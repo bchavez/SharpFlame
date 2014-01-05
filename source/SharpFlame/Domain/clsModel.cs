@@ -4,7 +4,7 @@ using Microsoft.VisualBasic;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Maths;
 
-namespace SharpFlame
+namespace SharpFlame.Domain
 {
     public class clsModel
     {

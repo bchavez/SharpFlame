@@ -1,4 +1,5 @@
 using System;
+using SharpFlame.Domain;
 
 namespace SharpFlame
 {
@@ -8,12 +9,12 @@ namespace SharpFlame
 
         public struct sUnitChance
         {
-            public clsUnitType Type;
+            public UnitTypeBase TypeBase;
             public UInt32 Chance;
 
-            public sUnitChance(clsUnitType Type, UInt32 Chance)
+            public sUnitChance(UnitTypeBase TypeBase, UInt32 Chance)
             {
-                this.Type = Type;
+                this.TypeBase = TypeBase;
                 this.Chance = Chance;
             }
         }
@@ -31,7 +32,7 @@ namespace SharpFlame
 
         public void ScatteredUnit_Add(sUnitChance NewUnit)
         {
-            if ( NewUnit.Type == null )
+            if ( NewUnit.TypeBase == null )
             {
                 return;
             }
@@ -45,7 +46,7 @@ namespace SharpFlame
 
         public void ClusteredUnit_Add(sUnitChance NewUnit)
         {
-            if ( NewUnit.Type == null )
+            if ( NewUnit.TypeBase == null )
             {
                 return;
             }

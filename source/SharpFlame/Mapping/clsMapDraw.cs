@@ -7,6 +7,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.AppSettings;
 using SharpFlame.Colors;
 using SharpFlame.Controls;
+using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Maths;
@@ -788,7 +789,7 @@ namespace SharpFlame.Mapping
                 GL.Enable(EnableCap.Texture2D);
                 if ( modTools.Tool == modTools.Tools.ObjectPlace )
                 {
-                    clsUnitType placeObject = Program.frmMainInstance.SingleSelectedObjectType;
+                    UnitTypeBase placeObject = Program.frmMainInstance.SingleSelectedObjectTypeBase;
                     if ( placeObject != null )
                     {
                         int Rotation = 0;
@@ -926,7 +927,7 @@ namespace SharpFlame.Mapping
             foreach ( clsUnit tempLoopVar_Unit in SelectedUnits )
             {
                 Unit = tempLoopVar_Unit;
-                Footprint = Unit.Type.get_GetFootprintSelected(Unit.Rotation);
+                Footprint = Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation);
                 RGB_sng = GetUnitGroupColour(Unit.UnitGroup);
                 ColourA = new sRGBA_sng((1.0F + RGB_sng.Red) / 2.0F, (1.0F + RGB_sng.Green) / 2.0F, (1.0F + RGB_sng.Blue) / 2.0F, 0.75F);
                 ColourB = new sRGBA_sng(RGB_sng.Red, RGB_sng.Green, RGB_sng.Blue, 0.75F);
@@ -941,7 +942,7 @@ namespace SharpFlame.Mapping
                     {
                         RGB_sng = GetUnitGroupColour(Unit.UnitGroup);
                         GL.Color4((0.5F + RGB_sng.Red) / 1.5F, (0.5F + RGB_sng.Green) / 1.5F, (0.5F + RGB_sng.Blue) / 1.5F, 0.75F);
-                        Footprint = Unit.Type.get_GetFootprintSelected(Unit.Rotation);
+                        Footprint = Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation);
                         ColourA = new sRGBA_sng((1.0F + RGB_sng.Red) / 2.0F, (1.0F + RGB_sng.Green) / 2.0F, (1.0F + RGB_sng.Blue) / 2.0F, 0.75F);
                         ColourB = new sRGBA_sng(RGB_sng.Red, RGB_sng.Green, RGB_sng.Blue, 0.875F);
                         DrawUnitRectangle(Unit, 16, ColourA, ColourB);
@@ -1123,7 +1124,7 @@ namespace SharpFlame.Mapping
             int A = 0;
             int Altitude = Unit.Pos.Altitude - ViewInfo.ViewPos.Y;
 
-            GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.Type.get_GetFootprintSelected(Unit.Rotation), PosA, PosB);
+            GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation), PosA, PosB);
             A = PosA.Y;
             PosA.X = (int)((PosA.X + 0.125D) * App.TerrainGridSpacing - ViewInfo.ViewPos.X);
             PosA.Y = (int)((PosB.Y + 0.875D) * - App.TerrainGridSpacing - ViewInfo.ViewPos.Z);
@@ -1592,7 +1593,7 @@ namespace SharpFlame.Mapping
                         XYZ_dbl.Y = Unit.Pos.Altitude - ViewInfo.ViewPos.Y;
                         XYZ_dbl.Z = - Unit.Pos.Horizontal.Y - ViewInfo.ViewPos.Z;
                         DrawUnitLabel = false;
-                        if ( Unit.Type.IsUnknown )
+                        if ( Unit.TypeBase.IsUnknown )
                         {
                             DrawUnitLabel = true;
                         }
@@ -1600,11 +1601,11 @@ namespace SharpFlame.Mapping
                         {
                             GL.PushMatrix();
                             GL.Translate(XYZ_dbl.X, XYZ_dbl.Y, Convert.ToDouble(- XYZ_dbl.Z));
-                            Unit.Type.GLDraw(Unit.Rotation);
+                            Unit.TypeBase.GLDraw(Unit.Rotation);
                             GL.PopMatrix();
-                            if ( Unit.Type.Type == clsUnitType.enumType.PlayerDroid )
+                            if ( Unit.TypeBase.Type == UnitType.PlayerDroid )
                             {
-                                if ( ((clsDroidDesign)Unit.Type).AlwaysDrawTextLabel )
+                                if ( ((DroidDesign)Unit.TypeBase).AlwaysDrawTextLabel )
                                 {
                                     DrawUnitLabel = true;
                                 }
@@ -1636,7 +1637,7 @@ namespace SharpFlame.Mapping
                                     TextLabel.Colour.Alpha = 1.0F;
                                     TextLabel.Pos.X = ScreenPos.X + 32;
                                     TextLabel.Pos.Y = ScreenPos.Y;
-                                    TextLabel.Text = Unit.Type.GetDisplayTextCode();
+                                    TextLabel.Text = Unit.TypeBase.GetDisplayTextCode();
                                     UnitTextLabels.Add(TextLabel);
                                 }
                             }

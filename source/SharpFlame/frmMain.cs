@@ -13,6 +13,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
 using SharpFlame.Controls;
+using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Generators;
 using SharpFlame.Mapping;
@@ -117,13 +118,13 @@ namespace SharpFlame
         public MapViewControl MapViewControl;
         public TextureViewControl TextureViewControl;
 
-        public clsBody[] cboBody_Objects;
-        public clsPropulsion[] cboPropulsion_Objects;
-        public clsTurret[] cboTurret_Objects;
+        public Body[] cboBody_Objects;
+        public Propulsion[] cboPropulsion_Objects;
+        public Turret[] cboTurret_Objects;
 
         public byte[] HeightSetPalette = new byte[8];
 
-        public ConnectedList<clsUnitType, frmMain> SelectedObjectTypes;
+        public ConnectedList<UnitTypeBase, frmMain> SelectedObjectTypes;
 
         public App.enumTextureTerrainAction TextureTerrainAction = App.enumTextureTerrainAction.Reinterpret;
 
@@ -143,7 +144,7 @@ namespace SharpFlame
         public frmMain()
         {
             _LoadedMaps = new clsMaps(this);
-            SelectedObjectTypes = new ConnectedList<clsUnitType, frmMain>(this);
+            SelectedObjectTypes = new ConnectedList<UnitTypeBase, frmMain>(this);
 
             InitializeComponent();
 
@@ -1378,16 +1379,16 @@ namespace SharpFlame
                 return;
             }
 
-            clsBody Body = default(clsBody);
-            clsPropulsion Propulsion = default(clsPropulsion);
-            clsTurret Turret = default(clsTurret);
+            Body Body = default(Body);
+            Propulsion Propulsion = default(Propulsion);
+            Turret Turret = default(Turret);
             string Text = "";
             string TypeName = "";
             int ListPosition = 0;
 
             cboDroidBody.Items.Clear();
-            cboBody_Objects = new clsBody[App.ObjectData.Bodies.Count];
-            foreach ( clsBody tempLoopVar_Body in App.ObjectData.Bodies )
+            cboBody_Objects = new Body[App.ObjectData.Bodies.Count];
+            foreach ( Body tempLoopVar_Body in App.ObjectData.Bodies )
             {
                 Body = tempLoopVar_Body;
                 if ( Body.Designable || (!cbxDesignableOnly.Checked) )
@@ -1399,8 +1400,8 @@ namespace SharpFlame
             Array.Resize(ref cboBody_Objects, cboDroidBody.Items.Count);
 
             cboDroidPropulsion.Items.Clear();
-            cboPropulsion_Objects = new clsPropulsion[App.ObjectData.Propulsions.Count];
-            foreach ( clsPropulsion tempLoopVar_Propulsion in App.ObjectData.Propulsions )
+            cboPropulsion_Objects = new Propulsion[App.ObjectData.Propulsions.Count];
+            foreach ( Propulsion tempLoopVar_Propulsion in App.ObjectData.Propulsions )
             {
                 Propulsion = tempLoopVar_Propulsion;
                 if ( Propulsion.Designable || (!cbxDesignableOnly.Checked) )
@@ -1414,8 +1415,8 @@ namespace SharpFlame
             cboDroidTurret1.Items.Clear();
             cboDroidTurret2.Items.Clear();
             cboDroidTurret3.Items.Clear();
-            cboTurret_Objects = new clsTurret[App.ObjectData.Turrets.Count];
-            foreach ( clsTurret tempLoopVar_Turret in App.ObjectData.Turrets )
+            cboTurret_Objects = new Turret[App.ObjectData.Turrets.Count];
+            foreach ( Turret tempLoopVar_Turret in App.ObjectData.Turrets )
             {
                 Turret = tempLoopVar_Turret;
                 if ( Turret.Designable || (!cbxDesignableOnly.Checked) )
@@ -1438,7 +1439,7 @@ namespace SharpFlame
             }
         }
 
-        private void ObjectListFill<ObjectType>(SimpleList<ObjectType> objects, DataGridView gridView) where ObjectType : clsUnitType
+        private void ObjectListFill<ObjectType>(SimpleList<ObjectType> objects, DataGridView gridView) where ObjectType : UnitTypeBase
         {
             SimpleList<ObjectType> filtered = default(SimpleList<ObjectType>);
             string searchText = txtObjectFind.Text;
@@ -1465,7 +1466,7 @@ namespace SharpFlame
             }
 
             DataTable table = new DataTable();
-            table.Columns.Add("Item", typeof(clsUnitType));
+            table.Columns.Add("Item", typeof(UnitTypeBase));
             table.Columns.Add("Internal Name", typeof(string));
             table.Columns.Add("In-Game Name", typeof(string));
             //table.Columns.Add("Type")
@@ -1488,7 +1489,7 @@ namespace SharpFlame
 #endif
         }
 
-        public SimpleList<ItemType> ObjectFindText<ItemType>(SimpleList<ItemType> list, string text) where ItemType : clsUnitType
+        public SimpleList<ItemType> ObjectFindText<ItemType>(SimpleList<ItemType> list, string text) where ItemType : UnitTypeBase
         {
             SimpleList<ItemType> result = new SimpleList<ItemType>();
             result.MaintainOrder = true;
@@ -1654,9 +1655,9 @@ namespace SharpFlame
                 foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.SelectedUnits )
                 {
                     Unit = tempLoopVar_Unit;
-                    if ( Unit.Type.Type == clsUnitType.enumType.PlayerDroid )
+                    if ( Unit.TypeBase.Type == UnitType.PlayerDroid )
                     {
-                        if ( ((clsDroidDesign)Unit.Type).IsTemplate )
+                        if ( ((DroidDesign)Unit.TypeBase).IsTemplate )
                         {
                             break;
                         }
@@ -1670,9 +1671,9 @@ namespace SharpFlame
                 foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.SelectedUnits )
                 {
                     Unit = tempLoopVar_Unit;
-                    if ( Unit.Type.Type == clsUnitType.enumType.PlayerDroid )
+                    if ( Unit.TypeBase.Type == UnitType.PlayerDroid )
                     {
-                        if ( !((clsDroidDesign)Unit.Type).IsTemplate )
+                        if ( !((DroidDesign)Unit.TypeBase).IsTemplate )
                         {
                             break;
                         }
@@ -1705,7 +1706,7 @@ namespace SharpFlame
             {
                 int A = 0;
                 clsMap.clsUnit with_1 = Map.SelectedUnits[0];
-                lblObjectType.Text = Convert.ToString(with_1.Type.GetDisplayTextCode());
+                lblObjectType.Text = Convert.ToString(with_1.TypeBase.GetDisplayTextCode());
                 ObjectPlayerNumControl.Target.Item = with_1.UnitGroup;
                 txtObjectRotation.Text = Convert.ToInt32(with_1.Rotation).ToStringInvariant();
                 txtObjectID.Text = with_1.ID.ToStringInvariant();
@@ -1718,9 +1719,9 @@ namespace SharpFlame
                 txtObjectPriority.Enabled = true;
                 txtObjectHealth.Enabled = true;
                 bool LabelEnabled = true;
-                if ( with_1.Type.Type == clsUnitType.enumType.PlayerStructure )
+                if ( with_1.TypeBase.Type == UnitType.PlayerStructure )
                 {
-                    if ( ((clsStructureType)with_1.Type).IsModule() )
+                    if ( ((StructureTypeBase)with_1.TypeBase).IsModule() )
                     {
                         LabelEnabled = false;
                     }
@@ -1735,9 +1736,9 @@ namespace SharpFlame
                     txtObjectLabel.Text = "";
                 }
                 bool ClearDesignControls = false;
-                if ( with_1.Type.Type == clsUnitType.enumType.PlayerDroid )
+                if ( with_1.TypeBase.Type == UnitType.PlayerDroid )
                 {
-                    clsDroidDesign DroidType = (clsDroidDesign)with_1.Type;
+                    DroidDesign DroidType = (DroidDesign)with_1.TypeBase;
                     if ( DroidType.IsTemplate )
                     {
                         btnDroidToDesign.Enabled = true;
@@ -3274,7 +3275,7 @@ namespace SharpFlame
             }
         }
 
-        private void SelectedObjects_SetDroidType(clsDroidDesign.clsTemplateDroidType NewType)
+        private void SelectedObjects_SetDroidType(DroidDesign.clsTemplateDroidType NewType)
         {
             clsMap Map = MainMap;
 
@@ -3379,7 +3380,7 @@ namespace SharpFlame
                 Unit = tempLoopVar_Unit;
                 if ( Unit.UnitGroup == UnitGroup )
                 {
-                    if ( Unit.Type.Type != clsUnitType.enumType.Feature )
+                    if ( Unit.TypeBase.Type != UnitType.Feature )
                     {
                         if ( !Unit.MapSelectedUnitLink.IsConnected )
                         {
@@ -3500,7 +3501,7 @@ namespace SharpFlame
             tsbSave.Enabled = true;
         }
 
-        public void ObjectPicker(clsUnitType UnitType)
+        public void ObjectPicker(UnitTypeBase unitTypeBase)
         {
             modTools.Tool = modTools.Tools.ObjectPlace;
             if ( !KeyboardManager.KeyboardProfile.Active(KeyboardManager.UnitMultiselect) )
@@ -3510,7 +3511,7 @@ namespace SharpFlame
                 dgvDroids.ClearSelection();
             }
             SelectedObjectTypes.Clear();
-            SelectedObjectTypes.Add(UnitType.UnitType_frmMainSelectedLink);
+            SelectedObjectTypes.Add(unitTypeBase.UnitType_frmMainSelectedLink);
             clsMap Map = MainMap;
             if ( Map != null )
             {
@@ -4226,13 +4227,13 @@ namespace SharpFlame
             switch ( TabControl1.SelectedIndex )
             {
                 case 0:
-                    ObjectListFill<clsFeatureType>(App.ObjectData.FeatureTypes.GetItemsAsSimpleList(), dgvFeatures);
+                    ObjectListFill<FeatureTypeBase>(App.ObjectData.FeatureTypes.GetItemsAsSimpleList(), dgvFeatures);
                     break;
                 case 1:
-                    ObjectListFill<clsStructureType>(App.ObjectData.StructureTypes.GetItemsAsSimpleList(), dgvStructures);
+                    ObjectListFill<StructureTypeBase>(App.ObjectData.StructureTypes.GetItemsAsSimpleList(), dgvStructures);
                     break;
                 case 2:
-                    ObjectListFill<clsDroidTemplate>(App.ObjectData.DroidTemplates.GetItemsAsSimpleList(), dgvDroids);
+                    ObjectListFill<DroidTemplate>(App.ObjectData.DroidTemplates.GetItemsAsSimpleList(), dgvDroids);
                     break;
             }
         }
@@ -4377,7 +4378,7 @@ namespace SharpFlame
                 return;
             }
 
-            if ( DefaultGenerator.UnitType_OilResource == null )
+            if ( DefaultGenerator.UnitTypeBaseOilResource == null )
             {
                 MessageBox.Show("Unable. Oil resource is not loaded.");
                 return;
@@ -4388,7 +4389,7 @@ namespace SharpFlame
             foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.Units )
             {
                 Unit = tempLoopVar_Unit;
-                if ( Unit.Type == DefaultGenerator.UnitType_OilResource )
+                if ( Unit.TypeBase == DefaultGenerator.UnitTypeBaseOilResource )
                 {
                     OilList.Add(Unit);
                 }
@@ -4414,7 +4415,7 @@ namespace SharpFlame
             foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.Units )
             {
                 Unit = tempLoopVar_Unit;
-                if ( Unit.Type.Type == clsUnitType.enumType.PlayerStructure )
+                if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
                 {
                     StructureList.Add(Unit);
                 }
@@ -4441,7 +4442,7 @@ namespace SharpFlame
             }
             foreach ( clsMap.clsUnit Unit in Map.Units )
             {
-                if ( Unit.Type.UnitType_frmMainSelectedLink.IsConnected )
+                if ( Unit.TypeBase.UnitType_frmMainSelectedLink.IsConnected )
                 {
                     if ( !Unit.MapSelectedUnitLink.IsConnected )
                     {
@@ -4453,7 +4454,7 @@ namespace SharpFlame
             View_DrawViewLater();
         }
 
-        public clsUnitType SingleSelectedObjectType
+        public UnitTypeBase SingleSelectedObjectTypeBase
         {
             get
             {
@@ -4473,10 +4474,10 @@ namespace SharpFlame
             SelectedObjectTypes.Clear();
             foreach ( DataGridViewRow selection in dataView.SelectedRows )
             {
-                clsUnitType objectType = (clsUnitType)(selection.Cells[0].Value);
-                if ( !objectType.UnitType_frmMainSelectedLink.IsConnected )
+                UnitTypeBase objectTypeBase = (UnitTypeBase)(selection.Cells[0].Value);
+                if ( !objectTypeBase.UnitType_frmMainSelectedLink.IsConnected )
                 {
-                    SelectedObjectTypes.Add(objectType.UnitType_frmMainSelectedLink);
+                    SelectedObjectTypes.Add(objectTypeBase.UnitType_frmMainSelectedLink);
                 }
             }
             clsMap Map = MainMap;

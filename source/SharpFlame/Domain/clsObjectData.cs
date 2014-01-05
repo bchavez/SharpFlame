@@ -8,45 +8,45 @@ using SharpFlame.Collections;
 using SharpFlame.FileIO;
 using SharpFlame.Maths;
 
-namespace SharpFlame
+namespace SharpFlame.Domain
 {
     public class clsObjectData
     {
         public clsObjectData()
         {
-            UnitTypes = new ConnectedList<clsUnitType, clsObjectData>(this);
-            FeatureTypes = new ConnectedList<clsFeatureType, clsObjectData>(this);
-            StructureTypes = new ConnectedList<clsStructureType, clsObjectData>(this);
-            DroidTemplates = new ConnectedList<clsDroidTemplate, clsObjectData>(this);
+            UnitTypes = new ConnectedList<UnitTypeBase, clsObjectData>(this);
+            FeatureTypes = new ConnectedList<FeatureTypeBase, clsObjectData>(this);
+            StructureTypes = new ConnectedList<StructureTypeBase, clsObjectData>(this);
+            DroidTemplates = new ConnectedList<DroidTemplate, clsObjectData>(this);
             WallTypes = new ConnectedList<clsWallType, clsObjectData>(this);
-            Bodies = new ConnectedList<clsBody, clsObjectData>(this);
-            Propulsions = new ConnectedList<clsPropulsion, clsObjectData>(this);
-            Turrets = new ConnectedList<clsTurret, clsObjectData>(this);
-            Weapons = new ConnectedList<clsWeapon, clsObjectData>(this);
-            Sensors = new ConnectedList<clsSensor, clsObjectData>(this);
-            Repairs = new ConnectedList<clsRepair, clsObjectData>(this);
-            Constructors = new ConnectedList<clsConstruct, clsObjectData>(this);
-            Brains = new ConnectedList<clsBrain, clsObjectData>(this);
-            ECMs = new ConnectedList<clsECM, clsObjectData>(this);
+            Bodies = new ConnectedList<Body, clsObjectData>(this);
+            Propulsions = new ConnectedList<Propulsion, clsObjectData>(this);
+            Turrets = new ConnectedList<Turret, clsObjectData>(this);
+            Weapons = new ConnectedList<Weapon, clsObjectData>(this);
+            Sensors = new ConnectedList<Sensor, clsObjectData>(this);
+            Repairs = new ConnectedList<Repair, clsObjectData>(this);
+            Constructors = new ConnectedList<Construct, clsObjectData>(this);
+            Brains = new ConnectedList<Brain, clsObjectData>(this);
+            ECMs = new ConnectedList<Ecm, clsObjectData>(this);
         }
 
-        public ConnectedList<clsUnitType, clsObjectData> UnitTypes;
+        public ConnectedList<UnitTypeBase, clsObjectData> UnitTypes;
 
-        public ConnectedList<clsFeatureType, clsObjectData> FeatureTypes;
-        public ConnectedList<clsStructureType, clsObjectData> StructureTypes;
-        public ConnectedList<clsDroidTemplate, clsObjectData> DroidTemplates;
+        public ConnectedList<FeatureTypeBase, clsObjectData> FeatureTypes;
+        public ConnectedList<StructureTypeBase, clsObjectData> StructureTypes;
+        public ConnectedList<DroidTemplate, clsObjectData> DroidTemplates;
 
         public ConnectedList<clsWallType, clsObjectData> WallTypes;
 
-        public ConnectedList<clsBody, clsObjectData> Bodies;
-        public ConnectedList<clsPropulsion, clsObjectData> Propulsions;
-        public ConnectedList<clsTurret, clsObjectData> Turrets;
-        public ConnectedList<clsWeapon, clsObjectData> Weapons;
-        public ConnectedList<clsSensor, clsObjectData> Sensors;
-        public ConnectedList<clsRepair, clsObjectData> Repairs;
-        public ConnectedList<clsConstruct, clsObjectData> Constructors;
-        public ConnectedList<clsBrain, clsObjectData> Brains;
-        public ConnectedList<clsECM, clsObjectData> ECMs;
+        public ConnectedList<Body, clsObjectData> Bodies;
+        public ConnectedList<Propulsion, clsObjectData> Propulsions;
+        public ConnectedList<Turret, clsObjectData> Turrets;
+        public ConnectedList<Weapon, clsObjectData> Weapons;
+        public ConnectedList<Sensor, clsObjectData> Sensors;
+        public ConnectedList<Repair, clsObjectData> Repairs;
+        public ConnectedList<Construct, clsObjectData> Constructors;
+        public ConnectedList<Brain, clsObjectData> Brains;
+        public ConnectedList<Ecm, clsObjectData> ECMs;
 
         public class clsTexturePage
         {
@@ -587,20 +587,20 @@ namespace SharpFlame
 
             //interpret stats
 
-            clsUnitType.clsAttachment Attachment = default(clsUnitType.clsAttachment);
-            clsUnitType.clsAttachment BaseAttachment = default(clsUnitType.clsAttachment);
+            clsAttachment Attachment = default(clsAttachment);
+            clsAttachment BaseAttachment = default(clsAttachment);
             sXYZ_sng Connector = new sXYZ_sng();
-            clsStructureType StructureType = default(clsStructureType);
-            clsFeatureType FeatureType = default(clsFeatureType);
-            clsDroidTemplate Template = default(clsDroidTemplate);
-            clsBody Body = default(clsBody);
-            clsPropulsion Propulsion = default(clsPropulsion);
-            clsConstruct Construct = default(clsConstruct);
-            clsWeapon Weapon = default(clsWeapon);
-            clsRepair Repair = default(clsRepair);
-            clsSensor Sensor = default(clsSensor);
-            clsBrain Brain = default(clsBrain);
-            clsECM ECM = default(clsECM);
+            StructureTypeBase structureTypeBase = default(StructureTypeBase);
+            FeatureTypeBase featureTypeBase = default(FeatureTypeBase);
+            DroidTemplate Template = default(DroidTemplate);
+            Body Body = default(Body);
+            Propulsion Propulsion = default(Propulsion);
+            Construct Construct = default(Construct);
+            Weapon Weapon = default(Weapon);
+            Repair Repair = default(Repair);
+            Sensor Sensor = default(Sensor);
+            Brain Brain = default(Brain);
+            Ecm ECM = default(Ecm);
             string[] Fields = null;
 
             //interpret body
@@ -608,7 +608,7 @@ namespace SharpFlame
             foreach ( string[] tempLoopVar_Fields in DataBody.ResultData )
             {
                 Fields = tempLoopVar_Fields;
-                Body = new clsBody();
+                Body = new Body();
                 Body.ObjectDataLink.Connect(Bodies);
                 Body.Code = Fields[0];
                 SetComponentName(DataNames.ResultData, Body, ReturnResult);
@@ -622,7 +622,7 @@ namespace SharpFlame
             foreach ( string[] tempLoopVar_Fields in DataPropulsion.ResultData )
             {
                 Fields = tempLoopVar_Fields;
-                Propulsion = new clsPropulsion(Bodies.Count);
+                Propulsion = new Propulsion(Bodies.Count);
                 Propulsion.ObjectDataLink.Connect(Propulsions);
                 Propulsion.Code = Fields[0];
                 SetComponentName(DataNames.ResultData, Propulsion, ReturnResult);
@@ -670,9 +670,9 @@ namespace SharpFlame
                 for ( int B = 0; B <= Bodies.Count - 1; B++ )
                 {
                     Body = Bodies[B];
-                    Propulsion.Bodies[B].LeftAttachment = new clsUnitType.clsAttachment();
+                    Propulsion.Bodies[B].LeftAttachment = new clsAttachment();
                     Propulsion.Bodies[B].LeftAttachment.Models.Add(GetModelForPIE(PIE_List, BodyPropulsionPIEs[B, A].LeftPIE, ReturnResult));
-                    Propulsion.Bodies[B].RightAttachment = new clsUnitType.clsAttachment();
+                    Propulsion.Bodies[B].RightAttachment = new clsAttachment();
                     Propulsion.Bodies[B].RightAttachment.Models.Add(GetModelForPIE(PIE_List, BodyPropulsionPIEs[B, A].RightPIE, ReturnResult));
                 }
             }
@@ -682,7 +682,7 @@ namespace SharpFlame
             foreach ( string[] tempLoopVar_Fields in DataConstruction.ResultData )
             {
                 Fields = tempLoopVar_Fields;
-                Construct = new clsConstruct();
+                Construct = new Construct();
                 Construct.ObjectDataLink.Connect(Constructors);
                 Construct.TurretObjectDataLink.Connect(Turrets);
                 Construct.Code = Fields[0];
@@ -696,7 +696,7 @@ namespace SharpFlame
             foreach ( string[] tempLoopVar_Fields in DataWeapons.ResultData )
             {
                 Fields = tempLoopVar_Fields;
-                Weapon = new clsWeapon();
+                Weapon = new Weapon();
                 Weapon.ObjectDataLink.Connect(Weapons);
                 Weapon.TurretObjectDataLink.Connect(Turrets);
                 Weapon.Code = Fields[0];
@@ -712,7 +712,7 @@ namespace SharpFlame
             foreach ( string[] tempLoopVar_Fields in DataSensor.ResultData )
             {
                 Fields = tempLoopVar_Fields;
-                Sensor = new clsSensor();
+                Sensor = new Sensor();
                 Sensor.ObjectDataLink.Connect(Sensors);
                 Sensor.TurretObjectDataLink.Connect(Turrets);
                 Sensor.Code = Fields[0];
@@ -722,13 +722,13 @@ namespace SharpFlame
                 switch ( Fields[11].ToLower() )
                 {
                     case "turret":
-                        Sensor.Location = clsSensor.enumLocation.Turret;
+                        Sensor.Location = Sensor.enumLocation.Turret;
                         break;
                     case "default":
-                        Sensor.Location = clsSensor.enumLocation.Invisible;
+                        Sensor.Location = Sensor.enumLocation.Invisible;
                         break;
                     default:
-                        Sensor.Location = clsSensor.enumLocation.Invisible;
+                        Sensor.Location = Sensor.enumLocation.Invisible;
                         break;
                 }
                 Sensor.Attachment.Models.Add(GetModelForPIE(PIE_List, Fields[8].ToLower(), ReturnResult));
@@ -740,7 +740,7 @@ namespace SharpFlame
             foreach ( string[] tempLoopVar_Fields in DataRepair.ResultData )
             {
                 Fields = tempLoopVar_Fields;
-                Repair = new clsRepair();
+                Repair = new Repair();
                 Repair.ObjectDataLink.Connect(Repairs);
                 Repair.TurretObjectDataLink.Connect(Turrets);
                 Repair.Code = Fields[0];
@@ -755,7 +755,7 @@ namespace SharpFlame
             foreach ( string[] tempLoopVar_Fields in DataBrain.ResultData )
             {
                 Fields = tempLoopVar_Fields;
-                Brain = new clsBrain();
+                Brain = new Brain();
                 Brain.ObjectDataLink.Connect(Brains);
                 Brain.TurretObjectDataLink.Connect(Turrets);
                 Brain.Code = Fields[0];
@@ -774,7 +774,7 @@ namespace SharpFlame
             foreach ( string[] tempLoopVar_Fields in DataECM.ResultData )
             {
                 Fields = tempLoopVar_Fields;
-                ECM = new clsECM();
+                ECM = new Ecm();
                 ECM.ObjectDataLink.Connect(ECMs);
                 ECM.TurretObjectDataLink.Connect(Turrets);
                 ECM.Code = Fields[0];
@@ -789,25 +789,25 @@ namespace SharpFlame
             foreach ( string[] tempLoopVar_Fields in DataFeatures.ResultData )
             {
                 Fields = tempLoopVar_Fields;
-                FeatureType = new clsFeatureType();
-                FeatureType.UnitType_ObjectDataLink.Connect(UnitTypes);
-                FeatureType.FeatureType_ObjectDataLink.Connect(FeatureTypes);
-                FeatureType.Code = Fields[0];
+                featureTypeBase = new FeatureTypeBase();
+                featureTypeBase.UnitType_ObjectDataLink.Connect(UnitTypes);
+                featureTypeBase.FeatureType_ObjectDataLink.Connect(FeatureTypes);
+                featureTypeBase.Code = Fields[0];
                 if ( Fields[7] == "OIL RESOURCE" ) //type
                 {
-                    FeatureType.FeatureType = clsFeatureType.enumFeatureType.OilResource;
+                    featureTypeBase.FeatureType = FeatureTypeBase.enumFeatureType.OilResource;
                 }
-                SetFeatureName(DataNames.ResultData, FeatureType, ReturnResult);
-                if ( !IOUtil.InvariantParse(Fields[1], ref FeatureType.Footprint.X) )
+                SetFeatureName(DataNames.ResultData, featureTypeBase, ReturnResult);
+                if ( !IOUtil.InvariantParse(Fields[1], ref featureTypeBase.Footprint.X) )
                 {
-                    ReturnResult.WarningAdd("Feature footprint-x was not an integer for " + FeatureType.Code + ".");
+                    ReturnResult.WarningAdd("Feature footprint-x was not an integer for " + featureTypeBase.Code + ".");
                 }
-                if ( !IOUtil.InvariantParse(Fields[2], ref FeatureType.Footprint.Y) )
+                if ( !IOUtil.InvariantParse(Fields[2], ref featureTypeBase.Footprint.Y) )
                 {
-                    ReturnResult.WarningAdd("Feature footprint-y was not an integer for " + FeatureType.Code + ".");
+                    ReturnResult.WarningAdd("Feature footprint-y was not an integer for " + featureTypeBase.Code + ".");
                 }
-                FeatureType.BaseAttachment = new clsUnitType.clsAttachment();
-                BaseAttachment = FeatureType.BaseAttachment;
+                featureTypeBase.BaseAttachment = new clsAttachment();
+                BaseAttachment = featureTypeBase.BaseAttachment;
                 Text = Fields[6].ToLower();
                 Attachment = BaseAttachment.CreateAttachment();
                 Attachment.Models.Add(GetModelForPIE(PIE_List, Text, ReturnResult));
@@ -834,92 +834,92 @@ namespace SharpFlame
                 if ( StructureTypeText != "WALL" || StructurePIEs.GetLength(0) != 4 )
                 {
                     //this is NOT a generic wall
-                    StructureType = new clsStructureType();
-                    StructureType.UnitType_ObjectDataLink.Connect(UnitTypes);
-                    StructureType.StructureType_ObjectDataLink.Connect(StructureTypes);
-                    StructureType.Code = StructureCode;
-                    SetStructureName(DataNames.ResultData, StructureType, ReturnResult);
-                    StructureType.Footprint = StructureFootprint;
+                    structureTypeBase = new StructureTypeBase();
+                    structureTypeBase.UnitType_ObjectDataLink.Connect(UnitTypes);
+                    structureTypeBase.StructureType_ObjectDataLink.Connect(StructureTypes);
+                    structureTypeBase.Code = StructureCode;
+                    SetStructureName(DataNames.ResultData, structureTypeBase, ReturnResult);
+                    structureTypeBase.Footprint = StructureFootprint;
                     switch ( StructureTypeText )
                     {
                         case "DEMOLISH":
-                            StructureType.StructureType = clsStructureType.enumStructureType.Demolish;
+                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.Demolish;
                             break;
                         case "WALL":
-                            StructureType.StructureType = clsStructureType.enumStructureType.Wall;
+                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.Wall;
                             break;
                         case "CORNER WALL":
-                            StructureType.StructureType = clsStructureType.enumStructureType.CornerWall;
+                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.CornerWall;
                             break;
                         case "FACTORY":
-                            StructureType.StructureType = clsStructureType.enumStructureType.Factory;
+                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.Factory;
                             break;
                         case "CYBORG FACTORY":
-                            StructureType.StructureType = clsStructureType.enumStructureType.CyborgFactory;
+                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.CyborgFactory;
                             break;
                         case "VTOL FACTORY":
-                            StructureType.StructureType = clsStructureType.enumStructureType.VTOLFactory;
+                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.VTOLFactory;
                             break;
                         case "COMMAND":
-                            StructureType.StructureType = clsStructureType.enumStructureType.Command;
+                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.Command;
                             break;
                         case "HQ":
-                            StructureType.StructureType = clsStructureType.enumStructureType.HQ;
+                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.HQ;
                             break;
                         case "DEFENSE":
-                            StructureType.StructureType = clsStructureType.enumStructureType.Defense;
+                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.Defense;
                             break;
                         case "POWER GENERATOR":
-                            StructureType.StructureType = clsStructureType.enumStructureType.PowerGenerator;
+                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.PowerGenerator;
                             break;
                         case "POWER MODULE":
-                            StructureType.StructureType = clsStructureType.enumStructureType.PowerModule;
+                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.PowerModule;
                             break;
                         case "RESEARCH":
-                            StructureType.StructureType = clsStructureType.enumStructureType.Research;
+                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.Research;
                             break;
                         case "RESEARCH MODULE":
-                            StructureType.StructureType = clsStructureType.enumStructureType.ResearchModule;
+                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.ResearchModule;
                             break;
                         case "FACTORY MODULE":
-                            StructureType.StructureType = clsStructureType.enumStructureType.FactoryModule;
+                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.FactoryModule;
                             break;
                         case "DOOR":
-                            StructureType.StructureType = clsStructureType.enumStructureType.DOOR;
+                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.DOOR;
                             break;
                         case "REPAIR FACILITY":
-                            StructureType.StructureType = clsStructureType.enumStructureType.RepairFacility;
+                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.RepairFacility;
                             break;
                         case "SAT UPLINK":
-                            StructureType.StructureType = clsStructureType.enumStructureType.DOOR;
+                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.DOOR;
                             break;
                         case "REARM PAD":
-                            StructureType.StructureType = clsStructureType.enumStructureType.RearmPad;
+                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.RearmPad;
                             break;
                         case "MISSILE SILO":
-                            StructureType.StructureType = clsStructureType.enumStructureType.MissileSilo;
+                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.MissileSilo;
                             break;
                         case "RESOURCE EXTRACTOR":
-                            StructureType.StructureType = clsStructureType.enumStructureType.ResourceExtractor;
+                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.ResourceExtractor;
                             break;
                         default:
-                            StructureType.StructureType = clsStructureType.enumStructureType.Unknown;
+                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.Unknown;
                             break;
                     }
 
-                    BaseAttachment = StructureType.BaseAttachment;
+                    BaseAttachment = structureTypeBase.BaseAttachment;
                     if ( StructurePIEs.GetLength(0) > 0 )
                     {
                         BaseAttachment.Models.Add(GetModelForPIE(PIE_List, StructurePIEs[0], ReturnResult));
                     }
-                    StructureType.StructureBasePlate = GetModelForPIE(PIE_List, StructureBasePIE, ReturnResult);
+                    structureTypeBase.StructureBasePlate = GetModelForPIE(PIE_List, StructureBasePIE, ReturnResult);
                     if ( BaseAttachment.Models.Count == 1 )
                     {
                         if ( BaseAttachment.Models[0].ConnectorCount >= 1 )
                         {
                             Connector = BaseAttachment.Models[0].Connectors[0];
                             SimpleList<string[]> StructureWeapons = default(SimpleList<string[]>);
-                            StructureWeapons = GetRowsWithValue(DataStructureWeapons.ResultData, StructureType.Code);
+                            StructureWeapons = GetRowsWithValue(DataStructureWeapons.ResultData, structureTypeBase.Code);
                             if ( StructureWeapons.Count > 0 )
                             {
                                 Weapon = FindWeaponCode(Convert.ToString(StructureWeapons[0][1]));
@@ -967,14 +967,14 @@ namespace SharpFlame
                     clsModel WallBasePlate = GetModelForPIE(PIE_List, StructureBasePIE, ReturnResult);
 
                     int WallNum = 0;
-                    clsStructureType WallStructureType = default(clsStructureType);
+                    StructureTypeBase wallStructureTypeBase = default(StructureTypeBase);
                     for ( WallNum = 0; WallNum <= 3; WallNum++ )
                     {
-                        WallStructureType = new clsStructureType();
-                        WallStructureType.UnitType_ObjectDataLink.Connect(UnitTypes);
-                        WallStructureType.StructureType_ObjectDataLink.Connect(StructureTypes);
-                        WallStructureType.WallLink.Connect(NewWall.Segments);
-                        WallStructureType.Code = StructureCode;
+                        wallStructureTypeBase = new StructureTypeBase();
+                        wallStructureTypeBase.UnitType_ObjectDataLink.Connect(UnitTypes);
+                        wallStructureTypeBase.StructureType_ObjectDataLink.Connect(StructureTypes);
+                        wallStructureTypeBase.WallLink.Connect(NewWall.Segments);
+                        wallStructureTypeBase.Code = StructureCode;
                         Text = NewWall.Name;
                         switch ( WallNum )
                         {
@@ -991,15 +991,15 @@ namespace SharpFlame
                                 Text += " L ";
                                 break;
                         }
-                        WallStructureType.Name = Text;
-                        WallStructureType.Footprint = StructureFootprint;
-                        WallStructureType.StructureType = clsStructureType.enumStructureType.Wall;
+                        wallStructureTypeBase.Name = Text;
+                        wallStructureTypeBase.Footprint = StructureFootprint;
+                        wallStructureTypeBase.StructureType = StructureTypeBase.enumStructureType.Wall;
 
-                        BaseAttachment = WallStructureType.BaseAttachment;
+                        BaseAttachment = wallStructureTypeBase.BaseAttachment;
 
                         Text = StructurePIEs[WallNum];
                         BaseAttachment.Models.Add(GetModelForPIE(PIE_List, Text, ReturnResult));
-                        WallStructureType.StructureBasePlate = WallBasePlate;
+                        wallStructureTypeBase.StructureBasePlate = WallBasePlate;
                     }
                 }
             }
@@ -1010,7 +1010,7 @@ namespace SharpFlame
             foreach ( string[] tempLoopVar_Fields in DataTemplates.ResultData )
             {
                 Fields = tempLoopVar_Fields;
-                Template = new clsDroidTemplate();
+                Template = new DroidTemplate();
                 Template.UnitType_ObjectDataLink.Connect(UnitTypes);
                 Template.DroidTemplate_ObjectDataLink.Connect(DroidTemplates);
                 Template.Code = Fields[0];
@@ -1046,7 +1046,7 @@ namespace SharpFlame
                         ReturnResult.WarningAdd("Template " + Template.GetDisplayTextCode() + " had an unrecognised type.");
                         break;
                 }
-                clsDroidDesign.sLoadPartsArgs LoadPartsArgs = new clsDroidDesign.sLoadPartsArgs();
+                DroidDesign.sLoadPartsArgs LoadPartsArgs = new DroidDesign.sLoadPartsArgs();
                 LoadPartsArgs.Body = FindBodyCode(Fields[2]);
                 LoadPartsArgs.Brain = FindBrainCode(Fields[3]);
                 LoadPartsArgs.Construct = FindConstructorCode(Fields[4]);
@@ -1251,52 +1251,52 @@ namespace SharpFlame
             return null;
         }
 
-        public void SetComponentName(SimpleList<string[]> Names, clsComponent Component, clsResult Result)
+        public void SetComponentName(SimpleList<string[]> Names, ComponentBase componentBase, clsResult Result)
         {
             SimpleList<string[]> ValueSearchResults = default(SimpleList<string[]>);
 
-            ValueSearchResults = GetRowsWithValue(Names, Component.Code);
+            ValueSearchResults = GetRowsWithValue(Names, componentBase.Code);
             if ( ValueSearchResults.Count == 0 )
             {
-                Result.WarningAdd("No name for component " + Component.Code + ".");
+                Result.WarningAdd("No name for component " + componentBase.Code + ".");
             }
             else
             {
-                Component.Name = Convert.ToString(ValueSearchResults[0][1]);
+                componentBase.Name = Convert.ToString(ValueSearchResults[0][1]);
             }
         }
 
-        public void SetFeatureName(SimpleList<string[]> Names, clsFeatureType FeatureType, clsResult Result)
+        public void SetFeatureName(SimpleList<string[]> Names, FeatureTypeBase featureTypeBase, clsResult Result)
         {
             SimpleList<string[]> ValueSearchResults = default(SimpleList<string[]>);
 
-            ValueSearchResults = GetRowsWithValue(Names, FeatureType.Code);
+            ValueSearchResults = GetRowsWithValue(Names, featureTypeBase.Code);
             if ( ValueSearchResults.Count == 0 )
             {
-                Result.WarningAdd("No name for feature type " + FeatureType.Code + ".");
+                Result.WarningAdd("No name for feature type " + featureTypeBase.Code + ".");
             }
             else
             {
-                FeatureType.Name = Convert.ToString(ValueSearchResults[0][1]);
+                featureTypeBase.Name = Convert.ToString(ValueSearchResults[0][1]);
             }
         }
 
-        public void SetStructureName(SimpleList<string[]> Names, clsStructureType StructureType, clsResult Result)
+        public void SetStructureName(SimpleList<string[]> Names, StructureTypeBase structureTypeBase, clsResult Result)
         {
             SimpleList<string[]> ValueSearchResults = default(SimpleList<string[]>);
 
-            ValueSearchResults = GetRowsWithValue(Names, StructureType.Code);
+            ValueSearchResults = GetRowsWithValue(Names, structureTypeBase.Code);
             if ( ValueSearchResults.Count == 0 )
             {
-                Result.WarningAdd("No name for structure type " + StructureType.Code + ".");
+                Result.WarningAdd("No name for structure type " + structureTypeBase.Code + ".");
             }
             else
             {
-                StructureType.Name = Convert.ToString(ValueSearchResults[0][1]);
+                structureTypeBase.Name = Convert.ToString(ValueSearchResults[0][1]);
             }
         }
 
-        public void SetTemplateName(SimpleList<string[]> Names, clsDroidTemplate Template, clsResult Result)
+        public void SetTemplateName(SimpleList<string[]> Names, DroidTemplate Template, clsResult Result)
         {
             SimpleList<string[]> ValueSearchResults = default(SimpleList<string[]>);
 
@@ -1326,11 +1326,11 @@ namespace SharpFlame
             }
         }
 
-        public clsBody FindBodyCode(string Code)
+        public Body FindBodyCode(string Code)
         {
-            clsBody Component = default(clsBody);
+            Body Component = default(Body);
 
-            foreach ( clsBody tempLoopVar_Component in Bodies )
+            foreach ( Body tempLoopVar_Component in Bodies )
             {
                 Component = tempLoopVar_Component;
                 if ( Component.Code == Code )
@@ -1342,11 +1342,11 @@ namespace SharpFlame
             return null;
         }
 
-        public clsPropulsion FindPropulsionCode(string Code)
+        public Propulsion FindPropulsionCode(string Code)
         {
-            clsPropulsion Component = default(clsPropulsion);
+            Propulsion Component = default(Propulsion);
 
-            foreach ( clsPropulsion tempLoopVar_Component in Propulsions )
+            foreach ( Propulsion tempLoopVar_Component in Propulsions )
             {
                 Component = tempLoopVar_Component;
                 if ( Component.Code == Code )
@@ -1358,11 +1358,11 @@ namespace SharpFlame
             return null;
         }
 
-        public clsConstruct FindConstructorCode(string Code)
+        public Construct FindConstructorCode(string Code)
         {
-            clsConstruct Component = default(clsConstruct);
+            Construct Component = default(Construct);
 
-            foreach ( clsConstruct tempLoopVar_Component in Constructors )
+            foreach ( Construct tempLoopVar_Component in Constructors )
             {
                 Component = tempLoopVar_Component;
                 if ( Component.Code == Code )
@@ -1374,11 +1374,11 @@ namespace SharpFlame
             return null;
         }
 
-        public clsSensor FindSensorCode(string Code)
+        public Sensor FindSensorCode(string Code)
         {
-            clsSensor Component = default(clsSensor);
+            Sensor Component = default(Sensor);
 
-            foreach ( clsSensor tempLoopVar_Component in Sensors )
+            foreach ( Sensor tempLoopVar_Component in Sensors )
             {
                 Component = tempLoopVar_Component;
                 if ( Component.Code == Code )
@@ -1390,11 +1390,11 @@ namespace SharpFlame
             return null;
         }
 
-        public clsRepair FindRepairCode(string Code)
+        public Repair FindRepairCode(string Code)
         {
-            clsRepair Component = default(clsRepair);
+            Repair Component = default(Repair);
 
-            foreach ( clsRepair tempLoopVar_Component in Repairs )
+            foreach ( Repair tempLoopVar_Component in Repairs )
             {
                 Component = tempLoopVar_Component;
                 if ( Component.Code == Code )
@@ -1406,11 +1406,11 @@ namespace SharpFlame
             return null;
         }
 
-        public clsECM FindECMCode(string Code)
+        public Ecm FindECMCode(string Code)
         {
-            clsECM Component = default(clsECM);
+            Ecm Component = default(Ecm);
 
-            foreach ( clsECM tempLoopVar_Component in ECMs )
+            foreach ( Ecm tempLoopVar_Component in ECMs )
             {
                 Component = tempLoopVar_Component;
                 if ( Component.Code == Code )
@@ -1422,11 +1422,11 @@ namespace SharpFlame
             return null;
         }
 
-        public clsBrain FindBrainCode(string Code)
+        public Brain FindBrainCode(string Code)
         {
-            clsBrain Component = default(clsBrain);
+            Brain Component = default(Brain);
 
-            foreach ( clsBrain tempLoopVar_Component in Brains )
+            foreach ( Brain tempLoopVar_Component in Brains )
             {
                 Component = tempLoopVar_Component;
                 if ( Component.Code == Code )
@@ -1438,11 +1438,11 @@ namespace SharpFlame
             return null;
         }
 
-        public clsWeapon FindWeaponCode(string Code)
+        public Weapon FindWeaponCode(string Code)
         {
-            clsWeapon Component = default(clsWeapon);
+            Weapon Component = default(Weapon);
 
-            foreach ( clsWeapon tempLoopVar_Component in Weapons )
+            foreach ( Weapon tempLoopVar_Component in Weapons )
             {
                 Component = tempLoopVar_Component;
                 if ( Component.Code == Code )
@@ -1470,196 +1470,196 @@ namespace SharpFlame
             return 0;
         }
 
-        public clsWeapon FindOrCreateWeapon(string Code)
+        public Weapon FindOrCreateWeapon(string Code)
         {
-            clsWeapon Result = default(clsWeapon);
+            Weapon Result = default(Weapon);
 
             Result = FindWeaponCode(Code);
             if ( Result != null )
             {
                 return Result;
             }
-            Result = new clsWeapon();
+            Result = new Weapon();
             Result.IsUnknown = true;
             Result.Code = Code;
             return Result;
         }
 
-        public clsConstruct FindOrCreateConstruct(string Code)
+        public Construct FindOrCreateConstruct(string Code)
         {
-            clsConstruct Result = default(clsConstruct);
+            Construct Result = default(Construct);
 
             Result = FindConstructorCode(Code);
             if ( Result != null )
             {
                 return Result;
             }
-            Result = new clsConstruct();
+            Result = new Construct();
             Result.IsUnknown = true;
             Result.Code = Code;
             return Result;
         }
 
-        public clsRepair FindOrCreateRepair(string Code)
+        public Repair FindOrCreateRepair(string Code)
         {
-            clsRepair Result = default(clsRepair);
+            Repair Result = default(Repair);
 
             Result = FindRepairCode(Code);
             if ( Result != null )
             {
                 return Result;
             }
-            Result = new clsRepair();
+            Result = new Repair();
             Result.IsUnknown = true;
             Result.Code = Code;
             return Result;
         }
 
-        public clsSensor FindOrCreateSensor(string Code)
+        public Sensor FindOrCreateSensor(string Code)
         {
-            clsSensor Result = default(clsSensor);
+            Sensor Result = default(Sensor);
 
             Result = FindSensorCode(Code);
             if ( Result != null )
             {
                 return Result;
             }
-            Result = new clsSensor();
+            Result = new Sensor();
             Result.IsUnknown = true;
             Result.Code = Code;
             return Result;
         }
 
-        public clsBrain FindOrCreateBrain(string Code)
+        public Brain FindOrCreateBrain(string Code)
         {
-            clsBrain Result = default(clsBrain);
+            Brain Result = default(Brain);
 
             Result = FindBrainCode(Code);
             if ( Result != null )
             {
                 return Result;
             }
-            Result = new clsBrain();
+            Result = new Brain();
             Result.IsUnknown = true;
             Result.Code = Code;
             return Result;
         }
 
-        public clsECM FindOrCreateECM(string Code)
+        public Ecm FindOrCreateECM(string Code)
         {
-            clsECM Result = default(clsECM);
+            Ecm Result = default(Ecm);
 
             Result = FindECMCode(Code);
             if ( Result != null )
             {
                 return Result;
             }
-            Result = new clsECM();
+            Result = new Ecm();
             Result.IsUnknown = true;
             Result.Code = Code;
             return Result;
         }
 
-        public clsTurret FindOrCreateTurret(clsTurret.enumTurretType TurretType, string TurretCode)
+        public Turret FindOrCreateTurret(Turret.enumTurretType TurretType, string TurretCode)
         {
             switch ( TurretType )
             {
-                case clsTurret.enumTurretType.Weapon:
+                case Turret.enumTurretType.Weapon:
                     return FindOrCreateWeapon(TurretCode);
-                case clsTurret.enumTurretType.Construct:
+                case Turret.enumTurretType.Construct:
                     return FindOrCreateConstruct(TurretCode);
-                case clsTurret.enumTurretType.Repair:
+                case Turret.enumTurretType.Repair:
                     return FindOrCreateRepair(TurretCode);
-                case clsTurret.enumTurretType.Sensor:
+                case Turret.enumTurretType.Sensor:
                     return FindOrCreateSensor(TurretCode);
-                case clsTurret.enumTurretType.Brain:
+                case Turret.enumTurretType.Brain:
                     return FindOrCreateBrain(TurretCode);
-                case clsTurret.enumTurretType.ECM:
+                case Turret.enumTurretType.ECM:
                     return FindOrCreateECM(TurretCode);
                 default:
                     return null;
             }
         }
 
-        public clsBody FindOrCreateBody(string Code)
+        public Body FindOrCreateBody(string Code)
         {
-            clsBody Result = default(clsBody);
+            Body Result = default(Body);
 
             Result = FindBodyCode(Code);
             if ( Result != null )
             {
                 return Result;
             }
-            Result = new clsBody();
+            Result = new Body();
             Result.IsUnknown = true;
             Result.Code = Code;
             return Result;
         }
 
-        public clsPropulsion FindOrCreatePropulsion(string Code)
+        public Propulsion FindOrCreatePropulsion(string Code)
         {
-            clsPropulsion Result = default(clsPropulsion);
+            Propulsion Result = default(Propulsion);
 
             Result = FindPropulsionCode(Code);
             if ( Result != null )
             {
                 return Result;
             }
-            Result = new clsPropulsion(Bodies.Count);
+            Result = new Propulsion(Bodies.Count);
             Result.IsUnknown = true;
             Result.Code = Code;
             return Result;
         }
 
-        public clsUnitType FindOrCreateUnitType(string Code, clsUnitType.enumType Type, int WallType)
+        public UnitTypeBase FindOrCreateUnitType(string Code, UnitType Type, int WallType)
         {
             switch ( Type )
             {
-                case clsUnitType.enumType.Feature:
-                    clsFeatureType FeatureType = default(clsFeatureType);
-                    foreach ( clsFeatureType tempLoopVar_FeatureType in FeatureTypes )
+                case UnitType.Feature:
+                    FeatureTypeBase featureTypeBase = default(FeatureTypeBase);
+                    foreach ( FeatureTypeBase tempLoopVar_FeatureType in FeatureTypes )
                     {
-                        FeatureType = tempLoopVar_FeatureType;
-                        if ( FeatureType.Code == Code )
+                        featureTypeBase = tempLoopVar_FeatureType;
+                        if ( featureTypeBase.Code == Code )
                         {
-                            return FeatureType;
+                            return featureTypeBase;
                         }
                     }
-                    FeatureType = new clsFeatureType();
-                    FeatureType.IsUnknown = true;
-                    FeatureType.Code = Code;
-                    FeatureType.Footprint.X = 1;
-                    FeatureType.Footprint.Y = 1;
-                    return FeatureType;
-                case clsUnitType.enumType.PlayerStructure:
-                    clsStructureType StructureType = default(clsStructureType);
-                    foreach ( clsStructureType tempLoopVar_StructureType in StructureTypes )
+                    featureTypeBase = new FeatureTypeBase();
+                    featureTypeBase.IsUnknown = true;
+                    featureTypeBase.Code = Code;
+                    featureTypeBase.Footprint.X = 1;
+                    featureTypeBase.Footprint.Y = 1;
+                    return featureTypeBase;
+                case UnitType.PlayerStructure:
+                    StructureTypeBase structureTypeBase = default(StructureTypeBase);
+                    foreach ( StructureTypeBase tempLoopVar_StructureType in StructureTypes )
                     {
-                        StructureType = tempLoopVar_StructureType;
-                        if ( StructureType.Code == Code )
+                        structureTypeBase = tempLoopVar_StructureType;
+                        if ( structureTypeBase.Code == Code )
                         {
                             if ( WallType < 0 )
                             {
-                                return StructureType;
+                                return structureTypeBase;
                             }
-                            else if ( StructureType.WallLink.IsConnected )
+                            else if ( structureTypeBase.WallLink.IsConnected )
                             {
-                                if ( StructureType.WallLink.ArrayPosition == WallType )
+                                if ( structureTypeBase.WallLink.ArrayPosition == WallType )
                                 {
-                                    return StructureType;
+                                    return structureTypeBase;
                                 }
                             }
                         }
                     }
-                    StructureType = new clsStructureType();
-                    StructureType.IsUnknown = true;
-                    StructureType.Code = Code;
-                    StructureType.Footprint.X = 1;
-                    StructureType.Footprint.Y = 1;
-                    return StructureType;
-                case clsUnitType.enumType.PlayerDroid:
-                    clsDroidTemplate DroidType = default(clsDroidTemplate);
-                    foreach ( clsDroidTemplate tempLoopVar_DroidType in DroidTemplates )
+                    structureTypeBase = new StructureTypeBase();
+                    structureTypeBase.IsUnknown = true;
+                    structureTypeBase.Code = Code;
+                    structureTypeBase.Footprint.X = 1;
+                    structureTypeBase.Footprint.Y = 1;
+                    return structureTypeBase;
+                case UnitType.PlayerDroid:
+                    DroidTemplate DroidType = default(DroidTemplate);
+                    foreach ( DroidTemplate tempLoopVar_DroidType in DroidTemplates )
                     {
                         DroidType = tempLoopVar_DroidType;
                         if ( DroidType.IsTemplate )
@@ -1670,7 +1670,7 @@ namespace SharpFlame
                             }
                         }
                     }
-                    DroidType = new clsDroidTemplate();
+                    DroidType = new DroidTemplate();
                     DroidType.IsUnknown = true;
                     DroidType.Code = Code;
                     return DroidType;
@@ -1679,16 +1679,16 @@ namespace SharpFlame
             }
         }
 
-        public clsStructureType FindFirstStructureType(clsStructureType.enumStructureType Type)
+        public StructureTypeBase FindFirstStructureType(StructureTypeBase.enumStructureType Type)
         {
-            clsStructureType StructureType = default(clsStructureType);
+            StructureTypeBase structureTypeBase = default(StructureTypeBase);
 
-            foreach ( clsStructureType tempLoopVar_StructureType in StructureTypes )
+            foreach ( StructureTypeBase tempLoopVar_StructureType in StructureTypes )
             {
-                StructureType = tempLoopVar_StructureType;
-                if ( StructureType.StructureType == Type )
+                structureTypeBase = tempLoopVar_StructureType;
+                if ( structureTypeBase.StructureType == Type )
                 {
-                    return StructureType;
+                    return structureTypeBase;
                 }
             }
 

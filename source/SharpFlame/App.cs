@@ -10,6 +10,7 @@ using SharpFlame.AppSettings;
 using SharpFlame.Collections;
 using SharpFlame.Collections.Specialized;
 using SharpFlame.Colors;
+using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping;
@@ -88,7 +89,7 @@ namespace SharpFlame
         public const int TileTypeNum_Water = 7;
         public const int TileTypeNum_Cliff = 8;
 
-        public static clsDroidDesign.clsTemplateDroidType[] TemplateDroidTypes = new clsDroidDesign.clsTemplateDroidType[0];
+        public static DroidDesign.clsTemplateDroidType[] TemplateDroidTypes = new DroidDesign.clsTemplateDroidType[0];
         public static int TemplateDroidTypeCount;
 
         public static readonly UTF8Encoding UTF8Encoding = new UTF8Encoding(false, false);
@@ -255,43 +256,43 @@ namespace SharpFlame
             }
         }
 
-        public static clsDroidDesign.clsTemplateDroidType TemplateDroidType_Droid;
-        public static clsDroidDesign.clsTemplateDroidType TemplateDroidType_Cyborg;
-        public static clsDroidDesign.clsTemplateDroidType TemplateDroidType_CyborgConstruct;
-        public static clsDroidDesign.clsTemplateDroidType TemplateDroidType_CyborgRepair;
-        public static clsDroidDesign.clsTemplateDroidType TemplateDroidType_CyborgSuper;
-        public static clsDroidDesign.clsTemplateDroidType TemplateDroidType_Transporter;
-        public static clsDroidDesign.clsTemplateDroidType TemplateDroidType_Person;
-        public static clsDroidDesign.clsTemplateDroidType TemplateDroidType_Null;
+        public static DroidDesign.clsTemplateDroidType TemplateDroidType_Droid;
+        public static DroidDesign.clsTemplateDroidType TemplateDroidType_Cyborg;
+        public static DroidDesign.clsTemplateDroidType TemplateDroidType_CyborgConstruct;
+        public static DroidDesign.clsTemplateDroidType TemplateDroidType_CyborgRepair;
+        public static DroidDesign.clsTemplateDroidType TemplateDroidType_CyborgSuper;
+        public static DroidDesign.clsTemplateDroidType TemplateDroidType_Transporter;
+        public static DroidDesign.clsTemplateDroidType TemplateDroidType_Person;
+        public static DroidDesign.clsTemplateDroidType TemplateDroidType_Null;
 
         public static void CreateTemplateDroidTypes()
         {
-            TemplateDroidType_Droid = new clsDroidDesign.clsTemplateDroidType("Droid", "DROID");
+            TemplateDroidType_Droid = new DroidDesign.clsTemplateDroidType("Droid", "DROID");
             TemplateDroidType_Droid.Num = TemplateDroidType_Add(TemplateDroidType_Droid);
 
-            TemplateDroidType_Cyborg = new clsDroidDesign.clsTemplateDroidType("Cyborg", "CYBORG");
+            TemplateDroidType_Cyborg = new DroidDesign.clsTemplateDroidType("Cyborg", "CYBORG");
             TemplateDroidType_Cyborg.Num = TemplateDroidType_Add(TemplateDroidType_Cyborg);
 
-            TemplateDroidType_CyborgConstruct = new clsDroidDesign.clsTemplateDroidType("Cyborg Construct", "CYBORG_CONSTRUCT");
+            TemplateDroidType_CyborgConstruct = new DroidDesign.clsTemplateDroidType("Cyborg Construct", "CYBORG_CONSTRUCT");
             TemplateDroidType_CyborgConstruct.Num = TemplateDroidType_Add(TemplateDroidType_CyborgConstruct);
 
-            TemplateDroidType_CyborgRepair = new clsDroidDesign.clsTemplateDroidType("Cyborg Repair", "CYBORG_REPAIR");
+            TemplateDroidType_CyborgRepair = new DroidDesign.clsTemplateDroidType("Cyborg Repair", "CYBORG_REPAIR");
             TemplateDroidType_CyborgRepair.Num = TemplateDroidType_Add(TemplateDroidType_CyborgRepair);
 
-            TemplateDroidType_CyborgSuper = new clsDroidDesign.clsTemplateDroidType("Cyborg Super", "CYBORG_SUPER");
+            TemplateDroidType_CyborgSuper = new DroidDesign.clsTemplateDroidType("Cyborg Super", "CYBORG_SUPER");
             TemplateDroidType_CyborgSuper.Num = TemplateDroidType_Add(TemplateDroidType_CyborgSuper);
 
-            TemplateDroidType_Transporter = new clsDroidDesign.clsTemplateDroidType("Transporter", "TRANSPORTER");
+            TemplateDroidType_Transporter = new DroidDesign.clsTemplateDroidType("Transporter", "TRANSPORTER");
             TemplateDroidType_Transporter.Num = TemplateDroidType_Add(TemplateDroidType_Transporter);
 
-            TemplateDroidType_Person = new clsDroidDesign.clsTemplateDroidType("Person", "PERSON");
+            TemplateDroidType_Person = new DroidDesign.clsTemplateDroidType("Person", "PERSON");
             TemplateDroidType_Person.Num = TemplateDroidType_Add(TemplateDroidType_Person);
 
-            TemplateDroidType_Null = new clsDroidDesign.clsTemplateDroidType("Null Droid", "ZNULLDROID");
+            TemplateDroidType_Null = new DroidDesign.clsTemplateDroidType("Null Droid", "ZNULLDROID");
             TemplateDroidType_Null.Num = TemplateDroidType_Add(TemplateDroidType_Null);
         }
 
-        public static clsDroidDesign.clsTemplateDroidType GetTemplateDroidTypeFromTemplateCode(string Code)
+        public static DroidDesign.clsTemplateDroidType GetTemplateDroidTypeFromTemplateCode(string Code)
         {
             string LCaseCode = Code.ToLower();
             int A = 0;
@@ -306,7 +307,7 @@ namespace SharpFlame
             return null;
         }
 
-        public static int TemplateDroidType_Add(clsDroidDesign.clsTemplateDroidType NewDroidType)
+        public static int TemplateDroidType_Add(DroidDesign.clsTemplateDroidType NewDroidType)
         {
             int ReturnResult = 0;
 
@@ -347,24 +348,24 @@ namespace SharpFlame
             WarningsForm.Activate();
         }
 
-        public static clsTurret.enumTurretType GetTurretTypeFromName(string TurretTypeName)
+        public static Turret.enumTurretType GetTurretTypeFromName(string TurretTypeName)
         {
             switch ( TurretTypeName.ToLower() )
             {
                 case "weapon":
-                    return clsTurret.enumTurretType.Weapon;
+                    return Turret.enumTurretType.Weapon;
                 case "construct":
-                    return clsTurret.enumTurretType.Construct;
+                    return Turret.enumTurretType.Construct;
                 case "repair":
-                    return clsTurret.enumTurretType.Repair;
+                    return Turret.enumTurretType.Repair;
                 case "sensor":
-                    return clsTurret.enumTurretType.Sensor;
+                    return Turret.enumTurretType.Sensor;
                 case "brain":
-                    return clsTurret.enumTurretType.Brain;
+                    return Turret.enumTurretType.Brain;
                 case "ecm":
-                    return clsTurret.enumTurretType.ECM;
+                    return Turret.enumTurretType.ECM;
                 default:
-                    return clsTurret.enumTurretType.Unknown;
+                    return Turret.enumTurretType.Unknown;
             }
         }
 
@@ -386,7 +387,7 @@ namespace SharpFlame
 
             MessageText = "An object\'s ID has been changed unexpectedly. The error was in " + Convert.ToString(ControlChars.Quote) + NameOfErrorSource +
                           Convert.ToString(ControlChars.Quote) + "." + ControlChars.CrLf + ControlChars.CrLf + "The object is of type " +
-                          IDUnit.Type.GetDisplayTextCode() + " and is at map position " + IDUnit.GetPosText() + ". It\'s ID was " +
+                          IDUnit.TypeBase.GetDisplayTextCode() + " and is at map position " + IDUnit.GetPosText() + ". It\'s ID was " +
                           IntendedID.ToStringInvariant() + ", but is now " + IDUnit.ID.ToStringInvariant() + "." + ControlChars.CrLf +
                           ControlChars.CrLf + "Click Cancel to stop seeing this message. Otherwise, click OK.";
 
@@ -401,7 +402,7 @@ namespace SharpFlame
             string MessageText = "";
 
             MessageText = "An object\'s ID has been changed from 0 to " + NewID.ToStringInvariant() + ". Zero is not a valid ID. The object is of type " +
-                          IDUnit.Type.GetDisplayTextCode() + " and is at map position " + IDUnit.GetPosText() + ".";
+                          IDUnit.TypeBase.GetDisplayTextCode() + " and is at map position " + IDUnit.GetPosText() + ".";
 
             //MsgBox(MessageText, MsgBoxStyle.OkOnly)
             Output.WarningAdd(MessageText);

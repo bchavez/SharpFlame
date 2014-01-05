@@ -5,6 +5,7 @@ using Matrix3D;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using SharpFlame.Collections.Specialized;
+using SharpFlame.Domain;
 using SharpFlame.Generators;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
@@ -2134,7 +2135,7 @@ namespace SharpFlame
             return BestNode;
         }
 
-        public clsMap.clsUnit PlaceUnitNear(clsUnitType Type, sXY_int Pos, clsMap.clsUnitGroup UnitGroup, int Clearance, int Rotation, int MaxDistFromPos)
+        public clsMap.clsUnit PlaceUnitNear(UnitTypeBase TypeBase, sXY_int Pos, clsMap.clsUnitGroup UnitGroup, int Clearance, int Rotation, int MaxDistFromPos)
         {
             PathfinderNode PosNode = default(PathfinderNode);
             clsNodeTag NodeTag = default(clsNodeTag);
@@ -2157,12 +2158,12 @@ namespace SharpFlame
                     NewUnitAdd.StoreChange = true;
                     clsMap.clsUnit NewUnit = new clsMap.clsUnit();
                     NewUnitAdd.NewUnit = NewUnit;
-                    NewUnit.Type = Type;
+                    NewUnit.TypeBase = TypeBase;
                     NewUnit.UnitGroup = UnitGroup;
 
                     FinalTilePos.X = (int)(Conversion.Int(NodeTag.Pos.X / App.TerrainGridSpacing));
                     FinalTilePos.Y = Conversion.Int(NodeTag.Pos.Y / App.TerrainGridSpacing);
-                    Footprint = Type.get_GetFootprintSelected(Rotation);
+                    Footprint = TypeBase.get_GetFootprintSelected(Rotation);
                     Remainder = Footprint.X % 2;
                     if ( Remainder > 0 )
                     {
@@ -2226,7 +2227,7 @@ namespace SharpFlame
             }
         }
 
-        public clsMap.clsUnit PlaceUnit(clsUnitType Type, App.sWorldPos Pos, clsMap.clsUnitGroup UnitGroup, int Rotation)
+        public clsMap.clsUnit PlaceUnit(UnitTypeBase TypeBase, App.sWorldPos Pos, clsMap.clsUnitGroup UnitGroup, int Rotation)
         {
             sXY_int TilePosA = new sXY_int();
             sXY_int TilePosB = new sXY_int();
@@ -2240,13 +2241,13 @@ namespace SharpFlame
             NewUnitAdd.StoreChange = true;
             clsMap.clsUnit NewUnit = new clsMap.clsUnit();
             NewUnitAdd.NewUnit = NewUnit;
-            NewUnit.Type = Type;
+            NewUnit.TypeBase = TypeBase;
             NewUnit.UnitGroup = UnitGroup;
 
             FinalTilePos.X = (int)(Conversion.Int(Pos.Horizontal.X / App.TerrainGridSpacing));
             FinalTilePos.Y = (int)(Conversion.Int(Pos.Horizontal.Y / App.TerrainGridSpacing));
 
-            Footprint = Type.get_GetFootprintSelected(Rotation);
+            Footprint = TypeBase.get_GetFootprintSelected(Rotation);
 
             NewUnit.Pos = Pos;
             TilePosA.X = (int)(Conversion.Int(NewUnit.Pos.Horizontal.X / App.TerrainGridSpacing - Footprint.X / 2.0D + 0.5D));
@@ -2385,19 +2386,19 @@ namespace SharpFlame
             for ( A = 0; A <= TotalPlayerCount - 1; A++ )
             {
                 PlayerNum = A;
-                tmpUnit = PlaceUnitNear(DefaultGenerator.UnitType_CommandCentre, PlayerBases[A].Pos, Map.UnitGroups[PlayerNum], 3, 0, BasePlaceRange);
+                tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBaseCommandCentre, PlayerBases[A].Pos, Map.UnitGroups[PlayerNum], 3, 0, BasePlaceRange);
                 if ( tmpUnit == null )
                 {
                     ReturnResult.ProblemAdd("No room for base structures");
                     return ReturnResult;
                 }
-                tmpUnit = PlaceUnitNear(DefaultGenerator.UnitType_PowerGenerator, PlayerBases[A].Pos, Map.UnitGroups[PlayerNum], 3, 0, BasePlaceRange);
+                tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBasePowerGenerator, PlayerBases[A].Pos, Map.UnitGroups[PlayerNum], 3, 0, BasePlaceRange);
                 if ( tmpUnit == null )
                 {
                     ReturnResult.ProblemAdd("No room for base structures.");
                     return ReturnResult;
                 }
-                tmpUnit = PlaceUnit(DefaultGenerator.UnitType_PowerModule, tmpUnit.Pos, Map.UnitGroups[PlayerNum], 0);
+                tmpUnit = PlaceUnit(DefaultGenerator.UnitTypeBasePowerModule, tmpUnit.Pos, Map.UnitGroups[PlayerNum], 0);
                 if ( tmpUnit == null )
                 {
                     ReturnResult.ProblemAdd("No room for module.");
@@ -2405,13 +2406,13 @@ namespace SharpFlame
                 }
                 for ( B = 1; B <= 2; B++ )
                 {
-                    tmpUnit = PlaceUnitNear(DefaultGenerator.UnitType_ResearchFacility, PlayerBases[A].Pos, Map.UnitGroups[PlayerNum], 3, 0, BasePlaceRange);
+                    tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBaseResearchFacility, PlayerBases[A].Pos, Map.UnitGroups[PlayerNum], 3, 0, BasePlaceRange);
                     if ( tmpUnit == null )
                     {
                         ReturnResult.ProblemAdd("No room for base structures");
                         return ReturnResult;
                     }
-                    tmpUnit = PlaceUnit(DefaultGenerator.UnitType_ResearchModule, tmpUnit.Pos, Map.UnitGroups[PlayerNum], 0);
+                    tmpUnit = PlaceUnit(DefaultGenerator.UnitTypeBaseResearchModule, tmpUnit.Pos, Map.UnitGroups[PlayerNum], 0);
                     if ( tmpUnit == null )
                     {
                         ReturnResult.ProblemAdd("No room for module.");
@@ -2420,20 +2421,20 @@ namespace SharpFlame
                 }
                 for ( B = 1; B <= 2; B++ )
                 {
-                    tmpUnit = PlaceUnitNear(DefaultGenerator.UnitType_Factory, PlayerBases[A].Pos, Map.UnitGroups[PlayerNum], 4, 0, BasePlaceRange);
+                    tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBaseFactory, PlayerBases[A].Pos, Map.UnitGroups[PlayerNum], 4, 0, BasePlaceRange);
                     if ( tmpUnit == null )
                     {
                         ReturnResult.ProblemAdd("No room for base structures");
                         return ReturnResult;
                     }
-                    tmpUnit = PlaceUnit(DefaultGenerator.UnitType_FactoryModule, tmpUnit.Pos, Map.UnitGroups[PlayerNum], 0);
+                    tmpUnit = PlaceUnit(DefaultGenerator.UnitTypeBaseFactoryModule, tmpUnit.Pos, Map.UnitGroups[PlayerNum], 0);
                     if ( tmpUnit == null )
                     {
                         ReturnResult.ProblemAdd("No room for module.");
                         return ReturnResult;
                     }
                 }
-                tmpUnit = PlaceUnitNear(DefaultGenerator.UnitType_CyborgFactory, PlayerBases[A].Pos, Map.UnitGroups[PlayerNum], 3, 0, BasePlaceRange);
+                tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBaseCyborgFactory, PlayerBases[A].Pos, Map.UnitGroups[PlayerNum], 3, 0, BasePlaceRange);
                 if ( tmpUnit == null )
                 {
                     ReturnResult.ProblemAdd("No room for base structures");
@@ -2441,7 +2442,7 @@ namespace SharpFlame
                 }
                 for ( B = 1; B <= BaseTruckCount; B++ )
                 {
-                    tmpUnit = PlaceUnitNear(DefaultGenerator.UnitType_Truck, PlayerBases[A].Pos, Map.UnitGroups[PlayerNum], 2, 0, BasePlaceRange);
+                    tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBaseTruck, PlayerBases[A].Pos, Map.UnitGroups[PlayerNum], 2, 0, BasePlaceRange);
                     if ( tmpUnit == null )
                     {
                         ReturnResult.ProblemAdd("No room for trucks");
@@ -2457,11 +2458,11 @@ namespace SharpFlame
                     {
                         if ( PassageNodes[D, A].PlayerBaseNum >= 0 )
                         {
-                            tmpUnit = PlaceUnitNear(DefaultGenerator.UnitType_OilResource, PassageNodes[D, A].Pos, Map.ScavengerUnitGroup, 2, 0, BasePlaceRange);
+                            tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBaseOilResource, PassageNodes[D, A].Pos, Map.ScavengerUnitGroup, 2, 0, BasePlaceRange);
                         }
                         else
                         {
-                            tmpUnit = PlaceUnitNear(DefaultGenerator.UnitType_OilResource, PassageNodes[D, A].Pos, Map.ScavengerUnitGroup, 2, 0, FeaturePlaceRange);
+                            tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBaseOilResource, PassageNodes[D, A].Pos, Map.ScavengerUnitGroup, 2, 0, FeaturePlaceRange);
                         }
                         if ( tmpUnit == null )
                         {
@@ -2486,7 +2487,7 @@ namespace SharpFlame
                         if ( PassageNodes[D, A].PlayerBaseNum >= 0 )
                         {
                             //place base derrick
-                            tmpUnit = PlaceUnit(DefaultGenerator.UnitType_Derrick, tmpUnit.Pos, Map.UnitGroups[PassageNodes[D, A].PlayerBaseNum], 0);
+                            tmpUnit = PlaceUnit(DefaultGenerator.UnitTypeBaseDerrick, tmpUnit.Pos, Map.UnitGroups[PassageNodes[D, A].PlayerBaseNum], 0);
                             if ( tmpUnit == null )
                             {
                                 ReturnResult.ProblemAdd("No room for derrick.");
@@ -2540,9 +2541,9 @@ namespace SharpFlame
                                     }
                                 }
                                 Rotation = 0;
-                                Footprint = GenerateTileset.ClusteredUnits[C].Type.get_GetFootprintSelected(Rotation);
+                                Footprint = GenerateTileset.ClusteredUnits[C].TypeBase.get_GetFootprintSelected(Rotation);
                                 E = ((int)(Math.Ceiling((decimal)(Math.Max(Footprint.X, Footprint.Y) / 2.0F)))) + 1;
-                                tmpUnit = PlaceUnitNear(GenerateTileset.ClusteredUnits[C].Type, PassageNodes[D, A].Pos, Map.ScavengerUnitGroup, E, Rotation,
+                                tmpUnit = PlaceUnitNear(GenerateTileset.ClusteredUnits[C].TypeBase, PassageNodes[D, A].Pos, Map.ScavengerUnitGroup, E, Rotation,
                                     FeaturePlaceRange);
                                 if ( tmpUnit == null )
                                 {
@@ -2580,7 +2581,7 @@ namespace SharpFlame
                         }
                     }
                     Rotation = 0;
-                    Footprint = GenerateTileset.ScatteredUnits[C].Type.get_GetFootprintSelected(Rotation);
+                    Footprint = GenerateTileset.ScatteredUnits[C].TypeBase.get_GetFootprintSelected(Rotation);
                     B = FeatureScatterGap + (int)(Math.Ceiling((decimal)(Math.Max(Footprint.X, Footprint.Y) / 2.0F)));
                     tmpNode = GetRandomChildNode(TilePathMap.get_GetNodeLayer(TilePathMap.GetNodeLayerCount - 1).get_GetNode(0), B);
                     if ( tmpNode == null )
@@ -2590,7 +2591,7 @@ namespace SharpFlame
                     else
                     {
                         clsNodeTag NodeTag = (clsNodeTag)tmpNode.Tag;
-                        if ( PlaceUnitNear(GenerateTileset.ScatteredUnits[C].Type, NodeTag.Pos, Map.ScavengerUnitGroup, B, Rotation, FeaturePlaceRange) == null )
+                        if ( PlaceUnitNear(GenerateTileset.ScatteredUnits[C].TypeBase, NodeTag.Pos, Map.ScavengerUnitGroup, B, Rotation, FeaturePlaceRange) == null )
                         {
                             break;
                         }

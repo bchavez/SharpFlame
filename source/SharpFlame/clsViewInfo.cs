@@ -602,7 +602,7 @@ namespace SharpFlame
                         Unit = Connection.Unit;
                         XY_dbl.X = Unit.Pos.Horizontal.X - MouseOverTerrain.Pos.Horizontal.X;
                         XY_dbl.Y = Unit.Pos.Horizontal.Y - MouseOverTerrain.Pos.Horizontal.Y;
-                        Footprint = Unit.Type.get_GetFootprintSelected(Unit.Rotation);
+                        Footprint = Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation);
                         if ( Math.Abs(XY_dbl.X) <= Math.Max(Footprint.X / 2.0D, 0.5D) * App.TerrainGridSpacing
                              && Math.Abs(XY_dbl.Y) <= Math.Max(Footprint.Y / 2.0D, 0.5D) * App.TerrainGridSpacing )
                         {
@@ -1590,7 +1590,7 @@ namespace SharpFlame
                                 {
                                     if ( MouseOverTerrain.Units.Count == 1 )
                                     {
-                                        Program.frmMainInstance.ObjectPicker(MouseOverTerrain.Units[0].Type);
+                                        Program.frmMainInstance.ObjectPicker(MouseOverTerrain.Units[0].TypeBase);
                                     }
                                     else
                                     {
@@ -1710,7 +1710,7 @@ namespace SharpFlame
                         }
                         else if ( modTools.Tool == modTools.Tools.ObjectPlace )
                         {
-                            if ( Program.frmMainInstance.SingleSelectedObjectType != null && Map.SelectedUnitGroup != null )
+                            if ( Program.frmMainInstance.SingleSelectedObjectTypeBase != null && Map.SelectedUnitGroup != null )
                             {
                                 clsMap.clsUnitCreate objectCreator = new clsMap.clsUnitCreate();
                                 Map.SetObjectCreatorDefaults(objectCreator);
@@ -2059,7 +2059,7 @@ namespace SharpFlame
 
         public void ApplyObjectLine()
         {
-            if ( Program.frmMainInstance.SingleSelectedObjectType != null && Map.SelectedUnitGroup != null )
+            if ( Program.frmMainInstance.SingleSelectedObjectTypeBase != null && Map.SelectedUnitGroup != null )
             {
                 clsMouseOver.clsOverTerrain MouseOverTerrian = GetMouseOverTerrain();
 

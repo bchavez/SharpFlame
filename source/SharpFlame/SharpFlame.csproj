@@ -114,7 +114,7 @@
     <Compile Include="Bitmaps\BitmapGLTexture.cs" />
     <Compile Include="Collections\Specialized\BooleanMap.cs" />
     <Compile Include="Generators\clsBrush.cs" />
-    <Compile Include="Domain\clsComponent.cs" />
+    <Compile Include="Domain\ComponentBase.cs" />
     <Compile Include="Mapping\clsGeneratorMap.cs" />
     <Compile Include="Mapping\Tiles\clsGeneratorTileset.cs" />
     <Compile Include="Mapping\clsHeightmap.cs" />
@@ -174,7 +174,7 @@
     <Compile Include="Pathfinding\LargeArrays.cs" />
     <Compile Include="Pathfinding\Path.cs" />
     <Compile Include="Util\Tools.cs" />
-    <Compile Include="Domain\clsUnitType.cs" />
+    <Compile Include="Domain\UnitTypeBase.cs" />
     <Compile Include="clsViewInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Colors\ColorUtil.cs" />

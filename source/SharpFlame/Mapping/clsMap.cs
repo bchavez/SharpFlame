@@ -9,6 +9,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.AppSettings;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
+using SharpFlame.Domain;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
@@ -914,7 +915,7 @@ namespace SharpFlame.Mapping
             {
                 bool[,] IsBasePlate = new bool[Constants.SectorTileSize, Constants.SectorTileSize];
                 clsUnit Unit = default(clsUnit);
-                clsStructureType StructureType = default(clsStructureType);
+                StructureTypeBase structureTypeBase = default(StructureTypeBase);
                 sXY_int Footprint = new sXY_int();
                 clsUnitSectorConnection Connection = default(clsUnitSectorConnection);
                 sXY_int FootprintStart = new sXY_int();
@@ -923,12 +924,12 @@ namespace SharpFlame.Mapping
                 {
                     Connection = tempLoopVar_Connection;
                     Unit = Connection.Unit;
-                    if ( Unit.Type.Type == clsUnitType.enumType.PlayerStructure )
+                    if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
                     {
-                        StructureType = (clsStructureType)Unit.Type;
-                        if ( StructureType.StructureBasePlate != null )
+                        structureTypeBase = (StructureTypeBase)Unit.TypeBase;
+                        if ( structureTypeBase.StructureBasePlate != null )
                         {
-                            Footprint = StructureType.get_GetFootprintSelected(Unit.Rotation);
+                            Footprint = structureTypeBase.get_GetFootprintSelected(Unit.Rotation);
                             GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Footprint, FootprintStart, FootprintFinish);
                             for ( TileY = Math.Max(FootprintStart.Y, StartY); TileY <= Math.Min(FootprintFinish.Y, FinishY); TileY++ )
                             {
@@ -1200,13 +1201,13 @@ namespace SharpFlame.Mapping
                 {
                     Unit = tempLoopVar_Unit;
                     Flag = true;
-                    if ( Unit.Type.UnitType_frmMainSelectedLink.IsConnected )
+                    if ( Unit.TypeBase.UnitType_frmMainSelectedLink.IsConnected )
                     {
                         Flag = false;
                     }
                     else
                     {
-                        Footprint = Unit.Type.get_GetFootprintSelected(Unit.Rotation);
+                        Footprint = Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation);
                     }
                     if ( Flag )
                     {
@@ -1220,7 +1221,7 @@ namespace SharpFlame.Mapping
                                     UnitMap[Y, X] = true;
                                     if ( SettingsManager.Settings.MinimapTeamColours )
                                     {
-                                        if ( SettingsManager.Settings.MinimapTeamColoursExceptFeatures & Unit.Type.Type == clsUnitType.enumType.Feature )
+                                        if ( SettingsManager.Settings.MinimapTeamColoursExceptFeatures & Unit.TypeBase.Type == UnitType.Feature )
                                         {
                                             sngTexture[Y, X, 0] = App.MinimapFeatureColour.Red;
                                             sngTexture[Y, X, 1] = App.MinimapFeatureColour.Green;
@@ -1260,10 +1261,10 @@ namespace SharpFlame.Mapping
                 {
                     Unit = tempLoopVar_Unit;
                     Flag = false;
-                    if ( Unit.Type.UnitType_frmMainSelectedLink.IsConnected )
+                    if ( Unit.TypeBase.UnitType_frmMainSelectedLink.IsConnected )
                     {
                         Flag = true;
-                        Footprint = Unit.Type.get_GetFootprintSelected(Unit.Rotation);
+                        Footprint = Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation);
                         Footprint.X += 2;
                         Footprint.Y += 2;
                     }
@@ -1463,7 +1464,7 @@ namespace SharpFlame.Mapping
             int X = 0;
             int Y = 0;
 
-            GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.Type.get_GetFootprintSelected(Unit.Rotation), TileStart, TileFinish);
+            GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation), TileStart, TileFinish);
             Start = GetTileSectorNum(TileStart);
             Finish = GetTileSectorNum(TileFinish);
             Start.X = MathUtil.Clamp_int(Start.X, 0, SectorCount.X - 1);
@@ -3713,8 +3714,8 @@ namespace SharpFlame.Mapping
             App.enumTileWalls TileWalls = App.enumTileWalls.None;
             SimpleList<clsUnit> Walls = new SimpleList<clsUnit>();
             SimpleList<clsUnit> Removals = new SimpleList<clsUnit>();
-            clsUnitType UnitType = default(clsUnitType);
-            clsStructureType StructureType = default(clsStructureType);
+            UnitTypeBase unitTypeBase = default(UnitTypeBase);
+            StructureTypeBase structureTypeBase = default(StructureTypeBase);
             int X = 0;
             int Y = 0;
             sXY_int MinTile = new sXY_int();
@@ -3737,11 +3738,11 @@ namespace SharpFlame.Mapping
                     {
                         Connection = tempLoopVar_Connection;
                         Unit = Connection.Unit;
-                        UnitType = Unit.Type;
-                        if ( UnitType.Type == clsUnitType.enumType.PlayerStructure )
+                        unitTypeBase = Unit.TypeBase;
+                        if ( unitTypeBase.Type == UnitType.PlayerStructure )
                         {
-                            StructureType = (clsStructureType)UnitType;
-                            if ( StructureType.WallLink.Source == WallType )
+                            structureTypeBase = (StructureTypeBase)unitTypeBase;
+                            if ( structureTypeBase.WallLink.Source == WallType )
                             {
                                 UnitTile = GetPosTileNum(Unit.Pos.Horizontal);
                                 Difference.X = UnitTile.X - TileNum.X;
@@ -3792,7 +3793,7 @@ namespace SharpFlame.Mapping
             }
 
             clsUnit NewUnit = new clsUnit();
-            clsUnitType NewUnitType = WallType.Segments[WallType.TileWalls_Segment[(int)TileWalls]];
+            UnitTypeBase newUnitTypeBase = WallType.Segments[WallType.TileWalls_Segment[(int)TileWalls]];
             NewUnit.Rotation = WallType.TileWalls_Direction[(int)TileWalls];
             if ( Expand )
             {
@@ -3808,7 +3809,7 @@ namespace SharpFlame.Mapping
                 NewUnit.UnitGroup = Removals[0].UnitGroup;
             }
             NewUnit.Pos = TileAlignedPos(TileNum, new sXY_int(1, 1));
-            NewUnit.Type = NewUnitType;
+            NewUnit.TypeBase = newUnitTypeBase;
             clsUnitAdd UnitAdd = new clsUnitAdd();
             UnitAdd.Map = this;
             UnitAdd.NewUnit = NewUnit;

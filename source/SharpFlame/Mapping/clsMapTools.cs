@@ -4,6 +4,7 @@ using System.IO;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
 using SharpFlame.Collections.Specialized;
+using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
@@ -163,9 +164,9 @@ namespace SharpFlame.Mapping
                 }
                 else if ( ObjectRotateMode == App.enumObjectRotateMode.Walls )
                 {
-                    if ( Unit.Type.Type == clsUnitType.enumType.PlayerStructure )
+                    if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
                     {
-                        if ( ((clsStructureType)Unit.Type).StructureType == clsStructureType.enumStructureType.Wall )
+                        if ( ((StructureTypeBase)Unit.TypeBase).StructureType == StructureTypeBase.enumStructureType.Wall )
                         {
                             Unit.Rotation =
                                 (int)
@@ -2191,7 +2192,7 @@ namespace SharpFlame.Mapping
             {
                 NewPos.X = Unit.Pos.Horizontal.X + Offset.X;
                 NewPos.Y = Unit.Pos.Horizontal.Y + Offset.Y;
-                ResultUnit.Pos = Map.TileAlignedPosFromMapPos(NewPos, ResultUnit.Type.get_GetFootprintSelected(Unit.Rotation));
+                ResultUnit.Pos = Map.TileAlignedPosFromMapPos(NewPos, ResultUnit.TypeBase.get_GetFootprintSelected(Unit.Rotation));
             }
         }
 
@@ -2217,16 +2218,16 @@ namespace SharpFlame.Mapping
 
         public class clsObjectTemplateToDesign : clsObjectAction
         {
-            private clsDroidDesign OldDroidType;
-            private clsDroidDesign NewDroidType;
+            private DroidDesign OldDroidType;
+            private DroidDesign NewDroidType;
 
             protected override void ActionCondition()
             {
                 base.ActionCondition();
 
-                if ( Unit.Type.Type == clsUnitType.enumType.PlayerDroid )
+                if ( Unit.TypeBase.Type == UnitType.PlayerDroid )
                 {
-                    OldDroidType = (clsDroidDesign)Unit.Type;
+                    OldDroidType = (DroidDesign)Unit.TypeBase;
                     ActionPerformed = OldDroidType.IsTemplate;
                 }
                 else
@@ -2238,8 +2239,8 @@ namespace SharpFlame.Mapping
 
             protected override void _ActionPerform()
             {
-                NewDroidType = new clsDroidDesign();
-                ResultUnit.Type = NewDroidType;
+                NewDroidType = new DroidDesign();
+                ResultUnit.TypeBase = NewDroidType;
                 NewDroidType.CopyDesign(OldDroidType);
                 NewDroidType.UpdateAttachments();
             }
@@ -2247,8 +2248,8 @@ namespace SharpFlame.Mapping
 
         public abstract class clsObjectComponent : clsObjectAction
         {
-            private clsDroidDesign OldDroidType;
-            protected clsDroidDesign NewDroidType;
+            private DroidDesign OldDroidType;
+            protected DroidDesign NewDroidType;
 
             protected abstract void ChangeComponent();
 
@@ -2256,9 +2257,9 @@ namespace SharpFlame.Mapping
             {
                 base.ActionCondition();
 
-                if ( Unit.Type.Type == clsUnitType.enumType.PlayerDroid )
+                if ( Unit.TypeBase.Type == UnitType.PlayerDroid )
                 {
-                    OldDroidType = (clsDroidDesign)Unit.Type;
+                    OldDroidType = (DroidDesign)Unit.TypeBase;
                     ActionPerformed = !OldDroidType.IsTemplate;
                 }
                 else
@@ -2270,8 +2271,8 @@ namespace SharpFlame.Mapping
 
             protected override void _ActionPerform()
             {
-                NewDroidType = new clsDroidDesign();
-                ResultUnit.Type = NewDroidType;
+                NewDroidType = new DroidDesign();
+                ResultUnit.TypeBase = NewDroidType;
                 NewDroidType.CopyDesign(OldDroidType);
 
                 ChangeComponent();
@@ -2284,13 +2285,13 @@ namespace SharpFlame.Mapping
         {
             protected override void _ActionPerform()
             {
-                ResultUnit.Pos = Unit.MapLink.Source.TileAlignedPosFromMapPos(Unit.Pos.Horizontal, Unit.Type.get_GetFootprintNew(Unit.Rotation));
+                ResultUnit.Pos = Unit.MapLink.Source.TileAlignedPosFromMapPos(Unit.Pos.Horizontal, Unit.TypeBase.get_GetFootprintNew(Unit.Rotation));
             }
         }
 
         public class clsObjectBody : clsObjectComponent
         {
-            public clsBody Body;
+            public Body Body;
 
             protected override void ChangeComponent()
             {
@@ -2300,7 +2301,7 @@ namespace SharpFlame.Mapping
 
         public class clsObjectPropulsion : clsObjectComponent
         {
-            public clsPropulsion Propulsion;
+            public Propulsion Propulsion;
 
             protected override void ChangeComponent()
             {
@@ -2310,7 +2311,7 @@ namespace SharpFlame.Mapping
 
         public class clsObjectTurret : clsObjectComponent
         {
-            public clsTurret Turret;
+            public Turret Turret;
             public int TurretNum;
 
             protected override void ChangeComponent()
@@ -2342,7 +2343,7 @@ namespace SharpFlame.Mapping
 
         public class clsObjectDroidType : clsObjectComponent
         {
-            public clsDroidDesign.clsTemplateDroidType DroidType;
+            public DroidDesign.clsTemplateDroidType DroidType;
 
             protected override void ChangeComponent()
             {
@@ -2413,7 +2414,7 @@ namespace SharpFlame.Mapping
                 int Y = 0;
                 double Total = 0;
                 byte Average = 0;
-                sXY_int Footprint = Unit.Type.get_GetFootprintSelected(Unit.Rotation);
+                sXY_int Footprint = Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation);
                 sXY_int Start = new sXY_int();
                 sXY_int Finish = new sXY_int();
                 int Samples = 0;
@@ -2465,7 +2466,7 @@ namespace SharpFlame.Mapping
 
             private clsUnit Unit;
 
-            private clsStructureType StructureType;
+            private StructureTypeBase structureTypeBase;
             private byte[] StruZeroBytesA = new byte[12];
             private byte[] StruZeroBytesB = new byte[40];
 
@@ -2477,8 +2478,8 @@ namespace SharpFlame.Mapping
                     return;
                 }
 
-                StructureType = (clsStructureType)Unit.Type;
-                IOUtil.WriteTextOfLength(File, 40, StructureType.Code);
+                structureTypeBase = (StructureTypeBase)Unit.TypeBase;
+                IOUtil.WriteTextOfLength(File, 40, structureTypeBase.Code);
                 File.Write(Unit.ID);
                 File.Write(Convert.ToBoolean((uint)Unit.Pos.Horizontal.X));
                 File.Write(Convert.ToBoolean((uint)Unit.Pos.Horizontal.Y));

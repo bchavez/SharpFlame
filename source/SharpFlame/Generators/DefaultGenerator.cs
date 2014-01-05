@@ -1,4 +1,5 @@
 using System;
+using SharpFlame.Domain;
 using SharpFlame.Mapping;
 
 namespace SharpFlame.Generators
@@ -9,71 +10,71 @@ namespace SharpFlame.Generators
         public static clsGeneratorTileset Generator_TilesetUrban;
         public static clsGeneratorTileset Generator_TilesetRockies;
 
-        public static clsUnitType UnitType_OilResource;
-        public static clsUnitType UnitType_CommandCentre;
-        public static clsUnitType UnitType_Truck;
-        public static clsUnitType UnitType_Factory;
-        public static clsUnitType UnitType_FactoryModule;
-        public static clsUnitType UnitType_CyborgFactory;
-        public static clsUnitType UnitType_ResearchFacility;
-        public static clsUnitType UnitType_ResearchModule;
-        public static clsUnitType UnitType_PowerGenerator;
-        public static clsUnitType UnitType_PowerModule;
-        public static clsUnitType UnitType_Derrick;
+        public static UnitTypeBase UnitTypeBaseOilResource;
+        public static UnitTypeBase UnitTypeBaseCommandCentre;
+        public static UnitTypeBase UnitTypeBaseTruck;
+        public static UnitTypeBase UnitTypeBaseFactory;
+        public static UnitTypeBase UnitTypeBaseFactoryModule;
+        public static UnitTypeBase UnitTypeBaseCyborgFactory;
+        public static UnitTypeBase UnitTypeBaseResearchFacility;
+        public static UnitTypeBase UnitTypeBaseResearchModule;
+        public static UnitTypeBase UnitTypeBasePowerGenerator;
+        public static UnitTypeBase UnitTypeBasePowerModule;
+        public static UnitTypeBase UnitTypeBaseDerrick;
 
-        public static clsUnitType UnitType_Boulder1;
-        public static clsUnitType UnitType_Boulder2;
-        public static clsUnitType UnitType_Boulder3;
-        public static clsUnitType UnitType_Ruin1;
-        public static clsUnitType UnitType_Ruin3;
-        public static clsUnitType UnitType_Ruin4;
-        public static clsUnitType UnitType_Ruin5;
+        public static UnitTypeBase UnitTypeBaseBoulder1;
+        public static UnitTypeBase UnitTypeBaseBoulder2;
+        public static UnitTypeBase UnitTypeBaseBoulder3;
+        public static UnitTypeBase UnitTypeBaseRuin1;
+        public static UnitTypeBase UnitTypeBaseRuin3;
+        public static UnitTypeBase UnitTypeBaseRuin4;
+        public static UnitTypeBase UnitTypeBaseRuin5;
 
-        public static clsUnitType UnitType_5Trees;
-        public static clsUnitType UnitType_4Trees;
-        public static clsUnitType UnitType_1Tree;
-        public static clsUnitType UnitType_5TreesSnowy;
-        public static clsUnitType UnitType_4TreesSnowy;
-        public static clsUnitType UnitType_1TreeSnowy;
+        public static UnitTypeBase UnitTypeBase5Trees;
+        public static UnitTypeBase UnitTypeBase4Trees;
+        public static UnitTypeBase UnitTypeBase1Tree;
+        public static UnitTypeBase UnitTypeBase5TreesSnowy;
+        public static UnitTypeBase UnitTypeBase4TreesSnowy;
+        public static UnitTypeBase UnitTypeBase1TreeSnowy;
 
-        public static clsUnitType UnitType_Highrise1;
-        public static clsUnitType UnitType_Highrise2;
-        public static clsUnitType UnitType_Highrise3;
-        public static clsUnitType UnitType_HalfHighrise;
-        public static clsUnitType UnitType_HighriseStump1;
-        public static clsUnitType UnitType_HighriseStump2;
-        public static clsUnitType UnitType_BuildingStump;
-        public static clsUnitType UnitType_SmallBuilding1;
-        public static clsUnitType UnitType_SmallBuilding2;
-        public static clsUnitType UnitType_SmallBuilding3;
+        public static UnitTypeBase UnitTypeBaseHighrise1;
+        public static UnitTypeBase UnitTypeBaseHighrise2;
+        public static UnitTypeBase UnitTypeBaseHighrise3;
+        public static UnitTypeBase UnitTypeBaseHalfHighrise;
+        public static UnitTypeBase UnitTypeBaseHighriseStump1;
+        public static UnitTypeBase UnitTypeBaseHighriseStump2;
+        public static UnitTypeBase UnitTypeBaseBuildingStump;
+        public static UnitTypeBase UnitTypeBaseSmallBuilding1;
+        public static UnitTypeBase UnitTypeBaseSmallBuilding2;
+        public static UnitTypeBase UnitTypeBaseSmallBuilding3;
 
-        public static clsUnitType UnitType_LogCabin1;
-        public static clsUnitType UnitType_LogCabin2;
-        public static clsUnitType UnitType_LogCabin3;
-        public static clsUnitType UnitType_LogCabin4;
-        public static clsUnitType UnitType_LogCabin5;
+        public static UnitTypeBase UnitTypeBaseLogCabin1;
+        public static UnitTypeBase UnitTypeBaseLogCabin2;
+        public static UnitTypeBase UnitTypeBaseLogCabin3;
+        public static UnitTypeBase UnitTypeBaseLogCabin4;
+        public static UnitTypeBase UnitTypeBaseLogCabin5;
 
-        public static clsUnitType UnitType_Crane;
+        public static UnitTypeBase UnitTypeBaseCrane;
 
-        public static clsUnitType UnitType_OilDrum;
+        public static UnitTypeBase UnitTypeBaseOilDrum;
 
         public static clsMap.sGenerateMasterTerrainArgs TerrainStyle_Arizona;
         public static clsMap.sGenerateMasterTerrainArgs TerrainStyle_Urban;
         public static clsMap.sGenerateMasterTerrainArgs TerrainStyle_Rockies;
 
-        public static clsUnitType GetUnitTypeFromCode(string Code)
+        public static UnitTypeBase GetUnitTypeFromCode(string Code)
         {
-            clsUnitType UnitType = default(clsUnitType);
+            UnitTypeBase unitTypeBase = default(UnitTypeBase);
 
-            foreach ( clsUnitType tempLoopVar_UnitType in App.ObjectData.UnitTypes )
+            foreach ( UnitTypeBase tempLoopVar_UnitType in App.ObjectData.UnitTypes )
             {
-                UnitType = tempLoopVar_UnitType;
+                unitTypeBase = tempLoopVar_UnitType;
                 string UnitCode = null;
-                if ( UnitType.GetCode(ref UnitCode) )
+                if ( unitTypeBase.GetCode(ref UnitCode) )
                 {
                     if ( UnitCode == Code )
                     {
-                        return UnitType;
+                        return unitTypeBase;
                     }
                 }
             }
@@ -89,81 +90,81 @@ namespace SharpFlame.Generators
             Generator_TilesetRockies = new clsGeneratorTileset();
             Generator_TilesetRockies.Tileset = App.Tileset_Rockies;
 
-            UnitType_OilResource = GetUnitTypeFromCode("OilResource");
-            UnitType_CommandCentre = GetUnitTypeFromCode("A0CommandCentre");
-            UnitType_Truck = GetUnitTypeFromCode("ConstructionDroid");
-            UnitType_Factory = GetUnitTypeFromCode("A0LightFactory");
-            UnitType_FactoryModule = GetUnitTypeFromCode("A0FacMod1");
-            UnitType_CyborgFactory = GetUnitTypeFromCode("A0CyborgFactory");
-            UnitType_ResearchFacility = GetUnitTypeFromCode("A0ResearchFacility");
-            UnitType_ResearchModule = GetUnitTypeFromCode("A0ResearchModule1");
-            UnitType_PowerGenerator = GetUnitTypeFromCode("A0PowerGenerator");
-            UnitType_PowerModule = GetUnitTypeFromCode("A0PowMod1");
-            UnitType_Derrick = GetUnitTypeFromCode("A0ResourceExtractor");
-            UnitType_Boulder1 = GetUnitTypeFromCode("Boulder1");
-            UnitType_Boulder2 = GetUnitTypeFromCode("Boulder2");
-            UnitType_Boulder3 = GetUnitTypeFromCode("Boulder3");
-            UnitType_Ruin1 = GetUnitTypeFromCode("Ruin1");
-            UnitType_Ruin3 = GetUnitTypeFromCode("Ruin3");
-            UnitType_Ruin4 = GetUnitTypeFromCode("Ruin4");
-            UnitType_Ruin5 = GetUnitTypeFromCode("Ruin5");
-            UnitType_5Trees = GetUnitTypeFromCode("Tree1");
-            UnitType_4Trees = GetUnitTypeFromCode("Tree2");
-            UnitType_1Tree = GetUnitTypeFromCode("Tree3");
-            UnitType_5TreesSnowy = GetUnitTypeFromCode("TreeSnow1");
-            UnitType_4TreesSnowy = GetUnitTypeFromCode("TreeSnow2");
-            UnitType_1TreeSnowy = GetUnitTypeFromCode("TreeSnow3");
-            UnitType_Highrise1 = GetUnitTypeFromCode("building1");
-            UnitType_Highrise2 = GetUnitTypeFromCode("building2");
-            UnitType_Highrise3 = GetUnitTypeFromCode("building3");
-            UnitType_HalfHighrise = GetUnitTypeFromCode("building11");
-            UnitType_HighriseStump1 = GetUnitTypeFromCode("building7");
-            UnitType_HighriseStump2 = GetUnitTypeFromCode("building8");
-            UnitType_BuildingStump = GetUnitTypeFromCode("WreckedBuilding9");
-            UnitType_SmallBuilding1 = GetUnitTypeFromCode("building10");
-            UnitType_SmallBuilding2 = GetUnitTypeFromCode("building12");
-            UnitType_SmallBuilding3 = GetUnitTypeFromCode("WreckedBuilding17");
-            UnitType_LogCabin1 = GetUnitTypeFromCode("LogCabin1");
-            UnitType_LogCabin2 = GetUnitTypeFromCode("LogCabin2");
-            UnitType_LogCabin3 = GetUnitTypeFromCode("LogCabin3");
-            UnitType_LogCabin4 = GetUnitTypeFromCode("LogCabin4");
-            UnitType_LogCabin5 = GetUnitTypeFromCode("LogCabin5");
-            UnitType_Crane = GetUnitTypeFromCode("Crane");
-            UnitType_OilDrum = GetUnitTypeFromCode("OilDrum");
+            UnitTypeBaseOilResource = GetUnitTypeFromCode("OilResource");
+            UnitTypeBaseCommandCentre = GetUnitTypeFromCode("A0CommandCentre");
+            UnitTypeBaseTruck = GetUnitTypeFromCode("ConstructionDroid");
+            UnitTypeBaseFactory = GetUnitTypeFromCode("A0LightFactory");
+            UnitTypeBaseFactoryModule = GetUnitTypeFromCode("A0FacMod1");
+            UnitTypeBaseCyborgFactory = GetUnitTypeFromCode("A0CyborgFactory");
+            UnitTypeBaseResearchFacility = GetUnitTypeFromCode("A0ResearchFacility");
+            UnitTypeBaseResearchModule = GetUnitTypeFromCode("A0ResearchModule1");
+            UnitTypeBasePowerGenerator = GetUnitTypeFromCode("A0PowerGenerator");
+            UnitTypeBasePowerModule = GetUnitTypeFromCode("A0PowMod1");
+            UnitTypeBaseDerrick = GetUnitTypeFromCode("A0ResourceExtractor");
+            UnitTypeBaseBoulder1 = GetUnitTypeFromCode("Boulder1");
+            UnitTypeBaseBoulder2 = GetUnitTypeFromCode("Boulder2");
+            UnitTypeBaseBoulder3 = GetUnitTypeFromCode("Boulder3");
+            UnitTypeBaseRuin1 = GetUnitTypeFromCode("Ruin1");
+            UnitTypeBaseRuin3 = GetUnitTypeFromCode("Ruin3");
+            UnitTypeBaseRuin4 = GetUnitTypeFromCode("Ruin4");
+            UnitTypeBaseRuin5 = GetUnitTypeFromCode("Ruin5");
+            UnitTypeBase5Trees = GetUnitTypeFromCode("Tree1");
+            UnitTypeBase4Trees = GetUnitTypeFromCode("Tree2");
+            UnitTypeBase1Tree = GetUnitTypeFromCode("Tree3");
+            UnitTypeBase5TreesSnowy = GetUnitTypeFromCode("TreeSnow1");
+            UnitTypeBase4TreesSnowy = GetUnitTypeFromCode("TreeSnow2");
+            UnitTypeBase1TreeSnowy = GetUnitTypeFromCode("TreeSnow3");
+            UnitTypeBaseHighrise1 = GetUnitTypeFromCode("building1");
+            UnitTypeBaseHighrise2 = GetUnitTypeFromCode("building2");
+            UnitTypeBaseHighrise3 = GetUnitTypeFromCode("building3");
+            UnitTypeBaseHalfHighrise = GetUnitTypeFromCode("building11");
+            UnitTypeBaseHighriseStump1 = GetUnitTypeFromCode("building7");
+            UnitTypeBaseHighriseStump2 = GetUnitTypeFromCode("building8");
+            UnitTypeBaseBuildingStump = GetUnitTypeFromCode("WreckedBuilding9");
+            UnitTypeBaseSmallBuilding1 = GetUnitTypeFromCode("building10");
+            UnitTypeBaseSmallBuilding2 = GetUnitTypeFromCode("building12");
+            UnitTypeBaseSmallBuilding3 = GetUnitTypeFromCode("WreckedBuilding17");
+            UnitTypeBaseLogCabin1 = GetUnitTypeFromCode("LogCabin1");
+            UnitTypeBaseLogCabin2 = GetUnitTypeFromCode("LogCabin2");
+            UnitTypeBaseLogCabin3 = GetUnitTypeFromCode("LogCabin3");
+            UnitTypeBaseLogCabin4 = GetUnitTypeFromCode("LogCabin4");
+            UnitTypeBaseLogCabin5 = GetUnitTypeFromCode("LogCabin5");
+            UnitTypeBaseCrane = GetUnitTypeFromCode("Crane");
+            UnitTypeBaseOilDrum = GetUnitTypeFromCode("OilDrum");
 
-            Generator_TilesetArizona.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_Boulder1, 1));
-            Generator_TilesetArizona.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_Boulder2, 1));
-            Generator_TilesetArizona.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_Boulder3, 1));
+            Generator_TilesetArizona.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseBoulder1, 1));
+            Generator_TilesetArizona.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseBoulder2, 1));
+            Generator_TilesetArizona.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseBoulder3, 1));
 
-            Generator_TilesetArizona.ClusteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_Ruin1, 1));
-            Generator_TilesetArizona.ClusteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_Ruin3, 1));
-            Generator_TilesetArizona.ClusteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_Ruin4, 1));
-            Generator_TilesetArizona.ClusteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_Ruin5, 1));
+            Generator_TilesetArizona.ClusteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseRuin1, 1));
+            Generator_TilesetArizona.ClusteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseRuin3, 1));
+            Generator_TilesetArizona.ClusteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseRuin4, 1));
+            Generator_TilesetArizona.ClusteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseRuin5, 1));
 
-            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_Highrise1, 3));
-            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_Highrise2, 3));
-            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_Highrise3, 3));
-            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_HalfHighrise, 1));
-            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_SmallBuilding1, 3));
-            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_SmallBuilding2, 3));
-            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_SmallBuilding3, 3));
-            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_HighriseStump1, 1));
-            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_HighriseStump2, 1));
-            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_BuildingStump, 1));
-            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_Crane, 2));
+            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseHighrise1, 3));
+            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseHighrise2, 3));
+            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseHighrise3, 3));
+            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseHalfHighrise, 1));
+            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseSmallBuilding1, 3));
+            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseSmallBuilding2, 3));
+            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseSmallBuilding3, 3));
+            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseHighriseStump1, 1));
+            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseHighriseStump2, 1));
+            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseBuildingStump, 1));
+            Generator_TilesetUrban.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseCrane, 2));
 
-            Generator_TilesetRockies.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_5Trees, 1));
-            Generator_TilesetRockies.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_4Trees, 1));
-            Generator_TilesetRockies.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_1Tree, 2));
+            Generator_TilesetRockies.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBase5Trees, 1));
+            Generator_TilesetRockies.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBase4Trees, 1));
+            Generator_TilesetRockies.ScatteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBase1Tree, 2));
             //Tileset_Rockies.ScatteredUnit_Add(New clsWZTileset.sUnitChance(UnitType_5TreesSnowy, 1))
             //Tileset_Rockies.ScatteredUnit_Add(New clsWZTileset.sUnitChance(UnitType_4TreesSnowy, 1))
             //Tileset_Rockies.ScatteredUnit_Add(New clsWZTileset.sUnitChance(UnitType_1TreeSnowy, 2))
 
-            Generator_TilesetRockies.ClusteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_LogCabin1, 3));
-            Generator_TilesetRockies.ClusteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_LogCabin2, 1));
-            Generator_TilesetRockies.ClusteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_LogCabin3, 1));
-            Generator_TilesetRockies.ClusteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_LogCabin4, 1));
-            Generator_TilesetRockies.ClusteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitType_LogCabin5, 3));
+            Generator_TilesetRockies.ClusteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseLogCabin1, 3));
+            Generator_TilesetRockies.ClusteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseLogCabin2, 1));
+            Generator_TilesetRockies.ClusteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseLogCabin3, 1));
+            Generator_TilesetRockies.ClusteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseLogCabin4, 1));
+            Generator_TilesetRockies.ClusteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseLogCabin5, 3));
 
             int Num = 0;
 

@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
+using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping;
 using SharpFlame.Maths;
@@ -230,16 +231,16 @@ namespace SharpFlame
             //check unit positions
 
             bool[,] TileHasUnit = new bool[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
-            clsStructureType[,] TileStructureType = new clsStructureType[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
-            clsFeatureType[,] TileFeatureType = new clsFeatureType[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
+            StructureTypeBase[,] tileStructureTypeBase = new StructureTypeBase[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
+            FeatureTypeBase[,] tileFeatureTypeBase = new FeatureTypeBase[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
             clsMap.clsUnitGroup[,] TileObjectGroup = new clsMap.clsUnitGroup[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
             int X = 0;
             int Y = 0;
             sXY_int StartPos = new sXY_int();
             sXY_int FinishPos = new sXY_int();
             sXY_int CentrePos = new sXY_int();
-            clsStructureType.enumStructureType StructureTypeType;
-            clsStructureType StructureType = default(clsStructureType);
+            StructureTypeBase.enumStructureType StructureTypeType;
+            StructureTypeBase structureTypeBase = default(StructureTypeBase);
             sXY_int Footprint = new sXY_int();
             bool[] UnitIsStructureModule = new bool[Map.Units.Count];
             bool IsValid = default(bool);
@@ -247,12 +248,12 @@ namespace SharpFlame
             foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.Units )
             {
                 Unit = tempLoopVar_Unit;
-                if ( Unit.Type.Type == clsUnitType.enumType.PlayerStructure )
+                if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
                 {
-                    StructureType = (clsStructureType)Unit.Type;
-                    StructureTypeType = StructureType.StructureType;
-                    UnitIsStructureModule[Unit.MapLink.ArrayPosition] = StructureType.IsModule() |
-                                                                        StructureTypeType == clsStructureType.enumStructureType.ResourceExtractor;
+                    structureTypeBase = (StructureTypeBase)Unit.TypeBase;
+                    StructureTypeType = structureTypeBase.StructureType;
+                    UnitIsStructureModule[Unit.MapLink.ArrayPosition] = structureTypeBase.IsModule() |
+                                                                        StructureTypeType == StructureTypeBase.enumStructureType.ResourceExtractor;
                 }
             }
             //check and store non-module units first. modules need to check for the underlying unit.
@@ -261,7 +262,7 @@ namespace SharpFlame
                 Unit = tempLoopVar_Unit;
                 if ( !UnitIsStructureModule[Unit.MapLink.ArrayPosition] )
                 {
-                    Footprint = Unit.Type.get_GetFootprintSelected(Unit.Rotation);
+                    Footprint = Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation);
                     Map.GetFootprintTileRange(Unit.Pos.Horizontal, Footprint, StartPos, FinishPos);
                     if ( StartPos.X < 0 | FinishPos.X >= Map.Terrain.TileSize.X
                          | StartPos.Y < 0 | FinishPos.Y >= Map.Terrain.TileSize.Y )
@@ -285,13 +286,13 @@ namespace SharpFlame
                                 else
                                 {
                                     TileHasUnit[X, Y] = true;
-                                    if ( Unit.Type.Type == clsUnitType.enumType.PlayerStructure )
+                                    if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
                                     {
-                                        TileStructureType[X, Y] = (clsStructureType)Unit.Type;
+                                        tileStructureTypeBase[X, Y] = (StructureTypeBase)Unit.TypeBase;
                                     }
-                                    else if ( Unit.Type.Type == clsUnitType.enumType.Feature )
+                                    else if ( Unit.TypeBase.Type == UnitType.Feature )
                                     {
-                                        TileFeatureType[X, Y] = (clsFeatureType)Unit.Type;
+                                        tileFeatureTypeBase[X, Y] = (FeatureTypeBase)Unit.TypeBase;
                                     }
                                     TileObjectGroup[X, Y] = Unit.UnitGroup;
                                 }
@@ -306,7 +307,7 @@ namespace SharpFlame
                 Unit = tempLoopVar_Unit;
                 if ( UnitIsStructureModule[Unit.MapLink.ArrayPosition] )
                 {
-                    StructureTypeType = ((clsStructureType)Unit.Type).StructureType;
+                    StructureTypeType = ((StructureTypeBase)Unit.TypeBase).StructureType;
                     CentrePos.X = Conversion.Int(Unit.Pos.Horizontal.X / App.TerrainGridSpacing);
                     CentrePos.Y = (int)(Conversion.Int(Unit.Pos.Horizontal.Y / App.TerrainGridSpacing));
                     if ( CentrePos.X < 0 | CentrePos.X >= Map.Terrain.TileSize.X
@@ -318,14 +319,14 @@ namespace SharpFlame
                     }
                     else
                     {
-                        if ( TileStructureType[CentrePos.X, CentrePos.Y] != null )
+                        if ( tileStructureTypeBase[CentrePos.X, CentrePos.Y] != null )
                         {
                             if ( TileObjectGroup[CentrePos.X, CentrePos.Y] == Unit.UnitGroup )
                             {
-                                if ( StructureTypeType == clsStructureType.enumStructureType.FactoryModule )
+                                if ( StructureTypeType == StructureTypeBase.enumStructureType.FactoryModule )
                                 {
-                                    if ( TileStructureType[CentrePos.X, CentrePos.Y].StructureType == clsStructureType.enumStructureType.Factory
-                                         | TileStructureType[CentrePos.X, CentrePos.Y].StructureType == clsStructureType.enumStructureType.VTOLFactory )
+                                    if ( tileStructureTypeBase[CentrePos.X, CentrePos.Y].StructureType == StructureTypeBase.enumStructureType.Factory
+                                         | tileStructureTypeBase[CentrePos.X, CentrePos.Y].StructureType == StructureTypeBase.enumStructureType.VTOLFactory )
                                     {
                                         IsValid = true;
                                     }
@@ -334,9 +335,9 @@ namespace SharpFlame
                                         IsValid = false;
                                     }
                                 }
-                                else if ( StructureTypeType == clsStructureType.enumStructureType.PowerModule )
+                                else if ( StructureTypeType == StructureTypeBase.enumStructureType.PowerModule )
                                 {
-                                    if ( TileStructureType[CentrePos.X, CentrePos.Y].StructureType == clsStructureType.enumStructureType.PowerGenerator )
+                                    if ( tileStructureTypeBase[CentrePos.X, CentrePos.Y].StructureType == StructureTypeBase.enumStructureType.PowerGenerator )
                                     {
                                         IsValid = true;
                                     }
@@ -345,9 +346,9 @@ namespace SharpFlame
                                         IsValid = false;
                                     }
                                 }
-                                else if ( StructureTypeType == clsStructureType.enumStructureType.ResearchModule )
+                                else if ( StructureTypeType == StructureTypeBase.enumStructureType.ResearchModule )
                                 {
-                                    if ( TileStructureType[CentrePos.X, CentrePos.Y].StructureType == clsStructureType.enumStructureType.Research )
+                                    if ( tileStructureTypeBase[CentrePos.X, CentrePos.Y].StructureType == StructureTypeBase.enumStructureType.Research )
                                     {
                                         IsValid = true;
                                     }
@@ -366,11 +367,11 @@ namespace SharpFlame
                                 IsValid = false;
                             }
                         }
-                        else if ( TileFeatureType[CentrePos.X, CentrePos.Y] != null )
+                        else if ( tileFeatureTypeBase[CentrePos.X, CentrePos.Y] != null )
                         {
-                            if ( StructureTypeType == clsStructureType.enumStructureType.ResourceExtractor )
+                            if ( StructureTypeType == StructureTypeBase.enumStructureType.ResourceExtractor )
                             {
-                                if ( TileFeatureType[CentrePos.X, CentrePos.Y].FeatureType == clsFeatureType.enumFeatureType.OilResource )
+                                if ( tileFeatureTypeBase[CentrePos.X, CentrePos.Y].FeatureType == FeatureTypeBase.enumFeatureType.OilResource )
                                 {
                                     IsValid = true;
                                 }
@@ -384,7 +385,7 @@ namespace SharpFlame
                                 IsValid = false;
                             }
                         }
-                        else if ( StructureTypeType == clsStructureType.enumStructureType.ResourceExtractor )
+                        else if ( StructureTypeType == StructureTypeBase.enumStructureType.ResourceExtractor )
                         {
                             IsValid = true;
                         }
@@ -422,8 +423,8 @@ namespace SharpFlame
             int[] PlayerMasterTruckCount = new int[Constants.PlayerCountMax];
             int ScavPlayerNum = 0;
             int ScavObjectCount = 0;
-            clsDroidDesign DroidType = default(clsDroidDesign);
-            clsStructureType StructureType;
+            DroidDesign DroidType = default(DroidDesign);
+            StructureTypeBase structureTypeBase;
             int UnusedPlayerUnitWarningCount = 0;
             clsMap.clsUnit Unit = default(clsMap.clsUnit);
 
@@ -437,12 +438,12 @@ namespace SharpFlame
                 }
                 else
                 {
-                    if ( Unit.Type.Type == clsUnitType.enumType.PlayerDroid )
+                    if ( Unit.TypeBase.Type == UnitType.PlayerDroid )
                     {
-                        DroidType = (clsDroidDesign)Unit.Type;
+                        DroidType = (DroidDesign)Unit.TypeBase;
                         if ( DroidType.Body != null && DroidType.Propulsion != null && DroidType.Turret1 != null && DroidType.TurretCount == 1 )
                         {
-                            if ( DroidType.Turret1.TurretType == clsTurret.enumTurretType.Construct )
+                            if ( DroidType.Turret1.TurretType == Turret.enumTurretType.Construct )
                             {
                                 PlayerMasterTruckCount[Unit.UnitGroup.WZ_StartPos]++;
                                 if ( DroidType.IsTemplate )
@@ -452,16 +453,16 @@ namespace SharpFlame
                             }
                         }
                     }
-                    else if ( Unit.Type.Type == clsUnitType.enumType.PlayerStructure )
+                    else if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
                     {
-                        StructureType = (clsStructureType)Unit.Type;
-                        if ( StructureType.Code == "A0CommandCentre" )
+                        structureTypeBase = (StructureTypeBase)Unit.TypeBase;
+                        if ( structureTypeBase.Code == "A0CommandCentre" )
                         {
                             PlayerHQCount[Unit.UnitGroup.WZ_StartPos]++;
                         }
                     }
                 }
-                if ( Unit.Type.Type != clsUnitType.enumType.Feature )
+                if ( Unit.TypeBase.Type != UnitType.Feature )
                 {
                     if ( Unit.UnitGroup.WZ_StartPos == ScavPlayerNum || Unit.UnitGroup == Map.ScavengerUnitGroup )
                     {
@@ -527,30 +528,30 @@ namespace SharpFlame
 
             int[,] PlayerStructureTypeCount = new int[Constants.PlayerCountMax, App.ObjectData.StructureTypes.Count];
             int[] ScavStructureTypeCount = new int[App.ObjectData.StructureTypes.Count];
-            clsStructureType StructureType = default(clsStructureType);
+            StructureTypeBase structureTypeBase = default(StructureTypeBase);
             clsMap.clsUnit Unit = default(clsMap.clsUnit);
 
             foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.Units )
             {
                 Unit = tempLoopVar_Unit;
-                if ( Unit.Type.Type == clsUnitType.enumType.PlayerStructure )
+                if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
                 {
-                    StructureType = (clsStructureType)Unit.Type;
+                    structureTypeBase = (StructureTypeBase)Unit.TypeBase;
                     if ( Unit.UnitGroup == Map.ScavengerUnitGroup )
                     {
-                        ScavStructureTypeCount[StructureType.StructureType_ObjectDataLink.ArrayPosition]++;
+                        ScavStructureTypeCount[structureTypeBase.StructureType_ObjectDataLink.ArrayPosition]++;
                     }
                     else
                     {
-                        PlayerStructureTypeCount[Unit.UnitGroup.WZ_StartPos, StructureType.StructureType_ObjectDataLink.ArrayPosition]++;
+                        PlayerStructureTypeCount[Unit.UnitGroup.WZ_StartPos, structureTypeBase.StructureType_ObjectDataLink.ArrayPosition]++;
                     }
                 }
             }
 
-            foreach ( clsStructureType tempLoopVar_StructureType in App.ObjectData.StructureTypes )
+            foreach ( StructureTypeBase tempLoopVar_StructureType in App.ObjectData.StructureTypes )
             {
-                StructureType = tempLoopVar_StructureType;
-                int StructureTypeNum = StructureType.StructureType_ObjectDataLink.ArrayPosition;
+                structureTypeBase = tempLoopVar_StructureType;
+                int StructureTypeNum = structureTypeBase.StructureType_ObjectDataLink.ArrayPosition;
                 int PlayerNum = 0;
                 for ( PlayerNum = 0; PlayerNum <= Constants.PlayerCountMax - 1; PlayerNum++ )
                 {
@@ -558,14 +559,14 @@ namespace SharpFlame
                     {
                         ReturnResult.ProblemAdd("Player " + Convert.ToString(PlayerNum) + " has too many (" +
                                                 Convert.ToString(PlayerStructureTypeCount[PlayerNum, StructureTypeNum]) + ") of structure " +
-                                                Convert.ToString(ControlChars.Quote) + StructureType.Code + Convert.ToString(ControlChars.Quote) +
+                                                Convert.ToString(ControlChars.Quote) + structureTypeBase.Code + Convert.ToString(ControlChars.Quote) +
                                                 ". The limit is 255 of any one structure type.");
                     }
                 }
                 if ( ScavStructureTypeCount[StructureTypeNum] > 255 )
                 {
                     ReturnResult.ProblemAdd("Scavengers have too many (" + Convert.ToString(ScavStructureTypeCount[StructureTypeNum]) + ") of structure " +
-                                            Convert.ToString(ControlChars.Quote) + StructureType.Code + Convert.ToString(ControlChars.Quote) +
+                                            Convert.ToString(ControlChars.Quote) + structureTypeBase.Code + Convert.ToString(ControlChars.Quote) +
                                             ". The limit is 255 of any one structure type.");
                 }
             }

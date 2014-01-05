@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
+using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
 using SharpFlame.Maths;
@@ -26,7 +27,7 @@ namespace SharpFlame.Mapping
             public ConnectedList<clsUnitSectorConnection, clsUnit> Sectors;
 
             public UInt32 ID;
-            public clsUnitType Type;
+            public UnitTypeBase TypeBase;
             public App.sWorldPos Pos;
             public int Rotation;
             public clsUnitGroup UnitGroup;
@@ -54,9 +55,9 @@ namespace SharpFlame.Mapping
 
                 bool IsDesign = default(bool);
 
-                if ( UnitToCopy.Type.Type == clsUnitType.enumType.PlayerDroid )
+                if ( UnitToCopy.TypeBase.Type == UnitType.PlayerDroid )
                 {
-                    IsDesign = !((clsDroidDesign)UnitToCopy.Type).IsTemplate;
+                    IsDesign = !((DroidDesign)UnitToCopy.TypeBase).IsTemplate;
                 }
                 else
                 {
@@ -64,14 +65,14 @@ namespace SharpFlame.Mapping
                 }
                 if ( IsDesign )
                 {
-                    clsDroidDesign DroidDesign = new clsDroidDesign();
-                    Type = DroidDesign;
-                    DroidDesign.CopyDesign((clsDroidDesign)UnitToCopy.Type);
+                    DroidDesign DroidDesign = new DroidDesign();
+                    TypeBase = DroidDesign;
+                    DroidDesign.CopyDesign((DroidDesign)UnitToCopy.TypeBase);
                     DroidDesign.UpdateAttachments();
                 }
                 else
                 {
-                    Type = UnitToCopy.Type;
+                    TypeBase = UnitToCopy.TypeBase;
                 }
                 Pos = UnitToCopy.Pos;
                 Rotation = UnitToCopy.Rotation;
@@ -132,13 +133,13 @@ namespace SharpFlame.Mapping
             {
                 App.sResult Result = new App.sResult();
 
-                if ( Type.Type == clsUnitType.enumType.PlayerStructure )
+                if ( TypeBase.Type == UnitType.PlayerStructure )
                 {
-                    clsStructureType StructureType = (clsStructureType)Type;
-                    clsStructureType.enumStructureType StructureTypeType = StructureType.StructureType;
-                    if ( StructureTypeType == clsStructureType.enumStructureType.FactoryModule
-                         | StructureTypeType == clsStructureType.enumStructureType.PowerModule
-                         | StructureTypeType == clsStructureType.enumStructureType.ResearchModule )
+                    StructureTypeBase structureTypeBase = (StructureTypeBase)TypeBase;
+                    StructureTypeBase.enumStructureType StructureTypeType = structureTypeBase.StructureType;
+                    if ( StructureTypeType == StructureTypeBase.enumStructureType.FactoryModule
+                         | StructureTypeType == StructureTypeBase.enumStructureType.PowerModule
+                         | StructureTypeType == StructureTypeBase.enumStructureType.ResearchModule )
                     {
                         Result.Problem = "Error: Trying to assign label to structure module.";
                         return Result;
@@ -175,15 +176,15 @@ namespace SharpFlame.Mapping
                 if ( _Label != null )
                 {
                     int TypeNum = 0;
-                    switch ( Type.Type )
+                    switch ( TypeBase.Type )
                     {
-                        case clsUnitType.enumType.PlayerDroid:
+                        case UnitType.PlayerDroid:
                             TypeNum = 0;
                             break;
-                        case clsUnitType.enumType.PlayerStructure:
+                        case UnitType.PlayerStructure:
                             TypeNum = 1;
                             break;
-                        case clsUnitType.enumType.Feature:
+                        case UnitType.Feature:
                             TypeNum = 2;
                             break;
                         default:
@@ -659,7 +660,7 @@ namespace SharpFlame.Mapping
         public class clsUnitCreate
         {
             public clsMap Map;
-            public clsUnitType ObjectType;
+            public UnitTypeBase ObjectTypeBase;
             public sXY_int Horizontal;
             public clsUnitGroup UnitGroup;
             public bool AutoWalls = false;
@@ -670,13 +671,13 @@ namespace SharpFlame.Mapping
             {
                 if ( AutoWalls )
                 {
-                    if ( ObjectType.Type == clsUnitType.enumType.PlayerStructure )
+                    if ( ObjectTypeBase.Type == UnitType.PlayerStructure )
                     {
-                        clsStructureType StructureType = (clsStructureType)ObjectType;
-                        if ( StructureType.WallLink.IsConnected )
+                        StructureTypeBase structureTypeBase = (StructureTypeBase)ObjectTypeBase;
+                        if ( structureTypeBase.WallLink.IsConnected )
                         {
                             clsWallType AutoWallType = null;
-                            AutoWallType = StructureType.WallLink.Source;
+                            AutoWallType = structureTypeBase.WallLink.Source;
                             Map.PerformTileWall(AutoWallType, Map.GetPosTileNum(Horizontal), true);
                             return null;
                         }
@@ -692,8 +693,8 @@ namespace SharpFlame.Mapping
                     newUnit.Rotation = Rotation;
                 }
                 newUnit.UnitGroup = UnitGroup;
-                newUnit.Pos = Map.TileAlignedPosFromMapPos(Horizontal, ObjectType.get_GetFootprintSelected(newUnit.Rotation));
-                newUnit.Type = ObjectType;
+                newUnit.Pos = Map.TileAlignedPosFromMapPos(Horizontal, ObjectTypeBase.get_GetFootprintSelected(newUnit.Rotation));
+                newUnit.TypeBase = ObjectTypeBase;
                 clsUnitAdd UnitAdd = new clsUnitAdd();
                 UnitAdd.Map = Map;
                 UnitAdd.NewUnit = newUnit;
@@ -707,7 +708,7 @@ namespace SharpFlame.Mapping
         {
             objectCreator.Map = this;
 
-            objectCreator.ObjectType = Program.frmMainInstance.SingleSelectedObjectType;
+            objectCreator.ObjectTypeBase = Program.frmMainInstance.SingleSelectedObjectTypeBase;
             objectCreator.AutoWalls = Program.frmMainInstance.cbxAutoWalls.Checked;
             objectCreator.UnitGroup = SelectedUnitGroup.Item;
             try

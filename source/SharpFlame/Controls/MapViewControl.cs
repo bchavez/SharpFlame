@@ -8,6 +8,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
+using SharpFlame.Domain;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.AppSettings;
 using SharpFlame.Mapping;
@@ -354,7 +355,7 @@ namespace SharpFlame.Controls
 
             if ( ListSelectIsPicker )
             {
-                Program.frmMainInstance.ObjectPicker(Unit.Type);
+                Program.frmMainInstance.ObjectPicker(Unit.TypeBase);
             }
             else
             {
@@ -553,9 +554,9 @@ namespace SharpFlame.Controls
                         {
                             Connection = tempLoopVar_Connection;
                             Unit = Connection.Unit;
-                            if ( Unit.Type.Type == clsUnitType.enumType.PlayerStructure )
+                            if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
                             {
-                                if ( ((clsStructureType)Unit.Type).StructureBasePlate != null )
+                                if ( ((StructureTypeBase)Unit.TypeBase).StructureBasePlate != null )
                                 {
                                     SectorNum.X = X;
                                     SectorNum.Y = Y;
@@ -987,7 +988,7 @@ namespace SharpFlame.Controls
             for ( A = 0; A <= MouseOverTerrain.Units.Count - 1; A++ )
             {
                 Unit = MouseOverTerrain.Units[A];
-                ListSelectItems[A] = new ToolStripButton(Unit.Type.GetDisplayTextCode());
+                ListSelectItems[A] = new ToolStripButton(Unit.TypeBase.GetDisplayTextCode());
                 ListSelectItems[A].Tag = Unit;
                 ListSelect.Items.Add(ListSelectItems[A]);
             }

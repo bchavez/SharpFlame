@@ -6,6 +6,7 @@ using Microsoft.VisualBasic;
 using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
+using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
@@ -314,7 +315,7 @@ namespace SharpFlame.Mapping
                     }
 
                     clsUnit NewUnit = default(clsUnit);
-                    clsUnitType UnitType = null;
+                    UnitTypeBase unitTypeBase = null;
                     UInt32 AvailableID = 0;
 
                     AvailableID = 1U;
@@ -330,24 +331,24 @@ namespace SharpFlame.Mapping
                     {
                         if ( TempUnit[A].LNDType == ((byte)0) )
                         {
-                            UnitType = App.ObjectData.FindOrCreateUnitType(TempUnit[A].Code, clsUnitType.enumType.Feature, -1);
+                            unitTypeBase = App.ObjectData.FindOrCreateUnitType(TempUnit[A].Code, UnitType.Feature, -1);
                         }
                         else if ( TempUnit[A].LNDType == ((byte)1) )
                         {
-                            UnitType = App.ObjectData.FindOrCreateUnitType(TempUnit[A].Code, clsUnitType.enumType.PlayerStructure, -1);
+                            unitTypeBase = App.ObjectData.FindOrCreateUnitType(TempUnit[A].Code, UnitType.PlayerStructure, -1);
                         }
                         else if ( TempUnit[A].LNDType == ((byte)2) )
                         {
-                            UnitType = App.ObjectData.FindOrCreateUnitType(Convert.ToString(TempUnit[A].Code), clsUnitType.enumType.PlayerDroid, -1);
+                            unitTypeBase = App.ObjectData.FindOrCreateUnitType(Convert.ToString(TempUnit[A].Code), UnitType.PlayerDroid, -1);
                         }
                         else
                         {
-                            UnitType = null;
+                            unitTypeBase = null;
                         }
-                        if ( UnitType != null )
+                        if ( unitTypeBase != null )
                         {
                             NewUnit = new clsUnit();
-                            NewUnit.Type = UnitType;
+                            NewUnit.TypeBase = unitTypeBase;
                             NewUnit.ID = TempUnit[A].ID;
                             NewUnit.SavePriority = TempUnit[A].SavePriority;
                             //NewUnit.Name = TempUnit(A).Name
@@ -1058,7 +1059,7 @@ namespace SharpFlame.Mapping
 
                 clsUnit NewUnit = default(clsUnit);
                 sXYZ_int XYZ_int = new sXYZ_int();
-                clsUnitType NewType = default(clsUnitType);
+                UnitTypeBase newTypeBase = default(UnitTypeBase);
                 UInt32 AvailableID = 0;
                 clsLNDObject CurrentObject = default(clsLNDObject);
 
@@ -1077,22 +1078,22 @@ namespace SharpFlame.Mapping
                     switch ( CurrentObject.TypeNum )
                     {
                         case 0:
-                            NewType = App.ObjectData.FindOrCreateUnitType(CurrentObject.Code, clsUnitType.enumType.Feature, -1);
+                            newTypeBase = App.ObjectData.FindOrCreateUnitType(CurrentObject.Code, UnitType.Feature, -1);
                             break;
                         case 1:
-                            NewType = App.ObjectData.FindOrCreateUnitType(CurrentObject.Code, clsUnitType.enumType.PlayerStructure, -1);
+                            newTypeBase = App.ObjectData.FindOrCreateUnitType(CurrentObject.Code, UnitType.PlayerStructure, -1);
                             break;
                         case 2:
-                            NewType = App.ObjectData.FindOrCreateUnitType(CurrentObject.Code, clsUnitType.enumType.PlayerDroid, -1);
+                            newTypeBase = App.ObjectData.FindOrCreateUnitType(CurrentObject.Code, UnitType.PlayerDroid, -1);
                             break;
                         default:
-                            NewType = null;
+                            newTypeBase = null;
                             break;
                     }
-                    if ( NewType != null )
+                    if ( newTypeBase != null )
                     {
                         NewUnit = new clsUnit();
-                        NewUnit.Type = NewType;
+                        NewUnit.TypeBase = newTypeBase;
                         if ( CurrentObject.PlayerNum < 0 | CurrentObject.PlayerNum >= Constants.PlayerCountMax )
                         {
                             NewUnit.UnitGroup = ScavengerUnitGroup;
@@ -1361,16 +1362,16 @@ namespace SharpFlame.Mapping
                 foreach ( clsUnit tempLoopVar_Unit in Units )
                 {
                     Unit = tempLoopVar_Unit;
-                    switch ( Unit.Type.Type )
+                    switch ( Unit.TypeBase.Type )
                     {
-                        case clsUnitType.enumType.Feature:
+                        case UnitType.Feature:
                             B = 0;
                             break;
-                        case clsUnitType.enumType.PlayerStructure:
+                        case UnitType.PlayerStructure:
                             B = 1;
                             break;
-                        case clsUnitType.enumType.PlayerDroid:
-                            if ( ((clsDroidDesign)Unit.Type).IsTemplate )
+                        case UnitType.PlayerDroid:
+                            if ( ((DroidDesign)Unit.TypeBase).IsTemplate )
                             {
                                 B = 2;
                             }
@@ -1387,7 +1388,7 @@ namespace SharpFlame.Mapping
                     XYZ_int = LNDPos_From_MapPos(Units[A].Pos.Horizontal);
                     if ( B >= 0 )
                     {
-                        if ( Unit.Type.GetCode(ref Code) )
+                        if ( Unit.TypeBase.GetCode(ref Code) )
                         {
                             Text = "        " + Unit.ID.ToStringInvariant() + " " + Convert.ToString(B) + " " + Convert.ToString(Quote) +
                                    Code + Convert.ToString(Quote) + " " + Unit.UnitGroup.GetLNDPlayerText() + " " + Convert.ToString(Quote) + "NONAME" +
@@ -1840,7 +1841,7 @@ namespace SharpFlame.Mapping
                 foreach ( clsUnit tempLoopVar_Unit in Units )
                 {
                     Unit = tempLoopVar_Unit;
-                    if ( Unit.Type.GetCode(ref OutputUnitCode[OutputUnitCount]) )
+                    if ( Unit.TypeBase.GetCode(ref OutputUnitCode[OutputUnitCount]) )
                     {
                         OutputUnits[OutputUnitCount] = Unit;
                         OutputUnitCount++;
@@ -1853,15 +1854,15 @@ namespace SharpFlame.Mapping
                 {
                     Unit = OutputUnits[A];
                     IOUtil.WriteTextOfLength(File, 40, OutputUnitCode[A]);
-                    switch ( Unit.Type.Type )
+                    switch ( Unit.TypeBase.Type )
                     {
-                        case clsUnitType.enumType.Feature:
+                        case UnitType.Feature:
                             File.Write((byte)0);
                             break;
-                        case clsUnitType.enumType.PlayerStructure:
+                        case UnitType.PlayerStructure:
                             File.Write((byte)1);
                             break;
-                        case clsUnitType.enumType.PlayerDroid:
+                        case UnitType.PlayerDroid:
                             File.Write((byte)2);
                             break;
                     }

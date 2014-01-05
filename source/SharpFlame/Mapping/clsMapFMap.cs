@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.VisualBasic;
+using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
 using SharpFlame.Mapping.Tiles;
@@ -16,7 +17,7 @@ namespace SharpFlame.Mapping
             public struct sObject
             {
                 public UInt32 ID;
-                public clsUnitType.enumType Type;
+                public UnitType Type;
                 public bool IsTemplate;
                 public string Code;
                 public string UnitGroup;
@@ -24,10 +25,10 @@ namespace SharpFlame.Mapping
                 public clsXY_int Pos;
                 public double Heading;
                 public double Health;
-                public clsDroidDesign.clsTemplateDroidType TemplateDroidType;
+                public DroidDesign.clsTemplateDroidType TemplateDroidType;
                 public string BodyCode;
                 public string PropulsionCode;
-                public clsTurret.enumTurretType[] TurretTypes;
+                public Turret.enumTurretType[] TurretTypes;
                 public string[] TurretCodes;
                 public int TurretCount;
                 public int Priority;
@@ -47,14 +48,14 @@ namespace SharpFlame.Mapping
                 Objects = new sObject[ObjectCount];
                 for ( A = 0; A <= ObjectCount - 1; A++ )
                 {
-                    Objects[A].Type = clsUnitType.enumType.Unspecified;
+                    Objects[A].Type = UnitType.Unspecified;
                     Objects[A].Health = 1.0D;
                     Objects[A].WallType = -1;
                     Objects[A].TurretCodes = new string[3];
-                    Objects[A].TurretTypes = new clsTurret.enumTurretType[3];
+                    Objects[A].TurretTypes = new Turret.enumTurretType[3];
                     for ( B = 0; B <= Constants.MaxDroidWeapons - 1; B++ )
                     {
-                        Objects[A].TurretTypes[B] = clsTurret.enumTurretType.Unknown;
+                        Objects[A].TurretTypes[B] = Turret.enumTurretType.Unknown;
                     }
                 }
             }
@@ -79,20 +80,20 @@ namespace SharpFlame.Mapping
                     switch ( CommaText[0].ToLower() )
                     {
                         case "feature":
-                            Objects[INISectionNum].Type = clsUnitType.enumType.Feature;
+                            Objects[INISectionNum].Type = UnitType.Feature;
                             Objects[INISectionNum].Code = CommaText[1];
                             break;
                         case "structure":
-                            Objects[INISectionNum].Type = clsUnitType.enumType.PlayerStructure;
+                            Objects[INISectionNum].Type = UnitType.PlayerStructure;
                             Objects[INISectionNum].Code = CommaText[1];
                             break;
                         case "droidtemplate":
-                            Objects[INISectionNum].Type = clsUnitType.enumType.PlayerDroid;
+                            Objects[INISectionNum].Type = UnitType.PlayerDroid;
                             Objects[INISectionNum].IsTemplate = true;
                             Objects[INISectionNum].Code = CommaText[1];
                             break;
                         case "droiddesign":
-                            Objects[INISectionNum].Type = clsUnitType.enumType.PlayerDroid;
+                            Objects[INISectionNum].Type = UnitType.PlayerDroid;
                             break;
                         default:
                             return TranslatorResult.ValueInvalid;
@@ -100,7 +101,7 @@ namespace SharpFlame.Mapping
                 }
                 else if ( (string)INIProperty.Name == "droidtype" )
                 {
-                    clsDroidDesign.clsTemplateDroidType DroidType = App.GetTemplateDroidTypeFromTemplateCode(Convert.ToString(INIProperty.Value));
+                    DroidDesign.clsTemplateDroidType DroidType = App.GetTemplateDroidTypeFromTemplateCode(Convert.ToString(INIProperty.Value));
                     if ( DroidType == null )
                     {
                         return TranslatorResult.ValueInvalid;
@@ -143,9 +144,9 @@ namespace SharpFlame.Mapping
                     {
                         CommaText[A] = Convert.ToString(CommaText[A].Trim());
                     }
-                    clsTurret.enumTurretType TurretType = default(clsTurret.enumTurretType);
+                    Turret.enumTurretType TurretType = default(Turret.enumTurretType);
                     TurretType = App.GetTurretTypeFromName(CommaText[0]);
-                    if ( TurretType != clsTurret.enumTurretType.Unknown )
+                    if ( TurretType != Turret.enumTurretType.Unknown )
                     {
                         Objects[INISectionNum].TurretTypes[0] = TurretType;
                         Objects[INISectionNum].TurretCodes[0] = CommaText[1];
@@ -166,9 +167,9 @@ namespace SharpFlame.Mapping
                     {
                         CommaText[A] = Convert.ToString(CommaText[A].Trim());
                     }
-                    clsTurret.enumTurretType TurretType = default(clsTurret.enumTurretType);
+                    Turret.enumTurretType TurretType = default(Turret.enumTurretType);
                     TurretType = App.GetTurretTypeFromName(CommaText[0]);
-                    if ( TurretType != clsTurret.enumTurretType.Unknown )
+                    if ( TurretType != Turret.enumTurretType.Unknown )
                     {
                         Objects[INISectionNum].TurretTypes[1] = TurretType;
                         Objects[INISectionNum].TurretCodes[1] = CommaText[1];
@@ -189,9 +190,9 @@ namespace SharpFlame.Mapping
                     {
                         CommaText[A] = Convert.ToString(CommaText[A].Trim());
                     }
-                    clsTurret.enumTurretType TurretType = default(clsTurret.enumTurretType);
+                    Turret.enumTurretType TurretType = default(Turret.enumTurretType);
                     TurretType = App.GetTurretTypeFromName(CommaText[0]);
-                    if ( TurretType != clsTurret.enumTurretType.Unknown )
+                    if ( TurretType != Turret.enumTurretType.Unknown )
                     {
                         Objects[INISectionNum].TurretTypes[2] = TurretType;
                         Objects[INISectionNum].TurretCodes[2] = CommaText[1];
@@ -833,7 +834,7 @@ namespace SharpFlame.Mapping
 
             int A = 0;
             clsUnit Unit = default(clsUnit);
-            clsDroidDesign Droid = default(clsDroidDesign);
+            DroidDesign Droid = default(DroidDesign);
             int WarningCount = 0;
             string Text = null;
 
@@ -843,24 +844,24 @@ namespace SharpFlame.Mapping
                 {
                     Unit = Units[A];
                     File.AppendSectionName(A.ToStringInvariant());
-                    switch ( Unit.Type.Type )
+                    switch ( Unit.TypeBase.Type )
                     {
-                        case clsUnitType.enumType.Feature:
-                            File.AppendProperty("Type", "Feature, " + ((clsFeatureType)Unit.Type).Code);
+                        case UnitType.Feature:
+                            File.AppendProperty("Type", "Feature, " + ((FeatureTypeBase)Unit.TypeBase).Code);
                             break;
-                        case clsUnitType.enumType.PlayerStructure:
-                            clsStructureType StructureType = (clsStructureType)Unit.Type;
-                            File.AppendProperty("Type", "Structure, " + StructureType.Code);
-                            if ( StructureType.WallLink.IsConnected )
+                        case UnitType.PlayerStructure:
+                            StructureTypeBase structureTypeBase = (StructureTypeBase)Unit.TypeBase;
+                            File.AppendProperty("Type", "Structure, " + structureTypeBase.Code);
+                            if ( structureTypeBase.WallLink.IsConnected )
                             {
-                                File.AppendProperty("WallType", StructureType.WallLink.ArrayPosition.ToStringInvariant());
+                                File.AppendProperty("WallType", structureTypeBase.WallLink.ArrayPosition.ToStringInvariant());
                             }
                             break;
-                        case clsUnitType.enumType.PlayerDroid:
-                            Droid = (clsDroidDesign)Unit.Type;
+                        case UnitType.PlayerDroid:
+                            Droid = (DroidDesign)Unit.TypeBase;
                             if ( Droid.IsTemplate )
                             {
-                                File.AppendProperty("Type", "DroidTemplate, " + ((clsDroidTemplate)Unit.Type).Code);
+                                File.AppendProperty("Type", "DroidTemplate, " + ((DroidTemplate)Unit.TypeBase).Code);
                             }
                             else
                             {
@@ -1727,10 +1728,10 @@ namespace SharpFlame.Mapping
             int UnknownUnitTypeCount = 0;
             int MaxUnknownUnitTypeWarningCount = 16;
 
-            clsDroidDesign DroidDesign = default(clsDroidDesign);
+            DroidDesign DroidDesign = default(DroidDesign);
             clsUnit NewObject = default(clsUnit);
             clsUnitAdd UnitAdd = new clsUnitAdd();
-            clsUnitType UnitType = default(clsUnitType);
+            UnitTypeBase unitTypeBase = default(UnitTypeBase);
             bool IsDesign = default(bool);
             clsUnitGroup UnitGroup = default(clsUnitGroup);
             sXY_int ZeroPos = new sXY_int(0, 0);
@@ -1758,11 +1759,11 @@ namespace SharpFlame.Mapping
                 }
                 else
                 {
-                    UnitType = null;
-                    if ( INIObjects.Objects[A].Type != clsUnitType.enumType.Unspecified )
+                    unitTypeBase = null;
+                    if ( INIObjects.Objects[A].Type != UnitType.Unspecified )
                     {
                         IsDesign = false;
-                        if ( INIObjects.Objects[A].Type == clsUnitType.enumType.PlayerDroid )
+                        if ( INIObjects.Objects[A].Type == UnitType.PlayerDroid )
                         {
                             if ( !INIObjects.Objects[A].IsTemplate )
                             {
@@ -1771,7 +1772,7 @@ namespace SharpFlame.Mapping
                         }
                         if ( IsDesign )
                         {
-                            DroidDesign = new clsDroidDesign();
+                            DroidDesign = new DroidDesign();
                             DroidDesign.TemplateDroidType = INIObjects.Objects[A].TemplateDroidType;
                             if ( DroidDesign.TemplateDroidType == null )
                             {
@@ -1823,12 +1824,12 @@ namespace SharpFlame.Mapping
                                 }
                             }
                             DroidDesign.UpdateAttachments();
-                            UnitType = DroidDesign;
+                            unitTypeBase = DroidDesign;
                         }
                         else
                         {
-                            UnitType = App.ObjectData.FindOrCreateUnitType(INIObjects.Objects[A].Code, INIObjects.Objects[A].Type, INIObjects.Objects[A].WallType);
-                            if ( UnitType.IsUnknown )
+                            unitTypeBase = App.ObjectData.FindOrCreateUnitType(INIObjects.Objects[A].Code, INIObjects.Objects[A].Type, INIObjects.Objects[A].WallType);
+                            if ( unitTypeBase.IsUnknown )
                             {
                                 if ( UnknownUnitTypeCount < MaxUnknownUnitTypeWarningCount )
                                 {
@@ -1839,14 +1840,14 @@ namespace SharpFlame.Mapping
                             }
                         }
                     }
-                    if ( UnitType == null )
+                    if ( unitTypeBase == null )
                     {
                         ObjectTypeMissingCount++;
                     }
                     else
                     {
                         NewObject = new clsUnit();
-                        NewObject.Type = UnitType;
+                        NewObject.TypeBase = unitTypeBase;
                         NewObject.Pos.Horizontal.X = INIObjects.Objects[A].Pos.X;
                         NewObject.Pos.Horizontal.Y = INIObjects.Objects[A].Pos.Y;
                         NewObject.Health = INIObjects.Objects[A].Health;
@@ -1858,7 +1859,7 @@ namespace SharpFlame.Mapping
                         }
                         if ( INIObjects.Objects[A].UnitGroup == null || INIObjects.Objects[A].UnitGroup == "" )
                         {
-                            if ( INIObjects.Objects[A].Type != clsUnitType.enumType.Feature )
+                            if ( INIObjects.Objects[A].Type != UnitType.Feature )
                             {
                                 ObjectPlayerNumInvalidCount++;
                             }
