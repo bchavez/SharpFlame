@@ -141,6 +141,8 @@
     <Compile Include="Mapping\Objects\clsUnitSectorConnection.cs" />
     <Compile Include="Mapping\Renderers\clsDrawTile.cs" />
     <Compile Include="Mapping\Renderers\clsDrawTileOld.cs" />
+    <Compile Include="Mapping\Script\clsScriptArea.cs" />
+    <Compile Include="Mapping\Script\clsScriptPosition.cs" />
     <Compile Include="Mapping\Tiles\clsGeneratorTileset.cs" />
     <Compile Include="Mapping\clsHeightmap.cs" />
     <Compile Include="Collections\ConnectedList.cs" />
@@ -173,7 +175,7 @@
     <Compile Include="Mapping\clsMapFMap.cs" />
     <Compile Include="Mapping\clsMapObject.cs" />
     <Compile Include="Mapping\clsMapOtherIO.cs" />
-    <Compile Include="Mapping\Script\clsMapScriptMarkers.cs" />
+    <Compile Include="Mapping\clsMapScriptMarkers.cs" />
     <Compile Include="Mapping\Tools\clsMapTools.cs" />
     <Compile Include="Mapping\Wz\clsMapWZ.cs" />
     <Compile Include="Domain\clsModel.cs" />

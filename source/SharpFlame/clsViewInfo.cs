@@ -7,6 +7,7 @@ using SharpFlame.Controls;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Objects;
+using SharpFlame.Mapping.Script;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
 using SharpFlame.AppSettings;
@@ -1601,7 +1602,7 @@ namespace SharpFlame
                             }
                             else if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ScriptPosition) )
                             {
-                                clsMap.clsScriptPosition NewPosition = clsMap.clsScriptPosition.Create(Map);
+                                clsScriptPosition NewPosition = clsScriptPosition.Create(Map);
                                 if ( NewPosition != null )
                                 {
                                     NewPosition.PosX = MouseLeftDown.OverTerrain.DownPos.Horizontal.X;

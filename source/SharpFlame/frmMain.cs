@@ -18,6 +18,7 @@ using SharpFlame.FileIO;
 using SharpFlame.Generators;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Objects;
+using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
@@ -3693,7 +3694,7 @@ namespace SharpFlame
                 return;
             }
 
-            clsMap.clsScriptArea NewArea = clsMap.clsScriptArea.Create(Map);
+            clsScriptArea NewArea = clsScriptArea.Create(Map);
             if ( NewArea == null )
             {
                 MessageBox.Show("Error: Creating area failed.");
@@ -3710,8 +3711,8 @@ namespace SharpFlame
             View_DrawViewLater();
         }
 
-        private clsMap.clsScriptPosition[] lstScriptPositions_Objects = new clsMap.clsScriptPosition[0];
-        private clsMap.clsScriptArea[] lstScriptAreas_Objects = new clsMap.clsScriptArea[0];
+        private clsScriptPosition[] lstScriptPositions_Objects = new clsScriptPosition[0];
+        private clsScriptArea[] lstScriptAreas_Objects = new clsScriptArea[0];
 
         public void ScriptMarkerLists_Update()
         {
@@ -3730,14 +3731,14 @@ namespace SharpFlame
             }
 
             int ListPosition = 0;
-            clsMap.clsScriptPosition ScriptPosition = default(clsMap.clsScriptPosition);
-            clsMap.clsScriptArea ScriptArea = default(clsMap.clsScriptArea);
+            clsScriptPosition ScriptPosition = default(clsScriptPosition);
+            clsScriptArea ScriptArea = default(clsScriptArea);
             object NewSelectedScriptMarker = null;
 
-            lstScriptPositions_Objects = new clsMap.clsScriptPosition[Map.ScriptPositions.Count];
-            lstScriptAreas_Objects = new clsMap.clsScriptArea[Map.ScriptAreas.Count];
+            lstScriptPositions_Objects = new clsScriptPosition[Map.ScriptPositions.Count];
+            lstScriptAreas_Objects = new clsScriptArea[Map.ScriptAreas.Count];
 
-            foreach ( clsMap.clsScriptPosition tempLoopVar_ScriptPosition in Map.ScriptPositions )
+            foreach ( clsScriptPosition tempLoopVar_ScriptPosition in Map.ScriptPositions )
             {
                 ScriptPosition = tempLoopVar_ScriptPosition;
                 ListPosition = lstScriptPositions.Items.Add(ScriptPosition.Label);
@@ -3749,7 +3750,7 @@ namespace SharpFlame
                 }
             }
 
-            foreach ( clsMap.clsScriptArea tempLoopVar_ScriptArea in Map.ScriptAreas )
+            foreach ( clsScriptArea tempLoopVar_ScriptArea in Map.ScriptAreas )
             {
                 ScriptArea = tempLoopVar_ScriptArea;
                 ListPosition = lstScriptAreas.Items.Add(ScriptArea.Label);
@@ -3826,9 +3827,9 @@ namespace SharpFlame
             txtScriptMarkerY2.Text = "";
             if ( _SelectedScriptMarker != null )
             {
-                if ( _SelectedScriptMarker is clsMap.clsScriptPosition )
+                if ( _SelectedScriptMarker is clsScriptPosition )
                 {
-                    clsMap.clsScriptPosition ScriptPosition = (clsMap.clsScriptPosition)_SelectedScriptMarker;
+                    clsScriptPosition ScriptPosition = (clsScriptPosition)_SelectedScriptMarker;
                     txtScriptMarkerLabel.Text = ScriptPosition.Label;
                     txtScriptMarkerX.Text = ScriptPosition.PosX.ToStringInvariant();
                     txtScriptMarkerY.Text = ScriptPosition.PosY.ToStringInvariant();
@@ -3836,9 +3837,9 @@ namespace SharpFlame
                     txtScriptMarkerX.Enabled = true;
                     txtScriptMarkerY.Enabled = true;
                 }
-                else if ( _SelectedScriptMarker is clsMap.clsScriptArea )
+                else if ( _SelectedScriptMarker is clsScriptArea )
                 {
-                    clsMap.clsScriptArea ScriptArea = (clsMap.clsScriptArea)_SelectedScriptMarker;
+                    clsScriptArea ScriptArea = (clsScriptArea)_SelectedScriptMarker;
                     txtScriptMarkerLabel.Text = ScriptArea.Label;
                     txtScriptMarkerX.Text = ScriptArea.PosAX.ToStringInvariant();
                     txtScriptMarkerY.Text = ScriptArea.PosAY.ToStringInvariant();
@@ -3867,9 +3868,9 @@ namespace SharpFlame
             }
 
             int Number = 0;
-            if ( _SelectedScriptMarker is clsMap.clsScriptPosition )
+            if ( _SelectedScriptMarker is clsScriptPosition )
             {
-                clsMap.clsScriptPosition ScripPosition = (clsMap.clsScriptPosition)_SelectedScriptMarker;
+                clsScriptPosition ScripPosition = (clsScriptPosition)_SelectedScriptMarker;
                 Number = ScripPosition.ParentMap.ArrayPosition;
                 ScripPosition.Deallocate();
                 if ( Map.ScriptPositions.Count > 0 )
@@ -3881,9 +3882,9 @@ namespace SharpFlame
                     _SelectedScriptMarker = null;
                 }
             }
-            else if ( _SelectedScriptMarker is clsMap.clsScriptArea )
+            else if ( _SelectedScriptMarker is clsScriptArea )
             {
-                clsMap.clsScriptArea ScriptArea = (clsMap.clsScriptArea)_SelectedScriptMarker;
+                clsScriptArea ScriptArea = (clsScriptArea)_SelectedScriptMarker;
                 Number = ScriptArea.ParentMap.ArrayPosition;
                 ScriptArea.Deallocate();
                 if ( Map.ScriptAreas.Count > 0 )
@@ -3913,18 +3914,18 @@ namespace SharpFlame
             }
 
             App.sResult Result = new App.sResult();
-            if ( _SelectedScriptMarker is clsMap.clsScriptPosition )
+            if ( _SelectedScriptMarker is clsScriptPosition )
             {
-                clsMap.clsScriptPosition ScriptPosition = (clsMap.clsScriptPosition)_SelectedScriptMarker;
+                clsScriptPosition ScriptPosition = (clsScriptPosition)_SelectedScriptMarker;
                 if ( ScriptPosition.Label == txtScriptMarkerLabel.Text )
                 {
                     return;
                 }
                 Result = ScriptPosition.SetLabel(txtScriptMarkerLabel.Text);
             }
-            else if ( _SelectedScriptMarker is clsMap.clsScriptArea )
+            else if ( _SelectedScriptMarker is clsScriptArea )
             {
-                clsMap.clsScriptArea ScriptArea = (clsMap.clsScriptArea)_SelectedScriptMarker;
+                clsScriptArea ScriptArea = (clsScriptArea)_SelectedScriptMarker;
                 if ( ScriptArea.Label == txtScriptMarkerLabel.Text )
                 {
                     return;
@@ -3957,16 +3958,16 @@ namespace SharpFlame
                 return;
             }
 
-            if ( _SelectedScriptMarker is clsMap.clsScriptPosition )
+            if ( _SelectedScriptMarker is clsScriptPosition )
             {
-                clsMap.clsScriptPosition ScriptPosition = (clsMap.clsScriptPosition)_SelectedScriptMarker;
+                clsScriptPosition ScriptPosition = (clsScriptPosition)_SelectedScriptMarker;
                 int temp_Result = ScriptPosition.PosX;
                 IOUtil.InvariantParse(txtScriptMarkerX.Text, ref temp_Result);
                 ScriptPosition.PosX = temp_Result;
             }
-            else if ( _SelectedScriptMarker is clsMap.clsScriptArea )
+            else if ( _SelectedScriptMarker is clsScriptArea )
             {
-                clsMap.clsScriptArea ScriptArea = (clsMap.clsScriptArea)_SelectedScriptMarker;
+                clsScriptArea ScriptArea = (clsScriptArea)_SelectedScriptMarker;
                 int temp_Result2 = ScriptArea.PosAX;
                 IOUtil.InvariantParse(txtScriptMarkerX.Text, ref temp_Result2);
                 ScriptArea.PosAX = temp_Result2;
@@ -3991,16 +3992,16 @@ namespace SharpFlame
                 return;
             }
 
-            if ( _SelectedScriptMarker is clsMap.clsScriptPosition )
+            if ( _SelectedScriptMarker is clsScriptPosition )
             {
-                clsMap.clsScriptPosition ScriptPosition = (clsMap.clsScriptPosition)_SelectedScriptMarker;
+                clsScriptPosition ScriptPosition = (clsScriptPosition)_SelectedScriptMarker;
                 int temp_Result = ScriptPosition.PosY;
                 IOUtil.InvariantParse(txtScriptMarkerY.Text, ref temp_Result);
                 ScriptPosition.PosY = temp_Result;
             }
-            else if ( _SelectedScriptMarker is clsMap.clsScriptArea )
+            else if ( _SelectedScriptMarker is clsScriptArea )
             {
-                clsMap.clsScriptArea ScriptArea = (clsMap.clsScriptArea)_SelectedScriptMarker;
+                clsScriptArea ScriptArea = (clsScriptArea)_SelectedScriptMarker;
                 int temp_Result2 = ScriptArea.PosAY;
                 IOUtil.InvariantParse(txtScriptMarkerY.Text, ref temp_Result2);
                 ScriptArea.PosAY = temp_Result2;
@@ -4025,9 +4026,9 @@ namespace SharpFlame
                 return;
             }
 
-            if ( _SelectedScriptMarker is clsMap.clsScriptArea )
+            if ( _SelectedScriptMarker is clsScriptArea )
             {
-                clsMap.clsScriptArea ScriptArea = (clsMap.clsScriptArea)_SelectedScriptMarker;
+                clsScriptArea ScriptArea = (clsScriptArea)_SelectedScriptMarker;
                 int temp_Result = ScriptArea.PosBX;
                 IOUtil.InvariantParse(txtScriptMarkerX2.Text, ref temp_Result);
                 ScriptArea.PosBX = temp_Result;
@@ -4052,9 +4053,9 @@ namespace SharpFlame
                 return;
             }
 
-            if ( _SelectedScriptMarker is clsMap.clsScriptArea )
+            if ( _SelectedScriptMarker is clsScriptArea )
             {
-                clsMap.clsScriptArea ScriptArea = (clsMap.clsScriptArea)_SelectedScriptMarker;
+                clsScriptArea ScriptArea = (clsScriptArea)_SelectedScriptMarker;
                 int temp_Result = ScriptArea.PosBY;
                 IOUtil.InvariantParse(txtScriptMarkerY2.Text, ref temp_Result);
                 ScriptArea.PosBY = temp_Result;
