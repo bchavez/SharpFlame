@@ -6,6 +6,7 @@ using SharpFlame.Colors;
 using SharpFlame.Controls;
 using SharpFlame.FileIO;
 using SharpFlame.AppSettings;
+using SharpFlame.Mapping;
 using SharpFlame.Maths;
 
 namespace SharpFlame

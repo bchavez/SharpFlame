@@ -1,7 +1,7 @@
 using SharpFlame.Collections;
 using SharpFlame.Maths;
 
-namespace SharpFlame
+namespace SharpFlame.Mapping
 {
     public partial class clsMap
     {

@@ -9,6 +9,7 @@ using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
+using SharpFlame.Util;
 
 namespace SharpFlame.Controls
 {

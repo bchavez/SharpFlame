@@ -5,9 +5,11 @@ using Microsoft.VisualBasic;
 using SharpFlame.Collections;
 using SharpFlame.Controls;
 using SharpFlame.FileIO;
+using SharpFlame.Mapping;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
 using SharpFlame.AppSettings;
+using SharpFlame.Util;
 
 namespace SharpFlame
 {

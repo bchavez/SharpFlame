@@ -1,5 +1,6 @@
 using System.Windows.Forms;
 using SharpFlame.Collections;
+using SharpFlame.Mapping;
 using SharpFlame.Maths;
 
 namespace SharpFlame

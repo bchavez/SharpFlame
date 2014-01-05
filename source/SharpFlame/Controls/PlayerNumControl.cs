@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Forms;
 using SharpFlame.FileIO;
+using SharpFlame.Mapping;
 
 namespace SharpFlame.Controls
 {

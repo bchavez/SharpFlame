@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using Matrix3D;
 using Microsoft.VisualBasic;
+using SharpFlame.Mapping;
 using SharpFlame.Maths;
 
 namespace SharpFlame

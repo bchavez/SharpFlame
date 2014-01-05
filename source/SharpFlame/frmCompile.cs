@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using SharpFlame.FileIO;
+using SharpFlame.Mapping;
 using SharpFlame.Maths;
 
 namespace SharpFlame

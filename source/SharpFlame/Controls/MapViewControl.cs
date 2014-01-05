@@ -10,7 +10,9 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.AppSettings;
+using SharpFlame.Mapping;
 using SharpFlame.Maths;
+using SharpFlame.Util;
 
 namespace SharpFlame.Controls
 {

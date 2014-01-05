@@ -2,6 +2,7 @@ using System;
 using System.Windows.Forms;
 using Matrix3D;
 using Microsoft.VisualBasic;
+using SharpFlame.Collections.Specialized;
 using SharpFlame.FileIO;
 using SharpFlame.Generators;
 using SharpFlame.Mapping;

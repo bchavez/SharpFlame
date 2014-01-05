@@ -20,6 +20,7 @@ using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
 using SharpFlame.AppSettings;
+using SharpFlame.Util;
 using Timer = System.Windows.Forms.Timer;
 
 namespace SharpFlame

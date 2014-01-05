@@ -6,16 +6,14 @@ using Matrix3D;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.Devices;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.AppSettings;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
-using SharpFlame.FileIO;
-using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
-using SharpFlame.AppSettings;
 
-namespace SharpFlame
+namespace SharpFlame.Mapping
 {
     public partial class clsMap
     {

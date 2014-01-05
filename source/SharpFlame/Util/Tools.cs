@@ -1,4 +1,4 @@
-namespace SharpFlame
+namespace SharpFlame.Util
 {
     public sealed class modTools
     {
@@ -103,7 +103,10 @@ namespace SharpFlame
             get { return _PreviousTool; }
         }
     }
+}
 
+namespace SharpFlame
+{
     public class clsTool
     {
     }

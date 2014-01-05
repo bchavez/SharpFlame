@@ -1,7 +1,7 @@
 using Microsoft.VisualBasic;
 using SharpFlame.Maths;
 
-namespace SharpFlame
+namespace SharpFlame.Collections.Specialized
 {
     public class clsBooleanMap
     {

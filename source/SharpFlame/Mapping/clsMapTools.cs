@@ -3,13 +3,13 @@ using System.Diagnostics;
 using System.IO;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
+using SharpFlame.Collections.Specialized;
 using SharpFlame.FileIO;
-using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
 
-namespace SharpFlame
+namespace SharpFlame.Mapping
 {
     public partial class clsMap
     {

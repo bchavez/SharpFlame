@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Matrix3D;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
+using SharpFlame.Collections.Specialized;
 using SharpFlame.Generators;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;

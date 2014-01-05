@@ -8,6 +8,7 @@ using Microsoft.VisualBasic.ApplicationServices;
 using Microsoft.VisualBasic.Devices;
 using SharpFlame.AppSettings;
 using SharpFlame.Collections;
+using SharpFlame.Collections.Specialized;
 using SharpFlame.Colors;
 using SharpFlame.FileIO;
 using SharpFlame.Graphics.OpenGL;

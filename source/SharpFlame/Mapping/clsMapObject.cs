@@ -8,7 +8,7 @@ using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
 using SharpFlame.Maths;
 
-namespace SharpFlame
+namespace SharpFlame.Mapping
 {
     public partial class clsMap
     {
