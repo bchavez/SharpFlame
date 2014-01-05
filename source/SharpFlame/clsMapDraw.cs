@@ -4,6 +4,7 @@ using Matrix3D;
 using Microsoft.VisualBasic;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Colors;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame

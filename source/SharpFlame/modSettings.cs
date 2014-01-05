@@ -4,6 +4,7 @@ using System.IO;
 using Microsoft.VisualBasic;
 using OpenTK;
 using SharpFlame.Collections;
+using SharpFlame.Colors;
 
 namespace SharpFlame
 {

@@ -7,6 +7,7 @@ using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.ApplicationServices;
 using Microsoft.VisualBasic.Devices;
 using SharpFlame.Collections;
+using SharpFlame.Colors;
 using SharpFlame.MathExtra;
 using SharpFlame.Painters;
 

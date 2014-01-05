@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
+using SharpFlame.Colors;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame
@@ -1536,7 +1537,7 @@ namespace SharpFlame
                 {
                     MinimapBitmap.SetPixel(X, Y,
                         ColorTranslator.FromOle(
-                            modColour.OSRGB((int)(MathUtil.Clamp_sng(Convert.ToSingle(Texture.get_Pixels(X, Y).Red * 255.0F), 0.0F, 255.0F)),
+                            ColorUtil.OSRGB((int)(MathUtil.Clamp_sng(Convert.ToSingle(Texture.get_Pixels(X, Y).Red * 255.0F), 0.0F, 255.0F)),
                                 (int)(MathUtil.Clamp_sng(Convert.ToSingle(Texture.get_Pixels(X, Y).Green * 255.0F), 0.0F, 255.0F)),
                                 (int)(MathUtil.Clamp_sng(Convert.ToSingle(Texture.get_Pixels(X, Y).Blue * 255.0F), 0.0F, 255.0F)))));
                 }
@@ -1559,7 +1560,7 @@ namespace SharpFlame
                 for ( X = 0; X <= Terrain.TileSize.X; X++ )
                 {
                     HeightmapBitmap.SetPixel(X, Y,
-                        ColorTranslator.FromOle(modColour.OSRGB(Convert.ToInt32(Terrain.Vertices[X, Y].Height), Terrain.Vertices[X, Y].Height,
+                        ColorTranslator.FromOle(ColorUtil.OSRGB(Convert.ToInt32(Terrain.Vertices[X, Y].Height), Terrain.Vertices[X, Y].Height,
                             Terrain.Vertices[X, Y].Height)));
                 }
             }

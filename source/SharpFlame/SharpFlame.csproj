@@ -102,8 +102,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup>
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="clsBooleanMap.cs" />
     <Compile Include="clsBrush.cs" />
@@ -120,6 +119,7 @@
     <Compile Include="Collections\AddNullItemBehavior.cs" />
     <Compile Include="Collections\SimpleList.cs" />
     <Compile Include="Collections\SimpleListTool.cs" />
+    <Compile Include="Colors\Definitions.cs" />
     <Compile Include="frmKeyboardControl.Designer.cs">
       <DependentUpon>frmKeyboardControl.cs</DependentUpon>
     </Compile>
@@ -142,7 +142,7 @@
     <Compile Include="Painters\Painter.cs" />
     <Compile Include="clsResult.cs" />
     <Compile Include="clsTileset.cs" />
-    <Compile Include="MathExtra\Structs.cs" />
+    <Compile Include="MathExtra\Definitions.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Painters\Road.cs" />
     <Compile Include="Painters\RoadBrush.cs" />
@@ -154,7 +154,7 @@
     <Compile Include="clsUnitType.cs" />
     <Compile Include="clsViewInfo.cs" />
     <Compile Include="modMain.cs" />
-    <Compile Include="modColour.cs" />
+    <Compile Include="Colors\ColorUtil.cs" />
     <Compile Include="frmQuit.Designer.cs">
       <DependentUpon>frmQuit.cs</DependentUpon>
     </Compile>

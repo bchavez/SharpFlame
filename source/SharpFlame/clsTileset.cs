@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using Microsoft.VisualBasic;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Colors;
 
 namespace SharpFlame
 {
@@ -332,7 +333,7 @@ namespace SharpFlame
                     Red = Convert.ToInt32(((PixelColorA.R) + PixelColorB.R + PixelColorC.R + PixelColorD.R) / 4.0F);
                     Green = Convert.ToInt32(((PixelColorA.G) + PixelColorB.G + PixelColorC.G + PixelColorD.G) / 4.0F);
                     Blue = Convert.ToInt32(((PixelColorA.B) + PixelColorB.B + PixelColorC.B + PixelColorD.B) / 4.0F);
-                    Bitmap8.SetPixel(PixX, PixY, ColorTranslator.FromOle(modColour.OSRGB(Red, Green, Blue)));
+                    Bitmap8.SetPixel(PixX, PixY, ColorTranslator.FromOle(ColorUtil.OSRGB(Red, Green, Blue)));
                 }
             }
 
@@ -359,7 +360,7 @@ namespace SharpFlame
                     Red = Convert.ToInt32(((PixelColorA.R) + PixelColorB.R + PixelColorC.R + PixelColorD.R) / 4.0F);
                     Green = Convert.ToInt32(((PixelColorA.G) + PixelColorB.G + PixelColorC.G + PixelColorD.G) / 4.0F);
                     Blue = Convert.ToInt32(((PixelColorA.B) + PixelColorB.B + PixelColorC.B + PixelColorD.B) / 4.0F);
-                    Bitmap4.SetPixel(PixX, PixY, ColorTranslator.FromOle(modColour.OSRGB(Red, Green, Blue)));
+                    Bitmap4.SetPixel(PixX, PixY, ColorTranslator.FromOle(ColorUtil.OSRGB(Red, Green, Blue)));
                 }
             }
 
@@ -386,7 +387,7 @@ namespace SharpFlame
                     Red = Convert.ToInt32(((PixelColorA.R) + PixelColorB.R + PixelColorC.R + PixelColorD.R) / 4.0F);
                     Green = Convert.ToInt32(((PixelColorA.G) + PixelColorB.G + PixelColorC.G + PixelColorD.G) / 4.0F);
                     Blue = Convert.ToInt32(((PixelColorA.B) + PixelColorB.B + PixelColorC.B + PixelColorD.B) / 4.0F);
-                    Bitmap2.SetPixel(PixX, PixY, ColorTranslator.FromOle(modColour.OSRGB(Red, Green, Blue)));
+                    Bitmap2.SetPixel(PixX, PixY, ColorTranslator.FromOle(ColorUtil.OSRGB(Red, Green, Blue)));
                 }
             }
 
@@ -411,7 +412,7 @@ namespace SharpFlame
             Red = Convert.ToInt32(((PixelColorA.R) + PixelColorB.R + PixelColorC.R + PixelColorD.R) / 4.0F);
             Green = Convert.ToInt32(((PixelColorA.G) + PixelColorB.G + PixelColorC.G + PixelColorD.G) / 4.0F);
             Blue = Convert.ToInt32(((PixelColorA.B) + PixelColorB.B + PixelColorC.B + PixelColorD.B) / 4.0F);
-            Bitmap1.SetPixel(PixX, PixY, ColorTranslator.FromOle(modColour.OSRGB(Red, Green, Blue)));
+            Bitmap1.SetPixel(PixX, PixY, ColorTranslator.FromOle(ColorUtil.OSRGB(Red, Green, Blue)));
 
             BitmapTextureArgs.Texture = Bitmap1;
             BitmapTextureArgs.MipMapLevel = 7;

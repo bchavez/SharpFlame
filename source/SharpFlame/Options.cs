@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
+using SharpFlame.Colors;
 
 namespace SharpFlame
 {

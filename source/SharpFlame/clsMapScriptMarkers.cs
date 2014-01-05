@@ -2,6 +2,7 @@ using System;
 using System.Windows.Forms;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
+using SharpFlame.Colors;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame

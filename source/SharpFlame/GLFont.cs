@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using Microsoft.VisualBasic;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Colors;
 using SharpFlame.MathExtra;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
