@@ -574,7 +574,7 @@ namespace SharpFlame
                 public int WithinLayer;
                 public bool[] AvoidLayers;
                 public Terrain Terrain;
-                public clsBooleanMap Terrainmap;
+                public BooleanMap Terrainmap;
                 public float HeightMin;
                 public float HeightMax;
                 public float SlopeMin;

@@ -3,15 +3,9 @@ using SharpFlame.Maths;
 
 namespace SharpFlame.Collections.Specialized
 {
-    public class clsBooleanMap
+    public class BooleanMap
     {
-        public class clsValueData
-        {
-            public sXY_int Size;
-            public bool[,] Value;
-        }
-
-        public clsValueData ValueData = new clsValueData();
+        public BooleanMapDataValue ValueData = new BooleanMapDataValue();
 
         public void Blank(int SizeX, int SizeY)
         {
@@ -20,14 +14,14 @@ namespace SharpFlame.Collections.Specialized
             ValueData.Value = new bool[SizeY, SizeX];
         }
 
-        public void SizeCopy(clsBooleanMap Source)
+        public void SizeCopy(BooleanMap Source)
         {
             ValueData.Size.X = Source.ValueData.Size.X;
             ValueData.Size.Y = Source.ValueData.Size.Y;
             ValueData.Value = new bool[ValueData.Size.Y, ValueData.Size.X];
         }
 
-        public void Copy(clsBooleanMap Source)
+        public void Copy(BooleanMap Source)
         {
             int X = 0;
             int Y = 0;
@@ -225,7 +219,7 @@ namespace SharpFlame.Collections.Specialized
             }
         }
 
-        public void Expand_One_Tile(clsBooleanMap Source)
+        public void Expand_One_Tile(BooleanMap Source)
         {
             int X = 0;
             int Y = 0;
@@ -276,7 +270,7 @@ namespace SharpFlame.Collections.Specialized
             }
         }
 
-        public void Remove(clsBooleanMap Source, clsBooleanMap Remove)
+        public void Remove(BooleanMap Source, BooleanMap Remove)
         {
             int X = 0;
             int Y = 0;
@@ -298,7 +292,7 @@ namespace SharpFlame.Collections.Specialized
             }
         }
 
-        public void Combine(clsBooleanMap Source, clsBooleanMap Insert)
+        public void Combine(BooleanMap Source, BooleanMap Insert)
         {
             int X = 0;
             int Y = 0;
@@ -320,7 +314,7 @@ namespace SharpFlame.Collections.Specialized
             }
         }
 
-        public void Within(clsBooleanMap Interior, clsBooleanMap Exterior)
+        public void Within(BooleanMap Interior, BooleanMap Exterior)
         {
             int Y = 0;
             int X = 0;
@@ -399,5 +393,11 @@ namespace SharpFlame.Collections.Specialized
                 }
             }
         }
+    }
+
+    public class BooleanMapDataValue
+    {
+        public sXY_int Size;
+        public bool[,] Value;
     }
 }

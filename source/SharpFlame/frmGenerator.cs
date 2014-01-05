@@ -406,8 +406,8 @@ namespace SharpFlame
                 tmpBrush.PerformActionMapTiles(ApplyCliff, Alignments);
                 bool[] RevertSlope = null;
                 bool[] RevertHeight = null;
-                clsBooleanMap WaterMap = new clsBooleanMap();
-                clsBooleanMap bmTemp = new clsBooleanMap();
+                BooleanMap WaterMap = new BooleanMap();
+                BooleanMap bmTemp = new BooleanMap();
                 int A = 0;
                 WaterMap = Generator.GetWaterMap();
                 RevertSlope = new bool[Generator.GenerateTileset.OldTextureLayers.LayerCount];
@@ -424,7 +424,7 @@ namespace SharpFlame
                             with_2.HeightMax = 255.0F;
                             bmTemp.Within(with_2.Terrainmap, WaterMap);
                             with_2.Terrainmap.ValueData = bmTemp.ValueData;
-                            bmTemp.ValueData = new clsBooleanMap.clsValueData();
+                            bmTemp.ValueData = new BooleanMapDataValue();
                             RevertHeight[A] = true;
                         }
                         RevertSlope[A] = true;

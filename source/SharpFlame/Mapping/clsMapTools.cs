@@ -314,7 +314,7 @@ namespace SharpFlame.Mapping
                 public int WithinLayer;
                 public bool[] AvoidLayers;
                 public int TileNum;
-                public clsBooleanMap Terrainmap;
+                public BooleanMap Terrainmap;
                 public float TerrainmapScale;
                 public float TerrainmapDensity;
                 public float HeightMin;
@@ -324,7 +324,7 @@ namespace SharpFlame.Mapping
 
             public clsLayer[] Layers;
             public int LayerCount;
-            public clsBooleanMap Watermap;
+            public BooleanMap Watermap;
         }
 
         public void GenerateMasterTerrain(sGenerateMasterTerrainArgs Args)
@@ -337,10 +337,10 @@ namespace SharpFlame.Mapping
 
             int TerrainNum = 0;
 
-            clsBooleanMap bmA = new clsBooleanMap();
+            BooleanMap bmA = new BooleanMap();
             int Layer_Num = 0;
-            clsBooleanMap[] LayerResult = new clsBooleanMap[Args.LayerCount];
-            clsBooleanMap bmB = new clsBooleanMap();
+            BooleanMap[] LayerResult = new BooleanMap[Args.LayerCount];
+            BooleanMap bmB = new BooleanMap();
             double BestSlope = 0;
             double CurrentSlope = 0;
             clsHeightmap hmB = new clsHeightmap();
@@ -388,7 +388,7 @@ namespace SharpFlame.Mapping
 
             for ( A = 0; A <= Args.LayerCount - 1; A++ )
             {
-                Args.Layers[A].Terrainmap = new clsBooleanMap();
+                Args.Layers[A].Terrainmap = new BooleanMap();
                 if ( Args.Layers[A].TerrainmapDensity == 1.0F )
                 {
                     Args.Layers[A].Terrainmap.ValueData.Value = new bool[Terrain.TileSize.Y, Terrain.TileSize.X];
@@ -461,7 +461,7 @@ namespace SharpFlame.Mapping
                 if ( TerrainNum >= 0 )
                 {
                     //do other layer constraints
-                    LayerResult[Layer_Num] = new clsBooleanMap();
+                    LayerResult[Layer_Num] = new BooleanMap();
                     LayerResult[Layer_Num].Copy(Args.Layers[Layer_Num].Terrainmap);
                     if ( Args.Layers[Layer_Num].WithinLayer >= 0 )
                     {
@@ -469,7 +469,7 @@ namespace SharpFlame.Mapping
                         {
                             bmA.Within(LayerResult[Layer_Num], LayerResult[Args.Layers[Layer_Num].WithinLayer]);
                             LayerResult[Layer_Num].ValueData = bmA.ValueData;
-                            bmA.ValueData = new clsBooleanMap.clsValueData();
+                            bmA.ValueData = new BooleanMapDataValue();
                         }
                     }
                     for ( A = 0; A <= Layer_Num - 1; A++ )
@@ -479,7 +479,7 @@ namespace SharpFlame.Mapping
                             bmA.Expand_One_Tile(LayerResult[A]);
                             bmB.Remove(LayerResult[Layer_Num], bmA);
                             LayerResult[Layer_Num].ValueData = bmB.ValueData;
-                            bmB.ValueData = new clsBooleanMap.clsValueData();
+                            bmB.ValueData = new BooleanMapDataValue();
                         }
                     }
                     //do height and slope constraints
@@ -594,10 +594,10 @@ namespace SharpFlame.Mapping
             Painters.Terrain[,] TerrainType = null;
             float[,] Slope = null;
             Painters.Terrain tmpTerrain = default(Painters.Terrain);
-            clsBooleanMap bmA = new clsBooleanMap();
-            clsBooleanMap bmB = new clsBooleanMap();
+            BooleanMap bmA = new BooleanMap();
+            BooleanMap bmB = new BooleanMap();
             int LayerNum = 0;
-            clsBooleanMap[] LayerResult = new clsBooleanMap[LayerList.LayerCount];
+            BooleanMap[] LayerResult = new BooleanMap[LayerList.LayerCount];
             double BestSlope = 0;
             double CurrentSlope = 0;
             bool AllowSlope = default(bool);
@@ -653,7 +653,7 @@ namespace SharpFlame.Mapping
                 if ( tmpTerrain != null )
                 {
                     //do other layer constraints
-                    LayerResult[LayerNum] = new clsBooleanMap();
+                    LayerResult[LayerNum] = new BooleanMap();
                     LayerResult[LayerNum].Copy(LayerList.Layers[LayerNum].Terrainmap);
                     if ( LayerList.Layers[LayerNum].WithinLayer >= 0 )
                     {
@@ -661,7 +661,7 @@ namespace SharpFlame.Mapping
                         {
                             bmA.Within(LayerResult[LayerNum], LayerResult[LayerList.Layers[LayerNum].WithinLayer]);
                             LayerResult[LayerNum].ValueData = bmA.ValueData;
-                            bmA.ValueData = new clsBooleanMap.clsValueData();
+                            bmA.ValueData = new BooleanMapDataValue();
                         }
                     }
                     for ( A = 0; A <= LayerNum - 1; A++ )
@@ -671,7 +671,7 @@ namespace SharpFlame.Mapping
                             bmA.Expand_One_Tile(LayerResult[A]);
                             bmB.Remove(LayerResult[LayerNum], bmA);
                             LayerResult[LayerNum].ValueData = bmB.ValueData;
-                            bmB.ValueData = new clsBooleanMap.clsValueData();
+                            bmB.ValueData = new BooleanMapDataValue();
                         }
                     }
                     //do height and slope constraints
@@ -766,15 +766,15 @@ namespace SharpFlame.Mapping
             UpdateAutoTextures();
         }
 
-        public clsBooleanMap GenerateTerrainMap(float Scale, float Density)
+        public BooleanMap GenerateTerrainMap(float Scale, float Density)
         {
-            clsBooleanMap ReturnResult = default(clsBooleanMap);
+            BooleanMap ReturnResult = default(BooleanMap);
             clsHeightmap hmB = new clsHeightmap();
             clsHeightmap hmC = new clsHeightmap();
 
             hmB.GenerateNewOfSize(Terrain.TileSize.Y + 1, Terrain.TileSize.X + 1, Scale, 1.0D);
             hmC.Rescale(hmB, 0.0D, 1.0D);
-            ReturnResult = new clsBooleanMap();
+            ReturnResult = new BooleanMap();
             ReturnResult.Convert_Heightmap(hmC, (int)((1.0D - Density) / hmC.HeightScale));
             return ReturnResult;
         }

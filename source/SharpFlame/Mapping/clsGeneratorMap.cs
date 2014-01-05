@@ -1976,9 +1976,9 @@ namespace SharpFlame
             TilePathMap.FindCalc();
         }
 
-        public clsBooleanMap GetWaterMap()
+        public BooleanMap GetWaterMap()
         {
-            clsBooleanMap ReturnResult = new clsBooleanMap();
+            BooleanMap ReturnResult = new BooleanMap();
             float BestDist = 0;
             bool BestIsWater = default(bool);
             sXY_int Pos = new sXY_int();
