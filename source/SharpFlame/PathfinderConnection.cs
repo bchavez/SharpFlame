@@ -44,7 +44,7 @@ namespace SharpFlame
 
         public float GetValue
         {
-            get { return this.Value; }
+            get { return Value; }
         }
 
         public int CalcValueNum = -1;

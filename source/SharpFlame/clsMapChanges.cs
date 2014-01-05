@@ -52,7 +52,7 @@ namespace SharpFlame
                 ChangedPoints.Clear();
             }
 
-            public void PerformTool(clsMap.clsAction Tool)
+            public void PerformTool(clsAction Tool)
             {
                 modMath.clsXY_int Point = default(modMath.clsXY_int);
 
@@ -73,7 +73,7 @@ namespace SharpFlame
             public clsMapTileChanges(clsMap Map, modMath.sXY_int PointSize) : base(PointSize)
             {
                 this.Map = Map;
-                this.Terrain = Map.Terrain;
+                Terrain = Map.Terrain;
             }
 
             public void Deallocate()
@@ -198,7 +198,7 @@ namespace SharpFlame
             }
         }
 
-        public class clsSectorChanges : clsMap.clsMapTileChanges
+        public class clsSectorChanges : clsMapTileChanges
         {
             public clsSectorChanges(clsMap Map) : base(Map, Map.SectorCount)
             {
@@ -213,7 +213,7 @@ namespace SharpFlame
             }
         }
 
-        public class clsAutoTextureChanges : clsMap.clsMapTileChanges
+        public class clsAutoTextureChanges : clsMapTileChanges
         {
             public clsAutoTextureChanges(clsMap Map) : base(Map, Map.Terrain.TileSize)
             {

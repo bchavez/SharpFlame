@@ -71,7 +71,7 @@ namespace SharpFlame
             nudRadiusIsBusy = false;
         }
 
-        public void tabShape_SelectedIndexChanged(object sender, System.EventArgs e)
+        public void tabShape_SelectedIndexChanged(object sender, EventArgs e)
         {
             if ( !tabShape.Enabled )
             {

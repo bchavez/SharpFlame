@@ -1,3 +1,4 @@
+using System;
 using OpenTK.Graphics.OpenGL;
 
 namespace SharpFlame
@@ -88,47 +89,47 @@ namespace SharpFlame
                 GL.Begin(BeginMode.Triangles);
                 if ( Terrain.Tiles[TileX, TileY].Tri )
                 {
-                    GL.Normal3(Normal0.X, Normal0.Y, System.Convert.ToDouble(- Normal0.Z));
+                    GL.Normal3(Normal0.X, Normal0.Y, Convert.ToDouble(- Normal0.Z));
                     GL.TexCoord2(TexCoord0.X, TexCoord0.Y);
-                    GL.Vertex3(Vertex0.X, Vertex0.Y, System.Convert.ToDouble(- Vertex0.Z));
-                    GL.Normal3(Normal2.X, Normal2.Y, System.Convert.ToDouble(- Normal2.Z));
+                    GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
+                    GL.Normal3(Normal2.X, Normal2.Y, Convert.ToDouble(- Normal2.Z));
                     GL.TexCoord2(TexCoord2.X, TexCoord2.Y);
-                    GL.Vertex3(Vertex2.X, Vertex2.Y, System.Convert.ToDouble(- Vertex2.Z));
-                    GL.Normal3(Normal1.X, Normal1.Y, System.Convert.ToDouble(- Normal1.Z));
+                    GL.Vertex3(Vertex2.X, Vertex2.Y, Convert.ToDouble(- Vertex2.Z));
+                    GL.Normal3(Normal1.X, Normal1.Y, Convert.ToDouble(- Normal1.Z));
                     GL.TexCoord2(TexCoord1.X, TexCoord1.Y);
-                    GL.Vertex3(Vertex1.X, Vertex1.Y, System.Convert.ToDouble(- Vertex1.Z));
+                    GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
 
-                    GL.Normal3(Normal1.X, Normal1.Y, System.Convert.ToDouble(- Normal1.Z));
+                    GL.Normal3(Normal1.X, Normal1.Y, Convert.ToDouble(- Normal1.Z));
                     GL.TexCoord2(TexCoord1.X, TexCoord1.Y);
-                    GL.Vertex3(Vertex1.X, Vertex1.Y, System.Convert.ToDouble(- Vertex1.Z));
-                    GL.Normal3(Normal2.X, Normal2.Y, System.Convert.ToDouble(- Normal2.Z));
+                    GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
+                    GL.Normal3(Normal2.X, Normal2.Y, Convert.ToDouble(- Normal2.Z));
                     GL.TexCoord2(TexCoord2.X, TexCoord2.Y);
-                    GL.Vertex3(Vertex2.X, Vertex2.Y, System.Convert.ToDouble(- Vertex2.Z));
-                    GL.Normal3(Normal3.X, Normal3.Y, System.Convert.ToDouble(- Normal3.Z));
+                    GL.Vertex3(Vertex2.X, Vertex2.Y, Convert.ToDouble(- Vertex2.Z));
+                    GL.Normal3(Normal3.X, Normal3.Y, Convert.ToDouble(- Normal3.Z));
                     GL.TexCoord2(TexCoord3.X, TexCoord3.Y);
-                    GL.Vertex3(Vertex3.X, Vertex3.Y, System.Convert.ToDouble(- Vertex3.Z));
+                    GL.Vertex3(Vertex3.X, Vertex3.Y, Convert.ToDouble(- Vertex3.Z));
                 }
                 else
                 {
-                    GL.Normal3(Normal0.X, Normal0.Y, System.Convert.ToDouble(- Normal0.Z));
+                    GL.Normal3(Normal0.X, Normal0.Y, Convert.ToDouble(- Normal0.Z));
                     GL.TexCoord2(TexCoord0.X, TexCoord0.Y);
-                    GL.Vertex3(Vertex0.X, Vertex0.Y, System.Convert.ToDouble(- Vertex0.Z));
-                    GL.Normal3(Normal2.X, Normal2.Y, System.Convert.ToDouble(- Normal2.Z));
+                    GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
+                    GL.Normal3(Normal2.X, Normal2.Y, Convert.ToDouble(- Normal2.Z));
                     GL.TexCoord2(TexCoord2.X, TexCoord2.Y);
-                    GL.Vertex3(Vertex2.X, Vertex2.Y, System.Convert.ToDouble(- Vertex2.Z));
-                    GL.Normal3(Normal3.X, Normal3.Y, System.Convert.ToDouble(- Normal3.Z));
+                    GL.Vertex3(Vertex2.X, Vertex2.Y, Convert.ToDouble(- Vertex2.Z));
+                    GL.Normal3(Normal3.X, Normal3.Y, Convert.ToDouble(- Normal3.Z));
                     GL.TexCoord2(TexCoord3.X, TexCoord3.Y);
-                    GL.Vertex3(Vertex3.X, Vertex3.Y, System.Convert.ToDouble(- Vertex3.Z));
+                    GL.Vertex3(Vertex3.X, Vertex3.Y, Convert.ToDouble(- Vertex3.Z));
 
-                    GL.Normal3(Normal0.X, Normal0.Y, System.Convert.ToDouble(- Normal0.Z));
+                    GL.Normal3(Normal0.X, Normal0.Y, Convert.ToDouble(- Normal0.Z));
                     GL.TexCoord2(TexCoord0.X, TexCoord0.Y);
-                    GL.Vertex3(Vertex0.X, Vertex0.Y, System.Convert.ToDouble(- Vertex0.Z));
-                    GL.Normal3(Normal3.X, Normal3.Y, System.Convert.ToDouble(- Normal3.Z));
+                    GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
+                    GL.Normal3(Normal3.X, Normal3.Y, Convert.ToDouble(- Normal3.Z));
                     GL.TexCoord2(TexCoord3.X, TexCoord3.Y);
-                    GL.Vertex3(Vertex3.X, Vertex3.Y, System.Convert.ToDouble(- Vertex3.Z));
-                    GL.Normal3(Normal1.X, Normal1.Y, System.Convert.ToDouble(- Normal1.Z));
+                    GL.Vertex3(Vertex3.X, Vertex3.Y, Convert.ToDouble(- Vertex3.Z));
+                    GL.Normal3(Normal1.X, Normal1.Y, Convert.ToDouble(- Normal1.Z));
                     GL.TexCoord2(TexCoord1.X, TexCoord1.Y);
-                    GL.Vertex3(Vertex1.X, Vertex1.Y, System.Convert.ToDouble(- Vertex1.Z));
+                    GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
                 }
                 GL.End();
             }

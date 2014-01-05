@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.VisualBasic;
 
 namespace SharpFlame
@@ -68,7 +70,7 @@ namespace SharpFlame
                     }
                     for ( A = 0; A <= CommaTextCount - 1; A++ )
                     {
-                        CommaText[A] = System.Convert.ToString(CommaText[A].Trim());
+                        CommaText[A] = Convert.ToString(CommaText[A].Trim());
                     }
                     switch ( CommaText[0].ToLower() )
                     {
@@ -94,7 +96,7 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "droidtype" )
                 {
-                    clsDroidDesign.clsTemplateDroidType DroidType = modProgram.GetTemplateDroidTypeFromTemplateCode(System.Convert.ToString(INIProperty.Value));
+                    clsDroidDesign.clsTemplateDroidType DroidType = modProgram.GetTemplateDroidTypeFromTemplateCode(Convert.ToString(INIProperty.Value));
                     if ( DroidType == null )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
@@ -103,16 +105,16 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "body" )
                 {
-                    Objects[INISectionNum].BodyCode = System.Convert.ToString(INIProperty.Value);
+                    Objects[INISectionNum].BodyCode = Convert.ToString(INIProperty.Value);
                 }
                 else if ( (string)INIProperty.Name == "propulsion" )
                 {
-                    Objects[INISectionNum].PropulsionCode = System.Convert.ToString(INIProperty.Value);
+                    Objects[INISectionNum].PropulsionCode = Convert.ToString(INIProperty.Value);
                 }
                 else if ( (string)INIProperty.Name == "turretcount" )
                 {
                     int NewTurretCount = 0;
-                    if ( !modIO.InvariantParse_int(System.Convert.ToString(INIProperty.Value), ref NewTurretCount) )
+                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref NewTurretCount) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -135,7 +137,7 @@ namespace SharpFlame
                     }
                     for ( A = 0; A <= CommaTextCount - 1; A++ )
                     {
-                        CommaText[A] = System.Convert.ToString(CommaText[A].Trim());
+                        CommaText[A] = Convert.ToString(CommaText[A].Trim());
                     }
                     clsTurret.enumTurretType TurretType = default(clsTurret.enumTurretType);
                     TurretType = modProgram.GetTurretTypeFromName(CommaText[0]);
@@ -158,7 +160,7 @@ namespace SharpFlame
                     }
                     for ( A = 0; A <= CommaTextCount - 1; A++ )
                     {
-                        CommaText[A] = System.Convert.ToString(CommaText[A].Trim());
+                        CommaText[A] = Convert.ToString(CommaText[A].Trim());
                     }
                     clsTurret.enumTurretType TurretType = default(clsTurret.enumTurretType);
                     TurretType = modProgram.GetTurretTypeFromName(CommaText[0]);
@@ -181,7 +183,7 @@ namespace SharpFlame
                     }
                     for ( A = 0; A <= CommaTextCount - 1; A++ )
                     {
-                        CommaText[A] = System.Convert.ToString(CommaText[A].Trim());
+                        CommaText[A] = Convert.ToString(CommaText[A].Trim());
                     }
                     clsTurret.enumTurretType TurretType = default(clsTurret.enumTurretType);
                     TurretType = modProgram.GetTurretTypeFromName(CommaText[0]);
@@ -193,15 +195,15 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "id" )
                 {
-                    if ( !modIO.InvariantParse_uint(System.Convert.ToString(INIProperty.Value), Objects[INISectionNum].ID) )
+                    if ( !modIO.InvariantParse_uint(Convert.ToString(INIProperty.Value), Objects[INISectionNum].ID) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "priority" )
                 {
-                    System.Int32 temp_Result = Objects[INISectionNum].Priority;
-                    if ( !modIO.InvariantParse_int(System.Convert.ToString(INIProperty.Value), ref temp_Result) )
+                    Int32 temp_Result = Objects[INISectionNum].Priority;
+                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -219,7 +221,7 @@ namespace SharpFlame
                     }
                     for ( A = 0; A <= CommaTextCount - 1; A++ )
                     {
-                        CommaText[A] = System.Convert.ToString(CommaText[A].Trim());
+                        CommaText[A] = Convert.ToString(CommaText[A].Trim());
                     }
                     modMath.sXY_int Pos = new modMath.sXY_int();
                     if ( !modIO.InvariantParse_int(CommaText[0], ref Pos.X) )
@@ -242,7 +244,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "heading" )
                 {
                     double dblTemp = 0;
-                    if ( !modIO.InvariantParse_dbl(System.Convert.ToString(INIProperty.Value), ref dblTemp) )
+                    if ( !modIO.InvariantParse_dbl(Convert.ToString(INIProperty.Value), ref dblTemp) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -254,12 +256,12 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "unitgroup" )
                 {
-                    Objects[INISectionNum].UnitGroup = System.Convert.ToString(INIProperty.Value);
+                    Objects[INISectionNum].UnitGroup = Convert.ToString(INIProperty.Value);
                 }
                 else if ( (string)INIProperty.Name == "health" )
                 {
                     double NewHealth = 0;
-                    if ( !modIO.InvariantParse_dbl(System.Convert.ToString(INIProperty.Value), ref NewHealth) )
+                    if ( !modIO.InvariantParse_dbl(Convert.ToString(INIProperty.Value), ref NewHealth) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -272,7 +274,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "walltype" )
                 {
                     int WallType = -1;
-                    if ( !modIO.InvariantParse_int(System.Convert.ToString(INIProperty.Value), ref WallType) )
+                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref WallType) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -283,7 +285,7 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "scriptlabel" )
                 {
-                    Objects[INISectionNum].Label = System.Convert.ToString(INIProperty.Value);
+                    Objects[INISectionNum].Label = Convert.ToString(INIProperty.Value);
                 }
                 else
                 {
@@ -296,21 +298,21 @@ namespace SharpFlame
         public clsResult Write_FMap(string Path, bool Overwrite, bool Compress)
         {
             clsResult ReturnResult =
-                new clsResult("Writing FMap to " + System.Convert.ToString(ControlChars.Quote) + Path + System.Convert.ToString(ControlChars.Quote));
+                new clsResult("Writing FMap to " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
 
             if ( !Overwrite )
             {
-                if ( System.IO.File.Exists(Path) )
+                if ( File.Exists(Path) )
                 {
                     ReturnResult.ProblemAdd("The file already exists");
                     return ReturnResult;
                 }
             }
 
-            System.IO.FileStream FileStream = default(System.IO.FileStream);
+            FileStream FileStream = default(FileStream);
             try
             {
-                FileStream = System.IO.File.Create(Path);
+                FileStream = File.Create(Path);
             }
             catch ( Exception )
             {
@@ -318,8 +320,8 @@ namespace SharpFlame
                 return ReturnResult;
             }
 
-            ICSharpCode.SharpZipLib.Zip.ZipOutputStream WZStream = new ICSharpCode.SharpZipLib.Zip.ZipOutputStream(FileStream);
-            WZStream.UseZip64 = ICSharpCode.SharpZipLib.Zip.UseZip64.Off;
+            ZipOutputStream WZStream = new ZipOutputStream(FileStream);
+            WZStream.UseZip64 = UseZip64.Off;
             if ( Compress )
             {
                 WZStream.SetLevel(9);
@@ -329,9 +331,9 @@ namespace SharpFlame
                 WZStream.SetLevel(0);
             }
 
-            System.IO.BinaryWriter BinaryWriter = new System.IO.BinaryWriter(WZStream, modProgram.UTF8Encoding);
-            System.IO.StreamWriter StreamWriter = new System.IO.StreamWriter(WZStream, modProgram.UTF8Encoding);
-            ICSharpCode.SharpZipLib.Zip.ZipEntry ZipEntry = default(ICSharpCode.SharpZipLib.Zip.ZipEntry);
+            BinaryWriter BinaryWriter = new BinaryWriter(WZStream, modProgram.UTF8Encoding);
+            StreamWriter StreamWriter = new StreamWriter(WZStream, modProgram.UTF8Encoding);
+            ZipEntry ZipEntry = default(ZipEntry);
             string ZipPath = "";
 
             ZipPath = "Info.ini";
@@ -506,7 +508,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult Serialize_FMap_VertexHeight(System.IO.BinaryWriter File)
+        public clsResult Serialize_FMap_VertexHeight(BinaryWriter File)
         {
             clsResult ReturnResult = new clsResult("Serializing vertex heights");
             int X = 0;
@@ -530,7 +532,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult Serialize_FMap_VertexTerrain(System.IO.BinaryWriter File)
+        public clsResult Serialize_FMap_VertexTerrain(BinaryWriter File)
         {
             clsResult ReturnResult = new clsResult("Serializing vertex terrain");
 
@@ -556,7 +558,7 @@ namespace SharpFlame
                         }
                         else
                         {
-                            Value = System.Convert.ToInt32(Terrain.Vertices[X, Y].Terrain.Num + 1);
+                            Value = Convert.ToInt32(Terrain.Vertices[X, Y].Terrain.Num + 1);
                             if ( Value > 255 )
                             {
                                 ErrorCount++;
@@ -580,7 +582,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult Serialize_FMap_TileTexture(System.IO.BinaryWriter File)
+        public clsResult Serialize_FMap_TileTexture(BinaryWriter File)
         {
             clsResult ReturnResult = new clsResult("Serializing tile textures");
 
@@ -595,7 +597,7 @@ namespace SharpFlame
                 {
                     for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
                     {
-                        Value = System.Convert.ToInt32(Terrain.Tiles[X, Y].Texture.TextureNum + 1);
+                        Value = Convert.ToInt32(Terrain.Tiles[X, Y].Texture.TextureNum + 1);
                         if ( Value < 0 | Value > 255 )
                         {
                             ErrorCount++;
@@ -618,7 +620,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult Serialize_FMap_TileOrientation(System.IO.BinaryWriter File)
+        public clsResult Serialize_FMap_TileOrientation(BinaryWriter File)
         {
             clsResult ReturnResult = new clsResult("Serializing tile orientations");
             int X = 0;
@@ -660,7 +662,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult Serialize_FMap_TileCliff(System.IO.BinaryWriter File)
+        public clsResult Serialize_FMap_TileCliff(BinaryWriter File)
         {
             clsResult ReturnResult = new clsResult("Serializing tile cliffs");
 
@@ -746,7 +748,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult Serialize_FMap_Roads(System.IO.BinaryWriter File)
+        public clsResult Serialize_FMap_Roads(BinaryWriter File)
         {
             clsResult ReturnResult = new clsResult("Serializing roads");
 
@@ -772,7 +774,7 @@ namespace SharpFlame
                         }
                         else
                         {
-                            Value = System.Convert.ToInt32(Terrain.SideH[X, Y].Road.Num + 1);
+                            Value = Convert.ToInt32(Terrain.SideH[X, Y].Road.Num + 1);
                             if ( Value > 255 )
                             {
                                 ErrorCount++;
@@ -797,7 +799,7 @@ namespace SharpFlame
                         }
                         else
                         {
-                            Value = System.Convert.ToInt32(Terrain.SideV[X, Y].Road.Num + 1);
+                            Value = Convert.ToInt32(Terrain.SideV[X, Y].Road.Num + 1);
                             if ( Value > 255 )
                             {
                                 ErrorCount++;
@@ -922,7 +924,7 @@ namespace SharpFlame
 
             if ( WarningCount > 0 )
             {
-                ReturnResult.WarningAdd("Error: " + System.Convert.ToString(WarningCount) + " units were of an unhandled type.");
+                ReturnResult.WarningAdd("Error: " + Convert.ToString(WarningCount) + " units were of an unhandled type.");
             }
 
             return ReturnResult;
@@ -955,7 +957,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult Serialize_FMap_TileTypes(System.IO.BinaryWriter File)
+        public clsResult Serialize_FMap_TileTypes(BinaryWriter File)
         {
             clsResult ReturnResult = new clsResult("Serializing tile types");
             int A = 0;
@@ -981,7 +983,7 @@ namespace SharpFlame
         public clsResult Load_FMap(string Path)
         {
             clsResult ReturnResult =
-                new clsResult("Loading FMap from " + System.Convert.ToString(ControlChars.Quote) + Path + System.Convert.ToString(ControlChars.Quote));
+                new clsResult("Loading FMap from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
 
             clsZipStreamEntry ZipSearchResult = default(clsZipStreamEntry);
             string FindPath = "";
@@ -992,13 +994,13 @@ namespace SharpFlame
             ZipSearchResult = modIO.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
-                ReturnResult.ProblemAdd("Unable to find file " + System.Convert.ToString(ControlChars.Quote) + FindPath + System.Convert.ToString(ControlChars.Quote) +
+                ReturnResult.ProblemAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
                                         ".");
                 return ReturnResult;
             }
             else
             {
-                System.IO.StreamReader Info_StreamReader = new System.IO.StreamReader(ZipSearchResult.Stream);
+                StreamReader Info_StreamReader = new StreamReader(ZipSearchResult.Stream);
                 ReturnResult.Add(Read_FMap_Info(Info_StreamReader, ref ResultInfo));
                 Info_StreamReader.Close();
                 if ( ReturnResult.HasProblems )
@@ -1012,11 +1014,11 @@ namespace SharpFlame
 
             if ( NewTerrainSize.X <= 0 | NewTerrainSize.X > modProgram.MapMaxSize )
             {
-                ReturnResult.ProblemAdd("Map width of " + System.Convert.ToString(NewTerrainSize.X) + " is not valid.");
+                ReturnResult.ProblemAdd("Map width of " + Convert.ToString(NewTerrainSize.X) + " is not valid.");
             }
             if ( NewTerrainSize.Y <= 0 | NewTerrainSize.Y > modProgram.MapMaxSize )
             {
-                ReturnResult.ProblemAdd("Map height of " + System.Convert.ToString(NewTerrainSize.Y) + " is not valid.");
+                ReturnResult.ProblemAdd("Map height of " + Convert.ToString(NewTerrainSize.Y) + " is not valid.");
             }
             if ( ReturnResult.HasProblems )
             {
@@ -1031,12 +1033,12 @@ namespace SharpFlame
             ZipSearchResult = modIO.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
-                ReturnResult.WarningAdd("Unable to find file " + System.Convert.ToString(ControlChars.Quote) + FindPath + System.Convert.ToString(ControlChars.Quote) +
+                ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
                                         ".");
             }
             else
             {
-                System.IO.BinaryReader VertexHeight_Reader = new System.IO.BinaryReader(ZipSearchResult.Stream);
+                BinaryReader VertexHeight_Reader = new BinaryReader(ZipSearchResult.Stream);
                 ReturnResult.Add(Read_FMap_VertexHeight(VertexHeight_Reader));
                 VertexHeight_Reader.Close();
             }
@@ -1045,12 +1047,12 @@ namespace SharpFlame
             ZipSearchResult = modIO.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
-                ReturnResult.WarningAdd("Unable to find file " + System.Convert.ToString(ControlChars.Quote) + FindPath + System.Convert.ToString(ControlChars.Quote) +
+                ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
                                         ".");
             }
             else
             {
-                System.IO.BinaryReader VertexTerrain_Reader = new System.IO.BinaryReader(ZipSearchResult.Stream);
+                BinaryReader VertexTerrain_Reader = new BinaryReader(ZipSearchResult.Stream);
                 ReturnResult.Add(Read_FMap_VertexTerrain(VertexTerrain_Reader));
                 VertexTerrain_Reader.Close();
             }
@@ -1059,12 +1061,12 @@ namespace SharpFlame
             ZipSearchResult = modIO.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
-                ReturnResult.WarningAdd("Unable to find file " + System.Convert.ToString(ControlChars.Quote) + FindPath + System.Convert.ToString(ControlChars.Quote) +
+                ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
                                         ".");
             }
             else
             {
-                System.IO.BinaryReader TileTexture_Reader = new System.IO.BinaryReader(ZipSearchResult.Stream);
+                BinaryReader TileTexture_Reader = new BinaryReader(ZipSearchResult.Stream);
                 ReturnResult.Add(Read_FMap_TileTexture(TileTexture_Reader));
                 TileTexture_Reader.Close();
             }
@@ -1073,12 +1075,12 @@ namespace SharpFlame
             ZipSearchResult = modIO.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
-                ReturnResult.WarningAdd("Unable to find file " + System.Convert.ToString(ControlChars.Quote) + FindPath + System.Convert.ToString(ControlChars.Quote) +
+                ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
                                         ".");
             }
             else
             {
-                System.IO.BinaryReader TileOrientation_Reader = new System.IO.BinaryReader(ZipSearchResult.Stream);
+                BinaryReader TileOrientation_Reader = new BinaryReader(ZipSearchResult.Stream);
                 ReturnResult.Add(Read_FMap_TileOrientation(TileOrientation_Reader));
                 TileOrientation_Reader.Close();
             }
@@ -1087,12 +1089,12 @@ namespace SharpFlame
             ZipSearchResult = modIO.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
-                ReturnResult.WarningAdd("Unable to find file " + System.Convert.ToString(ControlChars.Quote) + FindPath + System.Convert.ToString(ControlChars.Quote) +
+                ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
                                         ".");
             }
             else
             {
-                System.IO.BinaryReader TileCliff_Reader = new System.IO.BinaryReader(ZipSearchResult.Stream);
+                BinaryReader TileCliff_Reader = new BinaryReader(ZipSearchResult.Stream);
                 ReturnResult.Add(Read_FMap_TileCliff(TileCliff_Reader));
                 TileCliff_Reader.Close();
             }
@@ -1101,12 +1103,12 @@ namespace SharpFlame
             ZipSearchResult = modIO.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
-                ReturnResult.WarningAdd("Unable to find file " + System.Convert.ToString(ControlChars.Quote) + FindPath + System.Convert.ToString(ControlChars.Quote) +
+                ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
                                         ".");
             }
             else
             {
-                System.IO.BinaryReader Roads_Reader = new System.IO.BinaryReader(ZipSearchResult.Stream);
+                BinaryReader Roads_Reader = new BinaryReader(ZipSearchResult.Stream);
                 ReturnResult.Add(Read_FMap_Roads(Roads_Reader));
                 Roads_Reader.Close();
             }
@@ -1115,12 +1117,12 @@ namespace SharpFlame
             ZipSearchResult = modIO.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
-                ReturnResult.WarningAdd("Unable to find file " + System.Convert.ToString(ControlChars.Quote) + FindPath + System.Convert.ToString(ControlChars.Quote) +
+                ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
                                         ".");
             }
             else
             {
-                System.IO.StreamReader Objects_Reader = new System.IO.StreamReader(ZipSearchResult.Stream);
+                StreamReader Objects_Reader = new StreamReader(ZipSearchResult.Stream);
                 ReturnResult.Add(Read_FMap_Objects(Objects_Reader));
                 Objects_Reader.Close();
             }
@@ -1129,12 +1131,12 @@ namespace SharpFlame
             ZipSearchResult = modIO.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
-                ReturnResult.WarningAdd("Unable to find file " + System.Convert.ToString(ControlChars.Quote) + FindPath + System.Convert.ToString(ControlChars.Quote) +
+                ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
                                         ".");
             }
             else
             {
-                System.IO.StreamReader Gateway_Reader = new System.IO.StreamReader(ZipSearchResult.Stream);
+                StreamReader Gateway_Reader = new StreamReader(ZipSearchResult.Stream);
                 ReturnResult.Add(Read_FMap_Gateways(Gateway_Reader));
                 Gateway_Reader.Close();
             }
@@ -1143,12 +1145,12 @@ namespace SharpFlame
             ZipSearchResult = modIO.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
-                ReturnResult.WarningAdd("Unable to find file " + System.Convert.ToString(ControlChars.Quote) + FindPath + System.Convert.ToString(ControlChars.Quote) +
+                ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
                                         ".");
             }
             else
             {
-                System.IO.BinaryReader TileTypes_Reader = new System.IO.BinaryReader(ZipSearchResult.Stream);
+                BinaryReader TileTypes_Reader = new BinaryReader(ZipSearchResult.Stream);
                 ReturnResult.Add(Read_FMap_TileTypes(TileTypes_Reader));
                 TileTypes_Reader.Close();
             }
@@ -1162,7 +1164,7 @@ namespace SharpFlame
             {
                 clsResult Result = new clsResult("Reading labels");
                 clsINIRead LabelsINI = new clsINIRead();
-                System.IO.StreamReader LabelsINI_Reader = new System.IO.StreamReader(ZipSearchResult.Stream);
+                StreamReader LabelsINI_Reader = new StreamReader(ZipSearchResult.Stream);
                 Result.Take(LabelsINI.ReadFile(LabelsINI_Reader));
                 LabelsINI_Reader.Close();
                 Result.Take(Read_WZ_Labels(LabelsINI, true));
@@ -1177,7 +1179,7 @@ namespace SharpFlame
         public class clsFMapInfo : clsINIRead.clsTranslator
         {
             public modMath.sXY_int TerrainSize = new modMath.sXY_int(-1, -1);
-            public clsMap.clsInterfaceOptions InterfaceOptions = new clsMap.clsInterfaceOptions();
+            public clsInterfaceOptions InterfaceOptions = new clsInterfaceOptions();
             public clsTileset Tileset;
 
             public override clsINIRead.enumTranslatorResult Translate(clsINIRead.clsSection.sProperty INIProperty)
@@ -1230,61 +1232,61 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "autoscrolllimits" )
                 {
-                    if ( !modIO.InvariantParse_bool(System.Convert.ToString(INIProperty.Value), ref InterfaceOptions.AutoScrollLimits) )
+                    if ( !modIO.InvariantParse_bool(Convert.ToString(INIProperty.Value), ref InterfaceOptions.AutoScrollLimits) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "scrollminx" )
                 {
-                    if ( !modIO.InvariantParse_int(System.Convert.ToString(INIProperty.Value), ref InterfaceOptions.ScrollMin.X) )
+                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref InterfaceOptions.ScrollMin.X) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "scrollminy" )
                 {
-                    if ( !modIO.InvariantParse_int(System.Convert.ToString(INIProperty.Value), ref InterfaceOptions.ScrollMin.Y) )
+                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref InterfaceOptions.ScrollMin.Y) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "scrollmaxx" )
                 {
-                    if ( !modIO.InvariantParse_uint(System.Convert.ToString(INIProperty.Value), InterfaceOptions.ScrollMax.X) )
+                    if ( !modIO.InvariantParse_uint(Convert.ToString(INIProperty.Value), InterfaceOptions.ScrollMax.X) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "scrollmaxy" )
                 {
-                    if ( !modIO.InvariantParse_uint(System.Convert.ToString(INIProperty.Value), InterfaceOptions.ScrollMax.Y) )
+                    if ( !modIO.InvariantParse_uint(Convert.ToString(INIProperty.Value), InterfaceOptions.ScrollMax.Y) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "name" )
                 {
-                    InterfaceOptions.CompileName = System.Convert.ToString(INIProperty.Value);
+                    InterfaceOptions.CompileName = Convert.ToString(INIProperty.Value);
                 }
                 else if ( (string)INIProperty.Name == "players" )
                 {
-                    InterfaceOptions.CompileMultiPlayers = System.Convert.ToString(INIProperty.Value);
+                    InterfaceOptions.CompileMultiPlayers = Convert.ToString(INIProperty.Value);
                 }
                 else if ( (string)INIProperty.Name == "xplayerlev" )
                 {
-                    if ( !modIO.InvariantParse_bool(System.Convert.ToString(INIProperty.Value), ref InterfaceOptions.CompileMultiXPlayers) )
+                    if ( !modIO.InvariantParse_bool(Convert.ToString(INIProperty.Value), ref InterfaceOptions.CompileMultiXPlayers) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "author" )
                 {
-                    InterfaceOptions.CompileMultiAuthor = System.Convert.ToString(INIProperty.Value);
+                    InterfaceOptions.CompileMultiAuthor = Convert.ToString(INIProperty.Value);
                 }
                 else if ( (string)INIProperty.Name == "license" )
                 {
-                    InterfaceOptions.CompileMultiLicense = System.Convert.ToString(INIProperty.Value);
+                    InterfaceOptions.CompileMultiLicense = Convert.ToString(INIProperty.Value);
                 }
                 else if ( (string)INIProperty.Name == "camptime" )
                 {
@@ -1292,7 +1294,7 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "camptype" )
                 {
-                    if ( !modIO.InvariantParse_int(System.Convert.ToString(INIProperty.Value), ref InterfaceOptions.CampaignGameType) )
+                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref InterfaceOptions.CampaignGameType) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1305,7 +1307,7 @@ namespace SharpFlame
             }
         }
 
-        private clsResult Read_FMap_Info(System.IO.StreamReader File, ref clsFMapInfo ResultInfo)
+        private clsResult Read_FMap_Info(StreamReader File, ref clsFMapInfo ResultInfo)
         {
             clsResult ReturnResult = new clsResult("Read general map info");
 
@@ -1323,7 +1325,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        private clsResult Read_FMap_VertexHeight(System.IO.BinaryReader File)
+        private clsResult Read_FMap_VertexHeight(BinaryReader File)
         {
             clsResult ReturnResult = new clsResult("Reading vertex heights");
 
@@ -1354,7 +1356,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        private clsResult Read_FMap_VertexTerrain(System.IO.BinaryReader File)
+        private clsResult Read_FMap_VertexTerrain(BinaryReader File)
         {
             clsResult ReturnResult = new clsResult("Reading vertex terrain");
 
@@ -1380,7 +1382,7 @@ namespace SharpFlame
                         {
                             if ( WarningCount < 16 )
                             {
-                                ReturnResult.WarningAdd("Painted terrain at vertex " + System.Convert.ToString(X) + ", " + System.Convert.ToString(Y) +
+                                ReturnResult.WarningAdd("Painted terrain at vertex " + Convert.ToString(X) + ", " + Convert.ToString(Y) +
                                                         " was invalid.");
                             }
                             WarningCount++;
@@ -1412,7 +1414,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult Read_FMap_TileTexture(System.IO.BinaryReader File)
+        public clsResult Read_FMap_TileTexture(BinaryReader File)
         {
             clsResult ReturnResult = new clsResult("Reading tile textures");
 
@@ -1445,7 +1447,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult Read_FMap_TileOrientation(System.IO.BinaryReader File)
+        public clsResult Read_FMap_TileOrientation(BinaryReader File)
         {
             clsResult ReturnResult = new clsResult("Reading tile orientations");
 
@@ -1468,7 +1470,7 @@ namespace SharpFlame
                         {
                             if ( WarningCount < 16 )
                             {
-                                ReturnResult.WarningAdd("Unknown bits used for tile " + System.Convert.ToString(X) + ", " + System.Convert.ToString(Y) + ".");
+                                ReturnResult.WarningAdd("Unknown bits used for tile " + Convert.ToString(X) + ", " + Convert.ToString(Y) + ".");
                             }
                             WarningCount++;
                         }
@@ -1510,7 +1512,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult Read_FMap_TileCliff(System.IO.BinaryReader File)
+        public clsResult Read_FMap_TileCliff(BinaryReader File)
         {
             clsResult ReturnResult = new clsResult("Reading tile cliffs");
 
@@ -1534,7 +1536,7 @@ namespace SharpFlame
                         {
                             if ( WarningCount < 16 )
                             {
-                                ReturnResult.WarningAdd("Unknown bits used for tile " + System.Convert.ToString(X) + ", " + System.Convert.ToString(Y) + ".");
+                                ReturnResult.WarningAdd("Unknown bits used for tile " + Convert.ToString(X) + ", " + Convert.ToString(Y) + ".");
                             }
                             WarningCount++;
                         }
@@ -1562,7 +1564,7 @@ namespace SharpFlame
                                 Terrain.Tiles[X, Y].DownSide = TileOrientation.TileDirection_None;
                                 if ( DownSideWarningCount < 16 )
                                 {
-                                    ReturnResult.WarningAdd("Down side value for tile " + System.Convert.ToString(X) + ", " + System.Convert.ToString(Y) +
+                                    ReturnResult.WarningAdd("Down side value for tile " + Convert.ToString(X) + ", " + Convert.ToString(Y) +
                                                             " was invalid.");
                                 }
                                 DownSideWarningCount++;
@@ -1620,7 +1622,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult Read_FMap_Roads(System.IO.BinaryReader File)
+        public clsResult Read_FMap_Roads(BinaryReader File)
         {
             clsResult ReturnResult = new clsResult("Reading roads");
 
@@ -1644,7 +1646,7 @@ namespace SharpFlame
                         {
                             if ( WarningCount < 16 )
                             {
-                                ReturnResult.WarningAdd("Invalid road value for horizontal side " + System.Convert.ToString(X) + ", " + System.Convert.ToString(Y) +
+                                ReturnResult.WarningAdd("Invalid road value for horizontal side " + Convert.ToString(X) + ", " + Convert.ToString(Y) +
                                                         ".");
                             }
                             WarningCount++;
@@ -1669,7 +1671,7 @@ namespace SharpFlame
                         {
                             if ( WarningCount < 16 )
                             {
-                                ReturnResult.WarningAdd("Invalid road value for vertical side " + System.Convert.ToString(X) + ", " + System.Convert.ToString(Y) +
+                                ReturnResult.WarningAdd("Invalid road value for vertical side " + Convert.ToString(X) + ", " + Convert.ToString(Y) +
                                                         ".");
                             }
                             WarningCount++;
@@ -1701,7 +1703,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        private clsResult Read_FMap_Objects(System.IO.StreamReader File)
+        private clsResult Read_FMap_Objects(StreamReader File)
         {
             clsResult ReturnResult = new clsResult("Reading objects");
 
@@ -1723,7 +1725,7 @@ namespace SharpFlame
 
             clsDroidDesign DroidDesign = default(clsDroidDesign);
             clsUnit NewObject = default(clsUnit);
-            clsMap.clsUnitAdd UnitAdd = new clsMap.clsUnitAdd();
+            clsUnitAdd UnitAdd = new clsUnitAdd();
             clsUnitType UnitType = default(clsUnitType);
             bool IsDesign = default(bool);
             clsUnitGroup UnitGroup = default(clsUnitGroup);
@@ -1774,7 +1776,7 @@ namespace SharpFlame
                             }
                             if ( INIObjects.Objects[A].BodyCode != "" )
                             {
-                                DroidDesign.Body = modProgram.ObjectData.FindOrCreateBody(System.Convert.ToString(INIObjects.Objects[A].BodyCode));
+                                DroidDesign.Body = modProgram.ObjectData.FindOrCreateBody(Convert.ToString(INIObjects.Objects[A].BodyCode));
                                 if ( DroidDesign.Body.IsUnknown )
                                 {
                                     DroidComponentUnknownCount++;
@@ -1792,7 +1794,7 @@ namespace SharpFlame
                             if ( INIObjects.Objects[A].TurretCodes[0] != "" )
                             {
                                 DroidDesign.Turret1 = modProgram.ObjectData.FindOrCreateTurret(INIObjects.Objects[A].TurretTypes[0],
-                                    System.Convert.ToString(INIObjects.Objects[A].TurretCodes[0]));
+                                    Convert.ToString(INIObjects.Objects[A].TurretCodes[0]));
                                 if ( DroidDesign.Turret1.IsUnknown )
                                 {
                                     DroidComponentUnknownCount++;
@@ -1801,7 +1803,7 @@ namespace SharpFlame
                             if ( INIObjects.Objects[A].TurretCodes[1] != "" )
                             {
                                 DroidDesign.Turret2 = modProgram.ObjectData.FindOrCreateTurret(INIObjects.Objects[A].TurretTypes[1],
-                                    System.Convert.ToString(INIObjects.Objects[A].TurretCodes[1]));
+                                    Convert.ToString(INIObjects.Objects[A].TurretCodes[1]));
                                 if ( DroidDesign.Turret2.IsUnknown )
                                 {
                                     DroidComponentUnknownCount++;
@@ -1810,7 +1812,7 @@ namespace SharpFlame
                             if ( INIObjects.Objects[A].TurretCodes[2] != "" )
                             {
                                 DroidDesign.Turret3 = modProgram.ObjectData.FindOrCreateTurret(INIObjects.Objects[A].TurretTypes[2],
-                                    System.Convert.ToString(INIObjects.Objects[A].TurretCodes[2]));
+                                    Convert.ToString(INIObjects.Objects[A].TurretCodes[2]));
                                 if ( DroidDesign.Turret3.IsUnknown )
                                 {
                                     DroidComponentUnknownCount++;
@@ -1826,7 +1828,7 @@ namespace SharpFlame
                             {
                                 if ( UnknownUnitTypeCount < MaxUnknownUnitTypeWarningCount )
                                 {
-                                    ReturnResult.WarningAdd(ControlChars.Quote + INIObjects.Objects[A].Code + System.Convert.ToString(ControlChars.Quote) +
+                                    ReturnResult.WarningAdd(ControlChars.Quote + INIObjects.Objects[A].Code + Convert.ToString(ControlChars.Quote) +
                                                             " is not a loaded object.");
                                 }
                                 UnknownUnitTypeCount++;
@@ -1875,7 +1877,7 @@ namespace SharpFlame
                                     }
                                     if ( PlayerNum < modProgram.PlayerCountMax )
                                     {
-                                        UnitGroup = UnitGroups[System.Convert.ToInt32(PlayerNum)];
+                                        UnitGroup = UnitGroups[Convert.ToInt32(PlayerNum)];
                                     }
                                     else
                                     {
@@ -1968,23 +1970,23 @@ namespace SharpFlame
                 if ( (string)INIProperty.Name == "ax" )
                 {
                     int temp_Result = Gateways[INISectionNum].PosA.X;
-                    if ( !modIO.InvariantParse_int(System.Convert.ToString(INIProperty.Value), ref temp_Result) )
+                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "ay" )
                 {
-                    System.Int32 temp_Result2 = Gateways[INISectionNum].PosA.Y;
-                    if ( !modIO.InvariantParse_int(System.Convert.ToString(INIProperty.Value), ref temp_Result2) )
+                    Int32 temp_Result2 = Gateways[INISectionNum].PosA.Y;
+                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result2) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "bx" )
                 {
-                    System.Int32 temp_Result3 = Gateways[INISectionNum].PosB.X;
-                    if ( !modIO.InvariantParse_int(System.Convert.ToString(INIProperty.Value), ref temp_Result3) )
+                    Int32 temp_Result3 = Gateways[INISectionNum].PosB.X;
+                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result3) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1992,7 +1994,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "by" )
                 {
                     int temp_Result4 = Gateways[INISectionNum].PosB.Y;
-                    if ( !modIO.InvariantParse_int(System.Convert.ToString(INIProperty.Value), ref temp_Result4) )
+                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result4) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -2005,7 +2007,7 @@ namespace SharpFlame
             }
         }
 
-        public clsResult Read_FMap_Gateways(System.IO.StreamReader File)
+        public clsResult Read_FMap_Gateways(StreamReader File)
         {
             clsResult ReturnResult = new clsResult("Reading gateways");
 
@@ -2034,7 +2036,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult Read_FMap_TileTypes(System.IO.BinaryReader File)
+        public clsResult Read_FMap_TileTypes(BinaryReader File)
         {
             clsResult ReturnResult = new clsResult("Reading tile types");
 

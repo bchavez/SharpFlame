@@ -36,7 +36,7 @@ namespace SharpFlame
                 return;
             }
 
-            ScatteredUnitChanceTotal += System.Convert.ToInt32(NewUnit.Chance);
+            ScatteredUnitChanceTotal += Convert.ToInt32(NewUnit.Chance);
 
             Array.Resize(ref ScatteredUnits, ScatteredUnitCount + 1);
             ScatteredUnits[ScatteredUnitCount] = NewUnit;
@@ -50,7 +50,7 @@ namespace SharpFlame
                 return;
             }
 
-            ClusteredUnitChanceTotal += System.Convert.ToInt32(NewUnit.Chance);
+            ClusteredUnitChanceTotal += Convert.ToInt32(NewUnit.Chance);
 
             Array.Resize(ref ClusteredUnits, ClusteredUnitCount + 1);
             ClusteredUnits[ClusteredUnitCount] = NewUnit;

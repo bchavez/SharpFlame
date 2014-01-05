@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Microsoft.VisualBasic;
 using OpenTK.Graphics.OpenGL;
 
@@ -65,11 +66,11 @@ namespace SharpFlame
             {
                 sTriangle with_1 = Triangles[A];
                 GL.TexCoord2(with_1.TexCoordA.X, with_1.TexCoordA.Y);
-                GL.Vertex3(with_1.PosA.X, with_1.PosA.Y, System.Convert.ToDouble(- with_1.PosA.Z));
+                GL.Vertex3(with_1.PosA.X, with_1.PosA.Y, Convert.ToDouble(- with_1.PosA.Z));
                 GL.TexCoord2(with_1.TexCoordB.X, with_1.TexCoordB.Y);
-                GL.Vertex3(with_1.PosB.X, with_1.PosB.Y, System.Convert.ToDouble(- with_1.PosB.Z));
+                GL.Vertex3(with_1.PosB.X, with_1.PosB.Y, Convert.ToDouble(- with_1.PosB.Z));
                 GL.TexCoord2(with_1.TexCoordC.X, with_1.TexCoordC.Y);
-                GL.Vertex3(with_1.PosC.X, with_1.PosC.Y, System.Convert.ToDouble(- with_1.PosC.Z));
+                GL.Vertex3(with_1.PosC.X, with_1.PosC.Y, Convert.ToDouble(- with_1.PosC.Z));
             }
             GL.End();
             GL.Begin(BeginMode.Quads);
@@ -77,13 +78,13 @@ namespace SharpFlame
             {
                 sQuad with_2 = Quads[A];
                 GL.TexCoord2(with_2.TexCoordA.X, with_2.TexCoordA.Y);
-                GL.Vertex3(with_2.PosA.X, with_2.PosA.Y, System.Convert.ToDouble(- with_2.PosA.Z));
+                GL.Vertex3(with_2.PosA.X, with_2.PosA.Y, Convert.ToDouble(- with_2.PosA.Z));
                 GL.TexCoord2(with_2.TexCoordB.X, with_2.TexCoordB.Y);
-                GL.Vertex3(with_2.PosB.X, with_2.PosB.Y, System.Convert.ToDouble(- with_2.PosB.Z));
+                GL.Vertex3(with_2.PosB.X, with_2.PosB.Y, Convert.ToDouble(- with_2.PosB.Z));
                 GL.TexCoord2(with_2.TexCoordC.X, with_2.TexCoordC.Y);
-                GL.Vertex3(with_2.PosC.X, with_2.PosC.Y, System.Convert.ToDouble(- with_2.PosC.Z));
+                GL.Vertex3(with_2.PosC.X, with_2.PosC.Y, Convert.ToDouble(- with_2.PosC.Z));
                 GL.TexCoord2(with_2.TexCoordD.X, with_2.TexCoordD.Y);
-                GL.Vertex3(with_2.PosD.X, with_2.PosD.Y, System.Convert.ToDouble(- with_2.PosD.Z));
+                GL.Vertex3(with_2.PosD.X, with_2.PosD.Y, Convert.ToDouble(- with_2.PosD.Z));
             }
             GL.End();
         }
@@ -106,7 +107,7 @@ namespace SharpFlame
             public int PointCount;
         }
 
-        public clsResult ReadPIE(System.IO.StreamReader File, clsObjectData Owner)
+        public clsResult ReadPIE(StreamReader File, clsObjectData Owner)
         {
             clsResult ReturnResult = new clsResult("Reading PIE");
 
@@ -152,10 +153,10 @@ namespace SharpFlame
                 else if ( strTemp.Substring(0, 7) == "TEXTURE" )
                 {
                     TextureName = strTemp.Substring(strTemp.Length - (strTemp.Length - 10), strTemp.Length - 10);
-                    A = Strings.InStrRev(TextureName, " ", -1, (Microsoft.VisualBasic.CompareMethod)0);
+                    A = Strings.InStrRev(TextureName, " ", -1, (CompareMethod)0);
                     if ( A > 0 )
                     {
-                        A = Strings.InStrRev(TextureName, " ", A - 1, (Microsoft.VisualBasic.CompareMethod)0);
+                        A = Strings.InStrRev(TextureName, " ", A - 1, (CompareMethod)0);
                     }
                     else
                     {
@@ -236,7 +237,7 @@ namespace SharpFlame
                             }
                             catch ( Exception )
                             {
-                                ReturnResult.ProblemAdd("Bad point " + System.Convert.ToString(A));
+                                ReturnResult.ProblemAdd("Bad point " + Convert.ToString(A));
                                 return ReturnResult;
                             }
                             A++;
@@ -299,7 +300,7 @@ namespace SharpFlame
                                 //200, pointcount, points, texcoords
                                 if ( C < 2 )
                                 {
-                                    ReturnResult.ProblemAdd("Too few fields for polygon " + System.Convert.ToString(A));
+                                    ReturnResult.ProblemAdd("Too few fields for polygon " + Convert.ToString(A));
                                     return ReturnResult;
                                 }
                                 try
@@ -328,8 +329,8 @@ namespace SharpFlame
                                 }
                                 else if ( SplitText.GetUpperBound(0) + 1 != (2 + Count * 3) )
                                 {
-                                    ReturnResult.ProblemAdd("Wrong number of fields (" + System.Convert.ToString(SplitText.GetUpperBound(0) + 1) + ") for polygon " +
-                                                            System.Convert.ToString(A));
+                                    ReturnResult.ProblemAdd("Wrong number of fields (" + Convert.ToString(SplitText.GetUpperBound(0) + 1) + ") for polygon " +
+                                                            Convert.ToString(A));
                                     return ReturnResult;
                                 }
                                 for ( B = 0; B <= Count - 1; B++ )
@@ -462,7 +463,7 @@ namespace SharpFlame
                             }
                             catch ( Exception )
                             {
-                                ReturnResult.ProblemAdd("Bad connector " + System.Convert.ToString(A));
+                                ReturnResult.ProblemAdd("Bad connector " + Convert.ToString(A));
                                 return ReturnResult;
                             }
                             A++;
@@ -485,7 +486,7 @@ namespace SharpFlame
             GLTextureNum = Owner.Get_TexturePage_GLTexture(TextureName.Substring(0, TextureName.Length - 4));
             if ( GLTextureNum == 0 )
             {
-                ReturnResult.WarningAdd("Texture " + System.Convert.ToString(ControlChars.Quote) + TextureName + System.Convert.ToString(ControlChars.Quote) +
+                ReturnResult.WarningAdd("Texture " + Convert.ToString(ControlChars.Quote) + TextureName + Convert.ToString(ControlChars.Quote) +
                                         " was not loaded");
             }
 

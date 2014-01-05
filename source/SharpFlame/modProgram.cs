@@ -1,7 +1,11 @@
 using System;
 using System.Drawing;
+using System.IO;
+using System.Text;
 using Matrix3D;
 using Microsoft.VisualBasic;
+using Microsoft.VisualBasic.ApplicationServices;
+using Microsoft.VisualBasic.Devices;
 
 namespace SharpFlame
 {
@@ -47,17 +51,17 @@ namespace SharpFlame
 
         public static void SetProgramSubDirs()
         {
-            MyDocumentsProgramPath = (new Microsoft.VisualBasic.Devices.ServerComputer()).FileSystem.SpecialDirectories.MyDocuments +
-                                     System.Convert.ToString(PlatformPathSeparator) + ".flaME";
+            MyDocumentsProgramPath = (new ServerComputer()).FileSystem.SpecialDirectories.MyDocuments +
+                                     Convert.ToString(PlatformPathSeparator) + ".flaME";
 #if !Portable
-            SettingsPath = MyDocumentsProgramPath + System.Convert.ToString(PlatformPathSeparator) + "settings.ini";
-            AutoSavePath = MyDocumentsProgramPath + System.Convert.ToString(PlatformPathSeparator) + "autosave" + System.Convert.ToString(PlatformPathSeparator);
+            SettingsPath = MyDocumentsProgramPath + Convert.ToString(PlatformPathSeparator) + "settings.ini";
+            AutoSavePath = MyDocumentsProgramPath + Convert.ToString(PlatformPathSeparator) + "autosave" + Convert.ToString(PlatformPathSeparator);
 #else
 			SettingsPath = (new Microsoft.VisualBasic.ApplicationServices.ConsoleApplicationBase()).Info.DirectoryPath + System.Convert.ToString(PlatformPathSeparator) + "settings.ini";
 			AutoSavePath = (new Microsoft.VisualBasic.ApplicationServices.ConsoleApplicationBase()).Info.DirectoryPath + System.Convert.ToString(PlatformPathSeparator) + "autosave" + System.Convert.ToString(PlatformPathSeparator);
 #endif
-            InterfaceImagesPath = (new Microsoft.VisualBasic.ApplicationServices.ConsoleApplicationBase()).Info.DirectoryPath +
-                                  System.Convert.ToString(PlatformPathSeparator) + "interface" + System.Convert.ToString(PlatformPathSeparator);
+            InterfaceImagesPath = (new ConsoleApplicationBase()).Info.DirectoryPath +
+                                  Convert.ToString(PlatformPathSeparator) + "interface" + Convert.ToString(PlatformPathSeparator);
         }
 
         public static bool ProgramInitialized = false;
@@ -103,8 +107,8 @@ namespace SharpFlame
         public static clsDroidDesign.clsTemplateDroidType[] TemplateDroidTypes = new clsDroidDesign.clsTemplateDroidType[0];
         public static int TemplateDroidTypeCount;
 
-        public static readonly System.Text.UTF8Encoding UTF8Encoding = new System.Text.UTF8Encoding(false, false);
-        public static readonly System.Text.ASCIIEncoding ASCIIEncoding = new System.Text.ASCIIEncoding();
+        public static readonly UTF8Encoding UTF8Encoding = new UTF8Encoding(false, false);
+        public static readonly ASCIIEncoding ASCIIEncoding = new ASCIIEncoding();
 
         public const int INIRotationMax = 65536;
 
@@ -204,10 +208,10 @@ namespace SharpFlame
                 FilePath = "";
                 for ( A = 0; A <= PartCount - 2; A++ )
                 {
-                    FilePath += Parts[A] + System.Convert.ToString(PlatformPathSeparator);
+                    FilePath += Parts[A] + Convert.ToString(PlatformPathSeparator);
                 }
                 FileTitle = Parts[A];
-                A = Strings.InStrRev(FileTitle, ".", -1, (Microsoft.VisualBasic.CompareMethod)0);
+                A = Strings.InStrRev(FileTitle, ".", -1, (CompareMethod)0);
                 if ( A > 0 )
                 {
                     FileExtension = Strings.Right(FileTitle, FileTitle.Length - A);
@@ -243,7 +247,7 @@ namespace SharpFlame
                     FilePath += Parts[A] + "/";
                 }
                 FileTitle = Parts[A];
-                A = Strings.InStrRev(FileTitle, ".", -1, (Microsoft.VisualBasic.CompareMethod)0);
+                A = Strings.InStrRev(FileTitle, ".", -1, (CompareMethod)0);
                 if ( A > 0 )
                 {
                     FileExtension = Strings.Right(FileTitle, FileTitle.Length - A);
@@ -275,7 +279,7 @@ namespace SharpFlame
             }
             else
             {
-                return Text + System.Convert.ToString(PlatformPathSeparator);
+                return Text + Convert.ToString(PlatformPathSeparator);
             }
         }
 
@@ -432,8 +436,8 @@ namespace SharpFlame
 
             string MessageText = "";
 
-            MessageText = "An object\'s ID has been changed unexpectedly. The error was in " + System.Convert.ToString(ControlChars.Quote) + NameOfErrorSource +
-                          System.Convert.ToString(ControlChars.Quote) + "." + ControlChars.CrLf + ControlChars.CrLf + "The object is of type " +
+            MessageText = "An object\'s ID has been changed unexpectedly. The error was in " + Convert.ToString(ControlChars.Quote) + NameOfErrorSource +
+                          Convert.ToString(ControlChars.Quote) + "." + ControlChars.CrLf + ControlChars.CrLf + "The object is of type " +
                           IDUnit.Type.GetDisplayTextCode() + " and is at map position " + IDUnit.GetPosText() + ". It\'s ID was " +
                           modIO.InvariantToString_uint(IntendedID) + ", but is now " + modIO.InvariantToString_uint(IDUnit.ID) + "." + ControlChars.CrLf +
                           ControlChars.CrLf + "Click Cancel to stop seeing this message. Otherwise, click OK.";
@@ -511,7 +515,7 @@ namespace SharpFlame
             string[] TilesetDirs = null;
             try
             {
-                TilesetDirs = System.IO.Directory.GetDirectories(TilesetsPath);
+                TilesetDirs = Directory.GetDirectories(TilesetsPath);
             }
             catch ( Exception ex )
             {
@@ -722,7 +726,7 @@ namespace SharpFlame
                         {
                             Layers[A].WithinLayer = Layers[A].WithinLayer + 1;
                         }
-                        boolTemp = System.Convert.ToBoolean(Layers[A].AvoidLayers[Layer_Num]);
+                        boolTemp = Convert.ToBoolean(Layers[A].AvoidLayers[Layer_Num]);
                         for ( B = Layer_Num - 1; B >= Layer_Dest_Num; B-- )
                         {
                             Layers[A].AvoidLayers[B + 1] = Layers[A].AvoidLayers[B];
@@ -750,7 +754,7 @@ namespace SharpFlame
                         {
                             Layers[A].WithinLayer = Layers[A].WithinLayer - 1;
                         }
-                        boolTemp = System.Convert.ToBoolean(Layers[A].AvoidLayers[Layer_Num]);
+                        boolTemp = Convert.ToBoolean(Layers[A].AvoidLayers[Layer_Num]);
                         for ( B = Layer_Num; B <= Layer_Dest_Num - 1; B++ )
                         {
                             Layers[A].AvoidLayers[B] = Layers[A].AvoidLayers[B + 1];
@@ -763,9 +767,9 @@ namespace SharpFlame
 
         public static sLayerList LayerList;
 
-        public static Matrix3D.Position.XY_dbl CalcUnitsCentrePos(modLists.SimpleList<clsMap.clsUnit> Units)
+        public static Position.XY_dbl CalcUnitsCentrePos(modLists.SimpleList<clsMap.clsUnit> Units)
         {
-            Matrix3D.Position.XY_dbl Result = default(Matrix3D.Position.XY_dbl);
+            Position.XY_dbl Result = default(Position.XY_dbl);
 
             Result.X = 0.0D;
             Result.Y = 0.0D;
@@ -787,7 +791,7 @@ namespace SharpFlame
 
         public clsContainer(ItemType item)
         {
-            this.Item = item;
+            Item = item;
         }
     }
 }

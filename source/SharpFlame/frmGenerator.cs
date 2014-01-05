@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using Matrix3D;
 using Microsoft.VisualBasic;
 
 namespace SharpFlame
@@ -27,7 +28,7 @@ namespace SharpFlame
 
         private clsGenerateMap Generator = new clsGenerateMap();
 
-        public void btnGenerateLayout_Click(System.Object sender, System.EventArgs e)
+        public void btnGenerateLayout_Click(Object sender, EventArgs e)
         {
             lstResult.Items.Clear();
             btnGenerateLayout.Enabled = false;
@@ -48,128 +49,128 @@ namespace SharpFlame
             switch ( cboSymmetry.SelectedIndex )
             {
                 case 0: //none
-                    this.Generator.SymmetryBlockCountXY.X = 1;
-                    this.Generator.SymmetryBlockCountXY.Y = 1;
-                    this.Generator.SymmetryBlockCount = 1;
-                    this.Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(this.Generator.SymmetryBlockCount - 1) + 1];
-                    this.Generator.SymmetryBlocks[0].XYNum = new modMath.sXY_int(0, 0);
-                    this.Generator.SymmetryBlocks[0].Orientation = new TileOrientation.sTileOrientation(false, false, false);
-                    this.Generator.SymmetryIsRotational = false;
+                    Generator.SymmetryBlockCountXY.X = 1;
+                    Generator.SymmetryBlockCountXY.Y = 1;
+                    Generator.SymmetryBlockCount = 1;
+                    Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(Generator.SymmetryBlockCount - 1) + 1];
+                    Generator.SymmetryBlocks[0].XYNum = new modMath.sXY_int(0, 0);
+                    Generator.SymmetryBlocks[0].Orientation = new TileOrientation.sTileOrientation(false, false, false);
+                    Generator.SymmetryIsRotational = false;
                     break;
                 case 1: //h rotation
-                    this.Generator.SymmetryBlockCountXY.X = 2;
-                    this.Generator.SymmetryBlockCountXY.Y = 1;
-                    this.Generator.SymmetryBlockCount = 2;
-                    this.Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(this.Generator.SymmetryBlockCount - 1) + 1];
-                    this.Generator.SymmetryBlocks[0].XYNum = new modMath.sXY_int(0, 0);
-                    this.Generator.SymmetryBlocks[0].Orientation = new TileOrientation.sTileOrientation(false, false, false);
-                    this.Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)this.Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
-                    this.Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
-                    this.Generator.SymmetryBlocks[1].XYNum = new modMath.sXY_int(1, 0);
-                    this.Generator.SymmetryBlocks[1].Orientation = new TileOrientation.sTileOrientation(true, true, false);
-                    this.Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)this.Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
-                    this.Generator.SymmetryBlocks[1].ReflectToNum[0] = 0;
-                    this.Generator.SymmetryIsRotational = true;
+                    Generator.SymmetryBlockCountXY.X = 2;
+                    Generator.SymmetryBlockCountXY.Y = 1;
+                    Generator.SymmetryBlockCount = 2;
+                    Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(Generator.SymmetryBlockCount - 1) + 1];
+                    Generator.SymmetryBlocks[0].XYNum = new modMath.sXY_int(0, 0);
+                    Generator.SymmetryBlocks[0].Orientation = new TileOrientation.sTileOrientation(false, false, false);
+                    Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
+                    Generator.SymmetryBlocks[1].XYNum = new modMath.sXY_int(1, 0);
+                    Generator.SymmetryBlocks[1].Orientation = new TileOrientation.sTileOrientation(true, true, false);
+                    Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[1].ReflectToNum[0] = 0;
+                    Generator.SymmetryIsRotational = true;
                     break;
                 case 2: //v rotation
-                    this.Generator.SymmetryBlockCountXY.X = 1;
-                    this.Generator.SymmetryBlockCountXY.Y = 2;
-                    this.Generator.SymmetryBlockCount = 2;
-                    this.Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(this.Generator.SymmetryBlockCount - 1) + 1];
-                    this.Generator.SymmetryBlocks[0].XYNum = new modMath.sXY_int(0, 0);
-                    this.Generator.SymmetryBlocks[0].Orientation = new TileOrientation.sTileOrientation(false, false, false);
-                    this.Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)this.Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
-                    this.Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
-                    this.Generator.SymmetryBlocks[1].XYNum = new modMath.sXY_int(0, 1);
-                    this.Generator.SymmetryBlocks[1].Orientation = new TileOrientation.sTileOrientation(true, true, false);
-                    this.Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)this.Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
-                    this.Generator.SymmetryBlocks[1].ReflectToNum[0] = 0;
-                    this.Generator.SymmetryIsRotational = true;
+                    Generator.SymmetryBlockCountXY.X = 1;
+                    Generator.SymmetryBlockCountXY.Y = 2;
+                    Generator.SymmetryBlockCount = 2;
+                    Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(Generator.SymmetryBlockCount - 1) + 1];
+                    Generator.SymmetryBlocks[0].XYNum = new modMath.sXY_int(0, 0);
+                    Generator.SymmetryBlocks[0].Orientation = new TileOrientation.sTileOrientation(false, false, false);
+                    Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
+                    Generator.SymmetryBlocks[1].XYNum = new modMath.sXY_int(0, 1);
+                    Generator.SymmetryBlocks[1].Orientation = new TileOrientation.sTileOrientation(true, true, false);
+                    Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[1].ReflectToNum[0] = 0;
+                    Generator.SymmetryIsRotational = true;
                     break;
                 case 3: //h flip
-                    this.Generator.SymmetryBlockCountXY.X = 2;
-                    this.Generator.SymmetryBlockCountXY.Y = 1;
-                    this.Generator.SymmetryBlockCount = 2;
-                    this.Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(this.Generator.SymmetryBlockCount - 1) + 1];
-                    this.Generator.SymmetryBlocks[0].XYNum = new modMath.sXY_int(0, 0);
-                    this.Generator.SymmetryBlocks[0].Orientation = new TileOrientation.sTileOrientation(false, false, false);
-                    this.Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)this.Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
-                    this.Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
-                    this.Generator.SymmetryBlocks[1].XYNum = new modMath.sXY_int(1, 0);
-                    this.Generator.SymmetryBlocks[1].Orientation = new TileOrientation.sTileOrientation(true, false, false);
-                    this.Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)this.Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
-                    this.Generator.SymmetryBlocks[1].ReflectToNum[0] = 0;
-                    this.Generator.SymmetryIsRotational = false;
+                    Generator.SymmetryBlockCountXY.X = 2;
+                    Generator.SymmetryBlockCountXY.Y = 1;
+                    Generator.SymmetryBlockCount = 2;
+                    Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(Generator.SymmetryBlockCount - 1) + 1];
+                    Generator.SymmetryBlocks[0].XYNum = new modMath.sXY_int(0, 0);
+                    Generator.SymmetryBlocks[0].Orientation = new TileOrientation.sTileOrientation(false, false, false);
+                    Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
+                    Generator.SymmetryBlocks[1].XYNum = new modMath.sXY_int(1, 0);
+                    Generator.SymmetryBlocks[1].Orientation = new TileOrientation.sTileOrientation(true, false, false);
+                    Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[1].ReflectToNum[0] = 0;
+                    Generator.SymmetryIsRotational = false;
                     break;
                 case 4: //v flip
-                    this.Generator.SymmetryBlockCountXY.X = 1;
-                    this.Generator.SymmetryBlockCountXY.Y = 2;
-                    this.Generator.SymmetryBlockCount = 2;
-                    this.Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(this.Generator.SymmetryBlockCount - 1) + 1];
-                    this.Generator.SymmetryBlocks[0].XYNum = new modMath.sXY_int(0, 0);
-                    this.Generator.SymmetryBlocks[0].Orientation = new TileOrientation.sTileOrientation(false, false, false);
-                    this.Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)this.Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
-                    this.Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
-                    this.Generator.SymmetryBlocks[1].XYNum = new modMath.sXY_int(0, 1);
-                    this.Generator.SymmetryBlocks[1].Orientation = new TileOrientation.sTileOrientation(false, true, false);
-                    this.Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)this.Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
-                    this.Generator.SymmetryBlocks[1].ReflectToNum[0] = 0;
-                    this.Generator.SymmetryIsRotational = false;
+                    Generator.SymmetryBlockCountXY.X = 1;
+                    Generator.SymmetryBlockCountXY.Y = 2;
+                    Generator.SymmetryBlockCount = 2;
+                    Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(Generator.SymmetryBlockCount - 1) + 1];
+                    Generator.SymmetryBlocks[0].XYNum = new modMath.sXY_int(0, 0);
+                    Generator.SymmetryBlocks[0].Orientation = new TileOrientation.sTileOrientation(false, false, false);
+                    Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
+                    Generator.SymmetryBlocks[1].XYNum = new modMath.sXY_int(0, 1);
+                    Generator.SymmetryBlocks[1].Orientation = new TileOrientation.sTileOrientation(false, true, false);
+                    Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[1].ReflectToNum[0] = 0;
+                    Generator.SymmetryIsRotational = false;
                     Generator.SymmetryIsRotational = false;
                     break;
                 case 5: //4x rotation
-                    this.Generator.SymmetryBlockCountXY.X = 2;
-                    this.Generator.SymmetryBlockCountXY.Y = 2;
-                    this.Generator.SymmetryBlockCount = 4;
-                    this.Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(this.Generator.SymmetryBlockCount - 1) + 1];
-                    this.Generator.SymmetryBlocks[0].XYNum = new modMath.sXY_int(0, 0);
-                    this.Generator.SymmetryBlocks[0].Orientation = new TileOrientation.sTileOrientation(false, false, false);
-                    this.Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)this.Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
-                    this.Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
-                    this.Generator.SymmetryBlocks[0].ReflectToNum[1] = 2;
-                    this.Generator.SymmetryBlocks[1].XYNum = new modMath.sXY_int(1, 0);
-                    this.Generator.SymmetryBlocks[1].Orientation = new TileOrientation.sTileOrientation(true, false, true);
-                    this.Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)this.Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
-                    this.Generator.SymmetryBlocks[1].ReflectToNum[0] = 3;
-                    this.Generator.SymmetryBlocks[1].ReflectToNum[1] = 0;
-                    this.Generator.SymmetryBlocks[2].XYNum = new modMath.sXY_int(0, 1);
-                    this.Generator.SymmetryBlocks[2].Orientation = new TileOrientation.sTileOrientation(false, true, true);
-                    this.Generator.SymmetryBlocks[2].ReflectToNum = new int[(((int)Math.Round((double)(((double)this.Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
-                    this.Generator.SymmetryBlocks[2].ReflectToNum[0] = 0;
-                    this.Generator.SymmetryBlocks[2].ReflectToNum[1] = 3;
-                    this.Generator.SymmetryBlocks[3].XYNum = new modMath.sXY_int(1, 1);
-                    this.Generator.SymmetryBlocks[3].Orientation = new TileOrientation.sTileOrientation(true, true, false);
-                    this.Generator.SymmetryBlocks[3].ReflectToNum = new int[(((int)Math.Round((double)(((double)this.Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
-                    this.Generator.SymmetryBlocks[3].ReflectToNum[0] = 2;
-                    this.Generator.SymmetryBlocks[3].ReflectToNum[1] = 1;
-                    this.Generator.SymmetryIsRotational = true;
+                    Generator.SymmetryBlockCountXY.X = 2;
+                    Generator.SymmetryBlockCountXY.Y = 2;
+                    Generator.SymmetryBlockCount = 4;
+                    Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(Generator.SymmetryBlockCount - 1) + 1];
+                    Generator.SymmetryBlocks[0].XYNum = new modMath.sXY_int(0, 0);
+                    Generator.SymmetryBlocks[0].Orientation = new TileOrientation.sTileOrientation(false, false, false);
+                    Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
+                    Generator.SymmetryBlocks[0].ReflectToNum[1] = 2;
+                    Generator.SymmetryBlocks[1].XYNum = new modMath.sXY_int(1, 0);
+                    Generator.SymmetryBlocks[1].Orientation = new TileOrientation.sTileOrientation(true, false, true);
+                    Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[1].ReflectToNum[0] = 3;
+                    Generator.SymmetryBlocks[1].ReflectToNum[1] = 0;
+                    Generator.SymmetryBlocks[2].XYNum = new modMath.sXY_int(0, 1);
+                    Generator.SymmetryBlocks[2].Orientation = new TileOrientation.sTileOrientation(false, true, true);
+                    Generator.SymmetryBlocks[2].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[2].ReflectToNum[0] = 0;
+                    Generator.SymmetryBlocks[2].ReflectToNum[1] = 3;
+                    Generator.SymmetryBlocks[3].XYNum = new modMath.sXY_int(1, 1);
+                    Generator.SymmetryBlocks[3].Orientation = new TileOrientation.sTileOrientation(true, true, false);
+                    Generator.SymmetryBlocks[3].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[3].ReflectToNum[0] = 2;
+                    Generator.SymmetryBlocks[3].ReflectToNum[1] = 1;
+                    Generator.SymmetryIsRotational = true;
                     break;
                 case 6: //hv flip
-                    this.Generator.SymmetryBlockCountXY.X = 2;
-                    this.Generator.SymmetryBlockCountXY.Y = 2;
-                    this.Generator.SymmetryBlockCount = 4;
-                    this.Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(this.Generator.SymmetryBlockCount - 1) + 1];
-                    this.Generator.SymmetryBlocks[0].XYNum = new modMath.sXY_int(0, 0);
-                    this.Generator.SymmetryBlocks[0].Orientation = new TileOrientation.sTileOrientation(false, false, false);
-                    this.Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)this.Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
-                    this.Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
-                    this.Generator.SymmetryBlocks[0].ReflectToNum[1] = 2;
-                    this.Generator.SymmetryBlocks[1].XYNum = new modMath.sXY_int(1, 0);
-                    this.Generator.SymmetryBlocks[1].Orientation = new TileOrientation.sTileOrientation(true, false, false);
-                    this.Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)this.Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
-                    this.Generator.SymmetryBlocks[1].ReflectToNum[0] = 0;
-                    this.Generator.SymmetryBlocks[1].ReflectToNum[1] = 3;
-                    this.Generator.SymmetryBlocks[2].XYNum = new modMath.sXY_int(0, 1);
-                    this.Generator.SymmetryBlocks[2].Orientation = new TileOrientation.sTileOrientation(false, true, false);
-                    this.Generator.SymmetryBlocks[2].ReflectToNum = new int[(((int)Math.Round((double)(((double)this.Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
-                    this.Generator.SymmetryBlocks[2].ReflectToNum[0] = 3;
-                    this.Generator.SymmetryBlocks[2].ReflectToNum[1] = 0;
-                    this.Generator.SymmetryBlocks[3].XYNum = new modMath.sXY_int(1, 1);
-                    this.Generator.SymmetryBlocks[3].Orientation = new TileOrientation.sTileOrientation(true, true, false);
-                    this.Generator.SymmetryBlocks[3].ReflectToNum = new int[(((int)Math.Round((double)(((double)this.Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
-                    this.Generator.SymmetryBlocks[3].ReflectToNum[0] = 2;
-                    this.Generator.SymmetryBlocks[3].ReflectToNum[1] = 1;
-                    this.Generator.SymmetryIsRotational = false;
+                    Generator.SymmetryBlockCountXY.X = 2;
+                    Generator.SymmetryBlockCountXY.Y = 2;
+                    Generator.SymmetryBlockCount = 4;
+                    Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(Generator.SymmetryBlockCount - 1) + 1];
+                    Generator.SymmetryBlocks[0].XYNum = new modMath.sXY_int(0, 0);
+                    Generator.SymmetryBlocks[0].Orientation = new TileOrientation.sTileOrientation(false, false, false);
+                    Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
+                    Generator.SymmetryBlocks[0].ReflectToNum[1] = 2;
+                    Generator.SymmetryBlocks[1].XYNum = new modMath.sXY_int(1, 0);
+                    Generator.SymmetryBlocks[1].Orientation = new TileOrientation.sTileOrientation(true, false, false);
+                    Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[1].ReflectToNum[0] = 0;
+                    Generator.SymmetryBlocks[1].ReflectToNum[1] = 3;
+                    Generator.SymmetryBlocks[2].XYNum = new modMath.sXY_int(0, 1);
+                    Generator.SymmetryBlocks[2].Orientation = new TileOrientation.sTileOrientation(false, true, false);
+                    Generator.SymmetryBlocks[2].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[2].ReflectToNum[0] = 3;
+                    Generator.SymmetryBlocks[2].ReflectToNum[1] = 0;
+                    Generator.SymmetryBlocks[3].XYNum = new modMath.sXY_int(1, 1);
+                    Generator.SymmetryBlocks[3].Orientation = new TileOrientation.sTileOrientation(true, true, false);
+                    Generator.SymmetryBlocks[3].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[3].ReflectToNum[0] = 2;
+                    Generator.SymmetryBlocks[3].ReflectToNum[1] = 1;
+                    Generator.SymmetryIsRotational = false;
                     break;
                 default:
                     MessageBox.Show("Select symmetry");
@@ -203,8 +204,8 @@ namespace SharpFlame
             }
             Generator.PlayerBasePos = new modMath.sXY_int[Generator.TopLeftPlayerCount];
             double BaseMin = 12.0D;
-            Matrix3D.Position.XY_dbl BaseMax =
-                new Matrix3D.Position.XY_dbl(Math.Min(Generator.TileSize.X / Generator.SymmetryBlockCountXY.X, Generator.TileSize.X - 12.0D),
+            Position.XY_dbl BaseMax =
+                new Position.XY_dbl(Math.Min(Generator.TileSize.X / Generator.SymmetryBlockCountXY.X, Generator.TileSize.X - 12.0D),
                     Math.Min(Generator.TileSize.Y / Generator.SymmetryBlockCountXY.Y, Generator.TileSize.Y - 12.0D));
             Generator.PlayerBasePos[0] = new modMath.sXY_int(ValidateTextbox(txt1x, BaseMin, BaseMax.X, modProgram.TerrainGridSpacing),
                 ValidateTextbox(txt1y, BaseMin, BaseMax.X, modProgram.TerrainGridSpacing));
@@ -287,7 +288,7 @@ namespace SharpFlame
                     }
                 }
                 LoopCount++;
-                lstResult_AddText("Attempt " + System.Convert.ToString(LoopCount) + " failed.");
+                lstResult_AddText("Attempt " + Convert.ToString(LoopCount) + " failed.");
                 Application.DoEvents();
                 if ( StopTrying )
                 {
@@ -459,7 +460,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public void btnGenerateObjects_Click(System.Object sender, System.EventArgs e)
+        public void btnGenerateObjects_Click(Object sender, EventArgs e)
         {
             if ( Generator.Map == null || Generator.GenerateTileset == null )
             {
@@ -511,7 +512,7 @@ namespace SharpFlame
             Generator.Map.UndoStepCreate("Generator objects");
         }
 
-        public void btnGenerateRamps_Click(System.Object sender, System.EventArgs e)
+        public void btnGenerateRamps_Click(Object sender, EventArgs e)
         {
             if ( Generator.Map == null )
             {
@@ -541,7 +542,7 @@ namespace SharpFlame
             }
         }
 
-        public void btnGenerateTextures_Click(System.Object sender, System.EventArgs e)
+        public void btnGenerateTextures_Click(Object sender, EventArgs e)
         {
             if ( Generator.Map == null )
             {
@@ -556,19 +557,19 @@ namespace SharpFlame
             modMain.frmMainInstance.View_DrawViewLater();
         }
 
-        public void frmGenerator_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
+        public void frmGenerator_FormClosing(object sender, FormClosingEventArgs e)
         {
             Hide();
             e.Cancel = true;
         }
 
-        public void frmWZMapGen_Load(object sender, System.EventArgs e)
+        public void frmWZMapGen_Load(object sender, EventArgs e)
         {
             cboTileset.SelectedIndex = 0;
             cboSymmetry.SelectedIndex = 0;
         }
 
-        public void rdoPlayer2_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoPlayer2_CheckedChanged(Object sender, EventArgs e)
         {
             if ( rdoPlayer2.Checked )
             {
@@ -585,7 +586,7 @@ namespace SharpFlame
             }
         }
 
-        public void rdoPlayer3_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoPlayer3_CheckedChanged(Object sender, EventArgs e)
         {
             if ( rdoPlayer3.Checked )
             {
@@ -602,7 +603,7 @@ namespace SharpFlame
             }
         }
 
-        public void rdoPlayer4_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoPlayer4_CheckedChanged(Object sender, EventArgs e)
         {
             if ( rdoPlayer4.Checked )
             {
@@ -619,7 +620,7 @@ namespace SharpFlame
             }
         }
 
-        public void rdoPlayer5_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoPlayer5_CheckedChanged(Object sender, EventArgs e)
         {
             if ( rdoPlayer5.Checked )
             {
@@ -636,7 +637,7 @@ namespace SharpFlame
             }
         }
 
-        public void rdoPlayer6_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoPlayer6_CheckedChanged(Object sender, EventArgs e)
         {
             if ( rdoPlayer6.Checked )
             {
@@ -653,7 +654,7 @@ namespace SharpFlame
             }
         }
 
-        public void rdoPlayer7_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoPlayer7_CheckedChanged(Object sender, EventArgs e)
         {
             if ( rdoPlayer7.Checked )
             {
@@ -670,7 +671,7 @@ namespace SharpFlame
             }
         }
 
-        public void rdoPlayer8_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoPlayer8_CheckedChanged(Object sender, EventArgs e)
         {
             if ( rdoPlayer8.Checked )
             {
@@ -687,12 +688,12 @@ namespace SharpFlame
             }
         }
 
-        public void btnStop_Click(System.Object sender, System.EventArgs e)
+        public void btnStop_Click(Object sender, EventArgs e)
         {
             StopTrying = true;
         }
 
-        public void rdoPlayer1_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoPlayer1_CheckedChanged(Object sender, EventArgs e)
         {
             if ( rdoPlayer1.Checked )
             {
@@ -709,7 +710,7 @@ namespace SharpFlame
             }
         }
 
-        public void rdoPlayer9_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoPlayer9_CheckedChanged(Object sender, EventArgs e)
         {
             if ( rdoPlayer9.Checked )
             {
@@ -726,7 +727,7 @@ namespace SharpFlame
             }
         }
 
-        public void rdoPlayer10_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoPlayer10_CheckedChanged(Object sender, EventArgs e)
         {
             if ( rdoPlayer10.Checked )
             {

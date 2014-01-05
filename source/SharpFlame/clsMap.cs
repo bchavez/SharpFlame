@@ -1,8 +1,10 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Windows.Forms;
 using Matrix3D;
 using Microsoft.VisualBasic;
+using Microsoft.VisualBasic.Devices;
 using OpenTK.Graphics.OpenGL;
 
 namespace SharpFlame
@@ -94,19 +96,19 @@ namespace SharpFlame
 
             public modMath.sXY_int TileSize;
 
-            public clsMap.clsTerrain.Vertex[,] Vertices;
-            public clsMap.clsTerrain.Tile[,] Tiles;
-            public clsMap.clsTerrain.Side[,] SideH;
-            public clsMap.clsTerrain.Side[,] SideV;
+            public Vertex[,] Vertices;
+            public Tile[,] Tiles;
+            public Side[,] SideH;
+            public Side[,] SideV;
 
             public clsTerrain(modMath.sXY_int NewSize)
             {
                 TileSize = NewSize;
 
-                Vertices = new clsMap.clsTerrain.Vertex[TileSize.X + 1, TileSize.Y + 1];
-                Tiles = new clsMap.clsTerrain.Tile[TileSize.X, TileSize.Y];
-                SideH = new clsMap.clsTerrain.Side[TileSize.X, TileSize.Y + 1];
-                SideV = new clsMap.clsTerrain.Side[TileSize.X + 1, TileSize.Y];
+                Vertices = new Vertex[TileSize.X + 1, TileSize.Y + 1];
+                Tiles = new Tile[TileSize.X, TileSize.Y];
+                SideH = new Side[TileSize.X, TileSize.Y + 1];
+                SideV = new Side[TileSize.X + 1, TileSize.Y];
                 int X = 0;
                 int Y = 0;
 
@@ -127,13 +129,13 @@ namespace SharpFlame
         {
             public clsSector()
             {
-                Units = new modLists.ConnectedList<clsMap.clsUnitSectorConnection, clsMap.clsSector>(this);
+                Units = new modLists.ConnectedList<clsUnitSectorConnection, clsSector>(this);
             }
 
             public modMath.sXY_int Pos;
             public int GLList_Textured;
             public int GLList_Wireframe;
-            public modLists.ConnectedList<clsMap.clsUnitSectorConnection, clsMap.clsSector> Units;
+            public modLists.ConnectedList<clsUnitSectorConnection, clsSector> Units;
 
             public void DeleteLists()
             {
@@ -156,7 +158,7 @@ namespace SharpFlame
 
             public clsSector(modMath.sXY_int NewPos)
             {
-                Units = new modLists.ConnectedList<clsMap.clsUnitSectorConnection, clsMap.clsSector>(this);
+                Units = new modLists.ConnectedList<clsUnitSectorConnection, clsSector>(this);
 
 
                 Pos = NewPos;
@@ -202,15 +204,15 @@ namespace SharpFlame
         {
             public string Name;
             public modLists.SimpleList<clsShadowSector> ChangedSectors = new modLists.SimpleList<clsShadowSector>();
-            public modLists.SimpleList<clsMap.clsUnitChange> UnitChanges = new modLists.SimpleList<clsMap.clsUnitChange>();
-            public modLists.SimpleList<clsMap.clsGatewayChange> GatewayChanges = new modLists.SimpleList<clsMap.clsGatewayChange>();
+            public modLists.SimpleList<clsUnitChange> UnitChanges = new modLists.SimpleList<clsUnitChange>();
+            public modLists.SimpleList<clsGatewayChange> GatewayChanges = new modLists.SimpleList<clsGatewayChange>();
         }
 
-        public modLists.SimpleClassList<clsMap.clsUndo> Undos;
+        public modLists.SimpleClassList<clsUndo> Undos;
         public int UndoPosition;
 
-        public modLists.SimpleClassList<clsMap.clsUnitChange> UnitChanges;
-        public modLists.SimpleClassList<clsMap.clsGatewayChange> GatewayChanges;
+        public modLists.SimpleClassList<clsUnitChange> UnitChanges;
+        public modLists.SimpleClassList<clsGatewayChange> GatewayChanges;
 
         public int HeightMultiplier = modProgram.DefaultHeightMultiplier;
 
@@ -221,7 +223,7 @@ namespace SharpFlame
 
         private bool _ReadyForUserInput = false;
 
-        public modLists.ConnectedList<clsMap.clsUnit, clsMap> SelectedUnits;
+        public modLists.ConnectedList<clsUnit, clsMap> SelectedUnits;
         public modMath.clsXY_int Selected_Tile_A;
         public modMath.clsXY_int Selected_Tile_B;
         public modMath.clsXY_int Selected_Area_VertexA;
@@ -278,8 +280,8 @@ namespace SharpFlame
 
         public event ChangedEventHandler Changed
         {
-            add { ChangedEvent = (ChangedEventHandler)System.Delegate.Combine(ChangedEvent, value); }
-            remove { ChangedEvent = (ChangedEventHandler)System.Delegate.Remove(ChangedEvent, value); }
+            add { ChangedEvent = (ChangedEventHandler)Delegate.Combine(ChangedEvent, value); }
+            remove { ChangedEvent = (ChangedEventHandler)Delegate.Remove(ChangedEvent, value); }
         }
 
 
@@ -434,9 +436,9 @@ namespace SharpFlame
             }
 
             modMath.sXY_int PosDif = new modMath.sXY_int();
-            clsMap.clsUnitAdd NewUnitAdd = new clsMap.clsUnitAdd();
+            clsUnitAdd NewUnitAdd = new clsUnitAdd();
             NewUnitAdd.Map = this;
-            clsMap.clsUnit NewUnit = default(clsMap.clsUnit);
+            clsUnit NewUnit = default(clsUnit);
 
             clsGateway Gateway = default(clsGateway);
             foreach ( clsGateway tempLoopVar_Gateway in MapToCopy.Gateways )
@@ -535,10 +537,10 @@ namespace SharpFlame
             double GradientX = 0;
             double GradientY = 0;
             double Offset = 0;
-            Matrix3D.Position.XYZ_dbl XYZ_dbl = default(Matrix3D.Position.XYZ_dbl);
-            Matrix3D.Position.XYZ_dbl XYZ_dbl2 = default(Matrix3D.Position.XYZ_dbl);
-            Matrix3D.Position.XYZ_dbl XYZ_dbl3 = default(Matrix3D.Position.XYZ_dbl);
-            Matrix3D.Angles.AnglePY AnglePY = default(Matrix3D.Angles.AnglePY);
+            Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
+            Position.XYZ_dbl XYZ_dbl2 = default(Position.XYZ_dbl);
+            Position.XYZ_dbl XYZ_dbl3 = default(Position.XYZ_dbl);
+            Angles.AnglePY AnglePY = default(Angles.AnglePY);
 
             XG = Conversion.Int(Horizontal.X / modProgram.TerrainGridSpacing);
             YG = (int)(Conversion.Int(Horizontal.Y / modProgram.TerrainGridSpacing));
@@ -553,14 +555,14 @@ namespace SharpFlame
                 if ( InTileZ <= 1.0D - InTileX )
                 {
                     Offset = Terrain.Vertices[X1, Y1].Height;
-                    GradientX = System.Convert.ToDouble(Terrain.Vertices[X2, Y1].Height - Offset);
-                    GradientY = System.Convert.ToDouble(Terrain.Vertices[X1, Y2].Height - Offset);
+                    GradientX = Convert.ToDouble(Terrain.Vertices[X2, Y1].Height - Offset);
+                    GradientY = Convert.ToDouble(Terrain.Vertices[X1, Y2].Height - Offset);
                 }
                 else
                 {
                     Offset = Terrain.Vertices[X2, Y2].Height;
-                    GradientX = System.Convert.ToDouble(Terrain.Vertices[X1, Y2].Height - Offset);
-                    GradientY = System.Convert.ToDouble(Terrain.Vertices[X2, Y1].Height - Offset);
+                    GradientX = Convert.ToDouble(Terrain.Vertices[X1, Y2].Height - Offset);
+                    GradientY = Convert.ToDouble(Terrain.Vertices[X2, Y1].Height - Offset);
                 }
             }
             else
@@ -568,14 +570,14 @@ namespace SharpFlame
                 if ( InTileZ <= InTileX )
                 {
                     Offset = Terrain.Vertices[X2, Y1].Height;
-                    GradientX = System.Convert.ToDouble(Terrain.Vertices[X1, Y1].Height - Offset);
-                    GradientY = System.Convert.ToDouble(Terrain.Vertices[X2, Y2].Height - Offset);
+                    GradientX = Convert.ToDouble(Terrain.Vertices[X1, Y1].Height - Offset);
+                    GradientY = Convert.ToDouble(Terrain.Vertices[X2, Y2].Height - Offset);
                 }
                 else
                 {
                     Offset = Terrain.Vertices[X1, Y2].Height;
-                    GradientX = System.Convert.ToDouble(Terrain.Vertices[X2, Y2].Height - Offset);
-                    GradientY = System.Convert.ToDouble(Terrain.Vertices[X1, Y1].Height - Offset);
+                    GradientX = Convert.ToDouble(Terrain.Vertices[X2, Y2].Height - Offset);
+                    GradientY = Convert.ToDouble(Terrain.Vertices[X1, Y1].Height - Offset);
                 }
             }
 
@@ -626,16 +628,16 @@ namespace SharpFlame
                 if ( InTileZ <= 1.0D - InTileX )
                 {
                     Offset = Terrain.Vertices[X1, Y1].Height;
-                    GradientX = System.Convert.ToDouble(Terrain.Vertices[X2, Y1].Height - Offset);
-                    GradientY = System.Convert.ToDouble(Terrain.Vertices[X1, Y2].Height - Offset);
+                    GradientX = Convert.ToDouble(Terrain.Vertices[X2, Y1].Height - Offset);
+                    GradientY = Convert.ToDouble(Terrain.Vertices[X1, Y2].Height - Offset);
                     RatioX = InTileX;
                     RatioY = InTileZ;
                 }
                 else
                 {
                     Offset = Terrain.Vertices[X2, Y2].Height;
-                    GradientX = System.Convert.ToDouble(Terrain.Vertices[X1, Y2].Height - Offset);
-                    GradientY = System.Convert.ToDouble(Terrain.Vertices[X2, Y1].Height - Offset);
+                    GradientX = Convert.ToDouble(Terrain.Vertices[X1, Y2].Height - Offset);
+                    GradientY = Convert.ToDouble(Terrain.Vertices[X2, Y1].Height - Offset);
                     RatioX = 1.0D - InTileX;
                     RatioY = 1.0D - InTileZ;
                 }
@@ -645,16 +647,16 @@ namespace SharpFlame
                 if ( InTileZ <= InTileX )
                 {
                     Offset = Terrain.Vertices[X2, Y1].Height;
-                    GradientX = System.Convert.ToDouble(Terrain.Vertices[X1, Y1].Height - Offset);
-                    GradientY = System.Convert.ToDouble(Terrain.Vertices[X2, Y2].Height - Offset);
+                    GradientX = Convert.ToDouble(Terrain.Vertices[X1, Y1].Height - Offset);
+                    GradientY = Convert.ToDouble(Terrain.Vertices[X2, Y2].Height - Offset);
                     RatioX = 1.0D - InTileX;
                     RatioY = InTileZ;
                 }
                 else
                 {
                     Offset = Terrain.Vertices[X1, Y2].Height;
-                    GradientX = System.Convert.ToDouble(Terrain.Vertices[X2, Y2].Height - Offset);
-                    GradientY = System.Convert.ToDouble(Terrain.Vertices[X1, Y1].Height - Offset);
+                    GradientX = Convert.ToDouble(Terrain.Vertices[X2, Y2].Height - Offset);
+                    GradientY = Convert.ToDouble(Terrain.Vertices[X1, Y1].Height - Offset);
                     RatioX = InTileX;
                     RatioY = 1.0D - InTileZ;
                 }
@@ -671,8 +673,8 @@ namespace SharpFlame
             int TerrainHeightY2 = 0;
             int X2 = 0;
             int Y2 = 0;
-            Matrix3D.Position.XYZ_dbl XYZ_dbl = default(Matrix3D.Position.XYZ_dbl);
-            Matrix3D.Position.XYZ_dbl XYZ_dbl2 = default(Matrix3D.Position.XYZ_dbl);
+            Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
+            Position.XYZ_dbl XYZ_dbl2 = default(Position.XYZ_dbl);
             double dblTemp = 0;
 
             X2 = modMath.Clamp_int(X - 1, 0, Terrain.TileSize.X);
@@ -900,7 +902,7 @@ namespace SharpFlame
             FinishY = Math.Min(StartY + modProgram.SectorTileSize, Terrain.TileSize.Y) - 1;
 
             Sectors[X, Y].GLList_Textured = GL.GenLists(1);
-            GL.NewList(System.Convert.ToInt32(Sectors[X, Y].GLList_Textured), ListMode.Compile);
+            GL.NewList(Convert.ToInt32(Sectors[X, Y].GLList_Textured), ListMode.Compile);
 
             if ( modProgram.Draw_Units )
             {
@@ -1007,35 +1009,35 @@ namespace SharpFlame
             GL.Begin(BeginMode.Lines);
             if ( Terrain.Tiles[TileX, TileY].Tri )
             {
-                GL.Vertex3(Vertex0.X, Vertex0.Y, System.Convert.ToDouble(- Vertex0.Z));
-                GL.Vertex3(Vertex2.X, Vertex2.Y, System.Convert.ToDouble(- Vertex2.Z));
-                GL.Vertex3(Vertex2.X, Vertex2.Y, System.Convert.ToDouble(- Vertex2.Z));
-                GL.Vertex3(Vertex1.X, Vertex1.Y, System.Convert.ToDouble(- Vertex1.Z));
-                GL.Vertex3(Vertex1.X, Vertex1.Y, System.Convert.ToDouble(- Vertex1.Z));
-                GL.Vertex3(Vertex0.X, Vertex0.Y, System.Convert.ToDouble(- Vertex0.Z));
+                GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
+                GL.Vertex3(Vertex2.X, Vertex2.Y, Convert.ToDouble(- Vertex2.Z));
+                GL.Vertex3(Vertex2.X, Vertex2.Y, Convert.ToDouble(- Vertex2.Z));
+                GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
+                GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
+                GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
 
-                GL.Vertex3(Vertex1.X, Vertex1.Y, System.Convert.ToDouble(- Vertex1.Z));
-                GL.Vertex3(Vertex2.X, Vertex2.Y, System.Convert.ToDouble(- Vertex2.Z));
-                GL.Vertex3(Vertex2.X, Vertex2.Y, System.Convert.ToDouble(- Vertex2.Z));
-                GL.Vertex3(Vertex3.X, Vertex3.Y, System.Convert.ToDouble(- Vertex3.Z));
-                GL.Vertex3(Vertex3.X, Vertex3.Y, System.Convert.ToDouble(- Vertex3.Z));
-                GL.Vertex3(Vertex1.X, Vertex1.Y, System.Convert.ToDouble(- Vertex1.Z));
+                GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
+                GL.Vertex3(Vertex2.X, Vertex2.Y, Convert.ToDouble(- Vertex2.Z));
+                GL.Vertex3(Vertex2.X, Vertex2.Y, Convert.ToDouble(- Vertex2.Z));
+                GL.Vertex3(Vertex3.X, Vertex3.Y, Convert.ToDouble(- Vertex3.Z));
+                GL.Vertex3(Vertex3.X, Vertex3.Y, Convert.ToDouble(- Vertex3.Z));
+                GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
             }
             else
             {
-                GL.Vertex3(Vertex0.X, Vertex0.Y, System.Convert.ToDouble(- Vertex0.Z));
-                GL.Vertex3(Vertex2.X, Vertex2.Y, System.Convert.ToDouble(- Vertex2.Z));
-                GL.Vertex3(Vertex2.X, Vertex2.Y, System.Convert.ToDouble(- Vertex2.Z));
-                GL.Vertex3(Vertex3.X, Vertex3.Y, System.Convert.ToDouble(- Vertex3.Z));
-                GL.Vertex3(Vertex3.X, Vertex3.Y, System.Convert.ToDouble(- Vertex3.Z));
-                GL.Vertex3(Vertex0.X, Vertex0.Y, System.Convert.ToDouble(- Vertex0.Z));
+                GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
+                GL.Vertex3(Vertex2.X, Vertex2.Y, Convert.ToDouble(- Vertex2.Z));
+                GL.Vertex3(Vertex2.X, Vertex2.Y, Convert.ToDouble(- Vertex2.Z));
+                GL.Vertex3(Vertex3.X, Vertex3.Y, Convert.ToDouble(- Vertex3.Z));
+                GL.Vertex3(Vertex3.X, Vertex3.Y, Convert.ToDouble(- Vertex3.Z));
+                GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
 
-                GL.Vertex3(Vertex0.X, Vertex0.Y, System.Convert.ToDouble(- Vertex0.Z));
-                GL.Vertex3(Vertex3.X, Vertex3.Y, System.Convert.ToDouble(- Vertex3.Z));
-                GL.Vertex3(Vertex3.X, Vertex3.Y, System.Convert.ToDouble(- Vertex3.Z));
-                GL.Vertex3(Vertex1.X, Vertex1.Y, System.Convert.ToDouble(- Vertex1.Z));
-                GL.Vertex3(Vertex1.X, Vertex1.Y, System.Convert.ToDouble(- Vertex1.Z));
-                GL.Vertex3(Vertex0.X, Vertex0.Y, System.Convert.ToDouble(- Vertex0.Z));
+                GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
+                GL.Vertex3(Vertex3.X, Vertex3.Y, Convert.ToDouble(- Vertex3.Z));
+                GL.Vertex3(Vertex3.X, Vertex3.Y, Convert.ToDouble(- Vertex3.Z));
+                GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
+                GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
+                GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
             }
             GL.End();
         }
@@ -1106,7 +1108,7 @@ namespace SharpFlame
                         for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
                         {
                             Height =
-                                System.Convert.ToSingle(((Terrain.Vertices[X, Y].Height) + Terrain.Vertices[X + 1, Y].Height + Terrain.Vertices[X, Y + 1].Height +
+                                Convert.ToSingle(((Terrain.Vertices[X, Y].Height) + Terrain.Vertices[X + 1, Y].Height + Terrain.Vertices[X, Y + 1].Height +
                                                          Terrain.Vertices[X + 1, Y + 1].Height) / 1020.0F);
                             sngTexture[Y, X, 0] = (sngTexture[Y, X, 0] * 2.0F + Height) / 3.0F;
                             sngTexture[Y, X, 1] = (sngTexture[Y, X, 1] * 2.0F + Height) / 3.0F;
@@ -1123,7 +1125,7 @@ namespace SharpFlame
                     for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
                     {
                         Height =
-                            System.Convert.ToSingle(((Terrain.Vertices[X, Y].Height) + Terrain.Vertices[X + 1, Y].Height + Terrain.Vertices[X, Y + 1].Height +
+                            Convert.ToSingle(((Terrain.Vertices[X, Y].Height) + Terrain.Vertices[X + 1, Y].Height + Terrain.Vertices[X, Y + 1].Height +
                                                      Terrain.Vertices[X + 1, Y + 1].Height) / 1020.0F);
                         sngTexture[Y, X, 0] = Height;
                         sngTexture[Y, X, 1] = Height;
@@ -1362,7 +1364,7 @@ namespace SharpFlame
             int NewTextureSize =
                 (int)
                     (Math.Round(
-                        System.Convert.ToDouble(Math.Pow(2.0D, Math.Ceiling(Math.Log(Math.Max(Terrain.TileSize.X, Terrain.TileSize.Y)) / Math.Log(2.0D))))));
+                        Convert.ToDouble(Math.Pow(2.0D, Math.Ceiling(Math.Log(Math.Max(Terrain.TileSize.X, Terrain.TileSize.Y)) / Math.Log(2.0D))))));
 
             if ( NewTextureSize != Minimap_Texture_Size )
             {
@@ -1434,11 +1436,11 @@ namespace SharpFlame
 
             Result.Horizontal.X =
                 (int)
-                    ((Math.Round(System.Convert.ToDouble((Horizontal.X - Footprint.X * modProgram.TerrainGridSpacing / 2.0D) / modProgram.TerrainGridSpacing)) +
+                    ((Math.Round(Convert.ToDouble((Horizontal.X - Footprint.X * modProgram.TerrainGridSpacing / 2.0D) / modProgram.TerrainGridSpacing)) +
                       Footprint.X / 2.0D) * modProgram.TerrainGridSpacing);
             Result.Horizontal.Y =
                 (int)
-                    ((Math.Round(System.Convert.ToDouble((Horizontal.Y - Footprint.Y * modProgram.TerrainGridSpacing / 2.0D) / modProgram.TerrainGridSpacing)) +
+                    ((Math.Round(Convert.ToDouble((Horizontal.Y - Footprint.Y * modProgram.TerrainGridSpacing / 2.0D) / modProgram.TerrainGridSpacing)) +
                       Footprint.Y / 2.0D) * modProgram.TerrainGridSpacing);
             Result.Altitude = (int)(GetTerrainHeight(Result.Horizontal));
 
@@ -1451,7 +1453,7 @@ namespace SharpFlame
             modMath.sXY_int Finish = new modMath.sXY_int();
             modMath.sXY_int TileStart = new modMath.sXY_int();
             modMath.sXY_int TileFinish = new modMath.sXY_int();
-            clsMap.clsUnitSectorConnection Connection;
+            clsUnitSectorConnection Connection;
             int X = 0;
             int Y = 0;
 
@@ -1467,7 +1469,7 @@ namespace SharpFlame
             {
                 for ( X = Start.X; X <= Finish.X; X++ )
                 {
-                    Connection = clsMap.clsUnitSectorConnection.Create(Unit, Sectors[X, Y]);
+                    Connection = clsUnitSectorConnection.Create(Unit, Sectors[X, Y]);
                 }
             }
         }
@@ -1483,8 +1485,8 @@ namespace SharpFlame
                 return;
             }
             if (
-                DateAndTime.DateDiff("s", AutoSave.SavedDate, DateTime.Now, (Microsoft.VisualBasic.FirstDayOfWeek)Microsoft.VisualBasic.FirstDayOfWeek.Sunday,
-                    (Microsoft.VisualBasic.FirstWeekOfYear)Microsoft.VisualBasic.FirstWeekOfYear.Jan1) < modSettings.Settings.AutoSaveMinInterval_s )
+                DateAndTime.DateDiff("s", AutoSave.SavedDate, DateTime.Now, (FirstDayOfWeek)FirstDayOfWeek.Sunday,
+                    (FirstWeekOfYear)FirstWeekOfYear.Jan1) < modSettings.Settings.AutoSaveMinInterval_s )
             {
                 return;
             }
@@ -1499,16 +1501,16 @@ namespace SharpFlame
         {
             clsResult ReturnResult = new clsResult("Autosave");
 
-            if ( !System.IO.Directory.Exists(modProgram.AutoSavePath) )
+            if ( !Directory.Exists(modProgram.AutoSavePath) )
             {
                 try
                 {
-                    System.IO.Directory.CreateDirectory(modProgram.AutoSavePath);
+                    Directory.CreateDirectory(modProgram.AutoSavePath);
                 }
                 catch ( Exception )
                 {
-                    ReturnResult.ProblemAdd("Unable to create directory at " + System.Convert.ToString(ControlChars.Quote) + modProgram.AutoSavePath +
-                                            System.Convert.ToString(ControlChars.Quote));
+                    ReturnResult.ProblemAdd("Unable to create directory at " + Convert.ToString(ControlChars.Quote) + modProgram.AutoSavePath +
+                                            Convert.ToString(ControlChars.Quote));
                 }
             }
 
@@ -1639,7 +1641,7 @@ namespace SharpFlame
 
         public void UndoPerform()
         {
-            clsMap.clsUndo ThisUndo = default(clsMap.clsUndo);
+            clsUndo ThisUndo = default(clsUndo);
 
             UndoStepCreate("Incomplete Action"); //make another redo step incase something has changed, such as if user presses undo while still dragging a tool
 
@@ -1671,7 +1673,7 @@ namespace SharpFlame
             ThisUndo.ChangedSectors = NewSectorsForThisUndo;
 
             UInt32 ID = 0;
-            clsMap.clsUnitAdd UnitAdd = new clsMap.clsUnitAdd();
+            clsUnitAdd UnitAdd = new clsUnitAdd();
             UnitAdd.Map = this;
             clsUnit Unit = default(clsUnit);
             for ( int A = ThisUndo.UnitChanges.Count - 1; A >= 0; A-- ) //must do in reverse order, otherwise may try to delete units that havent been added yet
@@ -1752,7 +1754,7 @@ namespace SharpFlame
             ThisUndo.ChangedSectors = NewSectorsForThisUndo;
 
             UInt32 ID = 0;
-            clsMap.clsUnitAdd UnitAdd = new clsMap.clsUnitAdd();
+            clsUnitAdd UnitAdd = new clsUnitAdd();
             UnitAdd.Map = this;
             clsUnit Unit = default(clsUnit);
             for ( int A = 0; A <= ThisUndo.UnitChanges.Count - 1; A++ ) //forward order is important
@@ -2015,7 +2017,7 @@ namespace SharpFlame
                 clsUnit NewUnit = default(clsUnit);
                 clsUnit Unit = default(clsUnit);
                 modMath.sXY_int ZeroPos = new modMath.sXY_int(0, 0);
-                clsMap.clsUnitAdd UnitAdd = new clsMap.clsUnitAdd();
+                clsUnitAdd UnitAdd = new clsUnitAdd();
 
                 UnitAdd.Map = this;
                 UnitAdd.StoreChange = true;
@@ -2362,17 +2364,17 @@ namespace SharpFlame
             SectorUnitHeightsChanges = new clsSectorChanges(this);
             SectorTerrainUndoChanges = new clsSectorChanges(this);
             AutoTextureChanges = new clsAutoTextureChanges(this);
-            TerrainInterpretChanges = new clsMap.clsTerrainUpdate(Terrain.TileSize);
+            TerrainInterpretChanges = new clsTerrainUpdate(Terrain.TileSize);
 
-            UnitChanges = new modLists.SimpleClassList<clsMap.clsUnitChange>();
+            UnitChanges = new modLists.SimpleClassList<clsUnitChange>();
             UnitChanges.MaintainOrder = true;
-            GatewayChanges = new modLists.SimpleClassList<clsMap.clsGatewayChange>();
+            GatewayChanges = new modLists.SimpleClassList<clsGatewayChange>();
             GatewayChanges.MaintainOrder = true;
-            Undos = new modLists.SimpleClassList<clsMap.clsUndo>();
+            Undos = new modLists.SimpleClassList<clsUndo>();
             Undos.MaintainOrder = true;
             UndoPosition = 0;
 
-            SelectedUnits = new modLists.ConnectedList<clsMap.clsUnit, clsMap>(this);
+            SelectedUnits = new modLists.ConnectedList<clsUnit, clsMap>(this);
 
             if ( InterfaceOptions == null )
             {
@@ -2381,7 +2383,7 @@ namespace SharpFlame
 
             ViewInfo = new clsViewInfo(this, modMain.frmMainInstance.MapView);
 
-            _SelectedUnitGroup = new clsMap.clsUnitGroupContainer();
+            _SelectedUnitGroup = new clsUnitGroupContainer();
             SelectedUnitGroup.Item = ScavengerUnitGroup;
 
             Messages = new modLists.SimpleClassList<clsMessage>();
@@ -2392,7 +2394,7 @@ namespace SharpFlame
         {
             if ( PathInfo == null )
             {
-                return (new Microsoft.VisualBasic.Devices.ServerComputer()).FileSystem.SpecialDirectories.MyDocuments;
+                return (new ServerComputer()).FileSystem.SpecialDirectories.MyDocuments;
             }
             else
             {
@@ -2401,7 +2403,7 @@ namespace SharpFlame
             }
         }
 
-        public class clsUpdateSectorGraphics : clsMap.clsAction
+        public class clsUpdateSectorGraphics : clsAction
         {
             public override void ActionPerform()
             {
@@ -2457,10 +2459,10 @@ namespace SharpFlame
 
         public void TerrainInterpretUpdate()
         {
-            clsMap.clsApplyVertexTerrainInterpret ApplyVertexInterpret = new clsMap.clsApplyVertexTerrainInterpret();
-            clsMap.clsApplyTileTerrainInterpret ApplyTileInterpret = new clsMap.clsApplyTileTerrainInterpret();
-            clsMap.clsApplySideHTerrainInterpret ApplySideHInterpret = new clsMap.clsApplySideHTerrainInterpret();
-            clsMap.clsApplySideVTerrainInterpret ApplySideVInterpret = new clsMap.clsApplySideVTerrainInterpret();
+            clsApplyVertexTerrainInterpret ApplyVertexInterpret = new clsApplyVertexTerrainInterpret();
+            clsApplyTileTerrainInterpret ApplyTileInterpret = new clsApplyTileTerrainInterpret();
+            clsApplySideHTerrainInterpret ApplySideHInterpret = new clsApplySideHTerrainInterpret();
+            clsApplySideVTerrainInterpret ApplySideVInterpret = new clsApplySideVTerrainInterpret();
             ApplyVertexInterpret.Map = this;
             ApplyTileInterpret.Map = this;
             ApplySideHInterpret.Map = this;
@@ -2473,7 +2475,7 @@ namespace SharpFlame
             TerrainInterpretChanges.ClearAll();
         }
 
-        public class clsUpdateSectorUnitHeights : clsMap.clsAction
+        public class clsUpdateSectorUnitHeights : clsAction
         {
             private clsUnit NewUnit;
             private UInt32 ID;
@@ -2498,7 +2500,7 @@ namespace SharpFlame
                 }
 
                 int A = 0;
-                clsMap.clsUnitAdd UnitAdd = new clsMap.clsUnitAdd();
+                clsUnitAdd UnitAdd = new clsUnitAdd();
                 clsUnit Unit = default(clsUnit);
 
                 UnitAdd.Map = Map;
@@ -2535,7 +2537,7 @@ namespace SharpFlame
 
                 clsUnitSectorConnection Connection = default(clsUnitSectorConnection);
                 clsUnit Unit = default(clsUnit);
-                clsMap.clsSector Sector = default(clsMap.clsSector);
+                clsSector Sector = default(clsSector);
                 int A = 0;
 
                 Sector = Map.Sectors[PosNum.X, PosNum.Y];
@@ -2560,7 +2562,7 @@ namespace SharpFlame
             }
         }
 
-        public class clsUpdateAutotexture : clsMap.clsAction
+        public class clsUpdateAutotexture : clsAction
         {
             public bool MakeInvalidTiles;
 
@@ -3666,9 +3668,9 @@ namespace SharpFlame
             while ( A < Messages.Count )
             {
                 if (
-                    DateAndTime.DateDiff(DateInterval.Second, System.Convert.ToDateTime(Messages[A].CreatedDate), DateNow,
-                        (Microsoft.VisualBasic.FirstDayOfWeek)Microsoft.VisualBasic.FirstDayOfWeek.Sunday,
-                        (Microsoft.VisualBasic.FirstWeekOfYear)Microsoft.VisualBasic.FirstWeekOfYear.Jan1) >= 6 )
+                    DateAndTime.DateDiff(DateInterval.Second, Convert.ToDateTime(Messages[A].CreatedDate), DateNow,
+                        (FirstDayOfWeek)FirstDayOfWeek.Sunday,
+                        (FirstWeekOfYear)FirstWeekOfYear.Jan1) >= 6 )
                 {
                     Messages.Remove(A);
                     Changed = true;
@@ -3825,16 +3827,16 @@ namespace SharpFlame
             Dialog.InitialDirectory = GetDirectory();
             Dialog.FileName = "";
             Dialog.Filter = modProgram.ProgramName + " Map Files (*.fmap)|*.fmap";
-            if ( Dialog.ShowDialog(modMain.frmMainInstance) != System.Windows.Forms.DialogResult.OK )
+            if ( Dialog.ShowDialog(modMain.frmMainInstance) != DialogResult.OK )
             {
                 return false;
             }
-            modSettings.Settings.SavePath = System.IO.Path.GetDirectoryName(Dialog.FileName);
+            modSettings.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
             clsResult Result = default(clsResult);
             Result = Write_FMap(Dialog.FileName, true, true);
             if ( !Result.HasProblems )
             {
-                PathInfo = new clsMap.clsPathInfo(Dialog.FileName, true);
+                PathInfo = new clsPathInfo(Dialog.FileName, true);
                 ChangedSinceSave = false;
             }
             modProgram.ShowWarnings(Result);

@@ -1,23 +1,25 @@
 using System;
 using System.Globalization;
+using System.IO;
+using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.VisualBasic;
 
 namespace SharpFlame
 {
     public sealed class modIO
     {
-        public static ICSharpCode.SharpZipLib.Zip.ZipEntry ZipMakeEntry(ICSharpCode.SharpZipLib.Zip.ZipOutputStream ZipOutputStream, string Path, clsResult Result)
+        public static ZipEntry ZipMakeEntry(ZipOutputStream ZipOutputStream, string Path, clsResult Result)
         {
             try
             {
-                ICSharpCode.SharpZipLib.Zip.ZipEntry NewZipEntry = new ICSharpCode.SharpZipLib.Zip.ZipEntry(Path);
+                ZipEntry NewZipEntry = new ZipEntry(Path);
                 NewZipEntry.DateTime = DateTime.Now;
                 ZipOutputStream.PutNextEntry(NewZipEntry);
                 return NewZipEntry;
             }
             catch ( Exception ex )
             {
-                Result.ProblemAdd("Zip entry " + System.Convert.ToString(ControlChars.Quote) + Path + System.Convert.ToString(ControlChars.Quote) + " failed: " +
+                Result.ProblemAdd("Zip entry " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote) + " failed: " +
                                   ex.Message);
                 return null;
             }
@@ -98,7 +100,7 @@ namespace SharpFlame
             return double.TryParse(Text, NumberStyles.Any, CultureInfo.InvariantCulture, out Result);
         }
 
-        public static string ReadOldText(System.IO.BinaryReader File)
+        public static string ReadOldText(BinaryReader File)
         {
             string Result = "";
             int A = 0;
@@ -106,28 +108,28 @@ namespace SharpFlame
 
             for ( A = 0; A <= Length - 1; A++ )
             {
-                Result += System.Convert.ToString(Strings.Chr(File.ReadByte()));
+                Result += Convert.ToString(Strings.Chr(File.ReadByte()));
             }
             return Result;
         }
 
-        public static string ReadOldTextOfLength(System.IO.BinaryReader File, int Length)
+        public static string ReadOldTextOfLength(BinaryReader File, int Length)
         {
             string Result = "";
             int A = 0;
 
             for ( A = 0; A <= Length - 1; A++ )
             {
-                Result += System.Convert.ToString(Strings.Chr(File.ReadByte()));
+                Result += Convert.ToString(Strings.Chr(File.ReadByte()));
             }
             return Result;
         }
 
-        public static void WriteText(System.IO.BinaryWriter File, bool WriteLength, string Text)
+        public static void WriteText(BinaryWriter File, bool WriteLength, string Text)
         {
             if ( WriteLength )
             {
-                File.Write(System.Convert.ToBoolean((uint)Text.Length));
+                File.Write(Convert.ToBoolean((uint)Text.Length));
             }
             int A = 0;
             for ( A = 0; A <= Text.Length - 1; A++ )
@@ -136,7 +138,7 @@ namespace SharpFlame
             }
         }
 
-        public static void WriteTextOfLength(System.IO.BinaryWriter File, int Length, string Text)
+        public static void WriteTextOfLength(BinaryWriter File, int Length, string Text)
         {
             int A = 0;
 
@@ -150,14 +152,14 @@ namespace SharpFlame
             }
         }
 
-        public static clsResult WriteMemoryToNewFile(System.IO.MemoryStream Memory, string Path)
+        public static clsResult WriteMemoryToNewFile(MemoryStream Memory, string Path)
         {
-            clsResult ReturnResult = new clsResult("Writing to " + System.Convert.ToString(ControlChars.Quote) + Path + System.Convert.ToString(ControlChars.Quote));
+            clsResult ReturnResult = new clsResult("Writing to " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
 
-            System.IO.FileStream NewFile = default(System.IO.FileStream);
+            FileStream NewFile = default(FileStream);
             try
             {
-                NewFile = new System.IO.FileStream(Path, System.IO.FileMode.CreateNew);
+                NewFile = new FileStream(Path, FileMode.CreateNew);
             }
             catch ( Exception ex )
             {
@@ -180,7 +182,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public static clsResult WriteMemoryToZipEntryAndFlush(System.IO.MemoryStream Memory, ICSharpCode.SharpZipLib.Zip.ZipOutputStream Stream)
+        public static clsResult WriteMemoryToZipEntryAndFlush(MemoryStream Memory, ZipOutputStream Stream)
         {
             clsResult ReturnResult = new clsResult("Writing to zip stream");
 
@@ -200,7 +202,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public static modProgram.sResult TryOpenFileStream(string Path, ref System.IO.FileStream Output)
+        public static modProgram.sResult TryOpenFileStream(string Path, ref FileStream Output)
         {
             modProgram.sResult ReturnResult = new modProgram.sResult();
             ReturnResult.Success = false;
@@ -208,7 +210,7 @@ namespace SharpFlame
 
             try
             {
-                Output = new System.IO.FileStream(Path, System.IO.FileMode.Open);
+                Output = new FileStream(Path, FileMode.Open);
             }
             catch ( Exception ex )
             {
@@ -320,12 +322,12 @@ namespace SharpFlame
 
         public static clsZipStreamEntry FindZipEntryFromPath(string Path, string ZipPathToFind)
         {
-            ICSharpCode.SharpZipLib.Zip.ZipInputStream ZipStream = default(ICSharpCode.SharpZipLib.Zip.ZipInputStream);
-            ICSharpCode.SharpZipLib.Zip.ZipEntry ZipEntry = default(ICSharpCode.SharpZipLib.Zip.ZipEntry);
+            ZipInputStream ZipStream = default(ZipInputStream);
+            ZipEntry ZipEntry = default(ZipEntry);
             string FindPath = ZipPathToFind.ToLower().Replace('\\', '/');
             string ZipPath;
 
-            ZipStream = new ICSharpCode.SharpZipLib.Zip.ZipInputStream(System.IO.File.OpenRead(Path));
+            ZipStream = new ZipInputStream(File.OpenRead(Path));
             do
             {
                 try
@@ -356,7 +358,7 @@ namespace SharpFlame
             return null;
         }
 
-        public static modLists.SimpleList<string> BytesToLinesRemoveComments(System.IO.BinaryReader reader)
+        public static modLists.SimpleList<string> BytesToLinesRemoveComments(BinaryReader reader)
         {
             char CurrentChar = (char)0;
             bool CurrentCharExists = default(bool);
@@ -491,8 +493,8 @@ namespace SharpFlame
 
     public class clsZipStreamEntry
     {
-        public ICSharpCode.SharpZipLib.Zip.ZipInputStream Stream;
-        public ICSharpCode.SharpZipLib.Zip.ZipEntry Entry;
+        public ZipInputStream Stream;
+        public ZipEntry Entry;
     }
 
     public class clsSplitCommaText
@@ -508,7 +510,7 @@ namespace SharpFlame
             PartCount = Parts.GetUpperBound(0) + 1;
             for ( A = 0; A <= PartCount - 1; A++ )
             {
-                Parts[A] = System.Convert.ToString(Parts[A].Trim());
+                Parts[A] = Convert.ToString(Parts[A].Trim());
             }
         }
     }

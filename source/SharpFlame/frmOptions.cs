@@ -66,9 +66,9 @@ namespace SharpFlame
 
             TilesetsPathSet.SetPaths(modSettings.Settings.TilesetDirectories);
             ObjectDataPathSet.SetPaths(modSettings.Settings.ObjectDataDirectories);
-            TilesetsPathSet.SelectedNum = modMath.Clamp_int(System.Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultTilesetsPathNum)), -1,
+            TilesetsPathSet.SelectedNum = modMath.Clamp_int(Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultTilesetsPathNum)), -1,
                 modSettings.Settings.TilesetDirectories.Count - 1);
-            ObjectDataPathSet.SelectedNum = modMath.Clamp_int(System.Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultObjectDataPathNum)),
+            ObjectDataPathSet.SelectedNum = modMath.Clamp_int(Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultObjectDataPathNum)),
                 -1, modSettings.Settings.ObjectDataDirectories.Count - 1);
 
             txtMapBPP.Text = modIO.InvariantToString_int(modSettings.Settings.MapViewBPP);
@@ -81,7 +81,7 @@ namespace SharpFlame
             UpdateKeyboardControls(-1);
         }
 
-        public void btnSave_Click(System.Object sender, System.EventArgs e)
+        public void btnSave_Click(Object sender, EventArgs e)
         {
             modSettings.clsSettings NewSettings = (modSettings.clsSettings)(modSettings.Settings.GetCopy(new modSettings.clsSettingsCreator()));
             double dblTemp = 0;
@@ -90,12 +90,12 @@ namespace SharpFlame
             if ( modIO.InvariantParse_dbl(txtAutosaveChanges.Text, ref dblTemp) )
             {
                 NewSettings.set_Changes(modSettings.Setting_AutoSaveMinChanges,
-                    new clsOptionProfile.clsChange<UInt32>((uint)(modMath.Clamp_dbl(dblTemp, 1.0D, (System.Convert.ToDouble(UInt32.MaxValue)) - 1.0D))));
+                    new clsOptionProfile.clsChange<UInt32>((uint)(modMath.Clamp_dbl(dblTemp, 1.0D, (Convert.ToDouble(UInt32.MaxValue)) - 1.0D))));
             }
             if ( modIO.InvariantParse_dbl(txtAutosaveInterval.Text, ref dblTemp) )
             {
                 NewSettings.set_Changes(modSettings.Setting_AutoSaveMinInterval_s,
-                    new clsOptionProfile.clsChange<UInt32>((uint)(modMath.Clamp_dbl(dblTemp, 1.0D, (System.Convert.ToDouble(UInt32.MaxValue)) - 1.0D))));
+                    new clsOptionProfile.clsChange<UInt32>((uint)(modMath.Clamp_dbl(dblTemp, 1.0D, (Convert.ToDouble(UInt32.MaxValue)) - 1.0D))));
             }
             NewSettings.set_Changes(modSettings.Setting_AutoSaveCompress, new clsOptionProfile.clsChange<bool>(cbxAutosaveCompression.Checked));
             NewSettings.set_Changes(modSettings.Setting_AutoSaveEnabled, new clsOptionProfile.clsChange<bool>(cbxAutosaveEnabled.Checked));
@@ -165,24 +165,24 @@ namespace SharpFlame
 
             modControls.KeyboardProfile = ChangedKeyControls;
 
-            Finish(System.Windows.Forms.DialogResult.OK);
+            Finish(DialogResult.OK);
         }
 
-        public void btnCancel_Click(System.Object sender, System.EventArgs e)
+        public void btnCancel_Click(Object sender, EventArgs e)
         {
-            Finish(System.Windows.Forms.DialogResult.Cancel);
+            Finish(DialogResult.Cancel);
         }
 
         private bool AllowClose = false;
 
-        public void frmOptions_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
+        public void frmOptions_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = !AllowClose;
         }
 
         //setting DialogResult in mono tries to close the form
 
-        private void Finish(System.Windows.Forms.DialogResult result)
+        private void Finish(DialogResult result)
         {
             AllowClose = true;
             modMain.frmOptionsInstance = null;
@@ -199,9 +199,9 @@ namespace SharpFlame
             }
         }
 
-        public void btnFont_Click(System.Object sender, System.EventArgs e)
+        public void btnFont_Click(Object sender, EventArgs e)
         {
-            System.Windows.Forms.FontDialog FontDialog = new System.Windows.Forms.FontDialog();
+            FontDialog FontDialog = new FontDialog();
 
             DialogResult Result = default(DialogResult);
             try //mono 267 has crashed here
@@ -212,23 +212,23 @@ namespace SharpFlame
             }
             catch
             {
-                Result = System.Windows.Forms.DialogResult.Cancel;
+                Result = DialogResult.Cancel;
             }
-            if ( Result == System.Windows.Forms.DialogResult.OK )
+            if ( Result == DialogResult.OK )
             {
                 DisplayFont = FontDialog.Font;
                 UpdateDisplayFontLabel();
             }
         }
 
-        public void btnAutosaveOpen_Click(System.Object sender, System.EventArgs e)
+        public void btnAutosaveOpen_Click(Object sender, EventArgs e)
         {
             modMain.frmMainInstance.Load_Autosave_Prompt();
         }
 
         private void UpdateDisplayFontLabel()
         {
-            lblFont.Text = DisplayFont.FontFamily.Name + " " + System.Convert.ToString(DisplayFont.SizeInPoints) + " ";
+            lblFont.Text = DisplayFont.FontFamily.Name + " " + Convert.ToString(DisplayFont.SizeInPoints) + " ";
             if ( DisplayFont.Bold )
             {
                 lblFont.Text += "B";
@@ -265,11 +265,11 @@ namespace SharpFlame
             clsKeyboardControl control = (clsKeyboardControl)(ChangedKeyControls.get_Value(item));
             for ( int j = 0; j <= control.Keys.GetUpperBound(0); j++ )
             {
-                Keys key = System.Windows.Forms.Keys.A;
+                Keys key = Keys.A;
                 string keyText = Enum.GetName(typeof(Keys), key);
                 if ( keyText == null )
                 {
-                    text += modIO.InvariantToString_int((System.Int32)key);
+                    text += modIO.InvariantToString_int((Int32)key);
                 }
                 else
                 {
@@ -285,11 +285,11 @@ namespace SharpFlame
                 text += " unless ";
                 for ( int j = 0; j <= control.UnlessKeys.GetUpperBound(0); j++ )
                 {
-                    Keys key = System.Windows.Forms.Keys.A;
+                    Keys key = Keys.A;
                     string keyText = Enum.GetName(typeof(Keys), key);
                     if ( keyText == null )
                     {
-                        text += modIO.InvariantToString_int((System.Int32)key);
+                        text += modIO.InvariantToString_int((Int32)key);
                     }
                     else
                     {
@@ -309,7 +309,7 @@ namespace SharpFlame
             return text;
         }
 
-        public void btnKeyControlChange_Click(System.Object sender, System.EventArgs e)
+        public void btnKeyControlChange_Click(Object sender, EventArgs e)
         {
             if ( lstKeyboardControls.SelectedIndex < 0 )
             {
@@ -317,7 +317,7 @@ namespace SharpFlame
             }
 
             frmKeyboardControl capture = new frmKeyboardControl();
-            if ( capture.ShowDialog() != System.Windows.Forms.DialogResult.OK )
+            if ( capture.ShowDialog() != DialogResult.OK )
             {
                 return;
             }
@@ -338,7 +338,7 @@ namespace SharpFlame
             UpdateKeyboardControl(keyOption.GroupLink.ArrayPosition);
         }
 
-        public void btnKeyControlChangeUnless_Click(System.Object sender, System.EventArgs e)
+        public void btnKeyControlChangeUnless_Click(Object sender, EventArgs e)
         {
             if ( lstKeyboardControls.SelectedIndex < 0 )
             {
@@ -346,7 +346,7 @@ namespace SharpFlame
             }
 
             frmKeyboardControl capture = new frmKeyboardControl();
-            if ( capture.ShowDialog() != System.Windows.Forms.DialogResult.OK )
+            if ( capture.ShowDialog() != DialogResult.OK )
             {
                 return;
             }
@@ -367,7 +367,7 @@ namespace SharpFlame
             UpdateKeyboardControl(keyOption.GroupLink.ArrayPosition);
         }
 
-        public void btnKeyControlChangeDefault_Click(System.Object sender, System.EventArgs e)
+        public void btnKeyControlChangeDefault_Click(Object sender, EventArgs e)
         {
             if ( lstKeyboardControls.SelectedIndex < 0 )
             {

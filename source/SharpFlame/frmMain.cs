@@ -2,11 +2,15 @@ using System;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 using Matrix3D;
 using Microsoft.VisualBasic;
+using Microsoft.VisualBasic.ApplicationServices;
 using Microsoft.VisualBasic.CompilerServices;
 using OpenTK.Graphics.OpenGL;
+using Timer = System.Windows.Forms.Timer;
 
 namespace SharpFlame
 {
@@ -43,7 +47,7 @@ namespace SharpFlame
 
                 if ( Map == _MainMap )
                 {
-                    int NewNum = Math.Min(System.Convert.ToInt32(Owner.MapView.tabMaps.SelectedIndex), Count - 1);
+                    int NewNum = Math.Min(Convert.ToInt32(Owner.MapView.tabMaps.SelectedIndex), Count - 1);
                     if ( NewNum < 0 )
                     {
                         MainMap = null;
@@ -195,7 +199,7 @@ namespace SharpFlame
             LoadInterfaceImage(modProgram.InterfaceImagesPath + "problem.png", ref InterfaceImage_Problem, ReturnResult);
             Bitmap InterfaceImage_Warning = null;
             LoadInterfaceImage(modProgram.InterfaceImagesPath + "warning.png", ref InterfaceImage_Warning, ReturnResult);
-            modWarnings.WarningImages.ImageSize = new System.Drawing.Size(16, 16);
+            modWarnings.WarningImages.ImageSize = new Size(16, 16);
             if ( InterfaceImage_Problem != null )
             {
                 modWarnings.WarningImages.Images.Add("problem", InterfaceImage_Problem);
@@ -224,7 +228,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public void frmMain_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
+        public void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             bool ChangedPrompt = false;
 
@@ -244,7 +248,7 @@ namespace SharpFlame
                 DialogResult QuitResult = QuitPrompt.ShowDialog(modMain.frmMainInstance);
                 switch ( QuitResult )
                 {
-                    case System.Windows.Forms.DialogResult.Yes:
+                    case DialogResult.Yes:
                         while ( _LoadedMaps.Count > 0 )
                         {
                             clsMap RemoveMap = _LoadedMaps[0];
@@ -257,10 +261,10 @@ namespace SharpFlame
                             RemoveMap.Deallocate();
                         }
                         break;
-                    case System.Windows.Forms.DialogResult.No:
+                    case DialogResult.No:
                         break;
 
-                    case System.Windows.Forms.DialogResult.Cancel:
+                    case DialogResult.Cancel:
                         e.Cancel = true;
                         return;
                 }
@@ -290,7 +294,7 @@ namespace SharpFlame
             {
                 SplashScreen.Form.lblStatus.Text = InitializeStatus;
                 Application.DoEvents();
-                System.Threading.Thread.Sleep(200);
+                Thread.Sleep(200);
             }
             SplashScreen.Form.Close();
         }
@@ -312,7 +316,7 @@ namespace SharpFlame
 
 #if !Mono
             Hide();
-            System.Threading.Thread SplashThread = new System.Threading.Thread(new System.Threading.ThreadStart(ShowThreadedSplashScreen));
+            Thread SplashThread = new Thread(new ThreadStart(ShowThreadedSplashScreen));
             SplashThread.IsBackground = true;
             SplashThread.Start();
 #endif
@@ -328,7 +332,7 @@ namespace SharpFlame
 
             modTools.CreateTools();
 
-            Matrix3DMath.MatrixSetToPY(modProgram.SunAngleMatrix, new Matrix3D.Angles.AnglePY(-22.5D * modMath.RadOf1Deg, 157.5D * modMath.RadOf1Deg));
+            Matrix3DMath.MatrixSetToPY(modProgram.SunAngleMatrix, new Angles.AnglePY(-22.5D * modMath.RadOf1Deg, 157.5D * modMath.RadOf1Deg));
 
             NewPlayerNum.Left = 112;
             NewPlayerNum.Top = 10;
@@ -424,13 +428,13 @@ namespace SharpFlame
             {
                 modMain.frmOptionsInstance = new frmOptions();
                 modMain.frmOptionsInstance.FormClosing += modMain.frmOptionsInstance.frmOptions_FormClosing;
-                if ( modMain.frmOptionsInstance.ShowDialog() == System.Windows.Forms.DialogResult.Cancel )
+                if ( modMain.frmOptionsInstance.ShowDialog() == DialogResult.Cancel )
                 {
                     ProjectData.EndApp();
                 }
             }
 
-            int TilesetNum = System.Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultTilesetsPathNum));
+            int TilesetNum = Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultTilesetsPathNum));
             modLists.SimpleList<string> TilesetsList = (modLists.SimpleList<string>)(modSettings.Settings.get_Value(modSettings.Setting_TilesetDirectories));
             if ( TilesetNum >= 0 & TilesetNum < TilesetsList.Count )
             {
@@ -451,7 +455,7 @@ namespace SharpFlame
             modProgram.CreateTemplateDroidTypes(); //do before loading data
 
             modProgram.ObjectData = new clsObjectData();
-            int ObjectDataNum = System.Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultObjectDataPathNum));
+            int ObjectDataNum = Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultObjectDataPathNum));
             modLists.SimpleList<string> ObjectDataList = (modLists.SimpleList<string>)(modSettings.Settings.get_Value(modSettings.Setting_ObjectDataDirectories));
             if ( ObjectDataNum >= 0 & ObjectDataNum < TilesetsList.Count )
             {
@@ -529,12 +533,12 @@ namespace SharpFlame
             modProgram.ProgramInitializeFinished = true;
         }
 
-        public void Me_LostFocus(System.Object eventSender, System.EventArgs eventArgs)
+        public void Me_LostFocus(Object eventSender, EventArgs eventArgs)
         {
             modProgram.ViewKeyDown_Clear();
         }
 
-        private void tmrKey_Tick(System.Object sender, System.EventArgs e)
+        private void tmrKey_Tick(Object sender, EventArgs e)
         {
             if ( !modProgram.ProgramInitialized )
             {
@@ -595,11 +599,11 @@ namespace SharpFlame
             Dialog.FileName = "";
             Dialog.Filter = "Warzone Map Files (*.fmap, *.fme, *.wz, *.gam, *.lnd)|*.fmap;*.fme;*.wz;*.gam;*.lnd|All Files (*.*)|*.*";
             Dialog.Multiselect = true;
-            if ( Dialog.ShowDialog(this) != System.Windows.Forms.DialogResult.OK )
+            if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
-            modSettings.Settings.OpenPath = System.IO.Path.GetDirectoryName(Dialog.FileName);
+            modSettings.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
             string FileName = "";
             clsResult Results = new clsResult("Loading maps");
             foreach ( string tempLoopVar_FileName in Dialog.FileNames )
@@ -617,11 +621,11 @@ namespace SharpFlame
             Dialog.InitialDirectory = modSettings.Settings.OpenPath;
             Dialog.FileName = "";
             Dialog.Filter = "Image Files (*.bmp, *.png)|*.bmp;*.png|All Files (*.*)|*.*";
-            if ( Dialog.ShowDialog(this) != System.Windows.Forms.DialogResult.OK )
+            if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
-            modSettings.Settings.OpenPath = System.IO.Path.GetDirectoryName(Dialog.FileName);
+            modSettings.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
 
             Bitmap HeightmapBitmap = null;
             modProgram.sResult Result = modBitmap.LoadBitmap(Dialog.FileName, ref HeightmapBitmap);
@@ -655,7 +659,7 @@ namespace SharpFlame
                 {
                     PixelColor = HeightmapBitmap.GetPixel(X, Y);
                     ApplyToMap.Terrain.Vertices[X, Y].Height =
-                        (byte)Math.Min(Math.Round(System.Convert.ToDouble(((PixelColor.R) + PixelColor.G + PixelColor.B) / 3.0D)), byte.MaxValue);
+                        (byte)Math.Min(Math.Round(Convert.ToDouble(((PixelColor.R) + PixelColor.G + PixelColor.B) / 3.0D)), byte.MaxValue);
                 }
             }
 
@@ -690,11 +694,11 @@ namespace SharpFlame
             Dialog.InitialDirectory = modSettings.Settings.OpenPath;
             Dialog.FileName = "";
             Dialog.Filter = "TTP Files (*.ttp)|*.ttp|All Files (*.*)|*.*";
-            if ( !(Dialog.ShowDialog(this) == System.Windows.Forms.DialogResult.OK) )
+            if ( !(Dialog.ShowDialog(this) == DialogResult.OK) )
             {
                 return;
             }
-            modSettings.Settings.OpenPath = System.IO.Path.GetDirectoryName(Dialog.FileName);
+            modSettings.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
             modProgram.sResult Result = Map.Load_TTP(Dialog.FileName);
             if ( Result.Success )
             {
@@ -746,7 +750,7 @@ namespace SharpFlame
             }
         }
 
-        public void cboTileset_SelectedIndexChanged(System.Object sender, System.EventArgs e)
+        public void cboTileset_SelectedIndexChanged(Object sender, EventArgs e)
         {
             clsTileset NewTileset = default(clsTileset);
             clsMap Map = MainMap;
@@ -809,7 +813,7 @@ namespace SharpFlame
             lstAutoRoad.SelectedIndex = Road_NewSelectedIndex;
         }
 
-        public void TabControl_SelectedIndexChanged(object sender, System.EventArgs e)
+        public void TabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             if ( TabControl.SelectedTab == tpTextures )
             {
@@ -892,7 +896,7 @@ namespace SharpFlame
             }
         }
 
-        public void rdoHeightSet_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoHeightSet_CheckedChanged(Object sender, EventArgs e)
         {
             if ( rdoHeightSet.Checked )
             {
@@ -903,7 +907,7 @@ namespace SharpFlame
             }
         }
 
-        public void rdoHeightChange_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoHeightChange_CheckedChanged(Object sender, EventArgs e)
         {
             if ( rdoHeightChange.Checked )
             {
@@ -914,7 +918,7 @@ namespace SharpFlame
             }
         }
 
-        public void rdoHeightSmooth_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoHeightSmooth_CheckedChanged(Object sender, EventArgs e)
         {
             if ( rdoHeightSmooth.Checked )
             {
@@ -925,7 +929,7 @@ namespace SharpFlame
             }
         }
 
-        private void tmrTool_Tick(System.Object sender, System.EventArgs e)
+        private void tmrTool_Tick(Object sender, EventArgs e)
         {
             if ( !modProgram.ProgramInitialized )
             {
@@ -942,7 +946,7 @@ namespace SharpFlame
             Map.ViewInfo.TimedTools();
         }
 
-        public void btnResize_Click(System.Object sender, System.EventArgs e)
+        public void btnResize_Click(Object sender, EventArgs e)
         {
             modMath.sXY_int NewSize = new modMath.sXY_int();
             modMath.sXY_int Offset = new modMath.sXY_int();
@@ -977,7 +981,7 @@ namespace SharpFlame
                 return;
             }
 
-            if ( Interaction.MsgBox("Resizing can\'t be undone. Continue?", (Microsoft.VisualBasic.MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
+            if ( Interaction.MsgBox("Resizing can\'t be undone. Continue?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
                  MsgBoxResult.Ok )
             {
                 return;
@@ -991,7 +995,7 @@ namespace SharpFlame
             if ( NewSize.X > modProgram.WZMapMaxSize | NewSize.Y > modProgram.WZMapMaxSize )
             {
                 if (
-                    Interaction.MsgBox("Warzone doesn\'t support map sizes above " + System.Convert.ToString(modProgram.WZMapMaxSize) + ". Continue anyway?",
+                    Interaction.MsgBox("Warzone doesn\'t support map sizes above " + Convert.ToString(modProgram.WZMapMaxSize) + ". Continue anyway?",
                         MsgBoxStyle.YesNo, "") != MsgBoxResult.Yes )
                 {
                     return;
@@ -1030,17 +1034,17 @@ namespace SharpFlame
             }
         }
 
-        public void CloseToolStripMenuItem_Click(System.Object sender, System.EventArgs e)
+        public void CloseToolStripMenuItem_Click(Object sender, EventArgs e)
         {
             Close();
         }
 
-        public void OpenToolStripMenuItem_Click(System.Object sender, System.EventArgs e)
+        public void OpenToolStripMenuItem_Click(Object sender, EventArgs e)
         {
             Load_Map_Prompt();
         }
 
-        public void LNDToolStripMenuItem1_Click(System.Object sender, System.EventArgs e)
+        public void LNDToolStripMenuItem1_Click(Object sender, EventArgs e)
         {
             Save_LND_Prompt();
         }
@@ -1059,11 +1063,11 @@ namespace SharpFlame
             Dialog.InitialDirectory = modSettings.Settings.SavePath;
             Dialog.FileName = "";
             Dialog.Filter = "Editworld Files (*.lnd)|*.lnd";
-            if ( Dialog.ShowDialog(this) != System.Windows.Forms.DialogResult.OK )
+            if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
-            modSettings.Settings.SavePath = System.IO.Path.GetDirectoryName(Dialog.FileName);
+            modSettings.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
 
             clsResult Result = Map.Write_LND(Dialog.FileName, true);
 
@@ -1084,11 +1088,11 @@ namespace SharpFlame
             Dialog.InitialDirectory = modSettings.Settings.SavePath;
             Dialog.FileName = "";
             Dialog.Filter = modProgram.ProgramName + " FME Map Files (*.fme)|*.fme";
-            if ( Dialog.ShowDialog(this) != System.Windows.Forms.DialogResult.OK )
+            if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
-            modSettings.Settings.SavePath = System.IO.Path.GetDirectoryName(Dialog.FileName);
+            modSettings.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
             string strScavenger = Interaction.InputBox("Enter the player number for scavenger units:", "", "", -1, -1);
             byte ScavengerNum = 0;
             if ( !modIO.InvariantParse_byte(strScavenger, ref ScavengerNum) )
@@ -1119,11 +1123,11 @@ namespace SharpFlame
             Dialog.InitialDirectory = modSettings.Settings.SavePath;
             Dialog.FileName = "";
             Dialog.Filter = "Bitmap File (*.bmp)|*.bmp";
-            if ( Dialog.ShowDialog(this) != System.Windows.Forms.DialogResult.OK )
+            if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
-            modSettings.Settings.SavePath = System.IO.Path.GetDirectoryName(Dialog.FileName);
+            modSettings.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
             modProgram.sResult Result = new modProgram.sResult();
             Result = Map.Write_MinimapFile(Dialog.FileName, true);
             if ( !Result.Success )
@@ -1146,11 +1150,11 @@ namespace SharpFlame
             Dialog.InitialDirectory = modSettings.Settings.SavePath;
             Dialog.FileName = "";
             Dialog.Filter = "Bitmap File (*.bmp)|*.bmp";
-            if ( Dialog.ShowDialog(this) != System.Windows.Forms.DialogResult.OK )
+            if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
-            modSettings.Settings.SavePath = System.IO.Path.GetDirectoryName(Dialog.FileName);
+            modSettings.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
             modProgram.sResult Result = new modProgram.sResult();
             Result = Map.Write_Heightmap(Dialog.FileName, true);
             if ( !Result.Success )
@@ -1173,11 +1177,11 @@ namespace SharpFlame
             Dialog.InitialDirectory = modSettings.Settings.SavePath;
             Dialog.FileName = "";
             Dialog.Filter = "TTP Files (*.ttp)|*.ttp";
-            if ( Dialog.ShowDialog(this) != System.Windows.Forms.DialogResult.OK )
+            if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
-            modSettings.Settings.SavePath = System.IO.Path.GetDirectoryName(Dialog.FileName);
+            modSettings.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
             modProgram.sResult Result = new modProgram.sResult();
             Result = Map.Write_TTP(Dialog.FileName, true);
             if ( !Result.Success )
@@ -1201,22 +1205,22 @@ namespace SharpFlame
             NewMap.UndoClear();
         }
 
-        public void rdoAutoCliffRemove_Click(System.Object sender, System.EventArgs e)
+        public void rdoAutoCliffRemove_Click(Object sender, EventArgs e)
         {
             modTools.Tool = modTools.Tools.CliffRemove;
         }
 
-        public void rdoAutoCliffBrush_Click(System.Object sender, System.EventArgs e)
+        public void rdoAutoCliffBrush_Click(Object sender, EventArgs e)
         {
             modTools.Tool = modTools.Tools.CliffBrush;
         }
 
-        public void MinimapBMPToolStripMenuItem_Click(System.Object sender, System.EventArgs e)
+        public void MinimapBMPToolStripMenuItem_Click(Object sender, EventArgs e)
         {
             Save_Minimap_Prompt();
         }
 
-        public void FMapToolStripMenuItem_Click(System.Object sender, System.EventArgs e)
+        public void FMapToolStripMenuItem_Click(Object sender, EventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -1232,12 +1236,12 @@ namespace SharpFlame
             }
         }
 
-        public void menuSaveFMapQuick_Click(System.Object sender, System.EventArgs e)
+        public void menuSaveFMapQuick_Click(Object sender, EventArgs e)
         {
             QuickSave();
         }
 
-        public void MapWZToolStripMenuItem_Click(System.Object sender, System.EventArgs e)
+        public void MapWZToolStripMenuItem_Click(Object sender, EventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -1257,12 +1261,12 @@ namespace SharpFlame
             }
         }
 
-        public void rdoAutoTextureFill_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoAutoTextureFill_CheckedChanged(Object sender, EventArgs e)
         {
             modTools.Tool = modTools.Tools.TerrainFill;
         }
 
-        public void btnHeightOffsetSelection_Click(System.Object sender, System.EventArgs e)
+        public void btnHeightOffsetSelection_Click(Object sender, EventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -1294,7 +1298,7 @@ namespace SharpFlame
                 for ( X = StartXY.X; X <= FinishXY.X; X++ )
                 {
                     Map.Terrain.Vertices[X, Y].Height =
-                        (byte)(Math.Round(modMath.Clamp_dbl(System.Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height + Offset), byte.MinValue, byte.MaxValue)));
+                        (byte)(Math.Round(modMath.Clamp_dbl(Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height + Offset), byte.MinValue, byte.MaxValue)));
                     Pos.X = X;
                     Pos.Y = Y;
                     Map.SectorGraphicsChanges.VertexAndNormalsChanged(Pos);
@@ -1310,17 +1314,17 @@ namespace SharpFlame
             View_DrawViewLater();
         }
 
-        public void rdoAutoTexturePlace_Click(System.Object sender, System.EventArgs e)
+        public void rdoAutoTexturePlace_Click(Object sender, EventArgs e)
         {
             modTools.Tool = modTools.Tools.TerrainBrush;
         }
 
-        public void rdoAutoRoadPlace_Click(System.Object sender, System.EventArgs e)
+        public void rdoAutoRoadPlace_Click(Object sender, EventArgs e)
         {
             modTools.Tool = modTools.Tools.RoadPlace;
         }
 
-        public void rdoAutoRoadLine_Click(System.Object sender, System.EventArgs e)
+        public void rdoAutoRoadLine_Click(Object sender, EventArgs e)
         {
             modTools.Tool = modTools.Tools.RoadLines;
             clsMap Map = MainMap;
@@ -1331,27 +1335,27 @@ namespace SharpFlame
             }
         }
 
-        public void rdoRoadRemove_Click(System.Object sender, System.EventArgs e)
+        public void rdoRoadRemove_Click(Object sender, EventArgs e)
         {
             modTools.Tool = modTools.Tools.RoadRemove;
         }
 
-        public void btnAutoRoadRemove_Click(System.Object sender, System.EventArgs e)
+        public void btnAutoRoadRemove_Click(Object sender, EventArgs e)
         {
             lstAutoRoad.SelectedIndex = -1;
         }
 
-        public void btnAutoTextureRemove_Click(System.Object sender, System.EventArgs e)
+        public void btnAutoTextureRemove_Click(Object sender, EventArgs e)
         {
             lstAutoTexture.SelectedIndex = -1;
         }
 
-        public void NewMapToolStripMenuItem_Click(System.Object sender, System.EventArgs e)
+        public void NewMapToolStripMenuItem_Click(Object sender, EventArgs e)
         {
             New_Prompt();
         }
 
-        public void ToolStripMenuItem3_Click(System.Object sender, System.EventArgs e)
+        public void ToolStripMenuItem3_Click(Object sender, EventArgs e)
         {
             Save_Heightmap_Prompt();
         }
@@ -1500,7 +1504,7 @@ namespace SharpFlame
             return result;
         }
 
-        public void txtObjectRotation_LostFocus(System.Object sender, System.EventArgs e)
+        public void txtObjectRotation_LostFocus(Object sender, EventArgs e)
         {
             if ( !txtObjectRotation.Enabled )
             {
@@ -1690,12 +1694,12 @@ namespace SharpFlame
             {
                 int A = 0;
                 clsMap.clsUnit with_1 = Map.SelectedUnits[0];
-                lblObjectType.Text = System.Convert.ToString(with_1.Type.GetDisplayTextCode());
+                lblObjectType.Text = Convert.ToString(with_1.Type.GetDisplayTextCode());
                 ObjectPlayerNum.Target.Item = with_1.UnitGroup;
-                txtObjectRotation.Text = modIO.InvariantToString_int(System.Convert.ToInt32(with_1.Rotation));
+                txtObjectRotation.Text = modIO.InvariantToString_int(Convert.ToInt32(with_1.Rotation));
                 txtObjectID.Text = modIO.InvariantToString_uint(with_1.ID);
-                txtObjectPriority.Text = modIO.InvariantToString_int(System.Convert.ToInt32(with_1.SavePriority));
-                txtObjectHealth.Text = modIO.InvariantToString_dbl(System.Convert.ToDouble(with_1.Health * 100.0D));
+                txtObjectPriority.Text = modIO.InvariantToString_int(Convert.ToInt32(with_1.SavePriority));
+                txtObjectHealth.Text = modIO.InvariantToString_dbl(Convert.ToDouble(with_1.Health * 100.0D));
                 lblObjectType.Enabled = true;
                 ObjectPlayerNum.Enabled = true;
                 txtObjectRotation.Enabled = true;
@@ -1712,7 +1716,7 @@ namespace SharpFlame
                 }
                 if ( LabelEnabled )
                 {
-                    txtObjectLabel.Text = System.Convert.ToString(with_1.Label);
+                    txtObjectLabel.Text = Convert.ToString(with_1.Label);
                     txtObjectLabel.Enabled = true;
                 }
                 else
@@ -1929,12 +1933,12 @@ namespace SharpFlame
             }
         }
 
-        public void tsbSelection_Click(System.Object sender, System.EventArgs e)
+        public void tsbSelection_Click(Object sender, EventArgs e)
         {
             modTools.Tool = modTools.Tools.TerrainSelect;
         }
 
-        public void tsbSelectionCopy_Click(System.Object sender, System.EventArgs e)
+        public void tsbSelectionCopy_Click(Object sender, EventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -1959,7 +1963,7 @@ namespace SharpFlame
             modProgram.Copied_Map = new clsMap(Map, Start, Area);
         }
 
-        public void tsbSelectionPaste_Click(System.Object sender, System.EventArgs e)
+        public void tsbSelectionPaste_Click(Object sender, EventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -1997,7 +2001,7 @@ namespace SharpFlame
             View_DrawViewLater();
         }
 
-        public void btnSelResize_Click(System.Object sender, System.EventArgs e)
+        public void btnSelResize_Click(Object sender, EventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -2022,7 +2026,7 @@ namespace SharpFlame
             Map_Resize(Start, Area);
         }
 
-        public void tsbSelectionRotateClockwise_Click(System.Object sender, System.EventArgs e)
+        public void tsbSelectionRotateClockwise_Click(Object sender, EventArgs e)
         {
             if ( modProgram.Copied_Map == null )
             {
@@ -2033,7 +2037,7 @@ namespace SharpFlame
             modProgram.Copied_Map.Rotate(TileOrientation.Orientation_Clockwise, modMain.frmMainInstance.PasteRotateObjects);
         }
 
-        public void tsbSelectionRotateAnticlockwise_Click(System.Object sender, System.EventArgs e)
+        public void tsbSelectionRotateAnticlockwise_Click(Object sender, EventArgs e)
         {
             if ( modProgram.Copied_Map == null )
             {
@@ -2044,17 +2048,17 @@ namespace SharpFlame
             modProgram.Copied_Map.Rotate(TileOrientation.Orientation_CounterClockwise, modMain.frmMainInstance.PasteRotateObjects);
         }
 
-        public void menuMiniShowTex_Click(System.Object sender, System.EventArgs e)
+        public void menuMiniShowTex_Click(Object sender, EventArgs e)
         {
             UpdateMinimap();
         }
 
-        public void menuMiniShowHeight_Click(System.Object sender, System.EventArgs e)
+        public void menuMiniShowHeight_Click(Object sender, EventArgs e)
         {
             UpdateMinimap();
         }
 
-        public void menuMiniShowUnits_Click(System.Object sender, System.EventArgs e)
+        public void menuMiniShowUnits_Click(Object sender, EventArgs e)
         {
             UpdateMinimap();
         }
@@ -2074,7 +2078,7 @@ namespace SharpFlame
 
             if (
                 modBitmap.LoadBitmap(
-                    modProgram.EndWithPathSeperator((new Microsoft.VisualBasic.ApplicationServices.ConsoleApplicationBase()).Info.DirectoryPath) + "notile.png",
+                    modProgram.EndWithPathSeperator((new ConsoleApplicationBase()).Info.DirectoryPath) + "notile.png",
                     ref Bitmap).Success )
             {
                 clsResult Result = new clsResult("notile.png");
@@ -2086,7 +2090,7 @@ namespace SharpFlame
             }
             if (
                 modBitmap.LoadBitmap(
-                    modProgram.EndWithPathSeperator((new Microsoft.VisualBasic.ApplicationServices.ConsoleApplicationBase()).Info.DirectoryPath) + "overflow.png",
+                    modProgram.EndWithPathSeperator((new ConsoleApplicationBase()).Info.DirectoryPath) + "overflow.png",
                     ref Bitmap).Success )
             {
                 clsResult Result = new clsResult("overflow.png");
@@ -2100,7 +2104,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public void tsbGateways_Click(System.Object sender, System.EventArgs e)
+        public void tsbGateways_Click(Object sender, EventArgs e)
         {
             if ( modTools.Tool == modTools.Tools.Gateways )
             {
@@ -2123,7 +2127,7 @@ namespace SharpFlame
             }
         }
 
-        public void tsbDrawAutotexture_Click(System.Object sender, System.EventArgs e)
+        public void tsbDrawAutotexture_Click(Object sender, EventArgs e)
         {
             if ( MapView != null )
             {
@@ -2135,7 +2139,7 @@ namespace SharpFlame
             }
         }
 
-        public void tsbDrawTileOrientation_Click(System.Object sender, System.EventArgs e)
+        public void tsbDrawTileOrientation_Click(Object sender, EventArgs e)
         {
             if ( MapView != null )
             {
@@ -2148,12 +2152,12 @@ namespace SharpFlame
             }
         }
 
-        public void menuMiniShowGateways_Click(System.Object sender, System.EventArgs e)
+        public void menuMiniShowGateways_Click(Object sender, EventArgs e)
         {
             UpdateMinimap();
         }
 
-        public void menuMiniShowCliffs_Click(object sender, System.EventArgs e)
+        public void menuMiniShowCliffs_Click(object sender, EventArgs e)
         {
             UpdateMinimap();
         }
@@ -2170,7 +2174,7 @@ namespace SharpFlame
             Map.MinimapMakeLater();
         }
 
-        public void cmbTileType_SelectedIndexChanged(System.Object sender, System.EventArgs e)
+        public void cmbTileType_SelectedIndexChanged(Object sender, EventArgs e)
         {
             if ( !cboTileType.Enabled )
             {
@@ -2197,13 +2201,13 @@ namespace SharpFlame
             TextureView.DrawViewLater();
         }
 
-        public void chkTileTypes_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void chkTileTypes_CheckedChanged(Object sender, EventArgs e)
         {
             TextureView.DisplayTileTypes = cbxTileTypes.Checked;
             TextureView.DrawViewLater();
         }
 
-        public void chkTileNumbers_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void chkTileNumbers_CheckedChanged(Object sender, EventArgs e)
         {
             TextureView.DisplayTileNumbers = cbxTileNumbers.Checked;
             TextureView.DrawViewLater();
@@ -2309,22 +2313,22 @@ namespace SharpFlame
             modProgram.TileTypes.Add(NewTileType);
         }
 
-        public void menuExportMapTileTypes_Click(System.Object sender, System.EventArgs e)
+        public void menuExportMapTileTypes_Click(Object sender, EventArgs e)
         {
             PromptSave_TTP();
         }
 
-        public void ImportHeightmapToolStripMenuItem_Click(System.Object sender, System.EventArgs e)
+        public void ImportHeightmapToolStripMenuItem_Click(Object sender, EventArgs e)
         {
             Load_Heightmap_Prompt();
         }
 
-        public void menuImportTileTypes_Click(System.Object sender, System.EventArgs e)
+        public void menuImportTileTypes_Click(Object sender, EventArgs e)
         {
             Load_TTP_Prompt();
         }
 
-        public void tsbSave_Click(System.Object sender, System.EventArgs e)
+        public void tsbSave_Click(Object sender, EventArgs e)
         {
             QuickSave();
         }
@@ -2371,9 +2375,9 @@ namespace SharpFlame
                     {
                         MapFileTitle = SplitPath.FileTitleWithoutExtension;
                         string quickSavePath = Map.PathInfo.Path;
-                        tsbSave.ToolTipText = "Quick save FMap to " + System.Convert.ToString(ControlChars.Quote) + quickSavePath +
-                                              System.Convert.ToString(ControlChars.Quote);
-                        menuSaveFMapQuick.Text = "Quick Save fmap to " + System.Convert.ToString(ControlChars.Quote);
+                        tsbSave.ToolTipText = "Quick save FMap to " + Convert.ToString(ControlChars.Quote) + quickSavePath +
+                                              Convert.ToString(ControlChars.Quote);
+                        menuSaveFMapQuick.Text = "Quick Save fmap to " + Convert.ToString(ControlChars.Quote);
                         if ( quickSavePath.Length <= 32 )
                         {
                             menuSaveFMapQuick.Text += quickSavePath;
@@ -2397,7 +2401,7 @@ namespace SharpFlame
             Text = MapFileTitle + " - " + modProgram.ProgramName + " " + modProgram.ProgramVersionNumber;
         }
 
-        public void lstAutoTexture_SelectedIndexChanged(System.Object sender, System.EventArgs e)
+        public void lstAutoTexture_SelectedIndexChanged(Object sender, EventArgs e)
         {
             if ( !lstAutoTexture.Enabled )
             {
@@ -2411,7 +2415,7 @@ namespace SharpFlame
             }
         }
 
-        public void lstAutoRoad_Click(System.Object sender, System.EventArgs e)
+        public void lstAutoRoad_Click(Object sender, EventArgs e)
         {
             if ( !(modTools.Tool == modTools.Tools.RoadPlace || modTools.Tool == modTools.Tools.RoadLines) )
             {
@@ -2468,7 +2472,7 @@ namespace SharpFlame
             View_DrawViewLater();
         }
 
-        public void txtHeightSetL_LostFocus(object sender, System.EventArgs e)
+        public void txtHeightSetL_LostFocus(object sender, EventArgs e)
         {
             byte Height = 0;
             string Text = "";
@@ -2489,7 +2493,7 @@ namespace SharpFlame
             tabHeightSetR.TabPages[tabHeightSetL.SelectedIndex].Text = Text;
         }
 
-        public void txtHeightSetR_LostFocus(object sender, System.EventArgs e)
+        public void txtHeightSetR_LostFocus(object sender, EventArgs e)
         {
             byte Height = 0;
             string Text = "";
@@ -2510,17 +2514,17 @@ namespace SharpFlame
             tabHeightSetR.TabPages[tabHeightSetR.SelectedIndex].Text = Text;
         }
 
-        public void tabHeightSetL_SelectedIndexChanged(object sender, System.EventArgs e)
+        public void tabHeightSetL_SelectedIndexChanged(object sender, EventArgs e)
         {
             txtHeightSetL.Text = modIO.InvariantToString_byte(HeightSetPalette[tabHeightSetL.SelectedIndex]);
         }
 
-        public void tabHeightSetR_SelectedIndexChanged(object sender, System.EventArgs e)
+        public void tabHeightSetR_SelectedIndexChanged(object sender, EventArgs e)
         {
             txtHeightSetR.Text = modIO.InvariantToString_byte(HeightSetPalette[tabHeightSetR.SelectedIndex]);
         }
 
-        public void tsbSelectionObjects_Click(System.Object sender, System.EventArgs e)
+        public void tsbSelectionObjects_Click(Object sender, EventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -2562,7 +2566,7 @@ namespace SharpFlame
             }
         }
 
-        public void tsbSelectionFlipX_Click(System.Object sender, System.EventArgs e)
+        public void tsbSelectionFlipX_Click(Object sender, EventArgs e)
         {
             if ( modProgram.Copied_Map == null )
             {
@@ -2573,7 +2577,7 @@ namespace SharpFlame
             modProgram.Copied_Map.Rotate(TileOrientation.Orientation_FlipX, modMain.frmMainInstance.PasteRotateObjects);
         }
 
-        public void btnHeightsMultiplySelection_Click(System.Object sender, System.EventArgs e)
+        public void btnHeightsMultiplySelection_Click(Object sender, EventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -2606,7 +2610,7 @@ namespace SharpFlame
                 for ( X = StartXY.X; X <= FinishXY.X; X++ )
                 {
                     Map.Terrain.Vertices[X, Y].Height =
-                        (byte)(Math.Round(modMath.Clamp_dbl(System.Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height * Multiplier), byte.MinValue, byte.MaxValue)));
+                        (byte)(Math.Round(modMath.Clamp_dbl(Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height * Multiplier), byte.MinValue, byte.MaxValue)));
                     Pos.X = X;
                     Pos.Y = Y;
                     Map.SectorGraphicsChanges.VertexAndNormalsChanged(Pos);
@@ -2622,21 +2626,21 @@ namespace SharpFlame
             View_DrawViewLater();
         }
 
-        public void btnTextureAnticlockwise_Click(System.Object sender, System.EventArgs e)
+        public void btnTextureAnticlockwise_Click(Object sender, EventArgs e)
         {
             modProgram.TextureOrientation.RotateAnticlockwise();
 
             TextureView.DrawViewLater();
         }
 
-        public void btnTextureClockwise_Click(System.Object sender, System.EventArgs e)
+        public void btnTextureClockwise_Click(Object sender, EventArgs e)
         {
             modProgram.TextureOrientation.RotateClockwise();
 
             TextureView.DrawViewLater();
         }
 
-        public void btnTextureFlipX_Click(System.Object sender, System.EventArgs e)
+        public void btnTextureFlipX_Click(Object sender, EventArgs e)
         {
             if ( modProgram.TextureOrientation.SwitchedAxes )
             {
@@ -2650,7 +2654,7 @@ namespace SharpFlame
             TextureView.DrawViewLater();
         }
 
-        public void lstAutoTexture_SelectedIndexChanged_1(System.Object sender, System.EventArgs e)
+        public void lstAutoTexture_SelectedIndexChanged_1(Object sender, EventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -2674,7 +2678,7 @@ namespace SharpFlame
             }
         }
 
-        public void lstAutoRoad_SelectedIndexChanged(System.Object sender, System.EventArgs e)
+        public void lstAutoRoad_SelectedIndexChanged(Object sender, EventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -2698,7 +2702,7 @@ namespace SharpFlame
             }
         }
 
-        public void txtObjectPriority_LostFocus(System.Object sender, System.EventArgs e)
+        public void txtObjectPriority_LostFocus(Object sender, EventArgs e)
         {
             if ( !txtObjectPriority.Enabled )
             {
@@ -2724,7 +2728,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if ( Interaction.MsgBox("Change priority of multiple objects?", (Microsoft.VisualBasic.MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
+                if ( Interaction.MsgBox("Change priority of multiple objects?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
                      MsgBoxResult.Ok )
                 {
                     //SelectedObject_Changed()
@@ -2750,7 +2754,7 @@ namespace SharpFlame
             View_DrawViewLater();
         }
 
-        public void txtObjectHealth_LostFocus(System.Object sender, System.EventArgs e)
+        public void txtObjectHealth_LostFocus(Object sender, EventArgs e)
         {
             if ( !txtObjectHealth.Enabled )
             {
@@ -2778,7 +2782,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if ( Interaction.MsgBox("Change health of multiple objects?", (Microsoft.VisualBasic.MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
+                if ( Interaction.MsgBox("Change health of multiple objects?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
                      MsgBoxResult.Ok )
                 {
                     //SelectedObject_Changed()
@@ -2797,7 +2801,7 @@ namespace SharpFlame
             View_DrawViewLater();
         }
 
-        public void btnDroidToDesign_Click(System.Object sender, System.EventArgs e)
+        public void btnDroidToDesign_Click(Object sender, EventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -2812,7 +2816,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if ( Interaction.MsgBox("Change design of multiple droids?", (Microsoft.VisualBasic.MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
+                if ( Interaction.MsgBox("Change design of multiple droids?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
                      MsgBoxResult.Ok )
                 {
                     return;
@@ -2820,7 +2824,7 @@ namespace SharpFlame
             }
             else
             {
-                if ( Interaction.MsgBox("Change design of a droid?", (Microsoft.VisualBasic.MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
+                if ( Interaction.MsgBox("Change design of a droid?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
                      MsgBoxResult.Ok )
                 {
                     return;
@@ -2841,7 +2845,7 @@ namespace SharpFlame
 
         public modProgram.enumObjectRotateMode PasteRotateObjects = modProgram.enumObjectRotateMode.Walls;
 
-        public void menuRotateUnits_Click(System.Object sender, System.EventArgs e)
+        public void menuRotateUnits_Click(Object sender, EventArgs e)
         {
             PasteRotateObjects = modProgram.enumObjectRotateMode.All;
             menuRotateUnits.Checked = true;
@@ -2849,7 +2853,7 @@ namespace SharpFlame
             menuRotateNothing.Checked = false;
         }
 
-        public void menuRotateWalls_Click(System.Object sender, System.EventArgs e)
+        public void menuRotateWalls_Click(Object sender, EventArgs e)
         {
             PasteRotateObjects = modProgram.enumObjectRotateMode.Walls;
             menuRotateUnits.Checked = false;
@@ -2857,7 +2861,7 @@ namespace SharpFlame
             menuRotateNothing.Checked = false;
         }
 
-        public void menuRotateNothing_Click(System.Object sender, System.EventArgs e)
+        public void menuRotateNothing_Click(Object sender, EventArgs e)
         {
             PasteRotateObjects = modProgram.enumObjectRotateMode.None;
             menuRotateUnits.Checked = false;
@@ -2865,7 +2869,7 @@ namespace SharpFlame
             menuRotateNothing.Checked = true;
         }
 
-        public void cboDroidBody_SelectedIndexChanged(System.Object sender, System.EventArgs e)
+        public void cboDroidBody_SelectedIndexChanged(Object sender, EventArgs e)
         {
             if ( !cboDroidBody.Enabled )
             {
@@ -2887,7 +2891,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if ( Interaction.MsgBox("Change body of multiple droids?", (Microsoft.VisualBasic.MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
+                if ( Interaction.MsgBox("Change body of multiple droids?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
                      MsgBoxResult.Ok )
                 {
                     return;
@@ -2907,7 +2911,7 @@ namespace SharpFlame
             }
         }
 
-        public void cboDroidPropulsion_SelectedIndexChanged(System.Object sender, System.EventArgs e)
+        public void cboDroidPropulsion_SelectedIndexChanged(Object sender, EventArgs e)
         {
             if ( !cboDroidPropulsion.Enabled )
             {
@@ -2930,7 +2934,7 @@ namespace SharpFlame
             if ( Map.SelectedUnits.Count > 1 )
             {
                 if (
-                    Interaction.MsgBox("Change propulsion of multiple droids?", (Microsoft.VisualBasic.MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
+                    Interaction.MsgBox("Change propulsion of multiple droids?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
                     MsgBoxResult.Ok )
                 {
                     return;
@@ -2956,7 +2960,7 @@ namespace SharpFlame
             }
         }
 
-        public void cboDroidTurret1_SelectedIndexChanged(System.Object sender, System.EventArgs e)
+        public void cboDroidTurret1_SelectedIndexChanged(Object sender, EventArgs e)
         {
             if ( !cboDroidTurret1.Enabled )
             {
@@ -2978,7 +2982,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if ( Interaction.MsgBox("Change turret of multiple droids?", (Microsoft.VisualBasic.MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
+                if ( Interaction.MsgBox("Change turret of multiple droids?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
                      MsgBoxResult.Ok )
                 {
                     return;
@@ -2999,7 +3003,7 @@ namespace SharpFlame
             }
         }
 
-        public void cboDroidTurret2_SelectedIndexChanged(System.Object sender, System.EventArgs e)
+        public void cboDroidTurret2_SelectedIndexChanged(Object sender, EventArgs e)
         {
             if ( !cboDroidTurret2.Enabled )
             {
@@ -3021,7 +3025,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if ( Interaction.MsgBox("Change turret of multiple droids?", (Microsoft.VisualBasic.MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
+                if ( Interaction.MsgBox("Change turret of multiple droids?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
                      MsgBoxResult.Ok )
                 {
                     return;
@@ -3042,7 +3046,7 @@ namespace SharpFlame
             }
         }
 
-        public void cboDroidTurret3_SelectedIndexChanged(System.Object sender, System.EventArgs e)
+        public void cboDroidTurret3_SelectedIndexChanged(Object sender, EventArgs e)
         {
             if ( !cboDroidTurret3.Enabled )
             {
@@ -3064,7 +3068,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if ( Interaction.MsgBox("Change turret of multiple droids?", (Microsoft.VisualBasic.MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
+                if ( Interaction.MsgBox("Change turret of multiple droids?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
                      MsgBoxResult.Ok )
                 {
                     return;
@@ -3085,7 +3089,7 @@ namespace SharpFlame
             }
         }
 
-        public void rdoDroidTurret0_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoDroidTurret0_CheckedChanged(Object sender, EventArgs e)
         {
             if ( !rdoDroidTurret0.Enabled )
             {
@@ -3113,7 +3117,7 @@ namespace SharpFlame
             if ( Map.SelectedUnits.Count > 1 )
             {
                 if (
-                    Interaction.MsgBox("Change number of turrets of multiple droids?", (Microsoft.VisualBasic.MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question),
+                    Interaction.MsgBox("Change number of turrets of multiple droids?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question),
                         "") != MsgBoxResult.Ok )
                 {
                     return;
@@ -3123,7 +3127,7 @@ namespace SharpFlame
             SelectedObjects_SetTurretCount((byte)0);
         }
 
-        public void rdoDroidTurret1_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoDroidTurret1_CheckedChanged(Object sender, EventArgs e)
         {
             if ( !rdoDroidTurret1.Enabled )
             {
@@ -3151,7 +3155,7 @@ namespace SharpFlame
             if ( Map.SelectedUnits.Count > 1 )
             {
                 if (
-                    Interaction.MsgBox("Change number of turrets of multiple droids?", (Microsoft.VisualBasic.MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question),
+                    Interaction.MsgBox("Change number of turrets of multiple droids?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question),
                         "") != MsgBoxResult.Ok )
                 {
                     return;
@@ -3161,7 +3165,7 @@ namespace SharpFlame
             SelectedObjects_SetTurretCount((byte)1);
         }
 
-        public void rdoDroidTurret2_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoDroidTurret2_CheckedChanged(Object sender, EventArgs e)
         {
             if ( !rdoDroidTurret2.Enabled )
             {
@@ -3189,7 +3193,7 @@ namespace SharpFlame
             if ( Map.SelectedUnits.Count > 1 )
             {
                 if (
-                    Interaction.MsgBox("Change number of turrets of multiple droids?", (Microsoft.VisualBasic.MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question),
+                    Interaction.MsgBox("Change number of turrets of multiple droids?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question),
                         "") != MsgBoxResult.Ok )
                 {
                     return;
@@ -3199,7 +3203,7 @@ namespace SharpFlame
             SelectedObjects_SetTurretCount((byte)2);
         }
 
-        public void rdoDroidTurret3_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoDroidTurret3_CheckedChanged(Object sender, EventArgs e)
         {
             if ( !rdoDroidTurret2.Enabled )
             {
@@ -3227,7 +3231,7 @@ namespace SharpFlame
             if ( Map.SelectedUnits.Count > 1 )
             {
                 if (
-                    Interaction.MsgBox("Change number of turrets of multiple droids?", (Microsoft.VisualBasic.MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question),
+                    Interaction.MsgBox("Change number of turrets of multiple droids?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question),
                         "") != MsgBoxResult.Ok )
                 {
                     return;
@@ -3281,7 +3285,7 @@ namespace SharpFlame
             }
         }
 
-        public void cboDroidType_SelectedIndexChanged(System.Object sender, System.EventArgs e)
+        public void cboDroidType_SelectedIndexChanged(Object sender, EventArgs e)
         {
             if ( !cboDroidType.Enabled )
             {
@@ -3303,7 +3307,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if ( Interaction.MsgBox("Change type of multiple droids?", (Microsoft.VisualBasic.MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
+                if ( Interaction.MsgBox("Change type of multiple droids?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
                      MsgBoxResult.Ok )
                 {
                     return;
@@ -3313,7 +3317,7 @@ namespace SharpFlame
             SelectedObjects_SetDroidType(modProgram.TemplateDroidTypes[cboDroidType.SelectedIndex]);
         }
 
-        public void rdoTextureIgnoreTerrain_Click(System.Object sender, System.EventArgs e)
+        public void rdoTextureIgnoreTerrain_Click(Object sender, EventArgs e)
         {
             if ( rdoTextureIgnoreTerrain.Checked )
             {
@@ -3323,7 +3327,7 @@ namespace SharpFlame
             }
         }
 
-        public void rdoTextureReinterpretTerrain_Click(System.Object sender, System.EventArgs e)
+        public void rdoTextureReinterpretTerrain_Click(Object sender, EventArgs e)
         {
             if ( rdoTextureReinterpretTerrain.Checked )
             {
@@ -3333,7 +3337,7 @@ namespace SharpFlame
             }
         }
 
-        public void rdoTextureRemoveTerrain_Click(System.Object sender, System.EventArgs e)
+        public void rdoTextureRemoveTerrain_Click(Object sender, EventArgs e)
         {
             if ( rdoTextureRemoveTerrain.Checked )
             {
@@ -3343,7 +3347,7 @@ namespace SharpFlame
             }
         }
 
-        public void btnPlayerSelectObjects_Click(System.Object sender, System.EventArgs e)
+        public void btnPlayerSelectObjects_Click(Object sender, EventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -3377,12 +3381,12 @@ namespace SharpFlame
             View_DrawViewLater();
         }
 
-        public void menuSaveFME_Click(System.Object sender, System.EventArgs e)
+        public void menuSaveFME_Click(Object sender, EventArgs e)
         {
             Save_FME_Prompt();
         }
 
-        public void menuOptions_Click(System.Object sender, System.EventArgs e)
+        public void menuOptions_Click(Object sender, EventArgs e)
         {
             if ( modMain.frmOptionsInstance != null )
             {
@@ -3394,7 +3398,7 @@ namespace SharpFlame
             modMain.frmOptionsInstance.Show();
         }
 
-        public void rdoCliffTriBrush_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoCliffTriBrush_CheckedChanged(Object sender, EventArgs e)
         {
             modTools.Tool = modTools.Tools.CliffTriangle;
         }
@@ -3407,7 +3411,7 @@ namespace SharpFlame
             BitmapResult = modBitmap.LoadBitmap(ImagePath, ref ResultBitmap);
             if ( !BitmapResult.Success )
             {
-                Result.WarningAdd("Unable to load image " + System.Convert.ToString(ControlChars.Quote) + ImagePath + System.Convert.ToString(ControlChars.Quote));
+                Result.WarningAdd("Unable to load image " + Convert.ToString(ControlChars.Quote) + ImagePath + Convert.ToString(ControlChars.Quote));
             }
         }
 
@@ -3576,7 +3580,7 @@ namespace SharpFlame
             }
 
             txtHeightSetL.Text =
-                modIO.InvariantToString_byte(System.Convert.ToByte(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height));
+                modIO.InvariantToString_byte(Convert.ToByte(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height));
             txtHeightSetL.Focus();
             MapView.OpenGLControl.Focus();
         }
@@ -3596,7 +3600,7 @@ namespace SharpFlame
             MapView.OpenGLControl.Focus();
         }
 
-        public void OpenGL_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
+        public void OpenGL_DragEnter(object sender, DragEventArgs e)
         {
             if ( e.Data.GetDataPresent(DataFormats.FileDrop) )
             {
@@ -3608,7 +3612,7 @@ namespace SharpFlame
             }
         }
 
-        public void OpenGL_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
+        public void OpenGL_DragDrop(object sender, DragEventArgs e)
         {
             string[] Paths = (string[])(e.Data.GetData(DataFormats.FileDrop));
             clsResult Result = new clsResult("Loading drag-dropped maps");
@@ -3638,22 +3642,22 @@ namespace SharpFlame
             Map.UndoStepCreate("Flatten Under Structures");
         }
 
-        public void rdoFillCliffIgnore_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoFillCliffIgnore_CheckedChanged(Object sender, EventArgs e)
         {
             FillCliffAction = modProgram.enumFillCliffAction.Ignore;
         }
 
-        public void rdoFillCliffStopBefore_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoFillCliffStopBefore_CheckedChanged(Object sender, EventArgs e)
         {
             FillCliffAction = modProgram.enumFillCliffAction.StopBefore;
         }
 
-        public void rdoFillCliffStopAfter_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void rdoFillCliffStopAfter_CheckedChanged(Object sender, EventArgs e)
         {
             FillCliffAction = modProgram.enumFillCliffAction.StopAfter;
         }
 
-        public void btnScriptAreaCreate_Click(System.Object sender, System.EventArgs e)
+        public void btnScriptAreaCreate_Click(Object sender, EventArgs e)
         {
             if ( !btnScriptAreaCreate.Enabled )
             {
@@ -3759,7 +3763,7 @@ namespace SharpFlame
             get { return _SelectedScriptMarker; }
         }
 
-        public void lstScriptPositions_SelectedIndexChanged(System.Object sender, System.EventArgs e)
+        public void lstScriptPositions_SelectedIndexChanged(Object sender, EventArgs e)
         {
             if ( !lstScriptPositions.Enabled )
             {
@@ -3777,7 +3781,7 @@ namespace SharpFlame
             View_DrawViewLater();
         }
 
-        public void lstScriptAreas_SelectedIndexChanged(System.Object sender, System.EventArgs e)
+        public void lstScriptAreas_SelectedIndexChanged(Object sender, EventArgs e)
         {
             if ( !lstScriptAreas.Enabled )
             {
@@ -3836,7 +3840,7 @@ namespace SharpFlame
             }
         }
 
-        public void btnScriptMarkerRemove_Click(System.Object sender, System.EventArgs e)
+        public void btnScriptMarkerRemove_Click(Object sender, EventArgs e)
         {
             if ( _SelectedScriptMarker == null )
             {
@@ -3884,7 +3888,7 @@ namespace SharpFlame
             View_DrawViewLater();
         }
 
-        public void txtScriptMarkerLabel_LostFocus(System.Object sender, System.EventArgs e)
+        public void txtScriptMarkerLabel_LostFocus(Object sender, EventArgs e)
         {
             if ( !txtScriptMarkerLabel.Enabled )
             {
@@ -3929,7 +3933,7 @@ namespace SharpFlame
             ScriptMarkerLists_Update();
         }
 
-        public void txtScriptMarkerX_LostFocus(System.Object sender, System.EventArgs e)
+        public void txtScriptMarkerX_LostFocus(Object sender, EventArgs e)
         {
             if ( !txtScriptMarkerX.Enabled )
             {
@@ -3963,7 +3967,7 @@ namespace SharpFlame
             View_DrawViewLater();
         }
 
-        public void txtScriptMarkerY_LostFocus(System.Object sender, System.EventArgs e)
+        public void txtScriptMarkerY_LostFocus(Object sender, EventArgs e)
         {
             if ( !txtScriptMarkerY.Enabled )
             {
@@ -3997,7 +4001,7 @@ namespace SharpFlame
             View_DrawViewLater();
         }
 
-        public void txtScriptMarkerX2_LostFocus(System.Object sender, System.EventArgs e)
+        public void txtScriptMarkerX2_LostFocus(Object sender, EventArgs e)
         {
             if ( !txtScriptMarkerX2.Enabled )
             {
@@ -4024,7 +4028,7 @@ namespace SharpFlame
             View_DrawViewLater();
         }
 
-        public void txtScriptMarkerY2_LostFocus(System.Object sender, System.EventArgs e)
+        public void txtScriptMarkerY2_LostFocus(Object sender, EventArgs e)
         {
             if ( !txtScriptMarkerY2.Enabled )
             {
@@ -4051,7 +4055,7 @@ namespace SharpFlame
             View_DrawViewLater();
         }
 
-        public void txtObjectLabel_LostFocus(System.Object sender, System.EventArgs e)
+        public void txtObjectLabel_LostFocus(Object sender, EventArgs e)
         {
             if ( !txtObjectLabel.Enabled )
             {
@@ -4159,7 +4163,7 @@ namespace SharpFlame
 
         public void Load_Autosave_Prompt()
         {
-            if ( !System.IO.Directory.Exists(modProgram.AutoSavePath) )
+            if ( !Directory.Exists(modProgram.AutoSavePath) )
             {
                 Interaction.MsgBox("Autosave directory does not exist. There are no autosaves.", MsgBoxStyle.OkOnly, "");
                 return;
@@ -4169,17 +4173,17 @@ namespace SharpFlame
             Dialog.FileName = "";
             Dialog.Filter = modProgram.ProgramName + " Files (*.fmap, *.fme)|*.fmap;*.fme|All Files (*.*)|*.*";
             Dialog.InitialDirectory = modProgram.AutoSavePath;
-            if ( Dialog.ShowDialog(this) != System.Windows.Forms.DialogResult.OK )
+            if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
-            modSettings.Settings.OpenPath = System.IO.Path.GetDirectoryName(Dialog.FileName);
+            modSettings.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
             clsResult Result = new clsResult("Loading map");
             Result.Take(LoadMap(Dialog.FileName));
             modProgram.ShowWarnings(Result);
         }
 
-        public void btnAlignObjects_Click(System.Object sender, System.EventArgs e)
+        public void btnAlignObjects_Click(Object sender, EventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -4196,7 +4200,7 @@ namespace SharpFlame
             Map.UndoStepCreate("Align Objects");
         }
 
-        public void cbxDesignableOnly_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void cbxDesignableOnly_CheckedChanged(Object sender, EventArgs e)
         {
             Components_Update();
         }
@@ -4222,7 +4226,7 @@ namespace SharpFlame
             }
         }
 
-        public void txtObjectFind_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        public void txtObjectFind_KeyDown(object sender, KeyEventArgs e)
         {
             if ( !txtObjectFind.Enabled )
             {
@@ -4241,7 +4245,7 @@ namespace SharpFlame
             txtObjectFind.Enabled = true;
         }
 
-        public void txtObjectFind_Leave(object sender, System.EventArgs e)
+        public void txtObjectFind_Leave(object sender, EventArgs e)
         {
             if ( !txtObjectFind.Enabled )
             {
@@ -4255,17 +4259,17 @@ namespace SharpFlame
             txtObjectFind.Enabled = true;
         }
 
-        public void rdoObjectPlace_Click(System.Object sender, System.EventArgs e)
+        public void rdoObjectPlace_Click(Object sender, EventArgs e)
         {
             modTools.Tool = modTools.Tools.ObjectPlace;
         }
 
-        public void rdoObjectLine_Click(System.Object sender, System.EventArgs e)
+        public void rdoObjectLine_Click(Object sender, EventArgs e)
         {
             modTools.Tool = modTools.Tools.ObjectLines;
         }
 
-        private void rdoObjectsSortNone_Click(System.Object sender, System.EventArgs e)
+        private void rdoObjectsSortNone_Click(Object sender, EventArgs e)
         {
             if ( !modProgram.ProgramInitializeFinished )
             {
@@ -4275,7 +4279,7 @@ namespace SharpFlame
             ObjectsUpdate();
         }
 
-        private void rdoObjectsSortInternal_Click(System.Object sender, System.EventArgs e)
+        private void rdoObjectsSortInternal_Click(Object sender, EventArgs e)
         {
             if ( !modProgram.ProgramInitializeFinished )
             {
@@ -4285,7 +4289,7 @@ namespace SharpFlame
             ObjectsUpdate();
         }
 
-        private void rdoObjectsSortInGame_Click(System.Object sender, System.EventArgs e)
+        private void rdoObjectsSortInGame_Click(Object sender, EventArgs e)
         {
             if ( !modProgram.ProgramInitializeFinished )
             {
@@ -4307,19 +4311,19 @@ namespace SharpFlame
             }
         }
 
-        public void TabControl1_SelectedIndexChanged(object sender, System.EventArgs e)
+        public void TabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             ActivateObjectTool();
             ObjectsUpdate();
         }
 
-        public void GeneratorToolStripMenuItem_Click(System.Object sender, System.EventArgs e)
+        public void GeneratorToolStripMenuItem_Click(Object sender, EventArgs e)
         {
             modMain.frmGeneratorInstance.Show();
             modMain.frmGeneratorInstance.Activate();
         }
 
-        public void ReinterpretTerrainToolStripMenuItem_Click(System.Object sender, System.EventArgs e)
+        public void ReinterpretTerrainToolStripMenuItem_Click(Object sender, EventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -4335,7 +4339,7 @@ namespace SharpFlame
             Map.UndoStepCreate("Interpret Terrain");
         }
 
-        public void WaterTriangleCorrectionToolStripMenuItem_Click(System.Object sender, System.EventArgs e)
+        public void WaterTriangleCorrectionToolStripMenuItem_Click(Object sender, EventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -4353,7 +4357,7 @@ namespace SharpFlame
             View_DrawViewLater();
         }
 
-        public void ToolStripMenuItem5_Click(System.Object sender, System.EventArgs e)
+        public void ToolStripMenuItem5_Click(Object sender, EventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -4385,7 +4389,7 @@ namespace SharpFlame
             Map.UndoStepCreate("Flatten Under Oil");
         }
 
-        public void ToolStripMenuItem6_Click(System.Object sender, System.EventArgs e)
+        public void ToolStripMenuItem6_Click(Object sender, EventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -4411,7 +4415,7 @@ namespace SharpFlame
             Map.UndoStepCreate("Flatten Under Structures");
         }
 
-        public void btnObjectTypeSelect_Click(System.Object sender, System.EventArgs e)
+        public void btnObjectTypeSelect_Click(Object sender, EventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -4472,19 +4476,19 @@ namespace SharpFlame
             }
         }
 
-        public void dgvFeatures_SelectionChanged(object sender, System.EventArgs e)
+        public void dgvFeatures_SelectionChanged(object sender, EventArgs e)
         {
             ActivateObjectTool();
             ObjectTypeSelectionUpdate(dgvFeatures);
         }
 
-        public void dgvStructures_SelectionChanged(object sender, System.EventArgs e)
+        public void dgvStructures_SelectionChanged(object sender, EventArgs e)
         {
             ActivateObjectTool();
             ObjectTypeSelectionUpdate(dgvStructures);
         }
 
-        public void dgvDroids_SelectionChanged(object sender, System.EventArgs e)
+        public void dgvDroids_SelectionChanged(object sender, EventArgs e)
         {
             ActivateObjectTool();
             ObjectTypeSelectionUpdate(dgvDroids);

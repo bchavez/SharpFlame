@@ -1,6 +1,9 @@
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using OpenTK.Graphics.OpenGL;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace SharpFlame
 {
@@ -39,11 +42,11 @@ namespace SharpFlame
 
             try
             {
-                if ( System.IO.File.Exists(Path) )
+                if ( File.Exists(Path) )
                 {
                     if ( Overwrite )
                     {
-                        System.IO.File.Delete(Path);
+                        File.Delete(Path);
                     }
                     else
                     {
@@ -73,8 +76,8 @@ namespace SharpFlame
 
             public void Perform()
             {
-                System.Drawing.Imaging.BitmapData BitmapData = Texture.LockBits(new Rectangle(0, 0, Texture.Width, Texture.Height),
-                    System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                BitmapData BitmapData = Texture.LockBits(new Rectangle(0, 0, Texture.Width, Texture.Height),
+                    ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
 
                 if ( MipMapLevel == 0 )
                 {
@@ -88,7 +91,7 @@ namespace SharpFlame
                     GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)MagFilter);
                     GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)MinFilter);
                 }
-                OpenTK.Graphics.OpenGL.GL.TexImage2D(TextureTarget.Texture2D, MipMapLevel, PixelInternalFormat.Rgba8, Texture.Width, Texture.Height, 0, PixelFormat.Bgra,
+                GL.TexImage2D(TextureTarget.Texture2D, MipMapLevel, PixelInternalFormat.Rgba8, Texture.Width, Texture.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra,
                     PixelType.UnsignedByte, BitmapData.Scan0);
 
                 Texture.UnlockBits(BitmapData);

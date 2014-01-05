@@ -1,5 +1,7 @@
 using System;
 using System.Drawing;
+using System.IO;
+using System.Text;
 using Microsoft.VisualBasic;
 
 namespace SharpFlame
@@ -23,13 +25,13 @@ namespace SharpFlame
         public clsResult Load_FME(string Path)
         {
             clsResult ReturnResult =
-                new clsResult("Loading FME from " + System.Convert.ToString(ControlChars.Quote) + Path + System.Convert.ToString(ControlChars.Quote));
+                new clsResult("Loading FME from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
 
-            System.IO.BinaryReader File = default(System.IO.BinaryReader);
+            BinaryReader File = default(BinaryReader);
 
             try
             {
-                File = new System.IO.BinaryReader(new System.IO.FileStream(Path, System.IO.FileMode.Open));
+                File = new BinaryReader(new FileStream(Path, FileMode.Open));
             }
             catch ( Exception ex )
             {
@@ -42,7 +44,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        private clsResult Read_FME(System.IO.BinaryReader File)
+        private clsResult Read_FME(BinaryReader File)
         {
             clsResult ReturnResult = new clsResult("Reading FME");
 
@@ -50,7 +52,7 @@ namespace SharpFlame
 
             clsInterfaceOptions ResultInfo = new clsInterfaceOptions();
 
-            clsMap.clsUnitAdd UnitAdd = new clsMap.clsUnitAdd();
+            clsUnitAdd UnitAdd = new clsUnitAdd();
             UnitAdd.Map = this;
 
             try
@@ -59,7 +61,7 @@ namespace SharpFlame
 
                 if ( Version <= 4U )
                 {
-                    ReturnResult.ProblemAdd("Version " + System.Convert.ToString(Version) + " is not supported.");
+                    ReturnResult.ProblemAdd("Version " + Convert.ToString(Version) + " is not supported.");
                     return ReturnResult;
                 }
                 else if ( Version == 5U || Version == 6U || Version == 7U )
@@ -282,11 +284,11 @@ namespace SharpFlame
                     }
                     UInt32 TempUnitCount = 0;
                     TempUnitCount = File.ReadUInt32();
-                    sFMEUnit[] TempUnit = new sFMEUnit[(System.Convert.ToInt32(TempUnitCount))];
-                    for ( A = 0; A <= (System.Convert.ToInt32(TempUnitCount)) - 1; A++ )
+                    sFMEUnit[] TempUnit = new sFMEUnit[(Convert.ToInt32(TempUnitCount))];
+                    for ( A = 0; A <= (Convert.ToInt32(TempUnitCount)) - 1; A++ )
                     {
                         TempUnit[A].Code = new string(File.ReadChars(40));
-                        B = Strings.InStr(TempUnit[A].Code, System.Convert.ToString('\0'), (Microsoft.VisualBasic.CompareMethod)0);
+                        B = Strings.InStr(TempUnit[A].Code, Convert.ToString('\0'), (CompareMethod)0);
                         if ( B > 0 )
                         {
                             TempUnit[A].Code = Strings.Left(TempUnit[A].Code, B - 1);
@@ -310,7 +312,7 @@ namespace SharpFlame
                     UInt32 AvailableID = 0;
 
                     AvailableID = 1U;
-                    for ( A = 0; A <= (System.Convert.ToInt32(TempUnitCount)) - 1; A++ )
+                    for ( A = 0; A <= (Convert.ToInt32(TempUnitCount)) - 1; A++ )
                     {
                         if ( TempUnit[A].ID >= AvailableID )
                         {
@@ -318,7 +320,7 @@ namespace SharpFlame
                         }
                     }
                     WarningCount = 0;
-                    for ( A = 0; A <= (System.Convert.ToInt32(TempUnitCount)) - 1; A++ )
+                    for ( A = 0; A <= (Convert.ToInt32(TempUnitCount)) - 1; A++ )
                     {
                         if ( TempUnit[A].LNDType == ((byte)0) )
                         {
@@ -330,7 +332,7 @@ namespace SharpFlame
                         }
                         else if ( TempUnit[A].LNDType == ((byte)2) )
                         {
-                            UnitType = modProgram.ObjectData.FindOrCreateUnitType(System.Convert.ToString(TempUnit[A].Code), clsUnitType.enumType.PlayerDroid, -1);
+                            UnitType = modProgram.ObjectData.FindOrCreateUnitType(Convert.ToString(TempUnit[A].Code), clsUnitType.enumType.PlayerDroid, -1);
                         }
                         else
                         {
@@ -351,10 +353,10 @@ namespace SharpFlame
                             {
                                 NewUnit.UnitGroup = UnitGroups[TempUnit[A].Player];
                             }
-                            NewUnit.Pos.Horizontal.X = System.Convert.ToInt32(TempUnit[A].X);
+                            NewUnit.Pos.Horizontal.X = Convert.ToInt32(TempUnit[A].X);
                             //NewUnit.Pos.Altitude = TempUnit(A).Y
-                            NewUnit.Pos.Horizontal.Y = System.Convert.ToInt32(TempUnit[A].Z);
-                            NewUnit.Rotation = Math.Min(System.Convert.ToInt32(TempUnit[A].Rotation), 359);
+                            NewUnit.Pos.Horizontal.Y = Convert.ToInt32(TempUnit[A].Z);
+                            NewUnit.Rotation = Math.Min(Convert.ToInt32(TempUnit[A].Rotation), 359);
                             if ( TempUnit[A].ID == 0U )
                             {
                                 TempUnit[A].ID = AvailableID;
@@ -385,7 +387,7 @@ namespace SharpFlame
 
                     NewGatewayCount = File.ReadUInt32();
                     WarningCount = 0;
-                    for ( A = 0; A <= (System.Convert.ToInt32(NewGatewayCount)) - 1; A++ )
+                    for ( A = 0; A <= (Convert.ToInt32(NewGatewayCount)) - 1; A++ )
                     {
                         NewGateStart.X = File.ReadUInt16();
                         NewGateStart.Y = File.ReadUInt16();
@@ -508,7 +510,7 @@ namespace SharpFlame
         public clsResult Load_LND(string Path)
         {
             clsResult ReturnResult =
-                new clsResult("Loading LND from " + System.Convert.ToString(ControlChars.Quote) + Path + System.Convert.ToString(ControlChars.Quote));
+                new clsResult("Loading LND from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
 
             try
             {
@@ -523,14 +525,14 @@ namespace SharpFlame
                 int Line_Num = 0;
                 sLNDTile[] LNDTile = null;
                 modLists.SimpleList<clsLNDObject> LNDObjects = new modLists.SimpleList<clsLNDObject>();
-                clsMap.clsUnitAdd UnitAdd = new clsMap.clsUnitAdd();
+                clsUnitAdd UnitAdd = new clsUnitAdd();
 
                 UnitAdd.Map = this;
 
-                System.IO.BinaryReader Reader = default(System.IO.BinaryReader);
+                BinaryReader Reader = default(BinaryReader);
                 try
                 {
-                    Reader = new System.IO.BinaryReader(new System.IO.FileStream(Path, System.IO.FileMode.Open), modProgram.UTF8Encoding);
+                    Reader = new BinaryReader(new FileStream(Path, FileMode.Open), modProgram.UTF8Encoding);
                 }
                 catch ( Exception ex )
                 {
@@ -664,7 +666,7 @@ namespace SharpFlame
                                     {
                                         strTemp2 = strTemp2.Substring(0, A - 1);
                                     }
-                                    System.Int16 temp_Result = LNDTile[Tile_Num].TID;
+                                    Int16 temp_Result = LNDTile[Tile_Num].TID;
                                     modIO.InvariantParse_short(strTemp2, ref temp_Result);
                                 }
 
@@ -682,7 +684,7 @@ namespace SharpFlame
                                     {
                                         strTemp2 = strTemp2.Substring(0, A - 1);
                                     }
-                                    System.Int16 temp_Result2 = LNDTile[Tile_Num].VF;
+                                    Int16 temp_Result2 = LNDTile[Tile_Num].VF;
                                     modIO.InvariantParse_short(strTemp2, ref temp_Result2);
                                 }
 
@@ -700,7 +702,7 @@ namespace SharpFlame
                                     {
                                         strTemp2 = strTemp2.Substring(0, A - 1);
                                     }
-                                    System.Int16 temp_Result3 = LNDTile[Tile_Num].TF;
+                                    Int16 temp_Result3 = LNDTile[Tile_Num].TF;
                                     modIO.InvariantParse_short(strTemp2, ref temp_Result3);
                                 }
 
@@ -754,7 +756,7 @@ namespace SharpFlame
                                         }
                                         else if ( A == 2 )
                                         {
-                                            System.Int16 temp_Result7 = LNDTile[Tile_Num].Vertex2Height;
+                                            Int16 temp_Result7 = LNDTile[Tile_Num].Vertex2Height;
                                             modIO.InvariantParse_short(strTemp2, ref temp_Result7);
                                         }
                                     }
@@ -1018,7 +1020,7 @@ namespace SharpFlame
                         Terrain.Tiles[X, Y].Texture.TextureNum = LNDTile[Tile_Num].TID - 1;
 
                         //ignore higher values
-                        A = System.Convert.ToInt32(Conversion.Int(LNDTile[Tile_Num].F / 64.0D));
+                        A = Convert.ToInt32(Conversion.Int(LNDTile[Tile_Num].F / 64.0D));
                         LNDTile[Tile_Num].F = (short)(LNDTile[Tile_Num].F - A * 64);
 
                         A = (int)(Conversion.Int(LNDTile[Tile_Num].F / 16.0D));
@@ -1038,7 +1040,7 @@ namespace SharpFlame
                         LNDTile[Tile_Num].F -= (short)(A * 4);
                         FlipX = A == 1;
 
-                        A = System.Convert.ToInt32(Conversion.Int(LNDTile[Tile_Num].F / 2.0D));
+                        A = Convert.ToInt32(Conversion.Int(LNDTile[Tile_Num].F / 2.0D));
                         LNDTile[Tile_Num].F -= (short)(A * 2);
                         Terrain.Tiles[X, Y].Tri = A == 1;
 
@@ -1162,7 +1164,7 @@ namespace SharpFlame
         public clsResult Write_LND(string Path, bool Overwrite)
         {
             clsResult ReturnResult =
-                new clsResult("Writing LND to " + System.Convert.ToString(ControlChars.Quote) + Path + System.Convert.ToString(ControlChars.Quote));
+                new clsResult("Writing LND to " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
 
             if ( System.IO.File.Exists(Path) )
             {
@@ -1177,7 +1179,7 @@ namespace SharpFlame
                 }
             }
 
-            System.IO.StreamWriter File = null;
+            StreamWriter File = null;
 
             try
             {
@@ -1198,83 +1200,83 @@ namespace SharpFlame
                 Quote = ControlChars.Quote;
                 EndChar = '\n';
 
-                File = new System.IO.StreamWriter(new System.IO.FileStream(Path, System.IO.FileMode.CreateNew), new System.Text.UTF8Encoding(false, false));
+                File = new StreamWriter(new FileStream(Path, FileMode.CreateNew), new UTF8Encoding(false, false));
 
                 if ( Tileset == modProgram.Tileset_Arizona )
                 {
-                    Text = "DataSet WarzoneDataC1.eds" + System.Convert.ToString(EndChar);
+                    Text = "DataSet WarzoneDataC1.eds" + Convert.ToString(EndChar);
                 }
                 else if ( Tileset == modProgram.Tileset_Urban )
                 {
-                    Text = "DataSet WarzoneDataC2.eds" + System.Convert.ToString(EndChar);
+                    Text = "DataSet WarzoneDataC2.eds" + Convert.ToString(EndChar);
                 }
                 else if ( Tileset == modProgram.Tileset_Rockies )
                 {
-                    Text = "DataSet WarzoneDataC3.eds" + System.Convert.ToString(EndChar);
+                    Text = "DataSet WarzoneDataC3.eds" + Convert.ToString(EndChar);
                 }
                 else
                 {
-                    Text = "DataSet " + System.Convert.ToString(EndChar);
+                    Text = "DataSet " + Convert.ToString(EndChar);
                 }
                 File.Write(Text);
-                Text = "GrdLand {" + System.Convert.ToString(EndChar);
+                Text = "GrdLand {" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    Version 4" + System.Convert.ToString(EndChar);
+                Text = "    Version 4" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    3DPosition 0.000000 3072.000000 0.000000" + System.Convert.ToString(EndChar);
+                Text = "    3DPosition 0.000000 3072.000000 0.000000" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    3DRotation 80.000000 0.000000 0.000000" + System.Convert.ToString(EndChar);
+                Text = "    3DRotation 80.000000 0.000000 0.000000" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    2DPosition 0 0" + System.Convert.ToString(EndChar);
+                Text = "    2DPosition 0 0" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    CustomSnap 16 16" + System.Convert.ToString(EndChar);
+                Text = "    CustomSnap 16 16" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    SnapMode 0" + System.Convert.ToString(EndChar);
+                Text = "    SnapMode 0" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    Gravity 1" + System.Convert.ToString(EndChar);
+                Text = "    Gravity 1" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    HeightScale " + modIO.InvariantToString_int(HeightMultiplier) + System.Convert.ToString(EndChar);
+                Text = "    HeightScale " + modIO.InvariantToString_int(HeightMultiplier) + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    MapWidth " + modIO.InvariantToString_int(Terrain.TileSize.X) + System.Convert.ToString(EndChar);
+                Text = "    MapWidth " + modIO.InvariantToString_int(Terrain.TileSize.X) + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    MapHeight " + modIO.InvariantToString_int(Terrain.TileSize.Y) + System.Convert.ToString(EndChar);
+                Text = "    MapHeight " + modIO.InvariantToString_int(Terrain.TileSize.Y) + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    TileWidth 128" + System.Convert.ToString(EndChar);
+                Text = "    TileWidth 128" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    TileHeight 128" + System.Convert.ToString(EndChar);
+                Text = "    TileHeight 128" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    SeaLevel 0" + System.Convert.ToString(EndChar);
+                Text = "    SeaLevel 0" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    TextureWidth 64" + System.Convert.ToString(EndChar);
+                Text = "    TextureWidth 64" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    TextureHeight 64" + System.Convert.ToString(EndChar);
+                Text = "    TextureHeight 64" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    NumTextures 1" + System.Convert.ToString(EndChar);
+                Text = "    NumTextures 1" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    Textures {" + System.Convert.ToString(EndChar);
+                Text = "    Textures {" + Convert.ToString(EndChar);
                 File.Write(Text);
                 if ( Tileset == modProgram.Tileset_Arizona )
                 {
-                    Text = "        texpages\\tertilesc1.pcx" + System.Convert.ToString(EndChar);
+                    Text = "        texpages\\tertilesc1.pcx" + Convert.ToString(EndChar);
                 }
                 else if ( Tileset == modProgram.Tileset_Urban )
                 {
-                    Text = "        texpages\\tertilesc2.pcx" + System.Convert.ToString(EndChar);
+                    Text = "        texpages\\tertilesc2.pcx" + Convert.ToString(EndChar);
                 }
                 else if ( Tileset == modProgram.Tileset_Rockies )
                 {
-                    Text = "        texpages\\tertilesc3.pcx" + System.Convert.ToString(EndChar);
+                    Text = "        texpages\\tertilesc3.pcx" + Convert.ToString(EndChar);
                 }
                 else
                 {
-                    Text = "        " + System.Convert.ToString(EndChar);
+                    Text = "        " + Convert.ToString(EndChar);
                 }
                 File.Write(Text);
-                Text = "    }" + System.Convert.ToString(EndChar);
+                Text = "    }" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    NumTiles " + modIO.InvariantToString_int(Terrain.TileSize.X * Terrain.TileSize.Y) + System.Convert.ToString(EndChar);
+                Text = "    NumTiles " + modIO.InvariantToString_int(Terrain.TileSize.X * Terrain.TileSize.Y) + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    Tiles {" + System.Convert.ToString(EndChar);
+                Text = "    Tiles {" + Convert.ToString(EndChar);
                 File.Write(Text);
                 for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
                 {
@@ -1311,46 +1313,46 @@ namespace SharpFlame
 
                         Text = "        TID " + (Terrain.Tiles[X, Y].Texture.TextureNum + 1) + " VF " + modIO.InvariantToString_int(VF) + " TF " +
                                modIO.InvariantToString_int(TF) + " F " + modIO.InvariantToString_int(Flip) + " VH " +
-                               modIO.InvariantToString_byte(System.Convert.ToByte(Terrain.Vertices[X, Y].Height)) + " " +
-                               modIO.InvariantToString_byte(Terrain.Vertices[X + 1, Y].Height) + " " + System.Convert.ToString(Terrain.Vertices[X + 1, Y + 1].Height) +
-                               " " + modIO.InvariantToString_byte(System.Convert.ToByte(Terrain.Vertices[X, Y + 1].Height)) + System.Convert.ToString(EndChar);
+                               modIO.InvariantToString_byte(Convert.ToByte(Terrain.Vertices[X, Y].Height)) + " " +
+                               modIO.InvariantToString_byte(Terrain.Vertices[X + 1, Y].Height) + " " + Convert.ToString(Terrain.Vertices[X + 1, Y + 1].Height) +
+                               " " + modIO.InvariantToString_byte(Convert.ToByte(Terrain.Vertices[X, Y + 1].Height)) + Convert.ToString(EndChar);
                         File.Write(Text);
                     }
                 }
-                Text = "    }" + System.Convert.ToString(EndChar);
+                Text = "    }" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "}" + System.Convert.ToString(EndChar);
+                Text = "}" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "ObjectList {" + System.Convert.ToString(EndChar);
+                Text = "ObjectList {" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    Version 3" + System.Convert.ToString(EndChar);
+                Text = "    Version 3" + Convert.ToString(EndChar);
                 File.Write(Text);
                 if ( Tileset == modProgram.Tileset_Arizona )
                 {
-                    Text = "	FeatureSet WarzoneDataC1.eds" + System.Convert.ToString(EndChar);
+                    Text = "	FeatureSet WarzoneDataC1.eds" + Convert.ToString(EndChar);
                 }
                 else if ( Tileset == modProgram.Tileset_Urban )
                 {
-                    Text = "	FeatureSet WarzoneDataC2.eds" + System.Convert.ToString(EndChar);
+                    Text = "	FeatureSet WarzoneDataC2.eds" + Convert.ToString(EndChar);
                 }
                 else if ( Tileset == modProgram.Tileset_Rockies )
                 {
-                    Text = "	FeatureSet WarzoneDataC3.eds" + System.Convert.ToString(EndChar);
+                    Text = "	FeatureSet WarzoneDataC3.eds" + Convert.ToString(EndChar);
                 }
                 else
                 {
-                    Text = "	FeatureSet " + System.Convert.ToString(EndChar);
+                    Text = "	FeatureSet " + Convert.ToString(EndChar);
                 }
                 File.Write(Text);
-                Text = "    NumObjects " + modIO.InvariantToString_int(Units.Count) + System.Convert.ToString(EndChar);
+                Text = "    NumObjects " + modIO.InvariantToString_int(Units.Count) + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    Objects {" + System.Convert.ToString(EndChar);
+                Text = "    Objects {" + Convert.ToString(EndChar);
                 File.Write(Text);
                 modMath.sXYZ_int XYZ_int = new modMath.sXYZ_int();
                 string Code = null;
                 int CustomDroidCount = 0;
-                clsMap.clsUnit Unit = default(clsMap.clsUnit);
-                foreach ( clsMap.clsUnit tempLoopVar_Unit in Units )
+                clsUnit Unit = default(clsUnit);
+                foreach ( clsUnit tempLoopVar_Unit in Units )
                 {
                     Unit = tempLoopVar_Unit;
                     switch ( Unit.Type.Type )
@@ -1381,11 +1383,11 @@ namespace SharpFlame
                     {
                         if ( Unit.Type.GetCode(ref Code) )
                         {
-                            Text = "        " + modIO.InvariantToString_uint(Unit.ID) + " " + System.Convert.ToString(B) + " " + System.Convert.ToString(Quote) +
-                                   Code + System.Convert.ToString(Quote) + " " + Unit.UnitGroup.GetLNDPlayerText() + " " + System.Convert.ToString(Quote) + "NONAME" +
-                                   System.Convert.ToString(Quote) + " " + modIO.InvariantToString_int(XYZ_int.X) + ".00 " + modIO.InvariantToString_int(XYZ_int.Y) +
+                            Text = "        " + modIO.InvariantToString_uint(Unit.ID) + " " + Convert.ToString(B) + " " + Convert.ToString(Quote) +
+                                   Code + Convert.ToString(Quote) + " " + Unit.UnitGroup.GetLNDPlayerText() + " " + Convert.ToString(Quote) + "NONAME" +
+                                   Convert.ToString(Quote) + " " + modIO.InvariantToString_int(XYZ_int.X) + ".00 " + modIO.InvariantToString_int(XYZ_int.Y) +
                                    ".00 " + modIO.InvariantToString_int(XYZ_int.Z) + ".00 0.00 " + modIO.InvariantToString_int(Unit.Rotation) + ".00 0.00" +
-                                   System.Convert.ToString(EndChar);
+                                   Convert.ToString(EndChar);
                             File.Write(Text);
                         }
                         else
@@ -1398,52 +1400,52 @@ namespace SharpFlame
                         CustomDroidCount++;
                     }
                 }
-                Text = "    }" + System.Convert.ToString(EndChar);
+                Text = "    }" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "}" + System.Convert.ToString(EndChar);
+                Text = "}" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "ScrollLimits {" + System.Convert.ToString(EndChar);
+                Text = "ScrollLimits {" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    Version 1" + System.Convert.ToString(EndChar);
+                Text = "    Version 1" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    NumLimits 1" + System.Convert.ToString(EndChar);
+                Text = "    NumLimits 1" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    Limits {" + System.Convert.ToString(EndChar);
+                Text = "    Limits {" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "        " + System.Convert.ToString(Quote) + "Entire Map" + System.Convert.ToString(Quote) + " 0 0 0 " +
-                       modIO.InvariantToString_int(Terrain.TileSize.X) + " " + modIO.InvariantToString_int(Terrain.TileSize.Y) + System.Convert.ToString(EndChar);
+                Text = "        " + Convert.ToString(Quote) + "Entire Map" + Convert.ToString(Quote) + " 0 0 0 " +
+                       modIO.InvariantToString_int(Terrain.TileSize.X) + " " + modIO.InvariantToString_int(Terrain.TileSize.Y) + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    }" + System.Convert.ToString(EndChar);
+                Text = "    }" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "}" + System.Convert.ToString(EndChar);
+                Text = "}" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "Gateways {" + System.Convert.ToString(EndChar);
+                Text = "Gateways {" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    Version 1" + System.Convert.ToString(EndChar);
+                Text = "    Version 1" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    NumGateways " + modIO.InvariantToString_int(Gateways.Count) + System.Convert.ToString(EndChar);
+                Text = "    NumGateways " + modIO.InvariantToString_int(Gateways.Count) + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    Gates {" + System.Convert.ToString(EndChar);
+                Text = "    Gates {" + Convert.ToString(EndChar);
                 File.Write(Text);
                 clsGateway Gateway = default(clsGateway);
                 foreach ( clsGateway tempLoopVar_Gateway in Gateways )
                 {
                     Gateway = tempLoopVar_Gateway;
                     Text = "        " + modIO.InvariantToString_int(Gateway.PosA.X) + " " + modIO.InvariantToString_int(Gateway.PosA.Y) + " " +
-                           modIO.InvariantToString_int(Gateway.PosB.X) + " " + modIO.InvariantToString_int(Gateway.PosB.Y) + System.Convert.ToString(EndChar);
+                           modIO.InvariantToString_int(Gateway.PosB.X) + " " + modIO.InvariantToString_int(Gateway.PosB.Y) + Convert.ToString(EndChar);
                     File.Write(Text);
                 }
-                Text = "    }" + System.Convert.ToString(EndChar);
+                Text = "    }" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "}" + System.Convert.ToString(EndChar);
+                Text = "}" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "TileTypes {" + System.Convert.ToString(EndChar);
+                Text = "TileTypes {" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    NumTiles " + System.Convert.ToString(Tileset.TileCount) + System.Convert.ToString(EndChar);
+                Text = "    NumTiles " + Convert.ToString(Tileset.TileCount) + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    Tiles {" + System.Convert.ToString(EndChar);
+                Text = "    Tiles {" + Convert.ToString(EndChar);
                 File.Write(Text);
-                for ( A = 0; A <= ((int)(Math.Ceiling(System.Convert.ToDecimal((Tileset.TileCount + 1) / 16.0D)))) - 1; A++ )
+                for ( A = 0; A <= ((int)(Math.Ceiling(Convert.ToDecimal((Tileset.TileCount + 1) / 16.0D)))) - 1; A++ )
                     //+1 because the first number is not a tile type
                 {
                     Text = "        ";
@@ -1459,48 +1461,48 @@ namespace SharpFlame
                             Text = Text + modIO.InvariantToString_byte(Tile_TypeNum[C + B]) + " ";
                         }
                     }
-                    Text = Text + System.Convert.ToString(EndChar);
+                    Text = Text + Convert.ToString(EndChar);
                     File.Write(Text);
                 }
-                Text = "    }" + System.Convert.ToString(EndChar);
+                Text = "    }" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "}" + System.Convert.ToString(EndChar);
+                Text = "}" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "TileFlags {" + System.Convert.ToString(EndChar);
+                Text = "TileFlags {" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    NumTiles 90" + System.Convert.ToString(EndChar);
+                Text = "    NumTiles 90" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    Flags {" + System.Convert.ToString(EndChar);
+                Text = "    Flags {" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 " + System.Convert.ToString(EndChar);
+                Text = "        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 " + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 " + System.Convert.ToString(EndChar);
+                Text = "        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 " + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 " + System.Convert.ToString(EndChar);
+                Text = "        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 " + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 " + System.Convert.ToString(EndChar);
+                Text = "        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 " + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 " + System.Convert.ToString(EndChar);
+                Text = "        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 " + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "        0 0 0 0 0 0 0 0 0 0 " + System.Convert.ToString(EndChar);
+                Text = "        0 0 0 0 0 0 0 0 0 0 " + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    }" + System.Convert.ToString(EndChar);
+                Text = "    }" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "}" + System.Convert.ToString(EndChar);
+                Text = "}" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "Brushes {" + System.Convert.ToString(EndChar);
+                Text = "Brushes {" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    Version 2" + System.Convert.ToString(EndChar);
+                Text = "    Version 2" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    NumEdgeBrushes 0" + System.Convert.ToString(EndChar);
+                Text = "    NumEdgeBrushes 0" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    NumUserBrushes 0" + System.Convert.ToString(EndChar);
+                Text = "    NumUserBrushes 0" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    EdgeBrushes {" + System.Convert.ToString(EndChar);
+                Text = "    EdgeBrushes {" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    }" + System.Convert.ToString(EndChar);
+                Text = "    }" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "}" + System.Convert.ToString(EndChar);
+                Text = "}" + Convert.ToString(EndChar);
                 File.Write(Text);
             }
             catch ( Exception ex )
@@ -1531,10 +1533,10 @@ namespace SharpFlame
                 for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
                 {
                     MinimapBitmap.SetPixel(X, Y,
-                        System.Drawing.ColorTranslator.FromOle(
-                            modColour.OSRGB((int)(modMath.Clamp_sng(System.Convert.ToSingle(Texture.get_Pixels(X, Y).Red * 255.0F), 0.0F, 255.0F)),
-                                (int)(modMath.Clamp_sng(System.Convert.ToSingle(Texture.get_Pixels(X, Y).Green * 255.0F), 0.0F, 255.0F)),
-                                (int)(modMath.Clamp_sng(System.Convert.ToSingle(Texture.get_Pixels(X, Y).Blue * 255.0F), 0.0F, 255.0F)))));
+                        ColorTranslator.FromOle(
+                            modColour.OSRGB((int)(modMath.Clamp_sng(Convert.ToSingle(Texture.get_Pixels(X, Y).Red * 255.0F), 0.0F, 255.0F)),
+                                (int)(modMath.Clamp_sng(Convert.ToSingle(Texture.get_Pixels(X, Y).Green * 255.0F), 0.0F, 255.0F)),
+                                (int)(modMath.Clamp_sng(Convert.ToSingle(Texture.get_Pixels(X, Y).Blue * 255.0F), 0.0F, 255.0F)))));
                 }
             }
 
@@ -1555,7 +1557,7 @@ namespace SharpFlame
                 for ( X = 0; X <= Terrain.TileSize.X; X++ )
                 {
                     HeightmapBitmap.SetPixel(X, Y,
-                        System.Drawing.ColorTranslator.FromOle(modColour.OSRGB(System.Convert.ToInt32(Terrain.Vertices[X, Y].Height), Terrain.Vertices[X, Y].Height,
+                        ColorTranslator.FromOle(modColour.OSRGB(Convert.ToInt32(Terrain.Vertices[X, Y].Height), Terrain.Vertices[X, Y].Height,
                             Terrain.Vertices[X, Y].Height)));
                 }
             }
@@ -1570,11 +1572,11 @@ namespace SharpFlame
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
-            if ( System.IO.File.Exists(Path) )
+            if ( File.Exists(Path) )
             {
                 if ( Overwrite )
                 {
-                    System.IO.File.Delete(Path);
+                    File.Delete(Path);
                 }
                 else
                 {
@@ -1583,11 +1585,11 @@ namespace SharpFlame
                 }
             }
 
-            System.IO.BinaryWriter File_TTP = default(System.IO.BinaryWriter);
+            BinaryWriter File_TTP = default(BinaryWriter);
 
             try
             {
-                File_TTP = new System.IO.BinaryWriter(new System.IO.FileStream(Path, System.IO.FileMode.CreateNew), modProgram.ASCIIEncoding);
+                File_TTP = new BinaryWriter(new FileStream(Path, FileMode.CreateNew), modProgram.ASCIIEncoding);
             }
             catch ( Exception ex )
             {
@@ -1606,10 +1608,10 @@ namespace SharpFlame
             }
             else
             {
-                File_TTP.Write(System.Convert.ToBoolean((uint)Tileset.TileCount));
+                File_TTP.Write(Convert.ToBoolean((uint)Tileset.TileCount));
                 for ( A = 0; A <= Tileset.TileCount - 1; A++ )
                 {
-                    File_TTP.Write(System.Convert.ToBoolean(Tile_TypeNum[A]));
+                    File_TTP.Write(Convert.ToBoolean(Tile_TypeNum[A]));
                 }
             }
             File_TTP.Close();
@@ -1623,11 +1625,11 @@ namespace SharpFlame
             modProgram.sResult ReturnResult = new modProgram.sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
-            System.IO.BinaryReader File = default(System.IO.BinaryReader);
+            BinaryReader File = default(BinaryReader);
 
             try
             {
-                File = new System.IO.BinaryReader(new System.IO.FileStream(Path, System.IO.FileMode.Open));
+                File = new BinaryReader(new FileStream(Path, FileMode.Open));
             }
             catch ( Exception ex )
             {
@@ -1659,11 +1661,11 @@ namespace SharpFlame
                 }
             }
 
-            System.IO.BinaryWriter File = null;
+            BinaryWriter File = null;
 
             try
             {
-                File = new System.IO.BinaryWriter(new System.IO.FileStream(Path, System.IO.FileMode.CreateNew));
+                File = new BinaryWriter(new FileStream(Path, FileMode.CreateNew));
 
                 int X = 0;
                 int Z = 0;
@@ -1687,8 +1689,8 @@ namespace SharpFlame
                     File.Write((byte)3);
                 }
 
-                File.Write(System.Convert.ToBoolean((ushort)Terrain.TileSize.X));
-                File.Write(System.Convert.ToBoolean((ushort)Terrain.TileSize.Y));
+                File.Write(Convert.ToBoolean((ushort)Terrain.TileSize.X));
+                File.Write(Convert.ToBoolean((ushort)Terrain.TileSize.Y));
 
                 byte TileAttributes = 0;
                 byte DownSideData = 0;
@@ -1709,7 +1711,7 @@ namespace SharpFlame
                         }
                         else
                         {
-                            File.Write(System.Convert.ToByte(Terrain.Vertices[X, Z].Terrain.Num + 1));
+                            File.Write(Convert.ToByte(Terrain.Vertices[X, Z].Terrain.Num + 1));
                         }
                     }
                 }
@@ -1717,7 +1719,7 @@ namespace SharpFlame
                 {
                     for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
                     {
-                        File.Write(System.Convert.ToByte(Terrain.Tiles[X, Z].Texture.TextureNum + 1));
+                        File.Write(Convert.ToByte(Terrain.Tiles[X, Z].Texture.TextureNum + 1));
 
                         TileAttributes = (byte)0;
                         if ( Terrain.Tiles[X, Z].Terrain_IsCliff )
@@ -1799,7 +1801,7 @@ namespace SharpFlame
                         }
                         else
                         {
-                            File.Write(System.Convert.ToByte(Terrain.SideH[X, Z].Road.Num + 1));
+                            File.Write(Convert.ToByte(Terrain.SideH[X, Z].Road.Num + 1));
                         }
                     }
                 }
@@ -1818,7 +1820,7 @@ namespace SharpFlame
                         }
                         else
                         {
-                            File.Write(System.Convert.ToByte(Terrain.SideV[X, Z].Road.Num + 1));
+                            File.Write(Convert.ToByte(Terrain.SideV[X, Z].Road.Num + 1));
                         }
                     }
                 }
@@ -1839,7 +1841,7 @@ namespace SharpFlame
                     }
                 }
 
-                File.Write(System.Convert.ToBoolean((uint)OutputUnitCount));
+                File.Write(Convert.ToBoolean((uint)OutputUnitCount));
 
                 for ( A = 0; A <= OutputUnitCount - 1; A++ )
                 {
@@ -1859,10 +1861,10 @@ namespace SharpFlame
                     }
                     File.Write(Unit.ID);
                     File.Write(Unit.SavePriority);
-                    File.Write(System.Convert.ToBoolean((uint)Unit.Pos.Horizontal.X));
-                    File.Write(System.Convert.ToBoolean((uint)Unit.Pos.Horizontal.Y));
-                    File.Write(System.Convert.ToBoolean((uint)Unit.Pos.Altitude));
-                    File.Write(System.Convert.ToBoolean((ushort)Unit.Rotation));
+                    File.Write(Convert.ToBoolean((uint)Unit.Pos.Horizontal.X));
+                    File.Write(Convert.ToBoolean((uint)Unit.Pos.Horizontal.Y));
+                    File.Write(Convert.ToBoolean((uint)Unit.Pos.Altitude));
+                    File.Write(Convert.ToBoolean((ushort)Unit.Rotation));
                     modIO.WriteText(File, true, "");
                     if ( Unit.UnitGroup == ScavengerUnitGroup )
                     {
@@ -1874,16 +1876,16 @@ namespace SharpFlame
                     }
                 }
 
-                File.Write(System.Convert.ToBoolean((uint)Gateways.Count));
+                File.Write(Convert.ToBoolean((uint)Gateways.Count));
 
                 clsGateway Gateway = default(clsGateway);
                 foreach ( clsGateway tempLoopVar_Gateway in Gateways )
                 {
                     Gateway = tempLoopVar_Gateway;
-                    File.Write(System.Convert.ToBoolean((ushort)Gateway.PosA.X));
-                    File.Write(System.Convert.ToBoolean((ushort)Gateway.PosA.Y));
-                    File.Write(System.Convert.ToBoolean((ushort)Gateway.PosB.X));
-                    File.Write(System.Convert.ToBoolean((ushort)Gateway.PosB.Y));
+                    File.Write(Convert.ToBoolean((ushort)Gateway.PosA.X));
+                    File.Write(Convert.ToBoolean((ushort)Gateway.PosA.Y));
+                    File.Write(Convert.ToBoolean((ushort)Gateway.PosB.X));
+                    File.Write(Convert.ToBoolean((ushort)Gateway.PosB.Y));
                 }
 
                 if ( Tileset != null )

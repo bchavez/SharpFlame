@@ -1,3 +1,5 @@
+using System;
+
 namespace SharpFlame
 {
     public partial class frmWZLoad
@@ -37,7 +39,7 @@ namespace SharpFlame
             Text = FormTitle;
         }
 
-        public void lstMaps_DoubleClick(object sender, System.EventArgs e)
+        public void lstMaps_DoubleClick(object sender, EventArgs e)
         {
             if ( lstMap.SelectedIndex >= 0 )
             {

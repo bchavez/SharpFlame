@@ -1,3 +1,5 @@
+using System.Windows.Forms;
+
 namespace SharpFlame
 {
     public partial class frmQuit
@@ -6,7 +8,7 @@ namespace SharpFlame
         {
             InitializeComponent();
 
-            DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            DialogResult = DialogResult.Cancel;
         }
     }
 }

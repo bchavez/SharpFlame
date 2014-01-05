@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using Matrix3D;
 using Microsoft.VisualBasic;
 
 namespace SharpFlame
@@ -20,7 +21,7 @@ namespace SharpFlame
             public sTileOrientation(bool ResultXFlip, bool ResultZFlip, bool SwitchedAxes)
             {
                 this.ResultXFlip = ResultXFlip;
-                this.ResultYFlip = ResultZFlip;
+                ResultYFlip = ResultZFlip;
                 this.SwitchedAxes = SwitchedAxes;
             }
 
@@ -456,9 +457,9 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public static Matrix3D.Position.XY_dbl GetTileRotatedPos_dbl(sTileOrientation TileOrientation, Matrix3D.Position.XY_dbl Pos)
+        public static Position.XY_dbl GetTileRotatedPos_dbl(sTileOrientation TileOrientation, Position.XY_dbl Pos)
         {
-            Matrix3D.Position.XY_dbl ReturnResult = default(Matrix3D.Position.XY_dbl);
+            Position.XY_dbl ReturnResult = default(Position.XY_dbl);
 
             if ( TileOrientation.SwitchedAxes )
             {
@@ -550,9 +551,9 @@ namespace SharpFlame
 
         public static double GetRotatedAngle(sTileOrientation Orientation, double Angle)
         {
-            Matrix3D.Position.XY_dbl XY_dbl = default(Matrix3D.Position.XY_dbl);
+            Position.XY_dbl XY_dbl = default(Position.XY_dbl);
 
-            XY_dbl = GetTileRotatedPos_dbl(Orientation, new Matrix3D.Position.XY_dbl((Math.Cos(Angle) + 1.0D) / 2.0D, (Math.Sin(Angle) + 1.0D) / 2.0D));
+            XY_dbl = GetTileRotatedPos_dbl(Orientation, new Position.XY_dbl((Math.Cos(Angle) + 1.0D) / 2.0D, (Math.Sin(Angle) + 1.0D) / 2.0D));
             XY_dbl.X = XY_dbl.X * 2.0D - 1.0D;
             XY_dbl.Y = XY_dbl.Y * 2.0D - 1.0D;
             return Math.Atan2(XY_dbl.Y, XY_dbl.X);

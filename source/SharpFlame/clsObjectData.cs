@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.IO;
 using Microsoft.VisualBasic;
 using OpenTK.Graphics.OpenGL;
 
@@ -91,7 +92,7 @@ namespace SharpFlame
                 {
                     for ( A = 0; A <= ResultData.Count - 1; A++ )
                     {
-                        Text = System.Convert.ToString(ResultData[A][UniqueField]);
+                        Text = Convert.ToString(ResultData[A][UniqueField]);
                         for ( B = A + 1; B <= ResultData.Count - 1; B++ )
                         {
                             if ( Text == ResultData[B][UniqueField] )
@@ -108,13 +109,13 @@ namespace SharpFlame
             public clsResult LoadCommaFile(string Path)
             {
                 clsResult Result =
-                    new clsResult("Loading comma separated file " + System.Convert.ToString(ControlChars.Quote) + SubDirectory +
-                                  System.Convert.ToString(ControlChars.Quote));
-                System.IO.StreamReader Reader = default(System.IO.StreamReader);
+                    new clsResult("Loading comma separated file " + Convert.ToString(ControlChars.Quote) + SubDirectory +
+                                  Convert.ToString(ControlChars.Quote));
+                StreamReader Reader = default(StreamReader);
 
                 try
                 {
-                    Reader = new System.IO.StreamReader(Path + SubDirectory, modProgram.UTF8Encoding);
+                    Reader = new StreamReader(Path + SubDirectory, modProgram.UTF8Encoding);
                 }
                 catch ( Exception ex )
                 {
@@ -149,13 +150,13 @@ namespace SharpFlame
             public clsResult LoadNamesFile(string Path)
             {
                 clsResult Result =
-                    new clsResult("Loading names file " + System.Convert.ToString(ControlChars.Quote) + SubDirectory + System.Convert.ToString(ControlChars.Quote));
-                System.IO.FileStream File = default(System.IO.FileStream);
-                System.IO.BinaryReader Reader = default(System.IO.BinaryReader);
+                    new clsResult("Loading names file " + Convert.ToString(ControlChars.Quote) + SubDirectory + Convert.ToString(ControlChars.Quote));
+                FileStream File = default(FileStream);
+                BinaryReader Reader = default(BinaryReader);
 
                 try
                 {
-                    File = new System.IO.FileStream(Path + SubDirectory, System.IO.FileMode.Open);
+                    File = new FileStream(Path + SubDirectory, FileMode.Open);
                 }
                 catch ( Exception ex )
                 {
@@ -165,7 +166,7 @@ namespace SharpFlame
 
                 try
                 {
-                    Reader = new System.IO.BinaryReader(File, modProgram.UTF8Encoding);
+                    Reader = new BinaryReader(File, modProgram.UTF8Encoding);
                 }
                 catch ( Exception ex )
                 {
@@ -323,7 +324,7 @@ namespace SharpFlame
         public clsResult LoadDirectory(string Path)
         {
             clsResult ReturnResult =
-                new clsResult("Loading object data from " + System.Convert.ToString(ControlChars.Quote) + Path + System.Convert.ToString(ControlChars.Quote));
+                new clsResult("Loading object data from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
 
             Path = modProgram.EndWithPathSeperator(Path);
 
@@ -350,21 +351,21 @@ namespace SharpFlame
             string SubDirStructureWeapons = "";
             string SubDirPIEs = "";
 
-            SubDirNames = "messages" + System.Convert.ToString(modProgram.PlatformPathSeparator) + "strings" +
-                          System.Convert.ToString(modProgram.PlatformPathSeparator) + "names.txt";
-            SubDirStructures = "stats" + System.Convert.ToString(modProgram.PlatformPathSeparator) + "structures.txt";
-            SubDirBrain = "stats" + System.Convert.ToString(modProgram.PlatformPathSeparator) + "brain.txt";
-            SubDirBody = "stats" + System.Convert.ToString(modProgram.PlatformPathSeparator) + "body.txt";
-            SubDirPropulsion = "stats" + System.Convert.ToString(modProgram.PlatformPathSeparator) + "propulsion.txt";
-            SubDirBodyPropulsion = "stats" + System.Convert.ToString(modProgram.PlatformPathSeparator) + "bodypropulsionimd.txt";
-            SubDirConstruction = "stats" + System.Convert.ToString(modProgram.PlatformPathSeparator) + "construction.txt";
-            SubDirSensor = "stats" + System.Convert.ToString(modProgram.PlatformPathSeparator) + "sensor.txt";
-            SubDirRepair = "stats" + System.Convert.ToString(modProgram.PlatformPathSeparator) + "repair.txt";
-            SubDirTemplates = "stats" + System.Convert.ToString(modProgram.PlatformPathSeparator) + "templates.txt";
-            SubDirWeapons = "stats" + System.Convert.ToString(modProgram.PlatformPathSeparator) + "weapons.txt";
-            SubDirECM = "stats" + System.Convert.ToString(modProgram.PlatformPathSeparator) + "ecm.txt";
-            SubDirFeatures = "stats" + System.Convert.ToString(modProgram.PlatformPathSeparator) + "features.txt";
-            SubDirPIEs = "pies" + System.Convert.ToString(modProgram.PlatformPathSeparator);
+            SubDirNames = "messages" + Convert.ToString(modProgram.PlatformPathSeparator) + "strings" +
+                          Convert.ToString(modProgram.PlatformPathSeparator) + "names.txt";
+            SubDirStructures = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "structures.txt";
+            SubDirBrain = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "brain.txt";
+            SubDirBody = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "body.txt";
+            SubDirPropulsion = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "propulsion.txt";
+            SubDirBodyPropulsion = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "bodypropulsionimd.txt";
+            SubDirConstruction = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "construction.txt";
+            SubDirSensor = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "sensor.txt";
+            SubDirRepair = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "repair.txt";
+            SubDirTemplates = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "templates.txt";
+            SubDirWeapons = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "weapons.txt";
+            SubDirECM = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "ecm.txt";
+            SubDirFeatures = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "features.txt";
+            SubDirPIEs = "pies" + Convert.ToString(modProgram.PlatformPathSeparator);
             //SubDirStructurePIE = "structs" & ospathseperator
             SubDirStructurePIE = SubDirPIEs;
             //SubDirBodiesPIE = "components" & ospathseperator & "bodies" & ospathseperator
@@ -373,11 +374,11 @@ namespace SharpFlame
             SubDirPropPIE = SubDirPIEs;
             //SubDirWeaponsPIE = "components" & ospathseperator & "weapons" & ospathseperator
             SubDirWeaponsPIE = SubDirPIEs;
-            SubDirTexpages = "texpages" + System.Convert.ToString(modProgram.PlatformPathSeparator);
-            SubDirAssignWeapons = "stats" + System.Convert.ToString(modProgram.PlatformPathSeparator) + "assignweapons.txt";
+            SubDirTexpages = "texpages" + Convert.ToString(modProgram.PlatformPathSeparator);
+            SubDirAssignWeapons = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "assignweapons.txt";
             //SubDirFeaturePIE = "features" & ospathseperator
             SubDirFeaturePIE = SubDirPIEs;
-            SubDirStructureWeapons = "stats" + System.Convert.ToString(modProgram.PlatformPathSeparator) + "structureweapons.txt";
+            SubDirStructureWeapons = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "structureweapons.txt";
 
             modLists.SimpleList<clsTextFile> CommaFiles = new modLists.SimpleList<clsTextFile>();
 
@@ -475,7 +476,7 @@ namespace SharpFlame
                     {
                         if ( !TextFile.CalcUniqueField() )
                         {
-                            ReturnResult.ProblemAdd("An entry in field " + System.Convert.ToString(TextFile.UniqueField) + " was not unique for file " +
+                            ReturnResult.ProblemAdd("An entry in field " + Convert.ToString(TextFile.UniqueField) + " was not unique for file " +
                                                     TextFile.SubDirectory + ".");
                         }
                     }
@@ -497,7 +498,7 @@ namespace SharpFlame
 
             try
             {
-                TexFiles = System.IO.Directory.GetFiles(Path + SubDirTexpages);
+                TexFiles = Directory.GetFiles(Path + SubDirTexpages);
             }
             catch ( Exception )
             {
@@ -517,8 +518,8 @@ namespace SharpFlame
                 if ( Text.Substring(Text.Length - 4, 4).ToLower() == ".png" )
                 {
                     clsResult Result =
-                        new clsResult("Loading texture page " + System.Convert.ToString(ControlChars.Quote) + Text + System.Convert.ToString(ControlChars.Quote));
-                    if ( System.IO.File.Exists(Text) )
+                        new clsResult("Loading texture page " + Convert.ToString(ControlChars.Quote) + Text + Convert.ToString(ControlChars.Quote));
+                    if ( File.Exists(Text) )
                     {
                         BitmapResult = modBitmap.LoadBitmap(Text, ref Bitmap);
                         clsTexturePage NewPage = new clsTexturePage();
@@ -537,7 +538,7 @@ namespace SharpFlame
                         {
                             Result.WarningAdd(BitmapResult.Problem);
                         }
-                        InstrPos2 = Strings.InStrRev(Text, modProgram.PlatformPathSeparator.ToString(), -1, (Microsoft.VisualBasic.CompareMethod)0);
+                        InstrPos2 = Strings.InStrRev(Text, modProgram.PlatformPathSeparator.ToString(), -1, (CompareMethod)0);
                         NewPage.FileTitle = Strings.Mid(Text, InstrPos2 + 1, Text.Length - 4 - InstrPos2);
                         TexturePages.Add(NewPage);
                     }
@@ -557,7 +558,7 @@ namespace SharpFlame
 
             try
             {
-                PIE_Files = System.IO.Directory.GetFiles(Path + SubDirPIEs);
+                PIE_Files = Directory.GetFiles(Path + SubDirPIEs);
             }
             catch ( Exception )
             {
@@ -698,7 +699,7 @@ namespace SharpFlame
                 SetComponentName(DataNames.ResultData, Weapon, ReturnResult);
                 modIO.InvariantParse_int(Fields[7], ref Weapon.HitPoints);
                 Weapon.Designable = Fields[51] != "0";
-                Weapon.Attachment.Models.Add(GetModelForPIE(PIE_List, System.Convert.ToString(Fields[8].ToLower()), ReturnResult));
+                Weapon.Attachment.Models.Add(GetModelForPIE(PIE_List, Convert.ToString(Fields[8].ToLower()), ReturnResult));
                 Weapon.Attachment.Models.Add(GetModelForPIE(PIE_List, Fields[9].ToLower(), ReturnResult));
             }
 
@@ -917,7 +918,7 @@ namespace SharpFlame
                             StructureWeapons = GetRowsWithValue(DataStructureWeapons.ResultData, StructureType.Code);
                             if ( StructureWeapons.Count > 0 )
                             {
-                                Weapon = FindWeaponCode(System.Convert.ToString(StructureWeapons[0][1]));
+                                Weapon = FindWeaponCode(Convert.ToString(StructureWeapons[0][1]));
                             }
                             else
                             {
@@ -1052,17 +1053,17 @@ namespace SharpFlame
                 modLists.SimpleList<string[]> TemplateWeapons = GetRowsWithValue(DataAssignWeapons.ResultData, Template.Code);
                 if ( TemplateWeapons.Count > 0 )
                 {
-                    Text = System.Convert.ToString(TemplateWeapons[0][1]);
+                    Text = Convert.ToString(TemplateWeapons[0][1]);
                     if ( Text != "NULL" )
                     {
                         LoadPartsArgs.Weapon1 = FindWeaponCode(Text);
                     }
-                    Text = System.Convert.ToString(TemplateWeapons[0][2]);
+                    Text = Convert.ToString(TemplateWeapons[0][2]);
                     if ( Text != "NULL" )
                     {
                         LoadPartsArgs.Weapon2 = FindWeaponCode(Text);
                     }
-                    Text = System.Convert.ToString(TemplateWeapons[0][3]);
+                    Text = Convert.ToString(TemplateWeapons[0][3]);
                     if ( Text != "NULL" )
                     {
                         LoadPartsArgs.Weapon3 = FindWeaponCode(Text);
@@ -1151,7 +1152,7 @@ namespace SharpFlame
                                     CommentLength = CharNum - CommentStart;
                                     InCommentBlock = false;
                                     Lines[LineNum] = Strings.Left(Lines[LineNum], CommentStart) +
-                                                     Strings.Right(Lines[LineNum], System.Convert.ToInt32(Lines[LineNum].Length - (CommentStart + CommentLength)));
+                                                     Strings.Right(Lines[LineNum], Convert.ToInt32(Lines[LineNum].Length - (CommentStart + CommentLength)));
                                     CharNum -= CommentLength;
                                 }
                             }
@@ -1172,7 +1173,7 @@ namespace SharpFlame
                                 CharNum = Lines[LineNum].Length;
                                 CommentLength = CharNum - CommentStart;
                                 Lines[LineNum] = Strings.Left(Lines[LineNum], CommentStart) +
-                                                 Strings.Right(Lines[LineNum], System.Convert.ToInt32(Lines[LineNum].Length - (CommentStart + CommentLength)));
+                                                 Strings.Right(Lines[LineNum], Convert.ToInt32(Lines[LineNum].Length - (CommentStart + CommentLength)));
                                 break;
                             }
                             else if ( Lines[LineNum][CharNum] == '*' )
@@ -1199,7 +1200,7 @@ namespace SharpFlame
             }
 
             int A = 0;
-            System.IO.StreamReader PIEFile = default(System.IO.StreamReader);
+            StreamReader PIEFile = default(StreamReader);
             clsPIE PIE = default(clsPIE);
 
             clsResult Result = new clsResult("Loading PIE file " + PIE_LCaseFileTitle);
@@ -1214,7 +1215,7 @@ namespace SharpFlame
                         PIE.Model = new clsModel();
                         try
                         {
-                            PIEFile = new System.IO.StreamReader(PIE.Path);
+                            PIEFile = new StreamReader(PIE.Path);
                             try
                             {
                                 Result.Take(PIE.Model.ReadPIE(PIEFile, this));
@@ -1257,7 +1258,7 @@ namespace SharpFlame
             }
             else
             {
-                Component.Name = System.Convert.ToString(ValueSearchResults[0][1]);
+                Component.Name = Convert.ToString(ValueSearchResults[0][1]);
             }
         }
 
@@ -1272,7 +1273,7 @@ namespace SharpFlame
             }
             else
             {
-                FeatureType.Name = System.Convert.ToString(ValueSearchResults[0][1]);
+                FeatureType.Name = Convert.ToString(ValueSearchResults[0][1]);
             }
         }
 
@@ -1287,7 +1288,7 @@ namespace SharpFlame
             }
             else
             {
-                StructureType.Name = System.Convert.ToString(ValueSearchResults[0][1]);
+                StructureType.Name = Convert.ToString(ValueSearchResults[0][1]);
             }
         }
 
@@ -1302,7 +1303,7 @@ namespace SharpFlame
             }
             else
             {
-                Template.Name = System.Convert.ToString(ValueSearchResults[0][1]);
+                Template.Name = Convert.ToString(ValueSearchResults[0][1]);
             }
         }
 
@@ -1317,7 +1318,7 @@ namespace SharpFlame
             }
             else
             {
-                WallType.Name = System.Convert.ToString(ValueSearchResults[0][1]);
+                WallType.Name = Convert.ToString(ValueSearchResults[0][1]);
             }
         }
 

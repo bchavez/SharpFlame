@@ -13,7 +13,7 @@ namespace SharpFlame
         public modMath.sXYZ_int ViewPos;
         public Matrix3DMath.Matrix3D ViewAngleMatrix = new Matrix3DMath.Matrix3D();
         public Matrix3DMath.Matrix3D ViewAngleMatrix_Inverted = new Matrix3DMath.Matrix3D();
-        public Matrix3D.Angles.AngleRPY ViewAngleRPY;
+        public Angles.AngleRPY ViewAngleRPY;
         public double FOVMultiplier;
         public double FOVMultiplierExponent;
         public float FieldOfViewY;
@@ -113,7 +113,7 @@ namespace SharpFlame
             const int MaxHeight = 1048576;
             const int MaxDist = 1048576;
 
-            ViewPos.X = modMath.Clamp_int(ViewPos.X, System.Convert.ToInt32(- MaxDist), Map.Terrain.TileSize.X * modProgram.TerrainGridSpacing + MaxDist);
+            ViewPos.X = modMath.Clamp_int(ViewPos.X, Convert.ToInt32(- MaxDist), Map.Terrain.TileSize.X * modProgram.TerrainGridSpacing + MaxDist);
             ViewPos.Z = modMath.Clamp_int(ViewPos.Z, - Map.Terrain.TileSize.Y * modProgram.TerrainGridSpacing - MaxDist, MaxDist);
             ViewPos.Y = modMath.Clamp_int(ViewPos.Y, ((int)(Math.Ceiling(Map.GetTerrainHeight(new modMath.sXY_int(ViewPos.X, - ViewPos.Z))))) + 16, MaxHeight);
         }
@@ -140,8 +140,8 @@ namespace SharpFlame
         public void ViewAngleSet_Rotate(Matrix3DMath.Matrix3D NewMatrix)
         {
             bool Flag = default(bool);
-            Matrix3D.Position.XYZ_dbl XYZ_dbl = default(Matrix3D.Position.XYZ_dbl);
-            Matrix3D.Position.XYZ_dbl XYZ_dbl2 = default(Matrix3D.Position.XYZ_dbl);
+            Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
+            Position.XYZ_dbl XYZ_dbl2 = default(Position.XYZ_dbl);
             //Dim XYZ_lng As sXYZ_lng
             Position.XY_dbl XY_dbl = default(Position.XY_dbl);
 
@@ -158,7 +158,7 @@ namespace SharpFlame
                 {
                     XYZ_dbl.X = XY_dbl.X;
                     XYZ_dbl.Y = 127.5D;
-                    XYZ_dbl.Z = System.Convert.ToDouble(- XY_dbl.Y);
+                    XYZ_dbl.Z = Convert.ToDouble(- XY_dbl.Y);
                 }
                 else
                 {
@@ -186,8 +186,8 @@ namespace SharpFlame
             {
                 XYZ_dbl2.X = ViewPos.X;
                 XYZ_dbl2.Y = ViewPos.Y;
-                XYZ_dbl2.Z = System.Convert.ToDouble(- ViewPos.Z);
-                MoveToViewTerrainPosFromDistance(XYZ_dbl, System.Convert.ToDouble((XYZ_dbl2 - XYZ_dbl).GetMagnitude()));
+                XYZ_dbl2.Z = Convert.ToDouble(- ViewPos.Z);
+                MoveToViewTerrainPosFromDistance(XYZ_dbl, Convert.ToDouble((XYZ_dbl2 - XYZ_dbl).GetMagnitude()));
             }
 
             MapView.DrawViewLater();
@@ -204,7 +204,7 @@ namespace SharpFlame
 
         public void LookAtPos(modMath.sXY_int Horizontal)
         {
-            Matrix3D.Position.XYZ_dbl XYZ_dbl = default(Matrix3D.Position.XYZ_dbl);
+            Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
             modMath.sXYZ_int XYZ_int = new modMath.sXYZ_int();
             double dblTemp = 0;
             int A = 0;
@@ -234,9 +234,9 @@ namespace SharpFlame
             ViewPosSet(XYZ_int);
         }
 
-        public void MoveToViewTerrainPosFromDistance(Matrix3D.Position.XYZ_dbl TerrainPos, double Distance)
+        public void MoveToViewTerrainPosFromDistance(Position.XYZ_dbl TerrainPos, double Distance)
         {
-            Matrix3D.Position.XYZ_dbl XYZ_dbl = default(Matrix3D.Position.XYZ_dbl);
+            Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
             modMath.sXYZ_int XYZ_int = new modMath.sXYZ_int();
 
             Matrix3DMath.VectorForwardsRotationByMatrix(ViewAngleMatrix, ref XYZ_dbl);
@@ -248,7 +248,7 @@ namespace SharpFlame
             ViewPosSet(XYZ_int);
         }
 
-        public bool Pos_Get_Screen_XY(Matrix3D.Position.XYZ_dbl Pos, modMath.sXY_int Result)
+        public bool Pos_Get_Screen_XY(Position.XYZ_dbl Pos, modMath.sXY_int Result)
         {
             if ( Pos.Z <= 0.0D )
             {
@@ -269,11 +269,11 @@ namespace SharpFlame
             return false;
         }
 
-        public bool ScreenXY_Get_ViewPlanePos(modMath.sXY_int ScreenPos, double PlaneHeight, Matrix3D.Position.XY_dbl ResultPos)
+        public bool ScreenXY_Get_ViewPlanePos(modMath.sXY_int ScreenPos, double PlaneHeight, Position.XY_dbl ResultPos)
         {
             double dblTemp = 0;
-            Matrix3D.Position.XYZ_dbl XYZ_dbl = default(Matrix3D.Position.XYZ_dbl);
-            Matrix3D.Position.XYZ_dbl XYZ_dbl2 = default(Matrix3D.Position.XYZ_dbl);
+            Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
+            Position.XYZ_dbl XYZ_dbl2 = default(Position.XYZ_dbl);
 
             try
             {
@@ -298,31 +298,31 @@ namespace SharpFlame
         public bool ScreenXY_Get_TerrainPos(modMath.sXY_int ScreenPos, modProgram.sWorldPos ResultPos)
         {
             double dblTemp = 0;
-            Matrix3D.Position.XYZ_dbl XYZ_dbl = default(Matrix3D.Position.XYZ_dbl);
-            Matrix3D.Position.XYZ_dbl TerrainViewVector = default(Matrix3D.Position.XYZ_dbl);
+            Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
+            Position.XYZ_dbl TerrainViewVector = default(Position.XYZ_dbl);
             int X = 0;
             int Y = 0;
-            Matrix3D.Position.XY_dbl LimitA = default(Matrix3D.Position.XY_dbl);
-            Matrix3D.Position.XY_dbl LimitB = default(Matrix3D.Position.XY_dbl);
+            Position.XY_dbl LimitA = default(Position.XY_dbl);
+            Position.XY_dbl LimitB = default(Position.XY_dbl);
             modMath.sXY_int Min = new modMath.sXY_int();
             modMath.sXY_int Max = new modMath.sXY_int();
             double TriGradientX = 0;
             double TriGradientZ = 0;
             double TriHeightOffset = 0;
             double Dist = 0;
-            Matrix3D.Position.XYZ_dbl BestPos = default(Matrix3D.Position.XYZ_dbl);
+            Position.XYZ_dbl BestPos = default(Position.XYZ_dbl);
             double BestDist = 0;
-            Matrix3D.Position.XYZ_dbl Dif = default(Matrix3D.Position.XYZ_dbl);
+            Position.XYZ_dbl Dif = default(Position.XYZ_dbl);
             double InTileX = 0;
             double InTileZ = 0;
-            Matrix3D.Position.XY_dbl TilePos = default(Matrix3D.Position.XY_dbl);
-            Matrix3D.Position.XYZ_dbl TerrainViewPos = default(Matrix3D.Position.XYZ_dbl);
+            Position.XY_dbl TilePos = default(Position.XY_dbl);
+            Position.XYZ_dbl TerrainViewPos = default(Position.XYZ_dbl);
 
             try
             {
                 TerrainViewPos.X = ViewPos.X;
                 TerrainViewPos.Y = ViewPos.Y;
-                TerrainViewPos.Z = System.Convert.ToDouble(- ViewPos.Z);
+                TerrainViewPos.Z = Convert.ToDouble(- ViewPos.Z);
 
                 //convert screen pos to vector of one pos unit
                 XYZ_dbl.X = (ScreenPos.X - MapView.GLSize.X / 2.0D) * FOVMultiplier;
@@ -330,8 +330,8 @@ namespace SharpFlame
                 XYZ_dbl.Z = 1.0D;
                 //rotate the vector so that it points forward and level
                 Matrix3DMath.VectorRotationByMatrix(ViewAngleMatrix, XYZ_dbl, ref TerrainViewVector);
-                TerrainViewVector.Y = System.Convert.ToDouble(- TerrainViewVector.Y); //get the amount of looking down, not up
-                TerrainViewVector.Z = System.Convert.ToDouble(- TerrainViewVector.Z); //convert to terrain coordinates from view coordinates
+                TerrainViewVector.Y = Convert.ToDouble(- TerrainViewVector.Y); //get the amount of looking down, not up
+                TerrainViewVector.Z = Convert.ToDouble(- TerrainViewVector.Z); //convert to terrain coordinates from view coordinates
                 //get range of possible tiles
                 dblTemp = (TerrainViewPos.Y - 255 * Map.HeightMultiplier) / TerrainViewVector.Y;
                 LimitA.X = TerrainViewPos.X + TerrainViewVector.X * dblTemp;
@@ -339,10 +339,10 @@ namespace SharpFlame
                 dblTemp = TerrainViewPos.Y / TerrainViewVector.Y;
                 LimitB.X = TerrainViewPos.X + TerrainViewVector.X * dblTemp;
                 LimitB.Y = TerrainViewPos.Z + TerrainViewVector.Z * dblTemp;
-                Min.X = Math.Max(System.Convert.ToInt32(Conversion.Int(Math.Min(LimitA.X, LimitB.X) / modProgram.TerrainGridSpacing)), 0);
+                Min.X = Math.Max(Convert.ToInt32(Conversion.Int(Math.Min(LimitA.X, LimitB.X) / modProgram.TerrainGridSpacing)), 0);
                 Min.Y = Math.Max((int)(Conversion.Int(Math.Min(LimitA.Y, LimitB.Y) / modProgram.TerrainGridSpacing)), 0);
-                Max.X = Math.Min(System.Convert.ToInt32(Conversion.Int(Math.Max(LimitA.X, LimitB.X) / modProgram.TerrainGridSpacing)), Map.Terrain.TileSize.X - 1);
-                Max.Y = Math.Min(System.Convert.ToInt32(Conversion.Int(Math.Max(LimitA.Y, LimitB.Y) / modProgram.TerrainGridSpacing)), Map.Terrain.TileSize.Y - 1);
+                Max.X = Math.Min(Convert.ToInt32(Conversion.Int(Math.Max(LimitA.X, LimitB.X) / modProgram.TerrainGridSpacing)), Map.Terrain.TileSize.X - 1);
+                Max.Y = Math.Min(Convert.ToInt32(Conversion.Int(Math.Max(LimitA.Y, LimitB.Y) / modProgram.TerrainGridSpacing)), Map.Terrain.TileSize.Y - 1);
                 //find the nearest valid tile to the view
                 BestDist = double.MaxValue;
                 BestPos.X = double.NaN;
@@ -357,9 +357,9 @@ namespace SharpFlame
 
                         if ( Map.Terrain.Tiles[X, Y].Tri )
                         {
-                            TriHeightOffset = System.Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height * Map.HeightMultiplier);
-                            TriGradientX = System.Convert.ToDouble(Map.Terrain.Vertices[X + 1, Y].Height * Map.HeightMultiplier - TriHeightOffset);
-                            TriGradientZ = System.Convert.ToDouble(Map.Terrain.Vertices[X, Y + 1].Height * Map.HeightMultiplier - TriHeightOffset);
+                            TriHeightOffset = Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height * Map.HeightMultiplier);
+                            TriGradientX = Convert.ToDouble(Map.Terrain.Vertices[X + 1, Y].Height * Map.HeightMultiplier - TriHeightOffset);
+                            TriGradientZ = Convert.ToDouble(Map.Terrain.Vertices[X, Y + 1].Height * Map.HeightMultiplier - TriHeightOffset);
                             XYZ_dbl.Y = (TriHeightOffset +
                                          (TriGradientX * (TerrainViewPos.X - TilePos.X) + TriGradientZ * (TerrainViewPos.Z - TilePos.Y) +
                                           (TriGradientX * TerrainViewVector.X + TriGradientZ * TerrainViewVector.Z) * TerrainViewPos.Y / TerrainViewVector.Y) /
@@ -381,9 +381,9 @@ namespace SharpFlame
                                 }
                             }
 
-                            TriHeightOffset = System.Convert.ToDouble(Map.Terrain.Vertices[X + 1, Y + 1].Height * Map.HeightMultiplier);
-                            TriGradientX = System.Convert.ToDouble(Map.Terrain.Vertices[X, Y + 1].Height * Map.HeightMultiplier - TriHeightOffset);
-                            TriGradientZ = System.Convert.ToDouble(Map.Terrain.Vertices[X + 1, Y].Height * Map.HeightMultiplier - TriHeightOffset);
+                            TriHeightOffset = Convert.ToDouble(Map.Terrain.Vertices[X + 1, Y + 1].Height * Map.HeightMultiplier);
+                            TriGradientX = Convert.ToDouble(Map.Terrain.Vertices[X, Y + 1].Height * Map.HeightMultiplier - TriHeightOffset);
+                            TriGradientZ = Convert.ToDouble(Map.Terrain.Vertices[X + 1, Y].Height * Map.HeightMultiplier - TriHeightOffset);
                             XYZ_dbl.Y = (TriHeightOffset + TriGradientX + TriGradientZ +
                                          (TriGradientX * (TilePos.X - TerrainViewPos.X) + TriGradientZ * (TilePos.Y - TerrainViewPos.Z) -
                                           (TriGradientX * TerrainViewVector.X + TriGradientZ * TerrainViewVector.Z) * TerrainViewPos.Y / TerrainViewVector.Y) /
@@ -407,9 +407,9 @@ namespace SharpFlame
                         }
                         else
                         {
-                            TriHeightOffset = System.Convert.ToDouble(Map.Terrain.Vertices[X + 1, Y].Height * Map.HeightMultiplier);
-                            TriGradientX = System.Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height * Map.HeightMultiplier - TriHeightOffset);
-                            TriGradientZ = System.Convert.ToDouble(Map.Terrain.Vertices[X + 1, Y + 1].Height * Map.HeightMultiplier - TriHeightOffset);
+                            TriHeightOffset = Convert.ToDouble(Map.Terrain.Vertices[X + 1, Y].Height * Map.HeightMultiplier);
+                            TriGradientX = Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height * Map.HeightMultiplier - TriHeightOffset);
+                            TriGradientZ = Convert.ToDouble(Map.Terrain.Vertices[X + 1, Y + 1].Height * Map.HeightMultiplier - TriHeightOffset);
                             XYZ_dbl.Y = (TriHeightOffset + TriGradientX +
                                          (TriGradientX * (TilePos.X - TerrainViewPos.X) + TriGradientZ * (TerrainViewPos.Z - TilePos.Y) -
                                           (TriGradientX * TerrainViewVector.X - TriGradientZ * TerrainViewVector.Z) * TerrainViewPos.Y / TerrainViewVector.Y) /
@@ -431,9 +431,9 @@ namespace SharpFlame
                                 }
                             }
 
-                            TriHeightOffset = System.Convert.ToDouble(Map.Terrain.Vertices[X, Y + 1].Height * Map.HeightMultiplier);
-                            TriGradientX = System.Convert.ToDouble(Map.Terrain.Vertices[X + 1, Y + 1].Height * Map.HeightMultiplier - TriHeightOffset);
-                            TriGradientZ = System.Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height * Map.HeightMultiplier - TriHeightOffset);
+                            TriHeightOffset = Convert.ToDouble(Map.Terrain.Vertices[X, Y + 1].Height * Map.HeightMultiplier);
+                            TriGradientX = Convert.ToDouble(Map.Terrain.Vertices[X + 1, Y + 1].Height * Map.HeightMultiplier - TriHeightOffset);
+                            TriGradientZ = Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height * Map.HeightMultiplier - TriHeightOffset);
                             XYZ_dbl.Y = (TriHeightOffset + TriGradientZ +
                                          (TriGradientX * (TerrainViewPos.X - TilePos.X) + TriGradientZ * (TilePos.Y - TerrainViewPos.Z) +
                                           (TriGradientX * TerrainViewVector.X - TriGradientZ * TerrainViewVector.Z) * TerrainViewPos.Y / TerrainViewVector.Y) /
@@ -474,11 +474,11 @@ namespace SharpFlame
             return true;
         }
 
-        public bool ScreenXY_Get_ViewPlanePos_ForwardDownOnly(int ScreenX, int ScreenY, double PlaneHeight, Matrix3D.Position.XY_dbl ResultPos)
+        public bool ScreenXY_Get_ViewPlanePos_ForwardDownOnly(int ScreenX, int ScreenY, double PlaneHeight, Position.XY_dbl ResultPos)
         {
             double dblTemp = 0;
-            Matrix3D.Position.XYZ_dbl XYZ_dbl = default(Matrix3D.Position.XYZ_dbl);
-            Matrix3D.Position.XYZ_dbl XYZ_dbl2 = default(Matrix3D.Position.XYZ_dbl);
+            Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
+            Position.XYZ_dbl XYZ_dbl2 = default(Position.XYZ_dbl);
             double dblTemp2 = 0;
 
             if ( ViewPos.Y < PlaneHeight )
@@ -515,7 +515,7 @@ namespace SharpFlame
 
         public void MouseOver_Pos_Calc()
         {
-            Matrix3D.Position.XY_dbl XY_dbl = default(Matrix3D.Position.XY_dbl);
+            Position.XY_dbl XY_dbl = default(Position.XY_dbl);
             bool Flag = default(bool);
             modMath.sXY_int Footprint = new modMath.sXY_int();
             clsMouseDown.clsOverMinimap MouseLeftDownOverMinimap = GetMouseLeftDownOverMinimap();
@@ -553,7 +553,7 @@ namespace SharpFlame
                     if ( ScreenXY_Get_ViewPlanePos(MouseOver.ScreenPos, MouseOverTerrain.Pos.Altitude, XY_dbl) )
                     {
                         MouseOverTerrain.Pos.Horizontal.X = (int)XY_dbl.X;
-                        MouseOverTerrain.Pos.Horizontal.Y = System.Convert.ToInt32(- XY_dbl.Y);
+                        MouseOverTerrain.Pos.Horizontal.Y = Convert.ToInt32(- XY_dbl.Y);
                         if ( Map.PosIsOnMap(MouseOverTerrain.Pos.Horizontal) )
                         {
                             MouseOverTerrain.Pos.Altitude = (int)(Map.GetTerrainHeight(MouseOverTerrain.Pos.Horizontal));
@@ -1555,12 +1555,12 @@ namespace SharpFlame
 
             ScreenPos.X = e.X;
             ScreenPos.Y = e.Y;
-            if ( e.Button == System.Windows.Forms.MouseButtons.Left )
+            if ( e.Button == MouseButtons.Left )
             {
-                MouseLeftDown = new clsViewInfo.clsMouseDown();
+                MouseLeftDown = new clsMouseDown();
                 if ( IsViewPosOverMinimap(ScreenPos) )
                 {
-                    MouseLeftDown.OverMinimap = new clsViewInfo.clsMouseDown.clsOverMinimap();
+                    MouseLeftDown.OverMinimap = new clsMouseDown.clsOverMinimap();
                     MouseLeftDown.OverMinimap.DownPos = ScreenPos;
                     modMath.sXY_int Pos = new modMath.sXY_int((int)(Conversion.Int(ScreenPos.X * Tiles_Per_Minimap_Pixel)),
                         (int)Conversion.Int(ScreenPos.Y * Tiles_Per_Minimap_Pixel));
@@ -1749,7 +1749,7 @@ namespace SharpFlame
                     }
                 }
             }
-            else if ( e.Button == System.Windows.Forms.MouseButtons.Right )
+            else if ( e.Button == MouseButtons.Right )
             {
                 MouseRightDown = new clsMouseDown();
                 if ( IsViewPosOverMinimap(ScreenPos) )
@@ -1805,10 +1805,10 @@ namespace SharpFlame
         {
             Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
             double PanRate = Pan * FieldOfViewY;
-            Matrix3D.Angles.AnglePY AnglePY = default(Matrix3D.Angles.AnglePY);
+            Angles.AnglePY AnglePY = default(Angles.AnglePY);
             Matrix3DMath.Matrix3D matrixA = new Matrix3DMath.Matrix3D();
             Matrix3DMath.Matrix3D matrixB = new Matrix3DMath.Matrix3D();
-            Matrix3D.Position.XYZ_dbl ViewAngleChange = default(Matrix3D.Position.XYZ_dbl);
+            Position.XYZ_dbl ViewAngleChange = default(Position.XYZ_dbl);
             modMath.sXYZ_int ViewPosChangeXYZ = new modMath.sXYZ_int();
             bool AngleChanged = default(bool);
 
@@ -1816,7 +1816,7 @@ namespace SharpFlame
 
             if ( modControls.KeyboardProfile.Active(modControls.Control_View_Zoom_In) )
             {
-                FOV_Scale_2E_Change(System.Convert.ToDouble(- Zoom));
+                FOV_Scale_2E_Change(Convert.ToDouble(- Zoom));
             }
             if ( modControls.KeyboardProfile.Active(modControls.Control_View_Zoom_Out) )
             {
@@ -1947,13 +1947,13 @@ namespace SharpFlame
                 {
                     if ( modControls.KeyboardProfile.Active(modControls.Control_View_Forward) )
                     {
-                        AnglePY.Pitch = modMath.Clamp_dbl(AnglePY.Pitch + OrbitRate, System.Convert.ToDouble(- modMath.RadOf90Deg + 0.03125D * modMath.RadOf1Deg),
+                        AnglePY.Pitch = modMath.Clamp_dbl(AnglePY.Pitch + OrbitRate, Convert.ToDouble(- modMath.RadOf90Deg + 0.03125D * modMath.RadOf1Deg),
                             modMath.RadOf90Deg - 0.03125D * modMath.RadOf1Deg);
                         AngleChanged = true;
                     }
                     if ( modControls.KeyboardProfile.Active(modControls.Control_View_Backward) )
                     {
-                        AnglePY.Pitch = modMath.Clamp_dbl(AnglePY.Pitch - OrbitRate, System.Convert.ToDouble(- modMath.RadOf90Deg + 0.03125D * modMath.RadOf1Deg),
+                        AnglePY.Pitch = modMath.Clamp_dbl(AnglePY.Pitch - OrbitRate, Convert.ToDouble(- modMath.RadOf90Deg + 0.03125D * modMath.RadOf1Deg),
                             modMath.RadOf90Deg - 0.03125D * modMath.RadOf1Deg);
                         AngleChanged = true;
                     }
@@ -1972,13 +1972,13 @@ namespace SharpFlame
                 {
                     if ( modControls.KeyboardProfile.Active(modControls.Control_View_Forward) )
                     {
-                        AnglePY.Pitch = modMath.Clamp_dbl(AnglePY.Pitch - OrbitRate, System.Convert.ToDouble(- modMath.RadOf90Deg + 0.03125D * modMath.RadOf1Deg),
+                        AnglePY.Pitch = modMath.Clamp_dbl(AnglePY.Pitch - OrbitRate, Convert.ToDouble(- modMath.RadOf90Deg + 0.03125D * modMath.RadOf1Deg),
                             modMath.RadOf90Deg - 0.03125D * modMath.RadOf1Deg);
                         AngleChanged = true;
                     }
                     if ( modControls.KeyboardProfile.Active(modControls.Control_View_Backward) )
                     {
-                        AnglePY.Pitch = modMath.Clamp_dbl(AnglePY.Pitch + OrbitRate, System.Convert.ToDouble(- modMath.RadOf90Deg + 0.03125D * modMath.RadOf1Deg),
+                        AnglePY.Pitch = modMath.Clamp_dbl(AnglePY.Pitch + OrbitRate, Convert.ToDouble(- modMath.RadOf90Deg + 0.03125D * modMath.RadOf1Deg),
                             modMath.RadOf90Deg - 0.03125D * modMath.RadOf1Deg);
                         AngleChanged = true;
                     }
@@ -2043,7 +2043,7 @@ namespace SharpFlame
                     }
                     else if ( GetMouseRightDownOverTerrain() != null )
                     {
-                        Apply_Height_Change(modMath.Clamp_dbl(System.Convert.ToDouble(- dblTemp), -255.0D, 255.0D));
+                        Apply_Height_Change(modMath.Clamp_dbl(Convert.ToDouble(- dblTemp), -255.0D, 255.0D));
                     }
                 }
             }

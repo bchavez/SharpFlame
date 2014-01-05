@@ -1,6 +1,8 @@
 using System;
 using System.Drawing;
+using System.IO;
 using Microsoft.VisualBasic;
+using OpenTK;
 
 namespace SharpFlame
 {
@@ -29,7 +31,7 @@ namespace SharpFlame
 
             public override bool IsValueValid(object value)
             {
-                return System.Convert.ToSingle(value) >= 0.0F;
+                return Convert.ToSingle(value) >= 0.0F;
             }
         }
 
@@ -51,7 +53,7 @@ namespace SharpFlame
 
             public override bool IsValueValid(object value)
             {
-                int intValue = System.Convert.ToInt32(value);
+                int intValue = Convert.ToInt32(value);
                 return intValue >= 0 & intValue <= modProgram.MinimapMaxSize;
             }
         }
@@ -78,7 +80,7 @@ namespace SharpFlame
 
             public override bool IsValueValid(object value)
             {
-                double dblValue = System.Convert.ToDouble(value);
+                double dblValue = Convert.ToDouble(value);
                 return dblValue >= 0.00005D & dblValue <= 0.005D;
             }
         }
@@ -114,144 +116,144 @@ namespace SharpFlame
 
             public bool AutoSaveEnabled
             {
-                get { return System.Convert.ToBoolean(this.get_Value(Setting_AutoSaveEnabled)); }
+                get { return Convert.ToBoolean(get_Value(Setting_AutoSaveEnabled)); }
             }
 
             public bool AutoSaveCompress
             {
-                get { return System.Convert.ToBoolean(this.get_Value(Setting_AutoSaveCompress)); }
+                get { return Convert.ToBoolean(get_Value(Setting_AutoSaveCompress)); }
             }
 
             public UInt32 AutoSaveMinInterval_s
             {
-                get { return System.Convert.ToUInt32(this.get_Value(Setting_AutoSaveMinInterval_s)); }
+                get { return Convert.ToUInt32(get_Value(Setting_AutoSaveMinInterval_s)); }
             }
 
             public UInt32 AutoSaveMinChanges
             {
-                get { return System.Convert.ToUInt32(this.get_Value(Setting_AutoSaveMinChanges)); }
+                get { return Convert.ToUInt32(get_Value(Setting_AutoSaveMinChanges)); }
             }
 
             public UInt32 UndoLimit
             {
-                get { return System.Convert.ToUInt32(this.get_Value(Setting_UndoLimit)); }
+                get { return Convert.ToUInt32(get_Value(Setting_UndoLimit)); }
             }
 
             public bool DirectoriesPrompt
             {
-                get { return System.Convert.ToBoolean(this.get_Value(Setting_DirectoriesPrompt)); }
+                get { return Convert.ToBoolean(get_Value(Setting_DirectoriesPrompt)); }
             }
 
             public bool DirectPointer
             {
-                get { return System.Convert.ToBoolean(this.get_Value(Setting_DirectPointer)); }
+                get { return Convert.ToBoolean(get_Value(Setting_DirectPointer)); }
             }
 
             public FontFamily FontFamily
             {
-                get { return ((FontFamily)(this.get_Value(Setting_FontFamily))); }
+                get { return ((FontFamily)(get_Value(Setting_FontFamily))); }
             }
 
             public bool FontBold
             {
-                get { return System.Convert.ToBoolean(this.get_Value(Setting_FontBold)); }
+                get { return Convert.ToBoolean(get_Value(Setting_FontBold)); }
             }
 
             public bool FontItalic
             {
-                get { return System.Convert.ToBoolean(this.get_Value(Setting_FontItalic)); }
+                get { return Convert.ToBoolean(get_Value(Setting_FontItalic)); }
             }
 
             public float FontSize
             {
-                get { return System.Convert.ToSingle(System.Convert.ToSingle(this.get_Value(Setting_FontSize))); }
+                get { return Convert.ToSingle(Convert.ToSingle(get_Value(Setting_FontSize))); }
             }
 
             public int MinimapSize
             {
-                get { return System.Convert.ToInt32(this.get_Value(Setting_MinimapSize)); }
+                get { return Convert.ToInt32(get_Value(Setting_MinimapSize)); }
             }
 
             public bool MinimapTeamColours
             {
-                get { return System.Convert.ToBoolean(this.get_Value(Setting_MinimapTeamColours)); }
+                get { return Convert.ToBoolean(get_Value(Setting_MinimapTeamColours)); }
             }
 
             public bool MinimapTeamColoursExceptFeatures
             {
-                get { return System.Convert.ToBoolean(this.get_Value(Setting_MinimapTeamColoursExceptFeatures)); }
+                get { return Convert.ToBoolean(get_Value(Setting_MinimapTeamColoursExceptFeatures)); }
             }
 
             public clsRGBA_sng MinimapCliffColour
             {
-                get { return ((clsRGBA_sng)(this.get_Value(Setting_MinimapCliffColour))); }
+                get { return ((clsRGBA_sng)(get_Value(Setting_MinimapCliffColour))); }
             }
 
             public clsRGBA_sng MinimapSelectedObjectsColour
             {
-                get { return ((clsRGBA_sng)(this.get_Value(Setting_MinimapSelectedObjectsColour))); }
+                get { return ((clsRGBA_sng)(get_Value(Setting_MinimapSelectedObjectsColour))); }
             }
 
             public double FOVDefault
             {
-                get { return System.Convert.ToDouble(this.get_Value(Setting_FOVDefault)); }
+                get { return Convert.ToDouble(get_Value(Setting_FOVDefault)); }
             }
 
             public bool Mipmaps
             {
-                get { return System.Convert.ToBoolean(this.get_Value(Setting_Mipmaps)); }
+                get { return Convert.ToBoolean(get_Value(Setting_Mipmaps)); }
             }
 
             public bool MipmapsHardware
             {
-                get { return System.Convert.ToBoolean(this.get_Value(Setting_MipmapsHardware)); }
+                get { return Convert.ToBoolean(get_Value(Setting_MipmapsHardware)); }
             }
 
             public string OpenPath
             {
-                get { return System.Convert.ToString(this.get_Value(Setting_OpenPath)); }
-                set { set_Changes(Setting_OpenPath, new clsOptionProfile.clsChange<string>(value)); }
+                get { return Convert.ToString(get_Value(Setting_OpenPath)); }
+                set { set_Changes(Setting_OpenPath, new clsChange<string>(value)); }
             }
 
             public string SavePath
             {
-                get { return System.Convert.ToString(this.get_Value(Setting_SavePath)); }
-                set { set_Changes(Setting_SavePath, new clsOptionProfile.clsChange<string>(value)); }
+                get { return Convert.ToString(get_Value(Setting_SavePath)); }
+                set { set_Changes(Setting_SavePath, new clsChange<string>(value)); }
             }
 
             public int MapViewBPP
             {
-                get { return System.Convert.ToInt32(this.get_Value(Setting_MapViewBPP)); }
+                get { return Convert.ToInt32(get_Value(Setting_MapViewBPP)); }
             }
 
             public int TextureViewBPP
             {
-                get { return System.Convert.ToInt32(this.get_Value(Setting_TextureViewBPP)); }
+                get { return Convert.ToInt32(get_Value(Setting_TextureViewBPP)); }
             }
 
             public int MapViewDepth
             {
-                get { return System.Convert.ToInt32(this.get_Value(Setting_MapViewDepth)); }
+                get { return Convert.ToInt32(get_Value(Setting_MapViewDepth)); }
             }
 
             public int TextureViewDepth
             {
-                get { return System.Convert.ToInt32(this.get_Value(Setting_TextureViewDepth)); }
+                get { return Convert.ToInt32(get_Value(Setting_TextureViewDepth)); }
             }
 
             public modLists.SimpleList<string> TilesetDirectories
             {
-                get { return ((modLists.SimpleList<string>)(this.get_Value(Setting_TilesetDirectories))); }
+                get { return ((modLists.SimpleList<string>)(get_Value(Setting_TilesetDirectories))); }
             }
 
             public modLists.SimpleList<string> ObjectDataDirectories
             {
-                get { return ((modLists.SimpleList<string>)(this.get_Value(Setting_ObjectDataDirectories))); }
+                get { return ((modLists.SimpleList<string>)(get_Value(Setting_ObjectDataDirectories))); }
             }
 
             public bool PickOrientation
             {
-                get { return System.Convert.ToBoolean(this.get_Value(Setting_PickOrientation)); }
+                get { return Convert.ToBoolean(get_Value(Setting_PickOrientation)); }
             }
 
             public Font MakeFont()
@@ -320,8 +322,8 @@ namespace SharpFlame
             Setting_MipmapsHardware = CreateSetting<bool>("MipmapsHardware", false);
             Setting_OpenPath = CreateSetting<string>("OpenPath", null);
             Setting_SavePath = CreateSetting<string>("SavePath", null);
-            Setting_MapViewBPP = CreateSetting<int>("MapViewBPP", OpenTK.DisplayDevice.Default.BitsPerPixel);
-            Setting_TextureViewBPP = CreateSetting<int>("TextureViewBPP", OpenTK.DisplayDevice.Default.BitsPerPixel);
+            Setting_MapViewBPP = CreateSetting<int>("MapViewBPP", DisplayDevice.Default.BitsPerPixel);
+            Setting_TextureViewBPP = CreateSetting<int>("TextureViewBPP", DisplayDevice.Default.BitsPerPixel);
             Setting_MapViewDepth = CreateSetting<int>("MapViewDepth", 24);
             Setting_TextureViewDepth = CreateSetting<int>("TextureViewDepth", 24);
             Setting_TilesetDirectories = CreateSetting<modLists.SimpleList<string>>("TilesetsPath", new modLists.SimpleList<string>());
@@ -331,7 +333,7 @@ namespace SharpFlame
             Setting_PickOrientation = CreateSetting<bool>("PickOrientation", true);
         }
 
-        public static clsResult Read_Settings(System.IO.StreamReader File, ref clsSettings Result)
+        public static clsResult Read_Settings(StreamReader File, ref clsSettings Result)
         {
             clsResult ReturnResult = new clsResult("Reading settings");
 
@@ -408,20 +410,20 @@ namespace SharpFlame
         public static clsResult Settings_Write()
         {
             clsResult ReturnResult =
-                new clsResult("Writing settings to " + System.Convert.ToString(ControlChars.Quote) + modProgram.SettingsPath +
-                              System.Convert.ToString(ControlChars.Quote));
+                new clsResult("Writing settings to " + Convert.ToString(ControlChars.Quote) + modProgram.SettingsPath +
+                              Convert.ToString(ControlChars.Quote));
 
 #if !Portable
-            if ( !System.IO.Directory.Exists(modProgram.MyDocumentsProgramPath) )
+            if ( !Directory.Exists(modProgram.MyDocumentsProgramPath) )
             {
                 try
                 {
-                    System.IO.Directory.CreateDirectory(modProgram.MyDocumentsProgramPath);
+                    Directory.CreateDirectory(modProgram.MyDocumentsProgramPath);
                 }
                 catch ( Exception ex )
                 {
-                    ReturnResult.ProblemAdd("Unable to create folder " + System.Convert.ToString(ControlChars.Quote) + modProgram.MyDocumentsProgramPath +
-                                            System.Convert.ToString(ControlChars.Quote) + ": " + ex.Message);
+                    ReturnResult.ProblemAdd("Unable to create folder " + Convert.ToString(ControlChars.Quote) + modProgram.MyDocumentsProgramPath +
+                                            Convert.ToString(ControlChars.Quote) + ": " + ex.Message);
                     return ReturnResult;
                 }
             }
@@ -431,7 +433,7 @@ namespace SharpFlame
 
             try
             {
-                INI_Settings = clsINIWrite.CreateFile(System.IO.File.Create(modProgram.SettingsPath));
+                INI_Settings = clsINIWrite.CreateFile(File.Create(modProgram.SettingsPath));
             }
             catch ( Exception ex )
             {
@@ -462,13 +464,13 @@ namespace SharpFlame
         public static clsResult Settings_Load(ref clsSettings Result)
         {
             clsResult ReturnResult =
-                new clsResult("Loading settings from " + System.Convert.ToString(ControlChars.Quote) + modProgram.SettingsPath +
-                              System.Convert.ToString(ControlChars.Quote));
+                new clsResult("Loading settings from " + Convert.ToString(ControlChars.Quote) + modProgram.SettingsPath +
+                              Convert.ToString(ControlChars.Quote));
 
-            System.IO.StreamReader File_Settings = default(System.IO.StreamReader);
+            StreamReader File_Settings = default(StreamReader);
             try
             {
-                File_Settings = new System.IO.StreamReader(modProgram.SettingsPath);
+                File_Settings = new StreamReader(modProgram.SettingsPath);
             }
             catch
             {

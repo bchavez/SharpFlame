@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using Microsoft.VisualBasic;
 
 namespace SharpFlame
@@ -32,7 +34,7 @@ namespace SharpFlame
                 Properties.Add(NewProperty);
             }
 
-            public clsResult ReadFile(System.IO.StreamReader File)
+            public clsResult ReadFile(StreamReader File)
             {
                 clsResult ReturnResult = new clsResult("");
 
@@ -76,13 +78,13 @@ namespace SharpFlame
 
                 if ( InvalidLineCount > 0 )
                 {
-                    ReturnResult.WarningAdd("There were " + System.Convert.ToString(InvalidLineCount) + " invalid lines that were ignored.");
+                    ReturnResult.WarningAdd("There were " + Convert.ToString(InvalidLineCount) + " invalid lines that were ignored.");
                 }
 
                 return ReturnResult;
             }
 
-            public clsResult Translate(int SectionNum, clsINIRead.clsSectionTranslator Translator, sErrorCount ErrorCount)
+            public clsResult Translate(int SectionNum, clsSectionTranslator Translator, sErrorCount ErrorCount)
             {
                 clsResult ReturnResult = new clsResult("Section " + Name);
 
@@ -97,18 +99,18 @@ namespace SharpFlame
                         case enumTranslatorResult.NameUnknown:
                             if ( ErrorCount.NameErrorCount < 16 )
                             {
-                                ReturnResult.WarningAdd("Property name " + System.Convert.ToString(ControlChars.Quote) + Properties[A].Name +
-                                                        System.Convert.ToString(ControlChars.Quote) + " is unknown.");
+                                ReturnResult.WarningAdd("Property name " + Convert.ToString(ControlChars.Quote) + Properties[A].Name +
+                                                        Convert.ToString(ControlChars.Quote) + " is unknown.");
                             }
                             ErrorCount.NameErrorCount++;
                             break;
                         case enumTranslatorResult.ValueInvalid:
                             if ( ErrorCount.ValueErrorCount < 16 )
                             {
-                                ReturnResult.WarningAdd("Value " + System.Convert.ToString(ControlChars.Quote) + Properties[A].Value +
-                                                        System.Convert.ToString(ControlChars.Quote) + " for property name " +
-                                                        System.Convert.ToString(ControlChars.Quote) + Properties[A].Name +
-                                                        System.Convert.ToString(ControlChars.Quote) + " is not valid.");
+                                ReturnResult.WarningAdd("Value " + Convert.ToString(ControlChars.Quote) + Properties[A].Value +
+                                                        Convert.ToString(ControlChars.Quote) + " for property name " +
+                                                        Convert.ToString(ControlChars.Quote) + Properties[A].Name +
+                                                        Convert.ToString(ControlChars.Quote) + " is not valid.");
                             }
                             ErrorCount.ValueErrorCount++;
                             break;
@@ -118,7 +120,7 @@ namespace SharpFlame
                 return ReturnResult;
             }
 
-            public clsResult Translate(clsINIRead.clsTranslator Translator)
+            public clsResult Translate(clsTranslator Translator)
             {
                 clsResult ReturnResult = new clsResult("Section " + Name);
 
@@ -137,18 +139,18 @@ namespace SharpFlame
                         case enumTranslatorResult.NameUnknown:
                             if ( ErrorCount.NameErrorCount < 16 )
                             {
-                                ReturnResult.WarningAdd("Property name " + System.Convert.ToString(ControlChars.Quote) + Properties[A].Name +
-                                                        System.Convert.ToString(ControlChars.Quote) + " is unknown.");
+                                ReturnResult.WarningAdd("Property name " + Convert.ToString(ControlChars.Quote) + Properties[A].Name +
+                                                        Convert.ToString(ControlChars.Quote) + " is unknown.");
                             }
                             ErrorCount.NameErrorCount++;
                             break;
                         case enumTranslatorResult.ValueInvalid:
                             if ( ErrorCount.ValueErrorCount < 16 )
                             {
-                                ReturnResult.WarningAdd("Value " + System.Convert.ToString(ControlChars.Quote) + Properties[A].Value +
-                                                        System.Convert.ToString(ControlChars.Quote) + " for property name " +
-                                                        System.Convert.ToString(ControlChars.Quote) + Properties[A].Name +
-                                                        System.Convert.ToString(ControlChars.Quote) + " is not valid.");
+                                ReturnResult.WarningAdd("Value " + Convert.ToString(ControlChars.Quote) + Properties[A].Value +
+                                                        Convert.ToString(ControlChars.Quote) + " for property name " +
+                                                        Convert.ToString(ControlChars.Quote) + Properties[A].Name +
+                                                        Convert.ToString(ControlChars.Quote) + " is not valid.");
                             }
                             ErrorCount.ValueErrorCount++;
                             break;
@@ -157,11 +159,11 @@ namespace SharpFlame
 
                 if ( ErrorCount.NameErrorCount > ErrorCount.NameWarningCountMax )
                 {
-                    ReturnResult.WarningAdd("There were " + System.Convert.ToString(ErrorCount.NameErrorCount) + " unknown property names that were ignored.");
+                    ReturnResult.WarningAdd("There were " + Convert.ToString(ErrorCount.NameErrorCount) + " unknown property names that were ignored.");
                 }
                 if ( ErrorCount.ValueErrorCount > ErrorCount.ValueWarningCountMax )
                 {
-                    ReturnResult.WarningAdd("There were " + System.Convert.ToString(ErrorCount.ValueErrorCount) + " invalid values that were ignored.");
+                    ReturnResult.WarningAdd("There were " + Convert.ToString(ErrorCount.ValueErrorCount) + " invalid values that were ignored.");
                 }
 
                 return ReturnResult;
@@ -193,7 +195,7 @@ namespace SharpFlame
             Sections.Add(newSection);
         }
 
-        public clsResult ReadFile(System.IO.StreamReader File)
+        public clsResult ReadFile(StreamReader File)
         {
             clsResult ReturnResult = new clsResult("Reading INI");
 
@@ -279,7 +281,7 @@ namespace SharpFlame
 
             if ( InvalidLineCount > 0 )
             {
-                ReturnResult.WarningAdd("There were " + System.Convert.ToString(InvalidLineCount) + " invalid lines that were ignored.");
+                ReturnResult.WarningAdd("There were " + Convert.ToString(InvalidLineCount) + " invalid lines that were ignored.");
             }
 
             return ReturnResult;
@@ -300,7 +302,7 @@ namespace SharpFlame
             public int ValueWarningCountMax;
         }
 
-        public clsResult Translate(clsINIRead.clsSectionTranslator Translator)
+        public clsResult Translate(clsSectionTranslator Translator)
         {
             clsResult ReturnResult = new clsResult("Translating INI");
 
@@ -317,11 +319,11 @@ namespace SharpFlame
 
             if ( ErrorCount.NameErrorCount > ErrorCount.NameWarningCountMax )
             {
-                ReturnResult.WarningAdd("There were " + System.Convert.ToString(ErrorCount.NameErrorCount) + " unknown property names that were ignored.");
+                ReturnResult.WarningAdd("There were " + Convert.ToString(ErrorCount.NameErrorCount) + " unknown property names that were ignored.");
             }
             if ( ErrorCount.ValueErrorCount > ErrorCount.ValueWarningCountMax )
             {
-                ReturnResult.WarningAdd("There were " + System.Convert.ToString(ErrorCount.ValueErrorCount) + " invalid values that were ignored.");
+                ReturnResult.WarningAdd("There were " + Convert.ToString(ErrorCount.ValueErrorCount) + " invalid values that were ignored.");
             }
 
             return ReturnResult;
@@ -329,18 +331,18 @@ namespace SharpFlame
 
         public abstract class clsSectionTranslator
         {
-            public abstract enumTranslatorResult Translate(int INISectionNum, clsINIRead.clsSection.sProperty INIProperty);
+            public abstract enumTranslatorResult Translate(int INISectionNum, clsSection.sProperty INIProperty);
         }
 
         public abstract class clsTranslator
         {
-            public abstract enumTranslatorResult Translate(clsINIRead.clsSection.sProperty INIProperty);
+            public abstract enumTranslatorResult Translate(clsSection.sProperty INIProperty);
         }
     }
 
     public class clsINIWrite
     {
-        public System.IO.StreamWriter File;
+        public StreamWriter File;
         public char LineEndChar;
         public char EqualsChar = '=';
 
@@ -349,11 +351,11 @@ namespace SharpFlame
             LineEndChar = '\n';
         }
 
-        public static clsINIWrite CreateFile(System.IO.Stream Output)
+        public static clsINIWrite CreateFile(Stream Output)
         {
             clsINIWrite NewINI = new clsINIWrite();
 
-            NewINI.File = new System.IO.StreamWriter(Output, modProgram.UTF8Encoding);
+            NewINI.File = new StreamWriter(Output, modProgram.UTF8Encoding);
 
             return NewINI;
         }
@@ -362,7 +364,7 @@ namespace SharpFlame
         {
             Name = Name.Replace(LineEndChar.ToString(), "");
 
-            File.Write('[' + Name + System.Convert.ToString(']') + System.Convert.ToString(LineEndChar));
+            File.Write('[' + Name + Convert.ToString(']') + Convert.ToString(LineEndChar));
         }
 
         public void Property_Append(string Name, string Value)
@@ -371,7 +373,7 @@ namespace SharpFlame
             Name = Name.Replace(EqualsChar.ToString(), "");
             Value = Value.Replace(LineEndChar.ToString(), "");
 
-            File.Write(Name + " " + System.Convert.ToString(EqualsChar) + " " + Value + System.Convert.ToString(LineEndChar));
+            File.Write(Name + " " + Convert.ToString(EqualsChar) + " " + Value + Convert.ToString(LineEndChar));
         }
 
         public void Gap_Append()

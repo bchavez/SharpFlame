@@ -113,7 +113,7 @@ namespace SharpFlame
             UpdateControls(); //display to show any changes
         }
 
-        public void btnCompile_Click(System.Object sender, System.EventArgs e)
+        public void btnCompile_Click(Object sender, EventArgs e)
         {
             clsResult ReturnResult = new clsResult("Compile multiplayer");
             int A = 0;
@@ -130,7 +130,7 @@ namespace SharpFlame
             bool IsXPlayerFormat = cbxLevFormat.Checked;
             if ( PlayerCount < 2 | PlayerCount > 10 )
             {
-                ReturnResult.ProblemAdd("The number of players must be from 2 to " + System.Convert.ToString(modProgram.PlayerCountMax));
+                ReturnResult.ProblemAdd("The number of players must be from 2 to " + Convert.ToString(modProgram.PlayerCountMax));
             }
             if ( !IsXPlayerFormat )
             {
@@ -186,7 +186,7 @@ namespace SharpFlame
             }
             CompileMultiDialog.FileName = PlayerCount + "c-" + MapName;
             CompileMultiDialog.Filter = "WZ Files (*.wz)|*.wz";
-            if ( CompileMultiDialog.ShowDialog(this) != System.Windows.Forms.DialogResult.OK )
+            if ( CompileMultiDialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
@@ -209,13 +209,13 @@ namespace SharpFlame
             }
         }
 
-        public void frmCompile_FormClosed(object sender, System.Windows.Forms.FormClosedEventArgs e)
+        public void frmCompile_FormClosed(object sender, FormClosedEventArgs e)
         {
             Map.CompileScreen = null;
             Map = null;
         }
 
-        public void frmCompile_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
+        public void frmCompile_FormClosing(object sender, FormClosingEventArgs e)
         {
             SaveToMap();
         }
@@ -276,7 +276,7 @@ namespace SharpFlame
                                 if ( TileHasUnit[X, Y] )
                                 {
                                     clsResultProblemGoto<clsResultItemPosGoto> resultItem = modResults.CreateResultProblemGotoForObject(Unit);
-                                    resultItem.Text = "Bad unit overlap on tile " + System.Convert.ToString(X) + ", " + System.Convert.ToString(Y) + ".";
+                                    resultItem.Text = "Bad unit overlap on tile " + Convert.ToString(X) + ", " + Convert.ToString(Y) + ".";
                                     Result.ItemAdd(resultItem);
                                 }
                                 else
@@ -392,7 +392,7 @@ namespace SharpFlame
                         if ( !IsValid )
                         {
                             clsResultProblemGoto<clsResultItemPosGoto> resultItem = modResults.CreateResultProblemGotoForObject(Unit);
-                            resultItem.Text = "Bad module on tile " + System.Convert.ToString(CentrePos.X) + ", " + System.Convert.ToString(CentrePos.Y) + ".";
+                            resultItem.Text = "Bad module on tile " + Convert.ToString(CentrePos.X) + ", " + Convert.ToString(CentrePos.Y) + ".";
                             Result.ItemAdd(resultItem);
                         }
                     }
@@ -470,7 +470,7 @@ namespace SharpFlame
                         {
                             UnusedPlayerUnitWarningCount++;
                             clsResultProblemGoto<clsResultItemPosGoto> resultItem = modResults.CreateResultProblemGotoForObject(Unit);
-                            resultItem.Text = "An unused player (" + System.Convert.ToString(Unit.UnitGroup.WZ_StartPos) + ") has a unit at " + Unit.GetPosText() + ".";
+                            resultItem.Text = "An unused player (" + Convert.ToString(Unit.UnitGroup.WZ_StartPos) + ") has a unit at " + Unit.GetPosText() + ".";
                             Result.ItemAdd(resultItem);
                         }
                     }
@@ -489,15 +489,15 @@ namespace SharpFlame
             {
                 if ( PlayerHQCount[A] == 0 )
                 {
-                    Result.ProblemAdd("There is no Command Centre for player " + System.Convert.ToString(A) + ".");
+                    Result.ProblemAdd("There is no Command Centre for player " + Convert.ToString(A) + ".");
                 }
                 if ( PlayerMasterTruckCount[A] == 0 )
                 {
-                    Result.ProblemAdd("There are no constructor units for player " + System.Convert.ToString(A) + ".");
+                    Result.ProblemAdd("There are no constructor units for player " + Convert.ToString(A) + ".");
                 }
                 else if ( Player23TruckCount[A] == 0 )
                 {
-                    Result.WarningAdd("All constructor units for player " + System.Convert.ToString(A) + " will only exist in master.");
+                    Result.WarningAdd("All constructor units for player " + Convert.ToString(A) + " will only exist in master.");
                 }
             }
 
@@ -510,11 +510,11 @@ namespace SharpFlame
 
             if ( Map.Terrain.TileSize.X > modProgram.WZMapMaxSize )
             {
-                ReturnResult.WarningAdd("Map width is too large. The maximum is " + System.Convert.ToString(modProgram.WZMapMaxSize) + ".");
+                ReturnResult.WarningAdd("Map width is too large. The maximum is " + Convert.ToString(modProgram.WZMapMaxSize) + ".");
             }
             if ( Map.Terrain.TileSize.Y > modProgram.WZMapMaxSize )
             {
-                ReturnResult.WarningAdd("Map height is too large. The maximum is " + System.Convert.ToString(modProgram.WZMapMaxSize) + ".");
+                ReturnResult.WarningAdd("Map height is too large. The maximum is " + Convert.ToString(modProgram.WZMapMaxSize) + ".");
             }
 
             if ( Map.Tileset == null )
@@ -553,16 +553,16 @@ namespace SharpFlame
                 {
                     if ( PlayerStructureTypeCount[PlayerNum, StructureTypeNum] > 255 )
                     {
-                        ReturnResult.ProblemAdd("Player " + System.Convert.ToString(PlayerNum) + " has too many (" +
-                                                System.Convert.ToString(PlayerStructureTypeCount[PlayerNum, StructureTypeNum]) + ") of structure " +
-                                                System.Convert.ToString(ControlChars.Quote) + StructureType.Code + System.Convert.ToString(ControlChars.Quote) +
+                        ReturnResult.ProblemAdd("Player " + Convert.ToString(PlayerNum) + " has too many (" +
+                                                Convert.ToString(PlayerStructureTypeCount[PlayerNum, StructureTypeNum]) + ") of structure " +
+                                                Convert.ToString(ControlChars.Quote) + StructureType.Code + Convert.ToString(ControlChars.Quote) +
                                                 ". The limit is 255 of any one structure type.");
                     }
                 }
                 if ( ScavStructureTypeCount[StructureTypeNum] > 255 )
                 {
-                    ReturnResult.ProblemAdd("Scavengers have too many (" + System.Convert.ToString(ScavStructureTypeCount[StructureTypeNum]) + ") of structure " +
-                                            System.Convert.ToString(ControlChars.Quote) + StructureType.Code + System.Convert.ToString(ControlChars.Quote) +
+                    ReturnResult.ProblemAdd("Scavengers have too many (" + Convert.ToString(ScavStructureTypeCount[StructureTypeNum]) + ") of structure " +
+                                            Convert.ToString(ControlChars.Quote) + StructureType.Code + Convert.ToString(ControlChars.Quote) +
                                             ". The limit is 255 of any one structure type.");
                 }
             }
@@ -600,7 +600,7 @@ namespace SharpFlame
             return Count;
         }
 
-        public void btnCompileCampaign_Click(System.Object sender, System.EventArgs e)
+        public void btnCompileCampaign_Click(Object sender, EventArgs e)
         {
             clsResult ReturnResult = new clsResult("Compile campaign");
             int A = 0;
@@ -635,7 +635,7 @@ namespace SharpFlame
                 return;
             }
             FolderBrowserDialog CompileCampDialog = new FolderBrowserDialog();
-            if ( CompileCampDialog.ShowDialog(this) != System.Windows.Forms.DialogResult.OK )
+            if ( CompileCampDialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
@@ -673,7 +673,7 @@ namespace SharpFlame
             }
         }
 
-        public void cbxAutoScrollLimits_CheckedChanged(System.Object sender, System.EventArgs e)
+        public void cbxAutoScrollLimits_CheckedChanged(Object sender, EventArgs e)
         {
             if ( !cbxAutoScrollLimits.Enabled )
             {

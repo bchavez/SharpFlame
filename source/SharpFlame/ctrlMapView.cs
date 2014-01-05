@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Matrix3D;
 using Microsoft.VisualBasic;
+using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
@@ -26,7 +27,7 @@ namespace SharpFlame
         private Timer tmrDraw;
         private Timer tmrDrawDelay;
 
-        public OpenTK.GLControl OpenGLControl;
+        public GLControl OpenGLControl;
 
         public ctrlMapView(frmMain Owner)
         {
@@ -96,7 +97,7 @@ namespace SharpFlame
             }
         }
 
-        private void tmrDraw_Tick(System.Object sender, System.EventArgs e)
+        private void tmrDraw_Tick(Object sender, EventArgs e)
         {
             tmrDraw.Enabled = false;
             if ( DrawPending )
@@ -262,7 +263,7 @@ namespace SharpFlame
             }
 
             GL.ClearColor(BGColour.Red, BGColour.Green, BGColour.Blue, 1.0F);
-            GL.Clear((OpenTK.Graphics.OpenGL.ClearBufferMask)(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
+            GL.Clear((ClearBufferMask)(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
 
             if ( Map != null )
             {
@@ -275,7 +276,7 @@ namespace SharpFlame
             Refresh();
         }
 
-        public void OpenGL_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
+        public void OpenGL_MouseMove(object sender, MouseEventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -304,21 +305,21 @@ namespace SharpFlame
             }
             else
             {
-                lblTile.Text = "Tile x:" + System.Convert.ToString(MouseOverTerrain.Tile.Normal.X) + ", y:" + System.Convert.ToString(MouseOverTerrain.Tile.Normal.Y);
-                lblVertex.Text = "Vertex  x:" + System.Convert.ToString(MouseOverTerrain.Vertex.Normal.X) + ", y:" +
-                                 System.Convert.ToString(MouseOverTerrain.Vertex.Normal.Y) + ", alt:" +
+                lblTile.Text = "Tile x:" + Convert.ToString(MouseOverTerrain.Tile.Normal.X) + ", y:" + Convert.ToString(MouseOverTerrain.Tile.Normal.Y);
+                lblVertex.Text = "Vertex  x:" + Convert.ToString(MouseOverTerrain.Vertex.Normal.X) + ", y:" +
+                                 Convert.ToString(MouseOverTerrain.Vertex.Normal.Y) + ", alt:" +
                                  Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height * Map.HeightMultiplier + " (" +
-                                 System.Convert.ToString(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height) + "x" +
-                                 System.Convert.ToString(Map.HeightMultiplier) + ")";
-                lblPos.Text = "Pos x:" + System.Convert.ToString(MouseOverTerrain.Pos.Horizontal.X) + ", y:" +
-                              System.Convert.ToString(MouseOverTerrain.Pos.Horizontal.Y) + ", alt:" + System.Convert.ToString(MouseOverTerrain.Pos.Altitude) +
+                                 Convert.ToString(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height) + "x" +
+                                 Convert.ToString(Map.HeightMultiplier) + ")";
+                lblPos.Text = "Pos x:" + Convert.ToString(MouseOverTerrain.Pos.Horizontal.X) + ", y:" +
+                              Convert.ToString(MouseOverTerrain.Pos.Horizontal.Y) + ", alt:" + Convert.ToString(MouseOverTerrain.Pos.Altitude) +
                               ", slope: " +
-                              System.Convert.ToString(Math.Round(Map.GetTerrainSlopeAngle(MouseOverTerrain.Pos.Horizontal) / modMath.RadOf1Deg * 10.0D) / 10.0D) +
+                              Convert.ToString(Math.Round(Map.GetTerrainSlopeAngle(MouseOverTerrain.Pos.Horizontal) / modMath.RadOf1Deg * 10.0D) / 10.0D) +
                               "°";
             }
         }
 
-        public void OpenGL_LostFocus(System.Object eventSender, System.EventArgs eventArgs)
+        public void OpenGL_LostFocus(Object eventSender, EventArgs eventArgs)
         {
             clsMap Map = MainMap;
 
@@ -630,11 +631,11 @@ namespace SharpFlame
                     {
                         if ( Map.SelectedUnits.Count > 0 )
                         {
-                            Matrix3D.Position.XY_dbl Centre = modProgram.CalcUnitsCentrePos(Map.SelectedUnits.GetItemsAsSimpleList());
+                            Position.XY_dbl Centre = modProgram.CalcUnitsCentrePos(Map.SelectedUnits.GetItemsAsSimpleList());
                             modMath.sXY_int Offset = new modMath.sXY_int();
-                            Offset.X = ((int)(Math.Round(System.Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.X - Centre.X) / modProgram.TerrainGridSpacing)))) *
+                            Offset.X = ((int)(Math.Round(Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.X - Centre.X) / modProgram.TerrainGridSpacing)))) *
                                        modProgram.TerrainGridSpacing;
-                            Offset.Y = ((int)(Math.Round(System.Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.Y - Centre.Y) / modProgram.TerrainGridSpacing)))) *
+                            Offset.Y = ((int)(Math.Round(Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.Y - Centre.Y) / modProgram.TerrainGridSpacing)))) *
                                        modProgram.TerrainGridSpacing;
                             clsMap.clsObjectPosOffset ObjectPosOffset = new clsMap.clsObjectPosOffset();
                             ObjectPosOffset.Map = Map;
@@ -696,7 +697,7 @@ namespace SharpFlame
             }
         }
 
-        private void OpenGL_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void OpenGL_MouseUp(object sender, MouseEventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -709,7 +710,7 @@ namespace SharpFlame
 
             Map.SuppressMinimap = false;
 
-            if ( e.Button == System.Windows.Forms.MouseButtons.Left )
+            if ( e.Button == MouseButtons.Left )
             {
                 if ( Map.ViewInfo.GetMouseLeftDownOverMinimap() != null )
                 {
@@ -766,7 +767,7 @@ namespace SharpFlame
                 }
                 Map.ViewInfo.MouseLeftDown = null;
             }
-            else if ( e.Button == System.Windows.Forms.MouseButtons.Right )
+            else if ( e.Button == MouseButtons.Right )
             {
                 if ( Map.ViewInfo.GetMouseRightDownOverMinimap() != null )
                 {
@@ -859,7 +860,7 @@ namespace SharpFlame
             DrawViewLater();
         }
 
-        private void tmrDrawDelay_Tick(System.Object sender, System.EventArgs e)
+        private void tmrDrawDelay_Tick(Object sender, EventArgs e)
         {
             if ( DrawPending )
             {
@@ -872,7 +873,7 @@ namespace SharpFlame
             }
         }
 
-        public void pnlDraw_Resize(object sender, System.EventArgs e)
+        public void pnlDraw_Resize(object sender, EventArgs e)
         {
             if ( OpenGLControl != null )
             {
@@ -880,7 +881,7 @@ namespace SharpFlame
             }
         }
 
-        public void OpenGL_Resize(System.Object eventSender, System.EventArgs eventArgs)
+        public void OpenGL_Resize(Object eventSender, EventArgs eventArgs)
         {
             clsMap Map = MainMap;
 
@@ -898,7 +899,7 @@ namespace SharpFlame
             DrawViewLater();
         }
 
-        public void OpenGL_MouseEnter(object sender, System.EventArgs e)
+        public void OpenGL_MouseEnter(object sender, EventArgs e)
         {
             if ( Form.ActiveForm == modMain.frmMainInstance )
             {
@@ -906,7 +907,7 @@ namespace SharpFlame
             }
         }
 
-        public void OpenGL_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
+        public void OpenGL_MouseWheel(object sender, MouseEventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -916,13 +917,13 @@ namespace SharpFlame
             }
 
             modMath.sXYZ_int Move = new modMath.sXYZ_int();
-            Matrix3D.Position.XYZ_dbl XYZ_dbl = default(Matrix3D.Position.XYZ_dbl);
+            Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
             int A = 0;
 
             for ( A = 0; A <= (int)(Math.Abs(e.Delta / 120.0D)); A++ )
             {
                 Matrix3DMath.VectorForwardsRotationByMatrix(Map.ViewInfo.ViewAngleMatrix,
-                    System.Convert.ToDouble(Math.Sign(e.Delta) * Math.Max(Map.ViewInfo.ViewPos.Y, 512.0D) / 24.0D), ref XYZ_dbl);
+                    Convert.ToDouble(Math.Sign(e.Delta) * Math.Max(Map.ViewInfo.ViewPos.Y, 512.0D) / 24.0D), ref XYZ_dbl);
                 Move.Set_dbl(XYZ_dbl);
                 Map.ViewInfo.ViewPosChange(Move);
             }
@@ -948,7 +949,7 @@ namespace SharpFlame
             UndoMessageTimer.Enabled = true;
         }
 
-        private void OpenGL_MouseLeave(object sender, System.EventArgs e)
+        private void OpenGL_MouseLeave(object sender, EventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -985,10 +986,10 @@ namespace SharpFlame
                 ListSelect.Items.Add(ListSelectItems[A]);
             }
             ListSelectIsPicker = isPicker;
-            ListSelect.Show(this, new System.Drawing.Point(Map.ViewInfo.MouseOver.ScreenPos.X, Map.ViewInfo.MouseOver.ScreenPos.Y));
+            ListSelect.Show(this, new Point(Map.ViewInfo.MouseOver.ScreenPos.X, Map.ViewInfo.MouseOver.ScreenPos.Y));
         }
 
-        public void tabMaps_SelectedIndexChanged(System.Object sender, System.EventArgs e)
+        public void tabMaps_SelectedIndexChanged(Object sender, EventArgs e)
         {
             if ( !tabMaps.Enabled )
             {
@@ -1006,7 +1007,7 @@ namespace SharpFlame
             _Owner.SetMainMap(Map);
         }
 
-        public void btnClose_Click(System.Object sender, System.EventArgs e)
+        public void btnClose_Click(Object sender, EventArgs e)
         {
             clsMap Map = MainMap;
 

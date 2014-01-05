@@ -37,12 +37,12 @@ namespace SharpFlame
                 Tiles[TileCount].Chance = Chance;
                 TileCount++;
 
-                TileChanceTotal += System.Convert.ToInt32(Chance);
+                TileChanceTotal += Convert.ToInt32(Chance);
             }
 
             public void Tile_Remove(int Num)
             {
-                TileChanceTotal -= System.Convert.ToInt32(Tiles[Num].Chance);
+                TileChanceTotal -= Convert.ToInt32(Tiles[Num].Chance);
 
                 TileCount--;
                 if ( Num != TileCount )
@@ -62,7 +62,7 @@ namespace SharpFlame
                 intRandom = (int)(Conversion.Int(VBMath.Rnd() * TileChanceTotal));
                 for ( A = 0; A <= TileCount - 1; A++ )
                 {
-                    Total += System.Convert.ToInt32(Tiles[A].Chance);
+                    Total += Convert.ToInt32(Tiles[A].Chance);
                     if ( intRandom < Total )
                     {
                         break;

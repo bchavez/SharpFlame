@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using Microsoft.VisualBasic;
 
 namespace SharpFlame
@@ -59,7 +60,7 @@ namespace SharpFlame
                     }
                     TriDirection = TriDirection.GetRotated(Orientation);
                     NewTerrain.Tiles[X, Y].Tri =
-                        System.Convert.ToBoolean(TileOrientation.IdenticalTileDirections(TriDirection, TileOrientation.TileDirection_TopLeft) ||
+                        Convert.ToBoolean(TileOrientation.IdenticalTileDirections(TriDirection, TileOrientation.TileDirection_TopLeft) ||
                                                  TileOrientation.IdenticalTileDirections(TriDirection, TileOrientation.TileDirection_BottomRight));
                     if ( Terrain.Tiles[RotatedPos.X, RotatedPos.Y].Tri )
                     {
@@ -137,8 +138,8 @@ namespace SharpFlame
                 }
             }
 
-            clsMap.clsUnit Unit = default(clsMap.clsUnit);
-            foreach ( clsMap.clsUnit tempLoopVar_Unit in Units )
+            clsUnit Unit = default(clsUnit);
+            foreach ( clsUnit tempLoopVar_Unit in Units )
             {
                 Unit = tempLoopVar_Unit;
                 Unit.Sectors.Clear();
@@ -183,7 +184,7 @@ namespace SharpFlame
             modMath.sXY_int ZeroPos = new modMath.sXY_int(0, 0);
 
             int Position = 0;
-            foreach ( clsMap.clsUnit tempLoopVar_Unit in Units.GetItemsAsSimpleList() )
+            foreach ( clsUnit tempLoopVar_Unit in Units.GetItemsAsSimpleList() )
             {
                 Unit = tempLoopVar_Unit;
                 if ( !modProgram.PosIsWithinTileArea(Unit.Pos.Horizontal, ZeroPos, NewTerrain.TileSize) )
@@ -239,7 +240,7 @@ namespace SharpFlame
             {
                 for ( X = 0; X <= Terrain.TileSize.X; X++ )
                 {
-                    hmSource.HeightData.Height[Y, X] = System.Convert.ToInt32(Terrain.Vertices[X, Y].Height / hmSource.HeightScale);
+                    hmSource.HeightData.Height[Y, X] = Convert.ToInt32(Terrain.Vertices[X, Y].Height / hmSource.HeightScale);
                 }
             }
             hmSource.MinMaxGet(MinMax);
@@ -249,20 +250,20 @@ namespace SharpFlame
             for ( Level = 0; Level <= IntervalCount; Level++ )
             {
                 LevelHeight =
-                    System.Convert.ToSingle(System.Convert.ToDouble(MinMax.Min + System.Convert.ToInt32(Level * MinMax.Max / IntervalCount)) * hmSource.HeightScale);
+                    Convert.ToSingle(Convert.ToDouble(MinMax.Min + Convert.ToInt32(Level * MinMax.Max / IntervalCount)) * hmSource.HeightScale);
                 AlterationLevels.Heights[Level] = LevelHeight;
                 hmB.GenerateNewOfSize(Terrain.TileSize.Y + 1, Terrain.TileSize.X + 1, 2.0F, 10000.0D);
                 hmAlteration.Heightmaps[Level] = new clsHeightmap();
                 hmAlteration.Heightmaps[Level].Rescale(hmB, LevelHeight - Variation, LevelHeight + Variation);
             }
             hmA.FadeMultiple(hmSource, hmAlteration, AlterationLevels);
-            hmB.Rescale(hmA, Math.Max(System.Convert.ToDouble(System.Convert.ToDouble(MinMax.Min * hmSource.HeightScale) - Variation), 0.0D),
-                Math.Min(System.Convert.ToDouble(System.Convert.ToDouble(MinMax.Max * hmSource.HeightScale) + Variation), 255.9D));
+            hmB.Rescale(hmA, Math.Max(Convert.ToDouble(Convert.ToDouble(MinMax.Min * hmSource.HeightScale) - Variation), 0.0D),
+                Math.Min(Convert.ToDouble(Convert.ToDouble(MinMax.Max * hmSource.HeightScale) + Variation), 255.9D));
             for ( Y = 0; Y <= Terrain.TileSize.Y; Y++ )
             {
                 for ( X = 0; X <= Terrain.TileSize.X; X++ )
                 {
-                    Terrain.Vertices[X, Y].Height = System.Convert.ToByte(Conversion.Int(hmB.HeightData.Height[Y, X] * hmB.HeightScale));
+                    Terrain.Vertices[X, Y].Height = Convert.ToByte(Conversion.Int(hmB.HeightData.Height[Y, X] * hmB.HeightScale));
                 }
             }
         }
@@ -396,7 +397,7 @@ namespace SharpFlame
                 }
                 else
                 {
-                    hmB.GenerateNewOfSize(Terrain.TileSize.Y, Terrain.TileSize.X, System.Convert.ToSingle(Args.Layers[A].TerrainmapScale), 1.0D);
+                    hmB.GenerateNewOfSize(Terrain.TileSize.Y, Terrain.TileSize.X, Convert.ToSingle(Args.Layers[A].TerrainmapScale), 1.0D);
                     hmC.Rescale(hmB, 0.0D, 1.0D);
                     Args.Layers[A].Terrainmap.Convert_Heightmap(hmC, (int)((1.0F - Args.Layers[A].TerrainmapDensity) / hmC.HeightScale));
                 }
@@ -815,16 +816,16 @@ namespace SharpFlame
             public abstract void ActionPerform();
         }
 
-        public abstract class clsObjectAction : modLists.SimpleListTool<clsMap.clsUnit>
+        public abstract class clsObjectAction : modLists.SimpleListTool<clsUnit>
         {
             public clsMap Map;
             public clsUnit Unit;
-            private modLists.SimpleClassList<clsMap.clsUnit> _ResultUnits = new modLists.SimpleClassList<clsMap.clsUnit>();
+            private modLists.SimpleClassList<clsUnit> _ResultUnits = new modLists.SimpleClassList<clsUnit>();
             public bool ActionPerformed;
 
-            protected clsMap.clsUnit ResultUnit;
+            protected clsUnit ResultUnit;
 
-            public modLists.SimpleClassList<clsMap.clsUnit> ResultUnits
+            public modLists.SimpleClassList<clsUnit> ResultUnits
             {
                 get { return _ResultUnits; }
             }
@@ -848,7 +849,7 @@ namespace SharpFlame
                 {
                     return;
                 }
-                ResultUnit = new clsMap.clsUnit(Unit, Map);
+                ResultUnit = new clsUnit(Unit, Map);
                 _ActionPerform();
                 if ( ResultUnit == null )
                 {
@@ -869,7 +870,7 @@ namespace SharpFlame
             }
         }
 
-        public class clsApplyCliff : clsMap.clsAction
+        public class clsApplyCliff : clsAction
         {
             public double Angle;
             public bool SetTris;
@@ -893,11 +894,11 @@ namespace SharpFlame
             {
                 Terrain = Map.Terrain;
 
-                HeightA = System.Convert.ToDouble(((Terrain.Vertices[PosNum.X, PosNum.Y].Height) + Terrain.Vertices[PosNum.X + 1, PosNum.Y].Height) / 2.0D);
-                HeightB = System.Convert.ToDouble(((Terrain.Vertices[PosNum.X, PosNum.Y + 1].Height) + Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Height) / 2.0D);
+                HeightA = Convert.ToDouble(((Terrain.Vertices[PosNum.X, PosNum.Y].Height) + Terrain.Vertices[PosNum.X + 1, PosNum.Y].Height) / 2.0D);
+                HeightB = Convert.ToDouble(((Terrain.Vertices[PosNum.X, PosNum.Y + 1].Height) + Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Height) / 2.0D);
                 DifA = HeightB - HeightA;
-                HeightA = System.Convert.ToDouble(((Terrain.Vertices[PosNum.X, PosNum.Y].Height) + Terrain.Vertices[PosNum.X, PosNum.Y + 1].Height) / 2.0D);
-                HeightB = System.Convert.ToDouble(((Terrain.Vertices[PosNum.X + 1, PosNum.Y].Height) + Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Height) / 2.0D);
+                HeightA = Convert.ToDouble(((Terrain.Vertices[PosNum.X, PosNum.Y].Height) + Terrain.Vertices[PosNum.X, PosNum.Y + 1].Height) / 2.0D);
+                HeightB = Convert.ToDouble(((Terrain.Vertices[PosNum.X + 1, PosNum.Y].Height) + Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Height) / 2.0D);
                 DifB = HeightB - HeightA;
                 if ( Math.Abs(DifA) == Math.Abs(DifB) )
                 {
@@ -1074,7 +1075,7 @@ namespace SharpFlame
             }
         }
 
-        public class clsApplyCliffRemove : clsMap.clsAction
+        public class clsApplyCliffRemove : clsAction
         {
             private clsTerrain Terrain;
 
@@ -1099,7 +1100,7 @@ namespace SharpFlame
             }
         }
 
-        public class clsApplyCliffTriangle : clsMap.clsAction
+        public class clsApplyCliffTriangle : clsAction
         {
             public bool Triangle;
 
@@ -1167,11 +1168,11 @@ namespace SharpFlame
                 Map.SectorGraphicsChanges.TileChanged(PosNum);
                 Map.SectorTerrainUndoChanges.TileChanged(PosNum);
 
-                HeightA = System.Convert.ToDouble(((Terrain.Vertices[PosNum.X, PosNum.Y].Height) + Terrain.Vertices[PosNum.X + 1, PosNum.Y].Height) / 2.0D);
-                HeightB = System.Convert.ToDouble(((Terrain.Vertices[PosNum.X, PosNum.Y + 1].Height) + Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Height) / 2.0D);
+                HeightA = Convert.ToDouble(((Terrain.Vertices[PosNum.X, PosNum.Y].Height) + Terrain.Vertices[PosNum.X + 1, PosNum.Y].Height) / 2.0D);
+                HeightB = Convert.ToDouble(((Terrain.Vertices[PosNum.X, PosNum.Y + 1].Height) + Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Height) / 2.0D);
                 difA = HeightB - HeightA;
-                HeightA = System.Convert.ToDouble(((Terrain.Vertices[PosNum.X, PosNum.Y].Height) + Terrain.Vertices[PosNum.X, PosNum.Y + 1].Height) / 2.0D);
-                HeightB = System.Convert.ToDouble(((Terrain.Vertices[PosNum.X + 1, PosNum.Y].Height) + Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Height) / 2.0D);
+                HeightA = Convert.ToDouble(((Terrain.Vertices[PosNum.X, PosNum.Y].Height) + Terrain.Vertices[PosNum.X, PosNum.Y + 1].Height) / 2.0D);
+                HeightB = Convert.ToDouble(((Terrain.Vertices[PosNum.X + 1, PosNum.Y].Height) + Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Height) / 2.0D);
                 difB = HeightB - HeightA;
                 if ( Math.Abs(difA) == Math.Abs(difB) )
                 {
@@ -1218,7 +1219,7 @@ namespace SharpFlame
             }
         }
 
-        public class clsApplyCliffTriangleRemove : clsMap.clsAction
+        public class clsApplyCliffTriangleRemove : clsAction
         {
             public bool Triangle;
 
@@ -1284,7 +1285,7 @@ namespace SharpFlame
             }
         }
 
-        public class clsApplyHeightChange : clsMap.clsAction
+        public class clsApplyHeightChange : clsAction
         {
             public double Rate;
 
@@ -1303,7 +1304,7 @@ namespace SharpFlame
             }
         }
 
-        public class clsApplyHeightSet : clsMap.clsAction
+        public class clsApplyHeightSet : clsAction
         {
             public byte Height;
 
@@ -1323,7 +1324,7 @@ namespace SharpFlame
             }
         }
 
-        public class clsApplyHeightSmoothing : clsMap.clsAction
+        public class clsApplyHeightSmoothing : clsAction
         {
             public double Ratio;
             public modMath.sXY_int Offset;
@@ -1413,8 +1414,8 @@ namespace SharpFlame
                 {
                     Y2 = PosNum.Y + Y;
                     XNum = Y - modProgram.SmoothRadius.Tiles.YMin;
-                    for ( X = modMath.Clamp_int(System.Convert.ToInt32(modProgram.SmoothRadius.Tiles.XMin[XNum] + PosNum.X), 0, LimitX) - PosNum.X;
-                        X <= modMath.Clamp_int(System.Convert.ToInt32(modProgram.SmoothRadius.Tiles.XMax[XNum] + PosNum.X), 0, LimitX) - PosNum.X;
+                    for ( X = modMath.Clamp_int(Convert.ToInt32(modProgram.SmoothRadius.Tiles.XMin[XNum] + PosNum.X), 0, LimitX) - PosNum.X;
+                        X <= modMath.Clamp_int(Convert.ToInt32(modProgram.SmoothRadius.Tiles.XMax[XNum] + PosNum.X), 0, LimitX) - PosNum.X;
                         X++ )
                     {
                         X2 = PosNum.X + X;
@@ -1423,11 +1424,11 @@ namespace SharpFlame
                     }
                 }
                 NewHeight[PosNum.X - Offset.X, PosNum.Y - Offset.Y] =
-                    Math.Min((byte)(System.Convert.ToInt32(Terrain.Vertices[PosNum.X, PosNum.Y].Height * (1.0D - Ratio) + TempHeight / Samples * Ratio)), byte.MaxValue);
+                    Math.Min((byte)(Convert.ToInt32(Terrain.Vertices[PosNum.X, PosNum.Y].Height * (1.0D - Ratio) + TempHeight / Samples * Ratio)), byte.MaxValue);
             }
         }
 
-        public class clsApplyRoadRemove : clsMap.clsAction
+        public class clsApplyRoadRemove : clsAction
         {
             private clsTerrain Terrain;
 
@@ -1466,7 +1467,7 @@ namespace SharpFlame
             }
         }
 
-        public class clsApplyVertexTerrain : clsMap.clsAction
+        public class clsApplyVertexTerrain : clsAction
         {
             public clsPainter.clsTerrain VertexTerrain;
 
@@ -1486,7 +1487,7 @@ namespace SharpFlame
             }
         }
 
-        public class clsApplyTexture : clsMap.clsAction
+        public class clsApplyTexture : clsAction
         {
             public int TextureNum;
             public bool SetTexture;
@@ -1531,7 +1532,7 @@ namespace SharpFlame
             }
         }
 
-        public class clsApplyVertexTerrainInterpret : clsMap.clsAction
+        public class clsApplyVertexTerrainInterpret : clsAction
         {
             private int[] TerrainCount;
             private TileOrientation.sTileDirection VertexDirection;
@@ -1791,7 +1792,7 @@ namespace SharpFlame
             }
         }
 
-        public class clsApplyTileTerrainInterpret : clsMap.clsAction
+        public class clsApplyTileTerrainInterpret : clsAction
         {
             private clsPainter Painter;
             private clsPainter.clsTerrain PainterTerrainA;
@@ -1922,7 +1923,7 @@ namespace SharpFlame
             }
         }
 
-        public abstract class clsApplySideTerrainInterpret : clsMap.clsAction
+        public abstract class clsApplySideTerrainInterpret : clsAction
         {
             protected clsPainter Painter;
             protected clsPainter.clsTerrain PainterTerrain;
@@ -2015,7 +2016,7 @@ namespace SharpFlame
             }
         }
 
-        public class clsApplySideHTerrainInterpret : clsMap.clsApplySideTerrainInterpret
+        public class clsApplySideHTerrainInterpret : clsApplySideTerrainInterpret
         {
             public override void ActionPerform()
             {
@@ -2061,7 +2062,7 @@ namespace SharpFlame
             }
         }
 
-        public class clsApplySideVTerrainInterpret : clsMap.clsApplySideTerrainInterpret
+        public class clsApplySideVTerrainInterpret : clsApplySideTerrainInterpret
         {
             public override void ActionPerform()
             {
@@ -2345,7 +2346,7 @@ namespace SharpFlame
 
         public class clsObjectSelect : modLists.SimpleListTool<clsUnit>
         {
-            private clsMap.clsUnit Unit;
+            private clsUnit Unit;
 
             public void ActionPerform()
             {
@@ -2358,16 +2359,16 @@ namespace SharpFlame
             }
         }
 
-        public class clsObjectPriorityOrderList : modLists.SimpleListTool<clsMap.clsUnit>
+        public class clsObjectPriorityOrderList : modLists.SimpleListTool<clsUnit>
         {
-            private modLists.SimpleClassList<clsMap.clsUnit> _Result = new modLists.SimpleClassList<clsMap.clsUnit>();
+            private modLists.SimpleClassList<clsUnit> _Result = new modLists.SimpleClassList<clsUnit>();
 
-            public modLists.SimpleClassList<clsMap.clsUnit> Result
+            public modLists.SimpleClassList<clsUnit> Result
             {
                 get { return _Result; }
             }
 
-            private clsMap.clsUnit Unit;
+            private clsUnit Unit;
 
             public clsObjectPriorityOrderList()
             {
@@ -2396,7 +2397,7 @@ namespace SharpFlame
 
         public class clsObjectFlattenTerrain : modLists.SimpleListTool<clsUnit>
         {
-            private clsMap.clsUnit Unit;
+            private clsUnit Unit;
 
             public void ActionPerform()
             {
@@ -2450,13 +2451,13 @@ namespace SharpFlame
             }
         }
 
-        public class clsStructureWriteWZ : modLists.SimpleListTool<clsMap.clsUnit>
+        public class clsStructureWriteWZ : modLists.SimpleListTool<clsUnit>
         {
-            public System.IO.BinaryWriter File;
-            public clsMap.sWrite_WZ_Args.enumCompileType CompileType;
+            public BinaryWriter File;
+            public sWrite_WZ_Args.enumCompileType CompileType;
             public int PlayerCount;
 
-            private clsMap.clsUnit Unit;
+            private clsUnit Unit;
 
             private clsStructureType StructureType;
             private byte[] StruZeroBytesA = new byte[12];
@@ -2473,10 +2474,10 @@ namespace SharpFlame
                 StructureType = (clsStructureType)Unit.Type;
                 modIO.WriteTextOfLength(File, 40, StructureType.Code);
                 File.Write(Unit.ID);
-                File.Write(System.Convert.ToBoolean((uint)Unit.Pos.Horizontal.X));
-                File.Write(System.Convert.ToBoolean((uint)Unit.Pos.Horizontal.Y));
-                File.Write(System.Convert.ToBoolean((uint)Unit.Pos.Altitude));
-                File.Write(System.Convert.ToBoolean((uint)Unit.Rotation));
+                File.Write(Convert.ToBoolean((uint)Unit.Pos.Horizontal.X));
+                File.Write(Convert.ToBoolean((uint)Unit.Pos.Horizontal.Y));
+                File.Write(Convert.ToBoolean((uint)Unit.Pos.Altitude));
+                File.Write(Convert.ToBoolean((uint)Unit.Rotation));
                 switch ( CompileType )
                 {
                     case sWrite_WZ_Args.enumCompileType.Multiplayer:

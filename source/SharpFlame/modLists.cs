@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.VisualBasic;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace SharpFlame
 {
@@ -18,7 +20,7 @@ namespace SharpFlame
             return ((ConnectedList<ItemType, SourceType>)value);
         }
 
-        public class SimpleList<ItemType> : System.Collections.Generic.IEnumerable<ItemType>
+        public class SimpleList<ItemType> : IEnumerable<ItemType>
         {
             private ItemType[] Items = new ItemType[1];
             private int ItemCount = 0;
@@ -81,7 +83,7 @@ namespace SharpFlame
                 IsBusy = false;
             }
 
-            public virtual void AddList(System.Collections.Generic.IList<ItemType> NewItems)
+            public virtual void AddList(IList<ItemType> NewItems)
             {
                 if ( IsBusy )
                 {
@@ -215,7 +217,7 @@ namespace SharpFlame
                 int ArraySize = (Items.Length - 1) + 1;
                 if ( ItemCount * 3 < ArraySize & ArraySize > MinSize )
                 {
-                    Items = (ItemType[])Microsoft.VisualBasic.CompilerServices.Utils.CopyArray((Array)Items, new ItemType[Math.Max(ItemCount * 2, MinSize)]);
+                    Items = (ItemType[])Utils.CopyArray((Array)Items, new ItemType[Math.Max(ItemCount * 2, MinSize)]);
                 }
 
                 IsBusy = false;
@@ -334,12 +336,12 @@ namespace SharpFlame
                 return result;
             }
 
-            public System.Collections.Generic.IEnumerator<ItemType> GetEnumerator()
+            public IEnumerator<ItemType> GetEnumerator()
             {
-                return this.GetEnumeratorType();
+                return GetEnumeratorType();
             }
 
-            public System.Collections.Generic.IEnumerator<ItemType> GetEnumeratorType()
+            public IEnumerator<ItemType> GetEnumeratorType()
             {
                 return new EnumeratorType(this);
             }
@@ -354,7 +356,7 @@ namespace SharpFlame
             //#endif
             //}
 
-            private class Enumerator : System.Collections.IEnumerator
+            private class Enumerator : IEnumerator
             {
                 private SimpleList<ItemType> list;
                 private const int startPosition = -1;
@@ -382,7 +384,7 @@ namespace SharpFlame
                 }
             }
 
-            private class EnumeratorType : System.Collections.Generic.IEnumerator<ItemType>
+            private class EnumeratorType : IEnumerator<ItemType>
             {
                 private SimpleList<ItemType> list;
                 private const int startPosition = -1;
@@ -434,7 +436,7 @@ namespace SharpFlame
                 // IDisposable
                 protected virtual void Dispose(bool disposing)
                 {
-                    if ( !this.disposedValue )
+                    if ( !disposedValue )
                     {
                         if ( disposing )
                         {
@@ -444,7 +446,7 @@ namespace SharpFlame
                         // TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
                         // TODO: set large fields to null.
                     }
-                    this.disposedValue = true;
+                    disposedValue = true;
                 }
 
                 // TODO: override Finalize() only if Dispose( disposing As Boolean) above has code to free unmanaged resources.
@@ -532,7 +534,7 @@ namespace SharpFlame
             void ActionPerform();
         }
 
-        private class ConnectedListItemList<ItemType, SourceType> : modLists.SimpleClassList<ConnectedListItem<ItemType, SourceType>> where ItemType : class
+        private class ConnectedListItemList<ItemType, SourceType> : SimpleClassList<ConnectedListItem<ItemType, SourceType>> where ItemType : class
             where SourceType : class
         {
             protected override void AfterMoveAction(int position)
@@ -541,7 +543,7 @@ namespace SharpFlame
             }
         }
 
-        public class ConnectedList<ItemType, SourceType> : System.Collections.Generic.IEnumerable<ItemType> where ItemType : class where SourceType : class
+        public class ConnectedList<ItemType, SourceType> : IEnumerable<ItemType> where ItemType : class where SourceType : class
         {
             private ConnectedListItemList<ItemType, SourceType> List = new ConnectedListItemList<ItemType, SourceType>();
             private SourceType Source;
@@ -549,7 +551,7 @@ namespace SharpFlame
             public ConnectedList(SourceType Owner)
             {
                 Source = Owner;
-                List.AddNothingAction = modLists.SimpleClassList_AddNothingAction.DisallowError;
+                List.AddNothingAction = SimpleClassList_AddNothingAction.DisallowError;
             }
 
             public SourceType Owner
@@ -587,7 +589,7 @@ namespace SharpFlame
             {
                 if ( NewItem.CanAdd() )
                 {
-                    NewItem.BeforeAdd(modLists.MonoWorkaroundConnectedList<ItemType, SourceType>(this), List.Count);
+                    NewItem.BeforeAdd(MonoWorkaroundConnectedList<ItemType, SourceType>(this), List.Count);
                     List.Add(NewItem);
                 }
             }
@@ -596,7 +598,7 @@ namespace SharpFlame
             {
                 if ( NewItem.CanAdd() )
                 {
-                    NewItem.BeforeAdd(modLists.MonoWorkaroundConnectedList<ItemType, SourceType>(this), Position);
+                    NewItem.BeforeAdd(MonoWorkaroundConnectedList<ItemType, SourceType>(this), Position);
                     List.Insert(NewItem, Position);
                 }
             }
@@ -629,9 +631,9 @@ namespace SharpFlame
                 Source = null;
             }
 
-            public modLists.SimpleList<ItemType> GetItemsAsSimpleList()
+            public SimpleList<ItemType> GetItemsAsSimpleList()
             {
-                modLists.SimpleList<ItemType> Result = new modLists.SimpleList<ItemType>();
+                SimpleList<ItemType> Result = new SimpleList<ItemType>();
 
                 ItemType ConnectedItem = default(ItemType);
                 foreach ( ItemType tempLoopVar_ConnectedItem in this )
@@ -643,9 +645,9 @@ namespace SharpFlame
                 return Result;
             }
 
-            public modLists.SimpleClassList<ItemType> GetItemsAsSimpleClassList()
+            public SimpleClassList<ItemType> GetItemsAsSimpleClassList()
             {
-                modLists.SimpleClassList<ItemType> Result = new modLists.SimpleClassList<ItemType>();
+                SimpleClassList<ItemType> Result = new SimpleClassList<ItemType>();
 
                 ItemType ConnectedItem = default(ItemType);
                 foreach ( ItemType tempLoopVar_ConnectedItem in this )
@@ -665,12 +667,12 @@ namespace SharpFlame
                 }
             }
 
-            public System.Collections.Generic.IEnumerator<ItemType> GetEnumerator()
+            public IEnumerator<ItemType> GetEnumerator()
             {
-                return this.GetEnumeratorType();
+                return GetEnumeratorType();
             }
 
-            public System.Collections.Generic.IEnumerator<ItemType> GetEnumeratorType()
+            public IEnumerator<ItemType> GetEnumeratorType()
             {
                 return new EnumeratorType(this);
             }
@@ -685,7 +687,7 @@ namespace SharpFlame
             //#endif
             //}
 
-            public class Enumerator : System.Collections.IEnumerator
+            public class Enumerator : IEnumerator
             {
                 private ConnectedList<ItemType, SourceType> list;
                 private const int startPosition = -1;
@@ -713,7 +715,7 @@ namespace SharpFlame
                 }
             }
 
-            public class EnumeratorType : System.Collections.Generic.IEnumerator<ItemType>
+            public class EnumeratorType : IEnumerator<ItemType>
             {
                 private ConnectedList<ItemType, SourceType> list;
                 private const int startPosition = -1;
@@ -765,7 +767,7 @@ namespace SharpFlame
                 // IDisposable
                 protected virtual void Dispose(bool disposing)
                 {
-                    if ( !this.disposedValue )
+                    if ( !disposedValue )
                     {
                         if ( disposing )
                         {
@@ -775,7 +777,7 @@ namespace SharpFlame
                         // TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
                         // TODO: set large fields to null.
                     }
-                    this.disposedValue = true;
+                    disposedValue = true;
                 }
 
                 // TODO: override Finalize() only if Dispose( disposing As Boolean) above has code to free unmanaged resources.

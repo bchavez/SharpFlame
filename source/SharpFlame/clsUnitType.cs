@@ -1,3 +1,4 @@
+using System;
 using Matrix3D;
 using OpenTK.Graphics.OpenGL;
 
@@ -42,7 +43,7 @@ namespace SharpFlame
 
             public void GLDraw()
             {
-                Matrix3D.Angles.AngleRPY AngleRPY = default(Matrix3D.Angles.AngleRPY);
+                Angles.AngleRPY AngleRPY = default(Angles.AngleRPY);
                 Matrix3DMath.Matrix3D matrixA = new Matrix3DMath.Matrix3D();
                 clsAttachment Attachment = default(clsAttachment);
                 clsModel Model = default(clsModel);
@@ -59,7 +60,7 @@ namespace SharpFlame
                     GL.PushMatrix();
                     Matrix3DMath.MatrixInvert(Attachment.AngleOffsetMatrix, matrixA);
                     Matrix3DMath.MatrixToRPY(matrixA, ref AngleRPY);
-                    GL.Translate(Attachment.Pos_Offset.X, Attachment.Pos_Offset.Y, System.Convert.ToDouble(- Attachment.Pos_Offset.Z));
+                    GL.Translate(Attachment.Pos_Offset.X, Attachment.Pos_Offset.Y, Convert.ToDouble(- Attachment.Pos_Offset.Z));
                     GL.Rotate((float)(AngleRPY.Roll / modMath.RadOf1Deg), 0.0F, 0.0F, -1.0F);
                     GL.Rotate((float)(AngleRPY.Pitch / modMath.RadOf1Deg), 1.0F, 0.0F, 0.0F);
                     GL.Rotate((float)(AngleRPY.Yaw / modMath.RadOf1Deg), 0.0F, 1.0F, 0.0F);
@@ -167,7 +168,7 @@ namespace SharpFlame
                     return Result;
             }
             //switch footprint axes if not a droid
-            double Remainder = System.Convert.ToDouble((Rotation / 90.0D + 0.5D) % 2.0D);
+            double Remainder = Convert.ToDouble((Rotation / 90.0D + 0.5D) % 2.0D);
             if ( Remainder < 0.0D )
             {
                 Remainder += 2.0D;
@@ -298,7 +299,7 @@ namespace SharpFlame
 
         public enumFeatureType FeatureType = enumFeatureType.Unknown;
 
-        public clsUnitType.clsAttachment BaseAttachment;
+        public clsAttachment BaseAttachment;
 
         public clsFeatureType()
         {
@@ -359,7 +360,7 @@ namespace SharpFlame
 
         public modLists.ConnectedListLink<clsStructureType, clsWallType> WallLink;
 
-        public clsUnitType.clsAttachment BaseAttachment = new clsUnitType.clsAttachment();
+        public clsAttachment BaseAttachment = new clsAttachment();
         public clsModel StructureBasePlate;
 
         public clsStructureType()
@@ -385,9 +386,9 @@ namespace SharpFlame
 
         public bool IsModule()
         {
-            return StructureType == clsStructureType.enumStructureType.FactoryModule
-                   | StructureType == clsStructureType.enumStructureType.PowerModule
-                   | StructureType == clsStructureType.enumStructureType.ResearchModule;
+            return StructureType == enumStructureType.FactoryModule
+                   | StructureType == enumStructureType.PowerModule
+                   | StructureType == enumStructureType.ResearchModule;
         }
 
         public override string GetName()
@@ -426,7 +427,7 @@ namespace SharpFlame
         public clsTurret Turret2;
         public clsTurret Turret3;
 
-        public clsUnitType.clsAttachment BaseAttachment = new clsUnitType.clsAttachment();
+        public clsAttachment BaseAttachment = new clsAttachment();
 
         public bool AlwaysDrawTextLabel;
 
@@ -456,7 +457,7 @@ namespace SharpFlame
 
         public void UpdateAttachments()
         {
-            BaseAttachment = new clsUnitType.clsAttachment();
+            BaseAttachment = new clsAttachment();
 
             if ( Body == null )
             {
@@ -464,7 +465,7 @@ namespace SharpFlame
                 return;
             }
 
-            clsUnitType.clsAttachment NewBody = BaseAttachment.AddCopyOfAttachment(Body.Attachment);
+            clsAttachment NewBody = BaseAttachment.AddCopyOfAttachment(Body.Attachment);
 
             AlwaysDrawTextLabel = NewBody.Models.Count == 0;
 
@@ -495,7 +496,7 @@ namespace SharpFlame
             {
                 if ( Turret1 != null )
                 {
-                    clsUnitType.clsAttachment NewTurret = NewBody.AddCopyOfAttachment(Turret1.Attachment);
+                    clsAttachment NewTurret = NewBody.AddCopyOfAttachment(Turret1.Attachment);
                     NewTurret.Pos_Offset = TurretConnector;
                 }
             }
@@ -511,7 +512,7 @@ namespace SharpFlame
             {
                 if ( Turret2 != null )
                 {
-                    clsUnitType.clsAttachment NewTurret = NewBody.AddCopyOfAttachment(Turret2.Attachment);
+                    clsAttachment NewTurret = NewBody.AddCopyOfAttachment(Turret2.Attachment);
                     NewTurret.Pos_Offset = TurretConnector;
                 }
             }

@@ -70,7 +70,7 @@ namespace SharpFlame
                 }
                 Pos = UnitToCopy.Pos;
                 Rotation = UnitToCopy.Rotation;
-                clsMap.clsUnitGroup OtherUnitGroup = default(clsMap.clsUnitGroup);
+                clsUnitGroup OtherUnitGroup = default(clsUnitGroup);
                 OtherUnitGroup = UnitToCopy.UnitGroup;
                 if ( OtherUnitGroup.WZ_StartPos < 0 )
                 {
@@ -269,14 +269,14 @@ namespace SharpFlame
             }
         }
 
-        public modLists.ConnectedList<clsMap.clsUnit, clsMap> Units;
+        public modLists.ConnectedList<clsUnit, clsMap> Units;
 
         public class clsUnitSectorConnection
         {
             public clsUnitSectorConnection()
             {
-                _UnitLink = new Link<clsMap.clsUnit>(this);
-                _SectorLink = new Link<clsMap.clsSector>(this);
+                _UnitLink = new Link<clsUnit>(this);
+                _SectorLink = new Link<clsSector>(this);
             }
 
             protected class Link<SourceType> : modLists.ConnectedListLink<clsUnitSectorConnection, SourceType> where SourceType : class
@@ -293,20 +293,20 @@ namespace SharpFlame
                 }
             }
 
-            protected Link<clsMap.clsUnit> _UnitLink;
-            protected Link<clsMap.clsSector> _SectorLink;
+            protected Link<clsUnit> _UnitLink;
+            protected Link<clsSector> _SectorLink;
 
-            public virtual clsMap.clsUnit Unit
+            public virtual clsUnit Unit
             {
                 get { return _UnitLink.Source; }
             }
 
-            public virtual clsMap.clsSector Sector
+            public virtual clsSector Sector
             {
                 get { return _SectorLink.Source; }
             }
 
-            public static clsUnitSectorConnection Create(clsMap.clsUnit Unit, clsMap.clsSector Sector)
+            public static clsUnitSectorConnection Create(clsUnit Unit, clsSector Sector)
             {
                 if ( Unit == null )
                 {
@@ -380,8 +380,8 @@ namespace SharpFlame
 
             public event ChangedEventHandler Changed
             {
-                add { ChangedEvent = (ChangedEventHandler)System.Delegate.Combine(ChangedEvent, value); }
-                remove { ChangedEvent = (ChangedEventHandler)System.Delegate.Remove(ChangedEvent, value); }
+                add { ChangedEvent = (ChangedEventHandler)Delegate.Combine(ChangedEvent, value); }
+                remove { ChangedEvent = (ChangedEventHandler)Delegate.Remove(ChangedEvent, value); }
             }
         }
 
@@ -501,7 +501,7 @@ namespace SharpFlame
 
                 if ( StoreChange )
                 {
-                    clsMap.clsUnitChange UnitChange = new clsMap.clsUnitChange();
+                    clsUnitChange UnitChange = new clsUnitChange();
                     UnitChange.Type = clsUnitChange.enumType.Added;
                     UnitChange.Unit = NewUnit;
                     Map.UnitChanges.Add(UnitChange);
@@ -542,7 +542,7 @@ namespace SharpFlame
 
         public void UnitRemoveStoreChange(int Num)
         {
-            clsMap.clsUnitChange UnitChange = new clsMap.clsUnitChange();
+            clsUnitChange UnitChange = new clsUnitChange();
             UnitChange.Type = clsUnitChange.enumType.Deleted;
             UnitChange.Unit = Units[Num];
             UnitChanges.Add(UnitChange);
@@ -552,7 +552,7 @@ namespace SharpFlame
 
         public void UnitRemove(int Num)
         {
-            clsMap.clsUnit Unit = default(clsMap.clsUnit);
+            clsUnit Unit = default(clsUnit);
 
             Unit = Units[Num];
 
@@ -577,7 +577,7 @@ namespace SharpFlame
             Unit.DisconnectFromMap();
         }
 
-        public void UnitSwap(clsMap.clsUnit OldUnit, clsMap.clsUnit NewUnit)
+        public void UnitSwap(clsUnit OldUnit, clsUnit NewUnit)
         {
             if ( OldUnit.MapLink.Source != this )
             {
@@ -586,7 +586,7 @@ namespace SharpFlame
             }
 
             UnitRemoveStoreChange(OldUnit.MapLink.ArrayPosition);
-            clsMap.clsUnitAdd UnitAdd = new clsMap.clsUnitAdd();
+            clsUnitAdd UnitAdd = new clsUnitAdd();
             UnitAdd.Map = this;
             UnitAdd.StoreChange = true;
             UnitAdd.ID = OldUnit.ID;
@@ -599,7 +599,7 @@ namespace SharpFlame
         public void MakeDefaultUnitGroups()
         {
             int A = 0;
-            clsMap.clsUnitGroup NewGroup = default(clsMap.clsUnitGroup);
+            clsUnitGroup NewGroup = default(clsUnitGroup);
 
             UnitGroups.Clear();
             for ( A = 0; A <= modProgram.PlayerCountMax - 1; A++ )
@@ -677,7 +677,7 @@ namespace SharpFlame
                         }
                     }
                 }
-                clsMap.clsUnit newUnit = new clsMap.clsUnit();
+                clsUnit newUnit = new clsUnit();
                 if ( RandomizeRotation )
                 {
                     newUnit.Rotation = (int)(Conversion.Int(VBMath.Rnd() * 360.0D));
@@ -698,7 +698,7 @@ namespace SharpFlame
             }
         }
 
-        public void SetObjectCreatorDefaults(clsMap.clsUnitCreate objectCreator)
+        public void SetObjectCreatorDefaults(clsUnitCreate objectCreator)
         {
             objectCreator.Map = this;
 

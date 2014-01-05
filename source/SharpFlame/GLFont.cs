@@ -1,8 +1,10 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using Microsoft.VisualBasic;
 using OpenTK.Graphics.OpenGL;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace SharpFlame
 {
@@ -32,7 +34,7 @@ namespace SharpFlame
             int Y = 0;
             Bitmap TempBitmap = default(Bitmap);
             Graphics gfx = default(Graphics);
-            System.Drawing.Imaging.BitmapData BitmapData = default(System.Drawing.Imaging.BitmapData);
+            BitmapData BitmapData = default(BitmapData);
             int NewSizeX = 0;
             int StartX = 0;
             int FinishX = 0;
@@ -43,8 +45,8 @@ namespace SharpFlame
             Height = BaseFont.Height;
             for ( A = 0; A <= 255; A++ )
             {
-                Text = System.Convert.ToString(Strings.ChrW(A));
-                TempBitmap = new Bitmap(Height * 2, Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                Text = Convert.ToString(Strings.ChrW(A));
+                TempBitmap = new Bitmap(Height * 2, Height, PixelFormat.Format32bppArgb);
                 gfx = Graphics.FromImage(TempBitmap);
                 gfx.Clear(Color.Transparent);
                 gfx.DrawString(Text, BaseFont, Brushes.White, 0.0F, 0.0F);
@@ -84,17 +86,17 @@ namespace SharpFlame
                 {
                     NewSizeX = Math.Max((int)(Math.Round(Height / 4.0F)), 1);
                     Character[A].TexSize = (int)(Math.Round(Math.Pow(2.0D, Math.Ceiling(Math.Log(Math.Max(NewSizeX, TempBitmap.Height)) / Math.Log(2.0D)))));
-                    TexBitmap = new Bitmap(Character[A].TexSize, System.Convert.ToInt32(Character[A].TexSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    TexBitmap = new Bitmap(Character[A].TexSize, Convert.ToInt32(Character[A].TexSize), PixelFormat.Format32bppArgb);
                     gfx = Graphics.FromImage(TexBitmap);
                     gfx.Clear(Color.Transparent);
                     gfx.Dispose();
-                    BitmapData = TexBitmap.LockBits(new Rectangle(0, 0, TexBitmap.Width, TexBitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly,
-                        System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    BitmapData = TexBitmap.LockBits(new Rectangle(0, 0, TexBitmap.Width, TexBitmap.Height), ImageLockMode.ReadOnly,
+                        PixelFormat.Format32bppArgb);
                     GL.GenTextures(1, out Character[A].GLTexture);
-                    GL.BindTexture(TextureTarget.Texture2D, System.Convert.ToInt32(Character[A].GLTexture));
+                    GL.BindTexture(TextureTarget.Texture2D, Convert.ToInt32(Character[A].GLTexture));
                     GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
                     GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-                    OpenTK.Graphics.OpenGL.GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, TexBitmap.Width, TexBitmap.Height, 0, PixelFormat.Bgra,
+                    GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, TexBitmap.Width, TexBitmap.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra,
                         PixelType.UnsignedByte, BitmapData.Scan0);
                     TexBitmap.UnlockBits(BitmapData);
                     Character[A].Width = NewSizeX;
@@ -102,7 +104,7 @@ namespace SharpFlame
                 else
                 {
                     Character[A].TexSize = (int)(Math.Round(Math.Pow(2.0D, Math.Ceiling(Math.Log(Math.Max(NewSizeX, TempBitmap.Height)) / Math.Log(2.0D)))));
-                    TexBitmap = new Bitmap(System.Convert.ToInt32(Character[A].TexSize), Character[A].TexSize, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    TexBitmap = new Bitmap(Convert.ToInt32(Character[A].TexSize), Character[A].TexSize, PixelFormat.Format32bppArgb);
                     gfx = Graphics.FromImage(TexBitmap);
                     gfx.Clear(Color.Transparent);
                     gfx.Dispose();
@@ -113,13 +115,13 @@ namespace SharpFlame
                             TexBitmap.SetPixel(X - StartX, Y, TempBitmap.GetPixel(X, Y));
                         }
                     }
-                    BitmapData = TexBitmap.LockBits(new Rectangle(0, 0, TexBitmap.Width, TexBitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly,
-                        System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    BitmapData = TexBitmap.LockBits(new Rectangle(0, 0, TexBitmap.Width, TexBitmap.Height), ImageLockMode.ReadOnly,
+                        PixelFormat.Format32bppArgb);
                     GL.GenTextures(1, out Character[A].GLTexture);
                     GL.BindTexture(TextureTarget.Texture2D, Character[A].GLTexture);
                     GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
                     GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-                    OpenTK.Graphics.OpenGL.GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, TexBitmap.Width, TexBitmap.Height, 0, PixelFormat.Bgra,
+                    GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, TexBitmap.Width, TexBitmap.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra,
                         PixelType.UnsignedByte, BitmapData.Scan0);
                     TexBitmap.UnlockBits(BitmapData);
                     Character[A].Width = NewSizeX;
@@ -135,7 +137,7 @@ namespace SharpFlame
 
             for ( A = 0; A <= 255; A++ )
             {
-                GL.DeleteTexture(System.Convert.ToInt32(Character[A].GLTexture));
+                GL.DeleteTexture(Convert.ToInt32(Character[A].GLTexture));
             }
         }
     }

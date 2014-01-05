@@ -21,11 +21,11 @@ namespace SharpFlame
             lblKeys.Text = "";
             for ( int i = 0; i <= Results.Count - 1; i++ )
             {
-                Keys key = System.Windows.Forms.Keys.A;
+                Keys key = Keys.A;
                 string text = Enum.GetName(typeof(Keys), key);
                 if ( text == null )
                 {
-                    lblKeys.Text += modIO.InvariantToString_int(System.Convert.ToInt32(Results[i].Item));
+                    lblKeys.Text += modIO.InvariantToString_int(Convert.ToInt32(Results[i].Item));
                 }
                 else
                 {
@@ -35,17 +35,17 @@ namespace SharpFlame
             }
         }
 
-        public void btnSave_Click(System.Object sender, System.EventArgs e)
+        public void btnSave_Click(Object sender, EventArgs e)
         {
-            DialogResult = System.Windows.Forms.DialogResult.OK;
+            DialogResult = DialogResult.OK;
         }
 
-        public void btnCancel_Click(System.Object sender, System.EventArgs e)
+        public void btnCancel_Click(Object sender, EventArgs e)
         {
-            DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            DialogResult = DialogResult.Cancel;
         }
 
-        public void frmKeyboardControl_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        public void frmKeyboardControl_KeyDown(object sender, KeyEventArgs e)
         {
             if ( Results.Count > 8 )
             {

@@ -244,7 +244,7 @@ namespace SharpFlame
                     }
                     for ( PathNum = 0; PathNum <= Paths[LastLayer].PathCount - 1; PathNum++ )
                     {
-                        CalcNodeCount[PathNum] = Math.Min(Accuracy, System.Convert.ToInt32(Paths[LastLayer].Paths[PathNum].NodeCount - 1));
+                        CalcNodeCount[PathNum] = Math.Min(Accuracy, Convert.ToInt32(Paths[LastLayer].Paths[PathNum].NodeCount - 1));
                     }
                     Destinations[0] = Paths[LastLayer].Paths[0].Nodes[CalcNodeCount[0]];
                     DestinationCount = 1;

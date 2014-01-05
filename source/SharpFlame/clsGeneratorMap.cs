@@ -1,7 +1,9 @@
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
+using Matrix3D;
 using Microsoft.VisualBasic;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace SharpFlame
 {
@@ -68,7 +70,7 @@ namespace SharpFlame
             public void CalcPos()
             {
                 int A = 0;
-                Matrix3D.Position.XY_dbl Total = default(Matrix3D.Position.XY_dbl);
+                Position.XY_dbl Total = default(Position.XY_dbl);
 
                 for ( A = 0; A <= NodeCount - 1; A++ )
                 {
@@ -337,20 +339,20 @@ namespace SharpFlame
             int PassageRadius = (int)(128.0F * NodeScale);
             int MaxLikelyPassageNodeCount = 0;
             MaxLikelyPassageNodeCount =
-                (int)(Math.Ceiling(System.Convert.ToDecimal(2.0D * TileSize.X * 128 * TileSize.Y * 128 / (Math.PI * PassageRadius * PassageRadius))));
+                (int)(Math.Ceiling(Convert.ToDecimal(2.0D * TileSize.X * 128 * TileSize.Y * 128 / (Math.PI * PassageRadius * PassageRadius))));
 
             PassageNodes = new clsPassageNode[SymmetryBlockCount, MaxLikelyPassageNodeCount];
             int LoopCount = 0;
             int EdgeOffset = 0 * 128;
             bool PointIsValid;
             modMath.sXY_int EdgeSections = new modMath.sXY_int();
-            Matrix3D.Position.XY_dbl EdgeSectionSize = default(Matrix3D.Position.XY_dbl);
+            Position.XY_dbl EdgeSectionSize = default(Position.XY_dbl);
             modMath.sXY_int NewPointPos = new modMath.sXY_int();
 
             if ( SymmetryBlockCountXY.X == 1 )
             {
                 EdgeSections.X =
-                    System.Convert.ToInt32(
+                    Convert.ToInt32(
                         Conversion.Int((TileSize.X * modProgram.TerrainGridSpacing - EdgeOffset * 2.0D) / (NodeScale * modProgram.TerrainGridSpacing * 2.0F)));
                 EdgeSectionSize.X = (TileSize.X * modProgram.TerrainGridSpacing - EdgeOffset * 2.0D) / EdgeSections.X;
                 EdgeSections.X--;
@@ -362,15 +364,15 @@ namespace SharpFlame
                         (Conversion.Int((TileSize.X * modProgram.TerrainGridSpacing / SymmetryBlockCountXY.X - EdgeOffset) /
                                         (NodeScale * modProgram.TerrainGridSpacing * 2.0F) - 0.5D));
                 EdgeSectionSize.X =
-                    System.Convert.ToDouble((TileSize.X * modProgram.TerrainGridSpacing / SymmetryBlockCountXY.X - EdgeOffset) /
-                                            (System.Convert.ToDouble(
+                    Convert.ToDouble((TileSize.X * modProgram.TerrainGridSpacing / SymmetryBlockCountXY.X - EdgeOffset) /
+                                            (Convert.ToDouble(
                                                 Conversion.Int((TileSize.X * modProgram.TerrainGridSpacing / SymmetryBlockCountXY.X - EdgeOffset) /
                                                                (NodeScale * modProgram.TerrainGridSpacing * 2.0F) - 0.5D)) + 0.5D));
             }
             if ( SymmetryBlockCountXY.Y == 1 )
             {
                 EdgeSections.Y =
-                    System.Convert.ToInt32(
+                    Convert.ToInt32(
                         Conversion.Int((TileSize.Y * modProgram.TerrainGridSpacing - EdgeOffset * 2.0D) / (NodeScale * modProgram.TerrainGridSpacing * 2.0F)));
                 EdgeSectionSize.Y = (TileSize.Y * modProgram.TerrainGridSpacing - EdgeOffset * 2.0D) / EdgeSections.Y;
                 EdgeSections.Y--;
@@ -378,12 +380,12 @@ namespace SharpFlame
             else
             {
                 EdgeSections.Y =
-                    System.Convert.ToInt32(
+                    Convert.ToInt32(
                         Conversion.Int((TileSize.Y * modProgram.TerrainGridSpacing / SymmetryBlockCountXY.Y - EdgeOffset) /
                                        (NodeScale * modProgram.TerrainGridSpacing * 2.0F) - 0.5D));
                 EdgeSectionSize.Y =
-                    System.Convert.ToDouble((TileSize.Y * modProgram.TerrainGridSpacing / SymmetryBlockCountXY.Y - EdgeOffset) /
-                                            (System.Convert.ToDouble(
+                    Convert.ToDouble((TileSize.Y * modProgram.TerrainGridSpacing / SymmetryBlockCountXY.Y - EdgeOffset) /
+                                            (Convert.ToDouble(
                                                 Conversion.Int((TileSize.Y * modProgram.TerrainGridSpacing / SymmetryBlockCountXY.Y - EdgeOffset) /
                                                                (NodeScale * modProgram.TerrainGridSpacing * 2.0F) - 0.5D)) + 0.5D));
             }
@@ -443,7 +445,7 @@ namespace SharpFlame
                     }
                     else
                     {
-                        NewPointPos.Y = EdgeOffset + System.Convert.ToInt32(Conversion.Int(VBMath.Rnd() * (SymmetrySize.Y - EdgeOffset + 1)));
+                        NewPointPos.Y = EdgeOffset + Convert.ToInt32(Conversion.Int(VBMath.Rnd() * (SymmetrySize.Y - EdgeOffset + 1)));
                     }
                     for ( A = 0; A <= PassageNodeCount - 1; A++ )
                     {
@@ -473,7 +475,7 @@ namespace SharpFlame
             PointMakingFinished:
             PassageNodes =
                 (clsPassageNode[,])
-                    Microsoft.VisualBasic.CompilerServices.Utils.CopyArray((Array)PassageNodes, new clsPassageNode[SymmetryBlockCount, PassageNodeCount]);
+                    Utils.CopyArray((Array)PassageNodes, new clsPassageNode[SymmetryBlockCount, PassageNodeCount]);
 
             //connect until all are connected without intersecting
 
@@ -734,7 +736,7 @@ namespace SharpFlame
 
                 if ( BaseLevel < 0 )
                 {
-                    D = System.Convert.ToInt32(Conversion.Int(VBMath.Rnd() * LevelCount));
+                    D = Convert.ToInt32(Conversion.Int(VBMath.Rnd() * LevelCount));
                 }
                 else
                 {
@@ -1143,7 +1145,7 @@ namespace SharpFlame
                         }
                         NearestA.NodeA[0] = Args.PassageNodeA;
                         NearestA.NodeB[0] = Args.PassageNodeB;
-                        B = System.Convert.ToInt32(SymmetryBlocks[0].ReflectToNum[1 - ReflectionNum]);
+                        B = Convert.ToInt32(SymmetryBlocks[0].ReflectToNum[1 - ReflectionNum]);
                         NearestA.NodeA[1] = PassageNodes[B, Args.PassageNodeA.Num];
                         NearestA.NodeB[1] = PassageNodes[SymmetryBlocks[B].ReflectToNum[ReflectionNum], Args.PassageNodeB.Num];
                         NearestA.NodeCount = 2;
@@ -1176,10 +1178,10 @@ namespace SharpFlame
             clsNodeTag TagA = (clsNodeTag)NodeA.Tag;
             clsNodeTag TagB = (clsNodeTag)NodeB.Tag;
 
-            return System.Convert.ToSingle((TagA.Pos - TagB.Pos).ToDoubles().GetMagnitude());
+            return Convert.ToSingle((TagA.Pos - TagB.Pos).ToDoubles().GetMagnitude());
         }
 
-        public void CalcNodePos(PathfinderNode Node, ref Matrix3D.Position.XY_dbl Pos, ref int SampleCount)
+        public void CalcNodePos(PathfinderNode Node, ref Position.XY_dbl Pos, ref int SampleCount)
         {
             if ( Node.GetLayer.GetNetwork_LayerNum == 0 )
             {
@@ -1296,7 +1298,7 @@ namespace SharpFlame
 
             //set position of jitter layer nodes
 
-            Matrix3D.Position.XY_dbl XY_dbl = default(Matrix3D.Position.XY_dbl);
+            Position.XY_dbl XY_dbl = default(Position.XY_dbl);
 
             if ( A > 0 )
             {
@@ -1334,7 +1336,7 @@ namespace SharpFlame
                         //only do this if the levels are the same
                         //this is to make sure nodes that are connected are actually connected on the terrain
                         XY_int = modMath.PointGetClosestPosOnLine(Connections[B].PassageNodeA.Pos, Connections[B].PassageNodeB.Pos, NodeTag.Pos);
-                        Dist = System.Convert.ToSingle((XY_int - NodeTag.Pos).ToDoubles().GetMagnitude());
+                        Dist = Convert.ToSingle((XY_int - NodeTag.Pos).ToDoubles().GetMagnitude());
                         if ( Dist < BestDist )
                         {
                             BestDist = Dist;
@@ -1356,7 +1358,7 @@ namespace SharpFlame
                     //If Not PassageNodesA(C).IsOnBorder Then
                     for ( D = 0; D <= SymmetryBlockCount - 1; D++ )
                     {
-                        Dist = System.Convert.ToSingle((NodeTag.Pos - PassageNodes[D, C].Pos).ToDoubles().GetMagnitude());
+                        Dist = Convert.ToSingle((NodeTag.Pos - PassageNodes[D, C].Pos).ToDoubles().GetMagnitude());
                         if ( Dist < BestDist )
                         {
                             BestDist = Dist;
@@ -1402,7 +1404,7 @@ namespace SharpFlame
             {
                 RampArgs.Connection = Connections[B];
                 RampArgs.RampLength =
-                    Math.Max(System.Convert.ToInt32((Connections[B].PassageNodeA.Pos - Connections[B].PassageNodeB.Pos).ToDoubles().GetMagnitude() * 0.75D),
+                    Math.Max(Convert.ToInt32((Connections[B].PassageNodeA.Pos - Connections[B].PassageNodeB.Pos).ToDoubles().GetMagnitude() * 0.75D),
                         MinRampLength * Math.Abs(Connections[B].PassageNodeA.Level - Connections[B].PassageNodeB.Level));
                 for ( A = 0; A <= JitterLayer.GetNodeCount - 1; A++ )
                 {
@@ -1410,7 +1412,7 @@ namespace SharpFlame
                     {
                         NodeTag = (clsNodeTag)(JitterLayer.get_GetNode(A).Tag);
                         XY_int = modMath.PointGetClosestPosOnLine(Connections[B].PassageNodeA.Pos, Connections[B].PassageNodeB.Pos, NodeTag.Pos);
-                        Dist = System.Convert.ToSingle((XY_int - NodeTag.Pos).ToDoubles().GetMagnitude());
+                        Dist = Convert.ToSingle((XY_int - NodeTag.Pos).ToDoubles().GetMagnitude());
                         if ( Dist < RampArgs.RampLength * 2.0F )
                         {
                             SetBaseLevelRamp(RampArgs, JitterLayer.get_GetNode(A));
@@ -1645,7 +1647,7 @@ namespace SharpFlame
         {
             public clsPassageNode[] OilNodes;
             public int[] OilClusterSizes;
-            public clsGenerateMap.clsOilPossibilities OilPossibilities;
+            public clsOilPossibilities OilPossibilities;
             public double[] PlayerOilScore;
         }
 
@@ -1718,7 +1720,7 @@ namespace SharpFlame
             double UnbalancedScore = 0;
             double dblTemp = 0;
             double Value = 0;
-            clsGenerateMap.clsOilPossibilities.clsPossibility NewPossibility = new clsGenerateMap.clsOilPossibilities.clsPossibility();
+            clsOilPossibilities.clsPossibility NewPossibility = new clsOilPossibilities.clsPossibility();
             double[] BaseOilScore = new double[TopLeftPlayerCount];
 
             NewPossibility.PlayerOilScoreAddition = new double[TopLeftPlayerCount];
@@ -1801,7 +1803,7 @@ namespace SharpFlame
                     for ( SymmetryBlockNum = 0; SymmetryBlockNum <= SymmetryBlockCount - 1; SymmetryBlockNum++ )
                     {
                         dblTemp =
-                            System.Convert.ToDouble(PassageNodeDists[0, PlayerBases[PlayerNum].Nodes[0].Num, SymmetryBlockNum, NewOilNodeNum] * 2.0D +
+                            Convert.ToDouble(PassageNodeDists[0, PlayerBases[PlayerNum].Nodes[0].Num, SymmetryBlockNum, NewOilNodeNum] * 2.0D +
                                                     (PlayerBases[PlayerNum].Nodes[0].Pos - PassageNodes[SymmetryBlockNum, NewOilNodeNum].Pos).ToDoubles().GetMagnitude());
                         BaseOilScore[PlayerNum] += 100.0D / dblTemp;
                     }
@@ -1909,15 +1911,15 @@ namespace SharpFlame
             {
                 clsNodeTag NodeTag = (clsNodeTag)Node.Tag;
                 modMath.sXY_int XY_int = modMath.PointGetClosestPosOnLine(Args.Connection.PassageNodeA.Pos, Args.Connection.PassageNodeB.Pos, NodeTag.Pos);
-                float ConnectionLength = System.Convert.ToSingle((Args.Connection.PassageNodeA.Pos - Args.Connection.PassageNodeB.Pos).ToDoubles().GetMagnitude());
+                float ConnectionLength = Convert.ToSingle((Args.Connection.PassageNodeA.Pos - Args.Connection.PassageNodeB.Pos).ToDoubles().GetMagnitude());
                 float Extra = ConnectionLength - Args.RampLength;
-                float ConnectionPos = System.Convert.ToSingle((XY_int - Args.Connection.PassageNodeA.Pos).ToDoubles().GetMagnitude());
+                float ConnectionPos = Convert.ToSingle((XY_int - Args.Connection.PassageNodeA.Pos).ToDoubles().GetMagnitude());
                 float RampPos = modMath.Clamp_sng((float)((ConnectionPos - Extra / 2.0F) / Args.RampLength), 0.0F, 1.0F);
                 int Layer_NodeNum = Node.GetLayer_NodeNum;
                 RampPos = (float)(1.0D - (Math.Cos(RampPos * Math.PI) + 1.0D) / 2.0D);
                 if ( RampPos > 0.0F & RampPos < 1.0F )
                 {
-                    float Dist2 = System.Convert.ToSingle((NodeTag.Pos - XY_int).ToDoubles().GetMagnitude());
+                    float Dist2 = Convert.ToSingle((NodeTag.Pos - XY_int).ToDoubles().GetMagnitude());
                     if ( Dist2 < Args.RampRadius )
                     {
                         float Dist2Factor = 1.0F; //Math.Min(3.0F - 3.0F * Dist2 / 384.0F, 1.0F) 'distance fading
@@ -1996,7 +1998,7 @@ namespace SharpFlame
                             //only do this if the waters are the same
                             //this is to make sure nodes that are connected are actually connected as water
                             XY_int = modMath.PointGetClosestPosOnLine(Connections[B].PassageNodeA.Pos, Connections[B].PassageNodeB.Pos, Pos);
-                            Dist = System.Convert.ToSingle((XY_int - Pos).ToDoubles().GetMagnitude());
+                            Dist = Convert.ToSingle((XY_int - Pos).ToDoubles().GetMagnitude());
                             if ( Dist < BestDist )
                             {
                                 BestDist = Dist;
@@ -2016,7 +2018,7 @@ namespace SharpFlame
                     {
                         for ( B = 0; B <= SymmetryBlockCount - 1; B++ )
                         {
-                            Dist = System.Convert.ToSingle((Pos - PassageNodes[B, C].Pos).ToDoubles().GetMagnitude());
+                            Dist = Convert.ToSingle((Pos - PassageNodes[B, C].Pos).ToDoubles().GetMagnitude());
                             if ( Dist < BestDist )
                             {
                                 BestDist = Dist;
@@ -2518,7 +2520,7 @@ namespace SharpFlame
                         if ( PassageNodes[D, A].HasFeatureCluster )
                         {
                             Count = FeatureClusterMinUnits +
-                                    System.Convert.ToInt32(Conversion.Int(VBMath.Rnd() * (FeatureClusterMaxUnits - FeatureClusterMinUnits + 1)));
+                                    Convert.ToInt32(Conversion.Int(VBMath.Rnd() * (FeatureClusterMaxUnits - FeatureClusterMinUnits + 1)));
                             for ( B = 1; B <= Count; B++ )
                             {
                                 RandNum = (uint)(Conversion.Int(VBMath.Rnd() * GenerateTileset.ClusteredUnitChanceTotal));
@@ -2547,7 +2549,7 @@ namespace SharpFlame
                 }
                 if ( MissingUnitCount > 0 )
                 {
-                    ReturnResult.WarningAdd("Not enough space for " + System.Convert.ToString(MissingUnitCount) + " clustered objects.");
+                    ReturnResult.WarningAdd("Not enough space for " + Convert.ToString(MissingUnitCount) + " clustered objects.");
                 }
             }
 
@@ -2590,7 +2592,7 @@ namespace SharpFlame
                 }
                 if ( A < FeatureScatterCount + 1 )
                 {
-                    ReturnResult.WarningAdd("Only enough space for " + System.Convert.ToString(A - 1) + " scattered objects.");
+                    ReturnResult.WarningAdd("Only enough space for " + Convert.ToString(A - 1) + " scattered objects.");
                 }
             }
 
@@ -2613,7 +2615,7 @@ namespace SharpFlame
                 int A = 0;
                 do
                 {
-                    A = System.Convert.ToInt32(Conversion.Int(VBMath.Rnd() * InputNode.GetChildNodeCount));
+                    A = Convert.ToInt32(Conversion.Int(VBMath.Rnd() * InputNode.GetChildNodeCount));
                 } while ( InputNode.get_GetChildNode(A).GetClearance < MinClearance );
 
                 PathfinderNode ReturnResult = GetRandomChildNode(InputNode.get_GetChildNode(A), MinClearance);
@@ -3212,7 +3214,7 @@ namespace SharpFlame
             }
             else
             {
-                RandomAction = System.Convert.ToInt32(Conversion.Int(VBMath.Rnd() * Args.ActionTotal));
+                RandomAction = Convert.ToInt32(Conversion.Int(VBMath.Rnd() * Args.ActionTotal));
                 if ( RandomAction < Args.FlatsCutoff )
                 {
                     //extend the level that surrounds this most
@@ -3422,7 +3424,7 @@ namespace SharpFlame
                 {
                     if ( ConnectionsCanRamp[B] && !Connections[B].IsRamp )
                     {
-                        if ( CheckRampAngles(Connections[B], System.Convert.ToDouble(80.0D * modMath.RadOf1Deg), System.Convert.ToDouble(120.0D * modMath.RadOf1Deg),
+                        if ( CheckRampAngles(Connections[B], Convert.ToDouble(80.0D * modMath.RadOf1Deg), Convert.ToDouble(120.0D * modMath.RadOf1Deg),
                             0.0D * modMath.RadOf1Deg) )
                         {
                             GetPathStartNodes[0] = PassageNodePathNodes[Connections[B].PassageNodeA.MirrorNum, Connections[B].PassageNodeA.Num];
@@ -3433,7 +3435,7 @@ namespace SharpFlame
                             XY_int.Y = (int)((Connections[B].PassageNodeA.Pos.Y + Connections[B].PassageNodeB.Pos.Y) / 2.0D);
                             for ( E = 0; E <= TotalPlayerCount - 1; E++ )
                             {
-                                Dist = System.Convert.ToDouble((PlayerBases[E].Pos - XY_int).ToDoubles().GetMagnitude());
+                                Dist = Convert.ToDouble((PlayerBases[E].Pos - XY_int).ToDoubles().GetMagnitude());
                                 if ( Dist < BaseDist )
                                 {
                                     BaseDist = Dist;
@@ -3690,8 +3692,8 @@ namespace SharpFlame
             {
                 MaxBestNodeCount *= PassageNodeCount;
             }
-            clsGenerateMap.clsOilPossibilities.clsPossibility BestPossibility = default(clsGenerateMap.clsOilPossibilities.clsPossibility);
-            clsGenerateMap.clsOilBalanceLoopArgs OilArgs = new clsGenerateMap.clsOilBalanceLoopArgs();
+            clsOilPossibilities.clsPossibility BestPossibility = default(clsOilPossibilities.clsPossibility);
+            clsOilBalanceLoopArgs OilArgs = new clsOilBalanceLoopArgs();
             OilArgs.OilClusterSizes = new int[OilAtATime];
             OilArgs.PlayerOilScore = new double[TopLeftPlayerCount];
             OilArgs.OilNodes = new clsPassageNode[OilAtATime];
@@ -3704,9 +3706,9 @@ namespace SharpFlame
                 {
                     OilArgs.OilClusterSizes[A] =
                         Math.Min(ExtraOilClusterSizeMin + (int)(Conversion.Int(VBMath.Rnd() * (ExtraOilClusterSizeMax - ExtraOilClusterSizeMin + 1))),
-                            Math.Max((int)(Math.Ceiling(System.Convert.ToDecimal((ExtraOilCount - PlacedExtraOilCount) / SymmetryBlockCount))), 1));
+                            Math.Max((int)(Math.Ceiling(Convert.ToDecimal((ExtraOilCount - PlacedExtraOilCount) / SymmetryBlockCount))), 1));
                 }
-                OilArgs.OilPossibilities = new clsGenerateMap.clsOilPossibilities();
+                OilArgs.OilPossibilities = new clsOilPossibilities();
                 OilBalanceLoop(OilArgs, 0);
 
                 BestPossibility = OilArgs.OilPossibilities.BestPossibility;
@@ -3727,7 +3729,7 @@ namespace SharpFlame
                 }
                 else
                 {
-                    ReturnResult.WarningAdd("Could not place all of the oil. " + System.Convert.ToString(PlacedExtraOilCount) + " oil was placed.");
+                    ReturnResult.WarningAdd("Could not place all of the oil. " + Convert.ToString(PlacedExtraOilCount) + " oil was placed.");
                     break;
                 }
             }

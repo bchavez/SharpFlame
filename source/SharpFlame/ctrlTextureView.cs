@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
+using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
@@ -31,7 +32,7 @@ namespace SharpFlame
         private Timer tmrDraw;
         private Timer tmrDrawDelay;
 
-        public OpenTK.GLControl OpenGLControl;
+        public GLControl OpenGLControl;
 
         public ctrlTextureView(frmMain Owner)
         {
@@ -95,7 +96,7 @@ namespace SharpFlame
             }
         }
 
-        private void tmrDraw_Tick(System.Object sender, System.EventArgs e)
+        private void tmrDraw_Tick(Object sender, EventArgs e)
         {
             tmrDraw.Enabled = false;
             if ( DrawPending )
@@ -197,7 +198,7 @@ namespace SharpFlame
             modMath.sXY_sng TexCoord3 = new modMath.sXY_sng();
 
             GL.MatrixMode(MatrixMode.Projection);
-            OpenTK.Matrix4 temp_mat = OpenTK.Matrix4.CreateOrthographicOffCenter(0.0F, GLSize.X, GLSize.Y, 0.0F, -1.0F, 1.0F);
+            Matrix4 temp_mat = Matrix4.CreateOrthographicOffCenter(0.0F, GLSize.X, GLSize.Y, 0.0F, -1.0F, 1.0F);
             GL.LoadMatrix(ref temp_mat);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
@@ -356,7 +357,7 @@ namespace SharpFlame
             Refresh();
         }
 
-        public void OpenGL_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        public void OpenGL_MouseDown(object sender, MouseEventArgs e)
         {
             clsMap Map = MainMap;
 
@@ -405,7 +406,7 @@ namespace SharpFlame
             DrawViewLater();
         }
 
-        private void tmrDrawDelay_Tick(System.Object sender, System.EventArgs e)
+        private void tmrDrawDelay_Tick(Object sender, EventArgs e)
         {
             if ( DrawPending )
             {
@@ -418,7 +419,7 @@ namespace SharpFlame
             }
         }
 
-        public void pnlDraw_Resize(object sender, System.EventArgs e)
+        public void pnlDraw_Resize(object sender, EventArgs e)
         {
             if ( OpenGLControl != null )
             {
@@ -479,7 +480,7 @@ namespace SharpFlame
             }
         }
 
-        public void OpenGL_Resize(object sender, System.EventArgs e)
+        public void OpenGL_Resize(object sender, EventArgs e)
         {
             GLSize.X = OpenGLControl.Width;
             GLSize.Y = OpenGLControl.Height;
@@ -490,7 +491,7 @@ namespace SharpFlame
             Viewport_Resize();
         }
 
-        public void TextureScroll_ValueChanged(object sender, System.EventArgs e)
+        public void TextureScroll_ValueChanged(object sender, EventArgs e)
         {
             TextureYOffset = TextureScroll.Value;
 

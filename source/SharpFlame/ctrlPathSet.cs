@@ -1,3 +1,4 @@
+using System;
 using System.Windows.Forms;
 
 namespace SharpFlame
@@ -57,13 +58,13 @@ namespace SharpFlame
             }
         }
 
-        public void btnAdd_Click(System.Object sender, System.EventArgs e)
+        public void btnAdd_Click(Object sender, EventArgs e)
         {
-            System.Windows.Forms.FolderBrowserDialog DirSelect = new System.Windows.Forms.FolderBrowserDialog();
+            FolderBrowserDialog DirSelect = new FolderBrowserDialog();
 
             if ( lstPaths.Items.Count > 0 )
             {
-                DirSelect.SelectedPath = System.Convert.ToString(lstPaths.Items[lstPaths.Items.Count - 1]);
+                DirSelect.SelectedPath = Convert.ToString(lstPaths.Items[lstPaths.Items.Count - 1]);
             }
 
             if ( DirSelect.ShowDialog() != DialogResult.OK )
@@ -75,7 +76,7 @@ namespace SharpFlame
             lstPaths.SelectedIndex = lstPaths.Items.Count - 1;
         }
 
-        public void btnRemove_Click(System.Object sender, System.EventArgs e)
+        public void btnRemove_Click(Object sender, EventArgs e)
         {
             if ( lstPaths.SelectedIndex < 0 )
             {

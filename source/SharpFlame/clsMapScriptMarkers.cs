@@ -1,3 +1,4 @@
+using System;
 using System.Windows.Forms;
 using OpenTK.Graphics.OpenGL;
 
@@ -142,7 +143,7 @@ namespace SharpFlame
                 set
                 {
                     _Pos.X = modMath.Clamp_int(value, 0,
-                        System.Convert.ToInt32(System.Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.X * modProgram.TerrainGridSpacing) - 1));
+                        Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.X * modProgram.TerrainGridSpacing) - 1));
                 }
             }
 
@@ -152,7 +153,7 @@ namespace SharpFlame
                 set
                 {
                     _Pos.Y = modMath.Clamp_int(value, 0,
-                        System.Convert.ToInt32(System.Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.Y * modProgram.TerrainGridSpacing) - 1));
+                        Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.Y * modProgram.TerrainGridSpacing) - 1));
                 }
             }
 
@@ -177,7 +178,7 @@ namespace SharpFlame
 
             public void GLDraw()
             {
-                clsMap.clsDrawHorizontalPosOnTerrain Drawer = new clsMap.clsDrawHorizontalPosOnTerrain();
+                clsDrawHorizontalPosOnTerrain Drawer = new clsDrawHorizontalPosOnTerrain();
                 Drawer.Map = _ParentMapLink.Source;
                 Drawer.Horizontal = _Pos;
                 if ( modMain.frmMainInstance.SelectedScriptMarker == this )
@@ -277,7 +278,7 @@ namespace SharpFlame
                 set
                 {
                     _PosA.X = modMath.Clamp_int(value, 0,
-                        System.Convert.ToInt32(System.Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.X * modProgram.TerrainGridSpacing) - 1));
+                        Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.X * modProgram.TerrainGridSpacing) - 1));
                     modMath.ReorderXY(_PosA, _PosB, _PosA, _PosB);
                 }
             }
@@ -288,7 +289,7 @@ namespace SharpFlame
                 set
                 {
                     _PosA.Y = modMath.Clamp_int(value, 0,
-                        System.Convert.ToInt32(System.Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.Y * modProgram.TerrainGridSpacing) - 1));
+                        Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.Y * modProgram.TerrainGridSpacing) - 1));
                     modMath.ReorderXY(_PosA, _PosB, _PosA, _PosB);
                 }
             }
@@ -299,7 +300,7 @@ namespace SharpFlame
                 set
                 {
                     _PosB.X = modMath.Clamp_int(value, 0,
-                        System.Convert.ToInt32(System.Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.X * modProgram.TerrainGridSpacing) - 1));
+                        Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.X * modProgram.TerrainGridSpacing) - 1));
                     modMath.ReorderXY(_PosA, _PosB, _PosA, _PosB);
                 }
             }
@@ -310,7 +311,7 @@ namespace SharpFlame
                 set
                 {
                     _PosB.Y = modMath.Clamp_int(value, 0,
-                        System.Convert.ToInt32(System.Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.Y * modProgram.TerrainGridSpacing) - 1));
+                        Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.Y * modProgram.TerrainGridSpacing) - 1));
                     modMath.ReorderXY(_PosA, _PosB, _PosA, _PosB);
                 }
             }
@@ -348,7 +349,7 @@ namespace SharpFlame
 
             public void GLDraw()
             {
-                clsMap.clsDrawTerrainLine Drawer = new clsMap.clsDrawTerrainLine();
+                clsDrawTerrainLine Drawer = new clsDrawTerrainLine();
                 Drawer.Map = _ParentMapLink.Source;
                 if ( modMain.frmMainInstance.SelectedScriptMarker == this )
                 {

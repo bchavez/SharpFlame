@@ -45,9 +45,9 @@ namespace SharpFlame
             ColourBoxRedraw();
         }
 
-        public void SelectColour(System.Object sender, System.EventArgs e)
+        public void SelectColour(Object sender, EventArgs e)
         {
-            System.Windows.Forms.ColorDialog ColourSelect = new System.Windows.Forms.ColorDialog();
+            ColorDialog ColourSelect = new ColorDialog();
 
             ColourSelect.Color = ColourColor;
             DialogResult Result = ColourSelect.ShowDialog();

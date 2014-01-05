@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using Matrix3D;
 using Microsoft.VisualBasic;
 
 namespace SharpFlame
@@ -133,7 +134,7 @@ namespace SharpFlame
                 Action.PosNum.Y = Centre.Y + Y;
                 XNum = Y - Tiles.YMin;
                 for ( X = modMath.Clamp_int(Tiles.XMin[XNum] + Centre.X, 0, LastValidNum.X) - Centre.X;
-                    X <= modMath.Clamp_int(System.Convert.ToInt32(Tiles.XMax[XNum] + Centre.X), 0, LastValidNum.X) - Centre.X;
+                    X <= modMath.Clamp_int(Convert.ToInt32(Tiles.XMax[XNum] + Centre.X), 0, LastValidNum.X) - Centre.X;
                     X++ )
                 {
                     Action.PosNum.X = Centre.X + X;
@@ -143,21 +144,21 @@ namespace SharpFlame
                         {
                             switch ( _Shape )
                             {
-                                case clsBrush.enumShape.Circle:
+                                case enumShape.Circle:
                                     if ( _Alignment )
                                     {
                                         Action.Effect =
-                                            System.Convert.ToDouble(1.0D -
-                                                                    (new Matrix3D.Position.XY_dbl(Action.PosNum.X, Action.PosNum.Y) -
-                                                                     new Matrix3D.Position.XY_dbl(Centre.X - 0.5D, Centre.Y - 0.5D)).GetMagnitude() /
+                                            Convert.ToDouble(1.0D -
+                                                                    (new Position.XY_dbl(Action.PosNum.X, Action.PosNum.Y) -
+                                                                     new Position.XY_dbl(Centre.X - 0.5D, Centre.Y - 0.5D)).GetMagnitude() /
                                                                     (Tiles.ResultRadius + 0.5D));
                                     }
                                     else
                                     {
-                                        Action.Effect = System.Convert.ToDouble(1.0D - (Centre - Action.PosNum).ToDoubles().GetMagnitude() / (Tiles.ResultRadius + 0.5D));
+                                        Action.Effect = Convert.ToDouble(1.0D - (Centre - Action.PosNum).ToDoubles().GetMagnitude() / (Tiles.ResultRadius + 0.5D));
                                     }
                                     break;
-                                case clsBrush.enumShape.Square:
+                                case enumShape.Square:
                                     if ( _Alignment )
                                     {
                                         Action.Effect = 1.0D -
@@ -204,7 +205,7 @@ namespace SharpFlame
             {
                 RadiusB += 1.0D;
                 Y = (int)(Conversion.Int(RadiusB));
-                YMin = System.Convert.ToInt32(- Y);
+                YMin = Convert.ToInt32(- Y);
                 YMax = Y - 1;
                 B = YMax - YMin;
                 XMin = new int[B + 1];
@@ -216,7 +217,7 @@ namespace SharpFlame
                     dblX = Math.Sqrt(RadiusC - dblY * dblY) + 0.5D;
                     A = Y - YMin;
                     X = (int)(Conversion.Int(dblX));
-                    XMin[A] = System.Convert.ToInt32(- X);
+                    XMin[A] = Convert.ToInt32(- X);
                     XMax[A] = X - 1;
                 }
             }
@@ -224,7 +225,7 @@ namespace SharpFlame
             {
                 RadiusB += 0.125D;
                 Y = (int)(Conversion.Int(RadiusB));
-                YMin = System.Convert.ToInt32(- Y);
+                YMin = Convert.ToInt32(- Y);
                 YMax = Y;
                 B = YMax - YMin;
                 XMin = new int[B + 1];
@@ -236,7 +237,7 @@ namespace SharpFlame
                     dblX = Math.Sqrt(RadiusC - dblY * dblY);
                     A = Y - YMin;
                     X = (int)(Conversion.Int(dblX));
-                    XMin[A] = System.Convert.ToInt32(- X);
+                    XMin[A] = Convert.ToInt32(- X);
                     XMax[A] = X;
                 }
             }
@@ -256,13 +257,13 @@ namespace SharpFlame
             {
                 RadiusB += 0.5D;
                 A = (int)(Conversion.Int(RadiusB));
-                YMin = System.Convert.ToInt32(- A);
+                YMin = Convert.ToInt32(- A);
                 YMax = A - 1;
             }
             else
             {
                 A = (int)(Conversion.Int(RadiusB));
-                YMin = System.Convert.ToInt32(- A);
+                YMin = Convert.ToInt32(- A);
                 YMax = A;
             }
             B = YMax - YMin;

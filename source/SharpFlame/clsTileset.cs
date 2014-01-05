@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.IO;
 using Microsoft.VisualBasic;
 using OpenTK.Graphics.OpenGL;
 
@@ -27,11 +28,11 @@ namespace SharpFlame
         public modProgram.sResult Default_TileTypes_Load(string Path)
         {
             modProgram.sResult ReturnResult = new modProgram.sResult();
-            System.IO.BinaryReader File = default(System.IO.BinaryReader);
+            BinaryReader File = default(BinaryReader);
 
             try
             {
-                File = new System.IO.BinaryReader(new System.IO.FileStream(Path, System.IO.FileMode.Open));
+                File = new BinaryReader(new FileStream(Path, FileMode.Open));
             }
             catch ( Exception ex )
             {
@@ -43,7 +44,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        private modProgram.sResult Default_TileTypes_Read(System.IO.BinaryReader File)
+        private modProgram.sResult Default_TileTypes_Read(BinaryReader File)
         {
             modProgram.sResult ReturnResult = new modProgram.sResult();
             ReturnResult.Success = false;
@@ -71,10 +72,10 @@ namespace SharpFlame
                 }
 
                 uintTemp = File.ReadUInt32();
-                TileCount = System.Convert.ToInt32(uintTemp);
+                TileCount = Convert.ToInt32(uintTemp);
                 Tiles = new sTile[TileCount];
 
-                for ( A = 0; A <= Math.Min(System.Convert.ToInt32(uintTemp), TileCount) - 1; A++ )
+                for ( A = 0; A <= Math.Min(Convert.ToInt32(uintTemp), TileCount) - 1; A++ )
                 {
                     ushortTemp = File.ReadUInt16();
                     if ( ushortTemp > modProgram.TileTypes.Count )
@@ -98,7 +99,7 @@ namespace SharpFlame
         public clsResult LoadDirectory(string Path)
         {
             clsResult ReturnResult =
-                new clsResult("Loading tileset from " + System.Convert.ToString(ControlChars.Quote) + Path + System.Convert.ToString(ControlChars.Quote));
+                new clsResult("Loading tileset from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
 
             Bitmap Bitmap = null;
             modProgram.sSplitPath SplitPath = new modProgram.sSplitPath(Path);
@@ -142,7 +143,7 @@ namespace SharpFlame
 
                 //-------- 128 --------
 
-                GraphicPath = SlashPath + Name + "-128" + System.Convert.ToString(modProgram.PlatformPathSeparator) + strTile;
+                GraphicPath = SlashPath + Name + "-128" + Convert.ToString(modProgram.PlatformPathSeparator) + strTile;
 
                 Result = modBitmap.LoadBitmap(GraphicPath, ref Bitmap);
                 if ( !Result.Success )
@@ -252,7 +253,7 @@ namespace SharpFlame
 
             //-------- 64 --------
 
-            GraphicPath = SlashPath + Name + "-64" + System.Convert.ToString(modProgram.PlatformPathSeparator) + strTile;
+            GraphicPath = SlashPath + Name + "-64" + Convert.ToString(modProgram.PlatformPathSeparator) + strTile;
 
             Result = modBitmap.LoadBitmap(GraphicPath, ref Bitmap);
             if ( !Result.Success )
@@ -273,7 +274,7 @@ namespace SharpFlame
 
             //-------- 32 --------
 
-            GraphicPath = SlashPath + Name + "-32" + System.Convert.ToString(modProgram.PlatformPathSeparator) + strTile;
+            GraphicPath = SlashPath + Name + "-32" + Convert.ToString(modProgram.PlatformPathSeparator) + strTile;
 
             Result = modBitmap.LoadBitmap(GraphicPath, ref Bitmap);
             if ( !Result.Success )
@@ -294,7 +295,7 @@ namespace SharpFlame
 
             //-------- 16 --------
 
-            GraphicPath = SlashPath + Name + "-16" + System.Convert.ToString(modProgram.PlatformPathSeparator) + strTile;
+            GraphicPath = SlashPath + Name + "-16" + Convert.ToString(modProgram.PlatformPathSeparator) + strTile;
 
             Result = modBitmap.LoadBitmap(GraphicPath, ref Bitmap);
             if ( !Result.Success )
@@ -328,9 +329,9 @@ namespace SharpFlame
                     PixelColorB = Bitmap.GetPixel(X2, Y1);
                     PixelColorC = Bitmap.GetPixel(X1, Y2);
                     PixelColorD = Bitmap.GetPixel(X2, Y2);
-                    Red = System.Convert.ToInt32(((PixelColorA.R) + PixelColorB.R + PixelColorC.R + PixelColorD.R) / 4.0F);
-                    Green = System.Convert.ToInt32(((PixelColorA.G) + PixelColorB.G + PixelColorC.G + PixelColorD.G) / 4.0F);
-                    Blue = System.Convert.ToInt32(((PixelColorA.B) + PixelColorB.B + PixelColorC.B + PixelColorD.B) / 4.0F);
+                    Red = Convert.ToInt32(((PixelColorA.R) + PixelColorB.R + PixelColorC.R + PixelColorD.R) / 4.0F);
+                    Green = Convert.ToInt32(((PixelColorA.G) + PixelColorB.G + PixelColorC.G + PixelColorD.G) / 4.0F);
+                    Blue = Convert.ToInt32(((PixelColorA.B) + PixelColorB.B + PixelColorC.B + PixelColorD.B) / 4.0F);
                     Bitmap8.SetPixel(PixX, PixY, ColorTranslator.FromOle(modColour.OSRGB(Red, Green, Blue)));
                 }
             }
@@ -355,9 +356,9 @@ namespace SharpFlame
                     PixelColorB = Bitmap.GetPixel(X2, Y1);
                     PixelColorC = Bitmap.GetPixel(X1, Y2);
                     PixelColorD = Bitmap.GetPixel(X2, Y2);
-                    Red = System.Convert.ToInt32(((PixelColorA.R) + PixelColorB.R + PixelColorC.R + PixelColorD.R) / 4.0F);
-                    Green = System.Convert.ToInt32(((PixelColorA.G) + PixelColorB.G + PixelColorC.G + PixelColorD.G) / 4.0F);
-                    Blue = System.Convert.ToInt32(((PixelColorA.B) + PixelColorB.B + PixelColorC.B + PixelColorD.B) / 4.0F);
+                    Red = Convert.ToInt32(((PixelColorA.R) + PixelColorB.R + PixelColorC.R + PixelColorD.R) / 4.0F);
+                    Green = Convert.ToInt32(((PixelColorA.G) + PixelColorB.G + PixelColorC.G + PixelColorD.G) / 4.0F);
+                    Blue = Convert.ToInt32(((PixelColorA.B) + PixelColorB.B + PixelColorC.B + PixelColorD.B) / 4.0F);
                     Bitmap4.SetPixel(PixX, PixY, ColorTranslator.FromOle(modColour.OSRGB(Red, Green, Blue)));
                 }
             }
@@ -382,9 +383,9 @@ namespace SharpFlame
                     PixelColorB = Bitmap.GetPixel(X2, Y1);
                     PixelColorC = Bitmap.GetPixel(X1, Y2);
                     PixelColorD = Bitmap.GetPixel(X2, Y2);
-                    Red = System.Convert.ToInt32(((PixelColorA.R) + PixelColorB.R + PixelColorC.R + PixelColorD.R) / 4.0F);
-                    Green = System.Convert.ToInt32(((PixelColorA.G) + PixelColorB.G + PixelColorC.G + PixelColorD.G) / 4.0F);
-                    Blue = System.Convert.ToInt32(((PixelColorA.B) + PixelColorB.B + PixelColorC.B + PixelColorD.B) / 4.0F);
+                    Red = Convert.ToInt32(((PixelColorA.R) + PixelColorB.R + PixelColorC.R + PixelColorD.R) / 4.0F);
+                    Green = Convert.ToInt32(((PixelColorA.G) + PixelColorB.G + PixelColorC.G + PixelColorD.G) / 4.0F);
+                    Blue = Convert.ToInt32(((PixelColorA.B) + PixelColorB.B + PixelColorC.B + PixelColorD.B) / 4.0F);
                     Bitmap2.SetPixel(PixX, PixY, ColorTranslator.FromOle(modColour.OSRGB(Red, Green, Blue)));
                 }
             }
@@ -407,9 +408,9 @@ namespace SharpFlame
             PixelColorB = Bitmap.GetPixel(X2, Y1);
             PixelColorC = Bitmap.GetPixel(X1, Y2);
             PixelColorD = Bitmap.GetPixel(X2, Y2);
-            Red = System.Convert.ToInt32(((PixelColorA.R) + PixelColorB.R + PixelColorC.R + PixelColorD.R) / 4.0F);
-            Green = System.Convert.ToInt32(((PixelColorA.G) + PixelColorB.G + PixelColorC.G + PixelColorD.G) / 4.0F);
-            Blue = System.Convert.ToInt32(((PixelColorA.B) + PixelColorB.B + PixelColorC.B + PixelColorD.B) / 4.0F);
+            Red = Convert.ToInt32(((PixelColorA.R) + PixelColorB.R + PixelColorC.R + PixelColorD.R) / 4.0F);
+            Green = Convert.ToInt32(((PixelColorA.G) + PixelColorB.G + PixelColorC.G + PixelColorD.G) / 4.0F);
+            Blue = Convert.ToInt32(((PixelColorA.B) + PixelColorB.B + PixelColorC.B + PixelColorD.B) / 4.0F);
             Bitmap1.SetPixel(PixX, PixY, ColorTranslator.FromOle(modColour.OSRGB(Red, Green, Blue)));
 
             BitmapTextureArgs.Texture = Bitmap1;

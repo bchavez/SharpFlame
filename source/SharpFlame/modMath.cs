@@ -1,4 +1,5 @@
 using System;
+using Matrix3D;
 
 namespace SharpFlame
 {
@@ -51,9 +52,9 @@ namespace SharpFlame
                 return result;
             }
 
-            public static Matrix3D.Position.XY_dbl operator *(sXY_int a, double b)
+            public static Position.XY_dbl operator *(sXY_int a, double b)
             {
-                Matrix3D.Position.XY_dbl result = default(Matrix3D.Position.XY_dbl);
+                Position.XY_dbl result = default(Position.XY_dbl);
 
                 result.X = a.X * b;
                 result.Y = a.Y * b;
@@ -61,9 +62,9 @@ namespace SharpFlame
                 return result;
             }
 
-            public static Matrix3D.Position.XY_dbl operator /(sXY_int a, double b)
+            public static Position.XY_dbl operator /(sXY_int a, double b)
             {
-                Matrix3D.Position.XY_dbl result = default(Matrix3D.Position.XY_dbl);
+                Position.XY_dbl result = default(Position.XY_dbl);
 
                 result.X = a.X / b;
                 result.Y = a.Y / b;
@@ -71,9 +72,9 @@ namespace SharpFlame
                 return result;
             }
 
-            public Matrix3D.Position.XY_dbl ToDoubles()
+            public Position.XY_dbl ToDoubles()
             {
-                Matrix3D.Position.XY_dbl result = default(Matrix3D.Position.XY_dbl);
+                Position.XY_dbl result = default(Position.XY_dbl);
 
                 result.X = X;
                 result.Y = Y;
@@ -167,14 +168,14 @@ namespace SharpFlame
                 this.Z = Z;
             }
 
-            public void Add_dbl(Matrix3D.Position.XYZ_dbl XYZ)
+            public void Add_dbl(Position.XYZ_dbl XYZ)
             {
                 X += (int)XYZ.X;
                 Y += (int)XYZ.Y;
                 Z += (int)XYZ.Z;
             }
 
-            public void Set_dbl(Matrix3D.Position.XYZ_dbl XYZ)
+            public void Set_dbl(Position.XYZ_dbl XYZ)
             {
                 X = (int)XYZ.X;
                 Y = (int)XYZ.Y;

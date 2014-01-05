@@ -1,3 +1,5 @@
+using System.Windows.Forms;
+
 namespace SharpFlame
 {
     public partial class frmClose
@@ -8,7 +10,7 @@ namespace SharpFlame
 
             Text = WindowTitle;
 
-            DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            DialogResult = DialogResult.Cancel;
         }
     }
 }

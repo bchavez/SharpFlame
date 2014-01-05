@@ -26,7 +26,7 @@ namespace SharpFlame
 
         private void NodeDoubleClicked(object sender, TreeNodeMouseClickEventArgs e)
         {
-            if ( e.Button != System.Windows.Forms.MouseButtons.Left )
+            if ( e.Button != MouseButtons.Left )
             {
                 return;
             }
@@ -38,7 +38,7 @@ namespace SharpFlame
             item.DoubleClicked();
         }
 
-        public void frmWarnings_FormClosed(object sender, System.Windows.Forms.FormClosedEventArgs e)
+        public void frmWarnings_FormClosed(object sender, FormClosedEventArgs e)
         {
             tvwWarnings.NodeMouseDoubleClick -= NodeDoubleClicked;
         }

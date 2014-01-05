@@ -1,7 +1,12 @@
 using System;
 using System.Drawing;
+using System.IO;
+using System.Threading;
 using System.Windows.Forms;
+using Microsoft.VisualBasic.ApplicationServices;
+using OpenTK;
 using OpenTK.Graphics;
+using Timer = System.Windows.Forms.Timer;
 
 namespace SharpFlame
 {
@@ -14,14 +19,14 @@ namespace SharpFlame
         public static frmGenerator frmGeneratorInstance;
         public static frmOptions frmOptionsInstance;
 
-        public static OpenTK.GLControl OpenGL1;
-        public static OpenTK.GLControl OpenGL2;
+        public static GLControl OpenGL1;
+        public static GLControl OpenGL2;
 
         public static void Main()
         {
-            System.Windows.Forms.Application.EnableVisualStyles();
+            Application.EnableVisualStyles();
 
-            modProgram.PlatformPathSeparator = System.IO.Path.DirectorySeparatorChar;
+            modProgram.PlatformPathSeparator = Path.DirectorySeparatorChar;
             modProgram.SetProgramSubDirs();
 
             modSettings.CreateSettingOptions();
@@ -30,9 +35,9 @@ namespace SharpFlame
             InitializeResult.Add(SettingsLoadResult);
 
             OpenGL1 =
-                new OpenTK.GLControl(new GraphicsMode(new ColorFormat(modSettings.InitializeSettings.MapViewBPP), modSettings.InitializeSettings.MapViewDepth, 0));
+                new GLControl(new GraphicsMode(new ColorFormat(modSettings.InitializeSettings.MapViewBPP), modSettings.InitializeSettings.MapViewDepth, 0));
             OpenGL2 =
-                new OpenTK.GLControl(new GraphicsMode(new ColorFormat(modSettings.InitializeSettings.TextureViewBPP), modSettings.InitializeSettings.TextureViewDepth,
+                new GLControl(new GraphicsMode(new ColorFormat(modSettings.InitializeSettings.TextureViewBPP), modSettings.InitializeSettings.TextureViewDepth,
                     0));
 
             while ( OpenGL1.Context == null || OpenGL2.Context == null )
@@ -48,8 +53,8 @@ namespace SharpFlame
             try
             {
                 modProgram.ProgramIcon =
-                    new Icon((new Microsoft.VisualBasic.ApplicationServices.ConsoleApplicationBase()).Info.DirectoryPath +
-                             System.Convert.ToString(modProgram.PlatformPathSeparator) + "flaME.ico");
+                    new Icon((new ConsoleApplicationBase()).Info.DirectoryPath +
+                             Convert.ToString(modProgram.PlatformPathSeparator) + "flaME.ico");
             }
             catch ( Exception ex )
             {
@@ -65,11 +70,11 @@ namespace SharpFlame
 
             while ( !modProgram.ProgramInitializeFinished )
             {
-                System.Threading.Thread.Sleep(50);
+                Thread.Sleep(50);
                 Application.DoEvents();
             }
 
-            System.Windows.Forms.Application.Run(frmMainInstance);
+            Application.Run(frmMainInstance);
         }
     }
 }

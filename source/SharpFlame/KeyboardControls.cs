@@ -8,7 +8,7 @@ namespace SharpFlame
         {
             public bool Active(clsOption<clsKeyboardControl> control)
             {
-                return ((clsKeyboardControl)(this.get_Value(control))).Active;
+                return ((clsKeyboardControl)(get_Value(control))).Active;
             }
 
             public clsKeyboardProfile(clsOptionGroup options) : base(options)
