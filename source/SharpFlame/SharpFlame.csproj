@@ -117,6 +117,16 @@
     <Compile Include="Mapping\Changes\clsSectorChanges.cs" />
     <Compile Include="Mapping\Changes\clsTerrainUpdate.cs" />
     <Compile Include="Mapping\clsGeneratorMap.cs" />
+    <Compile Include="Mapping\Drawing\clsDrawCallTerrain.cs" />
+    <Compile Include="Mapping\Drawing\clsDrawCallTerrainWireframe.cs" />
+    <Compile Include="Mapping\Drawing\clsDrawHorizontalPosOnTerrain.cs" />
+    <Compile Include="Mapping\Drawing\clsDrawSectorObjects.cs" />
+    <Compile Include="Mapping\Drawing\clsDrawTerrainLine.cs" />
+    <Compile Include="Mapping\Drawing\clsDrawTileAreaOutline.cs" />
+    <Compile Include="Mapping\Drawing\clsDrawTileOrientation.cs" />
+    <Compile Include="Mapping\Drawing\clsDrawTileOutline.cs" />
+    <Compile Include="Mapping\Drawing\clsDrawVertexMarker.cs" />
+    <Compile Include="Mapping\Drawing\clsDrawVertexTerrain.cs" />
     <Compile Include="Mapping\Tiles\clsGeneratorTileset.cs" />
     <Compile Include="Mapping\clsHeightmap.cs" />
     <Compile Include="Mapping\Renderers\clsMapRender.cs" />
@@ -146,7 +156,7 @@
     <Compile Include="AppSettings\KeyboardManager.cs" />
     <Compile Include="Mapping\clsMap.cs" />
     <Compile Include="Mapping\clsMapChanges.cs" />
-    <Compile Include="Mapping\Drawing\clsMapDraw.cs" />
+    <Compile Include="Mapping\clsMapDraw.cs" />
     <Compile Include="Mapping\FMap\clsMapFMap.cs" />
     <Compile Include="Mapping\Objects\clsMapObject.cs" />
     <Compile Include="Mapping\IO\clsMapOtherIO.cs" />
