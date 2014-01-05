@@ -1,99 +1,79 @@
 using System.Windows.Forms;
 
-namespace SharpFlame
+namespace SharpFlame.AppSettings
 {
     public sealed class modControls
     {
-        public class clsKeyboardProfile : clsOptionProfile
-        {
-            public bool Active(clsOption<clsKeyboardControl> control)
-            {
-                return ((clsKeyboardControl)(get_Value(control))).Active;
-            }
-
-            public clsKeyboardProfile(clsOptionGroup options) : base(options)
-            {
-            }
-        }
-
-        public class clsKeyboardProfileCreator : clsOptionProfileCreator
-        {
-            public override clsOptionProfile Create()
-            {
-                return new clsKeyboardProfile(Options);
-            }
-        }
-
-        public static clsOptionGroup Options_KeyboardControls = new clsOptionGroup();
+        public static OptionGroup Options_KeyboardControls = new OptionGroup();
         public static clsKeyboardProfile KeyboardProfile;
 
         //interface controls
-        public static clsOption<clsKeyboardControl> Control_Deselect;
-        public static clsOption<clsKeyboardControl> Control_PreviousTool;
+        public static Option<clsKeyboardControl> Control_Deselect;
+        public static Option<clsKeyboardControl> Control_PreviousTool;
         //selected unit controls
-        public static clsOption<clsKeyboardControl> Control_Unit_Move;
-        public static clsOption<clsKeyboardControl> Control_Unit_Delete;
-        public static clsOption<clsKeyboardControl> Control_Unit_Multiselect;
+        public static Option<clsKeyboardControl> Control_Unit_Move;
+        public static Option<clsKeyboardControl> Control_Unit_Delete;
+        public static Option<clsKeyboardControl> Control_Unit_Multiselect;
         //generalised controls
-        public static clsOption<clsKeyboardControl> Control_Slow;
-        public static clsOption<clsKeyboardControl> Control_Fast;
+        public static Option<clsKeyboardControl> Control_Slow;
+        public static Option<clsKeyboardControl> Control_Fast;
         //picker controls
-        public static clsOption<clsKeyboardControl> Control_Picker;
+        public static Option<clsKeyboardControl> Control_Picker;
         //view controls
-        public static clsOption<clsKeyboardControl> Control_View_Textures;
-        public static clsOption<clsKeyboardControl> Control_View_Lighting;
-        public static clsOption<clsKeyboardControl> Control_View_Wireframe;
-        public static clsOption<clsKeyboardControl> Control_View_Units;
-        public static clsOption<clsKeyboardControl> Control_View_ScriptMarkers;
-        public static clsOption<clsKeyboardControl> Control_View_Move_Type;
-        public static clsOption<clsKeyboardControl> Control_View_Rotate_Type;
-        public static clsOption<clsKeyboardControl> Control_View_Move_Left;
-        public static clsOption<clsKeyboardControl> Control_View_Move_Right;
-        public static clsOption<clsKeyboardControl> Control_View_Move_Forward;
-        public static clsOption<clsKeyboardControl> Control_View_Move_Backward;
-        public static clsOption<clsKeyboardControl> Control_View_Move_Up;
-        public static clsOption<clsKeyboardControl> Control_View_Move_Down;
-        public static clsOption<clsKeyboardControl> Control_View_Zoom_In;
-        public static clsOption<clsKeyboardControl> Control_View_Zoom_Out;
-        public static clsOption<clsKeyboardControl> Control_View_Left;
-        public static clsOption<clsKeyboardControl> Control_View_Right;
-        public static clsOption<clsKeyboardControl> Control_View_Forward;
-        public static clsOption<clsKeyboardControl> Control_View_Backward;
-        public static clsOption<clsKeyboardControl> Control_View_Up;
-        public static clsOption<clsKeyboardControl> Control_View_Down;
-        public static clsOption<clsKeyboardControl> Control_View_Reset;
-        public static clsOption<clsKeyboardControl> Control_View_Roll_Left;
-        public static clsOption<clsKeyboardControl> Control_View_Roll_Right;
+        public static Option<clsKeyboardControl> Control_View_Textures;
+        public static Option<clsKeyboardControl> Control_View_Lighting;
+        public static Option<clsKeyboardControl> Control_View_Wireframe;
+        public static Option<clsKeyboardControl> Control_View_Units;
+        public static Option<clsKeyboardControl> Control_View_ScriptMarkers;
+        public static Option<clsKeyboardControl> Control_View_Move_Type;
+        public static Option<clsKeyboardControl> Control_View_Rotate_Type;
+        public static Option<clsKeyboardControl> Control_View_Move_Left;
+        public static Option<clsKeyboardControl> Control_View_Move_Right;
+        public static Option<clsKeyboardControl> Control_View_Move_Forward;
+        public static Option<clsKeyboardControl> Control_View_Move_Backward;
+        public static Option<clsKeyboardControl> Control_View_Move_Up;
+        public static Option<clsKeyboardControl> Control_View_Move_Down;
+        public static Option<clsKeyboardControl> Control_View_Zoom_In;
+        public static Option<clsKeyboardControl> Control_View_Zoom_Out;
+        public static Option<clsKeyboardControl> Control_View_Left;
+        public static Option<clsKeyboardControl> Control_View_Right;
+        public static Option<clsKeyboardControl> Control_View_Forward;
+        public static Option<clsKeyboardControl> Control_View_Backward;
+        public static Option<clsKeyboardControl> Control_View_Up;
+        public static Option<clsKeyboardControl> Control_View_Down;
+        public static Option<clsKeyboardControl> Control_View_Reset;
+        public static Option<clsKeyboardControl> Control_View_Roll_Left;
+        public static Option<clsKeyboardControl> Control_View_Roll_Right;
         //texture controls
-        public static clsOption<clsKeyboardControl> Control_Clockwise;
-        public static clsOption<clsKeyboardControl> Control_CounterClockwise;
-        public static clsOption<clsKeyboardControl> Control_Texture_Flip;
-        public static clsOption<clsKeyboardControl> Control_Tri_Flip;
+        public static Option<clsKeyboardControl> Control_Clockwise;
+        public static Option<clsKeyboardControl> Control_CounterClockwise;
+        public static Option<clsKeyboardControl> Control_Texture_Flip;
+        public static Option<clsKeyboardControl> Control_Tri_Flip;
         //gateway controls
-        public static clsOption<clsKeyboardControl> Control_Gateway_Delete;
+        public static Option<clsKeyboardControl> Control_Gateway_Delete;
         //undo controls
-        public static clsOption<clsKeyboardControl> Control_Undo;
-        public static clsOption<clsKeyboardControl> Control_Redo;
+        public static Option<clsKeyboardControl> Control_Undo;
+        public static Option<clsKeyboardControl> Control_Redo;
         //script marker controls
-        public static clsOption<clsKeyboardControl> Control_ScriptPosition;
+        public static Option<clsKeyboardControl> Control_ScriptPosition;
 
-        public static clsOption<clsKeyboardControl> KeyboardControlOptionCreate(string saveKey, Keys[] keys)
+        public static Option<clsKeyboardControl> KeyboardControlOptionCreate(string saveKey, Keys[] keys)
         {
-            clsOption<clsKeyboardControl> result = new clsOption<clsKeyboardControl>(saveKey, new clsKeyboardControl(keys, new Keys[] {}));
+            Option<clsKeyboardControl> result = new Option<clsKeyboardControl>(saveKey, new clsKeyboardControl(keys, new Keys[] {}));
             Options_KeyboardControls.Options.Add(result.GroupLink);
             return result;
         }
 
-        public static clsOption<clsKeyboardControl> KeyboardControlOptionCreate(string saveKey, Keys[] keys, Keys[] unlessKeys)
+        public static Option<clsKeyboardControl> KeyboardControlOptionCreate(string saveKey, Keys[] keys, Keys[] unlessKeys)
         {
-            clsOption<clsKeyboardControl> result = new clsOption<clsKeyboardControl>(saveKey, new clsKeyboardControl(keys, unlessKeys));
+            Option<clsKeyboardControl> result = new Option<clsKeyboardControl>(saveKey, new clsKeyboardControl(keys, unlessKeys));
             Options_KeyboardControls.Options.Add(result.GroupLink);
             return result;
         }
 
-        public static clsOption<clsKeyboardControl> KeyboardControlOptionCreate(string saveKey, clsKeyboardControl defaultValue)
+        public static Option<clsKeyboardControl> KeyboardControlOptionCreate(string saveKey, clsKeyboardControl defaultValue)
         {
-            clsOption<clsKeyboardControl> result = new clsOption<clsKeyboardControl>(saveKey, defaultValue);
+            Option<clsKeyboardControl> result = new Option<clsKeyboardControl>(saveKey, defaultValue);
             Options_KeyboardControls.Options.Add(result.GroupLink);
             return result;
         }
@@ -162,6 +142,26 @@ namespace SharpFlame
             Control_ScriptPosition = KeyboardControlOptionCreate("PositionLabel", new Keys[] {Keys.P});
 
             KeyboardProfile = new clsKeyboardProfile(Options_KeyboardControls);
+        }
+    }
+
+    public class KeyboardProfileCreator : OptionProfileCreator
+    {
+        public override OptionProfile Create()
+        {
+            return new clsKeyboardProfile(Options);
+        }
+    }
+
+    public class clsKeyboardProfile : OptionProfile
+    {
+        public bool Active(Option<clsKeyboardControl> control)
+        {
+            return ((clsKeyboardControl)(get_Value(control))).Active;
+        }
+
+        public clsKeyboardProfile(OptionGroup options) : base(options)
+        {
         }
     }
 

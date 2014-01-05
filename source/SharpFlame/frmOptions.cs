@@ -6,6 +6,7 @@ using SharpFlame.Colors;
 using SharpFlame.Controls;
 using SharpFlame.FileIO;
 using SharpFlame.MathExtra;
+using SharpFlame.AppSettings;
 
 namespace SharpFlame
 {
@@ -20,9 +21,9 @@ namespace SharpFlame
         private PathSetControl objectDataPathSetControl = new PathSetControl("Object Data Directories");
         private PathSetControl tilesetsPathSetControl = new PathSetControl("Tilesets Directories");
 
-        private modControls.clsKeyboardProfile ChangedKeyControls;
+        private clsKeyboardProfile ChangedKeyControls;
 
-        private clsOption<clsKeyboardControl>[] lstKeyboardControls_Items = new clsOption<clsKeyboardControl>[] {};
+        private Option<clsKeyboardControl>[] lstKeyboardControls_Items = new Option<clsKeyboardControl>[] {};
 
         public frmOptions()
         {
@@ -42,88 +43,88 @@ namespace SharpFlame
             TableLayoutPanel1.Controls.Add(tilesetsPathSetControl, 0, 0);
             TableLayoutPanel1.Controls.Add(objectDataPathSetControl, 0, 1);
 
-            ChangedKeyControls = (modControls.clsKeyboardProfile)(modControls.KeyboardProfile.GetCopy(new modControls.clsKeyboardProfileCreator()));
+            ChangedKeyControls = (clsKeyboardProfile)(modControls.KeyboardProfile.GetCopy(new KeyboardProfileCreator()));
 
-            txtAutosaveChanges.Text = IOUtil.InvariantToString_uint(modSettings.Settings.AutoSaveMinChanges);
-            txtAutosaveInterval.Text = IOUtil.InvariantToString_uint(modSettings.Settings.AutoSaveMinInterval_s);
-            cbxAutosaveCompression.Checked = modSettings.Settings.AutoSaveCompress;
-            cbxAutosaveEnabled.Checked = modSettings.Settings.AutoSaveEnabled;
-            cbxAskDirectories.Checked = modSettings.Settings.DirectoriesPrompt;
-            cbxPointerDirect.Checked = modSettings.Settings.DirectPointer;
-            DisplayFont = modSettings.Settings.MakeFont();
+            txtAutosaveChanges.Text = IOUtil.InvariantToString_uint(SettingsManager.Settings.AutoSaveMinChanges);
+            txtAutosaveInterval.Text = IOUtil.InvariantToString_uint(SettingsManager.Settings.AutoSaveMinInterval_s);
+            cbxAutosaveCompression.Checked = SettingsManager.Settings.AutoSaveCompress;
+            cbxAutosaveEnabled.Checked = SettingsManager.Settings.AutoSaveEnabled;
+            cbxAskDirectories.Checked = SettingsManager.Settings.DirectoriesPrompt;
+            cbxPointerDirect.Checked = SettingsManager.Settings.DirectPointer;
+            DisplayFont = SettingsManager.Settings.MakeFont();
             UpdateDisplayFontLabel();
-            txtFOV.Text = IOUtil.InvariantToString_dbl(modSettings.Settings.FOVDefault);
+            txtFOV.Text = IOUtil.InvariantToString_dbl(SettingsManager.Settings.FOVDefault);
 
-            MinimapCliffColour = new clsRGBA_sng(modSettings.Settings.MinimapCliffColour);
+            MinimapCliffColour = new clsRGBA_sng(SettingsManager.Settings.MinimapCliffColour);
             clrMinimapCliffs = new ColourControl(MinimapCliffColour);
             pnlMinimapCliffColour.Controls.Add(clrMinimapCliffs);
 
-            MinimapSelectedObjectColour = new clsRGBA_sng(modSettings.Settings.MinimapSelectedObjectsColour);
+            MinimapSelectedObjectColour = new clsRGBA_sng(SettingsManager.Settings.MinimapSelectedObjectsColour);
             clrMinimapSelectedObjects = new ColourControl(MinimapSelectedObjectColour);
             pnlMinimapSelectedObjectColour.Controls.Add(clrMinimapSelectedObjects);
 
-            txtMinimapSize.Text = IOUtil.InvariantToString_int(modSettings.Settings.MinimapSize);
-            cbxMinimapObjectColours.Checked = modSettings.Settings.MinimapTeamColours;
-            cbxMinimapTeamColourFeatures.Checked = modSettings.Settings.MinimapTeamColoursExceptFeatures;
-            cbxMipmaps.Checked = modSettings.Settings.Mipmaps;
-            cbxMipmapsHardware.Checked = modSettings.Settings.MipmapsHardware;
-            txtUndoSteps.Text = IOUtil.InvariantToString_uint(modSettings.Settings.UndoLimit);
+            txtMinimapSize.Text = IOUtil.InvariantToString_int(SettingsManager.Settings.MinimapSize);
+            cbxMinimapObjectColours.Checked = SettingsManager.Settings.MinimapTeamColours;
+            cbxMinimapTeamColourFeatures.Checked = SettingsManager.Settings.MinimapTeamColoursExceptFeatures;
+            cbxMipmaps.Checked = SettingsManager.Settings.Mipmaps;
+            cbxMipmapsHardware.Checked = SettingsManager.Settings.MipmapsHardware;
+            txtUndoSteps.Text = IOUtil.InvariantToString_uint(SettingsManager.Settings.UndoLimit);
 
-            tilesetsPathSetControl.SetPaths(modSettings.Settings.TilesetDirectories);
-            objectDataPathSetControl.SetPaths(modSettings.Settings.ObjectDataDirectories);
-            tilesetsPathSetControl.SelectedNum = MathUtil.Clamp_int(Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultTilesetsPathNum)), -1,
-                modSettings.Settings.TilesetDirectories.Count - 1);
-            objectDataPathSetControl.SelectedNum = MathUtil.Clamp_int(Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultObjectDataPathNum)),
-                -1, modSettings.Settings.ObjectDataDirectories.Count - 1);
+            tilesetsPathSetControl.SetPaths(SettingsManager.Settings.TilesetDirectories);
+            objectDataPathSetControl.SetPaths(SettingsManager.Settings.ObjectDataDirectories);
+            tilesetsPathSetControl.SelectedNum = MathUtil.Clamp_int(Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultTilesetsPathNum)), -1,
+                SettingsManager.Settings.TilesetDirectories.Count - 1);
+            objectDataPathSetControl.SelectedNum = MathUtil.Clamp_int(Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultObjectDataPathNum)),
+                -1, SettingsManager.Settings.ObjectDataDirectories.Count - 1);
 
-            txtMapBPP.Text = IOUtil.InvariantToString_int(modSettings.Settings.MapViewBPP);
-            txtMapDepth.Text = IOUtil.InvariantToString_int(modSettings.Settings.MapViewDepth);
-            txtTexturesBPP.Text = IOUtil.InvariantToString_int(modSettings.Settings.TextureViewBPP);
-            txtTexturesDepth.Text = IOUtil.InvariantToString_int(modSettings.Settings.TextureViewDepth);
+            txtMapBPP.Text = IOUtil.InvariantToString_int(SettingsManager.Settings.MapViewBPP);
+            txtMapDepth.Text = IOUtil.InvariantToString_int(SettingsManager.Settings.MapViewDepth);
+            txtTexturesBPP.Text = IOUtil.InvariantToString_int(SettingsManager.Settings.TextureViewBPP);
+            txtTexturesDepth.Text = IOUtil.InvariantToString_int(SettingsManager.Settings.TextureViewDepth);
 
-            cbxPickerOrientation.Checked = modSettings.Settings.PickOrientation;
+            cbxPickerOrientation.Checked = SettingsManager.Settings.PickOrientation;
 
             UpdateKeyboardControls(-1);
         }
 
         public void btnSave_Click(Object sender, EventArgs e)
         {
-            modSettings.clsSettings NewSettings = (modSettings.clsSettings)(modSettings.Settings.GetCopy(new modSettings.clsSettingsCreator()));
+            clsSettings NewSettings = (clsSettings)(SettingsManager.Settings.GetCopy(new SettingsCreator()));
             double dblTemp = 0;
             int intTemp = 0;
 
             if ( IOUtil.InvariantParse_dbl(txtAutosaveChanges.Text, ref dblTemp) )
             {
-                NewSettings.set_Changes(modSettings.Setting_AutoSaveMinChanges,
-                    new clsOptionProfile.clsChange<UInt32>((uint)(MathUtil.Clamp_dbl(dblTemp, 1.0D, (Convert.ToDouble(UInt32.MaxValue)) - 1.0D))));
+                NewSettings.set_Changes(SettingsManager.Setting_AutoSaveMinChanges,
+                    new Change<UInt32>((uint)(MathUtil.Clamp_dbl(dblTemp, 1.0D, (Convert.ToDouble(UInt32.MaxValue)) - 1.0D))));
             }
             if ( IOUtil.InvariantParse_dbl(txtAutosaveInterval.Text, ref dblTemp) )
             {
-                NewSettings.set_Changes(modSettings.Setting_AutoSaveMinInterval_s,
-                    new clsOptionProfile.clsChange<UInt32>((uint)(MathUtil.Clamp_dbl(dblTemp, 1.0D, (Convert.ToDouble(UInt32.MaxValue)) - 1.0D))));
+                NewSettings.set_Changes(SettingsManager.Setting_AutoSaveMinInterval_s,
+                    new Change<UInt32>((uint)(MathUtil.Clamp_dbl(dblTemp, 1.0D, (Convert.ToDouble(UInt32.MaxValue)) - 1.0D))));
             }
-            NewSettings.set_Changes(modSettings.Setting_AutoSaveCompress, new clsOptionProfile.clsChange<bool>(cbxAutosaveCompression.Checked));
-            NewSettings.set_Changes(modSettings.Setting_AutoSaveEnabled, new clsOptionProfile.clsChange<bool>(cbxAutosaveEnabled.Checked));
-            NewSettings.set_Changes(modSettings.Setting_DirectoriesPrompt, new clsOptionProfile.clsChange<bool>(cbxAskDirectories.Checked));
-            NewSettings.set_Changes(modSettings.Setting_DirectPointer, new clsOptionProfile.clsChange<bool>(cbxPointerDirect.Checked));
-            NewSettings.set_Changes(modSettings.Setting_FontFamily, new clsOptionProfile.clsChange<FontFamily>(DisplayFont.FontFamily));
+            NewSettings.set_Changes(SettingsManager.Setting_AutoSaveCompress, new Change<bool>(cbxAutosaveCompression.Checked));
+            NewSettings.set_Changes(SettingsManager.Setting_AutoSaveEnabled, new Change<bool>(cbxAutosaveEnabled.Checked));
+            NewSettings.set_Changes(SettingsManager.Setting_DirectoriesPrompt, new Change<bool>(cbxAskDirectories.Checked));
+            NewSettings.set_Changes(SettingsManager.Setting_DirectPointer, new Change<bool>(cbxPointerDirect.Checked));
+            NewSettings.set_Changes(SettingsManager.Setting_FontFamily, new Change<FontFamily>(DisplayFont.FontFamily));
             if ( IOUtil.InvariantParse_dbl(txtFOV.Text, ref dblTemp) )
             {
-                NewSettings.set_Changes(modSettings.Setting_FOVDefault, new clsOptionProfile.clsChange<double>(dblTemp));
+                NewSettings.set_Changes(SettingsManager.Setting_FOVDefault, new Change<double>(dblTemp));
             }
-            NewSettings.set_Changes(modSettings.Setting_MinimapCliffColour, new clsOptionProfile.clsChange<clsRGBA_sng>(MinimapCliffColour));
-            NewSettings.set_Changes(modSettings.Setting_MinimapSelectedObjectsColour, new clsOptionProfile.clsChange<clsRGBA_sng>(MinimapSelectedObjectColour));
+            NewSettings.set_Changes(SettingsManager.Setting_MinimapCliffColour, new Change<clsRGBA_sng>(MinimapCliffColour));
+            NewSettings.set_Changes(SettingsManager.Setting_MinimapSelectedObjectsColour, new Change<clsRGBA_sng>(MinimapSelectedObjectColour));
             if ( IOUtil.InvariantParse_int(txtMinimapSize.Text, ref intTemp) )
             {
-                NewSettings.set_Changes(modSettings.Setting_MinimapSize, new clsOptionProfile.clsChange<int>(intTemp));
+                NewSettings.set_Changes(SettingsManager.Setting_MinimapSize, new Change<int>(intTemp));
             }
-            NewSettings.set_Changes(modSettings.Setting_MinimapTeamColours, new clsOptionProfile.clsChange<bool>(cbxMinimapObjectColours.Checked));
-            NewSettings.set_Changes(modSettings.Setting_MinimapTeamColoursExceptFeatures, new clsOptionProfile.clsChange<bool>(cbxMinimapTeamColourFeatures.Checked));
-            NewSettings.set_Changes(modSettings.Setting_Mipmaps, new clsOptionProfile.clsChange<bool>(cbxMipmaps.Checked));
-            NewSettings.set_Changes(modSettings.Setting_MipmapsHardware, new clsOptionProfile.clsChange<bool>(cbxMipmapsHardware.Checked));
+            NewSettings.set_Changes(SettingsManager.Setting_MinimapTeamColours, new Change<bool>(cbxMinimapObjectColours.Checked));
+            NewSettings.set_Changes(SettingsManager.Setting_MinimapTeamColoursExceptFeatures, new Change<bool>(cbxMinimapTeamColourFeatures.Checked));
+            NewSettings.set_Changes(SettingsManager.Setting_Mipmaps, new Change<bool>(cbxMipmaps.Checked));
+            NewSettings.set_Changes(SettingsManager.Setting_MipmapsHardware, new Change<bool>(cbxMipmapsHardware.Checked));
             if ( IOUtil.InvariantParse_int(txtUndoSteps.Text, ref intTemp) )
             {
-                NewSettings.set_Changes(modSettings.Setting_UndoLimit, new clsOptionProfile.clsChange<int>(intTemp));
+                NewSettings.set_Changes(SettingsManager.Setting_UndoLimit, new Change<int>(intTemp));
             }
             SimpleList<string> tilesetPaths = new SimpleList<string>();
             SimpleList<string> objectsPaths = new SimpleList<string>();
@@ -137,29 +138,29 @@ namespace SharpFlame
             {
                 objectsPaths.Add(controlobjectsPaths[i]);
             }
-            NewSettings.set_Changes(modSettings.Setting_TilesetDirectories, new clsOptionProfile.clsChange<SimpleList<string>>(tilesetPaths));
-            NewSettings.set_Changes(modSettings.Setting_ObjectDataDirectories, new clsOptionProfile.clsChange<SimpleList<string>>(objectsPaths));
-            NewSettings.set_Changes(modSettings.Setting_DefaultTilesetsPathNum, new clsOptionProfile.clsChange<int>(tilesetsPathSetControl.SelectedNum));
-            NewSettings.set_Changes(modSettings.Setting_DefaultObjectDataPathNum, new clsOptionProfile.clsChange<int>(objectDataPathSetControl.SelectedNum));
+            NewSettings.set_Changes(SettingsManager.Setting_TilesetDirectories, new Change<SimpleList<string>>(tilesetPaths));
+            NewSettings.set_Changes(SettingsManager.Setting_ObjectDataDirectories, new Change<SimpleList<string>>(objectsPaths));
+            NewSettings.set_Changes(SettingsManager.Setting_DefaultTilesetsPathNum, new Change<int>(tilesetsPathSetControl.SelectedNum));
+            NewSettings.set_Changes(SettingsManager.Setting_DefaultObjectDataPathNum, new Change<int>(objectDataPathSetControl.SelectedNum));
             if ( IOUtil.InvariantParse_int(txtMapBPP.Text, ref intTemp) )
             {
-                NewSettings.set_Changes(modSettings.Setting_MapViewBPP, new clsOptionProfile.clsChange<int>(intTemp));
+                NewSettings.set_Changes(SettingsManager.Setting_MapViewBPP, new Change<int>(intTemp));
             }
             if ( IOUtil.InvariantParse_int(txtMapDepth.Text, ref intTemp) )
             {
-                NewSettings.set_Changes(modSettings.Setting_MapViewDepth, new clsOptionProfile.clsChange<int>(intTemp));
+                NewSettings.set_Changes(SettingsManager.Setting_MapViewDepth, new Change<int>(intTemp));
             }
             if ( IOUtil.InvariantParse_int(txtTexturesBPP.Text, ref intTemp) )
             {
-                NewSettings.set_Changes(modSettings.Setting_TextureViewBPP, new clsOptionProfile.clsChange<int>(intTemp));
+                NewSettings.set_Changes(SettingsManager.Setting_TextureViewBPP, new Change<int>(intTemp));
             }
             if ( IOUtil.InvariantParse_int(txtTexturesDepth.Text, ref intTemp) )
             {
-                NewSettings.set_Changes(modSettings.Setting_TextureViewDepth, new clsOptionProfile.clsChange<int>(intTemp));
+                NewSettings.set_Changes(SettingsManager.Setting_TextureViewDepth, new Change<int>(intTemp));
             }
-            NewSettings.set_Changes(modSettings.Setting_PickOrientation, new clsOptionProfile.clsChange<bool>(cbxPickerOrientation.Checked));
+            NewSettings.set_Changes(SettingsManager.Setting_PickOrientation, new Change<bool>(cbxPickerOrientation.Checked));
 
-            modSettings.UpdateSettings(NewSettings);
+            SettingsManager.UpdateSettings(NewSettings);
 
             clsMap Map = Program.frmMainInstance.MainMap;
             if ( Map != null )
@@ -246,17 +247,17 @@ namespace SharpFlame
 
         private void UpdateKeyboardControl(int index)
         {
-            lstKeyboardControls.Items[index] = GetKeyControlText((clsOption<clsKeyboardControl>)(modControls.Options_KeyboardControls.Options[index]));
+            lstKeyboardControls.Items[index] = GetKeyControlText((Option<clsKeyboardControl>)(modControls.Options_KeyboardControls.Options[index]));
         }
 
         private void UpdateKeyboardControls(int selectedIndex)
         {
             lstKeyboardControls.Hide();
             lstKeyboardControls.Items.Clear();
-            lstKeyboardControls_Items = new clsOption<clsKeyboardControl>[modControls.Options_KeyboardControls.Options.Count];
+            lstKeyboardControls_Items = new Option<clsKeyboardControl>[modControls.Options_KeyboardControls.Options.Count];
             for ( int i = 0; i <= modControls.Options_KeyboardControls.Options.Count - 1; i++ )
             {
-                clsOption<clsKeyboardControl> item = (clsOption<clsKeyboardControl>)(modControls.Options_KeyboardControls.Options[i]);
+                Option<clsKeyboardControl> item = (Option<clsKeyboardControl>)(modControls.Options_KeyboardControls.Options[i]);
                 string text = GetKeyControlText(item);
                 lstKeyboardControls_Items[lstKeyboardControls.Items.Add(text)] = item;
             }
@@ -264,7 +265,7 @@ namespace SharpFlame
             lstKeyboardControls.Show();
         }
 
-        private string GetKeyControlText(clsOption<clsKeyboardControl> item)
+        private string GetKeyControlText(Option<clsKeyboardControl> item)
         {
             string text = item.SaveKey + " = ";
             clsKeyboardControl control = (clsKeyboardControl)(ChangedKeyControls.get_Value(item));
@@ -330,7 +331,7 @@ namespace SharpFlame
             {
                 return;
             }
-            clsOption<clsKeyboardControl> keyOption = lstKeyboardControls_Items[lstKeyboardControls.SelectedIndex];
+            Option<clsKeyboardControl> keyOption = lstKeyboardControls_Items[lstKeyboardControls.SelectedIndex];
             clsKeyboardControl previous = (clsKeyboardControl)(ChangedKeyControls.get_Value(keyOption));
 
             Keys[] keys = new Keys[capture.Results.Count];
@@ -339,7 +340,7 @@ namespace SharpFlame
                 keys[i] = capture.Results[i].Item;
             }
             clsKeyboardControl copy = new clsKeyboardControl(keys, previous.UnlessKeys);
-            ChangedKeyControls.set_Changes(keyOption, new clsOptionProfile.clsChange<clsKeyboardControl>(copy));
+            ChangedKeyControls.set_Changes(keyOption, new Change<clsKeyboardControl>(copy));
             UpdateKeyboardControl(keyOption.GroupLink.ArrayPosition);
         }
 
@@ -359,7 +360,7 @@ namespace SharpFlame
             {
                 return;
             }
-            clsOption<clsKeyboardControl> keyOption = lstKeyboardControls_Items[lstKeyboardControls.SelectedIndex];
+            Option<clsKeyboardControl> keyOption = lstKeyboardControls_Items[lstKeyboardControls.SelectedIndex];
             clsKeyboardControl previous = (clsKeyboardControl)(ChangedKeyControls.get_Value(keyOption));
 
             Keys[] unlessKeys = new Keys[capture.Results.Count];
@@ -368,7 +369,7 @@ namespace SharpFlame
                 unlessKeys[i] = capture.Results[i].Item;
             }
             clsKeyboardControl copy = new clsKeyboardControl(previous.Keys, unlessKeys);
-            ChangedKeyControls.set_Changes(keyOption, new clsOptionProfile.clsChange<clsKeyboardControl>(copy));
+            ChangedKeyControls.set_Changes(keyOption, new Change<clsKeyboardControl>(copy));
             UpdateKeyboardControl(keyOption.GroupLink.ArrayPosition);
         }
 
@@ -379,7 +380,7 @@ namespace SharpFlame
                 return;
             }
 
-            clsOption<clsKeyboardControl> keyOption = lstKeyboardControls_Items[lstKeyboardControls.SelectedIndex];
+            Option<clsKeyboardControl> keyOption = lstKeyboardControls_Items[lstKeyboardControls.SelectedIndex];
             ChangedKeyControls.set_Changes(keyOption, null);
             UpdateKeyboardControl(keyOption.GroupLink.ArrayPosition);
         }

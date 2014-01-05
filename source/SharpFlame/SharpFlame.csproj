@@ -104,6 +104,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="AppSettings\Change.cs" />
+    <Compile Include="AppSettings\ChangeInterface.cs" />
+    <Compile Include="AppSettings\OptionCreator.cs" />
+    <Compile Include="AppSettings\OptionProfile.cs" />
     <Compile Include="Bitmaps\BitmapGLTexture.cs" />
     <Compile Include="clsBooleanMap.cs" />
     <Compile Include="clsBrush.cs" />
@@ -128,7 +132,7 @@
     <Compile Include="frmKeyboardControl.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="KeyboardControls.cs" />
+    <Compile Include="AppSettings\KeyboardControls.cs" />
     <Compile Include="clsMap.cs" />
     <Compile Include="clsMapChanges.cs" />
     <Compile Include="clsMapDraw.cs" />
@@ -142,12 +146,15 @@
     <Compile Include="clsObjectData.cs" />
     <Compile Include="Mapping\Tiles\TileDirection.cs" />
     <Compile Include="Mapping\Tiles\TileOrientation.cs" />
+    <Compile Include="AppSettings\OptionGroup.cs" />
+    <Compile Include="AppSettings\OptionInterface.cs" />
+    <Compile Include="AppSettings\OptionProfileCreator.cs" />
     <Compile Include="Painters\CliffBrush.cs" />
     <Compile Include="Painters\Painter.cs" />
     <Compile Include="clsResult.cs" />
     <Compile Include="clsTileset.cs" />
     <Compile Include="MathExtra\Definitions.cs" />
-    <Compile Include="Options.cs" />
+    <Compile Include="AppSettings\Options.cs" />
     <Compile Include="Painters\Road.cs" />
     <Compile Include="Painters\RoadBrush.cs" />
     <Compile Include="Painters\Terrain.cs" />
@@ -258,7 +265,7 @@
     <Compile Include="MathExtra\MathUtil.cs" />
     <Compile Include="Painters\PainterFactory.cs" />
     <Compile Include="App.cs" />
-    <Compile Include="modSettings.cs" />
+    <Compile Include="AppSettings\SettingsManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Application.Designer.cs">
       <AutoGen>True</AutoGen>

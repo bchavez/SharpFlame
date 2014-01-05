@@ -9,6 +9,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
 using SharpFlame.MathExtra;
+using SharpFlame.AppSettings;
 
 namespace SharpFlame.Controls
 {
@@ -408,7 +409,7 @@ namespace SharpFlame.Controls
 
             App.IsViewKeyDown.Keys[(int)e.KeyCode] = true;
 
-            foreach ( clsOption<clsKeyboardControl> control in modControls.Options_KeyboardControls.Options )
+            foreach ( Option<clsKeyboardControl> control in modControls.Options_KeyboardControls.Options )
             {
                 ((clsKeyboardControl)(modControls.KeyboardProfile.get_Value(control))).KeysChanged(App.IsViewKeyDown);
             }
@@ -511,7 +512,7 @@ namespace SharpFlame.Controls
             }
             if ( modControls.KeyboardProfile.Active(modControls.Control_View_Reset) )
             {
-                Map.ViewInfo.FOV_Multiplier_Set(modSettings.Settings.FOVDefault);
+                Map.ViewInfo.FOV_Multiplier_Set(SettingsManager.Settings.FOVDefault);
                 if ( App.ViewMoveType == App.enumView_Move_Type.Free )
                 {
                     Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
@@ -693,7 +694,7 @@ namespace SharpFlame.Controls
         {
             App.IsViewKeyDown.Keys[(int)e.KeyCode] = false;
 
-            foreach ( clsOption<clsKeyboardControl> control in modControls.Options_KeyboardControls.Options )
+            foreach ( Option<clsKeyboardControl> control in modControls.Options_KeyboardControls.Options )
             {
                 ((clsKeyboardControl)(modControls.KeyboardProfile.get_Value(control))).KeysChanged(App.IsViewKeyDown);
             }

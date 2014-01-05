@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Microsoft.VisualBasic.ApplicationServices;
 using OpenTK;
 using OpenTK.Graphics;
+using SharpFlame.AppSettings;
 
 
 namespace SharpFlame
@@ -28,15 +29,15 @@ namespace SharpFlame
             App.PlatformPathSeparator = Path.DirectorySeparatorChar;
             App.SetProgramSubDirs();
 
-            modSettings.CreateSettingOptions();
+            SettingsManager.CreateSettingOptions();
             modControls.CreateControls(); //needed to load key control settings
-            clsResult SettingsLoadResult = modSettings.Settings_Load(ref modSettings.InitializeSettings);
+            clsResult SettingsLoadResult = SettingsManager.Settings_Load(ref SettingsManager.InitializeSettings);
             InitializeResult.Add(SettingsLoadResult);
 
             OpenGL1 =
-                new GLControl(new GraphicsMode(new ColorFormat(modSettings.InitializeSettings.MapViewBPP), modSettings.InitializeSettings.MapViewDepth, 0));
+                new GLControl(new GraphicsMode(new ColorFormat(SettingsManager.InitializeSettings.MapViewBPP), SettingsManager.InitializeSettings.MapViewDepth, 0));
             OpenGL2 =
-                new GLControl(new GraphicsMode(new ColorFormat(modSettings.InitializeSettings.TextureViewBPP), modSettings.InitializeSettings.TextureViewDepth,
+                new GLControl(new GraphicsMode(new ColorFormat(SettingsManager.InitializeSettings.TextureViewBPP), SettingsManager.InitializeSettings.TextureViewDepth,
                     0));
 
             while ( OpenGL1.Context == null || OpenGL2.Context == null )

@@ -19,6 +19,7 @@ using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.MathExtra;
 using SharpFlame.Painters;
+using SharpFlame.AppSettings;
 using Timer = System.Windows.Forms.Timer;
 
 namespace SharpFlame
@@ -279,7 +280,7 @@ namespace SharpFlame
                 }
             }
 
-            clsResult Result = modSettings.Settings_Write();
+            clsResult Result = SettingsManager.Settings_Write();
         }
 
 #if !Mono
@@ -430,10 +431,10 @@ namespace SharpFlame
             App.MinimapFeatureColour.Green = 0.5F;
             App.MinimapFeatureColour.Blue = 0.5F;
 
-            modSettings.UpdateSettings(modSettings.InitializeSettings);
-            modSettings.InitializeSettings = null;
+            SettingsManager.UpdateSettings(SettingsManager.InitializeSettings);
+            SettingsManager.InitializeSettings = null;
 
-            if ( modSettings.Settings.DirectoriesPrompt )
+            if ( SettingsManager.Settings.DirectoriesPrompt )
             {
                 Program.frmOptionsInstance = new frmOptions();
                 Program.frmOptionsInstance.FormClosing += Program.frmOptionsInstance.frmOptions_FormClosing;
@@ -443,8 +444,8 @@ namespace SharpFlame
                 }
             }
 
-            int TilesetNum = Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultTilesetsPathNum));
-            SimpleList<string> TilesetsList = (SimpleList<string>)(modSettings.Settings.get_Value(modSettings.Setting_TilesetDirectories));
+            int TilesetNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultTilesetsPathNum));
+            SimpleList<string> TilesetsList = (SimpleList<string>)(SettingsManager.Settings.get_Value(SettingsManager.Setting_TilesetDirectories));
             if ( TilesetNum >= 0 & TilesetNum < TilesetsList.Count )
             {
                 string TilesetsPath = TilesetsList[TilesetNum];
@@ -464,8 +465,8 @@ namespace SharpFlame
             App.CreateTemplateDroidTypes(); //do before loading data
 
             App.ObjectData = new clsObjectData();
-            int ObjectDataNum = Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultObjectDataPathNum));
-            SimpleList<string> ObjectDataList = (SimpleList<string>)(modSettings.Settings.get_Value(modSettings.Setting_ObjectDataDirectories));
+            int ObjectDataNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultObjectDataPathNum));
+            SimpleList<string> ObjectDataList = (SimpleList<string>)(SettingsManager.Settings.get_Value(SettingsManager.Setting_ObjectDataDirectories));
             if ( ObjectDataNum >= 0 & ObjectDataNum < TilesetsList.Count )
             {
                 string ObjectDataPath = ObjectDataList[ObjectDataNum];
@@ -604,7 +605,7 @@ namespace SharpFlame
         {
             OpenFileDialog Dialog = new OpenFileDialog();
 
-            Dialog.InitialDirectory = modSettings.Settings.OpenPath;
+            Dialog.InitialDirectory = SettingsManager.Settings.OpenPath;
             Dialog.FileName = "";
             Dialog.Filter = "Warzone Map Files (*.fmap, *.fme, *.wz, *.gam, *.lnd)|*.fmap;*.fme;*.wz;*.gam;*.lnd|All Files (*.*)|*.*";
             Dialog.Multiselect = true;
@@ -612,7 +613,7 @@ namespace SharpFlame
             {
                 return;
             }
-            modSettings.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
+            SettingsManager.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
             string FileName = "";
             clsResult Results = new clsResult("Loading maps");
             foreach ( string tempLoopVar_FileName in Dialog.FileNames )
@@ -627,14 +628,14 @@ namespace SharpFlame
         {
             OpenFileDialog Dialog = new OpenFileDialog();
 
-            Dialog.InitialDirectory = modSettings.Settings.OpenPath;
+            Dialog.InitialDirectory = SettingsManager.Settings.OpenPath;
             Dialog.FileName = "";
             Dialog.Filter = "Image Files (*.bmp, *.png)|*.bmp;*.png|All Files (*.*)|*.*";
             if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
-            modSettings.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
+            SettingsManager.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
 
             Bitmap HeightmapBitmap = null;
             App.sResult Result = BitmapUtil.LoadBitmap(Dialog.FileName, ref HeightmapBitmap);
@@ -700,14 +701,14 @@ namespace SharpFlame
                 return;
             }
 
-            Dialog.InitialDirectory = modSettings.Settings.OpenPath;
+            Dialog.InitialDirectory = SettingsManager.Settings.OpenPath;
             Dialog.FileName = "";
             Dialog.Filter = "TTP Files (*.ttp)|*.ttp|All Files (*.*)|*.*";
             if ( !(Dialog.ShowDialog(this) == DialogResult.OK) )
             {
                 return;
             }
-            modSettings.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
+            SettingsManager.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
             App.sResult Result = Map.Load_TTP(Dialog.FileName);
             if ( Result.Success )
             {
@@ -1069,14 +1070,14 @@ namespace SharpFlame
 
             SaveFileDialog Dialog = new SaveFileDialog();
 
-            Dialog.InitialDirectory = modSettings.Settings.SavePath;
+            Dialog.InitialDirectory = SettingsManager.Settings.SavePath;
             Dialog.FileName = "";
             Dialog.Filter = "Editworld Files (*.lnd)|*.lnd";
             if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
-            modSettings.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
+            SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
 
             clsResult Result = Map.Write_LND(Dialog.FileName, true);
 
@@ -1094,14 +1095,14 @@ namespace SharpFlame
 
             SaveFileDialog Dialog = new SaveFileDialog();
 
-            Dialog.InitialDirectory = modSettings.Settings.SavePath;
+            Dialog.InitialDirectory = SettingsManager.Settings.SavePath;
             Dialog.FileName = "";
             Dialog.Filter = Constants.ProgramName + " FME Map Files (*.fme)|*.fme";
             if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
-            modSettings.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
+            SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
             string strScavenger = Interaction.InputBox("Enter the player number for scavenger units:", "", "", -1, -1);
             byte ScavengerNum = 0;
             if ( !IOUtil.InvariantParse_byte(strScavenger, ref ScavengerNum) )
@@ -1129,14 +1130,14 @@ namespace SharpFlame
 
             SaveFileDialog Dialog = new SaveFileDialog();
 
-            Dialog.InitialDirectory = modSettings.Settings.SavePath;
+            Dialog.InitialDirectory = SettingsManager.Settings.SavePath;
             Dialog.FileName = "";
             Dialog.Filter = "Bitmap File (*.bmp)|*.bmp";
             if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
-            modSettings.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
+            SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
             App.sResult Result = new App.sResult();
             Result = Map.Write_MinimapFile(Dialog.FileName, true);
             if ( !Result.Success )
@@ -1156,14 +1157,14 @@ namespace SharpFlame
 
             SaveFileDialog Dialog = new SaveFileDialog();
 
-            Dialog.InitialDirectory = modSettings.Settings.SavePath;
+            Dialog.InitialDirectory = SettingsManager.Settings.SavePath;
             Dialog.FileName = "";
             Dialog.Filter = "Bitmap File (*.bmp)|*.bmp";
             if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
-            modSettings.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
+            SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
             App.sResult Result = new App.sResult();
             Result = Map.Write_Heightmap(Dialog.FileName, true);
             if ( !Result.Success )
@@ -1183,14 +1184,14 @@ namespace SharpFlame
 
             SaveFileDialog Dialog = new SaveFileDialog();
 
-            Dialog.InitialDirectory = modSettings.Settings.SavePath;
+            Dialog.InitialDirectory = SettingsManager.Settings.SavePath;
             Dialog.FileName = "";
             Dialog.Filter = "TTP Files (*.ttp)|*.ttp";
             if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
-            modSettings.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
+            SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
             App.sResult Result = new App.sResult();
             Result = Map.Write_TTP(Dialog.FileName, true);
             if ( !Result.Success )
@@ -2474,7 +2475,7 @@ namespace SharpFlame
 
             SelectedObject_Changed();
             Map.UndoStepCreate("Object Player Changed");
-            if ( modSettings.Settings.MinimapTeamColours )
+            if ( SettingsManager.Settings.MinimapTeamColours )
             {
                 Map.MinimapMakeLater();
             }
@@ -3570,7 +3571,7 @@ namespace SharpFlame
                 }
             }
 
-            if ( modSettings.Settings.PickOrientation )
+            if ( SettingsManager.Settings.PickOrientation )
             {
                 App.TextureOrientation = Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation;
                 TextureViewControl.DrawViewLater();
@@ -4186,7 +4187,7 @@ namespace SharpFlame
             {
                 return;
             }
-            modSettings.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
+            SettingsManager.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
             clsResult Result = new clsResult("Loading map");
             Result.Take(LoadMap(Dialog.FileName));
             App.ShowWarnings(Result);

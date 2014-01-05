@@ -6,113 +6,15 @@ using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.FileIO;
 
-namespace SharpFlame
+namespace SharpFlame.AppSettings
 {
-    public class clsOptionGroup
+    public class OptionProfile : clsINIRead.clsTranslator
     {
-        public clsOptionGroup()
-        {
-            Options = new ConnectedList<clsOptionInterface, clsOptionGroup>(this);
-        }
-
-        public ConnectedList<clsOptionInterface, clsOptionGroup> Options;
-    }
-
-    public abstract class clsOptionInterface
-    {
-        public abstract ConnectedListLink<clsOptionInterface, clsOptionGroup> GroupLink { get; }
-
-        public abstract string SaveKey { get; }
-        public abstract object DefaultValueObject { get; }
-        public abstract bool IsValueValid(object value);
-    }
-
-    public class clsOption<ValueType> : clsOptionInterface
-    {
-        private ConnectedListLink<clsOptionInterface, clsOptionGroup> _GroupLink;
-
-        public override ConnectedListLink<clsOptionInterface, clsOptionGroup> GroupLink
-        {
-            get { return _GroupLink; }
-        }
-
-        private string _SaveKey;
-        private ValueType _DefaultValue;
-
-        public ValueType DefaultValue
-        {
-            get { return _DefaultValue; }
-        }
-
-        public clsOption(string saveKey, ValueType defaultValue)
-        {
-            _GroupLink = new ConnectedListLink<clsOptionInterface, clsOptionGroup>(this);
-
-
-            _SaveKey = saveKey;
-            _DefaultValue = defaultValue;
-        }
-
-        public override object DefaultValueObject
-        {
-            get { return _DefaultValue; }
-        }
-
-        public override string SaveKey
-        {
-            get { return _SaveKey; }
-        }
-
-        public override bool IsValueValid(object value)
-        {
-            return true;
-        }
-    }
-
-    public class clsOptionCreator<ValueType>
-    {
-        public string SaveKey;
-        public ValueType DefaultValue;
-
-        public virtual clsOption<ValueType> Create()
-        {
-            return new clsOption<ValueType>(SaveKey, DefaultValue);
-        }
-    }
-
-    public class clsOptionProfile : clsINIRead.clsTranslator
-    {
-        public abstract class clsChangeInterface
-        {
-            public abstract object ValueObject { get; }
-            public abstract clsChangeInterface GetCopy();
-        }
-
-        public class clsChange<ValueType> : clsChangeInterface
-        {
-            public ValueType Value;
-
-            public override object ValueObject
-            {
-                get { return Value; }
-            }
-
-            public clsChange(ValueType value)
-            {
-                Value = value;
-            }
-
-            public override clsChangeInterface GetCopy()
-            {
-                return new clsChange<ValueType>(Value);
-            }
-        }
-
         public bool IsAnythingChanged
         {
             get
             {
-                foreach ( clsOptionInterface item in _Options.Options )
+                foreach ( OptionInterface item in _Options.Options )
                 {
                     if ( get_Changes(item) != null )
                     {
@@ -123,29 +25,29 @@ namespace SharpFlame
             }
         }
 
-        private clsOptionGroup _Options;
+        private OptionGroup _Options;
 
-        public clsOptionGroup Options
+        public OptionGroup Options
         {
             get { return _Options; }
         }
 
-        private clsChangeInterface[] _Changes;
+        private ChangeInterface[] _Changes;
 
-        public clsChangeInterface get_Changes(clsOptionInterface optionItem)
+        public ChangeInterface get_Changes(OptionInterface optionItem)
         {
             return _Changes[optionItem.GroupLink.ArrayPosition];
         }
 
-        public void set_Changes(clsOptionInterface optionItem, clsChangeInterface value)
+        public void set_Changes(OptionInterface optionItem, ChangeInterface value)
         {
             _Changes[optionItem.GroupLink.ArrayPosition] = value;
         }
 
-        public object get_Value(clsOptionInterface optionItem)
+        public object get_Value(OptionInterface optionItem)
         {
             int index = optionItem.GroupLink.ArrayPosition;
-            clsChangeInterface change = _Changes[index];
+            ChangeInterface change = _Changes[index];
             if ( change == null )
             {
                 return optionItem.DefaultValueObject;
@@ -156,16 +58,16 @@ namespace SharpFlame
             }
         }
 
-        public clsOptionProfile(clsOptionGroup options)
+        public OptionProfile(OptionGroup options)
         {
             _Options = options;
-            _Changes = new clsChangeInterface[options.Options.Count];
+            _Changes = new ChangeInterface[options.Options.Count];
         }
 
-        public virtual clsOptionProfile GetCopy(clsOptionProfileCreator creator)
+        public virtual OptionProfile GetCopy(OptionProfileCreator creator)
         {
             creator.Options = _Options;
-            clsOptionProfile result = creator.Create();
+            OptionProfile result = creator.Create();
 
             for ( int i = 0; i <= _Options.Options.Count - 1; i++ )
             {
@@ -182,7 +84,7 @@ namespace SharpFlame
         {
             clsResult returnResult = new clsResult("Writing options to INI");
 
-            foreach ( clsOptionInterface item in _Options.Options )
+            foreach ( OptionInterface item in _Options.Options )
             {
                 if ( get_Changes(item) == null )
                 {
@@ -190,7 +92,7 @@ namespace SharpFlame
                 }
                 object optionValue = get_Value(item);
                 string valueText = null;
-                if ( item is clsOption<clsKeyboardControl> )
+                if ( item is Option<clsKeyboardControl> )
                 {
                     clsKeyboardControl control = (clsKeyboardControl)optionValue;
                     valueText = "";
@@ -217,7 +119,7 @@ namespace SharpFlame
                         }
                     }
                 }
-                else if ( item is clsOption<SimpleList<string>> )
+                else if ( item is Option<SimpleList<string>> )
                 {
                     SimpleList<string> list = (SimpleList<string>)optionValue;
                     for ( int i = 0; i <= list.Count - 1; i++ )
@@ -225,47 +127,47 @@ namespace SharpFlame
                         file.Property_Append(item.SaveKey, list[i]);
                     }
                 }
-                else if ( item is clsOption<clsRGB_sng> )
+                else if ( item is Option<clsRGB_sng> )
                 {
                     valueText = ((clsRGB_sng)optionValue).GetINIOutput();
                 }
-                else if ( item is clsOption<clsRGBA_sng> )
+                else if ( item is Option<clsRGBA_sng> )
                 {
                     valueText = ((clsRGBA_sng)optionValue).GetINIOutput();
                 }
-                else if ( item is clsOption<FontFamily> )
+                else if ( item is Option<FontFamily> )
                 {
                     valueText = ((FontFamily)optionValue).Name;
                 }
-                else if ( item is clsOption<bool> )
+                else if ( item is Option<bool> )
                 {
                     valueText = IOUtil.InvariantToString_bool(Convert.ToBoolean(optionValue));
                 }
-                else if ( item is clsOption<byte> )
+                else if ( item is Option<byte> )
                 {
                     valueText = IOUtil.InvariantToString_byte(Convert.ToByte(optionValue));
                 }
-                else if ( item is clsOption<short> )
+                else if ( item is Option<short> )
                 {
                     valueText = IOUtil.InvariantToString_int((short)optionValue);
                 }
-                else if ( item is clsOption<int> )
+                else if ( item is Option<int> )
                 {
                     valueText = IOUtil.InvariantToString_int(Convert.ToInt32(optionValue));
                 }
-                else if ( item is clsOption<UInt32> )
+                else if ( item is Option<UInt32> )
                 {
                     valueText = IOUtil.InvariantToString_uint(Convert.ToUInt32(optionValue));
                 }
-                else if ( item is clsOption<Single> )
+                else if ( item is Option<Single> )
                 {
                     valueText = IOUtil.InvariantToString_sng(Convert.ToSingle(Convert.ToSingle(optionValue)));
                 }
-                else if ( item is clsOption<double> )
+                else if ( item is Option<double> )
                 {
                     valueText = IOUtil.InvariantToString_dbl(Convert.ToDouble(optionValue));
                 }
-                else if ( item is clsOption<string> )
+                else if ( item is Option<string> )
                 {
                     valueText = Convert.ToString(optionValue);
                 }
@@ -286,13 +188,13 @@ namespace SharpFlame
 
         public override clsINIRead.enumTranslatorResult Translate(clsINIRead.clsSection.sProperty INIProperty)
         {
-            foreach ( clsOptionInterface item in _Options.Options )
+            foreach ( OptionInterface item in _Options.Options )
             {
                 if ( item.SaveKey.ToLower() != INIProperty.Name )
                 {
                     continue;
                 }
-                if ( item is clsOption<clsKeyboardControl> )
+                if ( item is Option<clsKeyboardControl> )
                 {
                     int unlessIndex = Convert.ToInt32(INIProperty.Value.ToLower().IndexOf("unless"));
                     string[] keysText = null;
@@ -345,16 +247,16 @@ namespace SharpFlame
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    set_Changes(item, new clsChange<clsKeyboardControl>(control));
+                    set_Changes(item, new Change<clsKeyboardControl>(control));
                     return clsINIRead.enumTranslatorResult.Translated;
                 }
-                else if ( item is clsOption<SimpleList<string>> )
+                else if ( item is Option<SimpleList<string>> )
                 {
                     SimpleList<string> list = default(SimpleList<string>);
                     if ( get_Changes(item) == null )
                     {
                         list = new SimpleList<string>();
-                        set_Changes(item, new clsChange<SimpleList<string>>(list));
+                        set_Changes(item, new Change<SimpleList<string>>(list));
                     }
                     else
                     {
@@ -363,7 +265,7 @@ namespace SharpFlame
                     list.Add(INIProperty.Value);
                     return clsINIRead.enumTranslatorResult.Translated;
                 }
-                else if ( item is clsOption<FontFamily> )
+                else if ( item is Option<FontFamily> )
                 {
                     FontFamily fontFamily = default(FontFamily);
                     try
@@ -378,10 +280,10 @@ namespace SharpFlame
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    set_Changes(item, new clsChange<FontFamily>(fontFamily));
+                    set_Changes(item, new Change<FontFamily>(fontFamily));
                     return clsINIRead.enumTranslatorResult.Translated;
                 }
-                else if ( item is clsOption<clsRGB_sng> )
+                else if ( item is Option<clsRGB_sng> )
                 {
                     clsRGB_sng value = new clsRGB_sng(0.0F, 0.0F, 0.0F);
                     if ( !value.ReadINIText(new SplitCommaText(Convert.ToString(INIProperty.Value))) )
@@ -392,10 +294,10 @@ namespace SharpFlame
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    set_Changes(item, new clsChange<clsRGB_sng>(value));
+                    set_Changes(item, new Change<clsRGB_sng>(value));
                     return clsINIRead.enumTranslatorResult.Translated;
                 }
-                else if ( item is clsOption<clsRGBA_sng> )
+                else if ( item is Option<clsRGBA_sng> )
                 {
                     clsRGBA_sng value = new clsRGBA_sng(0.0F, 0.0F, 0.0F, 0.0F);
                     if ( !value.ReadINIText(new SplitCommaText(Convert.ToString(INIProperty.Value))) )
@@ -406,10 +308,10 @@ namespace SharpFlame
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    set_Changes(item, new clsChange<clsRGBA_sng>(value));
+                    set_Changes(item, new Change<clsRGBA_sng>(value));
                     return clsINIRead.enumTranslatorResult.Translated;
                 }
-                else if ( item is clsOption<bool> )
+                else if ( item is Option<bool> )
                 {
                     bool value = default(bool);
                     if ( !IOUtil.InvariantParse_bool(Convert.ToString(INIProperty.Value), ref value) )
@@ -420,10 +322,10 @@ namespace SharpFlame
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    set_Changes(item, new clsChange<bool>(value));
+                    set_Changes(item, new Change<bool>(value));
                     return clsINIRead.enumTranslatorResult.Translated;
                 }
-                else if ( item is clsOption<byte> )
+                else if ( item is Option<byte> )
                 {
                     byte value = 0;
                     if ( !IOUtil.InvariantParse_byte(Convert.ToString(INIProperty.Value), ref value) )
@@ -434,10 +336,10 @@ namespace SharpFlame
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    set_Changes(item, new clsChange<byte>(value));
+                    set_Changes(item, new Change<byte>(value));
                     return clsINIRead.enumTranslatorResult.Translated;
                 }
-                else if ( item is clsOption<short> )
+                else if ( item is Option<short> )
                 {
                     short value = 0;
                     if ( !IOUtil.InvariantParse_short(Convert.ToString(INIProperty.Value), ref value) )
@@ -448,10 +350,10 @@ namespace SharpFlame
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    set_Changes(item, new clsChange<short>(value));
+                    set_Changes(item, new Change<short>(value));
                     return clsINIRead.enumTranslatorResult.Translated;
                 }
-                else if ( item is clsOption<int> )
+                else if ( item is Option<int> )
                 {
                     int value = 0;
                     if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref value) )
@@ -462,10 +364,10 @@ namespace SharpFlame
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    set_Changes(item, new clsChange<int>(value));
+                    set_Changes(item, new Change<int>(value));
                     return clsINIRead.enumTranslatorResult.Translated;
                 }
-                else if ( item is clsOption<UInt32> )
+                else if ( item is Option<UInt32> )
                 {
                     UInt32 value = 0;
                     if ( !IOUtil.InvariantParse_uint(Convert.ToString(INIProperty.Value), value) )
@@ -476,10 +378,10 @@ namespace SharpFlame
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    set_Changes(item, new clsChange<UInt32>(value));
+                    set_Changes(item, new Change<UInt32>(value));
                     return clsINIRead.enumTranslatorResult.Translated;
                 }
-                else if ( item is clsOption<Single> )
+                else if ( item is Option<Single> )
                 {
                     float value = 0;
                     if ( !IOUtil.InvariantParse_sng(Convert.ToString(INIProperty.Value), ref value) )
@@ -490,10 +392,10 @@ namespace SharpFlame
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    set_Changes(item, new clsChange<Single>(value));
+                    set_Changes(item, new Change<Single>(value));
                     return clsINIRead.enumTranslatorResult.Translated;
                 }
-                else if ( item is clsOption<double> )
+                else if ( item is Option<double> )
                 {
                     double value = 0;
                     if ( !IOUtil.InvariantParse_dbl(Convert.ToString(INIProperty.Value), ref value) )
@@ -504,17 +406,17 @@ namespace SharpFlame
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    set_Changes(item, new clsChange<double>(value));
+                    set_Changes(item, new Change<double>(value));
                     return clsINIRead.enumTranslatorResult.Translated;
                 }
-                else if ( item is clsOption<string> )
+                else if ( item is Option<string> )
                 {
                     string value = Convert.ToString(INIProperty.Value);
                     if ( !item.IsValueValid(value) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    set_Changes(item, new clsChange<string>(value));
+                    set_Changes(item, new Change<string>(value));
                     return clsINIRead.enumTranslatorResult.Translated;
                 }
                 else
@@ -524,25 +426,6 @@ namespace SharpFlame
             }
 
             return clsINIRead.enumTranslatorResult.ValueInvalid;
-        }
-    }
-
-    public class clsOptionProfileCreator
-    {
-        public clsOptionGroup Options;
-
-        public clsOptionProfileCreator()
-        {
-        }
-
-        public clsOptionProfileCreator(clsOptionGroup options)
-        {
-            Options = options;
-        }
-
-        public virtual clsOptionProfile Create()
-        {
-            return new clsOptionProfile(Options);
         }
     }
 }

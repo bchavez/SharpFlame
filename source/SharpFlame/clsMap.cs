@@ -13,6 +13,7 @@ using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.MathExtra;
 using SharpFlame.Painters;
+using SharpFlame.AppSettings;
 
 namespace SharpFlame
 {
@@ -1156,7 +1157,7 @@ namespace SharpFlame
             {
                 if ( Tileset != null )
                 {
-                    Alpha = modSettings.Settings.MinimapCliffColour.Alpha;
+                    Alpha = SettingsManager.Settings.MinimapCliffColour.Alpha;
                     AntiAlpha = 1.0F - Alpha;
                     for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
                     {
@@ -1166,9 +1167,9 @@ namespace SharpFlame
                             {
                                 if ( Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].Default_Type == App.TileTypeNum_Cliff )
                                 {
-                                    sngTexture[Y, X, 0] = sngTexture[Y, X, 0] * AntiAlpha + modSettings.Settings.MinimapCliffColour.Red * Alpha;
-                                    sngTexture[Y, X, 1] = sngTexture[Y, X, 1] * AntiAlpha + modSettings.Settings.MinimapCliffColour.Green * Alpha;
-                                    sngTexture[Y, X, 2] = sngTexture[Y, X, 2] * AntiAlpha + modSettings.Settings.MinimapCliffColour.Blue * Alpha;
+                                    sngTexture[Y, X, 0] = sngTexture[Y, X, 0] * AntiAlpha + SettingsManager.Settings.MinimapCliffColour.Red * Alpha;
+                                    sngTexture[Y, X, 1] = sngTexture[Y, X, 1] * AntiAlpha + SettingsManager.Settings.MinimapCliffColour.Green * Alpha;
+                                    sngTexture[Y, X, 2] = sngTexture[Y, X, 2] * AntiAlpha + SettingsManager.Settings.MinimapCliffColour.Blue * Alpha;
                                 }
                             }
                         }
@@ -1219,9 +1220,9 @@ namespace SharpFlame
                                 if ( !UnitMap[Y, X] )
                                 {
                                     UnitMap[Y, X] = true;
-                                    if ( modSettings.Settings.MinimapTeamColours )
+                                    if ( SettingsManager.Settings.MinimapTeamColours )
                                     {
-                                        if ( modSettings.Settings.MinimapTeamColoursExceptFeatures & Unit.Type.Type == clsUnitType.enumType.Feature )
+                                        if ( SettingsManager.Settings.MinimapTeamColoursExceptFeatures & Unit.Type.Type == clsUnitType.enumType.Feature )
                                         {
                                             sngTexture[Y, X, 0] = App.MinimapFeatureColour.Red;
                                             sngTexture[Y, X, 1] = App.MinimapFeatureColour.Green;
@@ -1255,7 +1256,7 @@ namespace SharpFlame
                     }
                 }
                 //units that are selected and highlighted
-                Alpha = modSettings.Settings.MinimapSelectedObjectsColour.Alpha;
+                Alpha = SettingsManager.Settings.MinimapSelectedObjectsColour.Alpha;
                 AntiAlpha = 1.0F - Alpha;
                 foreach ( clsUnit tempLoopVar_Unit in Units )
                 {
@@ -1278,9 +1279,9 @@ namespace SharpFlame
                                 if ( !UnitMap[Y, X] )
                                 {
                                     UnitMap[Y, X] = true;
-                                    sngTexture[Y, X, 0] = sngTexture[Y, X, 0] * AntiAlpha + modSettings.Settings.MinimapSelectedObjectsColour.Red * Alpha;
-                                    sngTexture[Y, X, 1] = sngTexture[Y, X, 1] * AntiAlpha + modSettings.Settings.MinimapSelectedObjectsColour.Green * Alpha;
-                                    sngTexture[Y, X, 2] = sngTexture[Y, X, 2] * AntiAlpha + modSettings.Settings.MinimapSelectedObjectsColour.Blue * Alpha;
+                                    sngTexture[Y, X, 0] = sngTexture[Y, X, 0] * AntiAlpha + SettingsManager.Settings.MinimapSelectedObjectsColour.Red * Alpha;
+                                    sngTexture[Y, X, 1] = sngTexture[Y, X, 1] * AntiAlpha + SettingsManager.Settings.MinimapSelectedObjectsColour.Green * Alpha;
+                                    sngTexture[Y, X, 2] = sngTexture[Y, X, 2] * AntiAlpha + SettingsManager.Settings.MinimapSelectedObjectsColour.Blue * Alpha;
                                 }
                             }
                         }
@@ -1483,17 +1484,17 @@ namespace SharpFlame
 
         public void AutoSaveTest()
         {
-            if ( !modSettings.Settings.AutoSaveEnabled )
+            if ( !SettingsManager.Settings.AutoSaveEnabled )
             {
                 return;
             }
-            if ( AutoSave.ChangeCount < modSettings.Settings.AutoSaveMinChanges )
+            if ( AutoSave.ChangeCount < SettingsManager.Settings.AutoSaveMinChanges )
             {
                 return;
             }
             if (
                 DateAndTime.DateDiff("s", AutoSave.SavedDate, DateTime.Now, (FirstDayOfWeek)FirstDayOfWeek.Sunday,
-                    (FirstWeekOfYear)FirstWeekOfYear.Jan1) < modSettings.Settings.AutoSaveMinInterval_s )
+                    (FirstWeekOfYear)FirstWeekOfYear.Jan1) < SettingsManager.Settings.AutoSaveMinInterval_s )
             {
                 return;
             }
@@ -1528,7 +1529,7 @@ namespace SharpFlame
                    App.MinDigits(DateNow.Day, 2) + "-" + App.MinDigits(DateNow.Hour, 2) + "-" + App.MinDigits(DateNow.Minute, 2) + "-" +
                    App.MinDigits(DateNow.Second, 2) + "-" + App.MinDigits(DateNow.Millisecond, 3) + ".fmap";
 
-            ReturnResult.Add(Write_FMap(Path, false, modSettings.Settings.AutoSaveCompress));
+            ReturnResult.Add(Write_FMap(Path, false, SettingsManager.Settings.AutoSaveCompress));
 
             return ReturnResult;
         }
@@ -3838,7 +3839,7 @@ namespace SharpFlame
             {
                 return false;
             }
-            modSettings.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
+            SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
             clsResult Result = default(clsResult);
             Result = Write_FMap(Dialog.FileName, true, true);
             if ( !Result.HasProblems )

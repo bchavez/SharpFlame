@@ -7,6 +7,7 @@ using SharpFlame.Controls;
 using SharpFlame.FileIO;
 using SharpFlame.MathExtra;
 using SharpFlame.Painters;
+using SharpFlame.AppSettings;
 
 namespace SharpFlame
 {
@@ -29,7 +30,7 @@ namespace SharpFlame
             this.MapViewControl = MapViewControl;
 
             ViewPos = new sXYZ_int(0, 3072, 0);
-            FOV_Multiplier_Set(modSettings.Settings.FOVDefault);
+            FOV_Multiplier_Set(SettingsManager.Settings.FOVDefault);
             ViewAngleSetToDefault();
             LookAtPos(new sXY_int((int)(Map.Terrain.TileSize.X * App.TerrainGridSpacing / 2.0D),
                 (int)(Map.Terrain.TileSize.Y * App.TerrainGridSpacing / 2.0D)));
@@ -542,7 +543,7 @@ namespace SharpFlame
             {
                 clsMouseOver.clsOverTerrain MouseOverTerrain = new clsMouseOver.clsOverTerrain();
                 Flag = false;
-                if ( modSettings.Settings.DirectPointer )
+                if ( SettingsManager.Settings.DirectPointer )
                 {
                     if ( ScreenXY_Get_TerrainPos(MouseOver.ScreenPos, MouseOverTerrain.Pos) )
                     {

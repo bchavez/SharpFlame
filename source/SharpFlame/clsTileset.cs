@@ -6,6 +6,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.Bitmaps;
 using SharpFlame.Colors;
 using SharpFlame.FileIO;
+using SharpFlame.AppSettings;
 
 namespace SharpFlame
 {
@@ -170,7 +171,7 @@ namespace SharpFlame
                 Tiles[TileNum].TextureView_GL_Texture_Num = BitmapTextureArgs.TextureNum;
 
                 BitmapTextureArgs.MagFilter = TextureMagFilter.Nearest;
-                if ( modSettings.Settings.Mipmaps )
+                if ( SettingsManager.Settings.Mipmaps )
                 {
                     BitmapTextureArgs.MinFilter = TextureMinFilter.LinearMipmapLinear;
                 }
@@ -183,9 +184,9 @@ namespace SharpFlame
                 BitmapTextureArgs.Perform();
                 Tiles[TileNum].MapView_GL_Texture_Num = BitmapTextureArgs.TextureNum;
 
-                if ( modSettings.Settings.Mipmaps )
+                if ( SettingsManager.Settings.Mipmaps )
                 {
-                    if ( modSettings.Settings.MipmapsHardware )
+                    if ( SettingsManager.Settings.MipmapsHardware )
                     {
                         GL.Enable(EnableCap.Texture2D);
                         GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);

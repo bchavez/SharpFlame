@@ -6,6 +6,7 @@ using Matrix3D;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.ApplicationServices;
 using Microsoft.VisualBasic.Devices;
+using SharpFlame.AppSettings;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.FileIO;
@@ -246,7 +247,7 @@ namespace SharpFlame
         {
             IsViewKeyDown.Deactivate();
 
-            foreach ( clsOption<clsKeyboardControl> control in modControls.Options_KeyboardControls.Options )
+            foreach ( Option<clsKeyboardControl> control in modControls.Options_KeyboardControls.Options )
             {
                 ((clsKeyboardControl)(modControls.KeyboardProfile.get_Value(control))).KeysChanged(IsViewKeyDown);
             }
