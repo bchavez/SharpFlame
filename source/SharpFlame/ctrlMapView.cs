@@ -9,1064 +9,1051 @@ using OpenTK.Graphics.OpenGL;
 
 namespace SharpFlame
 {
-	public partial class ctrlMapView
-	{
-		
-		private frmMain _Owner;
-		
-		public bool DrawPending;
-		
-		public modMath.sXY_int GLSize;
-		public float GLSize_XPerY;
-		
-		public bool DrawView_Enabled = false;
-		
-		private Timer GLInitializeDelayTimer;
-		public bool IsGLInitialized = false;
-		
-		private Timer tmrDraw;
-		private Timer tmrDrawDelay;
-		
-		public OpenTK.GLControl OpenGLControl;
-		
-		public ctrlMapView(frmMain Owner)
-		{
-			
-			_Owner = Owner;
-			
-			InitializeComponent();
-			
-			ListSelect = new ContextMenuStrip();
-			ListSelect.ItemClicked += ListSelect_Click;
-			ListSelect.Closed += ListSelect_Close;
-			UndoMessageTimer = new Timer();
-			UndoMessageTimer.Tick += RemoveUndoMessage;
-			
-			OpenGLControl = modMain.OpenGL1;
-			pnlDraw.Controls.Add(OpenGLControl);
-			
-			GLInitializeDelayTimer = new Timer();
-			GLInitializeDelayTimer.Interval = 50;
-			GLInitializeDelayTimer.Tick += GLInitialize;
-			GLInitializeDelayTimer.Enabled = true;
-			
-			tmrDraw = new Timer();
-			tmrDraw.Tick += tmrDraw_Tick;
-			tmrDraw.Interval = 1;
-			
-			tmrDrawDelay = new Timer();
-			tmrDrawDelay.Tick += tmrDrawDelay_Tick;
-			tmrDrawDelay.Interval = 30;
-			
-			UndoMessageTimer.Interval = 4000;
-		}
-		
-		public void ResizeOpenGL()
-		{
-			
-			if (OpenGLControl.Context == null)
-			{
-				return;
-			}
-			
-			OpenGLControl.Width = pnlDraw.Width;
-			OpenGLControl.Height = pnlDraw.Height;
-		}
-		
-		public void DrawView_SetEnabled(bool Value)
-		{
-			
-			if (Value)
-			{
-				if (!DrawView_Enabled)
-				{
-					DrawView_Enabled = true;
-					DrawViewLater();
-				}
-			}
-			else
-			{
-				tmrDraw.Enabled = false;
-				DrawView_Enabled = false;
-			}
-		}
-		
-		public void DrawViewLater()
-		{
-			
-			DrawPending = true;
-			if (!tmrDrawDelay.Enabled)
-			{
-				tmrDraw.Enabled = true;
-			}
-		}
-		
-		private void tmrDraw_Tick(System.Object sender, System.EventArgs e)
-		{
-			
-			tmrDraw.Enabled = false;
-			if (DrawPending)
-			{
-				DrawView();
-				DrawPending = false;
-				tmrDrawDelay.Enabled = true;
-			}
-		}
-		
-		private void GLInitialize(object sender, EventArgs e)
-		{
-			
-			if (OpenGLControl.Context == null)
-			{
-				return;
-			}
-			
-			GLInitializeDelayTimer.Enabled = false;
-			GLInitializeDelayTimer.Tick -= GLInitialize;
-			GLInitializeDelayTimer.Dispose();
-			GLInitializeDelayTimer = null;
-			
-			ResizeOpenGL();
-			
-			OpenGLControl.MouseDown += OpenGL_MouseDown;
-			OpenGLControl.MouseUp += OpenGL_MouseUp;
-			OpenGLControl.MouseWheel += OpenGL_MouseWheel;
-			OpenGLControl.MouseMove += OpenGL_MouseMove;
-			OpenGLControl.MouseEnter += OpenGL_MouseEnter;
-			OpenGLControl.MouseLeave += OpenGL_MouseLeave;
-			OpenGLControl.Resize += OpenGL_Resize;
-			OpenGLControl.Leave += OpenGL_LostFocus;
-			OpenGLControl.PreviewKeyDown += OpenGL_KeyDown;
-			OpenGLControl.KeyUp += OpenGL_KeyUp;
-			
-			if (GraphicsContext.CurrentContext != OpenGLControl.Context)
-			{
-				OpenGLControl.MakeCurrent();
-			}
-			
-			GL.PixelStore(PixelStoreParameter.PackAlignment, 1);
-			GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
-			GL.ClearColor(0.0F, 0.0F, 0.0F, 1.0F);
-			GL.Clear(ClearBufferMask.ColorBufferBit);
-			GL.ShadeModel(ShadingModel.Smooth);
-			GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
-			GL.Enable(EnableCap.DepthTest);
-			
-			float[] ambient = new float[4];
-			float[] specular = new float[4];
-			float[] diffuse = new float[4];
-			
-			ambient[0] = 0.333333343F;
-			ambient[1] = 0.333333343F;
-			ambient[2] = 0.333333343F;
-			ambient[3] = 1.0F;
-			specular[0] = 0.6666667F;
-			specular[1] = 0.6666667F;
-			specular[2] = 0.6666667F;
-			specular[3] = 1.0F;
-			diffuse[0] = 0.75F;
-			diffuse[1] = 0.75F;
-			diffuse[2] = 0.75F;
-			diffuse[3] = 1.0F;
-			GL.Light(LightName.Light0, LightParameter.Diffuse, diffuse);
-			GL.Light(LightName.Light0, LightParameter.Specular, specular);
-			GL.Light(LightName.Light0, LightParameter.Ambient, ambient);
-			
-			ambient[0] = 0.25F;
-			ambient[1] = 0.25F;
-			ambient[2] = 0.25F;
-			ambient[3] = 1.0F;
-			specular[0] = 0.5F;
-			specular[1] = 0.5F;
-			specular[2] = 0.5F;
-			specular[3] = 1.0F;
-			diffuse[0] = 0.5625F;
-			diffuse[1] = 0.5625F;
-			diffuse[2] = 0.5625F;
-			diffuse[3] = 1.0F;
-			GL.Light(LightName.Light1, LightParameter.Diffuse, diffuse);
-			GL.Light(LightName.Light1, LightParameter.Specular, specular);
-			GL.Light(LightName.Light1, LightParameter.Ambient, ambient);
-			
-			float[] mat_diffuse = new float[4];
-			float[] mat_specular = new float[4];
-			float[] mat_ambient = new float[4];
-			float[] mat_shininess = new float[1];
-			
-			mat_specular[0] = 0.0F;
-			mat_specular[1] = 0.0F;
-			mat_specular[2] = 0.0F;
-			mat_specular[3] = 0.0F;
-			mat_ambient[0] = 1.0F;
-			mat_ambient[1] = 1.0F;
-			mat_ambient[2] = 1.0F;
-			mat_ambient[3] = 1.0F;
-			mat_diffuse[0] = 1.0F;
-			mat_diffuse[1] = 1.0F;
-			mat_diffuse[2] = 1.0F;
-			mat_diffuse[3] = 1.0F;
-			mat_shininess[0] = 0.0F;
-			
-			GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Ambient, mat_ambient);
-			GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Specular, mat_specular);
-			GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Diffuse, mat_diffuse);
-			GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Shininess, mat_shininess);
-			
-			IsGLInitialized = true;
-		}
-		
-		public void Viewport_Resize()
-		{
-			
-			if (!modProgram.ProgramInitialized)
-			{
-				return;
-			}
-			
-			if (GraphicsContext.CurrentContext != OpenGLControl.Context)
-			{
-				OpenGLControl.MakeCurrent();
-			}
-			GL.Viewport(0, 0, GLSize.X, GLSize.Y);
-			
-			GL.Clear(ClearBufferMask.ColorBufferBit);
-			GL.Flush();
-			OpenGLControl.SwapBuffers();
-			Refresh();
-			
-			DrawViewLater();
-		}
-		
-		private void DrawView()
-		{
-			
-			if (!(DrawView_Enabled && IsGLInitialized))
-			{
-				return;
-			}
-			
-			if (GraphicsContext.CurrentContext != OpenGLControl.Context)
-			{
-				OpenGLControl.MakeCurrent();
-			}
-			
-			clsMap Map = MainMap;
-			sRGB_sng BGColour = new sRGB_sng();
-			
-			if (Map == null)
-			{
-				BGColour.Red = 0.5F;
-				BGColour.Green = 0.5F;
-				BGColour.Blue = 0.5F;
-			}
-			else if (Map.Tileset == null)
-			{
-				BGColour.Red = 0.5F;
-				BGColour.Green = 0.5F;
-				BGColour.Blue = 0.5F;
-			}
-			else
-			{
-				BGColour = Map.Tileset.BGColour;
-			}
-			
-			GL.ClearColor(BGColour.Red, BGColour.Green, BGColour.Blue, 1.0F);
-			GL.Clear((OpenTK.Graphics.OpenGL.ClearBufferMask) (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
-			
-			if (Map != null)
-			{
-				Map.GLDraw();
-			}
-			
-			GL.Flush();
-			OpenGLControl.SwapBuffers();
-			
-			Refresh();
-		}
-		
-		public void OpenGL_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
-		{
-			clsMap Map = MainMap;
-			
-			if (Map == null)
-			{
-				return;
-			}
-			
-			Map.ViewInfo.Map.ViewInfo.MouseOver = new clsViewInfo.clsMouseOver();
-			Map.ViewInfo.MouseOver.ScreenPos.X = e.X;
-			Map.ViewInfo.MouseOver.ScreenPos.Y = e.Y;
-			
-			Map.ViewInfo.MouseOver_Pos_Calc();
-		}
-		
-		public void Pos_Display_Update()
-		{
-			clsMap Map = MainMap;
-			clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
-			
-			if (MouseOverTerrain == null)
-			{
-				lblTile.Text = "";
-				lblVertex.Text = "";
-				lblPos.Text = "";
-			}
-			else
-			{
-				lblTile.Text = "Tile x:" + System.Convert.ToString(MouseOverTerrain.Tile.Normal.X) + ", y:" + System.Convert.ToString(MouseOverTerrain.Tile.Normal.Y);
-				lblVertex.Text = "Vertex  x:" + System.Convert.ToString(MouseOverTerrain.Vertex.Normal.X) + ", y:" + System.Convert.ToString(MouseOverTerrain.Vertex.Normal.Y) + ", alt:" + Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height * Map.HeightMultiplier + " (" + System.Convert.ToString(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height) + "x" + System.Convert.ToString(Map.HeightMultiplier) + ")";
-				lblPos.Text = "Pos x:" + System.Convert.ToString(MouseOverTerrain.Pos.Horizontal.X) + ", y:" + System.Convert.ToString(MouseOverTerrain.Pos.Horizontal.Y) + ", alt:" + System.Convert.ToString(MouseOverTerrain.Pos.Altitude) + ", slope: " + System.Convert.ToString(Math.Round(Map.GetTerrainSlopeAngle(MouseOverTerrain.Pos.Horizontal) / modMath.RadOf1Deg * 10.0D) / 10.0D) + "°";
-			}
-		}
-		
-		public void OpenGL_LostFocus(System.Object eventSender, System.EventArgs eventArgs)
-		{
-			clsMap Map = MainMap;
-			
-			if (Map == null)
-			{
-				return;
-			}
-			
-			Map.SuppressMinimap = false;
-			
-			Map.ViewInfo.MouseOver = null;
-			Map.ViewInfo.MouseLeftDown = null;
-			Map.ViewInfo.MouseRightDown = null;
-			
-			modProgram.ViewKeyDown_Clear();
-		}
-		
-		private ContextMenuStrip ListSelect;
-		private bool ListSelectIsPicker;
-		private ToolStripItem[] ListSelectItems = new ToolStripItem[0];
-		
-		private void ListSelect_Click(object Sender, ToolStripItemClickedEventArgs e)
-		{
-			ToolStripItem Button = e.ClickedItem;
-			clsMap.clsUnit Unit = (clsMap.clsUnit) Button.Tag;
-			
-			if (ListSelectIsPicker)
-			{
-				modMain.frmMainInstance.ObjectPicker(Unit.Type);
-			}
-			else
-			{
-				if (Unit.MapSelectedUnitLink.IsConnected)
-				{
-					Unit.MapDeselect();
-				}
-				else
-				{
-					Unit.MapSelect();
-				}
-				modMain.frmMainInstance.SelectedObject_Changed();
-				DrawViewLater();
-			}
-		}
-		
-		private void ListSelect_Close(object sender, ToolStripDropDownClosedEventArgs e)
-		{
-			int A = 0;
-			
-			for (A = 0; A <= ListSelectItems.GetUpperBound(0); A++)
-			{
-				ListSelectItems[A].Tag = null;
-				ListSelectItems[A].Dispose();
-			}
-			ListSelect.Items.Clear();
-			ListSelectItems = new ToolStripItem[0];
-			
-			modProgram.ViewKeyDown_Clear();
-		}
-		
-		private void OpenGL_MouseDown(object sender, MouseEventArgs e)
-		{
-			clsMap Map = MainMap;
-			
-			if (Map == null)
-			{
-				return;
-			}
-			
-			Map.ViewInfo.MouseDown(e);
-		}
-		
-		private void OpenGL_KeyDown(object sender, PreviewKeyDownEventArgs e)
-		{
-			clsMap Map = MainMap;
-			
-			if (Map == null)
-			{
-				return;
-			}
-			
-			Matrix3DMath.Matrix3D matrixA = new Matrix3DMath.Matrix3D();
-			clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
-			
-			modProgram.IsViewKeyDown.Keys[(int)e.KeyCode] = true;
-			
-			foreach (clsOption<clsKeyboardControl> control in modControls.Options_KeyboardControls.Options)
-			{
-				((clsKeyboardControl) (modControls.KeyboardProfile.get_Value(control))).KeysChanged(modProgram.IsViewKeyDown);
-			}
-			
-			if (modControls.KeyboardProfile.Active(modControls.Control_Undo))
-			{
-				string Message = "";
-				if (Map.UndoPosition > 0)
-				{
-					Message = "Undid: " + Map.Undos[Map.UndoPosition - 1].Name;
-					clsMap.clsMessage MapMessage = new clsMap.clsMessage();
-					MapMessage.Text = Message;
-					Map.Messages.Add(MapMessage);
-					Map.UndoPerform();
-					DrawViewLater();
-				}
-				else
-				{
-					Message = "Nothing to undo";
-				}
-				DisplayUndoMessage(Message);
-			}
-			if (modControls.KeyboardProfile.Active(modControls.Control_Redo))
-			{
-				string Message = "";
-				if (Map.UndoPosition < Map.Undos.Count)
-				{
-					Message = "Redid: " + Map.Undos[Map.UndoPosition].Name;
-					clsMap.clsMessage MapMessage = new clsMap.clsMessage();
-					MapMessage.Text = Message;
-					Map.Messages.Add(MapMessage);
-					Map.RedoPerform();
-					DrawViewLater();
-				}
-				else
-				{
-					Message = "Nothing to redo";
-				}
-				DisplayUndoMessage(Message);
-			}
-			if (modProgram.IsViewKeyDown.Keys[(int)Keys.ControlKey])
-			{
-				if (e.KeyCode == Keys.D1)
-				{
-					modProgram.VisionRadius_2E = 6;
-				}
-				else if (e.KeyCode == Keys.D2)
-				{
-					modProgram.VisionRadius_2E = 7;
-				}
-				else if (e.KeyCode == Keys.D3)
-				{
-					modProgram.VisionRadius_2E = 8;
-				}
-				else if (e.KeyCode == Keys.D4)
-				{
-					modProgram.VisionRadius_2E = 9;
-				}
-				else if (e.KeyCode == Keys.D5)
-				{
-					modProgram.VisionRadius_2E = 10;
-				}
-				else if (e.KeyCode == Keys.D6)
-				{
-					modProgram.VisionRadius_2E = 11;
-				}
-				else if (e.KeyCode == Keys.D7)
-				{
-					modProgram.VisionRadius_2E = 12;
-				}
-				else if (e.KeyCode == Keys.D8)
-				{
-					modProgram.VisionRadius_2E = 13;
-				}
-				else if (e.KeyCode == Keys.D9)
-				{
-					modProgram.VisionRadius_2E = 14;
-				}
-				else if (e.KeyCode == Keys.D0)
-				{
-					modProgram.VisionRadius_2E = 15;
-				}
-				modProgram.VisionRadius_2E_Changed();
-			}
-			
-			if (modControls.KeyboardProfile.Active(modControls.Control_View_Move_Type))
-			{
-				if (modProgram.ViewMoveType == modProgram.enumView_Move_Type.Free)
-				{
-					modProgram.ViewMoveType = modProgram.enumView_Move_Type.RTS;
-				}
-				else if (modProgram.ViewMoveType == modProgram.enumView_Move_Type.RTS)
-				{
-					modProgram.ViewMoveType = modProgram.enumView_Move_Type.Free;
-				}
-			}
-			if (modControls.KeyboardProfile.Active(modControls.Control_View_Rotate_Type))
-			{
-				modProgram.RTSOrbit = !modProgram.RTSOrbit;
-			}
-			if (modControls.KeyboardProfile.Active(modControls.Control_View_Reset))
-			{
-				Map.ViewInfo.FOV_Multiplier_Set(modSettings.Settings.FOVDefault);
-				if (modProgram.ViewMoveType == modProgram.enumView_Move_Type.Free)
-				{
-					Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
-					Map.ViewInfo.ViewAngleSet_Rotate(matrixA);
-				}
-				else if (modProgram.ViewMoveType == modProgram.enumView_Move_Type.RTS)
-				{
-					Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
-					Map.ViewInfo.ViewAngleSet_Rotate(matrixA);
-				}
-			}
-			if (modControls.KeyboardProfile.Active(modControls.Control_View_Textures))
-			{
-				modProgram.Draw_TileTextures = !modProgram.Draw_TileTextures;
-				DrawViewLater();
-			}
-			if (modControls.KeyboardProfile.Active(modControls.Control_View_Wireframe))
-			{
-				modProgram.Draw_TileWireframe = !modProgram.Draw_TileWireframe;
-				DrawViewLater();
-			}
-			if (modControls.KeyboardProfile.Active(modControls.Control_View_Units))
-			{
-				modProgram.Draw_Units = !modProgram.Draw_Units;
-				int X = 0;
-				int Y = 0;
-				modMath.sXY_int SectorNum = new modMath.sXY_int();
-				clsMap.clsUnit Unit = default(clsMap.clsUnit);
-				clsMap.clsUnitSectorConnection Connection = default(clsMap.clsUnitSectorConnection);
-				for (Y = 0; Y <= Map.SectorCount.Y - 1; Y++)
-				{
-					for (X = 0; X <= Map.SectorCount.X - 1; X++)
-					{
-						foreach (clsMap.clsUnitSectorConnection tempLoopVar_Connection in Map.Sectors[X, Y].Units)
-						{
-							Connection = tempLoopVar_Connection;
-							Unit = Connection.Unit;
-							if (Unit.Type.Type == clsUnitType.enumType.PlayerStructure)
-							{
-								if (((clsStructureType) Unit.Type).StructureBasePlate != null)
-								{
-									SectorNum.X = X;
-									SectorNum.Y = Y;
-									Map.SectorGraphicsChanges.Changed(SectorNum);
-									break;
-								}
-							}
-						}
-					}
-				}
-				Map.Update();
-				DrawViewLater();
-			}
-			if (modControls.KeyboardProfile.Active(modControls.Control_View_ScriptMarkers))
-			{
-				modProgram.Draw_ScriptMarkers = !modProgram.Draw_ScriptMarkers;
-				DrawViewLater();
-			}
-			if (modControls.KeyboardProfile.Active(modControls.Control_View_Lighting))
-			{
-				if (modProgram.Draw_Lighting == modProgram.enumDrawLighting.Off)
-				{
-					modProgram.Draw_Lighting = modProgram.enumDrawLighting.Half;
-				}
-				else if (modProgram.Draw_Lighting == modProgram.enumDrawLighting.Half)
-				{
-					modProgram.Draw_Lighting = modProgram.enumDrawLighting.Normal;
-				}
-				else if (modProgram.Draw_Lighting == modProgram.enumDrawLighting.Normal)
-				{
-					modProgram.Draw_Lighting = modProgram.enumDrawLighting.Off;
-				}
-				DrawViewLater();
-			}
-			if (modTools.Tool == modTools.Tools.TextureBrush)
-			{
-				if (MouseOverTerrain != null)
-				{
-					if (modControls.KeyboardProfile.Active(modControls.Control_Clockwise))
-					{
-						Map.ViewInfo.Apply_Texture_Clockwise();
-					}
-					if (modControls.KeyboardProfile.Active(modControls.Control_CounterClockwise))
-					{
-						Map.ViewInfo.Apply_Texture_CounterClockwise();
-					}
-					if (modControls.KeyboardProfile.Active(modControls.Control_Texture_Flip))
-					{
-						Map.ViewInfo.Apply_Texture_FlipX();
-					}
-					if (modControls.KeyboardProfile.Active(modControls.Control_Tri_Flip))
-					{
-						Map.ViewInfo.Apply_Tri_Flip();
-					}
-				}
-			}
-			if (modTools.Tool == modTools.Tools.ObjectSelect)
-			{
-				if (modControls.KeyboardProfile.Active(modControls.Control_Unit_Delete))
-				{
-					if (Map.SelectedUnits.Count > 0)
-					{
-						clsMap.clsUnit Unit = default(clsMap.clsUnit);
-						foreach (clsMap.clsUnit tempLoopVar_Unit in Map.SelectedUnits.GetItemsAsSimpleList())
-						{
-							Unit = tempLoopVar_Unit;
-							Map.UnitRemoveStoreChange(Unit.MapLink.ArrayPosition);
-						}
-						modMain.frmMainInstance.SelectedObject_Changed();
-						Map.UndoStepCreate("Object Deleted");
-						Map.Update();
-						Map.MinimapMakeLater();
-						DrawViewLater();
-					}
-				}
-				if (modControls.KeyboardProfile.Active(modControls.Control_Unit_Move))
-				{
-					if (MouseOverTerrain != null)
-					{
-						if (Map.SelectedUnits.Count > 0)
-						{
-							Matrix3D.Position.XY_dbl Centre = modProgram.CalcUnitsCentrePos(Map.SelectedUnits.GetItemsAsSimpleList());
-							modMath.sXY_int Offset = new modMath.sXY_int();
-							Offset.X = ((int) (Math.Round(System.Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.X - Centre.X) / modProgram.TerrainGridSpacing)))) * modProgram.TerrainGridSpacing;
-							Offset.Y = ((int) (Math.Round(System.Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.Y - Centre.Y) / modProgram.TerrainGridSpacing)))) * modProgram.TerrainGridSpacing;
-							clsMap.clsObjectPosOffset ObjectPosOffset = new clsMap.clsObjectPosOffset();
-							ObjectPosOffset.Map = Map;
-							ObjectPosOffset.Offset = Offset;
-							Map.SelectedUnitsAction(ObjectPosOffset);
-							
-							Map.UndoStepCreate("Objects Moved");
-							Map.Update();
-							Map.MinimapMakeLater();
-							modMain.frmMainInstance.SelectedObject_Changed();
-							DrawViewLater();
-						}
-					}
-				}
-				if (modControls.KeyboardProfile.Active(modControls.Control_Clockwise))
-				{
-					clsMap.clsObjectRotationOffset ObjectRotationOffset = new clsMap.clsObjectRotationOffset();
-					ObjectRotationOffset.Map = Map;
-					ObjectRotationOffset.Offset = -90;
-					Map.SelectedUnitsAction(ObjectRotationOffset);
-					Map.Update();
-					modMain.frmMainInstance.SelectedObject_Changed();
-					Map.UndoStepCreate("Object Rotated");
-					DrawViewLater();
-				}
-				if (modControls.KeyboardProfile.Active(modControls.Control_CounterClockwise))
-				{
-					clsMap.clsObjectRotationOffset ObjectRotationOffset = new clsMap.clsObjectRotationOffset();
-					ObjectRotationOffset.Map = Map;
-					ObjectRotationOffset.Offset = 90;
-					Map.SelectedUnitsAction(ObjectRotationOffset);
-					Map.Update();
-					modMain.frmMainInstance.SelectedObject_Changed();
-					Map.UndoStepCreate("Object Rotated");
-					DrawViewLater();
-				}
-			}
-			
-			if (modControls.KeyboardProfile.Active(modControls.Control_Deselect))
-			{
-				modTools.Tool = modTools.Tools.ObjectSelect;
-				DrawViewLater();
-			}
-			
-			if (modControls.KeyboardProfile.Active(modControls.Control_PreviousTool))
-			{
-				modTools.Tool = modTools.PreviousTool;
-				DrawViewLater();
-			}
-		}
-		
-		private void OpenGL_KeyUp(object sender, KeyEventArgs e)
-		{
-			
-			modProgram.IsViewKeyDown.Keys[(int)e.KeyCode] = false;
-			
-			foreach (clsOption<clsKeyboardControl> control in modControls.Options_KeyboardControls.Options)
-			{
-				((clsKeyboardControl) (modControls.KeyboardProfile.get_Value(control))).KeysChanged(modProgram.IsViewKeyDown);
-			}
-		}
-		
-		private void OpenGL_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
-		{
-			clsMap Map = MainMap;
-			
-			if (Map == null)
-			{
-				return;
-			}
-			
-			clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
-			
-			Map.SuppressMinimap = false;
-			
-			if (e.Button == System.Windows.Forms.MouseButtons.Left)
-			{
-				if (Map.ViewInfo.GetMouseLeftDownOverMinimap() != null)
-				{
-					
-				}
-				else
-				{
-					if (modTools.Tool == modTools.Tools.TerrainBrush)
-					{
-						Map.UndoStepCreate("Ground Painted");
-					}
-					else if (modTools.Tool == modTools.Tools.CliffTriangle)
-					{
-						Map.UndoStepCreate("Cliff Triangles");
-					}
-					else if (modTools.Tool == modTools.Tools.CliffBrush)
-					{
-						Map.UndoStepCreate("Cliff Brush");
-					}
-					else if (modTools.Tool == modTools.Tools.CliffRemove)
-					{
-						Map.UndoStepCreate("Cliff Remove Brush");
-					}
-					else if (modTools.Tool == modTools.Tools.HeightChangeBrush)
-					{
-						Map.UndoStepCreate("Height Change");
-					}
-					else if (modTools.Tool == modTools.Tools.HeightSetBrush)
-					{
-						Map.UndoStepCreate("Height Set");
-					}
-					else if (modTools.Tool == modTools.Tools.HeightSmoothBrush)
-					{
-						Map.UndoStepCreate("Height Smooth");
-					}
-					else if (modTools.Tool == modTools.Tools.TextureBrush)
-					{
-						Map.UndoStepCreate("Texture");
-					}
-					else if (modTools.Tool == modTools.Tools.RoadRemove)
-					{
-						Map.UndoStepCreate("Road Remove");
-					}
-					else if (modTools.Tool == modTools.Tools.ObjectSelect)
-					{
-						if (Map.Unit_Selected_Area_VertexA != null)
-						{
-							if (MouseOverTerrain != null)
-							{
-								SelectUnits(Map.Unit_Selected_Area_VertexA.XY, MouseOverTerrain.Vertex.Normal);
-							}
-							Map.Unit_Selected_Area_VertexA = null;
-						}
-					}
-				}
-				Map.ViewInfo.MouseLeftDown = null;
-			}
-			else if (e.Button == System.Windows.Forms.MouseButtons.Right)
-			{
-				if (Map.ViewInfo.GetMouseRightDownOverMinimap() != null)
-				{
-					
-				}
-				else
-				{
-					if (modTools.Tool == modTools.Tools.HeightChangeBrush)
-					{
-						Map.UndoStepCreate("Height Change");
-					}
-					else if (modTools.Tool == modTools.Tools.HeightSetBrush)
-					{
-						Map.UndoStepCreate("Height Set");
-					}
-				}
-				Map.ViewInfo.MouseRightDown = null;
-			}
-		}
-		
-		private void SelectUnits(modMath.sXY_int VertexA, modMath.sXY_int VertexB)
-		{
-			clsMap Map = MainMap;
-			clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
-			modMath.sXY_int SectorNum = new modMath.sXY_int();
-			clsMap.clsUnit Unit = default(clsMap.clsUnit);
-			modMath.sXY_int SectorStart = new modMath.sXY_int();
-			modMath.sXY_int SectorFinish = new modMath.sXY_int();
-			modMath.sXY_int StartPos = new modMath.sXY_int();
-			modMath.sXY_int FinishPos = new modMath.sXY_int();
-			modMath.sXY_int StartVertex = new modMath.sXY_int();
-			modMath.sXY_int FinishVertex = new modMath.sXY_int();
-			
-			if (Math.Abs(VertexA.X - VertexB.X) <= 1 && 
-				Math.Abs(VertexA.Y - VertexB.Y) <= 1 && 
-				MouseOverTerrain != null)
-			{
-				if (MouseOverTerrain.Units.Count > 0)
-				{
-					if (MouseOverTerrain.Units.Count == 1)
-					{
-						Unit = MouseOverTerrain.Units[0];
-						if (Unit.MapSelectedUnitLink.IsConnected)
-						{
-							Unit.MapDeselect();
-						}
-						else
-						{
-							Unit.MapSelect();
-						}
-					}
-					else
-					{
-						ListSelectBegin(false);
-					}
-				}
-			}
-			else
-			{
-				modMath.ReorderXY(VertexA, VertexB, StartVertex, FinishVertex);
-				StartPos.X = StartVertex.X * modProgram.TerrainGridSpacing;
-				StartPos.Y = StartVertex.Y * modProgram.TerrainGridSpacing;
-				FinishPos.X = FinishVertex.X * modProgram.TerrainGridSpacing;
-				FinishPos.Y = FinishVertex.Y * modProgram.TerrainGridSpacing;
-				SectorStart.X = Math.Min(Conversion.Int(StartVertex.X / modProgram.SectorTileSize), Map.SectorCount.X - 1);
-				SectorStart.Y = Math.Min((int) (Conversion.Int(StartVertex.Y / modProgram.SectorTileSize)), Map.SectorCount.Y - 1);
-				SectorFinish.X = Math.Min(Conversion.Int(FinishVertex.X / modProgram.SectorTileSize), Map.SectorCount.X - 1);
-				SectorFinish.Y = Math.Min(Conversion.Int(FinishVertex.Y / modProgram.SectorTileSize), Map.SectorCount.Y - 1);
-				for (SectorNum.Y = SectorStart.Y; SectorNum.Y <= SectorFinish.Y; SectorNum.Y++)
-				{
-					for (SectorNum.X = SectorStart.X; SectorNum.X <= SectorFinish.X; SectorNum.X++)
-					{
-						clsMap.clsUnitSectorConnection Connection = default(clsMap.clsUnitSectorConnection);
-						foreach (clsMap.clsUnitSectorConnection tempLoopVar_Connection in Map.Sectors[SectorNum.X, SectorNum.Y].Units)
-						{
-							Connection = tempLoopVar_Connection;
-							Unit = Connection.Unit;
-							if (Unit.Pos.Horizontal.X >= StartPos.X & Unit.Pos.Horizontal.Y >= StartPos.Y & 
-								Unit.Pos.Horizontal.X <= FinishPos.X & Unit.Pos.Horizontal.Y <= FinishPos.Y)
-							{
-								if (!Unit.MapSelectedUnitLink.IsConnected)
-								{
-									Unit.MapSelect();
-								}
-							}
-						}
-					}
-				}
-			}
-			modMain.frmMainInstance.SelectedObject_Changed();
-			DrawViewLater();
-		}
-		
-		private void tmrDrawDelay_Tick(System.Object sender, System.EventArgs e)
-		{
-			
-			if (DrawPending)
-			{
-				DrawPending = false;
-				DrawView();
-			}
-			else
-			{
-				tmrDrawDelay.Enabled = false;
-			}
-		}
-		
-		public void pnlDraw_Resize(object sender, System.EventArgs e)
-		{
-			
-			if (OpenGLControl != null)
-			{
-				ResizeOpenGL();
-			}
-		}
-		
-		public void OpenGL_Resize(System.Object eventSender, System.EventArgs eventArgs)
-		{
-			
-			clsMap Map = MainMap;
-			
-			GLSize.X = OpenGLControl.Width;
-			GLSize.Y = OpenGLControl.Height;
-			if (GLSize.Y != 0)
-			{
-				GLSize_XPerY = (float) (GLSize.X / GLSize.Y);
-			}
-			Viewport_Resize();
-			if (Map != null)
-			{
-				Map.ViewInfo.FOV_Calc();
-			}
-			DrawViewLater();
-		}
-		
-		public void OpenGL_MouseEnter(object sender, System.EventArgs e)
-		{
-			
-			if (Form.ActiveForm == modMain.frmMainInstance)
-			{
-				OpenGLControl.Focus();
-			}
-		}
-		
-		public void OpenGL_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
-		{
-			clsMap Map = MainMap;
-			
-			if (Map == null)
-			{
-				return;
-			}
-			
-			modMath.sXYZ_int Move = new modMath.sXYZ_int();
-			Matrix3D.Position.XYZ_dbl XYZ_dbl = default(Matrix3D.Position.XYZ_dbl);
-			int A = 0;
-			
-			for (A = 0; A <= (int) (Math.Abs(e.Delta / 120.0D)); A++)
-			{
-				Matrix3DMath.VectorForwardsRotationByMatrix(Map.ViewInfo.ViewAngleMatrix, System.Convert.ToDouble(Math.Sign(e.Delta) * Math.Max(Map.ViewInfo.ViewPos.Y, 512.0D) / 24.0D), ref XYZ_dbl);
-				Move.Set_dbl(XYZ_dbl);
-				Map.ViewInfo.ViewPosChange(Move);
-			}
-		}
-		
-		public GLFont CreateGLFont(Font BaseFont)
-		{
-			
-			return new GLFont(new Font(BaseFont.FontFamily, 24.0F, BaseFont.Style, GraphicsUnit.Pixel));
-		}
-		
-		public Timer UndoMessageTimer;
-		
-		public void RemoveUndoMessage(object sender, EventArgs e)
-		{
-			
-			UndoMessageTimer.Enabled = false;
-			lblUndo.Text = "";
-		}
-		
-		public void DisplayUndoMessage(string Text)
-		{
-			
-			lblUndo.Text = Text;
-			UndoMessageTimer.Enabled = false;
-			UndoMessageTimer.Enabled = true;
-		}
-		
-		private void OpenGL_MouseLeave(object sender, System.EventArgs e)
-		{
-			clsMap Map = MainMap;
-			
-			if (Map == null)
-			{
-				return;
-			}
-			
-			Map.ViewInfo.MouseOver = null;
-		}
-		
-		public void ListSelectBegin(bool isPicker)
-		{
-			clsMap Map = MainMap;
-			clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
-			
-			if (MouseOverTerrain == null)
-			{
-				Debugger.Break();
-				return;
-			}
-			
-			int A = 0;
-			clsMap.clsUnit Unit = default(clsMap.clsUnit);
-			
-			ListSelect.Close();
-			ListSelect.Items.Clear();
-			ListSelectItems = new ToolStripItem[MouseOverTerrain.Units.Count - 1 + 1];
-			for (A = 0; A <= MouseOverTerrain.Units.Count - 1; A++)
-			{
-				Unit = MouseOverTerrain.Units[A];
-				ListSelectItems[A] = new ToolStripButton(Unit.Type.GetDisplayTextCode());
-				ListSelectItems[A].Tag = Unit;
-				ListSelect.Items.Add(ListSelectItems[A]);
-			}
-			ListSelectIsPicker = isPicker;
-			ListSelect.Show(this, new System.Drawing.Point(Map.ViewInfo.MouseOver.ScreenPos.X, Map.ViewInfo.MouseOver.ScreenPos.Y));
-		}
-		
-		public void tabMaps_SelectedIndexChanged(System.Object sender, System.EventArgs e)
-		{
-			
-			if (!tabMaps.Enabled)
-			{
-				return;
-			}
-			
-			if (tabMaps.SelectedTab == null)
-			{
-				_Owner.SetMainMap(null);
-				return;
-			}
-			
-			clsMap Map = (clsMap) tabMaps.SelectedTab.Tag;
-			
-			_Owner.SetMainMap(Map);
-		}
-		
-		public void btnClose_Click(System.Object sender, System.EventArgs e)
-		{
-			clsMap Map = MainMap;
-			
-			if (Map == null)
-			{
-				return;
-			}
-			if (!Map.frmMainLink.IsConnected)
-			{
-MessageBox.Show("Error: Map should be closed already.");
-				return;
-			}
-			
-			if (!Map.ClosePrompt())
-			{
-				return;
-			}
-			
-			Map.Deallocate();
-		}
-		
-		public void UpdateTabs()
-		{
-			clsMap Map = default(clsMap);
-			
-			tabMaps.Enabled = false;
-			tabMaps.TabPages.Clear();
-			foreach (clsMap tempLoopVar_Map in _Owner.LoadedMaps)
-			{
-				Map = tempLoopVar_Map;
-				tabMaps.TabPages.Add(Map.MapView_TabPage);
-			}
-			Map = MainMap;
-			if (Map != null)
-			{
-				tabMaps.SelectedIndex = Map.frmMainLink.ArrayPosition;
-			}
-			else
-			{
-				tabMaps.SelectedIndex = -1;
-			}
-			tabMaps.Enabled = true;
-		}
-		
-private clsMap MainMap
-		{
-			get
-			{
-				return _Owner.MainMap;
-			}
-		}
-	}
-	
+    public partial class ctrlMapView
+    {
+        private frmMain _Owner;
+
+        public bool DrawPending;
+
+        public modMath.sXY_int GLSize;
+        public float GLSize_XPerY;
+
+        public bool DrawView_Enabled = false;
+
+        private Timer GLInitializeDelayTimer;
+        public bool IsGLInitialized = false;
+
+        private Timer tmrDraw;
+        private Timer tmrDrawDelay;
+
+        public OpenTK.GLControl OpenGLControl;
+
+        public ctrlMapView(frmMain Owner)
+        {
+            _Owner = Owner;
+
+            InitializeComponent();
+
+            ListSelect = new ContextMenuStrip();
+            ListSelect.ItemClicked += ListSelect_Click;
+            ListSelect.Closed += ListSelect_Close;
+            UndoMessageTimer = new Timer();
+            UndoMessageTimer.Tick += RemoveUndoMessage;
+
+            OpenGLControl = modMain.OpenGL1;
+            pnlDraw.Controls.Add(OpenGLControl);
+
+            GLInitializeDelayTimer = new Timer();
+            GLInitializeDelayTimer.Interval = 50;
+            GLInitializeDelayTimer.Tick += GLInitialize;
+            GLInitializeDelayTimer.Enabled = true;
+
+            tmrDraw = new Timer();
+            tmrDraw.Tick += tmrDraw_Tick;
+            tmrDraw.Interval = 1;
+
+            tmrDrawDelay = new Timer();
+            tmrDrawDelay.Tick += tmrDrawDelay_Tick;
+            tmrDrawDelay.Interval = 30;
+
+            UndoMessageTimer.Interval = 4000;
+        }
+
+        public void ResizeOpenGL()
+        {
+            if ( OpenGLControl.Context == null )
+            {
+                return;
+            }
+
+            OpenGLControl.Width = pnlDraw.Width;
+            OpenGLControl.Height = pnlDraw.Height;
+        }
+
+        public void DrawView_SetEnabled(bool Value)
+        {
+            if ( Value )
+            {
+                if ( !DrawView_Enabled )
+                {
+                    DrawView_Enabled = true;
+                    DrawViewLater();
+                }
+            }
+            else
+            {
+                tmrDraw.Enabled = false;
+                DrawView_Enabled = false;
+            }
+        }
+
+        public void DrawViewLater()
+        {
+            DrawPending = true;
+            if ( !tmrDrawDelay.Enabled )
+            {
+                tmrDraw.Enabled = true;
+            }
+        }
+
+        private void tmrDraw_Tick(System.Object sender, System.EventArgs e)
+        {
+            tmrDraw.Enabled = false;
+            if ( DrawPending )
+            {
+                DrawView();
+                DrawPending = false;
+                tmrDrawDelay.Enabled = true;
+            }
+        }
+
+        private void GLInitialize(object sender, EventArgs e)
+        {
+            if ( OpenGLControl.Context == null )
+            {
+                return;
+            }
+
+            GLInitializeDelayTimer.Enabled = false;
+            GLInitializeDelayTimer.Tick -= GLInitialize;
+            GLInitializeDelayTimer.Dispose();
+            GLInitializeDelayTimer = null;
+
+            ResizeOpenGL();
+
+            OpenGLControl.MouseDown += OpenGL_MouseDown;
+            OpenGLControl.MouseUp += OpenGL_MouseUp;
+            OpenGLControl.MouseWheel += OpenGL_MouseWheel;
+            OpenGLControl.MouseMove += OpenGL_MouseMove;
+            OpenGLControl.MouseEnter += OpenGL_MouseEnter;
+            OpenGLControl.MouseLeave += OpenGL_MouseLeave;
+            OpenGLControl.Resize += OpenGL_Resize;
+            OpenGLControl.Leave += OpenGL_LostFocus;
+            OpenGLControl.PreviewKeyDown += OpenGL_KeyDown;
+            OpenGLControl.KeyUp += OpenGL_KeyUp;
+
+            if ( GraphicsContext.CurrentContext != OpenGLControl.Context )
+            {
+                OpenGLControl.MakeCurrent();
+            }
+
+            GL.PixelStore(PixelStoreParameter.PackAlignment, 1);
+            GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
+            GL.ClearColor(0.0F, 0.0F, 0.0F, 1.0F);
+            GL.Clear(ClearBufferMask.ColorBufferBit);
+            GL.ShadeModel(ShadingModel.Smooth);
+            GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
+            GL.Enable(EnableCap.DepthTest);
+
+            float[] ambient = new float[4];
+            float[] specular = new float[4];
+            float[] diffuse = new float[4];
+
+            ambient[0] = 0.333333343F;
+            ambient[1] = 0.333333343F;
+            ambient[2] = 0.333333343F;
+            ambient[3] = 1.0F;
+            specular[0] = 0.6666667F;
+            specular[1] = 0.6666667F;
+            specular[2] = 0.6666667F;
+            specular[3] = 1.0F;
+            diffuse[0] = 0.75F;
+            diffuse[1] = 0.75F;
+            diffuse[2] = 0.75F;
+            diffuse[3] = 1.0F;
+            GL.Light(LightName.Light0, LightParameter.Diffuse, diffuse);
+            GL.Light(LightName.Light0, LightParameter.Specular, specular);
+            GL.Light(LightName.Light0, LightParameter.Ambient, ambient);
+
+            ambient[0] = 0.25F;
+            ambient[1] = 0.25F;
+            ambient[2] = 0.25F;
+            ambient[3] = 1.0F;
+            specular[0] = 0.5F;
+            specular[1] = 0.5F;
+            specular[2] = 0.5F;
+            specular[3] = 1.0F;
+            diffuse[0] = 0.5625F;
+            diffuse[1] = 0.5625F;
+            diffuse[2] = 0.5625F;
+            diffuse[3] = 1.0F;
+            GL.Light(LightName.Light1, LightParameter.Diffuse, diffuse);
+            GL.Light(LightName.Light1, LightParameter.Specular, specular);
+            GL.Light(LightName.Light1, LightParameter.Ambient, ambient);
+
+            float[] mat_diffuse = new float[4];
+            float[] mat_specular = new float[4];
+            float[] mat_ambient = new float[4];
+            float[] mat_shininess = new float[1];
+
+            mat_specular[0] = 0.0F;
+            mat_specular[1] = 0.0F;
+            mat_specular[2] = 0.0F;
+            mat_specular[3] = 0.0F;
+            mat_ambient[0] = 1.0F;
+            mat_ambient[1] = 1.0F;
+            mat_ambient[2] = 1.0F;
+            mat_ambient[3] = 1.0F;
+            mat_diffuse[0] = 1.0F;
+            mat_diffuse[1] = 1.0F;
+            mat_diffuse[2] = 1.0F;
+            mat_diffuse[3] = 1.0F;
+            mat_shininess[0] = 0.0F;
+
+            GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Ambient, mat_ambient);
+            GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Specular, mat_specular);
+            GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Diffuse, mat_diffuse);
+            GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Shininess, mat_shininess);
+
+            IsGLInitialized = true;
+        }
+
+        public void Viewport_Resize()
+        {
+            if ( !modProgram.ProgramInitialized )
+            {
+                return;
+            }
+
+            if ( GraphicsContext.CurrentContext != OpenGLControl.Context )
+            {
+                OpenGLControl.MakeCurrent();
+            }
+            GL.Viewport(0, 0, GLSize.X, GLSize.Y);
+
+            GL.Clear(ClearBufferMask.ColorBufferBit);
+            GL.Flush();
+            OpenGLControl.SwapBuffers();
+            Refresh();
+
+            DrawViewLater();
+        }
+
+        private void DrawView()
+        {
+            if ( !(DrawView_Enabled && IsGLInitialized) )
+            {
+                return;
+            }
+
+            if ( GraphicsContext.CurrentContext != OpenGLControl.Context )
+            {
+                OpenGLControl.MakeCurrent();
+            }
+
+            clsMap Map = MainMap;
+            sRGB_sng BGColour = new sRGB_sng();
+
+            if ( Map == null )
+            {
+                BGColour.Red = 0.5F;
+                BGColour.Green = 0.5F;
+                BGColour.Blue = 0.5F;
+            }
+            else if ( Map.Tileset == null )
+            {
+                BGColour.Red = 0.5F;
+                BGColour.Green = 0.5F;
+                BGColour.Blue = 0.5F;
+            }
+            else
+            {
+                BGColour = Map.Tileset.BGColour;
+            }
+
+            GL.ClearColor(BGColour.Red, BGColour.Green, BGColour.Blue, 1.0F);
+            GL.Clear((OpenTK.Graphics.OpenGL.ClearBufferMask)(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
+
+            if ( Map != null )
+            {
+                Map.GLDraw();
+            }
+
+            GL.Flush();
+            OpenGLControl.SwapBuffers();
+
+            Refresh();
+        }
+
+        public void OpenGL_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            clsMap Map = MainMap;
+
+            if ( Map == null )
+            {
+                return;
+            }
+
+            Map.ViewInfo.Map.ViewInfo.MouseOver = new clsViewInfo.clsMouseOver();
+            Map.ViewInfo.MouseOver.ScreenPos.X = e.X;
+            Map.ViewInfo.MouseOver.ScreenPos.Y = e.Y;
+
+            Map.ViewInfo.MouseOver_Pos_Calc();
+        }
+
+        public void Pos_Display_Update()
+        {
+            clsMap Map = MainMap;
+            clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
+
+            if ( MouseOverTerrain == null )
+            {
+                lblTile.Text = "";
+                lblVertex.Text = "";
+                lblPos.Text = "";
+            }
+            else
+            {
+                lblTile.Text = "Tile x:" + System.Convert.ToString(MouseOverTerrain.Tile.Normal.X) + ", y:" + System.Convert.ToString(MouseOverTerrain.Tile.Normal.Y);
+                lblVertex.Text = "Vertex  x:" + System.Convert.ToString(MouseOverTerrain.Vertex.Normal.X) + ", y:" +
+                                 System.Convert.ToString(MouseOverTerrain.Vertex.Normal.Y) + ", alt:" +
+                                 Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height * Map.HeightMultiplier + " (" +
+                                 System.Convert.ToString(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height) + "x" +
+                                 System.Convert.ToString(Map.HeightMultiplier) + ")";
+                lblPos.Text = "Pos x:" + System.Convert.ToString(MouseOverTerrain.Pos.Horizontal.X) + ", y:" +
+                              System.Convert.ToString(MouseOverTerrain.Pos.Horizontal.Y) + ", alt:" + System.Convert.ToString(MouseOverTerrain.Pos.Altitude) +
+                              ", slope: " +
+                              System.Convert.ToString(Math.Round(Map.GetTerrainSlopeAngle(MouseOverTerrain.Pos.Horizontal) / modMath.RadOf1Deg * 10.0D) / 10.0D) +
+                              "°";
+            }
+        }
+
+        public void OpenGL_LostFocus(System.Object eventSender, System.EventArgs eventArgs)
+        {
+            clsMap Map = MainMap;
+
+            if ( Map == null )
+            {
+                return;
+            }
+
+            Map.SuppressMinimap = false;
+
+            Map.ViewInfo.MouseOver = null;
+            Map.ViewInfo.MouseLeftDown = null;
+            Map.ViewInfo.MouseRightDown = null;
+
+            modProgram.ViewKeyDown_Clear();
+        }
+
+        private ContextMenuStrip ListSelect;
+        private bool ListSelectIsPicker;
+        private ToolStripItem[] ListSelectItems = new ToolStripItem[0];
+
+        private void ListSelect_Click(object Sender, ToolStripItemClickedEventArgs e)
+        {
+            ToolStripItem Button = e.ClickedItem;
+            clsMap.clsUnit Unit = (clsMap.clsUnit)Button.Tag;
+
+            if ( ListSelectIsPicker )
+            {
+                modMain.frmMainInstance.ObjectPicker(Unit.Type);
+            }
+            else
+            {
+                if ( Unit.MapSelectedUnitLink.IsConnected )
+                {
+                    Unit.MapDeselect();
+                }
+                else
+                {
+                    Unit.MapSelect();
+                }
+                modMain.frmMainInstance.SelectedObject_Changed();
+                DrawViewLater();
+            }
+        }
+
+        private void ListSelect_Close(object sender, ToolStripDropDownClosedEventArgs e)
+        {
+            int A = 0;
+
+            for ( A = 0; A <= ListSelectItems.GetUpperBound(0); A++ )
+            {
+                ListSelectItems[A].Tag = null;
+                ListSelectItems[A].Dispose();
+            }
+            ListSelect.Items.Clear();
+            ListSelectItems = new ToolStripItem[0];
+
+            modProgram.ViewKeyDown_Clear();
+        }
+
+        private void OpenGL_MouseDown(object sender, MouseEventArgs e)
+        {
+            clsMap Map = MainMap;
+
+            if ( Map == null )
+            {
+                return;
+            }
+
+            Map.ViewInfo.MouseDown(e);
+        }
+
+        private void OpenGL_KeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            clsMap Map = MainMap;
+
+            if ( Map == null )
+            {
+                return;
+            }
+
+            Matrix3DMath.Matrix3D matrixA = new Matrix3DMath.Matrix3D();
+            clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
+
+            modProgram.IsViewKeyDown.Keys[(int)e.KeyCode] = true;
+
+            foreach ( clsOption<clsKeyboardControl> control in modControls.Options_KeyboardControls.Options )
+            {
+                ((clsKeyboardControl)(modControls.KeyboardProfile.get_Value(control))).KeysChanged(modProgram.IsViewKeyDown);
+            }
+
+            if ( modControls.KeyboardProfile.Active(modControls.Control_Undo) )
+            {
+                string Message = "";
+                if ( Map.UndoPosition > 0 )
+                {
+                    Message = "Undid: " + Map.Undos[Map.UndoPosition - 1].Name;
+                    clsMap.clsMessage MapMessage = new clsMap.clsMessage();
+                    MapMessage.Text = Message;
+                    Map.Messages.Add(MapMessage);
+                    Map.UndoPerform();
+                    DrawViewLater();
+                }
+                else
+                {
+                    Message = "Nothing to undo";
+                }
+                DisplayUndoMessage(Message);
+            }
+            if ( modControls.KeyboardProfile.Active(modControls.Control_Redo) )
+            {
+                string Message = "";
+                if ( Map.UndoPosition < Map.Undos.Count )
+                {
+                    Message = "Redid: " + Map.Undos[Map.UndoPosition].Name;
+                    clsMap.clsMessage MapMessage = new clsMap.clsMessage();
+                    MapMessage.Text = Message;
+                    Map.Messages.Add(MapMessage);
+                    Map.RedoPerform();
+                    DrawViewLater();
+                }
+                else
+                {
+                    Message = "Nothing to redo";
+                }
+                DisplayUndoMessage(Message);
+            }
+            if ( modProgram.IsViewKeyDown.Keys[(int)Keys.ControlKey] )
+            {
+                if ( e.KeyCode == Keys.D1 )
+                {
+                    modProgram.VisionRadius_2E = 6;
+                }
+                else if ( e.KeyCode == Keys.D2 )
+                {
+                    modProgram.VisionRadius_2E = 7;
+                }
+                else if ( e.KeyCode == Keys.D3 )
+                {
+                    modProgram.VisionRadius_2E = 8;
+                }
+                else if ( e.KeyCode == Keys.D4 )
+                {
+                    modProgram.VisionRadius_2E = 9;
+                }
+                else if ( e.KeyCode == Keys.D5 )
+                {
+                    modProgram.VisionRadius_2E = 10;
+                }
+                else if ( e.KeyCode == Keys.D6 )
+                {
+                    modProgram.VisionRadius_2E = 11;
+                }
+                else if ( e.KeyCode == Keys.D7 )
+                {
+                    modProgram.VisionRadius_2E = 12;
+                }
+                else if ( e.KeyCode == Keys.D8 )
+                {
+                    modProgram.VisionRadius_2E = 13;
+                }
+                else if ( e.KeyCode == Keys.D9 )
+                {
+                    modProgram.VisionRadius_2E = 14;
+                }
+                else if ( e.KeyCode == Keys.D0 )
+                {
+                    modProgram.VisionRadius_2E = 15;
+                }
+                modProgram.VisionRadius_2E_Changed();
+            }
+
+            if ( modControls.KeyboardProfile.Active(modControls.Control_View_Move_Type) )
+            {
+                if ( modProgram.ViewMoveType == modProgram.enumView_Move_Type.Free )
+                {
+                    modProgram.ViewMoveType = modProgram.enumView_Move_Type.RTS;
+                }
+                else if ( modProgram.ViewMoveType == modProgram.enumView_Move_Type.RTS )
+                {
+                    modProgram.ViewMoveType = modProgram.enumView_Move_Type.Free;
+                }
+            }
+            if ( modControls.KeyboardProfile.Active(modControls.Control_View_Rotate_Type) )
+            {
+                modProgram.RTSOrbit = !modProgram.RTSOrbit;
+            }
+            if ( modControls.KeyboardProfile.Active(modControls.Control_View_Reset) )
+            {
+                Map.ViewInfo.FOV_Multiplier_Set(modSettings.Settings.FOVDefault);
+                if ( modProgram.ViewMoveType == modProgram.enumView_Move_Type.Free )
+                {
+                    Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
+                    Map.ViewInfo.ViewAngleSet_Rotate(matrixA);
+                }
+                else if ( modProgram.ViewMoveType == modProgram.enumView_Move_Type.RTS )
+                {
+                    Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
+                    Map.ViewInfo.ViewAngleSet_Rotate(matrixA);
+                }
+            }
+            if ( modControls.KeyboardProfile.Active(modControls.Control_View_Textures) )
+            {
+                modProgram.Draw_TileTextures = !modProgram.Draw_TileTextures;
+                DrawViewLater();
+            }
+            if ( modControls.KeyboardProfile.Active(modControls.Control_View_Wireframe) )
+            {
+                modProgram.Draw_TileWireframe = !modProgram.Draw_TileWireframe;
+                DrawViewLater();
+            }
+            if ( modControls.KeyboardProfile.Active(modControls.Control_View_Units) )
+            {
+                modProgram.Draw_Units = !modProgram.Draw_Units;
+                int X = 0;
+                int Y = 0;
+                modMath.sXY_int SectorNum = new modMath.sXY_int();
+                clsMap.clsUnit Unit = default(clsMap.clsUnit);
+                clsMap.clsUnitSectorConnection Connection = default(clsMap.clsUnitSectorConnection);
+                for ( Y = 0; Y <= Map.SectorCount.Y - 1; Y++ )
+                {
+                    for ( X = 0; X <= Map.SectorCount.X - 1; X++ )
+                    {
+                        foreach ( clsMap.clsUnitSectorConnection tempLoopVar_Connection in Map.Sectors[X, Y].Units )
+                        {
+                            Connection = tempLoopVar_Connection;
+                            Unit = Connection.Unit;
+                            if ( Unit.Type.Type == clsUnitType.enumType.PlayerStructure )
+                            {
+                                if ( ((clsStructureType)Unit.Type).StructureBasePlate != null )
+                                {
+                                    SectorNum.X = X;
+                                    SectorNum.Y = Y;
+                                    Map.SectorGraphicsChanges.Changed(SectorNum);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                Map.Update();
+                DrawViewLater();
+            }
+            if ( modControls.KeyboardProfile.Active(modControls.Control_View_ScriptMarkers) )
+            {
+                modProgram.Draw_ScriptMarkers = !modProgram.Draw_ScriptMarkers;
+                DrawViewLater();
+            }
+            if ( modControls.KeyboardProfile.Active(modControls.Control_View_Lighting) )
+            {
+                if ( modProgram.Draw_Lighting == modProgram.enumDrawLighting.Off )
+                {
+                    modProgram.Draw_Lighting = modProgram.enumDrawLighting.Half;
+                }
+                else if ( modProgram.Draw_Lighting == modProgram.enumDrawLighting.Half )
+                {
+                    modProgram.Draw_Lighting = modProgram.enumDrawLighting.Normal;
+                }
+                else if ( modProgram.Draw_Lighting == modProgram.enumDrawLighting.Normal )
+                {
+                    modProgram.Draw_Lighting = modProgram.enumDrawLighting.Off;
+                }
+                DrawViewLater();
+            }
+            if ( modTools.Tool == modTools.Tools.TextureBrush )
+            {
+                if ( MouseOverTerrain != null )
+                {
+                    if ( modControls.KeyboardProfile.Active(modControls.Control_Clockwise) )
+                    {
+                        Map.ViewInfo.Apply_Texture_Clockwise();
+                    }
+                    if ( modControls.KeyboardProfile.Active(modControls.Control_CounterClockwise) )
+                    {
+                        Map.ViewInfo.Apply_Texture_CounterClockwise();
+                    }
+                    if ( modControls.KeyboardProfile.Active(modControls.Control_Texture_Flip) )
+                    {
+                        Map.ViewInfo.Apply_Texture_FlipX();
+                    }
+                    if ( modControls.KeyboardProfile.Active(modControls.Control_Tri_Flip) )
+                    {
+                        Map.ViewInfo.Apply_Tri_Flip();
+                    }
+                }
+            }
+            if ( modTools.Tool == modTools.Tools.ObjectSelect )
+            {
+                if ( modControls.KeyboardProfile.Active(modControls.Control_Unit_Delete) )
+                {
+                    if ( Map.SelectedUnits.Count > 0 )
+                    {
+                        clsMap.clsUnit Unit = default(clsMap.clsUnit);
+                        foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.SelectedUnits.GetItemsAsSimpleList() )
+                        {
+                            Unit = tempLoopVar_Unit;
+                            Map.UnitRemoveStoreChange(Unit.MapLink.ArrayPosition);
+                        }
+                        modMain.frmMainInstance.SelectedObject_Changed();
+                        Map.UndoStepCreate("Object Deleted");
+                        Map.Update();
+                        Map.MinimapMakeLater();
+                        DrawViewLater();
+                    }
+                }
+                if ( modControls.KeyboardProfile.Active(modControls.Control_Unit_Move) )
+                {
+                    if ( MouseOverTerrain != null )
+                    {
+                        if ( Map.SelectedUnits.Count > 0 )
+                        {
+                            Matrix3D.Position.XY_dbl Centre = modProgram.CalcUnitsCentrePos(Map.SelectedUnits.GetItemsAsSimpleList());
+                            modMath.sXY_int Offset = new modMath.sXY_int();
+                            Offset.X = ((int)(Math.Round(System.Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.X - Centre.X) / modProgram.TerrainGridSpacing)))) *
+                                       modProgram.TerrainGridSpacing;
+                            Offset.Y = ((int)(Math.Round(System.Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.Y - Centre.Y) / modProgram.TerrainGridSpacing)))) *
+                                       modProgram.TerrainGridSpacing;
+                            clsMap.clsObjectPosOffset ObjectPosOffset = new clsMap.clsObjectPosOffset();
+                            ObjectPosOffset.Map = Map;
+                            ObjectPosOffset.Offset = Offset;
+                            Map.SelectedUnitsAction(ObjectPosOffset);
+
+                            Map.UndoStepCreate("Objects Moved");
+                            Map.Update();
+                            Map.MinimapMakeLater();
+                            modMain.frmMainInstance.SelectedObject_Changed();
+                            DrawViewLater();
+                        }
+                    }
+                }
+                if ( modControls.KeyboardProfile.Active(modControls.Control_Clockwise) )
+                {
+                    clsMap.clsObjectRotationOffset ObjectRotationOffset = new clsMap.clsObjectRotationOffset();
+                    ObjectRotationOffset.Map = Map;
+                    ObjectRotationOffset.Offset = -90;
+                    Map.SelectedUnitsAction(ObjectRotationOffset);
+                    Map.Update();
+                    modMain.frmMainInstance.SelectedObject_Changed();
+                    Map.UndoStepCreate("Object Rotated");
+                    DrawViewLater();
+                }
+                if ( modControls.KeyboardProfile.Active(modControls.Control_CounterClockwise) )
+                {
+                    clsMap.clsObjectRotationOffset ObjectRotationOffset = new clsMap.clsObjectRotationOffset();
+                    ObjectRotationOffset.Map = Map;
+                    ObjectRotationOffset.Offset = 90;
+                    Map.SelectedUnitsAction(ObjectRotationOffset);
+                    Map.Update();
+                    modMain.frmMainInstance.SelectedObject_Changed();
+                    Map.UndoStepCreate("Object Rotated");
+                    DrawViewLater();
+                }
+            }
+
+            if ( modControls.KeyboardProfile.Active(modControls.Control_Deselect) )
+            {
+                modTools.Tool = modTools.Tools.ObjectSelect;
+                DrawViewLater();
+            }
+
+            if ( modControls.KeyboardProfile.Active(modControls.Control_PreviousTool) )
+            {
+                modTools.Tool = modTools.PreviousTool;
+                DrawViewLater();
+            }
+        }
+
+        private void OpenGL_KeyUp(object sender, KeyEventArgs e)
+        {
+            modProgram.IsViewKeyDown.Keys[(int)e.KeyCode] = false;
+
+            foreach ( clsOption<clsKeyboardControl> control in modControls.Options_KeyboardControls.Options )
+            {
+                ((clsKeyboardControl)(modControls.KeyboardProfile.get_Value(control))).KeysChanged(modProgram.IsViewKeyDown);
+            }
+        }
+
+        private void OpenGL_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            clsMap Map = MainMap;
+
+            if ( Map == null )
+            {
+                return;
+            }
+
+            clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
+
+            Map.SuppressMinimap = false;
+
+            if ( e.Button == System.Windows.Forms.MouseButtons.Left )
+            {
+                if ( Map.ViewInfo.GetMouseLeftDownOverMinimap() != null )
+                {
+                }
+                else
+                {
+                    if ( modTools.Tool == modTools.Tools.TerrainBrush )
+                    {
+                        Map.UndoStepCreate("Ground Painted");
+                    }
+                    else if ( modTools.Tool == modTools.Tools.CliffTriangle )
+                    {
+                        Map.UndoStepCreate("Cliff Triangles");
+                    }
+                    else if ( modTools.Tool == modTools.Tools.CliffBrush )
+                    {
+                        Map.UndoStepCreate("Cliff Brush");
+                    }
+                    else if ( modTools.Tool == modTools.Tools.CliffRemove )
+                    {
+                        Map.UndoStepCreate("Cliff Remove Brush");
+                    }
+                    else if ( modTools.Tool == modTools.Tools.HeightChangeBrush )
+                    {
+                        Map.UndoStepCreate("Height Change");
+                    }
+                    else if ( modTools.Tool == modTools.Tools.HeightSetBrush )
+                    {
+                        Map.UndoStepCreate("Height Set");
+                    }
+                    else if ( modTools.Tool == modTools.Tools.HeightSmoothBrush )
+                    {
+                        Map.UndoStepCreate("Height Smooth");
+                    }
+                    else if ( modTools.Tool == modTools.Tools.TextureBrush )
+                    {
+                        Map.UndoStepCreate("Texture");
+                    }
+                    else if ( modTools.Tool == modTools.Tools.RoadRemove )
+                    {
+                        Map.UndoStepCreate("Road Remove");
+                    }
+                    else if ( modTools.Tool == modTools.Tools.ObjectSelect )
+                    {
+                        if ( Map.Unit_Selected_Area_VertexA != null )
+                        {
+                            if ( MouseOverTerrain != null )
+                            {
+                                SelectUnits(Map.Unit_Selected_Area_VertexA.XY, MouseOverTerrain.Vertex.Normal);
+                            }
+                            Map.Unit_Selected_Area_VertexA = null;
+                        }
+                    }
+                }
+                Map.ViewInfo.MouseLeftDown = null;
+            }
+            else if ( e.Button == System.Windows.Forms.MouseButtons.Right )
+            {
+                if ( Map.ViewInfo.GetMouseRightDownOverMinimap() != null )
+                {
+                }
+                else
+                {
+                    if ( modTools.Tool == modTools.Tools.HeightChangeBrush )
+                    {
+                        Map.UndoStepCreate("Height Change");
+                    }
+                    else if ( modTools.Tool == modTools.Tools.HeightSetBrush )
+                    {
+                        Map.UndoStepCreate("Height Set");
+                    }
+                }
+                Map.ViewInfo.MouseRightDown = null;
+            }
+        }
+
+        private void SelectUnits(modMath.sXY_int VertexA, modMath.sXY_int VertexB)
+        {
+            clsMap Map = MainMap;
+            clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
+            modMath.sXY_int SectorNum = new modMath.sXY_int();
+            clsMap.clsUnit Unit = default(clsMap.clsUnit);
+            modMath.sXY_int SectorStart = new modMath.sXY_int();
+            modMath.sXY_int SectorFinish = new modMath.sXY_int();
+            modMath.sXY_int StartPos = new modMath.sXY_int();
+            modMath.sXY_int FinishPos = new modMath.sXY_int();
+            modMath.sXY_int StartVertex = new modMath.sXY_int();
+            modMath.sXY_int FinishVertex = new modMath.sXY_int();
+
+            if ( Math.Abs(VertexA.X - VertexB.X) <= 1 &&
+                 Math.Abs(VertexA.Y - VertexB.Y) <= 1 &&
+                 MouseOverTerrain != null )
+            {
+                if ( MouseOverTerrain.Units.Count > 0 )
+                {
+                    if ( MouseOverTerrain.Units.Count == 1 )
+                    {
+                        Unit = MouseOverTerrain.Units[0];
+                        if ( Unit.MapSelectedUnitLink.IsConnected )
+                        {
+                            Unit.MapDeselect();
+                        }
+                        else
+                        {
+                            Unit.MapSelect();
+                        }
+                    }
+                    else
+                    {
+                        ListSelectBegin(false);
+                    }
+                }
+            }
+            else
+            {
+                modMath.ReorderXY(VertexA, VertexB, StartVertex, FinishVertex);
+                StartPos.X = StartVertex.X * modProgram.TerrainGridSpacing;
+                StartPos.Y = StartVertex.Y * modProgram.TerrainGridSpacing;
+                FinishPos.X = FinishVertex.X * modProgram.TerrainGridSpacing;
+                FinishPos.Y = FinishVertex.Y * modProgram.TerrainGridSpacing;
+                SectorStart.X = Math.Min(Conversion.Int(StartVertex.X / modProgram.SectorTileSize), Map.SectorCount.X - 1);
+                SectorStart.Y = Math.Min((int)(Conversion.Int(StartVertex.Y / modProgram.SectorTileSize)), Map.SectorCount.Y - 1);
+                SectorFinish.X = Math.Min(Conversion.Int(FinishVertex.X / modProgram.SectorTileSize), Map.SectorCount.X - 1);
+                SectorFinish.Y = Math.Min(Conversion.Int(FinishVertex.Y / modProgram.SectorTileSize), Map.SectorCount.Y - 1);
+                for ( SectorNum.Y = SectorStart.Y; SectorNum.Y <= SectorFinish.Y; SectorNum.Y++ )
+                {
+                    for ( SectorNum.X = SectorStart.X; SectorNum.X <= SectorFinish.X; SectorNum.X++ )
+                    {
+                        clsMap.clsUnitSectorConnection Connection = default(clsMap.clsUnitSectorConnection);
+                        foreach ( clsMap.clsUnitSectorConnection tempLoopVar_Connection in Map.Sectors[SectorNum.X, SectorNum.Y].Units )
+                        {
+                            Connection = tempLoopVar_Connection;
+                            Unit = Connection.Unit;
+                            if ( Unit.Pos.Horizontal.X >= StartPos.X & Unit.Pos.Horizontal.Y >= StartPos.Y &
+                                 Unit.Pos.Horizontal.X <= FinishPos.X & Unit.Pos.Horizontal.Y <= FinishPos.Y )
+                            {
+                                if ( !Unit.MapSelectedUnitLink.IsConnected )
+                                {
+                                    Unit.MapSelect();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            modMain.frmMainInstance.SelectedObject_Changed();
+            DrawViewLater();
+        }
+
+        private void tmrDrawDelay_Tick(System.Object sender, System.EventArgs e)
+        {
+            if ( DrawPending )
+            {
+                DrawPending = false;
+                DrawView();
+            }
+            else
+            {
+                tmrDrawDelay.Enabled = false;
+            }
+        }
+
+        public void pnlDraw_Resize(object sender, System.EventArgs e)
+        {
+            if ( OpenGLControl != null )
+            {
+                ResizeOpenGL();
+            }
+        }
+
+        public void OpenGL_Resize(System.Object eventSender, System.EventArgs eventArgs)
+        {
+            clsMap Map = MainMap;
+
+            GLSize.X = OpenGLControl.Width;
+            GLSize.Y = OpenGLControl.Height;
+            if ( GLSize.Y != 0 )
+            {
+                GLSize_XPerY = (float)(GLSize.X / GLSize.Y);
+            }
+            Viewport_Resize();
+            if ( Map != null )
+            {
+                Map.ViewInfo.FOV_Calc();
+            }
+            DrawViewLater();
+        }
+
+        public void OpenGL_MouseEnter(object sender, System.EventArgs e)
+        {
+            if ( Form.ActiveForm == modMain.frmMainInstance )
+            {
+                OpenGLControl.Focus();
+            }
+        }
+
+        public void OpenGL_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            clsMap Map = MainMap;
+
+            if ( Map == null )
+            {
+                return;
+            }
+
+            modMath.sXYZ_int Move = new modMath.sXYZ_int();
+            Matrix3D.Position.XYZ_dbl XYZ_dbl = default(Matrix3D.Position.XYZ_dbl);
+            int A = 0;
+
+            for ( A = 0; A <= (int)(Math.Abs(e.Delta / 120.0D)); A++ )
+            {
+                Matrix3DMath.VectorForwardsRotationByMatrix(Map.ViewInfo.ViewAngleMatrix,
+                    System.Convert.ToDouble(Math.Sign(e.Delta) * Math.Max(Map.ViewInfo.ViewPos.Y, 512.0D) / 24.0D), ref XYZ_dbl);
+                Move.Set_dbl(XYZ_dbl);
+                Map.ViewInfo.ViewPosChange(Move);
+            }
+        }
+
+        public GLFont CreateGLFont(Font BaseFont)
+        {
+            return new GLFont(new Font(BaseFont.FontFamily, 24.0F, BaseFont.Style, GraphicsUnit.Pixel));
+        }
+
+        public Timer UndoMessageTimer;
+
+        public void RemoveUndoMessage(object sender, EventArgs e)
+        {
+            UndoMessageTimer.Enabled = false;
+            lblUndo.Text = "";
+        }
+
+        public void DisplayUndoMessage(string Text)
+        {
+            lblUndo.Text = Text;
+            UndoMessageTimer.Enabled = false;
+            UndoMessageTimer.Enabled = true;
+        }
+
+        private void OpenGL_MouseLeave(object sender, System.EventArgs e)
+        {
+            clsMap Map = MainMap;
+
+            if ( Map == null )
+            {
+                return;
+            }
+
+            Map.ViewInfo.MouseOver = null;
+        }
+
+        public void ListSelectBegin(bool isPicker)
+        {
+            clsMap Map = MainMap;
+            clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
+
+            if ( MouseOverTerrain == null )
+            {
+                Debugger.Break();
+                return;
+            }
+
+            int A = 0;
+            clsMap.clsUnit Unit = default(clsMap.clsUnit);
+
+            ListSelect.Close();
+            ListSelect.Items.Clear();
+            ListSelectItems = new ToolStripItem[MouseOverTerrain.Units.Count - 1 + 1];
+            for ( A = 0; A <= MouseOverTerrain.Units.Count - 1; A++ )
+            {
+                Unit = MouseOverTerrain.Units[A];
+                ListSelectItems[A] = new ToolStripButton(Unit.Type.GetDisplayTextCode());
+                ListSelectItems[A].Tag = Unit;
+                ListSelect.Items.Add(ListSelectItems[A]);
+            }
+            ListSelectIsPicker = isPicker;
+            ListSelect.Show(this, new System.Drawing.Point(Map.ViewInfo.MouseOver.ScreenPos.X, Map.ViewInfo.MouseOver.ScreenPos.Y));
+        }
+
+        public void tabMaps_SelectedIndexChanged(System.Object sender, System.EventArgs e)
+        {
+            if ( !tabMaps.Enabled )
+            {
+                return;
+            }
+
+            if ( tabMaps.SelectedTab == null )
+            {
+                _Owner.SetMainMap(null);
+                return;
+            }
+
+            clsMap Map = (clsMap)tabMaps.SelectedTab.Tag;
+
+            _Owner.SetMainMap(Map);
+        }
+
+        public void btnClose_Click(System.Object sender, System.EventArgs e)
+        {
+            clsMap Map = MainMap;
+
+            if ( Map == null )
+            {
+                return;
+            }
+            if ( !Map.frmMainLink.IsConnected )
+            {
+                MessageBox.Show("Error: Map should be closed already.");
+                return;
+            }
+
+            if ( !Map.ClosePrompt() )
+            {
+                return;
+            }
+
+            Map.Deallocate();
+        }
+
+        public void UpdateTabs()
+        {
+            clsMap Map = default(clsMap);
+
+            tabMaps.Enabled = false;
+            tabMaps.TabPages.Clear();
+            foreach ( clsMap tempLoopVar_Map in _Owner.LoadedMaps )
+            {
+                Map = tempLoopVar_Map;
+                tabMaps.TabPages.Add(Map.MapView_TabPage);
+            }
+            Map = MainMap;
+            if ( Map != null )
+            {
+                tabMaps.SelectedIndex = Map.frmMainLink.ArrayPosition;
+            }
+            else
+            {
+                tabMaps.SelectedIndex = -1;
+            }
+            tabMaps.Enabled = true;
+        }
+
+        private clsMap MainMap
+        {
+            get { return _Owner.MainMap; }
+        }
+    }
 }
