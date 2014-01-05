@@ -36,6 +36,9 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Sprache">
+      <HintPath>..\packages\Sprache.1.10.0.35\lib\net40\Sprache.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,10 +49,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GeneralTests.cs" />
+    <Compile Include="Parser\GeneralTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Maps\2c-Tinny-War.wz" />
+    <None Include="Maps\6c-NTW_3v3wBases-3oil.wz" />
+    <None Include="Maps\6c-NTW_3v3wBases-4oil.wz" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpFlame.Core\SharpFlame.Core.csproj">
+      <Project>{8ae7f7a3-841a-44a7-b016-4661bbbf7821}</Project>
+      <Name>SharpFlame.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -22,6 +22,7 @@ namespace SharpFlame
         public static GLControl OpenGL1;
         public static GLControl OpenGL2;
 
+        [STAThread]
         public static void Main()
         {
             Application.EnableVisualStyles();
