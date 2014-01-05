@@ -214,7 +214,7 @@
     <Compile Include="Mapping\Tools\clsObjectUnitGroup.cs" />
     <Compile Include="Mapping\Tools\clsStructureWriteWZ.cs" />
     <Compile Include="Mapping\Tools\sGenerateMasterTerrainArgs.cs" />
-    <Compile Include="Mapping\Wz\clsMapWZ.cs" />
+    <Compile Include="Mapping\clsMapWZ.cs" />
     <Compile Include="Domain\clsModel.cs" />
     <Compile Include="Domain\clsObjectData.cs" />
     <Compile Include="Mapping\Tiles\TileDirection.cs" />
@@ -222,6 +222,13 @@
     <Compile Include="AppSettings\OptionGroup.cs" />
     <Compile Include="AppSettings\OptionInterface.cs" />
     <Compile Include="AppSettings\OptionProfileCreator.cs" />
+    <Compile Include="Mapping\Wz\clsWZBJOUnit.cs" />
+    <Compile Include="Mapping\Wz\clsWZMapEntry.cs" />
+    <Compile Include="Mapping\Wz\IniDroids.cs" />
+    <Compile Include="Mapping\Wz\IniFeatures.cs" />
+    <Compile Include="Mapping\Wz\IniStructures.cs" />
+    <Compile Include="Mapping\Wz\sCreateWZObjectsArgs.cs" />
+    <Compile Include="Mapping\Wz\sWrite_WZ_Args.cs" />
     <Compile Include="Painters\CliffBrush.cs" />
     <Compile Include="Painters\Painter.cs" />
     <Compile Include="clsResult.cs" />

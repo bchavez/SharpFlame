@@ -5,13 +5,14 @@ using SharpFlame.Collections;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.Objects;
+using SharpFlame.Mapping.Wz;
 
 namespace SharpFlame.Mapping.Tools
 {
     public class clsStructureWriteWZ : SimpleListTool<clsUnit>
     {
         public BinaryWriter File;
-        public clsMap.sWrite_WZ_Args.enumCompileType CompileType;
+        public sWrite_WZ_Args.enumCompileType CompileType;
         public int PlayerCount;
 
         private clsUnit Unit;
@@ -22,7 +23,7 @@ namespace SharpFlame.Mapping.Tools
 
         public void ActionPerform()
         {
-            if ( CompileType == clsMap.sWrite_WZ_Args.enumCompileType.Unspecified )
+            if ( CompileType == sWrite_WZ_Args.enumCompileType.Unspecified )
             {
                 Debugger.Break();
                 return;
@@ -37,10 +38,10 @@ namespace SharpFlame.Mapping.Tools
             File.Write(Convert.ToBoolean((uint)Unit.Rotation));
             switch ( CompileType )
             {
-                case clsMap.sWrite_WZ_Args.enumCompileType.Multiplayer:
+                case sWrite_WZ_Args.enumCompileType.Multiplayer:
                     File.Write(Unit.GetBJOMultiplayerPlayerNum(PlayerCount));
                     break;
-                case clsMap.sWrite_WZ_Args.enumCompileType.Campaign:
+                case sWrite_WZ_Args.enumCompileType.Campaign:
                     File.Write(Unit.GetBJOCampaignPlayerNum());
                     break;
                 default:

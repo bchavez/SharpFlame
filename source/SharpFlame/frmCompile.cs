@@ -6,6 +6,7 @@ using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Objects;
+using SharpFlame.Mapping.Wz;
 using SharpFlame.Maths;
 
 namespace SharpFlame
@@ -195,17 +196,17 @@ namespace SharpFlame
             {
                 return;
             }
-            clsMap.sWrite_WZ_Args WriteWZArgs = new clsMap.sWrite_WZ_Args();
+            sWrite_WZ_Args WriteWZArgs = new sWrite_WZ_Args();
             WriteWZArgs.MapName = MapName;
             WriteWZArgs.Path = CompileMultiDialog.FileName;
             WriteWZArgs.Overwrite = true;
             SetScrollLimits(WriteWZArgs.ScrollMin, WriteWZArgs.ScrollMax);
-            WriteWZArgs.Multiplayer = new clsMap.sWrite_WZ_Args.clsMultiplayer();
+            WriteWZArgs.Multiplayer = new sWrite_WZ_Args.clsMultiplayer();
             WriteWZArgs.Multiplayer.AuthorName = txtAuthor.Text;
             WriteWZArgs.Multiplayer.PlayerCount = PlayerCount;
             WriteWZArgs.Multiplayer.IsBetaPlayerFormat = IsXPlayerFormat;
             WriteWZArgs.Multiplayer.License = License;
-            WriteWZArgs.CompileType = clsMap.sWrite_WZ_Args.enumCompileType.Multiplayer;
+            WriteWZArgs.CompileType = sWrite_WZ_Args.enumCompileType.Multiplayer;
             ReturnResult.Add(Map.Write_WZ(WriteWZArgs));
             App.ShowWarnings(ReturnResult);
             if ( !ReturnResult.HasWarnings )
@@ -644,14 +645,14 @@ namespace SharpFlame
             {
                 return;
             }
-            clsMap.sWrite_WZ_Args WriteWZArgs = new clsMap.sWrite_WZ_Args();
+            sWrite_WZ_Args WriteWZArgs = new sWrite_WZ_Args();
             WriteWZArgs.MapName = MapName;
             WriteWZArgs.Path = CompileCampDialog.SelectedPath;
             WriteWZArgs.Overwrite = false;
             SetScrollLimits(WriteWZArgs.ScrollMin, WriteWZArgs.ScrollMax);
-            WriteWZArgs.Campaign = new clsMap.sWrite_WZ_Args.clsCampaign();
+            WriteWZArgs.Campaign = new sWrite_WZ_Args.clsCampaign();
             WriteWZArgs.Campaign.GAMType = (uint)TypeNum;
-            WriteWZArgs.CompileType = clsMap.sWrite_WZ_Args.enumCompileType.Campaign;
+            WriteWZArgs.CompileType = sWrite_WZ_Args.enumCompileType.Campaign;
             ReturnResult.Add(Map.Write_WZ(WriteWZArgs));
             App.ShowWarnings(ReturnResult);
             if ( !ReturnResult.HasWarnings )
