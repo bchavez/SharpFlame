@@ -2,9 +2,9 @@ using System;
 using System.Windows.Forms;
 using SharpFlame.FileIO;
 
-namespace SharpFlame
+namespace SharpFlame.Controls
 {
-    public partial class ctrlPlayerNum
+    public partial class PlayerNumControl
     {
         public ToolStripButton[] tsbNumber = new ToolStripButton[11];
 
@@ -12,7 +12,7 @@ namespace SharpFlame
 
         public const int ScavButtonNum = 10;
 
-        public ctrlPlayerNum()
+        public PlayerNumControl()
         {
             InitializeComponent();
 

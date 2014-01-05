@@ -1,7 +1,7 @@
-namespace SharpFlame
+namespace SharpFlame.Controls
 {
 	[global::Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]public 
-	partial class ctrlTextureView : System.Windows.Forms.UserControl
+	partial class TextureViewControl : System.Windows.Forms.UserControl
 	{
 		
 		//UserControl overrides dispose to clean up the component list.
@@ -76,7 +76,7 @@ namespace SharpFlame
 			this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.Controls.Add(this.TableLayoutPanel1);
 			this.Margin = new System.Windows.Forms.Padding(0);
-			this.Name = "ctrlTextureView";
+			this.Name = "TextureViewControl";
 			this.Size = new System.Drawing.Size(280, 384);
 			this.TableLayoutPanel1.ResumeLayout(false);
 			this.ResumeLayout(false);

@@ -1,7 +1,7 @@
-namespace SharpFlame
+namespace SharpFlame.Controls
 {
 	[global::Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]public 
-	partial class ctrlPathSet : System.Windows.Forms.UserControl
+	partial class PathSetControl : System.Windows.Forms.UserControl
 	{
 		
 		//UserControl overrides dispose to clean up the component list.
@@ -122,7 +122,7 @@ namespace SharpFlame
 			//
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.Controls.Add(this.gbxTitle);
-			this.Name = "ctrlPathSet";
+			this.Name = "PathSetControl";
 			this.Size = new System.Drawing.Size(486, 180);
 			this.gbxTitle.ResumeLayout(false);
 			this.TableLayoutPanel1.ResumeLayout(false);

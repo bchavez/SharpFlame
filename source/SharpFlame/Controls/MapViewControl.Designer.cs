@@ -1,7 +1,7 @@
-namespace SharpFlame
+namespace SharpFlame.Controls
 {
 	[global::Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]public 
-	partial class ctrlMapView : System.Windows.Forms.UserControl
+	partial class MapViewControl : System.Windows.Forms.UserControl
 	{
 		
 		//UserControl overrides dispose to clean up the component list.
@@ -158,7 +158,7 @@ namespace SharpFlame
 			this.Controls.Add(this.TableLayoutPanel1);
 			this.Controls.Add(this.ssStatus);
 			this.Margin = new System.Windows.Forms.Padding(0);
-			this.Name = "ctrlMapView";
+			this.Name = "MapViewControl";
 			this.Size = new System.Drawing.Size(1308, 424);
 			this.ssStatus.ResumeLayout(false);
 			this.ssStatus.PerformLayout();

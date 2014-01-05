@@ -5,16 +5,16 @@ using System.Windows.Forms;
 using SharpFlame.Colors;
 using SharpFlame.MathExtra;
 
-namespace SharpFlame
+namespace SharpFlame.Controls
 {
-    public partial class ctrlColour
+    public partial class ColourControl
     {
         private clsRGB_sng Colour;
         private Color ColourColor;
 
         private Graphics ColourBoxGraphics;
 
-        public ctrlColour(clsRGB_sng NewColour)
+        public ColourControl(clsRGB_sng NewColour)
         {
             InitializeComponent();
 

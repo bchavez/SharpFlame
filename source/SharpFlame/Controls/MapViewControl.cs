@@ -10,9 +10,9 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
 using SharpFlame.MathExtra;
 
-namespace SharpFlame
+namespace SharpFlame.Controls
 {
-    public partial class ctrlMapView
+    public partial class MapViewControl
     {
         private frmMain _Owner;
 
@@ -31,7 +31,7 @@ namespace SharpFlame
 
         public GLControl OpenGLControl;
 
-        public ctrlMapView(frmMain Owner)
+        public MapViewControl(frmMain Owner)
         {
             _Owner = Owner;
 

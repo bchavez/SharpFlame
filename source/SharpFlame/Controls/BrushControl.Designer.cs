@@ -1,7 +1,7 @@
-namespace SharpFlame
+namespace SharpFlame.Controls
 {
 	[global::Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]public 
-	partial class ctrlBrush : System.Windows.Forms.UserControl
+	partial class BrushControl : System.Windows.Forms.UserControl
 	{
 		
 		//UserControl overrides dispose to clean up the component list.
@@ -105,7 +105,7 @@ namespace SharpFlame
 			this.Controls.Add(this.tabShape);
 			this.Controls.Add(this.Label1);
 			this.Controls.Add(this.nudRadius);
-			this.Name = "ctrlBrush";
+			this.Name = "BrushControl";
 			this.Size = new System.Drawing.Size(695, 87);
 			this.tabShape.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize) this.nudRadius).EndInit();

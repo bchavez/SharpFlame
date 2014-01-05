@@ -1,7 +1,7 @@
-namespace SharpFlame
+namespace SharpFlame.Controls
 {
 	[global::Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]public 
-	partial class ctrlPlayerNum : System.Windows.Forms.UserControl
+	partial class PlayerNumControl : System.Windows.Forms.UserControl
 	{
 		
 		//UserControl overrides dispose to clean up the component list.
@@ -57,7 +57,7 @@ namespace SharpFlame
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.Controls.Add(this.tsPlayerNum2);
 			this.Controls.Add(this.tsPlayerNum1);
-			this.Name = "ctrlPlayerNum";
+			this.Name = "PlayerNumControl";
 			this.Size = new System.Drawing.Size(56, 50);
 			this.ResumeLayout(false);
 			this.PerformLayout();

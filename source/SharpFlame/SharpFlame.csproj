@@ -165,40 +165,40 @@
     <Compile Include="frmQuit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ctrlBrush.Designer.cs">
-      <DependentUpon>ctrlBrush.cs</DependentUpon>
+    <Compile Include="Controls\BrushControl.Designer.cs">
+      <DependentUpon>BrushControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="ctrlBrush.cs">
+    <Compile Include="Controls\BrushControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ctrlColour.Designer.cs">
-      <DependentUpon>ctrlColour.cs</DependentUpon>
+    <Compile Include="Controls\ColourControl.Designer.cs">
+      <DependentUpon>ColourControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="ctrlColour.cs">
+    <Compile Include="Controls\ColourControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ctrlMapView.Designer.cs">
-      <DependentUpon>ctrlMapView.cs</DependentUpon>
+    <Compile Include="Controls\MapViewControl.Designer.cs">
+      <DependentUpon>MapViewControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="ctrlMapView.cs">
+    <Compile Include="Controls\MapViewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ctrlPathSet.Designer.cs">
-      <DependentUpon>ctrlPathSet.cs</DependentUpon>
+    <Compile Include="Controls\PathSetControl.Designer.cs">
+      <DependentUpon>PathSetControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="ctrlPathSet.cs">
+    <Compile Include="Controls\PathSetControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ctrlPlayerNum.Designer.cs">
-      <DependentUpon>ctrlPlayerNum.cs</DependentUpon>
+    <Compile Include="Controls\PlayerNumControl.Designer.cs">
+      <DependentUpon>PlayerNumControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="ctrlPlayerNum.cs">
+    <Compile Include="Controls\PlayerNumControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ctrlTextureView.Designer.cs">
-      <DependentUpon>ctrlTextureView.cs</DependentUpon>
+    <Compile Include="Controls\TextureViewControl.Designer.cs">
+      <DependentUpon>TextureViewControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="ctrlTextureView.cs">
+    <Compile Include="Controls\TextureViewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="frmClose.Designer.cs">
@@ -288,23 +288,23 @@
     <EmbeddedResource Include="frmQuit.resx">
       <DependentUpon>frmQuit.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ctrlBrush.resx">
-      <DependentUpon>ctrlBrush.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\BrushControl.resx">
+      <DependentUpon>BrushControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ctrlColour.resx">
-      <DependentUpon>ctrlColour.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\ColourControl.resx">
+      <DependentUpon>ColourControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ctrlMapView.resx">
-      <DependentUpon>ctrlMapView.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\MapViewControl.resx">
+      <DependentUpon>MapViewControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ctrlPathSet.resx">
-      <DependentUpon>ctrlPathSet.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\PathSetControl.resx">
+      <DependentUpon>PathSetControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ctrlPlayerNum.resx">
-      <DependentUpon>ctrlPlayerNum.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\PlayerNumControl.resx">
+      <DependentUpon>PlayerNumControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ctrlTextureView.resx">
-      <DependentUpon>ctrlTextureView.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\TextureViewControl.resx">
+      <DependentUpon>TextureViewControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmClose.resx">
       <DependentUpon>frmClose.cs</DependentUpon>

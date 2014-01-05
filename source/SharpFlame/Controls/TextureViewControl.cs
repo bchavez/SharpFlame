@@ -9,9 +9,9 @@ using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.MathExtra;
 
-namespace SharpFlame
+namespace SharpFlame.Controls
 {
-    public partial class ctrlTextureView
+    public partial class TextureViewControl
     {
         private frmMain _Owner;
 
@@ -38,7 +38,7 @@ namespace SharpFlame
 
         public GLControl OpenGLControl;
 
-        public ctrlTextureView(frmMain Owner)
+        public TextureViewControl(frmMain Owner)
         {
             _Owner = Owner;
 

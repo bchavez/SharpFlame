@@ -12,6 +12,7 @@ using Microsoft.VisualBasic.CompilerServices;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
+using SharpFlame.Controls;
 using SharpFlame.FileIO;
 using SharpFlame.Generators;
 using SharpFlame.Mapping;
@@ -44,7 +45,7 @@ namespace SharpFlame
 
                 base.Add(NewItem);
 
-                Owner.MapView.UpdateTabs();
+                Owner.MapViewControl.UpdateTabs();
             }
 
             public override void Remove(int Position)
@@ -55,7 +56,7 @@ namespace SharpFlame
 
                 if ( Map == _MainMap )
                 {
-                    int NewNum = Math.Min(Convert.ToInt32(Owner.MapView.tabMaps.SelectedIndex), Count - 1);
+                    int NewNum = Math.Min(Convert.ToInt32(Owner.MapViewControl.tabMaps.SelectedIndex), Count - 1);
                     if ( NewNum < 0 )
                     {
                         MainMap = null;
@@ -69,7 +70,7 @@ namespace SharpFlame
                 Map.MapView_TabPage.Tag = null;
                 Map.MapView_TabPage = null;
 
-                Owner.MapView.UpdateTabs();
+                Owner.MapViewControl.UpdateTabs();
             }
 
             public clsMap MainMap
@@ -111,8 +112,8 @@ namespace SharpFlame
 
         private clsMaps _LoadedMaps;
 
-        public ctrlMapView MapView;
-        public ctrlTextureView TextureView;
+        public MapViewControl MapViewControl;
+        public TextureViewControl TextureViewControl;
 
         public clsBody[] cboBody_Objects;
         public clsPropulsion[] cboPropulsion_Objects;
@@ -129,13 +130,13 @@ namespace SharpFlame
         public Timer tmrKey;
         public Timer tmrTool;
 
-        public ctrlPlayerNum NewPlayerNum;
-        public ctrlPlayerNum ObjectPlayerNum;
+        public PlayerNumControl NewPlayerNumControl;
+        public PlayerNumControl ObjectPlayerNumControl;
 
-        public ctrlBrush ctrlTextureBrush;
-        public ctrlBrush ctrlTerrainBrush;
-        public ctrlBrush ctrlCliffRemoveBrush;
-        public ctrlBrush ctrlHeightBrush;
+        public BrushControl ctrlTextureBrush;
+        public BrushControl ctrlTerrainBrush;
+        public BrushControl ctrlCliffRemoveBrush;
+        public BrushControl ctrlHeightBrush;
 
         public frmMain()
         {
@@ -156,8 +157,8 @@ namespace SharpFlame
 			}
 #endif
 
-            MapView = new ctrlMapView(this);
-            TextureView = new ctrlTextureView(this);
+            MapViewControl = new MapViewControl(this);
+            TextureViewControl = new TextureViewControl(this);
 
             Program.frmGeneratorInstance = new frmGenerator(this);
 
@@ -169,8 +170,8 @@ namespace SharpFlame
             tmrTool.Tick += tmrTool_Tick;
             tmrTool.Interval = 100;
 
-            NewPlayerNum = new ctrlPlayerNum();
-            ObjectPlayerNum = new ctrlPlayerNum();
+            NewPlayerNumControl = new PlayerNumControl();
+            ObjectPlayerNumControl = new PlayerNumControl();
         }
 
         private clsResult LoadInterfaceImages()
@@ -317,7 +318,7 @@ namespace SharpFlame
                 Debugger.Break();
                 return;
             }
-            if ( !(MapView.IsGLInitialized && TextureView.IsGLInitialized) )
+            if ( !(MapViewControl.IsGLInitialized && TextureViewControl.IsGLInitialized) )
             {
                 return;
             }
@@ -342,26 +343,26 @@ namespace SharpFlame
 
             Matrix3DMath.MatrixSetToPY(App.SunAngleMatrix, new Angles.AnglePY(-22.5D * MathUtil.RadOf1Deg, 157.5D * MathUtil.RadOf1Deg));
 
-            NewPlayerNum.Left = 112;
-            NewPlayerNum.Top = 10;
-            Panel1.Controls.Add(NewPlayerNum);
+            NewPlayerNumControl.Left = 112;
+            NewPlayerNumControl.Top = 10;
+            Panel1.Controls.Add(NewPlayerNumControl);
 
-            ObjectPlayerNum.Left = 72;
-            ObjectPlayerNum.Top = 60;
-            ObjectPlayerNum.Target = new clsMap.clsUnitGroupContainer();
-            ObjectPlayerNum.Target.Changed += tabPlayerNum_SelectedIndexChanged;
-            Panel14.Controls.Add(ObjectPlayerNum);
+            ObjectPlayerNumControl.Left = 72;
+            ObjectPlayerNumControl.Top = 60;
+            ObjectPlayerNumControl.Target = new clsMap.clsUnitGroupContainer();
+            ObjectPlayerNumControl.Target.Changed += tabPlayerNum_SelectedIndexChanged;
+            Panel14.Controls.Add(ObjectPlayerNumControl);
 
-            ctrlTextureBrush = new ctrlBrush(App.TextureBrush);
+            ctrlTextureBrush = new BrushControl(App.TextureBrush);
             pnlTextureBrush.Controls.Add(ctrlTextureBrush);
 
-            ctrlTerrainBrush = new ctrlBrush(App.TerrainBrush);
+            ctrlTerrainBrush = new BrushControl(App.TerrainBrush);
             pnlTerrainBrush.Controls.Add(ctrlTerrainBrush);
 
-            ctrlCliffRemoveBrush = new ctrlBrush(App.CliffBrush);
+            ctrlCliffRemoveBrush = new BrushControl(App.CliffBrush);
             pnlCliffRemoveBrush.Controls.Add(ctrlCliffRemoveBrush);
 
-            ctrlHeightBrush = new ctrlBrush(App.HeightBrush);
+            ctrlHeightBrush = new BrushControl(App.HeightBrush);
             pnlHeightSetBrush.Controls.Add(ctrlHeightBrush);
 
             VBMath.Randomize();
@@ -483,8 +484,8 @@ namespace SharpFlame
 
             Components_Update();
 
-            MapView.Dock = DockStyle.Fill;
-            pnlView.Controls.Add(MapView);
+            MapViewControl.Dock = DockStyle.Fill;
+            pnlView.Controls.Add(MapViewControl);
 
             App.VisionRadius_2E = 10;
             App.VisionRadius_2E_Changed();
@@ -519,13 +520,13 @@ namespace SharpFlame
                 App.ShowWarnings(LoadResult);
             }
 
-            TextureView.Dock = DockStyle.Fill;
-            TableLayoutPanel6.Controls.Add(TextureView, 0, 1);
+            TextureViewControl.Dock = DockStyle.Fill;
+            TableLayoutPanel6.Controls.Add(TextureViewControl, 0, 1);
 
             MainMapAfterChanged();
 
-            MapView.DrawView_SetEnabled(true);
-            TextureView.DrawView_SetEnabled(true);
+            MapViewControl.DrawView_SetEnabled(true);
+            TextureViewControl.DrawView_SetEnabled(true);
 
             WindowState = FormWindowState.Maximized;
 #if !Mono
@@ -710,7 +711,7 @@ namespace SharpFlame
             App.sResult Result = Map.Load_TTP(Dialog.FileName);
             if ( Result.Success )
             {
-                TextureView.DrawViewLater();
+                TextureViewControl.DrawViewLater();
             }
             else
             {
@@ -792,8 +793,8 @@ namespace SharpFlame
                 Map.Update();
                 Map.MinimapMakeLater();
                 View_DrawViewLater();
-                TextureView.ScrollUpdate();
-                TextureView.DrawViewLater();
+                TextureViewControl.ScrollUpdate();
+                TextureViewControl.DrawViewLater();
             }
         }
 
@@ -826,7 +827,7 @@ namespace SharpFlame
             if ( TabControl.SelectedTab == tpTextures )
             {
                 modTools.Tool = modTools.Tools.TextureBrush;
-                TextureView.DrawViewLater();
+                TextureViewControl.DrawViewLater();
             }
             else if ( TabControl.SelectedTab == tpHeight )
             {
@@ -1571,7 +1572,7 @@ namespace SharpFlame
             clsMap Map = MainMap;
 
             lblObjectType.Enabled = false;
-            ObjectPlayerNum.Enabled = false;
+            ObjectPlayerNumControl.Enabled = false;
             txtObjectRotation.Enabled = false;
             txtObjectID.Enabled = false;
             txtObjectLabel.Enabled = false;
@@ -1599,7 +1600,7 @@ namespace SharpFlame
             if ( ClearControls )
             {
                 lblObjectType.Text = "";
-                ObjectPlayerNum.Target.Item = null;
+                ObjectPlayerNumControl.Target.Item = null;
                 txtObjectRotation.Text = "";
                 txtObjectID.Text = "";
                 txtObjectLabel.Text = "";
@@ -1630,17 +1631,17 @@ namespace SharpFlame
                 }
                 if ( A == Map.SelectedUnits.Count )
                 {
-                    ObjectPlayerNum.Target.Item = UnitGroup;
+                    ObjectPlayerNumControl.Target.Item = UnitGroup;
                 }
                 else
                 {
-                    ObjectPlayerNum.Target.Item = null;
+                    ObjectPlayerNumControl.Target.Item = null;
                 }
                 txtObjectRotation.Text = "";
                 txtObjectID.Text = "";
                 txtObjectLabel.Text = "";
                 lblObjectType.Enabled = true;
-                ObjectPlayerNum.Enabled = true;
+                ObjectPlayerNumControl.Enabled = true;
                 txtObjectRotation.Enabled = true;
                 txtObjectPriority.Text = "";
                 txtObjectPriority.Enabled = true;
@@ -1703,13 +1704,13 @@ namespace SharpFlame
                 int A = 0;
                 clsMap.clsUnit with_1 = Map.SelectedUnits[0];
                 lblObjectType.Text = Convert.ToString(with_1.Type.GetDisplayTextCode());
-                ObjectPlayerNum.Target.Item = with_1.UnitGroup;
+                ObjectPlayerNumControl.Target.Item = with_1.UnitGroup;
                 txtObjectRotation.Text = IOUtil.InvariantToString_int(Convert.ToInt32(with_1.Rotation));
                 txtObjectID.Text = IOUtil.InvariantToString_uint(with_1.ID);
                 txtObjectPriority.Text = IOUtil.InvariantToString_int(Convert.ToInt32(with_1.SavePriority));
                 txtObjectHealth.Text = IOUtil.InvariantToString_dbl(Convert.ToDouble(with_1.Health * 100.0D));
                 lblObjectType.Enabled = true;
-                ObjectPlayerNum.Enabled = true;
+                ObjectPlayerNumControl.Enabled = true;
                 txtObjectRotation.Enabled = true;
                 //txtObjectID.Enabled = True 'no known need to change IDs
                 txtObjectPriority.Enabled = true;
@@ -2137,7 +2138,7 @@ namespace SharpFlame
 
         public void tsbDrawAutotexture_Click(Object sender, EventArgs e)
         {
-            if ( MapView != null )
+            if ( MapViewControl != null )
             {
                 if ( App.Draw_VertexTerrain != tsbDrawAutotexture.Checked )
                 {
@@ -2149,13 +2150,13 @@ namespace SharpFlame
 
         public void tsbDrawTileOrientation_Click(Object sender, EventArgs e)
         {
-            if ( MapView != null )
+            if ( MapViewControl != null )
             {
                 if ( App.DisplayTileOrientation != tsbDrawTileOrientation.Checked )
                 {
                     App.DisplayTileOrientation = tsbDrawTileOrientation.Checked;
                     View_DrawViewLater();
-                    TextureView.DrawViewLater();
+                    TextureViewControl.DrawViewLater();
                 }
             }
         }
@@ -2206,19 +2207,19 @@ namespace SharpFlame
 
             Map.Tile_TypeNum[App.SelectedTextureNum] = (byte)cboTileType.SelectedIndex;
 
-            TextureView.DrawViewLater();
+            TextureViewControl.DrawViewLater();
         }
 
         public void chkTileTypes_CheckedChanged(Object sender, EventArgs e)
         {
-            TextureView.DisplayTileTypes = cbxTileTypes.Checked;
-            TextureView.DrawViewLater();
+            TextureViewControl.DisplayTileTypes = cbxTileTypes.Checked;
+            TextureViewControl.DrawViewLater();
         }
 
         public void chkTileNumbers_CheckedChanged(Object sender, EventArgs e)
         {
-            TextureView.DisplayTileNumbers = cbxTileNumbers.Checked;
-            TextureView.DrawViewLater();
+            TextureViewControl.DisplayTileNumbers = cbxTileNumbers.Checked;
+            TextureViewControl.DrawViewLater();
         }
 
         private void cboTileType_Update()
@@ -2436,7 +2437,7 @@ namespace SharpFlame
         {
             //ObjectPlayerNum.Focus() 'so that the rotation textbox and anything else loses focus, and performs its effects
 
-            if ( !ObjectPlayerNum.Enabled )
+            if ( !ObjectPlayerNumControl.Enabled )
             {
                 return;
             }
@@ -2451,7 +2452,7 @@ namespace SharpFlame
             {
                 return;
             }
-            if ( ObjectPlayerNum.Target.Item == null )
+            if ( ObjectPlayerNumControl.Target.Item == null )
             {
                 return;
             }
@@ -2468,7 +2469,7 @@ namespace SharpFlame
 
             clsMap.clsObjectUnitGroup ObjectUnitGroup = new clsMap.clsObjectUnitGroup();
             ObjectUnitGroup.Map = Map;
-            ObjectUnitGroup.UnitGroup = ObjectPlayerNum.Target.Item;
+            ObjectUnitGroup.UnitGroup = ObjectPlayerNumControl.Target.Item;
             Map.SelectedUnitsAction(ObjectUnitGroup);
 
             SelectedObject_Changed();
@@ -2568,9 +2569,9 @@ namespace SharpFlame
 
         public void View_DrawViewLater()
         {
-            if ( MapView != null )
+            if ( MapViewControl != null )
             {
-                MapView.DrawViewLater();
+                MapViewControl.DrawViewLater();
             }
         }
 
@@ -2638,14 +2639,14 @@ namespace SharpFlame
         {
             App.TextureOrientation.RotateAntiClockwise();
 
-            TextureView.DrawViewLater();
+            TextureViewControl.DrawViewLater();
         }
 
         public void btnTextureClockwise_Click(Object sender, EventArgs e)
         {
             App.TextureOrientation.RotateClockwise();
 
-            TextureView.DrawViewLater();
+            TextureViewControl.DrawViewLater();
         }
 
         public void btnTextureFlipX_Click(Object sender, EventArgs e)
@@ -2659,7 +2660,7 @@ namespace SharpFlame
                 App.TextureOrientation.ResultXFlip = !App.TextureOrientation.ResultXFlip;
             }
 
-            TextureView.DrawViewLater();
+            TextureViewControl.DrawViewLater();
         }
 
         public void lstAutoTexture_SelectedIndexChanged_1(Object sender, EventArgs e)
@@ -3427,7 +3428,7 @@ namespace SharpFlame
         {
             clsMap Map = MainMap;
 
-            MapView.UpdateTabs();
+            MapViewControl.UpdateTabs();
 
             App.SelectedTerrain = null;
             App.SelectedRoad = null;
@@ -3437,8 +3438,8 @@ namespace SharpFlame
             PainterTerrains_Refresh(-1, -1);
             ScriptMarkerLists_Update();
 
-            NewPlayerNum.Enabled = false;
-            ObjectPlayerNum.Enabled = false;
+            NewPlayerNumControl.Enabled = false;
+            ObjectPlayerNumControl.Enabled = false;
             if ( Map != null )
             {
                 Map.CheckMessages();
@@ -3447,28 +3448,28 @@ namespace SharpFlame
                 Map.Update();
                 Map.MinimapMakeLater();
                 tsbSave.Enabled = Map.ChangedSinceSave;
-                NewPlayerNum.SetMap(Map);
-                NewPlayerNum.Target = Map.SelectedUnitGroup;
-                ObjectPlayerNum.SetMap(Map);
+                NewPlayerNumControl.SetMap(Map);
+                NewPlayerNumControl.Target = Map.SelectedUnitGroup;
+                ObjectPlayerNumControl.SetMap(Map);
                 MainMap.Changed += MainMap_Modified;
             }
             else
             {
                 tsbSave.Enabled = false;
-                NewPlayerNum.SetMap(null);
-                NewPlayerNum.Target = null;
-                ObjectPlayerNum.SetMap(null);
+                NewPlayerNumControl.SetMap(null);
+                NewPlayerNumControl.Target = null;
+                ObjectPlayerNumControl.SetMap(null);
             }
-            NewPlayerNum.Enabled = true;
-            ObjectPlayerNum.Enabled = true;
+            NewPlayerNumControl.Enabled = true;
+            ObjectPlayerNumControl.Enabled = true;
 
             SelectedObject_Changed();
 
             TitleTextUpdate();
 
-            TextureView.ScrollUpdate();
+            TextureViewControl.ScrollUpdate();
 
-            TextureView.DrawViewLater();
+            TextureViewControl.DrawViewLater();
             View_DrawViewLater();
         }
 
@@ -3476,7 +3477,7 @@ namespace SharpFlame
         {
             clsMap Map = MainMap;
 
-            MapView.OpenGLControl.Focus(); //take focus from controls to trigger their lostfocuses
+            MapViewControl.OpenGLControl.Focus(); //take focus from controls to trigger their lostfocuses
 
             if ( Map == null )
             {
@@ -3565,14 +3566,14 @@ namespace SharpFlame
                 if ( Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.TextureNum < Map.Tileset.TileCount )
                 {
                     App.SelectedTextureNum = Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.TextureNum;
-                    TextureView.DrawViewLater();
+                    TextureViewControl.DrawViewLater();
                 }
             }
 
             if ( modSettings.Settings.PickOrientation )
             {
                 App.TextureOrientation = Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation;
-                TextureView.DrawViewLater();
+                TextureViewControl.DrawViewLater();
             }
         }
 
@@ -3590,7 +3591,7 @@ namespace SharpFlame
             txtHeightSetL.Text =
                 IOUtil.InvariantToString_byte(Convert.ToByte(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height));
             txtHeightSetL.Focus();
-            MapView.OpenGLControl.Focus();
+            MapViewControl.OpenGLControl.Focus();
         }
 
         public void HeightPickerR()
@@ -3605,7 +3606,7 @@ namespace SharpFlame
 
             txtHeightSetR.Text = IOUtil.InvariantToString_byte(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height);
             txtHeightSetR.Focus();
-            MapView.OpenGLControl.Focus();
+            MapViewControl.OpenGLControl.Focus();
         }
 
         public void OpenGL_DragEnter(object sender, DragEventArgs e)

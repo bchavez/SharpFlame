@@ -2,9 +2,9 @@ using System;
 using System.Windows.Forms;
 using SharpFlame.Collections;
 
-namespace SharpFlame
+namespace SharpFlame.Controls
 {
-    public partial class ctrlPathSet
+    public partial class PathSetControl
     {
         public int SelectedNum
         {
@@ -41,7 +41,7 @@ namespace SharpFlame
             }
         }
 
-        public ctrlPathSet(string Title)
+        public PathSetControl(string Title)
         {
             InitializeComponent();
 

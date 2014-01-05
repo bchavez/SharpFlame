@@ -209,7 +209,7 @@ namespace SharpFlame
         public static void VisionRadius_2E_Changed()
         {
             VisionRadius = 256.0D * Math.Pow(2.0D, (VisionRadius_2E / 2.0D));
-            if ( Program.frmMainInstance.MapView != null )
+            if ( Program.frmMainInstance.MapViewControl != null )
             {
                 View_Radius_Set(VisionRadius);
                 Program.frmMainInstance.View_DrawViewLater();

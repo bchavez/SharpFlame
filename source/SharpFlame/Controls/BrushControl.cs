@@ -1,13 +1,13 @@
 using System;
 using SharpFlame.MathExtra;
 
-namespace SharpFlame
+namespace SharpFlame.Controls
 {
-    public partial class ctrlBrush
+    public partial class BrushControl
     {
         private clsBrush Brush;
 
-        public ctrlBrush(clsBrush NewBrush)
+        public BrushControl(clsBrush NewBrush)
         {
             InitializeComponent();
 

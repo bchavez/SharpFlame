@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
+using SharpFlame.Controls;
 using SharpFlame.FileIO;
 using SharpFlame.MathExtra;
 
@@ -13,11 +14,11 @@ namespace SharpFlame
         private Font DisplayFont;
 
         private clsRGBA_sng MinimapCliffColour;
-        private ctrlColour clrMinimapCliffs;
+        private ColourControl clrMinimapCliffs;
         private clsRGBA_sng MinimapSelectedObjectColour;
-        private ctrlColour clrMinimapSelectedObjects;
-        private ctrlPathSet ObjectDataPathSet = new ctrlPathSet("Object Data Directories");
-        private ctrlPathSet TilesetsPathSet = new ctrlPathSet("Tilesets Directories");
+        private ColourControl clrMinimapSelectedObjects;
+        private PathSetControl objectDataPathSetControl = new PathSetControl("Object Data Directories");
+        private PathSetControl tilesetsPathSetControl = new PathSetControl("Tilesets Directories");
 
         private modControls.clsKeyboardProfile ChangedKeyControls;
 
@@ -36,10 +37,10 @@ namespace SharpFlame
 			}
 #endif
 
-            TilesetsPathSet.Dock = DockStyle.Fill;
-            ObjectDataPathSet.Dock = DockStyle.Fill;
-            TableLayoutPanel1.Controls.Add(TilesetsPathSet, 0, 0);
-            TableLayoutPanel1.Controls.Add(ObjectDataPathSet, 0, 1);
+            tilesetsPathSetControl.Dock = DockStyle.Fill;
+            objectDataPathSetControl.Dock = DockStyle.Fill;
+            TableLayoutPanel1.Controls.Add(tilesetsPathSetControl, 0, 0);
+            TableLayoutPanel1.Controls.Add(objectDataPathSetControl, 0, 1);
 
             ChangedKeyControls = (modControls.clsKeyboardProfile)(modControls.KeyboardProfile.GetCopy(new modControls.clsKeyboardProfileCreator()));
 
@@ -54,11 +55,11 @@ namespace SharpFlame
             txtFOV.Text = IOUtil.InvariantToString_dbl(modSettings.Settings.FOVDefault);
 
             MinimapCliffColour = new clsRGBA_sng(modSettings.Settings.MinimapCliffColour);
-            clrMinimapCliffs = new ctrlColour(MinimapCliffColour);
+            clrMinimapCliffs = new ColourControl(MinimapCliffColour);
             pnlMinimapCliffColour.Controls.Add(clrMinimapCliffs);
 
             MinimapSelectedObjectColour = new clsRGBA_sng(modSettings.Settings.MinimapSelectedObjectsColour);
-            clrMinimapSelectedObjects = new ctrlColour(MinimapSelectedObjectColour);
+            clrMinimapSelectedObjects = new ColourControl(MinimapSelectedObjectColour);
             pnlMinimapSelectedObjectColour.Controls.Add(clrMinimapSelectedObjects);
 
             txtMinimapSize.Text = IOUtil.InvariantToString_int(modSettings.Settings.MinimapSize);
@@ -68,11 +69,11 @@ namespace SharpFlame
             cbxMipmapsHardware.Checked = modSettings.Settings.MipmapsHardware;
             txtUndoSteps.Text = IOUtil.InvariantToString_uint(modSettings.Settings.UndoLimit);
 
-            TilesetsPathSet.SetPaths(modSettings.Settings.TilesetDirectories);
-            ObjectDataPathSet.SetPaths(modSettings.Settings.ObjectDataDirectories);
-            TilesetsPathSet.SelectedNum = MathUtil.Clamp_int(Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultTilesetsPathNum)), -1,
+            tilesetsPathSetControl.SetPaths(modSettings.Settings.TilesetDirectories);
+            objectDataPathSetControl.SetPaths(modSettings.Settings.ObjectDataDirectories);
+            tilesetsPathSetControl.SelectedNum = MathUtil.Clamp_int(Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultTilesetsPathNum)), -1,
                 modSettings.Settings.TilesetDirectories.Count - 1);
-            ObjectDataPathSet.SelectedNum = MathUtil.Clamp_int(Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultObjectDataPathNum)),
+            objectDataPathSetControl.SelectedNum = MathUtil.Clamp_int(Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultObjectDataPathNum)),
                 -1, modSettings.Settings.ObjectDataDirectories.Count - 1);
 
             txtMapBPP.Text = IOUtil.InvariantToString_int(modSettings.Settings.MapViewBPP);
@@ -126,8 +127,8 @@ namespace SharpFlame
             }
             SimpleList<string> tilesetPaths = new SimpleList<string>();
             SimpleList<string> objectsPaths = new SimpleList<string>();
-            string[] controlTilesetPaths = TilesetsPathSet.GetPaths;
-            string[] controlobjectsPaths = ObjectDataPathSet.GetPaths;
+            string[] controlTilesetPaths = tilesetsPathSetControl.GetPaths;
+            string[] controlobjectsPaths = objectDataPathSetControl.GetPaths;
             for ( int i = 0; i <= controlTilesetPaths.GetUpperBound(0); i++ )
             {
                 tilesetPaths.Add(controlTilesetPaths[i]);
@@ -138,8 +139,8 @@ namespace SharpFlame
             }
             NewSettings.set_Changes(modSettings.Setting_TilesetDirectories, new clsOptionProfile.clsChange<SimpleList<string>>(tilesetPaths));
             NewSettings.set_Changes(modSettings.Setting_ObjectDataDirectories, new clsOptionProfile.clsChange<SimpleList<string>>(objectsPaths));
-            NewSettings.set_Changes(modSettings.Setting_DefaultTilesetsPathNum, new clsOptionProfile.clsChange<int>(TilesetsPathSet.SelectedNum));
-            NewSettings.set_Changes(modSettings.Setting_DefaultObjectDataPathNum, new clsOptionProfile.clsChange<int>(ObjectDataPathSet.SelectedNum));
+            NewSettings.set_Changes(modSettings.Setting_DefaultTilesetsPathNum, new clsOptionProfile.clsChange<int>(tilesetsPathSetControl.SelectedNum));
+            NewSettings.set_Changes(modSettings.Setting_DefaultObjectDataPathNum, new clsOptionProfile.clsChange<int>(objectDataPathSetControl.SelectedNum));
             if ( IOUtil.InvariantParse_int(txtMapBPP.Text, ref intTemp) )
             {
                 NewSettings.set_Changes(modSettings.Setting_MapViewBPP, new clsOptionProfile.clsChange<int>(intTemp));

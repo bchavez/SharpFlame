@@ -5,6 +5,7 @@ using Microsoft.VisualBasic;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
+using SharpFlame.Controls;
 using SharpFlame.FileIO;
 using SharpFlame.MathExtra;
 
@@ -57,8 +58,8 @@ namespace SharpFlame
             Matrix3DMath.Matrix3D matrixB = new Matrix3DMath.Matrix3D();
             clsAction MapAction = default(clsAction);
             float ZNearFar = 0;
-            ctrlMapView MapView = ViewInfo.MapView;
-            sXY_int GLSize = ViewInfo.MapView.GLSize;
+            MapViewControl MapViewControl = ViewInfo.MapViewControl;
+            sXY_int GLSize = ViewInfo.MapViewControl.GLSize;
             Position.XY_dbl DrawCentre = default(Position.XY_dbl);
             double dblTemp2 = 0;
 
@@ -97,7 +98,7 @@ namespace SharpFlame
 
             GL.Enable(EnableCap.DepthTest);
             GL.MatrixMode(MatrixMode.Projection);
-            Matrix4 temp_mat = Matrix4.CreatePerspectiveFieldOfView(ViewInfo.FieldOfViewY, MapView.GLSize_XPerY, ZNearFar / 128.0F, ZNearFar * 128.0F);
+            Matrix4 temp_mat = Matrix4.CreatePerspectiveFieldOfView(ViewInfo.FieldOfViewY, MapViewControl.GLSize_XPerY, ZNearFar / 128.0F, ZNearFar * 128.0F);
             GL.LoadMatrix(ref temp_mat);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
@@ -1621,7 +1622,7 @@ namespace SharpFlame
                             Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrix_Inverted, XYZ_dbl, ref XYZ_dbl2);
                             if ( ViewInfo.Pos_Get_Screen_XY(XYZ_dbl2, ScreenPos) )
                             {
-                                if ( ScreenPos.X >= 0 & ScreenPos.X <= ViewInfo.MapView.GLSize.X & ScreenPos.Y >= 0 & ScreenPos.Y <= ViewInfo.MapView.GLSize.Y )
+                                if ( ScreenPos.X >= 0 & ScreenPos.X <= ViewInfo.MapViewControl.GLSize.X & ScreenPos.Y >= 0 & ScreenPos.Y <= ViewInfo.MapViewControl.GLSize.Y )
                                 {
                                     TextLabel = new clsTextLabel();
                                     TextLabel.TextFont = App.UnitLabelFont;

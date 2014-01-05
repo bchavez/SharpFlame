@@ -2388,7 +2388,7 @@ namespace SharpFlame
                 InterfaceOptions = new clsInterfaceOptions();
             }
 
-            ViewInfo = new clsViewInfo(this, Program.frmMainInstance.MapView);
+            ViewInfo = new clsViewInfo(this, Program.frmMainInstance.MapViewControl);
 
             _SelectedUnitGroup = new clsUnitGroupContainer();
             SelectedUnitGroup.Item = ScavengerUnitGroup;
