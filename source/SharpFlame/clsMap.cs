@@ -9,6 +9,8 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.FileIO;
+using SharpFlame.Mapping;
+using SharpFlame.Mapping.Tiles;
 using SharpFlame.MathExtra;
 using SharpFlame.Painters;
 
@@ -31,7 +33,7 @@ namespace SharpFlame
                 public struct sTexture
                 {
                     public int TextureNum;
-                    public TileOrientation.sTileOrientation Orientation;
+                    public TileOrientation Orientation;
                 }
 
                 public sTexture Texture;
@@ -41,7 +43,7 @@ namespace SharpFlame
                 public bool TriBottomLeftIsCliff;
                 public bool TriBottomRightIsCliff;
                 public bool Terrain_IsCliff;
-                public TileOrientation.sTileDirection DownSide;
+                public TileDirection DownSide;
 
                 public void Copy(Tile TileToCopy)
                 {
@@ -55,7 +57,7 @@ namespace SharpFlame
                     DownSide = TileToCopy.DownSide;
                 }
 
-                public void TriCliffAddDirection(TileOrientation.sTileDirection Direction)
+                public void TriCliffAddDirection(TileDirection Direction)
                 {
                     if ( Direction.X == 0 )
                     {
@@ -122,7 +124,7 @@ namespace SharpFlame
                     for ( X = 0; X <= TileSize.X - 1; X++ )
                     {
                         Tiles[X, Y].Texture.TextureNum = -1;
-                        Tiles[X, Y].DownSide = TileOrientation.TileDirection_None;
+                        Tiles[X, Y].DownSide = TileUtil.None;
                     }
                 }
             }
@@ -1049,7 +1051,7 @@ namespace SharpFlame
 
         public void DrawTileOrientation(sXY_int Tile)
         {
-            TileOrientation.sTileOrientation TileOrientation;
+            TileOrientation TileOrientation;
             sXY_int UnrotatedPos = new sXY_int();
             App.sWorldPos Vertex0 = new App.sWorldPos();
             App.sWorldPos Vertex1 = new App.sWorldPos();
@@ -2167,7 +2169,7 @@ namespace SharpFlame
 
             sXY_int RotatedOffset = new sXY_int();
 
-            RotatedOffset = TileOrientation.GetTileRotatedOffset(Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation, TileOffsetToRotate);
+            RotatedOffset = TileUtil.GetTileRotatedOffset(Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation, TileOffsetToRotate);
             Result.Horizontal.X = Tile.X * App.TerrainGridSpacing + RotatedOffset.X;
             Result.Horizontal.Y = Tile.Y * App.TerrainGridSpacing + RotatedOffset.Y;
             Result.Altitude = (int)(GetTerrainHeight(Result.Horizontal));
@@ -2581,7 +2583,7 @@ namespace SharpFlame
             private Painter Painter;
             private clsTerrain Terrain;
             private TileList ResultTiles;
-            private TileOrientation.sTileDirection ResultDirection;
+            private TileDirection ResultDirection;
             private TileOrientationChance ResultTexture;
 
             public override void ActionPerform()
@@ -2591,7 +2593,7 @@ namespace SharpFlame
                 Painter = Map.Painter;
 
                 ResultTiles = null;
-                ResultDirection = TileOrientation.TileDirection_None;
+                ResultDirection = TileUtil.None;
 
                 //apply centre brushes
                 if ( !Terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff )
@@ -2609,7 +2611,7 @@ namespace SharpFlame
                                     {
                                         //i i i i
                                         ResultTiles = Terrain_Inner.Tiles;
-                                        ResultDirection = TileOrientation.TileDirection_None;
+                                        ResultDirection = TileUtil.None;
                                     }
                                 }
                             }
@@ -2640,7 +2642,7 @@ namespace SharpFlame
                                     {
                                         //i i i o
                                         ResultTiles = Painter.TransitionBrushes[BrushNum].Tiles_Corner_In;
-                                        ResultDirection = TileOrientation.TileDirection_BottomRight;
+                                        ResultDirection = TileUtil.BottomRight;
                                         break;
                                     }
                                 }
@@ -2650,14 +2652,14 @@ namespace SharpFlame
                                     {
                                         //i i o i
                                         ResultTiles = Painter.TransitionBrushes[BrushNum].Tiles_Corner_In;
-                                        ResultDirection = TileOrientation.TileDirection_BottomLeft;
+                                        ResultDirection = TileUtil.BottomLeft;
                                         break;
                                     }
                                     else if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
                                     {
                                         //i i o o
                                         ResultTiles = Painter.TransitionBrushes[BrushNum].Tiles_Straight;
-                                        ResultDirection = TileOrientation.TileDirection_Bottom;
+                                        ResultDirection = TileUtil.Bottom;
                                         break;
                                     }
                                 }
@@ -2670,14 +2672,14 @@ namespace SharpFlame
                                     {
                                         //i o i i
                                         ResultTiles = Painter.TransitionBrushes[BrushNum].Tiles_Corner_In;
-                                        ResultDirection = TileOrientation.TileDirection_TopRight;
+                                        ResultDirection = TileUtil.TopRight;
                                         break;
                                     }
                                     else if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
                                     {
                                         //i o i o
                                         ResultTiles = Painter.TransitionBrushes[BrushNum].Tiles_Straight;
-                                        ResultDirection = TileOrientation.TileDirection_Right;
+                                        ResultDirection = TileUtil.Right;
                                         break;
                                     }
                                 }
@@ -2687,14 +2689,14 @@ namespace SharpFlame
                                     {
                                         //i o o i
                                         ResultTiles = null;
-                                        ResultDirection = TileOrientation.TileDirection_None;
+                                        ResultDirection = TileUtil.None;
                                         break;
                                     }
                                     else if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
                                     {
                                         //i o o o
                                         ResultTiles = Painter.TransitionBrushes[BrushNum].Tiles_Corner_Out;
-                                        ResultDirection = TileOrientation.TileDirection_BottomRight;
+                                        ResultDirection = TileUtil.BottomRight;
                                         break;
                                     }
                                 }
@@ -2710,14 +2712,14 @@ namespace SharpFlame
                                     {
                                         //o i i i
                                         ResultTiles = Painter.TransitionBrushes[BrushNum].Tiles_Corner_In;
-                                        ResultDirection = TileOrientation.TileDirection_TopLeft;
+                                        ResultDirection = TileUtil.TopLeft;
                                         break;
                                     }
                                     else if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
                                     {
                                         //o i i o
                                         ResultTiles = null;
-                                        ResultDirection = TileOrientation.TileDirection_None;
+                                        ResultDirection = TileUtil.None;
                                         break;
                                     }
                                 }
@@ -2727,14 +2729,14 @@ namespace SharpFlame
                                     {
                                         //o i o i
                                         ResultTiles = Painter.TransitionBrushes[BrushNum].Tiles_Straight;
-                                        ResultDirection = TileOrientation.TileDirection_Left;
+                                        ResultDirection = TileUtil.Left;
                                         break;
                                     }
                                     else if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
                                     {
                                         //o i o o
                                         ResultTiles = Painter.TransitionBrushes[BrushNum].Tiles_Corner_Out;
-                                        ResultDirection = TileOrientation.TileDirection_BottomLeft;
+                                        ResultDirection = TileUtil.BottomLeft;
                                         break;
                                     }
                                 }
@@ -2747,14 +2749,14 @@ namespace SharpFlame
                                     {
                                         //o o i i
                                         ResultTiles = Painter.TransitionBrushes[BrushNum].Tiles_Straight;
-                                        ResultDirection = TileOrientation.TileDirection_Top;
+                                        ResultDirection = TileUtil.Top;
                                         break;
                                     }
                                     else if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
                                     {
                                         //o o i o
                                         ResultTiles = Painter.TransitionBrushes[BrushNum].Tiles_Corner_Out;
-                                        ResultDirection = TileOrientation.TileDirection_TopRight;
+                                        ResultDirection = TileUtil.TopRight;
                                         break;
                                     }
                                 }
@@ -2764,7 +2766,7 @@ namespace SharpFlame
                                     {
                                         //o o o i
                                         ResultTiles = Painter.TransitionBrushes[BrushNum].Tiles_Corner_Out;
-                                        ResultDirection = TileOrientation.TileDirection_TopLeft;
+                                        ResultDirection = TileUtil.TopLeft;
                                         break;
                                     }
                                     else if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
@@ -2825,7 +2827,7 @@ namespace SharpFlame
                                        Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer)) )
                                 {
                                     ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Straight;
-                                    ResultDirection = TileOrientation.TileDirection_Bottom;
+                                    ResultDirection = TileUtil.Bottom;
                                     break;
                                 }
                                 else if ( ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer &&
@@ -2838,7 +2840,7 @@ namespace SharpFlame
                                             Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Inner)) )
                                 {
                                     ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Straight;
-                                    ResultDirection = TileOrientation.TileDirection_Left;
+                                    ResultDirection = TileUtil.Left;
                                     break;
                                 }
                                 else if ( ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer &&
@@ -2851,7 +2853,7 @@ namespace SharpFlame
                                             Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Inner)) )
                                 {
                                     ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Straight;
-                                    ResultDirection = TileOrientation.TileDirection_Top;
+                                    ResultDirection = TileUtil.Top;
                                     break;
                                 }
                                 else if ( ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Inner &&
@@ -2864,14 +2866,14 @@ namespace SharpFlame
                                             Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer)) )
                                 {
                                     ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Straight;
-                                    ResultDirection = TileOrientation.TileDirection_Right;
+                                    ResultDirection = TileUtil.Right;
                                     break;
                                 }
                             }
                             if ( BrushNum == Painter.CliffBrushCount )
                             {
                                 ResultTiles = null;
-                                ResultDirection = TileOrientation.TileDirection_None;
+                                ResultDirection = TileUtil.None;
                             }
                         }
                         else
@@ -2899,7 +2901,7 @@ namespace SharpFlame
                                     if ( A >= 2 )
                                     {
                                         ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Corner_In;
-                                        ResultDirection = TileOrientation.TileDirection_TopLeft;
+                                        ResultDirection = TileUtil.TopLeft;
                                         break;
                                     }
                                 }
@@ -2921,7 +2923,7 @@ namespace SharpFlame
                                     if ( A >= 2 )
                                     {
                                         ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Corner_Out;
-                                        ResultDirection = TileOrientation.TileDirection_BottomRight;
+                                        ResultDirection = TileUtil.BottomRight;
                                         break;
                                     }
                                 }
@@ -2929,7 +2931,7 @@ namespace SharpFlame
                             if ( BrushNum == Painter.CliffBrushCount )
                             {
                                 ResultTiles = null;
-                                ResultDirection = TileOrientation.TileDirection_None;
+                                ResultDirection = TileUtil.None;
                             }
                         }
                     }
@@ -2958,7 +2960,7 @@ namespace SharpFlame
                                 if ( A >= 2 )
                                 {
                                     ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Corner_In;
-                                    ResultDirection = TileOrientation.TileDirection_BottomRight;
+                                    ResultDirection = TileUtil.BottomRight;
                                     break;
                                 }
                             }
@@ -2980,7 +2982,7 @@ namespace SharpFlame
                                 if ( A >= 2 )
                                 {
                                     ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Corner_Out;
-                                    ResultDirection = TileOrientation.TileDirection_TopLeft;
+                                    ResultDirection = TileUtil.TopLeft;
                                     break;
                                 }
                             }
@@ -2988,7 +2990,7 @@ namespace SharpFlame
                         if ( BrushNum == Painter.CliffBrushCount )
                         {
                             ResultTiles = null;
-                            ResultDirection = TileOrientation.TileDirection_None;
+                            ResultDirection = TileUtil.None;
                         }
                     }
                     else
@@ -3042,7 +3044,7 @@ namespace SharpFlame
                                        Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer)) )
                                 {
                                     ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Straight;
-                                    ResultDirection = TileOrientation.TileDirection_Bottom;
+                                    ResultDirection = TileUtil.Bottom;
                                     break;
                                 }
                                 else if ( ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer &&
@@ -3055,7 +3057,7 @@ namespace SharpFlame
                                             Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Inner)) )
                                 {
                                     ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Straight;
-                                    ResultDirection = TileOrientation.TileDirection_Left;
+                                    ResultDirection = TileUtil.Left;
                                     break;
                                 }
                                 else if ( ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer &&
@@ -3068,7 +3070,7 @@ namespace SharpFlame
                                             Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Inner)) )
                                 {
                                     ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Straight;
-                                    ResultDirection = TileOrientation.TileDirection_Top;
+                                    ResultDirection = TileUtil.Top;
                                     break;
                                 }
                                 else if ( ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Inner &&
@@ -3081,14 +3083,14 @@ namespace SharpFlame
                                             Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer)) )
                                 {
                                     ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Straight;
-                                    ResultDirection = TileOrientation.TileDirection_Right;
+                                    ResultDirection = TileUtil.Right;
                                     break;
                                 }
                             }
                             if ( BrushNum == Painter.CliffBrushCount )
                             {
                                 ResultTiles = null;
-                                ResultDirection = TileOrientation.TileDirection_None;
+                                ResultDirection = TileUtil.None;
                             }
                         }
                         else
@@ -3116,7 +3118,7 @@ namespace SharpFlame
                                     if ( A >= 2 )
                                     {
                                         ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Corner_In;
-                                        ResultDirection = TileOrientation.TileDirection_TopRight;
+                                        ResultDirection = TileUtil.TopRight;
                                         break;
                                     }
                                 }
@@ -3138,7 +3140,7 @@ namespace SharpFlame
                                     if ( A >= 2 )
                                     {
                                         ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Corner_Out;
-                                        ResultDirection = TileOrientation.TileDirection_BottomLeft;
+                                        ResultDirection = TileUtil.BottomLeft;
                                         break;
                                     }
                                 }
@@ -3146,7 +3148,7 @@ namespace SharpFlame
                             if ( BrushNum == Painter.CliffBrushCount )
                             {
                                 ResultTiles = null;
-                                ResultDirection = TileOrientation.TileDirection_None;
+                                ResultDirection = TileUtil.None;
                             }
                         }
                     }
@@ -3175,7 +3177,7 @@ namespace SharpFlame
                                 if ( A >= 2 )
                                 {
                                     ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Corner_In;
-                                    ResultDirection = TileOrientation.TileDirection_BottomLeft;
+                                    ResultDirection = TileUtil.BottomLeft;
                                     break;
                                 }
                             }
@@ -3197,7 +3199,7 @@ namespace SharpFlame
                                 if ( A >= 2 )
                                 {
                                     ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Corner_Out;
-                                    ResultDirection = TileOrientation.TileDirection_TopRight;
+                                    ResultDirection = TileUtil.TopRight;
                                     break;
                                 }
                             }
@@ -3205,7 +3207,7 @@ namespace SharpFlame
                         if ( BrushNum == Painter.CliffBrushCount )
                         {
                             ResultTiles = null;
-                            ResultDirection = TileOrientation.TileDirection_None;
+                            ResultDirection = TileUtil.None;
                         }
                     }
                     else
@@ -3265,7 +3267,7 @@ namespace SharpFlame
                     }
 
                     ResultTiles = null;
-                    ResultDirection = TileOrientation.TileDirection_None;
+                    ResultDirection = TileUtil.None;
 
                     if ( BrushNum < Painter.RoadBrushCount )
                     {
@@ -3277,28 +3279,28 @@ namespace SharpFlame
                         if ( RoadTop && RoadLeft && RoadRight && RoadBottom )
                         {
                             ResultTiles = Painter.RoadBrushes[BrushNum].Tile_CrossIntersection;
-                            ResultDirection = TileOrientation.TileDirection_None;
+                            ResultDirection = TileUtil.None;
                             //do T intersection
                         }
                         else if ( RoadTop && RoadLeft && RoadRight )
                         {
                             ResultTiles = Painter.RoadBrushes[BrushNum].Tile_TIntersection;
-                            ResultDirection = TileOrientation.TileDirection_Top;
+                            ResultDirection = TileUtil.Top;
                         }
                         else if ( RoadTop && RoadLeft && RoadBottom )
                         {
                             ResultTiles = Painter.RoadBrushes[BrushNum].Tile_TIntersection;
-                            ResultDirection = TileOrientation.TileDirection_Left;
+                            ResultDirection = TileUtil.Left;
                         }
                         else if ( RoadTop && RoadRight && RoadBottom )
                         {
                             ResultTiles = Painter.RoadBrushes[BrushNum].Tile_TIntersection;
-                            ResultDirection = TileOrientation.TileDirection_Right;
+                            ResultDirection = TileUtil.Right;
                         }
                         else if ( RoadLeft && RoadRight && RoadBottom )
                         {
                             ResultTiles = Painter.RoadBrushes[BrushNum].Tile_TIntersection;
-                            ResultDirection = TileOrientation.TileDirection_Bottom;
+                            ResultDirection = TileUtil.Bottom;
                             //do straight
                         }
                         else if ( RoadTop && RoadBottom )
@@ -3306,11 +3308,11 @@ namespace SharpFlame
                             ResultTiles = Painter.RoadBrushes[BrushNum].Tile_Straight;
                             if ( VBMath.Rnd() >= 0.5F )
                             {
-                                ResultDirection = TileOrientation.TileDirection_Top;
+                                ResultDirection = TileUtil.Top;
                             }
                             else
                             {
-                                ResultDirection = TileOrientation.TileDirection_Bottom;
+                                ResultDirection = TileUtil.Bottom;
                             }
                         }
                         else if ( RoadLeft && RoadRight )
@@ -3318,54 +3320,54 @@ namespace SharpFlame
                             ResultTiles = Painter.RoadBrushes[BrushNum].Tile_Straight;
                             if ( VBMath.Rnd() >= 0.5F )
                             {
-                                ResultDirection = TileOrientation.TileDirection_Left;
+                                ResultDirection = TileUtil.Left;
                             }
                             else
                             {
-                                ResultDirection = TileOrientation.TileDirection_Right;
+                                ResultDirection = TileUtil.Right;
                             }
                             //do corner
                         }
                         else if ( RoadTop && RoadLeft )
                         {
                             ResultTiles = Painter.RoadBrushes[BrushNum].Tile_Corner_In;
-                            ResultDirection = TileOrientation.TileDirection_TopLeft;
+                            ResultDirection = TileUtil.TopLeft;
                         }
                         else if ( RoadTop && RoadRight )
                         {
                             ResultTiles = Painter.RoadBrushes[BrushNum].Tile_Corner_In;
-                            ResultDirection = TileOrientation.TileDirection_TopRight;
+                            ResultDirection = TileUtil.TopRight;
                         }
                         else if ( RoadLeft && RoadBottom )
                         {
                             ResultTiles = Painter.RoadBrushes[BrushNum].Tile_Corner_In;
-                            ResultDirection = TileOrientation.TileDirection_BottomLeft;
+                            ResultDirection = TileUtil.BottomLeft;
                         }
                         else if ( RoadRight && RoadBottom )
                         {
                             ResultTiles = Painter.RoadBrushes[BrushNum].Tile_Corner_In;
-                            ResultDirection = TileOrientation.TileDirection_BottomRight;
+                            ResultDirection = TileUtil.BottomRight;
                             //do end
                         }
                         else if ( RoadTop )
                         {
                             ResultTiles = Painter.RoadBrushes[BrushNum].Tile_End;
-                            ResultDirection = TileOrientation.TileDirection_Top;
+                            ResultDirection = TileUtil.Top;
                         }
                         else if ( RoadLeft )
                         {
                             ResultTiles = Painter.RoadBrushes[BrushNum].Tile_End;
-                            ResultDirection = TileOrientation.TileDirection_Left;
+                            ResultDirection = TileUtil.Left;
                         }
                         else if ( RoadRight )
                         {
                             ResultTiles = Painter.RoadBrushes[BrushNum].Tile_End;
-                            ResultDirection = TileOrientation.TileDirection_Right;
+                            ResultDirection = TileUtil.Right;
                         }
                         else if ( RoadBottom )
                         {
                             ResultTiles = Painter.RoadBrushes[BrushNum].Tile_End;
-                            ResultDirection = TileOrientation.TileDirection_Bottom;
+                            ResultDirection = TileUtil.Bottom;
                         }
                     }
                 }
@@ -3373,7 +3375,7 @@ namespace SharpFlame
                 if ( ResultTiles == null )
                 {
                     ResultTexture.TextureNum = -1;
-                    ResultTexture.Direction = TileOrientation.TileDirection_None;
+                    ResultTexture.Direction = TileUtil.None;
                 }
                 else
                 {
@@ -3383,12 +3385,12 @@ namespace SharpFlame
                 {
                     if ( MakeInvalidTiles )
                     {
-                        Terrain.Tiles[PosNum.X, PosNum.Y].Texture = TileOrientation.OrientateTile(ResultTexture, ResultDirection);
+                        Terrain.Tiles[PosNum.X, PosNum.Y].Texture = TileUtil.OrientateTile(ResultTexture, ResultDirection);
                     }
                 }
                 else
                 {
-                    Terrain.Tiles[PosNum.X, PosNum.Y].Texture = TileOrientation.OrientateTile(ResultTexture, ResultDirection);
+                    Terrain.Tiles[PosNum.X, PosNum.Y].Texture = TileUtil.OrientateTile(ResultTexture, ResultDirection);
                 }
 
                 Map.SectorGraphicsChanges.TileChanged(PosNum);

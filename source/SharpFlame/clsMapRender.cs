@@ -1,5 +1,7 @@
 using System;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Mapping;
+using SharpFlame.Mapping.Tiles;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame
@@ -67,7 +69,7 @@ namespace SharpFlame
                 TileTerrainHeight[2] = Terrain.Vertices[TileX, TileY + 1].Height;
                 TileTerrainHeight[3] = Terrain.Vertices[TileX + 1, TileY + 1].Height;
 
-                TileOrientation.GetTileRotatedTexCoords(Terrain.Tiles[TileX, TileY].Texture.Orientation, TexCoord0, TexCoord1, TexCoord2, TexCoord3);
+                TileUtil.GetTileRotatedTexCoords(Terrain.Tiles[TileX, TileY].Texture.Orientation, TexCoord0, TexCoord1, TexCoord2, TexCoord3);
 
                 Vertex0.X = TileX * App.TerrainGridSpacing;
                 Vertex0.Y = (float)(TileTerrainHeight[0] * Map.HeightMultiplier);

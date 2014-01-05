@@ -3,6 +3,8 @@ using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.VisualBasic;
 using SharpFlame.FileIO;
+using SharpFlame.Mapping;
+using SharpFlame.Mapping.Tiles;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame
@@ -707,23 +709,23 @@ namespace SharpFlame
                         {
                             Value += 4;
                         }
-                        if ( TileOrientation.IdenticalTileDirections(Terrain.Tiles[X, Y].DownSide, TileOrientation.TileDirection_None) )
+                        if ( TileUtil.IdenticalTileDirections(Terrain.Tiles[X, Y].DownSide, TileUtil.None) )
                         {
                             DownSideValue = 0;
                         }
-                        else if ( TileOrientation.IdenticalTileDirections(Terrain.Tiles[X, Y].DownSide, TileOrientation.TileDirection_Top) )
+                        else if ( TileUtil.IdenticalTileDirections(Terrain.Tiles[X, Y].DownSide, TileUtil.Top) )
                         {
                             DownSideValue = 1;
                         }
-                        else if ( TileOrientation.IdenticalTileDirections(Terrain.Tiles[X, Y].DownSide, TileOrientation.TileDirection_Left) )
+                        else if ( TileUtil.IdenticalTileDirections(Terrain.Tiles[X, Y].DownSide, TileUtil.Left) )
                         {
                             DownSideValue = 2;
                         }
-                        else if ( TileOrientation.IdenticalTileDirections(Terrain.Tiles[X, Y].DownSide, TileOrientation.TileDirection_Right) )
+                        else if ( TileUtil.IdenticalTileDirections(Terrain.Tiles[X, Y].DownSide, TileUtil.Right) )
                         {
                             DownSideValue = 3;
                         }
-                        else if ( TileOrientation.IdenticalTileDirections(Terrain.Tiles[X, Y].DownSide, TileOrientation.TileDirection_Bottom) )
+                        else if ( TileUtil.IdenticalTileDirections(Terrain.Tiles[X, Y].DownSide, TileUtil.Bottom) )
                         {
                             DownSideValue = 4;
                         }
@@ -1548,22 +1550,22 @@ namespace SharpFlame
                         switch ( PartValue )
                         {
                             case 0:
-                                Terrain.Tiles[X, Y].DownSide = TileOrientation.TileDirection_None;
+                                Terrain.Tiles[X, Y].DownSide = TileUtil.None;
                                 break;
                             case 1:
-                                Terrain.Tiles[X, Y].DownSide = TileOrientation.TileDirection_Top;
+                                Terrain.Tiles[X, Y].DownSide = TileUtil.Top;
                                 break;
                             case 2:
-                                Terrain.Tiles[X, Y].DownSide = TileOrientation.TileDirection_Left;
+                                Terrain.Tiles[X, Y].DownSide = TileUtil.Left;
                                 break;
                             case 3:
-                                Terrain.Tiles[X, Y].DownSide = TileOrientation.TileDirection_Right;
+                                Terrain.Tiles[X, Y].DownSide = TileUtil.Right;
                                 break;
                             case 4:
-                                Terrain.Tiles[X, Y].DownSide = TileOrientation.TileDirection_Bottom;
+                                Terrain.Tiles[X, Y].DownSide = TileUtil.Bottom;
                                 break;
                             default:
-                                Terrain.Tiles[X, Y].DownSide = TileOrientation.TileDirection_None;
+                                Terrain.Tiles[X, Y].DownSide = TileUtil.None;
                                 if ( DownSideWarningCount < 16 )
                                 {
                                     ReturnResult.WarningAdd("Down side value for tile " + Convert.ToString(X) + ", " + Convert.ToString(Y) +

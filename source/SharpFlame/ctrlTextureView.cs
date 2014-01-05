@@ -5,6 +5,8 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.FileIO;
+using SharpFlame.Mapping;
+using SharpFlame.Mapping.Tiles;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame
@@ -207,7 +209,7 @@ namespace SharpFlame
 
             if ( Map.Tileset != null )
             {
-                TileOrientation.GetTileRotatedTexCoords(App.TextureOrientation, TexCoord0, TexCoord1, TexCoord2, TexCoord3);
+                TileUtil.GetTileRotatedTexCoords(App.TextureOrientation, TexCoord0, TexCoord1, TexCoord2, TexCoord3);
 
                 GL.Enable(EnableCap.Texture2D);
                 GL.Color4(0.0F, 0.0F, 0.0F, 1.0F);
@@ -278,13 +280,13 @@ namespace SharpFlame
 
                     UnrotatedPos.X = 0.25F;
                     UnrotatedPos.Y = 0.25F;
-                    Vertex0 = TileOrientation.GetTileRotatedPos_sng(App.TextureOrientation, UnrotatedPos);
+                    Vertex0 = TileUtil.GetTileRotatedPos_sng(App.TextureOrientation, UnrotatedPos);
                     UnrotatedPos.X = 0.5F;
                     UnrotatedPos.Y = 0.25F;
-                    Vertex1 = TileOrientation.GetTileRotatedPos_sng(App.TextureOrientation, UnrotatedPos);
+                    Vertex1 = TileUtil.GetTileRotatedPos_sng(App.TextureOrientation, UnrotatedPos);
                     UnrotatedPos.X = 0.5F;
                     UnrotatedPos.Y = 0.5F;
-                    Vertex2 = TileOrientation.GetTileRotatedPos_sng(App.TextureOrientation, UnrotatedPos);
+                    Vertex2 = TileUtil.GetTileRotatedPos_sng(App.TextureOrientation, UnrotatedPos);
 
                     GL.Begin(BeginMode.Triangles);
                     GL.Color3(1.0F, 1.0F, 0.0F);

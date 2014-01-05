@@ -4,6 +4,8 @@ using System.IO;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
 using SharpFlame.FileIO;
+using SharpFlame.Mapping;
+using SharpFlame.Mapping.Tiles;
 using SharpFlame.MathExtra;
 using SharpFlame.Painters;
 
@@ -11,14 +13,14 @@ namespace SharpFlame
 {
     public partial class clsMap
     {
-        public void Rotate(TileOrientation.sTileOrientation Orientation, App.enumObjectRotateMode ObjectRotateMode)
+        public void Rotate(TileOrientation Orientation, App.enumObjectRotateMode ObjectRotateMode)
         {
             int X = 0;
             int Y = 0;
             sXY_int Pos = new sXY_int();
             sXY_int RotatedPos = new sXY_int();
-            sXY_int NewTerrainPosA = TileOrientation.GetRotatedPos(Orientation, new sXY_int(0, 0), Terrain.TileSize);
-            sXY_int NewTerrainPosB = TileOrientation.GetRotatedPos(Orientation, Terrain.TileSize, Terrain.TileSize);
+            sXY_int NewTerrainPosA = TileUtil.GetRotatedPos(Orientation, new sXY_int(0, 0), Terrain.TileSize);
+            sXY_int NewTerrainPosB = TileUtil.GetRotatedPos(Orientation, Terrain.TileSize, Terrain.TileSize);
             sXY_int VertexLimits = new sXY_int(Math.Max(NewTerrainPosA.X, NewTerrainPosB.X), Math.Max(NewTerrainPosA.Y, NewTerrainPosB.Y));
             clsTerrain NewTerrain = new clsTerrain(VertexLimits);
             sXY_int NewTileLimits = new sXY_int(NewTerrain.TileSize.X - 1, NewTerrain.TileSize.Y - 1);
@@ -26,8 +28,8 @@ namespace SharpFlame
             sXY_int NewSideVLimits = new sXY_int(NewTerrain.TileSize.X, NewTerrain.TileSize.Y - 1);
             sXY_int OldTileLimits = new sXY_int(Terrain.TileSize.X - 1, Terrain.TileSize.Y - 1);
             sXY_int OldPosLimits = new sXY_int(Terrain.TileSize.X * App.TerrainGridSpacing, Terrain.TileSize.Y * App.TerrainGridSpacing);
-            TileOrientation.sTileOrientation ReverseOrientation = new TileOrientation.sTileOrientation();
-            TileOrientation.sTileDirection TriDirection = new TileOrientation.sTileDirection();
+            TileOrientation ReverseOrientation = new TileOrientation();
+            TileDirection TriDirection = new TileDirection();
 
             ReverseOrientation = Orientation;
             ReverseOrientation.Reverse();
@@ -38,7 +40,7 @@ namespace SharpFlame
                 for ( X = 0; X <= NewTerrain.TileSize.X; X++ )
                 {
                     Pos.X = X;
-                    RotatedPos = TileOrientation.GetRotatedPos(ReverseOrientation, Pos, VertexLimits);
+                    RotatedPos = TileUtil.GetRotatedPos(ReverseOrientation, Pos, VertexLimits);
                     NewTerrain.Vertices[X, Y].Height = Terrain.Vertices[RotatedPos.X, RotatedPos.Y].Height;
                     NewTerrain.Vertices[X, Y].Terrain = Terrain.Vertices[RotatedPos.X, RotatedPos.Y].Terrain;
                 }
@@ -49,33 +51,33 @@ namespace SharpFlame
                 for ( X = 0; X <= NewTerrain.TileSize.X - 1; X++ )
                 {
                     Pos.X = X;
-                    RotatedPos = TileOrientation.GetRotatedPos(ReverseOrientation, Pos, NewTileLimits);
+                    RotatedPos = TileUtil.GetRotatedPos(ReverseOrientation, Pos, NewTileLimits);
                     NewTerrain.Tiles[X, Y].Texture = Terrain.Tiles[RotatedPos.X, RotatedPos.Y].Texture;
                     NewTerrain.Tiles[X, Y].Texture.Orientation = NewTerrain.Tiles[X, Y].Texture.Orientation.GetRotated(Orientation);
                     NewTerrain.Tiles[X, Y].DownSide = Terrain.Tiles[RotatedPos.X, RotatedPos.Y].DownSide;
                     NewTerrain.Tiles[X, Y].DownSide = NewTerrain.Tiles[X, Y].DownSide.GetRotated(Orientation);
                     if ( Terrain.Tiles[RotatedPos.X, RotatedPos.Y].Tri )
                     {
-                        TriDirection = TileOrientation.TileDirection_TopLeft;
+                        TriDirection = TileUtil.TopLeft;
                     }
                     else
                     {
-                        TriDirection = TileOrientation.TileDirection_TopRight;
+                        TriDirection = TileUtil.TopRight;
                     }
                     TriDirection = TriDirection.GetRotated(Orientation);
                     NewTerrain.Tiles[X, Y].Tri =
-                        Convert.ToBoolean(TileOrientation.IdenticalTileDirections(TriDirection, TileOrientation.TileDirection_TopLeft) ||
-                                                 TileOrientation.IdenticalTileDirections(TriDirection, TileOrientation.TileDirection_BottomRight));
+                        Convert.ToBoolean(TileUtil.IdenticalTileDirections(TriDirection, TileUtil.TopLeft) ||
+                                                 TileUtil.IdenticalTileDirections(TriDirection, TileUtil.BottomRight));
                     if ( Terrain.Tiles[RotatedPos.X, RotatedPos.Y].Tri )
                     {
                         if ( Terrain.Tiles[RotatedPos.X, RotatedPos.Y].TriTopLeftIsCliff )
                         {
-                            TileOrientation.RotateDirection(TileOrientation.TileDirection_TopLeft, Orientation, ref TriDirection);
+                            TileUtil.RotateDirection(TileUtil.TopLeft, Orientation, ref TriDirection);
                             NewTerrain.Tiles[X, Y].TriCliffAddDirection(TriDirection);
                         }
                         if ( Terrain.Tiles[RotatedPos.X, RotatedPos.Y].TriBottomRightIsCliff )
                         {
-                            TileOrientation.RotateDirection(TileOrientation.TileDirection_BottomRight, Orientation, ref TriDirection);
+                            TileUtil.RotateDirection(TileUtil.BottomRight, Orientation, ref TriDirection);
                             NewTerrain.Tiles[X, Y].TriCliffAddDirection(TriDirection);
                         }
                     }
@@ -83,12 +85,12 @@ namespace SharpFlame
                     {
                         if ( Terrain.Tiles[RotatedPos.X, RotatedPos.Y].TriTopRightIsCliff )
                         {
-                            TileOrientation.RotateDirection(TileOrientation.TileDirection_TopRight, Orientation, ref TriDirection);
+                            TileUtil.RotateDirection(TileUtil.TopRight, Orientation, ref TriDirection);
                             NewTerrain.Tiles[X, Y].TriCliffAddDirection(TriDirection);
                         }
                         if ( Terrain.Tiles[RotatedPos.X, RotatedPos.Y].TriBottomLeftIsCliff )
                         {
-                            TileOrientation.RotateDirection(TileOrientation.TileDirection_BottomLeft, Orientation, ref TriDirection);
+                            TileUtil.RotateDirection(TileUtil.BottomLeft, Orientation, ref TriDirection);
                             NewTerrain.Tiles[X, Y].TriCliffAddDirection(TriDirection);
                         }
                     }
@@ -103,7 +105,7 @@ namespace SharpFlame
                     for ( X = 0; X <= NewTerrain.TileSize.X - 1; X++ )
                     {
                         Pos.X = X;
-                        RotatedPos = TileOrientation.GetRotatedPos(ReverseOrientation, Pos, NewSideHLimits);
+                        RotatedPos = TileUtil.GetRotatedPos(ReverseOrientation, Pos, NewSideHLimits);
                         NewTerrain.SideH[X, Y].Road = Terrain.SideV[RotatedPos.X, RotatedPos.Y].Road;
                     }
                 }
@@ -113,7 +115,7 @@ namespace SharpFlame
                     for ( X = 0; X <= NewTerrain.TileSize.X; X++ )
                     {
                         Pos.X = X;
-                        RotatedPos = TileOrientation.GetRotatedPos(ReverseOrientation, Pos, NewSideVLimits);
+                        RotatedPos = TileUtil.GetRotatedPos(ReverseOrientation, Pos, NewSideVLimits);
                         NewTerrain.SideV[X, Y].Road = Terrain.SideH[RotatedPos.X, RotatedPos.Y].Road;
                     }
                 }
@@ -126,7 +128,7 @@ namespace SharpFlame
                     for ( X = 0; X <= NewTerrain.TileSize.X - 1; X++ )
                     {
                         Pos.X = X;
-                        RotatedPos = TileOrientation.GetRotatedPos(ReverseOrientation, Pos, NewSideHLimits);
+                        RotatedPos = TileUtil.GetRotatedPos(ReverseOrientation, Pos, NewSideHLimits);
                         NewTerrain.SideH[X, Y].Road = Terrain.SideH[RotatedPos.X, RotatedPos.Y].Road;
                     }
                 }
@@ -136,7 +138,7 @@ namespace SharpFlame
                     for ( X = 0; X <= NewTerrain.TileSize.X; X++ )
                     {
                         Pos.X = X;
-                        RotatedPos = TileOrientation.GetRotatedPos(ReverseOrientation, Pos, NewSideVLimits);
+                        RotatedPos = TileUtil.GetRotatedPos(ReverseOrientation, Pos, NewSideVLimits);
                         NewTerrain.SideV[X, Y].Road = Terrain.SideV[RotatedPos.X, RotatedPos.Y].Road;
                     }
                 }
@@ -152,7 +154,7 @@ namespace SharpFlame
                     Unit.Rotation =
                         (int)
                             (MathUtil.AngleClamp(MathUtil.RadOf360Deg -
-                                                TileOrientation.GetRotatedAngle(Orientation,
+                                                TileUtil.GetRotatedAngle(Orientation,
                                                     MathUtil.AngleClamp(MathUtil.RadOf360Deg - Unit.Rotation * MathUtil.RadOf1Deg))) / MathUtil.RadOf1Deg);
                     if ( Unit.Rotation < 0 )
                     {
@@ -168,7 +170,7 @@ namespace SharpFlame
                             Unit.Rotation =
                                 (int)
                                     (MathUtil.AngleClamp(MathUtil.RadOf360Deg -
-                                                        TileOrientation.GetRotatedAngle(Orientation,
+                                                        TileUtil.GetRotatedAngle(Orientation,
                                                             MathUtil.AngleClamp(MathUtil.RadOf360Deg - Unit.Rotation * MathUtil.RadOf1Deg))) / MathUtil.RadOf1Deg);
                             if ( Unit.Rotation < 0 )
                             {
@@ -182,7 +184,7 @@ namespace SharpFlame
                         }
                     }
                 }
-                Unit.Pos.Horizontal = TileOrientation.GetRotatedPos(Orientation, Unit.Pos.Horizontal, OldPosLimits);
+                Unit.Pos.Horizontal = TileUtil.GetRotatedPos(Orientation, Unit.Pos.Horizontal, OldPosLimits);
             }
 
             sXY_int ZeroPos = new sXY_int(0, 0);
@@ -204,8 +206,8 @@ namespace SharpFlame
             foreach ( clsGateway tempLoopVar_Gateway in Gateways.GetItemsAsSimpleClassList() )
             {
                 Gateway = tempLoopVar_Gateway;
-                GatewayCreate(TileOrientation.GetRotatedPos(Orientation, Gateway.PosA, OldTileLimits),
-                    TileOrientation.GetRotatedPos(Orientation, Gateway.PosB, OldTileLimits));
+                GatewayCreate(TileUtil.GetRotatedPos(Orientation, Gateway.PosA, OldTileLimits),
+                    TileUtil.GetRotatedPos(Orientation, Gateway.PosB, OldTileLimits));
                 Gateway.Deallocate();
             }
 
@@ -577,7 +579,7 @@ namespace SharpFlame
             {
                 for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
                 {
-                    Terrain.Tiles[X, Y].Texture.Orientation = new TileOrientation.sTileOrientation(VBMath.Rnd() >= 0.5F, VBMath.Rnd() >= 0.5F, VBMath.Rnd() >= 0.5F);
+                    Terrain.Tiles[X, Y].Texture.Orientation = new TileOrientation(VBMath.Rnd() >= 0.5F, VBMath.Rnd() >= 0.5F, VBMath.Rnd() >= 0.5F);
                 }
             }
             SectorTerrainUndoChanges.SetAllChanged();
@@ -909,41 +911,41 @@ namespace SharpFlame
                     RandomNum = (int)(Conversion.Int(VBMath.Rnd() * 4.0F));
                     if ( RandomNum == 0 )
                     {
-                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileOrientation.TileDirection_Top;
+                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileUtil.Top;
                     }
                     else if ( RandomNum == 1 )
                     {
-                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileOrientation.TileDirection_Right;
+                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileUtil.Right;
                     }
                     else if ( RandomNum == 2 )
                     {
-                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileOrientation.TileDirection_Bottom;
+                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileUtil.Bottom;
                     }
                     else
                     {
-                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileOrientation.TileDirection_Left;
+                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileUtil.Left;
                     }
                 }
                 else if ( Math.Abs(DifA) > Math.Abs(DifB) )
                 {
                     if ( DifA < 0.0D )
                     {
-                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileOrientation.TileDirection_Bottom;
+                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileUtil.Bottom;
                     }
                     else
                     {
-                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileOrientation.TileDirection_Top;
+                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileUtil.Top;
                     }
                 }
                 else
                 {
                     if ( DifB < 0.0D )
                     {
-                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileOrientation.TileDirection_Right;
+                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileUtil.Right;
                     }
                     else
                     {
-                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileOrientation.TileDirection_Left;
+                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileUtil.Left;
                     }
                 }
 
@@ -1183,41 +1185,41 @@ namespace SharpFlame
                     A = (int)(Conversion.Int(VBMath.Rnd() * 4.0F));
                     if ( A == 0 )
                     {
-                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileOrientation.TileDirection_Top;
+                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileUtil.Top;
                     }
                     else if ( A == 1 )
                     {
-                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileOrientation.TileDirection_Right;
+                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileUtil.Right;
                     }
                     else if ( A == 2 )
                     {
-                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileOrientation.TileDirection_Bottom;
+                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileUtil.Bottom;
                     }
                     else
                     {
-                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileOrientation.TileDirection_Left;
+                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileUtil.Left;
                     }
                 }
                 else if ( Math.Abs(difA) > Math.Abs(difB) )
                 {
                     if ( difA < 0.0D )
                     {
-                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileOrientation.TileDirection_Bottom;
+                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileUtil.Bottom;
                     }
                     else
                     {
-                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileOrientation.TileDirection_Top;
+                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileUtil.Top;
                     }
                 }
                 else
                 {
                     if ( difB < 0.0D )
                     {
-                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileOrientation.TileDirection_Right;
+                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileUtil.Right;
                     }
                     else
                     {
-                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileOrientation.TileDirection_Left;
+                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileUtil.Left;
                     }
                 }
             }
@@ -1495,7 +1497,7 @@ namespace SharpFlame
         {
             public int TextureNum;
             public bool SetTexture;
-            public TileOrientation.sTileOrientation Orientation;
+            public TileOrientation Orientation;
             public bool SetOrientation;
             public bool RandomOrientation;
             public App.enumTextureTerrainAction TerrainAction;
@@ -1520,7 +1522,7 @@ namespace SharpFlame
                 {
                     if ( RandomOrientation )
                     {
-                        Terrain.Tiles[PosNum.X, PosNum.Y].Texture.Orientation = new TileOrientation.sTileOrientation(VBMath.Rnd() < 0.5F, VBMath.Rnd() < 0.5F,
+                        Terrain.Tiles[PosNum.X, PosNum.Y].Texture.Orientation = new TileOrientation(VBMath.Rnd() < 0.5F, VBMath.Rnd() < 0.5F,
                             VBMath.Rnd() < 0.5F);
                     }
                     else
@@ -1539,14 +1541,14 @@ namespace SharpFlame
         public class clsApplyVertexTerrainInterpret : clsAction
         {
             private int[] TerrainCount;
-            private TileOrientation.sTileDirection VertexDirection;
+            private TileDirection VertexDirection;
             private Painter Painter;
             private Painters.Terrain PainterTerrainA;
             private Painters.Terrain PainterTerrainB;
             private clsTerrain.Tile.sTexture Texture;
-            private TileOrientation.sTileDirection ResultDirection;
+            private TileDirection ResultDirection;
             private TileOrientationChance PainterTexture;
-            private TileOrientation.sTileDirection OppositeDirection;
+            private TileDirection OppositeDirection;
             private int BestNum;
             private int BestCount;
             private clsTerrain.Tile Tile;
@@ -1578,8 +1580,8 @@ namespace SharpFlame
                         PainterTexture = Painter.TransitionBrushes[PainterBrushNum].Tiles_Straight.Tiles[A];
                         if ( PainterTexture.TextureNum == Texture.TextureNum )
                         {
-                            TileOrientation.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
-                            if ( TileOrientation.DirectionsOnSameSide(VertexDirection, ResultDirection) )
+                            TileUtil.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
+                            if ( TileUtil.DirectionsOnSameSide(VertexDirection, ResultDirection) )
                             {
                                 TerrainCount[PainterTerrainB.Num]++;
                             }
@@ -1594,8 +1596,8 @@ namespace SharpFlame
                         PainterTexture = Painter.TransitionBrushes[PainterBrushNum].Tiles_Corner_In.Tiles[A];
                         if ( PainterTexture.TextureNum == Texture.TextureNum )
                         {
-                            TileOrientation.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
-                            if ( TileOrientation.IdenticalTileDirections(VertexDirection, ResultDirection) )
+                            TileUtil.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
+                            if ( TileUtil.IdenticalTileDirections(VertexDirection, ResultDirection) )
                             {
                                 TerrainCount[PainterTerrainB.Num]++;
                             }
@@ -1613,8 +1615,8 @@ namespace SharpFlame
                             OppositeDirection = PainterTexture.Direction;
                             OppositeDirection.FlipX();
                             OppositeDirection.FlipY();
-                            TileOrientation.RotateDirection(OppositeDirection, Texture.Orientation, ref ResultDirection);
-                            if ( TileOrientation.IdenticalTileDirections(VertexDirection, ResultDirection) )
+                            TileUtil.RotateDirection(OppositeDirection, Texture.Orientation, ref ResultDirection);
+                            if ( TileUtil.IdenticalTileDirections(VertexDirection, ResultDirection) )
                             {
                                 TerrainCount[PainterTerrainA.Num]++;
                             }
@@ -1635,8 +1637,8 @@ namespace SharpFlame
                         PainterTexture = Painter.CliffBrushes[PainterBrushNum].Tiles_Straight.Tiles[A];
                         if ( PainterTexture.TextureNum == Texture.TextureNum )
                         {
-                            TileOrientation.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
-                            if ( TileOrientation.DirectionsOnSameSide(VertexDirection, ResultDirection) )
+                            TileUtil.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
+                            if ( TileUtil.DirectionsOnSameSide(VertexDirection, ResultDirection) )
                             {
                                 TerrainCount[PainterTerrainB.Num]++;
                             }
@@ -1651,8 +1653,8 @@ namespace SharpFlame
                         PainterTexture = Painter.CliffBrushes[PainterBrushNum].Tiles_Corner_In.Tiles[A];
                         if ( PainterTexture.TextureNum == Texture.TextureNum )
                         {
-                            TileOrientation.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
-                            if ( TileOrientation.IdenticalTileDirections(VertexDirection, ResultDirection) )
+                            TileUtil.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
+                            if ( TileUtil.IdenticalTileDirections(VertexDirection, ResultDirection) )
                             {
                                 TerrainCount[PainterTerrainA.Num]++;
                             }
@@ -1670,8 +1672,8 @@ namespace SharpFlame
                             OppositeDirection = PainterTexture.Direction;
                             OppositeDirection.FlipX();
                             OppositeDirection.FlipY();
-                            TileOrientation.RotateDirection(OppositeDirection, Texture.Orientation, ref ResultDirection);
-                            if ( TileOrientation.IdenticalTileDirections(VertexDirection, ResultDirection) )
+                            TileUtil.RotateDirection(OppositeDirection, Texture.Orientation, ref ResultDirection);
+                            if ( TileUtil.IdenticalTileDirections(VertexDirection, ResultDirection) )
                             {
                                 TerrainCount[PainterTerrainA.Num]++;
                             }
@@ -1742,14 +1744,14 @@ namespace SharpFlame
                 {
                     if ( PosNum.X > 0 )
                     {
-                        VertexDirection = TileOrientation.TileDirection_BottomRight;
+                        VertexDirection = TileUtil.BottomRight;
                         Tile = Terrain.Tiles[PosNum.X - 1, PosNum.Y - 1];
                         Texture = Tile.Texture;
                         ToolPerformTile();
                     }
                     if ( PosNum.X < Terrain.TileSize.X )
                     {
-                        VertexDirection = TileOrientation.TileDirection_BottomLeft;
+                        VertexDirection = TileUtil.BottomLeft;
                         Tile = Terrain.Tiles[PosNum.X, PosNum.Y - 1];
                         Texture = Tile.Texture;
                         ToolPerformTile();
@@ -1759,14 +1761,14 @@ namespace SharpFlame
                 {
                     if ( PosNum.X > 0 )
                     {
-                        VertexDirection = TileOrientation.TileDirection_TopRight;
+                        VertexDirection = TileUtil.TopRight;
                         Tile = Terrain.Tiles[PosNum.X - 1, PosNum.Y];
                         Texture = Tile.Texture;
                         ToolPerformTile();
                     }
                     if ( PosNum.X < Terrain.TileSize.X )
                     {
-                        VertexDirection = TileOrientation.TileDirection_TopLeft;
+                        VertexDirection = TileUtil.TopLeft;
                         Tile = Terrain.Tiles[PosNum.X, PosNum.Y];
                         Texture = Tile.Texture;
                         ToolPerformTile();
@@ -1802,9 +1804,9 @@ namespace SharpFlame
             private Painters.Terrain PainterTerrainA;
             private Painters.Terrain PainterTerrainB;
             private clsTerrain.Tile.sTexture Texture;
-            private TileOrientation.sTileDirection ResultDirection;
+            private TileDirection ResultDirection;
             private TileOrientationChance PainterTexture;
-            private TileOrientation.sTileDirection OppositeDirection;
+            private TileDirection OppositeDirection;
             private clsTerrain.Tile Tile;
             private clsTerrain Terrain;
 
@@ -1824,7 +1826,7 @@ namespace SharpFlame
                 Terrain.Tiles[PosNum.X, PosNum.Y].TriTopRightIsCliff = false;
                 Terrain.Tiles[PosNum.X, PosNum.Y].TriBottomLeftIsCliff = false;
                 Terrain.Tiles[PosNum.X, PosNum.Y].TriBottomRightIsCliff = false;
-                Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileOrientation.TileDirection_None;
+                Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileUtil.None;
 
                 for ( PainterBrushNum = 0; PainterBrushNum <= Painter.CliffBrushCount - 1; PainterBrushNum++ )
                 {
@@ -1846,7 +1848,7 @@ namespace SharpFlame
                                 Terrain.Tiles[PosNum.X, PosNum.Y].TriBottomLeftIsCliff = true;
                             }
                             Terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
-                            TileOrientation.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
+                            TileUtil.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
                             Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = ResultDirection;
                         }
                     }
@@ -1855,15 +1857,15 @@ namespace SharpFlame
                         PainterTexture = Painter.CliffBrushes[PainterBrushNum].Tiles_Corner_In.Tiles[A];
                         if ( PainterTexture.TextureNum == Texture.TextureNum )
                         {
-                            TileOrientation.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
+                            TileUtil.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
                             if ( Tile.Tri )
                             {
-                                if ( TileOrientation.IdenticalTileDirections(ResultDirection, TileOrientation.TileDirection_TopLeft) )
+                                if ( TileUtil.IdenticalTileDirections(ResultDirection, TileUtil.TopLeft) )
                                 {
                                     Terrain.Tiles[PosNum.X, PosNum.Y].TriTopLeftIsCliff = true;
                                     Terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
                                 }
-                                else if ( TileOrientation.IdenticalTileDirections(ResultDirection, TileOrientation.TileDirection_BottomRight) )
+                                else if ( TileUtil.IdenticalTileDirections(ResultDirection, TileUtil.BottomRight) )
                                 {
                                     Terrain.Tiles[PosNum.X, PosNum.Y].TriBottomRightIsCliff = true;
                                     Terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
@@ -1871,12 +1873,12 @@ namespace SharpFlame
                             }
                             else
                             {
-                                if ( TileOrientation.IdenticalTileDirections(ResultDirection, TileOrientation.TileDirection_TopRight) )
+                                if ( TileUtil.IdenticalTileDirections(ResultDirection, TileUtil.TopRight) )
                                 {
                                     Terrain.Tiles[PosNum.X, PosNum.Y].TriTopRightIsCliff = true;
                                     Terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
                                 }
-                                else if ( TileOrientation.IdenticalTileDirections(ResultDirection, TileOrientation.TileDirection_BottomLeft) )
+                                else if ( TileUtil.IdenticalTileDirections(ResultDirection, TileUtil.BottomLeft) )
                                 {
                                     Terrain.Tiles[PosNum.X, PosNum.Y].TriBottomLeftIsCliff = true;
                                     Terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
@@ -1892,15 +1894,15 @@ namespace SharpFlame
                             OppositeDirection = PainterTexture.Direction;
                             OppositeDirection.FlipX();
                             OppositeDirection.FlipY();
-                            TileOrientation.RotateDirection(OppositeDirection, Texture.Orientation, ref ResultDirection);
+                            TileUtil.RotateDirection(OppositeDirection, Texture.Orientation, ref ResultDirection);
                             if ( Tile.Tri )
                             {
-                                if ( TileOrientation.IdenticalTileDirections(ResultDirection, TileOrientation.TileDirection_TopLeft) )
+                                if ( TileUtil.IdenticalTileDirections(ResultDirection, TileUtil.TopLeft) )
                                 {
                                     Terrain.Tiles[PosNum.X, PosNum.Y].TriTopLeftIsCliff = true;
                                     Terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
                                 }
-                                else if ( TileOrientation.IdenticalTileDirections(ResultDirection, TileOrientation.TileDirection_BottomRight) )
+                                else if ( TileUtil.IdenticalTileDirections(ResultDirection, TileUtil.BottomRight) )
                                 {
                                     Terrain.Tiles[PosNum.X, PosNum.Y].TriBottomRightIsCliff = true;
                                     Terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
@@ -1908,12 +1910,12 @@ namespace SharpFlame
                             }
                             else
                             {
-                                if ( TileOrientation.IdenticalTileDirections(ResultDirection, TileOrientation.TileDirection_TopRight) )
+                                if ( TileUtil.IdenticalTileDirections(ResultDirection, TileUtil.TopRight) )
                                 {
                                     Terrain.Tiles[PosNum.X, PosNum.Y].TriTopRightIsCliff = true;
                                     Terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
                                 }
-                                else if ( TileOrientation.IdenticalTileDirections(ResultDirection, TileOrientation.TileDirection_BottomLeft) )
+                                else if ( TileUtil.IdenticalTileDirections(ResultDirection, TileUtil.BottomLeft) )
                                 {
                                     Terrain.Tiles[PosNum.X, PosNum.Y].TriBottomLeftIsCliff = true;
                                     Terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
@@ -1933,12 +1935,12 @@ namespace SharpFlame
             protected Painters.Terrain PainterTerrain;
             protected Road PainterRoad;
             protected clsTerrain.Tile.sTexture Texture;
-            protected TileOrientation.sTileDirection ResultDirection;
+            protected TileDirection ResultDirection;
             protected TileOrientationChance PainterTexture;
-            protected TileOrientation.sTileDirection OppositeDirection;
+            protected TileDirection OppositeDirection;
             protected clsTerrain.Tile Tile;
             protected int[] RoadCount;
-            protected TileOrientation.sTileDirection SideDirection;
+            protected TileDirection SideDirection;
             protected int BestNum;
             protected int BestCount;
             protected clsTerrain Terrain;
@@ -1957,8 +1959,8 @@ namespace SharpFlame
                         PainterTexture = Painter.RoadBrushes[PainterBrushNum].Tile_Corner_In.Tiles[A];
                         if ( PainterTexture.TextureNum == Texture.TextureNum )
                         {
-                            TileOrientation.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
-                            if ( TileOrientation.DirectionsOnSameSide(SideDirection, ResultDirection) )
+                            TileUtil.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
+                            if ( TileUtil.DirectionsOnSameSide(SideDirection, ResultDirection) )
                             {
                                 RoadCount[PainterRoad.Num]++;
                             }
@@ -1977,8 +1979,8 @@ namespace SharpFlame
                         PainterTexture = Painter.RoadBrushes[PainterBrushNum].Tile_End.Tiles[A];
                         if ( PainterTexture.TextureNum == Texture.TextureNum )
                         {
-                            TileOrientation.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
-                            if ( TileOrientation.IdenticalTileDirections(SideDirection, ResultDirection) )
+                            TileUtil.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
+                            if ( TileUtil.IdenticalTileDirections(SideDirection, ResultDirection) )
                             {
                                 RoadCount[PainterRoad.Num]++;
                             }
@@ -1989,8 +1991,8 @@ namespace SharpFlame
                         PainterTexture = Painter.RoadBrushes[PainterBrushNum].Tile_Straight.Tiles[A];
                         if ( PainterTexture.TextureNum == Texture.TextureNum )
                         {
-                            TileOrientation.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
-                            if ( TileOrientation.DirectionsAreInLine(SideDirection, ResultDirection) )
+                            TileUtil.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
+                            if ( TileUtil.DirectionsAreInLine(SideDirection, ResultDirection) )
                             {
                                 RoadCount[PainterRoad.Num]++;
                             }
@@ -2001,8 +2003,8 @@ namespace SharpFlame
                         PainterTexture = Painter.RoadBrushes[PainterBrushNum].Tile_TIntersection.Tiles[A];
                         if ( PainterTexture.TextureNum == Texture.TextureNum )
                         {
-                            TileOrientation.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
-                            if ( !TileOrientation.DirectionsOnSameSide(SideDirection, ResultDirection) )
+                            TileUtil.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
+                            if ( !TileUtil.DirectionsOnSameSide(SideDirection, ResultDirection) )
                             {
                                 RoadCount[PainterRoad.Num]++;
                             }
@@ -2030,14 +2032,14 @@ namespace SharpFlame
 
                 if ( PosNum.Y > 0 )
                 {
-                    SideDirection = TileOrientation.TileDirection_Bottom;
+                    SideDirection = TileUtil.Bottom;
                     Tile = Terrain.Tiles[PosNum.X, PosNum.Y - 1];
                     Texture = Tile.Texture;
                     ToolPerformTile();
                 }
                 if ( PosNum.Y < Terrain.TileSize.Y )
                 {
-                    SideDirection = TileOrientation.TileDirection_Top;
+                    SideDirection = TileUtil.Top;
                     Tile = Terrain.Tiles[PosNum.X, PosNum.Y];
                     Texture = Tile.Texture;
                     ToolPerformTile();
@@ -2076,14 +2078,14 @@ namespace SharpFlame
 
                 if ( PosNum.X > 0 )
                 {
-                    SideDirection = TileOrientation.TileDirection_Right;
+                    SideDirection = TileUtil.Right;
                     Tile = Terrain.Tiles[PosNum.X - 1, PosNum.Y];
                     Texture = Tile.Texture;
                     ToolPerformTile();
                 }
                 if ( PosNum.X < Terrain.TileSize.X )
                 {
-                    SideDirection = TileOrientation.TileDirection_Left;
+                    SideDirection = TileUtil.Left;
                     Tile = Terrain.Tiles[PosNum.X, PosNum.Y];
                     Texture = Tile.Texture;
                     ToolPerformTile();

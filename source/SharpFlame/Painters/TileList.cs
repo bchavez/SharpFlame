@@ -1,5 +1,7 @@
 using System;
 using Microsoft.VisualBasic;
+using SharpFlame.Mapping;
+using SharpFlame.Mapping.Tiles;
 
 namespace SharpFlame.Painters
 {
@@ -9,7 +11,7 @@ namespace SharpFlame.Painters
         public int TileCount;
         public int TileChanceTotal;
 
-        public void Tile_Add(int TileNum, TileOrientation.sTileDirection TileOutwardOrientation, UInt32 Chance)
+        public void Tile_Add(int TileNum, TileDirection TileOutwardOrientation, UInt32 Chance)
         {
             Array.Resize(ref Tiles, TileCount + 1);
             Tiles[TileCount].TextureNum = TileNum;
@@ -51,7 +53,7 @@ namespace SharpFlame.Painters
             if ( A == TileCount )
             {
                 ReturnResult.TextureNum = -1;
-                ReturnResult.Direction = TileOrientation.TileDirection_None;
+                ReturnResult.Direction = TileUtil.None;
             }
             else
             {

@@ -7,6 +7,8 @@ using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.FileIO;
+using SharpFlame.Mapping;
+using SharpFlame.Mapping.Tiles;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame
@@ -212,23 +214,23 @@ namespace SharpFlame
 
                             if ( byteTemp == ((byte)0) )
                             {
-                                Terrain.Tiles[X, Y].DownSide = TileOrientation.TileDirection_None;
+                                Terrain.Tiles[X, Y].DownSide = TileUtil.None;
                             }
                             else if ( byteTemp == ((byte)1) )
                             {
-                                Terrain.Tiles[X, Y].DownSide = TileOrientation.TileDirection_Top;
+                                Terrain.Tiles[X, Y].DownSide = TileUtil.Top;
                             }
                             else if ( byteTemp == ((byte)2) )
                             {
-                                Terrain.Tiles[X, Y].DownSide = TileOrientation.TileDirection_Left;
+                                Terrain.Tiles[X, Y].DownSide = TileUtil.Left;
                             }
                             else if ( byteTemp == ((byte)3) )
                             {
-                                Terrain.Tiles[X, Y].DownSide = TileOrientation.TileDirection_Right;
+                                Terrain.Tiles[X, Y].DownSide = TileUtil.Right;
                             }
                             else if ( byteTemp == ((byte)4) )
                             {
-                                Terrain.Tiles[X, Y].DownSide = TileOrientation.TileDirection_Bottom;
+                                Terrain.Tiles[X, Y].DownSide = TileUtil.Bottom;
                             }
                             else
                             {
@@ -1051,7 +1053,7 @@ namespace SharpFlame
 
                         //vf, tf, ignore
 
-                        TileOrientation.OldOrientation_To_TileOrientation(Rotation, FlipX, FlipZ, Terrain.Tiles[X, Y].Texture.Orientation);
+                        TileUtil.OldOrientation_To_TileOrientation(Rotation, FlipX, FlipZ, Terrain.Tiles[X, Y].Texture.Orientation);
                     }
                 }
 
@@ -1287,7 +1289,7 @@ namespace SharpFlame
                 {
                     for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
                     {
-                        TileOrientation.TileOrientation_To_OldOrientation(Terrain.Tiles[X, Y].Texture.Orientation, ref Rotation, ref FlipX);
+                        TileUtil.TileOrientation_To_OldOrientation(Terrain.Tiles[X, Y].Texture.Orientation, ref Rotation, ref FlipX);
                         Flip = (byte)0;
                         if ( Terrain.Tiles[X, Y].Tri )
                         {
@@ -1768,19 +1770,19 @@ namespace SharpFlame
                             }
                         }
                         File.Write(TileAttributes);
-                        if ( TileOrientation.IdenticalTileDirections(Terrain.Tiles[X, Z].DownSide, TileOrientation.TileDirection_Top) )
+                        if ( TileUtil.IdenticalTileDirections(Terrain.Tiles[X, Z].DownSide, TileUtil.Top) )
                         {
                             DownSideData = (byte)1;
                         }
-                        else if ( TileOrientation.IdenticalTileDirections(Terrain.Tiles[X, Z].DownSide, TileOrientation.TileDirection_Left) )
+                        else if ( TileUtil.IdenticalTileDirections(Terrain.Tiles[X, Z].DownSide, TileUtil.Left) )
                         {
                             DownSideData = (byte)2;
                         }
-                        else if ( TileOrientation.IdenticalTileDirections(Terrain.Tiles[X, Z].DownSide, TileOrientation.TileDirection_Right) )
+                        else if ( TileUtil.IdenticalTileDirections(Terrain.Tiles[X, Z].DownSide, TileUtil.Right) )
                         {
                             DownSideData = (byte)3;
                         }
-                        else if ( TileOrientation.IdenticalTileDirections(Terrain.Tiles[X, Z].DownSide, TileOrientation.TileDirection_Bottom) )
+                        else if ( TileUtil.IdenticalTileDirections(Terrain.Tiles[X, Z].DownSide, TileUtil.Bottom) )
                         {
                             DownSideData = (byte)4;
                         }

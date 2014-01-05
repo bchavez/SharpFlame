@@ -140,6 +140,8 @@
     <Compile Include="clsMapWZ.cs" />
     <Compile Include="clsModel.cs" />
     <Compile Include="clsObjectData.cs" />
+    <Compile Include="Mapping\Tiles\TileDirection.cs" />
+    <Compile Include="Mapping\Tiles\TileOrientation.cs" />
     <Compile Include="Painters\CliffBrush.cs" />
     <Compile Include="Painters\Painter.cs" />
     <Compile Include="clsResult.cs" />
@@ -276,7 +278,7 @@
     <Compile Include="PathfinderLayer.cs" />
     <Compile Include="PathfinderNetwork.cs" />
     <Compile Include="PathfinderNode.cs" />
-    <Compile Include="TileOrientation.cs" />
+    <Compile Include="Mapping\Tiles\TileUtil.cs" />
     <Compile Include="FileIO\ZipSplitPath.cs" />
   </ItemGroup>
   <ItemGroup>

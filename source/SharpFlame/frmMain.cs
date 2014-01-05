@@ -14,6 +14,8 @@ using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
 using SharpFlame.FileIO;
 using SharpFlame.Generators;
+using SharpFlame.Mapping;
+using SharpFlame.Mapping.Tiles;
 using SharpFlame.MathExtra;
 using SharpFlame.Painters;
 using Timer = System.Windows.Forms.Timer;
@@ -2040,7 +2042,7 @@ namespace SharpFlame
                 return;
             }
 
-            App.Copied_Map.Rotate(TileOrientation.Orientation_Clockwise, Program.frmMainInstance.PasteRotateObjects);
+            App.Copied_Map.Rotate(TileUtil.Clockwise, Program.frmMainInstance.PasteRotateObjects);
         }
 
         public void tsbSelectionRotateAnticlockwise_Click(Object sender, EventArgs e)
@@ -2051,7 +2053,7 @@ namespace SharpFlame
                 return;
             }
 
-            App.Copied_Map.Rotate(TileOrientation.Orientation_CounterClockwise, Program.frmMainInstance.PasteRotateObjects);
+            App.Copied_Map.Rotate(TileUtil.CounterClockwise, Program.frmMainInstance.PasteRotateObjects);
         }
 
         public void menuMiniShowTex_Click(Object sender, EventArgs e)
@@ -2580,7 +2582,7 @@ namespace SharpFlame
                 return;
             }
 
-            App.Copied_Map.Rotate(TileOrientation.Orientation_FlipX, Program.frmMainInstance.PasteRotateObjects);
+            App.Copied_Map.Rotate(TileUtil.FlipX, Program.frmMainInstance.PasteRotateObjects);
         }
 
         public void btnHeightsMultiplySelection_Click(Object sender, EventArgs e)
@@ -2634,7 +2636,7 @@ namespace SharpFlame
 
         public void btnTextureAnticlockwise_Click(Object sender, EventArgs e)
         {
-            App.TextureOrientation.RotateAnticlockwise();
+            App.TextureOrientation.RotateAntiClockwise();
 
             TextureView.DrawViewLater();
         }

@@ -9,6 +9,8 @@ using Microsoft.VisualBasic.Devices;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.FileIO;
+using SharpFlame.Mapping;
+using SharpFlame.Mapping.Tiles;
 using SharpFlame.MathExtra;
 using SharpFlame.Painters;
 
@@ -67,7 +69,7 @@ namespace SharpFlame
         public static clsObjectData ObjectData;
 
         public static int SelectedTextureNum = -1;
-        public static TileOrientation.sTileOrientation TextureOrientation = new TileOrientation.sTileOrientation(false, false, false);
+        public static TileOrientation TextureOrientation = new TileOrientation(false, false, false);
 
         public static Terrain SelectedTerrain;
         public static Road SelectedRoad;

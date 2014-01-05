@@ -1367,7 +1367,7 @@ namespace SharpFlame
 
             sXY_int Tile = MouseOverTerrain.Tile.Normal;
 
-            Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation.RotateAnticlockwise();
+            Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation.RotateAntiClockwise();
             Map.TileTextureChangeTerrainAction(Tile, Program.frmMainInstance.TextureTerrainAction);
 
             Map.SectorGraphicsChanges.TileChanged(Tile);

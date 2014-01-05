@@ -6,6 +6,8 @@ using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
 using SharpFlame.FileIO;
+using SharpFlame.Mapping;
+using SharpFlame.Mapping.Tiles;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame
@@ -1718,7 +1720,7 @@ namespace SharpFlame
                         A = (int)(Conversion.Int(Flip / 16.0D));
                         Flip -= (byte)(A * 16);
                         Rotate = (byte)A;
-                        TileOrientation.OldOrientation_To_TileOrientation(Rotate, FlipX, FlipZ, Terrain.Tiles[X, Y].Texture.Orientation);
+                        TileUtil.OldOrientation_To_TileOrientation(Rotate, FlipX, FlipZ, Terrain.Tiles[X, Y].Texture.Orientation);
                         //get tri direction
                         A = (int)(Conversion.Int(Flip / 8.0D));
                         Flip -= (byte)(A * 8);
@@ -2881,7 +2883,7 @@ namespace SharpFlame
                 {
                     for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
                     {
-                        TileOrientation.TileOrientation_To_OldOrientation(Terrain.Tiles[X, Y].Texture.Orientation, ref Rotation, ref DoFlipX);
+                        TileUtil.TileOrientation_To_OldOrientation(Terrain.Tiles[X, Y].Texture.Orientation, ref Rotation, ref DoFlipX);
                         Flip = (byte)0;
                         if ( Terrain.Tiles[X, Y].Tri )
                         {

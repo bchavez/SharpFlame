@@ -5,6 +5,8 @@ using Matrix3D;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using SharpFlame.Generators;
+using SharpFlame.Mapping;
+using SharpFlame.Mapping.Tiles;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame
@@ -21,7 +23,7 @@ namespace SharpFlame
         public struct sSymmetryBlock
         {
             public sXY_int XYNum;
-            public TileOrientation.sTileOrientation Orientation;
+            public TileOrientation Orientation;
             public int[] ReflectToNum;
         }
 
@@ -787,7 +789,7 @@ namespace SharpFlame
                         PassageNodesMaxLevelSet(PlayerBases[E].Nodes[C], HeightsArgs.PassageNodesMaxLevel, D, MaxLevelTransition);
                     }
                     //PlayerBases(E).CalcPos()
-                    RotatedPos = TileOrientation.GetRotatedPos(SymmetryBlocks[A].Orientation, PlayerBasePos[B],
+                    RotatedPos = TileUtil.GetRotatedPos(SymmetryBlocks[A].Orientation, PlayerBasePos[B],
                         new sXY_int(SymmetrySize.X - 1, SymmetrySize.Y - 1));
                     PlayerBases[E].Pos.X = SymmetryBlocks[A].XYNum.X * SymmetrySize.X + RotatedPos.X;
                     PlayerBases[E].Pos.Y = SymmetryBlocks[A].XYNum.Y * SymmetrySize.Y + RotatedPos.Y;
@@ -2945,7 +2947,7 @@ namespace SharpFlame
 
             for ( A = 0; A <= SymmetryBlockCount - 1; A++ )
             {
-                RotatedPos = TileOrientation.GetRotatedPos(SymmetryBlocks[A].Orientation, Pos, Limits);
+                RotatedPos = TileUtil.GetRotatedPos(SymmetryBlocks[A].Orientation, Pos, Limits);
                 Positions[A].X = SymmetryBlocks[A].XYNum.X * SymmetrySize.X + RotatedPos.X;
                 Positions[A].Y = SymmetryBlocks[A].XYNum.Y * SymmetrySize.Y + RotatedPos.Y;
                 for ( B = 0; B <= A - 1; B++ )
