@@ -599,7 +599,7 @@ namespace SharpFlame
                     }
                     else
                     {
-                        IOUtil.InvariantParse_int(strTemp.Substring(strTemp.Length - (strTemp.Length - (A + 8)), strTemp.Length - (A + 8)), ref NewTileSize.X);
+                        IOUtil.InvariantParse(strTemp.Substring(strTemp.Length - (strTemp.Length - (A + 8)), strTemp.Length - (A + 8)), ref NewTileSize.X);
                         goto LineDone;
                     }
 
@@ -609,7 +609,7 @@ namespace SharpFlame
                     }
                     else
                     {
-                        IOUtil.InvariantParse_int(strTemp.Substring(strTemp.Length - (strTemp.Length - (A + 9)), strTemp.Length - (A + 9)), ref NewTileSize.Y);
+                        IOUtil.InvariantParse(strTemp.Substring(strTemp.Length - (strTemp.Length - (A + 9)), strTemp.Length - (A + 9)), ref NewTileSize.Y);
                         goto LineDone;
                     }
 
@@ -674,7 +674,7 @@ namespace SharpFlame
                                         strTemp2 = strTemp2.Substring(0, A - 1);
                                     }
                                     Int16 temp_Result = LNDTile[Tile_Num].TID;
-                                    IOUtil.InvariantParse_short(strTemp2, ref temp_Result);
+                                    IOUtil.InvariantParse(strTemp2, ref temp_Result);
                                 }
 
                                 A = strTemp.IndexOf("VF ") + 1;
@@ -692,7 +692,7 @@ namespace SharpFlame
                                         strTemp2 = strTemp2.Substring(0, A - 1);
                                     }
                                     Int16 temp_Result2 = LNDTile[Tile_Num].VF;
-                                    IOUtil.InvariantParse_short(strTemp2, ref temp_Result2);
+                                    IOUtil.InvariantParse(strTemp2, ref temp_Result2);
                                 }
 
                                 A = strTemp.IndexOf("TF ") + 1;
@@ -710,7 +710,7 @@ namespace SharpFlame
                                         strTemp2 = strTemp2.Substring(0, A - 1);
                                     }
                                     Int16 temp_Result3 = LNDTile[Tile_Num].TF;
-                                    IOUtil.InvariantParse_short(strTemp2, ref temp_Result3);
+                                    IOUtil.InvariantParse(strTemp2, ref temp_Result3);
                                 }
 
                                 A = strTemp.IndexOf(" F ") + 1;
@@ -728,7 +728,7 @@ namespace SharpFlame
                                         strTemp2 = strTemp2.Substring(0, A - 1);
                                     }
                                     short temp_Result4 = LNDTile[Tile_Num].F;
-                                    IOUtil.InvariantParse_short(strTemp2, ref temp_Result4);
+                                    IOUtil.InvariantParse(strTemp2, ref temp_Result4);
                                 }
 
                                 A = strTemp.IndexOf(" VH ") + 1;
@@ -754,21 +754,21 @@ namespace SharpFlame
                                         if ( A == 0 )
                                         {
                                             short temp_Result5 = LNDTile[Tile_Num].Vertex0Height;
-                                            IOUtil.InvariantParse_short(strTemp2, ref temp_Result5);
+                                            IOUtil.InvariantParse(strTemp2, ref temp_Result5);
                                         }
                                         else if ( A == 1 )
                                         {
                                             short temp_Result6 = LNDTile[Tile_Num].Vertex1Height;
-                                            IOUtil.InvariantParse_short(strTemp2, ref temp_Result6);
+                                            IOUtil.InvariantParse(strTemp2, ref temp_Result6);
                                         }
                                         else if ( A == 2 )
                                         {
                                             Int16 temp_Result7 = LNDTile[Tile_Num].Vertex2Height;
-                                            IOUtil.InvariantParse_short(strTemp2, ref temp_Result7);
+                                            IOUtil.InvariantParse(strTemp2, ref temp_Result7);
                                         }
                                     }
                                     short temp_Result8 = LNDTile[Tile_Num].Vertex3Height;
-                                    IOUtil.InvariantParse_short(strTemp3, ref temp_Result8);
+                                    IOUtil.InvariantParse(strTemp3, ref temp_Result8);
                                 }
 
                                 Tile_Num++;
@@ -827,23 +827,23 @@ namespace SharpFlame
                                 }
 
                                 clsLNDObject NewObject = new clsLNDObject();
-                                IOUtil.InvariantParse_uint(ObjectText[0], NewObject.ID);
-                                IOUtil.InvariantParse_int(ObjectText[1], ref NewObject.TypeNum);
+                                IOUtil.InvariantParse(ObjectText[0], NewObject.ID);
+                                IOUtil.InvariantParse(ObjectText[1], ref NewObject.TypeNum);
                                 NewObject.Code = ObjectText[2].Substring(1, ObjectText[2].Length - 2); //remove quotes
-                                IOUtil.InvariantParse_int(ObjectText[3], ref NewObject.PlayerNum);
+                                IOUtil.InvariantParse(ObjectText[3], ref NewObject.PlayerNum);
                                 NewObject.Name = ObjectText[4].Substring(1, ObjectText[4].Length - 2); //remove quotes
-                                IOUtil.InvariantParse_sng(ObjectText[5], ref NewObject.Pos.X);
-                                IOUtil.InvariantParse_sng(ObjectText[6], ref NewObject.Pos.Y);
-                                IOUtil.InvariantParse_sng(ObjectText[7], ref NewObject.Pos.Z);
-                                if ( IOUtil.InvariantParse_dbl(ObjectText[8], ref dblTemp) )
+                                IOUtil.InvariantParse(ObjectText[5], ref NewObject.Pos.X);
+                                IOUtil.InvariantParse(ObjectText[6], ref NewObject.Pos.Y);
+                                IOUtil.InvariantParse(ObjectText[7], ref NewObject.Pos.Z);
+                                if ( IOUtil.InvariantParse(ObjectText[8], ref dblTemp) )
                                 {
                                     NewObject.Rotation.X = (int)(MathUtil.Clamp_dbl(dblTemp, 0.0D, 359.0D));
                                 }
-                                if ( IOUtil.InvariantParse_dbl(ObjectText[9], ref dblTemp) )
+                                if ( IOUtil.InvariantParse(ObjectText[9], ref dblTemp) )
                                 {
                                     NewObject.Rotation.Y = (int)(MathUtil.Clamp_dbl(dblTemp, 0.0D, 359.0D));
                                 }
-                                if ( IOUtil.InvariantParse_dbl(ObjectText[10], ref dblTemp) )
+                                if ( IOUtil.InvariantParse(ObjectText[10], ref dblTemp) )
                                 {
                                     NewObject.Rotation.Z = (int)(MathUtil.Clamp_dbl(dblTemp, 0.0D, 359.0D));
                                 }
@@ -903,13 +903,13 @@ namespace SharpFlame
                                 }
 
                                 Gateway = new clsGateway();
-                                IOUtil.InvariantParse_int(GateText[0], ref Gateway.PosA.X);
+                                IOUtil.InvariantParse(GateText[0], ref Gateway.PosA.X);
                                 Gateway.PosA.X = Math.Max(Gateway.PosA.X, 0);
-                                IOUtil.InvariantParse_int(GateText[1], ref Gateway.PosA.Y);
+                                IOUtil.InvariantParse(GateText[1], ref Gateway.PosA.Y);
                                 Gateway.PosA.Y = Math.Max(Gateway.PosA.Y, 0);
-                                IOUtil.InvariantParse_int(GateText[2], ref Gateway.PosB.X);
+                                IOUtil.InvariantParse(GateText[2], ref Gateway.PosB.X);
                                 Gateway.PosB.X = Math.Max(Gateway.PosB.X, 0);
-                                IOUtil.InvariantParse_int(GateText[3], ref Gateway.PosB.Y);
+                                IOUtil.InvariantParse(GateText[3], ref Gateway.PosB.Y);
                                 Gateway.PosB.Y = Math.Max(Gateway.PosB.Y, 0);
                                 LNDGates.Add(Gateway);
                             }
@@ -1242,11 +1242,11 @@ namespace SharpFlame
                 File.Write(Text);
                 Text = "    Gravity 1" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    HeightScale " + IOUtil.InvariantToString_int(HeightMultiplier) + Convert.ToString(EndChar);
+                Text = "    HeightScale " + IOUtil.InvariantToString(HeightMultiplier) + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    MapWidth " + IOUtil.InvariantToString_int(Terrain.TileSize.X) + Convert.ToString(EndChar);
+                Text = "    MapWidth " + IOUtil.InvariantToString(Terrain.TileSize.X) + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    MapHeight " + IOUtil.InvariantToString_int(Terrain.TileSize.Y) + Convert.ToString(EndChar);
+                Text = "    MapHeight " + IOUtil.InvariantToString(Terrain.TileSize.Y) + Convert.ToString(EndChar);
                 File.Write(Text);
                 Text = "    TileWidth 128" + Convert.ToString(EndChar);
                 File.Write(Text);
@@ -1281,7 +1281,7 @@ namespace SharpFlame
                 File.Write(Text);
                 Text = "    }" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    NumTiles " + IOUtil.InvariantToString_int(Terrain.TileSize.X * Terrain.TileSize.Y) + Convert.ToString(EndChar);
+                Text = "    NumTiles " + IOUtil.InvariantToString(Terrain.TileSize.X * Terrain.TileSize.Y) + Convert.ToString(EndChar);
                 File.Write(Text);
                 Text = "    Tiles {" + Convert.ToString(EndChar);
                 File.Write(Text);
@@ -1318,11 +1318,11 @@ namespace SharpFlame
                             TF = 0;
                         }
 
-                        Text = "        TID " + (Terrain.Tiles[X, Y].Texture.TextureNum + 1) + " VF " + IOUtil.InvariantToString_int(VF) + " TF " +
-                               IOUtil.InvariantToString_int(TF) + " F " + IOUtil.InvariantToString_int(Flip) + " VH " +
-                               IOUtil.InvariantToString_byte(Convert.ToByte(Terrain.Vertices[X, Y].Height)) + " " +
-                               IOUtil.InvariantToString_byte(Terrain.Vertices[X + 1, Y].Height) + " " + Convert.ToString(Terrain.Vertices[X + 1, Y + 1].Height) +
-                               " " + IOUtil.InvariantToString_byte(Convert.ToByte(Terrain.Vertices[X, Y + 1].Height)) + Convert.ToString(EndChar);
+                        Text = "        TID " + (Terrain.Tiles[X, Y].Texture.TextureNum + 1) + " VF " + IOUtil.InvariantToString(VF) + " TF " +
+                               IOUtil.InvariantToString(TF) + " F " + IOUtil.InvariantToString((int)Flip) + " VH " +
+                               IOUtil.InvariantToString(Convert.ToByte(Terrain.Vertices[X, Y].Height)) + " " +
+                               IOUtil.InvariantToString(Terrain.Vertices[X + 1, Y].Height) + " " + Convert.ToString(Terrain.Vertices[X + 1, Y + 1].Height) +
+                               " " + IOUtil.InvariantToString(Convert.ToByte(Terrain.Vertices[X, Y + 1].Height)) + Convert.ToString(EndChar);
                         File.Write(Text);
                     }
                 }
@@ -1351,7 +1351,7 @@ namespace SharpFlame
                     Text = "	FeatureSet " + Convert.ToString(EndChar);
                 }
                 File.Write(Text);
-                Text = "    NumObjects " + IOUtil.InvariantToString_int(Units.Count) + Convert.ToString(EndChar);
+                Text = "    NumObjects " + IOUtil.InvariantToString(Units.Count) + Convert.ToString(EndChar);
                 File.Write(Text);
                 Text = "    Objects {" + Convert.ToString(EndChar);
                 File.Write(Text);
@@ -1390,10 +1390,10 @@ namespace SharpFlame
                     {
                         if ( Unit.Type.GetCode(ref Code) )
                         {
-                            Text = "        " + IOUtil.InvariantToString_uint(Unit.ID) + " " + Convert.ToString(B) + " " + Convert.ToString(Quote) +
+                            Text = "        " + IOUtil.InvariantToString(Unit.ID) + " " + Convert.ToString(B) + " " + Convert.ToString(Quote) +
                                    Code + Convert.ToString(Quote) + " " + Unit.UnitGroup.GetLNDPlayerText() + " " + Convert.ToString(Quote) + "NONAME" +
-                                   Convert.ToString(Quote) + " " + IOUtil.InvariantToString_int(XYZ_int.X) + ".00 " + IOUtil.InvariantToString_int(XYZ_int.Y) +
-                                   ".00 " + IOUtil.InvariantToString_int(XYZ_int.Z) + ".00 0.00 " + IOUtil.InvariantToString_int(Unit.Rotation) + ".00 0.00" +
+                                   Convert.ToString(Quote) + " " + IOUtil.InvariantToString(XYZ_int.X) + ".00 " + IOUtil.InvariantToString(XYZ_int.Y) +
+                                   ".00 " + IOUtil.InvariantToString(XYZ_int.Z) + ".00 0.00 " + IOUtil.InvariantToString(Unit.Rotation) + ".00 0.00" +
                                    Convert.ToString(EndChar);
                             File.Write(Text);
                         }
@@ -1420,7 +1420,7 @@ namespace SharpFlame
                 Text = "    Limits {" + Convert.ToString(EndChar);
                 File.Write(Text);
                 Text = "        " + Convert.ToString(Quote) + "Entire Map" + Convert.ToString(Quote) + " 0 0 0 " +
-                       IOUtil.InvariantToString_int(Terrain.TileSize.X) + " " + IOUtil.InvariantToString_int(Terrain.TileSize.Y) + Convert.ToString(EndChar);
+                       IOUtil.InvariantToString(Terrain.TileSize.X) + " " + IOUtil.InvariantToString(Terrain.TileSize.Y) + Convert.ToString(EndChar);
                 File.Write(Text);
                 Text = "    }" + Convert.ToString(EndChar);
                 File.Write(Text);
@@ -1430,7 +1430,7 @@ namespace SharpFlame
                 File.Write(Text);
                 Text = "    Version 1" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    NumGateways " + IOUtil.InvariantToString_int(Gateways.Count) + Convert.ToString(EndChar);
+                Text = "    NumGateways " + IOUtil.InvariantToString(Gateways.Count) + Convert.ToString(EndChar);
                 File.Write(Text);
                 Text = "    Gates {" + Convert.ToString(EndChar);
                 File.Write(Text);
@@ -1438,8 +1438,8 @@ namespace SharpFlame
                 foreach ( clsGateway tempLoopVar_Gateway in Gateways )
                 {
                     Gateway = tempLoopVar_Gateway;
-                    Text = "        " + IOUtil.InvariantToString_int(Gateway.PosA.X) + " " + IOUtil.InvariantToString_int(Gateway.PosA.Y) + " " +
-                           IOUtil.InvariantToString_int(Gateway.PosB.X) + " " + IOUtil.InvariantToString_int(Gateway.PosB.Y) + Convert.ToString(EndChar);
+                    Text = "        " + IOUtil.InvariantToString(Gateway.PosA.X) + " " + IOUtil.InvariantToString(Gateway.PosA.Y) + " " +
+                           IOUtil.InvariantToString(Gateway.PosB.X) + " " + IOUtil.InvariantToString(Gateway.PosB.Y) + Convert.ToString(EndChar);
                     File.Write(Text);
                 }
                 Text = "    }" + Convert.ToString(EndChar);
@@ -1465,7 +1465,7 @@ namespace SharpFlame
                         }
                         else
                         {
-                            Text = Text + IOUtil.InvariantToString_byte(Tile_TypeNum[C + B]) + " ";
+                            Text = Text + IOUtil.InvariantToString(Tile_TypeNum[C + B]) + " ";
                         }
                     }
                     Text = Text + Convert.ToString(EndChar);

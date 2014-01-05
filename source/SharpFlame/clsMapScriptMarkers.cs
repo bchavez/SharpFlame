@@ -21,7 +21,7 @@ namespace SharpFlame
 
             do
             {
-                Label = Prefix + IOUtil.InvariantToString_int(Number);
+                Label = Prefix + IOUtil.InvariantToString(Number);
                 Valid = ScriptLabelIsValid(Label);
                 if ( Valid.Success )
                 {
@@ -206,8 +206,8 @@ namespace SharpFlame
 
             public void WriteWZ(clsINIWrite File)
             {
-                File.SectionName_Append("position_" + IOUtil.InvariantToString_int(_ParentMapLink.ArrayPosition));
-                File.Property_Append("pos", IOUtil.InvariantToString_int(_Pos.X) + ", " + IOUtil.InvariantToString_int(_Pos.Y));
+                File.SectionName_Append("position_" + IOUtil.InvariantToString(_ParentMapLink.ArrayPosition));
+                File.Property_Append("pos", IOUtil.InvariantToString(_Pos.X) + ", " + IOUtil.InvariantToString(_Pos.Y));
                 File.Property_Append("label", _Label);
                 File.Gap_Append();
             }
@@ -394,9 +394,9 @@ namespace SharpFlame
 
             public void WriteWZ(clsINIWrite File)
             {
-                File.SectionName_Append("area_" + IOUtil.InvariantToString_int(_ParentMapLink.ArrayPosition));
-                File.Property_Append("pos1", IOUtil.InvariantToString_int(_PosA.X) + ", " + IOUtil.InvariantToString_int(_PosA.Y));
-                File.Property_Append("pos2", IOUtil.InvariantToString_int(_PosB.X) + ", " + IOUtil.InvariantToString_int(_PosB.Y));
+                File.SectionName_Append("area_" + IOUtil.InvariantToString(_ParentMapLink.ArrayPosition));
+                File.Property_Append("pos1", IOUtil.InvariantToString(_PosA.X) + ", " + IOUtil.InvariantToString(_PosA.Y));
+                File.Property_Append("pos2", IOUtil.InvariantToString(_PosB.X) + ", " + IOUtil.InvariantToString(_PosB.Y));
                 File.Property_Append("label", _Label);
                 File.Gap_Append();
             }

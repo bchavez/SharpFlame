@@ -53,10 +53,10 @@ namespace SharpFlame
 
             cbxAutoScrollLimits.Checked = Map.InterfaceOptions.AutoScrollLimits;
             AutoScrollLimits_Update();
-            txtScrollMinX.Text = IOUtil.InvariantToString_int(Map.InterfaceOptions.ScrollMin.X);
-            txtScrollMinY.Text = IOUtil.InvariantToString_int(Map.InterfaceOptions.ScrollMin.Y);
-            txtScrollMaxX.Text = IOUtil.InvariantToString_uint(Map.InterfaceOptions.ScrollMax.X);
-            txtScrollMaxY.Text = IOUtil.InvariantToString_uint(Map.InterfaceOptions.ScrollMax.Y);
+            txtScrollMinX.Text = IOUtil.InvariantToString(Map.InterfaceOptions.ScrollMin.X);
+            txtScrollMinY.Text = IOUtil.InvariantToString(Map.InterfaceOptions.ScrollMin.Y);
+            txtScrollMaxX.Text = IOUtil.InvariantToString(Map.InterfaceOptions.ScrollMax.X);
+            txtScrollMaxY.Text = IOUtil.InvariantToString(Map.InterfaceOptions.ScrollMax.Y);
         }
 
         private void SaveToMap()
@@ -125,7 +125,7 @@ namespace SharpFlame
             string MapName = "";
             string License = cboLicense.Text;
             int PlayerCount = 0;
-            if ( !IOUtil.InvariantParse_int(txtMultiPlayers.Text, ref PlayerCount) )
+            if ( !IOUtil.InvariantParse(txtMultiPlayers.Text, ref PlayerCount) )
             {
                 PlayerCount = 0;
             }
@@ -693,10 +693,10 @@ namespace SharpFlame
             Max.Y = (uint)Map.Terrain.TileSize.Y;
             if ( !cbxAutoScrollLimits.Checked )
             {
-                IOUtil.InvariantParse_int(txtScrollMinX.Text, ref Min.X);
-                IOUtil.InvariantParse_int(txtScrollMinY.Text, ref Min.Y);
-                IOUtil.InvariantParse_uint(txtScrollMaxX.Text, Max.X);
-                IOUtil.InvariantParse_uint(txtScrollMaxY.Text, Max.Y);
+                IOUtil.InvariantParse(txtScrollMinX.Text, ref Min.X);
+                IOUtil.InvariantParse(txtScrollMinY.Text, ref Min.Y);
+                IOUtil.InvariantParse(txtScrollMaxX.Text, Max.X);
+                IOUtil.InvariantParse(txtScrollMaxY.Text, Max.Y);
             }
         }
     }

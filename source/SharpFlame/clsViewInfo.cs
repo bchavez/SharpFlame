@@ -1285,7 +1285,7 @@ namespace SharpFlame
             clsMap.clsApplyCliff ApplyCliff = new clsMap.clsApplyCliff();
             ApplyCliff.Map = Map;
             double Angle = 0;
-            if ( !IOUtil.InvariantParse_dbl(Program.frmMainInstance.txtAutoCliffSlope.Text, ref Angle) )
+            if ( !IOUtil.InvariantParse(Program.frmMainInstance.txtAutoCliffSlope.Text, ref Angle) )
             {
                 return;
             }
@@ -2026,7 +2026,7 @@ namespace SharpFlame
                     if ( GetMouseLeftDownOverTerrain() != null )
                     {
                         double dblTemp = 0;
-                        if ( !IOUtil.InvariantParse_dbl(Program.frmMainInstance.txtSmoothRate.Text, ref dblTemp) )
+                        if ( !IOUtil.InvariantParse(Program.frmMainInstance.txtSmoothRate.Text, ref dblTemp) )
                         {
                             return;
                         }
@@ -2039,7 +2039,7 @@ namespace SharpFlame
                 if ( GetMouseOverTerrain() != null )
                 {
                     double dblTemp = 0;
-                    if ( !IOUtil.InvariantParse_dbl(Program.frmMainInstance.txtHeightChangeRate.Text, ref dblTemp) )
+                    if ( !IOUtil.InvariantParse(Program.frmMainInstance.txtHeightChangeRate.Text, ref dblTemp) )
                     {
                         return;
                     }

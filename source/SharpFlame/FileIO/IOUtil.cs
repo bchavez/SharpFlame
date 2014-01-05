@@ -27,77 +27,77 @@ namespace SharpFlame.FileIO
             }
         }
 
-        public static string InvariantToString_bool(bool Value)
+        public static string InvariantToString(bool Value)
         {
             return Value.ToString(CultureInfo.InvariantCulture);
         }
 
-        public static string InvariantToString_byte(byte Value)
+        public static string InvariantToString(byte Value)
         {
             return Value.ToString(CultureInfo.InvariantCulture);
         }
 
-        public static string InvariantToString_short(short Value)
+        public static string InvariantToString(short Value)
         {
             return Value.ToString(CultureInfo.InvariantCulture);
         }
 
-        public static string InvariantToString_int(int Value)
+        public static string InvariantToString(int Value)
         {
             return Value.ToString(CultureInfo.InvariantCulture);
         }
 
-        public static string InvariantToString_uint(UInt32 Value)
+        public static string InvariantToString(UInt32 Value)
         {
             return Value.ToString(CultureInfo.InvariantCulture);
         }
 
-        public static string InvariantToString_sng(float Value)
+        public static string InvariantToString(float Value)
         {
             return Value.ToString(CultureInfo.InvariantCulture);
         }
 
-        public static string InvariantToString_dbl(double Value)
+        public static string InvariantToString(double Value)
         {
             return Value.ToString(CultureInfo.InvariantCulture);
         }
 
-        public static bool InvariantParse_bool(string Text, ref bool Result)
+        public static bool InvariantParse(string Text, ref bool Result)
         {
             return bool.TryParse(Text, out Result);
         }
 
-        public static bool InvariantParse_byte(string Text, ref byte Result)
+        public static bool InvariantParse(string Text, ref byte Result)
         {
             return byte.TryParse(Text, NumberStyles.Any, CultureInfo.InvariantCulture, out Result);
         }
 
-        public static bool InvariantParse_short(string Text, ref short Result)
+        public static bool InvariantParse(string Text, ref short Result)
         {
             return short.TryParse(Text, NumberStyles.Any, CultureInfo.InvariantCulture, out Result);
         }
 
-        public static bool InvariantParse_ushort(string Text, UInt16 Result)
+        public static bool InvariantParse(string Text, UInt16 Result)
         {
             return UInt16.TryParse(Text, NumberStyles.Any, CultureInfo.InvariantCulture, out Result);
         }
 
-        public static bool InvariantParse_int(string Text, ref int Result)
+        public static bool InvariantParse(string Text, ref int Result)
         {
             return int.TryParse(Text, NumberStyles.Any, CultureInfo.InvariantCulture, out Result);
         }
 
-        public static bool InvariantParse_uint(string Text, UInt32 Result)
+        public static bool InvariantParse(string Text, UInt32 Result)
         {
             return UInt32.TryParse(Text, NumberStyles.Any, CultureInfo.InvariantCulture, out Result);
         }
 
-        public static bool InvariantParse_sng(string Text, ref float Result)
+        public static bool InvariantParse(string Text, ref float Result)
         {
             return float.TryParse(Text, NumberStyles.Any, CultureInfo.InvariantCulture, out Result);
         }
 
-        public static bool InvariantParse_dbl(string Text, ref double Result)
+        public static bool InvariantParse(string Text, ref double Result)
         {
             return double.TryParse(Text, NumberStyles.Any, CultureInfo.InvariantCulture, out Result);
         }
@@ -235,10 +235,10 @@ namespace SharpFlame.FileIO
                 return false;
             }
 
-            if ( !InvariantParse_ushort(VectorText.Parts[0], WZAngle.Direction) )
+            if ( !InvariantParse(VectorText.Parts[0], WZAngle.Direction) )
             {
                 int ErrorValue = 0;
-                if ( !InvariantParse_int(VectorText.Parts[0], ref ErrorValue) )
+                if ( !InvariantParse(VectorText.Parts[0], ref ErrorValue) )
                 {
                     return false;
                 }
@@ -261,11 +261,11 @@ namespace SharpFlame.FileIO
                 }
                 return true;
             }
-            if ( !InvariantParse_ushort(VectorText.Parts[1], WZAngle.Pitch) )
+            if ( !InvariantParse(VectorText.Parts[1], WZAngle.Pitch) )
             {
                 return false;
             }
-            if ( !InvariantParse_ushort(VectorText.Parts[2], WZAngle.Roll) )
+            if ( !InvariantParse(VectorText.Parts[2], WZAngle.Roll) )
             {
                 return false;
             }
@@ -284,7 +284,7 @@ namespace SharpFlame.FileIO
                 return false;
             }
             Text = Text.Replace("%", "");
-            if ( !InvariantParse_int(Text, ref Health) )
+            if ( !InvariantParse(Text, ref Health) )
             {
                 return false;
             }
@@ -309,7 +309,7 @@ namespace SharpFlame.FileIO
             int[] Positions = new int[3];
             for ( A = 0; A <= 2; A++ )
             {
-                if ( InvariantParse_int(VectorText.Parts[A], ref B) )
+                if ( InvariantParse(VectorText.Parts[A], ref B) )
                 {
                     Positions[A] = B;
                 }
@@ -473,7 +473,7 @@ namespace SharpFlame.FileIO
             {
                 return false;
             }
-            if ( IOUtil.InvariantParse_int(Positions.Parts[0], ref A) )
+            if ( IOUtil.InvariantParse(Positions.Parts[0], ref A) )
             {
                 Pos.X = A;
             }
@@ -481,7 +481,7 @@ namespace SharpFlame.FileIO
             {
                 return false;
             }
-            if ( IOUtil.InvariantParse_int(Positions.Parts[1], ref A) )
+            if ( IOUtil.InvariantParse(Positions.Parts[1], ref A) )
             {
                 Pos.Y = A;
             }

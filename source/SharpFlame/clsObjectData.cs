@@ -612,7 +612,7 @@ namespace SharpFlame
                 Body.ObjectDataLink.Connect(Bodies);
                 Body.Code = Fields[0];
                 SetComponentName(DataNames.ResultData, Body, ReturnResult);
-                IOUtil.InvariantParse_int(Fields[6], ref Body.Hitpoints);
+                IOUtil.InvariantParse(Fields[6], ref Body.Hitpoints);
                 Body.Designable = Fields[24] != "0";
                 Body.Attachment.Models.Add(GetModelForPIE(PIE_List, Fields[7].ToLower(), ReturnResult));
             }
@@ -626,7 +626,7 @@ namespace SharpFlame
                 Propulsion.ObjectDataLink.Connect(Propulsions);
                 Propulsion.Code = Fields[0];
                 SetComponentName(DataNames.ResultData, Propulsion, ReturnResult);
-                IOUtil.InvariantParse_int(Fields[7], ref Propulsion.HitPoints);
+                IOUtil.InvariantParse(Fields[7], ref Propulsion.HitPoints);
                 //.Propulsions(Propulsion_Num).PIE = LCase(DataPropulsion.Entries(Propulsion_Num).FieldValues(8))
                 Propulsion.Designable = Fields[11] != "0";
             }
@@ -701,7 +701,7 @@ namespace SharpFlame
                 Weapon.TurretObjectDataLink.Connect(Turrets);
                 Weapon.Code = Fields[0];
                 SetComponentName(DataNames.ResultData, Weapon, ReturnResult);
-                IOUtil.InvariantParse_int(Fields[7], ref Weapon.HitPoints);
+                IOUtil.InvariantParse(Fields[7], ref Weapon.HitPoints);
                 Weapon.Designable = Fields[51] != "0";
                 Weapon.Attachment.Models.Add(GetModelForPIE(PIE_List, Convert.ToString(Fields[8].ToLower()), ReturnResult));
                 Weapon.Attachment.Models.Add(GetModelForPIE(PIE_List, Fields[9].ToLower(), ReturnResult));
@@ -717,7 +717,7 @@ namespace SharpFlame
                 Sensor.TurretObjectDataLink.Connect(Turrets);
                 Sensor.Code = Fields[0];
                 SetComponentName(DataNames.ResultData, Sensor, ReturnResult);
-                IOUtil.InvariantParse_int(Fields[7], ref Sensor.HitPoints);
+                IOUtil.InvariantParse(Fields[7], ref Sensor.HitPoints);
                 Sensor.Designable = Fields[15] != "0";
                 switch ( Fields[11].ToLower() )
                 {
@@ -779,7 +779,7 @@ namespace SharpFlame
                 ECM.TurretObjectDataLink.Connect(Turrets);
                 ECM.Code = Fields[0];
                 SetComponentName(DataNames.ResultData, ECM, ReturnResult);
-                IOUtil.InvariantParse_int(Fields[7], ref ECM.HitPoints);
+                IOUtil.InvariantParse(Fields[7], ref ECM.HitPoints);
                 ECM.Designable = false;
                 ECM.Attachment.Models.Add(GetModelForPIE(PIE_List, Fields[8].ToLower(), ReturnResult));
             }
@@ -798,11 +798,11 @@ namespace SharpFlame
                     FeatureType.FeatureType = clsFeatureType.enumFeatureType.OilResource;
                 }
                 SetFeatureName(DataNames.ResultData, FeatureType, ReturnResult);
-                if ( !IOUtil.InvariantParse_int(Fields[1], ref FeatureType.Footprint.X) )
+                if ( !IOUtil.InvariantParse(Fields[1], ref FeatureType.Footprint.X) )
                 {
                     ReturnResult.WarningAdd("Feature footprint-x was not an integer for " + FeatureType.Code + ".");
                 }
-                if ( !IOUtil.InvariantParse_int(Fields[2], ref FeatureType.Footprint.Y) )
+                if ( !IOUtil.InvariantParse(Fields[2], ref FeatureType.Footprint.Y) )
                 {
                     ReturnResult.WarningAdd("Feature footprint-y was not an integer for " + FeatureType.Code + ".");
                 }
@@ -823,11 +823,11 @@ namespace SharpFlame
                 string[] StructurePIEs = Fields[21].ToLower().Split('@');
                 sXY_int StructureFootprint = new sXY_int();
                 string StructureBasePIE = Fields[22].ToLower();
-                if ( !IOUtil.InvariantParse_int(Fields[5], ref StructureFootprint.X) )
+                if ( !IOUtil.InvariantParse(Fields[5], ref StructureFootprint.X) )
                 {
                     ReturnResult.WarningAdd("Structure footprint-x was not an integer for " + StructureCode + ".");
                 }
-                if ( !IOUtil.InvariantParse_int(Fields[6], ref StructureFootprint.Y) )
+                if ( !IOUtil.InvariantParse(Fields[6], ref StructureFootprint.Y) )
                 {
                     ReturnResult.WarningAdd("Structure footprint-y was not an integer for " + StructureCode + ".");
                 }

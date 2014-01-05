@@ -47,7 +47,7 @@ namespace SharpFlame.Colors
 
         public virtual string GetINIOutput()
         {
-            return IOUtil.InvariantToString_sng( Red ) + ", " + IOUtil.InvariantToString_sng( Green ) + ", " + IOUtil.InvariantToString_sng( Blue );
+            return IOUtil.InvariantToString( Red ) + ", " + IOUtil.InvariantToString( Green ) + ", " + IOUtil.InvariantToString( Blue );
         }
 
         public virtual bool ReadINIText( SplitCommaText SplitText )
@@ -59,15 +59,15 @@ namespace SharpFlame.Colors
 
             sRGB_sng Colour = new sRGB_sng();
 
-            if( !IOUtil.InvariantParse_sng( SplitText.Parts[0], ref Colour.Red ) )
+            if( !IOUtil.InvariantParse( SplitText.Parts[0], ref Colour.Red ) )
             {
                 return false;
             }
-            if( !IOUtil.InvariantParse_sng( SplitText.Parts[1], ref Colour.Green ) )
+            if( !IOUtil.InvariantParse( SplitText.Parts[1], ref Colour.Green ) )
             {
                 return false;
             }
-            if( !IOUtil.InvariantParse_sng( SplitText.Parts[2], ref Colour.Blue ) )
+            if( !IOUtil.InvariantParse( SplitText.Parts[2], ref Colour.Blue ) )
             {
                 return false;
             }
@@ -98,7 +98,7 @@ namespace SharpFlame.Colors
 
         public override string GetINIOutput()
         {
-            return base.GetINIOutput() + ", " + IOUtil.InvariantToString_sng( Alpha );
+            return base.GetINIOutput() + ", " + IOUtil.InvariantToString( Alpha );
         }
 
         public override bool ReadINIText( SplitCommaText SplitText )
@@ -113,7 +113,7 @@ namespace SharpFlame.Colors
                 return false;
             }
 
-            if( !IOUtil.InvariantParse_sng( SplitText.Parts[3], ref Alpha ) )
+            if( !IOUtil.InvariantParse( SplitText.Parts[3], ref Alpha ) )
             {
                 Alpha = 1.0F;
             }

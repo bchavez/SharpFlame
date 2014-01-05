@@ -99,7 +99,7 @@ namespace SharpFlame.AppSettings
                     for ( int i = 0; i <= control.Keys.GetUpperBound(0); i++ )
                     {
                         Keys key = Keys.A;
-                        valueText += IOUtil.InvariantToString_int((Int32)key);
+                        valueText += IOUtil.InvariantToString((Int32)key);
                         if ( i < control.Keys.GetUpperBound(0) )
                         {
                             valueText += ",";
@@ -111,7 +111,7 @@ namespace SharpFlame.AppSettings
                         for ( int i = 0; i <= control.UnlessKeys.GetUpperBound(0); i++ )
                         {
                             Keys key = Keys.A;
-                            valueText += IOUtil.InvariantToString_int((Int32)key);
+                            valueText += IOUtil.InvariantToString((Int32)key);
                             if ( i < control.UnlessKeys.GetUpperBound(0) )
                             {
                                 valueText += ",";
@@ -141,31 +141,31 @@ namespace SharpFlame.AppSettings
                 }
                 else if ( item is Option<bool> )
                 {
-                    valueText = IOUtil.InvariantToString_bool(Convert.ToBoolean(optionValue));
+                    valueText = IOUtil.InvariantToString(Convert.ToBoolean(optionValue));
                 }
                 else if ( item is Option<byte> )
                 {
-                    valueText = IOUtil.InvariantToString_byte(Convert.ToByte(optionValue));
+                    valueText = IOUtil.InvariantToString(Convert.ToByte(optionValue));
                 }
                 else if ( item is Option<short> )
                 {
-                    valueText = IOUtil.InvariantToString_int((short)optionValue);
+                    valueText = IOUtil.InvariantToString((int)(short)optionValue);
                 }
                 else if ( item is Option<int> )
                 {
-                    valueText = IOUtil.InvariantToString_int(Convert.ToInt32(optionValue));
+                    valueText = IOUtil.InvariantToString(Convert.ToInt32(optionValue));
                 }
                 else if ( item is Option<UInt32> )
                 {
-                    valueText = IOUtil.InvariantToString_uint(Convert.ToUInt32(optionValue));
+                    valueText = IOUtil.InvariantToString(Convert.ToUInt32(optionValue));
                 }
                 else if ( item is Option<Single> )
                 {
-                    valueText = IOUtil.InvariantToString_sng(Convert.ToSingle(Convert.ToSingle(optionValue)));
+                    valueText = IOUtil.InvariantToString(Convert.ToSingle(Convert.ToSingle(optionValue)));
                 }
                 else if ( item is Option<double> )
                 {
-                    valueText = IOUtil.InvariantToString_dbl(Convert.ToDouble(optionValue));
+                    valueText = IOUtil.InvariantToString(Convert.ToDouble(optionValue));
                 }
                 else if ( item is Option<string> )
                 {
@@ -216,7 +216,7 @@ namespace SharpFlame.AppSettings
                     for ( int j = 0; j <= keysText.GetUpperBound(0); j++ )
                     {
                         int number = 0;
-                        if ( IOUtil.InvariantParse_int(keysText[j], ref number) )
+                        if ( IOUtil.InvariantParse(keysText[j], ref number) )
                         {
                             keys[j] = (Keys)number;
                         }
@@ -229,7 +229,7 @@ namespace SharpFlame.AppSettings
                     for ( int j = 0; j <= unlessKeysText.GetUpperBound(0); j++ )
                     {
                         int number = 0;
-                        if ( IOUtil.InvariantParse_int(unlessKeysText[j], ref number) )
+                        if ( IOUtil.InvariantParse(unlessKeysText[j], ref number) )
                         {
                             unlessKeys[j] = (Keys)number;
                         }
@@ -314,7 +314,7 @@ namespace SharpFlame.AppSettings
                 else if ( item is Option<bool> )
                 {
                     bool value = default(bool);
-                    if ( !IOUtil.InvariantParse_bool(Convert.ToString(INIProperty.Value), ref value) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref value) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -328,7 +328,7 @@ namespace SharpFlame.AppSettings
                 else if ( item is Option<byte> )
                 {
                     byte value = 0;
-                    if ( !IOUtil.InvariantParse_byte(Convert.ToString(INIProperty.Value), ref value) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref value) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -342,7 +342,7 @@ namespace SharpFlame.AppSettings
                 else if ( item is Option<short> )
                 {
                     short value = 0;
-                    if ( !IOUtil.InvariantParse_short(Convert.ToString(INIProperty.Value), ref value) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref value) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -356,7 +356,7 @@ namespace SharpFlame.AppSettings
                 else if ( item is Option<int> )
                 {
                     int value = 0;
-                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref value) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref value) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -370,7 +370,7 @@ namespace SharpFlame.AppSettings
                 else if ( item is Option<UInt32> )
                 {
                     UInt32 value = 0;
-                    if ( !IOUtil.InvariantParse_uint(Convert.ToString(INIProperty.Value), value) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), value) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -384,7 +384,7 @@ namespace SharpFlame.AppSettings
                 else if ( item is Option<Single> )
                 {
                     float value = 0;
-                    if ( !IOUtil.InvariantParse_sng(Convert.ToString(INIProperty.Value), ref value) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref value) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -398,7 +398,7 @@ namespace SharpFlame.AppSettings
                 else if ( item is Option<double> )
                 {
                     double value = 0;
-                    if ( !IOUtil.InvariantParse_dbl(Convert.ToString(INIProperty.Value), ref value) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref value) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }

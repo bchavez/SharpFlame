@@ -792,7 +792,7 @@ namespace SharpFlame
                         int Rotation = 0;
                         try
                         {
-                            IOUtil.InvariantParse_int(Program.frmMainInstance.txtNewObjectRotation.Text, ref Rotation);
+                            IOUtil.InvariantParse(Program.frmMainInstance.txtNewObjectRotation.Text, ref Rotation);
                             if ( Rotation < 0 | Rotation > 359 )
                             {
                                 Rotation = 0;

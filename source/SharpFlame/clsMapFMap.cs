@@ -118,7 +118,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "turretcount" )
                 {
                     int NewTurretCount = 0;
-                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref NewTurretCount) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref NewTurretCount) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -199,7 +199,7 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "id" )
                 {
-                    if ( !IOUtil.InvariantParse_uint(Convert.ToString(INIProperty.Value), Objects[INISectionNum].ID) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), Objects[INISectionNum].ID) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -207,7 +207,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "priority" )
                 {
                     Int32 temp_Result = Objects[INISectionNum].Priority;
-                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref temp_Result) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -228,11 +228,11 @@ namespace SharpFlame
                         CommaText[A] = Convert.ToString(CommaText[A].Trim());
                     }
                     sXY_int Pos = new sXY_int();
-                    if ( !IOUtil.InvariantParse_int(CommaText[0], ref Pos.X) )
+                    if ( !IOUtil.InvariantParse(CommaText[0], ref Pos.X) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    if ( !IOUtil.InvariantParse_int(CommaText[1], ref Pos.Y) )
+                    if ( !IOUtil.InvariantParse(CommaText[1], ref Pos.Y) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -248,7 +248,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "heading" )
                 {
                     double dblTemp = 0;
-                    if ( !IOUtil.InvariantParse_dbl(Convert.ToString(INIProperty.Value), ref dblTemp) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref dblTemp) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -265,7 +265,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "health" )
                 {
                     double NewHealth = 0;
-                    if ( !IOUtil.InvariantParse_dbl(Convert.ToString(INIProperty.Value), ref NewHealth) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref NewHealth) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -278,7 +278,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "walltype" )
                 {
                     int WallType = -1;
-                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref WallType) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref WallType) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -486,22 +486,22 @@ namespace SharpFlame
                     File.Property_Append("Tileset", "Rockies");
                 }
 
-                File.Property_Append("Size", IOUtil.InvariantToString_int(Terrain.TileSize.X) + ", " + IOUtil.InvariantToString_int(Terrain.TileSize.Y));
+                File.Property_Append("Size", IOUtil.InvariantToString(Terrain.TileSize.X) + ", " + IOUtil.InvariantToString(Terrain.TileSize.Y));
 
-                File.Property_Append("AutoScrollLimits", IOUtil.InvariantToString_bool(InterfaceOptions.AutoScrollLimits));
-                File.Property_Append("ScrollMinX", IOUtil.InvariantToString_int(InterfaceOptions.ScrollMin.X));
-                File.Property_Append("ScrollMinY", IOUtil.InvariantToString_int(InterfaceOptions.ScrollMin.Y));
-                File.Property_Append("ScrollMaxX", IOUtil.InvariantToString_uint(InterfaceOptions.ScrollMax.X));
-                File.Property_Append("ScrollMaxY", IOUtil.InvariantToString_uint(InterfaceOptions.ScrollMax.Y));
+                File.Property_Append("AutoScrollLimits", IOUtil.InvariantToString(InterfaceOptions.AutoScrollLimits));
+                File.Property_Append("ScrollMinX", IOUtil.InvariantToString(InterfaceOptions.ScrollMin.X));
+                File.Property_Append("ScrollMinY", IOUtil.InvariantToString(InterfaceOptions.ScrollMin.Y));
+                File.Property_Append("ScrollMaxX", IOUtil.InvariantToString(InterfaceOptions.ScrollMax.X));
+                File.Property_Append("ScrollMaxY", IOUtil.InvariantToString(InterfaceOptions.ScrollMax.Y));
 
                 File.Property_Append("Name", InterfaceOptions.CompileName);
                 File.Property_Append("Players", InterfaceOptions.CompileMultiPlayers);
-                File.Property_Append("XPlayerLev", IOUtil.InvariantToString_bool(InterfaceOptions.CompileMultiXPlayers));
+                File.Property_Append("XPlayerLev", IOUtil.InvariantToString(InterfaceOptions.CompileMultiXPlayers));
                 File.Property_Append("Author", InterfaceOptions.CompileMultiAuthor);
                 File.Property_Append("License", InterfaceOptions.CompileMultiLicense);
                 if ( InterfaceOptions.CampaignGameType >= 0 )
                 {
-                    File.Property_Append("CampType", IOUtil.InvariantToString_int(InterfaceOptions.CampaignGameType));
+                    File.Property_Append("CampType", IOUtil.InvariantToString(InterfaceOptions.CampaignGameType));
                 }
             }
             catch ( Exception ex )
@@ -842,7 +842,7 @@ namespace SharpFlame
                 for ( A = 0; A <= Units.Count - 1; A++ )
                 {
                     Unit = Units[A];
-                    File.SectionName_Append(IOUtil.InvariantToString_int(A));
+                    File.SectionName_Append(IOUtil.InvariantToString(A));
                     switch ( Unit.Type.Type )
                     {
                         case clsUnitType.enumType.Feature:
@@ -853,7 +853,7 @@ namespace SharpFlame
                             File.Property_Append("Type", "Structure, " + StructureType.Code);
                             if ( StructureType.WallLink.IsConnected )
                             {
-                                File.Property_Append("WallType", IOUtil.InvariantToString_int(StructureType.WallLink.ArrayPosition));
+                                File.Property_Append("WallType", IOUtil.InvariantToString(StructureType.WallLink.ArrayPosition));
                             }
                             break;
                         case clsUnitType.enumType.PlayerDroid:
@@ -877,7 +877,7 @@ namespace SharpFlame
                                 {
                                     File.Property_Append("Propulsion", Droid.Propulsion.Code);
                                 }
-                                File.Property_Append("TurretCount", IOUtil.InvariantToString_byte(Droid.TurretCount));
+                                File.Property_Append("TurretCount", IOUtil.InvariantToString(Droid.TurretCount));
                                 if ( Droid.Turret1 != null )
                                 {
                                     if ( Droid.Turret1.GetTurretTypeName(ref Text) )
@@ -905,14 +905,14 @@ namespace SharpFlame
                             WarningCount++;
                             break;
                     }
-                    File.Property_Append("ID", IOUtil.InvariantToString_uint(Unit.ID));
-                    File.Property_Append("Priority", IOUtil.InvariantToString_int(Unit.SavePriority));
-                    File.Property_Append("Pos", IOUtil.InvariantToString_int(Unit.Pos.Horizontal.X) + ", " + IOUtil.InvariantToString_int(Unit.Pos.Horizontal.Y));
-                    File.Property_Append("Heading", IOUtil.InvariantToString_int(Unit.Rotation));
+                    File.Property_Append("ID", IOUtil.InvariantToString(Unit.ID));
+                    File.Property_Append("Priority", IOUtil.InvariantToString(Unit.SavePriority));
+                    File.Property_Append("Pos", IOUtil.InvariantToString(Unit.Pos.Horizontal.X) + ", " + IOUtil.InvariantToString(Unit.Pos.Horizontal.Y));
+                    File.Property_Append("Heading", IOUtil.InvariantToString(Unit.Rotation));
                     File.Property_Append("UnitGroup", Unit.UnitGroup.GetFMapINIPlayerText());
                     if ( Unit.Health < 1.0D )
                     {
-                        File.Property_Append("Health", IOUtil.InvariantToString_dbl(Unit.Health));
+                        File.Property_Append("Health", IOUtil.InvariantToString(Unit.Health));
                     }
                     if ( Unit.Label != null )
                     {
@@ -945,11 +945,11 @@ namespace SharpFlame
                 for ( A = 0; A <= Gateways.Count - 1; A++ )
                 {
                     Gateway = Gateways[A];
-                    File.SectionName_Append(IOUtil.InvariantToString_int(A));
-                    File.Property_Append("AX", IOUtil.InvariantToString_int(Gateway.PosA.X));
-                    File.Property_Append("AY", IOUtil.InvariantToString_int(Gateway.PosA.Y));
-                    File.Property_Append("BX", IOUtil.InvariantToString_int(Gateway.PosB.X));
-                    File.Property_Append("BY", IOUtil.InvariantToString_int(Gateway.PosB.Y));
+                    File.SectionName_Append(IOUtil.InvariantToString(A));
+                    File.Property_Append("AX", IOUtil.InvariantToString(Gateway.PosA.X));
+                    File.Property_Append("AY", IOUtil.InvariantToString(Gateway.PosA.Y));
+                    File.Property_Append("BX", IOUtil.InvariantToString(Gateway.PosB.X));
+                    File.Property_Append("BY", IOUtil.InvariantToString(Gateway.PosB.Y));
                     File.Gap_Append();
                 }
             }
@@ -1220,11 +1220,11 @@ namespace SharpFlame
                         CommaText[A] = CommaText[A].Trim();
                     }
                     sXY_int NewSize = new sXY_int();
-                    if ( !IOUtil.InvariantParse_int(CommaText[0], ref NewSize.X) )
+                    if ( !IOUtil.InvariantParse(CommaText[0], ref NewSize.X) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    if ( !IOUtil.InvariantParse_int(CommaText[1], ref NewSize.Y) )
+                    if ( !IOUtil.InvariantParse(CommaText[1], ref NewSize.Y) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1236,35 +1236,35 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "autoscrolllimits" )
                 {
-                    if ( !IOUtil.InvariantParse_bool(Convert.ToString(INIProperty.Value), ref InterfaceOptions.AutoScrollLimits) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref InterfaceOptions.AutoScrollLimits) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "scrollminx" )
                 {
-                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref InterfaceOptions.ScrollMin.X) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref InterfaceOptions.ScrollMin.X) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "scrollminy" )
                 {
-                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref InterfaceOptions.ScrollMin.Y) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref InterfaceOptions.ScrollMin.Y) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "scrollmaxx" )
                 {
-                    if ( !IOUtil.InvariantParse_uint(Convert.ToString(INIProperty.Value), InterfaceOptions.ScrollMax.X) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), InterfaceOptions.ScrollMax.X) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "scrollmaxy" )
                 {
-                    if ( !IOUtil.InvariantParse_uint(Convert.ToString(INIProperty.Value), InterfaceOptions.ScrollMax.Y) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), InterfaceOptions.ScrollMax.Y) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1279,7 +1279,7 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "xplayerlev" )
                 {
-                    if ( !IOUtil.InvariantParse_bool(Convert.ToString(INIProperty.Value), ref InterfaceOptions.CompileMultiXPlayers) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref InterfaceOptions.CompileMultiXPlayers) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1298,7 +1298,7 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "camptype" )
                 {
-                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref InterfaceOptions.CampaignGameType) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref InterfaceOptions.CampaignGameType) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1875,7 +1875,7 @@ namespace SharpFlame
                                 UInt32 PlayerNum = 0;
                                 try
                                 {
-                                    if ( !IOUtil.InvariantParse_uint(INIObjects.Objects[A].UnitGroup, PlayerNum) )
+                                    if ( !IOUtil.InvariantParse(INIObjects.Objects[A].UnitGroup, PlayerNum) )
                                     {
                                         throw (new Exception());
                                     }
@@ -1974,7 +1974,7 @@ namespace SharpFlame
                 if ( (string)INIProperty.Name == "ax" )
                 {
                     int temp_Result = Gateways[INISectionNum].PosA.X;
-                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref temp_Result) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1982,7 +1982,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "ay" )
                 {
                     Int32 temp_Result2 = Gateways[INISectionNum].PosA.Y;
-                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result2) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref temp_Result2) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1990,7 +1990,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "bx" )
                 {
                     Int32 temp_Result3 = Gateways[INISectionNum].PosB.X;
-                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result3) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref temp_Result3) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1998,7 +1998,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "by" )
                 {
                     int temp_Result4 = Gateways[INISectionNum].PosB.Y;
-                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result4) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref temp_Result4) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }

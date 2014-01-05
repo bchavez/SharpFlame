@@ -501,8 +501,8 @@ namespace SharpFlame
             HeightSetPalette[7] = (byte)255;
             for ( int A = 0; A <= 7; A++ )
             {
-                tabHeightSetL.TabPages[A].Text = IOUtil.InvariantToString_byte(HeightSetPalette[A]);
-                tabHeightSetR.TabPages[A].Text = IOUtil.InvariantToString_byte(HeightSetPalette[A]);
+                tabHeightSetL.TabPages[A].Text = IOUtil.InvariantToString(HeightSetPalette[A]);
+                tabHeightSetR.TabPages[A].Text = IOUtil.InvariantToString(HeightSetPalette[A]);
             }
             tabHeightSetL.SelectedIndex = 1;
             tabHeightSetR.SelectedIndex = 0;
@@ -962,19 +962,19 @@ namespace SharpFlame
             sXY_int Offset = new sXY_int();
             double Max = Constants.MapMaxSize;
 
-            if ( !IOUtil.InvariantParse_int(txtSizeX.Text, ref NewSize.X) )
+            if ( !IOUtil.InvariantParse(txtSizeX.Text, ref NewSize.X) )
             {
                 return;
             }
-            if ( !IOUtil.InvariantParse_int(txtSizeY.Text, ref NewSize.Y) )
+            if ( !IOUtil.InvariantParse(txtSizeY.Text, ref NewSize.Y) )
             {
                 return;
             }
-            if ( !IOUtil.InvariantParse_int(txtOffsetX.Text, ref Offset.X) )
+            if ( !IOUtil.InvariantParse(txtOffsetX.Text, ref Offset.X) )
             {
                 return;
             }
-            if ( !IOUtil.InvariantParse_int(txtOffsetY.Text, ref Offset.Y) )
+            if ( !IOUtil.InvariantParse(txtOffsetY.Text, ref Offset.Y) )
             {
                 return;
             }
@@ -1037,8 +1037,8 @@ namespace SharpFlame
             }
             else
             {
-                txtSizeX.Text = IOUtil.InvariantToString_int(Map.Terrain.TileSize.X);
-                txtSizeY.Text = IOUtil.InvariantToString_int(Map.Terrain.TileSize.Y);
+                txtSizeX.Text = IOUtil.InvariantToString(Map.Terrain.TileSize.X);
+                txtSizeY.Text = IOUtil.InvariantToString(Map.Terrain.TileSize.Y);
                 txtOffsetX.Text = "0";
                 txtOffsetY.Text = "0";
             }
@@ -1105,7 +1105,7 @@ namespace SharpFlame
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
             string strScavenger = Interaction.InputBox("Enter the player number for scavenger units:", "", "", -1, -1);
             byte ScavengerNum = 0;
-            if ( !IOUtil.InvariantParse_byte(strScavenger, ref ScavengerNum) )
+            if ( !IOUtil.InvariantParse(strScavenger, ref ScavengerNum) )
             {
                 MessageBox.Show("Unable to save FME: entered scavenger number is not a number.");
                 return;
@@ -1297,7 +1297,7 @@ namespace SharpFlame
             sXY_int FinishXY = new sXY_int();
             sXY_int Pos = new sXY_int();
 
-            if ( !IOUtil.InvariantParse_dbl(txtHeightOffset.Text, ref Offset) )
+            if ( !IOUtil.InvariantParse(txtHeightOffset.Text, ref Offset) )
             {
                 return;
             }
@@ -1537,7 +1537,7 @@ namespace SharpFlame
             }
 
             int Angle = 0;
-            if ( !IOUtil.InvariantParse_int(txtObjectRotation.Text, ref Angle) )
+            if ( !IOUtil.InvariantParse(txtObjectRotation.Text, ref Angle) )
             {
                 //MsgBox("Invalid rotation value.", (MsgBoxStyle.OkOnly or MsgBoxStyle.Information), "")
                 //SelectedObject_Changed()
@@ -1706,10 +1706,10 @@ namespace SharpFlame
                 clsMap.clsUnit with_1 = Map.SelectedUnits[0];
                 lblObjectType.Text = Convert.ToString(with_1.Type.GetDisplayTextCode());
                 ObjectPlayerNumControl.Target.Item = with_1.UnitGroup;
-                txtObjectRotation.Text = IOUtil.InvariantToString_int(Convert.ToInt32(with_1.Rotation));
-                txtObjectID.Text = IOUtil.InvariantToString_uint(with_1.ID);
-                txtObjectPriority.Text = IOUtil.InvariantToString_int(Convert.ToInt32(with_1.SavePriority));
-                txtObjectHealth.Text = IOUtil.InvariantToString_dbl(Convert.ToDouble(with_1.Health * 100.0D));
+                txtObjectRotation.Text = IOUtil.InvariantToString(Convert.ToInt32(with_1.Rotation));
+                txtObjectID.Text = IOUtil.InvariantToString(with_1.ID);
+                txtObjectPriority.Text = IOUtil.InvariantToString(Convert.ToInt32(with_1.SavePriority));
+                txtObjectHealth.Text = IOUtil.InvariantToString(Convert.ToDouble(with_1.Health * 100.0D));
                 lblObjectType.Enabled = true;
                 ObjectPlayerNumControl.Enabled = true;
                 txtObjectRotation.Enabled = true;
@@ -2488,7 +2488,7 @@ namespace SharpFlame
             string Text = "";
             double Height_dbl = 0;
 
-            if ( !IOUtil.InvariantParse_dbl(txtHeightSetL.Text, ref Height_dbl) )
+            if ( !IOUtil.InvariantParse(txtHeightSetL.Text, ref Height_dbl) )
             {
                 return;
             }
@@ -2498,7 +2498,7 @@ namespace SharpFlame
             {
                 tabHeightSetL_SelectedIndexChanged(null, null);
             }
-            Text = IOUtil.InvariantToString_byte(Height);
+            Text = IOUtil.InvariantToString(Height);
             tabHeightSetL.TabPages[tabHeightSetL.SelectedIndex].Text = Text;
             tabHeightSetR.TabPages[tabHeightSetL.SelectedIndex].Text = Text;
         }
@@ -2509,7 +2509,7 @@ namespace SharpFlame
             string Text = "";
             double Height_dbl = 0;
 
-            if ( !IOUtil.InvariantParse_dbl(txtHeightSetL.Text, ref Height_dbl) )
+            if ( !IOUtil.InvariantParse(txtHeightSetL.Text, ref Height_dbl) )
             {
                 return;
             }
@@ -2519,19 +2519,19 @@ namespace SharpFlame
             {
                 tabHeightSetL_SelectedIndexChanged(null, null);
             }
-            Text = IOUtil.InvariantToString_byte(Height);
+            Text = IOUtil.InvariantToString(Height);
             tabHeightSetL.TabPages[tabHeightSetR.SelectedIndex].Text = Text;
             tabHeightSetR.TabPages[tabHeightSetR.SelectedIndex].Text = Text;
         }
 
         public void tabHeightSetL_SelectedIndexChanged(object sender, EventArgs e)
         {
-            txtHeightSetL.Text = IOUtil.InvariantToString_byte(HeightSetPalette[tabHeightSetL.SelectedIndex]);
+            txtHeightSetL.Text = IOUtil.InvariantToString(HeightSetPalette[tabHeightSetL.SelectedIndex]);
         }
 
         public void tabHeightSetR_SelectedIndexChanged(object sender, EventArgs e)
         {
-            txtHeightSetR.Text = IOUtil.InvariantToString_byte(HeightSetPalette[tabHeightSetR.SelectedIndex]);
+            txtHeightSetR.Text = IOUtil.InvariantToString(HeightSetPalette[tabHeightSetR.SelectedIndex]);
         }
 
         public void tsbSelectionObjects_Click(Object sender, EventArgs e)
@@ -2609,7 +2609,7 @@ namespace SharpFlame
             sXY_int Pos = new sXY_int();
             double dblTemp = 0;
 
-            if ( !IOUtil.InvariantParse_dbl(txtHeightMultiply.Text, ref dblTemp) )
+            if ( !IOUtil.InvariantParse(txtHeightMultiply.Text, ref dblTemp) )
             {
                 return;
             }
@@ -2728,7 +2728,7 @@ namespace SharpFlame
                 return;
             }
             int Priority = 0;
-            if ( !IOUtil.InvariantParse_int(txtObjectPriority.Text, ref Priority) )
+            if ( !IOUtil.InvariantParse(txtObjectPriority.Text, ref Priority) )
             {
                 //MsgBox("Entered text is not a valid number.", (MsgBoxStyle.OkOnly or MsgBoxStyle.Information), "")
                 //SelectedObject_Changed()
@@ -2781,7 +2781,7 @@ namespace SharpFlame
             }
 
             double Health = 0;
-            if ( !IOUtil.InvariantParse_dbl(txtObjectHealth.Text, ref Health) )
+            if ( !IOUtil.InvariantParse(txtObjectHealth.Text, ref Health) )
             {
                 //SelectedObject_Changed()
                 //todo
@@ -3590,7 +3590,7 @@ namespace SharpFlame
             }
 
             txtHeightSetL.Text =
-                IOUtil.InvariantToString_byte(Convert.ToByte(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height));
+                IOUtil.InvariantToString(Convert.ToByte(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height));
             txtHeightSetL.Focus();
             MapViewControl.OpenGLControl.Focus();
         }
@@ -3605,7 +3605,7 @@ namespace SharpFlame
                 return;
             }
 
-            txtHeightSetR.Text = IOUtil.InvariantToString_byte(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height);
+            txtHeightSetR.Text = IOUtil.InvariantToString(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height);
             txtHeightSetR.Focus();
             MapViewControl.OpenGLControl.Focus();
         }
@@ -3827,8 +3827,8 @@ namespace SharpFlame
                 {
                     clsMap.clsScriptPosition ScriptPosition = (clsMap.clsScriptPosition)_SelectedScriptMarker;
                     txtScriptMarkerLabel.Text = ScriptPosition.Label;
-                    txtScriptMarkerX.Text = IOUtil.InvariantToString_int(ScriptPosition.PosX);
-                    txtScriptMarkerY.Text = IOUtil.InvariantToString_int(ScriptPosition.PosY);
+                    txtScriptMarkerX.Text = IOUtil.InvariantToString(ScriptPosition.PosX);
+                    txtScriptMarkerY.Text = IOUtil.InvariantToString(ScriptPosition.PosY);
                     txtScriptMarkerLabel.Enabled = true;
                     txtScriptMarkerX.Enabled = true;
                     txtScriptMarkerY.Enabled = true;
@@ -3837,10 +3837,10 @@ namespace SharpFlame
                 {
                     clsMap.clsScriptArea ScriptArea = (clsMap.clsScriptArea)_SelectedScriptMarker;
                     txtScriptMarkerLabel.Text = ScriptArea.Label;
-                    txtScriptMarkerX.Text = IOUtil.InvariantToString_int(ScriptArea.PosAX);
-                    txtScriptMarkerY.Text = IOUtil.InvariantToString_int(ScriptArea.PosAY);
-                    txtScriptMarkerX2.Text = IOUtil.InvariantToString_int(ScriptArea.PosBX);
-                    txtScriptMarkerY2.Text = IOUtil.InvariantToString_int(ScriptArea.PosBY);
+                    txtScriptMarkerX.Text = IOUtil.InvariantToString(ScriptArea.PosAX);
+                    txtScriptMarkerY.Text = IOUtil.InvariantToString(ScriptArea.PosAY);
+                    txtScriptMarkerX2.Text = IOUtil.InvariantToString(ScriptArea.PosBX);
+                    txtScriptMarkerY2.Text = IOUtil.InvariantToString(ScriptArea.PosBY);
                     txtScriptMarkerLabel.Enabled = true;
                     txtScriptMarkerX.Enabled = true;
                     txtScriptMarkerY.Enabled = true;
@@ -3958,14 +3958,14 @@ namespace SharpFlame
             {
                 clsMap.clsScriptPosition ScriptPosition = (clsMap.clsScriptPosition)_SelectedScriptMarker;
                 int temp_Result = ScriptPosition.PosX;
-                IOUtil.InvariantParse_int(txtScriptMarkerX.Text, ref temp_Result);
+                IOUtil.InvariantParse(txtScriptMarkerX.Text, ref temp_Result);
                 ScriptPosition.PosX = temp_Result;
             }
             else if ( _SelectedScriptMarker is clsMap.clsScriptArea )
             {
                 clsMap.clsScriptArea ScriptArea = (clsMap.clsScriptArea)_SelectedScriptMarker;
                 int temp_Result2 = ScriptArea.PosAX;
-                IOUtil.InvariantParse_int(txtScriptMarkerX.Text, ref temp_Result2);
+                IOUtil.InvariantParse(txtScriptMarkerX.Text, ref temp_Result2);
                 ScriptArea.PosAX = temp_Result2;
             }
             else
@@ -3992,14 +3992,14 @@ namespace SharpFlame
             {
                 clsMap.clsScriptPosition ScriptPosition = (clsMap.clsScriptPosition)_SelectedScriptMarker;
                 int temp_Result = ScriptPosition.PosY;
-                IOUtil.InvariantParse_int(txtScriptMarkerY.Text, ref temp_Result);
+                IOUtil.InvariantParse(txtScriptMarkerY.Text, ref temp_Result);
                 ScriptPosition.PosY = temp_Result;
             }
             else if ( _SelectedScriptMarker is clsMap.clsScriptArea )
             {
                 clsMap.clsScriptArea ScriptArea = (clsMap.clsScriptArea)_SelectedScriptMarker;
                 int temp_Result2 = ScriptArea.PosAY;
-                IOUtil.InvariantParse_int(txtScriptMarkerY.Text, ref temp_Result2);
+                IOUtil.InvariantParse(txtScriptMarkerY.Text, ref temp_Result2);
                 ScriptArea.PosAY = temp_Result2;
             }
             else
@@ -4026,7 +4026,7 @@ namespace SharpFlame
             {
                 clsMap.clsScriptArea ScriptArea = (clsMap.clsScriptArea)_SelectedScriptMarker;
                 int temp_Result = ScriptArea.PosBX;
-                IOUtil.InvariantParse_int(txtScriptMarkerX2.Text, ref temp_Result);
+                IOUtil.InvariantParse(txtScriptMarkerX2.Text, ref temp_Result);
                 ScriptArea.PosBX = temp_Result;
             }
             else
@@ -4053,7 +4053,7 @@ namespace SharpFlame
             {
                 clsMap.clsScriptArea ScriptArea = (clsMap.clsScriptArea)_SelectedScriptMarker;
                 int temp_Result = ScriptArea.PosBY;
-                IOUtil.InvariantParse_int(txtScriptMarkerY2.Text, ref temp_Result);
+                IOUtil.InvariantParse(txtScriptMarkerY2.Text, ref temp_Result);
                 ScriptArea.PosBY = temp_Result;
             }
             else
