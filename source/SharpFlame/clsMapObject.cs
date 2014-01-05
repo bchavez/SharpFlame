@@ -97,7 +97,7 @@ namespace SharpFlame
 
             public string GetINIPosition()
             {
-                return IOUtil.InvariantToString(Pos.Horizontal.X) + ", " + IOUtil.InvariantToString(Pos.Horizontal.Y) + ", 0";
+                return Pos.Horizontal.X.ToStringInvariant() + ", " + Pos.Horizontal.Y.ToStringInvariant() + ", 0";
             }
 
             public string GetINIRotation()
@@ -115,17 +115,17 @@ namespace SharpFlame
                     Rotation16 += App.INIRotationMax;
                 }
 
-                return IOUtil.InvariantToString(Rotation16) + ", 0, 0";
+                return Rotation16.ToStringInvariant() + ", 0, 0";
             }
 
             public string GetINIHealthPercent()
             {
-                return IOUtil.InvariantToString((int)(MathUtil.Clamp_dbl(Health * 100.0D, 1.0D, 100.0D))) + "%";
+                return ((int)(MathUtil.Clamp_dbl(Health * 100.0D, 1.0D, 100.0D))).ToStringInvariant() + "%";
             }
 
             public string GetPosText()
             {
-                return IOUtil.InvariantToString(Pos.Horizontal.X) + ", " + IOUtil.InvariantToString(Pos.Horizontal.Y);
+                return Pos.Horizontal.X.ToStringInvariant() + ", " + Pos.Horizontal.Y.ToStringInvariant();
             }
 
             public App.sResult SetLabel(string Text)
@@ -189,12 +189,12 @@ namespace SharpFlame
                         default:
                             return;
                     }
-                    File.AppendSectionName("object_" + IOUtil.InvariantToString(MapLink.ArrayPosition));
-                    File.AppendProperty("id", IOUtil.InvariantToString(ID));
+                    File.AppendSectionName("object_" + MapLink.ArrayPosition.ToStringInvariant());
+                    File.AppendProperty("id", ID.ToStringInvariant());
                     if ( PlayerCount >= 0 ) //not an FMap
                     {
-                        File.AppendProperty("type", IOUtil.InvariantToString(TypeNum));
-                        File.AppendProperty("player", IOUtil.InvariantToString(UnitGroup.GetPlayerNum(PlayerCount)));
+                        File.AppendProperty("type", TypeNum.ToStringInvariant());
+                        File.AppendProperty("player", UnitGroup.GetPlayerNum(PlayerCount).ToStringInvariant());
                     }
                     File.AppendProperty("label", _Label);
                     File.Gap_Append();
@@ -416,7 +416,7 @@ namespace SharpFlame
                 }
                 else
                 {
-                    return IOUtil.InvariantToString(WZ_StartPos);
+                    return WZ_StartPos.ToStringInvariant();
                 }
             }
 
@@ -424,11 +424,11 @@ namespace SharpFlame
             {
                 if ( WZ_StartPos < 0 | WZ_StartPos >= Constants.PlayerCountMax )
                 {
-                    return IOUtil.InvariantToString(7);
+                    return 7.ToStringInvariant();
                 }
                 else
                 {
-                    return IOUtil.InvariantToString(WZ_StartPos);
+                    return WZ_StartPos.ToStringInvariant();
                 }
             }
 

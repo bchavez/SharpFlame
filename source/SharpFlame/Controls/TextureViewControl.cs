@@ -325,7 +325,7 @@ namespace SharpFlame.Controls
                                 goto EndOfTextures4;
                             }
                             TextLabel = new clsTextLabel();
-                            TextLabel.Text = IOUtil.InvariantToString(Num);
+                            TextLabel.Text = Num.ToStringInvariant();
                             TextLabel.SizeY = 24.0F;
                             TextLabel.Colour.Red = 1.0F;
                             TextLabel.Colour.Green = 1.0F;

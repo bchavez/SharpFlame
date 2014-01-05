@@ -27,7 +27,7 @@ namespace SharpFlame
                 return 0;
             }
             Result = (int)(Conversion.Int(MathUtil.Clamp_dbl(dblTemp, Min, Max) * Multiplier));
-            TextBoxToValidate.Text = IOUtil.InvariantToString((float)(Result / Multiplier));
+            TextBoxToValidate.Text = ((float)(Result / Multiplier)).ToStringInvariant();
             return Result;
         }
 
@@ -324,7 +324,7 @@ namespace SharpFlame
             Generator.Map.RandomizeHeights(Generator.LevelCount);
 
             Generator.Map.InterfaceOptions = new clsMap.clsInterfaceOptions();
-            Generator.Map.InterfaceOptions.CompileMultiPlayers = IOUtil.InvariantToString(Generator.GetTotalPlayerCount);
+            Generator.Map.InterfaceOptions.CompileMultiPlayers = Generator.GetTotalPlayerCount.ToStringInvariant();
 
             _Owner.NewMainMap(Generator.Map);
 

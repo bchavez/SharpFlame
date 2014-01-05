@@ -1525,7 +1525,7 @@ namespace SharpFlame
             DateTime DateNow = DateTime.Now;
             string Path = "";
 
-            Path = App.AutoSavePath + "autosaved-" + IOUtil.InvariantToString(DateNow.Year) + "-" + App.MinDigits(DateNow.Month, 2) + "-" +
+            Path = App.AutoSavePath + "autosaved-" + DateNow.Year.ToStringInvariant() + "-" + App.MinDigits(DateNow.Month, 2) + "-" +
                    App.MinDigits(DateNow.Day, 2) + "-" + App.MinDigits(DateNow.Hour, 2) + "-" + App.MinDigits(DateNow.Minute, 2) + "-" +
                    App.MinDigits(DateNow.Second, 2) + "-" + App.MinDigits(DateNow.Millisecond, 3) + ".fmap";
 
@@ -3447,7 +3447,7 @@ namespace SharpFlame
             {
                 //set to default
                 CompileName = "";
-                CompileMultiPlayers = IOUtil.InvariantToString(2);
+                CompileMultiPlayers = 2.ToStringInvariant();
                 CompileMultiXPlayers = false;
                 CompileMultiAuthor = "";
                 CompileMultiLicense = "";

@@ -47,7 +47,7 @@ namespace SharpFlame.Colors
 
         public virtual string GetINIOutput()
         {
-            return IOUtil.InvariantToString( Red ) + ", " + IOUtil.InvariantToString( Green ) + ", " + IOUtil.InvariantToString( Blue );
+            return Red.ToStringInvariant() + ", " + Green.ToStringInvariant() + ", " + Blue.ToStringInvariant();
         }
 
         public virtual bool ReadINIText( SplitCommaText SplitText )
@@ -98,7 +98,7 @@ namespace SharpFlame.Colors
 
         public override string GetINIOutput()
         {
-            return base.GetINIOutput() + ", " + IOUtil.InvariantToString( Alpha );
+            return base.GetINIOutput() + ", " + Alpha.ToStringInvariant();
         }
 
         public override bool ReadINIText( SplitCommaText SplitText )

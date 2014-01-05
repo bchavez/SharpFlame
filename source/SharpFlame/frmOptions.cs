@@ -45,15 +45,15 @@ namespace SharpFlame
 
             ChangedKeyControls = (KeyboardProfile)(KeyboardManager.KeyboardProfile.GetCopy(new KeyboardProfileCreator()));
 
-            txtAutosaveChanges.Text = IOUtil.InvariantToString(SettingsManager.Settings.AutoSaveMinChanges);
-            txtAutosaveInterval.Text = IOUtil.InvariantToString(SettingsManager.Settings.AutoSaveMinInterval_s);
+            txtAutosaveChanges.Text = SettingsManager.Settings.AutoSaveMinChanges.ToStringInvariant();
+            txtAutosaveInterval.Text = SettingsManager.Settings.AutoSaveMinInterval_s.ToStringInvariant();
             cbxAutosaveCompression.Checked = SettingsManager.Settings.AutoSaveCompress;
             cbxAutosaveEnabled.Checked = SettingsManager.Settings.AutoSaveEnabled;
             cbxAskDirectories.Checked = SettingsManager.Settings.DirectoriesPrompt;
             cbxPointerDirect.Checked = SettingsManager.Settings.DirectPointer;
             DisplayFont = SettingsManager.Settings.MakeFont();
             UpdateDisplayFontLabel();
-            txtFOV.Text = IOUtil.InvariantToString(SettingsManager.Settings.FOVDefault);
+            txtFOV.Text = SettingsManager.Settings.FOVDefault.ToStringInvariant();
 
             MinimapCliffColour = new clsRGBA_sng(SettingsManager.Settings.MinimapCliffColour);
             clrMinimapCliffs = new ColourControl(MinimapCliffColour);
@@ -63,12 +63,12 @@ namespace SharpFlame
             clrMinimapSelectedObjects = new ColourControl(MinimapSelectedObjectColour);
             pnlMinimapSelectedObjectColour.Controls.Add(clrMinimapSelectedObjects);
 
-            txtMinimapSize.Text = IOUtil.InvariantToString(SettingsManager.Settings.MinimapSize);
+            txtMinimapSize.Text = SettingsManager.Settings.MinimapSize.ToStringInvariant();
             cbxMinimapObjectColours.Checked = SettingsManager.Settings.MinimapTeamColours;
             cbxMinimapTeamColourFeatures.Checked = SettingsManager.Settings.MinimapTeamColoursExceptFeatures;
             cbxMipmaps.Checked = SettingsManager.Settings.Mipmaps;
             cbxMipmapsHardware.Checked = SettingsManager.Settings.MipmapsHardware;
-            txtUndoSteps.Text = IOUtil.InvariantToString(SettingsManager.Settings.UndoLimit);
+            txtUndoSteps.Text = SettingsManager.Settings.UndoLimit.ToStringInvariant();
 
             tilesetsPathSetControl.SetPaths(SettingsManager.Settings.TilesetDirectories);
             objectDataPathSetControl.SetPaths(SettingsManager.Settings.ObjectDataDirectories);
@@ -77,10 +77,10 @@ namespace SharpFlame
             objectDataPathSetControl.SelectedNum = MathUtil.Clamp_int(Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultObjectDataPathNum)),
                 -1, SettingsManager.Settings.ObjectDataDirectories.Count - 1);
 
-            txtMapBPP.Text = IOUtil.InvariantToString(SettingsManager.Settings.MapViewBPP);
-            txtMapDepth.Text = IOUtil.InvariantToString(SettingsManager.Settings.MapViewDepth);
-            txtTexturesBPP.Text = IOUtil.InvariantToString(SettingsManager.Settings.TextureViewBPP);
-            txtTexturesDepth.Text = IOUtil.InvariantToString(SettingsManager.Settings.TextureViewDepth);
+            txtMapBPP.Text = SettingsManager.Settings.MapViewBPP.ToStringInvariant();
+            txtMapDepth.Text = SettingsManager.Settings.MapViewDepth.ToStringInvariant();
+            txtTexturesBPP.Text = SettingsManager.Settings.TextureViewBPP.ToStringInvariant();
+            txtTexturesDepth.Text = SettingsManager.Settings.TextureViewDepth.ToStringInvariant();
 
             cbxPickerOrientation.Checked = SettingsManager.Settings.PickOrientation;
 
@@ -275,7 +275,7 @@ namespace SharpFlame
                 string keyText = Enum.GetName(typeof(Keys), key);
                 if ( keyText == null )
                 {
-                    text += IOUtil.InvariantToString((Int32)key);
+                    text += ((Int32)key).ToStringInvariant();
                 }
                 else
                 {
@@ -295,7 +295,7 @@ namespace SharpFlame
                     string keyText = Enum.GetName(typeof(Keys), key);
                     if ( keyText == null )
                     {
-                        text += IOUtil.InvariantToString((Int32)key);
+                        text += ((Int32)key).ToStringInvariant();
                     }
                     else
                     {

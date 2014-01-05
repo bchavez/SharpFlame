@@ -1242,11 +1242,11 @@ namespace SharpFlame
                 File.Write(Text);
                 Text = "    Gravity 1" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    HeightScale " + IOUtil.InvariantToString(HeightMultiplier) + Convert.ToString(EndChar);
+                Text = "    HeightScale " + HeightMultiplier.ToStringInvariant() + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    MapWidth " + IOUtil.InvariantToString(Terrain.TileSize.X) + Convert.ToString(EndChar);
+                Text = "    MapWidth " + Terrain.TileSize.X.ToStringInvariant() + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    MapHeight " + IOUtil.InvariantToString(Terrain.TileSize.Y) + Convert.ToString(EndChar);
+                Text = "    MapHeight " + Terrain.TileSize.Y.ToStringInvariant() + Convert.ToString(EndChar);
                 File.Write(Text);
                 Text = "    TileWidth 128" + Convert.ToString(EndChar);
                 File.Write(Text);
@@ -1281,7 +1281,7 @@ namespace SharpFlame
                 File.Write(Text);
                 Text = "    }" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    NumTiles " + IOUtil.InvariantToString(Terrain.TileSize.X * Terrain.TileSize.Y) + Convert.ToString(EndChar);
+                Text = "    NumTiles " + (Terrain.TileSize.X * Terrain.TileSize.Y).ToStringInvariant() + Convert.ToString(EndChar);
                 File.Write(Text);
                 Text = "    Tiles {" + Convert.ToString(EndChar);
                 File.Write(Text);
@@ -1318,11 +1318,11 @@ namespace SharpFlame
                             TF = 0;
                         }
 
-                        Text = "        TID " + (Terrain.Tiles[X, Y].Texture.TextureNum + 1) + " VF " + IOUtil.InvariantToString(VF) + " TF " +
-                               IOUtil.InvariantToString(TF) + " F " + IOUtil.InvariantToString((int)Flip) + " VH " +
-                               IOUtil.InvariantToString(Convert.ToByte(Terrain.Vertices[X, Y].Height)) + " " +
-                               IOUtil.InvariantToString(Terrain.Vertices[X + 1, Y].Height) + " " + Convert.ToString(Terrain.Vertices[X + 1, Y + 1].Height) +
-                               " " + IOUtil.InvariantToString(Convert.ToByte(Terrain.Vertices[X, Y + 1].Height)) + Convert.ToString(EndChar);
+                        Text = "        TID " + (Terrain.Tiles[X, Y].Texture.TextureNum + 1) + " VF " + VF.ToStringInvariant() + " TF " +
+                               TF.ToStringInvariant() + " F " + ((int)Flip).ToStringInvariant() + " VH " +
+                               Convert.ToByte(Terrain.Vertices[X, Y].Height).ToStringInvariant() + " " +
+                               Terrain.Vertices[X + 1, Y].Height.ToStringInvariant() + " " + Convert.ToString(Terrain.Vertices[X + 1, Y + 1].Height) +
+                               " " + Convert.ToByte(Terrain.Vertices[X, Y + 1].Height).ToStringInvariant() + Convert.ToString(EndChar);
                         File.Write(Text);
                     }
                 }
@@ -1351,7 +1351,7 @@ namespace SharpFlame
                     Text = "	FeatureSet " + Convert.ToString(EndChar);
                 }
                 File.Write(Text);
-                Text = "    NumObjects " + IOUtil.InvariantToString(Units.Count) + Convert.ToString(EndChar);
+                Text = "    NumObjects " + Units.Count.ToStringInvariant() + Convert.ToString(EndChar);
                 File.Write(Text);
                 Text = "    Objects {" + Convert.ToString(EndChar);
                 File.Write(Text);
@@ -1390,10 +1390,10 @@ namespace SharpFlame
                     {
                         if ( Unit.Type.GetCode(ref Code) )
                         {
-                            Text = "        " + IOUtil.InvariantToString(Unit.ID) + " " + Convert.ToString(B) + " " + Convert.ToString(Quote) +
+                            Text = "        " + Unit.ID.ToStringInvariant() + " " + Convert.ToString(B) + " " + Convert.ToString(Quote) +
                                    Code + Convert.ToString(Quote) + " " + Unit.UnitGroup.GetLNDPlayerText() + " " + Convert.ToString(Quote) + "NONAME" +
-                                   Convert.ToString(Quote) + " " + IOUtil.InvariantToString(XYZ_int.X) + ".00 " + IOUtil.InvariantToString(XYZ_int.Y) +
-                                   ".00 " + IOUtil.InvariantToString(XYZ_int.Z) + ".00 0.00 " + IOUtil.InvariantToString(Unit.Rotation) + ".00 0.00" +
+                                   Convert.ToString(Quote) + " " + XYZ_int.X.ToStringInvariant() + ".00 " + XYZ_int.Y.ToStringInvariant() +
+                                   ".00 " + XYZ_int.Z.ToStringInvariant() + ".00 0.00 " + Unit.Rotation.ToStringInvariant() + ".00 0.00" +
                                    Convert.ToString(EndChar);
                             File.Write(Text);
                         }
@@ -1420,7 +1420,7 @@ namespace SharpFlame
                 Text = "    Limits {" + Convert.ToString(EndChar);
                 File.Write(Text);
                 Text = "        " + Convert.ToString(Quote) + "Entire Map" + Convert.ToString(Quote) + " 0 0 0 " +
-                       IOUtil.InvariantToString(Terrain.TileSize.X) + " " + IOUtil.InvariantToString(Terrain.TileSize.Y) + Convert.ToString(EndChar);
+                       Terrain.TileSize.X.ToStringInvariant() + " " + Terrain.TileSize.Y.ToStringInvariant() + Convert.ToString(EndChar);
                 File.Write(Text);
                 Text = "    }" + Convert.ToString(EndChar);
                 File.Write(Text);
@@ -1430,7 +1430,7 @@ namespace SharpFlame
                 File.Write(Text);
                 Text = "    Version 1" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    NumGateways " + IOUtil.InvariantToString(Gateways.Count) + Convert.ToString(EndChar);
+                Text = "    NumGateways " + Gateways.Count.ToStringInvariant() + Convert.ToString(EndChar);
                 File.Write(Text);
                 Text = "    Gates {" + Convert.ToString(EndChar);
                 File.Write(Text);
@@ -1438,8 +1438,8 @@ namespace SharpFlame
                 foreach ( clsGateway tempLoopVar_Gateway in Gateways )
                 {
                     Gateway = tempLoopVar_Gateway;
-                    Text = "        " + IOUtil.InvariantToString(Gateway.PosA.X) + " " + IOUtil.InvariantToString(Gateway.PosA.Y) + " " +
-                           IOUtil.InvariantToString(Gateway.PosB.X) + " " + IOUtil.InvariantToString(Gateway.PosB.Y) + Convert.ToString(EndChar);
+                    Text = "        " + Gateway.PosA.X.ToStringInvariant() + " " + Gateway.PosA.Y.ToStringInvariant() + " " +
+                           Gateway.PosB.X.ToStringInvariant() + " " + Gateway.PosB.Y.ToStringInvariant() + Convert.ToString(EndChar);
                     File.Write(Text);
                 }
                 Text = "    }" + Convert.ToString(EndChar);
@@ -1465,7 +1465,7 @@ namespace SharpFlame
                         }
                         else
                         {
-                            Text = Text + IOUtil.InvariantToString(Tile_TypeNum[C + B]) + " ";
+                            Text = Text + Tile_TypeNum[C + B].ToStringInvariant() + " ";
                         }
                     }
                     Text = Text + Convert.ToString(EndChar);

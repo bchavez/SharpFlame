@@ -27,7 +27,7 @@ namespace SharpFlame
                 string text = Enum.GetName(typeof(Keys), key);
                 if ( text == null )
                 {
-                    lblKeys.Text += IOUtil.InvariantToString(Convert.ToInt32(Results[i].Item));
+                    lblKeys.Text += Convert.ToInt32(Results[i].Item).ToStringInvariant();
                 }
                 else
                 {

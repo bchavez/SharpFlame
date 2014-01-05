@@ -8,7 +8,7 @@ using SharpFlame.MathExtra;
 
 namespace SharpFlame.FileIO
 {
-    public sealed class IOUtil
+    public static class IOUtil
     {
         public static ZipEntry ZipMakeEntry(ZipOutputStream ZipOutputStream, string Path, clsResult Result)
         {
@@ -25,41 +25,6 @@ namespace SharpFlame.FileIO
                                   ex.Message);
                 return null;
             }
-        }
-
-        public static string InvariantToString(bool Value)
-        {
-            return Value.ToString(CultureInfo.InvariantCulture);
-        }
-
-        public static string InvariantToString(byte Value)
-        {
-            return Value.ToString(CultureInfo.InvariantCulture);
-        }
-
-        public static string InvariantToString(short Value)
-        {
-            return Value.ToString(CultureInfo.InvariantCulture);
-        }
-
-        public static string InvariantToString(int Value)
-        {
-            return Value.ToString(CultureInfo.InvariantCulture);
-        }
-
-        public static string InvariantToString(UInt32 Value)
-        {
-            return Value.ToString(CultureInfo.InvariantCulture);
-        }
-
-        public static string InvariantToString(float Value)
-        {
-            return Value.ToString(CultureInfo.InvariantCulture);
-        }
-
-        public static string InvariantToString(double Value)
-        {
-            return Value.ToString(CultureInfo.InvariantCulture);
         }
 
         public static bool InvariantParse(string Text, ref bool Result)

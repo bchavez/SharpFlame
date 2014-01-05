@@ -235,7 +235,7 @@ namespace SharpFlame
             string ReturnResult = "";
             int A = 0;
 
-            ReturnResult = IOUtil.InvariantToString(Number);
+            ReturnResult = Number.ToStringInvariant();
             A = Digits - ReturnResult.Length;
             if ( A > 0 )
             {
@@ -386,7 +386,7 @@ namespace SharpFlame
             MessageText = "An object\'s ID has been changed unexpectedly. The error was in " + Convert.ToString(ControlChars.Quote) + NameOfErrorSource +
                           Convert.ToString(ControlChars.Quote) + "." + ControlChars.CrLf + ControlChars.CrLf + "The object is of type " +
                           IDUnit.Type.GetDisplayTextCode() + " and is at map position " + IDUnit.GetPosText() + ". It\'s ID was " +
-                          IOUtil.InvariantToString(IntendedID) + ", but is now " + IOUtil.InvariantToString(IDUnit.ID) + "." + ControlChars.CrLf +
+                          IntendedID.ToStringInvariant() + ", but is now " + IDUnit.ID.ToStringInvariant() + "." + ControlChars.CrLf +
                           ControlChars.CrLf + "Click Cancel to stop seeing this message. Otherwise, click OK.";
 
             if ( Interaction.MsgBox(MessageText, MsgBoxStyle.OkCancel, null) == MsgBoxResult.Cancel )
@@ -399,7 +399,7 @@ namespace SharpFlame
         {
             string MessageText = "";
 
-            MessageText = "An object\'s ID has been changed from 0 to " + IOUtil.InvariantToString(NewID) + ". Zero is not a valid ID. The object is of type " +
+            MessageText = "An object\'s ID has been changed from 0 to " + NewID.ToStringInvariant() + ". Zero is not a valid ID. The object is of type " +
                           IDUnit.Type.GetDisplayTextCode() + " and is at map position " + IDUnit.GetPosText() + ".";
 
             //MsgBox(MessageText, MsgBoxStyle.OkOnly)

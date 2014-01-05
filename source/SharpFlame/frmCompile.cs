@@ -53,10 +53,10 @@ namespace SharpFlame
 
             cbxAutoScrollLimits.Checked = Map.InterfaceOptions.AutoScrollLimits;
             AutoScrollLimits_Update();
-            txtScrollMinX.Text = IOUtil.InvariantToString(Map.InterfaceOptions.ScrollMin.X);
-            txtScrollMinY.Text = IOUtil.InvariantToString(Map.InterfaceOptions.ScrollMin.Y);
-            txtScrollMaxX.Text = IOUtil.InvariantToString(Map.InterfaceOptions.ScrollMax.X);
-            txtScrollMaxY.Text = IOUtil.InvariantToString(Map.InterfaceOptions.ScrollMax.Y);
+            txtScrollMinX.Text = Map.InterfaceOptions.ScrollMin.X.ToStringInvariant();
+            txtScrollMinY.Text = Map.InterfaceOptions.ScrollMin.Y.ToStringInvariant();
+            txtScrollMaxX.Text = Map.InterfaceOptions.ScrollMax.X.ToStringInvariant();
+            txtScrollMaxY.Text = Map.InterfaceOptions.ScrollMax.Y.ToStringInvariant();
         }
 
         private void SaveToMap()

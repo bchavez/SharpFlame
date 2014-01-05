@@ -501,8 +501,8 @@ namespace SharpFlame
             HeightSetPalette[7] = (byte)255;
             for ( int A = 0; A <= 7; A++ )
             {
-                tabHeightSetL.TabPages[A].Text = IOUtil.InvariantToString(HeightSetPalette[A]);
-                tabHeightSetR.TabPages[A].Text = IOUtil.InvariantToString(HeightSetPalette[A]);
+                tabHeightSetL.TabPages[A].Text = HeightSetPalette[A].ToStringInvariant();
+                tabHeightSetR.TabPages[A].Text = HeightSetPalette[A].ToStringInvariant();
             }
             tabHeightSetL.SelectedIndex = 1;
             tabHeightSetR.SelectedIndex = 0;
@@ -1037,8 +1037,8 @@ namespace SharpFlame
             }
             else
             {
-                txtSizeX.Text = IOUtil.InvariantToString(Map.Terrain.TileSize.X);
-                txtSizeY.Text = IOUtil.InvariantToString(Map.Terrain.TileSize.Y);
+                txtSizeX.Text = Map.Terrain.TileSize.X.ToStringInvariant();
+                txtSizeY.Text = Map.Terrain.TileSize.Y.ToStringInvariant();
                 txtOffsetX.Text = "0";
                 txtOffsetY.Text = "0";
             }
@@ -1706,10 +1706,10 @@ namespace SharpFlame
                 clsMap.clsUnit with_1 = Map.SelectedUnits[0];
                 lblObjectType.Text = Convert.ToString(with_1.Type.GetDisplayTextCode());
                 ObjectPlayerNumControl.Target.Item = with_1.UnitGroup;
-                txtObjectRotation.Text = IOUtil.InvariantToString(Convert.ToInt32(with_1.Rotation));
-                txtObjectID.Text = IOUtil.InvariantToString(with_1.ID);
-                txtObjectPriority.Text = IOUtil.InvariantToString(Convert.ToInt32(with_1.SavePriority));
-                txtObjectHealth.Text = IOUtil.InvariantToString(Convert.ToDouble(with_1.Health * 100.0D));
+                txtObjectRotation.Text = Convert.ToInt32(with_1.Rotation).ToStringInvariant();
+                txtObjectID.Text = with_1.ID.ToStringInvariant();
+                txtObjectPriority.Text = Convert.ToInt32(with_1.SavePriority).ToStringInvariant();
+                txtObjectHealth.Text = Convert.ToDouble(with_1.Health * 100.0D).ToStringInvariant();
                 lblObjectType.Enabled = true;
                 ObjectPlayerNumControl.Enabled = true;
                 txtObjectRotation.Enabled = true;
@@ -2498,7 +2498,7 @@ namespace SharpFlame
             {
                 tabHeightSetL_SelectedIndexChanged(null, null);
             }
-            Text = IOUtil.InvariantToString(Height);
+            Text = Height.ToStringInvariant();
             tabHeightSetL.TabPages[tabHeightSetL.SelectedIndex].Text = Text;
             tabHeightSetR.TabPages[tabHeightSetL.SelectedIndex].Text = Text;
         }
@@ -2519,19 +2519,19 @@ namespace SharpFlame
             {
                 tabHeightSetL_SelectedIndexChanged(null, null);
             }
-            Text = IOUtil.InvariantToString(Height);
+            Text = Height.ToStringInvariant();
             tabHeightSetL.TabPages[tabHeightSetR.SelectedIndex].Text = Text;
             tabHeightSetR.TabPages[tabHeightSetR.SelectedIndex].Text = Text;
         }
 
         public void tabHeightSetL_SelectedIndexChanged(object sender, EventArgs e)
         {
-            txtHeightSetL.Text = IOUtil.InvariantToString(HeightSetPalette[tabHeightSetL.SelectedIndex]);
+            txtHeightSetL.Text = HeightSetPalette[tabHeightSetL.SelectedIndex].ToStringInvariant();
         }
 
         public void tabHeightSetR_SelectedIndexChanged(object sender, EventArgs e)
         {
-            txtHeightSetR.Text = IOUtil.InvariantToString(HeightSetPalette[tabHeightSetR.SelectedIndex]);
+            txtHeightSetR.Text = HeightSetPalette[tabHeightSetR.SelectedIndex].ToStringInvariant();
         }
 
         public void tsbSelectionObjects_Click(Object sender, EventArgs e)
@@ -3590,7 +3590,7 @@ namespace SharpFlame
             }
 
             txtHeightSetL.Text =
-                IOUtil.InvariantToString(Convert.ToByte(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height));
+                Convert.ToByte(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height).ToStringInvariant();
             txtHeightSetL.Focus();
             MapViewControl.OpenGLControl.Focus();
         }
@@ -3605,7 +3605,7 @@ namespace SharpFlame
                 return;
             }
 
-            txtHeightSetR.Text = IOUtil.InvariantToString(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height);
+            txtHeightSetR.Text = Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height.ToStringInvariant();
             txtHeightSetR.Focus();
             MapViewControl.OpenGLControl.Focus();
         }
@@ -3827,8 +3827,8 @@ namespace SharpFlame
                 {
                     clsMap.clsScriptPosition ScriptPosition = (clsMap.clsScriptPosition)_SelectedScriptMarker;
                     txtScriptMarkerLabel.Text = ScriptPosition.Label;
-                    txtScriptMarkerX.Text = IOUtil.InvariantToString(ScriptPosition.PosX);
-                    txtScriptMarkerY.Text = IOUtil.InvariantToString(ScriptPosition.PosY);
+                    txtScriptMarkerX.Text = ScriptPosition.PosX.ToStringInvariant();
+                    txtScriptMarkerY.Text = ScriptPosition.PosY.ToStringInvariant();
                     txtScriptMarkerLabel.Enabled = true;
                     txtScriptMarkerX.Enabled = true;
                     txtScriptMarkerY.Enabled = true;
@@ -3837,10 +3837,10 @@ namespace SharpFlame
                 {
                     clsMap.clsScriptArea ScriptArea = (clsMap.clsScriptArea)_SelectedScriptMarker;
                     txtScriptMarkerLabel.Text = ScriptArea.Label;
-                    txtScriptMarkerX.Text = IOUtil.InvariantToString(ScriptArea.PosAX);
-                    txtScriptMarkerY.Text = IOUtil.InvariantToString(ScriptArea.PosAY);
-                    txtScriptMarkerX2.Text = IOUtil.InvariantToString(ScriptArea.PosBX);
-                    txtScriptMarkerY2.Text = IOUtil.InvariantToString(ScriptArea.PosBY);
+                    txtScriptMarkerX.Text = ScriptArea.PosAX.ToStringInvariant();
+                    txtScriptMarkerY.Text = ScriptArea.PosAY.ToStringInvariant();
+                    txtScriptMarkerX2.Text = ScriptArea.PosBX.ToStringInvariant();
+                    txtScriptMarkerY2.Text = ScriptArea.PosBY.ToStringInvariant();
                     txtScriptMarkerLabel.Enabled = true;
                     txtScriptMarkerX.Enabled = true;
                     txtScriptMarkerY.Enabled = true;

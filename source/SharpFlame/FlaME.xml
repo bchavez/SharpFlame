@@ -4,17 +4,17 @@
         <name>SharpFlame</name>
     </assembly>
     <members>
-        <member name="T:SharpFlame.Properties.Resources">
+        <member name="T:My.Resources.Resources">
             <summary>
               A strongly-typed resource class, for looking up localized strings, etc.
             </summary>
         </member>
-        <member name="P:SharpFlame.Properties.Resources.ResourceManager">
+        <member name="P:My.Resources.Resources.ResourceManager">
             <summary>
               Returns the cached ResourceManager instance used by this class.
             </summary>
         </member>
-        <member name="P:SharpFlame.Properties.Resources.Culture">
+        <member name="P:My.Resources.Resources.Culture">
             <summary>
               Overrides the current thread's CurrentUICulture property for all
               resource lookups using this strongly typed resource class.

@@ -2295,20 +2295,20 @@ namespace SharpFlame
                 }
                 else
                 {
-                    File.AppendSectionName("structure_" + IOUtil.InvariantToString(Unit.ID));
-                    File.AppendProperty("id", IOUtil.InvariantToString(Unit.ID));
+                    File.AppendSectionName("structure_" + Unit.ID.ToStringInvariant());
+                    File.AppendProperty("id", Unit.ID.ToStringInvariant());
                     if ( Unit.UnitGroup == ScavengerUnitGroup || (PlayerCount >= 0 & Unit.UnitGroup.WZ_StartPos >= PlayerCount) )
                     {
                         File.AppendProperty("player", "scavenger");
                     }
                     else
                     {
-                        File.AppendProperty("startpos", IOUtil.InvariantToString(Unit.UnitGroup.WZ_StartPos));
+                        File.AppendProperty("startpos", Unit.UnitGroup.WZ_StartPos.ToStringInvariant());
                     }
                     File.AppendProperty("name", StructureType.Code);
                     if ( StructureType.WallLink.IsConnected )
                     {
-                        File.AppendProperty("wall/type", IOUtil.InvariantToString(StructureType.WallLink.ArrayPosition));
+                        File.AppendProperty("wall/type", StructureType.WallLink.ArrayPosition.ToStringInvariant());
                     }
                     File.AppendProperty("position", Unit.GetINIPosition());
                     File.AppendProperty("rotation", Unit.GetINIRotation());
@@ -2348,7 +2348,7 @@ namespace SharpFlame
                     {
                         ModuleCount = UnitModuleCount[Unit.MapLink.ArrayPosition];
                     }
-                    File.AppendProperty("modules", IOUtil.InvariantToString(ModuleCount));
+                    File.AppendProperty("modules", ModuleCount.ToStringInvariant());
                     File.Gap_Append();
                 }
             }
@@ -2445,15 +2445,15 @@ namespace SharpFlame
                     }
                     if ( ValidDroid )
                     {
-                        File.AppendSectionName("droid_" + IOUtil.InvariantToString(Unit.ID));
-                        File.AppendProperty("id", IOUtil.InvariantToString(Unit.ID));
+                        File.AppendSectionName("droid_" + Unit.ID.ToStringInvariant());
+                        File.AppendProperty("id", Unit.ID.ToStringInvariant());
                         if ( Unit.UnitGroup == ScavengerUnitGroup || (PlayerCount >= 0 & Unit.UnitGroup.WZ_StartPos >= PlayerCount) )
                         {
                             File.AppendProperty("player", "scavenger");
                         }
                         else
                         {
-                            File.AppendProperty("startpos", IOUtil.InvariantToString(Unit.UnitGroup.WZ_StartPos));
+                            File.AppendProperty("startpos", Unit.UnitGroup.WZ_StartPos.ToStringInvariant());
                         }
                         if ( AsPartsNotTemplate )
                         {
@@ -2472,7 +2472,7 @@ namespace SharpFlame
                         }
                         if ( AsPartsNotTemplate )
                         {
-                            File.AppendProperty("droidType", IOUtil.InvariantToString(Convert.ToInt32(Droid.GetDroidType())));
+                            File.AppendProperty("droidType", Convert.ToInt32(Droid.GetDroidType()).ToStringInvariant());
                             if ( Droid.TurretCount == 0 )
                             {
                                 Text = "0";
@@ -2494,7 +2494,7 @@ namespace SharpFlame
                                 {
                                     if ( Droid.Turret1.TurretType == clsTurret.enumTurretType.Weapon )
                                     {
-                                        Text = IOUtil.InvariantToString(Droid.TurretCount);
+                                        Text = Droid.TurretCount.ToStringInvariant();
                                     }
                                     else
                                     {
@@ -2579,8 +2579,8 @@ namespace SharpFlame
                     }
                     if ( Valid )
                     {
-                        File.AppendSectionName("feature_" + IOUtil.InvariantToString(Unit.ID));
-                        File.AppendProperty("id", IOUtil.InvariantToString(Unit.ID));
+                        File.AppendSectionName("feature_" + Unit.ID.ToStringInvariant());
+                        File.AppendProperty("id", Unit.ID.ToStringInvariant());
                         File.AppendProperty("position", Unit.GetINIPosition());
                         File.AppendProperty("rotation", Unit.GetINIRotation());
                         File.AppendProperty("name", FeatureType.Code);
@@ -2750,7 +2750,7 @@ namespace SharpFlame
 
                 if ( Args.CompileType == sWrite_WZ_Args.enumCompileType.Multiplayer )
                 {
-                    PlayersText = IOUtil.InvariantToString(Args.Multiplayer.PlayerCount);
+                    PlayersText = Args.Multiplayer.PlayerCount.ToStringInvariant();
                     PlayersPrefix = PlayersText + "c-";
                     string fog = "";
                     string TilesetNum = "";

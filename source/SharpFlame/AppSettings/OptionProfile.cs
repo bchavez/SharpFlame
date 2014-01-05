@@ -100,7 +100,7 @@ namespace SharpFlame.AppSettings
                     for ( int i = 0; i <= control.Keys.GetUpperBound(0); i++ )
                     {
                         Keys key = Keys.A;
-                        valueText += IOUtil.InvariantToString((Int32)key);
+                        valueText += ((Int32)key).ToStringInvariant();
                         if ( i < control.Keys.GetUpperBound(0) )
                         {
                             valueText += ",";
@@ -112,7 +112,7 @@ namespace SharpFlame.AppSettings
                         for ( int i = 0; i <= control.UnlessKeys.GetUpperBound(0); i++ )
                         {
                             Keys key = Keys.A;
-                            valueText += IOUtil.InvariantToString((Int32)key);
+                            valueText += ((Int32)key).ToStringInvariant();
                             if ( i < control.UnlessKeys.GetUpperBound(0) )
                             {
                                 valueText += ",";
@@ -142,31 +142,31 @@ namespace SharpFlame.AppSettings
                 }
                 else if ( item is Option<bool> )
                 {
-                    valueText = IOUtil.InvariantToString(Convert.ToBoolean(optionValue));
+                    valueText = Convert.ToBoolean(optionValue).ToStringInvariant();
                 }
                 else if ( item is Option<byte> )
                 {
-                    valueText = IOUtil.InvariantToString(Convert.ToByte(optionValue));
+                    valueText = Convert.ToByte(optionValue).ToStringInvariant();
                 }
                 else if ( item is Option<short> )
                 {
-                    valueText = IOUtil.InvariantToString((int)(short)optionValue);
+                    valueText = ((int)(short)optionValue).ToStringInvariant();
                 }
                 else if ( item is Option<int> )
                 {
-                    valueText = IOUtil.InvariantToString(Convert.ToInt32(optionValue));
+                    valueText = Convert.ToInt32(optionValue).ToStringInvariant();
                 }
                 else if ( item is Option<UInt32> )
                 {
-                    valueText = IOUtil.InvariantToString(Convert.ToUInt32(optionValue));
+                    valueText = Convert.ToUInt32(optionValue).ToStringInvariant();
                 }
                 else if ( item is Option<Single> )
                 {
-                    valueText = IOUtil.InvariantToString(Convert.ToSingle(Convert.ToSingle(optionValue)));
+                    valueText = Convert.ToSingle(Convert.ToSingle(optionValue)).ToStringInvariant();
                 }
                 else if ( item is Option<double> )
                 {
-                    valueText = IOUtil.InvariantToString(Convert.ToDouble(optionValue));
+                    valueText = Convert.ToDouble(optionValue).ToStringInvariant();
                 }
                 else if ( item is Option<string> )
                 {

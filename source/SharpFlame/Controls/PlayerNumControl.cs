@@ -24,7 +24,7 @@ namespace SharpFlame.Controls
             {
                 tsbNumber[A] = new ToolStripButton();
                 tsbNumber[A].DisplayStyle = ToolStripItemDisplayStyle.Text;
-                tsbNumber[A].Text = IOUtil.InvariantToString(A);
+                tsbNumber[A].Text = A.ToStringInvariant();
                 tsbNumber[A].AutoToolTip = false;
                 tsbNumber[A].Click += tsbNumber_Clicked;
                 tsPlayerNum1.Items.Add(tsbNumber[A]);
@@ -32,7 +32,7 @@ namespace SharpFlame.Controls
                 B = A + ButtonsPerRow;
                 tsbNumber[B] = new ToolStripButton();
                 tsbNumber[B].DisplayStyle = ToolStripItemDisplayStyle.Text;
-                tsbNumber[B].Text = IOUtil.InvariantToString(B);
+                tsbNumber[B].Text = B.ToStringInvariant();
                 tsbNumber[B].AutoToolTip = false;
                 tsbNumber[B].Click += tsbNumber_Clicked;
                 tsPlayerNum2.Items.Add(tsbNumber[B]);
