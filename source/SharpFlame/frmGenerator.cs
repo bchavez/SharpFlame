@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using Matrix3D;
 using Microsoft.VisualBasic;
 using SharpFlame.FileIO;
+using SharpFlame.Generators;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame
@@ -337,25 +338,25 @@ namespace SharpFlame
                 switch ( cboTileset.SelectedIndex )
                 {
                     case 0:
-                        Generator.GenerateTileset = modGenerator.Generator_TilesetArizona;
-                        modGenerator.TerrainStyle_Arizona.Watermap = Generator.GetWaterMap();
-                        modGenerator.TerrainStyle_Arizona.LevelCount = Generator.LevelCount;
-                        Generator.Map.GenerateMasterTerrain(modGenerator.TerrainStyle_Arizona);
-                        modGenerator.TerrainStyle_Arizona.Watermap = null;
+                        Generator.GenerateTileset = DefaultGenerator.Generator_TilesetArizona;
+                        DefaultGenerator.TerrainStyle_Arizona.Watermap = Generator.GetWaterMap();
+                        DefaultGenerator.TerrainStyle_Arizona.LevelCount = Generator.LevelCount;
+                        Generator.Map.GenerateMasterTerrain(DefaultGenerator.TerrainStyle_Arizona);
+                        DefaultGenerator.TerrainStyle_Arizona.Watermap = null;
                         break;
                     case 1:
-                        Generator.GenerateTileset = modGenerator.Generator_TilesetUrban;
-                        modGenerator.TerrainStyle_Urban.Watermap = Generator.GetWaterMap();
-                        modGenerator.TerrainStyle_Urban.LevelCount = Generator.LevelCount;
-                        Generator.Map.GenerateMasterTerrain(modGenerator.TerrainStyle_Urban);
-                        modGenerator.TerrainStyle_Urban.Watermap = null;
+                        Generator.GenerateTileset = DefaultGenerator.Generator_TilesetUrban;
+                        DefaultGenerator.TerrainStyle_Urban.Watermap = Generator.GetWaterMap();
+                        DefaultGenerator.TerrainStyle_Urban.LevelCount = Generator.LevelCount;
+                        Generator.Map.GenerateMasterTerrain(DefaultGenerator.TerrainStyle_Urban);
+                        DefaultGenerator.TerrainStyle_Urban.Watermap = null;
                         break;
                     case 2:
-                        Generator.GenerateTileset = modGenerator.Generator_TilesetRockies;
-                        modGenerator.TerrainStyle_Rockies.Watermap = Generator.GetWaterMap();
-                        modGenerator.TerrainStyle_Rockies.LevelCount = Generator.LevelCount;
-                        Generator.Map.GenerateMasterTerrain(modGenerator.TerrainStyle_Rockies);
-                        modGenerator.TerrainStyle_Rockies.Watermap = null;
+                        Generator.GenerateTileset = DefaultGenerator.Generator_TilesetRockies;
+                        DefaultGenerator.TerrainStyle_Rockies.Watermap = Generator.GetWaterMap();
+                        DefaultGenerator.TerrainStyle_Rockies.LevelCount = Generator.LevelCount;
+                        Generator.Map.GenerateMasterTerrain(DefaultGenerator.TerrainStyle_Rockies);
+                        DefaultGenerator.TerrainStyle_Rockies.Watermap = null;
                         break;
                     default:
                         ReturnResult.ProblemAdd("Error: bad tileset selection.");
@@ -371,15 +372,15 @@ namespace SharpFlame
                 {
                     case 0:
                         Generator.Map.Tileset = App.Tileset_Arizona;
-                        Generator.GenerateTileset = modGenerator.Generator_TilesetArizona;
+                        Generator.GenerateTileset = DefaultGenerator.Generator_TilesetArizona;
                         break;
                     case 1:
                         Generator.Map.Tileset = App.Tileset_Urban;
-                        Generator.GenerateTileset = modGenerator.Generator_TilesetUrban;
+                        Generator.GenerateTileset = DefaultGenerator.Generator_TilesetUrban;
                         break;
                     case 2:
                         Generator.Map.Tileset = App.Tileset_Rockies;
-                        Generator.GenerateTileset = modGenerator.Generator_TilesetRockies;
+                        Generator.GenerateTileset = DefaultGenerator.Generator_TilesetRockies;
                         break;
                     default:
                         ReturnResult.ProblemAdd("Error: bad tileset selection.");

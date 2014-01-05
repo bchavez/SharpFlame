@@ -13,6 +13,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
 using SharpFlame.FileIO;
+using SharpFlame.Generators;
 using SharpFlame.MathExtra;
 using SharpFlame.Painters;
 using Timer = System.Windows.Forms.Timer;
@@ -473,7 +474,7 @@ namespace SharpFlame
                 }
             }
 
-            modGenerator.CreateGeneratorTilesets();
+            DefaultGenerator.CreateGeneratorTilesets();
             PainterFactory.CreatePainterArizona();
             PainterFactory.CreatePainterUrban();
             PainterFactory.CreatePainterRockies();
@@ -4371,7 +4372,7 @@ namespace SharpFlame
                 return;
             }
 
-            if ( modGenerator.UnitType_OilResource == null )
+            if ( DefaultGenerator.UnitType_OilResource == null )
             {
                 MessageBox.Show("Unable. Oil resource is not loaded.");
                 return;
@@ -4382,7 +4383,7 @@ namespace SharpFlame
             foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.Units )
             {
                 Unit = tempLoopVar_Unit;
-                if ( Unit.Type == modGenerator.UnitType_OilResource )
+                if ( Unit.Type == DefaultGenerator.UnitType_OilResource )
                 {
                     OilList.Add(Unit);
                 }

@@ -1,8 +1,8 @@
 using System;
 
-namespace SharpFlame
+namespace SharpFlame.Generators
 {
-    public sealed class modGenerator
+    public sealed class DefaultGenerator
     {
         public static clsGeneratorTileset Generator_TilesetArizona;
         public static clsGeneratorTileset Generator_TilesetUrban;

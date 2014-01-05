@@ -1,3 +1,4 @@
+using SharpFlame.Generators;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame.Painters
@@ -199,13 +200,13 @@ namespace SharpFlame.Painters
             NewRoadBrush.Tile_End.Tile_Add(52, TileOrientation.TileDirection_Bottom, 1);
             App.Painter_Arizona.AddBrush(NewRoadBrush);
 
-            modGenerator.Generator_TilesetArizona.OldTextureLayers.Layers = new App.sLayerList.clsLayer[0];
-            modGenerator.Generator_TilesetArizona.OldTextureLayers.LayerCount = 0;
+            DefaultGenerator.Generator_TilesetArizona.OldTextureLayers.Layers = new App.sLayerList.clsLayer[0];
+            DefaultGenerator.Generator_TilesetArizona.OldTextureLayers.LayerCount = 0;
 
             App.sLayerList.clsLayer NewLayer = default(App.sLayerList.clsLayer);
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetArizona.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetArizona.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetArizona.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetArizona.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.Terrain = Terrain_Red;
             NewLayer.HeightMax = 255.0F;
             NewLayer.SlopeMax = (float)MathUtil.RadOf90Deg;
@@ -213,7 +214,7 @@ namespace SharpFlame.Painters
             NewLayer.Density = 1.0F;
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetArizona.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetArizona.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetArizona.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetArizona.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.Terrain = Terrain_Sand;
             NewLayer.HeightMax = -1.0F; //signals water distribution
             NewLayer.SlopeMax = -1.0F; //signals water distribution
@@ -221,7 +222,7 @@ namespace SharpFlame.Painters
             NewLayer.Density = 1.0F;
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetArizona.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetArizona.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetArizona.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetArizona.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.WithinLayer = 1;
             NewLayer.Terrain = Terrain_Water;
             NewLayer.HeightMax = 255.0F;
@@ -230,7 +231,7 @@ namespace SharpFlame.Painters
             NewLayer.Density = 1.0F;
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetArizona.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetArizona.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetArizona.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetArizona.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.AvoidLayers[1] = true;
             NewLayer.Terrain = Terrain_Brown;
             NewLayer.HeightMax = 255.0F;
@@ -239,7 +240,7 @@ namespace SharpFlame.Painters
             NewLayer.Density = 0.35F;
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetArizona.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetArizona.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetArizona.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetArizona.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.AvoidLayers[1] = true;
             NewLayer.AvoidLayers[3] = true;
             NewLayer.Terrain = Terrain_Yellow;
@@ -249,7 +250,7 @@ namespace SharpFlame.Painters
             NewLayer.Density = 0.6F;
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetArizona.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetArizona.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetArizona.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetArizona.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.AvoidLayers[1] = true;
             NewLayer.WithinLayer = 4;
             NewLayer.Terrain = Terrain_Sand;
@@ -259,7 +260,7 @@ namespace SharpFlame.Painters
             NewLayer.Density = 0.5F;
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetArizona.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetArizona.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetArizona.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetArizona.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.AvoidLayers[1] = true;
             NewLayer.WithinLayer = 3;
             NewLayer.Terrain = Terrain_Green;
@@ -465,13 +466,13 @@ namespace SharpFlame.Painters
             NewRoadBrush.Tile_Straight.Tile_Add(42, TileOrientation.TileDirection_Left, 1);
             App.Painter_Urban.AddBrush(NewRoadBrush);
 
-            modGenerator.Generator_TilesetUrban.OldTextureLayers.Layers = new App.sLayerList.clsLayer[0];
-            modGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount = 0;
+            DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.Layers = new App.sLayerList.clsLayer[0];
+            DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount = 0;
 
             App.sLayerList.clsLayer NewLayer = default(App.sLayerList.clsLayer);
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetUrban.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.Terrain = Terrain_Gray;
             NewLayer.HeightMax = 255.0F;
             NewLayer.SlopeMax = (float)MathUtil.RadOf90Deg;
@@ -479,7 +480,7 @@ namespace SharpFlame.Painters
             NewLayer.Density = 1.0F;
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetUrban.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.Terrain = Terrain_Water;
             NewLayer.HeightMax = -1.0F;
             NewLayer.SlopeMax = -1.0F;
@@ -487,7 +488,7 @@ namespace SharpFlame.Painters
             NewLayer.Density = 1.0F;
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetUrban.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.AvoidLayers[1] = true;
             NewLayer.Terrain = Terrain_Blue;
             NewLayer.HeightMax = 255.0F;
@@ -496,7 +497,7 @@ namespace SharpFlame.Painters
             NewLayer.Density = 0.3F;
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetUrban.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.AvoidLayers[1] = true;
             NewLayer.AvoidLayers[2] = true;
             NewLayer.Terrain = Terrain_Orange;
@@ -506,7 +507,7 @@ namespace SharpFlame.Painters
             NewLayer.Density = 0.4F;
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetUrban.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.AvoidLayers[1] = true;
             NewLayer.AvoidLayers[2] = true;
             NewLayer.AvoidLayers[3] = true;
@@ -517,7 +518,7 @@ namespace SharpFlame.Painters
             NewLayer.Density = 0.6F;
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetUrban.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.AvoidLayers[1] = true;
             NewLayer.AvoidLayers[2] = true;
             NewLayer.AvoidLayers[3] = true;
@@ -529,7 +530,7 @@ namespace SharpFlame.Painters
             NewLayer.Density = 0.6F;
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetUrban.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.WithinLayer = 2;
             NewLayer.Terrain = Terrain_Orange;
             NewLayer.HeightMax = 255.0F;
@@ -538,7 +539,7 @@ namespace SharpFlame.Painters
             NewLayer.Density = 0.5F;
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetUrban.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.WithinLayer = 3;
             NewLayer.Terrain = Terrain_Blue;
             NewLayer.HeightMax = 255.0F;
@@ -547,7 +548,7 @@ namespace SharpFlame.Painters
             NewLayer.Density = 0.5F;
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetUrban.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.WithinLayer = 3;
             NewLayer.AvoidLayers[7] = true;
             NewLayer.Terrain = Terrain_Green;
@@ -778,13 +779,13 @@ namespace SharpFlame.Painters
             NewRoadBrush.Tile_End.Tile_Add(52, TileOrientation.TileDirection_Bottom, 1);
             App.Painter_Rockies.AddBrush(NewRoadBrush);
 
-            modGenerator.Generator_TilesetRockies.OldTextureLayers.Layers = new App.sLayerList.clsLayer[0];
-            modGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount = 0;
+            DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.Layers = new App.sLayerList.clsLayer[0];
+            DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount = 0;
 
             App.sLayerList.clsLayer NewLayer = default(App.sLayerList.clsLayer);
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetRockies.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.Terrain = Terrain_Gravel;
             NewLayer.HeightMax = 255.0F;
             NewLayer.SlopeMax = (float)MathUtil.RadOf90Deg;
@@ -792,7 +793,7 @@ namespace SharpFlame.Painters
             NewLayer.Density = 1.0F;
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetRockies.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.Terrain = Terrain_Water;
             NewLayer.HeightMax = -1.0F;
             NewLayer.SlopeMax = -1.0F;
@@ -800,7 +801,7 @@ namespace SharpFlame.Painters
             NewLayer.Density = 1.0F;
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetRockies.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.AvoidLayers[1] = true;
             NewLayer.Terrain = Terrain_Grass;
             NewLayer.HeightMax = 60.0F;
@@ -809,7 +810,7 @@ namespace SharpFlame.Painters
             NewLayer.Density = 1.0F;
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetRockies.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.AvoidLayers[1] = true;
             NewLayer.AvoidLayers[3] = true;
             NewLayer.Terrain = Terrain_GravelSnow;
@@ -820,7 +821,7 @@ namespace SharpFlame.Painters
             NewLayer.Density = 1.0F;
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetRockies.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.WithinLayer = 3;
             NewLayer.AvoidLayers[1] = true;
             NewLayer.Terrain = Terrain_Snow;
@@ -831,7 +832,7 @@ namespace SharpFlame.Painters
             NewLayer.Density = 1.0F;
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetRockies.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.WithinLayer = 3;
             NewLayer.AvoidLayers[4] = true;
             NewLayer.Terrain = Terrain_Snow;
@@ -842,7 +843,7 @@ namespace SharpFlame.Painters
             NewLayer.Density = 0.45F;
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetRockies.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.AvoidLayers[1] = true;
             NewLayer.AvoidLayers[2] = true;
             NewLayer.AvoidLayers[3] = true;
@@ -854,7 +855,7 @@ namespace SharpFlame.Painters
             NewLayer.Density = 0.45F;
 
             NewLayer = new App.sLayerList.clsLayer();
-            modGenerator.Generator_TilesetRockies.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount, NewLayer);
+            DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.AvoidLayers[1] = true;
             NewLayer.WithinLayer = 2;
             NewLayer.Terrain = Terrain_Dirt;

@@ -250,7 +250,7 @@
     <Compile Include="GLFont.cs" />
     <Compile Include="Collections\ListUtil.cs" />
     <Compile Include="Bitmaps\BitmapUtil.cs" />
-    <Compile Include="modGenerator.cs" />
+    <Compile Include="Generators\DefaultGenerator.cs" />
     <Compile Include="INI.cs" />
     <Compile Include="FileIO\IOUtil.cs" />
     <Compile Include="MathExtra\MathUtil.cs" />

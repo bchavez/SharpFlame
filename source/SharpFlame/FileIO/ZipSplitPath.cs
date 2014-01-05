@@ -24,7 +24,7 @@ namespace SharpFlame.FileIO
                 FilePath += Parts[A] + "/";
             }
             FileTitle = Parts[A];
-            A = Strings.InStrRev(FileTitle, ".", -1, (CompareMethod)0);
+            A = Strings.InStrRev(FileTitle, ".", -1, CompareMethod.Binary);
             if ( A > 0 )
             {
                 FileExtension = Strings.Right(FileTitle, FileTitle.Length - A);
