@@ -119,9 +119,9 @@ namespace SharpFlame
 
         public ConnectedList<clsUnitType, frmMain> SelectedObjectTypes;
 
-        public modProgram.enumTextureTerrainAction TextureTerrainAction = modProgram.enumTextureTerrainAction.Reinterpret;
+        public App.enumTextureTerrainAction TextureTerrainAction = App.enumTextureTerrainAction.Reinterpret;
 
-        public modProgram.enumFillCliffAction FillCliffAction = modProgram.enumFillCliffAction.Ignore;
+        public App.enumFillCliffAction FillCliffAction = App.enumFillCliffAction.Ignore;
 
         public Timer tmrKey;
         public Timer tmrTool;
@@ -187,23 +187,23 @@ namespace SharpFlame
             Bitmap InterfaceImage_SelectionPasteOptions = null;
             Bitmap InterfaceImage_Gateways = null;
 
-            LoadInterfaceImage(modProgram.InterfaceImagesPath + "displayautotexture.png", ref InterfaceImage_DisplayAutoTexture, ReturnResult);
-            LoadInterfaceImage(modProgram.InterfaceImagesPath + "drawtileorientation.png", ref InterfaceImage_DrawTileOrientation, ReturnResult);
-            LoadInterfaceImage(modProgram.InterfaceImagesPath + "save.png", ref InterfaceImage_QuickSave, ReturnResult);
-            LoadInterfaceImage(modProgram.InterfaceImagesPath + "selection.png", ref InterfaceImage_Selection, ReturnResult);
-            LoadInterfaceImage(modProgram.InterfaceImagesPath + "objectsselect.png", ref InterfaceImage_ObjectSelect, ReturnResult);
-            LoadInterfaceImage(modProgram.InterfaceImagesPath + "selectioncopy.png", ref InterfaceImage_SelectionCopy, ReturnResult);
-            LoadInterfaceImage(modProgram.InterfaceImagesPath + "selectionflipx.png", ref InterfaceImage_SelectionFlipX, ReturnResult);
-            LoadInterfaceImage(modProgram.InterfaceImagesPath + "selectionrotateclockwise.png", ref InterfaceImage_SelectionRotateClockwise, ReturnResult);
-            LoadInterfaceImage(modProgram.InterfaceImagesPath + "selectionrotateanticlockwise.png", ref InterfaceImage_SelectionRotateCounterClockwise, ReturnResult);
-            LoadInterfaceImage(modProgram.InterfaceImagesPath + "selectionpaste.png", ref InterfaceImage_SelectionPaste, ReturnResult);
-            LoadInterfaceImage(modProgram.InterfaceImagesPath + "selectionpasteoptions.png", ref InterfaceImage_SelectionPasteOptions, ReturnResult);
-            LoadInterfaceImage(modProgram.InterfaceImagesPath + "gateways.png", ref InterfaceImage_Gateways, ReturnResult);
+            LoadInterfaceImage(App.InterfaceImagesPath + "displayautotexture.png", ref InterfaceImage_DisplayAutoTexture, ReturnResult);
+            LoadInterfaceImage(App.InterfaceImagesPath + "drawtileorientation.png", ref InterfaceImage_DrawTileOrientation, ReturnResult);
+            LoadInterfaceImage(App.InterfaceImagesPath + "save.png", ref InterfaceImage_QuickSave, ReturnResult);
+            LoadInterfaceImage(App.InterfaceImagesPath + "selection.png", ref InterfaceImage_Selection, ReturnResult);
+            LoadInterfaceImage(App.InterfaceImagesPath + "objectsselect.png", ref InterfaceImage_ObjectSelect, ReturnResult);
+            LoadInterfaceImage(App.InterfaceImagesPath + "selectioncopy.png", ref InterfaceImage_SelectionCopy, ReturnResult);
+            LoadInterfaceImage(App.InterfaceImagesPath + "selectionflipx.png", ref InterfaceImage_SelectionFlipX, ReturnResult);
+            LoadInterfaceImage(App.InterfaceImagesPath + "selectionrotateclockwise.png", ref InterfaceImage_SelectionRotateClockwise, ReturnResult);
+            LoadInterfaceImage(App.InterfaceImagesPath + "selectionrotateanticlockwise.png", ref InterfaceImage_SelectionRotateCounterClockwise, ReturnResult);
+            LoadInterfaceImage(App.InterfaceImagesPath + "selectionpaste.png", ref InterfaceImage_SelectionPaste, ReturnResult);
+            LoadInterfaceImage(App.InterfaceImagesPath + "selectionpasteoptions.png", ref InterfaceImage_SelectionPasteOptions, ReturnResult);
+            LoadInterfaceImage(App.InterfaceImagesPath + "gateways.png", ref InterfaceImage_Gateways, ReturnResult);
 
             Bitmap InterfaceImage_Problem = null;
-            LoadInterfaceImage(modProgram.InterfaceImagesPath + "problem.png", ref InterfaceImage_Problem, ReturnResult);
+            LoadInterfaceImage(App.InterfaceImagesPath + "problem.png", ref InterfaceImage_Problem, ReturnResult);
             Bitmap InterfaceImage_Warning = null;
-            LoadInterfaceImage(modProgram.InterfaceImagesPath + "warning.png", ref InterfaceImage_Warning, ReturnResult);
+            LoadInterfaceImage(App.InterfaceImagesPath + "warning.png", ref InterfaceImage_Warning, ReturnResult);
             modWarnings.WarningImages.ImageSize = new Size(16, 16);
             if ( InterfaceImage_Problem != null )
             {
@@ -285,7 +285,7 @@ namespace SharpFlame
 
             public clsSplashScreen()
             {
-                Form.Icon = modProgram.ProgramIcon;
+                Form.Icon = App.ProgramIcon;
             }
         }
 
@@ -295,7 +295,7 @@ namespace SharpFlame
 
             SplashScreen.Form.Show();
             SplashScreen.Form.Activate();
-            while ( !modProgram.ProgramInitializeFinished )
+            while ( !App.ProgramInitializeFinished )
             {
                 SplashScreen.Form.lblStatus.Text = InitializeStatus;
                 Application.DoEvents();
@@ -309,7 +309,7 @@ namespace SharpFlame
 
         public void Initialize(object sender, EventArgs e)
         {
-            if ( modProgram.ProgramInitialized )
+            if ( App.ProgramInitialized )
             {
                 Debugger.Break();
                 return;
@@ -326,7 +326,7 @@ namespace SharpFlame
             SplashThread.Start();
 #endif
 
-            modProgram.ProgramInitialized = true;
+            App.ProgramInitialized = true;
 
             Program.InitializeDelay.Enabled = false;
             Program.InitializeDelay.Tick -= Initialize;
@@ -337,7 +337,7 @@ namespace SharpFlame
 
             modTools.CreateTools();
 
-            Matrix3DMath.MatrixSetToPY(modProgram.SunAngleMatrix, new Angles.AnglePY(-22.5D * MathUtil.RadOf1Deg, 157.5D * MathUtil.RadOf1Deg));
+            Matrix3DMath.MatrixSetToPY(App.SunAngleMatrix, new Angles.AnglePY(-22.5D * MathUtil.RadOf1Deg, 157.5D * MathUtil.RadOf1Deg));
 
             NewPlayerNum.Left = 112;
             NewPlayerNum.Top = 10;
@@ -349,16 +349,16 @@ namespace SharpFlame
             ObjectPlayerNum.Target.Changed += tabPlayerNum_SelectedIndexChanged;
             Panel14.Controls.Add(ObjectPlayerNum);
 
-            ctrlTextureBrush = new ctrlBrush(modProgram.TextureBrush);
+            ctrlTextureBrush = new ctrlBrush(App.TextureBrush);
             pnlTextureBrush.Controls.Add(ctrlTextureBrush);
 
-            ctrlTerrainBrush = new ctrlBrush(modProgram.TerrainBrush);
+            ctrlTerrainBrush = new ctrlBrush(App.TerrainBrush);
             pnlTerrainBrush.Controls.Add(ctrlTerrainBrush);
 
-            ctrlCliffRemoveBrush = new ctrlBrush(modProgram.CliffBrush);
+            ctrlCliffRemoveBrush = new ctrlBrush(App.CliffBrush);
             pnlCliffRemoveBrush.Controls.Add(ctrlCliffRemoveBrush);
 
-            ctrlHeightBrush = new ctrlBrush(modProgram.HeightBrush);
+            ctrlHeightBrush = new ctrlBrush(App.HeightBrush);
             pnlHeightSetBrush.Controls.Add(ctrlHeightBrush);
 
             VBMath.Randomize();
@@ -367,64 +367,64 @@ namespace SharpFlame
 
             for ( int i = 0; i <= 15; i++ )
             {
-                modProgram.PlayerColour[i] = new modProgram.clsPlayer();
+                App.PlayerColour[i] = new App.clsPlayer();
             }
-            modProgram.PlayerColour[0].Colour.Red = 0.0F;
-            modProgram.PlayerColour[0].Colour.Green = 96.0F / 255.0F;
-            modProgram.PlayerColour[0].Colour.Blue = 0.0F;
-            modProgram.PlayerColour[1].Colour.Red = 160.0F / 255.0F;
-            modProgram.PlayerColour[1].Colour.Green = 112.0F / 255.0F;
-            modProgram.PlayerColour[1].Colour.Blue = 0.0F;
-            modProgram.PlayerColour[2].Colour.Red = 128.0F / 255.0F;
-            modProgram.PlayerColour[2].Colour.Green = 128.0F / 255.0F;
-            modProgram.PlayerColour[2].Colour.Blue = 128.0F / 255.0F;
-            modProgram.PlayerColour[3].Colour.Red = 0.0F;
-            modProgram.PlayerColour[3].Colour.Green = 0.0F;
-            modProgram.PlayerColour[3].Colour.Blue = 0.0F;
-            modProgram.PlayerColour[4].Colour.Red = 128.0F / 255.0F;
-            modProgram.PlayerColour[4].Colour.Green = 0.0F;
-            modProgram.PlayerColour[4].Colour.Blue = 0.0F;
-            modProgram.PlayerColour[5].Colour.Red = 32.0F / 255.0F;
-            modProgram.PlayerColour[5].Colour.Green = 48.0F / 255.0F;
-            modProgram.PlayerColour[5].Colour.Blue = 96.0F / 255.0F;
-            modProgram.PlayerColour[6].Colour.Red = 144.0F / 255.0F;
-            modProgram.PlayerColour[6].Colour.Green = 0.0F;
-            modProgram.PlayerColour[6].Colour.Blue = 112 / 255.0F;
-            modProgram.PlayerColour[7].Colour.Red = 0.0F;
-            modProgram.PlayerColour[7].Colour.Green = 128.0F / 255.0F;
-            modProgram.PlayerColour[7].Colour.Blue = 128.0F / 255.0F;
-            modProgram.PlayerColour[8].Colour.Red = 128.0F / 255.0F;
-            modProgram.PlayerColour[8].Colour.Green = 192.0F / 255.0F;
-            modProgram.PlayerColour[8].Colour.Blue = 0.0F;
-            modProgram.PlayerColour[9].Colour.Red = 176.0F / 255.0F;
-            modProgram.PlayerColour[9].Colour.Green = 112.0F / 255.0F;
-            modProgram.PlayerColour[9].Colour.Blue = 112.0F / 255.0F;
-            modProgram.PlayerColour[10].Colour.Red = 224.0F / 255.0F;
-            modProgram.PlayerColour[10].Colour.Green = 224.0F / 255.0F;
-            modProgram.PlayerColour[10].Colour.Blue = 224.0F / 255.0F;
-            modProgram.PlayerColour[11].Colour.Red = 32.0F / 255.0F;
-            modProgram.PlayerColour[11].Colour.Green = 32.0F / 255.0F;
-            modProgram.PlayerColour[11].Colour.Blue = 255.0F / 255.0F;
-            modProgram.PlayerColour[12].Colour.Red = 0.0F;
-            modProgram.PlayerColour[12].Colour.Green = 160.0F / 255.0F;
-            modProgram.PlayerColour[12].Colour.Blue = 0.0F;
-            modProgram.PlayerColour[13].Colour.Red = 64.0F / 255.0F;
-            modProgram.PlayerColour[13].Colour.Green = 0.0F;
-            modProgram.PlayerColour[13].Colour.Blue = 0.0F;
-            modProgram.PlayerColour[14].Colour.Red = 16.0F / 255.0F;
-            modProgram.PlayerColour[14].Colour.Green = 0.0F;
-            modProgram.PlayerColour[14].Colour.Blue = 64.0F / 255.0F;
-            modProgram.PlayerColour[15].Colour.Red = 64.0F / 255.0F;
-            modProgram.PlayerColour[15].Colour.Green = 96.0F / 255.0F;
-            modProgram.PlayerColour[15].Colour.Blue = 0.0F;
+            App.PlayerColour[0].Colour.Red = 0.0F;
+            App.PlayerColour[0].Colour.Green = 96.0F / 255.0F;
+            App.PlayerColour[0].Colour.Blue = 0.0F;
+            App.PlayerColour[1].Colour.Red = 160.0F / 255.0F;
+            App.PlayerColour[1].Colour.Green = 112.0F / 255.0F;
+            App.PlayerColour[1].Colour.Blue = 0.0F;
+            App.PlayerColour[2].Colour.Red = 128.0F / 255.0F;
+            App.PlayerColour[2].Colour.Green = 128.0F / 255.0F;
+            App.PlayerColour[2].Colour.Blue = 128.0F / 255.0F;
+            App.PlayerColour[3].Colour.Red = 0.0F;
+            App.PlayerColour[3].Colour.Green = 0.0F;
+            App.PlayerColour[3].Colour.Blue = 0.0F;
+            App.PlayerColour[4].Colour.Red = 128.0F / 255.0F;
+            App.PlayerColour[4].Colour.Green = 0.0F;
+            App.PlayerColour[4].Colour.Blue = 0.0F;
+            App.PlayerColour[5].Colour.Red = 32.0F / 255.0F;
+            App.PlayerColour[5].Colour.Green = 48.0F / 255.0F;
+            App.PlayerColour[5].Colour.Blue = 96.0F / 255.0F;
+            App.PlayerColour[6].Colour.Red = 144.0F / 255.0F;
+            App.PlayerColour[6].Colour.Green = 0.0F;
+            App.PlayerColour[6].Colour.Blue = 112 / 255.0F;
+            App.PlayerColour[7].Colour.Red = 0.0F;
+            App.PlayerColour[7].Colour.Green = 128.0F / 255.0F;
+            App.PlayerColour[7].Colour.Blue = 128.0F / 255.0F;
+            App.PlayerColour[8].Colour.Red = 128.0F / 255.0F;
+            App.PlayerColour[8].Colour.Green = 192.0F / 255.0F;
+            App.PlayerColour[8].Colour.Blue = 0.0F;
+            App.PlayerColour[9].Colour.Red = 176.0F / 255.0F;
+            App.PlayerColour[9].Colour.Green = 112.0F / 255.0F;
+            App.PlayerColour[9].Colour.Blue = 112.0F / 255.0F;
+            App.PlayerColour[10].Colour.Red = 224.0F / 255.0F;
+            App.PlayerColour[10].Colour.Green = 224.0F / 255.0F;
+            App.PlayerColour[10].Colour.Blue = 224.0F / 255.0F;
+            App.PlayerColour[11].Colour.Red = 32.0F / 255.0F;
+            App.PlayerColour[11].Colour.Green = 32.0F / 255.0F;
+            App.PlayerColour[11].Colour.Blue = 255.0F / 255.0F;
+            App.PlayerColour[12].Colour.Red = 0.0F;
+            App.PlayerColour[12].Colour.Green = 160.0F / 255.0F;
+            App.PlayerColour[12].Colour.Blue = 0.0F;
+            App.PlayerColour[13].Colour.Red = 64.0F / 255.0F;
+            App.PlayerColour[13].Colour.Green = 0.0F;
+            App.PlayerColour[13].Colour.Blue = 0.0F;
+            App.PlayerColour[14].Colour.Red = 16.0F / 255.0F;
+            App.PlayerColour[14].Colour.Green = 0.0F;
+            App.PlayerColour[14].Colour.Blue = 64.0F / 255.0F;
+            App.PlayerColour[15].Colour.Red = 64.0F / 255.0F;
+            App.PlayerColour[15].Colour.Green = 96.0F / 255.0F;
+            App.PlayerColour[15].Colour.Blue = 0.0F;
             for ( int i = 0; i <= 15; i++ )
             {
-                modProgram.PlayerColour[i].CalcMinimapColour();
+                App.PlayerColour[i].CalcMinimapColour();
             }
 
-            modProgram.MinimapFeatureColour.Red = 0.5F;
-            modProgram.MinimapFeatureColour.Green = 0.5F;
-            modProgram.MinimapFeatureColour.Blue = 0.5F;
+            App.MinimapFeatureColour.Red = 0.5F;
+            App.MinimapFeatureColour.Green = 0.5F;
+            App.MinimapFeatureColour.Blue = 0.5F;
 
             modSettings.UpdateSettings(modSettings.InitializeSettings);
             modSettings.InitializeSettings = null;
@@ -447,7 +447,7 @@ namespace SharpFlame
                 if ( TilesetsPath != null && TilesetsPath != "" )
                 {
                     InitializeStatus = "Loading tilesets";
-                    Program.InitializeResult.Add(modProgram.LoadTilesets(modProgram.EndWithPathSeperator(TilesetsPath)));
+                    Program.InitializeResult.Add(App.LoadTilesets(App.EndWithPathSeperator(TilesetsPath)));
                     InitializeStatus = "";
                 }
             }
@@ -457,9 +457,9 @@ namespace SharpFlame
             Program.InitializeResult.Add(NoTile_Texture_Load());
             cboTileType_Update();
 
-            modProgram.CreateTemplateDroidTypes(); //do before loading data
+            App.CreateTemplateDroidTypes(); //do before loading data
 
-            modProgram.ObjectData = new clsObjectData();
+            App.ObjectData = new clsObjectData();
             int ObjectDataNum = Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultObjectDataPathNum));
             SimpleList<string> ObjectDataList = (SimpleList<string>)(modSettings.Settings.get_Value(modSettings.Setting_ObjectDataDirectories));
             if ( ObjectDataNum >= 0 & ObjectDataNum < TilesetsList.Count )
@@ -468,7 +468,7 @@ namespace SharpFlame
                 if ( ObjectDataPath != null && ObjectDataPath != "" )
                 {
                     InitializeStatus = "Loading object data";
-                    Program.InitializeResult.Add(modProgram.ObjectData.LoadDirectory(ObjectDataPath));
+                    Program.InitializeResult.Add(App.ObjectData.LoadDirectory(ObjectDataPath));
                     InitializeStatus = "";
                 }
             }
@@ -483,8 +483,8 @@ namespace SharpFlame
             MapView.Dock = DockStyle.Fill;
             pnlView.Controls.Add(MapView);
 
-            modProgram.VisionRadius_2E = 10;
-            modProgram.VisionRadius_2E_Changed();
+            App.VisionRadius_2E = 10;
+            App.VisionRadius_2E_Changed();
 
             HeightSetPalette[0] = (byte)0;
             HeightSetPalette[1] = (byte)85;
@@ -504,16 +504,16 @@ namespace SharpFlame
             tabHeightSetL_SelectedIndexChanged(null, null);
             tabHeightSetR_SelectedIndexChanged(null, null);
 
-            if ( modProgram.CommandLinePaths.Count >= 1 )
+            if ( App.CommandLinePaths.Count >= 1 )
             {
                 string Path = "";
                 clsResult LoadResult = new clsResult("Loading startup command-line maps");
-                foreach ( string tempLoopVar_Path in modProgram.CommandLinePaths )
+                foreach ( string tempLoopVar_Path in App.CommandLinePaths )
                 {
                     Path = tempLoopVar_Path;
                     LoadResult.Take(LoadMap(Path));
                 }
-                modProgram.ShowWarnings(LoadResult);
+                App.ShowWarnings(LoadResult);
             }
 
             TextureView.Dock = DockStyle.Fill;
@@ -533,19 +533,19 @@ namespace SharpFlame
             tmrKey.Enabled = true;
             tmrTool.Enabled = true;
 
-            modProgram.ShowWarnings(Program.InitializeResult);
+            App.ShowWarnings(Program.InitializeResult);
 
-            modProgram.ProgramInitializeFinished = true;
+            App.ProgramInitializeFinished = true;
         }
 
         public void Me_LostFocus(Object eventSender, EventArgs eventArgs)
         {
-            modProgram.ViewKeyDown_Clear();
+            App.ViewKeyDown_Clear();
         }
 
         private void tmrKey_Tick(Object sender, EventArgs e)
         {
-            if ( !modProgram.ProgramInitialized )
+            if ( !App.ProgramInitialized )
             {
                 return;
             }
@@ -616,7 +616,7 @@ namespace SharpFlame
                 FileName = tempLoopVar_FileName;
                 Results.Take(LoadMap(FileName));
             }
-            modProgram.ShowWarnings(Results);
+            App.ShowWarnings(Results);
         }
 
         public void Load_Heightmap_Prompt()
@@ -633,7 +633,7 @@ namespace SharpFlame
             modSettings.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
 
             Bitmap HeightmapBitmap = null;
-            modProgram.sResult Result = BitmapUtil.LoadBitmap(Dialog.FileName, ref HeightmapBitmap);
+            App.sResult Result = BitmapUtil.LoadBitmap(Dialog.FileName, ref HeightmapBitmap);
             if ( !Result.Success )
             {
                 MessageBox.Show("Failed to load image: " + Result.Problem);
@@ -704,7 +704,7 @@ namespace SharpFlame
                 return;
             }
             modSettings.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
-            modProgram.sResult Result = Map.Load_TTP(Dialog.FileName);
+            App.sResult Result = Map.Load_TTP(Dialog.FileName);
             if ( Result.Success )
             {
                 TextureView.DrawViewLater();
@@ -720,9 +720,9 @@ namespace SharpFlame
             int A = 0;
 
             cboTileset.Items.Clear();
-            for ( A = 0; A <= modProgram.Tilesets.Count - 1; A++ )
+            for ( A = 0; A <= App.Tilesets.Count - 1; A++ )
             {
-                cboTileset.Items.Add(modProgram.Tilesets[A].Name);
+                cboTileset.Items.Add(App.Tilesets[A].Name);
             }
             cboTileset.SelectedIndex = NewSelectedIndex;
         }
@@ -738,14 +738,14 @@ namespace SharpFlame
                 return;
             }
 
-            for ( A = 0; A <= modProgram.Tilesets.Count - 1; A++ )
+            for ( A = 0; A <= App.Tilesets.Count - 1; A++ )
             {
-                if ( modProgram.Tilesets[A] == Map.Tileset )
+                if ( App.Tilesets[A] == Map.Tileset )
                 {
                     break;
                 }
             }
-            if ( A == modProgram.Tilesets.Count )
+            if ( A == App.Tilesets.Count )
             {
                 cboTileset.SelectedIndex = -1;
             }
@@ -771,14 +771,14 @@ namespace SharpFlame
             }
             else
             {
-                NewTileset = modProgram.Tilesets[cboTileset.SelectedIndex];
+                NewTileset = App.Tilesets[cboTileset.SelectedIndex];
             }
             if ( NewTileset != Map.Tileset )
             {
                 Map.Tileset = NewTileset;
                 if ( Map.Tileset != null )
                 {
-                    modProgram.SelectedTextureNum = Math.Min(0, Map.Tileset.TileCount - 1);
+                    App.SelectedTextureNum = Math.Min(0, Map.Tileset.TileCount - 1);
                 }
                 Map.TileType_Reset();
 
@@ -936,7 +936,7 @@ namespace SharpFlame
 
         private void tmrTool_Tick(Object sender, EventArgs e)
         {
-            if ( !modProgram.ProgramInitialized )
+            if ( !App.ProgramInitialized )
             {
                 return;
             }
@@ -1076,7 +1076,7 @@ namespace SharpFlame
 
             clsResult Result = Map.Write_LND(Dialog.FileName, true);
 
-            modProgram.ShowWarnings(Result);
+            App.ShowWarnings(Result);
         }
 
         private void Save_FME_Prompt()
@@ -1106,7 +1106,7 @@ namespace SharpFlame
                 return;
             }
             ScavengerNum = Math.Min(ScavengerNum, (byte)10);
-            modProgram.sResult Result = new modProgram.sResult();
+            App.sResult Result = new App.sResult();
             Result = Map.Write_FME(Dialog.FileName, true, ScavengerNum);
             if ( !Result.Success )
             {
@@ -1133,7 +1133,7 @@ namespace SharpFlame
                 return;
             }
             modSettings.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            modProgram.sResult Result = new modProgram.sResult();
+            App.sResult Result = new App.sResult();
             Result = Map.Write_MinimapFile(Dialog.FileName, true);
             if ( !Result.Success )
             {
@@ -1160,7 +1160,7 @@ namespace SharpFlame
                 return;
             }
             modSettings.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            modProgram.sResult Result = new modProgram.sResult();
+            App.sResult Result = new App.sResult();
             Result = Map.Write_Heightmap(Dialog.FileName, true);
             if ( !Result.Success )
             {
@@ -1187,7 +1187,7 @@ namespace SharpFlame
                 return;
             }
             modSettings.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            modProgram.sResult Result = new modProgram.sResult();
+            App.sResult Result = new App.sResult();
             Result = Map.Write_TTP(Dialog.FileName, true);
             if ( !Result.Success )
             {
@@ -1367,7 +1367,7 @@ namespace SharpFlame
 
         public void Components_Update()
         {
-            if ( modProgram.ObjectData == null )
+            if ( App.ObjectData == null )
             {
                 return;
             }
@@ -1380,8 +1380,8 @@ namespace SharpFlame
             int ListPosition = 0;
 
             cboDroidBody.Items.Clear();
-            cboBody_Objects = new clsBody[modProgram.ObjectData.Bodies.Count];
-            foreach ( clsBody tempLoopVar_Body in modProgram.ObjectData.Bodies )
+            cboBody_Objects = new clsBody[App.ObjectData.Bodies.Count];
+            foreach ( clsBody tempLoopVar_Body in App.ObjectData.Bodies )
             {
                 Body = tempLoopVar_Body;
                 if ( Body.Designable || (!cbxDesignableOnly.Checked) )
@@ -1393,8 +1393,8 @@ namespace SharpFlame
             Array.Resize(ref cboBody_Objects, cboDroidBody.Items.Count);
 
             cboDroidPropulsion.Items.Clear();
-            cboPropulsion_Objects = new clsPropulsion[modProgram.ObjectData.Propulsions.Count];
-            foreach ( clsPropulsion tempLoopVar_Propulsion in modProgram.ObjectData.Propulsions )
+            cboPropulsion_Objects = new clsPropulsion[App.ObjectData.Propulsions.Count];
+            foreach ( clsPropulsion tempLoopVar_Propulsion in App.ObjectData.Propulsions )
             {
                 Propulsion = tempLoopVar_Propulsion;
                 if ( Propulsion.Designable || (!cbxDesignableOnly.Checked) )
@@ -1408,8 +1408,8 @@ namespace SharpFlame
             cboDroidTurret1.Items.Clear();
             cboDroidTurret2.Items.Clear();
             cboDroidTurret3.Items.Clear();
-            cboTurret_Objects = new clsTurret[modProgram.ObjectData.Turrets.Count];
-            foreach ( clsTurret tempLoopVar_Turret in modProgram.ObjectData.Turrets )
+            cboTurret_Objects = new clsTurret[App.ObjectData.Turrets.Count];
+            foreach ( clsTurret tempLoopVar_Turret in App.ObjectData.Turrets )
             {
                 Turret = tempLoopVar_Turret;
                 if ( Turret.Designable || (!cbxDesignableOnly.Checked) )
@@ -1426,9 +1426,9 @@ namespace SharpFlame
             Array.Resize(ref cboTurret_Objects, cboDroidTurret1.Items.Count);
 
             cboDroidType.Items.Clear();
-            for ( int A = 0; A <= modProgram.TemplateDroidTypeCount - 1; A++ )
+            for ( int A = 0; A <= App.TemplateDroidTypeCount - 1; A++ )
             {
-                cboDroidType.Items.Add(modProgram.TemplateDroidTypes[A].Name);
+                cboDroidType.Items.Add(App.TemplateDroidTypes[A].Name);
             }
         }
 
@@ -1955,9 +1955,9 @@ namespace SharpFlame
             {
                 return;
             }
-            if ( modProgram.Copied_Map != null )
+            if ( App.Copied_Map != null )
             {
-                modProgram.Copied_Map.Deallocate();
+                App.Copied_Map.Deallocate();
             }
             sXY_int Area = new sXY_int();
             sXY_int Start = new sXY_int();
@@ -1965,7 +1965,7 @@ namespace SharpFlame
             MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, Start, Finish);
             Area.X = Finish.X - Start.X;
             Area.Y = Finish.Y - Start.Y;
-            modProgram.Copied_Map = new clsMap(Map, Start, Area);
+            App.Copied_Map = new clsMap(Map, Start, Area);
         }
 
         public void tsbSelectionPaste_Click(Object sender, EventArgs e)
@@ -1980,7 +1980,7 @@ namespace SharpFlame
             {
                 return;
             }
-            if ( modProgram.Copied_Map == null )
+            if ( App.Copied_Map == null )
             {
                 MessageBox.Show("Nothing to paste.");
                 return;
@@ -1997,7 +1997,7 @@ namespace SharpFlame
             MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, Start, Finish);
             Area.X = Finish.X - Start.X;
             Area.Y = Finish.Y - Start.Y;
-            Map.MapInsert(modProgram.Copied_Map, Start, Area, menuSelPasteHeights.Checked, menuSelPasteTextures.Checked, menuSelPasteUnits.Checked,
+            Map.MapInsert(App.Copied_Map, Start, Area, menuSelPasteHeights.Checked, menuSelPasteTextures.Checked, menuSelPasteUnits.Checked,
                 menuSelPasteDeleteUnits.Checked, menuSelPasteGateways.Checked, menuSelPasteDeleteGateways.Checked);
 
             SelectedObject_Changed();
@@ -2033,24 +2033,24 @@ namespace SharpFlame
 
         public void tsbSelectionRotateClockwise_Click(Object sender, EventArgs e)
         {
-            if ( modProgram.Copied_Map == null )
+            if ( App.Copied_Map == null )
             {
                 MessageBox.Show("Nothing to rotate.");
                 return;
             }
 
-            modProgram.Copied_Map.Rotate(TileOrientation.Orientation_Clockwise, Program.frmMainInstance.PasteRotateObjects);
+            App.Copied_Map.Rotate(TileOrientation.Orientation_Clockwise, Program.frmMainInstance.PasteRotateObjects);
         }
 
         public void tsbSelectionRotateAnticlockwise_Click(Object sender, EventArgs e)
         {
-            if ( modProgram.Copied_Map == null )
+            if ( App.Copied_Map == null )
             {
                 MessageBox.Show("Nothing to rotate.");
                 return;
             }
 
-            modProgram.Copied_Map.Rotate(TileOrientation.Orientation_CounterClockwise, Program.frmMainInstance.PasteRotateObjects);
+            App.Copied_Map.Rotate(TileOrientation.Orientation_CounterClockwise, Program.frmMainInstance.PasteRotateObjects);
         }
 
         public void menuMiniShowTex_Click(Object sender, EventArgs e)
@@ -2083,7 +2083,7 @@ namespace SharpFlame
 
             if (
                 BitmapUtil.LoadBitmap(
-                    modProgram.EndWithPathSeperator((new ConsoleApplicationBase()).Info.DirectoryPath) + "notile.png",
+                    App.EndWithPathSeperator((new ConsoleApplicationBase()).Info.DirectoryPath) + "notile.png",
                     ref Bitmap).Success )
             {
                 clsResult Result = new clsResult("notile.png");
@@ -2091,11 +2091,11 @@ namespace SharpFlame
                 ReturnResult.Add(Result);
                 BitmapTextureArgs.Texture = Bitmap;
                 BitmapTextureArgs.Perform();
-                modProgram.GLTexture_NoTile = BitmapTextureArgs.TextureNum;
+                App.GLTexture_NoTile = BitmapTextureArgs.TextureNum;
             }
             if (
                 BitmapUtil.LoadBitmap(
-                    modProgram.EndWithPathSeperator((new ConsoleApplicationBase()).Info.DirectoryPath) + "overflow.png",
+                    App.EndWithPathSeperator((new ConsoleApplicationBase()).Info.DirectoryPath) + "overflow.png",
                     ref Bitmap).Success )
             {
                 clsResult Result = new clsResult("overflow.png");
@@ -2103,7 +2103,7 @@ namespace SharpFlame
                 ReturnResult.Add(Result);
                 BitmapTextureArgs.Texture = Bitmap;
                 BitmapTextureArgs.Perform();
-                modProgram.GLTexture_OverflowTile = BitmapTextureArgs.TextureNum;
+                App.GLTexture_OverflowTile = BitmapTextureArgs.TextureNum;
             }
 
             return ReturnResult;
@@ -2113,13 +2113,13 @@ namespace SharpFlame
         {
             if ( modTools.Tool == modTools.Tools.Gateways )
             {
-                modProgram.Draw_Gateways = false;
+                App.Draw_Gateways = false;
                 modTools.Tool = modTools.Tools.ObjectSelect;
                 tsbGateways.Checked = false;
             }
             else
             {
-                modProgram.Draw_Gateways = true;
+                App.Draw_Gateways = true;
                 modTools.Tool = modTools.Tools.Gateways;
                 tsbGateways.Checked = true;
             }
@@ -2136,9 +2136,9 @@ namespace SharpFlame
         {
             if ( MapView != null )
             {
-                if ( modProgram.Draw_VertexTerrain != tsbDrawAutotexture.Checked )
+                if ( App.Draw_VertexTerrain != tsbDrawAutotexture.Checked )
                 {
-                    modProgram.Draw_VertexTerrain = tsbDrawAutotexture.Checked;
+                    App.Draw_VertexTerrain = tsbDrawAutotexture.Checked;
                     View_DrawViewLater();
                 }
             }
@@ -2148,9 +2148,9 @@ namespace SharpFlame
         {
             if ( MapView != null )
             {
-                if ( modProgram.DisplayTileOrientation != tsbDrawTileOrientation.Checked )
+                if ( App.DisplayTileOrientation != tsbDrawTileOrientation.Checked )
                 {
-                    modProgram.DisplayTileOrientation = tsbDrawTileOrientation.Checked;
+                    App.DisplayTileOrientation = tsbDrawTileOrientation.Checked;
                     View_DrawViewLater();
                     TextureView.DrawViewLater();
                 }
@@ -2196,12 +2196,12 @@ namespace SharpFlame
             {
                 return;
             }
-            if ( modProgram.SelectedTextureNum < 0 | modProgram.SelectedTextureNum >= Map.Tileset.TileCount )
+            if ( App.SelectedTextureNum < 0 | App.SelectedTextureNum >= Map.Tileset.TileCount )
             {
                 return;
             }
 
-            Map.Tile_TypeNum[modProgram.SelectedTextureNum] = (byte)cboTileType.SelectedIndex;
+            Map.Tile_TypeNum[App.SelectedTextureNum] = (byte)cboTileType.SelectedIndex;
 
             TextureView.DrawViewLater();
         }
@@ -2221,8 +2221,8 @@ namespace SharpFlame
         private void cboTileType_Update()
         {
             cboTileType.Items.Clear();
-            modProgram.clsTileType tileType = default(modProgram.clsTileType);
-            foreach ( modProgram.clsTileType tempLoopVar_tileType in modProgram.TileTypes )
+            App.clsTileType tileType = default(App.clsTileType);
+            foreach ( App.clsTileType tempLoopVar_tileType in App.TileTypes )
             {
                 tileType = tempLoopVar_tileType;
                 cboTileType.Items.Add(tileType.Name);
@@ -2231,91 +2231,91 @@ namespace SharpFlame
 
         private void CreateTileTypes()
         {
-            modProgram.clsTileType NewTileType = default(modProgram.clsTileType);
+            App.clsTileType NewTileType = default(App.clsTileType);
 
-            NewTileType = new modProgram.clsTileType();
+            NewTileType = new App.clsTileType();
             NewTileType.Name = "Sand";
             NewTileType.DisplayColour.Red = 1.0F;
             NewTileType.DisplayColour.Green = 1.0F;
             NewTileType.DisplayColour.Blue = 0.0F;
-            modProgram.TileTypes.Add(NewTileType);
+            App.TileTypes.Add(NewTileType);
 
-            NewTileType = new modProgram.clsTileType();
+            NewTileType = new App.clsTileType();
             NewTileType.Name = "Sandy Brush";
             NewTileType.DisplayColour.Red = 0.5F;
             NewTileType.DisplayColour.Green = 0.5F;
             NewTileType.DisplayColour.Blue = 0.0F;
-            modProgram.TileTypes.Add(NewTileType);
+            App.TileTypes.Add(NewTileType);
 
-            NewTileType = new modProgram.clsTileType();
+            NewTileType = new App.clsTileType();
             NewTileType.Name = "Rubble";
             NewTileType.DisplayColour.Red = 0.25F;
             NewTileType.DisplayColour.Green = 0.25F;
             NewTileType.DisplayColour.Blue = 0.25F;
-            modProgram.TileTypes.Add(NewTileType);
+            App.TileTypes.Add(NewTileType);
 
-            NewTileType = new modProgram.clsTileType();
+            NewTileType = new App.clsTileType();
             NewTileType.Name = "Green Mud";
             NewTileType.DisplayColour.Red = 0.0F;
             NewTileType.DisplayColour.Green = 0.5F;
             NewTileType.DisplayColour.Blue = 0.0F;
-            modProgram.TileTypes.Add(NewTileType);
+            App.TileTypes.Add(NewTileType);
 
-            NewTileType = new modProgram.clsTileType();
+            NewTileType = new App.clsTileType();
             NewTileType.Name = "Red Brush";
             NewTileType.DisplayColour.Red = 1.0F;
             NewTileType.DisplayColour.Green = 0.0F;
             NewTileType.DisplayColour.Blue = 0.0F;
-            modProgram.TileTypes.Add(NewTileType);
+            App.TileTypes.Add(NewTileType);
 
-            NewTileType = new modProgram.clsTileType();
+            NewTileType = new App.clsTileType();
             NewTileType.Name = "Pink Rock";
             NewTileType.DisplayColour.Red = 1.0F;
             NewTileType.DisplayColour.Green = 0.5F;
             NewTileType.DisplayColour.Blue = 0.5F;
-            modProgram.TileTypes.Add(NewTileType);
+            App.TileTypes.Add(NewTileType);
 
-            NewTileType = new modProgram.clsTileType();
+            NewTileType = new App.clsTileType();
             NewTileType.Name = "Road";
             NewTileType.DisplayColour.Red = 0.0F;
             NewTileType.DisplayColour.Green = 0.0F;
             NewTileType.DisplayColour.Blue = 0.0F;
-            modProgram.TileTypes.Add(NewTileType);
+            App.TileTypes.Add(NewTileType);
 
-            NewTileType = new modProgram.clsTileType();
+            NewTileType = new App.clsTileType();
             NewTileType.Name = "Water";
             NewTileType.DisplayColour.Red = 0.0F;
             NewTileType.DisplayColour.Green = 0.0F;
             NewTileType.DisplayColour.Blue = 1.0F;
-            modProgram.TileTypes.Add(NewTileType);
+            App.TileTypes.Add(NewTileType);
 
-            NewTileType = new modProgram.clsTileType();
+            NewTileType = new App.clsTileType();
             NewTileType.Name = "Cliff Face";
             NewTileType.DisplayColour.Red = 0.5F;
             NewTileType.DisplayColour.Green = 0.5F;
             NewTileType.DisplayColour.Blue = 0.5F;
-            modProgram.TileTypes.Add(NewTileType);
+            App.TileTypes.Add(NewTileType);
 
-            NewTileType = new modProgram.clsTileType();
+            NewTileType = new App.clsTileType();
             NewTileType.Name = "Baked Earth";
             NewTileType.DisplayColour.Red = 0.5F;
             NewTileType.DisplayColour.Green = 0.0F;
             NewTileType.DisplayColour.Blue = 0.0F;
-            modProgram.TileTypes.Add(NewTileType);
+            App.TileTypes.Add(NewTileType);
 
-            NewTileType = new modProgram.clsTileType();
+            NewTileType = new App.clsTileType();
             NewTileType.Name = "Sheet Ice";
             NewTileType.DisplayColour.Red = 1.0F;
             NewTileType.DisplayColour.Green = 1.0F;
             NewTileType.DisplayColour.Blue = 1.0F;
-            modProgram.TileTypes.Add(NewTileType);
+            App.TileTypes.Add(NewTileType);
 
-            NewTileType = new modProgram.clsTileType();
+            NewTileType = new App.clsTileType();
             NewTileType.Name = "Slush";
             NewTileType.DisplayColour.Red = 0.75F;
             NewTileType.DisplayColour.Green = 0.75F;
             NewTileType.DisplayColour.Blue = 0.75F;
-            modProgram.TileTypes.Add(NewTileType);
+            App.TileTypes.Add(NewTileType);
         }
 
         public void menuExportMapTileTypes_Click(Object sender, EventArgs e)
@@ -2375,7 +2375,7 @@ namespace SharpFlame
                 }
                 else
                 {
-                    modProgram.sSplitPath SplitPath = new modProgram.sSplitPath(Map.PathInfo.Path);
+                    App.sSplitPath SplitPath = new App.sSplitPath(Map.PathInfo.Path);
                     if ( Map.PathInfo.IsFMap )
                     {
                         MapFileTitle = SplitPath.FileTitleWithoutExtension;
@@ -2549,7 +2549,7 @@ namespace SharpFlame
             MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, Start, Finish);
             for ( A = 0; A <= Map.Units.Count - 1; A++ )
             {
-                if ( modProgram.PosIsWithinTileArea(Map.Units[A].Pos.Horizontal, Start, Finish) )
+                if ( App.PosIsWithinTileArea(Map.Units[A].Pos.Horizontal, Start, Finish) )
                 {
                     if ( !Map.Units[A].MapSelectedUnitLink.IsConnected )
                     {
@@ -2573,13 +2573,13 @@ namespace SharpFlame
 
         public void tsbSelectionFlipX_Click(Object sender, EventArgs e)
         {
-            if ( modProgram.Copied_Map == null )
+            if ( App.Copied_Map == null )
             {
                 MessageBox.Show("Nothing to flip.");
                 return;
             }
 
-            modProgram.Copied_Map.Rotate(TileOrientation.Orientation_FlipX, Program.frmMainInstance.PasteRotateObjects);
+            App.Copied_Map.Rotate(TileOrientation.Orientation_FlipX, Program.frmMainInstance.PasteRotateObjects);
         }
 
         public void btnHeightsMultiplySelection_Click(Object sender, EventArgs e)
@@ -2633,27 +2633,27 @@ namespace SharpFlame
 
         public void btnTextureAnticlockwise_Click(Object sender, EventArgs e)
         {
-            modProgram.TextureOrientation.RotateAnticlockwise();
+            App.TextureOrientation.RotateAnticlockwise();
 
             TextureView.DrawViewLater();
         }
 
         public void btnTextureClockwise_Click(Object sender, EventArgs e)
         {
-            modProgram.TextureOrientation.RotateClockwise();
+            App.TextureOrientation.RotateClockwise();
 
             TextureView.DrawViewLater();
         }
 
         public void btnTextureFlipX_Click(Object sender, EventArgs e)
         {
-            if ( modProgram.TextureOrientation.SwitchedAxes )
+            if ( App.TextureOrientation.SwitchedAxes )
             {
-                modProgram.TextureOrientation.ResultYFlip = !modProgram.TextureOrientation.ResultYFlip;
+                App.TextureOrientation.ResultYFlip = !App.TextureOrientation.ResultYFlip;
             }
             else
             {
-                modProgram.TextureOrientation.ResultXFlip = !modProgram.TextureOrientation.ResultXFlip;
+                App.TextureOrientation.ResultXFlip = !App.TextureOrientation.ResultXFlip;
             }
 
             TextureView.DrawViewLater();
@@ -2670,16 +2670,16 @@ namespace SharpFlame
 
             if ( lstAutoTexture.SelectedIndex < 0 )
             {
-                modProgram.SelectedTerrain = null;
+                App.SelectedTerrain = null;
             }
             else if ( lstAutoTexture.SelectedIndex < Map.Painter.TerrainCount )
             {
-                modProgram.SelectedTerrain = Map.Painter.Terrains[lstAutoTexture.SelectedIndex];
+                App.SelectedTerrain = Map.Painter.Terrains[lstAutoTexture.SelectedIndex];
             }
             else
             {
                 Debugger.Break();
-                modProgram.SelectedTerrain = null;
+                App.SelectedTerrain = null;
             }
         }
 
@@ -2694,16 +2694,16 @@ namespace SharpFlame
 
             if ( lstAutoRoad.SelectedIndex < 0 )
             {
-                modProgram.SelectedRoad = null;
+                App.SelectedRoad = null;
             }
             else if ( lstAutoRoad.SelectedIndex < Map.Painter.RoadCount )
             {
-                modProgram.SelectedRoad = Map.Painter.Roads[lstAutoRoad.SelectedIndex];
+                App.SelectedRoad = Map.Painter.Roads[lstAutoRoad.SelectedIndex];
             }
             else
             {
                 Debugger.Break();
-                modProgram.SelectedRoad = null;
+                App.SelectedRoad = null;
             }
         }
 
@@ -2848,11 +2848,11 @@ namespace SharpFlame
             }
         }
 
-        public modProgram.enumObjectRotateMode PasteRotateObjects = modProgram.enumObjectRotateMode.Walls;
+        public App.enumObjectRotateMode PasteRotateObjects = App.enumObjectRotateMode.Walls;
 
         public void menuRotateUnits_Click(Object sender, EventArgs e)
         {
-            PasteRotateObjects = modProgram.enumObjectRotateMode.All;
+            PasteRotateObjects = App.enumObjectRotateMode.All;
             menuRotateUnits.Checked = true;
             menuRotateWalls.Checked = false;
             menuRotateNothing.Checked = false;
@@ -2860,7 +2860,7 @@ namespace SharpFlame
 
         public void menuRotateWalls_Click(Object sender, EventArgs e)
         {
-            PasteRotateObjects = modProgram.enumObjectRotateMode.Walls;
+            PasteRotateObjects = App.enumObjectRotateMode.Walls;
             menuRotateUnits.Checked = false;
             menuRotateWalls.Checked = true;
             menuRotateNothing.Checked = false;
@@ -2868,7 +2868,7 @@ namespace SharpFlame
 
         public void menuRotateNothing_Click(Object sender, EventArgs e)
         {
-            PasteRotateObjects = modProgram.enumObjectRotateMode.None;
+            PasteRotateObjects = App.enumObjectRotateMode.None;
             menuRotateUnits.Checked = false;
             menuRotateWalls.Checked = false;
             menuRotateNothing.Checked = true;
@@ -3319,14 +3319,14 @@ namespace SharpFlame
                 }
             }
 
-            SelectedObjects_SetDroidType(modProgram.TemplateDroidTypes[cboDroidType.SelectedIndex]);
+            SelectedObjects_SetDroidType(App.TemplateDroidTypes[cboDroidType.SelectedIndex]);
         }
 
         public void rdoTextureIgnoreTerrain_Click(Object sender, EventArgs e)
         {
             if ( rdoTextureIgnoreTerrain.Checked )
             {
-                TextureTerrainAction = modProgram.enumTextureTerrainAction.Ignore;
+                TextureTerrainAction = App.enumTextureTerrainAction.Ignore;
                 rdoTextureReinterpretTerrain.Checked = false;
                 rdoTextureRemoveTerrain.Checked = false;
             }
@@ -3336,7 +3336,7 @@ namespace SharpFlame
         {
             if ( rdoTextureReinterpretTerrain.Checked )
             {
-                TextureTerrainAction = modProgram.enumTextureTerrainAction.Reinterpret;
+                TextureTerrainAction = App.enumTextureTerrainAction.Reinterpret;
                 rdoTextureIgnoreTerrain.Checked = false;
                 rdoTextureRemoveTerrain.Checked = false;
             }
@@ -3346,7 +3346,7 @@ namespace SharpFlame
         {
             if ( rdoTextureRemoveTerrain.Checked )
             {
-                TextureTerrainAction = modProgram.enumTextureTerrainAction.Remove;
+                TextureTerrainAction = App.enumTextureTerrainAction.Remove;
                 rdoTextureIgnoreTerrain.Checked = false;
                 rdoTextureReinterpretTerrain.Checked = false;
             }
@@ -3410,7 +3410,7 @@ namespace SharpFlame
 
         private void LoadInterfaceImage(string ImagePath, ref Bitmap ResultBitmap, clsResult Result)
         {
-            modProgram.sResult BitmapResult = new modProgram.sResult();
+            App.sResult BitmapResult = new App.sResult();
 
             ResultBitmap = null;
             BitmapResult = BitmapUtil.LoadBitmap(ImagePath, ref ResultBitmap);
@@ -3426,8 +3426,8 @@ namespace SharpFlame
 
             MapView.UpdateTabs();
 
-            modProgram.SelectedTerrain = null;
-            modProgram.SelectedRoad = null;
+            App.SelectedTerrain = null;
+            App.SelectedRoad = null;
 
             Resize_Update();
             MainMapTilesetChanged();
@@ -3541,7 +3541,7 @@ namespace SharpFlame
                 lstAutoTexture.SelectedIndex = -1;
             }
             lstAutoTexture.Enabled = true;
-            modProgram.SelectedTerrain = Map.Terrain.Vertices[Vertex.X, Vertex.Y].Terrain;
+            App.SelectedTerrain = Map.Terrain.Vertices[Vertex.X, Vertex.Y].Terrain;
         }
 
         public void TexturePicker()
@@ -3561,14 +3561,14 @@ namespace SharpFlame
             {
                 if ( Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.TextureNum < Map.Tileset.TileCount )
                 {
-                    modProgram.SelectedTextureNum = Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.TextureNum;
+                    App.SelectedTextureNum = Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.TextureNum;
                     TextureView.DrawViewLater();
                 }
             }
 
             if ( modSettings.Settings.PickOrientation )
             {
-                modProgram.TextureOrientation = Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation;
+                App.TextureOrientation = Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation;
                 TextureView.DrawViewLater();
             }
         }
@@ -3628,7 +3628,7 @@ namespace SharpFlame
                 Path = tempLoopVar_Path;
                 Result.Take(LoadMap(Path));
             }
-            modProgram.ShowWarnings(Result);
+            App.ShowWarnings(Result);
         }
 
         public void btnFlatSelected_Click(object sender, EventArgs e)
@@ -3649,17 +3649,17 @@ namespace SharpFlame
 
         public void rdoFillCliffIgnore_CheckedChanged(Object sender, EventArgs e)
         {
-            FillCliffAction = modProgram.enumFillCliffAction.Ignore;
+            FillCliffAction = App.enumFillCliffAction.Ignore;
         }
 
         public void rdoFillCliffStopBefore_CheckedChanged(Object sender, EventArgs e)
         {
-            FillCliffAction = modProgram.enumFillCliffAction.StopBefore;
+            FillCliffAction = App.enumFillCliffAction.StopBefore;
         }
 
         public void rdoFillCliffStopAfter_CheckedChanged(Object sender, EventArgs e)
         {
-            FillCliffAction = modProgram.enumFillCliffAction.StopAfter;
+            FillCliffAction = App.enumFillCliffAction.StopAfter;
         }
 
         public void btnScriptAreaCreate_Click(Object sender, EventArgs e)
@@ -3693,8 +3693,8 @@ namespace SharpFlame
             }
 
             NewArea.SetPositions(
-                new sXY_int(Map.Selected_Area_VertexA.X * modProgram.TerrainGridSpacing, Map.Selected_Area_VertexA.Y * modProgram.TerrainGridSpacing),
-                new sXY_int(Map.Selected_Area_VertexB.X * modProgram.TerrainGridSpacing, Map.Selected_Area_VertexB.Y * modProgram.TerrainGridSpacing));
+                new sXY_int(Map.Selected_Area_VertexA.X * App.TerrainGridSpacing, Map.Selected_Area_VertexA.Y * App.TerrainGridSpacing),
+                new sXY_int(Map.Selected_Area_VertexB.X * App.TerrainGridSpacing, Map.Selected_Area_VertexB.Y * App.TerrainGridSpacing));
 
             ScriptMarkerLists_Update();
 
@@ -3904,7 +3904,7 @@ namespace SharpFlame
                 return;
             }
 
-            modProgram.sResult Result = new modProgram.sResult();
+            App.sResult Result = new App.sResult();
             if ( _SelectedScriptMarker is clsMap.clsScriptPosition )
             {
                 clsMap.clsScriptPosition ScriptPosition = (clsMap.clsScriptPosition)_SelectedScriptMarker;
@@ -4084,7 +4084,7 @@ namespace SharpFlame
             clsMap.clsUnit OldUnit = Map.SelectedUnits[0];
             clsMap.clsUnit ResultUnit = new clsMap.clsUnit(OldUnit, Map);
             Map.UnitSwap(OldUnit, ResultUnit);
-            modProgram.sResult Result = ResultUnit.SetLabel(txtObjectLabel.Text);
+            App.sResult Result = ResultUnit.SetLabel(txtObjectLabel.Text);
             if ( !Result.Success )
             {
                 MessageBox.Show("Unable to set label: " + Result.Problem);
@@ -4123,7 +4123,7 @@ namespace SharpFlame
         public clsResult LoadMap(string Path)
         {
             clsResult ReturnResult = new clsResult("");
-            modProgram.sSplitPath SplitPath = new modProgram.sSplitPath(Path);
+            App.sSplitPath SplitPath = new App.sSplitPath(Path);
             clsMap ResultMap = new clsMap();
             string Extension = SplitPath.FileExtension.ToLower();
 
@@ -4168,7 +4168,7 @@ namespace SharpFlame
 
         public void Load_Autosave_Prompt()
         {
-            if ( !Directory.Exists(modProgram.AutoSavePath) )
+            if ( !Directory.Exists(App.AutoSavePath) )
             {
                 Interaction.MsgBox("Autosave directory does not exist. There are no autosaves.", MsgBoxStyle.OkOnly, "");
                 return;
@@ -4177,7 +4177,7 @@ namespace SharpFlame
 
             Dialog.FileName = "";
             Dialog.Filter = Constants.ProgramName + " Files (*.fmap, *.fme)|*.fmap;*.fme|All Files (*.*)|*.*";
-            Dialog.InitialDirectory = modProgram.AutoSavePath;
+            Dialog.InitialDirectory = App.AutoSavePath;
             if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
@@ -4185,7 +4185,7 @@ namespace SharpFlame
             modSettings.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
             clsResult Result = new clsResult("Loading map");
             Result.Take(LoadMap(Dialog.FileName));
-            modProgram.ShowWarnings(Result);
+            App.ShowWarnings(Result);
         }
 
         public void btnAlignObjects_Click(Object sender, EventArgs e)
@@ -4212,7 +4212,7 @@ namespace SharpFlame
 
         private void ObjectsUpdate()
         {
-            if ( !modProgram.ProgramInitializeFinished )
+            if ( !App.ProgramInitializeFinished )
             {
                 return;
             }
@@ -4220,13 +4220,13 @@ namespace SharpFlame
             switch ( TabControl1.SelectedIndex )
             {
                 case 0:
-                    ObjectListFill<clsFeatureType>(modProgram.ObjectData.FeatureTypes.GetItemsAsSimpleList(), dgvFeatures);
+                    ObjectListFill<clsFeatureType>(App.ObjectData.FeatureTypes.GetItemsAsSimpleList(), dgvFeatures);
                     break;
                 case 1:
-                    ObjectListFill<clsStructureType>(modProgram.ObjectData.StructureTypes.GetItemsAsSimpleList(), dgvStructures);
+                    ObjectListFill<clsStructureType>(App.ObjectData.StructureTypes.GetItemsAsSimpleList(), dgvStructures);
                     break;
                 case 2:
-                    ObjectListFill<clsDroidTemplate>(modProgram.ObjectData.DroidTemplates.GetItemsAsSimpleList(), dgvDroids);
+                    ObjectListFill<clsDroidTemplate>(App.ObjectData.DroidTemplates.GetItemsAsSimpleList(), dgvDroids);
                     break;
             }
         }
@@ -4276,7 +4276,7 @@ namespace SharpFlame
 
         private void rdoObjectsSortNone_Click(Object sender, EventArgs e)
         {
-            if ( !modProgram.ProgramInitializeFinished )
+            if ( !App.ProgramInitializeFinished )
             {
                 return;
             }
@@ -4286,7 +4286,7 @@ namespace SharpFlame
 
         private void rdoObjectsSortInternal_Click(Object sender, EventArgs e)
         {
-            if ( !modProgram.ProgramInitializeFinished )
+            if ( !App.ProgramInitializeFinished )
             {
                 return;
             }
@@ -4296,7 +4296,7 @@ namespace SharpFlame
 
         private void rdoObjectsSortInGame_Click(Object sender, EventArgs e)
         {
-            if ( !modProgram.ProgramInitializeFinished )
+            if ( !App.ProgramInitializeFinished )
             {
                 return;
             }

@@ -112,15 +112,15 @@ namespace SharpFlame
 
         public void GLDraw(float RotationDegrees)
         {
-            switch ( modProgram.Draw_Lighting )
+            switch ( App.Draw_Lighting )
             {
-                case modProgram.enumDrawLighting.Off:
+                case App.enumDrawLighting.Off:
                     GL.Color3(1.0F, 1.0F, 1.0F);
                     break;
-                case modProgram.enumDrawLighting.Half:
+                case App.enumDrawLighting.Half:
                     GL.Color3(0.875F, 0.875F, 0.875F);
                     break;
-                case modProgram.enumDrawLighting.Normal:
+                case App.enumDrawLighting.Normal:
                     GL.Color3(0.75F, 0.75F, 0.75F);
                     break;
             }
@@ -733,115 +733,115 @@ namespace SharpFlame
             return Result;
         }
 
-        public modProgram.enumDroidType GetDroidType()
+        public App.enumDroidType GetDroidType()
         {
-            modProgram.enumDroidType Result = default(modProgram.enumDroidType);
+            App.enumDroidType Result = default(App.enumDroidType);
 
-            if ( TemplateDroidType == modProgram.TemplateDroidType_Null )
+            if ( TemplateDroidType == App.TemplateDroidType_Null )
             {
-                Result = modProgram.enumDroidType.Default_;
+                Result = App.enumDroidType.Default_;
             }
-            else if ( TemplateDroidType == modProgram.TemplateDroidType_Person )
+            else if ( TemplateDroidType == App.TemplateDroidType_Person )
             {
-                Result = modProgram.enumDroidType.Person;
+                Result = App.enumDroidType.Person;
             }
-            else if ( TemplateDroidType == modProgram.TemplateDroidType_Cyborg )
+            else if ( TemplateDroidType == App.TemplateDroidType_Cyborg )
             {
-                Result = modProgram.enumDroidType.Cyborg;
+                Result = App.enumDroidType.Cyborg;
             }
-            else if ( TemplateDroidType == modProgram.TemplateDroidType_CyborgSuper )
+            else if ( TemplateDroidType == App.TemplateDroidType_CyborgSuper )
             {
-                Result = modProgram.enumDroidType.Cyborg_Super;
+                Result = App.enumDroidType.Cyborg_Super;
             }
-            else if ( TemplateDroidType == modProgram.TemplateDroidType_CyborgConstruct )
+            else if ( TemplateDroidType == App.TemplateDroidType_CyborgConstruct )
             {
-                Result = modProgram.enumDroidType.Cyborg_Construct;
+                Result = App.enumDroidType.Cyborg_Construct;
             }
-            else if ( TemplateDroidType == modProgram.TemplateDroidType_CyborgRepair )
+            else if ( TemplateDroidType == App.TemplateDroidType_CyborgRepair )
             {
-                Result = modProgram.enumDroidType.Cyborg_Repair;
+                Result = App.enumDroidType.Cyborg_Repair;
             }
-            else if ( TemplateDroidType == modProgram.TemplateDroidType_Transporter )
+            else if ( TemplateDroidType == App.TemplateDroidType_Transporter )
             {
-                Result = modProgram.enumDroidType.Transporter;
+                Result = App.enumDroidType.Transporter;
             }
             else if ( Turret1 == null )
             {
-                Result = modProgram.enumDroidType.Default_;
+                Result = App.enumDroidType.Default_;
             }
             else if ( Turret1.TurretType == clsTurret.enumTurretType.Brain )
             {
-                Result = modProgram.enumDroidType.Command;
+                Result = App.enumDroidType.Command;
             }
             else if ( Turret1.TurretType == clsTurret.enumTurretType.Sensor )
             {
-                Result = modProgram.enumDroidType.Sensor;
+                Result = App.enumDroidType.Sensor;
             }
             else if ( Turret1.TurretType == clsTurret.enumTurretType.ECM )
             {
-                Result = modProgram.enumDroidType.ECM;
+                Result = App.enumDroidType.ECM;
             }
             else if ( Turret1.TurretType == clsTurret.enumTurretType.Construct )
             {
-                Result = modProgram.enumDroidType.Construct;
+                Result = App.enumDroidType.Construct;
             }
             else if ( Turret1.TurretType == clsTurret.enumTurretType.Repair )
             {
-                Result = modProgram.enumDroidType.Repair;
+                Result = App.enumDroidType.Repair;
             }
             else if ( Turret1.TurretType == clsTurret.enumTurretType.Weapon )
             {
-                Result = modProgram.enumDroidType.Weapon;
+                Result = App.enumDroidType.Weapon;
             }
             else
             {
-                Result = modProgram.enumDroidType.Default_;
+                Result = App.enumDroidType.Default_;
             }
             return Result;
         }
 
-        public bool SetDroidType(modProgram.enumDroidType DroidType)
+        public bool SetDroidType(App.enumDroidType DroidType)
         {
             switch ( DroidType )
             {
-                case modProgram.enumDroidType.Weapon:
-                    TemplateDroidType = modProgram.TemplateDroidType_Droid;
+                case App.enumDroidType.Weapon:
+                    TemplateDroidType = App.TemplateDroidType_Droid;
                     break;
-                case modProgram.enumDroidType.Sensor:
-                    TemplateDroidType = modProgram.TemplateDroidType_Droid;
+                case App.enumDroidType.Sensor:
+                    TemplateDroidType = App.TemplateDroidType_Droid;
                     break;
-                case modProgram.enumDroidType.ECM:
-                    TemplateDroidType = modProgram.TemplateDroidType_Droid;
+                case App.enumDroidType.ECM:
+                    TemplateDroidType = App.TemplateDroidType_Droid;
                     break;
-                case modProgram.enumDroidType.Construct:
-                    TemplateDroidType = modProgram.TemplateDroidType_Droid;
+                case App.enumDroidType.Construct:
+                    TemplateDroidType = App.TemplateDroidType_Droid;
                     break;
-                case modProgram.enumDroidType.Person:
-                    TemplateDroidType = modProgram.TemplateDroidType_Person;
+                case App.enumDroidType.Person:
+                    TemplateDroidType = App.TemplateDroidType_Person;
                     break;
-                case modProgram.enumDroidType.Cyborg:
-                    TemplateDroidType = modProgram.TemplateDroidType_Cyborg;
+                case App.enumDroidType.Cyborg:
+                    TemplateDroidType = App.TemplateDroidType_Cyborg;
                     break;
-                case modProgram.enumDroidType.Transporter:
-                    TemplateDroidType = modProgram.TemplateDroidType_Transporter;
+                case App.enumDroidType.Transporter:
+                    TemplateDroidType = App.TemplateDroidType_Transporter;
                     break;
-                case modProgram.enumDroidType.Command:
-                    TemplateDroidType = modProgram.TemplateDroidType_Droid;
+                case App.enumDroidType.Command:
+                    TemplateDroidType = App.TemplateDroidType_Droid;
                     break;
-                case modProgram.enumDroidType.Repair:
-                    TemplateDroidType = modProgram.TemplateDroidType_Droid;
+                case App.enumDroidType.Repair:
+                    TemplateDroidType = App.TemplateDroidType_Droid;
                     break;
-                case modProgram.enumDroidType.Default_:
-                    TemplateDroidType = modProgram.TemplateDroidType_Null;
+                case App.enumDroidType.Default_:
+                    TemplateDroidType = App.TemplateDroidType_Null;
                     break;
-                case modProgram.enumDroidType.Cyborg_Construct:
-                    TemplateDroidType = modProgram.TemplateDroidType_CyborgConstruct;
+                case App.enumDroidType.Cyborg_Construct:
+                    TemplateDroidType = App.TemplateDroidType_CyborgConstruct;
                     break;
-                case modProgram.enumDroidType.Cyborg_Repair:
-                    TemplateDroidType = modProgram.TemplateDroidType_CyborgRepair;
+                case App.enumDroidType.Cyborg_Repair:
+                    TemplateDroidType = App.TemplateDroidType_CyborgRepair;
                     break;
-                case modProgram.enumDroidType.Cyborg_Super:
-                    TemplateDroidType = modProgram.TemplateDroidType_CyborgSuper;
+                case App.enumDroidType.Cyborg_Super:
+                    TemplateDroidType = App.TemplateDroidType_CyborgSuper;
                     break;
                 default:
                     TemplateDroidType = null;

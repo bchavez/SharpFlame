@@ -25,8 +25,8 @@ namespace SharpFlame
         {
             Application.EnableVisualStyles();
 
-            modProgram.PlatformPathSeparator = Path.DirectorySeparatorChar;
-            modProgram.SetProgramSubDirs();
+            App.PlatformPathSeparator = Path.DirectorySeparatorChar;
+            App.SetProgramSubDirs();
 
             modSettings.CreateSettingOptions();
             modControls.CreateControls(); //needed to load key control settings
@@ -51,23 +51,23 @@ namespace SharpFlame
 
             try
             {
-                modProgram.ProgramIcon =
+                App.ProgramIcon =
                     new Icon((new ConsoleApplicationBase()).Info.DirectoryPath +
-                             Convert.ToString(modProgram.PlatformPathSeparator) + "flaME.ico");
+                             Convert.ToString(App.PlatformPathSeparator) + "flaME.ico");
             }
             catch ( Exception ex )
             {
                 InitializeResult.WarningAdd(Constants.ProgramName + " icon is missing: " + ex.Message);
             }
-            frmMainInstance.Icon = modProgram.ProgramIcon;
-            frmGeneratorInstance.Icon = modProgram.ProgramIcon;
+            frmMainInstance.Icon = App.ProgramIcon;
+            frmGeneratorInstance.Icon = App.ProgramIcon;
 
             InitializeDelay = new Timer();
             InitializeDelay.Tick += frmMainInstance.Initialize;
             InitializeDelay.Interval = 50;
             InitializeDelay.Enabled = true;
 
-            while ( !modProgram.ProgramInitializeFinished )
+            while ( !App.ProgramInitializeFinished )
             {
                 System.Threading.Thread.Sleep(50);
                 Application.DoEvents();

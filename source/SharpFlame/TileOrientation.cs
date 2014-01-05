@@ -375,7 +375,7 @@ namespace SharpFlame
             {
                 if ( TileOrientation.ResultXFlip )
                 {
-                    Result.X = modProgram.TerrainGridSpacing - Pos.Y;
+                    Result.X = App.TerrainGridSpacing - Pos.Y;
                 }
                 else
                 {
@@ -383,7 +383,7 @@ namespace SharpFlame
                 }
                 if ( TileOrientation.ResultYFlip )
                 {
-                    Result.Y = modProgram.TerrainGridSpacing - Pos.X;
+                    Result.Y = App.TerrainGridSpacing - Pos.X;
                 }
                 else
                 {
@@ -394,7 +394,7 @@ namespace SharpFlame
             {
                 if ( TileOrientation.ResultXFlip )
                 {
-                    Result.X = modProgram.TerrainGridSpacing - Pos.X;
+                    Result.X = App.TerrainGridSpacing - Pos.X;
                 }
                 else
                 {
@@ -402,7 +402,7 @@ namespace SharpFlame
                 }
                 if ( TileOrientation.ResultYFlip )
                 {
-                    Result.Y = modProgram.TerrainGridSpacing - Pos.Y;
+                    Result.Y = App.TerrainGridSpacing - Pos.Y;
                 }
                 else
                 {

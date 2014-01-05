@@ -81,15 +81,15 @@ namespace SharpFlame
                     }
                     else if ( byteTemp == 1 )
                     {
-                        Tileset = modProgram.Tileset_Arizona;
+                        Tileset = App.Tileset_Arizona;
                     }
                     else if ( byteTemp == 2 )
                     {
-                        Tileset = modProgram.Tileset_Urban;
+                        Tileset = App.Tileset_Urban;
                     }
                     else if ( byteTemp == 3 )
                     {
-                        Tileset = modProgram.Tileset_Rockies;
+                        Tileset = App.Tileset_Rockies;
                     }
                     else
                     {
@@ -329,15 +329,15 @@ namespace SharpFlame
                     {
                         if ( TempUnit[A].LNDType == ((byte)0) )
                         {
-                            UnitType = modProgram.ObjectData.FindOrCreateUnitType(TempUnit[A].Code, clsUnitType.enumType.Feature, -1);
+                            UnitType = App.ObjectData.FindOrCreateUnitType(TempUnit[A].Code, clsUnitType.enumType.Feature, -1);
                         }
                         else if ( TempUnit[A].LNDType == ((byte)1) )
                         {
-                            UnitType = modProgram.ObjectData.FindOrCreateUnitType(TempUnit[A].Code, clsUnitType.enumType.PlayerStructure, -1);
+                            UnitType = App.ObjectData.FindOrCreateUnitType(TempUnit[A].Code, clsUnitType.enumType.PlayerStructure, -1);
                         }
                         else if ( TempUnit[A].LNDType == ((byte)2) )
                         {
-                            UnitType = modProgram.ObjectData.FindOrCreateUnitType(Convert.ToString(TempUnit[A].Code), clsUnitType.enumType.PlayerDroid, -1);
+                            UnitType = App.ObjectData.FindOrCreateUnitType(Convert.ToString(TempUnit[A].Code), clsUnitType.enumType.PlayerDroid, -1);
                         }
                         else
                         {
@@ -365,12 +365,12 @@ namespace SharpFlame
                             if ( TempUnit[A].ID == 0U )
                             {
                                 TempUnit[A].ID = AvailableID;
-                                modProgram.ZeroIDWarning(NewUnit, TempUnit[A].ID, ReturnResult);
+                                App.ZeroIDWarning(NewUnit, TempUnit[A].ID, ReturnResult);
                             }
                             UnitAdd.ID = TempUnit[A].ID;
                             UnitAdd.NewUnit = NewUnit;
                             UnitAdd.Perform();
-                            modProgram.ErrorIDChange(TempUnit[A].ID, NewUnit, "Read_FMEv5+");
+                            App.ErrorIDChange(TempUnit[A].ID, NewUnit, "Read_FMEv5+");
                             if ( AvailableID == TempUnit[A].ID )
                             {
                                 AvailableID = NewUnit.ID + 1U;
@@ -537,7 +537,7 @@ namespace SharpFlame
                 BinaryReader Reader = default(BinaryReader);
                 try
                 {
-                    Reader = new BinaryReader(new FileStream(Path, FileMode.Open), modProgram.UTF8Encoding);
+                    Reader = new BinaryReader(new FileStream(Path, FileMode.Open), App.UTF8Encoding);
                 }
                 catch ( Exception ex )
                 {
@@ -623,19 +623,19 @@ namespace SharpFlame
                         strTemp2 = strTemp.ToLower();
                         if ( strTemp2.IndexOf("tertilesc1") + 1 > 0 )
                         {
-                            Tileset = modProgram.Tileset_Arizona;
+                            Tileset = App.Tileset_Arizona;
 
                             goto LineDone;
                         }
                         else if ( strTemp2.IndexOf("tertilesc2") + 1 > 0 )
                         {
-                            Tileset = modProgram.Tileset_Urban;
+                            Tileset = App.Tileset_Urban;
 
                             goto LineDone;
                         }
                         else if ( strTemp2.IndexOf("tertilesc3") + 1 > 0 )
                         {
-                            Tileset = modProgram.Tileset_Rockies;
+                            Tileset = App.Tileset_Rockies;
 
                             goto LineDone;
                         }
@@ -1076,13 +1076,13 @@ namespace SharpFlame
                     switch ( CurrentObject.TypeNum )
                     {
                         case 0:
-                            NewType = modProgram.ObjectData.FindOrCreateUnitType(CurrentObject.Code, clsUnitType.enumType.Feature, -1);
+                            NewType = App.ObjectData.FindOrCreateUnitType(CurrentObject.Code, clsUnitType.enumType.Feature, -1);
                             break;
                         case 1:
-                            NewType = modProgram.ObjectData.FindOrCreateUnitType(CurrentObject.Code, clsUnitType.enumType.PlayerStructure, -1);
+                            NewType = App.ObjectData.FindOrCreateUnitType(CurrentObject.Code, clsUnitType.enumType.PlayerStructure, -1);
                             break;
                         case 2:
-                            NewType = modProgram.ObjectData.FindOrCreateUnitType(CurrentObject.Code, clsUnitType.enumType.PlayerDroid, -1);
+                            NewType = App.ObjectData.FindOrCreateUnitType(CurrentObject.Code, clsUnitType.enumType.PlayerDroid, -1);
                             break;
                         default:
                             NewType = null;
@@ -1108,12 +1108,12 @@ namespace SharpFlame
                         if ( CurrentObject.ID == 0U )
                         {
                             CurrentObject.ID = AvailableID;
-                            modProgram.ZeroIDWarning(NewUnit, CurrentObject.ID, ReturnResult);
+                            App.ZeroIDWarning(NewUnit, CurrentObject.ID, ReturnResult);
                         }
                         UnitAdd.NewUnit = NewUnit;
                         UnitAdd.ID = CurrentObject.ID;
                         UnitAdd.Perform();
-                        modProgram.ErrorIDChange(CurrentObject.ID, NewUnit, "Load_LND");
+                        App.ErrorIDChange(CurrentObject.ID, NewUnit, "Load_LND");
                         if ( AvailableID == CurrentObject.ID )
                         {
                             AvailableID = NewUnit.ID + 1U;
@@ -1148,19 +1148,19 @@ namespace SharpFlame
         {
             sXYZ_int Result = new sXYZ_int();
 
-            Result.X = Horizontal.X - (int)(Terrain.TileSize.X * modProgram.TerrainGridSpacing / 2.0D);
-            Result.Z = ((int)(Terrain.TileSize.Y * modProgram.TerrainGridSpacing / 2.0D)) - Horizontal.Y;
+            Result.X = Horizontal.X - (int)(Terrain.TileSize.X * App.TerrainGridSpacing / 2.0D);
+            Result.Z = ((int)(Terrain.TileSize.Y * App.TerrainGridSpacing / 2.0D)) - Horizontal.Y;
             Result.Y = (int)(GetTerrainHeight(Horizontal));
 
             return Result;
         }
 
-        public modProgram.sWorldPos MapPos_From_LNDPos(sXYZ_int Pos)
+        public App.sWorldPos MapPos_From_LNDPos(sXYZ_int Pos)
         {
-            modProgram.sWorldPos Result = new modProgram.sWorldPos();
+            App.sWorldPos Result = new App.sWorldPos();
 
-            Result.Horizontal.X = Pos.X + (int)(Terrain.TileSize.X * modProgram.TerrainGridSpacing / 2.0D);
-            Result.Horizontal.Y = ((int)(Terrain.TileSize.Y * modProgram.TerrainGridSpacing / 2.0D)) - Pos.Z;
+            Result.Horizontal.X = Pos.X + (int)(Terrain.TileSize.X * App.TerrainGridSpacing / 2.0D);
+            Result.Horizontal.Y = ((int)(Terrain.TileSize.Y * App.TerrainGridSpacing / 2.0D)) - Pos.Z;
             Result.Altitude = (int)(GetTerrainHeight(Result.Horizontal));
 
             return Result;
@@ -1207,15 +1207,15 @@ namespace SharpFlame
 
                 File = new StreamWriter(new FileStream(Path, FileMode.CreateNew), new UTF8Encoding(false, false));
 
-                if ( Tileset == modProgram.Tileset_Arizona )
+                if ( Tileset == App.Tileset_Arizona )
                 {
                     Text = "DataSet WarzoneDataC1.eds" + Convert.ToString(EndChar);
                 }
-                else if ( Tileset == modProgram.Tileset_Urban )
+                else if ( Tileset == App.Tileset_Urban )
                 {
                     Text = "DataSet WarzoneDataC2.eds" + Convert.ToString(EndChar);
                 }
-                else if ( Tileset == modProgram.Tileset_Rockies )
+                else if ( Tileset == App.Tileset_Rockies )
                 {
                     Text = "DataSet WarzoneDataC3.eds" + Convert.ToString(EndChar);
                 }
@@ -1260,15 +1260,15 @@ namespace SharpFlame
                 File.Write(Text);
                 Text = "    Textures {" + Convert.ToString(EndChar);
                 File.Write(Text);
-                if ( Tileset == modProgram.Tileset_Arizona )
+                if ( Tileset == App.Tileset_Arizona )
                 {
                     Text = "        texpages\\tertilesc1.pcx" + Convert.ToString(EndChar);
                 }
-                else if ( Tileset == modProgram.Tileset_Urban )
+                else if ( Tileset == App.Tileset_Urban )
                 {
                     Text = "        texpages\\tertilesc2.pcx" + Convert.ToString(EndChar);
                 }
-                else if ( Tileset == modProgram.Tileset_Rockies )
+                else if ( Tileset == App.Tileset_Rockies )
                 {
                     Text = "        texpages\\tertilesc3.pcx" + Convert.ToString(EndChar);
                 }
@@ -1332,15 +1332,15 @@ namespace SharpFlame
                 File.Write(Text);
                 Text = "    Version 3" + Convert.ToString(EndChar);
                 File.Write(Text);
-                if ( Tileset == modProgram.Tileset_Arizona )
+                if ( Tileset == App.Tileset_Arizona )
                 {
                     Text = "	FeatureSet WarzoneDataC1.eds" + Convert.ToString(EndChar);
                 }
-                else if ( Tileset == modProgram.Tileset_Urban )
+                else if ( Tileset == App.Tileset_Urban )
                 {
                     Text = "	FeatureSet WarzoneDataC2.eds" + Convert.ToString(EndChar);
                 }
-                else if ( Tileset == modProgram.Tileset_Rockies )
+                else if ( Tileset == App.Tileset_Rockies )
                 {
                     Text = "	FeatureSet WarzoneDataC3.eds" + Convert.ToString(EndChar);
                 }
@@ -1522,9 +1522,9 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public modProgram.sResult Write_MinimapFile(string Path, bool Overwrite)
+        public App.sResult Write_MinimapFile(string Path, bool Overwrite)
         {
-            modProgram.sResult ReturnResult = new modProgram.sResult();
+            App.sResult ReturnResult = new App.sResult();
             int X = 0;
             int Y = 0;
 
@@ -1550,9 +1550,9 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public modProgram.sResult Write_Heightmap(string Path, bool Overwrite)
+        public App.sResult Write_Heightmap(string Path, bool Overwrite)
         {
-            modProgram.sResult ReturnResult = new modProgram.sResult();
+            App.sResult ReturnResult = new App.sResult();
             Bitmap HeightmapBitmap = new Bitmap(Terrain.TileSize.X + 1, Terrain.TileSize.Y + 1);
             int X = 0;
             int Y = 0;
@@ -1571,9 +1571,9 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public modProgram.sResult Write_TTP(string Path, bool Overwrite)
+        public App.sResult Write_TTP(string Path, bool Overwrite)
         {
-            modProgram.sResult ReturnResult = new modProgram.sResult();
+            App.sResult ReturnResult = new App.sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -1594,7 +1594,7 @@ namespace SharpFlame
 
             try
             {
-                File_TTP = new BinaryWriter(new FileStream(Path, FileMode.CreateNew), modProgram.ASCIIEncoding);
+                File_TTP = new BinaryWriter(new FileStream(Path, FileMode.CreateNew), App.ASCIIEncoding);
             }
             catch ( Exception ex )
             {
@@ -1625,9 +1625,9 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public modProgram.sResult Load_TTP(string Path)
+        public App.sResult Load_TTP(string Path)
         {
-            modProgram.sResult ReturnResult = new modProgram.sResult();
+            App.sResult ReturnResult = new App.sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
             BinaryReader File = default(BinaryReader);
@@ -1647,9 +1647,9 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public modProgram.sResult Write_FME(string Path, bool Overwrite, byte ScavengerPlayerNum)
+        public App.sResult Write_FME(string Path, bool Overwrite, byte ScavengerPlayerNum)
         {
-            modProgram.sResult ReturnResult = new modProgram.sResult();
+            App.sResult ReturnResult = new App.sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -1681,15 +1681,15 @@ namespace SharpFlame
                 {
                     File.Write((byte)0);
                 }
-                else if ( Tileset == modProgram.Tileset_Arizona )
+                else if ( Tileset == App.Tileset_Arizona )
                 {
                     File.Write((byte)1);
                 }
-                else if ( Tileset == modProgram.Tileset_Urban )
+                else if ( Tileset == App.Tileset_Urban )
                 {
                     File.Write((byte)2);
                 }
-                else if ( Tileset == modProgram.Tileset_Rockies )
+                else if ( Tileset == App.Tileset_Rockies )
                 {
                     File.Write((byte)3);
                 }

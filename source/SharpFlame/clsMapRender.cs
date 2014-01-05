@@ -38,18 +38,18 @@ namespace SharpFlame
 
                 if ( Terrain.Tiles[TileX, TileY].Texture.TextureNum < 0 )
                 {
-                    GL.BindTexture(TextureTarget.Texture2D, modProgram.GLTexture_NoTile);
+                    GL.BindTexture(TextureTarget.Texture2D, App.GLTexture_NoTile);
                 }
                 else if ( Tileset == null )
                 {
-                    GL.BindTexture(TextureTarget.Texture2D, modProgram.GLTexture_OverflowTile);
+                    GL.BindTexture(TextureTarget.Texture2D, App.GLTexture_OverflowTile);
                 }
                 else if ( Terrain.Tiles[TileX, TileY].Texture.TextureNum < Tileset.TileCount )
                 {
                     A = Tileset.Tiles[Terrain.Tiles[TileX, TileY].Texture.TextureNum].MapView_GL_Texture_Num;
                     if ( A == 0 )
                     {
-                        GL.BindTexture(TextureTarget.Texture2D, modProgram.GLTexture_OverflowTile);
+                        GL.BindTexture(TextureTarget.Texture2D, App.GLTexture_OverflowTile);
                     }
                     else
                     {
@@ -58,7 +58,7 @@ namespace SharpFlame
                 }
                 else
                 {
-                    GL.BindTexture(TextureTarget.Texture2D, modProgram.GLTexture_OverflowTile);
+                    GL.BindTexture(TextureTarget.Texture2D, App.GLTexture_OverflowTile);
                 }
                 GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Modulate);
 
@@ -69,18 +69,18 @@ namespace SharpFlame
 
                 TileOrientation.GetTileRotatedTexCoords(Terrain.Tiles[TileX, TileY].Texture.Orientation, TexCoord0, TexCoord1, TexCoord2, TexCoord3);
 
-                Vertex0.X = TileX * modProgram.TerrainGridSpacing;
+                Vertex0.X = TileX * App.TerrainGridSpacing;
                 Vertex0.Y = (float)(TileTerrainHeight[0] * Map.HeightMultiplier);
-                Vertex0.Z = - TileY * modProgram.TerrainGridSpacing;
-                Vertex1.X = (TileX + 1) * modProgram.TerrainGridSpacing;
+                Vertex0.Z = - TileY * App.TerrainGridSpacing;
+                Vertex1.X = (TileX + 1) * App.TerrainGridSpacing;
                 Vertex1.Y = (float)(TileTerrainHeight[1] * Map.HeightMultiplier);
-                Vertex1.Z = - TileY * modProgram.TerrainGridSpacing;
-                Vertex2.X = TileX * modProgram.TerrainGridSpacing;
+                Vertex1.Z = - TileY * App.TerrainGridSpacing;
+                Vertex2.X = TileX * App.TerrainGridSpacing;
                 Vertex2.Y = (float)(TileTerrainHeight[2] * Map.HeightMultiplier);
-                Vertex2.Z = - (TileY + 1) * modProgram.TerrainGridSpacing;
-                Vertex3.X = (TileX + 1) * modProgram.TerrainGridSpacing;
+                Vertex2.Z = - (TileY + 1) * App.TerrainGridSpacing;
+                Vertex3.X = (TileX + 1) * App.TerrainGridSpacing;
                 Vertex3.Y = (float)(TileTerrainHeight[3] * Map.HeightMultiplier);
-                Vertex3.Z = - (TileY + 1) * modProgram.TerrainGridSpacing;
+                Vertex3.Z = - (TileY + 1) * App.TerrainGridSpacing;
 
                 Normal0 = Map.TerrainVertexNormalCalc(TileX, TileY);
                 Normal1 = Map.TerrainVertexNormalCalc(TileX + 1, TileY);

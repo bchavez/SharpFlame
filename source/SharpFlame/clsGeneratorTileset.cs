@@ -27,7 +27,7 @@ namespace SharpFlame
 
         public int BorderTextureNum = -1;
 
-        public modProgram.sLayerList OldTextureLayers;
+        public App.sLayerList OldTextureLayers;
 
         public void ScatteredUnit_Add(sUnitChance NewUnit)
         {

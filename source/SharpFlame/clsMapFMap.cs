@@ -98,7 +98,7 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "droidtype" )
                 {
-                    clsDroidDesign.clsTemplateDroidType DroidType = modProgram.GetTemplateDroidTypeFromTemplateCode(Convert.ToString(INIProperty.Value));
+                    clsDroidDesign.clsTemplateDroidType DroidType = App.GetTemplateDroidTypeFromTemplateCode(Convert.ToString(INIProperty.Value));
                     if ( DroidType == null )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
@@ -142,7 +142,7 @@ namespace SharpFlame
                         CommaText[A] = Convert.ToString(CommaText[A].Trim());
                     }
                     clsTurret.enumTurretType TurretType = default(clsTurret.enumTurretType);
-                    TurretType = modProgram.GetTurretTypeFromName(CommaText[0]);
+                    TurretType = App.GetTurretTypeFromName(CommaText[0]);
                     if ( TurretType != clsTurret.enumTurretType.Unknown )
                     {
                         Objects[INISectionNum].TurretTypes[0] = TurretType;
@@ -165,7 +165,7 @@ namespace SharpFlame
                         CommaText[A] = Convert.ToString(CommaText[A].Trim());
                     }
                     clsTurret.enumTurretType TurretType = default(clsTurret.enumTurretType);
-                    TurretType = modProgram.GetTurretTypeFromName(CommaText[0]);
+                    TurretType = App.GetTurretTypeFromName(CommaText[0]);
                     if ( TurretType != clsTurret.enumTurretType.Unknown )
                     {
                         Objects[INISectionNum].TurretTypes[1] = TurretType;
@@ -188,7 +188,7 @@ namespace SharpFlame
                         CommaText[A] = Convert.ToString(CommaText[A].Trim());
                     }
                     clsTurret.enumTurretType TurretType = default(clsTurret.enumTurretType);
-                    TurretType = modProgram.GetTurretTypeFromName(CommaText[0]);
+                    TurretType = App.GetTurretTypeFromName(CommaText[0]);
                     if ( TurretType != clsTurret.enumTurretType.Unknown )
                     {
                         Objects[INISectionNum].TurretTypes[2] = TurretType;
@@ -333,8 +333,8 @@ namespace SharpFlame
                 WZStream.SetLevel(0);
             }
 
-            BinaryWriter BinaryWriter = new BinaryWriter(WZStream, modProgram.UTF8Encoding);
-            StreamWriter StreamWriter = new StreamWriter(WZStream, modProgram.UTF8Encoding);
+            BinaryWriter BinaryWriter = new BinaryWriter(WZStream, App.UTF8Encoding);
+            StreamWriter StreamWriter = new StreamWriter(WZStream, App.UTF8Encoding);
             ZipEntry ZipEntry = default(ZipEntry);
             string ZipPath = "";
 
@@ -471,15 +471,15 @@ namespace SharpFlame
                 if ( Tileset == null )
                 {
                 }
-                else if ( Tileset == modProgram.Tileset_Arizona )
+                else if ( Tileset == App.Tileset_Arizona )
                 {
                     File.Property_Append("Tileset", "Arizona");
                 }
-                else if ( Tileset == modProgram.Tileset_Urban )
+                else if ( Tileset == App.Tileset_Urban )
                 {
                     File.Property_Append("Tileset", "Urban");
                 }
-                else if ( Tileset == modProgram.Tileset_Rockies )
+                else if ( Tileset == App.Tileset_Rockies )
                 {
                     File.Property_Append("Tileset", "Rockies");
                 }
@@ -1190,15 +1190,15 @@ namespace SharpFlame
                 {
                     if ( INIProperty.Value.ToLower() == "arizona" )
                     {
-                        Tileset = modProgram.Tileset_Arizona;
+                        Tileset = App.Tileset_Arizona;
                     }
                     else if ( INIProperty.Value.ToLower() == "urban" )
                     {
-                        Tileset = modProgram.Tileset_Urban;
+                        Tileset = App.Tileset_Urban;
                     }
                     else if ( INIProperty.Value.ToLower() == "rockies" )
                     {
-                        Tileset = modProgram.Tileset_Rockies;
+                        Tileset = App.Tileset_Rockies;
                     }
                     else
                     {
@@ -1750,7 +1750,7 @@ namespace SharpFlame
                 {
                     ObjectPosInvalidCount++;
                 }
-                else if ( !modProgram.PosIsWithinTileArea(INIObjects.Objects[A].Pos.XY, ZeroPos, Terrain.TileSize) )
+                else if ( !App.PosIsWithinTileArea(INIObjects.Objects[A].Pos.XY, ZeroPos, Terrain.TileSize) )
                 {
                     ObjectPosInvalidCount++;
                 }
@@ -1773,12 +1773,12 @@ namespace SharpFlame
                             DroidDesign.TemplateDroidType = INIObjects.Objects[A].TemplateDroidType;
                             if ( DroidDesign.TemplateDroidType == null )
                             {
-                                DroidDesign.TemplateDroidType = modProgram.TemplateDroidType_Droid;
+                                DroidDesign.TemplateDroidType = App.TemplateDroidType_Droid;
                                 DesignTypeUnspecifiedCount++;
                             }
                             if ( INIObjects.Objects[A].BodyCode != "" )
                             {
-                                DroidDesign.Body = modProgram.ObjectData.FindOrCreateBody(Convert.ToString(INIObjects.Objects[A].BodyCode));
+                                DroidDesign.Body = App.ObjectData.FindOrCreateBody(Convert.ToString(INIObjects.Objects[A].BodyCode));
                                 if ( DroidDesign.Body.IsUnknown )
                                 {
                                     DroidComponentUnknownCount++;
@@ -1786,7 +1786,7 @@ namespace SharpFlame
                             }
                             if ( INIObjects.Objects[A].PropulsionCode != "" )
                             {
-                                DroidDesign.Propulsion = modProgram.ObjectData.FindOrCreatePropulsion(INIObjects.Objects[A].PropulsionCode);
+                                DroidDesign.Propulsion = App.ObjectData.FindOrCreatePropulsion(INIObjects.Objects[A].PropulsionCode);
                                 if ( DroidDesign.Propulsion.IsUnknown )
                                 {
                                     DroidComponentUnknownCount++;
@@ -1795,7 +1795,7 @@ namespace SharpFlame
                             DroidDesign.TurretCount = (byte)(INIObjects.Objects[A].TurretCount);
                             if ( INIObjects.Objects[A].TurretCodes[0] != "" )
                             {
-                                DroidDesign.Turret1 = modProgram.ObjectData.FindOrCreateTurret(INIObjects.Objects[A].TurretTypes[0],
+                                DroidDesign.Turret1 = App.ObjectData.FindOrCreateTurret(INIObjects.Objects[A].TurretTypes[0],
                                     Convert.ToString(INIObjects.Objects[A].TurretCodes[0]));
                                 if ( DroidDesign.Turret1.IsUnknown )
                                 {
@@ -1804,7 +1804,7 @@ namespace SharpFlame
                             }
                             if ( INIObjects.Objects[A].TurretCodes[1] != "" )
                             {
-                                DroidDesign.Turret2 = modProgram.ObjectData.FindOrCreateTurret(INIObjects.Objects[A].TurretTypes[1],
+                                DroidDesign.Turret2 = App.ObjectData.FindOrCreateTurret(INIObjects.Objects[A].TurretTypes[1],
                                     Convert.ToString(INIObjects.Objects[A].TurretCodes[1]));
                                 if ( DroidDesign.Turret2.IsUnknown )
                                 {
@@ -1813,7 +1813,7 @@ namespace SharpFlame
                             }
                             if ( INIObjects.Objects[A].TurretCodes[2] != "" )
                             {
-                                DroidDesign.Turret3 = modProgram.ObjectData.FindOrCreateTurret(INIObjects.Objects[A].TurretTypes[2],
+                                DroidDesign.Turret3 = App.ObjectData.FindOrCreateTurret(INIObjects.Objects[A].TurretTypes[2],
                                     Convert.ToString(INIObjects.Objects[A].TurretCodes[2]));
                                 if ( DroidDesign.Turret3.IsUnknown )
                                 {
@@ -1825,7 +1825,7 @@ namespace SharpFlame
                         }
                         else
                         {
-                            UnitType = modProgram.ObjectData.FindOrCreateUnitType(INIObjects.Objects[A].Code, INIObjects.Objects[A].Type, INIObjects.Objects[A].WallType);
+                            UnitType = App.ObjectData.FindOrCreateUnitType(INIObjects.Objects[A].Code, INIObjects.Objects[A].Type, INIObjects.Objects[A].WallType);
                             if ( UnitType.IsUnknown )
                             {
                                 if ( UnknownUnitTypeCount < MaxUnknownUnitTypeWarningCount )
@@ -1898,13 +1898,13 @@ namespace SharpFlame
                         if ( INIObjects.Objects[A].ID == 0U )
                         {
                             INIObjects.Objects[A].ID = AvailableID;
-                            modProgram.ZeroIDWarning(NewObject, INIObjects.Objects[A].ID, ReturnResult);
+                            App.ZeroIDWarning(NewObject, INIObjects.Objects[A].ID, ReturnResult);
                         }
                         UnitAdd.NewUnit = NewObject;
                         UnitAdd.ID = INIObjects.Objects[A].ID;
                         UnitAdd.Label = INIObjects.Objects[A].Label;
                         UnitAdd.Perform();
-                        modProgram.ErrorIDChange(INIObjects.Objects[A].ID, NewObject, "Read_FMap_Objects");
+                        App.ErrorIDChange(INIObjects.Objects[A].ID, NewObject, "Read_FMap_Objects");
                         if ( AvailableID == INIObjects.Objects[A].ID )
                         {
                             AvailableID = NewObject.ID + 1U;
@@ -2053,7 +2053,7 @@ namespace SharpFlame
                     for ( A = 0; A <= Tileset.TileCount - 1; A++ )
                     {
                         byteTemp = File.ReadByte();
-                        if ( byteTemp >= modProgram.TileTypes.Count )
+                        if ( byteTemp >= App.TileTypes.Count )
                         {
                             InvalidTypeCount++;
                         }

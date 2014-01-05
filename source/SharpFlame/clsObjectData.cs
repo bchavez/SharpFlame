@@ -119,7 +119,7 @@ namespace SharpFlame
 
                 try
                 {
-                    Reader = new StreamReader(Path + SubDirectory, modProgram.UTF8Encoding);
+                    Reader = new StreamReader(Path + SubDirectory, App.UTF8Encoding);
                 }
                 catch ( Exception ex )
                 {
@@ -170,7 +170,7 @@ namespace SharpFlame
 
                 try
                 {
-                    Reader = new BinaryReader(File, modProgram.UTF8Encoding);
+                    Reader = new BinaryReader(File, App.UTF8Encoding);
                 }
                 catch ( Exception ex )
                 {
@@ -330,7 +330,7 @@ namespace SharpFlame
             clsResult ReturnResult =
                 new clsResult("Loading object data from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
 
-            Path = modProgram.EndWithPathSeperator(Path);
+            Path = App.EndWithPathSeperator(Path);
 
             string SubDirNames = "";
             string SubDirStructures = "";
@@ -355,21 +355,21 @@ namespace SharpFlame
             string SubDirStructureWeapons = "";
             string SubDirPIEs = "";
 
-            SubDirNames = "messages" + Convert.ToString(modProgram.PlatformPathSeparator) + "strings" +
-                          Convert.ToString(modProgram.PlatformPathSeparator) + "names.txt";
-            SubDirStructures = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "structures.txt";
-            SubDirBrain = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "brain.txt";
-            SubDirBody = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "body.txt";
-            SubDirPropulsion = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "propulsion.txt";
-            SubDirBodyPropulsion = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "bodypropulsionimd.txt";
-            SubDirConstruction = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "construction.txt";
-            SubDirSensor = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "sensor.txt";
-            SubDirRepair = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "repair.txt";
-            SubDirTemplates = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "templates.txt";
-            SubDirWeapons = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "weapons.txt";
-            SubDirECM = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "ecm.txt";
-            SubDirFeatures = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "features.txt";
-            SubDirPIEs = "pies" + Convert.ToString(modProgram.PlatformPathSeparator);
+            SubDirNames = "messages" + Convert.ToString(App.PlatformPathSeparator) + "strings" +
+                          Convert.ToString(App.PlatformPathSeparator) + "names.txt";
+            SubDirStructures = "stats" + Convert.ToString(App.PlatformPathSeparator) + "structures.txt";
+            SubDirBrain = "stats" + Convert.ToString(App.PlatformPathSeparator) + "brain.txt";
+            SubDirBody = "stats" + Convert.ToString(App.PlatformPathSeparator) + "body.txt";
+            SubDirPropulsion = "stats" + Convert.ToString(App.PlatformPathSeparator) + "propulsion.txt";
+            SubDirBodyPropulsion = "stats" + Convert.ToString(App.PlatformPathSeparator) + "bodypropulsionimd.txt";
+            SubDirConstruction = "stats" + Convert.ToString(App.PlatformPathSeparator) + "construction.txt";
+            SubDirSensor = "stats" + Convert.ToString(App.PlatformPathSeparator) + "sensor.txt";
+            SubDirRepair = "stats" + Convert.ToString(App.PlatformPathSeparator) + "repair.txt";
+            SubDirTemplates = "stats" + Convert.ToString(App.PlatformPathSeparator) + "templates.txt";
+            SubDirWeapons = "stats" + Convert.ToString(App.PlatformPathSeparator) + "weapons.txt";
+            SubDirECM = "stats" + Convert.ToString(App.PlatformPathSeparator) + "ecm.txt";
+            SubDirFeatures = "stats" + Convert.ToString(App.PlatformPathSeparator) + "features.txt";
+            SubDirPIEs = "pies" + Convert.ToString(App.PlatformPathSeparator);
             //SubDirStructurePIE = "structs" & ospathseperator
             SubDirStructurePIE = SubDirPIEs;
             //SubDirBodiesPIE = "components" & ospathseperator & "bodies" & ospathseperator
@@ -378,11 +378,11 @@ namespace SharpFlame
             SubDirPropPIE = SubDirPIEs;
             //SubDirWeaponsPIE = "components" & ospathseperator & "weapons" & ospathseperator
             SubDirWeaponsPIE = SubDirPIEs;
-            SubDirTexpages = "texpages" + Convert.ToString(modProgram.PlatformPathSeparator);
-            SubDirAssignWeapons = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "assignweapons.txt";
+            SubDirTexpages = "texpages" + Convert.ToString(App.PlatformPathSeparator);
+            SubDirAssignWeapons = "stats" + Convert.ToString(App.PlatformPathSeparator) + "assignweapons.txt";
             //SubDirFeaturePIE = "features" & ospathseperator
             SubDirFeaturePIE = SubDirPIEs;
-            SubDirStructureWeapons = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "structureweapons.txt";
+            SubDirStructureWeapons = "stats" + Convert.ToString(App.PlatformPathSeparator) + "structureweapons.txt";
 
             SimpleList<clsTextFile> CommaFiles = new SimpleList<clsTextFile>();
 
@@ -514,7 +514,7 @@ namespace SharpFlame
             Bitmap Bitmap = null;
             int InstrPos2 = 0;
             BitmapGLTexture BitmapTextureArgs = new BitmapGLTexture();
-            modProgram.sResult BitmapResult = new modProgram.sResult();
+            App.sResult BitmapResult = new App.sResult();
 
             foreach ( string tempLoopVar_Text in TexFiles )
             {
@@ -542,7 +542,7 @@ namespace SharpFlame
                         {
                             Result.WarningAdd(BitmapResult.Problem);
                         }
-                        InstrPos2 = Strings.InStrRev(Text, modProgram.PlatformPathSeparator.ToString(), -1, (CompareMethod)0);
+                        InstrPos2 = Strings.InStrRev(Text, App.PlatformPathSeparator.ToString(), -1, (CompareMethod)0);
                         NewPage.FileTitle = Strings.Mid(Text, InstrPos2 + 1, Text.Length - 4 - InstrPos2);
                         TexturePages.Add(NewPage);
                     }
@@ -570,12 +570,12 @@ namespace SharpFlame
                 PIE_Files = new string[0];
             }
 
-            modProgram.sSplitPath SplitPath = new modProgram.sSplitPath();
+            App.sSplitPath SplitPath = new App.sSplitPath();
 
             foreach ( string tempLoopVar_Text in PIE_Files )
             {
                 Text = tempLoopVar_Text;
-                SplitPath = new modProgram.sSplitPath(Text);
+                SplitPath = new App.sSplitPath(Text);
                 if ( SplitPath.FileExtension.ToLower() == "pie" )
                 {
                     NewPIE = new clsPIE();
@@ -1018,28 +1018,28 @@ namespace SharpFlame
                 switch ( Fields[9] ) //type
                 {
                     case "ZNULLDROID":
-                        Template.TemplateDroidType = modProgram.TemplateDroidType_Null;
+                        Template.TemplateDroidType = App.TemplateDroidType_Null;
                         break;
                     case "DROID":
-                        Template.TemplateDroidType = modProgram.TemplateDroidType_Droid;
+                        Template.TemplateDroidType = App.TemplateDroidType_Droid;
                         break;
                     case "CYBORG":
-                        Template.TemplateDroidType = modProgram.TemplateDroidType_Cyborg;
+                        Template.TemplateDroidType = App.TemplateDroidType_Cyborg;
                         break;
                     case "CYBORG_CONSTRUCT":
-                        Template.TemplateDroidType = modProgram.TemplateDroidType_CyborgConstruct;
+                        Template.TemplateDroidType = App.TemplateDroidType_CyborgConstruct;
                         break;
                     case "CYBORG_REPAIR":
-                        Template.TemplateDroidType = modProgram.TemplateDroidType_CyborgRepair;
+                        Template.TemplateDroidType = App.TemplateDroidType_CyborgRepair;
                         break;
                     case "CYBORG_SUPER":
-                        Template.TemplateDroidType = modProgram.TemplateDroidType_CyborgSuper;
+                        Template.TemplateDroidType = App.TemplateDroidType_CyborgSuper;
                         break;
                     case "TRANSPORTER":
-                        Template.TemplateDroidType = modProgram.TemplateDroidType_Transporter;
+                        Template.TemplateDroidType = App.TemplateDroidType_Transporter;
                         break;
                     case "PERSON":
-                        Template.TemplateDroidType = modProgram.TemplateDroidType_Person;
+                        Template.TemplateDroidType = App.TemplateDroidType_Person;
                         break;
                     default:
                         Template.TemplateDroidType = null;

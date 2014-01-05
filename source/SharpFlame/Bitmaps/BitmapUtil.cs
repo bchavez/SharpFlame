@@ -6,9 +6,9 @@ namespace SharpFlame.Bitmaps
 {
     public sealed class BitmapUtil
     {
-        public static modProgram.sResult LoadBitmap(string Path, ref Bitmap ResultBitmap)
+        public static App.sResult LoadBitmap(string Path, ref Bitmap ResultBitmap)
         {
-            modProgram.sResult ReturnResult = new modProgram.sResult();
+            App.sResult ReturnResult = new App.sResult();
             ReturnResult.Problem = "";
             ReturnResult.Success = false;
 
@@ -31,9 +31,9 @@ namespace SharpFlame.Bitmaps
             return ReturnResult;
         }
 
-        public static modProgram.sResult SaveBitmap(string Path, bool Overwrite, Bitmap BitmapToSave)
+        public static App.sResult SaveBitmap(string Path, bool Overwrite, Bitmap BitmapToSave)
         {
-            modProgram.sResult ReturnResult = new modProgram.sResult();
+            App.sResult ReturnResult = new App.sResult();
             ReturnResult.Problem = "";
             ReturnResult.Success = false;
 
@@ -67,11 +67,11 @@ namespace SharpFlame.Bitmaps
         {
             clsResult ReturnResult = new clsResult("Compatability check");
 
-            if ( !modProgram.SizeIsPowerOf2(BitmapToCheck.Width) )
+            if ( !App.SizeIsPowerOf2(BitmapToCheck.Width) )
             {
                 ReturnResult.WarningAdd("Image width is not a power of 2.");
             }
-            if ( !modProgram.SizeIsPowerOf2(BitmapToCheck.Height) )
+            if ( !App.SizeIsPowerOf2(BitmapToCheck.Height) )
             {
                 ReturnResult.WarningAdd("Image height is not a power of 2.");
             }

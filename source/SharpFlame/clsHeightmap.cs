@@ -775,14 +775,14 @@ namespace SharpFlame
             }
         }
 
-        public modProgram.sResult Load_Image(string Path)
+        public App.sResult Load_Image(string Path)
         {
-            modProgram.sResult ReturnResult = new modProgram.sResult();
+            App.sResult ReturnResult = new App.sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
             Bitmap HeightmapBitmap = null;
-            modProgram.sResult Result = new modProgram.sResult();
+            App.sResult Result = new App.sResult();
 
             Result = BitmapUtil.LoadBitmap(Path, ref HeightmapBitmap);
             if ( !Result.Success )

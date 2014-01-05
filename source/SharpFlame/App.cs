@@ -14,7 +14,7 @@ using SharpFlame.Painters;
 
 namespace SharpFlame
 {
-    public sealed class modProgram
+    public sealed class App
     {
         public static sRGB_sng MinimapFeatureColour;
 
@@ -188,42 +188,6 @@ namespace SharpFlame
                 for ( A = 0; A <= PartCount - 2; A++ )
                 {
                     FilePath += Parts[A] + Convert.ToString(PlatformPathSeparator);
-                }
-                FileTitle = Parts[A];
-                A = Strings.InStrRev(FileTitle, ".", -1, (CompareMethod)0);
-                if ( A > 0 )
-                {
-                    FileExtension = Strings.Right(FileTitle, FileTitle.Length - A);
-                    FileTitleWithoutExtension = Strings.Left(FileTitle, A - 1);
-                }
-                else
-                {
-                    FileExtension = "";
-                    FileTitleWithoutExtension = FileTitle;
-                }
-            }
-        }
-
-        public struct sZipSplitPath
-        {
-            public string[] Parts;
-            public int PartCount;
-            public string FilePath;
-            public string FileTitle;
-            public string FileTitleWithoutExtension;
-            public string FileExtension;
-
-            public sZipSplitPath(string Path)
-            {
-                string PathFixed = Path.ToLower().Replace('\\', '/');
-                int A = 0;
-
-                Parts = PathFixed.Split('/');
-                PartCount = Parts.GetUpperBound(0) + 1;
-                FilePath = "";
-                for ( A = 0; A <= PartCount - 2; A++ )
-                {
-                    FilePath += Parts[A] + "/";
                 }
                 FileTitle = Parts[A];
                 A = Strings.InStrRev(FileTitle, ".", -1, (CompareMethod)0);

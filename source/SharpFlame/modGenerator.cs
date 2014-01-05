@@ -64,7 +64,7 @@ namespace SharpFlame
         {
             clsUnitType UnitType = default(clsUnitType);
 
-            foreach ( clsUnitType tempLoopVar_UnitType in modProgram.ObjectData.UnitTypes )
+            foreach ( clsUnitType tempLoopVar_UnitType in App.ObjectData.UnitTypes )
             {
                 UnitType = tempLoopVar_UnitType;
                 string UnitCode = null;
@@ -82,11 +82,11 @@ namespace SharpFlame
         public static void CreateGeneratorTilesets()
         {
             Generator_TilesetArizona = new clsGeneratorTileset();
-            Generator_TilesetArizona.Tileset = modProgram.Tileset_Arizona;
+            Generator_TilesetArizona.Tileset = App.Tileset_Arizona;
             Generator_TilesetUrban = new clsGeneratorTileset();
-            Generator_TilesetUrban.Tileset = modProgram.Tileset_Urban;
+            Generator_TilesetUrban.Tileset = App.Tileset_Urban;
             Generator_TilesetRockies = new clsGeneratorTileset();
-            Generator_TilesetRockies.Tileset = modProgram.Tileset_Rockies;
+            Generator_TilesetRockies.Tileset = App.Tileset_Rockies;
 
             UnitType_OilResource = GetUnitTypeFromCode("OilResource");
             UnitType_CommandCentre = GetUnitTypeFromCode("A0CommandCentre");

@@ -356,7 +356,7 @@ namespace SharpFlame
         {
             clsINIWrite NewINI = new clsINIWrite();
 
-            NewINI.File = new StreamWriter(Output, modProgram.UTF8Encoding);
+            NewINI.File = new StreamWriter(Output, App.UTF8Encoding);
 
             return NewINI;
         }

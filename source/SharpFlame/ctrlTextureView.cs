@@ -142,7 +142,7 @@ namespace SharpFlame
 
         public void Viewport_Resize()
         {
-            if ( !modProgram.ProgramInitialized )
+            if ( !App.ProgramInitialized )
             {
                 return;
             }
@@ -207,7 +207,7 @@ namespace SharpFlame
 
             if ( Map.Tileset != null )
             {
-                TileOrientation.GetTileRotatedTexCoords(modProgram.TextureOrientation, TexCoord0, TexCoord1, TexCoord2, TexCoord3);
+                TileOrientation.GetTileRotatedTexCoords(App.TextureOrientation, TexCoord0, TexCoord1, TexCoord2, TexCoord3);
 
                 GL.Enable(EnableCap.Texture2D);
                 GL.Color4(0.0F, 0.0F, 0.0F, 1.0F);
@@ -261,7 +261,7 @@ namespace SharpFlame
                                 goto EndOfTextures2;
                             }
                             A = Map.Tile_TypeNum[Num];
-                            GL.Color3(modProgram.TileTypes[A].DisplayColour.Red, modProgram.TileTypes[A].DisplayColour.Green, modProgram.TileTypes[A].DisplayColour.Blue);
+                            GL.Color3(App.TileTypes[A].DisplayColour.Red, App.TileTypes[A].DisplayColour.Green, App.TileTypes[A].DisplayColour.Blue);
                             GL.Vertex2(X * 64 + 24, Y * 64 + 24);
                             GL.Vertex2(X * 64 + 24, Y * 64 + 40);
                             GL.Vertex2(X * 64 + 40, Y * 64 + 40);
@@ -272,19 +272,19 @@ namespace SharpFlame
                     GL.End();
                 }
 
-                if ( modProgram.DisplayTileOrientation )
+                if ( App.DisplayTileOrientation )
                 {
                     GL.Disable(EnableCap.CullFace);
 
                     UnrotatedPos.X = 0.25F;
                     UnrotatedPos.Y = 0.25F;
-                    Vertex0 = TileOrientation.GetTileRotatedPos_sng(modProgram.TextureOrientation, UnrotatedPos);
+                    Vertex0 = TileOrientation.GetTileRotatedPos_sng(App.TextureOrientation, UnrotatedPos);
                     UnrotatedPos.X = 0.5F;
                     UnrotatedPos.Y = 0.25F;
-                    Vertex1 = TileOrientation.GetTileRotatedPos_sng(modProgram.TextureOrientation, UnrotatedPos);
+                    Vertex1 = TileOrientation.GetTileRotatedPos_sng(App.TextureOrientation, UnrotatedPos);
                     UnrotatedPos.X = 0.5F;
                     UnrotatedPos.Y = 0.5F;
-                    Vertex2 = TileOrientation.GetTileRotatedPos_sng(modProgram.TextureOrientation, UnrotatedPos);
+                    Vertex2 = TileOrientation.GetTileRotatedPos_sng(App.TextureOrientation, UnrotatedPos);
 
                     GL.Begin(BeginMode.Triangles);
                     GL.Color3(1.0F, 1.0F, 0.0F);
@@ -308,7 +308,7 @@ namespace SharpFlame
                     GL.Enable(EnableCap.CullFace);
                 }
 
-                if ( DisplayTileNumbers && modProgram.UnitLabelFont != null ) //TextureViewFont IsNot Nothing Then
+                if ( DisplayTileNumbers && App.UnitLabelFont != null ) //TextureViewFont IsNot Nothing Then
                 {
                     clsTextLabel TextLabel = default(clsTextLabel);
                     GL.Enable(EnableCap.Texture2D);
@@ -330,7 +330,7 @@ namespace SharpFlame
                             TextLabel.Colour.Alpha = 1.0F;
                             TextLabel.Pos.X = X * 64;
                             TextLabel.Pos.Y = Y * 64;
-                            TextLabel.TextFont = modProgram.UnitLabelFont; //TextureViewFont
+                            TextLabel.TextFont = App.UnitLabelFont; //TextureViewFont
                             TextLabel.Draw();
                         }
                     }
@@ -338,9 +338,9 @@ namespace SharpFlame
                     GL.Disable(EnableCap.Texture2D);
                 }
 
-                if ( modProgram.SelectedTextureNum >= 0 & TextureCount.X > 0 )
+                if ( App.SelectedTextureNum >= 0 & TextureCount.X > 0 )
                 {
-                    A = modProgram.SelectedTextureNum - TextureYOffset * TextureCount.X;
+                    A = App.SelectedTextureNum - TextureYOffset * TextureCount.X;
                     XY_int.X = A - ((int)(Conversion.Int(A / TextureCount.X))) * TextureCount.X;
                     XY_int.Y = (int)(Conversion.Int(A / TextureCount.X));
                     GL.Begin(BeginMode.LineLoop);
@@ -370,18 +370,18 @@ namespace SharpFlame
 
             if ( Map == null )
             {
-                modProgram.SelectedTextureNum = -1;
+                App.SelectedTextureNum = -1;
             }
             else if ( Map.Tileset == null )
             {
-                modProgram.SelectedTextureNum = -1;
+                App.SelectedTextureNum = -1;
             }
             else if ( e.X >= 0 & e.X < TextureCount.X * 64 & e.Y >= 0 & e.Y < TextureCount.Y * 64 )
             {
-                modProgram.SelectedTextureNum = (int)((TextureYOffset + (int)(Conversion.Int(e.Y / 64.0D))) * TextureCount.X + Conversion.Int(e.X / 64.0D));
-                if ( modProgram.SelectedTextureNum >= Map.Tileset.TileCount )
+                App.SelectedTextureNum = (int)((TextureYOffset + (int)(Conversion.Int(e.Y / 64.0D))) * TextureCount.X + Conversion.Int(e.X / 64.0D));
+                if ( App.SelectedTextureNum >= Map.Tileset.TileCount )
                 {
-                    modProgram.SelectedTextureNum = -1;
+                    App.SelectedTextureNum = -1;
                 }
                 else
                 {
@@ -390,13 +390,13 @@ namespace SharpFlame
             }
             else
             {
-                modProgram.SelectedTextureNum = -1;
+                App.SelectedTextureNum = -1;
             }
 
-            if ( modProgram.SelectedTextureNum >= 0 )
+            if ( App.SelectedTextureNum >= 0 )
             {
                 Program.frmMainInstance.cboTileType.Enabled = false;
-                Program.frmMainInstance.cboTileType.SelectedIndex = Map.Tile_TypeNum[modProgram.SelectedTextureNum];
+                Program.frmMainInstance.cboTileType.SelectedIndex = Map.Tile_TypeNum[App.SelectedTextureNum];
                 Program.frmMainInstance.cboTileType.Enabled = true;
             }
             else

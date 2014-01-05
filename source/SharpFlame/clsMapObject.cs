@@ -26,7 +26,7 @@ namespace SharpFlame
 
             public UInt32 ID;
             public clsUnitType Type;
-            public modProgram.sWorldPos Pos;
+            public App.sWorldPos Pos;
             public int Rotation;
             public clsUnitGroup UnitGroup;
             public int SavePriority;
@@ -103,15 +103,15 @@ namespace SharpFlame
             {
                 int Rotation16 = 0;
 
-                Rotation16 = (int)(Rotation * modProgram.INIRotationMax / 360.0D);
-                if ( Rotation16 >= modProgram.INIRotationMax )
+                Rotation16 = (int)(Rotation * App.INIRotationMax / 360.0D);
+                if ( Rotation16 >= App.INIRotationMax )
                 {
-                    Rotation16 -= modProgram.INIRotationMax;
+                    Rotation16 -= App.INIRotationMax;
                 }
                 else if ( Rotation16 < 0 )
                 {
                     Debugger.Break();
-                    Rotation16 += modProgram.INIRotationMax;
+                    Rotation16 += App.INIRotationMax;
                 }
 
                 return IOUtil.InvariantToString_int(Rotation16) + ", 0, 0";
@@ -127,9 +127,9 @@ namespace SharpFlame
                 return IOUtil.InvariantToString_int(Pos.Horizontal.X) + ", " + IOUtil.InvariantToString_int(Pos.Horizontal.Y);
             }
 
-            public modProgram.sResult SetLabel(string Text)
+            public App.sResult SetLabel(string Text)
             {
-                modProgram.sResult Result = new modProgram.sResult();
+                App.sResult Result = new App.sResult();
 
                 if ( Type.Type == clsUnitType.enumType.PlayerStructure )
                 {
@@ -524,8 +524,8 @@ namespace SharpFlame
 
                 NewUnit.MapLink.Connect(Map.Units);
 
-                NewUnit.Pos.Horizontal.X = MathUtil.Clamp_int(NewUnit.Pos.Horizontal.X, 0, Map.Terrain.TileSize.X * modProgram.TerrainGridSpacing - 1);
-                NewUnit.Pos.Horizontal.Y = MathUtil.Clamp_int(NewUnit.Pos.Horizontal.Y, 0, Map.Terrain.TileSize.Y * modProgram.TerrainGridSpacing - 1);
+                NewUnit.Pos.Horizontal.X = MathUtil.Clamp_int(NewUnit.Pos.Horizontal.X, 0, Map.Terrain.TileSize.X * App.TerrainGridSpacing - 1);
+                NewUnit.Pos.Horizontal.Y = MathUtil.Clamp_int(NewUnit.Pos.Horizontal.Y, 0, Map.Terrain.TileSize.Y * App.TerrainGridSpacing - 1);
                 NewUnit.Pos.Altitude = (int)(Math.Ceiling(Map.GetTerrainHeight(NewUnit.Pos.Horizontal)));
 
                 if ( Label != null )
@@ -597,7 +597,7 @@ namespace SharpFlame
             UnitAdd.NewUnit = NewUnit;
             UnitAdd.Label = OldUnit.Label;
             UnitAdd.Perform();
-            modProgram.ErrorIDChange(OldUnit.ID, NewUnit, "UnitSwap");
+            App.ErrorIDChange(OldUnit.ID, NewUnit, "UnitSwap");
         }
 
         public void MakeDefaultUnitGroups()
@@ -625,7 +625,7 @@ namespace SharpFlame
             }
             else
             {
-                return modProgram.PlayerColour[ColourUnitGroup.WZ_StartPos].Colour;
+                return App.PlayerColour[ColourUnitGroup.WZ_StartPos].Colour;
             }
         }
 
@@ -637,7 +637,7 @@ namespace SharpFlame
             }
             else
             {
-                return modProgram.PlayerColour[ColourUnitGroup.WZ_StartPos].MinimapColour;
+                return App.PlayerColour[ColourUnitGroup.WZ_StartPos].MinimapColour;
             }
         }
 

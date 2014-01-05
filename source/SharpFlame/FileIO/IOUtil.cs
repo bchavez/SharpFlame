@@ -204,9 +204,9 @@ namespace SharpFlame.FileIO
             return ReturnResult;
         }
 
-        public static modProgram.sResult TryOpenFileStream(string Path, ref FileStream Output)
+        public static App.sResult TryOpenFileStream(string Path, ref FileStream Output)
         {
-            modProgram.sResult ReturnResult = new modProgram.sResult();
+            App.sResult ReturnResult = new App.sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -225,10 +225,10 @@ namespace SharpFlame.FileIO
             return ReturnResult;
         }
 
-        public static bool WZAngleFromINIText(string Text, ref modProgram.sWZAngle Result)
+        public static bool WZAngleFromINIText(string Text, ref App.sWZAngle Result)
         {
             SplitCommaText VectorText = new SplitCommaText(Text);
-            modProgram.sWZAngle WZAngle = new modProgram.sWZAngle();
+            App.sWZAngle WZAngle = new App.sWZAngle();
 
             if ( VectorText.PartCount != 3 )
             {
@@ -243,12 +243,12 @@ namespace SharpFlame.FileIO
                     return false;
                 }
                 int Remainder = 0;
-                int Multiplier = Math.DivRem(ErrorValue, modProgram.INIRotationMax, out Remainder);
+                int Multiplier = Math.DivRem(ErrorValue, App.INIRotationMax, out Remainder);
                 try
                 {
                     if ( Remainder < 0 )
                     {
-                        WZAngle.Direction = (ushort)(Remainder + modProgram.INIRotationMax);
+                        WZAngle.Direction = (ushort)(Remainder + App.INIRotationMax);
                     }
                     else
                     {
@@ -296,7 +296,7 @@ namespace SharpFlame.FileIO
             return true;
         }
 
-        public static bool WorldPosFromINIText(string Text, ref modProgram.clsWorldPos Result)
+        public static bool WorldPosFromINIText(string Text, ref App.clsWorldPos Result)
         {
             SplitCommaText VectorText = new SplitCommaText(Text);
             int A = 0;
@@ -318,7 +318,7 @@ namespace SharpFlame.FileIO
                     return false;
                 }
             }
-            Result = new modProgram.clsWorldPos(new modProgram.sWorldPos(new sXY_int(Positions[0], Positions[1]), Positions[2]));
+            Result = new App.clsWorldPos(new App.sWorldPos(new sXY_int(Positions[0], Positions[1]), Positions[2]));
             return true;
         }
 

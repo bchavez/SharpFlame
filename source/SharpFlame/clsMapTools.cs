@@ -11,7 +11,7 @@ namespace SharpFlame
 {
     public partial class clsMap
     {
-        public void Rotate(TileOrientation.sTileOrientation Orientation, modProgram.enumObjectRotateMode ObjectRotateMode)
+        public void Rotate(TileOrientation.sTileOrientation Orientation, App.enumObjectRotateMode ObjectRotateMode)
         {
             int X = 0;
             int Y = 0;
@@ -25,7 +25,7 @@ namespace SharpFlame
             sXY_int NewSideHLimits = new sXY_int(NewTerrain.TileSize.X - 1, NewTerrain.TileSize.Y);
             sXY_int NewSideVLimits = new sXY_int(NewTerrain.TileSize.X, NewTerrain.TileSize.Y - 1);
             sXY_int OldTileLimits = new sXY_int(Terrain.TileSize.X - 1, Terrain.TileSize.Y - 1);
-            sXY_int OldPosLimits = new sXY_int(Terrain.TileSize.X * modProgram.TerrainGridSpacing, Terrain.TileSize.Y * modProgram.TerrainGridSpacing);
+            sXY_int OldPosLimits = new sXY_int(Terrain.TileSize.X * App.TerrainGridSpacing, Terrain.TileSize.Y * App.TerrainGridSpacing);
             TileOrientation.sTileOrientation ReverseOrientation = new TileOrientation.sTileOrientation();
             TileOrientation.sTileDirection TriDirection = new TileOrientation.sTileDirection();
 
@@ -147,7 +147,7 @@ namespace SharpFlame
             {
                 Unit = tempLoopVar_Unit;
                 Unit.Sectors.Clear();
-                if ( ObjectRotateMode == modProgram.enumObjectRotateMode.All )
+                if ( ObjectRotateMode == App.enumObjectRotateMode.All )
                 {
                     Unit.Rotation =
                         (int)
@@ -159,7 +159,7 @@ namespace SharpFlame
                         Unit.Rotation += 360;
                     }
                 }
-                else if ( ObjectRotateMode == modProgram.enumObjectRotateMode.Walls )
+                else if ( ObjectRotateMode == App.enumObjectRotateMode.Walls )
                 {
                     if ( Unit.Type.Type == clsUnitType.enumType.PlayerStructure )
                     {
@@ -191,7 +191,7 @@ namespace SharpFlame
             foreach ( clsUnit tempLoopVar_Unit in Units.GetItemsAsSimpleList() )
             {
                 Unit = tempLoopVar_Unit;
-                if ( !modProgram.PosIsWithinTileArea(Unit.Pos.Horizontal, ZeroPos, NewTerrain.TileSize) )
+                if ( !App.PosIsWithinTileArea(Unit.Pos.Horizontal, ZeroPos, NewTerrain.TileSize) )
                 {
                     Position = Unit.MapLink.ArrayPosition;
                     UnitRemove(Position);
@@ -290,7 +290,7 @@ namespace SharpFlame
                     TextureNum = Terrain.Tiles[X, Y].Texture.TextureNum;
                     if ( TextureNum >= 0 & TextureNum < Tileset.TileCount )
                     {
-                        if ( Tileset.Tiles[TextureNum].Default_Type == modProgram.TileTypeNum_Water )
+                        if ( Tileset.Tiles[TextureNum].Default_Type == App.TileTypeNum_Water )
                         {
                             Terrain.Vertices[X, Y].Height = (byte)0;
                             Terrain.Vertices[X + 1, Y].Height = (byte)0;
@@ -347,7 +347,7 @@ namespace SharpFlame
             double difA = 0;
             double difB = 0;
             bool NewTri = default(bool);
-            double CliffSlope = Math.Atan(255.0D * Constants.DefaultHeightMultiplier / (2.0D * (Args.LevelCount - 1.0D) * modProgram.TerrainGridSpacing)) -
+            double CliffSlope = Math.Atan(255.0D * Constants.DefaultHeightMultiplier / (2.0D * (Args.LevelCount - 1.0D) * App.TerrainGridSpacing)) -
                                 MathUtil.RadOf1Deg; //divided by 2 due to the terrain height randomization
 
             Tileset = Args.Tileset.Tileset;
@@ -418,32 +418,32 @@ namespace SharpFlame
                     //get slope
                     BestSlope = 0.0D;
 
-                    Pos.X = (int)((X + 0.25D) * modProgram.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.25D) * modProgram.TerrainGridSpacing);
+                    Pos.X = (int)((X + 0.25D) * App.TerrainGridSpacing);
+                    Pos.Y = (int)((Y + 0.25D) * App.TerrainGridSpacing);
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
                         BestSlope = CurrentSlope;
                     }
 
-                    Pos.X = (int)((X + 0.75D) * modProgram.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.25D) * modProgram.TerrainGridSpacing);
+                    Pos.X = (int)((X + 0.75D) * App.TerrainGridSpacing);
+                    Pos.Y = (int)((Y + 0.25D) * App.TerrainGridSpacing);
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
                         BestSlope = CurrentSlope;
                     }
 
-                    Pos.X = (int)((X + 0.25D) * modProgram.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.75D) * modProgram.TerrainGridSpacing);
+                    Pos.X = (int)((X + 0.25D) * App.TerrainGridSpacing);
+                    Pos.Y = (int)((Y + 0.75D) * App.TerrainGridSpacing);
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
                         BestSlope = CurrentSlope;
                     }
 
-                    Pos.X = (int)((X + 0.75D) * modProgram.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.75D) * modProgram.TerrainGridSpacing);
+                    Pos.X = (int)((X + 0.75D) * App.TerrainGridSpacing);
+                    Pos.Y = (int)((Y + 0.75D) * App.TerrainGridSpacing);
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
@@ -584,7 +584,7 @@ namespace SharpFlame
             SectorGraphicsChanges.SetAllChanged();
         }
 
-        public void MapTexturer(modProgram.sLayerList LayerList)
+        public void MapTexturer(App.sLayerList LayerList)
         {
             int X = 0;
             int Y = 0;
@@ -610,32 +610,32 @@ namespace SharpFlame
                     //get slope
                     BestSlope = 0.0D;
 
-                    Pos.X = (int)((X + 0.25D) * modProgram.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.25D) * modProgram.TerrainGridSpacing);
+                    Pos.X = (int)((X + 0.25D) * App.TerrainGridSpacing);
+                    Pos.Y = (int)((Y + 0.25D) * App.TerrainGridSpacing);
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
                         BestSlope = CurrentSlope;
                     }
 
-                    Pos.X = (int)((X + 0.75D) * modProgram.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.25D) * modProgram.TerrainGridSpacing);
+                    Pos.X = (int)((X + 0.75D) * App.TerrainGridSpacing);
+                    Pos.Y = (int)((Y + 0.25D) * App.TerrainGridSpacing);
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
                         BestSlope = CurrentSlope;
                     }
 
-                    Pos.X = (int)((X + 0.25D) * modProgram.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.75D) * modProgram.TerrainGridSpacing);
+                    Pos.X = (int)((X + 0.25D) * App.TerrainGridSpacing);
+                    Pos.Y = (int)((Y + 0.75D) * App.TerrainGridSpacing);
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
                         BestSlope = CurrentSlope;
                     }
 
-                    Pos.X = (int)((X + 0.75D) * modProgram.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.75D) * modProgram.TerrainGridSpacing);
+                    Pos.X = (int)((X + 0.75D) * App.TerrainGridSpacing);
+                    Pos.Y = (int)((Y + 0.75D) * App.TerrainGridSpacing);
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
@@ -798,7 +798,7 @@ namespace SharpFlame
                     {
                         if ( Terrain.Tiles[X, Y].Texture.TextureNum >= 0 )
                         {
-                            if ( Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].Default_Type == modProgram.TileTypeNum_Water )
+                            if ( Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].Default_Type == App.TileTypeNum_Water )
                             {
                                 Terrain.Tiles[X, Y].Tri = false;
                                 SectorGraphicsChanges.TileChanged(TileNum);
@@ -982,11 +982,11 @@ namespace SharpFlame
 
                 if ( Terrain.Tiles[PosNum.X, PosNum.Y].Tri )
                 {
-                    Pos.X = (int)((PosNum.X + 0.25D) * modProgram.TerrainGridSpacing);
-                    Pos.Y = (int)((PosNum.Y + 0.25D) * modProgram.TerrainGridSpacing);
+                    Pos.X = (int)((PosNum.X + 0.25D) * App.TerrainGridSpacing);
+                    Pos.Y = (int)((PosNum.Y + 0.25D) * App.TerrainGridSpacing);
                     TriTopLeftMaxSlope = Map.GetTerrainSlopeAngle(Pos);
-                    Pos.X = (int)((PosNum.X + 0.75D) * modProgram.TerrainGridSpacing);
-                    Pos.Y = (int)((PosNum.Y + 0.75D) * modProgram.TerrainGridSpacing);
+                    Pos.X = (int)((PosNum.X + 0.75D) * App.TerrainGridSpacing);
+                    Pos.Y = (int)((PosNum.Y + 0.75D) * App.TerrainGridSpacing);
                     TriBottomRightMaxSlope = Map.GetTerrainSlopeAngle(Pos);
 
                     if ( Terrain.Tiles[PosNum.X, PosNum.Y].TriTopRightIsCliff )
@@ -1025,11 +1025,11 @@ namespace SharpFlame
                 }
                 else
                 {
-                    Pos.X = (int)((PosNum.X + 0.75D) * modProgram.TerrainGridSpacing);
-                    Pos.Y = (int)((PosNum.Y + 0.25D) * modProgram.TerrainGridSpacing);
+                    Pos.X = (int)((PosNum.X + 0.75D) * App.TerrainGridSpacing);
+                    Pos.Y = (int)((PosNum.Y + 0.25D) * App.TerrainGridSpacing);
                     TriTopRightMaxSlope = Map.GetTerrainSlopeAngle(Pos);
-                    Pos.X = (int)((PosNum.X + 0.25D) * modProgram.TerrainGridSpacing);
-                    Pos.Y = (int)((PosNum.Y + 0.75D) * modProgram.TerrainGridSpacing);
+                    Pos.X = (int)((PosNum.X + 0.25D) * App.TerrainGridSpacing);
+                    Pos.Y = (int)((PosNum.Y + 0.75D) * App.TerrainGridSpacing);
                     TriBottomLeftMaxSlope = Map.GetTerrainSlopeAngle(Pos);
 
                     if ( Terrain.Tiles[PosNum.X, PosNum.Y].TriBottomRightIsCliff )
@@ -1412,14 +1412,14 @@ namespace SharpFlame
                 LimitY = Terrain.TileSize.Y;
                 TempHeight = 0;
                 Samples = 0;
-                for ( Y = MathUtil.Clamp_int(modProgram.SmoothRadius.Tiles.YMin + PosNum.Y, 0, LimitY) - PosNum.Y;
-                    Y <= MathUtil.Clamp_int(modProgram.SmoothRadius.Tiles.YMax + PosNum.Y, 0, LimitY) - PosNum.Y;
+                for ( Y = MathUtil.Clamp_int(App.SmoothRadius.Tiles.YMin + PosNum.Y, 0, LimitY) - PosNum.Y;
+                    Y <= MathUtil.Clamp_int(App.SmoothRadius.Tiles.YMax + PosNum.Y, 0, LimitY) - PosNum.Y;
                     Y++ )
                 {
                     Y2 = PosNum.Y + Y;
-                    XNum = Y - modProgram.SmoothRadius.Tiles.YMin;
-                    for ( X = MathUtil.Clamp_int(Convert.ToInt32(modProgram.SmoothRadius.Tiles.XMin[XNum] + PosNum.X), 0, LimitX) - PosNum.X;
-                        X <= MathUtil.Clamp_int(Convert.ToInt32(modProgram.SmoothRadius.Tiles.XMax[XNum] + PosNum.X), 0, LimitX) - PosNum.X;
+                    XNum = Y - App.SmoothRadius.Tiles.YMin;
+                    for ( X = MathUtil.Clamp_int(Convert.ToInt32(App.SmoothRadius.Tiles.XMin[XNum] + PosNum.X), 0, LimitX) - PosNum.X;
+                        X <= MathUtil.Clamp_int(Convert.ToInt32(App.SmoothRadius.Tiles.XMax[XNum] + PosNum.X), 0, LimitX) - PosNum.X;
                         X++ )
                     {
                         X2 = PosNum.X + X;
@@ -1498,7 +1498,7 @@ namespace SharpFlame
             public TileOrientation.sTileOrientation Orientation;
             public bool SetOrientation;
             public bool RandomOrientation;
-            public modProgram.enumTextureTerrainAction TerrainAction;
+            public App.enumTextureTerrainAction TerrainAction;
 
             private clsTerrain Terrain;
 

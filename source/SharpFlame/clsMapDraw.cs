@@ -40,7 +40,7 @@ namespace SharpFlame
             Position.XYZ_dbl Vertex3 = default(Position.XYZ_dbl);
             sXY_int ScreenPos = new sXY_int();
             Position.XYZ_dbl XYZ_dbl2 = default(Position.XYZ_dbl);
-            modProgram.sWorldPos WorldPos = new modProgram.sWorldPos();
+            App.sWorldPos WorldPos = new App.sWorldPos();
             Position.XY_dbl PosA = default(Position.XY_dbl);
             Position.XY_dbl PosB = default(Position.XY_dbl);
             Position.XY_dbl PosC = default(Position.XY_dbl);
@@ -74,16 +74,16 @@ namespace SharpFlame
             if ( !ViewInfo.ScreenXY_Get_ViewPlanePos(new sXY_int((int)(GLSize.X / 2.0D), (int)(GLSize.Y / 2.0D)), dblTemp, DrawCentre) )
             {
                 Matrix3DMath.VectorForwardsRotationByMatrix(ViewInfo.ViewAngleMatrix, ref XYZ_dbl);
-                dblTemp2 = modProgram.VisionRadius * 2.0D / Math.Sqrt(XYZ_dbl.X * XYZ_dbl.X + XYZ_dbl.Z * XYZ_dbl.Z);
+                dblTemp2 = App.VisionRadius * 2.0D / Math.Sqrt(XYZ_dbl.X * XYZ_dbl.X + XYZ_dbl.Z * XYZ_dbl.Z);
                 DrawCentre.X = ViewInfo.ViewPos.X + XYZ_dbl.X * dblTemp2;
                 DrawCentre.Y = ViewInfo.ViewPos.Z + XYZ_dbl.Z * dblTemp2;
             }
-            DrawCentre.X = MathUtil.Clamp_dbl(DrawCentre.X, 0.0D, Terrain.TileSize.X * modProgram.TerrainGridSpacing - 1.0D);
-            DrawCentre.Y = MathUtil.Clamp_dbl(Convert.ToDouble(- DrawCentre.Y), 0.0D, Terrain.TileSize.Y * modProgram.TerrainGridSpacing - 1.0D);
+            DrawCentre.X = MathUtil.Clamp_dbl(DrawCentre.X, 0.0D, Terrain.TileSize.X * App.TerrainGridSpacing - 1.0D);
+            DrawCentre.Y = MathUtil.Clamp_dbl(Convert.ToDouble(- DrawCentre.Y), 0.0D, Terrain.TileSize.Y * App.TerrainGridSpacing - 1.0D);
             DrawCentreSector.Normal = GetPosSectorNum(new sXY_int((int)DrawCentre.X, (int)DrawCentre.Y));
             DrawCentreSector.Alignment =
-                GetPosSectorNum(new sXY_int((int)(DrawCentre.X - Constants.SectorTileSize * modProgram.TerrainGridSpacing / 2.0D),
-                    (int)(DrawCentre.Y - Constants.SectorTileSize * modProgram.TerrainGridSpacing / 2.0D)));
+                GetPosSectorNum(new sXY_int((int)(DrawCentre.X - Constants.SectorTileSize * App.TerrainGridSpacing / 2.0D),
+                    (int)(DrawCentre.Y - Constants.SectorTileSize * App.TerrainGridSpacing / 2.0D)));
 
             clsDrawSectorObjects DrawObjects = new clsDrawSectorObjects();
             DrawObjects.Map = this;
@@ -102,7 +102,7 @@ namespace SharpFlame
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
-            Matrix3DMath.MatrixRotationByMatrix(ViewInfo.ViewAngleMatrix_Inverted, modProgram.SunAngleMatrix, matrixB);
+            Matrix3DMath.MatrixRotationByMatrix(ViewInfo.ViewAngleMatrix_Inverted, App.SunAngleMatrix, matrixB);
             Matrix3DMath.VectorForwardsRotationByMatrix(matrixB, ref XYZ_dbl);
             light_position[0] = (float)XYZ_dbl.X;
             light_position[1] = (float)XYZ_dbl.Y;
@@ -113,13 +113,13 @@ namespace SharpFlame
 
             GL.Disable(EnableCap.Light0);
             GL.Disable(EnableCap.Light1);
-            if ( modProgram.Draw_Lighting != modProgram.enumDrawLighting.Off )
+            if ( App.Draw_Lighting != App.enumDrawLighting.Off )
             {
-                if ( modProgram.Draw_Lighting == modProgram.enumDrawLighting.Half )
+                if ( App.Draw_Lighting == App.enumDrawLighting.Half )
                 {
                     GL.Enable(EnableCap.Light0);
                 }
-                else if ( modProgram.Draw_Lighting == modProgram.enumDrawLighting.Normal )
+                else if ( App.Draw_Lighting == App.enumDrawLighting.Normal )
                 {
                     GL.Enable(EnableCap.Light1);
                 }
@@ -152,13 +152,13 @@ namespace SharpFlame
 
             DebugGLError("Matrix modes");
 
-            if ( modProgram.Draw_TileTextures )
+            if ( App.Draw_TileTextures )
             {
                 GL.Color3(1.0F, 1.0F, 1.0F);
                 GL.Enable(EnableCap.Texture2D);
                 MapAction = new clsDrawCallTerrain();
                 MapAction.Map = this;
-                modProgram.VisionSectors.PerformActionMapSectors(MapAction, DrawCentreSector);
+                App.VisionSectors.PerformActionMapSectors(MapAction, DrawCentreSector);
                 GL.Disable(EnableCap.Texture2D);
 
                 DebugGLError("Tile textures");
@@ -167,20 +167,20 @@ namespace SharpFlame
             GL.Disable(EnableCap.DepthTest);
             GL.Disable(EnableCap.Lighting);
 
-            if ( modProgram.Draw_TileWireframe )
+            if ( App.Draw_TileWireframe )
             {
                 GL.Color3(0.0F, 1.0F, 0.0F);
                 GL.LineWidth(1.0F);
                 clsDrawCallTerrainWireframe DrawCallTerrainWireframe = new clsDrawCallTerrainWireframe();
                 DrawCallTerrainWireframe.Map = this;
-                modProgram.VisionSectors.PerformActionMapSectors(DrawCallTerrainWireframe, DrawCentreSector);
+                App.VisionSectors.PerformActionMapSectors(DrawCallTerrainWireframe, DrawCentreSector);
 
                 DebugGLError("Wireframe");
             }
 
             //draw tile orientation markers
 
-            if ( modProgram.DisplayTileOrientation )
+            if ( App.DisplayTileOrientation )
             {
                 GL.Disable(EnableCap.CullFace);
 
@@ -188,7 +188,7 @@ namespace SharpFlame
                 GL.Color3(1.0F, 1.0F, 0.0F);
                 MapAction = new clsDrawTileOrientation();
                 MapAction.Map = this;
-                modProgram.VisionSectors.PerformActionMapSectors(MapAction, DrawCentreSector);
+                App.VisionSectors.PerformActionMapSectors(MapAction, DrawCentreSector);
                 GL.End();
 
                 GL.Enable(EnableCap.CullFace);
@@ -202,13 +202,13 @@ namespace SharpFlame
 
             clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = ViewInfo.GetMouseOverTerrain();
 
-            if ( modProgram.Draw_VertexTerrain )
+            if ( App.Draw_VertexTerrain )
             {
                 GL.LineWidth(1.0F);
                 clsDrawVertexTerrain DrawVertexTerran = new clsDrawVertexTerrain();
                 DrawVertexTerran.Map = this;
                 DrawVertexTerran.ViewAngleMatrix = ViewInfo.ViewAngleMatrix;
-                modProgram.VisionSectors.PerformActionMapSectors(DrawVertexTerran, DrawCentreSector);
+                App.VisionSectors.PerformActionMapSectors(DrawVertexTerran, DrawCentreSector);
                 DebugGLError("Terrain type markers");
             }
 
@@ -221,8 +221,8 @@ namespace SharpFlame
                 {
                     //area is selected
                     MathUtil.ReorderXY(Selected_Area_VertexA.XY, Selected_Area_VertexB.XY, StartXY, FinishXY);
-                    XYZ_dbl.X = Selected_Area_VertexB.X * modProgram.TerrainGridSpacing - ViewInfo.ViewPos.X;
-                    XYZ_dbl.Z = - Selected_Area_VertexB.Y * modProgram.TerrainGridSpacing - ViewInfo.ViewPos.Z;
+                    XYZ_dbl.X = Selected_Area_VertexB.X * App.TerrainGridSpacing - ViewInfo.ViewPos.X;
+                    XYZ_dbl.Z = - Selected_Area_VertexB.Y * App.TerrainGridSpacing - ViewInfo.ViewPos.Z;
                     XYZ_dbl.Y = GetVertexAltitude(Selected_Area_VertexB.XY) - ViewInfo.ViewPos.Y;
                     DrawIt = true;
                 }
@@ -232,8 +232,8 @@ namespace SharpFlame
                     {
                         //selection is changing under pointer
                         MathUtil.ReorderXY(Selected_Area_VertexA.XY, MouseOverTerrain.Vertex.Normal, StartXY, FinishXY);
-                        XYZ_dbl.X = MouseOverTerrain.Vertex.Normal.X * modProgram.TerrainGridSpacing - ViewInfo.ViewPos.X;
-                        XYZ_dbl.Z = - MouseOverTerrain.Vertex.Normal.Y * modProgram.TerrainGridSpacing - ViewInfo.ViewPos.Z;
+                        XYZ_dbl.X = MouseOverTerrain.Vertex.Normal.X * App.TerrainGridSpacing - ViewInfo.ViewPos.X;
+                        XYZ_dbl.Z = - MouseOverTerrain.Vertex.Normal.Y * App.TerrainGridSpacing - ViewInfo.ViewPos.Z;
                         XYZ_dbl.Y = GetVertexAltitude(MouseOverTerrain.Vertex.Normal) - ViewInfo.ViewPos.Y;
                         DrawIt = true;
                     }
@@ -249,7 +249,7 @@ namespace SharpFlame
                             SelectionLabel.Colour.Green = 1.0F;
                             SelectionLabel.Colour.Blue = 1.0F;
                             SelectionLabel.Colour.Alpha = 1.0F;
-                            SelectionLabel.TextFont = modProgram.UnitLabelFont;
+                            SelectionLabel.TextFont = App.UnitLabelFont;
                             SelectionLabel.SizeY = modSettings.Settings.FontSize;
                             SelectionLabel.Pos = ScreenPos;
                             SelectionLabel.Text = FinishXY.X - StartXY.X + "x" + Convert.ToString(FinishXY.Y - StartXY.Y);
@@ -274,9 +274,9 @@ namespace SharpFlame
                     //draw mouseover vertex
                     GL.LineWidth(3.0F);
 
-                    Vertex0.X = MouseOverTerrain.Vertex.Normal.X * modProgram.TerrainGridSpacing;
+                    Vertex0.X = MouseOverTerrain.Vertex.Normal.X * App.TerrainGridSpacing;
                     Vertex0.Y = Convert.ToDouble(Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height * HeightMultiplier);
-                    Vertex0.Z = - MouseOverTerrain.Vertex.Normal.Y * modProgram.TerrainGridSpacing;
+                    Vertex0.Z = - MouseOverTerrain.Vertex.Normal.Y * App.TerrainGridSpacing;
                     GL.Begin(BeginMode.Lines);
                     GL.Color3(1.0F, 1.0F, 1.0F);
                     GL.Vertex3(Vertex0.X - 8.0D, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
@@ -290,7 +290,7 @@ namespace SharpFlame
 
             clsGateway Gateway = default(clsGateway);
 
-            if ( modProgram.Draw_Gateways )
+            if ( App.Draw_Gateways )
             {
                 GL.LineWidth(2.0F);
                 foreach ( clsGateway tempLoopVar_Gateway in Gateways )
@@ -311,18 +311,18 @@ namespace SharpFlame
                         X2 = Gateway.PosA.X;
                         for ( Y2 = C; Y2 <= D; Y2++ )
                         {
-                            Vertex0.X = X2 * modProgram.TerrainGridSpacing;
+                            Vertex0.X = X2 * App.TerrainGridSpacing;
                             Vertex0.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2].Height * HeightMultiplier);
-                            Vertex0.Z = - Y2 * modProgram.TerrainGridSpacing;
-                            Vertex1.X = (X2 + 1) * modProgram.TerrainGridSpacing;
+                            Vertex0.Z = - Y2 * App.TerrainGridSpacing;
+                            Vertex1.X = (X2 + 1) * App.TerrainGridSpacing;
                             Vertex1.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2].Height * HeightMultiplier);
-                            Vertex1.Z = - Y2 * modProgram.TerrainGridSpacing;
-                            Vertex2.X = X2 * modProgram.TerrainGridSpacing;
+                            Vertex1.Z = - Y2 * App.TerrainGridSpacing;
+                            Vertex2.X = X2 * App.TerrainGridSpacing;
                             Vertex2.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2 + 1].Height * HeightMultiplier);
-                            Vertex2.Z = - (Y2 + 1) * modProgram.TerrainGridSpacing;
-                            Vertex3.X = (X2 + 1) * modProgram.TerrainGridSpacing;
+                            Vertex2.Z = - (Y2 + 1) * App.TerrainGridSpacing;
+                            Vertex3.X = (X2 + 1) * App.TerrainGridSpacing;
                             Vertex3.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2 + 1].Height * HeightMultiplier);
-                            Vertex3.Z = - (Y2 + 1) * modProgram.TerrainGridSpacing;
+                            Vertex3.Z = - (Y2 + 1) * App.TerrainGridSpacing;
                             GL.Begin(BeginMode.LineLoop);
                             GL.Color3(0.75F, 1.0F, 0.0F);
                             GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
@@ -347,18 +347,18 @@ namespace SharpFlame
                         Y2 = Gateway.PosA.Y;
                         for ( X2 = C; X2 <= D; X2++ )
                         {
-                            Vertex0.X = X2 * modProgram.TerrainGridSpacing;
+                            Vertex0.X = X2 * App.TerrainGridSpacing;
                             Vertex0.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2].Height * HeightMultiplier);
-                            Vertex0.Z = - Y2 * modProgram.TerrainGridSpacing;
-                            Vertex1.X = (X2 + 1) * modProgram.TerrainGridSpacing;
+                            Vertex0.Z = - Y2 * App.TerrainGridSpacing;
+                            Vertex1.X = (X2 + 1) * App.TerrainGridSpacing;
                             Vertex1.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2].Height * HeightMultiplier);
-                            Vertex1.Z = - Y2 * modProgram.TerrainGridSpacing;
-                            Vertex2.X = X2 * modProgram.TerrainGridSpacing;
+                            Vertex1.Z = - Y2 * App.TerrainGridSpacing;
+                            Vertex2.X = X2 * App.TerrainGridSpacing;
                             Vertex2.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2 + 1].Height * HeightMultiplier);
-                            Vertex2.Z = - (Y2 + 1) * modProgram.TerrainGridSpacing;
-                            Vertex3.X = (X2 + 1) * modProgram.TerrainGridSpacing;
+                            Vertex2.Z = - (Y2 + 1) * App.TerrainGridSpacing;
+                            Vertex3.X = (X2 + 1) * App.TerrainGridSpacing;
                             Vertex3.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2 + 1].Height * HeightMultiplier);
-                            Vertex3.Z = - (Y2 + 1) * modProgram.TerrainGridSpacing;
+                            Vertex3.Z = - (Y2 + 1) * App.TerrainGridSpacing;
                             GL.Begin(BeginMode.LineLoop);
                             GL.Color3(0.75F, 1.0F, 0.0F);
                             GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
@@ -374,18 +374,18 @@ namespace SharpFlame
                         X2 = Gateway.PosA.X;
                         Y2 = Gateway.PosA.Y;
 
-                        Vertex0.X = X2 * modProgram.TerrainGridSpacing;
+                        Vertex0.X = X2 * App.TerrainGridSpacing;
                         Vertex0.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2].Height * HeightMultiplier);
-                        Vertex0.Z = - Y2 * modProgram.TerrainGridSpacing;
-                        Vertex1.X = (X2 + 1) * modProgram.TerrainGridSpacing;
+                        Vertex0.Z = - Y2 * App.TerrainGridSpacing;
+                        Vertex1.X = (X2 + 1) * App.TerrainGridSpacing;
                         Vertex1.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2].Height * HeightMultiplier);
-                        Vertex1.Z = - Y2 * modProgram.TerrainGridSpacing;
-                        Vertex2.X = X2 * modProgram.TerrainGridSpacing;
+                        Vertex1.Z = - Y2 * App.TerrainGridSpacing;
+                        Vertex2.X = X2 * App.TerrainGridSpacing;
                         Vertex2.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2 + 1].Height * HeightMultiplier);
-                        Vertex2.Z = - (Y2 + 1) * modProgram.TerrainGridSpacing;
-                        Vertex3.X = (X2 + 1) * modProgram.TerrainGridSpacing;
+                        Vertex2.Z = - (Y2 + 1) * App.TerrainGridSpacing;
+                        Vertex3.X = (X2 + 1) * App.TerrainGridSpacing;
                         Vertex3.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2 + 1].Height * HeightMultiplier);
-                        Vertex3.Z = - (Y2 + 1) * modProgram.TerrainGridSpacing;
+                        Vertex3.Z = - (Y2 + 1) * App.TerrainGridSpacing;
                         GL.Begin(BeginMode.LineLoop);
                         GL.Color3(1.0F, 0.0F, 0.0F);
                         GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
@@ -397,18 +397,18 @@ namespace SharpFlame
                         X2 = Gateway.PosB.X;
                         Y2 = Gateway.PosB.Y;
 
-                        Vertex0.X = X2 * modProgram.TerrainGridSpacing;
+                        Vertex0.X = X2 * App.TerrainGridSpacing;
                         Vertex0.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2].Height * HeightMultiplier);
-                        Vertex0.Z = - Y2 * modProgram.TerrainGridSpacing;
-                        Vertex1.X = (X2 + 1) * modProgram.TerrainGridSpacing;
+                        Vertex0.Z = - Y2 * App.TerrainGridSpacing;
+                        Vertex1.X = (X2 + 1) * App.TerrainGridSpacing;
                         Vertex1.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2].Height * HeightMultiplier);
-                        Vertex1.Z = - Y2 * modProgram.TerrainGridSpacing;
-                        Vertex2.X = X2 * modProgram.TerrainGridSpacing;
+                        Vertex1.Z = - Y2 * App.TerrainGridSpacing;
+                        Vertex2.X = X2 * App.TerrainGridSpacing;
                         Vertex2.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2 + 1].Height * HeightMultiplier);
-                        Vertex2.Z = - (Y2 + 1) * modProgram.TerrainGridSpacing;
-                        Vertex3.X = (X2 + 1) * modProgram.TerrainGridSpacing;
+                        Vertex2.Z = - (Y2 + 1) * App.TerrainGridSpacing;
+                        Vertex3.X = (X2 + 1) * App.TerrainGridSpacing;
                         Vertex3.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2 + 1].Height * HeightMultiplier);
-                        Vertex3.Z = - (Y2 + 1) * modProgram.TerrainGridSpacing;
+                        Vertex3.Z = - (Y2 + 1) * App.TerrainGridSpacing;
                         GL.Begin(BeginMode.LineLoop);
                         GL.Color3(1.0F, 0.0F, 0.0F);
                         GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
@@ -433,12 +433,12 @@ namespace SharpFlame
                         GL.Color3(0.0F, 1.0F, 1.0F);
                         for ( X = StartXY.X; X <= FinishXY.X - 1; X++ )
                         {
-                            Vertex0.X = X * modProgram.TerrainGridSpacing;
+                            Vertex0.X = X * App.TerrainGridSpacing;
                             Vertex0.Y = Convert.ToDouble(Terrain.Vertices[X, StartXY.Y].Height * HeightMultiplier);
-                            Vertex0.Z = - StartXY.Y * modProgram.TerrainGridSpacing;
-                            Vertex1.X = (X + 1) * modProgram.TerrainGridSpacing;
+                            Vertex0.Z = - StartXY.Y * App.TerrainGridSpacing;
+                            Vertex1.X = (X + 1) * App.TerrainGridSpacing;
                             Vertex1.Y = Convert.ToDouble(Terrain.Vertices[X + 1, StartXY.Y].Height * HeightMultiplier);
-                            Vertex1.Z = - StartXY.Y * modProgram.TerrainGridSpacing;
+                            Vertex1.Z = - StartXY.Y * App.TerrainGridSpacing;
                             GL.Begin(BeginMode.Lines);
                             GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
                             GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
@@ -446,12 +446,12 @@ namespace SharpFlame
                         }
                         for ( X = StartXY.X; X <= FinishXY.X - 1; X++ )
                         {
-                            Vertex0.X = X * modProgram.TerrainGridSpacing;
+                            Vertex0.X = X * App.TerrainGridSpacing;
                             Vertex0.Y = Convert.ToDouble(Terrain.Vertices[X, FinishXY.Y].Height * HeightMultiplier);
-                            Vertex0.Z = - FinishXY.Y * modProgram.TerrainGridSpacing;
-                            Vertex1.X = (X + 1) * modProgram.TerrainGridSpacing;
+                            Vertex0.Z = - FinishXY.Y * App.TerrainGridSpacing;
+                            Vertex1.X = (X + 1) * App.TerrainGridSpacing;
                             Vertex1.Y = Convert.ToDouble(Terrain.Vertices[X + 1, FinishXY.Y].Height * HeightMultiplier);
-                            Vertex1.Z = - FinishXY.Y * modProgram.TerrainGridSpacing;
+                            Vertex1.Z = - FinishXY.Y * App.TerrainGridSpacing;
                             GL.Begin(BeginMode.Lines);
                             GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
                             GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
@@ -459,12 +459,12 @@ namespace SharpFlame
                         }
                         for ( Y = StartXY.Y; Y <= FinishXY.Y - 1; Y++ )
                         {
-                            Vertex0.X = StartXY.X * modProgram.TerrainGridSpacing;
+                            Vertex0.X = StartXY.X * App.TerrainGridSpacing;
                             Vertex0.Y = Convert.ToDouble(Terrain.Vertices[StartXY.X, Y].Height * HeightMultiplier);
-                            Vertex0.Z = - Y * modProgram.TerrainGridSpacing;
-                            Vertex1.X = StartXY.X * modProgram.TerrainGridSpacing;
+                            Vertex0.Z = - Y * App.TerrainGridSpacing;
+                            Vertex1.X = StartXY.X * App.TerrainGridSpacing;
                             Vertex1.Y = Convert.ToDouble(Terrain.Vertices[StartXY.X, Y + 1].Height * HeightMultiplier);
-                            Vertex1.Z = - (Y + 1) * modProgram.TerrainGridSpacing;
+                            Vertex1.Z = - (Y + 1) * App.TerrainGridSpacing;
                             GL.Begin(BeginMode.Lines);
                             GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
                             GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
@@ -472,12 +472,12 @@ namespace SharpFlame
                         }
                         for ( Y = StartXY.Y; Y <= FinishXY.Y - 1; Y++ )
                         {
-                            Vertex0.X = FinishXY.X * modProgram.TerrainGridSpacing;
+                            Vertex0.X = FinishXY.X * App.TerrainGridSpacing;
                             Vertex0.Y = Convert.ToDouble(Terrain.Vertices[FinishXY.X, Y].Height * HeightMultiplier);
-                            Vertex0.Z = - Y * modProgram.TerrainGridSpacing;
-                            Vertex1.X = FinishXY.X * modProgram.TerrainGridSpacing;
+                            Vertex0.Z = - Y * App.TerrainGridSpacing;
+                            Vertex1.X = FinishXY.X * App.TerrainGridSpacing;
                             Vertex1.Y = Convert.ToDouble(Terrain.Vertices[FinishXY.X, Y + 1].Height * HeightMultiplier);
-                            Vertex1.Z = - (Y + 1) * modProgram.TerrainGridSpacing;
+                            Vertex1.Z = - (Y + 1) * App.TerrainGridSpacing;
                             GL.Begin(BeginMode.Lines);
                             GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
                             GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
@@ -507,21 +507,21 @@ namespace SharpFlame
 
                     if ( MouseOverTerrain.Side_IsV )
                     {
-                        Vertex0.X = MouseOverTerrain.Side_Num.X * modProgram.TerrainGridSpacing;
+                        Vertex0.X = MouseOverTerrain.Side_Num.X * App.TerrainGridSpacing;
                         Vertex0.Y = Convert.ToDouble(Terrain.Vertices[MouseOverTerrain.Side_Num.X, MouseOverTerrain.Side_Num.Y].Height * HeightMultiplier);
-                        Vertex0.Z = - MouseOverTerrain.Side_Num.Y * modProgram.TerrainGridSpacing;
-                        Vertex1.X = MouseOverTerrain.Side_Num.X * modProgram.TerrainGridSpacing;
+                        Vertex0.Z = - MouseOverTerrain.Side_Num.Y * App.TerrainGridSpacing;
+                        Vertex1.X = MouseOverTerrain.Side_Num.X * App.TerrainGridSpacing;
                         Vertex1.Y = Convert.ToDouble(Terrain.Vertices[MouseOverTerrain.Side_Num.X, MouseOverTerrain.Side_Num.Y + 1].Height * HeightMultiplier);
-                        Vertex1.Z = - (MouseOverTerrain.Side_Num.Y + 1) * modProgram.TerrainGridSpacing;
+                        Vertex1.Z = - (MouseOverTerrain.Side_Num.Y + 1) * App.TerrainGridSpacing;
                     }
                     else
                     {
-                        Vertex0.X = MouseOverTerrain.Side_Num.X * modProgram.TerrainGridSpacing;
+                        Vertex0.X = MouseOverTerrain.Side_Num.X * App.TerrainGridSpacing;
                         Vertex0.Y = Convert.ToDouble(Terrain.Vertices[MouseOverTerrain.Side_Num.X, MouseOverTerrain.Side_Num.Y].Height * HeightMultiplier);
-                        Vertex0.Z = - MouseOverTerrain.Side_Num.Y * modProgram.TerrainGridSpacing;
-                        Vertex1.X = (MouseOverTerrain.Side_Num.X + 1) * modProgram.TerrainGridSpacing;
+                        Vertex0.Z = - MouseOverTerrain.Side_Num.Y * App.TerrainGridSpacing;
+                        Vertex1.X = (MouseOverTerrain.Side_Num.X + 1) * App.TerrainGridSpacing;
                         Vertex1.Y = Convert.ToDouble(Terrain.Vertices[MouseOverTerrain.Side_Num.X + 1, MouseOverTerrain.Side_Num.Y].Height * HeightMultiplier);
-                        Vertex1.Z = - MouseOverTerrain.Side_Num.Y * modProgram.TerrainGridSpacing;
+                        Vertex1.Z = - MouseOverTerrain.Side_Num.Y * App.TerrainGridSpacing;
                     }
 
                     GL.Begin(BeginMode.Lines);
@@ -541,18 +541,18 @@ namespace SharpFlame
                         X2 = Selected_Tile_A.X;
                         Y2 = Selected_Tile_A.Y;
 
-                        Vertex0.X = X2 * modProgram.TerrainGridSpacing;
+                        Vertex0.X = X2 * App.TerrainGridSpacing;
                         Vertex0.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2].Height * HeightMultiplier);
-                        Vertex0.Z = - Y2 * modProgram.TerrainGridSpacing;
-                        Vertex1.X = (X2 + 1) * modProgram.TerrainGridSpacing;
+                        Vertex0.Z = - Y2 * App.TerrainGridSpacing;
+                        Vertex1.X = (X2 + 1) * App.TerrainGridSpacing;
                         Vertex1.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2].Height * HeightMultiplier);
-                        Vertex1.Z = - Y2 * modProgram.TerrainGridSpacing;
-                        Vertex2.X = X2 * modProgram.TerrainGridSpacing;
+                        Vertex1.Z = - Y2 * App.TerrainGridSpacing;
+                        Vertex2.X = X2 * App.TerrainGridSpacing;
                         Vertex2.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2 + 1].Height * HeightMultiplier);
-                        Vertex2.Z = - (Y2 + 1) * modProgram.TerrainGridSpacing;
-                        Vertex3.X = (X2 + 1) * modProgram.TerrainGridSpacing;
+                        Vertex2.Z = - (Y2 + 1) * App.TerrainGridSpacing;
+                        Vertex3.X = (X2 + 1) * App.TerrainGridSpacing;
                         Vertex3.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2 + 1].Height * HeightMultiplier);
-                        Vertex3.Z = - (Y2 + 1) * modProgram.TerrainGridSpacing;
+                        Vertex3.Z = - (Y2 + 1) * App.TerrainGridSpacing;
                         GL.Begin(BeginMode.LineLoop);
                         GL.Color3(0.0F, 1.0F, 1.0F);
                         GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
@@ -576,18 +576,18 @@ namespace SharpFlame
                             X2 = Selected_Tile_A.X;
                             for ( Y2 = A; Y2 <= B; Y2++ )
                             {
-                                Vertex0.X = X2 * modProgram.TerrainGridSpacing;
+                                Vertex0.X = X2 * App.TerrainGridSpacing;
                                 Vertex0.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2].Height * HeightMultiplier);
-                                Vertex0.Z = - Y2 * modProgram.TerrainGridSpacing;
-                                Vertex1.X = (X2 + 1) * modProgram.TerrainGridSpacing;
+                                Vertex0.Z = - Y2 * App.TerrainGridSpacing;
+                                Vertex1.X = (X2 + 1) * App.TerrainGridSpacing;
                                 Vertex1.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2].Height * HeightMultiplier);
-                                Vertex1.Z = - Y2 * modProgram.TerrainGridSpacing;
-                                Vertex2.X = X2 * modProgram.TerrainGridSpacing;
+                                Vertex1.Z = - Y2 * App.TerrainGridSpacing;
+                                Vertex2.X = X2 * App.TerrainGridSpacing;
                                 Vertex2.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2 + 1].Height * HeightMultiplier);
-                                Vertex2.Z = - (Y2 + 1) * modProgram.TerrainGridSpacing;
-                                Vertex3.X = (X2 + 1) * modProgram.TerrainGridSpacing;
+                                Vertex2.Z = - (Y2 + 1) * App.TerrainGridSpacing;
+                                Vertex3.X = (X2 + 1) * App.TerrainGridSpacing;
                                 Vertex3.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2 + 1].Height * HeightMultiplier);
-                                Vertex3.Z = - (Y2 + 1) * modProgram.TerrainGridSpacing;
+                                Vertex3.Z = - (Y2 + 1) * App.TerrainGridSpacing;
                                 GL.Begin(BeginMode.LineLoop);
                                 GL.Color3(0.0F, 1.0F, 1.0F);
                                 GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
@@ -612,18 +612,18 @@ namespace SharpFlame
                             Y2 = Selected_Tile_A.Y;
                             for ( X2 = A; X2 <= B; X2++ )
                             {
-                                Vertex0.X = X2 * modProgram.TerrainGridSpacing;
+                                Vertex0.X = X2 * App.TerrainGridSpacing;
                                 Vertex0.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2].Height * HeightMultiplier);
-                                Vertex0.Z = - Y2 * modProgram.TerrainGridSpacing;
-                                Vertex1.X = (X2 + 1) * modProgram.TerrainGridSpacing;
+                                Vertex0.Z = - Y2 * App.TerrainGridSpacing;
+                                Vertex1.X = (X2 + 1) * App.TerrainGridSpacing;
                                 Vertex1.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2].Height * HeightMultiplier);
-                                Vertex1.Z = - Y2 * modProgram.TerrainGridSpacing;
-                                Vertex2.X = X2 * modProgram.TerrainGridSpacing;
+                                Vertex1.Z = - Y2 * App.TerrainGridSpacing;
+                                Vertex2.X = X2 * App.TerrainGridSpacing;
                                 Vertex2.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2 + 1].Height * HeightMultiplier);
-                                Vertex2.Z = - (Y2 + 1) * modProgram.TerrainGridSpacing;
-                                Vertex3.X = (X2 + 1) * modProgram.TerrainGridSpacing;
+                                Vertex2.Z = - (Y2 + 1) * App.TerrainGridSpacing;
+                                Vertex3.X = (X2 + 1) * App.TerrainGridSpacing;
                                 Vertex3.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2 + 1].Height * HeightMultiplier);
-                                Vertex3.Z = - (Y2 + 1) * modProgram.TerrainGridSpacing;
+                                Vertex3.Z = - (Y2 + 1) * App.TerrainGridSpacing;
                                 GL.Begin(BeginMode.LineLoop);
                                 GL.Color3(0.0F, 1.0F, 1.0F);
                                 GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
@@ -639,18 +639,18 @@ namespace SharpFlame
                         X2 = MouseOverTerrain.Tile.Normal.X;
                         Y2 = MouseOverTerrain.Tile.Normal.Y;
 
-                        Vertex0.X = X2 * modProgram.TerrainGridSpacing;
+                        Vertex0.X = X2 * App.TerrainGridSpacing;
                         Vertex0.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2].Height * HeightMultiplier);
-                        Vertex0.Z = - Y2 * modProgram.TerrainGridSpacing;
-                        Vertex1.X = (X2 + 1) * modProgram.TerrainGridSpacing;
+                        Vertex0.Z = - Y2 * App.TerrainGridSpacing;
+                        Vertex1.X = (X2 + 1) * App.TerrainGridSpacing;
                         Vertex1.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2].Height * HeightMultiplier);
-                        Vertex1.Z = - Y2 * modProgram.TerrainGridSpacing;
-                        Vertex2.X = X2 * modProgram.TerrainGridSpacing;
+                        Vertex1.Z = - Y2 * App.TerrainGridSpacing;
+                        Vertex2.X = X2 * App.TerrainGridSpacing;
                         Vertex2.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2 + 1].Height * HeightMultiplier);
-                        Vertex2.Z = - (Y2 + 1) * modProgram.TerrainGridSpacing;
-                        Vertex3.X = (X2 + 1) * modProgram.TerrainGridSpacing;
+                        Vertex2.Z = - (Y2 + 1) * App.TerrainGridSpacing;
+                        Vertex3.X = (X2 + 1) * App.TerrainGridSpacing;
                         Vertex3.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2 + 1].Height * HeightMultiplier);
-                        Vertex3.Z = - (Y2 + 1) * modProgram.TerrainGridSpacing;
+                        Vertex3.Z = - (Y2 + 1) * App.TerrainGridSpacing;
                         GL.Begin(BeginMode.LineLoop);
                         GL.Color3(0.0F, 1.0F, 1.0F);
                         GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
@@ -668,19 +668,19 @@ namespace SharpFlame
 
                 if ( modTools.Tool == modTools.Tools.TextureBrush )
                 {
-                    ToolBrush = modProgram.TextureBrush;
+                    ToolBrush = App.TextureBrush;
                 }
                 else if ( modTools.Tool == modTools.Tools.CliffBrush )
                 {
-                    ToolBrush = modProgram.CliffBrush;
+                    ToolBrush = App.CliffBrush;
                 }
                 else if ( modTools.Tool == modTools.Tools.CliffRemove )
                 {
-                    ToolBrush = modProgram.CliffBrush;
+                    ToolBrush = App.CliffBrush;
                 }
                 else if ( modTools.Tool == modTools.Tools.RoadRemove )
                 {
-                    ToolBrush = modProgram.CliffBrush;
+                    ToolBrush = App.CliffBrush;
                 }
                 else
                 {
@@ -706,9 +706,9 @@ namespace SharpFlame
                 {
                     GL.LineWidth(2.0F);
 
-                    Vertex0.X = MouseOverTerrain.Vertex.Normal.X * modProgram.TerrainGridSpacing;
+                    Vertex0.X = MouseOverTerrain.Vertex.Normal.X * App.TerrainGridSpacing;
                     Vertex0.Y = Convert.ToDouble(Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height * HeightMultiplier);
-                    Vertex0.Z = - MouseOverTerrain.Vertex.Normal.Y * modProgram.TerrainGridSpacing;
+                    Vertex0.Z = - MouseOverTerrain.Vertex.Normal.Y * App.TerrainGridSpacing;
                     GL.Begin(BeginMode.Lines);
                     GL.Color3(0.0F, 1.0F, 1.0F);
                     GL.Vertex3(Vertex0.X - 8.0D, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
@@ -722,19 +722,19 @@ namespace SharpFlame
 
                 if ( modTools.Tool == modTools.Tools.TerrainBrush )
                 {
-                    ToolBrush = modProgram.TerrainBrush;
+                    ToolBrush = App.TerrainBrush;
                 }
                 else if ( modTools.Tool == modTools.Tools.HeightSetBrush )
                 {
-                    ToolBrush = modProgram.HeightBrush;
+                    ToolBrush = App.HeightBrush;
                 }
                 else if ( modTools.Tool == modTools.Tools.HeightChangeBrush )
                 {
-                    ToolBrush = modProgram.HeightBrush;
+                    ToolBrush = App.HeightBrush;
                 }
                 else if ( modTools.Tool == modTools.Tools.HeightSmoothBrush )
                 {
-                    ToolBrush = modProgram.HeightBrush;
+                    ToolBrush = App.HeightBrush;
                 }
                 else
                 {
@@ -770,11 +770,11 @@ namespace SharpFlame
 
             DebugGLError("Object matrix modes");
 
-            if ( modProgram.Draw_Units )
+            if ( App.Draw_Units )
             {
                 GL.Color3(1.0F, 1.0F, 1.0F);
                 GL.Enable(EnableCap.Texture2D);
-                modProgram.VisionSectors.PerformActionMapSectors(DrawObjects, DrawCentreSector);
+                App.VisionSectors.PerformActionMapSectors(DrawObjects, DrawCentreSector);
                 GL.Disable(EnableCap.Texture2D);
                 DebugGLError("Objects");
             }
@@ -816,7 +816,7 @@ namespace SharpFlame
 
             clsTextLabels ScriptMarkerTextLabels = new clsTextLabels(256);
             clsTextLabel TextLabel = default(clsTextLabel);
-            if ( modProgram.Draw_ScriptMarkers )
+            if ( App.Draw_ScriptMarkers )
             {
                 clsScriptPosition ScriptPosition = default(clsScriptPosition);
                 clsScriptArea ScriptArea = default(clsScriptArea);
@@ -852,7 +852,7 @@ namespace SharpFlame
                             TextLabel.Colour.Green = 1.0F;
                             TextLabel.Colour.Blue = 0.5F;
                             TextLabel.Colour.Alpha = 0.75F;
-                            TextLabel.TextFont = modProgram.UnitLabelFont;
+                            TextLabel.TextFont = App.UnitLabelFont;
                             TextLabel.SizeY = modSettings.Settings.FontSize;
                             TextLabel.Pos = ScreenPos;
                             TextLabel.Text = ScriptPosition.Label;
@@ -881,7 +881,7 @@ namespace SharpFlame
                             TextLabel.Colour.Green = 1.0F;
                             TextLabel.Colour.Blue = 0.5F;
                             TextLabel.Colour.Alpha = 0.75F;
-                            TextLabel.TextFont = modProgram.UnitLabelFont;
+                            TextLabel.TextFont = App.UnitLabelFont;
                             TextLabel.SizeY = modSettings.Settings.FontSize;
                             TextLabel.Pos = ScreenPos;
                             TextLabel.Text = ScriptArea.Label;
@@ -906,7 +906,7 @@ namespace SharpFlame
                     TextLabel.Colour.Green = 0.875F;
                     TextLabel.Colour.Blue = 1.0F;
                     TextLabel.Colour.Alpha = 1.0F;
-                    TextLabel.TextFont = modProgram.UnitLabelFont;
+                    TextLabel.TextFont = App.UnitLabelFont;
                     TextLabel.SizeY = modSettings.Settings.FontSize;
                     TextLabel.Pos.X = 32 + MinimapSizeXY.X;
                     TextLabel.Pos.Y = 32 + (int)(Math.Ceiling((decimal)(B * TextLabel.SizeY)));
@@ -1030,7 +1030,7 @@ namespace SharpFlame
 
                 if ( ShowMinimapViewPosBox )
                 {
-                    dblTemp = modProgram.TerrainGridSpacing * ViewInfo.Tiles_Per_Minimap_Pixel;
+                    dblTemp = App.TerrainGridSpacing * ViewInfo.Tiles_Per_Minimap_Pixel;
 
                     PosA.X = ViewCorner0.X / dblTemp;
                     PosA.Y = MinimapSizeXY.Y + ViewCorner0.Y / dblTemp;
@@ -1098,7 +1098,7 @@ namespace SharpFlame
 
         private void DebugGLError(string Name)
         {
-            if ( modProgram.Debug_GL )
+            if ( App.Debug_GL )
             {
                 if ( Messages.Count < 8 )
                 {
@@ -1121,10 +1121,10 @@ namespace SharpFlame
 
             GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.Type.get_GetFootprintSelected(Unit.Rotation), PosA, PosB);
             A = PosA.Y;
-            PosA.X = (int)((PosA.X + 0.125D) * modProgram.TerrainGridSpacing - ViewInfo.ViewPos.X);
-            PosA.Y = (int)((PosB.Y + 0.875D) * - modProgram.TerrainGridSpacing - ViewInfo.ViewPos.Z);
-            PosB.X = (int)((PosB.X + 0.875D) * modProgram.TerrainGridSpacing - ViewInfo.ViewPos.X);
-            PosB.Y = (int)((A + 0.125D) * - modProgram.TerrainGridSpacing - ViewInfo.ViewPos.Z);
+            PosA.X = (int)((PosA.X + 0.125D) * App.TerrainGridSpacing - ViewInfo.ViewPos.X);
+            PosA.Y = (int)((PosB.Y + 0.875D) * - App.TerrainGridSpacing - ViewInfo.ViewPos.Z);
+            PosB.X = (int)((PosB.X + 0.875D) * App.TerrainGridSpacing - ViewInfo.ViewPos.X);
+            PosB.Y = (int)((A + 0.125D) * - App.TerrainGridSpacing - ViewInfo.ViewPos.Z);
 
             GL.Color4(OutsideColour.Red, OutsideColour.Green, OutsideColour.Blue, OutsideColour.Alpha);
             GL.Vertex3(PosB.X, Altitude, Convert.ToInt32(- PosA.Y));
@@ -1166,18 +1166,18 @@ namespace SharpFlame
 
             public override void ActionPerform()
             {
-                Vertex0.X = PosNum.X * modProgram.TerrainGridSpacing;
+                Vertex0.X = PosNum.X * App.TerrainGridSpacing;
                 Vertex0.Y = Convert.ToInt32(Map.Terrain.Vertices[PosNum.X, PosNum.Y].Height * Map.HeightMultiplier);
-                Vertex0.Z = - PosNum.Y * modProgram.TerrainGridSpacing;
-                Vertex1.X = (PosNum.X + 1) * modProgram.TerrainGridSpacing;
+                Vertex0.Z = - PosNum.Y * App.TerrainGridSpacing;
+                Vertex1.X = (PosNum.X + 1) * App.TerrainGridSpacing;
                 Vertex1.Y = Convert.ToInt32(Map.Terrain.Vertices[PosNum.X + 1, PosNum.Y].Height * Map.HeightMultiplier);
-                Vertex1.Z = - PosNum.Y * modProgram.TerrainGridSpacing;
-                Vertex2.X = PosNum.X * modProgram.TerrainGridSpacing;
+                Vertex1.Z = - PosNum.Y * App.TerrainGridSpacing;
+                Vertex2.X = PosNum.X * App.TerrainGridSpacing;
                 Vertex2.Y = Convert.ToInt32(Map.Terrain.Vertices[PosNum.X, PosNum.Y + 1].Height * Map.HeightMultiplier);
-                Vertex2.Z = - (PosNum.Y + 1) * modProgram.TerrainGridSpacing;
-                Vertex3.X = (PosNum.X + 1) * modProgram.TerrainGridSpacing;
+                Vertex2.Z = - (PosNum.Y + 1) * App.TerrainGridSpacing;
+                Vertex3.X = (PosNum.X + 1) * App.TerrainGridSpacing;
                 Vertex3.Y = Convert.ToInt32(Map.Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Height * Map.HeightMultiplier);
-                Vertex3.Z = - (PosNum.Y + 1) * modProgram.TerrainGridSpacing;
+                Vertex3.Z = - (PosNum.Y + 1) * App.TerrainGridSpacing;
                 GL.Begin(BeginMode.LineLoop);
                 GL.Color4(Colour.Red, Colour.Green, Colour.Blue, Colour.Alpha);
                 GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToInt32(- Vertex0.Z));
@@ -1209,45 +1209,45 @@ namespace SharpFlame
                 GL.Color4(Colour.Red, Colour.Green, Colour.Blue, Colour.Alpha);
                 for ( X = StartXY.X; X <= FinishXY.X - 1; X++ )
                 {
-                    Vertex0.X = X * modProgram.TerrainGridSpacing;
+                    Vertex0.X = X * App.TerrainGridSpacing;
                     Vertex0.Y = Convert.ToInt32(Map.Terrain.Vertices[X, StartXY.Y].Height * Map.HeightMultiplier);
-                    Vertex0.Z = - StartXY.Y * modProgram.TerrainGridSpacing;
-                    Vertex1.X = (X + 1) * modProgram.TerrainGridSpacing;
+                    Vertex0.Z = - StartXY.Y * App.TerrainGridSpacing;
+                    Vertex1.X = (X + 1) * App.TerrainGridSpacing;
                     Vertex1.Y = Convert.ToInt32(Map.Terrain.Vertices[X + 1, StartXY.Y].Height * Map.HeightMultiplier);
-                    Vertex1.Z = - StartXY.Y * modProgram.TerrainGridSpacing;
+                    Vertex1.Z = - StartXY.Y * App.TerrainGridSpacing;
                     GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToInt32(- Vertex0.Z));
                     GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToInt32(- Vertex1.Z));
                 }
                 for ( X = StartXY.X; X <= FinishXY.X - 1; X++ )
                 {
-                    Vertex0.X = X * modProgram.TerrainGridSpacing;
+                    Vertex0.X = X * App.TerrainGridSpacing;
                     Vertex0.Y = Convert.ToInt32(Map.Terrain.Vertices[X, FinishXY.Y].Height * Map.HeightMultiplier);
-                    Vertex0.Z = - FinishXY.Y * modProgram.TerrainGridSpacing;
-                    Vertex1.X = (X + 1) * modProgram.TerrainGridSpacing;
+                    Vertex0.Z = - FinishXY.Y * App.TerrainGridSpacing;
+                    Vertex1.X = (X + 1) * App.TerrainGridSpacing;
                     Vertex1.Y = Convert.ToInt32(Map.Terrain.Vertices[X + 1, FinishXY.Y].Height * Map.HeightMultiplier);
-                    Vertex1.Z = - FinishXY.Y * modProgram.TerrainGridSpacing;
+                    Vertex1.Z = - FinishXY.Y * App.TerrainGridSpacing;
                     GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToInt32(- Vertex0.Z));
                     GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToInt32(- Vertex1.Z));
                 }
                 for ( Y = StartXY.Y; Y <= FinishXY.Y - 1; Y++ )
                 {
-                    Vertex0.X = StartXY.X * modProgram.TerrainGridSpacing;
+                    Vertex0.X = StartXY.X * App.TerrainGridSpacing;
                     Vertex0.Y = Convert.ToInt32(Map.Terrain.Vertices[StartXY.X, Y].Height * Map.HeightMultiplier);
-                    Vertex0.Z = - Y * modProgram.TerrainGridSpacing;
-                    Vertex1.X = StartXY.X * modProgram.TerrainGridSpacing;
+                    Vertex0.Z = - Y * App.TerrainGridSpacing;
+                    Vertex1.X = StartXY.X * App.TerrainGridSpacing;
                     Vertex1.Y = Convert.ToInt32(Map.Terrain.Vertices[StartXY.X, Y + 1].Height * Map.HeightMultiplier);
-                    Vertex1.Z = - (Y + 1) * modProgram.TerrainGridSpacing;
+                    Vertex1.Z = - (Y + 1) * App.TerrainGridSpacing;
                     GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToInt32(- Vertex0.Z));
                     GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToInt32(- Vertex1.Z));
                 }
                 for ( Y = StartXY.Y; Y <= FinishXY.Y - 1; Y++ )
                 {
-                    Vertex0.X = FinishXY.X * modProgram.TerrainGridSpacing;
+                    Vertex0.X = FinishXY.X * App.TerrainGridSpacing;
                     Vertex0.Y = Convert.ToInt32(Map.Terrain.Vertices[FinishXY.X, Y].Height * Map.HeightMultiplier);
-                    Vertex0.Z = - Y * modProgram.TerrainGridSpacing;
-                    Vertex1.X = FinishXY.X * modProgram.TerrainGridSpacing;
+                    Vertex0.Z = - Y * App.TerrainGridSpacing;
+                    Vertex1.X = FinishXY.X * App.TerrainGridSpacing;
                     Vertex1.Y = Convert.ToInt32(Map.Terrain.Vertices[FinishXY.X, Y + 1].Height * Map.HeightMultiplier);
-                    Vertex1.Z = - (Y + 1) * modProgram.TerrainGridSpacing;
+                    Vertex1.Z = - (Y + 1) * App.TerrainGridSpacing;
                     GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToInt32(- Vertex0.Z));
                     GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToInt32(- Vertex1.Z));
                 }
@@ -1282,9 +1282,9 @@ namespace SharpFlame
                 GL.Begin(BeginMode.LineStrip);
                 GL.Color4(Colour.Red, Colour.Green, Colour.Blue, Colour.Alpha);
 
-                StartTile.Y = (int)(Conversion.Int(StartXY.Y / modProgram.TerrainGridSpacing));
-                FinishTile.Y = Conversion.Int(FinishXY.Y / modProgram.TerrainGridSpacing);
-                LastXTile = Conversion.Int(StartXY.X / modProgram.TerrainGridSpacing);
+                StartTile.Y = (int)(Conversion.Int(StartXY.Y / App.TerrainGridSpacing));
+                FinishTile.Y = Conversion.Int(FinishXY.Y / App.TerrainGridSpacing);
+                LastXTile = Conversion.Int(StartXY.X / App.TerrainGridSpacing);
 
                 Horizontal = StartXY;
                 Vertex.X = Horizontal.X;
@@ -1297,21 +1297,21 @@ namespace SharpFlame
                     for ( Y = StartTile.Y + 1; Y <= FinishTile.Y; Y++ )
                     {
                         TileEdgeStart.X = 0;
-                        TileEdgeStart.Y = Y * modProgram.TerrainGridSpacing;
-                        TileEdgeFinish.X = Map.Terrain.TileSize.X * modProgram.TerrainGridSpacing;
-                        TileEdgeFinish.Y = Y * modProgram.TerrainGridSpacing;
+                        TileEdgeStart.Y = Y * App.TerrainGridSpacing;
+                        TileEdgeFinish.X = Map.Terrain.TileSize.X * App.TerrainGridSpacing;
+                        TileEdgeFinish.Y = Y * App.TerrainGridSpacing;
                         IntersectY = MathUtil.GetLinesIntersectBetween(StartXY, FinishXY, TileEdgeStart, TileEdgeFinish);
                         if ( IntersectY.Exists )
                         {
                             StartTile.X = LastXTile;
-                            FinishTile.X = (int)(Conversion.Int(IntersectY.Pos.X / modProgram.TerrainGridSpacing));
+                            FinishTile.X = (int)(Conversion.Int(IntersectY.Pos.X / App.TerrainGridSpacing));
 
                             for ( X = StartTile.X + 1; X <= FinishTile.X; X++ )
                             {
-                                TileEdgeStart.X = X * modProgram.TerrainGridSpacing;
+                                TileEdgeStart.X = X * App.TerrainGridSpacing;
                                 TileEdgeStart.Y = 0;
-                                TileEdgeFinish.X = X * modProgram.TerrainGridSpacing;
-                                TileEdgeFinish.Y = Map.Terrain.TileSize.Y * modProgram.TerrainGridSpacing;
+                                TileEdgeFinish.X = X * App.TerrainGridSpacing;
+                                TileEdgeFinish.Y = Map.Terrain.TileSize.Y * App.TerrainGridSpacing;
                                 IntersectX = MathUtil.GetLinesIntersectBetween(StartXY, FinishXY, TileEdgeStart, TileEdgeFinish);
                                 if ( IntersectX.Exists )
                                 {
@@ -1336,13 +1336,13 @@ namespace SharpFlame
                 else
                 {
                     StartTile.X = LastXTile;
-                    FinishTile.X = Conversion.Int(FinishXY.X / modProgram.TerrainGridSpacing);
+                    FinishTile.X = Conversion.Int(FinishXY.X / App.TerrainGridSpacing);
                     for ( X = StartTile.X + 1; X <= FinishTile.X; X++ )
                     {
-                        TileEdgeStart.X = X * modProgram.TerrainGridSpacing;
+                        TileEdgeStart.X = X * App.TerrainGridSpacing;
                         TileEdgeStart.Y = 0;
-                        TileEdgeFinish.X = X * modProgram.TerrainGridSpacing;
-                        TileEdgeFinish.Y = Map.Terrain.TileSize.Y * modProgram.TerrainGridSpacing;
+                        TileEdgeFinish.X = X * App.TerrainGridSpacing;
+                        TileEdgeFinish.Y = Map.Terrain.TileSize.Y * App.TerrainGridSpacing;
                         IntersectX = MathUtil.GetLinesIntersectBetween(StartXY, FinishXY, TileEdgeStart, TileEdgeFinish);
                         if ( IntersectX.Exists )
                         {
@@ -1444,9 +1444,9 @@ namespace SharpFlame
                                         RGB_sng2.Green = RGB_sng.Green / 2.0F;
                                         RGB_sng2.Blue = RGB_sng.Blue / 2.0F;
                                     }
-                                    XYZ_dbl.X = X * modProgram.TerrainGridSpacing;
+                                    XYZ_dbl.X = X * App.TerrainGridSpacing;
                                     XYZ_dbl.Y = Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height * Map.HeightMultiplier);
-                                    XYZ_dbl.Z = - Y * modProgram.TerrainGridSpacing;
+                                    XYZ_dbl.Z = - Y * App.TerrainGridSpacing;
                                     XYZ_dbl2.X = 10.0D;
                                     XYZ_dbl2.Y = 10.0D;
                                     XYZ_dbl2.Z = 0.0D;
@@ -1505,9 +1505,9 @@ namespace SharpFlame
 
             public override void ActionPerform()
             {
-                Vertex0.X = PosNum.X * modProgram.TerrainGridSpacing;
+                Vertex0.X = PosNum.X * App.TerrainGridSpacing;
                 Vertex0.Y = Convert.ToInt32(Map.Terrain.Vertices[PosNum.X, PosNum.Y].Height * Map.HeightMultiplier);
-                Vertex0.Z = - PosNum.Y * modProgram.TerrainGridSpacing;
+                Vertex0.Z = - PosNum.Y * App.TerrainGridSpacing;
                 GL.Begin(BeginMode.Lines);
                 GL.Color4(Colour.Red, Colour.Green, Colour.Blue, Colour.Alpha);
                 GL.Vertex3(Vertex0.X - 8, Vertex0.Y, Convert.ToInt32(- Vertex0.Z));
@@ -1624,7 +1624,7 @@ namespace SharpFlame
                                 if ( ScreenPos.X >= 0 & ScreenPos.X <= ViewInfo.MapView.GLSize.X & ScreenPos.Y >= 0 & ScreenPos.Y <= ViewInfo.MapView.GLSize.Y )
                                 {
                                     TextLabel = new clsTextLabel();
-                                    TextLabel.TextFont = modProgram.UnitLabelFont;
+                                    TextLabel.TextFont = App.UnitLabelFont;
                                     TextLabel.SizeY = modSettings.Settings.FontSize;
                                     TextLabel.Colour.Red = 1.0F;
                                     TextLabel.Colour.Green = 1.0F;

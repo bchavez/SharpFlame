@@ -27,7 +27,7 @@ namespace SharpFlame
         {
             InitializeComponent();
 
-            Icon = modProgram.ProgramIcon;
+            Icon = App.ProgramIcon;
 
 #if Mono
 			foreach (TabPage tab in TabControl1.TabPages)

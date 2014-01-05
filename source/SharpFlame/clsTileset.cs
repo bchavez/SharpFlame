@@ -28,9 +28,9 @@ namespace SharpFlame
 
         public sRGB_sng BGColour = new sRGB_sng(0.5F, 0.5F, 0.5F);
 
-        public modProgram.sResult Default_TileTypes_Load(string Path)
+        public App.sResult Default_TileTypes_Load(string Path)
         {
-            modProgram.sResult ReturnResult = new modProgram.sResult();
+            App.sResult ReturnResult = new App.sResult();
             BinaryReader File = default(BinaryReader);
 
             try
@@ -47,9 +47,9 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        private modProgram.sResult Default_TileTypes_Read(BinaryReader File)
+        private App.sResult Default_TileTypes_Read(BinaryReader File)
         {
-            modProgram.sResult ReturnResult = new modProgram.sResult();
+            App.sResult ReturnResult = new App.sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -81,7 +81,7 @@ namespace SharpFlame
                 for ( A = 0; A <= Math.Min(Convert.ToInt32(uintTemp), TileCount) - 1; A++ )
                 {
                     ushortTemp = File.ReadUInt16();
-                    if ( ushortTemp > modProgram.TileTypes.Count )
+                    if ( ushortTemp > App.TileTypes.Count )
                     {
                         ReturnResult.Problem = "Unknown tile type.";
                         return ReturnResult;
@@ -105,9 +105,9 @@ namespace SharpFlame
                 new clsResult("Loading tileset from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
 
             Bitmap Bitmap = null;
-            modProgram.sSplitPath SplitPath = new modProgram.sSplitPath(Path);
-            string SlashPath = modProgram.EndWithPathSeperator(Path);
-            modProgram.sResult Result = new modProgram.sResult();
+            App.sSplitPath SplitPath = new App.sSplitPath(Path);
+            string SlashPath = App.EndWithPathSeperator(Path);
+            App.sResult Result = new App.sResult();
 
             if ( SplitPath.FileTitle != "" )
             {
@@ -142,11 +142,11 @@ namespace SharpFlame
 
             for ( TileNum = 0; TileNum <= TileCount - 1; TileNum++ )
             {
-                strTile = "tile-" + modProgram.MinDigits(TileNum, 2) + ".png";
+                strTile = "tile-" + App.MinDigits(TileNum, 2) + ".png";
 
                 //-------- 128 --------
 
-                GraphicPath = SlashPath + Name + "-128" + Convert.ToString(modProgram.PlatformPathSeparator) + strTile;
+                GraphicPath = SlashPath + Name + "-128" + Convert.ToString(App.PlatformPathSeparator) + strTile;
 
                 Result = BitmapUtil.LoadBitmap(GraphicPath, ref Bitmap);
                 if ( !Result.Success )
@@ -252,11 +252,11 @@ namespace SharpFlame
             Bitmap Bitmap2 = default(Bitmap);
             Bitmap Bitmap1 = default(Bitmap);
             Bitmap Bitmap = null;
-            modProgram.sResult Result = new modProgram.sResult();
+            App.sResult Result = new App.sResult();
 
             //-------- 64 --------
 
-            GraphicPath = SlashPath + Name + "-64" + Convert.ToString(modProgram.PlatformPathSeparator) + strTile;
+            GraphicPath = SlashPath + Name + "-64" + Convert.ToString(App.PlatformPathSeparator) + strTile;
 
             Result = BitmapUtil.LoadBitmap(GraphicPath, ref Bitmap);
             if ( !Result.Success )
@@ -277,7 +277,7 @@ namespace SharpFlame
 
             //-------- 32 --------
 
-            GraphicPath = SlashPath + Name + "-32" + Convert.ToString(modProgram.PlatformPathSeparator) + strTile;
+            GraphicPath = SlashPath + Name + "-32" + Convert.ToString(App.PlatformPathSeparator) + strTile;
 
             Result = BitmapUtil.LoadBitmap(GraphicPath, ref Bitmap);
             if ( !Result.Success )
@@ -298,7 +298,7 @@ namespace SharpFlame
 
             //-------- 16 --------
 
-            GraphicPath = SlashPath + Name + "-16" + Convert.ToString(modProgram.PlatformPathSeparator) + strTile;
+            GraphicPath = SlashPath + Name + "-16" + Convert.ToString(App.PlatformPathSeparator) + strTile;
 
             Result = BitmapUtil.LoadBitmap(GraphicPath, ref Bitmap);
             if ( !Result.Success )

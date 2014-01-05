@@ -332,8 +332,8 @@ namespace SharpFlame
 
             sXY_int SymmetrySize = new sXY_int();
 
-            SymmetrySize.X = (int)(TileSize.X * modProgram.TerrainGridSpacing / SymmetryBlockCountXY.X);
-            SymmetrySize.Y = (int)(TileSize.Y * modProgram.TerrainGridSpacing / SymmetryBlockCountXY.Y);
+            SymmetrySize.X = (int)(TileSize.X * App.TerrainGridSpacing / SymmetryBlockCountXY.X);
+            SymmetrySize.Y = (int)(TileSize.Y * App.TerrainGridSpacing / SymmetryBlockCountXY.Y);
 
             //create passage nodes
 
@@ -354,41 +354,41 @@ namespace SharpFlame
             {
                 EdgeSections.X =
                     Convert.ToInt32(
-                        Conversion.Int((TileSize.X * modProgram.TerrainGridSpacing - EdgeOffset * 2.0D) / (NodeScale * modProgram.TerrainGridSpacing * 2.0F)));
-                EdgeSectionSize.X = (TileSize.X * modProgram.TerrainGridSpacing - EdgeOffset * 2.0D) / EdgeSections.X;
+                        Conversion.Int((TileSize.X * App.TerrainGridSpacing - EdgeOffset * 2.0D) / (NodeScale * App.TerrainGridSpacing * 2.0F)));
+                EdgeSectionSize.X = (TileSize.X * App.TerrainGridSpacing - EdgeOffset * 2.0D) / EdgeSections.X;
                 EdgeSections.X--;
             }
             else
             {
                 EdgeSections.X =
                     (int)
-                        (Conversion.Int((TileSize.X * modProgram.TerrainGridSpacing / SymmetryBlockCountXY.X - EdgeOffset) /
-                                        (NodeScale * modProgram.TerrainGridSpacing * 2.0F) - 0.5D));
+                        (Conversion.Int((TileSize.X * App.TerrainGridSpacing / SymmetryBlockCountXY.X - EdgeOffset) /
+                                        (NodeScale * App.TerrainGridSpacing * 2.0F) - 0.5D));
                 EdgeSectionSize.X =
-                    Convert.ToDouble((TileSize.X * modProgram.TerrainGridSpacing / SymmetryBlockCountXY.X - EdgeOffset) /
+                    Convert.ToDouble((TileSize.X * App.TerrainGridSpacing / SymmetryBlockCountXY.X - EdgeOffset) /
                                             (Convert.ToDouble(
-                                                Conversion.Int((TileSize.X * modProgram.TerrainGridSpacing / SymmetryBlockCountXY.X - EdgeOffset) /
-                                                               (NodeScale * modProgram.TerrainGridSpacing * 2.0F) - 0.5D)) + 0.5D));
+                                                Conversion.Int((TileSize.X * App.TerrainGridSpacing / SymmetryBlockCountXY.X - EdgeOffset) /
+                                                               (NodeScale * App.TerrainGridSpacing * 2.0F) - 0.5D)) + 0.5D));
             }
             if ( SymmetryBlockCountXY.Y == 1 )
             {
                 EdgeSections.Y =
                     Convert.ToInt32(
-                        Conversion.Int((TileSize.Y * modProgram.TerrainGridSpacing - EdgeOffset * 2.0D) / (NodeScale * modProgram.TerrainGridSpacing * 2.0F)));
-                EdgeSectionSize.Y = (TileSize.Y * modProgram.TerrainGridSpacing - EdgeOffset * 2.0D) / EdgeSections.Y;
+                        Conversion.Int((TileSize.Y * App.TerrainGridSpacing - EdgeOffset * 2.0D) / (NodeScale * App.TerrainGridSpacing * 2.0F)));
+                EdgeSectionSize.Y = (TileSize.Y * App.TerrainGridSpacing - EdgeOffset * 2.0D) / EdgeSections.Y;
                 EdgeSections.Y--;
             }
             else
             {
                 EdgeSections.Y =
                     Convert.ToInt32(
-                        Conversion.Int((TileSize.Y * modProgram.TerrainGridSpacing / SymmetryBlockCountXY.Y - EdgeOffset) /
-                                       (NodeScale * modProgram.TerrainGridSpacing * 2.0F) - 0.5D));
+                        Conversion.Int((TileSize.Y * App.TerrainGridSpacing / SymmetryBlockCountXY.Y - EdgeOffset) /
+                                       (NodeScale * App.TerrainGridSpacing * 2.0F) - 0.5D));
                 EdgeSectionSize.Y =
-                    Convert.ToDouble((TileSize.Y * modProgram.TerrainGridSpacing / SymmetryBlockCountXY.Y - EdgeOffset) /
+                    Convert.ToDouble((TileSize.Y * App.TerrainGridSpacing / SymmetryBlockCountXY.Y - EdgeOffset) /
                                             (Convert.ToDouble(
-                                                Conversion.Int((TileSize.Y * modProgram.TerrainGridSpacing / SymmetryBlockCountXY.Y - EdgeOffset) /
-                                                               (NodeScale * modProgram.TerrainGridSpacing * 2.0F) - 0.5D)) + 0.5D));
+                                                Conversion.Int((TileSize.Y * App.TerrainGridSpacing / SymmetryBlockCountXY.Y - EdgeOffset) /
+                                                               (NodeScale * App.TerrainGridSpacing * 2.0F) - 0.5D)) + 0.5D));
             }
 
             PassageNodeCount = 0;
@@ -402,7 +402,7 @@ namespace SharpFlame
                 if ( SymmetryBlockCountXY.X == 1 )
                 {
                     if (
-                        !MakePassageNodes(new sXY_int(TileSize.X * modProgram.TerrainGridSpacing - EdgeOffset, EdgeOffset + (int)(Y * EdgeSectionSize.Y)), true) )
+                        !MakePassageNodes(new sXY_int(TileSize.X * App.TerrainGridSpacing - EdgeOffset, EdgeOffset + (int)(Y * EdgeSectionSize.Y)), true) )
                     {
                         ReturnResult.ProblemAdd("Error: Bad border node.");
                         return ReturnResult;
@@ -419,7 +419,7 @@ namespace SharpFlame
                 if ( SymmetryBlockCountXY.Y == 1 )
                 {
                     if (
-                        !MakePassageNodes(new sXY_int(EdgeOffset + (int)(X * EdgeSectionSize.X), TileSize.Y * modProgram.TerrainGridSpacing - EdgeOffset), true) )
+                        !MakePassageNodes(new sXY_int(EdgeOffset + (int)(X * EdgeSectionSize.X), TileSize.Y * App.TerrainGridSpacing - EdgeOffset), true) )
                     {
                         ReturnResult.ProblemAdd("Error: Bad border node.");
                         return ReturnResult;
@@ -849,7 +849,7 @@ namespace SharpFlame
             }
 
             clsPassageNode tmpPassageNodeC = default(clsPassageNode);
-            modProgram.sResult Result = new modProgram.sResult();
+            App.sResult Result = new App.sResult();
 
             HeightsArgs.FlatsCutoff = 1;
             HeightsArgs.PassagesCutoff = 1;
@@ -1960,8 +1960,8 @@ namespace SharpFlame
                 {
                     if ( Map.Terrain.Tiles[X, Y].Texture.TextureNum >= 0 )
                     {
-                        if ( GenerateTileset.Tileset.Tiles[Map.Terrain.Tiles[X, Y].Texture.TextureNum].Default_Type == modProgram.TileTypeNum_Cliff ||
-                             GenerateTileset.Tileset.Tiles[Map.Terrain.Tiles[X, Y].Texture.TextureNum].Default_Type == modProgram.TileTypeNum_Water )
+                        if ( GenerateTileset.Tileset.Tiles[Map.Terrain.Tiles[X, Y].Texture.TextureNum].Default_Type == App.TileTypeNum_Cliff ||
+                             GenerateTileset.Tileset.Tiles[Map.Terrain.Tiles[X, Y].Texture.TextureNum].Default_Type == App.TileTypeNum_Water )
                         {
                             TileNodeBlock(X, Y);
                         }
@@ -1990,7 +1990,7 @@ namespace SharpFlame
                 for ( X = 0; X <= Map.Terrain.TileSize.X; X++ )
                 {
                     BestDist = float.MaxValue;
-                    Pos = new sXY_int(X * modProgram.TerrainGridSpacing, Y * modProgram.TerrainGridSpacing);
+                    Pos = new sXY_int(X * App.TerrainGridSpacing, Y * App.TerrainGridSpacing);
                     for ( B = 0; B <= ConnectionCount - 1; B++ )
                     {
                         //If Not (Connections(B).PassageNodeA.IsOnBorder Or Connections(B).PassageNodeB.IsOnBorder) Then
@@ -2155,8 +2155,8 @@ namespace SharpFlame
                     NewUnit.Type = Type;
                     NewUnit.UnitGroup = UnitGroup;
 
-                    FinalTilePos.X = (int)(Conversion.Int(NodeTag.Pos.X / modProgram.TerrainGridSpacing));
-                    FinalTilePos.Y = Conversion.Int(NodeTag.Pos.Y / modProgram.TerrainGridSpacing);
+                    FinalTilePos.X = (int)(Conversion.Int(NodeTag.Pos.X / App.TerrainGridSpacing));
+                    FinalTilePos.Y = Conversion.Int(NodeTag.Pos.Y / App.TerrainGridSpacing);
                     Footprint = Type.get_GetFootprintSelected(Rotation);
                     Remainder = Footprint.X % 2;
                     if ( Remainder > 0 )
@@ -2167,11 +2167,11 @@ namespace SharpFlame
                     {
                         if ( VBMath.Rnd() >= 0.5F )
                         {
-                            NewUnit.Pos.Horizontal.X = (int)(NodeTag.Pos.X - modProgram.TerrainGridSpacing / 2.0D);
+                            NewUnit.Pos.Horizontal.X = (int)(NodeTag.Pos.X - App.TerrainGridSpacing / 2.0D);
                         }
                         else
                         {
-                            NewUnit.Pos.Horizontal.X = (int)(NodeTag.Pos.X + modProgram.TerrainGridSpacing / 2.0D);
+                            NewUnit.Pos.Horizontal.X = (int)(NodeTag.Pos.X + App.TerrainGridSpacing / 2.0D);
                         }
                     }
                     Remainder = Footprint.Y % 2;
@@ -2183,17 +2183,17 @@ namespace SharpFlame
                     {
                         if ( VBMath.Rnd() >= 0.5F )
                         {
-                            NewUnit.Pos.Horizontal.Y = (int)(NodeTag.Pos.Y - modProgram.TerrainGridSpacing / 2.0D);
+                            NewUnit.Pos.Horizontal.Y = (int)(NodeTag.Pos.Y - App.TerrainGridSpacing / 2.0D);
                         }
                         else
                         {
-                            NewUnit.Pos.Horizontal.Y = (int)(NodeTag.Pos.Y + modProgram.TerrainGridSpacing / 2.0D);
+                            NewUnit.Pos.Horizontal.Y = (int)(NodeTag.Pos.Y + App.TerrainGridSpacing / 2.0D);
                         }
                     }
-                    TilePosA.X = (int)Conversion.Int(NewUnit.Pos.Horizontal.X / modProgram.TerrainGridSpacing - Footprint.X / 2.0D + 0.5D);
-                    TilePosA.Y = (int)Conversion.Int(NewUnit.Pos.Horizontal.Y / modProgram.TerrainGridSpacing - Footprint.Y / 2.0D + 0.5D);
-                    TilePosB.X = (int)(Conversion.Int(NewUnit.Pos.Horizontal.X / modProgram.TerrainGridSpacing + Footprint.X / 2.0D - 0.5D));
-                    TilePosB.Y = (int)(Conversion.Int(NewUnit.Pos.Horizontal.Y / modProgram.TerrainGridSpacing + Footprint.Y / 2.0D - 0.5D));
+                    TilePosA.X = (int)Conversion.Int(NewUnit.Pos.Horizontal.X / App.TerrainGridSpacing - Footprint.X / 2.0D + 0.5D);
+                    TilePosA.Y = (int)Conversion.Int(NewUnit.Pos.Horizontal.Y / App.TerrainGridSpacing - Footprint.Y / 2.0D + 0.5D);
+                    TilePosB.X = (int)(Conversion.Int(NewUnit.Pos.Horizontal.X / App.TerrainGridSpacing + Footprint.X / 2.0D - 0.5D));
+                    TilePosB.Y = (int)(Conversion.Int(NewUnit.Pos.Horizontal.Y / App.TerrainGridSpacing + Footprint.Y / 2.0D - 0.5D));
                     NewUnit.Rotation = Rotation;
 
                     NewUnitAdd.Perform();
@@ -2221,7 +2221,7 @@ namespace SharpFlame
             }
         }
 
-        public clsMap.clsUnit PlaceUnit(clsUnitType Type, modProgram.sWorldPos Pos, clsMap.clsUnitGroup UnitGroup, int Rotation)
+        public clsMap.clsUnit PlaceUnit(clsUnitType Type, App.sWorldPos Pos, clsMap.clsUnitGroup UnitGroup, int Rotation)
         {
             sXY_int TilePosA = new sXY_int();
             sXY_int TilePosB = new sXY_int();
@@ -2238,16 +2238,16 @@ namespace SharpFlame
             NewUnit.Type = Type;
             NewUnit.UnitGroup = UnitGroup;
 
-            FinalTilePos.X = (int)(Conversion.Int(Pos.Horizontal.X / modProgram.TerrainGridSpacing));
-            FinalTilePos.Y = (int)(Conversion.Int(Pos.Horizontal.Y / modProgram.TerrainGridSpacing));
+            FinalTilePos.X = (int)(Conversion.Int(Pos.Horizontal.X / App.TerrainGridSpacing));
+            FinalTilePos.Y = (int)(Conversion.Int(Pos.Horizontal.Y / App.TerrainGridSpacing));
 
             Footprint = Type.get_GetFootprintSelected(Rotation);
 
             NewUnit.Pos = Pos;
-            TilePosA.X = (int)(Conversion.Int(NewUnit.Pos.Horizontal.X / modProgram.TerrainGridSpacing - Footprint.X / 2.0D + 0.5D));
-            TilePosA.Y = (int)(Conversion.Int(NewUnit.Pos.Horizontal.Y / modProgram.TerrainGridSpacing - Footprint.Y / 2.0D + 0.5D));
-            TilePosB.X = (int)Conversion.Int(NewUnit.Pos.Horizontal.X / modProgram.TerrainGridSpacing + Footprint.X / 2.0D - 0.5D);
-            TilePosB.Y = (int)Conversion.Int(NewUnit.Pos.Horizontal.Y / modProgram.TerrainGridSpacing + Footprint.Y / 2.0D - 0.5D);
+            TilePosA.X = (int)(Conversion.Int(NewUnit.Pos.Horizontal.X / App.TerrainGridSpacing - Footprint.X / 2.0D + 0.5D));
+            TilePosA.Y = (int)(Conversion.Int(NewUnit.Pos.Horizontal.Y / App.TerrainGridSpacing - Footprint.Y / 2.0D + 0.5D));
+            TilePosB.X = (int)Conversion.Int(NewUnit.Pos.Horizontal.X / App.TerrainGridSpacing + Footprint.X / 2.0D - 0.5D);
+            TilePosB.Y = (int)Conversion.Int(NewUnit.Pos.Horizontal.Y / App.TerrainGridSpacing + Footprint.Y / 2.0D - 0.5D);
             NewUnit.Rotation = Rotation;
 
             NewUnitAdd.Perform();
@@ -2464,8 +2464,8 @@ namespace SharpFlame
                             return ReturnResult;
                         }
                         //flatten ground underneath
-                        TilePos.X = Conversion.Int(tmpUnit.Pos.Horizontal.X / modProgram.TerrainGridSpacing);
-                        TilePos.Y = (int)(Conversion.Int(tmpUnit.Pos.Horizontal.Y / modProgram.TerrainGridSpacing));
+                        TilePos.X = Conversion.Int(tmpUnit.Pos.Horizontal.X / App.TerrainGridSpacing);
+                        TilePos.Y = (int)(Conversion.Int(tmpUnit.Pos.Horizontal.Y / App.TerrainGridSpacing));
                         AverageHeight =
                             (byte)
                                 (((Terrain.Vertices[TilePos.X, TilePos.Y].Height) + (Terrain.Vertices[TilePos.X + 1, TilePos.Y].Height) +
@@ -2632,9 +2632,9 @@ namespace SharpFlame
             public int Length;
         }
 
-        public modProgram.sResult GenerateGateways()
+        public App.sResult GenerateGateways()
         {
-            modProgram.sResult ReturnResult = new modProgram.sResult();
+            App.sResult ReturnResult = new App.sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -2936,8 +2936,8 @@ namespace SharpFlame
             sXY_int[] Positions = new sXY_int[4];
             sXY_int Limits = new sXY_int();
 
-            SymmetrySize.X = (int)(TileSize.X * modProgram.TerrainGridSpacing / SymmetryBlockCountXY.X);
-            SymmetrySize.Y = (int)(TileSize.Y * modProgram.TerrainGridSpacing / SymmetryBlockCountXY.Y);
+            SymmetrySize.X = (int)(TileSize.X * App.TerrainGridSpacing / SymmetryBlockCountXY.X);
+            SymmetrySize.Y = (int)(TileSize.Y * App.TerrainGridSpacing / SymmetryBlockCountXY.Y);
 
             Limits.X = SymmetrySize.X - 1;
             Limits.Y = SymmetrySize.Y - 1;
@@ -2949,7 +2949,7 @@ namespace SharpFlame
                 Positions[A].Y = SymmetryBlocks[A].XYNum.Y * SymmetrySize.Y + RotatedPos.Y;
                 for ( B = 0; B <= A - 1; B++ )
                 {
-                    if ( (Positions[A] - Positions[B]).ToDoubles().GetMagnitude() < NodeScale * modProgram.TerrainGridSpacing * 2.0D )
+                    if ( (Positions[A] - Positions[B]).ToDoubles().GetMagnitude() < NodeScale * App.TerrainGridSpacing * 2.0D )
                     {
                         return false;
                     }
@@ -3152,9 +3152,9 @@ namespace SharpFlame
             public int ActionTotal;
         }
 
-        private modProgram.sResult PassageNodeHeightLevel(clsPassageNodeHeightLevelArgs Args)
+        private App.sResult PassageNodeHeightLevel(clsPassageNodeHeightLevelArgs Args)
         {
-            modProgram.sResult ReturnResult = new modProgram.sResult();
+            App.sResult ReturnResult = new App.sResult();
             ReturnResult.Problem = "";
             ReturnResult.Success = false;
 

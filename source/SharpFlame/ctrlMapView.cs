@@ -213,7 +213,7 @@ namespace SharpFlame
 
         public void Viewport_Resize()
         {
-            if ( !modProgram.ProgramInitialized )
+            if ( !App.ProgramInitialized )
             {
                 return;
             }
@@ -336,7 +336,7 @@ namespace SharpFlame
             Map.ViewInfo.MouseLeftDown = null;
             Map.ViewInfo.MouseRightDown = null;
 
-            modProgram.ViewKeyDown_Clear();
+            App.ViewKeyDown_Clear();
         }
 
         private ContextMenuStrip ListSelect;
@@ -379,7 +379,7 @@ namespace SharpFlame
             ListSelect.Items.Clear();
             ListSelectItems = new ToolStripItem[0];
 
-            modProgram.ViewKeyDown_Clear();
+            App.ViewKeyDown_Clear();
         }
 
         private void OpenGL_MouseDown(object sender, MouseEventArgs e)
@@ -406,11 +406,11 @@ namespace SharpFlame
             Matrix3DMath.Matrix3D matrixA = new Matrix3DMath.Matrix3D();
             clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
 
-            modProgram.IsViewKeyDown.Keys[(int)e.KeyCode] = true;
+            App.IsViewKeyDown.Keys[(int)e.KeyCode] = true;
 
             foreach ( clsOption<clsKeyboardControl> control in modControls.Options_KeyboardControls.Options )
             {
-                ((clsKeyboardControl)(modControls.KeyboardProfile.get_Value(control))).KeysChanged(modProgram.IsViewKeyDown);
+                ((clsKeyboardControl)(modControls.KeyboardProfile.get_Value(control))).KeysChanged(App.IsViewKeyDown);
             }
 
             if ( modControls.KeyboardProfile.Active(modControls.Control_Undo) )
@@ -449,75 +449,75 @@ namespace SharpFlame
                 }
                 DisplayUndoMessage(Message);
             }
-            if ( modProgram.IsViewKeyDown.Keys[(int)Keys.ControlKey] )
+            if ( App.IsViewKeyDown.Keys[(int)Keys.ControlKey] )
             {
                 if ( e.KeyCode == Keys.D1 )
                 {
-                    modProgram.VisionRadius_2E = 6;
+                    App.VisionRadius_2E = 6;
                 }
                 else if ( e.KeyCode == Keys.D2 )
                 {
-                    modProgram.VisionRadius_2E = 7;
+                    App.VisionRadius_2E = 7;
                 }
                 else if ( e.KeyCode == Keys.D3 )
                 {
-                    modProgram.VisionRadius_2E = 8;
+                    App.VisionRadius_2E = 8;
                 }
                 else if ( e.KeyCode == Keys.D4 )
                 {
-                    modProgram.VisionRadius_2E = 9;
+                    App.VisionRadius_2E = 9;
                 }
                 else if ( e.KeyCode == Keys.D5 )
                 {
-                    modProgram.VisionRadius_2E = 10;
+                    App.VisionRadius_2E = 10;
                 }
                 else if ( e.KeyCode == Keys.D6 )
                 {
-                    modProgram.VisionRadius_2E = 11;
+                    App.VisionRadius_2E = 11;
                 }
                 else if ( e.KeyCode == Keys.D7 )
                 {
-                    modProgram.VisionRadius_2E = 12;
+                    App.VisionRadius_2E = 12;
                 }
                 else if ( e.KeyCode == Keys.D8 )
                 {
-                    modProgram.VisionRadius_2E = 13;
+                    App.VisionRadius_2E = 13;
                 }
                 else if ( e.KeyCode == Keys.D9 )
                 {
-                    modProgram.VisionRadius_2E = 14;
+                    App.VisionRadius_2E = 14;
                 }
                 else if ( e.KeyCode == Keys.D0 )
                 {
-                    modProgram.VisionRadius_2E = 15;
+                    App.VisionRadius_2E = 15;
                 }
-                modProgram.VisionRadius_2E_Changed();
+                App.VisionRadius_2E_Changed();
             }
 
             if ( modControls.KeyboardProfile.Active(modControls.Control_View_Move_Type) )
             {
-                if ( modProgram.ViewMoveType == modProgram.enumView_Move_Type.Free )
+                if ( App.ViewMoveType == App.enumView_Move_Type.Free )
                 {
-                    modProgram.ViewMoveType = modProgram.enumView_Move_Type.RTS;
+                    App.ViewMoveType = App.enumView_Move_Type.RTS;
                 }
-                else if ( modProgram.ViewMoveType == modProgram.enumView_Move_Type.RTS )
+                else if ( App.ViewMoveType == App.enumView_Move_Type.RTS )
                 {
-                    modProgram.ViewMoveType = modProgram.enumView_Move_Type.Free;
+                    App.ViewMoveType = App.enumView_Move_Type.Free;
                 }
             }
             if ( modControls.KeyboardProfile.Active(modControls.Control_View_Rotate_Type) )
             {
-                modProgram.RTSOrbit = !modProgram.RTSOrbit;
+                App.RTSOrbit = !App.RTSOrbit;
             }
             if ( modControls.KeyboardProfile.Active(modControls.Control_View_Reset) )
             {
                 Map.ViewInfo.FOV_Multiplier_Set(modSettings.Settings.FOVDefault);
-                if ( modProgram.ViewMoveType == modProgram.enumView_Move_Type.Free )
+                if ( App.ViewMoveType == App.enumView_Move_Type.Free )
                 {
                     Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
                     Map.ViewInfo.ViewAngleSet_Rotate(matrixA);
                 }
-                else if ( modProgram.ViewMoveType == modProgram.enumView_Move_Type.RTS )
+                else if ( App.ViewMoveType == App.enumView_Move_Type.RTS )
                 {
                     Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
                     Map.ViewInfo.ViewAngleSet_Rotate(matrixA);
@@ -525,17 +525,17 @@ namespace SharpFlame
             }
             if ( modControls.KeyboardProfile.Active(modControls.Control_View_Textures) )
             {
-                modProgram.Draw_TileTextures = !modProgram.Draw_TileTextures;
+                App.Draw_TileTextures = !App.Draw_TileTextures;
                 DrawViewLater();
             }
             if ( modControls.KeyboardProfile.Active(modControls.Control_View_Wireframe) )
             {
-                modProgram.Draw_TileWireframe = !modProgram.Draw_TileWireframe;
+                App.Draw_TileWireframe = !App.Draw_TileWireframe;
                 DrawViewLater();
             }
             if ( modControls.KeyboardProfile.Active(modControls.Control_View_Units) )
             {
-                modProgram.Draw_Units = !modProgram.Draw_Units;
+                App.Draw_Units = !App.Draw_Units;
                 int X = 0;
                 int Y = 0;
                 sXY_int SectorNum = new sXY_int();
@@ -567,22 +567,22 @@ namespace SharpFlame
             }
             if ( modControls.KeyboardProfile.Active(modControls.Control_View_ScriptMarkers) )
             {
-                modProgram.Draw_ScriptMarkers = !modProgram.Draw_ScriptMarkers;
+                App.Draw_ScriptMarkers = !App.Draw_ScriptMarkers;
                 DrawViewLater();
             }
             if ( modControls.KeyboardProfile.Active(modControls.Control_View_Lighting) )
             {
-                if ( modProgram.Draw_Lighting == modProgram.enumDrawLighting.Off )
+                if ( App.Draw_Lighting == App.enumDrawLighting.Off )
                 {
-                    modProgram.Draw_Lighting = modProgram.enumDrawLighting.Half;
+                    App.Draw_Lighting = App.enumDrawLighting.Half;
                 }
-                else if ( modProgram.Draw_Lighting == modProgram.enumDrawLighting.Half )
+                else if ( App.Draw_Lighting == App.enumDrawLighting.Half )
                 {
-                    modProgram.Draw_Lighting = modProgram.enumDrawLighting.Normal;
+                    App.Draw_Lighting = App.enumDrawLighting.Normal;
                 }
-                else if ( modProgram.Draw_Lighting == modProgram.enumDrawLighting.Normal )
+                else if ( App.Draw_Lighting == App.enumDrawLighting.Normal )
                 {
-                    modProgram.Draw_Lighting = modProgram.enumDrawLighting.Off;
+                    App.Draw_Lighting = App.enumDrawLighting.Off;
                 }
                 DrawViewLater();
             }
@@ -633,12 +633,12 @@ namespace SharpFlame
                     {
                         if ( Map.SelectedUnits.Count > 0 )
                         {
-                            Position.XY_dbl Centre = modProgram.CalcUnitsCentrePos(Map.SelectedUnits.GetItemsAsSimpleList());
+                            Position.XY_dbl Centre = App.CalcUnitsCentrePos(Map.SelectedUnits.GetItemsAsSimpleList());
                             sXY_int Offset = new sXY_int();
-                            Offset.X = ((int)(Math.Round(Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.X - Centre.X) / modProgram.TerrainGridSpacing)))) *
-                                       modProgram.TerrainGridSpacing;
-                            Offset.Y = ((int)(Math.Round(Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.Y - Centre.Y) / modProgram.TerrainGridSpacing)))) *
-                                       modProgram.TerrainGridSpacing;
+                            Offset.X = ((int)(Math.Round(Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.X - Centre.X) / App.TerrainGridSpacing)))) *
+                                       App.TerrainGridSpacing;
+                            Offset.Y = ((int)(Math.Round(Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.Y - Centre.Y) / App.TerrainGridSpacing)))) *
+                                       App.TerrainGridSpacing;
                             clsMap.clsObjectPosOffset ObjectPosOffset = new clsMap.clsObjectPosOffset();
                             ObjectPosOffset.Map = Map;
                             ObjectPosOffset.Offset = Offset;
@@ -691,11 +691,11 @@ namespace SharpFlame
 
         private void OpenGL_KeyUp(object sender, KeyEventArgs e)
         {
-            modProgram.IsViewKeyDown.Keys[(int)e.KeyCode] = false;
+            App.IsViewKeyDown.Keys[(int)e.KeyCode] = false;
 
             foreach ( clsOption<clsKeyboardControl> control in modControls.Options_KeyboardControls.Options )
             {
-                ((clsKeyboardControl)(modControls.KeyboardProfile.get_Value(control))).KeysChanged(modProgram.IsViewKeyDown);
+                ((clsKeyboardControl)(modControls.KeyboardProfile.get_Value(control))).KeysChanged(App.IsViewKeyDown);
             }
         }
 
@@ -829,10 +829,10 @@ namespace SharpFlame
             else
             {
                 MathUtil.ReorderXY(VertexA, VertexB, StartVertex, FinishVertex);
-                StartPos.X = StartVertex.X * modProgram.TerrainGridSpacing;
-                StartPos.Y = StartVertex.Y * modProgram.TerrainGridSpacing;
-                FinishPos.X = FinishVertex.X * modProgram.TerrainGridSpacing;
-                FinishPos.Y = FinishVertex.Y * modProgram.TerrainGridSpacing;
+                StartPos.X = StartVertex.X * App.TerrainGridSpacing;
+                StartPos.Y = StartVertex.Y * App.TerrainGridSpacing;
+                FinishPos.X = FinishVertex.X * App.TerrainGridSpacing;
+                FinishPos.Y = FinishVertex.Y * App.TerrainGridSpacing;
                 SectorStart.X = Math.Min(Conversion.Int(StartVertex.X / Constants.SectorTileSize), Map.SectorCount.X - 1);
                 SectorStart.Y = Math.Min((int)(Conversion.Int(StartVertex.Y / Constants.SectorTileSize)), Map.SectorCount.Y - 1);
                 SectorFinish.X = Math.Min(Conversion.Int(FinishVertex.X / Constants.SectorTileSize), Map.SectorCount.X - 1);

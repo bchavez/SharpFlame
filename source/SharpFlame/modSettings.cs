@@ -402,29 +402,29 @@ namespace SharpFlame
 
         private static void SetFont(Font newFont)
         {
-            if ( modProgram.UnitLabelFont != null )
+            if ( App.UnitLabelFont != null )
             {
-                modProgram.UnitLabelFont.Deallocate();
+                App.UnitLabelFont.Deallocate();
             }
-            modProgram.UnitLabelFont = Program.frmMainInstance.MapView.CreateGLFont(newFont);
+            App.UnitLabelFont = Program.frmMainInstance.MapView.CreateGLFont(newFont);
         }
 
         public static clsResult Settings_Write()
         {
             clsResult ReturnResult =
-                new clsResult("Writing settings to " + Convert.ToString(ControlChars.Quote) + modProgram.SettingsPath +
+                new clsResult("Writing settings to " + Convert.ToString(ControlChars.Quote) + App.SettingsPath +
                               Convert.ToString(ControlChars.Quote));
 
 #if !Portable
-            if ( !Directory.Exists(modProgram.MyDocumentsProgramPath) )
+            if ( !Directory.Exists(App.MyDocumentsProgramPath) )
             {
                 try
                 {
-                    Directory.CreateDirectory(modProgram.MyDocumentsProgramPath);
+                    Directory.CreateDirectory(App.MyDocumentsProgramPath);
                 }
                 catch ( Exception ex )
                 {
-                    ReturnResult.ProblemAdd("Unable to create folder " + Convert.ToString(ControlChars.Quote) + modProgram.MyDocumentsProgramPath +
+                    ReturnResult.ProblemAdd("Unable to create folder " + Convert.ToString(ControlChars.Quote) + App.MyDocumentsProgramPath +
                                             Convert.ToString(ControlChars.Quote) + ": " + ex.Message);
                     return ReturnResult;
                 }
@@ -435,7 +435,7 @@ namespace SharpFlame
 
             try
             {
-                INI_Settings = clsINIWrite.CreateFile(File.Create(modProgram.SettingsPath));
+                INI_Settings = clsINIWrite.CreateFile(File.Create(App.SettingsPath));
             }
             catch ( Exception ex )
             {
@@ -466,13 +466,13 @@ namespace SharpFlame
         public static clsResult Settings_Load(ref clsSettings Result)
         {
             clsResult ReturnResult =
-                new clsResult("Loading settings from " + Convert.ToString(ControlChars.Quote) + modProgram.SettingsPath +
+                new clsResult("Loading settings from " + Convert.ToString(ControlChars.Quote) + App.SettingsPath +
                               Convert.ToString(ControlChars.Quote));
 
             StreamReader File_Settings = default(StreamReader);
             try
             {
-                File_Settings = new StreamReader(modProgram.SettingsPath);
+                File_Settings = new StreamReader(App.SettingsPath);
             }
             catch
             {

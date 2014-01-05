@@ -453,8 +453,8 @@ namespace SharpFlame
                     new sXY_int(Gateway.PosB.X - Offset.X, Gateway.PosB.Y - Offset.Y));
             }
 
-            PosDif.X = - Offset.X * modProgram.TerrainGridSpacing;
-            PosDif.Y = - Offset.Y * modProgram.TerrainGridSpacing;
+            PosDif.X = - Offset.X * App.TerrainGridSpacing;
+            PosDif.Y = - Offset.Y * App.TerrainGridSpacing;
             clsUnit Unit = default(clsUnit);
             sXY_int NewPos = new sXY_int();
             foreach ( clsUnit tempLoopVar_Unit in MapToCopy.Units )
@@ -499,10 +499,10 @@ namespace SharpFlame
             int XG = 0;
             int YG = 0;
 
-            XG = (int)(Conversion.Int(Horizontal.X / modProgram.TerrainGridSpacing));
-            YG = Conversion.Int(Horizontal.Y / modProgram.TerrainGridSpacing);
-            InTileX = MathUtil.Clamp_dbl(Horizontal.X / modProgram.TerrainGridSpacing - XG, 0.0D, 1.0D);
-            InTileZ = MathUtil.Clamp_dbl(Horizontal.Y / modProgram.TerrainGridSpacing - YG, 0.0D, 1.0D);
+            XG = (int)(Conversion.Int(Horizontal.X / App.TerrainGridSpacing));
+            YG = Conversion.Int(Horizontal.Y / App.TerrainGridSpacing);
+            InTileX = MathUtil.Clamp_dbl(Horizontal.X / App.TerrainGridSpacing - XG, 0.0D, 1.0D);
+            InTileZ = MathUtil.Clamp_dbl(Horizontal.Y / App.TerrainGridSpacing - YG, 0.0D, 1.0D);
             X1 = MathUtil.Clamp_int(XG, 0, Terrain.TileSize.X - 1);
             Y1 = MathUtil.Clamp_int(YG, 0, Terrain.TileSize.Y - 1);
             if ( Terrain.Tiles[X1, Y1].Tri )
@@ -547,10 +547,10 @@ namespace SharpFlame
             Position.XYZ_dbl XYZ_dbl3 = default(Position.XYZ_dbl);
             Angles.AnglePY AnglePY = default(Angles.AnglePY);
 
-            XG = Conversion.Int(Horizontal.X / modProgram.TerrainGridSpacing);
-            YG = (int)(Conversion.Int(Horizontal.Y / modProgram.TerrainGridSpacing));
-            InTileX = MathUtil.Clamp_dbl(Horizontal.X / modProgram.TerrainGridSpacing - XG, 0.0D, 1.0D);
-            InTileZ = MathUtil.Clamp_dbl(Horizontal.Y / modProgram.TerrainGridSpacing - YG, 0.0D, 1.0D);
+            XG = Conversion.Int(Horizontal.X / App.TerrainGridSpacing);
+            YG = (int)(Conversion.Int(Horizontal.Y / App.TerrainGridSpacing));
+            InTileX = MathUtil.Clamp_dbl(Horizontal.X / App.TerrainGridSpacing - XG, 0.0D, 1.0D);
+            InTileZ = MathUtil.Clamp_dbl(Horizontal.Y / App.TerrainGridSpacing - YG, 0.0D, 1.0D);
             X1 = MathUtil.Clamp_int(XG, 0, Terrain.TileSize.X - 1);
             Y1 = MathUtil.Clamp_int(YG, 0, Terrain.TileSize.Y - 1);
             X2 = MathUtil.Clamp_int(XG + 1, 0, Terrain.TileSize.X);
@@ -586,12 +586,12 @@ namespace SharpFlame
                 }
             }
 
-            XYZ_dbl.X = modProgram.TerrainGridSpacing;
+            XYZ_dbl.X = App.TerrainGridSpacing;
             XYZ_dbl.Y = GradientX * HeightMultiplier;
             XYZ_dbl.Z = 0.0D;
             XYZ_dbl2.X = 0.0D;
             XYZ_dbl2.Y = GradientY * HeightMultiplier;
-            XYZ_dbl2.Z = modProgram.TerrainGridSpacing;
+            XYZ_dbl2.Z = App.TerrainGridSpacing;
             Matrix3DMath.VectorCrossProduct(XYZ_dbl, XYZ_dbl2, ref XYZ_dbl3);
             if ( XYZ_dbl3.X != 0.0D | XYZ_dbl3.Z != 0.0D )
             {
@@ -620,10 +620,10 @@ namespace SharpFlame
             double RatioX = 0;
             double RatioY = 0;
 
-            XG = Conversion.Int(Horizontal.X / modProgram.TerrainGridSpacing);
-            YG = (int)(Conversion.Int(Horizontal.Y / modProgram.TerrainGridSpacing));
-            InTileX = MathUtil.Clamp_dbl(Horizontal.X / modProgram.TerrainGridSpacing - XG, 0.0D, 1.0D);
-            InTileZ = MathUtil.Clamp_dbl(Horizontal.Y / modProgram.TerrainGridSpacing - YG, 0.0D, 1.0D);
+            XG = Conversion.Int(Horizontal.X / App.TerrainGridSpacing);
+            YG = (int)(Conversion.Int(Horizontal.Y / App.TerrainGridSpacing));
+            InTileX = MathUtil.Clamp_dbl(Horizontal.X / App.TerrainGridSpacing - XG, 0.0D, 1.0D);
+            InTileZ = MathUtil.Clamp_dbl(Horizontal.Y / App.TerrainGridSpacing - YG, 0.0D, 1.0D);
             X1 = MathUtil.Clamp_int(XG, 0, Terrain.TileSize.X - 1);
             Y1 = MathUtil.Clamp_int(YG, 0, Terrain.TileSize.Y - 1);
             X2 = MathUtil.Clamp_int(XG + 1, 0, Terrain.TileSize.X);
@@ -695,10 +695,10 @@ namespace SharpFlame
             Y2 = MathUtil.Clamp_int(Y + 1, 0, Terrain.TileSize.Y);
             TerrainHeightY2 = Terrain.Vertices[X2, Y2].Height;
             XYZ_dbl.X = (TerrainHeightX1 - TerrainHeightX2) * HeightMultiplier;
-            XYZ_dbl.Y = modProgram.TerrainGridSpacing * 2.0D;
+            XYZ_dbl.Y = App.TerrainGridSpacing * 2.0D;
             XYZ_dbl.Z = 0.0D;
             XYZ_dbl2.X = 0.0D;
-            XYZ_dbl2.Y = modProgram.TerrainGridSpacing * 2.0D;
+            XYZ_dbl2.Y = App.TerrainGridSpacing * 2.0D;
             XYZ_dbl2.Z = (TerrainHeightY1 - TerrainHeightY2) * HeightMultiplier;
             XYZ_dbl.X = XYZ_dbl.X + XYZ_dbl2.X;
             XYZ_dbl.Y = XYZ_dbl.Y + XYZ_dbl2.Y;
@@ -826,8 +826,8 @@ namespace SharpFlame
             clsUnit Unit = default(clsUnit);
             clsGateway Gateway = default(clsGateway);
 
-            PosDifX = - Offset.X * modProgram.TerrainGridSpacing;
-            PosDifZ = - Offset.Y * modProgram.TerrainGridSpacing;
+            PosDifX = - Offset.X * App.TerrainGridSpacing;
+            PosDifZ = - Offset.Y * App.TerrainGridSpacing;
             foreach ( clsUnit tempLoopVar_Unit in Units )
             {
                 Unit = tempLoopVar_Unit;
@@ -850,7 +850,7 @@ namespace SharpFlame
             {
                 Unit = tempLoopVar_Unit;
                 Position = Unit.MapLink.ArrayPosition;
-                if ( !modProgram.PosIsWithinTileArea(Units[Position].Pos.Horizontal, ZeroPos, NewTerrain.TileSize) )
+                if ( !App.PosIsWithinTileArea(Units[Position].Pos.Horizontal, ZeroPos, NewTerrain.TileSize) )
                 {
                     UnitRemove(Position);
                 }
@@ -867,7 +867,7 @@ namespace SharpFlame
                 }
             }
 
-            sXY_int PosOffset = new sXY_int(Offset.X * modProgram.TerrainGridSpacing, Offset.Y * modProgram.TerrainGridSpacing);
+            sXY_int PosOffset = new sXY_int(Offset.X * App.TerrainGridSpacing, Offset.Y * App.TerrainGridSpacing);
 
             clsScriptPosition ScriptPosition = default(clsScriptPosition);
             foreach ( clsScriptPosition tempLoopVar_ScriptPosition in ScriptPositions.GetItemsAsSimpleList() )
@@ -909,7 +909,7 @@ namespace SharpFlame
             Sectors[X, Y].GLList_Textured = GL.GenLists(1);
             GL.NewList(Convert.ToInt32(Sectors[X, Y].GLList_Textured), ListMode.Compile);
 
-            if ( modProgram.Draw_Units )
+            if ( App.Draw_Units )
             {
                 bool[,] IsBasePlate = new bool[Constants.SectorTileSize, Constants.SectorTileSize];
                 clsUnit Unit = default(clsUnit);
@@ -998,18 +998,18 @@ namespace SharpFlame
             TileTerrainHeight[2] = Terrain.Vertices[TileX, TileY + 1].Height;
             TileTerrainHeight[3] = Terrain.Vertices[TileX + 1, TileY + 1].Height;
 
-            Vertex0.X = TileX * modProgram.TerrainGridSpacing;
+            Vertex0.X = TileX * App.TerrainGridSpacing;
             Vertex0.Y = (float)(TileTerrainHeight[0] * HeightMultiplier);
-            Vertex0.Z = - TileY * modProgram.TerrainGridSpacing;
-            Vertex1.X = (TileX + 1) * modProgram.TerrainGridSpacing;
+            Vertex0.Z = - TileY * App.TerrainGridSpacing;
+            Vertex1.X = (TileX + 1) * App.TerrainGridSpacing;
             Vertex1.Y = (float)(TileTerrainHeight[1] * HeightMultiplier);
-            Vertex1.Z = - TileY * modProgram.TerrainGridSpacing;
-            Vertex2.X = TileX * modProgram.TerrainGridSpacing;
+            Vertex1.Z = - TileY * App.TerrainGridSpacing;
+            Vertex2.X = TileX * App.TerrainGridSpacing;
             Vertex2.Y = (float)(TileTerrainHeight[2] * HeightMultiplier);
-            Vertex2.Z = - (TileY + 1) * modProgram.TerrainGridSpacing;
-            Vertex3.X = (TileX + 1) * modProgram.TerrainGridSpacing;
+            Vertex2.Z = - (TileY + 1) * App.TerrainGridSpacing;
+            Vertex3.X = (TileX + 1) * App.TerrainGridSpacing;
             Vertex3.Y = (float)(TileTerrainHeight[3] * HeightMultiplier);
-            Vertex3.Z = - (TileY + 1) * modProgram.TerrainGridSpacing;
+            Vertex3.Z = - (TileY + 1) * App.TerrainGridSpacing;
 
             GL.Begin(BeginMode.Lines);
             if ( Terrain.Tiles[TileX, TileY].Tri )
@@ -1051,9 +1051,9 @@ namespace SharpFlame
         {
             TileOrientation.sTileOrientation TileOrientation;
             sXY_int UnrotatedPos = new sXY_int();
-            modProgram.sWorldPos Vertex0 = new modProgram.sWorldPos();
-            modProgram.sWorldPos Vertex1 = new modProgram.sWorldPos();
-            modProgram.sWorldPos Vertex2 = new modProgram.sWorldPos();
+            App.sWorldPos Vertex0 = new App.sWorldPos();
+            App.sWorldPos Vertex1 = new App.sWorldPos();
+            App.sWorldPos Vertex2 = new App.sWorldPos();
 
             TileOrientation = Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation;
 
@@ -1162,7 +1162,7 @@ namespace SharpFlame
                         {
                             if ( Terrain.Tiles[X, Y].Texture.TextureNum >= 0 && Terrain.Tiles[X, Y].Texture.TextureNum < Tileset.TileCount )
                             {
-                                if ( Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].Default_Type == modProgram.TileTypeNum_Cliff )
+                                if ( Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].Default_Type == App.TileTypeNum_Cliff )
                                 {
                                     sngTexture[Y, X, 0] = sngTexture[Y, X, 0] * AntiAlpha + modSettings.Settings.MinimapCliffColour.Red * Alpha;
                                     sngTexture[Y, X, 1] = sngTexture[Y, X, 1] * AntiAlpha + modSettings.Settings.MinimapCliffColour.Green * Alpha;
@@ -1221,9 +1221,9 @@ namespace SharpFlame
                                     {
                                         if ( modSettings.Settings.MinimapTeamColoursExceptFeatures & Unit.Type.Type == clsUnitType.enumType.Feature )
                                         {
-                                            sngTexture[Y, X, 0] = modProgram.MinimapFeatureColour.Red;
-                                            sngTexture[Y, X, 1] = modProgram.MinimapFeatureColour.Green;
-                                            sngTexture[Y, X, 2] = modProgram.MinimapFeatureColour.Blue;
+                                            sngTexture[Y, X, 0] = App.MinimapFeatureColour.Red;
+                                            sngTexture[Y, X, 1] = App.MinimapFeatureColour.Green;
+                                            sngTexture[Y, X, 2] = App.MinimapFeatureColour.Blue;
                                         }
                                         else
                                         {
@@ -1424,29 +1424,29 @@ namespace SharpFlame
             ResultSectorFinish.Y = MathUtil.Clamp_int(ResultSectorFinish.Y, 0, SectorCount.Y - 1);
         }
 
-        public modProgram.sWorldPos TileAlignedPos(sXY_int TileNum, sXY_int Footprint)
+        public App.sWorldPos TileAlignedPos(sXY_int TileNum, sXY_int Footprint)
         {
-            modProgram.sWorldPos Result = new modProgram.sWorldPos();
+            App.sWorldPos Result = new App.sWorldPos();
 
-            Result.Horizontal.X = (int)((TileNum.X + Footprint.X / 2.0D) * modProgram.TerrainGridSpacing);
-            Result.Horizontal.Y = (int)((TileNum.Y + Footprint.Y / 2.0D) * modProgram.TerrainGridSpacing);
+            Result.Horizontal.X = (int)((TileNum.X + Footprint.X / 2.0D) * App.TerrainGridSpacing);
+            Result.Horizontal.Y = (int)((TileNum.Y + Footprint.Y / 2.0D) * App.TerrainGridSpacing);
             Result.Altitude = (int)(GetTerrainHeight(Result.Horizontal));
 
             return Result;
         }
 
-        public modProgram.sWorldPos TileAlignedPosFromMapPos(sXY_int Horizontal, sXY_int Footprint)
+        public App.sWorldPos TileAlignedPosFromMapPos(sXY_int Horizontal, sXY_int Footprint)
         {
-            modProgram.sWorldPos Result = new modProgram.sWorldPos();
+            App.sWorldPos Result = new App.sWorldPos();
 
             Result.Horizontal.X =
                 (int)
-                    ((Math.Round(Convert.ToDouble((Horizontal.X - Footprint.X * modProgram.TerrainGridSpacing / 2.0D) / modProgram.TerrainGridSpacing)) +
-                      Footprint.X / 2.0D) * modProgram.TerrainGridSpacing);
+                    ((Math.Round(Convert.ToDouble((Horizontal.X - Footprint.X * App.TerrainGridSpacing / 2.0D) / App.TerrainGridSpacing)) +
+                      Footprint.X / 2.0D) * App.TerrainGridSpacing);
             Result.Horizontal.Y =
                 (int)
-                    ((Math.Round(Convert.ToDouble((Horizontal.Y - Footprint.Y * modProgram.TerrainGridSpacing / 2.0D) / modProgram.TerrainGridSpacing)) +
-                      Footprint.Y / 2.0D) * modProgram.TerrainGridSpacing);
+                    ((Math.Round(Convert.ToDouble((Horizontal.Y - Footprint.Y * App.TerrainGridSpacing / 2.0D) / App.TerrainGridSpacing)) +
+                      Footprint.Y / 2.0D) * App.TerrainGridSpacing);
             Result.Altitude = (int)(GetTerrainHeight(Result.Horizontal));
 
             return Result;
@@ -1499,22 +1499,22 @@ namespace SharpFlame
             AutoSave.ChangeCount = 0;
             AutoSave.SavedDate = DateTime.Now;
 
-            modProgram.ShowWarnings(AutoSavePerform());
+            App.ShowWarnings(AutoSavePerform());
         }
 
         public clsResult AutoSavePerform()
         {
             clsResult ReturnResult = new clsResult("Autosave");
 
-            if ( !Directory.Exists(modProgram.AutoSavePath) )
+            if ( !Directory.Exists(App.AutoSavePath) )
             {
                 try
                 {
-                    Directory.CreateDirectory(modProgram.AutoSavePath);
+                    Directory.CreateDirectory(App.AutoSavePath);
                 }
                 catch ( Exception )
                 {
-                    ReturnResult.ProblemAdd("Unable to create directory at " + Convert.ToString(ControlChars.Quote) + modProgram.AutoSavePath +
+                    ReturnResult.ProblemAdd("Unable to create directory at " + Convert.ToString(ControlChars.Quote) + App.AutoSavePath +
                                             Convert.ToString(ControlChars.Quote));
                 }
             }
@@ -1522,9 +1522,9 @@ namespace SharpFlame
             DateTime DateNow = DateTime.Now;
             string Path = "";
 
-            Path = modProgram.AutoSavePath + "autosaved-" + IOUtil.InvariantToString_int(DateNow.Year) + "-" + modProgram.MinDigits(DateNow.Month, 2) + "-" +
-                   modProgram.MinDigits(DateNow.Day, 2) + "-" + modProgram.MinDigits(DateNow.Hour, 2) + "-" + modProgram.MinDigits(DateNow.Minute, 2) + "-" +
-                   modProgram.MinDigits(DateNow.Second, 2) + "-" + modProgram.MinDigits(DateNow.Millisecond, 3) + ".fmap";
+            Path = App.AutoSavePath + "autosaved-" + IOUtil.InvariantToString_int(DateNow.Year) + "-" + App.MinDigits(DateNow.Month, 2) + "-" +
+                   App.MinDigits(DateNow.Day, 2) + "-" + App.MinDigits(DateNow.Hour, 2) + "-" + App.MinDigits(DateNow.Minute, 2) + "-" +
+                   App.MinDigits(DateNow.Second, 2) + "-" + App.MinDigits(DateNow.Millisecond, 3) + ".fmap";
 
             ReturnResult.Add(Write_FMap(Path, false, modSettings.Settings.AutoSaveCompress));
 
@@ -1696,7 +1696,7 @@ namespace SharpFlame
                     UnitAdd.ID = ID;
                     UnitAdd.NewUnit = Unit;
                     UnitAdd.Perform();
-                    modProgram.ErrorIDChange(ID, Unit, "Undo_Perform");
+                    App.ErrorIDChange(ID, Unit, "Undo_Perform");
                 }
                 else
                 {
@@ -1772,7 +1772,7 @@ namespace SharpFlame
                     UnitAdd.ID = ID;
                     UnitAdd.NewUnit = Unit;
                     UnitAdd.Perform();
-                    modProgram.ErrorIDChange(ID, Unit, "Redo_Perform");
+                    App.ErrorIDChange(ID, Unit, "Redo_Perform");
                 }
                 else if ( ThisUndo.UnitChanges[A].Type == clsUnitChange.enumType.Deleted )
                 {
@@ -2000,7 +2000,7 @@ namespace SharpFlame
                         {
                             Connection = tempLoopVar_Connection;
                             Unit = Connection.Unit;
-                            if ( modProgram.PosIsWithinTileArea(Unit.Pos.Horizontal, Offset, Finish) )
+                            if ( App.PosIsWithinTileArea(Unit.Pos.Horizontal, Offset, Finish) )
                             {
                                 UnitsToDelete.Add(Unit);
                             }
@@ -2027,12 +2027,12 @@ namespace SharpFlame
                 UnitAdd.Map = this;
                 UnitAdd.StoreChange = true;
 
-                PosDif.X = Offset.X * modProgram.TerrainGridSpacing;
-                PosDif.Y = Offset.Y * modProgram.TerrainGridSpacing;
+                PosDif.X = Offset.X * App.TerrainGridSpacing;
+                PosDif.Y = Offset.Y * App.TerrainGridSpacing;
                 foreach ( clsUnit tempLoopVar_Unit in MapToInsert.Units )
                 {
                     Unit = tempLoopVar_Unit;
-                    if ( modProgram.PosIsWithinTileArea(Unit.Pos.Horizontal, ZeroPos, AreaAdjusted) )
+                    if ( App.PosIsWithinTileArea(Unit.Pos.Horizontal, ZeroPos, AreaAdjusted) )
                     {
                         NewUnit = new clsUnit(Unit, this);
                         NewUnit.Pos.Horizontal.X += PosDif.X;
@@ -2126,17 +2126,17 @@ namespace SharpFlame
             {
                 Painter = new Painter();
             }
-            else if ( Tileset == modProgram.Tileset_Arizona )
+            else if ( Tileset == App.Tileset_Arizona )
             {
-                Painter = modProgram.Painter_Arizona;
+                Painter = App.Painter_Arizona;
             }
-            else if ( Tileset == modProgram.Tileset_Urban )
+            else if ( Tileset == App.Tileset_Urban )
             {
-                Painter = modProgram.Painter_Urban;
+                Painter = App.Painter_Urban;
             }
-            else if ( Tileset == modProgram.Tileset_Rockies )
+            else if ( Tileset == App.Tileset_Rockies )
             {
-                Painter = modProgram.Painter_Rockies;
+                Painter = App.Painter_Rockies;
             }
             else
             {
@@ -2161,15 +2161,15 @@ namespace SharpFlame
             }
         }
 
-        public modProgram.sWorldPos GetTileOffsetRotatedWorldPos(sXY_int Tile, sXY_int TileOffsetToRotate)
+        public App.sWorldPos GetTileOffsetRotatedWorldPos(sXY_int Tile, sXY_int TileOffsetToRotate)
         {
-            modProgram.sWorldPos Result = new modProgram.sWorldPos();
+            App.sWorldPos Result = new App.sWorldPos();
 
             sXY_int RotatedOffset = new sXY_int();
 
             RotatedOffset = TileOrientation.GetTileRotatedOffset(Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation, TileOffsetToRotate);
-            Result.Horizontal.X = Tile.X * modProgram.TerrainGridSpacing + RotatedOffset.X;
-            Result.Horizontal.Y = Tile.Y * modProgram.TerrainGridSpacing + RotatedOffset.Y;
+            Result.Horizontal.X = Tile.X * App.TerrainGridSpacing + RotatedOffset.X;
+            Result.Horizontal.Y = Tile.Y * App.TerrainGridSpacing + RotatedOffset.Y;
             Result.Altitude = (int)(GetTerrainHeight(Result.Horizontal));
 
             return Result;
@@ -2207,8 +2207,8 @@ namespace SharpFlame
         {
             sXY_int Result = new sXY_int();
 
-            Result.X = (int)(Conversion.Int(Horizontal.X / modProgram.TerrainGridSpacing));
-            Result.Y = Conversion.Int(Horizontal.Y / modProgram.TerrainGridSpacing);
+            Result.X = (int)(Conversion.Int(Horizontal.X / App.TerrainGridSpacing));
+            Result.Y = Conversion.Int(Horizontal.Y / App.TerrainGridSpacing);
 
             return Result;
         }
@@ -2217,8 +2217,8 @@ namespace SharpFlame
         {
             sXY_int Result = new sXY_int();
 
-            Result.X = (int)(Math.Round((double)(Horizontal.X / modProgram.TerrainGridSpacing)));
-            Result.Y = (int)(Math.Round((double)(Horizontal.Y / modProgram.TerrainGridSpacing)));
+            Result.X = (int)(Math.Round((double)(Horizontal.X / App.TerrainGridSpacing)));
+            Result.Y = (int)(Math.Round((double)(Horizontal.Y / App.TerrainGridSpacing)));
 
             return Result;
         }
@@ -2249,7 +2249,7 @@ namespace SharpFlame
 
         public bool PosIsOnMap(sXY_int Horizontal)
         {
-            return modProgram.PosIsWithinTileArea(Horizontal, new sXY_int(0, 0), Terrain.TileSize);
+            return App.PosIsWithinTileArea(Horizontal, new sXY_int(0, 0), Terrain.TileSize);
         }
 
         public sXY_int TileNumClampToMap(sXY_int TileNum)
@@ -2403,7 +2403,7 @@ namespace SharpFlame
             }
             else
             {
-                modProgram.sSplitPath SplitPath = new modProgram.sSplitPath(PathInfo.Path);
+                App.sSplitPath SplitPath = new App.sSplitPath(PathInfo.Path);
                 return SplitPath.FilePath;
             }
         }
@@ -2525,7 +2525,7 @@ namespace SharpFlame
                         UnitAdd.NewUnit = NewUnit;
                         UnitAdd.ID = ID;
                         UnitAdd.Perform();
-                        modProgram.ErrorIDChange(ID, NewUnit, "UpdateSectorUnitHeights");
+                        App.ErrorIDChange(ID, NewUnit, "UpdateSectorUnitHeights");
                     }
                 }
 
@@ -3409,17 +3409,17 @@ namespace SharpFlame
             TerrainInterpretChanges.SidesV.Changed(new sXY_int(Pos.X + 1, Pos.Y));
         }
 
-        public void TileTextureChangeTerrainAction(sXY_int Pos, modProgram.enumTextureTerrainAction Action)
+        public void TileTextureChangeTerrainAction(sXY_int Pos, App.enumTextureTerrainAction Action)
         {
             switch ( Action )
             {
-                case modProgram.enumTextureTerrainAction.Ignore:
+                case App.enumTextureTerrainAction.Ignore:
                     break;
 
-                case modProgram.enumTextureTerrainAction.Reinterpret:
+                case App.enumTextureTerrainAction.Reinterpret:
                     TileNeedsInterpreting(Pos);
                     break;
-                case modProgram.enumTextureTerrainAction.Remove:
+                case App.enumTextureTerrainAction.Remove:
                     Terrain.Vertices[Pos.X, Pos.Y].Terrain = null;
                     Terrain.Vertices[Pos.X + 1, Pos.Y].Terrain = null;
                     Terrain.Vertices[Pos.X, Pos.Y + 1].Terrain = null;
@@ -3469,7 +3469,7 @@ namespace SharpFlame
             }
             else
             {
-                modProgram.sSplitPath SplitPath = new modProgram.sSplitPath(PathInfo.Path);
+                App.sSplitPath SplitPath = new App.sSplitPath(PathInfo.Path);
                 if ( PathInfo.IsFMap )
                 {
                     ReturnResult = SplitPath.FileTitleWithoutExtension;
@@ -3709,7 +3709,7 @@ namespace SharpFlame
             clsUnit Unit = default(clsUnit);
             sXY_int UnitTile = new sXY_int();
             sXY_int Difference = new sXY_int();
-            modProgram.enumTileWalls TileWalls = modProgram.enumTileWalls.None;
+            App.enumTileWalls TileWalls = App.enumTileWalls.None;
             SimpleList<clsUnit> Walls = new SimpleList<clsUnit>();
             SimpleList<clsUnit> Removals = new SimpleList<clsUnit>();
             clsUnitType UnitType = default(clsUnitType);
@@ -3749,7 +3749,7 @@ namespace SharpFlame
                                 {
                                     if ( Difference.X == 0 )
                                     {
-                                        TileWalls = (modProgram.enumTileWalls)(TileWalls | modProgram.enumTileWalls.Bottom);
+                                        TileWalls = (App.enumTileWalls)(TileWalls | App.enumTileWalls.Bottom);
                                         Walls.Add(Unit);
                                     }
                                 }
@@ -3761,12 +3761,12 @@ namespace SharpFlame
                                     }
                                     else if ( Difference.X == -1 )
                                     {
-                                        TileWalls = (modProgram.enumTileWalls)(TileWalls | modProgram.enumTileWalls.Left);
+                                        TileWalls = (App.enumTileWalls)(TileWalls | App.enumTileWalls.Left);
                                         Walls.Add(Unit);
                                     }
                                     else if ( Difference.X == 1 )
                                     {
-                                        TileWalls = (modProgram.enumTileWalls)(TileWalls | modProgram.enumTileWalls.Right);
+                                        TileWalls = (App.enumTileWalls)(TileWalls | App.enumTileWalls.Right);
                                         Walls.Add(Unit);
                                     }
                                 }
@@ -3774,7 +3774,7 @@ namespace SharpFlame
                                 {
                                     if ( Difference.X == 0 )
                                     {
-                                        TileWalls = (modProgram.enumTileWalls)(TileWalls | modProgram.enumTileWalls.Top);
+                                        TileWalls = (App.enumTileWalls)(TileWalls | App.enumTileWalls.Top);
                                         Walls.Add(Unit);
                                     }
                                 }
@@ -3844,7 +3844,7 @@ namespace SharpFlame
                 PathInfo = new clsPathInfo(Dialog.FileName, true);
                 ChangedSinceSave = false;
             }
-            modProgram.ShowWarnings(Result);
+            App.ShowWarnings(Result);
             return !Result.HasProblems;
         }
 
@@ -3861,7 +3861,7 @@ namespace SharpFlame
                 {
                     ChangedSinceSave = false;
                 }
-                modProgram.ShowWarnings(Result);
+                App.ShowWarnings(Result);
                 return !Result.HasProblems;
             }
             else

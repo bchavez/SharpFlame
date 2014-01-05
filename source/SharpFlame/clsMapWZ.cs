@@ -16,7 +16,7 @@ namespace SharpFlame
         {
             public string Code;
             public UInt32 ID;
-            public modProgram.sWorldPos Pos;
+            public App.sWorldPos Pos;
             public UInt32 Rotation;
             public UInt32 Player;
             public clsUnitType.enumType ObjectType;
@@ -32,7 +32,7 @@ namespace SharpFlame
         {
             clsResult ReturnResult =
                 new clsResult("Loading WZ from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
-            modProgram.sResult SubResult = new modProgram.sResult();
+            App.sResult SubResult = new App.sResult();
             string Quote = ControlChars.Quote.ToString();
             ZipEntry ZipEntry = default(ZipEntry);
             bool GameFound = default(bool);
@@ -41,7 +41,7 @@ namespace SharpFlame
             clsTileset GameTileset = null;
             string GameName = "";
             string strTemp = "";
-            modProgram.sZipSplitPath SplitPath;
+            ZipSplitPath SplitPath;
             int A = 0;
             int B = 0;
             int C = 0;
@@ -69,7 +69,7 @@ namespace SharpFlame
                     break;
                 }
 
-                SplitPath = new modProgram.sZipSplitPath(ZipEntry.Name);
+                SplitPath = new ZipSplitPath(ZipEntry.Name);
 
                 if ( SplitPath.FileExtension == "lev" && SplitPath.PartCount == 1 )
                 {
@@ -131,17 +131,17 @@ namespace SharpFlame
                                         strTemp = Strings.LCase(Strings.Right(Convert.ToString(LineData[A + B]), 1));
                                         if ( strTemp == "1" )
                                         {
-                                            GameTileset = modProgram.Tileset_Arizona;
+                                            GameTileset = App.Tileset_Arizona;
                                             DatasetFound = true;
                                         }
                                         else if ( strTemp == "2" )
                                         {
-                                            GameTileset = modProgram.Tileset_Urban;
+                                            GameTileset = App.Tileset_Urban;
                                             DatasetFound = true;
                                         }
                                         else if ( strTemp == "3" )
                                         {
-                                            GameTileset = modProgram.Tileset_Rockies;
+                                            GameTileset = App.Tileset_Rockies;
                                             DatasetFound = true;
                                         }
                                         break;
@@ -188,7 +188,7 @@ namespace SharpFlame
                     Names[A] = Convert.ToString(Maps[A].Name);
                 }
                 frmWZLoad SelectToLoadForm = new frmWZLoad(Names, SelectToLoadResult,
-                    "Select a map from " + Convert.ToString(new modProgram.sSplitPath(Path).FileTitle));
+                    "Select a map from " + Convert.ToString(new App.sSplitPath(Path).FileTitle));
                 SelectToLoadForm.ShowDialog();
                 if ( SelectToLoadResult.Result < 0 )
                 {
@@ -202,7 +202,7 @@ namespace SharpFlame
             TileType_Reset();
             SetPainterToDefaults();
 
-            modProgram.sZipSplitPath GameSplitPath = new modProgram.sZipSplitPath(MapLoadName);
+            ZipSplitPath GameSplitPath = new ZipSplitPath(MapLoadName);
             string GameFilesPath = GameSplitPath.FilePath + GameSplitPath.FileTitleWithoutExtension + "/";
 
             ZipStreamEntry ZipSearchResult = default(ZipStreamEntry);
@@ -415,7 +415,7 @@ namespace SharpFlame
         {
             clsResult ReturnResult =
                 new clsResult("Loading game file from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
-            modProgram.sResult SubResult = new modProgram.sResult();
+            App.sResult SubResult = new App.sResult();
             string Quote = ControlChars.Quote.ToString();
 
             Tileset = null;
@@ -423,8 +423,8 @@ namespace SharpFlame
             TileType_Reset();
             SetPainterToDefaults();
 
-            modProgram.sSplitPath GameSplitPath = new modProgram.sSplitPath(Path);
-            string GameFilesPath = GameSplitPath.FilePath + GameSplitPath.FileTitleWithoutExtension + Convert.ToString(modProgram.PlatformPathSeparator);
+            App.sSplitPath GameSplitPath = new App.sSplitPath(Path);
+            string GameFilesPath = GameSplitPath.FilePath + GameSplitPath.FileTitleWithoutExtension + Convert.ToString(App.PlatformPathSeparator);
             string MapDirectory = "";
             FileStream File = null;
 
@@ -466,7 +466,7 @@ namespace SharpFlame
                     ReturnResult.ProblemAdd("Aborted.");
                     return ReturnResult;
                 }
-                MapDirectory = DirectorySelect.SelectedPath + Convert.ToString(modProgram.PlatformPathSeparator);
+                MapDirectory = DirectorySelect.SelectedPath + Convert.ToString(App.PlatformPathSeparator);
 
                 SubResult = IOUtil.TryOpenFileStream(MapDirectory + "game.map", ref File);
                 if ( !SubResult.Success )
@@ -725,7 +725,7 @@ namespace SharpFlame
                 BJOUnit = tempLoopVar_BJOUnit;
                 NewUnit = new clsUnit();
                 NewUnit.ID = BJOUnit.ID;
-                NewUnit.Type = modProgram.ObjectData.FindOrCreateUnitType(BJOUnit.Code, BJOUnit.ObjectType, -1);
+                NewUnit.Type = App.ObjectData.FindOrCreateUnitType(BJOUnit.Code, BJOUnit.ObjectType, -1);
                 if ( NewUnit.Type == null )
                 {
                     ReturnResult.ProblemAdd("Unable to create object type.");
@@ -744,12 +744,12 @@ namespace SharpFlame
                 if ( BJOUnit.ID == 0U )
                 {
                     BJOUnit.ID = AvailableID;
-                    modProgram.ZeroIDWarning(NewUnit, BJOUnit.ID, ReturnResult);
+                    App.ZeroIDWarning(NewUnit, BJOUnit.ID, ReturnResult);
                 }
                 UnitAdd.NewUnit = NewUnit;
                 UnitAdd.ID = BJOUnit.ID;
                 UnitAdd.Perform();
-                modProgram.ErrorIDChange(BJOUnit.ID, NewUnit, "CreateWZObjects");
+                App.ErrorIDChange(BJOUnit.ID, NewUnit, "CreateWZObjects");
                 if ( AvailableID == BJOUnit.ID )
                 {
                     AvailableID = NewUnit.ID + 1U;
@@ -773,9 +773,9 @@ namespace SharpFlame
             clsStructureType ModuleType = default(clsStructureType);
             clsUnit NewModule = default(clsUnit);
 
-            clsStructureType FactoryModule = modProgram.ObjectData.FindFirstStructureType(clsStructureType.enumStructureType.FactoryModule);
-            clsStructureType ResearchModule = modProgram.ObjectData.FindFirstStructureType(clsStructureType.enumStructureType.ResearchModule);
-            clsStructureType PowerModule = modProgram.ObjectData.FindFirstStructureType(clsStructureType.enumStructureType.PowerModule);
+            clsStructureType FactoryModule = App.ObjectData.FindFirstStructureType(clsStructureType.enumStructureType.FactoryModule);
+            clsStructureType ResearchModule = App.ObjectData.FindFirstStructureType(clsStructureType.enumStructureType.ResearchModule);
+            clsStructureType PowerModule = App.ObjectData.FindFirstStructureType(clsStructureType.enumStructureType.PowerModule);
 
             if ( FactoryModule == null )
             {
@@ -798,13 +798,13 @@ namespace SharpFlame
                     {
                         StructureBadPositionCount++;
                     }
-                    else if ( !modProgram.PosIsWithinTileArea(INIStructures.Structures[A].Pos.WorldPos.Horizontal, ZeroPos, Terrain.TileSize) )
+                    else if ( !App.PosIsWithinTileArea(INIStructures.Structures[A].Pos.WorldPos.Horizontal, ZeroPos, Terrain.TileSize) )
                     {
                         StructureBadPositionCount++;
                     }
                     else
                     {
-                        UnitType = modProgram.ObjectData.FindOrCreateUnitType(Convert.ToString(INIStructures.Structures[A].Code),
+                        UnitType = App.ObjectData.FindOrCreateUnitType(Convert.ToString(INIStructures.Structures[A].Code),
                             clsUnitType.enumType.PlayerStructure, INIStructures.Structures[A].WallType);
                         if ( UnitType.Type == clsUnitType.enumType.PlayerStructure )
                         {
@@ -831,7 +831,7 @@ namespace SharpFlame
                                 NewUnit.UnitGroup = INIStructures.Structures[A].UnitGroup;
                             }
                             NewUnit.Pos = INIStructures.Structures[A].Pos.WorldPos;
-                            NewUnit.Rotation = Convert.ToInt32(INIStructures.Structures[A].Rotation.Direction * 360.0D / modProgram.INIRotationMax);
+                            NewUnit.Rotation = Convert.ToInt32(INIStructures.Structures[A].Rotation.Direction * 360.0D / App.INIRotationMax);
                             if ( NewUnit.Rotation == 360 )
                             {
                                 NewUnit.Rotation = 0;
@@ -843,12 +843,12 @@ namespace SharpFlame
                             if ( INIStructures.Structures[A].ID == 0U )
                             {
                                 INIStructures.Structures[A].ID = AvailableID;
-                                modProgram.ZeroIDWarning(NewUnit, INIStructures.Structures[A].ID, ReturnResult);
+                                App.ZeroIDWarning(NewUnit, INIStructures.Structures[A].ID, ReturnResult);
                             }
                             UnitAdd.NewUnit = NewUnit;
                             UnitAdd.ID = INIStructures.Structures[A].ID;
                             UnitAdd.Perform();
-                            modProgram.ErrorIDChange(INIStructures.Structures[A].ID, NewUnit, "Load_WZ->INIStructures");
+                            App.ErrorIDChange(INIStructures.Structures[A].ID, NewUnit, "Load_WZ->INIStructures");
                             if ( AvailableID == INIStructures.Structures[A].ID )
                             {
                                 AvailableID = NewUnit.ID + 1U;
@@ -922,13 +922,13 @@ namespace SharpFlame
                     {
                         FeatureBadPositionCount++;
                     }
-                    else if ( !modProgram.PosIsWithinTileArea(INIFeatures.Features[A].Pos.WorldPos.Horizontal, ZeroPos, Terrain.TileSize) )
+                    else if ( !App.PosIsWithinTileArea(INIFeatures.Features[A].Pos.WorldPos.Horizontal, ZeroPos, Terrain.TileSize) )
                     {
                         FeatureBadPositionCount++;
                     }
                     else
                     {
-                        UnitType = modProgram.ObjectData.FindOrCreateUnitType(Convert.ToString(INIFeatures.Features[A].Code), clsUnitType.enumType.Feature, -1);
+                        UnitType = App.ObjectData.FindOrCreateUnitType(Convert.ToString(INIFeatures.Features[A].Code), clsUnitType.enumType.Feature, -1);
                         if ( UnitType.Type == clsUnitType.enumType.Feature )
                         {
                             FeatureType = (clsFeatureType)UnitType;
@@ -947,7 +947,7 @@ namespace SharpFlame
                             NewUnit.Type = FeatureType;
                             NewUnit.UnitGroup = ScavengerUnitGroup;
                             NewUnit.Pos = INIFeatures.Features[A].Pos.WorldPos;
-                            NewUnit.Rotation = Convert.ToInt32(INIFeatures.Features[A].Rotation.Direction * 360.0D / modProgram.INIRotationMax);
+                            NewUnit.Rotation = Convert.ToInt32(INIFeatures.Features[A].Rotation.Direction * 360.0D / App.INIRotationMax);
                             if ( NewUnit.Rotation == 360 )
                             {
                                 NewUnit.Rotation = 0;
@@ -959,12 +959,12 @@ namespace SharpFlame
                             if ( INIFeatures.Features[A].ID == 0U )
                             {
                                 INIFeatures.Features[A].ID = AvailableID;
-                                modProgram.ZeroIDWarning(NewUnit, INIFeatures.Features[A].ID, ReturnResult);
+                                App.ZeroIDWarning(NewUnit, INIFeatures.Features[A].ID, ReturnResult);
                             }
                             UnitAdd.NewUnit = NewUnit;
                             UnitAdd.ID = INIFeatures.Features[A].ID;
                             UnitAdd.Perform();
-                            modProgram.ErrorIDChange(INIFeatures.Features[A].ID, NewUnit, "Load_WZ->INIFeatures");
+                            App.ErrorIDChange(INIFeatures.Features[A].ID, NewUnit, "Load_WZ->INIFeatures");
                             if ( AvailableID == INIFeatures.Features[A].ID )
                             {
                                 AvailableID = NewUnit.ID + 1U;
@@ -985,7 +985,7 @@ namespace SharpFlame
                     {
                         DroidBadPositionCount++;
                     }
-                    else if ( !modProgram.PosIsWithinTileArea(INIDroids.Droids[A].Pos.WorldPos.Horizontal, ZeroPos, Terrain.TileSize) )
+                    else if ( !App.PosIsWithinTileArea(INIDroids.Droids[A].Pos.WorldPos.Horizontal, ZeroPos, Terrain.TileSize) )
                     {
                         DroidBadPositionCount++;
                     }
@@ -994,11 +994,11 @@ namespace SharpFlame
                         if ( INIDroids.Droids[A].Template == null || INIDroids.Droids[A].Template == "" )
                         {
                             DroidType = new clsDroidDesign();
-                            if ( !DroidType.SetDroidType((modProgram.enumDroidType)(INIDroids.Droids[A].DroidType)) )
+                            if ( !DroidType.SetDroidType((App.enumDroidType)(INIDroids.Droids[A].DroidType)) )
                             {
                                 UnknownDroidTypeCount++;
                             }
-                            LoadPartsArgs.Body = modProgram.ObjectData.FindOrCreateBody(INIDroids.Droids[A].Body);
+                            LoadPartsArgs.Body = App.ObjectData.FindOrCreateBody(INIDroids.Droids[A].Body);
                             if ( LoadPartsArgs.Body == null )
                             {
                                 UnknownDroidComponentCount++;
@@ -1010,7 +1010,7 @@ namespace SharpFlame
                                     UnknownDroidComponentCount++;
                                 }
                             }
-                            LoadPartsArgs.Propulsion = modProgram.ObjectData.FindOrCreatePropulsion(Convert.ToString(INIDroids.Droids[A].Propulsion));
+                            LoadPartsArgs.Propulsion = App.ObjectData.FindOrCreatePropulsion(Convert.ToString(INIDroids.Droids[A].Propulsion));
                             if ( LoadPartsArgs.Propulsion == null )
                             {
                                 UnknownDroidComponentCount++;
@@ -1022,7 +1022,7 @@ namespace SharpFlame
                                     UnknownDroidComponentCount++;
                                 }
                             }
-                            LoadPartsArgs.Construct = modProgram.ObjectData.FindOrCreateConstruct(Convert.ToString(INIDroids.Droids[A].Construct));
+                            LoadPartsArgs.Construct = App.ObjectData.FindOrCreateConstruct(Convert.ToString(INIDroids.Droids[A].Construct));
                             if ( LoadPartsArgs.Construct == null )
                             {
                                 UnknownDroidComponentCount++;
@@ -1034,7 +1034,7 @@ namespace SharpFlame
                                     UnknownDroidComponentCount++;
                                 }
                             }
-                            LoadPartsArgs.Repair = modProgram.ObjectData.FindOrCreateRepair(INIDroids.Droids[A].Repair);
+                            LoadPartsArgs.Repair = App.ObjectData.FindOrCreateRepair(INIDroids.Droids[A].Repair);
                             if ( LoadPartsArgs.Repair == null )
                             {
                                 UnknownDroidComponentCount++;
@@ -1046,7 +1046,7 @@ namespace SharpFlame
                                     UnknownDroidComponentCount++;
                                 }
                             }
-                            LoadPartsArgs.Sensor = modProgram.ObjectData.FindOrCreateSensor(INIDroids.Droids[A].Sensor);
+                            LoadPartsArgs.Sensor = App.ObjectData.FindOrCreateSensor(INIDroids.Droids[A].Sensor);
                             if ( LoadPartsArgs.Sensor == null )
                             {
                                 UnknownDroidComponentCount++;
@@ -1058,7 +1058,7 @@ namespace SharpFlame
                                     UnknownDroidComponentCount++;
                                 }
                             }
-                            LoadPartsArgs.Brain = modProgram.ObjectData.FindOrCreateBrain(INIDroids.Droids[A].Brain);
+                            LoadPartsArgs.Brain = App.ObjectData.FindOrCreateBrain(INIDroids.Droids[A].Brain);
                             if ( LoadPartsArgs.Brain == null )
                             {
                                 UnknownDroidComponentCount++;
@@ -1070,7 +1070,7 @@ namespace SharpFlame
                                     UnknownDroidComponentCount++;
                                 }
                             }
-                            LoadPartsArgs.ECM = modProgram.ObjectData.FindOrCreateECM(Convert.ToString(INIDroids.Droids[A].ECM));
+                            LoadPartsArgs.ECM = App.ObjectData.FindOrCreateECM(Convert.ToString(INIDroids.Droids[A].ECM));
                             if ( LoadPartsArgs.ECM == null )
                             {
                                 UnknownDroidComponentCount++;
@@ -1082,7 +1082,7 @@ namespace SharpFlame
                                     UnknownDroidComponentCount++;
                                 }
                             }
-                            LoadPartsArgs.Weapon1 = modProgram.ObjectData.FindOrCreateWeapon(Convert.ToString(INIDroids.Droids[A].Weapons[0]));
+                            LoadPartsArgs.Weapon1 = App.ObjectData.FindOrCreateWeapon(Convert.ToString(INIDroids.Droids[A].Weapons[0]));
                             if ( LoadPartsArgs.Weapon1 == null )
                             {
                                 UnknownDroidComponentCount++;
@@ -1094,7 +1094,7 @@ namespace SharpFlame
                                     UnknownDroidComponentCount++;
                                 }
                             }
-                            LoadPartsArgs.Weapon2 = modProgram.ObjectData.FindOrCreateWeapon(Convert.ToString(INIDroids.Droids[A].Weapons[1]));
+                            LoadPartsArgs.Weapon2 = App.ObjectData.FindOrCreateWeapon(Convert.ToString(INIDroids.Droids[A].Weapons[1]));
                             if ( LoadPartsArgs.Weapon2 == null )
                             {
                                 UnknownDroidComponentCount++;
@@ -1106,7 +1106,7 @@ namespace SharpFlame
                                     UnknownDroidComponentCount++;
                                 }
                             }
-                            LoadPartsArgs.Weapon3 = modProgram.ObjectData.FindOrCreateWeapon(Convert.ToString(INIDroids.Droids[A].Weapons[2]));
+                            LoadPartsArgs.Weapon3 = App.ObjectData.FindOrCreateWeapon(Convert.ToString(INIDroids.Droids[A].Weapons[2]));
                             if ( LoadPartsArgs.Weapon3 == null )
                             {
                                 UnknownDroidComponentCount++;
@@ -1122,7 +1122,7 @@ namespace SharpFlame
                         }
                         else
                         {
-                            UnitType = modProgram.ObjectData.FindOrCreateUnitType(INIDroids.Droids[A].Template, clsUnitType.enumType.PlayerDroid, -1);
+                            UnitType = App.ObjectData.FindOrCreateUnitType(INIDroids.Droids[A].Template, clsUnitType.enumType.PlayerDroid, -1);
                             if ( UnitType == null )
                             {
                                 DroidType = null;
@@ -1156,7 +1156,7 @@ namespace SharpFlame
                                 NewUnit.UnitGroup = INIDroids.Droids[A].UnitGroup;
                             }
                             NewUnit.Pos = INIDroids.Droids[A].Pos.WorldPos;
-                            NewUnit.Rotation = Convert.ToInt32(INIDroids.Droids[A].Rotation.Direction * 360.0D / modProgram.INIRotationMax);
+                            NewUnit.Rotation = Convert.ToInt32(INIDroids.Droids[A].Rotation.Direction * 360.0D / App.INIRotationMax);
                             if ( NewUnit.Rotation == 360 )
                             {
                                 NewUnit.Rotation = 0;
@@ -1168,12 +1168,12 @@ namespace SharpFlame
                             if ( INIDroids.Droids[A].ID == 0U )
                             {
                                 INIDroids.Droids[A].ID = AvailableID;
-                                modProgram.ZeroIDWarning(NewUnit, INIDroids.Droids[A].ID, ReturnResult);
+                                App.ZeroIDWarning(NewUnit, INIDroids.Droids[A].ID, ReturnResult);
                             }
                             UnitAdd.NewUnit = NewUnit;
                             UnitAdd.ID = INIDroids.Droids[A].ID;
                             UnitAdd.Perform();
-                            modProgram.ErrorIDChange(INIDroids.Droids[A].ID, NewUnit, "Load_WZ->INIDroids");
+                            App.ErrorIDChange(INIDroids.Droids[A].ID, NewUnit, "Load_WZ->INIDroids");
                             if ( AvailableID == INIDroids.Droids[A].ID )
                             {
                                 AvailableID = NewUnit.ID + 1U;
@@ -1212,8 +1212,8 @@ namespace SharpFlame
                 public UInt32 ID;
                 public string Code;
                 public clsUnitGroup UnitGroup;
-                public modProgram.clsWorldPos Pos;
-                public modProgram.sWZAngle Rotation;
+                public App.clsWorldPos Pos;
+                public App.sWZAngle Rotation;
                 public int ModuleCount;
                 public int HealthPercent;
                 public int WallType;
@@ -1281,7 +1281,7 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "position" )
                 {
-                    modProgram.clsWorldPos temp_Result = Structures[INISectionNum].Pos;
+                    App.clsWorldPos temp_Result = Structures[INISectionNum].Pos;
                     if ( !IOUtil.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
@@ -1289,7 +1289,7 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "rotation" )
                 {
-                    modProgram.sWZAngle temp_Result2 = Structures[INISectionNum].Rotation;
+                    App.sWZAngle temp_Result2 = Structures[INISectionNum].Rotation;
                     if ( !IOUtil.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result2) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
@@ -1346,8 +1346,8 @@ namespace SharpFlame
                 public UInt32 ID;
                 public string Template;
                 public clsUnitGroup UnitGroup;
-                public modProgram.clsWorldPos Pos;
-                public modProgram.sWZAngle Rotation;
+                public App.clsWorldPos Pos;
+                public App.sWZAngle Rotation;
                 public int HealthPercent;
                 public int DroidType;
                 public string Body;
@@ -1428,7 +1428,7 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "position" )
                 {
-                    modProgram.clsWorldPos temp_Result = Droids[INISectionNum].Pos;
+                    App.clsWorldPos temp_Result = Droids[INISectionNum].Pos;
                     if ( !IOUtil.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
@@ -1436,7 +1436,7 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "rotation" )
                 {
-                    modProgram.sWZAngle temp_Result2 = Droids[INISectionNum].Rotation;
+                    App.sWZAngle temp_Result2 = Droids[INISectionNum].Rotation;
                     if ( !IOUtil.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result2) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
@@ -1520,8 +1520,8 @@ namespace SharpFlame
             {
                 public UInt32 ID;
                 public string Code;
-                public modProgram.clsWorldPos Pos;
-                public modProgram.sWZAngle Rotation;
+                public App.clsWorldPos Pos;
+                public App.sWZAngle Rotation;
                 public int HealthPercent;
             }
 
@@ -1563,7 +1563,7 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "position" )
                 {
-                    modProgram.clsWorldPos temp_Result = Features[INISectionNum].Pos;
+                    App.clsWorldPos temp_Result = Features[INISectionNum].Pos;
                     if ( !IOUtil.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
@@ -1571,7 +1571,7 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "rotation" )
                 {
-                    modProgram.sWZAngle temp_Result2 = Features[INISectionNum].Rotation;
+                    App.sWZAngle temp_Result2 = Features[INISectionNum].Rotation;
                     if ( !IOUtil.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result2) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
@@ -1593,9 +1593,9 @@ namespace SharpFlame
             }
         }
 
-        private modProgram.sResult Read_WZ_gam(BinaryReader File)
+        private App.sResult Read_WZ_gam(BinaryReader File)
         {
-            modProgram.sResult ReturnResult = new modProgram.sResult();
+            App.sResult ReturnResult = new App.sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -1646,9 +1646,9 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        private modProgram.sResult Read_WZ_map(BinaryReader File)
+        private App.sResult Read_WZ_map(BinaryReader File)
         {
-            modProgram.sResult ReturnResult = new modProgram.sResult();
+            App.sResult ReturnResult = new App.sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -1761,9 +1761,9 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        private modProgram.sResult Read_WZ_Features(BinaryReader File, SimpleClassList<clsWZBJOUnit> WZUnits)
+        private App.sResult Read_WZ_Features(BinaryReader File, SimpleClassList<clsWZBJOUnit> WZUnits)
         {
-            modProgram.sResult ReturnResult = new modProgram.sResult();
+            App.sResult ReturnResult = new App.sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -1826,9 +1826,9 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        private modProgram.sResult Read_WZ_TileTypes(BinaryReader File)
+        private App.sResult Read_WZ_TileTypes(BinaryReader File)
         {
-            modProgram.sResult ReturnResult = new modProgram.sResult();
+            App.sResult ReturnResult = new App.sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -1887,9 +1887,9 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        private modProgram.sResult Read_WZ_Structures(BinaryReader File, SimpleClassList<clsWZBJOUnit> WZUnits)
+        private App.sResult Read_WZ_Structures(BinaryReader File, SimpleClassList<clsWZBJOUnit> WZUnits)
         {
-            modProgram.sResult ReturnResult = new modProgram.sResult();
+            App.sResult ReturnResult = new App.sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -1952,9 +1952,9 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        private modProgram.sResult Read_WZ_Droids(BinaryReader File, SimpleClassList<clsWZBJOUnit> WZUnits)
+        private App.sResult Read_WZ_Droids(BinaryReader File, SimpleClassList<clsWZBJOUnit> WZUnits)
         {
-            modProgram.sResult ReturnResult = new modProgram.sResult();
+            App.sResult ReturnResult = new App.sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -2249,10 +2249,10 @@ namespace SharpFlame
                                     if ( A < UnderneathTypeCount )
                                     {
                                         Footprint = OtherStructureType.get_GetFootprintSelected(OtherUnit.Rotation);
-                                        ModuleMin.X = OtherUnit.Pos.Horizontal.X - (int)(Footprint.X * modProgram.TerrainGridSpacing / 2.0D);
-                                        ModuleMin.Y = OtherUnit.Pos.Horizontal.Y - (int)(Footprint.Y * modProgram.TerrainGridSpacing / 2.0D);
-                                        ModuleMax.X = OtherUnit.Pos.Horizontal.X + (int)(Footprint.X * modProgram.TerrainGridSpacing / 2.0D);
-                                        ModuleMax.Y = OtherUnit.Pos.Horizontal.Y + (int)(Footprint.Y * modProgram.TerrainGridSpacing / 2.0D);
+                                        ModuleMin.X = OtherUnit.Pos.Horizontal.X - (int)(Footprint.X * App.TerrainGridSpacing / 2.0D);
+                                        ModuleMin.Y = OtherUnit.Pos.Horizontal.Y - (int)(Footprint.Y * App.TerrainGridSpacing / 2.0D);
+                                        ModuleMax.X = OtherUnit.Pos.Horizontal.X + (int)(Footprint.X * App.TerrainGridSpacing / 2.0D);
+                                        ModuleMax.Y = OtherUnit.Pos.Horizontal.Y + (int)(Footprint.Y * App.TerrainGridSpacing / 2.0D);
                                         if ( Unit.Pos.Horizontal.X >= ModuleMin.X & Unit.Pos.Horizontal.X < ModuleMax.X &
                                              Unit.Pos.Horizontal.Y >= ModuleMin.Y & Unit.Pos.Horizontal.Y < ModuleMax.Y )
                                         {
@@ -2720,23 +2720,23 @@ namespace SharpFlame
                 string Text = "";
 
                 MemoryStream File_LEV_Memory = new MemoryStream();
-                StreamWriter File_LEV = new StreamWriter(File_LEV_Memory, modProgram.UTF8Encoding);
+                StreamWriter File_LEV = new StreamWriter(File_LEV_Memory, App.UTF8Encoding);
                 MemoryStream File_MAP_Memory = new MemoryStream();
-                BinaryWriter File_MAP = new BinaryWriter(File_MAP_Memory, modProgram.ASCIIEncoding);
+                BinaryWriter File_MAP = new BinaryWriter(File_MAP_Memory, App.ASCIIEncoding);
                 MemoryStream File_GAM_Memory = new MemoryStream();
-                BinaryWriter File_GAM = new BinaryWriter(File_GAM_Memory, modProgram.ASCIIEncoding);
+                BinaryWriter File_GAM = new BinaryWriter(File_GAM_Memory, App.ASCIIEncoding);
                 MemoryStream File_featBJO_Memory = new MemoryStream();
-                BinaryWriter File_featBJO = new BinaryWriter(File_featBJO_Memory, modProgram.ASCIIEncoding);
+                BinaryWriter File_featBJO = new BinaryWriter(File_featBJO_Memory, App.ASCIIEncoding);
                 MemoryStream INI_feature_Memory = new MemoryStream();
                 clsINIWrite INI_feature = clsINIWrite.CreateFile(INI_feature_Memory);
                 MemoryStream File_TTP_Memory = new MemoryStream();
-                BinaryWriter File_TTP = new BinaryWriter(File_TTP_Memory, modProgram.ASCIIEncoding);
+                BinaryWriter File_TTP = new BinaryWriter(File_TTP_Memory, App.ASCIIEncoding);
                 MemoryStream File_structBJO_Memory = new MemoryStream();
-                BinaryWriter File_structBJO = new BinaryWriter(File_structBJO_Memory, modProgram.ASCIIEncoding);
+                BinaryWriter File_structBJO = new BinaryWriter(File_structBJO_Memory, App.ASCIIEncoding);
                 MemoryStream INI_struct_Memory = new MemoryStream();
                 clsINIWrite INI_struct = clsINIWrite.CreateFile(INI_struct_Memory);
                 MemoryStream File_droidBJO_Memory = new MemoryStream();
-                BinaryWriter File_droidBJO = new BinaryWriter(File_droidBJO_Memory, modProgram.ASCIIEncoding);
+                BinaryWriter File_droidBJO = new BinaryWriter(File_droidBJO_Memory, App.ASCIIEncoding);
                 MemoryStream INI_droid_Memory = new MemoryStream();
                 clsINIWrite INI_droid = clsINIWrite.CreateFile(INI_droid_Memory);
                 MemoryStream INI_Labels_Memory = new MemoryStream();
@@ -2756,17 +2756,17 @@ namespace SharpFlame
                         ReturnResult.ProblemAdd("Map must have a tileset.");
                         return ReturnResult;
                     }
-                    else if ( Tileset == modProgram.Tileset_Arizona )
+                    else if ( Tileset == App.Tileset_Arizona )
                     {
                         fog = "fog1.wrf";
                         TilesetNum = "1";
                     }
-                    else if ( Tileset == modProgram.Tileset_Urban )
+                    else if ( Tileset == App.Tileset_Urban )
                     {
                         fog = "fog2.wrf";
                         TilesetNum = "2";
                     }
-                    else if ( Tileset == modProgram.Tileset_Rockies )
+                    else if ( Tileset == App.Tileset_Rockies )
                     {
                         fog = "fog3.wrf";
                         TilesetNum = "3";
@@ -2781,9 +2781,9 @@ namespace SharpFlame
                            Convert.ToString(EndChar);
                     File_LEV.Write(Text);
                     DateTime DateNow = DateTime.Now;
-                    Text = "// Date: " + Convert.ToString(DateNow.Year) + "/" + modProgram.MinDigits(DateNow.Month, 2) + "/" +
-                           modProgram.MinDigits(DateNow.Day, 2) + " " + modProgram.MinDigits(DateNow.Hour, 2) + ":" + modProgram.MinDigits(DateNow.Minute, 2) + ":" +
-                           modProgram.MinDigits(DateNow.Second, 2) + Convert.ToString(EndChar);
+                    Text = "// Date: " + Convert.ToString(DateNow.Year) + "/" + App.MinDigits(DateNow.Month, 2) + "/" +
+                           App.MinDigits(DateNow.Day, 2) + " " + App.MinDigits(DateNow.Hour, 2) + ":" + App.MinDigits(DateNow.Minute, 2) + ":" +
+                           App.MinDigits(DateNow.Second, 2) + Convert.ToString(EndChar);
                     File_LEV.Write(Text);
                     Text = "// Author: " + Args.Multiplayer.AuthorName + Convert.ToString(EndChar);
                     File_LEV.Write(Text);
@@ -3291,7 +3291,7 @@ namespace SharpFlame
                 }
                 else if ( Args.CompileType == sWrite_WZ_Args.enumCompileType.Campaign )
                 {
-                    string CampDirectory = modProgram.EndWithPathSeperator(Args.Path);
+                    string CampDirectory = App.EndWithPathSeperator(Args.Path);
 
                     if ( !Directory.Exists(CampDirectory) )
                     {
@@ -3304,7 +3304,7 @@ namespace SharpFlame
                     FilePath = CampDirectory + Args.MapName + ".gam";
                     ReturnResult.Add(IOUtil.WriteMemoryToNewFile(File_GAM_Memory, CampDirectory + Args.MapName + ".gam"));
 
-                    CampDirectory += Args.MapName + Convert.ToString(modProgram.PlatformPathSeparator);
+                    CampDirectory += Args.MapName + Convert.ToString(App.PlatformPathSeparator);
                     try
                     {
                         Directory.CreateDirectory(CampDirectory);
@@ -3353,9 +3353,9 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        private modProgram.sResult Read_TTP(BinaryReader File)
+        private App.sResult Read_TTP(BinaryReader File)
         {
-            modProgram.sResult ReturnResult = new modProgram.sResult();
+            App.sResult ReturnResult = new App.sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 

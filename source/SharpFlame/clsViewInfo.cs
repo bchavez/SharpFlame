@@ -30,8 +30,8 @@ namespace SharpFlame
             ViewPos = new sXYZ_int(0, 3072, 0);
             FOV_Multiplier_Set(modSettings.Settings.FOVDefault);
             ViewAngleSetToDefault();
-            LookAtPos(new sXY_int((int)(Map.Terrain.TileSize.X * modProgram.TerrainGridSpacing / 2.0D),
-                (int)(Map.Terrain.TileSize.Y * modProgram.TerrainGridSpacing / 2.0D)));
+            LookAtPos(new sXY_int((int)(Map.Terrain.TileSize.X * App.TerrainGridSpacing / 2.0D),
+                (int)(Map.Terrain.TileSize.Y * App.TerrainGridSpacing / 2.0D)));
         }
 
         public void FOV_Scale_2E_Set(double Power)
@@ -117,8 +117,8 @@ namespace SharpFlame
             const int MaxHeight = 1048576;
             const int MaxDist = 1048576;
 
-            ViewPos.X = MathUtil.Clamp_int(ViewPos.X, Convert.ToInt32(- MaxDist), Map.Terrain.TileSize.X * modProgram.TerrainGridSpacing + MaxDist);
-            ViewPos.Z = MathUtil.Clamp_int(ViewPos.Z, - Map.Terrain.TileSize.Y * modProgram.TerrainGridSpacing - MaxDist, MaxDist);
+            ViewPos.X = MathUtil.Clamp_int(ViewPos.X, Convert.ToInt32(- MaxDist), Map.Terrain.TileSize.X * App.TerrainGridSpacing + MaxDist);
+            ViewPos.Z = MathUtil.Clamp_int(ViewPos.Z, - Map.Terrain.TileSize.Y * App.TerrainGridSpacing - MaxDist, MaxDist);
             ViewPos.Y = MathUtil.Clamp_int(ViewPos.Y, ((int)(Math.Ceiling(Map.GetTerrainHeight(new sXY_int(ViewPos.X, - ViewPos.Z))))) + 16, MaxHeight);
         }
 
@@ -149,7 +149,7 @@ namespace SharpFlame
             //Dim XYZ_lng As sXYZ_lng
             Position.XY_dbl XY_dbl = default(Position.XY_dbl);
 
-            if ( modProgram.ViewMoveType == modProgram.enumView_Move_Type.RTS & modProgram.RTSOrbit )
+            if ( App.ViewMoveType == App.enumView_Move_Type.RTS & App.RTSOrbit )
             {
                 Flag = true;
                 //If ScreenXY_Get_TerrainPos(CInt(Int(GLSize.X / 2.0#)), CInt(Int(GLSize.Y / 2.0#)), XYZ_lng) Then
@@ -201,8 +201,8 @@ namespace SharpFlame
         {
             sXY_int Pos = new sXY_int();
 
-            Pos.X = (int)((TileNum.X + 0.5D) * modProgram.TerrainGridSpacing);
-            Pos.Y = (int)((TileNum.Y + 0.5D) * modProgram.TerrainGridSpacing);
+            Pos.X = (int)((TileNum.X + 0.5D) * App.TerrainGridSpacing);
+            Pos.Y = (int)((TileNum.Y + 0.5D) * App.TerrainGridSpacing);
             LookAtPos(Pos);
         }
 
@@ -299,7 +299,7 @@ namespace SharpFlame
             return true;
         }
 
-        public bool ScreenXY_Get_TerrainPos(sXY_int ScreenPos, modProgram.sWorldPos ResultPos)
+        public bool ScreenXY_Get_TerrainPos(sXY_int ScreenPos, App.sWorldPos ResultPos)
         {
             double dblTemp = 0;
             Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
@@ -343,10 +343,10 @@ namespace SharpFlame
                 dblTemp = TerrainViewPos.Y / TerrainViewVector.Y;
                 LimitB.X = TerrainViewPos.X + TerrainViewVector.X * dblTemp;
                 LimitB.Y = TerrainViewPos.Z + TerrainViewVector.Z * dblTemp;
-                Min.X = Math.Max(Convert.ToInt32(Conversion.Int(Math.Min(LimitA.X, LimitB.X) / modProgram.TerrainGridSpacing)), 0);
-                Min.Y = Math.Max((int)(Conversion.Int(Math.Min(LimitA.Y, LimitB.Y) / modProgram.TerrainGridSpacing)), 0);
-                Max.X = Math.Min(Convert.ToInt32(Conversion.Int(Math.Max(LimitA.X, LimitB.X) / modProgram.TerrainGridSpacing)), Map.Terrain.TileSize.X - 1);
-                Max.Y = Math.Min(Convert.ToInt32(Conversion.Int(Math.Max(LimitA.Y, LimitB.Y) / modProgram.TerrainGridSpacing)), Map.Terrain.TileSize.Y - 1);
+                Min.X = Math.Max(Convert.ToInt32(Conversion.Int(Math.Min(LimitA.X, LimitB.X) / App.TerrainGridSpacing)), 0);
+                Min.Y = Math.Max((int)(Conversion.Int(Math.Min(LimitA.Y, LimitB.Y) / App.TerrainGridSpacing)), 0);
+                Max.X = Math.Min(Convert.ToInt32(Conversion.Int(Math.Max(LimitA.X, LimitB.X) / App.TerrainGridSpacing)), Map.Terrain.TileSize.X - 1);
+                Max.Y = Math.Min(Convert.ToInt32(Conversion.Int(Math.Max(LimitA.Y, LimitB.Y) / App.TerrainGridSpacing)), Map.Terrain.TileSize.Y - 1);
                 //find the nearest valid tile to the view
                 BestDist = double.MaxValue;
                 BestPos.X = double.NaN;
@@ -356,8 +356,8 @@ namespace SharpFlame
                 {
                     for ( X = Min.X; X <= Max.X; X++ )
                     {
-                        TilePos.X = X * modProgram.TerrainGridSpacing;
-                        TilePos.Y = Y * modProgram.TerrainGridSpacing;
+                        TilePos.X = X * App.TerrainGridSpacing;
+                        TilePos.Y = Y * App.TerrainGridSpacing;
 
                         if ( Map.Terrain.Tiles[X, Y].Tri )
                         {
@@ -367,13 +367,13 @@ namespace SharpFlame
                             XYZ_dbl.Y = (TriHeightOffset +
                                          (TriGradientX * (TerrainViewPos.X - TilePos.X) + TriGradientZ * (TerrainViewPos.Z - TilePos.Y) +
                                           (TriGradientX * TerrainViewVector.X + TriGradientZ * TerrainViewVector.Z) * TerrainViewPos.Y / TerrainViewVector.Y) /
-                                         modProgram.TerrainGridSpacing) /
+                                         App.TerrainGridSpacing) /
                                         (1.0D +
-                                         (TriGradientX * TerrainViewVector.X + TriGradientZ * TerrainViewVector.Z) / (TerrainViewVector.Y * modProgram.TerrainGridSpacing));
+                                         (TriGradientX * TerrainViewVector.X + TriGradientZ * TerrainViewVector.Z) / (TerrainViewVector.Y * App.TerrainGridSpacing));
                             XYZ_dbl.X = TerrainViewPos.X + TerrainViewVector.X * (TerrainViewPos.Y - XYZ_dbl.Y) / TerrainViewVector.Y;
                             XYZ_dbl.Z = TerrainViewPos.Z + TerrainViewVector.Z * (TerrainViewPos.Y - XYZ_dbl.Y) / TerrainViewVector.Y;
-                            InTileX = XYZ_dbl.X / modProgram.TerrainGridSpacing - X;
-                            InTileZ = XYZ_dbl.Z / modProgram.TerrainGridSpacing - Y;
+                            InTileX = XYZ_dbl.X / App.TerrainGridSpacing - X;
+                            InTileZ = XYZ_dbl.Z / App.TerrainGridSpacing - Y;
                             if ( InTileZ <= 1.0D - InTileX & InTileX >= 0.0D & InTileZ >= 0.0D & InTileX <= 1.0D & InTileZ <= 1.0D )
                             {
                                 Dif = XYZ_dbl - TerrainViewPos;
@@ -391,13 +391,13 @@ namespace SharpFlame
                             XYZ_dbl.Y = (TriHeightOffset + TriGradientX + TriGradientZ +
                                          (TriGradientX * (TilePos.X - TerrainViewPos.X) + TriGradientZ * (TilePos.Y - TerrainViewPos.Z) -
                                           (TriGradientX * TerrainViewVector.X + TriGradientZ * TerrainViewVector.Z) * TerrainViewPos.Y / TerrainViewVector.Y) /
-                                         modProgram.TerrainGridSpacing) /
+                                         App.TerrainGridSpacing) /
                                         (1.0D -
-                                         (TriGradientX * TerrainViewVector.X + TriGradientZ * TerrainViewVector.Z) / (TerrainViewVector.Y * modProgram.TerrainGridSpacing));
+                                         (TriGradientX * TerrainViewVector.X + TriGradientZ * TerrainViewVector.Z) / (TerrainViewVector.Y * App.TerrainGridSpacing));
                             XYZ_dbl.X = TerrainViewPos.X + TerrainViewVector.X * (TerrainViewPos.Y - XYZ_dbl.Y) / TerrainViewVector.Y;
                             XYZ_dbl.Z = TerrainViewPos.Z + TerrainViewVector.Z * (TerrainViewPos.Y - XYZ_dbl.Y) / TerrainViewVector.Y;
-                            InTileX = XYZ_dbl.X / modProgram.TerrainGridSpacing - X;
-                            InTileZ = XYZ_dbl.Z / modProgram.TerrainGridSpacing - Y;
+                            InTileX = XYZ_dbl.X / App.TerrainGridSpacing - X;
+                            InTileZ = XYZ_dbl.Z / App.TerrainGridSpacing - Y;
                             if ( InTileZ >= 1.0D - InTileX & InTileX >= 0.0D & InTileZ >= 0.0D & InTileX <= 1.0D & InTileZ <= 1.0D )
                             {
                                 Dif = XYZ_dbl - TerrainViewPos;
@@ -417,13 +417,13 @@ namespace SharpFlame
                             XYZ_dbl.Y = (TriHeightOffset + TriGradientX +
                                          (TriGradientX * (TilePos.X - TerrainViewPos.X) + TriGradientZ * (TerrainViewPos.Z - TilePos.Y) -
                                           (TriGradientX * TerrainViewVector.X - TriGradientZ * TerrainViewVector.Z) * TerrainViewPos.Y / TerrainViewVector.Y) /
-                                         modProgram.TerrainGridSpacing) /
+                                         App.TerrainGridSpacing) /
                                         (1.0D -
-                                         (TriGradientX * TerrainViewVector.X - TriGradientZ * TerrainViewVector.Z) / (TerrainViewVector.Y * modProgram.TerrainGridSpacing));
+                                         (TriGradientX * TerrainViewVector.X - TriGradientZ * TerrainViewVector.Z) / (TerrainViewVector.Y * App.TerrainGridSpacing));
                             XYZ_dbl.X = TerrainViewPos.X + TerrainViewVector.X * (TerrainViewPos.Y - XYZ_dbl.Y) / TerrainViewVector.Y;
                             XYZ_dbl.Z = TerrainViewPos.Z + TerrainViewVector.Z * (TerrainViewPos.Y - XYZ_dbl.Y) / TerrainViewVector.Y;
-                            InTileX = XYZ_dbl.X / modProgram.TerrainGridSpacing - X;
-                            InTileZ = XYZ_dbl.Z / modProgram.TerrainGridSpacing - Y;
+                            InTileX = XYZ_dbl.X / App.TerrainGridSpacing - X;
+                            InTileZ = XYZ_dbl.Z / App.TerrainGridSpacing - Y;
                             if ( InTileZ <= InTileX & InTileX >= 0.0D & InTileZ >= 0.0D & InTileX <= 1.0D & InTileZ <= 1.0D )
                             {
                                 Dif = XYZ_dbl - TerrainViewPos;
@@ -441,13 +441,13 @@ namespace SharpFlame
                             XYZ_dbl.Y = (TriHeightOffset + TriGradientZ +
                                          (TriGradientX * (TerrainViewPos.X - TilePos.X) + TriGradientZ * (TilePos.Y - TerrainViewPos.Z) +
                                           (TriGradientX * TerrainViewVector.X - TriGradientZ * TerrainViewVector.Z) * TerrainViewPos.Y / TerrainViewVector.Y) /
-                                         modProgram.TerrainGridSpacing) /
+                                         App.TerrainGridSpacing) /
                                         (1.0D +
-                                         (TriGradientX * TerrainViewVector.X - TriGradientZ * TerrainViewVector.Z) / (TerrainViewVector.Y * modProgram.TerrainGridSpacing));
+                                         (TriGradientX * TerrainViewVector.X - TriGradientZ * TerrainViewVector.Z) / (TerrainViewVector.Y * App.TerrainGridSpacing));
                             XYZ_dbl.X = TerrainViewPos.X + TerrainViewVector.X * (TerrainViewPos.Y - XYZ_dbl.Y) / TerrainViewVector.Y;
                             XYZ_dbl.Z = TerrainViewPos.Z + TerrainViewVector.Z * (TerrainViewPos.Y - XYZ_dbl.Y) / TerrainViewVector.Y;
-                            InTileX = XYZ_dbl.X / modProgram.TerrainGridSpacing - X;
-                            InTileZ = XYZ_dbl.Z / modProgram.TerrainGridSpacing - Y;
+                            InTileX = XYZ_dbl.X / App.TerrainGridSpacing - X;
+                            InTileZ = XYZ_dbl.Z / App.TerrainGridSpacing - Y;
                             if ( InTileZ >= InTileX & InTileX >= 0.0D & InTileZ >= 0.0D & InTileX <= 1.0D & InTileZ <= 1.0D )
                             {
                                 Dif = XYZ_dbl - TerrainViewPos;
@@ -568,15 +568,15 @@ namespace SharpFlame
                 if ( Flag )
                 {
                     MouseOver.OverTerrain = MouseOverTerrain;
-                    MouseOverTerrain.Tile.Normal.X = Conversion.Int(MouseOverTerrain.Pos.Horizontal.X / modProgram.TerrainGridSpacing);
-                    MouseOverTerrain.Tile.Normal.Y = (int)(Conversion.Int(MouseOverTerrain.Pos.Horizontal.Y / modProgram.TerrainGridSpacing));
-                    MouseOverTerrain.Vertex.Normal.X = (int)(Math.Round((double)(MouseOverTerrain.Pos.Horizontal.X / modProgram.TerrainGridSpacing)));
-                    MouseOverTerrain.Vertex.Normal.Y = (int)(Math.Round((double)(MouseOverTerrain.Pos.Horizontal.Y / modProgram.TerrainGridSpacing)));
+                    MouseOverTerrain.Tile.Normal.X = Conversion.Int(MouseOverTerrain.Pos.Horizontal.X / App.TerrainGridSpacing);
+                    MouseOverTerrain.Tile.Normal.Y = (int)(Conversion.Int(MouseOverTerrain.Pos.Horizontal.Y / App.TerrainGridSpacing));
+                    MouseOverTerrain.Vertex.Normal.X = (int)(Math.Round((double)(MouseOverTerrain.Pos.Horizontal.X / App.TerrainGridSpacing)));
+                    MouseOverTerrain.Vertex.Normal.Y = (int)(Math.Round((double)(MouseOverTerrain.Pos.Horizontal.Y / App.TerrainGridSpacing)));
                     MouseOverTerrain.Tile.Alignment = MouseOverTerrain.Vertex.Normal;
                     MouseOverTerrain.Vertex.Alignment = new sXY_int(MouseOverTerrain.Tile.Normal.X + 1, MouseOverTerrain.Tile.Normal.Y + 1);
                     MouseOverTerrain.Triangle = Map.GetTerrainTri(MouseOverTerrain.Pos.Horizontal);
-                    XY_dbl.X = MouseOverTerrain.Pos.Horizontal.X - MouseOverTerrain.Vertex.Normal.X * modProgram.TerrainGridSpacing;
-                    XY_dbl.Y = MouseOverTerrain.Pos.Horizontal.Y - MouseOverTerrain.Vertex.Normal.Y * modProgram.TerrainGridSpacing;
+                    XY_dbl.X = MouseOverTerrain.Pos.Horizontal.X - MouseOverTerrain.Vertex.Normal.X * App.TerrainGridSpacing;
+                    XY_dbl.Y = MouseOverTerrain.Pos.Horizontal.Y - MouseOverTerrain.Vertex.Normal.Y * App.TerrainGridSpacing;
                     if ( Math.Abs(XY_dbl.Y) <= Math.Abs(XY_dbl.X) )
                     {
                         MouseOverTerrain.Side_IsV = false;
@@ -599,8 +599,8 @@ namespace SharpFlame
                         XY_dbl.X = Unit.Pos.Horizontal.X - MouseOverTerrain.Pos.Horizontal.X;
                         XY_dbl.Y = Unit.Pos.Horizontal.Y - MouseOverTerrain.Pos.Horizontal.Y;
                         Footprint = Unit.Type.get_GetFootprintSelected(Unit.Rotation);
-                        if ( Math.Abs(XY_dbl.X) <= Math.Max(Footprint.X / 2.0D, 0.5D) * modProgram.TerrainGridSpacing
-                             && Math.Abs(XY_dbl.Y) <= Math.Max(Footprint.Y / 2.0D, 0.5D) * modProgram.TerrainGridSpacing )
+                        if ( Math.Abs(XY_dbl.X) <= Math.Max(Footprint.X / 2.0D, 0.5D) * App.TerrainGridSpacing
+                             && Math.Abs(XY_dbl.Y) <= Math.Max(Footprint.Y / 2.0D, 0.5D) * App.TerrainGridSpacing )
                         {
                             MouseOverTerrain.Units.Add(Unit);
                         }
@@ -613,12 +613,12 @@ namespace SharpFlame
                             Apply_Terrain();
                             if ( Program.frmMainInstance.cbxAutoTexSetHeight.Checked )
                             {
-                                Apply_Height_Set(modProgram.TerrainBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
+                                Apply_Height_Set(App.TerrainBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
                             }
                         }
                         else if ( modTools.Tool == modTools.Tools.HeightSetBrush )
                         {
-                            Apply_Height_Set(modProgram.HeightBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
+                            Apply_Height_Set(App.HeightBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
                         }
                         else if ( modTools.Tool == modTools.Tools.TextureBrush )
                         {
@@ -651,7 +651,7 @@ namespace SharpFlame
                         {
                             if ( MouseLeftDown == null )
                             {
-                                Apply_Height_Set(modProgram.HeightBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetR.SelectedIndex]);
+                                Apply_Height_Set(App.HeightBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetR.SelectedIndex]);
                             }
                         }
                         else if ( modTools.Tool == modTools.Tools.CliffTriangle )
@@ -731,7 +731,7 @@ namespace SharpFlame
 
             public class clsOverTerrain
             {
-                public modProgram.sWorldPos Pos;
+                public App.sWorldPos Pos;
                 public SimpleClassList<clsMap.clsUnit> Units = new SimpleClassList<clsMap.clsUnit>();
                 public clsBrush.sPosNum Tile;
                 public clsBrush.sPosNum Vertex;
@@ -747,7 +747,7 @@ namespace SharpFlame
         {
             public class clsOverTerrain
             {
-                public modProgram.sWorldPos DownPos;
+                public App.sWorldPos DownPos;
             }
 
             public clsOverTerrain OverTerrain;
@@ -789,8 +789,8 @@ namespace SharpFlame
 
             clsMap.clsApplyVertexTerrain ApplyVertexTerrain = new clsMap.clsApplyVertexTerrain();
             ApplyVertexTerrain.Map = Map;
-            ApplyVertexTerrain.VertexTerrain = modProgram.SelectedTerrain;
-            modProgram.TerrainBrush.PerformActionMapVertices(ApplyVertexTerrain, MouseOverTerrain.Vertex);
+            ApplyVertexTerrain.VertexTerrain = App.SelectedTerrain;
+            App.TerrainBrush.PerformActionMapVertices(ApplyVertexTerrain, MouseOverTerrain.Vertex);
 
             Map.Update();
 
@@ -811,9 +811,9 @@ namespace SharpFlame
 
             if ( MouseOverTerrain.Side_IsV )
             {
-                if ( Map.Terrain.SideV[Side_Num.X, Side_Num.Y].Road != modProgram.SelectedRoad )
+                if ( Map.Terrain.SideV[Side_Num.X, Side_Num.Y].Road != App.SelectedRoad )
                 {
-                    Map.Terrain.SideV[Side_Num.X, Side_Num.Y].Road = modProgram.SelectedRoad;
+                    Map.Terrain.SideV[Side_Num.X, Side_Num.Y].Road = App.SelectedRoad;
 
                     if ( Side_Num.X > 0 )
                     {
@@ -840,9 +840,9 @@ namespace SharpFlame
             }
             else
             {
-                if ( Map.Terrain.SideH[Side_Num.X, Side_Num.Y].Road != modProgram.SelectedRoad )
+                if ( Map.Terrain.SideH[Side_Num.X, Side_Num.Y].Road != App.SelectedRoad )
                 {
-                    Map.Terrain.SideH[Side_Num.X, Side_Num.Y].Road = modProgram.SelectedRoad;
+                    Map.Terrain.SideH[Side_Num.X, Side_Num.Y].Road = App.SelectedRoad;
 
                     if ( Side_Num.Y > 0 )
                     {
@@ -900,7 +900,7 @@ namespace SharpFlame
                     }
                     for ( Num = A + 1; Num <= B; Num++ )
                     {
-                        Map.Terrain.SideH[Map.Selected_Tile_A.X, Num].Road = modProgram.SelectedRoad;
+                        Map.Terrain.SideH[Map.Selected_Tile_A.X, Num].Road = App.SelectedRoad;
                         SideNum.X = Map.Selected_Tile_A.X;
                         SideNum.Y = Num;
                         Map.AutoTextureChanges.SideHChanged(SideNum);
@@ -929,7 +929,7 @@ namespace SharpFlame
                     }
                     for ( Num = A + 1; Num <= B; Num++ )
                     {
-                        Map.Terrain.SideV[Num, Map.Selected_Tile_A.Y].Road = modProgram.SelectedRoad;
+                        Map.Terrain.SideV[Num, Map.Selected_Tile_A.Y].Road = App.SelectedRoad;
                         SideNum.X = Num;
                         SideNum.Y = Map.Selected_Tile_A.Y;
                         Map.AutoTextureChanges.SideVChanged(SideNum);
@@ -954,7 +954,7 @@ namespace SharpFlame
             }
         }
 
-        public void Apply_Terrain_Fill(modProgram.enumFillCliffAction CliffAction, bool Inside)
+        public void Apply_Terrain_Fill(App.enumFillCliffAction CliffAction, bool Inside)
         {
             clsMouseOver.clsOverTerrain MouseOverTerrain = GetMouseOverTerrain();
 
@@ -967,7 +967,7 @@ namespace SharpFlame
             Terrain ReplaceType = default(Terrain);
             sXY_int StartVertex = MouseOverTerrain.Vertex.Normal;
 
-            FillType = modProgram.SelectedTerrain;
+            FillType = App.SelectedTerrain;
             ReplaceType = Map.Terrain.Vertices[StartVertex.X, StartVertex.Y].Terrain;
             if ( FillType == ReplaceType )
             {
@@ -993,7 +993,7 @@ namespace SharpFlame
             {
                 CurrentSource = SourceOfFill[SourceOfFillNum];
 
-                if ( CliffAction == modProgram.enumFillCliffAction.StopBefore )
+                if ( CliffAction == App.enumFillCliffAction.StopBefore )
                 {
                     StopForCliff = Map.VertexIsCliffEdge(CurrentSource);
                 }
@@ -1084,7 +1084,7 @@ namespace SharpFlame
                         if ( NextSource.X >= 0 & NextSource.X <= Map.Terrain.TileSize.X
                              & NextSource.Y >= 0 & NextSource.Y <= Map.Terrain.TileSize.Y )
                         {
-                            if ( CliffAction == modProgram.enumFillCliffAction.StopAfter )
+                            if ( CliffAction == App.enumFillCliffAction.StopAfter )
                             {
                                 StopForCliff = Map.SideHIsCliffOnBothSides(new sXY_int(CurrentSource.X, CurrentSource.Y));
                             }
@@ -1111,7 +1111,7 @@ namespace SharpFlame
                         if ( NextSource.X >= 0 & NextSource.X <= Map.Terrain.TileSize.X
                              & NextSource.Y >= 0 & NextSource.Y <= Map.Terrain.TileSize.Y )
                         {
-                            if ( CliffAction == modProgram.enumFillCliffAction.StopAfter )
+                            if ( CliffAction == App.enumFillCliffAction.StopAfter )
                             {
                                 StopForCliff = Map.SideHIsCliffOnBothSides(new sXY_int(CurrentSource.X - 1, CurrentSource.Y));
                             }
@@ -1138,7 +1138,7 @@ namespace SharpFlame
                         if ( NextSource.X >= 0 & NextSource.X <= Map.Terrain.TileSize.X
                              & NextSource.Y >= 0 & NextSource.Y <= Map.Terrain.TileSize.Y )
                         {
-                            if ( CliffAction == modProgram.enumFillCliffAction.StopAfter )
+                            if ( CliffAction == App.enumFillCliffAction.StopAfter )
                             {
                                 StopForCliff = Map.SideVIsCliffOnBothSides(new sXY_int(CurrentSource.X, CurrentSource.Y));
                             }
@@ -1165,7 +1165,7 @@ namespace SharpFlame
                         if ( NextSource.X >= 0 & NextSource.X <= Map.Terrain.TileSize.X
                              & NextSource.Y >= 0 & NextSource.Y <= Map.Terrain.TileSize.Y )
                         {
-                            if ( CliffAction == modProgram.enumFillCliffAction.StopAfter )
+                            if ( CliffAction == App.enumFillCliffAction.StopAfter )
                             {
                                 StopForCliff = Map.SideVIsCliffOnBothSides(new sXY_int(CurrentSource.X, CurrentSource.Y - 1));
                             }
@@ -1227,13 +1227,13 @@ namespace SharpFlame
 
             clsMap.clsApplyTexture ApplyTexture = new clsMap.clsApplyTexture();
             ApplyTexture.Map = Map;
-            ApplyTexture.TextureNum = modProgram.SelectedTextureNum;
+            ApplyTexture.TextureNum = App.SelectedTextureNum;
             ApplyTexture.SetTexture = Program.frmMainInstance.chkSetTexture.Checked;
-            ApplyTexture.Orientation = modProgram.TextureOrientation;
+            ApplyTexture.Orientation = App.TextureOrientation;
             ApplyTexture.RandomOrientation = Program.frmMainInstance.chkTextureOrientationRandomize.Checked;
             ApplyTexture.SetOrientation = Program.frmMainInstance.chkSetTextureOrientation.Checked;
             ApplyTexture.TerrainAction = Program.frmMainInstance.TextureTerrainAction;
-            modProgram.TextureBrush.PerformActionMapTiles(ApplyTexture, MouseOverTerrain.Tile);
+            App.TextureBrush.PerformActionMapTiles(ApplyTexture, MouseOverTerrain.Tile);
 
             Map.Update();
 
@@ -1289,7 +1289,7 @@ namespace SharpFlame
             }
             ApplyCliff.Angle = MathUtil.Clamp_dbl(Angle * MathUtil.RadOf1Deg, 0.0D, MathUtil.RadOf90Deg);
             ApplyCliff.SetTris = Program.frmMainInstance.cbxCliffTris.Checked;
-            modProgram.CliffBrush.PerformActionMapTiles(ApplyCliff, MouseOverTerrain.Tile);
+            App.CliffBrush.PerformActionMapTiles(ApplyCliff, MouseOverTerrain.Tile);
 
             Map.Update();
 
@@ -1307,7 +1307,7 @@ namespace SharpFlame
 
             clsMap.clsApplyCliffRemove ApplyCliffRemove = new clsMap.clsApplyCliffRemove();
             ApplyCliffRemove.Map = Map;
-            modProgram.CliffBrush.PerformActionMapTiles(ApplyCliffRemove, MouseOverTerrain.Tile);
+            App.CliffBrush.PerformActionMapTiles(ApplyCliffRemove, MouseOverTerrain.Tile);
 
             Map.Update();
 
@@ -1325,7 +1325,7 @@ namespace SharpFlame
 
             clsMap.clsApplyRoadRemove ApplyRoadRemove = new clsMap.clsApplyRoadRemove();
             ApplyRoadRemove.Map = Map;
-            modProgram.CliffBrush.PerformActionMapTiles(ApplyRoadRemove, MouseOverTerrain.Tile);
+            App.CliffBrush.PerformActionMapTiles(ApplyRoadRemove, MouseOverTerrain.Tile);
 
             Map.Update();
 
@@ -1439,8 +1439,8 @@ namespace SharpFlame
             clsMap.clsApplyHeightSmoothing ApplyHeightSmoothing = new clsMap.clsApplyHeightSmoothing();
             ApplyHeightSmoothing.Map = Map;
             ApplyHeightSmoothing.Ratio = Ratio;
-            int Radius = (int)(Math.Ceiling(modProgram.HeightBrush.Radius));
-            sXY_int PosNum = modProgram.HeightBrush.GetPosNum(MouseOverTerrain.Vertex);
+            int Radius = (int)(Math.Ceiling(App.HeightBrush.Radius));
+            sXY_int PosNum = App.HeightBrush.GetPosNum(MouseOverTerrain.Vertex);
             ApplyHeightSmoothing.Offset.X = MathUtil.Clamp_int(PosNum.X - Radius, 0, Map.Terrain.TileSize.X);
             ApplyHeightSmoothing.Offset.Y = MathUtil.Clamp_int(PosNum.Y - Radius, 0, Map.Terrain.TileSize.Y);
             sXY_int PosEnd = new sXY_int();
@@ -1449,7 +1449,7 @@ namespace SharpFlame
             ApplyHeightSmoothing.AreaTileSize.X = PosEnd.X - ApplyHeightSmoothing.Offset.X;
             ApplyHeightSmoothing.AreaTileSize.Y = PosEnd.Y - ApplyHeightSmoothing.Offset.Y;
             ApplyHeightSmoothing.Start();
-            modProgram.HeightBrush.PerformActionMapVertices(ApplyHeightSmoothing, MouseOverTerrain.Vertex);
+            App.HeightBrush.PerformActionMapVertices(ApplyHeightSmoothing, MouseOverTerrain.Vertex);
             ApplyHeightSmoothing.Finish();
 
             Map.Update();
@@ -1470,7 +1470,7 @@ namespace SharpFlame
             ApplyHeightChange.Map = Map;
             ApplyHeightChange.Rate = Rate;
             ApplyHeightChange.UseEffect = Program.frmMainInstance.cbxHeightChangeFade.Checked;
-            modProgram.HeightBrush.PerformActionMapVertices(ApplyHeightChange, MouseOverTerrain.Vertex);
+            App.HeightBrush.PerformActionMapVertices(ApplyHeightChange, MouseOverTerrain.Vertex);
 
             Map.Update();
 
@@ -1628,7 +1628,7 @@ namespace SharpFlame
                                     Apply_Terrain();
                                     if ( Program.frmMainInstance.cbxAutoTexSetHeight.Checked )
                                     {
-                                        Apply_Height_Set(modProgram.TerrainBrush,
+                                        Apply_Height_Set(App.TerrainBrush,
                                             Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
                                     }
                                 }
@@ -1642,7 +1642,7 @@ namespace SharpFlame
                             }
                             else
                             {
-                                Apply_Height_Set(modProgram.HeightBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
+                                Apply_Height_Set(App.HeightBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
                             }
                         }
                         else if ( modTools.Tool == modTools.Tools.TextureBrush )
@@ -1799,7 +1799,7 @@ namespace SharpFlame
                     }
                     else
                     {
-                        Apply_Height_Set(modProgram.HeightBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetR.SelectedIndex]);
+                        Apply_Height_Set(App.HeightBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetR.SelectedIndex]);
                     }
                 }
             }
@@ -1827,7 +1827,7 @@ namespace SharpFlame
                 FOV_Scale_2E_Change(Zoom);
             }
 
-            if ( modProgram.ViewMoveType == modProgram.enumView_Move_Type.Free )
+            if ( App.ViewMoveType == App.enumView_Move_Type.Free )
             {
                 ViewPosChangeXYZ.X = 0;
                 ViewPosChangeXYZ.Y = 0;
@@ -1910,7 +1910,7 @@ namespace SharpFlame
                     ViewAngleSet_Rotate(matrixB);
                 }
             }
-            else if ( modProgram.ViewMoveType == modProgram.enumView_Move_Type.RTS )
+            else if ( App.ViewMoveType == App.enumView_Move_Type.RTS )
             {
                 ViewPosChangeXYZ = new sXYZ_int();
 
@@ -1947,7 +1947,7 @@ namespace SharpFlame
 
                 AngleChanged = false;
 
-                if ( modProgram.RTSOrbit )
+                if ( App.RTSOrbit )
                 {
                     if ( modControls.KeyboardProfile.Active(modControls.Control_View_Forward) )
                     {
@@ -2087,8 +2087,8 @@ namespace SharpFlame
                         Map.SetObjectCreatorDefaults(objectCreator);
                         for ( Num = A; Num <= B; Num++ )
                         {
-                            objectCreator.Horizontal.X = (int)((Tile.X + 0.5D) * modProgram.TerrainGridSpacing);
-                            objectCreator.Horizontal.Y = (int)((Num + 0.5D) * modProgram.TerrainGridSpacing);
+                            objectCreator.Horizontal.X = (int)((Tile.X + 0.5D) * App.TerrainGridSpacing);
+                            objectCreator.Horizontal.Y = (int)((Num + 0.5D) * App.TerrainGridSpacing);
                             objectCreator.Perform();
                         }
 
@@ -2114,8 +2114,8 @@ namespace SharpFlame
                         Map.SetObjectCreatorDefaults(objectCreator);
                         for ( Num = A; Num <= B; Num++ )
                         {
-                            objectCreator.Horizontal.X = (int)((Num + 0.5D) * modProgram.TerrainGridSpacing);
-                            objectCreator.Horizontal.Y = (int)((Tile.Y + 0.5D) * modProgram.TerrainGridSpacing);
+                            objectCreator.Horizontal.X = (int)((Num + 0.5D) * App.TerrainGridSpacing);
+                            objectCreator.Horizontal.Y = (int)((Tile.Y + 0.5D) * App.TerrainGridSpacing);
                             objectCreator.Perform();
                         }
 

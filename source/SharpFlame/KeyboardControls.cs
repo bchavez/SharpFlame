@@ -170,7 +170,7 @@ namespace SharpFlame
         public Keys[] Keys;
         public Keys[] UnlessKeys;
 
-        private bool IsPressed(modProgram.clsKeysActive KeysDown)
+        private bool IsPressed(App.clsKeysActive KeysDown)
         {
             foreach ( Keys keys in Keys )
             {
@@ -209,7 +209,7 @@ namespace SharpFlame
             get { return _Active; }
         }
 
-        public void KeysChanged(modProgram.clsKeysActive KeysDown)
+        public void KeysChanged(App.clsKeysActive KeysDown)
         {
             _Active = IsPressed(KeysDown);
         }

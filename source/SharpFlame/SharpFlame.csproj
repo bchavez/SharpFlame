@@ -255,7 +255,7 @@
     <Compile Include="FileIO\IOUtil.cs" />
     <Compile Include="MathExtra\MathUtil.cs" />
     <Compile Include="Painters\PainterFactory.cs" />
-    <Compile Include="modProgram.cs" />
+    <Compile Include="App.cs" />
     <Compile Include="modSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Application.Designer.cs">
@@ -277,6 +277,7 @@
     <Compile Include="PathfinderNetwork.cs" />
     <Compile Include="PathfinderNode.cs" />
     <Compile Include="TileOrientation.cs" />
+    <Compile Include="FileIO\ZipSplitPath.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">

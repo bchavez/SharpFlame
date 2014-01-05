@@ -32,7 +32,7 @@ namespace SharpFlame
         {
             InitializeComponent();
 
-            Icon = modProgram.ProgramIcon;
+            Icon = App.ProgramIcon;
 
             this.Map = Map;
             Map.CompileScreen = this;
@@ -178,7 +178,7 @@ namespace SharpFlame
             }
             if ( ReturnResult.HasProblems )
             {
-                modProgram.ShowWarnings(ReturnResult);
+                App.ShowWarnings(ReturnResult);
                 return;
             }
             SaveFileDialog CompileMultiDialog = new SaveFileDialog();
@@ -204,7 +204,7 @@ namespace SharpFlame
             WriteWZArgs.Multiplayer.License = License;
             WriteWZArgs.CompileType = clsMap.sWrite_WZ_Args.enumCompileType.Multiplayer;
             ReturnResult.Add(Map.Write_WZ(WriteWZArgs));
-            modProgram.ShowWarnings(ReturnResult);
+            App.ShowWarnings(ReturnResult);
             if ( !ReturnResult.HasWarnings )
             {
                 Close();
@@ -306,8 +306,8 @@ namespace SharpFlame
                 if ( UnitIsStructureModule[Unit.MapLink.ArrayPosition] )
                 {
                     StructureTypeType = ((clsStructureType)Unit.Type).StructureType;
-                    CentrePos.X = Conversion.Int(Unit.Pos.Horizontal.X / modProgram.TerrainGridSpacing);
-                    CentrePos.Y = (int)(Conversion.Int(Unit.Pos.Horizontal.Y / modProgram.TerrainGridSpacing));
+                    CentrePos.X = Conversion.Int(Unit.Pos.Horizontal.X / App.TerrainGridSpacing);
+                    CentrePos.Y = (int)(Conversion.Int(Unit.Pos.Horizontal.Y / App.TerrainGridSpacing));
                     if ( CentrePos.X < 0 | CentrePos.X >= Map.Terrain.TileSize.X
                          | CentrePos.Y < 0 | CentrePos.Y >= Map.Terrain.TileSize.Y )
                     {
@@ -524,8 +524,8 @@ namespace SharpFlame
                 ReturnResult.ProblemAdd("No tileset selected.");
             }
 
-            int[,] PlayerStructureTypeCount = new int[Constants.PlayerCountMax, modProgram.ObjectData.StructureTypes.Count];
-            int[] ScavStructureTypeCount = new int[modProgram.ObjectData.StructureTypes.Count];
+            int[,] PlayerStructureTypeCount = new int[Constants.PlayerCountMax, App.ObjectData.StructureTypes.Count];
+            int[] ScavStructureTypeCount = new int[App.ObjectData.StructureTypes.Count];
             clsStructureType StructureType = default(clsStructureType);
             clsMap.clsUnit Unit = default(clsMap.clsUnit);
 
@@ -546,7 +546,7 @@ namespace SharpFlame
                 }
             }
 
-            foreach ( clsStructureType tempLoopVar_StructureType in modProgram.ObjectData.StructureTypes )
+            foreach ( clsStructureType tempLoopVar_StructureType in App.ObjectData.StructureTypes )
             {
                 StructureType = tempLoopVar_StructureType;
                 int StructureTypeNum = StructureType.StructureType_ObjectDataLink.ArrayPosition;
@@ -591,7 +591,7 @@ namespace SharpFlame
                     {
                         if ( Map.Terrain.Tiles[X, Y].Texture.TextureNum >= 0 && Map.Terrain.Tiles[X, Y].Texture.TextureNum < Map.Tileset.TileCount )
                         {
-                            if ( Map.Tileset.Tiles[Map.Terrain.Tiles[X, Y].Texture.TextureNum].Default_Type == modProgram.TileTypeNum_Water )
+                            if ( Map.Tileset.Tiles[Map.Terrain.Tiles[X, Y].Texture.TextureNum].Default_Type == App.TileTypeNum_Water )
                             {
                                 Count++;
                             }
@@ -633,7 +633,7 @@ namespace SharpFlame
             }
             if ( ReturnResult.HasProblems )
             {
-                modProgram.ShowWarnings(ReturnResult);
+                App.ShowWarnings(ReturnResult);
                 return;
             }
             FolderBrowserDialog CompileCampDialog = new FolderBrowserDialog();
@@ -650,7 +650,7 @@ namespace SharpFlame
             WriteWZArgs.Campaign.GAMType = (uint)TypeNum;
             WriteWZArgs.CompileType = clsMap.sWrite_WZ_Args.enumCompileType.Campaign;
             ReturnResult.Add(Map.Write_WZ(WriteWZArgs));
-            modProgram.ShowWarnings(ReturnResult);
+            App.ShowWarnings(ReturnResult);
             if ( !ReturnResult.HasWarnings )
             {
                 Close();

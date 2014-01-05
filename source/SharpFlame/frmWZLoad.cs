@@ -22,7 +22,7 @@ namespace SharpFlame
         {
             InitializeComponent();
 
-            Icon = modProgram.ProgramIcon;
+            Icon = App.ProgramIcon;
 
             Output = NewOutput;
             Output.Result = -1;

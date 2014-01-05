@@ -13,7 +13,7 @@ namespace SharpFlame
         {
             InitializeComponent();
 
-            Icon = modProgram.ProgramIcon;
+            Icon = App.ProgramIcon;
 
             Text = windowTitle;
 
