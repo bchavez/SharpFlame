@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using Microsoft.VisualBasic;
 
-namespace SharpFlame
+namespace SharpFlame.Pathfinding
 {
     public class PathfinderNode
     {
@@ -808,7 +808,7 @@ namespace SharpFlame
                 {
                     Args.NodeValues[Nodes[A].Layer_NodeNum] = float.MaxValue;
                 }
-                Args.BestPaths = new PathfinderNetwork.Path[Args.FinishNodeCount];
+                Args.BestPaths = new Path[Args.FinishNodeCount];
                 Layer.Network.FloodSpan(Args);
                 for ( A = NumA + 1; A <= NodeCount - 1; A++ )
                 {

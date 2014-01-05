@@ -7,6 +7,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
 using SharpFlame.Controls;
 using SharpFlame.FileIO;
+using SharpFlame.Graphics.OpenGL;
 using SharpFlame.MathExtra;
 using SharpFlame.AppSettings;
 

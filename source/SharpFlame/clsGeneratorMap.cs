@@ -8,6 +8,7 @@ using SharpFlame.Generators;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.MathExtra;
+using SharpFlame.Pathfinding;
 
 namespace SharpFlame
 {

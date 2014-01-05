@@ -170,6 +170,8 @@
     <Compile Include="Painters\TileList.cs" />
     <Compile Include="Painters\TileOrientationChance.cs" />
     <Compile Include="Painters\TransitionBrush.cs" />
+    <Compile Include="Pathfinding\LargeArrays.cs" />
+    <Compile Include="Pathfinding\Path.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="clsUnitType.cs" />
     <Compile Include="clsViewInfo.cs" />
@@ -265,7 +267,7 @@
     <Compile Include="frmWZLoad.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GLFont.cs" />
+    <Compile Include="Graphics\OpenGL\GLFont.cs" />
     <Compile Include="Collections\ListUtil.cs" />
     <Compile Include="Bitmaps\BitmapUtil.cs" />
     <Compile Include="Generators\DefaultGenerator.cs" />
@@ -290,10 +292,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="PathfinderConnection.cs" />
-    <Compile Include="PathfinderLayer.cs" />
-    <Compile Include="PathfinderNetwork.cs" />
-    <Compile Include="PathfinderNode.cs" />
+    <Compile Include="Pathfinding\PathfinderConnection.cs" />
+    <Compile Include="Pathfinding\PathfinderLayer.cs" />
+    <Compile Include="Pathfinding\PathfinderNetwork.cs" />
+    <Compile Include="Pathfinding\PathfinderNode.cs" />
     <Compile Include="Mapping\Tiles\TileUtil.cs" />
     <Compile Include="FileIO\ZipSplitPath.cs" />
   </ItemGroup>

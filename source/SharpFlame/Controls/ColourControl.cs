@@ -12,7 +12,7 @@ namespace SharpFlame.Controls
         private clsRGB_sng Colour;
         private Color ColourColor;
 
-        private Graphics ColourBoxGraphics;
+        private System.Drawing.Graphics ColourBoxGraphics;
 
         public ColourControl(clsRGB_sng NewColour)
         {

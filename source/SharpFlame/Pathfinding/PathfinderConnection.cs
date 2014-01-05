@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace SharpFlame
+namespace SharpFlame.Pathfinding
 {
     public class PathfinderConnection
     {
@@ -230,7 +230,7 @@ namespace SharpFlame
                 {
                     Args.NodeValues[NodeB.Nodes[A].Layer_NodeNum] = float.MaxValue;
                 }
-                Args.BestPaths = new PathfinderNetwork.Path[Args.FinishNodeCount];
+                Args.BestPaths = new Path[Args.FinishNodeCount];
                 NodeA.Layer.Network.FloodForValues(Args);
                 for ( A = 0; A <= NodeB.NodeCount - 1; A++ )
                 {

@@ -1,6 +1,6 @@
 using System;
 
-namespace SharpFlame
+namespace SharpFlame.Pathfinding
 {
     public class PathfinderLayer
     {

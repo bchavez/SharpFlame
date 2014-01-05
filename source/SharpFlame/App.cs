@@ -10,6 +10,7 @@ using SharpFlame.AppSettings;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.FileIO;
+using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.MathExtra;

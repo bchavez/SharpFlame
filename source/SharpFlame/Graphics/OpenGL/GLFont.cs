@@ -8,7 +8,7 @@ using SharpFlame.Colors;
 using SharpFlame.MathExtra;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
-namespace SharpFlame
+namespace SharpFlame.Graphics.OpenGL
 {
     public class GLFont
     {
@@ -35,7 +35,7 @@ namespace SharpFlame
             int X = 0;
             int Y = 0;
             Bitmap TempBitmap = default(Bitmap);
-            Graphics gfx = default(Graphics);
+            System.Drawing.Graphics gfx = default(System.Drawing.Graphics);
             BitmapData BitmapData = default(BitmapData);
             int NewSizeX = 0;
             int StartX = 0;
@@ -49,7 +49,7 @@ namespace SharpFlame
             {
                 Text = Convert.ToString(Strings.ChrW(A));
                 TempBitmap = new Bitmap(Height * 2, Height, PixelFormat.Format32bppArgb);
-                gfx = Graphics.FromImage(TempBitmap);
+                gfx = System.Drawing.Graphics.FromImage(TempBitmap);
                 gfx.Clear(Color.Transparent);
                 gfx.DrawString(Text, BaseFont, Brushes.White, 0.0F, 0.0F);
                 gfx.Dispose();
@@ -89,7 +89,7 @@ namespace SharpFlame
                     NewSizeX = Math.Max((int)(Math.Round(Height / 4.0F)), 1);
                     Character[A].TexSize = (int)(Math.Round(Math.Pow(2.0D, Math.Ceiling(Math.Log(Math.Max(NewSizeX, TempBitmap.Height)) / Math.Log(2.0D)))));
                     TexBitmap = new Bitmap(Character[A].TexSize, Convert.ToInt32(Character[A].TexSize), PixelFormat.Format32bppArgb);
-                    gfx = Graphics.FromImage(TexBitmap);
+                    gfx = System.Drawing.Graphics.FromImage(TexBitmap);
                     gfx.Clear(Color.Transparent);
                     gfx.Dispose();
                     BitmapData = TexBitmap.LockBits(new Rectangle(0, 0, TexBitmap.Width, TexBitmap.Height), ImageLockMode.ReadOnly,
@@ -107,7 +107,7 @@ namespace SharpFlame
                 {
                     Character[A].TexSize = (int)(Math.Round(Math.Pow(2.0D, Math.Ceiling(Math.Log(Math.Max(NewSizeX, TempBitmap.Height)) / Math.Log(2.0D)))));
                     TexBitmap = new Bitmap(Convert.ToInt32(Character[A].TexSize), Character[A].TexSize, PixelFormat.Format32bppArgb);
-                    gfx = Graphics.FromImage(TexBitmap);
+                    gfx = System.Drawing.Graphics.FromImage(TexBitmap);
                     gfx.Clear(Color.Transparent);
                     gfx.Dispose();
                     for ( Y = 0; Y <= TempBitmap.Height - 1; Y++ )
