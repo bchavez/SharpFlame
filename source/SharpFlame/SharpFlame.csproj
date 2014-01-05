@@ -170,12 +170,12 @@
     </Compile>
     <Compile Include="AppSettings\KeyboardManager.cs" />
     <Compile Include="Mapping\clsMap.cs" />
-    <Compile Include="Mapping\clsMapChanges.cs" />
-    <Compile Include="Mapping\clsMapDraw.cs" />
-    <Compile Include="Mapping\clsMapFMap.cs" />
-    <Compile Include="Mapping\clsMapObject.cs" />
-    <Compile Include="Mapping\clsMapOtherIO.cs" />
-    <Compile Include="Mapping\clsMapScriptMarkers.cs" />
+    <Compile Include="Mapping\Changes\clsMapChanges.cs" />
+    <Compile Include="Mapping\Drawing\clsMapDraw.cs" />
+    <Compile Include="Mapping\FMap\clsMapFMap.cs" />
+    <Compile Include="Mapping\Objects\clsMapObject.cs" />
+    <Compile Include="Mapping\IO\clsMapOtherIO.cs" />
+    <Compile Include="Mapping\Script\clsMapScriptMarkers.cs" />
     <Compile Include="Mapping\Tools\clsAction.cs" />
     <Compile Include="Mapping\Tools\clsApplyAutoTri.cs" />
     <Compile Include="Mapping\Tools\clsApplyCliff.cs" />
@@ -193,7 +193,7 @@
     <Compile Include="Mapping\Tools\clsApplyTileTerrainInterpret.cs" />
     <Compile Include="Mapping\Tools\clsApplyVertexTerrain.cs" />
     <Compile Include="Mapping\Tools\clsApplyVertexTerrainInterpret.cs" />
-    <Compile Include="Mapping\clsMapTools.cs" />
+    <Compile Include="Mapping\Tools\clsMapTools.cs" />
     <Compile Include="Mapping\Tools\clsObjectAction.cs" />
     <Compile Include="Mapping\Tools\clsObjectAlignment.cs" />
     <Compile Include="Mapping\Tools\clsObjectBody.cs" />
@@ -214,7 +214,7 @@
     <Compile Include="Mapping\Tools\clsObjectUnitGroup.cs" />
     <Compile Include="Mapping\Tools\clsStructureWriteWZ.cs" />
     <Compile Include="Mapping\Tools\sGenerateMasterTerrainArgs.cs" />
-    <Compile Include="Mapping\clsMapWZ.cs" />
+    <Compile Include="Mapping\Wz\clsMapWZ.cs" />
     <Compile Include="Domain\clsModel.cs" />
     <Compile Include="Domain\clsObjectData.cs" />
     <Compile Include="Mapping\Tiles\TileDirection.cs" />
