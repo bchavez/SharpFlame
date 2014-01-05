@@ -1,4 +1,5 @@
 using System;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -28,7 +29,7 @@ namespace SharpFlame
                 return;
             }
 
-            nudRadius.Value = (decimal)(modMath.Clamp_dbl(Brush.Radius, (double)nudRadius.Minimum, (double)nudRadius.Maximum));
+            nudRadius.Value = (decimal)(MathUtil.Clamp_dbl(Brush.Radius, (double)nudRadius.Minimum, (double)nudRadius.Maximum));
             switch ( Brush.Shape )
             {
                 case clsBrush.enumShape.Circle:

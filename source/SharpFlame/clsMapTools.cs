@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -12,17 +13,17 @@ namespace SharpFlame
         {
             int X = 0;
             int Y = 0;
-            modMath.sXY_int Pos = new modMath.sXY_int();
-            modMath.sXY_int RotatedPos = new modMath.sXY_int();
-            modMath.sXY_int NewTerrainPosA = TileOrientation.GetRotatedPos(Orientation, new modMath.sXY_int(0, 0), Terrain.TileSize);
-            modMath.sXY_int NewTerrainPosB = TileOrientation.GetRotatedPos(Orientation, Terrain.TileSize, Terrain.TileSize);
-            modMath.sXY_int VertexLimits = new modMath.sXY_int(Math.Max(NewTerrainPosA.X, NewTerrainPosB.X), Math.Max(NewTerrainPosA.Y, NewTerrainPosB.Y));
+            sXY_int Pos = new sXY_int();
+            sXY_int RotatedPos = new sXY_int();
+            sXY_int NewTerrainPosA = TileOrientation.GetRotatedPos(Orientation, new sXY_int(0, 0), Terrain.TileSize);
+            sXY_int NewTerrainPosB = TileOrientation.GetRotatedPos(Orientation, Terrain.TileSize, Terrain.TileSize);
+            sXY_int VertexLimits = new sXY_int(Math.Max(NewTerrainPosA.X, NewTerrainPosB.X), Math.Max(NewTerrainPosA.Y, NewTerrainPosB.Y));
             clsTerrain NewTerrain = new clsTerrain(VertexLimits);
-            modMath.sXY_int NewTileLimits = new modMath.sXY_int(NewTerrain.TileSize.X - 1, NewTerrain.TileSize.Y - 1);
-            modMath.sXY_int NewSideHLimits = new modMath.sXY_int(NewTerrain.TileSize.X - 1, NewTerrain.TileSize.Y);
-            modMath.sXY_int NewSideVLimits = new modMath.sXY_int(NewTerrain.TileSize.X, NewTerrain.TileSize.Y - 1);
-            modMath.sXY_int OldTileLimits = new modMath.sXY_int(Terrain.TileSize.X - 1, Terrain.TileSize.Y - 1);
-            modMath.sXY_int OldPosLimits = new modMath.sXY_int(Terrain.TileSize.X * modProgram.TerrainGridSpacing, Terrain.TileSize.Y * modProgram.TerrainGridSpacing);
+            sXY_int NewTileLimits = new sXY_int(NewTerrain.TileSize.X - 1, NewTerrain.TileSize.Y - 1);
+            sXY_int NewSideHLimits = new sXY_int(NewTerrain.TileSize.X - 1, NewTerrain.TileSize.Y);
+            sXY_int NewSideVLimits = new sXY_int(NewTerrain.TileSize.X, NewTerrain.TileSize.Y - 1);
+            sXY_int OldTileLimits = new sXY_int(Terrain.TileSize.X - 1, Terrain.TileSize.Y - 1);
+            sXY_int OldPosLimits = new sXY_int(Terrain.TileSize.X * modProgram.TerrainGridSpacing, Terrain.TileSize.Y * modProgram.TerrainGridSpacing);
             TileOrientation.sTileOrientation ReverseOrientation = new TileOrientation.sTileOrientation();
             TileOrientation.sTileDirection TriDirection = new TileOrientation.sTileDirection();
 
@@ -148,9 +149,9 @@ namespace SharpFlame
                 {
                     Unit.Rotation =
                         (int)
-                            (modMath.AngleClamp(modMath.RadOf360Deg -
+                            (MathUtil.AngleClamp(MathUtil.RadOf360Deg -
                                                 TileOrientation.GetRotatedAngle(Orientation,
-                                                    modMath.AngleClamp(modMath.RadOf360Deg - Unit.Rotation * modMath.RadOf1Deg))) / modMath.RadOf1Deg);
+                                                    MathUtil.AngleClamp(MathUtil.RadOf360Deg - Unit.Rotation * MathUtil.RadOf1Deg))) / MathUtil.RadOf1Deg);
                     if ( Unit.Rotation < 0 )
                     {
                         Unit.Rotation += 360;
@@ -164,9 +165,9 @@ namespace SharpFlame
                         {
                             Unit.Rotation =
                                 (int)
-                                    (modMath.AngleClamp(modMath.RadOf360Deg -
+                                    (MathUtil.AngleClamp(MathUtil.RadOf360Deg -
                                                         TileOrientation.GetRotatedAngle(Orientation,
-                                                            modMath.AngleClamp(modMath.RadOf360Deg - Unit.Rotation * modMath.RadOf1Deg))) / modMath.RadOf1Deg);
+                                                            MathUtil.AngleClamp(MathUtil.RadOf360Deg - Unit.Rotation * MathUtil.RadOf1Deg))) / MathUtil.RadOf1Deg);
                             if ( Unit.Rotation < 0 )
                             {
                                 Unit.Rotation += 360;
@@ -182,7 +183,7 @@ namespace SharpFlame
                 Unit.Pos.Horizontal = TileOrientation.GetRotatedPos(Orientation, Unit.Pos.Horizontal, OldPosLimits);
             }
 
-            modMath.sXY_int ZeroPos = new modMath.sXY_int(0, 0);
+            sXY_int ZeroPos = new sXY_int(0, 0);
 
             int Position = 0;
             foreach ( clsUnit tempLoopVar_Unit in Units.GetItemsAsSimpleList() )
@@ -345,7 +346,7 @@ namespace SharpFlame
             double difB = 0;
             bool NewTri = default(bool);
             double CliffSlope = Math.Atan(255.0D * modProgram.DefaultHeightMultiplier / (2.0D * (Args.LevelCount - 1.0D) * modProgram.TerrainGridSpacing)) -
-                                modMath.RadOf1Deg; //divided by 2 due to the terrain height randomization
+                                MathUtil.RadOf1Deg; //divided by 2 due to the terrain height randomization
 
             Tileset = Args.Tileset.Tileset;
 
@@ -404,7 +405,7 @@ namespace SharpFlame
                 }
             }
 
-            modMath.sXY_int Pos = new modMath.sXY_int();
+            sXY_int Pos = new sXY_int();
 
             TerrainType = new int[Terrain.TileSize.X, Terrain.TileSize.Y];
             Slope = new float[Terrain.TileSize.X, Terrain.TileSize.Y];
@@ -596,7 +597,7 @@ namespace SharpFlame
             double BestSlope = 0;
             double CurrentSlope = 0;
             bool AllowSlope = default(bool);
-            modMath.sXY_int Pos = new modMath.sXY_int();
+            sXY_int Pos = new sXY_int();
 
             TerrainType = new clsPainter.clsTerrain[Terrain.TileSize.X + 1, Terrain.TileSize.Y + 1];
             Slope = new float[Terrain.TileSize.X, Terrain.TileSize.Y];
@@ -783,7 +784,7 @@ namespace SharpFlame
 
             int X = 0;
             int Y = 0;
-            modMath.sXY_int TileNum = new modMath.sXY_int();
+            sXY_int TileNum = new sXY_int();
 
             for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
             {
@@ -810,7 +811,7 @@ namespace SharpFlame
         public abstract class clsAction
         {
             public clsMap Map;
-            public modMath.sXY_int PosNum;
+            public sXY_int PosNum;
             public bool UseEffect;
             public double Effect;
 
@@ -889,7 +890,7 @@ namespace SharpFlame
             private bool TriChanged;
             private bool NewVal;
             private clsTerrain Terrain;
-            private modMath.sXY_int Pos;
+            private sXY_int Pos;
 
             public override void ActionPerform()
             {
@@ -1297,7 +1298,7 @@ namespace SharpFlame
                 Terrain = Map.Terrain;
 
                 Terrain.Vertices[PosNum.X, PosNum.Y].Height =
-                    (byte)(modMath.Clamp_int((Terrain.Vertices[PosNum.X, PosNum.Y].Height) + (int)(Rate * Effect), byte.MinValue, byte.MaxValue));
+                    (byte)(MathUtil.Clamp_int((Terrain.Vertices[PosNum.X, PosNum.Y].Height) + (int)(Rate * Effect), byte.MinValue, byte.MaxValue));
 
                 Map.SectorGraphicsChanges.VertexAndNormalsChanged(PosNum);
                 Map.SectorUnitHeightsChanges.VertexChanged(PosNum);
@@ -1328,8 +1329,8 @@ namespace SharpFlame
         public class clsApplyHeightSmoothing : clsAction
         {
             public double Ratio;
-            public modMath.sXY_int Offset;
-            public modMath.sXY_int AreaTileSize;
+            public sXY_int Offset;
+            public sXY_int AreaTileSize;
 
             private byte[,] NewHeight;
             private bool Started;
@@ -1338,7 +1339,7 @@ namespace SharpFlame
             private int LimitX;
             private int LimitY;
             private int XNum;
-            private modMath.sXY_int VertexNum;
+            private sXY_int VertexNum;
             private clsTerrain Terrain;
 
             public void Start()
@@ -1409,14 +1410,14 @@ namespace SharpFlame
                 LimitY = Terrain.TileSize.Y;
                 TempHeight = 0;
                 Samples = 0;
-                for ( Y = modMath.Clamp_int(modProgram.SmoothRadius.Tiles.YMin + PosNum.Y, 0, LimitY) - PosNum.Y;
-                    Y <= modMath.Clamp_int(modProgram.SmoothRadius.Tiles.YMax + PosNum.Y, 0, LimitY) - PosNum.Y;
+                for ( Y = MathUtil.Clamp_int(modProgram.SmoothRadius.Tiles.YMin + PosNum.Y, 0, LimitY) - PosNum.Y;
+                    Y <= MathUtil.Clamp_int(modProgram.SmoothRadius.Tiles.YMax + PosNum.Y, 0, LimitY) - PosNum.Y;
                     Y++ )
                 {
                     Y2 = PosNum.Y + Y;
                     XNum = Y - modProgram.SmoothRadius.Tiles.YMin;
-                    for ( X = modMath.Clamp_int(Convert.ToInt32(modProgram.SmoothRadius.Tiles.XMin[XNum] + PosNum.X), 0, LimitX) - PosNum.X;
-                        X <= modMath.Clamp_int(Convert.ToInt32(modProgram.SmoothRadius.Tiles.XMax[XNum] + PosNum.X), 0, LimitX) - PosNum.X;
+                    for ( X = MathUtil.Clamp_int(Convert.ToInt32(modProgram.SmoothRadius.Tiles.XMin[XNum] + PosNum.X), 0, LimitX) - PosNum.X;
+                        X <= MathUtil.Clamp_int(Convert.ToInt32(modProgram.SmoothRadius.Tiles.XMax[XNum] + PosNum.X), 0, LimitX) - PosNum.X;
                         X++ )
                     {
                         X2 = PosNum.X + X;
@@ -1433,7 +1434,7 @@ namespace SharpFlame
         {
             private clsTerrain Terrain;
 
-            private void ToolPerformSideH(modMath.sXY_int SideNum)
+            private void ToolPerformSideH(sXY_int SideNum)
             {
                 Terrain = Map.Terrain;
 
@@ -1446,7 +1447,7 @@ namespace SharpFlame
                 }
             }
 
-            private void ToolPerformSideV(modMath.sXY_int SideNum)
+            private void ToolPerformSideV(sXY_int SideNum)
             {
                 Terrain = Map.Terrain;
 
@@ -1462,9 +1463,9 @@ namespace SharpFlame
             public override void ActionPerform()
             {
                 ToolPerformSideH(PosNum);
-                ToolPerformSideH(new modMath.sXY_int(PosNum.X, PosNum.Y + 1));
+                ToolPerformSideH(new sXY_int(PosNum.X, PosNum.Y + 1));
                 ToolPerformSideV(PosNum);
-                ToolPerformSideV(new modMath.sXY_int(PosNum.X + 1, PosNum.Y));
+                ToolPerformSideV(new sXY_int(PosNum.X + 1, PosNum.Y));
             }
         }
 
@@ -2178,9 +2179,9 @@ namespace SharpFlame
 
         public class clsObjectPosOffset : clsObjectAction
         {
-            public modMath.sXY_int Offset;
+            public sXY_int Offset;
 
-            private modMath.sXY_int NewPos;
+            private sXY_int NewPos;
 
             protected override void _ActionPerform()
             {
@@ -2194,7 +2195,7 @@ namespace SharpFlame
         {
             public int Offset;
 
-            private modMath.sXY_int NewPos;
+            private sXY_int NewPos;
 
             protected override void _ActionPerform()
             {
@@ -2403,14 +2404,14 @@ namespace SharpFlame
             public void ActionPerform()
             {
                 clsMap Map = Unit.MapLink.Source;
-                modMath.sXY_int VertexPos = new modMath.sXY_int();
+                sXY_int VertexPos = new sXY_int();
                 int X = 0;
                 int Y = 0;
                 double Total = 0;
                 byte Average = 0;
-                modMath.sXY_int Footprint = Unit.Type.get_GetFootprintSelected(Unit.Rotation);
-                modMath.sXY_int Start = new modMath.sXY_int();
-                modMath.sXY_int Finish = new modMath.sXY_int();
+                sXY_int Footprint = Unit.Type.get_GetFootprintSelected(Unit.Rotation);
+                sXY_int Start = new sXY_int();
+                sXY_int Finish = new sXY_int();
                 int Samples = 0;
 
                 Map.GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Footprint, Start, Finish);
@@ -2429,7 +2430,7 @@ namespace SharpFlame
 
                 if ( Samples >= 1 )
                 {
-                    Average = (byte)(modMath.Clamp_int((int)(Total / Samples), byte.MinValue, byte.MaxValue));
+                    Average = (byte)(MathUtil.Clamp_int((int)(Total / Samples), byte.MinValue, byte.MaxValue));
                     for ( Y = Start.Y; Y <= Finish.Y + 1; Y++ )
                     {
                         VertexPos.Y = Y;

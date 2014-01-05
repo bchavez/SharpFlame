@@ -1,3 +1,5 @@
+using SharpFlame.MathExtra;
+
 namespace SharpFlame
 {
     internal sealed class modPainters
@@ -206,7 +208,7 @@ namespace SharpFlame
             modGenerator.Generator_TilesetArizona.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetArizona.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.Terrain = Terrain_Red;
             NewLayer.HeightMax = 255.0F;
-            NewLayer.SlopeMax = (float)modMath.RadOf90Deg;
+            NewLayer.SlopeMax = (float)MathUtil.RadOf90Deg;
             NewLayer.Scale = 0.0F;
             NewLayer.Density = 1.0F;
 
@@ -223,7 +225,7 @@ namespace SharpFlame
             NewLayer.WithinLayer = 1;
             NewLayer.Terrain = Terrain_Water;
             NewLayer.HeightMax = 255.0F;
-            NewLayer.SlopeMax = (float)modMath.RadOf90Deg;
+            NewLayer.SlopeMax = (float)MathUtil.RadOf90Deg;
             NewLayer.Scale = 0.0F;
             NewLayer.Density = 1.0F;
 
@@ -252,7 +254,7 @@ namespace SharpFlame
             NewLayer.WithinLayer = 4;
             NewLayer.Terrain = Terrain_Sand;
             NewLayer.HeightMax = 255.0F;
-            NewLayer.SlopeMax = (float)modMath.RadOf90Deg;
+            NewLayer.SlopeMax = (float)MathUtil.RadOf90Deg;
             NewLayer.Scale = 1.0F;
             NewLayer.Density = 0.5F;
 
@@ -262,7 +264,7 @@ namespace SharpFlame
             NewLayer.WithinLayer = 3;
             NewLayer.Terrain = Terrain_Green;
             NewLayer.HeightMax = 255.0F;
-            NewLayer.SlopeMax = (float)modMath.RadOf90Deg;
+            NewLayer.SlopeMax = (float)MathUtil.RadOf90Deg;
             NewLayer.Scale = 2.0F;
             NewLayer.Density = 0.4F;
         }
@@ -472,7 +474,7 @@ namespace SharpFlame
             modGenerator.Generator_TilesetUrban.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.Terrain = Terrain_Gray;
             NewLayer.HeightMax = 255.0F;
-            NewLayer.SlopeMax = (float)modMath.RadOf90Deg;
+            NewLayer.SlopeMax = (float)MathUtil.RadOf90Deg;
             NewLayer.Scale = 0.0F;
             NewLayer.Density = 1.0F;
 
@@ -531,7 +533,7 @@ namespace SharpFlame
             NewLayer.WithinLayer = 2;
             NewLayer.Terrain = Terrain_Orange;
             NewLayer.HeightMax = 255.0F;
-            NewLayer.SlopeMax = (float)modMath.RadOf90Deg;
+            NewLayer.SlopeMax = (float)MathUtil.RadOf90Deg;
             NewLayer.Scale = 1.5F;
             NewLayer.Density = 0.5F;
 
@@ -540,7 +542,7 @@ namespace SharpFlame
             NewLayer.WithinLayer = 3;
             NewLayer.Terrain = Terrain_Blue;
             NewLayer.HeightMax = 255.0F;
-            NewLayer.SlopeMax = (float)modMath.RadOf90Deg;
+            NewLayer.SlopeMax = (float)MathUtil.RadOf90Deg;
             NewLayer.Scale = 1.5F;
             NewLayer.Density = 0.5F;
 
@@ -550,7 +552,7 @@ namespace SharpFlame
             NewLayer.AvoidLayers[7] = true;
             NewLayer.Terrain = Terrain_Green;
             NewLayer.HeightMax = 255.0F;
-            NewLayer.SlopeMax = (float)modMath.RadOf90Deg;
+            NewLayer.SlopeMax = (float)MathUtil.RadOf90Deg;
             NewLayer.Scale = 1.5F;
             NewLayer.Density = 0.5F;
         }
@@ -785,7 +787,7 @@ namespace SharpFlame
             modGenerator.Generator_TilesetRockies.OldTextureLayers.Layer_Insert(modGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount, NewLayer);
             NewLayer.Terrain = Terrain_Gravel;
             NewLayer.HeightMax = 255.0F;
-            NewLayer.SlopeMax = (float)modMath.RadOf90Deg;
+            NewLayer.SlopeMax = (float)MathUtil.RadOf90Deg;
             NewLayer.Scale = 0.0F;
             NewLayer.Density = 1.0F;
 
@@ -813,7 +815,7 @@ namespace SharpFlame
             NewLayer.Terrain = Terrain_GravelSnow;
             NewLayer.HeightMin = 150.0F;
             NewLayer.HeightMax = 255.0F;
-            NewLayer.SlopeMax = (float)modMath.RadOf90Deg;
+            NewLayer.SlopeMax = (float)MathUtil.RadOf90Deg;
             NewLayer.Scale = 0.0F;
             NewLayer.Density = 1.0F;
 
@@ -824,7 +826,7 @@ namespace SharpFlame
             NewLayer.Terrain = Terrain_Snow;
             NewLayer.HeightMin = 200.0F;
             NewLayer.HeightMax = 255.0F;
-            NewLayer.SlopeMax = (float)modMath.RadOf90Deg;
+            NewLayer.SlopeMax = (float)MathUtil.RadOf90Deg;
             NewLayer.Scale = 0.0F;
             NewLayer.Density = 1.0F;
 
@@ -858,7 +860,7 @@ namespace SharpFlame
             NewLayer.Terrain = Terrain_Dirt;
             NewLayer.HeightMin = 0.0F;
             NewLayer.HeightMax = 255.0F;
-            NewLayer.SlopeMax = (float)modMath.RadOf90Deg;
+            NewLayer.SlopeMax = (float)MathUtil.RadOf90Deg;
             NewLayer.Scale = 1.0F;
             NewLayer.Density = 0.3F;
         }

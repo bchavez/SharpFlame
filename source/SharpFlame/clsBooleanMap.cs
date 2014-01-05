@@ -1,4 +1,5 @@
 using Microsoft.VisualBasic;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -6,7 +7,7 @@ namespace SharpFlame
     {
         public class clsValueData
         {
-            public modMath.sXY_int Size;
+            public sXY_int Size;
             public bool[,] Value;
         }
 

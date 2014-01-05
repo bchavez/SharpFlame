@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -24,9 +25,9 @@ namespace SharpFlame
             }
 
             Colour = NewColour;
-            int Red = (int)(modMath.Clamp_dbl(Colour.Red * 255.0D, 0.0D, 255.0D));
-            int Green = (int)(modMath.Clamp_dbl(Colour.Green * 255.0D, 0.0D, 255.0D));
-            int Blue = (int)(modMath.Clamp_dbl(Colour.Blue * 255.0D, 0.0D, 255.0D));
+            int Red = (int)(MathUtil.Clamp_dbl(Colour.Red * 255.0D, 0.0D, 255.0D));
+            int Green = (int)(MathUtil.Clamp_dbl(Colour.Green * 255.0D, 0.0D, 255.0D));
+            int Blue = (int)(MathUtil.Clamp_dbl(Colour.Blue * 255.0D, 0.0D, 255.0D));
             ColourColor = ColorTranslator.FromOle(modColour.OSRGB(Red, Green, Blue));
 
             if ( Colour is clsRGBA_sng )

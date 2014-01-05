@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using Matrix3D;
 using Microsoft.VisualBasic;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -9,8 +10,8 @@ namespace SharpFlame
     {
         public struct sPosNum
         {
-            public modMath.sXY_int Normal;
-            public modMath.sXY_int Alignment;
+            public sXY_int Normal;
+            public sXY_int Alignment;
         }
 
         private double _Radius;
@@ -86,7 +87,7 @@ namespace SharpFlame
 
         public void PerformActionMapTiles(clsMap.clsAction Tool, sPosNum Centre)
         {
-            PerformAction(Tool, Centre, new modMath.sXY_int(Tool.Map.Terrain.TileSize.X - 1, Tool.Map.Terrain.TileSize.Y - 1));
+            PerformAction(Tool, Centre, new sXY_int(Tool.Map.Terrain.TileSize.X - 1, Tool.Map.Terrain.TileSize.Y - 1));
         }
 
         public void PerformActionMapVertices(clsMap.clsAction Tool, sPosNum Centre)
@@ -96,10 +97,10 @@ namespace SharpFlame
 
         public void PerformActionMapSectors(clsMap.clsAction Tool, sPosNum Centre)
         {
-            PerformAction(Tool, Centre, new modMath.sXY_int(Tool.Map.SectorCount.X - 1, Tool.Map.SectorCount.Y - 1));
+            PerformAction(Tool, Centre, new sXY_int(Tool.Map.SectorCount.X - 1, Tool.Map.SectorCount.Y - 1));
         }
 
-        public modMath.sXY_int GetPosNum(sPosNum PosNum)
+        public sXY_int GetPosNum(sPosNum PosNum)
         {
             if ( _Alignment )
             {
@@ -111,12 +112,12 @@ namespace SharpFlame
             }
         }
 
-        private void PerformAction(clsMap.clsAction Action, sPosNum PosNum, modMath.sXY_int LastValidNum)
+        private void PerformAction(clsMap.clsAction Action, sPosNum PosNum, sXY_int LastValidNum)
         {
             int XNum = 0;
             int X = 0;
             int Y = 0;
-            modMath.sXY_int Centre = new modMath.sXY_int();
+            sXY_int Centre = new sXY_int();
 
             if ( Action.Map == null )
             {
@@ -127,14 +128,14 @@ namespace SharpFlame
             Centre = GetPosNum(PosNum);
 
             Action.Effect = 1.0D;
-            for ( Y = modMath.Clamp_int(Tiles.YMin + Centre.Y, 0, LastValidNum.Y) - Centre.Y;
-                Y <= modMath.Clamp_int(Tiles.YMax + Centre.Y, 0, LastValidNum.Y) - Centre.Y;
+            for ( Y = MathUtil.Clamp_int(Tiles.YMin + Centre.Y, 0, LastValidNum.Y) - Centre.Y;
+                Y <= MathUtil.Clamp_int(Tiles.YMax + Centre.Y, 0, LastValidNum.Y) - Centre.Y;
                 Y++ )
             {
                 Action.PosNum.Y = Centre.Y + Y;
                 XNum = Y - Tiles.YMin;
-                for ( X = modMath.Clamp_int(Tiles.XMin[XNum] + Centre.X, 0, LastValidNum.X) - Centre.X;
-                    X <= modMath.Clamp_int(Convert.ToInt32(Tiles.XMax[XNum] + Centre.X), 0, LastValidNum.X) - Centre.X;
+                for ( X = MathUtil.Clamp_int(Tiles.XMin[XNum] + Centre.X, 0, LastValidNum.X) - Centre.X;
+                    X <= MathUtil.Clamp_int(Convert.ToInt32(Tiles.XMax[XNum] + Centre.X), 0, LastValidNum.X) - Centre.X;
                     X++ )
                 {
                     Action.PosNum.X = Centre.X + X;

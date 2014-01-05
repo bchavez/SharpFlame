@@ -1,5 +1,6 @@
 using System;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -21,18 +22,18 @@ namespace SharpFlame
                 clsTerrain Terrain = Map.Terrain;
                 clsTileset Tileset = Map.Tileset;
                 double[] TileTerrainHeight = new double[4];
-                modMath.sXYZ_sng Vertex0 = new modMath.sXYZ_sng();
-                modMath.sXYZ_sng Vertex1 = new modMath.sXYZ_sng();
-                modMath.sXYZ_sng Vertex2 = new modMath.sXYZ_sng();
-                modMath.sXYZ_sng Vertex3 = new modMath.sXYZ_sng();
-                modMath.sXYZ_sng Normal0 = new modMath.sXYZ_sng();
-                modMath.sXYZ_sng Normal1 = new modMath.sXYZ_sng();
-                modMath.sXYZ_sng Normal2 = new modMath.sXYZ_sng();
-                modMath.sXYZ_sng Normal3 = new modMath.sXYZ_sng();
-                modMath.sXY_sng TexCoord0 = new modMath.sXY_sng();
-                modMath.sXY_sng TexCoord1 = new modMath.sXY_sng();
-                modMath.sXY_sng TexCoord2 = new modMath.sXY_sng();
-                modMath.sXY_sng TexCoord3 = new modMath.sXY_sng();
+                sXYZ_sng Vertex0 = new sXYZ_sng();
+                sXYZ_sng Vertex1 = new sXYZ_sng();
+                sXYZ_sng Vertex2 = new sXYZ_sng();
+                sXYZ_sng Vertex3 = new sXYZ_sng();
+                sXYZ_sng Normal0 = new sXYZ_sng();
+                sXYZ_sng Normal1 = new sXYZ_sng();
+                sXYZ_sng Normal2 = new sXYZ_sng();
+                sXYZ_sng Normal3 = new sXYZ_sng();
+                sXY_sng TexCoord0 = new sXY_sng();
+                sXY_sng TexCoord1 = new sXY_sng();
+                sXY_sng TexCoord2 = new sXY_sng();
+                sXY_sng TexCoord3 = new sXY_sng();
                 int A = 0;
 
                 if ( Terrain.Tiles[TileX, TileY].Texture.TextureNum < 0 )

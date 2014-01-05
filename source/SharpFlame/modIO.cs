@@ -4,6 +4,7 @@ using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -317,7 +318,7 @@ namespace SharpFlame
                     return false;
                 }
             }
-            Result = new modProgram.clsWorldPos(new modProgram.sWorldPos(new modMath.sXY_int(Positions[0], Positions[1]), Positions[2]));
+            Result = new modProgram.clsWorldPos(new modProgram.sWorldPos(new sXY_int(Positions[0], Positions[1]), Positions[2]));
             return true;
         }
 
@@ -461,7 +462,7 @@ namespace SharpFlame
 
     public class clsPositionFromText
     {
-        public modMath.sXY_int Pos;
+        public sXY_int Pos;
 
         public bool Translate(string Text)
         {

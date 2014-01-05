@@ -7,6 +7,7 @@ using Microsoft.VisualBasic;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -16,7 +17,7 @@ namespace SharpFlame
 
         public bool DrawPending;
 
-        public modMath.sXY_int GLSize;
+        public sXY_int GLSize;
         public float GLSize_XPerY;
 
         public bool DrawView_Enabled = false;
@@ -314,7 +315,7 @@ namespace SharpFlame
                 lblPos.Text = "Pos x:" + Convert.ToString(MouseOverTerrain.Pos.Horizontal.X) + ", y:" +
                               Convert.ToString(MouseOverTerrain.Pos.Horizontal.Y) + ", alt:" + Convert.ToString(MouseOverTerrain.Pos.Altitude) +
                               ", slope: " +
-                              Convert.ToString(Math.Round(Map.GetTerrainSlopeAngle(MouseOverTerrain.Pos.Horizontal) / modMath.RadOf1Deg * 10.0D) / 10.0D) +
+                              Convert.ToString(Math.Round(Map.GetTerrainSlopeAngle(MouseOverTerrain.Pos.Horizontal) / MathUtil.RadOf1Deg * 10.0D) / 10.0D) +
                               "°";
             }
         }
@@ -536,7 +537,7 @@ namespace SharpFlame
                 modProgram.Draw_Units = !modProgram.Draw_Units;
                 int X = 0;
                 int Y = 0;
-                modMath.sXY_int SectorNum = new modMath.sXY_int();
+                sXY_int SectorNum = new sXY_int();
                 clsMap.clsUnit Unit = default(clsMap.clsUnit);
                 clsMap.clsUnitSectorConnection Connection = default(clsMap.clsUnitSectorConnection);
                 for ( Y = 0; Y <= Map.SectorCount.Y - 1; Y++ )
@@ -632,7 +633,7 @@ namespace SharpFlame
                         if ( Map.SelectedUnits.Count > 0 )
                         {
                             Position.XY_dbl Centre = modProgram.CalcUnitsCentrePos(Map.SelectedUnits.GetItemsAsSimpleList());
-                            modMath.sXY_int Offset = new modMath.sXY_int();
+                            sXY_int Offset = new sXY_int();
                             Offset.X = ((int)(Math.Round(Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.X - Centre.X) / modProgram.TerrainGridSpacing)))) *
                                        modProgram.TerrainGridSpacing;
                             Offset.Y = ((int)(Math.Round(Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.Y - Centre.Y) / modProgram.TerrainGridSpacing)))) *
@@ -787,18 +788,18 @@ namespace SharpFlame
             }
         }
 
-        private void SelectUnits(modMath.sXY_int VertexA, modMath.sXY_int VertexB)
+        private void SelectUnits(sXY_int VertexA, sXY_int VertexB)
         {
             clsMap Map = MainMap;
             clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
-            modMath.sXY_int SectorNum = new modMath.sXY_int();
+            sXY_int SectorNum = new sXY_int();
             clsMap.clsUnit Unit = default(clsMap.clsUnit);
-            modMath.sXY_int SectorStart = new modMath.sXY_int();
-            modMath.sXY_int SectorFinish = new modMath.sXY_int();
-            modMath.sXY_int StartPos = new modMath.sXY_int();
-            modMath.sXY_int FinishPos = new modMath.sXY_int();
-            modMath.sXY_int StartVertex = new modMath.sXY_int();
-            modMath.sXY_int FinishVertex = new modMath.sXY_int();
+            sXY_int SectorStart = new sXY_int();
+            sXY_int SectorFinish = new sXY_int();
+            sXY_int StartPos = new sXY_int();
+            sXY_int FinishPos = new sXY_int();
+            sXY_int StartVertex = new sXY_int();
+            sXY_int FinishVertex = new sXY_int();
 
             if ( Math.Abs(VertexA.X - VertexB.X) <= 1 &&
                  Math.Abs(VertexA.Y - VertexB.Y) <= 1 &&
@@ -826,7 +827,7 @@ namespace SharpFlame
             }
             else
             {
-                modMath.ReorderXY(VertexA, VertexB, StartVertex, FinishVertex);
+                MathUtil.ReorderXY(VertexA, VertexB, StartVertex, FinishVertex);
                 StartPos.X = StartVertex.X * modProgram.TerrainGridSpacing;
                 StartPos.Y = StartVertex.Y * modProgram.TerrainGridSpacing;
                 FinishPos.X = FinishVertex.X * modProgram.TerrainGridSpacing;
@@ -916,7 +917,7 @@ namespace SharpFlame
                 return;
             }
 
-            modMath.sXYZ_int Move = new modMath.sXYZ_int();
+            sXYZ_int Move = new sXYZ_int();
             Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
             int A = 0;
 

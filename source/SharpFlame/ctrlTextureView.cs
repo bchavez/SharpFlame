@@ -4,6 +4,7 @@ using Microsoft.VisualBasic;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -13,12 +14,12 @@ namespace SharpFlame
 
         public bool DrawPending;
 
-        public modMath.sXY_int GLSize;
+        public sXY_int GLSize;
         public double GLSize_XPerY;
 
-        public modMath.sXY_int View_Pos;
+        public sXY_int View_Pos;
 
-        public modMath.sXY_int TextureCount;
+        public sXY_int TextureCount;
         public int TextureYOffset;
 
         public bool DrawView_Enabled = false;
@@ -186,16 +187,16 @@ namespace SharpFlame
             int X = 0;
             int Y = 0;
             int Num = 0;
-            modMath.sXY_int XY_int = new modMath.sXY_int();
+            sXY_int XY_int = new sXY_int();
             int A = 0;
-            modMath.sXY_sng Vertex0 = new modMath.sXY_sng();
-            modMath.sXY_sng Vertex1 = new modMath.sXY_sng();
-            modMath.sXY_sng Vertex2 = new modMath.sXY_sng();
-            modMath.sXY_sng UnrotatedPos = new modMath.sXY_sng();
-            modMath.sXY_sng TexCoord0 = new modMath.sXY_sng();
-            modMath.sXY_sng TexCoord1 = new modMath.sXY_sng();
-            modMath.sXY_sng TexCoord2 = new modMath.sXY_sng();
-            modMath.sXY_sng TexCoord3 = new modMath.sXY_sng();
+            sXY_sng Vertex0 = new sXY_sng();
+            sXY_sng Vertex1 = new sXY_sng();
+            sXY_sng Vertex2 = new sXY_sng();
+            sXY_sng UnrotatedPos = new sXY_sng();
+            sXY_sng TexCoord0 = new sXY_sng();
+            sXY_sng TexCoord1 = new sXY_sng();
+            sXY_sng TexCoord2 = new sXY_sng();
+            sXY_sng TexCoord3 = new sXY_sng();
 
             GL.MatrixMode(MatrixMode.Projection);
             Matrix4 temp_mat = Matrix4.CreateOrthographicOffCenter(0.0F, GLSize.X, GLSize.Y, 0.0F, -1.0F, 1.0F);

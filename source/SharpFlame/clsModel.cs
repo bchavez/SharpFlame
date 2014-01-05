@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Microsoft.VisualBasic;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -11,12 +12,12 @@ namespace SharpFlame
 
         public struct sTriangle
         {
-            public modMath.sXYZ_sng PosA;
-            public modMath.sXYZ_sng PosB;
-            public modMath.sXYZ_sng PosC;
-            public modMath.sXY_sng TexCoordA;
-            public modMath.sXY_sng TexCoordB;
-            public modMath.sXY_sng TexCoordC;
+            public sXYZ_sng PosA;
+            public sXYZ_sng PosB;
+            public sXYZ_sng PosC;
+            public sXY_sng TexCoordA;
+            public sXY_sng TexCoordB;
+            public sXY_sng TexCoordC;
         }
 
         public sTriangle[] Triangles;
@@ -24,14 +25,14 @@ namespace SharpFlame
 
         public struct sQuad
         {
-            public modMath.sXYZ_sng PosA;
-            public modMath.sXYZ_sng PosB;
-            public modMath.sXYZ_sng PosC;
-            public modMath.sXYZ_sng PosD;
-            public modMath.sXY_sng TexCoordA;
-            public modMath.sXY_sng TexCoordB;
-            public modMath.sXY_sng TexCoordC;
-            public modMath.sXY_sng TexCoordD;
+            public sXYZ_sng PosA;
+            public sXYZ_sng PosB;
+            public sXYZ_sng PosC;
+            public sXYZ_sng PosD;
+            public sXY_sng TexCoordA;
+            public sXY_sng TexCoordB;
+            public sXY_sng TexCoordC;
+            public sXY_sng TexCoordD;
         }
 
         public sQuad[] Quads;
@@ -89,7 +90,7 @@ namespace SharpFlame
             GL.End();
         }
 
-        public modMath.sXYZ_sng[] Connectors = new modMath.sXYZ_sng[0];
+        public sXYZ_sng[] Connectors = new sXYZ_sng[0];
         public int ConnectorCount;
 
         public struct sPIELevel
@@ -97,13 +98,13 @@ namespace SharpFlame
             public struct sPolygon
             {
                 public int[] PointNum;
-                public modMath.sXY_sng[] TexCoord;
+                public sXY_sng[] TexCoord;
                 public int PointCount;
             }
 
             public sPolygon[] Polygon;
             public int PolygonCount;
-            public modMath.sXYZ_sng[] Point;
+            public sXYZ_sng[] Point;
             public int PointCount;
         }
 
@@ -190,7 +191,7 @@ namespace SharpFlame
                 else if ( strTemp.Substring(0, 6) == "POINTS" )
                 {
                     Levels[LevelNum].PointCount = int.Parse(strTemp.Substring(strTemp.Length - (strTemp.Length - 7), strTemp.Length - 7));
-                    Levels[LevelNum].Point = new modMath.sXYZ_sng[Levels[LevelNum].PointCount];
+                    Levels[LevelNum].Point = new sXYZ_sng[Levels[LevelNum].PointCount];
                     A = 0;
                     do
                     {
@@ -314,7 +315,7 @@ namespace SharpFlame
                                 }
                                 Levels[LevelNum].Polygon[A].PointCount = Count;
                                 Levels[LevelNum].Polygon[A].PointNum = new int[Count];
-                                Levels[LevelNum].Polygon[A].TexCoord = new modMath.sXY_sng[Count];
+                                Levels[LevelNum].Polygon[A].TexCoord = new sXY_sng[Count];
                                 if ( Count == 3 )
                                 {
                                     NewTriCount++;
@@ -374,7 +375,7 @@ namespace SharpFlame
                                     //flag, numpoints, points[], x4 ignore if animated, texcoord[]xy
                                     Levels[LevelNum].Polygon[A].PointCount = int.Parse(SplitText[D + 1]);
                                     Levels[LevelNum].Polygon[A].PointNum = new int[Levels[LevelNum].Polygon[A].PointCount];
-                                    Levels[LevelNum].Polygon[A].TexCoord = new modMath.sXY_sng[Levels[LevelNum].Polygon[A].PointCount];
+                                    Levels[LevelNum].Polygon[A].TexCoord = new sXY_sng[Levels[LevelNum].Polygon[A].PointCount];
                                     if ( Levels[LevelNum].Polygon[A].PointCount == 3 )
                                     {
                                         NewTriCount++;
@@ -416,7 +417,7 @@ namespace SharpFlame
                 else if ( strTemp.Substring(0, 10) == "CONNECTORS" )
                 {
                     ConnectorCount = int.Parse(strTemp.Substring(strTemp.Length - (strTemp.Length - 11), strTemp.Length - 11));
-                    Connectors = new modMath.sXYZ_sng[ConnectorCount];
+                    Connectors = new sXYZ_sng[ConnectorCount];
                     A = 0;
                     do
                     {

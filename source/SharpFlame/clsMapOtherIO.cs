@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -107,7 +108,7 @@ namespace SharpFlame
                         return ReturnResult;
                     }
 
-                    TerrainBlank(new modMath.sXY_int(MapWidth, MapHeight));
+                    TerrainBlank(new sXY_int(MapWidth, MapHeight));
                     TileType_Reset();
 
                     int X = 0;
@@ -383,8 +384,8 @@ namespace SharpFlame
                     }
 
                     UInt32 NewGatewayCount = 0;
-                    modMath.sXY_int NewGateStart = new modMath.sXY_int();
-                    modMath.sXY_int NewGateFinish = new modMath.sXY_int();
+                    sXY_int NewGateStart = new sXY_int();
+                    sXY_int NewGateFinish = new sXY_int();
 
                     NewGatewayCount = File.ReadUInt32();
                     WarningCount = 0;
@@ -504,8 +505,8 @@ namespace SharpFlame
             public string Code;
             public int PlayerNum;
             public string Name;
-            public modMath.sXYZ_sng Pos;
-            public modMath.sXYZ_int Rotation;
+            public sXYZ_sng Pos;
+            public sXYZ_int Rotation;
         }
 
         public clsResult Load_LND(string Path)
@@ -563,7 +564,7 @@ namespace SharpFlame
                 bool FlipX = default(bool);
                 bool FlipZ = default(bool);
                 byte Rotation = 0;
-                modMath.sXY_int NewTileSize = new modMath.sXY_int();
+                sXY_int NewTileSize = new sXY_int();
                 double dblTemp = 0;
 
                 Line_Num = 0;
@@ -831,15 +832,15 @@ namespace SharpFlame
                                 modIO.InvariantParse_sng(ObjectText[7], ref NewObject.Pos.Z);
                                 if ( modIO.InvariantParse_dbl(ObjectText[8], ref dblTemp) )
                                 {
-                                    NewObject.Rotation.X = (int)(modMath.Clamp_dbl(dblTemp, 0.0D, 359.0D));
+                                    NewObject.Rotation.X = (int)(MathUtil.Clamp_dbl(dblTemp, 0.0D, 359.0D));
                                 }
                                 if ( modIO.InvariantParse_dbl(ObjectText[9], ref dblTemp) )
                                 {
-                                    NewObject.Rotation.Y = (int)(modMath.Clamp_dbl(dblTemp, 0.0D, 359.0D));
+                                    NewObject.Rotation.Y = (int)(MathUtil.Clamp_dbl(dblTemp, 0.0D, 359.0D));
                                 }
                                 if ( modIO.InvariantParse_dbl(ObjectText[10], ref dblTemp) )
                                 {
-                                    NewObject.Rotation.Z = (int)(modMath.Clamp_dbl(dblTemp, 0.0D, 359.0D));
+                                    NewObject.Rotation.Z = (int)(MathUtil.Clamp_dbl(dblTemp, 0.0D, 359.0D));
                                 }
                                 LNDObjects.Add(NewObject);
                             }
@@ -1052,7 +1053,7 @@ namespace SharpFlame
                 }
 
                 clsUnit NewUnit = default(clsUnit);
-                modMath.sXYZ_int XYZ_int = new modMath.sXYZ_int();
+                sXYZ_int XYZ_int = new sXYZ_int();
                 clsUnitType NewType = default(clsUnitType);
                 UInt32 AvailableID = 0;
                 clsLNDObject CurrentObject = default(clsLNDObject);
@@ -1140,9 +1141,9 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public modMath.sXYZ_int LNDPos_From_MapPos(modMath.sXY_int Horizontal)
+        public sXYZ_int LNDPos_From_MapPos(sXY_int Horizontal)
         {
-            modMath.sXYZ_int Result = new modMath.sXYZ_int();
+            sXYZ_int Result = new sXYZ_int();
 
             Result.X = Horizontal.X - (int)(Terrain.TileSize.X * modProgram.TerrainGridSpacing / 2.0D);
             Result.Z = ((int)(Terrain.TileSize.Y * modProgram.TerrainGridSpacing / 2.0D)) - Horizontal.Y;
@@ -1151,7 +1152,7 @@ namespace SharpFlame
             return Result;
         }
 
-        public modProgram.sWorldPos MapPos_From_LNDPos(modMath.sXYZ_int Pos)
+        public modProgram.sWorldPos MapPos_From_LNDPos(sXYZ_int Pos)
         {
             modProgram.sWorldPos Result = new modProgram.sWorldPos();
 
@@ -1349,7 +1350,7 @@ namespace SharpFlame
                 File.Write(Text);
                 Text = "    Objects {" + Convert.ToString(EndChar);
                 File.Write(Text);
-                modMath.sXYZ_int XYZ_int = new modMath.sXYZ_int();
+                sXYZ_int XYZ_int = new sXYZ_int();
                 string Code = null;
                 int CustomDroidCount = 0;
                 clsUnit Unit = default(clsUnit);
@@ -1526,7 +1527,7 @@ namespace SharpFlame
 
             Bitmap MinimapBitmap = new Bitmap(Terrain.TileSize.X, Terrain.TileSize.Y);
 
-            clsMinimapTexture Texture = new clsMinimapTexture(new modMath.sXY_int(Terrain.TileSize.X, Terrain.TileSize.Y));
+            clsMinimapTexture Texture = new clsMinimapTexture(new sXY_int(Terrain.TileSize.X, Terrain.TileSize.Y));
             MinimapTextureFill(Texture);
 
             for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
@@ -1535,9 +1536,9 @@ namespace SharpFlame
                 {
                     MinimapBitmap.SetPixel(X, Y,
                         ColorTranslator.FromOle(
-                            modColour.OSRGB((int)(modMath.Clamp_sng(Convert.ToSingle(Texture.get_Pixels(X, Y).Red * 255.0F), 0.0F, 255.0F)),
-                                (int)(modMath.Clamp_sng(Convert.ToSingle(Texture.get_Pixels(X, Y).Green * 255.0F), 0.0F, 255.0F)),
-                                (int)(modMath.Clamp_sng(Convert.ToSingle(Texture.get_Pixels(X, Y).Blue * 255.0F), 0.0F, 255.0F)))));
+                            modColour.OSRGB((int)(MathUtil.Clamp_sng(Convert.ToSingle(Texture.get_Pixels(X, Y).Red * 255.0F), 0.0F, 255.0F)),
+                                (int)(MathUtil.Clamp_sng(Convert.ToSingle(Texture.get_Pixels(X, Y).Green * 255.0F), 0.0F, 255.0F)),
+                                (int)(MathUtil.Clamp_sng(Convert.ToSingle(Texture.get_Pixels(X, Y).Blue * 255.0F), 0.0F, 255.0F)))));
                 }
             }
 

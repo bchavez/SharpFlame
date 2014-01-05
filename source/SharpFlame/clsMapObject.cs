@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -116,7 +117,7 @@ namespace SharpFlame
 
             public string GetINIHealthPercent()
             {
-                return modIO.InvariantToString_int((int)(modMath.Clamp_dbl(Health * 100.0D, 1.0D, 100.0D))) + "%";
+                return modIO.InvariantToString_int((int)(MathUtil.Clamp_dbl(Health * 100.0D, 1.0D, 100.0D))) + "%";
             }
 
             public string GetPosText()
@@ -521,8 +522,8 @@ namespace SharpFlame
 
                 NewUnit.MapLink.Connect(Map.Units);
 
-                NewUnit.Pos.Horizontal.X = modMath.Clamp_int(NewUnit.Pos.Horizontal.X, 0, Map.Terrain.TileSize.X * modProgram.TerrainGridSpacing - 1);
-                NewUnit.Pos.Horizontal.Y = modMath.Clamp_int(NewUnit.Pos.Horizontal.Y, 0, Map.Terrain.TileSize.Y * modProgram.TerrainGridSpacing - 1);
+                NewUnit.Pos.Horizontal.X = MathUtil.Clamp_int(NewUnit.Pos.Horizontal.X, 0, Map.Terrain.TileSize.X * modProgram.TerrainGridSpacing - 1);
+                NewUnit.Pos.Horizontal.Y = MathUtil.Clamp_int(NewUnit.Pos.Horizontal.Y, 0, Map.Terrain.TileSize.Y * modProgram.TerrainGridSpacing - 1);
                 NewUnit.Pos.Altitude = (int)(Math.Ceiling(Map.GetTerrainHeight(NewUnit.Pos.Horizontal)));
 
                 if ( Label != null )
@@ -656,7 +657,7 @@ namespace SharpFlame
         {
             public clsMap Map;
             public clsUnitType ObjectType;
-            public modMath.sXY_int Horizontal;
+            public sXY_int Horizontal;
             public clsUnitGroup UnitGroup;
             public bool AutoWalls = false;
             public int Rotation = 0;

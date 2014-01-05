@@ -2,6 +2,7 @@ using System;
 using System.Windows.Forms;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -136,14 +137,14 @@ namespace SharpFlame
                 get { return _Label; }
             }
 
-            private modMath.sXY_int _Pos;
+            private sXY_int _Pos;
 
             public int PosX
             {
                 get { return _Pos.X; }
                 set
                 {
-                    _Pos.X = modMath.Clamp_int(value, 0,
+                    _Pos.X = MathUtil.Clamp_int(value, 0,
                         Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.X * modProgram.TerrainGridSpacing) - 1));
                 }
             }
@@ -153,7 +154,7 @@ namespace SharpFlame
                 get { return _Pos.Y; }
                 set
                 {
-                    _Pos.Y = modMath.Clamp_int(value, 0,
+                    _Pos.Y = MathUtil.Clamp_int(value, 0,
                         Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.Y * modProgram.TerrainGridSpacing) - 1));
                 }
             }
@@ -195,7 +196,7 @@ namespace SharpFlame
                 Drawer.ActionPerform();
             }
 
-            public void MapResizing(modMath.sXY_int PosOffset)
+            public void MapResizing(sXY_int PosOffset)
             {
                 PosX = _Pos.X - PosOffset.X;
                 PosY = _Pos.Y - PosOffset.Y;
@@ -248,28 +249,28 @@ namespace SharpFlame
                 get { return _Label; }
             }
 
-            private modMath.sXY_int _PosA;
-            private modMath.sXY_int _PosB;
+            private sXY_int _PosA;
+            private sXY_int _PosB;
 
-            public modMath.sXY_int PosA
+            public sXY_int PosA
             {
                 set
                 {
                     clsMap Map = _ParentMapLink.Source;
-                    _PosA.X = modMath.Clamp_int(value.X, 0, Map.Terrain.TileSize.X * modProgram.TerrainGridSpacing - 1);
-                    _PosA.Y = modMath.Clamp_int(value.Y, 0, Map.Terrain.TileSize.Y * modProgram.TerrainGridSpacing - 1);
-                    modMath.ReorderXY(_PosA, _PosB, _PosA, _PosB);
+                    _PosA.X = MathUtil.Clamp_int(value.X, 0, Map.Terrain.TileSize.X * modProgram.TerrainGridSpacing - 1);
+                    _PosA.Y = MathUtil.Clamp_int(value.Y, 0, Map.Terrain.TileSize.Y * modProgram.TerrainGridSpacing - 1);
+                    MathUtil.ReorderXY(_PosA, _PosB, _PosA, _PosB);
                 }
             }
 
-            public modMath.sXY_int PosB
+            public sXY_int PosB
             {
                 set
                 {
                     clsMap Map = _ParentMapLink.Source;
-                    _PosB.X = modMath.Clamp_int(value.X, 0, Map.Terrain.TileSize.X * modProgram.TerrainGridSpacing - 1);
-                    _PosB.Y = modMath.Clamp_int(value.Y, 0, Map.Terrain.TileSize.Y * modProgram.TerrainGridSpacing - 1);
-                    modMath.ReorderXY(_PosA, _PosB, _PosA, _PosB);
+                    _PosB.X = MathUtil.Clamp_int(value.X, 0, Map.Terrain.TileSize.X * modProgram.TerrainGridSpacing - 1);
+                    _PosB.Y = MathUtil.Clamp_int(value.Y, 0, Map.Terrain.TileSize.Y * modProgram.TerrainGridSpacing - 1);
+                    MathUtil.ReorderXY(_PosA, _PosB, _PosA, _PosB);
                 }
             }
 
@@ -278,9 +279,9 @@ namespace SharpFlame
                 get { return _PosA.X; }
                 set
                 {
-                    _PosA.X = modMath.Clamp_int(value, 0,
+                    _PosA.X = MathUtil.Clamp_int(value, 0,
                         Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.X * modProgram.TerrainGridSpacing) - 1));
-                    modMath.ReorderXY(_PosA, _PosB, _PosA, _PosB);
+                    MathUtil.ReorderXY(_PosA, _PosB, _PosA, _PosB);
                 }
             }
 
@@ -289,9 +290,9 @@ namespace SharpFlame
                 get { return _PosA.Y; }
                 set
                 {
-                    _PosA.Y = modMath.Clamp_int(value, 0,
+                    _PosA.Y = MathUtil.Clamp_int(value, 0,
                         Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.Y * modProgram.TerrainGridSpacing) - 1));
-                    modMath.ReorderXY(_PosA, _PosB, _PosA, _PosB);
+                    MathUtil.ReorderXY(_PosA, _PosB, _PosA, _PosB);
                 }
             }
 
@@ -300,9 +301,9 @@ namespace SharpFlame
                 get { return _PosB.X; }
                 set
                 {
-                    _PosB.X = modMath.Clamp_int(value, 0,
+                    _PosB.X = MathUtil.Clamp_int(value, 0,
                         Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.X * modProgram.TerrainGridSpacing) - 1));
-                    modMath.ReorderXY(_PosA, _PosB, _PosA, _PosB);
+                    MathUtil.ReorderXY(_PosA, _PosB, _PosA, _PosB);
                 }
             }
 
@@ -311,9 +312,9 @@ namespace SharpFlame
                 get { return _PosB.Y; }
                 set
                 {
-                    _PosB.Y = modMath.Clamp_int(value, 0,
+                    _PosB.Y = MathUtil.Clamp_int(value, 0,
                         Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.Y * modProgram.TerrainGridSpacing) - 1));
-                    modMath.ReorderXY(_PosA, _PosB, _PosA, _PosB);
+                    MathUtil.ReorderXY(_PosA, _PosB, _PosA, _PosB);
                 }
             }
 
@@ -336,16 +337,16 @@ namespace SharpFlame
                 return Result;
             }
 
-            public void SetPositions(modMath.sXY_int PosA, modMath.sXY_int PosB)
+            public void SetPositions(sXY_int PosA, sXY_int PosB)
             {
                 clsMap Map = _ParentMapLink.Source;
 
-                PosA.X = modMath.Clamp_int(PosA.X, 0, Map.Terrain.TileSize.X * modProgram.TerrainGridSpacing - 1);
-                PosA.Y = modMath.Clamp_int(PosA.Y, 0, Map.Terrain.TileSize.Y * modProgram.TerrainGridSpacing - 1);
-                PosB.X = modMath.Clamp_int(PosB.X, 0, Map.Terrain.TileSize.X * modProgram.TerrainGridSpacing - 1);
-                PosB.Y = modMath.Clamp_int(PosB.Y, 0, Map.Terrain.TileSize.Y * modProgram.TerrainGridSpacing - 1);
+                PosA.X = MathUtil.Clamp_int(PosA.X, 0, Map.Terrain.TileSize.X * modProgram.TerrainGridSpacing - 1);
+                PosA.Y = MathUtil.Clamp_int(PosA.Y, 0, Map.Terrain.TileSize.Y * modProgram.TerrainGridSpacing - 1);
+                PosB.X = MathUtil.Clamp_int(PosB.X, 0, Map.Terrain.TileSize.X * modProgram.TerrainGridSpacing - 1);
+                PosB.Y = MathUtil.Clamp_int(PosB.Y, 0, Map.Terrain.TileSize.Y * modProgram.TerrainGridSpacing - 1);
 
-                modMath.ReorderXY(PosA, PosB, _PosA, _PosB);
+                MathUtil.ReorderXY(PosA, PosB, _PosA, _PosB);
             }
 
             public void GLDraw()
@@ -384,9 +385,9 @@ namespace SharpFlame
                 Drawer.ActionPerform();
             }
 
-            public void MapResizing(modMath.sXY_int PosOffset)
+            public void MapResizing(sXY_int PosOffset)
             {
-                SetPositions(new modMath.sXY_int(_PosA.X - PosOffset.X, _PosA.Y - PosOffset.Y), new modMath.sXY_int(_PosB.X - PosOffset.X, _PosB.Y - PosOffset.Y));
+                SetPositions(new sXY_int(_PosA.X - PosOffset.X, _PosA.Y - PosOffset.Y), new sXY_int(_PosB.X - PosOffset.X, _PosB.Y - PosOffset.Y));
             }
 
             public void WriteWZ(clsINIWrite File)

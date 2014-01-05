@@ -4,6 +4,7 @@ using Matrix3D;
 using Microsoft.VisualBasic;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -14,7 +15,7 @@ namespace SharpFlame
         public void GLDraw()
         {
             Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
-            modMath.sXY_int Footprint;
+            sXY_int Footprint;
             int X = 0;
             int Y = 0;
             int X2 = 0;
@@ -35,17 +36,17 @@ namespace SharpFlame
             Position.XYZ_dbl Vertex1 = default(Position.XYZ_dbl);
             Position.XYZ_dbl Vertex2 = default(Position.XYZ_dbl);
             Position.XYZ_dbl Vertex3 = default(Position.XYZ_dbl);
-            modMath.sXY_int ScreenPos = new modMath.sXY_int();
+            sXY_int ScreenPos = new sXY_int();
             Position.XYZ_dbl XYZ_dbl2 = default(Position.XYZ_dbl);
             modProgram.sWorldPos WorldPos = new modProgram.sWorldPos();
             Position.XY_dbl PosA = default(Position.XY_dbl);
             Position.XY_dbl PosB = default(Position.XY_dbl);
             Position.XY_dbl PosC = default(Position.XY_dbl);
             Position.XY_dbl PosD = default(Position.XY_dbl);
-            modMath.sXY_int MinimapSizeXY = new modMath.sXY_int();
+            sXY_int MinimapSizeXY = new sXY_int();
             clsUnit Unit = default(clsUnit);
-            modMath.sXY_int StartXY = new modMath.sXY_int();
-            modMath.sXY_int FinishXY = new modMath.sXY_int();
+            sXY_int StartXY = new sXY_int();
+            sXY_int FinishXY = new sXY_int();
             bool DrawIt = default(bool);
             clsBrush.sPosNum DrawCentreSector = new clsBrush.sPosNum();
             clsTextLabel SelectionLabel = new clsTextLabel();
@@ -55,31 +56,31 @@ namespace SharpFlame
             clsAction MapAction = default(clsAction);
             float ZNearFar = 0;
             ctrlMapView MapView = ViewInfo.MapView;
-            modMath.sXY_int GLSize = ViewInfo.MapView.GLSize;
+            sXY_int GLSize = ViewInfo.MapView.GLSize;
             Position.XY_dbl DrawCentre = default(Position.XY_dbl);
             double dblTemp2 = 0;
 
             dblTemp = modSettings.Settings.MinimapSize;
             ViewInfo.Tiles_Per_Minimap_Pixel = Math.Sqrt(Terrain.TileSize.X * Terrain.TileSize.X + Terrain.TileSize.Y * Terrain.TileSize.Y) /
-                                               (modMath.RootTwo * dblTemp);
+                                               (MathUtil.RootTwo * dblTemp);
             if ( Minimap_Texture_Size > 0 & ViewInfo.Tiles_Per_Minimap_Pixel > 0.0D )
             {
                 MinimapSizeXY.X = (int)(Terrain.TileSize.X / ViewInfo.Tiles_Per_Minimap_Pixel);
                 MinimapSizeXY.Y = (int)(Terrain.TileSize.Y / ViewInfo.Tiles_Per_Minimap_Pixel);
             }
 
-            if ( !ViewInfo.ScreenXY_Get_ViewPlanePos(new modMath.sXY_int((int)(GLSize.X / 2.0D), (int)(GLSize.Y / 2.0D)), dblTemp, DrawCentre) )
+            if ( !ViewInfo.ScreenXY_Get_ViewPlanePos(new sXY_int((int)(GLSize.X / 2.0D), (int)(GLSize.Y / 2.0D)), dblTemp, DrawCentre) )
             {
                 Matrix3DMath.VectorForwardsRotationByMatrix(ViewInfo.ViewAngleMatrix, ref XYZ_dbl);
                 dblTemp2 = modProgram.VisionRadius * 2.0D / Math.Sqrt(XYZ_dbl.X * XYZ_dbl.X + XYZ_dbl.Z * XYZ_dbl.Z);
                 DrawCentre.X = ViewInfo.ViewPos.X + XYZ_dbl.X * dblTemp2;
                 DrawCentre.Y = ViewInfo.ViewPos.Z + XYZ_dbl.Z * dblTemp2;
             }
-            DrawCentre.X = modMath.Clamp_dbl(DrawCentre.X, 0.0D, Terrain.TileSize.X * modProgram.TerrainGridSpacing - 1.0D);
-            DrawCentre.Y = modMath.Clamp_dbl(Convert.ToDouble(- DrawCentre.Y), 0.0D, Terrain.TileSize.Y * modProgram.TerrainGridSpacing - 1.0D);
-            DrawCentreSector.Normal = GetPosSectorNum(new modMath.sXY_int((int)DrawCentre.X, (int)DrawCentre.Y));
+            DrawCentre.X = MathUtil.Clamp_dbl(DrawCentre.X, 0.0D, Terrain.TileSize.X * modProgram.TerrainGridSpacing - 1.0D);
+            DrawCentre.Y = MathUtil.Clamp_dbl(Convert.ToDouble(- DrawCentre.Y), 0.0D, Terrain.TileSize.Y * modProgram.TerrainGridSpacing - 1.0D);
+            DrawCentreSector.Normal = GetPosSectorNum(new sXY_int((int)DrawCentre.X, (int)DrawCentre.Y));
             DrawCentreSector.Alignment =
-                GetPosSectorNum(new modMath.sXY_int((int)(DrawCentre.X - modProgram.SectorTileSize * modProgram.TerrainGridSpacing / 2.0D),
+                GetPosSectorNum(new sXY_int((int)(DrawCentre.X - modProgram.SectorTileSize * modProgram.TerrainGridSpacing / 2.0D),
                     (int)(DrawCentre.Y - modProgram.SectorTileSize * modProgram.TerrainGridSpacing / 2.0D)));
 
             clsDrawSectorObjects DrawObjects = new clsDrawSectorObjects();
@@ -140,9 +141,9 @@ namespace SharpFlame
                 ShowMinimapViewPosBox = false;
             }
 
-            GL.Rotate((float)(ViewInfo.ViewAngleRPY.Roll / modMath.RadOf1Deg), 0.0F, 0.0F, -1.0F);
-            GL.Rotate((float)(ViewInfo.ViewAngleRPY.Pitch / modMath.RadOf1Deg), 1.0F, 0.0F, 0.0F);
-            GL.Rotate((float)(ViewInfo.ViewAngleRPY.Yaw / modMath.RadOf1Deg), 0.0F, 1.0F, 0.0F);
+            GL.Rotate((float)(ViewInfo.ViewAngleRPY.Roll / MathUtil.RadOf1Deg), 0.0F, 0.0F, -1.0F);
+            GL.Rotate((float)(ViewInfo.ViewAngleRPY.Pitch / MathUtil.RadOf1Deg), 1.0F, 0.0F, 0.0F);
+            GL.Rotate((float)(ViewInfo.ViewAngleRPY.Yaw / MathUtil.RadOf1Deg), 0.0F, 1.0F, 0.0F);
             GL.Translate(Convert.ToDouble(- ViewInfo.ViewPos.X), Convert.ToDouble(- ViewInfo.ViewPos.Y), ViewInfo.ViewPos.Z);
 
             GL.Enable(EnableCap.CullFace);
@@ -217,7 +218,7 @@ namespace SharpFlame
                 if ( Selected_Area_VertexB != null )
                 {
                     //area is selected
-                    modMath.ReorderXY(Selected_Area_VertexA.XY, Selected_Area_VertexB.XY, StartXY, FinishXY);
+                    MathUtil.ReorderXY(Selected_Area_VertexA.XY, Selected_Area_VertexB.XY, StartXY, FinishXY);
                     XYZ_dbl.X = Selected_Area_VertexB.X * modProgram.TerrainGridSpacing - ViewInfo.ViewPos.X;
                     XYZ_dbl.Z = - Selected_Area_VertexB.Y * modProgram.TerrainGridSpacing - ViewInfo.ViewPos.Z;
                     XYZ_dbl.Y = GetVertexAltitude(Selected_Area_VertexB.XY) - ViewInfo.ViewPos.Y;
@@ -228,7 +229,7 @@ namespace SharpFlame
                     if ( MouseOverTerrain != null )
                     {
                         //selection is changing under pointer
-                        modMath.ReorderXY(Selected_Area_VertexA.XY, MouseOverTerrain.Vertex.Normal, StartXY, FinishXY);
+                        MathUtil.ReorderXY(Selected_Area_VertexA.XY, MouseOverTerrain.Vertex.Normal, StartXY, FinishXY);
                         XYZ_dbl.X = MouseOverTerrain.Vertex.Normal.X * modProgram.TerrainGridSpacing - ViewInfo.ViewPos.X;
                         XYZ_dbl.Z = - MouseOverTerrain.Vertex.Normal.Y * modProgram.TerrainGridSpacing - ViewInfo.ViewPos.Z;
                         XYZ_dbl.Y = GetVertexAltitude(MouseOverTerrain.Vertex.Normal) - ViewInfo.ViewPos.Y;
@@ -425,7 +426,7 @@ namespace SharpFlame
                     if ( Unit_Selected_Area_VertexA != null )
                     {
                         //selection is changing under pointer
-                        modMath.ReorderXY(Unit_Selected_Area_VertexA.XY, MouseOverTerrain.Vertex.Normal, StartXY, FinishXY);
+                        MathUtil.ReorderXY(Unit_Selected_Area_VertexA.XY, MouseOverTerrain.Vertex.Normal, StartXY, FinishXY);
                         GL.LineWidth(2.0F);
                         GL.Color3(0.0F, 1.0F, 1.0F);
                         for ( X = StartXY.X; X <= FinishXY.X - 1; X++ )
@@ -758,9 +759,9 @@ namespace SharpFlame
             GL.Disable(EnableCap.CullFace);
 
             GL.LoadIdentity();
-            GL.Rotate((float)(ViewInfo.ViewAngleRPY.Roll / modMath.RadOf1Deg), 0.0F, 0.0F, -1.0F);
-            GL.Rotate((float)(ViewInfo.ViewAngleRPY.Pitch / modMath.RadOf1Deg), 1.0F, 0.0F, 0.0F);
-            GL.Rotate((float)(ViewInfo.ViewAngleRPY.Yaw / modMath.RadOf1Deg), 0.0F, 1.0F, 0.0F);
+            GL.Rotate((float)(ViewInfo.ViewAngleRPY.Roll / MathUtil.RadOf1Deg), 0.0F, 0.0F, -1.0F);
+            GL.Rotate((float)(ViewInfo.ViewAngleRPY.Pitch / MathUtil.RadOf1Deg), 1.0F, 0.0F, 0.0F);
+            GL.Rotate((float)(ViewInfo.ViewAngleRPY.Yaw / MathUtil.RadOf1Deg), 0.0F, 1.0F, 0.0F);
 
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
@@ -838,7 +839,7 @@ namespace SharpFlame
                     }
                     XYZ_dbl.X = ScriptPosition.PosX - ViewInfo.ViewPos.X;
                     XYZ_dbl.Z = - ScriptPosition.PosY - ViewInfo.ViewPos.Z;
-                    XYZ_dbl.Y = GetTerrainHeight(new modMath.sXY_int(ScriptPosition.PosX, ScriptPosition.PosY)) - ViewInfo.ViewPos.Y;
+                    XYZ_dbl.Y = GetTerrainHeight(new sXY_int(ScriptPosition.PosX, ScriptPosition.PosY)) - ViewInfo.ViewPos.Y;
                     Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrix_Inverted, XYZ_dbl, ref XYZ_dbl2);
                     if ( ViewInfo.Pos_Get_Screen_XY(XYZ_dbl2, ScreenPos) )
                     {
@@ -867,7 +868,7 @@ namespace SharpFlame
                     }
                     XYZ_dbl.X = ScriptArea.PosAX - ViewInfo.ViewPos.X;
                     XYZ_dbl.Z = - ScriptArea.PosAY - ViewInfo.ViewPos.Z;
-                    XYZ_dbl.Y = GetTerrainHeight(new modMath.sXY_int(ScriptArea.PosAX, ScriptArea.PosAY)) - ViewInfo.ViewPos.Y;
+                    XYZ_dbl.Y = GetTerrainHeight(new sXY_int(ScriptArea.PosAX, ScriptArea.PosAY)) - ViewInfo.ViewPos.Y;
                     Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrix_Inverted, XYZ_dbl, ref XYZ_dbl2);
                     if ( ViewInfo.Pos_Get_Screen_XY(XYZ_dbl2, ScreenPos) )
                     {
@@ -1056,7 +1057,7 @@ namespace SharpFlame
                     if ( Selected_Area_VertexB != null )
                     {
                         //area is selected
-                        modMath.ReorderXY(Selected_Area_VertexA.XY, Selected_Area_VertexB.XY, StartXY, FinishXY);
+                        MathUtil.ReorderXY(Selected_Area_VertexA.XY, Selected_Area_VertexB.XY, StartXY, FinishXY);
                         DrawIt = true;
                     }
                     else if ( modTools.Tool == modTools.Tools.TerrainSelect )
@@ -1064,7 +1065,7 @@ namespace SharpFlame
                         if ( MouseOverTerrain != null )
                         {
                             //selection is changing under mouse
-                            modMath.ReorderXY(Selected_Area_VertexA.XY, MouseOverTerrain.Vertex.Normal, StartXY, FinishXY);
+                            MathUtil.ReorderXY(Selected_Area_VertexA.XY, MouseOverTerrain.Vertex.Normal, StartXY, FinishXY);
                             DrawIt = true;
                         }
                     }
@@ -1111,8 +1112,8 @@ namespace SharpFlame
 
         public void DrawUnitRectangle(clsUnit Unit, int BorderInsideThickness, sRGBA_sng InsideColour, sRGBA_sng OutsideColour)
         {
-            modMath.sXY_int PosA = new modMath.sXY_int();
-            modMath.sXY_int PosB = new modMath.sXY_int();
+            sXY_int PosA = new sXY_int();
+            sXY_int PosB = new sXY_int();
             int A = 0;
             int Altitude = Unit.Pos.Altitude - ViewInfo.ViewPos.Y;
 
@@ -1156,10 +1157,10 @@ namespace SharpFlame
         {
             public sRGBA_sng Colour;
 
-            private modMath.sXYZ_int Vertex0;
-            private modMath.sXYZ_int Vertex1;
-            private modMath.sXYZ_int Vertex2;
-            private modMath.sXYZ_int Vertex3;
+            private sXYZ_int Vertex0;
+            private sXYZ_int Vertex1;
+            private sXYZ_int Vertex2;
+            private sXYZ_int Vertex3;
 
             public override void ActionPerform()
             {
@@ -1191,11 +1192,11 @@ namespace SharpFlame
 
             public clsMap Map;
             public sRGBA_sng Colour;
-            public modMath.sXY_int StartXY;
-            public modMath.sXY_int FinishXY;
+            public sXY_int StartXY;
+            public sXY_int FinishXY;
 
-            private modMath.sXYZ_int Vertex0;
-            private modMath.sXYZ_int Vertex1;
+            private sXYZ_int Vertex0;
+            private sXYZ_int Vertex1;
 
             public void ActionPerform()
             {
@@ -1258,18 +1259,18 @@ namespace SharpFlame
 
             public clsMap Map;
             public sRGBA_sng Colour;
-            public modMath.sXY_int StartXY;
-            public modMath.sXY_int FinishXY;
+            public sXY_int StartXY;
+            public sXY_int FinishXY;
 
-            private modMath.sXYZ_int Vertex;
-            private modMath.sXY_int StartTile;
-            private modMath.sXY_int FinishTile;
-            private modMath.sIntersectPos IntersectX;
-            private modMath.sIntersectPos IntersectY;
-            private modMath.sXY_int TileEdgeStart;
-            private modMath.sXY_int TileEdgeFinish;
+            private sXYZ_int Vertex;
+            private sXY_int StartTile;
+            private sXY_int FinishTile;
+            private MathUtil.sIntersectPos IntersectX;
+            private MathUtil.sIntersectPos IntersectY;
+            private sXY_int TileEdgeStart;
+            private sXY_int TileEdgeFinish;
             private int LastXTile;
-            private modMath.sXY_int Horizontal;
+            private sXY_int Horizontal;
 
             public void ActionPerform()
             {
@@ -1297,7 +1298,7 @@ namespace SharpFlame
                         TileEdgeStart.Y = Y * modProgram.TerrainGridSpacing;
                         TileEdgeFinish.X = Map.Terrain.TileSize.X * modProgram.TerrainGridSpacing;
                         TileEdgeFinish.Y = Y * modProgram.TerrainGridSpacing;
-                        IntersectY = modMath.GetLinesIntersectBetween(StartXY, FinishXY, TileEdgeStart, TileEdgeFinish);
+                        IntersectY = MathUtil.GetLinesIntersectBetween(StartXY, FinishXY, TileEdgeStart, TileEdgeFinish);
                         if ( IntersectY.Exists )
                         {
                             StartTile.X = LastXTile;
@@ -1309,7 +1310,7 @@ namespace SharpFlame
                                 TileEdgeStart.Y = 0;
                                 TileEdgeFinish.X = X * modProgram.TerrainGridSpacing;
                                 TileEdgeFinish.Y = Map.Terrain.TileSize.Y * modProgram.TerrainGridSpacing;
-                                IntersectX = modMath.GetLinesIntersectBetween(StartXY, FinishXY, TileEdgeStart, TileEdgeFinish);
+                                IntersectX = MathUtil.GetLinesIntersectBetween(StartXY, FinishXY, TileEdgeStart, TileEdgeFinish);
                                 if ( IntersectX.Exists )
                                 {
                                     Horizontal = IntersectX.Pos;
@@ -1340,7 +1341,7 @@ namespace SharpFlame
                         TileEdgeStart.Y = 0;
                         TileEdgeFinish.X = X * modProgram.TerrainGridSpacing;
                         TileEdgeFinish.Y = Map.Terrain.TileSize.Y * modProgram.TerrainGridSpacing;
-                        IntersectX = modMath.GetLinesIntersectBetween(StartXY, FinishXY, TileEdgeStart, TileEdgeFinish);
+                        IntersectX = MathUtil.GetLinesIntersectBetween(StartXY, FinishXY, TileEdgeStart, TileEdgeFinish);
                         if ( IntersectX.Exists )
                         {
                             Horizontal = IntersectX.Pos;
@@ -1389,7 +1390,7 @@ namespace SharpFlame
                 {
                     for ( X = PosNum.X * modProgram.SectorTileSize; X <= Math.Min((PosNum.X + 1) * modProgram.SectorTileSize - 1, Map.Terrain.TileSize.X - 1); X++ )
                     {
-                        Map.DrawTileOrientation(new modMath.sXY_int(X, Y));
+                        Map.DrawTileOrientation(new sXY_int(X, Y));
                     }
                 }
             }
@@ -1498,7 +1499,7 @@ namespace SharpFlame
         {
             public sRGBA_sng Colour;
 
-            private modMath.sXYZ_int Vertex0;
+            private sXYZ_int Vertex0;
 
             public override void ActionPerform()
             {
@@ -1521,10 +1522,10 @@ namespace SharpFlame
 
             public clsMap Map;
 
-            public modMath.sXY_int Horizontal;
+            public sXY_int Horizontal;
             public sRGBA_sng Colour;
 
-            private modMath.sXYZ_int Vertex0;
+            private sXYZ_int Vertex0;
 
             public void ActionPerform()
             {
@@ -1571,7 +1572,7 @@ namespace SharpFlame
                 clsTextLabel TextLabel = default(clsTextLabel);
                 Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
                 Position.XYZ_dbl XYZ_dbl2 = default(Position.XYZ_dbl);
-                modMath.sXY_int ScreenPos = new modMath.sXY_int();
+                sXY_int ScreenPos = new sXY_int();
                 clsUnitSectorConnection Connection = default(clsUnitSectorConnection);
 
                 foreach ( clsUnitSectorConnection tempLoopVar_Connection in Sector.Units )

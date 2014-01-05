@@ -141,6 +141,7 @@
     <Compile Include="clsPainter.cs" />
     <Compile Include="clsResult.cs" />
     <Compile Include="clsTileset.cs" />
+    <Compile Include="MathExtra\Structs.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="clsUnitType.cs" />
@@ -243,7 +244,7 @@
     <Compile Include="modGenerator.cs" />
     <Compile Include="INI.cs" />
     <Compile Include="modIO.cs" />
-    <Compile Include="modMath.cs" />
+    <Compile Include="MathExtra\MathUtil.cs" />
     <Compile Include="modPainters.cs" />
     <Compile Include="modProgram.cs" />
     <Compile Include="modSettings.cs" />

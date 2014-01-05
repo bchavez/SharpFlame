@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using Matrix3D;
 using Microsoft.VisualBasic;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -365,9 +366,9 @@ namespace SharpFlame
             }
         }
 
-        public static modMath.sXY_int GetTileRotatedOffset(sTileOrientation TileOrientation, modMath.sXY_int Pos)
+        public static sXY_int GetTileRotatedOffset(sTileOrientation TileOrientation, sXY_int Pos)
         {
-            modMath.sXY_int Result = new modMath.sXY_int();
+            sXY_int Result = new sXY_int();
 
             if ( TileOrientation.SwitchedAxes )
             {
@@ -411,9 +412,9 @@ namespace SharpFlame
             return Result;
         }
 
-        public static modMath.sXY_sng GetTileRotatedPos_sng(sTileOrientation TileOrientation, modMath.sXY_sng Pos)
+        public static sXY_sng GetTileRotatedPos_sng(sTileOrientation TileOrientation, sXY_sng Pos)
         {
-            modMath.sXY_sng ReturnResult = new modMath.sXY_sng();
+            sXY_sng ReturnResult = new sXY_sng();
 
             if ( TileOrientation.SwitchedAxes )
             {
@@ -503,9 +504,9 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public static modMath.sXY_int GetRotatedPos(sTileOrientation Orientation, modMath.sXY_int Pos, modMath.sXY_int Limits)
+        public static sXY_int GetRotatedPos(sTileOrientation Orientation, sXY_int Pos, sXY_int Limits)
         {
-            modMath.sXY_int Result = new modMath.sXY_int();
+            sXY_int Result = new sXY_int();
 
             if ( Orientation.SwitchedAxes )
             {
@@ -559,8 +560,8 @@ namespace SharpFlame
             return Math.Atan2(XY_dbl.Y, XY_dbl.X);
         }
 
-        public static void GetTileRotatedTexCoords(sTileOrientation TileOrientation, modMath.sXY_sng CoordA, modMath.sXY_sng CoordB, modMath.sXY_sng CoordC,
-            modMath.sXY_sng CoordD)
+        public static void GetTileRotatedTexCoords(sTileOrientation TileOrientation, sXY_sng CoordA, sXY_sng CoordB, sXY_sng CoordC,
+            sXY_sng CoordD)
         {
             sTileOrientation ReverseOrientation = new sTileOrientation();
 

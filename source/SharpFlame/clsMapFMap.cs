@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.VisualBasic;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -17,7 +18,7 @@ namespace SharpFlame
                 public string Code;
                 public string UnitGroup;
                 public bool GotAltitude;
-                public modMath.clsXY_int Pos;
+                public clsXY_int Pos;
                 public double Heading;
                 public double Health;
                 public clsDroidDesign.clsTemplateDroidType TemplateDroidType;
@@ -223,7 +224,7 @@ namespace SharpFlame
                     {
                         CommaText[A] = Convert.ToString(CommaText[A].Trim());
                     }
-                    modMath.sXY_int Pos = new modMath.sXY_int();
+                    sXY_int Pos = new sXY_int();
                     if ( !modIO.InvariantParse_int(CommaText[0], ref Pos.X) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
@@ -234,7 +235,7 @@ namespace SharpFlame
                     }
                     try
                     {
-                        Objects[INISectionNum].Pos = new modMath.clsXY_int(Pos);
+                        Objects[INISectionNum].Pos = new clsXY_int(Pos);
                     }
                     catch ( Exception )
                     {
@@ -1009,7 +1010,7 @@ namespace SharpFlame
                 }
             }
 
-            modMath.sXY_int NewTerrainSize = ResultInfo.TerrainSize;
+            sXY_int NewTerrainSize = ResultInfo.TerrainSize;
             Tileset = ResultInfo.Tileset;
 
             if ( NewTerrainSize.X <= 0 | NewTerrainSize.X > modProgram.MapMaxSize )
@@ -1178,7 +1179,7 @@ namespace SharpFlame
 
         public class clsFMapInfo : clsINIRead.clsTranslator
         {
-            public modMath.sXY_int TerrainSize = new modMath.sXY_int(-1, -1);
+            public sXY_int TerrainSize = new sXY_int(-1, -1);
             public clsInterfaceOptions InterfaceOptions = new clsInterfaceOptions();
             public clsTileset Tileset;
 
@@ -1215,7 +1216,7 @@ namespace SharpFlame
                     {
                         CommaText[A] = CommaText[A].Trim();
                     }
-                    modMath.sXY_int NewSize = new modMath.sXY_int();
+                    sXY_int NewSize = new sXY_int();
                     if ( !modIO.InvariantParse_int(CommaText[0], ref NewSize.X) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
@@ -1729,7 +1730,7 @@ namespace SharpFlame
             clsUnitType UnitType = default(clsUnitType);
             bool IsDesign = default(bool);
             clsUnitGroup UnitGroup = default(clsUnitGroup);
-            modMath.sXY_int ZeroPos = new modMath.sXY_int(0, 0);
+            sXY_int ZeroPos = new sXY_int(0, 0);
             UInt32 AvailableID = 0;
 
             UnitAdd.Map = this;
@@ -1943,8 +1944,8 @@ namespace SharpFlame
         {
             public struct sGateway
             {
-                public modMath.sXY_int PosA;
-                public modMath.sXY_int PosB;
+                public sXY_int PosA;
+                public sXY_int PosB;
             }
 
             public sGateway[] Gateways;

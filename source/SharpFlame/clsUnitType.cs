@@ -2,6 +2,7 @@ using System;
 using Matrix3D;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -31,7 +32,7 @@ namespace SharpFlame
 
         public class clsAttachment
         {
-            public modMath.sXYZ_sng Pos_Offset;
+            public sXYZ_sng Pos_Offset;
             public Matrix3DMath.Matrix3D AngleOffsetMatrix = new Matrix3DMath.Matrix3D();
             public SimpleClassList<clsModel> Models = new SimpleClassList<clsModel>();
             public SimpleClassList<clsAttachment> Attachments = new SimpleClassList<clsAttachment>();
@@ -62,9 +63,9 @@ namespace SharpFlame
                     Matrix3DMath.MatrixInvert(Attachment.AngleOffsetMatrix, matrixA);
                     Matrix3DMath.MatrixToRPY(matrixA, ref AngleRPY);
                     GL.Translate(Attachment.Pos_Offset.X, Attachment.Pos_Offset.Y, Convert.ToDouble(- Attachment.Pos_Offset.Z));
-                    GL.Rotate((float)(AngleRPY.Roll / modMath.RadOf1Deg), 0.0F, 0.0F, -1.0F);
-                    GL.Rotate((float)(AngleRPY.Pitch / modMath.RadOf1Deg), 1.0F, 0.0F, 0.0F);
-                    GL.Rotate((float)(AngleRPY.Yaw / modMath.RadOf1Deg), 0.0F, 1.0F, 0.0F);
+                    GL.Rotate((float)(AngleRPY.Roll / MathUtil.RadOf1Deg), 0.0F, 0.0F, -1.0F);
+                    GL.Rotate((float)(AngleRPY.Pitch / MathUtil.RadOf1Deg), 1.0F, 0.0F, 0.0F);
+                    GL.Rotate((float)(AngleRPY.Yaw / MathUtil.RadOf1Deg), 0.0F, 1.0F, 0.0F);
                     Attachment.GLDraw();
                     GL.PopMatrix();
                 }
@@ -134,7 +135,7 @@ namespace SharpFlame
         {
         }
 
-        public modMath.sXY_int GetFootprintOld
+        public sXY_int GetFootprintOld
         {
             get
             {
@@ -145,16 +146,16 @@ namespace SharpFlame
                     case enumType.PlayerStructure:
                         return ((clsStructureType)this).Footprint;
                     default:
-                        modMath.sXY_int XY_int = new modMath.sXY_int(1, 1);
+                        sXY_int XY_int = new sXY_int(1, 1);
                         return XY_int;
                 }
             }
         }
 
-        public modMath.sXY_int get_GetFootprintNew(int Rotation)
+        public sXY_int get_GetFootprintNew(int Rotation)
         {
             //get initial footprint
-            modMath.sXY_int Result = new modMath.sXY_int();
+            sXY_int Result = new sXY_int();
             switch ( Type )
             {
                 case enumType.Feature:
@@ -165,7 +166,7 @@ namespace SharpFlame
                     break;
                 default:
                     //return droid footprint
-                    Result = new modMath.sXY_int(1, 1);
+                    Result = new sXY_int(1, 1);
                     return Result;
             }
             //switch footprint axes if not a droid
@@ -183,7 +184,7 @@ namespace SharpFlame
             return Result;
         }
 
-        public modMath.sXY_int get_GetFootprintSelected(int Rotation)
+        public sXY_int get_GetFootprintSelected(int Rotation)
         {
             if ( modMain.frmMainInstance.cbxFootprintRotate.Checked )
             {
@@ -290,7 +291,7 @@ namespace SharpFlame
 
         public string Code = "";
         public string Name = "Unknown";
-        public modMath.sXY_int Footprint;
+        public sXY_int Footprint;
 
         public enum enumFeatureType
         {
@@ -330,7 +331,7 @@ namespace SharpFlame
 
         public string Code = "";
         public string Name = "Unknown";
-        public modMath.sXY_int Footprint;
+        public sXY_int Footprint;
 
         public enum enumStructureType
         {
@@ -489,7 +490,7 @@ namespace SharpFlame
                 return;
             }
 
-            modMath.sXYZ_sng TurretConnector = new modMath.sXYZ_sng();
+            sXYZ_sng TurretConnector = new sXYZ_sng();
 
             TurretConnector = Body.Attachment.Models[0].Connectors[0];
 

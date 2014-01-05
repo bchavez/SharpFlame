@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using Microsoft.VisualBasic;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -121,7 +122,7 @@ namespace SharpFlame
             }
 
             //centre points
-            Dist = modMath.RootTwo;
+            Dist = MathUtil.RootTwo;
             Variation = Dist * LayerFactor * HeightMultiplier;
             VariationHalved = (int)(Variation / 2.0D);
             for ( Y = 1; Y <= HeightData.SizeY - 2; Y += 2 )
@@ -629,7 +630,7 @@ namespace SharpFlame
                 {
                     HeightData.Height[Y, X] =
                         (int)
-                            (((1.0D - Math.Sin((1.0D - Convert.ToInt32(Source.HeightData.Height[Y, X] - HeightMin) / HeightRange) * modMath.RadOf90Deg)) *
+                            (((1.0D - Math.Sin((1.0D - Convert.ToInt32(Source.HeightData.Height[Y, X] - HeightMin) / HeightRange) * MathUtil.RadOf90Deg)) *
                               HeightRange + HeightMin) * Source.HeightScale / HeightScale);
                 }
             }
@@ -661,7 +662,7 @@ namespace SharpFlame
                         (int)
                             ((Math.Sin(
                                 Convert.ToDouble(Convert.ToInt32(Convert.ToDouble(Source.HeightData.Height[Y, X] - HeightMin) / HeightRange) *
-                                                        modMath.RadOf90Deg)) * HeightRange + HeightMin) * Source.HeightScale / HeightScale);
+                                                        MathUtil.RadOf90Deg)) * HeightRange + HeightMin) * Source.HeightScale / HeightScale);
                 }
             }
         }

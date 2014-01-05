@@ -11,6 +11,7 @@ using Microsoft.VisualBasic.ApplicationServices;
 using Microsoft.VisualBasic.CompilerServices;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
+using SharpFlame.MathExtra;
 using Timer = System.Windows.Forms.Timer;
 
 namespace SharpFlame
@@ -333,7 +334,7 @@ namespace SharpFlame
 
             modTools.CreateTools();
 
-            Matrix3DMath.MatrixSetToPY(modProgram.SunAngleMatrix, new Angles.AnglePY(-22.5D * modMath.RadOf1Deg, 157.5D * modMath.RadOf1Deg));
+            Matrix3DMath.MatrixSetToPY(modProgram.SunAngleMatrix, new Angles.AnglePY(-22.5D * MathUtil.RadOf1Deg, 157.5D * MathUtil.RadOf1Deg));
 
             NewPlayerNum.Left = 112;
             NewPlayerNum.Top = 10;
@@ -580,7 +581,7 @@ namespace SharpFlame
 
             Zoom = tmrKey.Interval * 0.002D;
             Move = tmrKey.Interval * Rate / 2048.0D;
-            Roll = 5.0D * modMath.RadOf1Deg;
+            Roll = 5.0D * MathUtil.RadOf1Deg;
             Pan = 1.0D / 16.0D;
             OrbitRate = 1.0D / 32.0D;
 
@@ -647,7 +648,7 @@ namespace SharpFlame
             }
             if ( ApplyToMap == null )
             {
-                ApplyToMap = new clsMap(new modMath.sXY_int(HeightmapBitmap.Width - 1, HeightmapBitmap.Height - 1));
+                ApplyToMap = new clsMap(new sXY_int(HeightmapBitmap.Width - 1, HeightmapBitmap.Height - 1));
             }
 
             int X = 0;
@@ -949,8 +950,8 @@ namespace SharpFlame
 
         public void btnResize_Click(Object sender, EventArgs e)
         {
-            modMath.sXY_int NewSize = new modMath.sXY_int();
-            modMath.sXY_int Offset = new modMath.sXY_int();
+            sXY_int NewSize = new sXY_int();
+            sXY_int Offset = new sXY_int();
             double Max = modProgram.MapMaxSize;
 
             if ( !modIO.InvariantParse_int(txtSizeX.Text, ref NewSize.X) )
@@ -973,7 +974,7 @@ namespace SharpFlame
             Map_Resize(Offset, NewSize);
         }
 
-        public void Map_Resize(modMath.sXY_int Offset, modMath.sXY_int NewSize)
+        public void Map_Resize(sXY_int Offset, sXY_int NewSize)
         {
             clsMap Map = MainMap;
 
@@ -1198,7 +1199,7 @@ namespace SharpFlame
 
         public void NewMap()
         {
-            clsMap NewMap = new clsMap(new modMath.sXY_int(64, 64));
+            clsMap NewMap = new clsMap(new sXY_int(64, 64));
             NewMainMap(NewMap);
 
             NewMap.RandomizeTileOrientations();
@@ -1284,22 +1285,22 @@ namespace SharpFlame
             int X = 0;
             int Y = 0;
             double Offset = 0;
-            modMath.sXY_int StartXY = new modMath.sXY_int();
-            modMath.sXY_int FinishXY = new modMath.sXY_int();
-            modMath.sXY_int Pos = new modMath.sXY_int();
+            sXY_int StartXY = new sXY_int();
+            sXY_int FinishXY = new sXY_int();
+            sXY_int Pos = new sXY_int();
 
             if ( !modIO.InvariantParse_dbl(txtHeightOffset.Text, ref Offset) )
             {
                 return;
             }
 
-            modMath.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, StartXY, FinishXY);
+            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, StartXY, FinishXY);
             for ( Y = StartXY.Y; Y <= FinishXY.Y; Y++ )
             {
                 for ( X = StartXY.X; X <= FinishXY.X; X++ )
                 {
                     Map.Terrain.Vertices[X, Y].Height =
-                        (byte)(Math.Round(modMath.Clamp_dbl(Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height + Offset), byte.MinValue, byte.MaxValue)));
+                        (byte)(Math.Round(MathUtil.Clamp_dbl(Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height + Offset), byte.MinValue, byte.MaxValue)));
                     Pos.X = X;
                     Pos.Y = Y;
                     Map.SectorGraphicsChanges.VertexAndNormalsChanged(Pos);
@@ -1536,7 +1537,7 @@ namespace SharpFlame
                 return;
             }
 
-            Angle = modMath.Clamp_int(Angle, 0, 359);
+            Angle = MathUtil.Clamp_int(Angle, 0, 359);
 
             if ( Map.SelectedUnits.Count > 1 )
             {
@@ -1955,10 +1956,10 @@ namespace SharpFlame
             {
                 modProgram.Copied_Map.Deallocate();
             }
-            modMath.sXY_int Area = new modMath.sXY_int();
-            modMath.sXY_int Start = new modMath.sXY_int();
-            modMath.sXY_int Finish = new modMath.sXY_int();
-            modMath.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, Start, Finish);
+            sXY_int Area = new sXY_int();
+            sXY_int Start = new sXY_int();
+            sXY_int Finish = new sXY_int();
+            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, Start, Finish);
             Area.X = Finish.X - Start.X;
             Area.Y = Finish.Y - Start.Y;
             modProgram.Copied_Map = new clsMap(Map, Start, Area);
@@ -1987,10 +1988,10 @@ namespace SharpFlame
             {
                 return;
             }
-            modMath.sXY_int Area = new modMath.sXY_int();
-            modMath.sXY_int Start = new modMath.sXY_int();
-            modMath.sXY_int Finish = new modMath.sXY_int();
-            modMath.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, Start, Finish);
+            sXY_int Area = new sXY_int();
+            sXY_int Start = new sXY_int();
+            sXY_int Finish = new sXY_int();
+            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, Start, Finish);
             Area.X = Finish.X - Start.X;
             Area.Y = Finish.Y - Start.Y;
             Map.MapInsert(modProgram.Copied_Map, Start, Area, menuSelPasteHeights.Checked, menuSelPasteTextures.Checked, menuSelPasteUnits.Checked,
@@ -2017,10 +2018,10 @@ namespace SharpFlame
                 return;
             }
 
-            modMath.sXY_int Start = new modMath.sXY_int();
-            modMath.sXY_int Finish = new modMath.sXY_int();
-            modMath.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, Start, Finish);
-            modMath.sXY_int Area = new modMath.sXY_int();
+            sXY_int Start = new sXY_int();
+            sXY_int Finish = new sXY_int();
+            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, Start, Finish);
+            sXY_int Area = new sXY_int();
             Area.X = Finish.X - Start.X;
             Area.Y = Finish.Y - Start.Y;
 
@@ -2483,7 +2484,7 @@ namespace SharpFlame
             {
                 return;
             }
-            Height = (byte)(modMath.Clamp_dbl(Height_dbl, byte.MinValue, byte.MaxValue));
+            Height = (byte)(MathUtil.Clamp_dbl(Height_dbl, byte.MinValue, byte.MaxValue));
             HeightSetPalette[tabHeightSetL.SelectedIndex] = Height;
             if ( tabHeightSetL.SelectedIndex == tabHeightSetL.SelectedIndex )
             {
@@ -2504,7 +2505,7 @@ namespace SharpFlame
             {
                 return;
             }
-            Height = (byte)(modMath.Clamp_dbl(Height_dbl, byte.MinValue, byte.MaxValue));
+            Height = (byte)(MathUtil.Clamp_dbl(Height_dbl, byte.MinValue, byte.MaxValue));
             HeightSetPalette[tabHeightSetR.SelectedIndex] = Height;
             if ( tabHeightSetL.SelectedIndex == tabHeightSetR.SelectedIndex )
             {
@@ -2538,11 +2539,11 @@ namespace SharpFlame
             {
                 return;
             }
-            modMath.sXY_int Start = new modMath.sXY_int();
-            modMath.sXY_int Finish = new modMath.sXY_int();
+            sXY_int Start = new sXY_int();
+            sXY_int Finish = new sXY_int();
             int A = 0;
 
-            modMath.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, Start, Finish);
+            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, Start, Finish);
             for ( A = 0; A <= Map.Units.Count - 1; A++ )
             {
                 if ( modProgram.PosIsWithinTileArea(Map.Units[A].Pos.Horizontal, Start, Finish) )
@@ -2595,23 +2596,23 @@ namespace SharpFlame
             int X = 0;
             int Y = 0;
             double Multiplier = 0;
-            modMath.sXY_int StartXY = new modMath.sXY_int();
-            modMath.sXY_int FinishXY = new modMath.sXY_int();
-            modMath.sXY_int Pos = new modMath.sXY_int();
+            sXY_int StartXY = new sXY_int();
+            sXY_int FinishXY = new sXY_int();
+            sXY_int Pos = new sXY_int();
             double dblTemp = 0;
 
             if ( !modIO.InvariantParse_dbl(txtHeightMultiply.Text, ref dblTemp) )
             {
                 return;
             }
-            Multiplier = modMath.Clamp_dbl(dblTemp, 0.0D, 255.0D);
-            modMath.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, StartXY, FinishXY);
+            Multiplier = MathUtil.Clamp_dbl(dblTemp, 0.0D, 255.0D);
+            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, StartXY, FinishXY);
             for ( Y = StartXY.Y; Y <= FinishXY.Y; Y++ )
             {
                 for ( X = StartXY.X; X <= FinishXY.X; X++ )
                 {
                     Map.Terrain.Vertices[X, Y].Height =
-                        (byte)(Math.Round(modMath.Clamp_dbl(Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height * Multiplier), byte.MinValue, byte.MaxValue)));
+                        (byte)(Math.Round(MathUtil.Clamp_dbl(Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height * Multiplier), byte.MinValue, byte.MaxValue)));
                     Pos.X = X;
                     Pos.Y = Y;
                     Map.SectorGraphicsChanges.VertexAndNormalsChanged(Pos);
@@ -2779,7 +2780,7 @@ namespace SharpFlame
                 return;
             }
 
-            Health = modMath.Clamp_dbl(Health, 1.0D, 100.0D) / 100.0D;
+            Health = MathUtil.Clamp_dbl(Health, 1.0D, 100.0D) / 100.0D;
 
             if ( Map.SelectedUnits.Count > 1 )
             {
@@ -3520,7 +3521,7 @@ namespace SharpFlame
                 return;
             }
 
-            modMath.sXY_int Vertex = MouseOverTerrain.Vertex.Normal;
+            sXY_int Vertex = MouseOverTerrain.Vertex.Normal;
             int A = 0;
 
             lstAutoTexture.Enabled = false;
@@ -3551,7 +3552,7 @@ namespace SharpFlame
                 return;
             }
 
-            modMath.sXY_int Tile = MouseOverTerrain.Tile.Normal;
+            sXY_int Tile = MouseOverTerrain.Tile.Normal;
 
             if ( Map.Tileset != null )
             {
@@ -3689,8 +3690,8 @@ namespace SharpFlame
             }
 
             NewArea.SetPositions(
-                new modMath.sXY_int(Map.Selected_Area_VertexA.X * modProgram.TerrainGridSpacing, Map.Selected_Area_VertexA.Y * modProgram.TerrainGridSpacing),
-                new modMath.sXY_int(Map.Selected_Area_VertexB.X * modProgram.TerrainGridSpacing, Map.Selected_Area_VertexB.Y * modProgram.TerrainGridSpacing));
+                new sXY_int(Map.Selected_Area_VertexA.X * modProgram.TerrainGridSpacing, Map.Selected_Area_VertexA.Y * modProgram.TerrainGridSpacing),
+                new sXY_int(Map.Selected_Area_VertexB.X * modProgram.TerrainGridSpacing, Map.Selected_Area_VertexB.Y * modProgram.TerrainGridSpacing));
 
             ScriptMarkerLists_Update();
 
@@ -3862,7 +3863,7 @@ namespace SharpFlame
                 ScripPosition.Deallocate();
                 if ( Map.ScriptPositions.Count > 0 )
                 {
-                    _SelectedScriptMarker = Map.ScriptPositions[modMath.Clamp_int(Number, 0, Map.ScriptPositions.Count - 1)];
+                    _SelectedScriptMarker = Map.ScriptPositions[MathUtil.Clamp_int(Number, 0, Map.ScriptPositions.Count - 1)];
                 }
                 else
                 {
@@ -3876,7 +3877,7 @@ namespace SharpFlame
                 ScriptArea.Deallocate();
                 if ( Map.ScriptAreas.Count > 0 )
                 {
-                    _SelectedScriptMarker = Map.ScriptAreas[modMath.Clamp_int(Number, 0, Map.ScriptAreas.Count - 1)];
+                    _SelectedScriptMarker = Map.ScriptAreas[MathUtil.Clamp_int(Number, 0, Map.ScriptAreas.Count - 1)];
                 }
                 else
                 {

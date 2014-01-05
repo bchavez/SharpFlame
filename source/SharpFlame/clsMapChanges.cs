@@ -1,4 +1,5 @@
 using SharpFlame.Collections;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -7,21 +8,21 @@ namespace SharpFlame
         public class clsPointChanges
         {
             public bool[,] PointIsChanged;
-            public SimpleList<modMath.clsXY_int> ChangedPoints = new SimpleList<modMath.clsXY_int>();
+            public SimpleList<clsXY_int> ChangedPoints = new SimpleList<clsXY_int>();
 
-            public clsPointChanges(modMath.sXY_int PointSize)
+            public clsPointChanges(sXY_int PointSize)
             {
                 PointIsChanged = new bool[PointSize.X, PointSize.Y];
                 ChangedPoints.MinSize = PointSize.X * PointSize.Y;
                 ChangedPoints.Clear();
             }
 
-            public void Changed(modMath.sXY_int Num)
+            public void Changed(sXY_int Num)
             {
                 if ( !PointIsChanged[Num.X, Num.Y] )
                 {
                     PointIsChanged[Num.X, Num.Y] = true;
-                    ChangedPoints.Add(new modMath.clsXY_int(Num));
+                    ChangedPoints.Add(new clsXY_int(Num));
                 }
             }
 
@@ -29,7 +30,7 @@ namespace SharpFlame
             {
                 int X = 0;
                 int Y = 0;
-                modMath.sXY_int Num = new modMath.sXY_int();
+                sXY_int Num = new sXY_int();
 
                 for ( Y = 0; Y <= PointIsChanged.GetUpperBound(1); Y++ )
                 {
@@ -44,9 +45,9 @@ namespace SharpFlame
 
             public void Clear()
             {
-                modMath.clsXY_int Point = default(modMath.clsXY_int);
+                clsXY_int Point = default(clsXY_int);
 
-                foreach ( modMath.clsXY_int tempLoopVar_Point in ChangedPoints )
+                foreach ( clsXY_int tempLoopVar_Point in ChangedPoints )
                 {
                     Point = tempLoopVar_Point;
                     PointIsChanged[Point.X, Point.Y] = false;
@@ -56,9 +57,9 @@ namespace SharpFlame
 
             public void PerformTool(clsAction Tool)
             {
-                modMath.clsXY_int Point = default(modMath.clsXY_int);
+                clsXY_int Point = default(clsXY_int);
 
-                foreach ( modMath.clsXY_int tempLoopVar_Point in ChangedPoints )
+                foreach ( clsXY_int tempLoopVar_Point in ChangedPoints )
                 {
                     Point = tempLoopVar_Point;
                     Tool.PosNum = Point.XY;
@@ -72,7 +73,7 @@ namespace SharpFlame
             public clsMap Map;
             public clsTerrain Terrain;
 
-            public clsMapTileChanges(clsMap Map, modMath.sXY_int PointSize) : base(PointSize)
+            public clsMapTileChanges(clsMap Map, sXY_int PointSize) : base(PointSize)
             {
                 this.Map = Map;
                 Terrain = Map.Terrain;
@@ -83,26 +84,26 @@ namespace SharpFlame
                 Map = null;
             }
 
-            public abstract void TileChanged(modMath.sXY_int Num);
+            public abstract void TileChanged(sXY_int Num);
 
-            public void VertexChanged(modMath.sXY_int Num)
+            public void VertexChanged(sXY_int Num)
             {
                 if ( Num.X > 0 )
                 {
                     if ( Num.Y > 0 )
                     {
-                        TileChanged(new modMath.sXY_int(Num.X - 1, Num.Y - 1));
+                        TileChanged(new sXY_int(Num.X - 1, Num.Y - 1));
                     }
                     if ( Num.Y < Terrain.TileSize.Y )
                     {
-                        TileChanged(new modMath.sXY_int(Num.X - 1, Num.Y));
+                        TileChanged(new sXY_int(Num.X - 1, Num.Y));
                     }
                 }
                 if ( Num.X < Terrain.TileSize.X )
                 {
                     if ( Num.Y > 0 )
                     {
-                        TileChanged(new modMath.sXY_int(Num.X, Num.Y - 1));
+                        TileChanged(new sXY_int(Num.X, Num.Y - 1));
                     }
                     if ( Num.Y < Terrain.TileSize.Y )
                     {
@@ -111,47 +112,47 @@ namespace SharpFlame
                 }
             }
 
-            public void VertexAndNormalsChanged(modMath.sXY_int Num)
+            public void VertexAndNormalsChanged(sXY_int Num)
             {
                 if ( Num.X > 1 )
                 {
                     if ( Num.Y > 0 )
                     {
-                        TileChanged(new modMath.sXY_int(Num.X - 2, Num.Y - 1));
+                        TileChanged(new sXY_int(Num.X - 2, Num.Y - 1));
                     }
                     if ( Num.Y < Terrain.TileSize.Y )
                     {
-                        TileChanged(new modMath.sXY_int(Num.X - 2, Num.Y));
+                        TileChanged(new sXY_int(Num.X - 2, Num.Y));
                     }
                 }
                 if ( Num.X > 0 )
                 {
                     if ( Num.Y > 1 )
                     {
-                        TileChanged(new modMath.sXY_int(Num.X - 1, Num.Y - 2));
+                        TileChanged(new sXY_int(Num.X - 1, Num.Y - 2));
                     }
                     if ( Num.Y > 0 )
                     {
-                        TileChanged(new modMath.sXY_int(Num.X - 1, Num.Y - 1));
+                        TileChanged(new sXY_int(Num.X - 1, Num.Y - 1));
                     }
                     if ( Num.Y < Terrain.TileSize.Y )
                     {
-                        TileChanged(new modMath.sXY_int(Num.X - 1, Num.Y));
+                        TileChanged(new sXY_int(Num.X - 1, Num.Y));
                     }
                     if ( Num.Y < Terrain.TileSize.Y - 1 )
                     {
-                        TileChanged(new modMath.sXY_int(Num.X - 1, Num.Y + 1));
+                        TileChanged(new sXY_int(Num.X - 1, Num.Y + 1));
                     }
                 }
                 if ( Num.X < Terrain.TileSize.X )
                 {
                     if ( Num.Y > 1 )
                     {
-                        TileChanged(new modMath.sXY_int(Num.X, Num.Y - 2));
+                        TileChanged(new sXY_int(Num.X, Num.Y - 2));
                     }
                     if ( Num.Y > 0 )
                     {
-                        TileChanged(new modMath.sXY_int(Num.X, Num.Y - 1));
+                        TileChanged(new sXY_int(Num.X, Num.Y - 1));
                     }
                     if ( Num.Y < Terrain.TileSize.Y )
                     {
@@ -159,27 +160,27 @@ namespace SharpFlame
                     }
                     if ( Num.Y < Terrain.TileSize.Y - 1 )
                     {
-                        TileChanged(new modMath.sXY_int(Num.X, Num.Y + 1));
+                        TileChanged(new sXY_int(Num.X, Num.Y + 1));
                     }
                 }
                 if ( Num.X < Terrain.TileSize.X - 1 )
                 {
                     if ( Num.Y > 0 )
                     {
-                        TileChanged(new modMath.sXY_int(Num.X + 1, Num.Y - 1));
+                        TileChanged(new sXY_int(Num.X + 1, Num.Y - 1));
                     }
                     if ( Num.Y < Terrain.TileSize.Y )
                     {
-                        TileChanged(new modMath.sXY_int(Num.X + 1, Num.Y));
+                        TileChanged(new sXY_int(Num.X + 1, Num.Y));
                     }
                 }
             }
 
-            public void SideHChanged(modMath.sXY_int Num)
+            public void SideHChanged(sXY_int Num)
             {
                 if ( Num.Y > 0 )
                 {
-                    TileChanged(new modMath.sXY_int(Num.X, Num.Y - 1));
+                    TileChanged(new sXY_int(Num.X, Num.Y - 1));
                 }
                 if ( Num.Y < Map.Terrain.TileSize.Y )
                 {
@@ -187,11 +188,11 @@ namespace SharpFlame
                 }
             }
 
-            public void SideVChanged(modMath.sXY_int Num)
+            public void SideVChanged(sXY_int Num)
             {
                 if ( Num.X > 0 )
                 {
-                    TileChanged(new modMath.sXY_int(Num.X - 1, Num.Y));
+                    TileChanged(new sXY_int(Num.X - 1, Num.Y));
                 }
                 if ( Num.X < Map.Terrain.TileSize.X )
                 {
@@ -206,9 +207,9 @@ namespace SharpFlame
             {
             }
 
-            public override void TileChanged(modMath.sXY_int Num)
+            public override void TileChanged(sXY_int Num)
             {
-                modMath.sXY_int SectorNum = new modMath.sXY_int();
+                sXY_int SectorNum = new sXY_int();
 
                 SectorNum = Map.GetTileSectorNum(Num);
                 Changed(SectorNum);
@@ -221,7 +222,7 @@ namespace SharpFlame
             {
             }
 
-            public override void TileChanged(modMath.sXY_int Num)
+            public override void TileChanged(sXY_int Num)
             {
                 Changed(Num);
             }
@@ -243,12 +244,12 @@ namespace SharpFlame
             {
             }
 
-            public clsTerrainUpdate(modMath.sXY_int TileSize)
+            public clsTerrainUpdate(sXY_int TileSize)
             {
-                Vertices = new clsPointChanges(new modMath.sXY_int(TileSize.X + 1, TileSize.Y + 1));
-                Tiles = new clsPointChanges(new modMath.sXY_int(TileSize.X, TileSize.Y));
-                SidesH = new clsPointChanges(new modMath.sXY_int(TileSize.X, TileSize.Y + 1));
-                SidesV = new clsPointChanges(new modMath.sXY_int(TileSize.X + 1, TileSize.Y));
+                Vertices = new clsPointChanges(new sXY_int(TileSize.X + 1, TileSize.Y + 1));
+                Tiles = new clsPointChanges(new sXY_int(TileSize.X, TileSize.Y));
+                SidesH = new clsPointChanges(new sXY_int(TileSize.X, TileSize.Y + 1));
+                SidesV = new clsPointChanges(new sXY_int(TileSize.X + 1, TileSize.Y));
             }
 
             public void SetAllChanged()

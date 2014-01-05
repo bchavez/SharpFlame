@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -767,7 +768,7 @@ namespace SharpFlame
             int StructureBadModulesCount = 0;
             int FeatureBadPositionCount = 0;
             int ModuleLimit = 0;
-            modMath.sXY_int ZeroPos = new modMath.sXY_int(0, 0);
+            sXY_int ZeroPos = new sXY_int(0, 0);
             clsStructureType ModuleType = default(clsStructureType);
             clsUnit NewModule = default(clsUnit);
 
@@ -836,7 +837,7 @@ namespace SharpFlame
                             }
                             if ( INIStructures.Structures[A].HealthPercent >= 0 )
                             {
-                                NewUnit.Health = modMath.Clamp_dbl(INIStructures.Structures[A].HealthPercent / 100.0D, 0.01D, 1.0D);
+                                NewUnit.Health = MathUtil.Clamp_dbl(INIStructures.Structures[A].HealthPercent / 100.0D, 0.01D, 1.0D);
                             }
                             if ( INIStructures.Structures[A].ID == 0U )
                             {
@@ -952,7 +953,7 @@ namespace SharpFlame
                             }
                             if ( INIFeatures.Features[A].HealthPercent >= 0 )
                             {
-                                NewUnit.Health = modMath.Clamp_dbl(INIFeatures.Features[A].HealthPercent / 100.0D, 0.01D, 1.0D);
+                                NewUnit.Health = MathUtil.Clamp_dbl(INIFeatures.Features[A].HealthPercent / 100.0D, 0.01D, 1.0D);
                             }
                             if ( INIFeatures.Features[A].ID == 0U )
                             {
@@ -1161,7 +1162,7 @@ namespace SharpFlame
                             }
                             if ( INIDroids.Droids[A].HealthPercent >= 0 )
                             {
-                                NewUnit.Health = modMath.Clamp_dbl(INIDroids.Droids[A].HealthPercent / 100.0D, 0.01D, 1.0D);
+                                NewUnit.Health = MathUtil.Clamp_dbl(INIDroids.Droids[A].HealthPercent / 100.0D, 0.01D, 1.0D);
                             }
                             if ( INIDroids.Droids[A].ID == 0U )
                             {
@@ -1663,8 +1664,8 @@ namespace SharpFlame
             int A = 0;
             int X = 0;
             int Y = 0;
-            modMath.sXY_int PosA = new modMath.sXY_int();
-            modMath.sXY_int PosB = new modMath.sXY_int();
+            sXY_int PosA = new sXY_int();
+            sXY_int PosB = new sXY_int();
 
             try
             {
@@ -1694,7 +1695,7 @@ namespace SharpFlame
                     return ReturnResult;
                 }
 
-                TerrainBlank(new modMath.sXY_int(Convert.ToInt32(MapWidth), Convert.ToInt32(MapHeight)));
+                TerrainBlank(new sXY_int(Convert.ToInt32(MapWidth), Convert.ToInt32(MapHeight)));
 
                 for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
                 {
@@ -2180,12 +2181,12 @@ namespace SharpFlame
             clsUnit Unit = default(clsUnit);
             bool[] UnitIsModule = new bool[Units.Count];
             int[] UnitModuleCount = new int[Units.Count];
-            modMath.sXY_int SectorNum = new modMath.sXY_int();
+            sXY_int SectorNum = new sXY_int();
             clsStructureType OtherStructureType = default(clsStructureType);
             clsUnit OtherUnit = default(clsUnit);
-            modMath.sXY_int ModuleMin = new modMath.sXY_int();
-            modMath.sXY_int ModuleMax = new modMath.sXY_int();
-            modMath.sXY_int Footprint = new modMath.sXY_int();
+            sXY_int ModuleMin = new sXY_int();
+            sXY_int ModuleMax = new sXY_int();
+            sXY_int Footprint = new sXY_int();
             int A = 0;
             clsStructureType.enumStructureType[] UnderneathTypes = new clsStructureType.enumStructureType[2];
             int UnderneathTypeCount = 0;
@@ -2658,8 +2659,8 @@ namespace SharpFlame
                 Campaign
             }
 
-            public modMath.sXY_int ScrollMin;
-            public modMath.sXY_uint ScrollMax;
+            public sXY_int ScrollMin;
+            public sXY_uint ScrollMax;
             public enumCompileType CompileType;
         }
 
@@ -2917,10 +2918,10 @@ namespace SharpFlame
                 foreach ( clsGateway tempLoopVar_Gateway in Gateways )
                 {
                     Gateway = tempLoopVar_Gateway;
-                    File_MAP.Write((byte)(modMath.Clamp_int(Gateway.PosA.X, 0, 255)));
-                    File_MAP.Write((byte)(modMath.Clamp_int(Gateway.PosA.Y, 0, 255)));
-                    File_MAP.Write((byte)(modMath.Clamp_int(Gateway.PosB.X, 0, 255)));
-                    File_MAP.Write((byte)(modMath.Clamp_int(Gateway.PosB.Y, 0, 255)));
+                    File_MAP.Write((byte)(MathUtil.Clamp_int(Gateway.PosA.X, 0, 255)));
+                    File_MAP.Write((byte)(MathUtil.Clamp_int(Gateway.PosA.Y, 0, 255)));
+                    File_MAP.Write((byte)(MathUtil.Clamp_int(Gateway.PosB.X, 0, 255)));
+                    File_MAP.Write((byte)(MathUtil.Clamp_int(Gateway.PosB.Y, 0, 255)));
                 }
 
                 clsFeatureType FeatureType = default(clsFeatureType);

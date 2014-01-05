@@ -7,6 +7,7 @@ using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.ApplicationServices;
 using Microsoft.VisualBasic.Devices;
 using SharpFlame.Collections;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -462,10 +463,10 @@ namespace SharpFlame
 
         public struct sWorldPos
         {
-            public modMath.sXY_int Horizontal;
+            public sXY_int Horizontal;
             public int Altitude;
 
-            public sWorldPos(modMath.sXY_int NewHorizontal, int NewAltitude)
+            public sWorldPos(sXY_int NewHorizontal, int NewAltitude)
             {
                 Horizontal = NewHorizontal;
                 Altitude = NewAltitude;
@@ -482,7 +483,7 @@ namespace SharpFlame
             }
         }
 
-        public static bool PosIsWithinTileArea(modMath.sXY_int WorldHorizontal, modMath.sXY_int StartTile, modMath.sXY_int FinishTile)
+        public static bool PosIsWithinTileArea(sXY_int WorldHorizontal, sXY_int StartTile, sXY_int FinishTile)
         {
             return WorldHorizontal.X >= StartTile.X * TerrainGridSpacing &
                    WorldHorizontal.Y >= StartTile.Y * TerrainGridSpacing &

@@ -1,5 +1,6 @@
 using System.Windows.Forms;
 using SharpFlame.Collections;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -186,7 +187,7 @@ namespace SharpFlame
     public class clsResultItemTileGoto : clsResultItemGotoInterface
     {
         public clsViewInfo View;
-        public modMath.sXY_int TileNum;
+        public sXY_int TileNum;
 
         public override void Perform()
         {
@@ -197,7 +198,7 @@ namespace SharpFlame
     public class clsResultItemPosGoto : clsResultItemGotoInterface
     {
         public clsViewInfo View;
-        public modMath.sXY_int Horizontal;
+        public sXY_int Horizontal;
 
         public override void Perform()
         {

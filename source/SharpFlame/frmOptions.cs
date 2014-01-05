@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using SharpFlame.Collections;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -67,9 +68,9 @@ namespace SharpFlame
 
             TilesetsPathSet.SetPaths(modSettings.Settings.TilesetDirectories);
             ObjectDataPathSet.SetPaths(modSettings.Settings.ObjectDataDirectories);
-            TilesetsPathSet.SelectedNum = modMath.Clamp_int(Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultTilesetsPathNum)), -1,
+            TilesetsPathSet.SelectedNum = MathUtil.Clamp_int(Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultTilesetsPathNum)), -1,
                 modSettings.Settings.TilesetDirectories.Count - 1);
-            ObjectDataPathSet.SelectedNum = modMath.Clamp_int(Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultObjectDataPathNum)),
+            ObjectDataPathSet.SelectedNum = MathUtil.Clamp_int(Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultObjectDataPathNum)),
                 -1, modSettings.Settings.ObjectDataDirectories.Count - 1);
 
             txtMapBPP.Text = modIO.InvariantToString_int(modSettings.Settings.MapViewBPP);
@@ -91,12 +92,12 @@ namespace SharpFlame
             if ( modIO.InvariantParse_dbl(txtAutosaveChanges.Text, ref dblTemp) )
             {
                 NewSettings.set_Changes(modSettings.Setting_AutoSaveMinChanges,
-                    new clsOptionProfile.clsChange<UInt32>((uint)(modMath.Clamp_dbl(dblTemp, 1.0D, (Convert.ToDouble(UInt32.MaxValue)) - 1.0D))));
+                    new clsOptionProfile.clsChange<UInt32>((uint)(MathUtil.Clamp_dbl(dblTemp, 1.0D, (Convert.ToDouble(UInt32.MaxValue)) - 1.0D))));
             }
             if ( modIO.InvariantParse_dbl(txtAutosaveInterval.Text, ref dblTemp) )
             {
                 NewSettings.set_Changes(modSettings.Setting_AutoSaveMinInterval_s,
-                    new clsOptionProfile.clsChange<UInt32>((uint)(modMath.Clamp_dbl(dblTemp, 1.0D, (Convert.ToDouble(UInt32.MaxValue)) - 1.0D))));
+                    new clsOptionProfile.clsChange<UInt32>((uint)(MathUtil.Clamp_dbl(dblTemp, 1.0D, (Convert.ToDouble(UInt32.MaxValue)) - 1.0D))));
             }
             NewSettings.set_Changes(modSettings.Setting_AutoSaveCompress, new clsOptionProfile.clsChange<bool>(cbxAutosaveCompression.Checked));
             NewSettings.set_Changes(modSettings.Setting_AutoSaveEnabled, new clsOptionProfile.clsChange<bool>(cbxAutosaveEnabled.Checked));

@@ -4,6 +4,7 @@ using System.IO;
 using Microsoft.VisualBasic;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -586,7 +587,7 @@ namespace SharpFlame
 
             clsUnitType.clsAttachment Attachment = default(clsUnitType.clsAttachment);
             clsUnitType.clsAttachment BaseAttachment = default(clsUnitType.clsAttachment);
-            modMath.sXYZ_sng Connector = new modMath.sXYZ_sng();
+            sXYZ_sng Connector = new sXYZ_sng();
             clsStructureType StructureType = default(clsStructureType);
             clsFeatureType FeatureType = default(clsFeatureType);
             clsDroidTemplate Template = default(clsDroidTemplate);
@@ -818,7 +819,7 @@ namespace SharpFlame
                 string StructureCode = Fields[0];
                 string StructureTypeText = Fields[1];
                 string[] StructurePIEs = Fields[21].ToLower().Split('@');
-                modMath.sXY_int StructureFootprint = new modMath.sXY_int();
+                sXY_int StructureFootprint = new sXY_int();
                 string StructureBasePIE = Fields[22].ToLower();
                 if ( !modIO.InvariantParse_int(Fields[5], ref StructureFootprint.X) )
                 {

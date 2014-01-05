@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using Matrix3D;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
+using SharpFlame.MathExtra;
 
 namespace SharpFlame
 {
@@ -11,7 +12,7 @@ namespace SharpFlame
         public clsMap Map;
         public ctrlMapView MapView;
 
-        public modMath.sXYZ_int ViewPos;
+        public sXYZ_int ViewPos;
         public Matrix3DMath.Matrix3D ViewAngleMatrix = new Matrix3DMath.Matrix3D();
         public Matrix3DMath.Matrix3D ViewAngleMatrix_Inverted = new Matrix3DMath.Matrix3D();
         public Angles.AngleRPY ViewAngleRPY;
@@ -24,10 +25,10 @@ namespace SharpFlame
             this.Map = Map;
             this.MapView = MapView;
 
-            ViewPos = new modMath.sXYZ_int(0, 3072, 0);
+            ViewPos = new sXYZ_int(0, 3072, 0);
             FOV_Multiplier_Set(modSettings.Settings.FOVDefault);
             ViewAngleSetToDefault();
-            LookAtPos(new modMath.sXY_int((int)(Map.Terrain.TileSize.X * modProgram.TerrainGridSpacing / 2.0D),
+            LookAtPos(new sXY_int((int)(Map.Terrain.TileSize.X * modProgram.TerrainGridSpacing / 2.0D),
                 (int)(Map.Terrain.TileSize.Y * modProgram.TerrainGridSpacing / 2.0D)));
         }
 
@@ -65,8 +66,8 @@ namespace SharpFlame
 
         public void FOV_Calc()
         {
-            const float Min = (float)(0.1d * modMath.RadOf1Deg);
-            const float Max = (float)(179.0d * modMath.RadOf1Deg);
+            const float Min = (float)(0.1d * MathUtil.RadOf1Deg);
+            const float Max = (float)(179.0d * MathUtil.RadOf1Deg);
 
             FieldOfViewY = (float)(Math.Atan(MapView.GLSize.Y * FOVMultiplier / 2.0D) * 2.0D);
             if ( FieldOfViewY < Min )
@@ -91,7 +92,7 @@ namespace SharpFlame
             MapView.DrawViewLater();
         }
 
-        public void ViewPosSet(modMath.sXYZ_int NewViewPos)
+        public void ViewPosSet(sXYZ_int NewViewPos)
         {
             ViewPos = NewViewPos;
             ViewPosClamp();
@@ -99,7 +100,7 @@ namespace SharpFlame
             MapView.DrawViewLater();
         }
 
-        public void ViewPosChange(modMath.sXYZ_int Displacement)
+        public void ViewPosChange(sXYZ_int Displacement)
         {
             ViewPos.X += Displacement.X;
             ViewPos.Z += Displacement.Z;
@@ -114,9 +115,9 @@ namespace SharpFlame
             const int MaxHeight = 1048576;
             const int MaxDist = 1048576;
 
-            ViewPos.X = modMath.Clamp_int(ViewPos.X, Convert.ToInt32(- MaxDist), Map.Terrain.TileSize.X * modProgram.TerrainGridSpacing + MaxDist);
-            ViewPos.Z = modMath.Clamp_int(ViewPos.Z, - Map.Terrain.TileSize.Y * modProgram.TerrainGridSpacing - MaxDist, MaxDist);
-            ViewPos.Y = modMath.Clamp_int(ViewPos.Y, ((int)(Math.Ceiling(Map.GetTerrainHeight(new modMath.sXY_int(ViewPos.X, - ViewPos.Z))))) + 16, MaxHeight);
+            ViewPos.X = MathUtil.Clamp_int(ViewPos.X, Convert.ToInt32(- MaxDist), Map.Terrain.TileSize.X * modProgram.TerrainGridSpacing + MaxDist);
+            ViewPos.Z = MathUtil.Clamp_int(ViewPos.Z, - Map.Terrain.TileSize.Y * modProgram.TerrainGridSpacing - MaxDist, MaxDist);
+            ViewPos.Y = MathUtil.Clamp_int(ViewPos.Y, ((int)(Math.Ceiling(Map.GetTerrainHeight(new sXY_int(ViewPos.X, - ViewPos.Z))))) + 16, MaxHeight);
         }
 
         public void ViewAngleSet(Matrix3DMath.Matrix3D NewMatrix)
@@ -175,9 +176,9 @@ namespace SharpFlame
             Matrix3DMath.MatrixToRPY(NewMatrix, ref ViewAngleRPY);
             if ( Flag )
             {
-                if ( ViewAngleRPY.Pitch < modMath.RadOf1Deg * 10.0D )
+                if ( ViewAngleRPY.Pitch < MathUtil.RadOf1Deg * 10.0D )
                 {
-                    ViewAngleRPY.Pitch = modMath.RadOf1Deg * 10.0D;
+                    ViewAngleRPY.Pitch = MathUtil.RadOf1Deg * 10.0D;
                 }
             }
             Matrix3DMath.MatrixSetToRPY(ViewAngleMatrix, ViewAngleRPY);
@@ -194,19 +195,19 @@ namespace SharpFlame
             MapView.DrawViewLater();
         }
 
-        public void LookAtTile(modMath.sXY_int TileNum)
+        public void LookAtTile(sXY_int TileNum)
         {
-            modMath.sXY_int Pos = new modMath.sXY_int();
+            sXY_int Pos = new sXY_int();
 
             Pos.X = (int)((TileNum.X + 0.5D) * modProgram.TerrainGridSpacing);
             Pos.Y = (int)((TileNum.Y + 0.5D) * modProgram.TerrainGridSpacing);
             LookAtPos(Pos);
         }
 
-        public void LookAtPos(modMath.sXY_int Horizontal)
+        public void LookAtPos(sXY_int Horizontal)
         {
             Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
-            modMath.sXYZ_int XYZ_int = new modMath.sXYZ_int();
+            sXYZ_int XYZ_int = new sXYZ_int();
             double dblTemp = 0;
             int A = 0;
             Matrix3DMath.Matrix3D matrixA = new Matrix3DMath.Matrix3D();
@@ -238,7 +239,7 @@ namespace SharpFlame
         public void MoveToViewTerrainPosFromDistance(Position.XYZ_dbl TerrainPos, double Distance)
         {
             Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
-            modMath.sXYZ_int XYZ_int = new modMath.sXYZ_int();
+            sXYZ_int XYZ_int = new sXYZ_int();
 
             Matrix3DMath.VectorForwardsRotationByMatrix(ViewAngleMatrix, ref XYZ_dbl);
 
@@ -249,7 +250,7 @@ namespace SharpFlame
             ViewPosSet(XYZ_int);
         }
 
-        public bool Pos_Get_Screen_XY(Position.XYZ_dbl Pos, modMath.sXY_int Result)
+        public bool Pos_Get_Screen_XY(Position.XYZ_dbl Pos, sXY_int Result)
         {
             if ( Pos.Z <= 0.0D )
             {
@@ -270,7 +271,7 @@ namespace SharpFlame
             return false;
         }
 
-        public bool ScreenXY_Get_ViewPlanePos(modMath.sXY_int ScreenPos, double PlaneHeight, Position.XY_dbl ResultPos)
+        public bool ScreenXY_Get_ViewPlanePos(sXY_int ScreenPos, double PlaneHeight, Position.XY_dbl ResultPos)
         {
             double dblTemp = 0;
             Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
@@ -296,7 +297,7 @@ namespace SharpFlame
             return true;
         }
 
-        public bool ScreenXY_Get_TerrainPos(modMath.sXY_int ScreenPos, modProgram.sWorldPos ResultPos)
+        public bool ScreenXY_Get_TerrainPos(sXY_int ScreenPos, modProgram.sWorldPos ResultPos)
         {
             double dblTemp = 0;
             Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
@@ -305,8 +306,8 @@ namespace SharpFlame
             int Y = 0;
             Position.XY_dbl LimitA = default(Position.XY_dbl);
             Position.XY_dbl LimitB = default(Position.XY_dbl);
-            modMath.sXY_int Min = new modMath.sXY_int();
-            modMath.sXY_int Max = new modMath.sXY_int();
+            sXY_int Min = new sXY_int();
+            sXY_int Max = new sXY_int();
             double TriGradientX = 0;
             double TriGradientZ = 0;
             double TriHeightOffset = 0;
@@ -518,7 +519,7 @@ namespace SharpFlame
         {
             Position.XY_dbl XY_dbl = default(Position.XY_dbl);
             bool Flag = default(bool);
-            modMath.sXY_int Footprint = new modMath.sXY_int();
+            sXY_int Footprint = new sXY_int();
             clsMouseDown.clsOverMinimap MouseLeftDownOverMinimap = GetMouseLeftDownOverMinimap();
 
             if ( MouseLeftDownOverMinimap != null )
@@ -528,7 +529,7 @@ namespace SharpFlame
                 }
                 else if ( IsViewPosOverMinimap(MouseOver.ScreenPos) )
                 {
-                    modMath.sXY_int Pos = new modMath.sXY_int((int)Conversion.Int(MouseOver.ScreenPos.X * Tiles_Per_Minimap_Pixel),
+                    sXY_int Pos = new sXY_int((int)Conversion.Int(MouseOver.ScreenPos.X * Tiles_Per_Minimap_Pixel),
                         (int)(Conversion.Int(MouseOver.ScreenPos.Y * Tiles_Per_Minimap_Pixel)));
                     Map.TileNumClampToMap(Pos);
                     LookAtTile(Pos);
@@ -570,7 +571,7 @@ namespace SharpFlame
                     MouseOverTerrain.Vertex.Normal.X = (int)(Math.Round((double)(MouseOverTerrain.Pos.Horizontal.X / modProgram.TerrainGridSpacing)));
                     MouseOverTerrain.Vertex.Normal.Y = (int)(Math.Round((double)(MouseOverTerrain.Pos.Horizontal.Y / modProgram.TerrainGridSpacing)));
                     MouseOverTerrain.Tile.Alignment = MouseOverTerrain.Vertex.Normal;
-                    MouseOverTerrain.Vertex.Alignment = new modMath.sXY_int(MouseOverTerrain.Tile.Normal.X + 1, MouseOverTerrain.Tile.Normal.Y + 1);
+                    MouseOverTerrain.Vertex.Alignment = new sXY_int(MouseOverTerrain.Tile.Normal.X + 1, MouseOverTerrain.Tile.Normal.Y + 1);
                     MouseOverTerrain.Triangle = Map.GetTerrainTri(MouseOverTerrain.Pos.Horizontal);
                     XY_dbl.X = MouseOverTerrain.Pos.Horizontal.X - MouseOverTerrain.Vertex.Normal.X * modProgram.TerrainGridSpacing;
                     XY_dbl.Y = MouseOverTerrain.Pos.Horizontal.Y - MouseOverTerrain.Vertex.Normal.Y * modProgram.TerrainGridSpacing;
@@ -586,7 +587,7 @@ namespace SharpFlame
                         MouseOverTerrain.Side_Num.X = MouseOverTerrain.Vertex.Normal.X;
                         MouseOverTerrain.Side_Num.Y = MouseOverTerrain.Tile.Normal.Y;
                     }
-                    modMath.sXY_int SectorNum = Map.GetPosSectorNum(MouseOverTerrain.Pos.Horizontal);
+                    sXY_int SectorNum = Map.GetPosSectorNum(MouseOverTerrain.Pos.Horizontal);
                     clsMap.clsUnit Unit = default(clsMap.clsUnit);
                     clsMap.clsUnitSectorConnection Connection = default(clsMap.clsUnitSectorConnection);
                     foreach ( clsMap.clsUnitSectorConnection tempLoopVar_Connection in Map.Sectors[SectorNum.X, SectorNum.Y].Units )
@@ -724,7 +725,7 @@ namespace SharpFlame
 
         public class clsMouseOver
         {
-            public modMath.sXY_int ScreenPos;
+            public sXY_int ScreenPos;
 
             public class clsOverTerrain
             {
@@ -733,7 +734,7 @@ namespace SharpFlame
                 public clsBrush.sPosNum Tile;
                 public clsBrush.sPosNum Vertex;
                 public bool Triangle;
-                public modMath.sXY_int Side_Num;
+                public sXY_int Side_Num;
                 public bool Side_IsV;
             }
 
@@ -751,7 +752,7 @@ namespace SharpFlame
 
             public class clsOverMinimap
             {
-                public modMath.sXY_int DownPos;
+                public sXY_int DownPos;
             }
 
             public clsOverMinimap OverMinimap;
@@ -762,7 +763,7 @@ namespace SharpFlame
         public clsMouseDown MouseLeftDown;
         public clsMouseDown MouseRightDown;
 
-        public bool IsViewPosOverMinimap(modMath.sXY_int Pos)
+        public bool IsViewPosOverMinimap(sXY_int Pos)
         {
             if ( Pos.X >= 0 & Pos.X < Map.Terrain.TileSize.X / Tiles_Per_Minimap_Pixel
                  & Pos.Y >= 0 & Pos.Y < Map.Terrain.TileSize.Y / Tiles_Per_Minimap_Pixel )
@@ -803,8 +804,8 @@ namespace SharpFlame
                 return;
             }
 
-            modMath.sXY_int Side_Num = MouseOverTerrain.Side_Num;
-            modMath.sXY_int TileNum = new modMath.sXY_int();
+            sXY_int Side_Num = MouseOverTerrain.Side_Num;
+            sXY_int TileNum = new sXY_int();
 
             if ( MouseOverTerrain.Side_IsV )
             {
@@ -878,8 +879,8 @@ namespace SharpFlame
             int Num = 0;
             int A = 0;
             int B = 0;
-            modMath.sXY_int Tile = MouseOverTerrian.Tile.Normal;
-            modMath.sXY_int SideNum = new modMath.sXY_int();
+            sXY_int Tile = MouseOverTerrian.Tile.Normal;
+            sXY_int SideNum = new sXY_int();
 
             if ( Map.Selected_Tile_A != null )
             {
@@ -947,7 +948,7 @@ namespace SharpFlame
             }
             else
             {
-                Map.Selected_Tile_A = new modMath.clsXY_int(Tile);
+                Map.Selected_Tile_A = new clsXY_int(Tile);
             }
         }
 
@@ -962,7 +963,7 @@ namespace SharpFlame
 
             clsPainter.clsTerrain FillType = default(clsPainter.clsTerrain);
             clsPainter.clsTerrain ReplaceType = default(clsPainter.clsTerrain);
-            modMath.sXY_int StartVertex = MouseOverTerrain.Vertex.Normal;
+            sXY_int StartVertex = MouseOverTerrain.Vertex.Normal;
 
             FillType = modProgram.SelectedTerrain;
             ReplaceType = Map.Terrain.Vertices[StartVertex.X, StartVertex.Y].Terrain;
@@ -972,14 +973,14 @@ namespace SharpFlame
             }
 
             int A = 0;
-            modMath.sXY_int[] SourceOfFill = new modMath.sXY_int[524289];
+            sXY_int[] SourceOfFill = new sXY_int[524289];
             int SourceOfFillCount = 0;
             int SourceOfFillNum = 0;
             int MoveCount = 0;
             int RemainingCount = 0;
             int MoveOffset = 0;
-            modMath.sXY_int CurrentSource = new modMath.sXY_int();
-            modMath.sXY_int NextSource = new modMath.sXY_int();
+            sXY_int CurrentSource = new sXY_int();
+            sXY_int NextSource = new sXY_int();
             bool StopForCliff = default(bool);
             bool StopForEdge = default(bool);
 
@@ -1083,7 +1084,7 @@ namespace SharpFlame
                         {
                             if ( CliffAction == modProgram.enumFillCliffAction.StopAfter )
                             {
-                                StopForCliff = Map.SideHIsCliffOnBothSides(new modMath.sXY_int(CurrentSource.X, CurrentSource.Y));
+                                StopForCliff = Map.SideHIsCliffOnBothSides(new sXY_int(CurrentSource.X, CurrentSource.Y));
                             }
                             else
                             {
@@ -1110,7 +1111,7 @@ namespace SharpFlame
                         {
                             if ( CliffAction == modProgram.enumFillCliffAction.StopAfter )
                             {
-                                StopForCliff = Map.SideHIsCliffOnBothSides(new modMath.sXY_int(CurrentSource.X - 1, CurrentSource.Y));
+                                StopForCliff = Map.SideHIsCliffOnBothSides(new sXY_int(CurrentSource.X - 1, CurrentSource.Y));
                             }
                             else
                             {
@@ -1137,7 +1138,7 @@ namespace SharpFlame
                         {
                             if ( CliffAction == modProgram.enumFillCliffAction.StopAfter )
                             {
-                                StopForCliff = Map.SideVIsCliffOnBothSides(new modMath.sXY_int(CurrentSource.X, CurrentSource.Y));
+                                StopForCliff = Map.SideVIsCliffOnBothSides(new sXY_int(CurrentSource.X, CurrentSource.Y));
                             }
                             else
                             {
@@ -1164,7 +1165,7 @@ namespace SharpFlame
                         {
                             if ( CliffAction == modProgram.enumFillCliffAction.StopAfter )
                             {
-                                StopForCliff = Map.SideVIsCliffOnBothSides(new modMath.sXY_int(CurrentSource.X, CurrentSource.Y - 1));
+                                StopForCliff = Map.SideVIsCliffOnBothSides(new sXY_int(CurrentSource.X, CurrentSource.Y - 1));
                             }
                             else
                             {
@@ -1284,7 +1285,7 @@ namespace SharpFlame
             {
                 return;
             }
-            ApplyCliff.Angle = modMath.Clamp_dbl(Angle * modMath.RadOf1Deg, 0.0D, modMath.RadOf90Deg);
+            ApplyCliff.Angle = MathUtil.Clamp_dbl(Angle * MathUtil.RadOf1Deg, 0.0D, MathUtil.RadOf90Deg);
             ApplyCliff.SetTris = modMain.frmMainInstance.cbxCliffTris.Checked;
             modProgram.CliffBrush.PerformActionMapTiles(ApplyCliff, MouseOverTerrain.Tile);
 
@@ -1338,7 +1339,7 @@ namespace SharpFlame
                 return;
             }
 
-            modMath.sXY_int Tile = MouseOverTerrain.Tile.Normal;
+            sXY_int Tile = MouseOverTerrain.Tile.Normal;
 
             Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation.RotateClockwise();
             Map.TileTextureChangeTerrainAction(Tile, modMain.frmMainInstance.TextureTerrainAction);
@@ -1362,7 +1363,7 @@ namespace SharpFlame
                 return;
             }
 
-            modMath.sXY_int Tile = MouseOverTerrain.Tile.Normal;
+            sXY_int Tile = MouseOverTerrain.Tile.Normal;
 
             Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation.RotateAnticlockwise();
             Map.TileTextureChangeTerrainAction(Tile, modMain.frmMainInstance.TextureTerrainAction);
@@ -1386,7 +1387,7 @@ namespace SharpFlame
                 return;
             }
 
-            modMath.sXY_int Tile = MouseOverTerrain.Tile.Normal;
+            sXY_int Tile = MouseOverTerrain.Tile.Normal;
 
             Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation.ResultXFlip = !Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation.ResultXFlip;
             Map.TileTextureChangeTerrainAction(Tile, modMain.frmMainInstance.TextureTerrainAction);
@@ -1410,7 +1411,7 @@ namespace SharpFlame
                 return;
             }
 
-            modMath.sXY_int Tile = MouseOverTerrain.Tile.Normal;
+            sXY_int Tile = MouseOverTerrain.Tile.Normal;
 
             Map.Terrain.Tiles[Tile.X, Tile.Y].Tri = !Map.Terrain.Tiles[Tile.X, Tile.Y].Tri;
 
@@ -1437,12 +1438,12 @@ namespace SharpFlame
             ApplyHeightSmoothing.Map = Map;
             ApplyHeightSmoothing.Ratio = Ratio;
             int Radius = (int)(Math.Ceiling(modProgram.HeightBrush.Radius));
-            modMath.sXY_int PosNum = modProgram.HeightBrush.GetPosNum(MouseOverTerrain.Vertex);
-            ApplyHeightSmoothing.Offset.X = modMath.Clamp_int(PosNum.X - Radius, 0, Map.Terrain.TileSize.X);
-            ApplyHeightSmoothing.Offset.Y = modMath.Clamp_int(PosNum.Y - Radius, 0, Map.Terrain.TileSize.Y);
-            modMath.sXY_int PosEnd = new modMath.sXY_int();
-            PosEnd.X = modMath.Clamp_int(PosNum.X + Radius, 0, Map.Terrain.TileSize.X);
-            PosEnd.Y = modMath.Clamp_int(PosNum.Y + Radius, 0, Map.Terrain.TileSize.Y);
+            sXY_int PosNum = modProgram.HeightBrush.GetPosNum(MouseOverTerrain.Vertex);
+            ApplyHeightSmoothing.Offset.X = MathUtil.Clamp_int(PosNum.X - Radius, 0, Map.Terrain.TileSize.X);
+            ApplyHeightSmoothing.Offset.Y = MathUtil.Clamp_int(PosNum.Y - Radius, 0, Map.Terrain.TileSize.Y);
+            sXY_int PosEnd = new sXY_int();
+            PosEnd.X = MathUtil.Clamp_int(PosNum.X + Radius, 0, Map.Terrain.TileSize.X);
+            PosEnd.Y = MathUtil.Clamp_int(PosNum.Y + Radius, 0, Map.Terrain.TileSize.Y);
             ApplyHeightSmoothing.AreaTileSize.X = PosEnd.X - ApplyHeightSmoothing.Offset.X;
             ApplyHeightSmoothing.AreaTileSize.Y = PosEnd.Y - ApplyHeightSmoothing.Offset.Y;
             ApplyHeightSmoothing.Start();
@@ -1502,17 +1503,17 @@ namespace SharpFlame
                 return;
             }
 
-            modMath.sXY_int Tile = MouseOverTerrain.Tile.Normal;
+            sXY_int Tile = MouseOverTerrain.Tile.Normal;
 
             if ( modControls.KeyboardProfile.Active(modControls.Control_Gateway_Delete) )
             {
                 int A = 0;
-                modMath.sXY_int Low = new modMath.sXY_int();
-                modMath.sXY_int High = new modMath.sXY_int();
+                sXY_int Low = new sXY_int();
+                sXY_int High = new sXY_int();
                 A = 0;
                 while ( A < Map.Gateways.Count )
                 {
-                    modMath.ReorderXY(Map.Gateways[A].PosA, Map.Gateways[A].PosB, Low, High);
+                    MathUtil.ReorderXY(Map.Gateways[A].PosA, Map.Gateways[A].PosB, Low, High);
                     if ( Low.X <= Tile.X
                          & High.X >= Tile.X
                          & Low.Y <= Tile.Y
@@ -1531,7 +1532,7 @@ namespace SharpFlame
             {
                 if ( Map.Selected_Tile_A == null )
                 {
-                    Map.Selected_Tile_A = new modMath.clsXY_int(Tile);
+                    Map.Selected_Tile_A = new clsXY_int(Tile);
                     MapView.DrawViewLater();
                 }
                 else if ( Tile.X == Map.Selected_Tile_A.X | Tile.Y == Map.Selected_Tile_A.Y )
@@ -1550,7 +1551,7 @@ namespace SharpFlame
 
         public void MouseDown(MouseEventArgs e)
         {
-            modMath.sXY_int ScreenPos = new modMath.sXY_int();
+            sXY_int ScreenPos = new sXY_int();
 
             Map.SuppressMinimap = true;
 
@@ -1563,7 +1564,7 @@ namespace SharpFlame
                 {
                     MouseLeftDown.OverMinimap = new clsMouseDown.clsOverMinimap();
                     MouseLeftDown.OverMinimap.DownPos = ScreenPos;
-                    modMath.sXY_int Pos = new modMath.sXY_int((int)(Conversion.Int(ScreenPos.X * Tiles_Per_Minimap_Pixel)),
+                    sXY_int Pos = new sXY_int((int)(Conversion.Int(ScreenPos.X * Tiles_Per_Minimap_Pixel)),
                         (int)Conversion.Int(ScreenPos.Y * Tiles_Per_Minimap_Pixel));
                     Map.TileNumClampToMap(Pos);
                     LookAtTile(Pos);
@@ -1608,7 +1609,7 @@ namespace SharpFlame
                                     Map.SelectedUnits.Clear();
                                 }
                                 modMain.frmMainInstance.SelectedObject_Changed();
-                                Map.Unit_Selected_Area_VertexA = new modMath.clsXY_int(MouseOverTerrain.Vertex.Normal);
+                                Map.Unit_Selected_Area_VertexA = new clsXY_int(MouseOverTerrain.Vertex.Normal);
                                 MapView.DrawViewLater();
                             }
                         }
@@ -1723,12 +1724,12 @@ namespace SharpFlame
                         {
                             if ( Map.Selected_Area_VertexA == null )
                             {
-                                Map.Selected_Area_VertexA = new modMath.clsXY_int(MouseOverTerrain.Vertex.Normal);
+                                Map.Selected_Area_VertexA = new clsXY_int(MouseOverTerrain.Vertex.Normal);
                                 MapView.DrawViewLater();
                             }
                             else if ( Map.Selected_Area_VertexB == null )
                             {
-                                Map.Selected_Area_VertexB = new modMath.clsXY_int(MouseOverTerrain.Vertex.Normal);
+                                Map.Selected_Area_VertexB = new clsXY_int(MouseOverTerrain.Vertex.Normal);
                                 MapView.DrawViewLater();
                             }
                             else
@@ -1810,7 +1811,7 @@ namespace SharpFlame
             Matrix3DMath.Matrix3D matrixA = new Matrix3DMath.Matrix3D();
             Matrix3DMath.Matrix3D matrixB = new Matrix3DMath.Matrix3D();
             Position.XYZ_dbl ViewAngleChange = default(Position.XYZ_dbl);
-            modMath.sXYZ_int ViewPosChangeXYZ = new modMath.sXYZ_int();
+            sXYZ_int ViewPosChangeXYZ = new sXYZ_int();
             bool AngleChanged = default(bool);
 
             Move *= FOVMultiplier * (MapView.GLSize.X + MapView.GLSize.Y) * Math.Max(Math.Abs(ViewPos.Y), 512.0D);
@@ -1909,7 +1910,7 @@ namespace SharpFlame
             }
             else if ( modProgram.ViewMoveType == modProgram.enumView_Move_Type.RTS )
             {
-                ViewPosChangeXYZ = new modMath.sXYZ_int();
+                ViewPosChangeXYZ = new sXYZ_int();
 
                 Matrix3DMath.MatrixToPY(ViewAngleMatrix, ref AnglePY);
                 Matrix3DMath.MatrixSetToYAngle(matrixA, AnglePY.Yaw);
@@ -1948,24 +1949,24 @@ namespace SharpFlame
                 {
                     if ( modControls.KeyboardProfile.Active(modControls.Control_View_Forward) )
                     {
-                        AnglePY.Pitch = modMath.Clamp_dbl(AnglePY.Pitch + OrbitRate, Convert.ToDouble(- modMath.RadOf90Deg + 0.03125D * modMath.RadOf1Deg),
-                            modMath.RadOf90Deg - 0.03125D * modMath.RadOf1Deg);
+                        AnglePY.Pitch = MathUtil.Clamp_dbl(AnglePY.Pitch + OrbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
+                            MathUtil.RadOf90Deg - 0.03125D * MathUtil.RadOf1Deg);
                         AngleChanged = true;
                     }
                     if ( modControls.KeyboardProfile.Active(modControls.Control_View_Backward) )
                     {
-                        AnglePY.Pitch = modMath.Clamp_dbl(AnglePY.Pitch - OrbitRate, Convert.ToDouble(- modMath.RadOf90Deg + 0.03125D * modMath.RadOf1Deg),
-                            modMath.RadOf90Deg - 0.03125D * modMath.RadOf1Deg);
+                        AnglePY.Pitch = MathUtil.Clamp_dbl(AnglePY.Pitch - OrbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
+                            MathUtil.RadOf90Deg - 0.03125D * MathUtil.RadOf1Deg);
                         AngleChanged = true;
                     }
                     if ( modControls.KeyboardProfile.Active(modControls.Control_View_Left) )
                     {
-                        AnglePY.Yaw = modMath.AngleClamp(AnglePY.Yaw + OrbitRate);
+                        AnglePY.Yaw = MathUtil.AngleClamp(AnglePY.Yaw + OrbitRate);
                         AngleChanged = true;
                     }
                     if ( modControls.KeyboardProfile.Active(modControls.Control_View_Right) )
                     {
-                        AnglePY.Yaw = modMath.AngleClamp(AnglePY.Yaw - OrbitRate);
+                        AnglePY.Yaw = MathUtil.AngleClamp(AnglePY.Yaw - OrbitRate);
                         AngleChanged = true;
                     }
                 }
@@ -1973,24 +1974,24 @@ namespace SharpFlame
                 {
                     if ( modControls.KeyboardProfile.Active(modControls.Control_View_Forward) )
                     {
-                        AnglePY.Pitch = modMath.Clamp_dbl(AnglePY.Pitch - OrbitRate, Convert.ToDouble(- modMath.RadOf90Deg + 0.03125D * modMath.RadOf1Deg),
-                            modMath.RadOf90Deg - 0.03125D * modMath.RadOf1Deg);
+                        AnglePY.Pitch = MathUtil.Clamp_dbl(AnglePY.Pitch - OrbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
+                            MathUtil.RadOf90Deg - 0.03125D * MathUtil.RadOf1Deg);
                         AngleChanged = true;
                     }
                     if ( modControls.KeyboardProfile.Active(modControls.Control_View_Backward) )
                     {
-                        AnglePY.Pitch = modMath.Clamp_dbl(AnglePY.Pitch + OrbitRate, Convert.ToDouble(- modMath.RadOf90Deg + 0.03125D * modMath.RadOf1Deg),
-                            modMath.RadOf90Deg - 0.03125D * modMath.RadOf1Deg);
+                        AnglePY.Pitch = MathUtil.Clamp_dbl(AnglePY.Pitch + OrbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
+                            MathUtil.RadOf90Deg - 0.03125D * MathUtil.RadOf1Deg);
                         AngleChanged = true;
                     }
                     if ( modControls.KeyboardProfile.Active(modControls.Control_View_Left) )
                     {
-                        AnglePY.Yaw = modMath.AngleClamp(AnglePY.Yaw - OrbitRate);
+                        AnglePY.Yaw = MathUtil.AngleClamp(AnglePY.Yaw - OrbitRate);
                         AngleChanged = true;
                     }
                     if ( modControls.KeyboardProfile.Active(modControls.Control_View_Right) )
                     {
-                        AnglePY.Yaw = modMath.AngleClamp(AnglePY.Yaw + OrbitRate);
+                        AnglePY.Yaw = MathUtil.AngleClamp(AnglePY.Yaw + OrbitRate);
                         AngleChanged = true;
                     }
                 }
@@ -2025,7 +2026,7 @@ namespace SharpFlame
                         {
                             return;
                         }
-                        Apply_HeightSmoothing(modMath.Clamp_dbl(dblTemp * modMain.frmMainInstance.tmrTool.Interval / 1000.0D, 0.0D, 1.0D));
+                        Apply_HeightSmoothing(MathUtil.Clamp_dbl(dblTemp * modMain.frmMainInstance.tmrTool.Interval / 1000.0D, 0.0D, 1.0D));
                     }
                 }
             }
@@ -2040,11 +2041,11 @@ namespace SharpFlame
                     }
                     if ( GetMouseLeftDownOverTerrain() != null )
                     {
-                        Apply_Height_Change(modMath.Clamp_dbl(dblTemp, -255.0D, 255.0D));
+                        Apply_Height_Change(MathUtil.Clamp_dbl(dblTemp, -255.0D, 255.0D));
                     }
                     else if ( GetMouseRightDownOverTerrain() != null )
                     {
-                        Apply_Height_Change(modMath.Clamp_dbl(Convert.ToDouble(- dblTemp), -255.0D, 255.0D));
+                        Apply_Height_Change(MathUtil.Clamp_dbl(Convert.ToDouble(- dblTemp), -255.0D, 255.0D));
                     }
                 }
             }
@@ -2064,7 +2065,7 @@ namespace SharpFlame
                 int Num = 0;
                 int A = 0;
                 int B = 0;
-                modMath.sXY_int Tile = MouseOverTerrian.Tile.Normal;
+                sXY_int Tile = MouseOverTerrian.Tile.Normal;
 
                 if ( Map.Selected_Tile_A != null )
                 {
@@ -2128,7 +2129,7 @@ namespace SharpFlame
                 }
                 else
                 {
-                    Map.Selected_Tile_A = new modMath.clsXY_int(Tile);
+                    Map.Selected_Tile_A = new clsXY_int(Tile);
                 }
             }
         }
