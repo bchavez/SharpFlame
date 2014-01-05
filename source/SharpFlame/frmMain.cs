@@ -12,6 +12,7 @@ using Microsoft.VisualBasic.CompilerServices;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
 using SharpFlame.MathExtra;
+using SharpFlame.Painters;
 using Timer = System.Windows.Forms.Timer;
 
 namespace SharpFlame
@@ -471,9 +472,9 @@ namespace SharpFlame
             }
 
             modGenerator.CreateGeneratorTilesets();
-            modPainters.CreatePainterArizona();
-            modPainters.CreatePainterUrban();
-            modPainters.CreatePainterRockies();
+            PainterFactory.CreatePainterArizona();
+            PainterFactory.CreatePainterUrban();
+            PainterFactory.CreatePainterRockies();
 
             Components_Update();
 

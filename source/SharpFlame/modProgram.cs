@@ -8,6 +8,7 @@ using Microsoft.VisualBasic.ApplicationServices;
 using Microsoft.VisualBasic.Devices;
 using SharpFlame.Collections;
 using SharpFlame.MathExtra;
+using SharpFlame.Painters;
 
 namespace SharpFlame
 {
@@ -92,8 +93,8 @@ namespace SharpFlame
         public static int SelectedTextureNum = -1;
         public static TileOrientation.sTileOrientation TextureOrientation = new TileOrientation.sTileOrientation(false, false, false);
 
-        public static clsPainter.clsTerrain SelectedTerrain;
-        public static clsPainter.clsRoad SelectedRoad;
+        public static Terrain SelectedTerrain;
+        public static Road SelectedRoad;
 
         public class clsTileType
         {
@@ -170,9 +171,9 @@ namespace SharpFlame
         public static clsTileset Tileset_Urban;
         public static clsTileset Tileset_Rockies;
 
-        public static clsPainter Painter_Arizona;
-        public static clsPainter Painter_Urban;
-        public static clsPainter Painter_Rockies;
+        public static Painter Painter_Arizona;
+        public static Painter Painter_Urban;
+        public static Painter Painter_Rockies;
 
         public static GLFont UnitLabelFont;
         //Public TextureViewFont As GLFont
@@ -627,7 +628,7 @@ namespace SharpFlame
             {
                 public int WithinLayer;
                 public bool[] AvoidLayers;
-                public clsPainter.clsTerrain Terrain;
+                public Terrain Terrain;
                 public clsBooleanMap Terrainmap;
                 public float HeightMin;
                 public float HeightMax;

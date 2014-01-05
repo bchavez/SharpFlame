@@ -8,6 +8,7 @@ using Microsoft.VisualBasic.Devices;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
 using SharpFlame.MathExtra;
+using SharpFlame.Painters;
 
 namespace SharpFlame
 {
@@ -20,7 +21,7 @@ namespace SharpFlame
             public struct Vertex
             {
                 public byte Height;
-                public clsPainter.clsTerrain Terrain;
+                public Painters.Terrain Terrain;
             }
 
             public struct Tile
@@ -93,7 +94,7 @@ namespace SharpFlame
 
             public struct Side
             {
-                public clsPainter.clsRoad Road;
+                public Road Road;
             }
 
             public sXY_int TileSize;
@@ -300,7 +301,7 @@ namespace SharpFlame
 
         public clsAutoSave AutoSave = new clsAutoSave();
 
-        public clsPainter Painter = new clsPainter();
+        public Painter Painter = new Painter();
 
         public byte[] Tile_TypeNum = new byte[0];
 
@@ -2121,7 +2122,7 @@ namespace SharpFlame
         {
             if ( Tileset == null )
             {
-                Painter = new clsPainter();
+                Painter = new Painter();
             }
             else if ( Tileset == modProgram.Tileset_Arizona )
             {
@@ -2137,7 +2138,7 @@ namespace SharpFlame
             }
             else
             {
-                Painter = new clsPainter();
+                Painter = new Painter();
             }
         }
 
@@ -2568,18 +2569,18 @@ namespace SharpFlame
         {
             public bool MakeInvalidTiles;
 
-            private clsPainter.clsTerrain Terrain_Inner;
-            private clsPainter.clsTerrain Terrain_Outer;
-            private clsPainter.clsRoad Road;
+            private Painters.Terrain Terrain_Inner;
+            private Painters.Terrain Terrain_Outer;
+            private Road Road;
             private bool RoadTop;
             private bool RoadLeft;
             private bool RoadRight;
             private bool RoadBottom;
-            private clsPainter Painter;
+            private Painter Painter;
             private clsTerrain Terrain;
-            private clsPainter.clsTileList ResultTiles;
+            private TileList ResultTiles;
             private TileOrientation.sTileDirection ResultDirection;
-            private clsPainter.clsTileList.sTileOrientationChance ResultTexture;
+            private TileOrientationChance ResultTexture;
 
             public override void ActionPerform()
             {

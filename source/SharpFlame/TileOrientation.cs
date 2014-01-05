@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Matrix3D;
 using Microsoft.VisualBasic;
 using SharpFlame.MathExtra;
+using SharpFlame.Painters;
 
 namespace SharpFlame
 {
@@ -218,7 +219,7 @@ namespace SharpFlame
         public static sTileDirection TileDirection_Left = new sTileDirection(0, 1);
         public static sTileDirection TileDirection_None = new sTileDirection(1, 1);
 
-        public static clsMap.clsTerrain.Tile.sTexture OrientateTile(clsPainter.clsTileList.sTileOrientationChance TileChance, sTileDirection NewDirection)
+        public static clsMap.clsTerrain.Tile.sTexture OrientateTile(TileOrientationChance TileChance, sTileDirection NewDirection)
         {
             clsMap.clsTerrain.Tile.sTexture ReturnResult = new clsMap.clsTerrain.Tile.sTexture();
 

@@ -4,6 +4,7 @@ using System.IO;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
 using SharpFlame.MathExtra;
+using SharpFlame.Painters;
 
 namespace SharpFlame
 {
@@ -587,9 +588,9 @@ namespace SharpFlame
             int X = 0;
             int Y = 0;
             int A = 0;
-            clsPainter.clsTerrain[,] TerrainType = null;
+            Painters.Terrain[,] TerrainType = null;
             float[,] Slope = null;
-            clsPainter.clsTerrain tmpTerrain = default(clsPainter.clsTerrain);
+            Painters.Terrain tmpTerrain = default(Painters.Terrain);
             clsBooleanMap bmA = new clsBooleanMap();
             clsBooleanMap bmB = new clsBooleanMap();
             int LayerNum = 0;
@@ -599,7 +600,7 @@ namespace SharpFlame
             bool AllowSlope = default(bool);
             sXY_int Pos = new sXY_int();
 
-            TerrainType = new clsPainter.clsTerrain[Terrain.TileSize.X + 1, Terrain.TileSize.Y + 1];
+            TerrainType = new Painters.Terrain[Terrain.TileSize.X + 1, Terrain.TileSize.Y + 1];
             Slope = new float[Terrain.TileSize.X, Terrain.TileSize.Y];
             for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
             {
@@ -1471,7 +1472,7 @@ namespace SharpFlame
 
         public class clsApplyVertexTerrain : clsAction
         {
-            public clsPainter.clsTerrain VertexTerrain;
+            public Painters.Terrain VertexTerrain;
 
             private clsTerrain Terrain;
 
@@ -1538,12 +1539,12 @@ namespace SharpFlame
         {
             private int[] TerrainCount;
             private TileOrientation.sTileDirection VertexDirection;
-            private clsPainter Painter;
-            private clsPainter.clsTerrain PainterTerrainA;
-            private clsPainter.clsTerrain PainterTerrainB;
+            private Painter Painter;
+            private Painters.Terrain PainterTerrainA;
+            private Painters.Terrain PainterTerrainB;
             private clsTerrain.Tile.sTexture Texture;
             private TileOrientation.sTileDirection ResultDirection;
-            private clsPainter.clsTileList.sTileOrientationChance PainterTexture;
+            private TileOrientationChance PainterTexture;
             private TileOrientation.sTileDirection OppositeDirection;
             private int BestNum;
             private int BestCount;
@@ -1796,12 +1797,12 @@ namespace SharpFlame
 
         public class clsApplyTileTerrainInterpret : clsAction
         {
-            private clsPainter Painter;
-            private clsPainter.clsTerrain PainterTerrainA;
-            private clsPainter.clsTerrain PainterTerrainB;
+            private Painter Painter;
+            private Painters.Terrain PainterTerrainA;
+            private Painters.Terrain PainterTerrainB;
             private clsTerrain.Tile.sTexture Texture;
             private TileOrientation.sTileDirection ResultDirection;
-            private clsPainter.clsTileList.sTileOrientationChance PainterTexture;
+            private TileOrientationChance PainterTexture;
             private TileOrientation.sTileDirection OppositeDirection;
             private clsTerrain.Tile Tile;
             private clsTerrain Terrain;
@@ -1927,12 +1928,12 @@ namespace SharpFlame
 
         public abstract class clsApplySideTerrainInterpret : clsAction
         {
-            protected clsPainter Painter;
-            protected clsPainter.clsTerrain PainterTerrain;
-            protected clsPainter.clsRoad PainterRoad;
+            protected Painter Painter;
+            protected Painters.Terrain PainterTerrain;
+            protected Road PainterRoad;
             protected clsTerrain.Tile.sTexture Texture;
             protected TileOrientation.sTileDirection ResultDirection;
-            protected clsPainter.clsTileList.sTileOrientationChance PainterTexture;
+            protected TileOrientationChance PainterTexture;
             protected TileOrientation.sTileDirection OppositeDirection;
             protected clsTerrain.Tile Tile;
             protected int[] RoadCount;

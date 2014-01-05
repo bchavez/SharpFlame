@@ -4,6 +4,7 @@ using Matrix3D;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
 using SharpFlame.MathExtra;
+using SharpFlame.Painters;
 
 namespace SharpFlame
 {
@@ -961,8 +962,8 @@ namespace SharpFlame
                 return;
             }
 
-            clsPainter.clsTerrain FillType = default(clsPainter.clsTerrain);
-            clsPainter.clsTerrain ReplaceType = default(clsPainter.clsTerrain);
+            Terrain FillType = default(Terrain);
+            Terrain ReplaceType = default(Terrain);
             sXY_int StartVertex = MouseOverTerrain.Vertex.Normal;
 
             FillType = modProgram.SelectedTerrain;
