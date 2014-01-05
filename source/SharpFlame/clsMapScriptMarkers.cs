@@ -4,6 +4,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.FileIO;
+using SharpFlame.FileIO.Ini;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame
@@ -204,7 +205,7 @@ namespace SharpFlame
                 PosY = _Pos.Y - PosOffset.Y;
             }
 
-            public void WriteWZ(clsINIWrite File)
+            public void WriteWZ(IniWriter File)
             {
                 File.SectionName_Append("position_" + IOUtil.InvariantToString(_ParentMapLink.ArrayPosition));
                 File.Property_Append("pos", IOUtil.InvariantToString(_Pos.X) + ", " + IOUtil.InvariantToString(_Pos.Y));
@@ -392,7 +393,7 @@ namespace SharpFlame
                 SetPositions(new sXY_int(_PosA.X - PosOffset.X, _PosA.Y - PosOffset.Y), new sXY_int(_PosB.X - PosOffset.X, _PosB.Y - PosOffset.Y));
             }
 
-            public void WriteWZ(clsINIWrite File)
+            public void WriteWZ(IniWriter File)
             {
                 File.SectionName_Append("area_" + IOUtil.InvariantToString(_ParentMapLink.ArrayPosition));
                 File.Property_Append("pos1", IOUtil.InvariantToString(_PosA.X) + ", " + IOUtil.InvariantToString(_PosA.Y));

@@ -6,6 +6,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
 using SharpFlame.FileIO;
+using SharpFlame.FileIO.Ini;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.MathExtra;
@@ -249,7 +250,7 @@ namespace SharpFlame
 
             SimpleClassList<clsWZBJOUnit> BJOUnits = new SimpleClassList<clsWZBJOUnit>();
 
-            clsINIFeatures INIFeatures = null;
+            IniFeatures INIFeatures = null;
 
             ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "feature.ini");
             if ( ZipSearchResult == null )
@@ -258,11 +259,11 @@ namespace SharpFlame
             else
             {
                 clsResult Result = new clsResult("feature.ini");
-                clsINIRead FeaturesINI = new clsINIRead();
+                IniReader FeaturesINI = new IniReader();
                 StreamReader FeaturesINI_Reader = new StreamReader(ZipSearchResult.Stream);
                 Result.Take(FeaturesINI.ReadFile(FeaturesINI_Reader));
                 FeaturesINI_Reader.Close();
-                INIFeatures = new clsINIFeatures(FeaturesINI.Sections.Count);
+                INIFeatures = new IniFeatures(FeaturesINI.Sections.Count);
                 Result.Take(FeaturesINI.Translate(INIFeatures));
                 ReturnResult.Add(Result);
             }
@@ -309,7 +310,7 @@ namespace SharpFlame
                 ReturnResult.Add(Result);
             }
 
-            clsINIStructures INIStructures = null;
+            IniStructures INIStructures = null;
 
             ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "struct.ini");
             if ( ZipSearchResult == null )
@@ -318,11 +319,11 @@ namespace SharpFlame
             else
             {
                 clsResult Result = new clsResult("struct.ini");
-                clsINIRead StructuresINI = new clsINIRead();
+                IniReader StructuresINI = new IniReader();
                 StreamReader StructuresINI_Reader = new StreamReader(ZipSearchResult.Stream);
                 Result.Take(StructuresINI.ReadFile(StructuresINI_Reader));
                 StructuresINI_Reader.Close();
-                INIStructures = new clsINIStructures(StructuresINI.Sections.Count, this);
+                INIStructures = new IniStructures(StructuresINI.Sections.Count, this);
                 Result.Take(StructuresINI.Translate(INIStructures));
                 ReturnResult.Add(Result);
             }
@@ -348,7 +349,7 @@ namespace SharpFlame
                 ReturnResult.Add(Result);
             }
 
-            clsINIDroids INIDroids = null;
+            IniDroids INIDroids = null;
 
             ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "droid.ini");
             if ( ZipSearchResult == null )
@@ -357,11 +358,11 @@ namespace SharpFlame
             else
             {
                 clsResult Result = new clsResult("droid.ini");
-                clsINIRead DroidsINI = new clsINIRead();
+                IniReader DroidsINI = new IniReader();
                 StreamReader DroidsINI_Reader = new StreamReader(ZipSearchResult.Stream);
                 Result.Take(DroidsINI.ReadFile(DroidsINI_Reader));
                 DroidsINI_Reader.Close();
-                INIDroids = new clsINIDroids(DroidsINI.Sections.Count, this);
+                INIDroids = new IniDroids(DroidsINI.Sections.Count, this);
                 Result.Take(DroidsINI.Translate(INIDroids));
                 ReturnResult.Add(Result);
             }
@@ -402,7 +403,7 @@ namespace SharpFlame
             else
             {
                 clsResult Result = new clsResult("labels.ini");
-                clsINIRead LabelsINI = new clsINIRead();
+                IniReader LabelsINI = new IniReader();
                 StreamReader LabelsINI_Reader = new StreamReader(ZipSearchResult.Stream);
                 Result.Take(LabelsINI.ReadFile(LabelsINI_Reader));
                 LabelsINI_Reader.Close();
@@ -494,7 +495,7 @@ namespace SharpFlame
 
             SimpleClassList<clsWZBJOUnit> BJOUnits = new SimpleClassList<clsWZBJOUnit>();
 
-            clsINIFeatures INIFeatures = null;
+            IniFeatures INIFeatures = null;
 
             SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "feature.ini", ref File);
             if ( !SubResult.Success )
@@ -503,11 +504,11 @@ namespace SharpFlame
             else
             {
                 clsResult Result = new clsResult("feature.ini");
-                clsINIRead FeaturesINI = new clsINIRead();
+                IniReader FeaturesINI = new IniReader();
                 StreamReader FeaturesINI_Reader = new StreamReader(File);
                 Result.Take(FeaturesINI.ReadFile(FeaturesINI_Reader));
                 FeaturesINI_Reader.Close();
-                INIFeatures = new clsINIFeatures(FeaturesINI.Sections.Count);
+                INIFeatures = new IniFeatures(FeaturesINI.Sections.Count);
                 Result.Take(FeaturesINI.Translate(INIFeatures));
                 ReturnResult.Add(Result);
             }
@@ -554,7 +555,7 @@ namespace SharpFlame
                 ReturnResult.Add(Result);
             }
 
-            clsINIStructures INIStructures = null;
+            IniStructures INIStructures = null;
 
             SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "struct.ini", ref File);
             if ( !SubResult.Success )
@@ -563,11 +564,11 @@ namespace SharpFlame
             else
             {
                 clsResult Result = new clsResult("struct.ini");
-                clsINIRead StructuresINI = new clsINIRead();
+                IniReader StructuresINI = new IniReader();
                 StreamReader StructuresINI_Reader = new StreamReader(File);
                 Result.Take(StructuresINI.ReadFile(StructuresINI_Reader));
                 StructuresINI_Reader.Close();
-                INIStructures = new clsINIStructures(StructuresINI.Sections.Count, this);
+                INIStructures = new IniStructures(StructuresINI.Sections.Count, this);
                 Result.Take(StructuresINI.Translate(INIStructures));
                 ReturnResult.Add(Result);
             }
@@ -593,7 +594,7 @@ namespace SharpFlame
                 ReturnResult.Add(Result);
             }
 
-            clsINIDroids INIDroids = null;
+            IniDroids INIDroids = null;
 
             SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "droid.ini", ref File);
             if ( !SubResult.Success )
@@ -602,11 +603,11 @@ namespace SharpFlame
             else
             {
                 clsResult Result = new clsResult("droid.ini");
-                clsINIRead DroidsINI = new clsINIRead();
+                IniReader DroidsINI = new IniReader();
                 StreamReader DroidsINI_Reader = new StreamReader(File);
                 Result.Take(DroidsINI.ReadFile(DroidsINI_Reader));
                 DroidsINI_Reader.Close();
-                INIDroids = new clsINIDroids(DroidsINI.Sections.Count, this);
+                INIDroids = new IniDroids(DroidsINI.Sections.Count, this);
                 Result.Take(DroidsINI.Translate(INIDroids));
                 ReturnResult.Add(Result);
             }
@@ -647,7 +648,7 @@ namespace SharpFlame
             else
             {
                 clsResult Result = new clsResult("labels.ini");
-                clsINIRead LabelsINI = new clsINIRead();
+                IniReader LabelsINI = new IniReader();
                 StreamReader LabelsINI_Reader = new StreamReader(File);
                 Result.Take(LabelsINI.ReadFile(LabelsINI_Reader));
                 LabelsINI_Reader.Close();
@@ -661,9 +662,9 @@ namespace SharpFlame
         public struct sCreateWZObjectsArgs
         {
             public SimpleClassList<clsWZBJOUnit> BJOUnits;
-            public clsINIStructures INIStructures;
-            public clsINIDroids INIDroids;
-            public clsINIFeatures INIFeatures;
+            public IniStructures INIStructures;
+            public IniDroids INIDroids;
+            public IniFeatures INIFeatures;
         }
 
         public clsResult CreateWZObjects(sCreateWZObjectsArgs Args)
@@ -672,9 +673,9 @@ namespace SharpFlame
             clsUnit NewUnit = default(clsUnit);
             UInt32 AvailableID = 0;
             SimpleClassList<clsWZBJOUnit> BJOUnits = Args.BJOUnits;
-            clsINIStructures INIStructures = Args.INIStructures;
-            clsINIDroids INIDroids = Args.INIDroids;
-            clsINIFeatures INIFeatures = Args.INIFeatures;
+            IniStructures INIStructures = Args.INIStructures;
+            IniDroids INIDroids = Args.INIDroids;
+            IniFeatures INIFeatures = Args.INIFeatures;
             clsUnitAdd UnitAdd = new clsUnitAdd();
             int A = 0;
             int B = 0;
@@ -1205,7 +1206,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public class clsINIStructures : clsINIRead.clsSectionTranslator
+        public class IniStructures : SectionTranslator
         {
             private clsMap ParentMap;
 
@@ -1224,7 +1225,7 @@ namespace SharpFlame
             public sStructure[] Structures;
             public int StructureCount;
 
-            public clsINIStructures(int NewStructureCount, clsMap NewParentMap)
+            public IniStructures(int NewStructureCount, clsMap NewParentMap)
             {
                 int A = 0;
 
@@ -1239,7 +1240,7 @@ namespace SharpFlame
                 }
             }
 
-            public override clsINIRead.enumTranslatorResult Translate(int INISectionNum, clsINIRead.clsSection.sProperty INIProperty)
+            public override TranslatorResult Translate(int INISectionNum, Section.SectionProperty INIProperty)
             {
                 if ( (string)INIProperty.Name == "id" )
                 {
@@ -1253,7 +1254,7 @@ namespace SharpFlame
                     }
                     else
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "name" )
@@ -1265,11 +1266,11 @@ namespace SharpFlame
                     int StartPos = 0;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref StartPos) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     if ( StartPos < 0 | StartPos >= Constants.PlayerCountMax )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     Structures[INISectionNum].UnitGroup = ParentMap.UnitGroups[StartPos];
                 }
@@ -1277,7 +1278,7 @@ namespace SharpFlame
                 {
                     if ( INIProperty.Value.ToLower() != "scavenger" )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     Structures[INISectionNum].UnitGroup = ParentMap.ScavengerUnitGroup;
                 }
@@ -1286,7 +1287,7 @@ namespace SharpFlame
                     App.clsWorldPos temp_Result = Structures[INISectionNum].Pos;
                     if ( !IOUtil.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "rotation" )
@@ -1294,7 +1295,7 @@ namespace SharpFlame
                     App.sWZAngle temp_Result2 = Structures[INISectionNum].Rotation;
                     if ( !IOUtil.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result2) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "modules" )
@@ -1302,11 +1303,11 @@ namespace SharpFlame
                     int ModuleCount = 0;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref ModuleCount) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     if ( ModuleCount < 0 )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     Structures[INISectionNum].ModuleCount = ModuleCount;
                 }
@@ -1315,7 +1316,7 @@ namespace SharpFlame
                     int temp_Result3 = Structures[INISectionNum].HealthPercent;
                     if ( !IOUtil.HealthFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result3) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "wall/type" )
@@ -1323,23 +1324,23 @@ namespace SharpFlame
                     int WallType = 0;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref WallType) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     if ( WallType < 0 )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     Structures[INISectionNum].WallType = WallType;
                 }
                 else
                 {
-                    return clsINIRead.enumTranslatorResult.NameUnknown;
+                    return TranslatorResult.NameUnknown;
                 }
-                return clsINIRead.enumTranslatorResult.Translated;
+                return TranslatorResult.Translated;
             }
         }
 
-        public class clsINIDroids : clsINIRead.clsSectionTranslator
+        public class IniDroids : SectionTranslator
         {
             private clsMap ParentMap;
 
@@ -1366,7 +1367,7 @@ namespace SharpFlame
             public sDroid[] Droids;
             public int DroidCount;
 
-            public clsINIDroids(int NewDroidCount, clsMap NewParentMap)
+            public IniDroids(int NewDroidCount, clsMap NewParentMap)
             {
                 int A = 0;
 
@@ -1382,7 +1383,7 @@ namespace SharpFlame
                 }
             }
 
-            public override clsINIRead.enumTranslatorResult Translate(int INISectionNum, clsINIRead.clsSection.sProperty INIProperty)
+            public override TranslatorResult Translate(int INISectionNum, Section.SectionProperty INIProperty)
             {
                 if ( (string)INIProperty.Name == "id" )
                 {
@@ -1396,7 +1397,7 @@ namespace SharpFlame
                     }
                     else
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "template" )
@@ -1408,11 +1409,11 @@ namespace SharpFlame
                     int StartPos = 0;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref StartPos) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     if ( StartPos < 0 | StartPos >= Constants.PlayerCountMax )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     Droids[INISectionNum].UnitGroup = ParentMap.UnitGroups[StartPos];
                 }
@@ -1420,7 +1421,7 @@ namespace SharpFlame
                 {
                     if ( INIProperty.Value.ToLower() != "scavenger" )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     Droids[INISectionNum].UnitGroup = ParentMap.ScavengerUnitGroup;
                 }
@@ -1433,7 +1434,7 @@ namespace SharpFlame
                     App.clsWorldPos temp_Result = Droids[INISectionNum].Pos;
                     if ( !IOUtil.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "rotation" )
@@ -1441,7 +1442,7 @@ namespace SharpFlame
                     App.sWZAngle temp_Result2 = Droids[INISectionNum].Rotation;
                     if ( !IOUtil.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result2) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "health" )
@@ -1449,7 +1450,7 @@ namespace SharpFlame
                     int temp_Result3 = Droids[INISectionNum].HealthPercent;
                     if ( !IOUtil.HealthFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result3) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "droidtype" )
@@ -1457,7 +1458,7 @@ namespace SharpFlame
                     int temp_Result4 = Droids[INISectionNum].DroidType;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref temp_Result4) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "weapons" )
@@ -1465,7 +1466,7 @@ namespace SharpFlame
                     Int32 temp_Result5 = Droids[INISectionNum].WeaponCount;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref temp_Result5) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "parts\\body" )
@@ -1510,13 +1511,13 @@ namespace SharpFlame
                 }
                 else
                 {
-                    return clsINIRead.enumTranslatorResult.NameUnknown;
+                    return TranslatorResult.NameUnknown;
                 }
-                return clsINIRead.enumTranslatorResult.Translated;
+                return TranslatorResult.Translated;
             }
         }
 
-        public class clsINIFeatures : clsINIRead.clsSectionTranslator
+        public class IniFeatures : SectionTranslator
         {
             public struct sFeatures
             {
@@ -1530,7 +1531,7 @@ namespace SharpFlame
             public sFeatures[] Features;
             public int FeatureCount;
 
-            public clsINIFeatures(int NewFeatureCount)
+            public IniFeatures(int NewFeatureCount)
             {
                 int A = 0;
 
@@ -1542,7 +1543,7 @@ namespace SharpFlame
                 }
             }
 
-            public override clsINIRead.enumTranslatorResult Translate(int INISectionNum, clsINIRead.clsSection.sProperty INIProperty)
+            public override TranslatorResult Translate(int INISectionNum, Section.SectionProperty INIProperty)
             {
                 if ( (string)INIProperty.Name == "id" )
                 {
@@ -1556,7 +1557,7 @@ namespace SharpFlame
                     }
                     else
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "name" )
@@ -1568,7 +1569,7 @@ namespace SharpFlame
                     App.clsWorldPos temp_Result = Features[INISectionNum].Pos;
                     if ( !IOUtil.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "rotation" )
@@ -1576,7 +1577,7 @@ namespace SharpFlame
                     App.sWZAngle temp_Result2 = Features[INISectionNum].Rotation;
                     if ( !IOUtil.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result2) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "health" )
@@ -1584,14 +1585,14 @@ namespace SharpFlame
                     Int32 temp_Result3 = Features[INISectionNum].HealthPercent;
                     if ( !IOUtil.HealthFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result3) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else
                 {
-                    return clsINIRead.enumTranslatorResult.NameUnknown;
+                    return TranslatorResult.NameUnknown;
                 }
-                return clsINIRead.enumTranslatorResult.Translated;
+                return TranslatorResult.Translated;
             }
         }
 
@@ -2019,7 +2020,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult Read_WZ_Labels(clsINIRead INI, bool IsFMap)
+        public clsResult Read_WZ_Labels(IniReader INI, bool IsFMap)
         {
             clsResult ReturnResult = new clsResult("Reading labels");
 
@@ -2039,8 +2040,8 @@ namespace SharpFlame
             int FailedCount = 0;
             int ModifiedCount = 0;
 
-            clsINIRead.clsSection INISection = default(clsINIRead.clsSection);
-            foreach ( clsINIRead.clsSection tempLoopVar_INISection in INI.Sections )
+            Section INISection = default(Section);
+            foreach ( Section tempLoopVar_INISection in INI.Sections )
             {
                 INISection = tempLoopVar_INISection;
                 NameText = INISection.Name;
@@ -2176,7 +2177,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult Serialize_WZ_StructuresINI(clsINIWrite File, int PlayerCount)
+        public clsResult Serialize_WZ_StructuresINI(IniWriter File, int PlayerCount)
         {
             clsResult ReturnResult = new clsResult("Serializing structures INI");
 
@@ -2360,7 +2361,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult Serialize_WZ_DroidsINI(clsINIWrite File, int PlayerCount)
+        public clsResult Serialize_WZ_DroidsINI(IniWriter File, int PlayerCount)
         {
             clsResult ReturnResult = new clsResult("Serializing droids INI");
 
@@ -2557,7 +2558,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult Serialize_WZ_FeaturesINI(clsINIWrite File)
+        public clsResult Serialize_WZ_FeaturesINI(IniWriter File)
         {
             clsResult ReturnResult = new clsResult("Serializing features INI");
             clsFeatureType FeatureType = default(clsFeatureType);
@@ -2595,7 +2596,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult Serialize_WZ_LabelsINI(clsINIWrite File, int PlayerCount)
+        public clsResult Serialize_WZ_LabelsINI(IniWriter File, int PlayerCount)
         {
             clsResult ReturnResult = new clsResult("Serializing labels INI");
 
@@ -2730,19 +2731,19 @@ namespace SharpFlame
                 MemoryStream File_featBJO_Memory = new MemoryStream();
                 BinaryWriter File_featBJO = new BinaryWriter(File_featBJO_Memory, App.ASCIIEncoding);
                 MemoryStream INI_feature_Memory = new MemoryStream();
-                clsINIWrite INI_feature = clsINIWrite.CreateFile(INI_feature_Memory);
+                IniWriter INI_feature = IniWriter.CreateFile(INI_feature_Memory);
                 MemoryStream File_TTP_Memory = new MemoryStream();
                 BinaryWriter File_TTP = new BinaryWriter(File_TTP_Memory, App.ASCIIEncoding);
                 MemoryStream File_structBJO_Memory = new MemoryStream();
                 BinaryWriter File_structBJO = new BinaryWriter(File_structBJO_Memory, App.ASCIIEncoding);
                 MemoryStream INI_struct_Memory = new MemoryStream();
-                clsINIWrite INI_struct = clsINIWrite.CreateFile(INI_struct_Memory);
+                IniWriter INI_struct = IniWriter.CreateFile(INI_struct_Memory);
                 MemoryStream File_droidBJO_Memory = new MemoryStream();
                 BinaryWriter File_droidBJO = new BinaryWriter(File_droidBJO_Memory, App.ASCIIEncoding);
                 MemoryStream INI_droid_Memory = new MemoryStream();
-                clsINIWrite INI_droid = clsINIWrite.CreateFile(INI_droid_Memory);
+                IniWriter INI_droid = IniWriter.CreateFile(INI_droid_Memory);
                 MemoryStream INI_Labels_Memory = new MemoryStream();
-                clsINIWrite INI_Labels = clsINIWrite.CreateFile(INI_Labels_Memory);
+                IniWriter INI_Labels = IniWriter.CreateFile(INI_Labels_Memory);
 
                 string PlayersPrefix = "";
                 string PlayersText = "";

@@ -5,6 +5,7 @@ using Microsoft.VisualBasic;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.FileIO;
+using SharpFlame.FileIO.Ini;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame
@@ -169,7 +170,7 @@ namespace SharpFlame
                 }
             }
 
-            public void WriteWZLabel(clsINIWrite File, int PlayerCount)
+            public void WriteWZLabel(IniWriter File, int PlayerCount)
             {
                 if ( _Label != null )
                 {

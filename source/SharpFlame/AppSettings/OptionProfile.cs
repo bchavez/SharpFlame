@@ -5,10 +5,11 @@ using Microsoft.VisualBasic;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.FileIO;
+using SharpFlame.FileIO.Ini;
 
 namespace SharpFlame.AppSettings
 {
-    public class OptionProfile : clsINIRead.clsTranslator
+    public class OptionProfile : Translator
     {
         public bool IsAnythingChanged
         {
@@ -80,7 +81,7 @@ namespace SharpFlame.AppSettings
             return result;
         }
 
-        public clsResult INIWrite(clsINIWrite file)
+        public clsResult INIWrite(IniWriter file)
         {
             clsResult returnResult = new clsResult("Writing options to INI");
 
@@ -186,7 +187,7 @@ namespace SharpFlame.AppSettings
             return returnResult;
         }
 
-        public override clsINIRead.enumTranslatorResult Translate(clsINIRead.clsSection.sProperty INIProperty)
+        public override TranslatorResult Translate(Section.SectionProperty INIProperty)
         {
             foreach ( OptionInterface item in _Options.Options )
             {
@@ -240,15 +241,15 @@ namespace SharpFlame.AppSettings
                     }
                     if ( !valid )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     KeyboardControl control = new KeyboardControl(keys, unlessKeys);
                     if ( !item.IsValueValid(control) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     set_Changes(item, new Change<KeyboardControl>(control));
-                    return clsINIRead.enumTranslatorResult.Translated;
+                    return TranslatorResult.Translated;
                 }
                 else if ( item is Option<SimpleList<string>> )
                 {
@@ -263,7 +264,7 @@ namespace SharpFlame.AppSettings
                         list = (SimpleList<string>)(get_Changes(item).ValueObject);
                     }
                     list.Add(INIProperty.Value);
-                    return clsINIRead.enumTranslatorResult.Translated;
+                    return TranslatorResult.Translated;
                 }
                 else if ( item is Option<FontFamily> )
                 {
@@ -274,158 +275,158 @@ namespace SharpFlame.AppSettings
                     }
                     catch
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     if ( !item.IsValueValid(fontFamily) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     set_Changes(item, new Change<FontFamily>(fontFamily));
-                    return clsINIRead.enumTranslatorResult.Translated;
+                    return TranslatorResult.Translated;
                 }
                 else if ( item is Option<clsRGB_sng> )
                 {
                     clsRGB_sng value = new clsRGB_sng(0.0F, 0.0F, 0.0F);
                     if ( !value.ReadINIText(new SplitCommaText(Convert.ToString(INIProperty.Value))) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     if ( !item.IsValueValid(value) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     set_Changes(item, new Change<clsRGB_sng>(value));
-                    return clsINIRead.enumTranslatorResult.Translated;
+                    return TranslatorResult.Translated;
                 }
                 else if ( item is Option<clsRGBA_sng> )
                 {
                     clsRGBA_sng value = new clsRGBA_sng(0.0F, 0.0F, 0.0F, 0.0F);
                     if ( !value.ReadINIText(new SplitCommaText(Convert.ToString(INIProperty.Value))) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     if ( !item.IsValueValid(value) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     set_Changes(item, new Change<clsRGBA_sng>(value));
-                    return clsINIRead.enumTranslatorResult.Translated;
+                    return TranslatorResult.Translated;
                 }
                 else if ( item is Option<bool> )
                 {
                     bool value = default(bool);
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref value) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     if ( !item.IsValueValid(value) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     set_Changes(item, new Change<bool>(value));
-                    return clsINIRead.enumTranslatorResult.Translated;
+                    return TranslatorResult.Translated;
                 }
                 else if ( item is Option<byte> )
                 {
                     byte value = 0;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref value) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     if ( !item.IsValueValid(value) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     set_Changes(item, new Change<byte>(value));
-                    return clsINIRead.enumTranslatorResult.Translated;
+                    return TranslatorResult.Translated;
                 }
                 else if ( item is Option<short> )
                 {
                     short value = 0;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref value) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     if ( !item.IsValueValid(value) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     set_Changes(item, new Change<short>(value));
-                    return clsINIRead.enumTranslatorResult.Translated;
+                    return TranslatorResult.Translated;
                 }
                 else if ( item is Option<int> )
                 {
                     int value = 0;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref value) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     if ( !item.IsValueValid(value) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     set_Changes(item, new Change<int>(value));
-                    return clsINIRead.enumTranslatorResult.Translated;
+                    return TranslatorResult.Translated;
                 }
                 else if ( item is Option<UInt32> )
                 {
                     UInt32 value = 0;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), value) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     if ( !item.IsValueValid(value) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     set_Changes(item, new Change<UInt32>(value));
-                    return clsINIRead.enumTranslatorResult.Translated;
+                    return TranslatorResult.Translated;
                 }
                 else if ( item is Option<Single> )
                 {
                     float value = 0;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref value) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     if ( !item.IsValueValid(value) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     set_Changes(item, new Change<Single>(value));
-                    return clsINIRead.enumTranslatorResult.Translated;
+                    return TranslatorResult.Translated;
                 }
                 else if ( item is Option<double> )
                 {
                     double value = 0;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref value) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     if ( !item.IsValueValid(value) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     set_Changes(item, new Change<double>(value));
-                    return clsINIRead.enumTranslatorResult.Translated;
+                    return TranslatorResult.Translated;
                 }
                 else if ( item is Option<string> )
                 {
                     string value = Convert.ToString(INIProperty.Value);
                     if ( !item.IsValueValid(value) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     set_Changes(item, new Change<string>(value));
-                    return clsINIRead.enumTranslatorResult.Translated;
+                    return TranslatorResult.Translated;
                 }
                 else
                 {
-                    return clsINIRead.enumTranslatorResult.ValueInvalid;
+                    return TranslatorResult.ValueInvalid;
                 }
             }
 
-            return clsINIRead.enumTranslatorResult.ValueInvalid;
+            return TranslatorResult.ValueInvalid;
         }
     }
 }

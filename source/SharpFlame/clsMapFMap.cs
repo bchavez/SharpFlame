@@ -3,6 +3,7 @@ using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.VisualBasic;
 using SharpFlame.FileIO;
+using SharpFlame.FileIO.Ini;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.MathExtra;
@@ -11,7 +12,7 @@ namespace SharpFlame
 {
     public partial class clsMap
     {
-        public class clsFMap_INIObjects : clsINIRead.clsSectionTranslator
+        public class FMapIniObjects : SectionTranslator
         {
             public struct sObject
             {
@@ -38,7 +39,7 @@ namespace SharpFlame
             public sObject[] Objects;
             public int ObjectCount;
 
-            public clsFMap_INIObjects(int NewObjectCount)
+            public FMapIniObjects(int NewObjectCount)
             {
                 int A = 0;
                 int B = 0;
@@ -59,7 +60,7 @@ namespace SharpFlame
                 }
             }
 
-            public override clsINIRead.enumTranslatorResult Translate(int INISectionNum, clsINIRead.clsSection.sProperty INIProperty)
+            public override TranslatorResult Translate(int INISectionNum, Section.SectionProperty INIProperty)
             {
                 if ( (string)INIProperty.Name == "type" )
                 {
@@ -70,7 +71,7 @@ namespace SharpFlame
                     CommaTextCount = CommaText.GetUpperBound(0) + 1;
                     if ( CommaTextCount < 1 )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     for ( A = 0; A <= CommaTextCount - 1; A++ )
                     {
@@ -95,7 +96,7 @@ namespace SharpFlame
                             Objects[INISectionNum].Type = clsUnitType.enumType.PlayerDroid;
                             break;
                         default:
-                            return clsINIRead.enumTranslatorResult.ValueInvalid;
+                            return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "droidtype" )
@@ -103,7 +104,7 @@ namespace SharpFlame
                     clsDroidDesign.clsTemplateDroidType DroidType = App.GetTemplateDroidTypeFromTemplateCode(Convert.ToString(INIProperty.Value));
                     if ( DroidType == null )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     Objects[INISectionNum].TemplateDroidType = DroidType;
                 }
@@ -120,11 +121,11 @@ namespace SharpFlame
                     int NewTurretCount = 0;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref NewTurretCount) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     if ( NewTurretCount < 0 | NewTurretCount > Constants.MaxDroidWeapons )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     Objects[INISectionNum].TurretCount = NewTurretCount;
                 }
@@ -137,7 +138,7 @@ namespace SharpFlame
                     CommaTextCount = CommaText.GetUpperBound(0) + 1;
                     if ( CommaTextCount < 2 )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     for ( A = 0; A <= CommaTextCount - 1; A++ )
                     {
@@ -160,7 +161,7 @@ namespace SharpFlame
                     CommaTextCount = CommaText.GetUpperBound(0) + 1;
                     if ( CommaTextCount < 2 )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     for ( A = 0; A <= CommaTextCount - 1; A++ )
                     {
@@ -183,7 +184,7 @@ namespace SharpFlame
                     CommaTextCount = CommaText.GetUpperBound(0) + 1;
                     if ( CommaTextCount < 2 )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     for ( A = 0; A <= CommaTextCount - 1; A++ )
                     {
@@ -201,7 +202,7 @@ namespace SharpFlame
                 {
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), Objects[INISectionNum].ID) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "priority" )
@@ -209,7 +210,7 @@ namespace SharpFlame
                     Int32 temp_Result = Objects[INISectionNum].Priority;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref temp_Result) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "pos" )
@@ -221,7 +222,7 @@ namespace SharpFlame
                     CommaTextCount = CommaText.GetUpperBound(0) + 1;
                     if ( CommaTextCount < 2 )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     for ( A = 0; A <= CommaTextCount - 1; A++ )
                     {
@@ -230,11 +231,11 @@ namespace SharpFlame
                     sXY_int Pos = new sXY_int();
                     if ( !IOUtil.InvariantParse(CommaText[0], ref Pos.X) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     if ( !IOUtil.InvariantParse(CommaText[1], ref Pos.Y) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     try
                     {
@@ -242,7 +243,7 @@ namespace SharpFlame
                     }
                     catch ( Exception )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "heading" )
@@ -250,11 +251,11 @@ namespace SharpFlame
                     double dblTemp = 0;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref dblTemp) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     if ( dblTemp < 0.0D | dblTemp >= 360.0D )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     Objects[INISectionNum].Heading = dblTemp;
                 }
@@ -267,11 +268,11 @@ namespace SharpFlame
                     double NewHealth = 0;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref NewHealth) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     if ( NewHealth < 0.0D | NewHealth >= 1.0D )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     Objects[INISectionNum].Health = NewHealth;
                 }
@@ -280,7 +281,7 @@ namespace SharpFlame
                     int WallType = -1;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref WallType) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     if ( WallType >= 0 & WallType <= 3 )
                     {
@@ -293,9 +294,9 @@ namespace SharpFlame
                 }
                 else
                 {
-                    return clsINIRead.enumTranslatorResult.NameUnknown;
+                    return TranslatorResult.NameUnknown;
                 }
-                return clsINIRead.enumTranslatorResult.Translated;
+                return TranslatorResult.Translated;
             }
         }
 
@@ -344,7 +345,7 @@ namespace SharpFlame
             ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
             if ( ZipEntry != null )
             {
-                clsINIWrite INI_Info = new clsINIWrite();
+                IniWriter INI_Info = new IniWriter();
                 INI_Info.File = StreamWriter;
                 ReturnResult.Add(Serialize_FMap_Info(INI_Info));
 
@@ -416,7 +417,7 @@ namespace SharpFlame
             ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
             if ( ZipEntry != null )
             {
-                clsINIWrite INI_Objects = new clsINIWrite();
+                IniWriter INI_Objects = new IniWriter();
                 INI_Objects.File = StreamWriter;
                 ReturnResult.Add(Serialize_FMap_Objects(INI_Objects));
 
@@ -428,7 +429,7 @@ namespace SharpFlame
             ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
             if ( ZipEntry != null )
             {
-                clsINIWrite INI_Gateways = new clsINIWrite();
+                IniWriter INI_Gateways = new IniWriter();
                 INI_Gateways.File = StreamWriter;
                 ReturnResult.Add(Serialize_FMap_Gateways(INI_Gateways));
 
@@ -450,7 +451,7 @@ namespace SharpFlame
             ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
             if ( ZipEntry != null )
             {
-                clsINIWrite INI_ScriptLabels = new clsINIWrite();
+                IniWriter INI_ScriptLabels = new IniWriter();
                 INI_ScriptLabels.File = StreamWriter;
                 ReturnResult.Add(Serialize_WZ_LabelsINI(INI_ScriptLabels, -1));
 
@@ -464,7 +465,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult Serialize_FMap_Info(clsINIWrite File)
+        public clsResult Serialize_FMap_Info(IniWriter File)
         {
             clsResult ReturnResult = new clsResult("Serializing general map info");
 
@@ -827,7 +828,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult Serialize_FMap_Objects(clsINIWrite File)
+        public clsResult Serialize_FMap_Objects(IniWriter File)
         {
             clsResult ReturnResult = new clsResult("Serializing objects");
 
@@ -934,7 +935,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult Serialize_FMap_Gateways(clsINIWrite File)
+        public clsResult Serialize_FMap_Gateways(IniWriter File)
         {
             clsResult ReturnResult = new clsResult("Serializing gateways");
             int A = 0;
@@ -992,7 +993,7 @@ namespace SharpFlame
             ZipStreamEntry ZipSearchResult = default(ZipStreamEntry);
             string FindPath = "";
 
-            clsFMapInfo ResultInfo = null;
+            FMapInfo ResultInfo = null;
 
             FindPath = "info.ini";
             ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
@@ -1167,7 +1168,7 @@ namespace SharpFlame
             else
             {
                 clsResult Result = new clsResult("Reading labels");
-                clsINIRead LabelsINI = new clsINIRead();
+                IniReader LabelsINI = new IniReader();
                 StreamReader LabelsINI_Reader = new StreamReader(ZipSearchResult.Stream);
                 Result.Take(LabelsINI.ReadFile(LabelsINI_Reader));
                 LabelsINI_Reader.Close();
@@ -1180,13 +1181,13 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public class clsFMapInfo : clsINIRead.clsTranslator
+        public class FMapInfo : Translator
         {
             public sXY_int TerrainSize = new sXY_int(-1, -1);
             public clsInterfaceOptions InterfaceOptions = new clsInterfaceOptions();
             public clsTileset Tileset;
 
-            public override clsINIRead.enumTranslatorResult Translate(clsINIRead.clsSection.sProperty INIProperty)
+            public override TranslatorResult Translate(Section.SectionProperty INIProperty)
             {
                 if ( INIProperty.Name == "tileset" )
                 {
@@ -1204,7 +1205,7 @@ namespace SharpFlame
                     }
                     else
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "size" )
@@ -1212,7 +1213,7 @@ namespace SharpFlame
                     string[] CommaText = INIProperty.Value.Split(',');
                     if ( CommaText.GetUpperBound(0) + 1 < 2 )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     int A = 0;
                     for ( A = 0; A <= CommaText.GetUpperBound(0); A++ )
@@ -1222,15 +1223,15 @@ namespace SharpFlame
                     sXY_int NewSize = new sXY_int();
                     if ( !IOUtil.InvariantParse(CommaText[0], ref NewSize.X) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     if ( !IOUtil.InvariantParse(CommaText[1], ref NewSize.Y) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     if ( NewSize.X < 1 | NewSize.Y < 1 | NewSize.X > Constants.MapMaxSize | NewSize.Y > Constants.MapMaxSize )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                     TerrainSize = NewSize;
                 }
@@ -1238,35 +1239,35 @@ namespace SharpFlame
                 {
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref InterfaceOptions.AutoScrollLimits) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "scrollminx" )
                 {
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref InterfaceOptions.ScrollMin.X) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "scrollminy" )
                 {
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref InterfaceOptions.ScrollMin.Y) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "scrollmaxx" )
                 {
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), InterfaceOptions.ScrollMax.X) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "scrollmaxy" )
                 {
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), InterfaceOptions.ScrollMax.Y) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "name" )
@@ -1281,7 +1282,7 @@ namespace SharpFlame
                 {
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref InterfaceOptions.CompileMultiXPlayers) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "author" )
@@ -1300,25 +1301,25 @@ namespace SharpFlame
                 {
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref InterfaceOptions.CampaignGameType) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else
                 {
-                    return clsINIRead.enumTranslatorResult.NameUnknown;
+                    return TranslatorResult.NameUnknown;
                 }
-                return clsINIRead.enumTranslatorResult.Translated;
+                return TranslatorResult.Translated;
             }
         }
 
-        private clsResult Read_FMap_Info(StreamReader File, ref clsFMapInfo ResultInfo)
+        private clsResult Read_FMap_Info(StreamReader File, ref FMapInfo ResultInfo)
         {
             clsResult ReturnResult = new clsResult("Read general map info");
 
-            clsINIRead.clsSection InfoINI = new clsINIRead.clsSection();
+            Section InfoINI = new Section();
             ReturnResult.Take(InfoINI.ReadFile(File));
 
-            ResultInfo = new clsFMapInfo();
+            ResultInfo = new FMapInfo();
             ReturnResult.Take(InfoINI.Translate(ResultInfo));
 
             if ( ResultInfo.TerrainSize.X < 0 | ResultInfo.TerrainSize.Y < 0 )
@@ -1713,10 +1714,10 @@ namespace SharpFlame
 
             int A = 0;
 
-            clsINIRead ObjectsINI = new clsINIRead();
+            IniReader ObjectsINI = new IniReader();
             ReturnResult.Take(ObjectsINI.ReadFile(File));
 
-            clsFMap_INIObjects INIObjects = new clsFMap_INIObjects(ObjectsINI.Sections.Count);
+            FMapIniObjects INIObjects = new FMapIniObjects(ObjectsINI.Sections.Count);
             ReturnResult.Take(ObjectsINI.Translate(INIObjects));
 
             int DroidComponentUnknownCount = 0;
@@ -1943,7 +1944,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public class clsFMap_INIGateways : clsINIRead.clsSectionTranslator
+        public class FMapIniGateways : SectionTranslator
         {
             public struct sGateway
             {
@@ -1954,7 +1955,7 @@ namespace SharpFlame
             public sGateway[] Gateways;
             public int GatewayCount;
 
-            public clsFMap_INIGateways(int NewGatewayCount)
+            public FMapIniGateways(int NewGatewayCount)
             {
                 int A = 0;
 
@@ -1969,14 +1970,14 @@ namespace SharpFlame
                 }
             }
 
-            public override clsINIRead.enumTranslatorResult Translate(int INISectionNum, clsINIRead.clsSection.sProperty INIProperty)
+            public override TranslatorResult Translate(int INISectionNum, Section.SectionProperty INIProperty)
             {
                 if ( (string)INIProperty.Name == "ax" )
                 {
                     int temp_Result = Gateways[INISectionNum].PosA.X;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref temp_Result) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "ay" )
@@ -1984,7 +1985,7 @@ namespace SharpFlame
                     Int32 temp_Result2 = Gateways[INISectionNum].PosA.Y;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref temp_Result2) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "bx" )
@@ -1992,7 +1993,7 @@ namespace SharpFlame
                     Int32 temp_Result3 = Gateways[INISectionNum].PosB.X;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref temp_Result3) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "by" )
@@ -2000,14 +2001,14 @@ namespace SharpFlame
                     int temp_Result4 = Gateways[INISectionNum].PosB.Y;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref temp_Result4) )
                     {
-                        return clsINIRead.enumTranslatorResult.ValueInvalid;
+                        return TranslatorResult.ValueInvalid;
                     }
                 }
                 else
                 {
-                    return clsINIRead.enumTranslatorResult.NameUnknown;
+                    return TranslatorResult.NameUnknown;
                 }
-                return clsINIRead.enumTranslatorResult.Translated;
+                return TranslatorResult.Translated;
             }
         }
 
@@ -2015,10 +2016,10 @@ namespace SharpFlame
         {
             clsResult ReturnResult = new clsResult("Reading gateways");
 
-            clsINIRead GatewaysINI = new clsINIRead();
+            IniReader GatewaysINI = new IniReader();
             ReturnResult.Take(GatewaysINI.ReadFile(File));
 
-            clsFMap_INIGateways INIGateways = new clsFMap_INIGateways(GatewaysINI.Sections.Count);
+            FMapIniGateways INIGateways = new FMapIniGateways(GatewaysINI.Sections.Count);
             ReturnResult.Take(GatewaysINI.Translate(INIGateways));
 
             int A = 0;

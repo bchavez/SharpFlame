@@ -5,6 +5,8 @@ using Microsoft.VisualBasic;
 using OpenTK;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
+using SharpFlame.FileIO;
+using SharpFlame.FileIO.Ini;
 
 namespace SharpFlame.AppSettings
 {
@@ -106,11 +108,11 @@ namespace SharpFlame.AppSettings
         {
             clsResult ReturnResult = new clsResult("Reading settings");
 
-            clsINIRead INIReader = new clsINIRead();
+            IniReader INIReader = new IniReader();
             ReturnResult.Take(INIReader.ReadFile(File));
             Result = new clsSettings();
             ReturnResult.Take(INIReader.RootSection.Translate(Result));
-            foreach ( clsINIRead.clsSection section in INIReader.Sections )
+            foreach ( Section section in INIReader.Sections )
             {
                 if ( section.Name.ToLower() == "keyboardcontrols" )
                 {
@@ -198,11 +200,11 @@ namespace SharpFlame.AppSettings
             }
 #endif
 
-            clsINIWrite INI_Settings = default(clsINIWrite);
+            IniWriter INI_Settings = default(IniWriter);
 
             try
             {
-                INI_Settings = clsINIWrite.CreateFile(File.Create(App.SettingsPath));
+                INI_Settings = IniWriter.CreateFile(File.Create(App.SettingsPath));
             }
             catch ( Exception ex )
             {
@@ -216,7 +218,7 @@ namespace SharpFlame.AppSettings
             return ReturnResult;
         }
 
-        private static clsResult Serialize_Settings(clsINIWrite File)
+        private static clsResult Serialize_Settings(IniWriter File)
         {
             clsResult ReturnResult = new clsResult("Serializing settings");
 
