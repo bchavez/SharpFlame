@@ -567,9 +567,9 @@ namespace SharpFlame
             double Pan = 0;
             double OrbitRate = 0;
 
-            if ( modControls.KeyboardProfile.Active(modControls.Control_Fast) )
+            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Fast) )
             {
-                if ( modControls.KeyboardProfile.Active(modControls.Control_Slow) )
+                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Slow) )
                 {
                     Rate = 8.0D;
                 }
@@ -578,7 +578,7 @@ namespace SharpFlame
                     Rate = 4.0D;
                 }
             }
-            else if ( modControls.KeyboardProfile.Active(modControls.Control_Slow) )
+            else if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Slow) )
             {
                 Rate = 0.25D;
             }
@@ -3366,7 +3366,7 @@ namespace SharpFlame
                 return;
             }
 
-            if ( !modControls.KeyboardProfile.Active(modControls.Control_Unit_Multiselect) )
+            if ( !KeyboardManager.KeyboardProfile.Active(KeyboardManager.UnitMultiselect) )
             {
                 Map.SelectedUnits.Clear();
             }
@@ -3502,7 +3502,7 @@ namespace SharpFlame
         public void ObjectPicker(clsUnitType UnitType)
         {
             modTools.Tool = modTools.Tools.ObjectPlace;
-            if ( !modControls.KeyboardProfile.Active(modControls.Control_Unit_Multiselect) )
+            if ( !KeyboardManager.KeyboardProfile.Active(KeyboardManager.UnitMultiselect) )
             {
                 dgvFeatures.ClearSelection();
                 dgvStructures.ClearSelection();
@@ -4434,7 +4434,7 @@ namespace SharpFlame
                 return;
             }
 
-            if ( !modControls.KeyboardProfile.Active(modControls.Control_Unit_Multiselect) )
+            if ( !KeyboardManager.KeyboardProfile.Active(KeyboardManager.UnitMultiselect) )
             {
                 Map.SelectedUnits.Clear();
             }

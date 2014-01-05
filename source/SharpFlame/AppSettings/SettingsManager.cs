@@ -115,7 +115,7 @@ namespace SharpFlame.AppSettings
                 if ( section.Name.ToLower() == "keyboardcontrols" )
                 {
                     clsResult keyResults = new clsResult("Keyboard controls");
-                    keyResults.Take(section.Translate(modControls.KeyboardProfile));
+                    keyResults.Take(section.Translate(KeyboardManager.KeyboardProfile));
                     ReturnResult.Take(keyResults);
                 }
             }
@@ -221,10 +221,10 @@ namespace SharpFlame.AppSettings
             clsResult ReturnResult = new clsResult("Serializing settings");
 
             ReturnResult.Take(Settings.INIWrite(File));
-            if ( modControls.KeyboardProfile.IsAnythingChanged )
+            if ( KeyboardManager.KeyboardProfile.IsAnythingChanged )
             {
                 File.SectionName_Append("KeyboardControls");
-                ReturnResult.Take(modControls.KeyboardProfile.INIWrite(File));
+                ReturnResult.Take(KeyboardManager.KeyboardProfile.INIWrite(File));
             }
 
             return ReturnResult;

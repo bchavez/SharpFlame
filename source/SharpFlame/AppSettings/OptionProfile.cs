@@ -92,9 +92,9 @@ namespace SharpFlame.AppSettings
                 }
                 object optionValue = get_Value(item);
                 string valueText = null;
-                if ( item is Option<clsKeyboardControl> )
+                if ( item is Option<KeyboardControl> )
                 {
-                    clsKeyboardControl control = (clsKeyboardControl)optionValue;
+                    KeyboardControl control = (KeyboardControl)optionValue;
                     valueText = "";
                     for ( int i = 0; i <= control.Keys.GetUpperBound(0); i++ )
                     {
@@ -194,7 +194,7 @@ namespace SharpFlame.AppSettings
                 {
                     continue;
                 }
-                if ( item is Option<clsKeyboardControl> )
+                if ( item is Option<KeyboardControl> )
                 {
                     int unlessIndex = Convert.ToInt32(INIProperty.Value.ToLower().IndexOf("unless"));
                     string[] keysText = null;
@@ -242,12 +242,12 @@ namespace SharpFlame.AppSettings
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    clsKeyboardControl control = new clsKeyboardControl(keys, unlessKeys);
+                    KeyboardControl control = new KeyboardControl(keys, unlessKeys);
                     if ( !item.IsValueValid(control) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    set_Changes(item, new Change<clsKeyboardControl>(control));
+                    set_Changes(item, new Change<KeyboardControl>(control));
                     return clsINIRead.enumTranslatorResult.Translated;
                 }
                 else if ( item is Option<SimpleList<string>> )

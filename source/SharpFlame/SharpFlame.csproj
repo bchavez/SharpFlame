@@ -106,6 +106,9 @@
   <ItemGroup>
     <Compile Include="AppSettings\Change.cs" />
     <Compile Include="AppSettings\ChangeInterface.cs" />
+    <Compile Include="AppSettings\KeyboardControl.cs" />
+    <Compile Include="AppSettings\KeyboardProfile.cs" />
+    <Compile Include="AppSettings\KeyboardProfileCreator.cs" />
     <Compile Include="AppSettings\OptionCreator.cs" />
     <Compile Include="AppSettings\OptionProfile.cs" />
     <Compile Include="Bitmaps\BitmapGLTexture.cs" />
@@ -132,7 +135,7 @@
     <Compile Include="frmKeyboardControl.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AppSettings\KeyboardControls.cs" />
+    <Compile Include="AppSettings\KeyboardManager.cs" />
     <Compile Include="clsMap.cs" />
     <Compile Include="clsMapChanges.cs" />
     <Compile Include="clsMapDraw.cs" />

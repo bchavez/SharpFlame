@@ -21,9 +21,9 @@ namespace SharpFlame
         private PathSetControl objectDataPathSetControl = new PathSetControl("Object Data Directories");
         private PathSetControl tilesetsPathSetControl = new PathSetControl("Tilesets Directories");
 
-        private clsKeyboardProfile ChangedKeyControls;
+        private KeyboardProfile ChangedKeyControls;
 
-        private Option<clsKeyboardControl>[] lstKeyboardControls_Items = new Option<clsKeyboardControl>[] {};
+        private Option<KeyboardControl>[] lstKeyboardControls_Items = new Option<KeyboardControl>[] {};
 
         public frmOptions()
         {
@@ -43,7 +43,7 @@ namespace SharpFlame
             TableLayoutPanel1.Controls.Add(tilesetsPathSetControl, 0, 0);
             TableLayoutPanel1.Controls.Add(objectDataPathSetControl, 0, 1);
 
-            ChangedKeyControls = (clsKeyboardProfile)(modControls.KeyboardProfile.GetCopy(new KeyboardProfileCreator()));
+            ChangedKeyControls = (KeyboardProfile)(KeyboardManager.KeyboardProfile.GetCopy(new KeyboardProfileCreator()));
 
             txtAutosaveChanges.Text = IOUtil.InvariantToString(SettingsManager.Settings.AutoSaveMinChanges);
             txtAutosaveInterval.Text = IOUtil.InvariantToString(SettingsManager.Settings.AutoSaveMinInterval_s);
@@ -169,7 +169,7 @@ namespace SharpFlame
             }
             Program.frmMainInstance.View_DrawViewLater();
 
-            modControls.KeyboardProfile = ChangedKeyControls;
+            KeyboardManager.KeyboardProfile = ChangedKeyControls;
 
             Finish(DialogResult.OK);
         }
@@ -247,17 +247,17 @@ namespace SharpFlame
 
         private void UpdateKeyboardControl(int index)
         {
-            lstKeyboardControls.Items[index] = GetKeyControlText((Option<clsKeyboardControl>)(modControls.Options_KeyboardControls.Options[index]));
+            lstKeyboardControls.Items[index] = GetKeyControlText((Option<KeyboardControl>)(KeyboardManager.OptionsKeyboardControls.Options[index]));
         }
 
         private void UpdateKeyboardControls(int selectedIndex)
         {
             lstKeyboardControls.Hide();
             lstKeyboardControls.Items.Clear();
-            lstKeyboardControls_Items = new Option<clsKeyboardControl>[modControls.Options_KeyboardControls.Options.Count];
-            for ( int i = 0; i <= modControls.Options_KeyboardControls.Options.Count - 1; i++ )
+            lstKeyboardControls_Items = new Option<KeyboardControl>[KeyboardManager.OptionsKeyboardControls.Options.Count];
+            for ( int i = 0; i <= KeyboardManager.OptionsKeyboardControls.Options.Count - 1; i++ )
             {
-                Option<clsKeyboardControl> item = (Option<clsKeyboardControl>)(modControls.Options_KeyboardControls.Options[i]);
+                Option<KeyboardControl> item = (Option<KeyboardControl>)(KeyboardManager.OptionsKeyboardControls.Options[i]);
                 string text = GetKeyControlText(item);
                 lstKeyboardControls_Items[lstKeyboardControls.Items.Add(text)] = item;
             }
@@ -265,10 +265,10 @@ namespace SharpFlame
             lstKeyboardControls.Show();
         }
 
-        private string GetKeyControlText(Option<clsKeyboardControl> item)
+        private string GetKeyControlText(Option<KeyboardControl> item)
         {
             string text = item.SaveKey + " = ";
-            clsKeyboardControl control = (clsKeyboardControl)(ChangedKeyControls.get_Value(item));
+            KeyboardControl control = (KeyboardControl)(ChangedKeyControls.get_Value(item));
             for ( int j = 0; j <= control.Keys.GetUpperBound(0); j++ )
             {
                 Keys key = Keys.A;
@@ -331,16 +331,16 @@ namespace SharpFlame
             {
                 return;
             }
-            Option<clsKeyboardControl> keyOption = lstKeyboardControls_Items[lstKeyboardControls.SelectedIndex];
-            clsKeyboardControl previous = (clsKeyboardControl)(ChangedKeyControls.get_Value(keyOption));
+            Option<KeyboardControl> keyOption = lstKeyboardControls_Items[lstKeyboardControls.SelectedIndex];
+            KeyboardControl previous = (KeyboardControl)(ChangedKeyControls.get_Value(keyOption));
 
             Keys[] keys = new Keys[capture.Results.Count];
             for ( int i = 0; i <= capture.Results.Count - 1; i++ )
             {
                 keys[i] = capture.Results[i].Item;
             }
-            clsKeyboardControl copy = new clsKeyboardControl(keys, previous.UnlessKeys);
-            ChangedKeyControls.set_Changes(keyOption, new Change<clsKeyboardControl>(copy));
+            KeyboardControl copy = new KeyboardControl(keys, previous.UnlessKeys);
+            ChangedKeyControls.set_Changes(keyOption, new Change<KeyboardControl>(copy));
             UpdateKeyboardControl(keyOption.GroupLink.ArrayPosition);
         }
 
@@ -360,16 +360,16 @@ namespace SharpFlame
             {
                 return;
             }
-            Option<clsKeyboardControl> keyOption = lstKeyboardControls_Items[lstKeyboardControls.SelectedIndex];
-            clsKeyboardControl previous = (clsKeyboardControl)(ChangedKeyControls.get_Value(keyOption));
+            Option<KeyboardControl> keyOption = lstKeyboardControls_Items[lstKeyboardControls.SelectedIndex];
+            KeyboardControl previous = (KeyboardControl)(ChangedKeyControls.get_Value(keyOption));
 
             Keys[] unlessKeys = new Keys[capture.Results.Count];
             for ( int i = 0; i <= capture.Results.Count - 1; i++ )
             {
                 unlessKeys[i] = capture.Results[i].Item;
             }
-            clsKeyboardControl copy = new clsKeyboardControl(previous.Keys, unlessKeys);
-            ChangedKeyControls.set_Changes(keyOption, new Change<clsKeyboardControl>(copy));
+            KeyboardControl copy = new KeyboardControl(previous.Keys, unlessKeys);
+            ChangedKeyControls.set_Changes(keyOption, new Change<KeyboardControl>(copy));
             UpdateKeyboardControl(keyOption.GroupLink.ArrayPosition);
         }
 
@@ -380,7 +380,7 @@ namespace SharpFlame
                 return;
             }
 
-            Option<clsKeyboardControl> keyOption = lstKeyboardControls_Items[lstKeyboardControls.SelectedIndex];
+            Option<KeyboardControl> keyOption = lstKeyboardControls_Items[lstKeyboardControls.SelectedIndex];
             ChangedKeyControls.set_Changes(keyOption, null);
             UpdateKeyboardControl(keyOption.GroupLink.ArrayPosition);
         }

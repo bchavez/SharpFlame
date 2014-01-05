@@ -247,9 +247,9 @@ namespace SharpFlame
         {
             IsViewKeyDown.Deactivate();
 
-            foreach ( Option<clsKeyboardControl> control in modControls.Options_KeyboardControls.Options )
+            foreach ( Option<KeyboardControl> control in KeyboardManager.OptionsKeyboardControls.Options )
             {
-                ((clsKeyboardControl)(modControls.KeyboardProfile.get_Value(control))).KeysChanged(IsViewKeyDown);
+                ((KeyboardControl)(KeyboardManager.KeyboardProfile.get_Value(control))).KeysChanged(IsViewKeyDown);
             }
         }
 

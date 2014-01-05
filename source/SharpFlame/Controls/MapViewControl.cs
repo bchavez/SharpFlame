@@ -409,12 +409,12 @@ namespace SharpFlame.Controls
 
             App.IsViewKeyDown.Keys[(int)e.KeyCode] = true;
 
-            foreach ( Option<clsKeyboardControl> control in modControls.Options_KeyboardControls.Options )
+            foreach ( Option<KeyboardControl> control in KeyboardManager.OptionsKeyboardControls.Options )
             {
-                ((clsKeyboardControl)(modControls.KeyboardProfile.get_Value(control))).KeysChanged(App.IsViewKeyDown);
+                ((KeyboardControl)(KeyboardManager.KeyboardProfile.get_Value(control))).KeysChanged(App.IsViewKeyDown);
             }
 
-            if ( modControls.KeyboardProfile.Active(modControls.Control_Undo) )
+            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Undo) )
             {
                 string Message = "";
                 if ( Map.UndoPosition > 0 )
@@ -432,7 +432,7 @@ namespace SharpFlame.Controls
                 }
                 DisplayUndoMessage(Message);
             }
-            if ( modControls.KeyboardProfile.Active(modControls.Control_Redo) )
+            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Redo) )
             {
                 string Message = "";
                 if ( Map.UndoPosition < Map.Undos.Count )
@@ -495,7 +495,7 @@ namespace SharpFlame.Controls
                 App.VisionRadius_2E_Changed();
             }
 
-            if ( modControls.KeyboardProfile.Active(modControls.Control_View_Move_Type) )
+            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveType) )
             {
                 if ( App.ViewMoveType == App.enumView_Move_Type.Free )
                 {
@@ -506,11 +506,11 @@ namespace SharpFlame.Controls
                     App.ViewMoveType = App.enumView_Move_Type.Free;
                 }
             }
-            if ( modControls.KeyboardProfile.Active(modControls.Control_View_Rotate_Type) )
+            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRotateType) )
             {
                 App.RTSOrbit = !App.RTSOrbit;
             }
-            if ( modControls.KeyboardProfile.Active(modControls.Control_View_Reset) )
+            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewReset) )
             {
                 Map.ViewInfo.FOV_Multiplier_Set(SettingsManager.Settings.FOVDefault);
                 if ( App.ViewMoveType == App.enumView_Move_Type.Free )
@@ -524,17 +524,17 @@ namespace SharpFlame.Controls
                     Map.ViewInfo.ViewAngleSet_Rotate(matrixA);
                 }
             }
-            if ( modControls.KeyboardProfile.Active(modControls.Control_View_Textures) )
+            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewTextures) )
             {
                 App.Draw_TileTextures = !App.Draw_TileTextures;
                 DrawViewLater();
             }
-            if ( modControls.KeyboardProfile.Active(modControls.Control_View_Wireframe) )
+            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewWireframe) )
             {
                 App.Draw_TileWireframe = !App.Draw_TileWireframe;
                 DrawViewLater();
             }
-            if ( modControls.KeyboardProfile.Active(modControls.Control_View_Units) )
+            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewUnits) )
             {
                 App.Draw_Units = !App.Draw_Units;
                 int X = 0;
@@ -566,12 +566,12 @@ namespace SharpFlame.Controls
                 Map.Update();
                 DrawViewLater();
             }
-            if ( modControls.KeyboardProfile.Active(modControls.Control_View_ScriptMarkers) )
+            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewScriptMarkers) )
             {
                 App.Draw_ScriptMarkers = !App.Draw_ScriptMarkers;
                 DrawViewLater();
             }
-            if ( modControls.KeyboardProfile.Active(modControls.Control_View_Lighting) )
+            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewLighting) )
             {
                 if ( App.Draw_Lighting == App.enumDrawLighting.Off )
                 {
@@ -591,19 +591,19 @@ namespace SharpFlame.Controls
             {
                 if ( MouseOverTerrain != null )
                 {
-                    if ( modControls.KeyboardProfile.Active(modControls.Control_Clockwise) )
+                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Clockwise) )
                     {
                         Map.ViewInfo.Apply_Texture_Clockwise();
                     }
-                    if ( modControls.KeyboardProfile.Active(modControls.Control_CounterClockwise) )
+                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.CounterClockwise) )
                     {
                         Map.ViewInfo.Apply_Texture_CounterClockwise();
                     }
-                    if ( modControls.KeyboardProfile.Active(modControls.Control_Texture_Flip) )
+                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.TextureFlip) )
                     {
                         Map.ViewInfo.Apply_Texture_FlipX();
                     }
-                    if ( modControls.KeyboardProfile.Active(modControls.Control_Tri_Flip) )
+                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.TriFlip) )
                     {
                         Map.ViewInfo.Apply_Tri_Flip();
                     }
@@ -611,7 +611,7 @@ namespace SharpFlame.Controls
             }
             if ( modTools.Tool == modTools.Tools.ObjectSelect )
             {
-                if ( modControls.KeyboardProfile.Active(modControls.Control_Unit_Delete) )
+                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.UnitDelete) )
                 {
                     if ( Map.SelectedUnits.Count > 0 )
                     {
@@ -628,7 +628,7 @@ namespace SharpFlame.Controls
                         DrawViewLater();
                     }
                 }
-                if ( modControls.KeyboardProfile.Active(modControls.Control_Unit_Move) )
+                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.UnitMove) )
                 {
                     if ( MouseOverTerrain != null )
                     {
@@ -653,7 +653,7 @@ namespace SharpFlame.Controls
                         }
                     }
                 }
-                if ( modControls.KeyboardProfile.Active(modControls.Control_Clockwise) )
+                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Clockwise) )
                 {
                     clsMap.clsObjectRotationOffset ObjectRotationOffset = new clsMap.clsObjectRotationOffset();
                     ObjectRotationOffset.Map = Map;
@@ -664,7 +664,7 @@ namespace SharpFlame.Controls
                     Map.UndoStepCreate("Object Rotated");
                     DrawViewLater();
                 }
-                if ( modControls.KeyboardProfile.Active(modControls.Control_CounterClockwise) )
+                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.CounterClockwise) )
                 {
                     clsMap.clsObjectRotationOffset ObjectRotationOffset = new clsMap.clsObjectRotationOffset();
                     ObjectRotationOffset.Map = Map;
@@ -677,13 +677,13 @@ namespace SharpFlame.Controls
                 }
             }
 
-            if ( modControls.KeyboardProfile.Active(modControls.Control_Deselect) )
+            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Deselect) )
             {
                 modTools.Tool = modTools.Tools.ObjectSelect;
                 DrawViewLater();
             }
 
-            if ( modControls.KeyboardProfile.Active(modControls.Control_PreviousTool) )
+            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.PreviousTool) )
             {
                 modTools.Tool = modTools.PreviousTool;
                 DrawViewLater();
@@ -694,9 +694,9 @@ namespace SharpFlame.Controls
         {
             App.IsViewKeyDown.Keys[(int)e.KeyCode] = false;
 
-            foreach ( Option<clsKeyboardControl> control in modControls.Options_KeyboardControls.Options )
+            foreach ( Option<KeyboardControl> control in KeyboardManager.OptionsKeyboardControls.Options )
             {
-                ((clsKeyboardControl)(modControls.KeyboardProfile.get_Value(control))).KeysChanged(App.IsViewKeyDown);
+                ((KeyboardControl)(KeyboardManager.KeyboardProfile.get_Value(control))).KeysChanged(App.IsViewKeyDown);
             }
         }
 

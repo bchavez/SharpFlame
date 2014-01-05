@@ -30,7 +30,7 @@ namespace SharpFlame
             App.SetProgramSubDirs();
 
             SettingsManager.CreateSettingOptions();
-            modControls.CreateControls(); //needed to load key control settings
+            KeyboardManager.CreateControls(); //needed to load key control settings
             clsResult SettingsLoadResult = SettingsManager.Settings_Load(ref SettingsManager.InitializeSettings);
             InitializeResult.Add(SettingsLoadResult);
 
