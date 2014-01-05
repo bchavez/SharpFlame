@@ -5,6 +5,7 @@ using Microsoft.VisualBasic;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
+using SharpFlame.FileIO;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame
@@ -789,7 +790,7 @@ namespace SharpFlame
                         int Rotation = 0;
                         try
                         {
-                            modIO.InvariantParse_int(modMain.frmMainInstance.txtNewObjectRotation.Text, ref Rotation);
+                            IOUtil.InvariantParse_int(modMain.frmMainInstance.txtNewObjectRotation.Text, ref Rotation);
                             if ( Rotation < 0 | Rotation > 359 )
                             {
                                 Rotation = 0;

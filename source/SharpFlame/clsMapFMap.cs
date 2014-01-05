@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.VisualBasic;
+using SharpFlame.FileIO;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame
@@ -115,7 +116,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "turretcount" )
                 {
                     int NewTurretCount = 0;
-                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref NewTurretCount) )
+                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref NewTurretCount) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -196,7 +197,7 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "id" )
                 {
-                    if ( !modIO.InvariantParse_uint(Convert.ToString(INIProperty.Value), Objects[INISectionNum].ID) )
+                    if ( !IOUtil.InvariantParse_uint(Convert.ToString(INIProperty.Value), Objects[INISectionNum].ID) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -204,7 +205,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "priority" )
                 {
                     Int32 temp_Result = Objects[INISectionNum].Priority;
-                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result) )
+                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -225,11 +226,11 @@ namespace SharpFlame
                         CommaText[A] = Convert.ToString(CommaText[A].Trim());
                     }
                     sXY_int Pos = new sXY_int();
-                    if ( !modIO.InvariantParse_int(CommaText[0], ref Pos.X) )
+                    if ( !IOUtil.InvariantParse_int(CommaText[0], ref Pos.X) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    if ( !modIO.InvariantParse_int(CommaText[1], ref Pos.Y) )
+                    if ( !IOUtil.InvariantParse_int(CommaText[1], ref Pos.Y) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -245,7 +246,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "heading" )
                 {
                     double dblTemp = 0;
-                    if ( !modIO.InvariantParse_dbl(Convert.ToString(INIProperty.Value), ref dblTemp) )
+                    if ( !IOUtil.InvariantParse_dbl(Convert.ToString(INIProperty.Value), ref dblTemp) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -262,7 +263,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "health" )
                 {
                     double NewHealth = 0;
-                    if ( !modIO.InvariantParse_dbl(Convert.ToString(INIProperty.Value), ref NewHealth) )
+                    if ( !IOUtil.InvariantParse_dbl(Convert.ToString(INIProperty.Value), ref NewHealth) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -275,7 +276,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "walltype" )
                 {
                     int WallType = -1;
-                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref WallType) )
+                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref WallType) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -338,7 +339,7 @@ namespace SharpFlame
             string ZipPath = "";
 
             ZipPath = "Info.ini";
-            ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
             if ( ZipEntry != null )
             {
                 clsINIWrite INI_Info = new clsINIWrite();
@@ -350,7 +351,7 @@ namespace SharpFlame
             }
 
             ZipPath = "VertexHeight.dat";
-            ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
             if ( ZipEntry != null )
             {
                 ReturnResult.Add(Serialize_FMap_VertexHeight(BinaryWriter));
@@ -360,7 +361,7 @@ namespace SharpFlame
             }
 
             ZipPath = "VertexTerrain.dat";
-            ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
             if ( ZipEntry != null )
             {
                 ReturnResult.Add(Serialize_FMap_VertexTerrain(BinaryWriter));
@@ -370,7 +371,7 @@ namespace SharpFlame
             }
 
             ZipPath = "TileTexture.dat";
-            ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
             if ( ZipEntry != null )
             {
                 ReturnResult.Add(Serialize_FMap_TileTexture(BinaryWriter));
@@ -380,7 +381,7 @@ namespace SharpFlame
             }
 
             ZipPath = "TileOrientation.dat";
-            ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
             if ( ZipEntry != null )
             {
                 ReturnResult.Add(Serialize_FMap_TileOrientation(BinaryWriter));
@@ -390,7 +391,7 @@ namespace SharpFlame
             }
 
             ZipPath = "TileCliff.dat";
-            ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
             if ( ZipEntry != null )
             {
                 ReturnResult.Add(Serialize_FMap_TileCliff(BinaryWriter));
@@ -400,7 +401,7 @@ namespace SharpFlame
             }
 
             ZipPath = "Roads.dat";
-            ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
             if ( ZipEntry != null )
             {
                 ReturnResult.Add(Serialize_FMap_Roads(BinaryWriter));
@@ -410,7 +411,7 @@ namespace SharpFlame
             }
 
             ZipPath = "Objects.ini";
-            ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
             if ( ZipEntry != null )
             {
                 clsINIWrite INI_Objects = new clsINIWrite();
@@ -422,7 +423,7 @@ namespace SharpFlame
             }
 
             ZipPath = "Gateways.ini";
-            ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
             if ( ZipEntry != null )
             {
                 clsINIWrite INI_Gateways = new clsINIWrite();
@@ -434,7 +435,7 @@ namespace SharpFlame
             }
 
             ZipPath = "TileTypes.dat";
-            ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
             if ( ZipEntry != null )
             {
                 ReturnResult.Add(Serialize_FMap_TileTypes(BinaryWriter));
@@ -444,7 +445,7 @@ namespace SharpFlame
             }
 
             ZipPath = "ScriptLabels.ini";
-            ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
             if ( ZipEntry != null )
             {
                 clsINIWrite INI_ScriptLabels = new clsINIWrite();
@@ -483,22 +484,22 @@ namespace SharpFlame
                     File.Property_Append("Tileset", "Rockies");
                 }
 
-                File.Property_Append("Size", modIO.InvariantToString_int(Terrain.TileSize.X) + ", " + modIO.InvariantToString_int(Terrain.TileSize.Y));
+                File.Property_Append("Size", IOUtil.InvariantToString_int(Terrain.TileSize.X) + ", " + IOUtil.InvariantToString_int(Terrain.TileSize.Y));
 
-                File.Property_Append("AutoScrollLimits", modIO.InvariantToString_bool(InterfaceOptions.AutoScrollLimits));
-                File.Property_Append("ScrollMinX", modIO.InvariantToString_int(InterfaceOptions.ScrollMin.X));
-                File.Property_Append("ScrollMinY", modIO.InvariantToString_int(InterfaceOptions.ScrollMin.Y));
-                File.Property_Append("ScrollMaxX", modIO.InvariantToString_uint(InterfaceOptions.ScrollMax.X));
-                File.Property_Append("ScrollMaxY", modIO.InvariantToString_uint(InterfaceOptions.ScrollMax.Y));
+                File.Property_Append("AutoScrollLimits", IOUtil.InvariantToString_bool(InterfaceOptions.AutoScrollLimits));
+                File.Property_Append("ScrollMinX", IOUtil.InvariantToString_int(InterfaceOptions.ScrollMin.X));
+                File.Property_Append("ScrollMinY", IOUtil.InvariantToString_int(InterfaceOptions.ScrollMin.Y));
+                File.Property_Append("ScrollMaxX", IOUtil.InvariantToString_uint(InterfaceOptions.ScrollMax.X));
+                File.Property_Append("ScrollMaxY", IOUtil.InvariantToString_uint(InterfaceOptions.ScrollMax.Y));
 
                 File.Property_Append("Name", InterfaceOptions.CompileName);
                 File.Property_Append("Players", InterfaceOptions.CompileMultiPlayers);
-                File.Property_Append("XPlayerLev", modIO.InvariantToString_bool(InterfaceOptions.CompileMultiXPlayers));
+                File.Property_Append("XPlayerLev", IOUtil.InvariantToString_bool(InterfaceOptions.CompileMultiXPlayers));
                 File.Property_Append("Author", InterfaceOptions.CompileMultiAuthor);
                 File.Property_Append("License", InterfaceOptions.CompileMultiLicense);
                 if ( InterfaceOptions.CampaignGameType >= 0 )
                 {
-                    File.Property_Append("CampType", modIO.InvariantToString_int(InterfaceOptions.CampaignGameType));
+                    File.Property_Append("CampType", IOUtil.InvariantToString_int(InterfaceOptions.CampaignGameType));
                 }
             }
             catch ( Exception ex )
@@ -839,7 +840,7 @@ namespace SharpFlame
                 for ( A = 0; A <= Units.Count - 1; A++ )
                 {
                     Unit = Units[A];
-                    File.SectionName_Append(modIO.InvariantToString_int(A));
+                    File.SectionName_Append(IOUtil.InvariantToString_int(A));
                     switch ( Unit.Type.Type )
                     {
                         case clsUnitType.enumType.Feature:
@@ -850,7 +851,7 @@ namespace SharpFlame
                             File.Property_Append("Type", "Structure, " + StructureType.Code);
                             if ( StructureType.WallLink.IsConnected )
                             {
-                                File.Property_Append("WallType", modIO.InvariantToString_int(StructureType.WallLink.ArrayPosition));
+                                File.Property_Append("WallType", IOUtil.InvariantToString_int(StructureType.WallLink.ArrayPosition));
                             }
                             break;
                         case clsUnitType.enumType.PlayerDroid:
@@ -874,7 +875,7 @@ namespace SharpFlame
                                 {
                                     File.Property_Append("Propulsion", Droid.Propulsion.Code);
                                 }
-                                File.Property_Append("TurretCount", modIO.InvariantToString_byte(Droid.TurretCount));
+                                File.Property_Append("TurretCount", IOUtil.InvariantToString_byte(Droid.TurretCount));
                                 if ( Droid.Turret1 != null )
                                 {
                                     if ( Droid.Turret1.GetTurretTypeName(ref Text) )
@@ -902,14 +903,14 @@ namespace SharpFlame
                             WarningCount++;
                             break;
                     }
-                    File.Property_Append("ID", modIO.InvariantToString_uint(Unit.ID));
-                    File.Property_Append("Priority", modIO.InvariantToString_int(Unit.SavePriority));
-                    File.Property_Append("Pos", modIO.InvariantToString_int(Unit.Pos.Horizontal.X) + ", " + modIO.InvariantToString_int(Unit.Pos.Horizontal.Y));
-                    File.Property_Append("Heading", modIO.InvariantToString_int(Unit.Rotation));
+                    File.Property_Append("ID", IOUtil.InvariantToString_uint(Unit.ID));
+                    File.Property_Append("Priority", IOUtil.InvariantToString_int(Unit.SavePriority));
+                    File.Property_Append("Pos", IOUtil.InvariantToString_int(Unit.Pos.Horizontal.X) + ", " + IOUtil.InvariantToString_int(Unit.Pos.Horizontal.Y));
+                    File.Property_Append("Heading", IOUtil.InvariantToString_int(Unit.Rotation));
                     File.Property_Append("UnitGroup", Unit.UnitGroup.GetFMapINIPlayerText());
                     if ( Unit.Health < 1.0D )
                     {
-                        File.Property_Append("Health", modIO.InvariantToString_dbl(Unit.Health));
+                        File.Property_Append("Health", IOUtil.InvariantToString_dbl(Unit.Health));
                     }
                     if ( Unit.Label != null )
                     {
@@ -942,11 +943,11 @@ namespace SharpFlame
                 for ( A = 0; A <= Gateways.Count - 1; A++ )
                 {
                     Gateway = Gateways[A];
-                    File.SectionName_Append(modIO.InvariantToString_int(A));
-                    File.Property_Append("AX", modIO.InvariantToString_int(Gateway.PosA.X));
-                    File.Property_Append("AY", modIO.InvariantToString_int(Gateway.PosA.Y));
-                    File.Property_Append("BX", modIO.InvariantToString_int(Gateway.PosB.X));
-                    File.Property_Append("BY", modIO.InvariantToString_int(Gateway.PosB.Y));
+                    File.SectionName_Append(IOUtil.InvariantToString_int(A));
+                    File.Property_Append("AX", IOUtil.InvariantToString_int(Gateway.PosA.X));
+                    File.Property_Append("AY", IOUtil.InvariantToString_int(Gateway.PosA.Y));
+                    File.Property_Append("BX", IOUtil.InvariantToString_int(Gateway.PosB.X));
+                    File.Property_Append("BY", IOUtil.InvariantToString_int(Gateway.PosB.Y));
                     File.Gap_Append();
                 }
             }
@@ -986,13 +987,13 @@ namespace SharpFlame
             clsResult ReturnResult =
                 new clsResult("Loading FMap from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
 
-            clsZipStreamEntry ZipSearchResult = default(clsZipStreamEntry);
+            ZipStreamEntry ZipSearchResult = default(ZipStreamEntry);
             string FindPath = "";
 
             clsFMapInfo ResultInfo = null;
 
             FindPath = "info.ini";
-            ZipSearchResult = modIO.FindZipEntryFromPath(Path, FindPath);
+            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
                 ReturnResult.ProblemAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
@@ -1031,7 +1032,7 @@ namespace SharpFlame
             TileType_Reset();
 
             FindPath = "vertexheight.dat";
-            ZipSearchResult = modIO.FindZipEntryFromPath(Path, FindPath);
+            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
                 ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
@@ -1045,7 +1046,7 @@ namespace SharpFlame
             }
 
             FindPath = "vertexterrain.dat";
-            ZipSearchResult = modIO.FindZipEntryFromPath(Path, FindPath);
+            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
                 ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
@@ -1059,7 +1060,7 @@ namespace SharpFlame
             }
 
             FindPath = "tiletexture.dat";
-            ZipSearchResult = modIO.FindZipEntryFromPath(Path, FindPath);
+            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
                 ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
@@ -1073,7 +1074,7 @@ namespace SharpFlame
             }
 
             FindPath = "tileorientation.dat";
-            ZipSearchResult = modIO.FindZipEntryFromPath(Path, FindPath);
+            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
                 ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
@@ -1087,7 +1088,7 @@ namespace SharpFlame
             }
 
             FindPath = "tilecliff.dat";
-            ZipSearchResult = modIO.FindZipEntryFromPath(Path, FindPath);
+            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
                 ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
@@ -1101,7 +1102,7 @@ namespace SharpFlame
             }
 
             FindPath = "roads.dat";
-            ZipSearchResult = modIO.FindZipEntryFromPath(Path, FindPath);
+            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
                 ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
@@ -1115,7 +1116,7 @@ namespace SharpFlame
             }
 
             FindPath = "objects.ini";
-            ZipSearchResult = modIO.FindZipEntryFromPath(Path, FindPath);
+            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
                 ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
@@ -1129,7 +1130,7 @@ namespace SharpFlame
             }
 
             FindPath = "gateways.ini";
-            ZipSearchResult = modIO.FindZipEntryFromPath(Path, FindPath);
+            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
                 ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
@@ -1143,7 +1144,7 @@ namespace SharpFlame
             }
 
             FindPath = "tiletypes.dat";
-            ZipSearchResult = modIO.FindZipEntryFromPath(Path, FindPath);
+            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
                 ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
@@ -1157,7 +1158,7 @@ namespace SharpFlame
             }
 
             FindPath = "scriptlabels.ini";
-            ZipSearchResult = modIO.FindZipEntryFromPath(Path, FindPath);
+            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
             }
@@ -1217,11 +1218,11 @@ namespace SharpFlame
                         CommaText[A] = CommaText[A].Trim();
                     }
                     sXY_int NewSize = new sXY_int();
-                    if ( !modIO.InvariantParse_int(CommaText[0], ref NewSize.X) )
+                    if ( !IOUtil.InvariantParse_int(CommaText[0], ref NewSize.X) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    if ( !modIO.InvariantParse_int(CommaText[1], ref NewSize.Y) )
+                    if ( !IOUtil.InvariantParse_int(CommaText[1], ref NewSize.Y) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1233,35 +1234,35 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "autoscrolllimits" )
                 {
-                    if ( !modIO.InvariantParse_bool(Convert.ToString(INIProperty.Value), ref InterfaceOptions.AutoScrollLimits) )
+                    if ( !IOUtil.InvariantParse_bool(Convert.ToString(INIProperty.Value), ref InterfaceOptions.AutoScrollLimits) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "scrollminx" )
                 {
-                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref InterfaceOptions.ScrollMin.X) )
+                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref InterfaceOptions.ScrollMin.X) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "scrollminy" )
                 {
-                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref InterfaceOptions.ScrollMin.Y) )
+                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref InterfaceOptions.ScrollMin.Y) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "scrollmaxx" )
                 {
-                    if ( !modIO.InvariantParse_uint(Convert.ToString(INIProperty.Value), InterfaceOptions.ScrollMax.X) )
+                    if ( !IOUtil.InvariantParse_uint(Convert.ToString(INIProperty.Value), InterfaceOptions.ScrollMax.X) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
                 }
                 else if ( (string)INIProperty.Name == "scrollmaxy" )
                 {
-                    if ( !modIO.InvariantParse_uint(Convert.ToString(INIProperty.Value), InterfaceOptions.ScrollMax.Y) )
+                    if ( !IOUtil.InvariantParse_uint(Convert.ToString(INIProperty.Value), InterfaceOptions.ScrollMax.Y) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1276,7 +1277,7 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "xplayerlev" )
                 {
-                    if ( !modIO.InvariantParse_bool(Convert.ToString(INIProperty.Value), ref InterfaceOptions.CompileMultiXPlayers) )
+                    if ( !IOUtil.InvariantParse_bool(Convert.ToString(INIProperty.Value), ref InterfaceOptions.CompileMultiXPlayers) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1295,7 +1296,7 @@ namespace SharpFlame
                 }
                 else if ( (string)INIProperty.Name == "camptype" )
                 {
-                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref InterfaceOptions.CampaignGameType) )
+                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref InterfaceOptions.CampaignGameType) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1872,7 +1873,7 @@ namespace SharpFlame
                                 UInt32 PlayerNum = 0;
                                 try
                                 {
-                                    if ( !modIO.InvariantParse_uint(INIObjects.Objects[A].UnitGroup, PlayerNum) )
+                                    if ( !IOUtil.InvariantParse_uint(INIObjects.Objects[A].UnitGroup, PlayerNum) )
                                     {
                                         throw (new Exception());
                                     }
@@ -1971,7 +1972,7 @@ namespace SharpFlame
                 if ( (string)INIProperty.Name == "ax" )
                 {
                     int temp_Result = Gateways[INISectionNum].PosA.X;
-                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result) )
+                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1979,7 +1980,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "ay" )
                 {
                     Int32 temp_Result2 = Gateways[INISectionNum].PosA.Y;
-                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result2) )
+                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result2) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1987,7 +1988,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "bx" )
                 {
                     Int32 temp_Result3 = Gateways[INISectionNum].PosB.X;
-                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result3) )
+                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result3) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1995,7 +1996,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "by" )
                 {
                     int temp_Result4 = Gateways[INISectionNum].PosB.Y;
-                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result4) )
+                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result4) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }

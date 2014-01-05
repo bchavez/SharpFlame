@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using Matrix3D;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
+using SharpFlame.FileIO;
 using SharpFlame.MathExtra;
 using SharpFlame.Painters;
 
@@ -1282,7 +1283,7 @@ namespace SharpFlame
             clsMap.clsApplyCliff ApplyCliff = new clsMap.clsApplyCliff();
             ApplyCliff.Map = Map;
             double Angle = 0;
-            if ( !modIO.InvariantParse_dbl(modMain.frmMainInstance.txtAutoCliffSlope.Text, ref Angle) )
+            if ( !IOUtil.InvariantParse_dbl(modMain.frmMainInstance.txtAutoCliffSlope.Text, ref Angle) )
             {
                 return;
             }
@@ -2023,7 +2024,7 @@ namespace SharpFlame
                     if ( GetMouseLeftDownOverTerrain() != null )
                     {
                         double dblTemp = 0;
-                        if ( !modIO.InvariantParse_dbl(modMain.frmMainInstance.txtSmoothRate.Text, ref dblTemp) )
+                        if ( !IOUtil.InvariantParse_dbl(modMain.frmMainInstance.txtSmoothRate.Text, ref dblTemp) )
                         {
                             return;
                         }
@@ -2036,7 +2037,7 @@ namespace SharpFlame
                 if ( GetMouseOverTerrain() != null )
                 {
                     double dblTemp = 0;
-                    if ( !modIO.InvariantParse_dbl(modMain.frmMainInstance.txtHeightChangeRate.Text, ref dblTemp) )
+                    if ( !IOUtil.InvariantParse_dbl(modMain.frmMainInstance.txtHeightChangeRate.Text, ref dblTemp) )
                     {
                         return;
                     }

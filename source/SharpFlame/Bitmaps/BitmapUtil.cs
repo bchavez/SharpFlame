@@ -1,13 +1,10 @@
 using System;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
-using OpenTK.Graphics.OpenGL;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
-namespace SharpFlame
+namespace SharpFlame.Bitmaps
 {
-    public sealed class modBitmap
+    public sealed class BitmapUtil
     {
         public static modProgram.sResult LoadBitmap(string Path, ref Bitmap ResultBitmap)
         {
@@ -64,38 +61,6 @@ namespace SharpFlame
 
             ReturnResult.Success = true;
             return ReturnResult;
-        }
-
-        public struct sBitmapGLTexture
-        {
-            public Bitmap Texture;
-            public int TextureNum;
-            public int MipMapLevel;
-            public TextureMinFilter MinFilter;
-            public TextureMagFilter MagFilter;
-
-            public void Perform()
-            {
-                BitmapData BitmapData = Texture.LockBits(new Rectangle(0, 0, Texture.Width, Texture.Height),
-                    ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-
-                if ( MipMapLevel == 0 )
-                {
-                    GL.GenTextures(1, out TextureNum);
-                }
-                GL.BindTexture(TextureTarget.Texture2D, TextureNum);
-                if ( MipMapLevel == 0 )
-                {
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)MagFilter);
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)MinFilter);
-                }
-                GL.TexImage2D(TextureTarget.Texture2D, MipMapLevel, PixelInternalFormat.Rgba8, Texture.Width, Texture.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra,
-                    PixelType.UnsignedByte, BitmapData.Scan0);
-
-                Texture.UnlockBits(BitmapData);
-            }
         }
 
         public static clsResult BitmapIsGLCompatible(Bitmap BitmapToCheck)

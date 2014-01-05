@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
+using SharpFlame.FileIO;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame
@@ -79,7 +80,7 @@ namespace SharpFlame
                         return ReturnResult;
                     }
                     BinaryReader Reader = new BinaryReader(ZipStream);
-                    SimpleList<string> LineData = modIO.BytesToLinesRemoveComments(Reader);
+                    SimpleList<string> LineData = IOUtil.BytesToLinesRemoveComments(Reader);
                     //find each level block
                     for ( A = 0; A <= LineData.Count - 1; A++ )
                     {
@@ -204,9 +205,9 @@ namespace SharpFlame
             modProgram.sZipSplitPath GameSplitPath = new modProgram.sZipSplitPath(MapLoadName);
             string GameFilesPath = GameSplitPath.FilePath + GameSplitPath.FileTitleWithoutExtension + "/";
 
-            clsZipStreamEntry ZipSearchResult = default(clsZipStreamEntry);
+            ZipStreamEntry ZipSearchResult = default(ZipStreamEntry);
 
-            ZipSearchResult = modIO.FindZipEntryFromPath(Path, MapLoadName);
+            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, MapLoadName);
             if ( ZipSearchResult == null )
             {
                 ReturnResult.ProblemAdd("Game file not found.");
@@ -225,7 +226,7 @@ namespace SharpFlame
                 }
             }
 
-            ZipSearchResult = modIO.FindZipEntryFromPath(Path, GameFilesPath + "game.map");
+            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "game.map");
             if ( ZipSearchResult == null )
             {
                 ReturnResult.ProblemAdd("game.map file not found");
@@ -248,7 +249,7 @@ namespace SharpFlame
 
             clsINIFeatures INIFeatures = null;
 
-            ZipSearchResult = modIO.FindZipEntryFromPath(Path, GameFilesPath + "feature.ini");
+            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "feature.ini");
             if ( ZipSearchResult == null )
             {
             }
@@ -267,7 +268,7 @@ namespace SharpFlame
             if ( INIFeatures == null )
             {
                 clsResult Result = new clsResult("feat.bjo");
-                ZipSearchResult = modIO.FindZipEntryFromPath(Path, GameFilesPath + "feat.bjo");
+                ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "feat.bjo");
                 if ( ZipSearchResult == null )
                 {
                     Result.WarningAdd("file not found");
@@ -288,7 +289,7 @@ namespace SharpFlame
             if ( true )
             {
                 clsResult Result = new clsResult("ttypes.ttp");
-                ZipSearchResult = modIO.FindZipEntryFromPath(Path, GameFilesPath + "ttypes.ttp");
+                ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "ttypes.ttp");
                 if ( ZipSearchResult == null )
                 {
                     Result.WarningAdd("file not found");
@@ -308,7 +309,7 @@ namespace SharpFlame
 
             clsINIStructures INIStructures = null;
 
-            ZipSearchResult = modIO.FindZipEntryFromPath(Path, GameFilesPath + "struct.ini");
+            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "struct.ini");
             if ( ZipSearchResult == null )
             {
             }
@@ -327,7 +328,7 @@ namespace SharpFlame
             if ( INIStructures == null )
             {
                 clsResult Result = new clsResult("struct.bjo");
-                ZipSearchResult = modIO.FindZipEntryFromPath(Path, GameFilesPath + "struct.bjo");
+                ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "struct.bjo");
                 if ( ZipSearchResult == null )
                 {
                     Result.WarningAdd("file not found");
@@ -347,7 +348,7 @@ namespace SharpFlame
 
             clsINIDroids INIDroids = null;
 
-            ZipSearchResult = modIO.FindZipEntryFromPath(Path, GameFilesPath + "droid.ini");
+            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "droid.ini");
             if ( ZipSearchResult == null )
             {
             }
@@ -366,7 +367,7 @@ namespace SharpFlame
             if ( INIDroids == null )
             {
                 clsResult Result = new clsResult("dinit.bjo");
-                ZipSearchResult = modIO.FindZipEntryFromPath(Path, GameFilesPath + "dinit.bjo");
+                ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "dinit.bjo");
                 if ( ZipSearchResult == null )
                 {
                     Result.WarningAdd("file not found");
@@ -392,7 +393,7 @@ namespace SharpFlame
             ReturnResult.Add(CreateWZObjects(CreateObjectsArgs));
 
             //objects are modified by this and must already exist
-            ZipSearchResult = modIO.FindZipEntryFromPath(Path, GameFilesPath + "labels.ini");
+            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "labels.ini");
             if ( ZipSearchResult == null )
             {
             }
@@ -427,7 +428,7 @@ namespace SharpFlame
             string MapDirectory = "";
             FileStream File = null;
 
-            SubResult = modIO.TryOpenFileStream(Path, ref File);
+            SubResult = IOUtil.TryOpenFileStream(Path, ref File);
             if ( !SubResult.Success )
             {
                 ReturnResult.ProblemAdd("Game file not found: " + SubResult.Problem);
@@ -446,7 +447,7 @@ namespace SharpFlame
                 }
             }
 
-            SubResult = modIO.TryOpenFileStream(GameFilesPath + "game.map", ref File);
+            SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "game.map", ref File);
             if ( !SubResult.Success )
             {
                 MsgBoxResult PromptResult =
@@ -467,7 +468,7 @@ namespace SharpFlame
                 }
                 MapDirectory = DirectorySelect.SelectedPath + Convert.ToString(modProgram.PlatformPathSeparator);
 
-                SubResult = modIO.TryOpenFileStream(MapDirectory + "game.map", ref File);
+                SubResult = IOUtil.TryOpenFileStream(MapDirectory + "game.map", ref File);
                 if ( !SubResult.Success )
                 {
                     ReturnResult.ProblemAdd("game.map file not found: " + SubResult.Problem);
@@ -493,7 +494,7 @@ namespace SharpFlame
 
             clsINIFeatures INIFeatures = null;
 
-            SubResult = modIO.TryOpenFileStream(GameFilesPath + "feature.ini", ref File);
+            SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "feature.ini", ref File);
             if ( !SubResult.Success )
             {
             }
@@ -512,7 +513,7 @@ namespace SharpFlame
             if ( INIFeatures == null )
             {
                 clsResult Result = new clsResult("feat.bjo");
-                SubResult = modIO.TryOpenFileStream(GameFilesPath + "feat.bjo", ref File);
+                SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "feat.bjo", ref File);
                 if ( !SubResult.Success )
                 {
                     Result.WarningAdd("file not found");
@@ -533,7 +534,7 @@ namespace SharpFlame
             if ( true )
             {
                 clsResult Result = new clsResult("ttypes.ttp");
-                SubResult = modIO.TryOpenFileStream(MapDirectory + "ttypes.ttp", ref File);
+                SubResult = IOUtil.TryOpenFileStream(MapDirectory + "ttypes.ttp", ref File);
                 if ( !SubResult.Success )
                 {
                     Result.WarningAdd("file not found");
@@ -553,7 +554,7 @@ namespace SharpFlame
 
             clsINIStructures INIStructures = null;
 
-            SubResult = modIO.TryOpenFileStream(GameFilesPath + "struct.ini", ref File);
+            SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "struct.ini", ref File);
             if ( !SubResult.Success )
             {
             }
@@ -572,7 +573,7 @@ namespace SharpFlame
             if ( INIStructures == null )
             {
                 clsResult Result = new clsResult("struct.bjo");
-                SubResult = modIO.TryOpenFileStream(GameFilesPath + "struct.bjo", ref File);
+                SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "struct.bjo", ref File);
                 if ( !SubResult.Success )
                 {
                     Result.WarningAdd("struct.bjo file not found.");
@@ -592,7 +593,7 @@ namespace SharpFlame
 
             clsINIDroids INIDroids = null;
 
-            SubResult = modIO.TryOpenFileStream(GameFilesPath + "droid.ini", ref File);
+            SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "droid.ini", ref File);
             if ( !SubResult.Success )
             {
             }
@@ -611,7 +612,7 @@ namespace SharpFlame
             if ( INIStructures == null )
             {
                 clsResult Result = new clsResult("dinit.bjo");
-                SubResult = modIO.TryOpenFileStream(GameFilesPath + "dinit.bjo", ref File);
+                SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "dinit.bjo", ref File);
                 if ( !SubResult.Success )
                 {
                     Result.WarningAdd("dinit.bjo file not found.");
@@ -637,7 +638,7 @@ namespace SharpFlame
             ReturnResult.Add(CreateWZObjects(CreateObjectsArgs));
 
             //map objects are modified by this and must already exist
-            SubResult = modIO.TryOpenFileStream(GameFilesPath + "labels.ini", ref File);
+            SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "labels.ini", ref File);
             if ( !SubResult.Success )
             {
             }
@@ -1241,7 +1242,7 @@ namespace SharpFlame
                 if ( (string)INIProperty.Name == "id" )
                 {
                     UInt32 uintTemp = 0;
-                    if ( modIO.InvariantParse_uint(Convert.ToString(INIProperty.Value), uintTemp) )
+                    if ( IOUtil.InvariantParse_uint(Convert.ToString(INIProperty.Value), uintTemp) )
                     {
                         if ( uintTemp > 0 )
                         {
@@ -1260,7 +1261,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "startpos" )
                 {
                     int StartPos = 0;
-                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref StartPos) )
+                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref StartPos) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1281,7 +1282,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "position" )
                 {
                     modProgram.clsWorldPos temp_Result = Structures[INISectionNum].Pos;
-                    if ( !modIO.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result) )
+                    if ( !IOUtil.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1289,7 +1290,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "rotation" )
                 {
                     modProgram.sWZAngle temp_Result2 = Structures[INISectionNum].Rotation;
-                    if ( !modIO.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result2) )
+                    if ( !IOUtil.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result2) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1297,7 +1298,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "modules" )
                 {
                     int ModuleCount = 0;
-                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref ModuleCount) )
+                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref ModuleCount) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1310,7 +1311,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "health" )
                 {
                     int temp_Result3 = Structures[INISectionNum].HealthPercent;
-                    if ( !modIO.HealthFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result3) )
+                    if ( !IOUtil.HealthFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result3) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1318,7 +1319,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "wall/type" )
                 {
                     int WallType = 0;
-                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref WallType) )
+                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref WallType) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1384,7 +1385,7 @@ namespace SharpFlame
                 if ( (string)INIProperty.Name == "id" )
                 {
                     UInt32 uintTemp = 0;
-                    if ( modIO.InvariantParse_uint(Convert.ToString(INIProperty.Value), uintTemp) )
+                    if ( IOUtil.InvariantParse_uint(Convert.ToString(INIProperty.Value), uintTemp) )
                     {
                         if ( uintTemp > 0 )
                         {
@@ -1403,7 +1404,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "startpos" )
                 {
                     int StartPos = 0;
-                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref StartPos) )
+                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref StartPos) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1428,7 +1429,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "position" )
                 {
                     modProgram.clsWorldPos temp_Result = Droids[INISectionNum].Pos;
-                    if ( !modIO.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result) )
+                    if ( !IOUtil.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1436,7 +1437,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "rotation" )
                 {
                     modProgram.sWZAngle temp_Result2 = Droids[INISectionNum].Rotation;
-                    if ( !modIO.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result2) )
+                    if ( !IOUtil.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result2) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1444,7 +1445,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "health" )
                 {
                     int temp_Result3 = Droids[INISectionNum].HealthPercent;
-                    if ( !modIO.HealthFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result3) )
+                    if ( !IOUtil.HealthFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result3) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1452,7 +1453,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "droidtype" )
                 {
                     int temp_Result4 = Droids[INISectionNum].DroidType;
-                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result4) )
+                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result4) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1460,7 +1461,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "weapons" )
                 {
                     Int32 temp_Result5 = Droids[INISectionNum].WeaponCount;
-                    if ( !modIO.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result5) )
+                    if ( !IOUtil.InvariantParse_int(Convert.ToString(INIProperty.Value), ref temp_Result5) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1544,7 +1545,7 @@ namespace SharpFlame
                 if ( (string)INIProperty.Name == "id" )
                 {
                     UInt32 uintTemp = 0;
-                    if ( modIO.InvariantParse_uint(Convert.ToString(INIProperty.Value), uintTemp) )
+                    if ( IOUtil.InvariantParse_uint(Convert.ToString(INIProperty.Value), uintTemp) )
                     {
                         if ( uintTemp > 0 )
                         {
@@ -1563,7 +1564,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "position" )
                 {
                     modProgram.clsWorldPos temp_Result = Features[INISectionNum].Pos;
-                    if ( !modIO.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result) )
+                    if ( !IOUtil.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1571,7 +1572,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "rotation" )
                 {
                     modProgram.sWZAngle temp_Result2 = Features[INISectionNum].Rotation;
-                    if ( !modIO.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result2) )
+                    if ( !IOUtil.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result2) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1579,7 +1580,7 @@ namespace SharpFlame
                 else if ( (string)INIProperty.Name == "health" )
                 {
                     Int32 temp_Result3 = Features[INISectionNum].HealthPercent;
-                    if ( !modIO.HealthFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result3) )
+                    if ( !IOUtil.HealthFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result3) )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1603,7 +1604,7 @@ namespace SharpFlame
 
             try
             {
-                strTemp = modIO.ReadOldTextOfLength(File, 4);
+                strTemp = IOUtil.ReadOldTextOfLength(File, 4);
                 if ( strTemp != "game" )
                 {
                     ReturnResult.Problem = "Unknown game identifier.";
@@ -1669,7 +1670,7 @@ namespace SharpFlame
 
             try
             {
-                strTemp = modIO.ReadOldTextOfLength(File, 4);
+                strTemp = IOUtil.ReadOldTextOfLength(File, 4);
                 if ( strTemp != "map " )
                 {
                     ReturnResult.Problem = "Unknown game.map identifier.";
@@ -1775,7 +1776,7 @@ namespace SharpFlame
 
             try
             {
-                strTemp = modIO.ReadOldTextOfLength(File, 4);
+                strTemp = IOUtil.ReadOldTextOfLength(File, 4);
                 if ( strTemp != "feat" )
                 {
                     ReturnResult.Problem = "Unknown feat.bjo identifier.";
@@ -1799,7 +1800,7 @@ namespace SharpFlame
                 {
                     WZBJOUnit = new clsWZBJOUnit();
                     WZBJOUnit.ObjectType = clsUnitType.enumType.Feature;
-                    WZBJOUnit.Code = modIO.ReadOldTextOfLength(File, 40);
+                    WZBJOUnit.Code = IOUtil.ReadOldTextOfLength(File, 40);
                     B = Strings.InStr(WZBJOUnit.Code, Convert.ToString('\0'), (CompareMethod)0);
                     if ( B > 0 )
                     {
@@ -1839,7 +1840,7 @@ namespace SharpFlame
 
             try
             {
-                strTemp = modIO.ReadOldTextOfLength(File, 4);
+                strTemp = IOUtil.ReadOldTextOfLength(File, 4);
                 if ( strTemp != "ttyp" )
                 {
                     ReturnResult.Problem = "Unknown ttypes.ttp identifier.";
@@ -1901,7 +1902,7 @@ namespace SharpFlame
 
             try
             {
-                strTemp = modIO.ReadOldTextOfLength(File, 4);
+                strTemp = IOUtil.ReadOldTextOfLength(File, 4);
                 if ( strTemp != "stru" )
                 {
                     ReturnResult.Problem = "Unknown struct.bjo identifier.";
@@ -1925,7 +1926,7 @@ namespace SharpFlame
                 {
                     WZBJOUnit = new clsWZBJOUnit();
                     WZBJOUnit.ObjectType = clsUnitType.enumType.PlayerStructure;
-                    WZBJOUnit.Code = modIO.ReadOldTextOfLength(File, 40);
+                    WZBJOUnit.Code = IOUtil.ReadOldTextOfLength(File, 40);
                     B = Strings.InStr(WZBJOUnit.Code, Convert.ToString('\0'), (CompareMethod)0);
                     if ( B > 0 )
                     {
@@ -1966,7 +1967,7 @@ namespace SharpFlame
 
             try
             {
-                strTemp = modIO.ReadOldTextOfLength(File, 4);
+                strTemp = IOUtil.ReadOldTextOfLength(File, 4);
                 if ( strTemp != "dint" )
                 {
                     ReturnResult.Problem = "Unknown dinit.bjo identifier.";
@@ -1990,7 +1991,7 @@ namespace SharpFlame
                 {
                     WZBJOUnit = new clsWZBJOUnit();
                     WZBJOUnit.ObjectType = clsUnitType.enumType.PlayerDroid;
-                    WZBJOUnit.Code = modIO.ReadOldTextOfLength(File, 40);
+                    WZBJOUnit.Code = IOUtil.ReadOldTextOfLength(File, 40);
                     B = Strings.InStr(WZBJOUnit.Code, Convert.ToString('\0'), (CompareMethod)0);
                     if ( B > 0 )
                     {
@@ -2021,8 +2022,8 @@ namespace SharpFlame
             clsResult ReturnResult = new clsResult("Reading labels");
 
             int CharNum = 0;
-            clsPositionFromText PositionsA = default(clsPositionFromText);
-            clsPositionFromText PositionsB = default(clsPositionFromText);
+            PositionFromText PositionsA = default(PositionFromText);
+            PositionFromText PositionsB = default(PositionFromText);
             int TypeNum = 0;
             clsScriptPosition NewPosition = default(clsScriptPosition);
             clsScriptArea NewArea = default(clsScriptArea);
@@ -2085,7 +2086,7 @@ namespace SharpFlame
                             FailedCount++;
                             continue;
                         }
-                        PositionsA = new clsPositionFromText();
+                        PositionsA = new PositionFromText();
                         if ( PositionsA.Translate(strPosA) )
                         {
                             NewPosition = clsScriptPosition.Create(this);
@@ -2116,8 +2117,8 @@ namespace SharpFlame
                             FailedCount++;
                             continue;
                         }
-                        PositionsA = new clsPositionFromText();
-                        PositionsB = new clsPositionFromText();
+                        PositionsA = new PositionFromText();
+                        PositionsB = new PositionFromText();
                         if ( PositionsA.Translate(strPosA) && PositionsB.Translate(strPosB) )
                         {
                             NewArea = clsScriptArea.Create(this);
@@ -2137,7 +2138,7 @@ namespace SharpFlame
                         break;
                     case 2: //object
                         IDText = Convert.ToString(INISection.GetLastPropertyValue("id"));
-                        if ( modIO.InvariantParse_uint(IDText, IDNum) )
+                        if ( IOUtil.InvariantParse_uint(IDText, IDNum) )
                         {
                             clsUnit Unit = IDUsage(IDNum);
                             if ( Unit != null )
@@ -2291,20 +2292,20 @@ namespace SharpFlame
                 }
                 else
                 {
-                    File.SectionName_Append("structure_" + modIO.InvariantToString_uint(Unit.ID));
-                    File.Property_Append("id", modIO.InvariantToString_uint(Unit.ID));
+                    File.SectionName_Append("structure_" + IOUtil.InvariantToString_uint(Unit.ID));
+                    File.Property_Append("id", IOUtil.InvariantToString_uint(Unit.ID));
                     if ( Unit.UnitGroup == ScavengerUnitGroup || (PlayerCount >= 0 & Unit.UnitGroup.WZ_StartPos >= PlayerCount) )
                     {
                         File.Property_Append("player", "scavenger");
                     }
                     else
                     {
-                        File.Property_Append("startpos", modIO.InvariantToString_int(Unit.UnitGroup.WZ_StartPos));
+                        File.Property_Append("startpos", IOUtil.InvariantToString_int(Unit.UnitGroup.WZ_StartPos));
                     }
                     File.Property_Append("name", StructureType.Code);
                     if ( StructureType.WallLink.IsConnected )
                     {
-                        File.Property_Append("wall/type", modIO.InvariantToString_int(StructureType.WallLink.ArrayPosition));
+                        File.Property_Append("wall/type", IOUtil.InvariantToString_int(StructureType.WallLink.ArrayPosition));
                     }
                     File.Property_Append("position", Unit.GetINIPosition());
                     File.Property_Append("rotation", Unit.GetINIRotation());
@@ -2344,7 +2345,7 @@ namespace SharpFlame
                     {
                         ModuleCount = UnitModuleCount[Unit.MapLink.ArrayPosition];
                     }
-                    File.Property_Append("modules", modIO.InvariantToString_int(ModuleCount));
+                    File.Property_Append("modules", IOUtil.InvariantToString_int(ModuleCount));
                     File.Gap_Append();
                 }
             }
@@ -2441,15 +2442,15 @@ namespace SharpFlame
                     }
                     if ( ValidDroid )
                     {
-                        File.SectionName_Append("droid_" + modIO.InvariantToString_uint(Unit.ID));
-                        File.Property_Append("id", modIO.InvariantToString_uint(Unit.ID));
+                        File.SectionName_Append("droid_" + IOUtil.InvariantToString_uint(Unit.ID));
+                        File.Property_Append("id", IOUtil.InvariantToString_uint(Unit.ID));
                         if ( Unit.UnitGroup == ScavengerUnitGroup || (PlayerCount >= 0 & Unit.UnitGroup.WZ_StartPos >= PlayerCount) )
                         {
                             File.Property_Append("player", "scavenger");
                         }
                         else
                         {
-                            File.Property_Append("startpos", modIO.InvariantToString_int(Unit.UnitGroup.WZ_StartPos));
+                            File.Property_Append("startpos", IOUtil.InvariantToString_int(Unit.UnitGroup.WZ_StartPos));
                         }
                         if ( AsPartsNotTemplate )
                         {
@@ -2468,7 +2469,7 @@ namespace SharpFlame
                         }
                         if ( AsPartsNotTemplate )
                         {
-                            File.Property_Append("droidType", modIO.InvariantToString_int(Convert.ToInt32(Droid.GetDroidType())));
+                            File.Property_Append("droidType", IOUtil.InvariantToString_int(Convert.ToInt32(Droid.GetDroidType())));
                             if ( Droid.TurretCount == 0 )
                             {
                                 Text = "0";
@@ -2490,7 +2491,7 @@ namespace SharpFlame
                                 {
                                     if ( Droid.Turret1.TurretType == clsTurret.enumTurretType.Weapon )
                                     {
-                                        Text = modIO.InvariantToString_byte(Droid.TurretCount);
+                                        Text = IOUtil.InvariantToString_byte(Droid.TurretCount);
                                     }
                                     else
                                     {
@@ -2575,8 +2576,8 @@ namespace SharpFlame
                     }
                     if ( Valid )
                     {
-                        File.SectionName_Append("feature_" + modIO.InvariantToString_uint(Unit.ID));
-                        File.Property_Append("id", modIO.InvariantToString_uint(Unit.ID));
+                        File.SectionName_Append("feature_" + IOUtil.InvariantToString_uint(Unit.ID));
+                        File.Property_Append("id", IOUtil.InvariantToString_uint(Unit.ID));
                         File.Property_Append("position", Unit.GetINIPosition());
                         File.Property_Append("rotation", Unit.GetINIRotation());
                         File.Property_Append("name", FeatureType.Code);
@@ -2746,7 +2747,7 @@ namespace SharpFlame
 
                 if ( Args.CompileType == sWrite_WZ_Args.enumCompileType.Multiplayer )
                 {
-                    PlayersText = modIO.InvariantToString_int(Args.Multiplayer.PlayerCount);
+                    PlayersText = IOUtil.InvariantToString_int(Args.Multiplayer.PlayerCount);
                     PlayersPrefix = PlayersText + "c-";
                     string fog = "";
                     string TilesetNum = "";
@@ -2846,7 +2847,7 @@ namespace SharpFlame
 
                 byte[] GameZeroBytes = new byte[20];
 
-                modIO.WriteText(File_GAM, false, "game");
+                IOUtil.WriteText(File_GAM, false, "game");
                 File_GAM.Write(8U);
                 File_GAM.Write(0U); //Time
                 if ( Args.CompileType == sWrite_WZ_Args.enumCompileType.Multiplayer )
@@ -2867,7 +2868,7 @@ namespace SharpFlame
                 int X = 0;
                 int Y = 0;
 
-                modIO.WriteText(File_MAP, false, "map ");
+                IOUtil.WriteText(File_MAP, false, "map ");
                 File_MAP.Write(10U);
                 File_MAP.Write(Convert.ToBoolean((uint)Terrain.TileSize.X));
                 File_MAP.Write(Convert.ToBoolean((uint)Terrain.TileSize.Y));
@@ -2943,7 +2944,7 @@ namespace SharpFlame
 
                 byte[] FeatZeroBytes = new byte[12];
 
-                modIO.WriteText(File_featBJO, false, "feat");
+                IOUtil.WriteText(File_featBJO, false, "feat");
                 File_featBJO.Write(8U);
                 clsObjectPriorityOrderList FeatureOrder = new clsObjectPriorityOrderList();
                 foreach ( clsUnit tempLoopVar_Unit in Units )
@@ -2960,7 +2961,7 @@ namespace SharpFlame
                 {
                     Unit = FeatureOrder.Result[A];
                     FeatureType = (clsFeatureType)Unit.Type;
-                    modIO.WriteTextOfLength(File_featBJO, 40, FeatureType.Code);
+                    IOUtil.WriteTextOfLength(File_featBJO, 40, FeatureType.Code);
                     File_featBJO.Write(Unit.ID);
                     File_featBJO.Write(Convert.ToBoolean((uint)Unit.Pos.Horizontal.X));
                     File_featBJO.Write(Convert.ToBoolean((uint)Unit.Pos.Horizontal.Y));
@@ -2981,7 +2982,7 @@ namespace SharpFlame
                     File_featBJO.Write(FeatZeroBytes);
                 }
 
-                modIO.WriteText(File_TTP, false, "ttyp");
+                IOUtil.WriteText(File_TTP, false, "ttyp");
                 File_TTP.Write(8U);
                 File_TTP.Write(Convert.ToBoolean((uint)Tileset.TileCount));
                 for ( A = 0; A <= Tileset.TileCount - 1; A++ )
@@ -2989,7 +2990,7 @@ namespace SharpFlame
                     File_TTP.Write(Convert.ToBoolean(Tile_TypeNum[A]));
                 }
 
-                modIO.WriteText(File_structBJO, false, "stru");
+                IOUtil.WriteText(File_structBJO, false, "stru");
                 File_structBJO.Write(8U);
                 clsObjectPriorityOrderList NonModuleStructureOrder = new clsObjectPriorityOrderList();
                 //non-module structures
@@ -3027,7 +3028,7 @@ namespace SharpFlame
 
                 byte[] DintZeroBytes = new byte[12];
 
-                modIO.WriteText(File_droidBJO, false, "dint");
+                IOUtil.WriteText(File_droidBJO, false, "dint");
                 File_droidBJO.Write(8U);
                 clsObjectPriorityOrderList Droids = new clsObjectPriorityOrderList();
                 foreach ( clsUnit tempLoopVar_Unit in Units )
@@ -3048,7 +3049,7 @@ namespace SharpFlame
                 {
                     Unit = Droids.Result[A];
                     DroidTemplate = (clsDroidTemplate)Unit.Type;
-                    modIO.WriteTextOfLength(File_droidBJO, 40, DroidTemplate.Code);
+                    IOUtil.WriteTextOfLength(File_droidBJO, 40, DroidTemplate.Code);
                     File_droidBJO.Write(Unit.ID);
                     File_droidBJO.Write(Convert.ToBoolean((uint)Unit.Pos.Horizontal.X));
                     File_droidBJO.Write(Convert.ToBoolean((uint)Unit.Pos.Horizontal.Y));
@@ -3149,7 +3150,7 @@ namespace SharpFlame
                         {
                             ZipPath = PlayersPrefix + Args.MapName + ".addon.lev";
                         }
-                        ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+                        ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
                         if ( ZipEntry != null )
                         {
                             File_LEV_Memory.WriteTo(WZStream);
@@ -3165,10 +3166,10 @@ namespace SharpFlame
                         WZStream.PutNextEntry(ZipEntry);
 
                         ZipPath = "multiplay/maps/" + PlayersPrefix + Args.MapName + ".gam";
-                        ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+                        ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
                         if ( ZipEntry != null )
                         {
-                            ReturnResult.Add(modIO.WriteMemoryToZipEntryAndFlush(File_GAM_Memory, WZStream));
+                            ReturnResult.Add(IOUtil.WriteMemoryToZipEntryAndFlush(File_GAM_Memory, WZStream));
                         }
                         else
                         {
@@ -3176,10 +3177,10 @@ namespace SharpFlame
                         }
 
                         ZipPath = "multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "dinit.bjo";
-                        ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+                        ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
                         if ( ZipEntry != null )
                         {
-                            ReturnResult.Add(modIO.WriteMemoryToZipEntryAndFlush(File_droidBJO_Memory, WZStream));
+                            ReturnResult.Add(IOUtil.WriteMemoryToZipEntryAndFlush(File_droidBJO_Memory, WZStream));
                         }
                         else
                         {
@@ -3187,10 +3188,10 @@ namespace SharpFlame
                         }
 
                         ZipPath = "multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "droid.ini";
-                        ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+                        ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
                         if ( ZipEntry != null )
                         {
-                            ReturnResult.Add(modIO.WriteMemoryToZipEntryAndFlush(INI_droid_Memory, WZStream));
+                            ReturnResult.Add(IOUtil.WriteMemoryToZipEntryAndFlush(INI_droid_Memory, WZStream));
                         }
                         else
                         {
@@ -3198,10 +3199,10 @@ namespace SharpFlame
                         }
 
                         ZipPath = "multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "feat.bjo";
-                        ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+                        ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
                         if ( ZipEntry != null )
                         {
-                            ReturnResult.Add(modIO.WriteMemoryToZipEntryAndFlush(File_featBJO_Memory, WZStream));
+                            ReturnResult.Add(IOUtil.WriteMemoryToZipEntryAndFlush(File_featBJO_Memory, WZStream));
                         }
                         else
                         {
@@ -3209,10 +3210,10 @@ namespace SharpFlame
                         }
 
                         ZipPath = "multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "feature.ini";
-                        ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+                        ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
                         if ( ZipEntry != null )
                         {
-                            ReturnResult.Add(modIO.WriteMemoryToZipEntryAndFlush(INI_feature_Memory, WZStream));
+                            ReturnResult.Add(IOUtil.WriteMemoryToZipEntryAndFlush(INI_feature_Memory, WZStream));
                         }
                         else
                         {
@@ -3220,10 +3221,10 @@ namespace SharpFlame
                         }
 
                         ZipPath = "multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "game.map";
-                        ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+                        ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
                         if ( ZipEntry != null )
                         {
-                            ReturnResult.Add(modIO.WriteMemoryToZipEntryAndFlush(File_MAP_Memory, WZStream));
+                            ReturnResult.Add(IOUtil.WriteMemoryToZipEntryAndFlush(File_MAP_Memory, WZStream));
                         }
                         else
                         {
@@ -3231,10 +3232,10 @@ namespace SharpFlame
                         }
 
                         ZipPath = "multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "struct.bjo";
-                        ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+                        ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
                         if ( ZipEntry != null )
                         {
-                            ReturnResult.Add(modIO.WriteMemoryToZipEntryAndFlush(File_structBJO_Memory, WZStream));
+                            ReturnResult.Add(IOUtil.WriteMemoryToZipEntryAndFlush(File_structBJO_Memory, WZStream));
                         }
                         else
                         {
@@ -3242,10 +3243,10 @@ namespace SharpFlame
                         }
 
                         ZipPath = "multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "struct.ini";
-                        ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+                        ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
                         if ( ZipEntry != null )
                         {
-                            ReturnResult.Add(modIO.WriteMemoryToZipEntryAndFlush(INI_struct_Memory, WZStream));
+                            ReturnResult.Add(IOUtil.WriteMemoryToZipEntryAndFlush(INI_struct_Memory, WZStream));
                         }
                         else
                         {
@@ -3253,10 +3254,10 @@ namespace SharpFlame
                         }
 
                         ZipPath = "multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "ttypes.ttp";
-                        ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+                        ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
                         if ( ZipEntry != null )
                         {
-                            ReturnResult.Add(modIO.WriteMemoryToZipEntryAndFlush(File_TTP_Memory, WZStream));
+                            ReturnResult.Add(IOUtil.WriteMemoryToZipEntryAndFlush(File_TTP_Memory, WZStream));
                         }
                         else
                         {
@@ -3266,10 +3267,10 @@ namespace SharpFlame
                         if ( INI_Labels_Memory.Length > 0 )
                         {
                             ZipPath = "multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "labels.ini";
-                            ZipEntry = modIO.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
+                            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
                             if ( ZipEntry != null )
                             {
-                                ReturnResult.Add(modIO.WriteMemoryToZipEntryAndFlush(INI_Labels_Memory, WZStream));
+                                ReturnResult.Add(IOUtil.WriteMemoryToZipEntryAndFlush(INI_Labels_Memory, WZStream));
                             }
                             else
                             {
@@ -3301,7 +3302,7 @@ namespace SharpFlame
                     string FilePath = "";
 
                     FilePath = CampDirectory + Args.MapName + ".gam";
-                    ReturnResult.Add(modIO.WriteMemoryToNewFile(File_GAM_Memory, CampDirectory + Args.MapName + ".gam"));
+                    ReturnResult.Add(IOUtil.WriteMemoryToNewFile(File_GAM_Memory, CampDirectory + Args.MapName + ".gam"));
 
                     CampDirectory += Args.MapName + Convert.ToString(modProgram.PlatformPathSeparator);
                     try
@@ -3315,31 +3316,31 @@ namespace SharpFlame
                     }
 
                     FilePath = CampDirectory + "dinit.bjo";
-                    ReturnResult.Add(modIO.WriteMemoryToNewFile(File_droidBJO_Memory, FilePath));
+                    ReturnResult.Add(IOUtil.WriteMemoryToNewFile(File_droidBJO_Memory, FilePath));
 
                     FilePath = CampDirectory + "droid.ini";
-                    ReturnResult.Add(modIO.WriteMemoryToNewFile(INI_droid_Memory, FilePath));
+                    ReturnResult.Add(IOUtil.WriteMemoryToNewFile(INI_droid_Memory, FilePath));
 
                     FilePath = CampDirectory + "feat.bjo";
-                    ReturnResult.Add(modIO.WriteMemoryToNewFile(File_featBJO_Memory, FilePath));
+                    ReturnResult.Add(IOUtil.WriteMemoryToNewFile(File_featBJO_Memory, FilePath));
 
                     FilePath = CampDirectory + "feature.ini";
-                    ReturnResult.Add(modIO.WriteMemoryToNewFile(INI_feature_Memory, FilePath));
+                    ReturnResult.Add(IOUtil.WriteMemoryToNewFile(INI_feature_Memory, FilePath));
 
                     FilePath = CampDirectory + "game.map";
-                    ReturnResult.Add(modIO.WriteMemoryToNewFile(File_MAP_Memory, FilePath));
+                    ReturnResult.Add(IOUtil.WriteMemoryToNewFile(File_MAP_Memory, FilePath));
 
                     FilePath = CampDirectory + "struct.bjo";
-                    ReturnResult.Add(modIO.WriteMemoryToNewFile(File_structBJO_Memory, FilePath));
+                    ReturnResult.Add(IOUtil.WriteMemoryToNewFile(File_structBJO_Memory, FilePath));
 
                     FilePath = CampDirectory + "struct.ini";
-                    ReturnResult.Add(modIO.WriteMemoryToNewFile(INI_struct_Memory, FilePath));
+                    ReturnResult.Add(IOUtil.WriteMemoryToNewFile(INI_struct_Memory, FilePath));
 
                     FilePath = CampDirectory + "ttypes.ttp";
-                    ReturnResult.Add(modIO.WriteMemoryToNewFile(File_TTP_Memory, FilePath));
+                    ReturnResult.Add(IOUtil.WriteMemoryToNewFile(File_TTP_Memory, FilePath));
 
                     FilePath = CampDirectory + "labels.ini";
-                    ReturnResult.Add(modIO.WriteMemoryToNewFile(INI_Labels_Memory, FilePath));
+                    ReturnResult.Add(IOUtil.WriteMemoryToNewFile(INI_Labels_Memory, FilePath));
                 }
             }
             catch ( Exception ex )
@@ -3365,7 +3366,7 @@ namespace SharpFlame
 
             try
             {
-                strTemp = modIO.ReadOldTextOfLength(File, 4);
+                strTemp = IOUtil.ReadOldTextOfLength(File, 4);
                 if ( strTemp != "ttyp" )
                 {
                     ReturnResult.Problem = "Incorrect identifier.";

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
+using SharpFlame.FileIO;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame
@@ -42,15 +43,15 @@ namespace SharpFlame
 
             ChangedKeyControls = (modControls.clsKeyboardProfile)(modControls.KeyboardProfile.GetCopy(new modControls.clsKeyboardProfileCreator()));
 
-            txtAutosaveChanges.Text = modIO.InvariantToString_uint(modSettings.Settings.AutoSaveMinChanges);
-            txtAutosaveInterval.Text = modIO.InvariantToString_uint(modSettings.Settings.AutoSaveMinInterval_s);
+            txtAutosaveChanges.Text = IOUtil.InvariantToString_uint(modSettings.Settings.AutoSaveMinChanges);
+            txtAutosaveInterval.Text = IOUtil.InvariantToString_uint(modSettings.Settings.AutoSaveMinInterval_s);
             cbxAutosaveCompression.Checked = modSettings.Settings.AutoSaveCompress;
             cbxAutosaveEnabled.Checked = modSettings.Settings.AutoSaveEnabled;
             cbxAskDirectories.Checked = modSettings.Settings.DirectoriesPrompt;
             cbxPointerDirect.Checked = modSettings.Settings.DirectPointer;
             DisplayFont = modSettings.Settings.MakeFont();
             UpdateDisplayFontLabel();
-            txtFOV.Text = modIO.InvariantToString_dbl(modSettings.Settings.FOVDefault);
+            txtFOV.Text = IOUtil.InvariantToString_dbl(modSettings.Settings.FOVDefault);
 
             MinimapCliffColour = new clsRGBA_sng(modSettings.Settings.MinimapCliffColour);
             clrMinimapCliffs = new ctrlColour(MinimapCliffColour);
@@ -60,12 +61,12 @@ namespace SharpFlame
             clrMinimapSelectedObjects = new ctrlColour(MinimapSelectedObjectColour);
             pnlMinimapSelectedObjectColour.Controls.Add(clrMinimapSelectedObjects);
 
-            txtMinimapSize.Text = modIO.InvariantToString_int(modSettings.Settings.MinimapSize);
+            txtMinimapSize.Text = IOUtil.InvariantToString_int(modSettings.Settings.MinimapSize);
             cbxMinimapObjectColours.Checked = modSettings.Settings.MinimapTeamColours;
             cbxMinimapTeamColourFeatures.Checked = modSettings.Settings.MinimapTeamColoursExceptFeatures;
             cbxMipmaps.Checked = modSettings.Settings.Mipmaps;
             cbxMipmapsHardware.Checked = modSettings.Settings.MipmapsHardware;
-            txtUndoSteps.Text = modIO.InvariantToString_uint(modSettings.Settings.UndoLimit);
+            txtUndoSteps.Text = IOUtil.InvariantToString_uint(modSettings.Settings.UndoLimit);
 
             TilesetsPathSet.SetPaths(modSettings.Settings.TilesetDirectories);
             ObjectDataPathSet.SetPaths(modSettings.Settings.ObjectDataDirectories);
@@ -74,10 +75,10 @@ namespace SharpFlame
             ObjectDataPathSet.SelectedNum = MathUtil.Clamp_int(Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultObjectDataPathNum)),
                 -1, modSettings.Settings.ObjectDataDirectories.Count - 1);
 
-            txtMapBPP.Text = modIO.InvariantToString_int(modSettings.Settings.MapViewBPP);
-            txtMapDepth.Text = modIO.InvariantToString_int(modSettings.Settings.MapViewDepth);
-            txtTexturesBPP.Text = modIO.InvariantToString_int(modSettings.Settings.TextureViewBPP);
-            txtTexturesDepth.Text = modIO.InvariantToString_int(modSettings.Settings.TextureViewDepth);
+            txtMapBPP.Text = IOUtil.InvariantToString_int(modSettings.Settings.MapViewBPP);
+            txtMapDepth.Text = IOUtil.InvariantToString_int(modSettings.Settings.MapViewDepth);
+            txtTexturesBPP.Text = IOUtil.InvariantToString_int(modSettings.Settings.TextureViewBPP);
+            txtTexturesDepth.Text = IOUtil.InvariantToString_int(modSettings.Settings.TextureViewDepth);
 
             cbxPickerOrientation.Checked = modSettings.Settings.PickOrientation;
 
@@ -90,12 +91,12 @@ namespace SharpFlame
             double dblTemp = 0;
             int intTemp = 0;
 
-            if ( modIO.InvariantParse_dbl(txtAutosaveChanges.Text, ref dblTemp) )
+            if ( IOUtil.InvariantParse_dbl(txtAutosaveChanges.Text, ref dblTemp) )
             {
                 NewSettings.set_Changes(modSettings.Setting_AutoSaveMinChanges,
                     new clsOptionProfile.clsChange<UInt32>((uint)(MathUtil.Clamp_dbl(dblTemp, 1.0D, (Convert.ToDouble(UInt32.MaxValue)) - 1.0D))));
             }
-            if ( modIO.InvariantParse_dbl(txtAutosaveInterval.Text, ref dblTemp) )
+            if ( IOUtil.InvariantParse_dbl(txtAutosaveInterval.Text, ref dblTemp) )
             {
                 NewSettings.set_Changes(modSettings.Setting_AutoSaveMinInterval_s,
                     new clsOptionProfile.clsChange<UInt32>((uint)(MathUtil.Clamp_dbl(dblTemp, 1.0D, (Convert.ToDouble(UInt32.MaxValue)) - 1.0D))));
@@ -105,13 +106,13 @@ namespace SharpFlame
             NewSettings.set_Changes(modSettings.Setting_DirectoriesPrompt, new clsOptionProfile.clsChange<bool>(cbxAskDirectories.Checked));
             NewSettings.set_Changes(modSettings.Setting_DirectPointer, new clsOptionProfile.clsChange<bool>(cbxPointerDirect.Checked));
             NewSettings.set_Changes(modSettings.Setting_FontFamily, new clsOptionProfile.clsChange<FontFamily>(DisplayFont.FontFamily));
-            if ( modIO.InvariantParse_dbl(txtFOV.Text, ref dblTemp) )
+            if ( IOUtil.InvariantParse_dbl(txtFOV.Text, ref dblTemp) )
             {
                 NewSettings.set_Changes(modSettings.Setting_FOVDefault, new clsOptionProfile.clsChange<double>(dblTemp));
             }
             NewSettings.set_Changes(modSettings.Setting_MinimapCliffColour, new clsOptionProfile.clsChange<clsRGBA_sng>(MinimapCliffColour));
             NewSettings.set_Changes(modSettings.Setting_MinimapSelectedObjectsColour, new clsOptionProfile.clsChange<clsRGBA_sng>(MinimapSelectedObjectColour));
-            if ( modIO.InvariantParse_int(txtMinimapSize.Text, ref intTemp) )
+            if ( IOUtil.InvariantParse_int(txtMinimapSize.Text, ref intTemp) )
             {
                 NewSettings.set_Changes(modSettings.Setting_MinimapSize, new clsOptionProfile.clsChange<int>(intTemp));
             }
@@ -119,7 +120,7 @@ namespace SharpFlame
             NewSettings.set_Changes(modSettings.Setting_MinimapTeamColoursExceptFeatures, new clsOptionProfile.clsChange<bool>(cbxMinimapTeamColourFeatures.Checked));
             NewSettings.set_Changes(modSettings.Setting_Mipmaps, new clsOptionProfile.clsChange<bool>(cbxMipmaps.Checked));
             NewSettings.set_Changes(modSettings.Setting_MipmapsHardware, new clsOptionProfile.clsChange<bool>(cbxMipmapsHardware.Checked));
-            if ( modIO.InvariantParse_int(txtUndoSteps.Text, ref intTemp) )
+            if ( IOUtil.InvariantParse_int(txtUndoSteps.Text, ref intTemp) )
             {
                 NewSettings.set_Changes(modSettings.Setting_UndoLimit, new clsOptionProfile.clsChange<int>(intTemp));
             }
@@ -139,19 +140,19 @@ namespace SharpFlame
             NewSettings.set_Changes(modSettings.Setting_ObjectDataDirectories, new clsOptionProfile.clsChange<SimpleList<string>>(objectsPaths));
             NewSettings.set_Changes(modSettings.Setting_DefaultTilesetsPathNum, new clsOptionProfile.clsChange<int>(TilesetsPathSet.SelectedNum));
             NewSettings.set_Changes(modSettings.Setting_DefaultObjectDataPathNum, new clsOptionProfile.clsChange<int>(ObjectDataPathSet.SelectedNum));
-            if ( modIO.InvariantParse_int(txtMapBPP.Text, ref intTemp) )
+            if ( IOUtil.InvariantParse_int(txtMapBPP.Text, ref intTemp) )
             {
                 NewSettings.set_Changes(modSettings.Setting_MapViewBPP, new clsOptionProfile.clsChange<int>(intTemp));
             }
-            if ( modIO.InvariantParse_int(txtMapDepth.Text, ref intTemp) )
+            if ( IOUtil.InvariantParse_int(txtMapDepth.Text, ref intTemp) )
             {
                 NewSettings.set_Changes(modSettings.Setting_MapViewDepth, new clsOptionProfile.clsChange<int>(intTemp));
             }
-            if ( modIO.InvariantParse_int(txtTexturesBPP.Text, ref intTemp) )
+            if ( IOUtil.InvariantParse_int(txtTexturesBPP.Text, ref intTemp) )
             {
                 NewSettings.set_Changes(modSettings.Setting_TextureViewBPP, new clsOptionProfile.clsChange<int>(intTemp));
             }
-            if ( modIO.InvariantParse_int(txtTexturesDepth.Text, ref intTemp) )
+            if ( IOUtil.InvariantParse_int(txtTexturesDepth.Text, ref intTemp) )
             {
                 NewSettings.set_Changes(modSettings.Setting_TextureViewDepth, new clsOptionProfile.clsChange<int>(intTemp));
             }
@@ -272,7 +273,7 @@ namespace SharpFlame
                 string keyText = Enum.GetName(typeof(Keys), key);
                 if ( keyText == null )
                 {
-                    text += modIO.InvariantToString_int((Int32)key);
+                    text += IOUtil.InvariantToString_int((Int32)key);
                 }
                 else
                 {
@@ -292,7 +293,7 @@ namespace SharpFlame
                     string keyText = Enum.GetName(typeof(Keys), key);
                     if ( keyText == null )
                     {
-                        text += modIO.InvariantToString_int((Int32)key);
+                        text += IOUtil.InvariantToString_int((Int32)key);
                     }
                     else
                     {

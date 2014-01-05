@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
+using SharpFlame.FileIO;
 using SharpFlame.MathExtra;
 using SharpFlame.Painters;
 
@@ -2475,7 +2476,7 @@ namespace SharpFlame
                 }
 
                 StructureType = (clsStructureType)Unit.Type;
-                modIO.WriteTextOfLength(File, 40, StructureType.Code);
+                IOUtil.WriteTextOfLength(File, 40, StructureType.Code);
                 File.Write(Unit.ID);
                 File.Write(Convert.ToBoolean((uint)Unit.Pos.Horizontal.X));
                 File.Write(Convert.ToBoolean((uint)Unit.Pos.Horizontal.Y));

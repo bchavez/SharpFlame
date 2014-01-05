@@ -6,9 +6,9 @@ using Microsoft.VisualBasic;
 using SharpFlame.Collections;
 using SharpFlame.MathExtra;
 
-namespace SharpFlame
+namespace SharpFlame.FileIO
 {
-    public sealed class modIO
+    public sealed class IOUtil
     {
         public static ZipEntry ZipMakeEntry(ZipOutputStream ZipOutputStream, string Path, clsResult Result)
         {
@@ -227,7 +227,7 @@ namespace SharpFlame
 
         public static bool WZAngleFromINIText(string Text, ref modProgram.sWZAngle Result)
         {
-            clsSplitCommaText VectorText = new clsSplitCommaText(Text);
+            SplitCommaText VectorText = new SplitCommaText(Text);
             modProgram.sWZAngle WZAngle = new modProgram.sWZAngle();
 
             if ( VectorText.PartCount != 3 )
@@ -298,7 +298,7 @@ namespace SharpFlame
 
         public static bool WorldPosFromINIText(string Text, ref modProgram.clsWorldPos Result)
         {
-            clsSplitCommaText VectorText = new clsSplitCommaText(Text);
+            SplitCommaText VectorText = new SplitCommaText(Text);
             int A = 0;
             int B = 0;
 
@@ -322,7 +322,7 @@ namespace SharpFlame
             return true;
         }
 
-        public static clsZipStreamEntry FindZipEntryFromPath(string Path, string ZipPathToFind)
+        public static ZipStreamEntry FindZipEntryFromPath(string Path, string ZipPathToFind)
         {
             ZipInputStream ZipStream = default(ZipInputStream);
             ZipEntry ZipEntry = default(ZipEntry);
@@ -348,7 +348,7 @@ namespace SharpFlame
                 ZipPath = ZipEntry.Name.ToLower().Replace('\\', '/');
                 if ( ZipPath == FindPath )
                 {
-                    clsZipStreamEntry Result = new clsZipStreamEntry();
+                    ZipStreamEntry Result = new ZipStreamEntry();
                     Result.Stream = ZipStream;
                     Result.Entry = ZipEntry;
                     return Result;
@@ -460,20 +460,20 @@ namespace SharpFlame
         }
     }
 
-    public class clsPositionFromText
+    public class PositionFromText
     {
         public sXY_int Pos;
 
         public bool Translate(string Text)
         {
             int A = 0;
-            clsSplitCommaText Positions = new clsSplitCommaText(Text);
+            SplitCommaText Positions = new SplitCommaText(Text);
 
             if ( Positions.PartCount < 2 )
             {
                 return false;
             }
-            if ( modIO.InvariantParse_int(Positions.Parts[0], ref A) )
+            if ( IOUtil.InvariantParse_int(Positions.Parts[0], ref A) )
             {
                 Pos.X = A;
             }
@@ -481,7 +481,7 @@ namespace SharpFlame
             {
                 return false;
             }
-            if ( modIO.InvariantParse_int(Positions.Parts[1], ref A) )
+            if ( IOUtil.InvariantParse_int(Positions.Parts[1], ref A) )
             {
                 Pos.Y = A;
             }
@@ -493,18 +493,18 @@ namespace SharpFlame
         }
     }
 
-    public class clsZipStreamEntry
+    public class ZipStreamEntry
     {
         public ZipInputStream Stream;
         public ZipEntry Entry;
     }
 
-    public class clsSplitCommaText
+    public class SplitCommaText
     {
         public string[] Parts;
         public int PartCount;
 
-        public clsSplitCommaText(string Text)
+        public SplitCommaText(string Text)
         {
             int A = 0;
 

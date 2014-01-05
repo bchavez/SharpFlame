@@ -3,8 +3,10 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using Microsoft.VisualBasic;
+using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
+using SharpFlame.FileIO;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame
@@ -306,7 +308,7 @@ namespace SharpFlame
                         TempUnit[A].Z = File.ReadUInt32();
                         TempUnit[A].Y = File.ReadUInt32();
                         TempUnit[A].Rotation = File.ReadUInt16();
-                        TempUnit[A].Name = modIO.ReadOldText(File);
+                        TempUnit[A].Name = IOUtil.ReadOldText(File);
                         TempUnit[A].Player = File.ReadByte();
                     }
 
@@ -425,7 +427,7 @@ namespace SharpFlame
 
                     string strTemp = null;
 
-                    ResultInfo.CompileName = modIO.ReadOldText(File);
+                    ResultInfo.CompileName = IOUtil.ReadOldText(File);
                     byteTemp = File.ReadByte();
                     if ( byteTemp == ((byte)0) )
                     {
@@ -443,7 +445,7 @@ namespace SharpFlame
                     {
                         //error
                     }
-                    ResultInfo.CompileMultiPlayers = modIO.ReadOldText(File);
+                    ResultInfo.CompileMultiPlayers = IOUtil.ReadOldText(File);
                     byteTemp = File.ReadByte();
                     if ( byteTemp == ((byte)0) )
                     {
@@ -457,9 +459,9 @@ namespace SharpFlame
                     {
                         ReturnResult.WarningAdd("Compile player format out of range.");
                     }
-                    ResultInfo.CompileMultiAuthor = modIO.ReadOldText(File);
-                    ResultInfo.CompileMultiLicense = modIO.ReadOldText(File);
-                    strTemp = modIO.ReadOldText(File); //game time
+                    ResultInfo.CompileMultiAuthor = IOUtil.ReadOldText(File);
+                    ResultInfo.CompileMultiLicense = IOUtil.ReadOldText(File);
+                    strTemp = IOUtil.ReadOldText(File); //game time
                     ResultInfo.CampaignGameType = File.ReadInt32();
                     if ( ResultInfo.CampaignGameType < -1 | ResultInfo.CampaignGameType >= modProgram.GameTypeCount )
                     {
@@ -542,7 +544,7 @@ namespace SharpFlame
                     ReturnResult.ProblemAdd(ex.Message);
                     return ReturnResult;
                 }
-                LineData = modIO.BytesToLinesRemoveComments(Reader);
+                LineData = IOUtil.BytesToLinesRemoveComments(Reader);
                 Reader.Close();
 
                 Array.Resize(ref LNDTile, LineData.Count);
@@ -595,7 +597,7 @@ namespace SharpFlame
                     }
                     else
                     {
-                        modIO.InvariantParse_int(strTemp.Substring(strTemp.Length - (strTemp.Length - (A + 8)), strTemp.Length - (A + 8)), ref NewTileSize.X);
+                        IOUtil.InvariantParse_int(strTemp.Substring(strTemp.Length - (strTemp.Length - (A + 8)), strTemp.Length - (A + 8)), ref NewTileSize.X);
                         goto LineDone;
                     }
 
@@ -605,7 +607,7 @@ namespace SharpFlame
                     }
                     else
                     {
-                        modIO.InvariantParse_int(strTemp.Substring(strTemp.Length - (strTemp.Length - (A + 9)), strTemp.Length - (A + 9)), ref NewTileSize.Y);
+                        IOUtil.InvariantParse_int(strTemp.Substring(strTemp.Length - (strTemp.Length - (A + 9)), strTemp.Length - (A + 9)), ref NewTileSize.Y);
                         goto LineDone;
                     }
 
@@ -670,7 +672,7 @@ namespace SharpFlame
                                         strTemp2 = strTemp2.Substring(0, A - 1);
                                     }
                                     Int16 temp_Result = LNDTile[Tile_Num].TID;
-                                    modIO.InvariantParse_short(strTemp2, ref temp_Result);
+                                    IOUtil.InvariantParse_short(strTemp2, ref temp_Result);
                                 }
 
                                 A = strTemp.IndexOf("VF ") + 1;
@@ -688,7 +690,7 @@ namespace SharpFlame
                                         strTemp2 = strTemp2.Substring(0, A - 1);
                                     }
                                     Int16 temp_Result2 = LNDTile[Tile_Num].VF;
-                                    modIO.InvariantParse_short(strTemp2, ref temp_Result2);
+                                    IOUtil.InvariantParse_short(strTemp2, ref temp_Result2);
                                 }
 
                                 A = strTemp.IndexOf("TF ") + 1;
@@ -706,7 +708,7 @@ namespace SharpFlame
                                         strTemp2 = strTemp2.Substring(0, A - 1);
                                     }
                                     Int16 temp_Result3 = LNDTile[Tile_Num].TF;
-                                    modIO.InvariantParse_short(strTemp2, ref temp_Result3);
+                                    IOUtil.InvariantParse_short(strTemp2, ref temp_Result3);
                                 }
 
                                 A = strTemp.IndexOf(" F ") + 1;
@@ -724,7 +726,7 @@ namespace SharpFlame
                                         strTemp2 = strTemp2.Substring(0, A - 1);
                                     }
                                     short temp_Result4 = LNDTile[Tile_Num].F;
-                                    modIO.InvariantParse_short(strTemp2, ref temp_Result4);
+                                    IOUtil.InvariantParse_short(strTemp2, ref temp_Result4);
                                 }
 
                                 A = strTemp.IndexOf(" VH ") + 1;
@@ -750,21 +752,21 @@ namespace SharpFlame
                                         if ( A == 0 )
                                         {
                                             short temp_Result5 = LNDTile[Tile_Num].Vertex0Height;
-                                            modIO.InvariantParse_short(strTemp2, ref temp_Result5);
+                                            IOUtil.InvariantParse_short(strTemp2, ref temp_Result5);
                                         }
                                         else if ( A == 1 )
                                         {
                                             short temp_Result6 = LNDTile[Tile_Num].Vertex1Height;
-                                            modIO.InvariantParse_short(strTemp2, ref temp_Result6);
+                                            IOUtil.InvariantParse_short(strTemp2, ref temp_Result6);
                                         }
                                         else if ( A == 2 )
                                         {
                                             Int16 temp_Result7 = LNDTile[Tile_Num].Vertex2Height;
-                                            modIO.InvariantParse_short(strTemp2, ref temp_Result7);
+                                            IOUtil.InvariantParse_short(strTemp2, ref temp_Result7);
                                         }
                                     }
                                     short temp_Result8 = LNDTile[Tile_Num].Vertex3Height;
-                                    modIO.InvariantParse_short(strTemp3, ref temp_Result8);
+                                    IOUtil.InvariantParse_short(strTemp3, ref temp_Result8);
                                 }
 
                                 Tile_Num++;
@@ -823,23 +825,23 @@ namespace SharpFlame
                                 }
 
                                 clsLNDObject NewObject = new clsLNDObject();
-                                modIO.InvariantParse_uint(ObjectText[0], NewObject.ID);
-                                modIO.InvariantParse_int(ObjectText[1], ref NewObject.TypeNum);
+                                IOUtil.InvariantParse_uint(ObjectText[0], NewObject.ID);
+                                IOUtil.InvariantParse_int(ObjectText[1], ref NewObject.TypeNum);
                                 NewObject.Code = ObjectText[2].Substring(1, ObjectText[2].Length - 2); //remove quotes
-                                modIO.InvariantParse_int(ObjectText[3], ref NewObject.PlayerNum);
+                                IOUtil.InvariantParse_int(ObjectText[3], ref NewObject.PlayerNum);
                                 NewObject.Name = ObjectText[4].Substring(1, ObjectText[4].Length - 2); //remove quotes
-                                modIO.InvariantParse_sng(ObjectText[5], ref NewObject.Pos.X);
-                                modIO.InvariantParse_sng(ObjectText[6], ref NewObject.Pos.Y);
-                                modIO.InvariantParse_sng(ObjectText[7], ref NewObject.Pos.Z);
-                                if ( modIO.InvariantParse_dbl(ObjectText[8], ref dblTemp) )
+                                IOUtil.InvariantParse_sng(ObjectText[5], ref NewObject.Pos.X);
+                                IOUtil.InvariantParse_sng(ObjectText[6], ref NewObject.Pos.Y);
+                                IOUtil.InvariantParse_sng(ObjectText[7], ref NewObject.Pos.Z);
+                                if ( IOUtil.InvariantParse_dbl(ObjectText[8], ref dblTemp) )
                                 {
                                     NewObject.Rotation.X = (int)(MathUtil.Clamp_dbl(dblTemp, 0.0D, 359.0D));
                                 }
-                                if ( modIO.InvariantParse_dbl(ObjectText[9], ref dblTemp) )
+                                if ( IOUtil.InvariantParse_dbl(ObjectText[9], ref dblTemp) )
                                 {
                                     NewObject.Rotation.Y = (int)(MathUtil.Clamp_dbl(dblTemp, 0.0D, 359.0D));
                                 }
-                                if ( modIO.InvariantParse_dbl(ObjectText[10], ref dblTemp) )
+                                if ( IOUtil.InvariantParse_dbl(ObjectText[10], ref dblTemp) )
                                 {
                                     NewObject.Rotation.Z = (int)(MathUtil.Clamp_dbl(dblTemp, 0.0D, 359.0D));
                                 }
@@ -899,13 +901,13 @@ namespace SharpFlame
                                 }
 
                                 Gateway = new clsGateway();
-                                modIO.InvariantParse_int(GateText[0], ref Gateway.PosA.X);
+                                IOUtil.InvariantParse_int(GateText[0], ref Gateway.PosA.X);
                                 Gateway.PosA.X = Math.Max(Gateway.PosA.X, 0);
-                                modIO.InvariantParse_int(GateText[1], ref Gateway.PosA.Y);
+                                IOUtil.InvariantParse_int(GateText[1], ref Gateway.PosA.Y);
                                 Gateway.PosA.Y = Math.Max(Gateway.PosA.Y, 0);
-                                modIO.InvariantParse_int(GateText[2], ref Gateway.PosB.X);
+                                IOUtil.InvariantParse_int(GateText[2], ref Gateway.PosB.X);
                                 Gateway.PosB.X = Math.Max(Gateway.PosB.X, 0);
-                                modIO.InvariantParse_int(GateText[3], ref Gateway.PosB.Y);
+                                IOUtil.InvariantParse_int(GateText[3], ref Gateway.PosB.Y);
                                 Gateway.PosB.Y = Math.Max(Gateway.PosB.Y, 0);
                                 LNDGates.Add(Gateway);
                             }
@@ -1238,11 +1240,11 @@ namespace SharpFlame
                 File.Write(Text);
                 Text = "    Gravity 1" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    HeightScale " + modIO.InvariantToString_int(HeightMultiplier) + Convert.ToString(EndChar);
+                Text = "    HeightScale " + IOUtil.InvariantToString_int(HeightMultiplier) + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    MapWidth " + modIO.InvariantToString_int(Terrain.TileSize.X) + Convert.ToString(EndChar);
+                Text = "    MapWidth " + IOUtil.InvariantToString_int(Terrain.TileSize.X) + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    MapHeight " + modIO.InvariantToString_int(Terrain.TileSize.Y) + Convert.ToString(EndChar);
+                Text = "    MapHeight " + IOUtil.InvariantToString_int(Terrain.TileSize.Y) + Convert.ToString(EndChar);
                 File.Write(Text);
                 Text = "    TileWidth 128" + Convert.ToString(EndChar);
                 File.Write(Text);
@@ -1277,7 +1279,7 @@ namespace SharpFlame
                 File.Write(Text);
                 Text = "    }" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    NumTiles " + modIO.InvariantToString_int(Terrain.TileSize.X * Terrain.TileSize.Y) + Convert.ToString(EndChar);
+                Text = "    NumTiles " + IOUtil.InvariantToString_int(Terrain.TileSize.X * Terrain.TileSize.Y) + Convert.ToString(EndChar);
                 File.Write(Text);
                 Text = "    Tiles {" + Convert.ToString(EndChar);
                 File.Write(Text);
@@ -1314,11 +1316,11 @@ namespace SharpFlame
                             TF = 0;
                         }
 
-                        Text = "        TID " + (Terrain.Tiles[X, Y].Texture.TextureNum + 1) + " VF " + modIO.InvariantToString_int(VF) + " TF " +
-                               modIO.InvariantToString_int(TF) + " F " + modIO.InvariantToString_int(Flip) + " VH " +
-                               modIO.InvariantToString_byte(Convert.ToByte(Terrain.Vertices[X, Y].Height)) + " " +
-                               modIO.InvariantToString_byte(Terrain.Vertices[X + 1, Y].Height) + " " + Convert.ToString(Terrain.Vertices[X + 1, Y + 1].Height) +
-                               " " + modIO.InvariantToString_byte(Convert.ToByte(Terrain.Vertices[X, Y + 1].Height)) + Convert.ToString(EndChar);
+                        Text = "        TID " + (Terrain.Tiles[X, Y].Texture.TextureNum + 1) + " VF " + IOUtil.InvariantToString_int(VF) + " TF " +
+                               IOUtil.InvariantToString_int(TF) + " F " + IOUtil.InvariantToString_int(Flip) + " VH " +
+                               IOUtil.InvariantToString_byte(Convert.ToByte(Terrain.Vertices[X, Y].Height)) + " " +
+                               IOUtil.InvariantToString_byte(Terrain.Vertices[X + 1, Y].Height) + " " + Convert.ToString(Terrain.Vertices[X + 1, Y + 1].Height) +
+                               " " + IOUtil.InvariantToString_byte(Convert.ToByte(Terrain.Vertices[X, Y + 1].Height)) + Convert.ToString(EndChar);
                         File.Write(Text);
                     }
                 }
@@ -1347,7 +1349,7 @@ namespace SharpFlame
                     Text = "	FeatureSet " + Convert.ToString(EndChar);
                 }
                 File.Write(Text);
-                Text = "    NumObjects " + modIO.InvariantToString_int(Units.Count) + Convert.ToString(EndChar);
+                Text = "    NumObjects " + IOUtil.InvariantToString_int(Units.Count) + Convert.ToString(EndChar);
                 File.Write(Text);
                 Text = "    Objects {" + Convert.ToString(EndChar);
                 File.Write(Text);
@@ -1386,10 +1388,10 @@ namespace SharpFlame
                     {
                         if ( Unit.Type.GetCode(ref Code) )
                         {
-                            Text = "        " + modIO.InvariantToString_uint(Unit.ID) + " " + Convert.ToString(B) + " " + Convert.ToString(Quote) +
+                            Text = "        " + IOUtil.InvariantToString_uint(Unit.ID) + " " + Convert.ToString(B) + " " + Convert.ToString(Quote) +
                                    Code + Convert.ToString(Quote) + " " + Unit.UnitGroup.GetLNDPlayerText() + " " + Convert.ToString(Quote) + "NONAME" +
-                                   Convert.ToString(Quote) + " " + modIO.InvariantToString_int(XYZ_int.X) + ".00 " + modIO.InvariantToString_int(XYZ_int.Y) +
-                                   ".00 " + modIO.InvariantToString_int(XYZ_int.Z) + ".00 0.00 " + modIO.InvariantToString_int(Unit.Rotation) + ".00 0.00" +
+                                   Convert.ToString(Quote) + " " + IOUtil.InvariantToString_int(XYZ_int.X) + ".00 " + IOUtil.InvariantToString_int(XYZ_int.Y) +
+                                   ".00 " + IOUtil.InvariantToString_int(XYZ_int.Z) + ".00 0.00 " + IOUtil.InvariantToString_int(Unit.Rotation) + ".00 0.00" +
                                    Convert.ToString(EndChar);
                             File.Write(Text);
                         }
@@ -1416,7 +1418,7 @@ namespace SharpFlame
                 Text = "    Limits {" + Convert.ToString(EndChar);
                 File.Write(Text);
                 Text = "        " + Convert.ToString(Quote) + "Entire Map" + Convert.ToString(Quote) + " 0 0 0 " +
-                       modIO.InvariantToString_int(Terrain.TileSize.X) + " " + modIO.InvariantToString_int(Terrain.TileSize.Y) + Convert.ToString(EndChar);
+                       IOUtil.InvariantToString_int(Terrain.TileSize.X) + " " + IOUtil.InvariantToString_int(Terrain.TileSize.Y) + Convert.ToString(EndChar);
                 File.Write(Text);
                 Text = "    }" + Convert.ToString(EndChar);
                 File.Write(Text);
@@ -1426,7 +1428,7 @@ namespace SharpFlame
                 File.Write(Text);
                 Text = "    Version 1" + Convert.ToString(EndChar);
                 File.Write(Text);
-                Text = "    NumGateways " + modIO.InvariantToString_int(Gateways.Count) + Convert.ToString(EndChar);
+                Text = "    NumGateways " + IOUtil.InvariantToString_int(Gateways.Count) + Convert.ToString(EndChar);
                 File.Write(Text);
                 Text = "    Gates {" + Convert.ToString(EndChar);
                 File.Write(Text);
@@ -1434,8 +1436,8 @@ namespace SharpFlame
                 foreach ( clsGateway tempLoopVar_Gateway in Gateways )
                 {
                     Gateway = tempLoopVar_Gateway;
-                    Text = "        " + modIO.InvariantToString_int(Gateway.PosA.X) + " " + modIO.InvariantToString_int(Gateway.PosA.Y) + " " +
-                           modIO.InvariantToString_int(Gateway.PosB.X) + " " + modIO.InvariantToString_int(Gateway.PosB.Y) + Convert.ToString(EndChar);
+                    Text = "        " + IOUtil.InvariantToString_int(Gateway.PosA.X) + " " + IOUtil.InvariantToString_int(Gateway.PosA.Y) + " " +
+                           IOUtil.InvariantToString_int(Gateway.PosB.X) + " " + IOUtil.InvariantToString_int(Gateway.PosB.Y) + Convert.ToString(EndChar);
                     File.Write(Text);
                 }
                 Text = "    }" + Convert.ToString(EndChar);
@@ -1461,7 +1463,7 @@ namespace SharpFlame
                         }
                         else
                         {
-                            Text = Text + modIO.InvariantToString_byte(Tile_TypeNum[C + B]) + " ";
+                            Text = Text + IOUtil.InvariantToString_byte(Tile_TypeNum[C + B]) + " ";
                         }
                     }
                     Text = Text + Convert.ToString(EndChar);
@@ -1543,7 +1545,7 @@ namespace SharpFlame
                 }
             }
 
-            ReturnResult = modBitmap.SaveBitmap(Path, Overwrite, MinimapBitmap);
+            ReturnResult = BitmapUtil.SaveBitmap(Path, Overwrite, MinimapBitmap);
 
             return ReturnResult;
         }
@@ -1565,7 +1567,7 @@ namespace SharpFlame
                 }
             }
 
-            ReturnResult = modBitmap.SaveBitmap(Path, Overwrite, HeightmapBitmap);
+            ReturnResult = BitmapUtil.SaveBitmap(Path, Overwrite, HeightmapBitmap);
             return ReturnResult;
         }
 
@@ -1602,7 +1604,7 @@ namespace SharpFlame
 
             int A = 0;
 
-            modIO.WriteText(File_TTP, false, "ttyp");
+            IOUtil.WriteText(File_TTP, false, "ttyp");
 
             File_TTP.Write(8U);
             if ( Tileset == null )
@@ -1849,7 +1851,7 @@ namespace SharpFlame
                 for ( A = 0; A <= OutputUnitCount - 1; A++ )
                 {
                     Unit = OutputUnits[A];
-                    modIO.WriteTextOfLength(File, 40, OutputUnitCode[A]);
+                    IOUtil.WriteTextOfLength(File, 40, OutputUnitCode[A]);
                     switch ( Unit.Type.Type )
                     {
                         case clsUnitType.enumType.Feature:
@@ -1868,7 +1870,7 @@ namespace SharpFlame
                     File.Write(Convert.ToBoolean((uint)Unit.Pos.Horizontal.Y));
                     File.Write(Convert.ToBoolean((uint)Unit.Pos.Altitude));
                     File.Write(Convert.ToBoolean((ushort)Unit.Rotation));
-                    modIO.WriteText(File, true, "");
+                    IOUtil.WriteText(File, true, "");
                     if ( Unit.UnitGroup == ScavengerUnitGroup )
                     {
                         File.Write(ScavengerPlayerNum);
@@ -1906,13 +1908,13 @@ namespace SharpFlame
                 File.Write(InterfaceOptions.ScrollMax.Y);
 
                 //other compile info
-                modIO.WriteText(File, true, InterfaceOptions.CompileName);
+                IOUtil.WriteText(File, true, InterfaceOptions.CompileName);
                 File.Write((byte)0); //multiplayer/campaign. 0 = neither
-                modIO.WriteText(File, true, InterfaceOptions.CompileMultiPlayers);
+                IOUtil.WriteText(File, true, InterfaceOptions.CompileMultiPlayers);
                 File.Write(InterfaceOptions.CompileMultiXPlayers);
-                modIO.WriteText(File, true, InterfaceOptions.CompileMultiAuthor);
-                modIO.WriteText(File, true, InterfaceOptions.CompileMultiLicense);
-                modIO.WriteText(File, true, "0"); //game time
+                IOUtil.WriteText(File, true, InterfaceOptions.CompileMultiAuthor);
+                IOUtil.WriteText(File, true, InterfaceOptions.CompileMultiLicense);
+                IOUtil.WriteText(File, true, "0"); //game time
                 int intTemp = InterfaceOptions.CampaignGameType;
                 File.Write(intTemp);
             }

@@ -3,7 +3,9 @@ using System.Drawing;
 using System.IO;
 using Microsoft.VisualBasic;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Bitmaps;
 using SharpFlame.Colors;
+using SharpFlame.FileIO;
 
 namespace SharpFlame
 {
@@ -58,7 +60,7 @@ namespace SharpFlame
 
             try
             {
-                strTemp = modIO.ReadOldTextOfLength(File, 4);
+                strTemp = IOUtil.ReadOldTextOfLength(File, 4);
                 if ( strTemp != "ttyp" )
                 {
                     ReturnResult.Problem = "Bad identifier.";
@@ -128,7 +130,7 @@ namespace SharpFlame
             int BlueTotal = 0;
             int TileNum = 0;
             string strTile = "";
-            modBitmap.sBitmapGLTexture BitmapTextureArgs = new modBitmap.sBitmapGLTexture();
+            BitmapGLTexture BitmapTextureArgs = new BitmapGLTexture();
             float[] AverageColour = new float[4];
             int X = 0;
             int Y = 0;
@@ -146,7 +148,7 @@ namespace SharpFlame
 
                 GraphicPath = SlashPath + Name + "-128" + Convert.ToString(modProgram.PlatformPathSeparator) + strTile;
 
-                Result = modBitmap.LoadBitmap(GraphicPath, ref Bitmap);
+                Result = BitmapUtil.LoadBitmap(GraphicPath, ref Bitmap);
                 if ( !Result.Success )
                 {
                     //ignore and exit, since not all tile types have a corresponding tile graphic
@@ -228,7 +230,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult GenerateMipMaps(string SlashPath, string strTile, modBitmap.sBitmapGLTexture BitmapTextureArgs, int TileNum)
+        public clsResult GenerateMipMaps(string SlashPath, string strTile, BitmapGLTexture BitmapTextureArgs, int TileNum)
         {
             clsResult ReturnResult = new clsResult("Generating mipmaps");
             string GraphicPath = "";
@@ -256,7 +258,7 @@ namespace SharpFlame
 
             GraphicPath = SlashPath + Name + "-64" + Convert.ToString(modProgram.PlatformPathSeparator) + strTile;
 
-            Result = modBitmap.LoadBitmap(GraphicPath, ref Bitmap);
+            Result = BitmapUtil.LoadBitmap(GraphicPath, ref Bitmap);
             if ( !Result.Success )
             {
                 ReturnResult.WarningAdd("Unable to load tile graphic: " + Result.Problem);
@@ -277,7 +279,7 @@ namespace SharpFlame
 
             GraphicPath = SlashPath + Name + "-32" + Convert.ToString(modProgram.PlatformPathSeparator) + strTile;
 
-            Result = modBitmap.LoadBitmap(GraphicPath, ref Bitmap);
+            Result = BitmapUtil.LoadBitmap(GraphicPath, ref Bitmap);
             if ( !Result.Success )
             {
                 ReturnResult.WarningAdd("Unable to load tile graphic: " + Result.Problem);
@@ -298,7 +300,7 @@ namespace SharpFlame
 
             GraphicPath = SlashPath + Name + "-16" + Convert.ToString(modProgram.PlatformPathSeparator) + strTile;
 
-            Result = modBitmap.LoadBitmap(GraphicPath, ref Bitmap);
+            Result = BitmapUtil.LoadBitmap(GraphicPath, ref Bitmap);
             if ( !Result.Success )
             {
                 ReturnResult.WarningAdd("Unable to load tile graphic: " + Result.Problem);

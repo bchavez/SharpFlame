@@ -4,6 +4,7 @@ using Microsoft.VisualBasic;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.FileIO;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame
@@ -321,7 +322,7 @@ namespace SharpFlame
                                 goto EndOfTextures4;
                             }
                             TextLabel = new clsTextLabel();
-                            TextLabel.Text = modIO.InvariantToString_int(Num);
+                            TextLabel.Text = IOUtil.InvariantToString_int(Num);
                             TextLabel.SizeY = 24.0F;
                             TextLabel.Colour.Red = 1.0F;
                             TextLabel.Colour.Green = 1.0F;

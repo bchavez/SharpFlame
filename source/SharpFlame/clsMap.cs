@@ -8,6 +8,7 @@ using Microsoft.VisualBasic.Devices;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
+using SharpFlame.FileIO;
 using SharpFlame.MathExtra;
 using SharpFlame.Painters;
 
@@ -1521,7 +1522,7 @@ namespace SharpFlame
             DateTime DateNow = DateTime.Now;
             string Path = "";
 
-            Path = modProgram.AutoSavePath + "autosaved-" + modIO.InvariantToString_int(DateNow.Year) + "-" + modProgram.MinDigits(DateNow.Month, 2) + "-" +
+            Path = modProgram.AutoSavePath + "autosaved-" + IOUtil.InvariantToString_int(DateNow.Year) + "-" + modProgram.MinDigits(DateNow.Month, 2) + "-" +
                    modProgram.MinDigits(DateNow.Day, 2) + "-" + modProgram.MinDigits(DateNow.Hour, 2) + "-" + modProgram.MinDigits(DateNow.Minute, 2) + "-" +
                    modProgram.MinDigits(DateNow.Second, 2) + "-" + modProgram.MinDigits(DateNow.Millisecond, 3) + ".fmap";
 
@@ -3443,7 +3444,7 @@ namespace SharpFlame
             {
                 //set to default
                 CompileName = "";
-                CompileMultiPlayers = modIO.InvariantToString_int(2);
+                CompileMultiPlayers = IOUtil.InvariantToString_int(2);
                 CompileMultiXPlayers = false;
                 CompileMultiAuthor = "";
                 CompileMultiLicense = "";

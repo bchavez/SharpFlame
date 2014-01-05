@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using Microsoft.VisualBasic;
+using SharpFlame.Bitmaps;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame
@@ -783,7 +784,7 @@ namespace SharpFlame
             Bitmap HeightmapBitmap = null;
             modProgram.sResult Result = new modProgram.sResult();
 
-            Result = modBitmap.LoadBitmap(Path, ref HeightmapBitmap);
+            Result = BitmapUtil.LoadBitmap(Path, ref HeightmapBitmap);
             if ( !Result.Success )
             {
                 ReturnResult.Problem = Result.Problem;

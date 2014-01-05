@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
+using SharpFlame.FileIO;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame
@@ -20,7 +21,7 @@ namespace SharpFlame
 
             do
             {
-                Label = Prefix + modIO.InvariantToString_int(Number);
+                Label = Prefix + IOUtil.InvariantToString_int(Number);
                 Valid = ScriptLabelIsValid(Label);
                 if ( Valid.Success )
                 {
@@ -205,8 +206,8 @@ namespace SharpFlame
 
             public void WriteWZ(clsINIWrite File)
             {
-                File.SectionName_Append("position_" + modIO.InvariantToString_int(_ParentMapLink.ArrayPosition));
-                File.Property_Append("pos", modIO.InvariantToString_int(_Pos.X) + ", " + modIO.InvariantToString_int(_Pos.Y));
+                File.SectionName_Append("position_" + IOUtil.InvariantToString_int(_ParentMapLink.ArrayPosition));
+                File.Property_Append("pos", IOUtil.InvariantToString_int(_Pos.X) + ", " + IOUtil.InvariantToString_int(_Pos.Y));
                 File.Property_Append("label", _Label);
                 File.Gap_Append();
             }
@@ -393,9 +394,9 @@ namespace SharpFlame
 
             public void WriteWZ(clsINIWrite File)
             {
-                File.SectionName_Append("area_" + modIO.InvariantToString_int(_ParentMapLink.ArrayPosition));
-                File.Property_Append("pos1", modIO.InvariantToString_int(_PosA.X) + ", " + modIO.InvariantToString_int(_PosA.Y));
-                File.Property_Append("pos2", modIO.InvariantToString_int(_PosB.X) + ", " + modIO.InvariantToString_int(_PosB.Y));
+                File.SectionName_Append("area_" + IOUtil.InvariantToString_int(_ParentMapLink.ArrayPosition));
+                File.Property_Append("pos1", IOUtil.InvariantToString_int(_PosA.X) + ", " + IOUtil.InvariantToString_int(_PosA.Y));
+                File.Property_Append("pos2", IOUtil.InvariantToString_int(_PosB.X) + ", " + IOUtil.InvariantToString_int(_PosB.Y));
                 File.Property_Append("label", _Label);
                 File.Gap_Append();
             }

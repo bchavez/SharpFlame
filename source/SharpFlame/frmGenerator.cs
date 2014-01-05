@@ -2,6 +2,7 @@ using System;
 using System.Windows.Forms;
 using Matrix3D;
 using Microsoft.VisualBasic;
+using SharpFlame.FileIO;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame
@@ -18,12 +19,12 @@ namespace SharpFlame
             double dblTemp = 0;
             int Result = 0;
 
-            if ( !modIO.InvariantParse_dbl(TextBoxToValidate.Text, ref dblTemp) )
+            if ( !IOUtil.InvariantParse_dbl(TextBoxToValidate.Text, ref dblTemp) )
             {
                 return 0;
             }
             Result = (int)(Conversion.Int(MathUtil.Clamp_dbl(dblTemp, Min, Max) * Multiplier));
-            TextBoxToValidate.Text = modIO.InvariantToString_sng((float)(Result / Multiplier));
+            TextBoxToValidate.Text = IOUtil.InvariantToString_sng((float)(Result / Multiplier));
             return Result;
         }
 
@@ -320,7 +321,7 @@ namespace SharpFlame
             Generator.Map.RandomizeHeights(Generator.LevelCount);
 
             Generator.Map.InterfaceOptions = new clsMap.clsInterfaceOptions();
-            Generator.Map.InterfaceOptions.CompileMultiPlayers = modIO.InvariantToString_int(Generator.GetTotalPlayerCount);
+            Generator.Map.InterfaceOptions.CompileMultiPlayers = IOUtil.InvariantToString_int(Generator.GetTotalPlayerCount);
 
             _Owner.NewMainMap(Generator.Map);
 

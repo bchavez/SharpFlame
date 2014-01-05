@@ -104,6 +104,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="Bitmaps\BitmapGLTexture.cs" />
     <Compile Include="clsBooleanMap.cs" />
     <Compile Include="clsBrush.cs" />
     <Compile Include="clsComponent.cs" />
@@ -247,10 +248,10 @@
     </Compile>
     <Compile Include="GLFont.cs" />
     <Compile Include="Collections\ListUtil.cs" />
-    <Compile Include="modBitmap.cs" />
+    <Compile Include="Bitmaps\BitmapUtil.cs" />
     <Compile Include="modGenerator.cs" />
     <Compile Include="INI.cs" />
-    <Compile Include="modIO.cs" />
+    <Compile Include="FileIO\IOUtil.cs" />
     <Compile Include="MathExtra\MathUtil.cs" />
     <Compile Include="Painters\PainterFactory.cs" />
     <Compile Include="modProgram.cs" />

@@ -10,7 +10,9 @@ using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.ApplicationServices;
 using Microsoft.VisualBasic.CompilerServices;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
+using SharpFlame.FileIO;
 using SharpFlame.MathExtra;
 using SharpFlame.Painters;
 using Timer = System.Windows.Forms.Timer;
@@ -494,8 +496,8 @@ namespace SharpFlame
             HeightSetPalette[7] = (byte)255;
             for ( int A = 0; A <= 7; A++ )
             {
-                tabHeightSetL.TabPages[A].Text = modIO.InvariantToString_byte(HeightSetPalette[A]);
-                tabHeightSetR.TabPages[A].Text = modIO.InvariantToString_byte(HeightSetPalette[A]);
+                tabHeightSetL.TabPages[A].Text = IOUtil.InvariantToString_byte(HeightSetPalette[A]);
+                tabHeightSetR.TabPages[A].Text = IOUtil.InvariantToString_byte(HeightSetPalette[A]);
             }
             tabHeightSetL.SelectedIndex = 1;
             tabHeightSetR.SelectedIndex = 0;
@@ -631,7 +633,7 @@ namespace SharpFlame
             modSettings.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
 
             Bitmap HeightmapBitmap = null;
-            modProgram.sResult Result = modBitmap.LoadBitmap(Dialog.FileName, ref HeightmapBitmap);
+            modProgram.sResult Result = BitmapUtil.LoadBitmap(Dialog.FileName, ref HeightmapBitmap);
             if ( !Result.Success )
             {
                 MessageBox.Show("Failed to load image: " + Result.Problem);
@@ -955,19 +957,19 @@ namespace SharpFlame
             sXY_int Offset = new sXY_int();
             double Max = modProgram.MapMaxSize;
 
-            if ( !modIO.InvariantParse_int(txtSizeX.Text, ref NewSize.X) )
+            if ( !IOUtil.InvariantParse_int(txtSizeX.Text, ref NewSize.X) )
             {
                 return;
             }
-            if ( !modIO.InvariantParse_int(txtSizeY.Text, ref NewSize.Y) )
+            if ( !IOUtil.InvariantParse_int(txtSizeY.Text, ref NewSize.Y) )
             {
                 return;
             }
-            if ( !modIO.InvariantParse_int(txtOffsetX.Text, ref Offset.X) )
+            if ( !IOUtil.InvariantParse_int(txtOffsetX.Text, ref Offset.X) )
             {
                 return;
             }
-            if ( !modIO.InvariantParse_int(txtOffsetY.Text, ref Offset.Y) )
+            if ( !IOUtil.InvariantParse_int(txtOffsetY.Text, ref Offset.Y) )
             {
                 return;
             }
@@ -1030,8 +1032,8 @@ namespace SharpFlame
             }
             else
             {
-                txtSizeX.Text = modIO.InvariantToString_int(Map.Terrain.TileSize.X);
-                txtSizeY.Text = modIO.InvariantToString_int(Map.Terrain.TileSize.Y);
+                txtSizeX.Text = IOUtil.InvariantToString_int(Map.Terrain.TileSize.X);
+                txtSizeY.Text = IOUtil.InvariantToString_int(Map.Terrain.TileSize.Y);
                 txtOffsetX.Text = "0";
                 txtOffsetY.Text = "0";
             }
@@ -1098,7 +1100,7 @@ namespace SharpFlame
             modSettings.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
             string strScavenger = Interaction.InputBox("Enter the player number for scavenger units:", "", "", -1, -1);
             byte ScavengerNum = 0;
-            if ( !modIO.InvariantParse_byte(strScavenger, ref ScavengerNum) )
+            if ( !IOUtil.InvariantParse_byte(strScavenger, ref ScavengerNum) )
             {
                 MessageBox.Show("Unable to save FME: entered scavenger number is not a number.");
                 return;
@@ -1290,7 +1292,7 @@ namespace SharpFlame
             sXY_int FinishXY = new sXY_int();
             sXY_int Pos = new sXY_int();
 
-            if ( !modIO.InvariantParse_dbl(txtHeightOffset.Text, ref Offset) )
+            if ( !IOUtil.InvariantParse_dbl(txtHeightOffset.Text, ref Offset) )
             {
                 return;
             }
@@ -1530,7 +1532,7 @@ namespace SharpFlame
             }
 
             int Angle = 0;
-            if ( !modIO.InvariantParse_int(txtObjectRotation.Text, ref Angle) )
+            if ( !IOUtil.InvariantParse_int(txtObjectRotation.Text, ref Angle) )
             {
                 //MsgBox("Invalid rotation value.", (MsgBoxStyle.OkOnly or MsgBoxStyle.Information), "")
                 //SelectedObject_Changed()
@@ -1699,10 +1701,10 @@ namespace SharpFlame
                 clsMap.clsUnit with_1 = Map.SelectedUnits[0];
                 lblObjectType.Text = Convert.ToString(with_1.Type.GetDisplayTextCode());
                 ObjectPlayerNum.Target.Item = with_1.UnitGroup;
-                txtObjectRotation.Text = modIO.InvariantToString_int(Convert.ToInt32(with_1.Rotation));
-                txtObjectID.Text = modIO.InvariantToString_uint(with_1.ID);
-                txtObjectPriority.Text = modIO.InvariantToString_int(Convert.ToInt32(with_1.SavePriority));
-                txtObjectHealth.Text = modIO.InvariantToString_dbl(Convert.ToDouble(with_1.Health * 100.0D));
+                txtObjectRotation.Text = IOUtil.InvariantToString_int(Convert.ToInt32(with_1.Rotation));
+                txtObjectID.Text = IOUtil.InvariantToString_uint(with_1.ID);
+                txtObjectPriority.Text = IOUtil.InvariantToString_int(Convert.ToInt32(with_1.SavePriority));
+                txtObjectHealth.Text = IOUtil.InvariantToString_dbl(Convert.ToDouble(with_1.Health * 100.0D));
                 lblObjectType.Enabled = true;
                 ObjectPlayerNum.Enabled = true;
                 txtObjectRotation.Enabled = true;
@@ -2072,7 +2074,7 @@ namespace SharpFlame
 
             Bitmap Bitmap = null;
 
-            modBitmap.sBitmapGLTexture BitmapTextureArgs = new modBitmap.sBitmapGLTexture();
+            BitmapGLTexture BitmapTextureArgs = new BitmapGLTexture();
 
             BitmapTextureArgs.MagFilter = TextureMagFilter.Nearest;
             BitmapTextureArgs.MinFilter = TextureMinFilter.Nearest;
@@ -2080,24 +2082,24 @@ namespace SharpFlame
             BitmapTextureArgs.MipMapLevel = 0;
 
             if (
-                modBitmap.LoadBitmap(
+                BitmapUtil.LoadBitmap(
                     modProgram.EndWithPathSeperator((new ConsoleApplicationBase()).Info.DirectoryPath) + "notile.png",
                     ref Bitmap).Success )
             {
                 clsResult Result = new clsResult("notile.png");
-                Result.Take(modBitmap.BitmapIsGLCompatible(Bitmap));
+                Result.Take(BitmapUtil.BitmapIsGLCompatible(Bitmap));
                 ReturnResult.Add(Result);
                 BitmapTextureArgs.Texture = Bitmap;
                 BitmapTextureArgs.Perform();
                 modProgram.GLTexture_NoTile = BitmapTextureArgs.TextureNum;
             }
             if (
-                modBitmap.LoadBitmap(
+                BitmapUtil.LoadBitmap(
                     modProgram.EndWithPathSeperator((new ConsoleApplicationBase()).Info.DirectoryPath) + "overflow.png",
                     ref Bitmap).Success )
             {
                 clsResult Result = new clsResult("overflow.png");
-                Result.Take(modBitmap.BitmapIsGLCompatible(Bitmap));
+                Result.Take(BitmapUtil.BitmapIsGLCompatible(Bitmap));
                 ReturnResult.Add(Result);
                 BitmapTextureArgs.Texture = Bitmap;
                 BitmapTextureArgs.Perform();
@@ -2481,7 +2483,7 @@ namespace SharpFlame
             string Text = "";
             double Height_dbl = 0;
 
-            if ( !modIO.InvariantParse_dbl(txtHeightSetL.Text, ref Height_dbl) )
+            if ( !IOUtil.InvariantParse_dbl(txtHeightSetL.Text, ref Height_dbl) )
             {
                 return;
             }
@@ -2491,7 +2493,7 @@ namespace SharpFlame
             {
                 tabHeightSetL_SelectedIndexChanged(null, null);
             }
-            Text = modIO.InvariantToString_byte(Height);
+            Text = IOUtil.InvariantToString_byte(Height);
             tabHeightSetL.TabPages[tabHeightSetL.SelectedIndex].Text = Text;
             tabHeightSetR.TabPages[tabHeightSetL.SelectedIndex].Text = Text;
         }
@@ -2502,7 +2504,7 @@ namespace SharpFlame
             string Text = "";
             double Height_dbl = 0;
 
-            if ( !modIO.InvariantParse_dbl(txtHeightSetL.Text, ref Height_dbl) )
+            if ( !IOUtil.InvariantParse_dbl(txtHeightSetL.Text, ref Height_dbl) )
             {
                 return;
             }
@@ -2512,19 +2514,19 @@ namespace SharpFlame
             {
                 tabHeightSetL_SelectedIndexChanged(null, null);
             }
-            Text = modIO.InvariantToString_byte(Height);
+            Text = IOUtil.InvariantToString_byte(Height);
             tabHeightSetL.TabPages[tabHeightSetR.SelectedIndex].Text = Text;
             tabHeightSetR.TabPages[tabHeightSetR.SelectedIndex].Text = Text;
         }
 
         public void tabHeightSetL_SelectedIndexChanged(object sender, EventArgs e)
         {
-            txtHeightSetL.Text = modIO.InvariantToString_byte(HeightSetPalette[tabHeightSetL.SelectedIndex]);
+            txtHeightSetL.Text = IOUtil.InvariantToString_byte(HeightSetPalette[tabHeightSetL.SelectedIndex]);
         }
 
         public void tabHeightSetR_SelectedIndexChanged(object sender, EventArgs e)
         {
-            txtHeightSetR.Text = modIO.InvariantToString_byte(HeightSetPalette[tabHeightSetR.SelectedIndex]);
+            txtHeightSetR.Text = IOUtil.InvariantToString_byte(HeightSetPalette[tabHeightSetR.SelectedIndex]);
         }
 
         public void tsbSelectionObjects_Click(Object sender, EventArgs e)
@@ -2602,7 +2604,7 @@ namespace SharpFlame
             sXY_int Pos = new sXY_int();
             double dblTemp = 0;
 
-            if ( !modIO.InvariantParse_dbl(txtHeightMultiply.Text, ref dblTemp) )
+            if ( !IOUtil.InvariantParse_dbl(txtHeightMultiply.Text, ref dblTemp) )
             {
                 return;
             }
@@ -2721,7 +2723,7 @@ namespace SharpFlame
                 return;
             }
             int Priority = 0;
-            if ( !modIO.InvariantParse_int(txtObjectPriority.Text, ref Priority) )
+            if ( !IOUtil.InvariantParse_int(txtObjectPriority.Text, ref Priority) )
             {
                 //MsgBox("Entered text is not a valid number.", (MsgBoxStyle.OkOnly or MsgBoxStyle.Information), "")
                 //SelectedObject_Changed()
@@ -2774,7 +2776,7 @@ namespace SharpFlame
             }
 
             double Health = 0;
-            if ( !modIO.InvariantParse_dbl(txtObjectHealth.Text, ref Health) )
+            if ( !IOUtil.InvariantParse_dbl(txtObjectHealth.Text, ref Health) )
             {
                 //SelectedObject_Changed()
                 //todo
@@ -3411,7 +3413,7 @@ namespace SharpFlame
             modProgram.sResult BitmapResult = new modProgram.sResult();
 
             ResultBitmap = null;
-            BitmapResult = modBitmap.LoadBitmap(ImagePath, ref ResultBitmap);
+            BitmapResult = BitmapUtil.LoadBitmap(ImagePath, ref ResultBitmap);
             if ( !BitmapResult.Success )
             {
                 Result.WarningAdd("Unable to load image " + Convert.ToString(ControlChars.Quote) + ImagePath + Convert.ToString(ControlChars.Quote));
@@ -3583,7 +3585,7 @@ namespace SharpFlame
             }
 
             txtHeightSetL.Text =
-                modIO.InvariantToString_byte(Convert.ToByte(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height));
+                IOUtil.InvariantToString_byte(Convert.ToByte(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height));
             txtHeightSetL.Focus();
             MapView.OpenGLControl.Focus();
         }
@@ -3598,7 +3600,7 @@ namespace SharpFlame
                 return;
             }
 
-            txtHeightSetR.Text = modIO.InvariantToString_byte(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height);
+            txtHeightSetR.Text = IOUtil.InvariantToString_byte(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height);
             txtHeightSetR.Focus();
             MapView.OpenGLControl.Focus();
         }
@@ -3820,8 +3822,8 @@ namespace SharpFlame
                 {
                     clsMap.clsScriptPosition ScriptPosition = (clsMap.clsScriptPosition)_SelectedScriptMarker;
                     txtScriptMarkerLabel.Text = ScriptPosition.Label;
-                    txtScriptMarkerX.Text = modIO.InvariantToString_int(ScriptPosition.PosX);
-                    txtScriptMarkerY.Text = modIO.InvariantToString_int(ScriptPosition.PosY);
+                    txtScriptMarkerX.Text = IOUtil.InvariantToString_int(ScriptPosition.PosX);
+                    txtScriptMarkerY.Text = IOUtil.InvariantToString_int(ScriptPosition.PosY);
                     txtScriptMarkerLabel.Enabled = true;
                     txtScriptMarkerX.Enabled = true;
                     txtScriptMarkerY.Enabled = true;
@@ -3830,10 +3832,10 @@ namespace SharpFlame
                 {
                     clsMap.clsScriptArea ScriptArea = (clsMap.clsScriptArea)_SelectedScriptMarker;
                     txtScriptMarkerLabel.Text = ScriptArea.Label;
-                    txtScriptMarkerX.Text = modIO.InvariantToString_int(ScriptArea.PosAX);
-                    txtScriptMarkerY.Text = modIO.InvariantToString_int(ScriptArea.PosAY);
-                    txtScriptMarkerX2.Text = modIO.InvariantToString_int(ScriptArea.PosBX);
-                    txtScriptMarkerY2.Text = modIO.InvariantToString_int(ScriptArea.PosBY);
+                    txtScriptMarkerX.Text = IOUtil.InvariantToString_int(ScriptArea.PosAX);
+                    txtScriptMarkerY.Text = IOUtil.InvariantToString_int(ScriptArea.PosAY);
+                    txtScriptMarkerX2.Text = IOUtil.InvariantToString_int(ScriptArea.PosBX);
+                    txtScriptMarkerY2.Text = IOUtil.InvariantToString_int(ScriptArea.PosBY);
                     txtScriptMarkerLabel.Enabled = true;
                     txtScriptMarkerX.Enabled = true;
                     txtScriptMarkerY.Enabled = true;
@@ -3951,14 +3953,14 @@ namespace SharpFlame
             {
                 clsMap.clsScriptPosition ScriptPosition = (clsMap.clsScriptPosition)_SelectedScriptMarker;
                 int temp_Result = ScriptPosition.PosX;
-                modIO.InvariantParse_int(txtScriptMarkerX.Text, ref temp_Result);
+                IOUtil.InvariantParse_int(txtScriptMarkerX.Text, ref temp_Result);
                 ScriptPosition.PosX = temp_Result;
             }
             else if ( _SelectedScriptMarker is clsMap.clsScriptArea )
             {
                 clsMap.clsScriptArea ScriptArea = (clsMap.clsScriptArea)_SelectedScriptMarker;
                 int temp_Result2 = ScriptArea.PosAX;
-                modIO.InvariantParse_int(txtScriptMarkerX.Text, ref temp_Result2);
+                IOUtil.InvariantParse_int(txtScriptMarkerX.Text, ref temp_Result2);
                 ScriptArea.PosAX = temp_Result2;
             }
             else
@@ -3985,14 +3987,14 @@ namespace SharpFlame
             {
                 clsMap.clsScriptPosition ScriptPosition = (clsMap.clsScriptPosition)_SelectedScriptMarker;
                 int temp_Result = ScriptPosition.PosY;
-                modIO.InvariantParse_int(txtScriptMarkerY.Text, ref temp_Result);
+                IOUtil.InvariantParse_int(txtScriptMarkerY.Text, ref temp_Result);
                 ScriptPosition.PosY = temp_Result;
             }
             else if ( _SelectedScriptMarker is clsMap.clsScriptArea )
             {
                 clsMap.clsScriptArea ScriptArea = (clsMap.clsScriptArea)_SelectedScriptMarker;
                 int temp_Result2 = ScriptArea.PosAY;
-                modIO.InvariantParse_int(txtScriptMarkerY.Text, ref temp_Result2);
+                IOUtil.InvariantParse_int(txtScriptMarkerY.Text, ref temp_Result2);
                 ScriptArea.PosAY = temp_Result2;
             }
             else
@@ -4019,7 +4021,7 @@ namespace SharpFlame
             {
                 clsMap.clsScriptArea ScriptArea = (clsMap.clsScriptArea)_SelectedScriptMarker;
                 int temp_Result = ScriptArea.PosBX;
-                modIO.InvariantParse_int(txtScriptMarkerX2.Text, ref temp_Result);
+                IOUtil.InvariantParse_int(txtScriptMarkerX2.Text, ref temp_Result);
                 ScriptArea.PosBX = temp_Result;
             }
             else
@@ -4046,7 +4048,7 @@ namespace SharpFlame
             {
                 clsMap.clsScriptArea ScriptArea = (clsMap.clsScriptArea)_SelectedScriptMarker;
                 int temp_Result = ScriptArea.PosBY;
-                modIO.InvariantParse_int(txtScriptMarkerY2.Text, ref temp_Result);
+                IOUtil.InvariantParse_int(txtScriptMarkerY2.Text, ref temp_Result);
                 ScriptArea.PosBY = temp_Result;
             }
             else

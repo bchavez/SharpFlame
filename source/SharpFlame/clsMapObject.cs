@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
+using SharpFlame.FileIO;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame
@@ -95,7 +96,7 @@ namespace SharpFlame
 
             public string GetINIPosition()
             {
-                return modIO.InvariantToString_int(Pos.Horizontal.X) + ", " + modIO.InvariantToString_int(Pos.Horizontal.Y) + ", 0";
+                return IOUtil.InvariantToString_int(Pos.Horizontal.X) + ", " + IOUtil.InvariantToString_int(Pos.Horizontal.Y) + ", 0";
             }
 
             public string GetINIRotation()
@@ -113,17 +114,17 @@ namespace SharpFlame
                     Rotation16 += modProgram.INIRotationMax;
                 }
 
-                return modIO.InvariantToString_int(Rotation16) + ", 0, 0";
+                return IOUtil.InvariantToString_int(Rotation16) + ", 0, 0";
             }
 
             public string GetINIHealthPercent()
             {
-                return modIO.InvariantToString_int((int)(MathUtil.Clamp_dbl(Health * 100.0D, 1.0D, 100.0D))) + "%";
+                return IOUtil.InvariantToString_int((int)(MathUtil.Clamp_dbl(Health * 100.0D, 1.0D, 100.0D))) + "%";
             }
 
             public string GetPosText()
             {
-                return modIO.InvariantToString_int(Pos.Horizontal.X) + ", " + modIO.InvariantToString_int(Pos.Horizontal.Y);
+                return IOUtil.InvariantToString_int(Pos.Horizontal.X) + ", " + IOUtil.InvariantToString_int(Pos.Horizontal.Y);
             }
 
             public modProgram.sResult SetLabel(string Text)
@@ -187,12 +188,12 @@ namespace SharpFlame
                         default:
                             return;
                     }
-                    File.SectionName_Append("object_" + modIO.InvariantToString_int(MapLink.ArrayPosition));
-                    File.Property_Append("id", modIO.InvariantToString_uint(ID));
+                    File.SectionName_Append("object_" + IOUtil.InvariantToString_int(MapLink.ArrayPosition));
+                    File.Property_Append("id", IOUtil.InvariantToString_uint(ID));
                     if ( PlayerCount >= 0 ) //not an FMap
                     {
-                        File.Property_Append("type", modIO.InvariantToString_int(TypeNum));
-                        File.Property_Append("player", modIO.InvariantToString_int(UnitGroup.GetPlayerNum(PlayerCount)));
+                        File.Property_Append("type", IOUtil.InvariantToString_int(TypeNum));
+                        File.Property_Append("player", IOUtil.InvariantToString_int(UnitGroup.GetPlayerNum(PlayerCount)));
                     }
                     File.Property_Append("label", _Label);
                     File.Gap_Append();
@@ -414,7 +415,7 @@ namespace SharpFlame
                 }
                 else
                 {
-                    return modIO.InvariantToString_int(WZ_StartPos);
+                    return IOUtil.InvariantToString_int(WZ_StartPos);
                 }
             }
 
@@ -422,11 +423,11 @@ namespace SharpFlame
             {
                 if ( WZ_StartPos < 0 | WZ_StartPos >= modProgram.PlayerCountMax )
                 {
-                    return modIO.InvariantToString_int(7);
+                    return IOUtil.InvariantToString_int(7);
                 }
                 else
                 {
-                    return modIO.InvariantToString_int(WZ_StartPos);
+                    return IOUtil.InvariantToString_int(WZ_StartPos);
                 }
             }
 
@@ -711,7 +712,7 @@ namespace SharpFlame
             try
             {
                 int Rotation = 0;
-                modIO.InvariantParse_int(modMain.frmMainInstance.txtNewObjectRotation.Text, ref Rotation);
+                IOUtil.InvariantParse_int(modMain.frmMainInstance.txtNewObjectRotation.Text, ref Rotation);
                 if ( Rotation < 0 | Rotation > 359 )
                 {
                     objectCreator.Rotation = 0;

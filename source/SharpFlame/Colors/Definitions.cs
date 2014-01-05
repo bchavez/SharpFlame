@@ -1,3 +1,5 @@
+using SharpFlame.FileIO;
+
 namespace SharpFlame.Colors
 {
     public struct sRGB_sng
@@ -45,10 +47,10 @@ namespace SharpFlame.Colors
 
         public virtual string GetINIOutput()
         {
-            return modIO.InvariantToString_sng( Red ) + ", " + modIO.InvariantToString_sng( Green ) + ", " + modIO.InvariantToString_sng( Blue );
+            return IOUtil.InvariantToString_sng( Red ) + ", " + IOUtil.InvariantToString_sng( Green ) + ", " + IOUtil.InvariantToString_sng( Blue );
         }
 
-        public virtual bool ReadINIText( clsSplitCommaText SplitText )
+        public virtual bool ReadINIText( SplitCommaText SplitText )
         {
             if( SplitText.PartCount < 3 )
             {
@@ -57,15 +59,15 @@ namespace SharpFlame.Colors
 
             sRGB_sng Colour = new sRGB_sng();
 
-            if( !modIO.InvariantParse_sng( SplitText.Parts[0], ref Colour.Red ) )
+            if( !IOUtil.InvariantParse_sng( SplitText.Parts[0], ref Colour.Red ) )
             {
                 return false;
             }
-            if( !modIO.InvariantParse_sng( SplitText.Parts[1], ref Colour.Green ) )
+            if( !IOUtil.InvariantParse_sng( SplitText.Parts[1], ref Colour.Green ) )
             {
                 return false;
             }
-            if( !modIO.InvariantParse_sng( SplitText.Parts[2], ref Colour.Blue ) )
+            if( !IOUtil.InvariantParse_sng( SplitText.Parts[2], ref Colour.Blue ) )
             {
                 return false;
             }
@@ -96,10 +98,10 @@ namespace SharpFlame.Colors
 
         public override string GetINIOutput()
         {
-            return base.GetINIOutput() + ", " + modIO.InvariantToString_sng( Alpha );
+            return base.GetINIOutput() + ", " + IOUtil.InvariantToString_sng( Alpha );
         }
 
-        public override bool ReadINIText( clsSplitCommaText SplitText )
+        public override bool ReadINIText( SplitCommaText SplitText )
         {
             if( !base.ReadINIText( SplitText ) )
             {
@@ -111,7 +113,7 @@ namespace SharpFlame.Colors
                 return false;
             }
 
-            if( !modIO.InvariantParse_sng( SplitText.Parts[3], ref Alpha ) )
+            if( !IOUtil.InvariantParse_sng( SplitText.Parts[3], ref Alpha ) )
             {
                 Alpha = 1.0F;
             }

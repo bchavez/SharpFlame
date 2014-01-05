@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using SharpFlame.FileIO;
 
 namespace SharpFlame
 {
@@ -23,7 +24,7 @@ namespace SharpFlame
             {
                 tsbNumber[A] = new ToolStripButton();
                 tsbNumber[A].DisplayStyle = ToolStripItemDisplayStyle.Text;
-                tsbNumber[A].Text = modIO.InvariantToString_int(A);
+                tsbNumber[A].Text = IOUtil.InvariantToString_int(A);
                 tsbNumber[A].AutoToolTip = false;
                 tsbNumber[A].Click += tsbNumber_Clicked;
                 tsPlayerNum1.Items.Add(tsbNumber[A]);
@@ -31,7 +32,7 @@ namespace SharpFlame
                 B = A + ButtonsPerRow;
                 tsbNumber[B] = new ToolStripButton();
                 tsbNumber[B].DisplayStyle = ToolStripItemDisplayStyle.Text;
-                tsbNumber[B].Text = modIO.InvariantToString_int(B);
+                tsbNumber[B].Text = IOUtil.InvariantToString_int(B);
                 tsbNumber[B].AutoToolTip = false;
                 tsbNumber[B].Click += tsbNumber_Clicked;
                 tsPlayerNum2.Items.Add(tsbNumber[B]);

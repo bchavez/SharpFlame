@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
+using SharpFlame.FileIO;
 using SharpFlame.MathExtra;
 
 namespace SharpFlame
@@ -52,10 +53,10 @@ namespace SharpFlame
 
             cbxAutoScrollLimits.Checked = Map.InterfaceOptions.AutoScrollLimits;
             AutoScrollLimits_Update();
-            txtScrollMinX.Text = modIO.InvariantToString_int(Map.InterfaceOptions.ScrollMin.X);
-            txtScrollMinY.Text = modIO.InvariantToString_int(Map.InterfaceOptions.ScrollMin.Y);
-            txtScrollMaxX.Text = modIO.InvariantToString_uint(Map.InterfaceOptions.ScrollMax.X);
-            txtScrollMaxY.Text = modIO.InvariantToString_uint(Map.InterfaceOptions.ScrollMax.Y);
+            txtScrollMinX.Text = IOUtil.InvariantToString_int(Map.InterfaceOptions.ScrollMin.X);
+            txtScrollMinY.Text = IOUtil.InvariantToString_int(Map.InterfaceOptions.ScrollMin.Y);
+            txtScrollMaxX.Text = IOUtil.InvariantToString_uint(Map.InterfaceOptions.ScrollMax.X);
+            txtScrollMaxY.Text = IOUtil.InvariantToString_uint(Map.InterfaceOptions.ScrollMax.Y);
         }
 
         private void SaveToMap()
@@ -124,7 +125,7 @@ namespace SharpFlame
             string MapName = "";
             string License = cboLicense.Text;
             int PlayerCount = 0;
-            if ( !modIO.InvariantParse_int(txtMultiPlayers.Text, ref PlayerCount) )
+            if ( !IOUtil.InvariantParse_int(txtMultiPlayers.Text, ref PlayerCount) )
             {
                 PlayerCount = 0;
             }
@@ -692,10 +693,10 @@ namespace SharpFlame
             Max.Y = (uint)Map.Terrain.TileSize.Y;
             if ( !cbxAutoScrollLimits.Checked )
             {
-                modIO.InvariantParse_int(txtScrollMinX.Text, ref Min.X);
-                modIO.InvariantParse_int(txtScrollMinY.Text, ref Min.Y);
-                modIO.InvariantParse_uint(txtScrollMaxX.Text, Max.X);
-                modIO.InvariantParse_uint(txtScrollMaxY.Text, Max.Y);
+                IOUtil.InvariantParse_int(txtScrollMinX.Text, ref Min.X);
+                IOUtil.InvariantParse_int(txtScrollMinY.Text, ref Min.Y);
+                IOUtil.InvariantParse_uint(txtScrollMaxX.Text, Max.X);
+                IOUtil.InvariantParse_uint(txtScrollMaxY.Text, Max.Y);
             }
         }
     }
