@@ -1,11 +1,12 @@
 using System;
 using System.Windows.Forms;
+using SharpFlame.Collections;
 
 namespace SharpFlame
 {
     public partial class frmKeyboardControl
     {
-        public modLists.SimpleList<clsContainer<Keys>> Results = new modLists.SimpleList<clsContainer<Keys>>();
+        public SimpleList<clsContainer<Keys>> Results = new SimpleList<clsContainer<Keys>>();
 
         public frmKeyboardControl()
         {

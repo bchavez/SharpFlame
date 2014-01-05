@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using SharpFlame.Collections;
 
 namespace SharpFlame
 {
@@ -120,8 +121,8 @@ namespace SharpFlame
             {
                 NewSettings.set_Changes(modSettings.Setting_UndoLimit, new clsOptionProfile.clsChange<int>(intTemp));
             }
-            modLists.SimpleList<string> tilesetPaths = new modLists.SimpleList<string>();
-            modLists.SimpleList<string> objectsPaths = new modLists.SimpleList<string>();
+            SimpleList<string> tilesetPaths = new SimpleList<string>();
+            SimpleList<string> objectsPaths = new SimpleList<string>();
             string[] controlTilesetPaths = TilesetsPathSet.GetPaths;
             string[] controlobjectsPaths = ObjectDataPathSet.GetPaths;
             for ( int i = 0; i <= controlTilesetPaths.GetUpperBound(0); i++ )
@@ -132,8 +133,8 @@ namespace SharpFlame
             {
                 objectsPaths.Add(controlobjectsPaths[i]);
             }
-            NewSettings.set_Changes(modSettings.Setting_TilesetDirectories, new clsOptionProfile.clsChange<modLists.SimpleList<string>>(tilesetPaths));
-            NewSettings.set_Changes(modSettings.Setting_ObjectDataDirectories, new clsOptionProfile.clsChange<modLists.SimpleList<string>>(objectsPaths));
+            NewSettings.set_Changes(modSettings.Setting_TilesetDirectories, new clsOptionProfile.clsChange<SimpleList<string>>(tilesetPaths));
+            NewSettings.set_Changes(modSettings.Setting_ObjectDataDirectories, new clsOptionProfile.clsChange<SimpleList<string>>(objectsPaths));
             NewSettings.set_Changes(modSettings.Setting_DefaultTilesetsPathNum, new clsOptionProfile.clsChange<int>(TilesetsPathSet.SelectedNum));
             NewSettings.set_Changes(modSettings.Setting_DefaultObjectDataPathNum, new clsOptionProfile.clsChange<int>(ObjectDataPathSet.SelectedNum));
             if ( modIO.InvariantParse_int(txtMapBPP.Text, ref intTemp) )

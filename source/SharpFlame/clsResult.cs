@@ -1,4 +1,5 @@
 using System.Windows.Forms;
+using SharpFlame.Collections;
 
 namespace SharpFlame
 {
@@ -45,7 +46,7 @@ namespace SharpFlame
             }
         }
 
-        private modLists.SimpleList<clsResultItemInterface> Items = new modLists.SimpleList<clsResultItemInterface>();
+        private SimpleList<clsResultItemInterface> Items = new SimpleList<clsResultItemInterface>();
         private bool Bad = false;
 
         public bool HasWarnings

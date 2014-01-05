@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
+using SharpFlame.Collections;
 
 namespace SharpFlame
 {
@@ -11,14 +12,14 @@ namespace SharpFlame
         {
             public clsUnit()
             {
-                MapLink = new modLists.ConnectedListLink<clsUnit, clsMap>(this);
-                MapSelectedUnitLink = new modLists.ConnectedListLink<clsUnit, clsMap>(this);
-                Sectors = new modLists.ConnectedList<clsUnitSectorConnection, clsUnit>(this);
+                MapLink = new ConnectedListLink<clsUnit, clsMap>(this);
+                MapSelectedUnitLink = new ConnectedListLink<clsUnit, clsMap>(this);
+                Sectors = new ConnectedList<clsUnitSectorConnection, clsUnit>(this);
             }
 
-            public modLists.ConnectedListLink<clsUnit, clsMap> MapLink;
-            public modLists.ConnectedListLink<clsUnit, clsMap> MapSelectedUnitLink;
-            public modLists.ConnectedList<clsUnitSectorConnection, clsUnit> Sectors;
+            public ConnectedListLink<clsUnit, clsMap> MapLink;
+            public ConnectedListLink<clsUnit, clsMap> MapSelectedUnitLink;
+            public ConnectedList<clsUnitSectorConnection, clsUnit> Sectors;
 
             public UInt32 ID;
             public clsUnitType Type;
@@ -43,9 +44,9 @@ namespace SharpFlame
 
             public clsUnit(clsUnit UnitToCopy, clsMap TargetMap)
             {
-                MapLink = new modLists.ConnectedListLink<clsUnit, clsMap>(this);
-                MapSelectedUnitLink = new modLists.ConnectedListLink<clsUnit, clsMap>(this);
-                Sectors = new modLists.ConnectedList<clsUnitSectorConnection, clsUnit>(this);
+                MapLink = new ConnectedListLink<clsUnit, clsMap>(this);
+                MapSelectedUnitLink = new ConnectedListLink<clsUnit, clsMap>(this);
+                Sectors = new ConnectedList<clsUnitSectorConnection, clsUnit>(this);
 
                 bool IsDesign = default(bool);
 
@@ -269,7 +270,7 @@ namespace SharpFlame
             }
         }
 
-        public modLists.ConnectedList<clsUnit, clsMap> Units;
+        public ConnectedList<clsUnit, clsMap> Units;
 
         public class clsUnitSectorConnection
         {
@@ -279,7 +280,7 @@ namespace SharpFlame
                 _SectorLink = new Link<clsSector>(this);
             }
 
-            protected class Link<SourceType> : modLists.ConnectedListLink<clsUnitSectorConnection, SourceType> where SourceType : class
+            protected class Link<SourceType> : ConnectedListLink<clsUnitSectorConnection, SourceType> where SourceType : class
             {
                 public Link(clsUnitSectorConnection Owner) : base(Owner)
                 {
@@ -396,10 +397,10 @@ namespace SharpFlame
         {
             public clsUnitGroup()
             {
-                MapLink = new modLists.ConnectedListLink<clsUnitGroup, clsMap>(this);
+                MapLink = new ConnectedListLink<clsUnitGroup, clsMap>(this);
             }
 
-            public modLists.ConnectedListLink<clsUnitGroup, clsMap> MapLink;
+            public ConnectedListLink<clsUnitGroup, clsMap> MapLink;
 
             public int WZ_StartPos = -1;
 
@@ -440,7 +441,7 @@ namespace SharpFlame
             }
         }
 
-        public modLists.ConnectedList<clsUnitGroup, clsMap> UnitGroups;
+        public ConnectedList<clsUnitGroup, clsMap> UnitGroups;
         public clsUnitGroup ScavengerUnitGroup;
 
         public UInt32 GetAvailableID()

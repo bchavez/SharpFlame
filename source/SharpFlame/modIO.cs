@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.VisualBasic;
+using SharpFlame.Collections;
 
 namespace SharpFlame
 {
@@ -358,7 +359,7 @@ namespace SharpFlame
             return null;
         }
 
-        public static modLists.SimpleList<string> BytesToLinesRemoveComments(BinaryReader reader)
+        public static SimpleList<string> BytesToLinesRemoveComments(BinaryReader reader)
         {
             char CurrentChar = (char)0;
             bool CurrentCharExists = default(bool);
@@ -367,7 +368,7 @@ namespace SharpFlame
             char PrevChar = (char)0;
             bool PrevCharExists = default(bool);
             string Line = "";
-            modLists.SimpleList<string> Result = new modLists.SimpleList<string>();
+            SimpleList<string> Result = new SimpleList<string>();
 
             do
             {

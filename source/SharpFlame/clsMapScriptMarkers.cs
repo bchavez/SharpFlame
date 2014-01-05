@@ -1,13 +1,14 @@
 using System;
 using System.Windows.Forms;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Collections;
 
 namespace SharpFlame
 {
     public partial class clsMap
     {
-        public modLists.ConnectedList<clsScriptPosition, clsMap> ScriptPositions;
-        public modLists.ConnectedList<clsScriptArea, clsMap> ScriptAreas;
+        public ConnectedList<clsScriptPosition, clsMap> ScriptPositions;
+        public ConnectedList<clsScriptArea, clsMap> ScriptAreas;
 
         public string GetDefaultScriptLabel(string Prefix)
         {
@@ -118,12 +119,12 @@ namespace SharpFlame
         {
             public clsScriptPosition()
             {
-                _ParentMapLink = new modLists.ConnectedListLink<clsScriptPosition, clsMap>(this);
+                _ParentMapLink = new ConnectedListLink<clsScriptPosition, clsMap>(this);
             }
 
-            private modLists.ConnectedListLink<clsScriptPosition, clsMap> _ParentMapLink;
+            private ConnectedListLink<clsScriptPosition, clsMap> _ParentMapLink;
 
-            public modLists.ConnectedListLink<clsScriptPosition, clsMap> ParentMap
+            public ConnectedListLink<clsScriptPosition, clsMap> ParentMap
             {
                 get { return _ParentMapLink; }
             }
@@ -230,12 +231,12 @@ namespace SharpFlame
         {
             public clsScriptArea()
             {
-                _ParentMapLink = new modLists.ConnectedListLink<clsScriptArea, clsMap>(this);
+                _ParentMapLink = new ConnectedListLink<clsScriptArea, clsMap>(this);
             }
 
-            private modLists.ConnectedListLink<clsScriptArea, clsMap> _ParentMapLink;
+            private ConnectedListLink<clsScriptArea, clsMap> _ParentMapLink;
 
-            public modLists.ConnectedListLink<clsScriptArea, clsMap> ParentMap
+            public ConnectedListLink<clsScriptArea, clsMap> ParentMap
             {
                 get { return _ParentMapLink; }
             }

@@ -1,14 +1,15 @@
 using System;
 using Matrix3D;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Collections;
 
 namespace SharpFlame
 {
     public abstract class clsUnitType
     {
-        public readonly modLists.ConnectedListLink<clsUnitType, clsObjectData> UnitType_ObjectDataLink;
+        public readonly ConnectedListLink<clsUnitType, clsObjectData> UnitType_ObjectDataLink;
 
-        public readonly modLists.ConnectedListLink<clsUnitType, frmMain> UnitType_frmMainSelectedLink;
+        public readonly ConnectedListLink<clsUnitType, frmMain> UnitType_frmMainSelectedLink;
 
         public bool IsUnknown = false;
 
@@ -24,20 +25,20 @@ namespace SharpFlame
 
         public clsUnitType()
         {
-            UnitType_frmMainSelectedLink = new modLists.ConnectedListLink<clsUnitType, frmMain>(this);
-            UnitType_ObjectDataLink = new modLists.ConnectedListLink<clsUnitType, clsObjectData>(this);
+            UnitType_frmMainSelectedLink = new ConnectedListLink<clsUnitType, frmMain>(this);
+            UnitType_ObjectDataLink = new ConnectedListLink<clsUnitType, clsObjectData>(this);
         }
 
         public class clsAttachment
         {
             public modMath.sXYZ_sng Pos_Offset;
             public Matrix3DMath.Matrix3D AngleOffsetMatrix = new Matrix3DMath.Matrix3D();
-            public modLists.SimpleClassList<clsModel> Models = new modLists.SimpleClassList<clsModel>();
-            public modLists.SimpleClassList<clsAttachment> Attachments = new modLists.SimpleClassList<clsAttachment>();
+            public SimpleClassList<clsModel> Models = new SimpleClassList<clsModel>();
+            public SimpleClassList<clsAttachment> Attachments = new SimpleClassList<clsAttachment>();
 
             public clsAttachment()
             {
-                Models.AddNothingAction = modLists.SimpleClassList_AddNothingAction.DisallowIgnore;
+                Models.AddNullItemBehavior = AddNullItemBehavior.DisallowIgnore;
                 Matrix3DMath.MatrixSetToIdentity(AngleOffsetMatrix);
             }
 
@@ -285,7 +286,7 @@ namespace SharpFlame
 
     public class clsFeatureType : clsUnitType
     {
-        public modLists.ConnectedListLink<clsFeatureType, clsObjectData> FeatureType_ObjectDataLink;
+        public ConnectedListLink<clsFeatureType, clsObjectData> FeatureType_ObjectDataLink;
 
         public string Code = "";
         public string Name = "Unknown";
@@ -303,7 +304,7 @@ namespace SharpFlame
 
         public clsFeatureType()
         {
-            FeatureType_ObjectDataLink = new modLists.ConnectedListLink<clsFeatureType, clsObjectData>(this);
+            FeatureType_ObjectDataLink = new ConnectedListLink<clsFeatureType, clsObjectData>(this);
 
 
             Type = enumType.Feature;
@@ -325,7 +326,7 @@ namespace SharpFlame
 
     public class clsStructureType : clsUnitType
     {
-        public modLists.ConnectedListLink<clsStructureType, clsObjectData> StructureType_ObjectDataLink;
+        public ConnectedListLink<clsStructureType, clsObjectData> StructureType_ObjectDataLink;
 
         public string Code = "";
         public string Name = "Unknown";
@@ -358,15 +359,15 @@ namespace SharpFlame
 
         public enumStructureType StructureType = enumStructureType.Unknown;
 
-        public modLists.ConnectedListLink<clsStructureType, clsWallType> WallLink;
+        public ConnectedListLink<clsStructureType, clsWallType> WallLink;
 
         public clsAttachment BaseAttachment = new clsAttachment();
         public clsModel StructureBasePlate;
 
         public clsStructureType()
         {
-            StructureType_ObjectDataLink = new modLists.ConnectedListLink<clsStructureType, clsObjectData>(this);
-            WallLink = new modLists.ConnectedListLink<clsStructureType, clsWallType>(this);
+            StructureType_ObjectDataLink = new ConnectedListLink<clsStructureType, clsObjectData>(this);
+            WallLink = new ConnectedListLink<clsStructureType, clsWallType>(this);
 
 
             Type = enumType.PlayerStructure;
@@ -1026,13 +1027,13 @@ namespace SharpFlame
 
     public class clsDroidTemplate : clsDroidDesign
     {
-        public modLists.ConnectedListLink<clsDroidTemplate, clsObjectData> DroidTemplate_ObjectDataLink;
+        public ConnectedListLink<clsDroidTemplate, clsObjectData> DroidTemplate_ObjectDataLink;
 
         public string Code = "";
 
         public clsDroidTemplate()
         {
-            DroidTemplate_ObjectDataLink = new modLists.ConnectedListLink<clsDroidTemplate, clsObjectData>(this);
+            DroidTemplate_ObjectDataLink = new ConnectedListLink<clsDroidTemplate, clsObjectData>(this);
 
 
             IsTemplate = true;
@@ -1042,7 +1043,7 @@ namespace SharpFlame
 
     public class clsWallType
     {
-        public modLists.ConnectedListLink<clsWallType, clsObjectData> WallType_ObjectDataLink;
+        public ConnectedListLink<clsWallType, clsObjectData> WallType_ObjectDataLink;
 
         public string Code = "";
         public string Name = "Unknown";
@@ -1054,12 +1055,12 @@ namespace SharpFlame
         private const int d3 = 270;
         public int[] TileWalls_Direction = new int[] {d0, d0, d2, d0, d3, d0, d3, d0, d1, d1, d2, d2, d3, d1, d3, d0};
 
-        public modLists.ConnectedList<clsStructureType, clsWallType> Segments;
+        public ConnectedList<clsStructureType, clsWallType> Segments;
 
         public clsWallType()
         {
-            WallType_ObjectDataLink = new modLists.ConnectedListLink<clsWallType, clsObjectData>(this);
-            Segments = new modLists.ConnectedList<clsStructureType, clsWallType>(this);
+            WallType_ObjectDataLink = new ConnectedListLink<clsWallType, clsObjectData>(this);
+            Segments = new ConnectedList<clsStructureType, clsWallType>(this);
 
 
             Segments.MaintainOrder = true;

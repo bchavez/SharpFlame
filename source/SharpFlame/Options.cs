@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
+using SharpFlame.Collections;
 
 namespace SharpFlame
 {
@@ -9,15 +10,15 @@ namespace SharpFlame
     {
         public clsOptionGroup()
         {
-            Options = new modLists.ConnectedList<clsOptionInterface, clsOptionGroup>(this);
+            Options = new ConnectedList<clsOptionInterface, clsOptionGroup>(this);
         }
 
-        public modLists.ConnectedList<clsOptionInterface, clsOptionGroup> Options;
+        public ConnectedList<clsOptionInterface, clsOptionGroup> Options;
     }
 
     public abstract class clsOptionInterface
     {
-        public abstract modLists.ConnectedListLink<clsOptionInterface, clsOptionGroup> GroupLink { get; }
+        public abstract ConnectedListLink<clsOptionInterface, clsOptionGroup> GroupLink { get; }
 
         public abstract string SaveKey { get; }
         public abstract object DefaultValueObject { get; }
@@ -26,9 +27,9 @@ namespace SharpFlame
 
     public class clsOption<ValueType> : clsOptionInterface
     {
-        private modLists.ConnectedListLink<clsOptionInterface, clsOptionGroup> _GroupLink;
+        private ConnectedListLink<clsOptionInterface, clsOptionGroup> _GroupLink;
 
-        public override modLists.ConnectedListLink<clsOptionInterface, clsOptionGroup> GroupLink
+        public override ConnectedListLink<clsOptionInterface, clsOptionGroup> GroupLink
         {
             get { return _GroupLink; }
         }
@@ -43,7 +44,7 @@ namespace SharpFlame
 
         public clsOption(string saveKey, ValueType defaultValue)
         {
-            _GroupLink = new modLists.ConnectedListLink<clsOptionInterface, clsOptionGroup>(this);
+            _GroupLink = new ConnectedListLink<clsOptionInterface, clsOptionGroup>(this);
 
 
             _SaveKey = saveKey;
@@ -214,9 +215,9 @@ namespace SharpFlame
                         }
                     }
                 }
-                else if ( item is clsOption<modLists.SimpleList<string>> )
+                else if ( item is clsOption<SimpleList<string>> )
                 {
-                    modLists.SimpleList<string> list = (modLists.SimpleList<string>)optionValue;
+                    SimpleList<string> list = (SimpleList<string>)optionValue;
                     for ( int i = 0; i <= list.Count - 1; i++ )
                     {
                         file.Property_Append(item.SaveKey, list[i]);
@@ -345,17 +346,17 @@ namespace SharpFlame
                     set_Changes(item, new clsChange<clsKeyboardControl>(control));
                     return clsINIRead.enumTranslatorResult.Translated;
                 }
-                else if ( item is clsOption<modLists.SimpleList<string>> )
+                else if ( item is clsOption<SimpleList<string>> )
                 {
-                    modLists.SimpleList<string> list = default(modLists.SimpleList<string>);
+                    SimpleList<string> list = default(SimpleList<string>);
                     if ( get_Changes(item) == null )
                     {
-                        list = new modLists.SimpleList<string>();
-                        set_Changes(item, new clsChange<modLists.SimpleList<string>>(list));
+                        list = new SimpleList<string>();
+                        set_Changes(item, new clsChange<SimpleList<string>>(list));
                     }
                     else
                     {
-                        list = (modLists.SimpleList<string>)(get_Changes(item).ValueObject);
+                        list = (SimpleList<string>)(get_Changes(item).ValueObject);
                     }
                     list.Add(INIProperty.Value);
                     return clsINIRead.enumTranslatorResult.Translated;

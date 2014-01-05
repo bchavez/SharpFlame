@@ -1,3 +1,5 @@
+using SharpFlame.Collections;
+
 namespace SharpFlame
 {
     public partial class clsMap
@@ -5,7 +7,7 @@ namespace SharpFlame
         public class clsPointChanges
         {
             public bool[,] PointIsChanged;
-            public modLists.SimpleList<modMath.clsXY_int> ChangedPoints = new modLists.SimpleList<modMath.clsXY_int>();
+            public SimpleList<modMath.clsXY_int> ChangedPoints = new SimpleList<modMath.clsXY_int>();
 
             public clsPointChanges(modMath.sXY_int PointSize)
             {

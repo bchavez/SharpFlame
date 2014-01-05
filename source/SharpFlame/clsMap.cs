@@ -6,12 +6,13 @@ using Matrix3D;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.Devices;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Collections;
 
 namespace SharpFlame
 {
     public partial class clsMap
     {
-        public modLists.ConnectedListLink<clsMap, frmMain> frmMainLink;
+        public ConnectedListLink<clsMap, frmMain> frmMainLink;
 
         public class clsTerrain
         {
@@ -129,13 +130,13 @@ namespace SharpFlame
         {
             public clsSector()
             {
-                Units = new modLists.ConnectedList<clsUnitSectorConnection, clsSector>(this);
+                Units = new ConnectedList<clsUnitSectorConnection, clsSector>(this);
             }
 
             public modMath.sXY_int Pos;
             public int GLList_Textured;
             public int GLList_Wireframe;
-            public modLists.ConnectedList<clsUnitSectorConnection, clsSector> Units;
+            public ConnectedList<clsUnitSectorConnection, clsSector> Units;
 
             public void DeleteLists()
             {
@@ -158,7 +159,7 @@ namespace SharpFlame
 
             public clsSector(modMath.sXY_int NewPos)
             {
-                Units = new modLists.ConnectedList<clsUnitSectorConnection, clsSector>(this);
+                Units = new ConnectedList<clsUnitSectorConnection, clsSector>(this);
 
 
                 Pos = NewPos;
@@ -203,16 +204,16 @@ namespace SharpFlame
         public class clsUndo
         {
             public string Name;
-            public modLists.SimpleList<clsShadowSector> ChangedSectors = new modLists.SimpleList<clsShadowSector>();
-            public modLists.SimpleList<clsUnitChange> UnitChanges = new modLists.SimpleList<clsUnitChange>();
-            public modLists.SimpleList<clsGatewayChange> GatewayChanges = new modLists.SimpleList<clsGatewayChange>();
+            public SimpleList<clsShadowSector> ChangedSectors = new SimpleList<clsShadowSector>();
+            public SimpleList<clsUnitChange> UnitChanges = new SimpleList<clsUnitChange>();
+            public SimpleList<clsGatewayChange> GatewayChanges = new SimpleList<clsGatewayChange>();
         }
 
-        public modLists.SimpleClassList<clsUndo> Undos;
+        public SimpleClassList<clsUndo> Undos;
         public int UndoPosition;
 
-        public modLists.SimpleClassList<clsUnitChange> UnitChanges;
-        public modLists.SimpleClassList<clsGatewayChange> GatewayChanges;
+        public SimpleClassList<clsUnitChange> UnitChanges;
+        public SimpleClassList<clsGatewayChange> GatewayChanges;
 
         public int HeightMultiplier = modProgram.DefaultHeightMultiplier;
 
@@ -223,7 +224,7 @@ namespace SharpFlame
 
         private bool _ReadyForUserInput = false;
 
-        public modLists.ConnectedList<clsUnit, clsMap> SelectedUnits;
+        public ConnectedList<clsUnit, clsMap> SelectedUnits;
         public modMath.clsXY_int Selected_Tile_A;
         public modMath.clsXY_int Selected_Tile_B;
         public modMath.clsXY_int Selected_Area_VertexA;
@@ -244,7 +245,7 @@ namespace SharpFlame
             }
         }
 
-        public modLists.SimpleClassList<clsMessage> Messages;
+        public SimpleClassList<clsMessage> Messages;
 
         public clsTileset Tileset;
 
@@ -306,10 +307,10 @@ namespace SharpFlame
         {
             public clsGateway()
             {
-                MapLink = new modLists.ConnectedListLink<clsGateway, clsMap>(this);
+                MapLink = new ConnectedListLink<clsGateway, clsMap>(this);
             }
 
-            public modLists.ConnectedListLink<clsGateway, clsMap> MapLink;
+            public ConnectedListLink<clsGateway, clsMap> MapLink;
             public modMath.sXY_int PosA;
             public modMath.sXY_int PosB;
 
@@ -333,12 +334,12 @@ namespace SharpFlame
             }
         }
 
-        public modLists.ConnectedList<clsGateway, clsMap> Gateways;
+        public ConnectedList<clsGateway, clsMap> Gateways;
 
         public clsMap()
         {
-            frmMainLink = new modLists.ConnectedListLink<clsMap, frmMain>(this);
-            Gateways = new modLists.ConnectedList<clsGateway, clsMap>(this);
+            frmMainLink = new ConnectedListLink<clsMap, frmMain>(this);
+            Gateways = new ConnectedList<clsGateway, clsMap>(this);
 
 
             Initialize();
@@ -346,8 +347,8 @@ namespace SharpFlame
 
         public clsMap(modMath.sXY_int TileSize)
         {
-            frmMainLink = new modLists.ConnectedListLink<clsMap, frmMain>(this);
-            Gateways = new modLists.ConnectedList<clsGateway, clsMap>(this);
+            frmMainLink = new ConnectedListLink<clsMap, frmMain>(this);
+            Gateways = new ConnectedList<clsGateway, clsMap>(this);
 
 
             Initialize();
@@ -369,8 +370,8 @@ namespace SharpFlame
 
         public clsMap(clsMap MapToCopy, modMath.sXY_int Offset, modMath.sXY_int Area)
         {
-            frmMainLink = new modLists.ConnectedListLink<clsMap, frmMain>(this);
-            Gateways = new modLists.ConnectedList<clsGateway, clsMap>(this);
+            frmMainLink = new ConnectedListLink<clsMap, frmMain>(this);
+            Gateways = new ConnectedList<clsGateway, clsMap>(this);
 
             int EndX = 0;
             int EndY = 0;
@@ -1652,7 +1653,7 @@ namespace SharpFlame
             modMath.sXY_int SectorNum = new modMath.sXY_int();
             clsShadowSector CurrentSector = default(clsShadowSector);
             clsShadowSector UndoSector = default(clsShadowSector);
-            modLists.SimpleList<clsShadowSector> NewSectorsForThisUndo = new modLists.SimpleList<clsShadowSector>();
+            SimpleList<clsShadowSector> NewSectorsForThisUndo = new SimpleList<clsShadowSector>();
             foreach ( clsShadowSector tempLoopVar_UndoSector in ThisUndo.ChangedSectors )
             {
                 UndoSector = tempLoopVar_UndoSector;
@@ -1733,7 +1734,7 @@ namespace SharpFlame
             modMath.sXY_int SectorNum = new modMath.sXY_int();
             clsShadowSector CurrentSector = default(clsShadowSector);
             clsShadowSector UndoSector = default(clsShadowSector);
-            modLists.SimpleList<clsShadowSector> NewSectorsForThisUndo = new modLists.SimpleList<clsShadowSector>();
+            SimpleList<clsShadowSector> NewSectorsForThisUndo = new SimpleList<clsShadowSector>();
             foreach ( clsShadowSector tempLoopVar_UndoSector in ThisUndo.ChangedSectors )
             {
                 UndoSector = tempLoopVar_UndoSector;
@@ -1983,7 +1984,7 @@ namespace SharpFlame
 
             if ( DeleteUnits )
             {
-                modLists.SimpleList<clsUnit> UnitsToDelete = new modLists.SimpleList<clsUnit>();
+                SimpleList<clsUnit> UnitsToDelete = new SimpleList<clsUnit>();
                 int UnitToDeleteCount = 0;
                 clsUnit Unit = default(clsUnit);
                 for ( Y = SectorStart.Y; Y <= SectorFinish.Y; Y++ )
@@ -2366,15 +2367,15 @@ namespace SharpFlame
             AutoTextureChanges = new clsAutoTextureChanges(this);
             TerrainInterpretChanges = new clsTerrainUpdate(Terrain.TileSize);
 
-            UnitChanges = new modLists.SimpleClassList<clsUnitChange>();
+            UnitChanges = new SimpleClassList<clsUnitChange>();
             UnitChanges.MaintainOrder = true;
-            GatewayChanges = new modLists.SimpleClassList<clsGatewayChange>();
+            GatewayChanges = new SimpleClassList<clsGatewayChange>();
             GatewayChanges.MaintainOrder = true;
-            Undos = new modLists.SimpleClassList<clsUndo>();
+            Undos = new SimpleClassList<clsUndo>();
             Undos.MaintainOrder = true;
             UndoPosition = 0;
 
-            SelectedUnits = new modLists.ConnectedList<clsUnit, clsMap>(this);
+            SelectedUnits = new ConnectedList<clsUnit, clsMap>(this);
 
             if ( InterfaceOptions == null )
             {
@@ -2386,7 +2387,7 @@ namespace SharpFlame
             _SelectedUnitGroup = new clsUnitGroupContainer();
             SelectedUnitGroup.Item = ScavengerUnitGroup;
 
-            Messages = new modLists.SimpleClassList<clsMessage>();
+            Messages = new SimpleClassList<clsMessage>();
             Messages.MaintainOrder = true;
         }
 
@@ -3705,8 +3706,8 @@ namespace SharpFlame
             modMath.sXY_int UnitTile = new modMath.sXY_int();
             modMath.sXY_int Difference = new modMath.sXY_int();
             modProgram.enumTileWalls TileWalls = modProgram.enumTileWalls.None;
-            modLists.SimpleList<clsUnit> Walls = new modLists.SimpleList<clsUnit>();
-            modLists.SimpleList<clsUnit> Removals = new modLists.SimpleList<clsUnit>();
+            SimpleList<clsUnit> Walls = new SimpleList<clsUnit>();
+            SimpleList<clsUnit> Removals = new SimpleList<clsUnit>();
             clsUnitType UnitType = default(clsUnitType);
             clsStructureType StructureType = default(clsStructureType);
             int X = 0;

@@ -6,6 +6,7 @@ using Matrix3D;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.ApplicationServices;
 using Microsoft.VisualBasic.Devices;
+using SharpFlame.Collections;
 
 namespace SharpFlame
 {
@@ -69,7 +70,7 @@ namespace SharpFlame
 
         public static Icon ProgramIcon;
 
-        public static modLists.SimpleList<string> CommandLinePaths = new modLists.SimpleList<string>();
+        public static SimpleList<string> CommandLinePaths = new SimpleList<string>();
 
         public static int GLTexture_NoTile;
         public static int GLTexture_OverflowTile;
@@ -99,7 +100,7 @@ namespace SharpFlame
             public sRGB_sng DisplayColour;
         }
 
-        public static modLists.SimpleList<clsTileType> TileTypes = new modLists.SimpleList<clsTileType>();
+        public static SimpleList<clsTileType> TileTypes = new SimpleList<clsTileType>();
 
         public const int TileTypeNum_Water = 7;
         public const int TileTypeNum_Cliff = 8;
@@ -162,7 +163,7 @@ namespace SharpFlame
 
         public static clsMap Copied_Map;
 
-        public static modLists.SimpleList<clsTileset> Tilesets = new modLists.SimpleList<clsTileset>();
+        public static SimpleList<clsTileset> Tilesets = new SimpleList<clsTileset>();
 
         public static clsTileset Tileset_Arizona;
         public static clsTileset Tileset_Urban;
@@ -767,7 +768,7 @@ namespace SharpFlame
 
         public static sLayerList LayerList;
 
-        public static Position.XY_dbl CalcUnitsCentrePos(modLists.SimpleList<clsMap.clsUnit> Units)
+        public static Position.XY_dbl CalcUnitsCentrePos(SimpleList<clsMap.clsUnit> Units)
         {
             Position.XY_dbl Result = default(Position.XY_dbl);
 

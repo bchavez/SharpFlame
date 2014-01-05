@@ -112,6 +112,14 @@
     <Compile Include="clsGeneratorTileset.cs" />
     <Compile Include="clsHeightmap.cs" />
     <Compile Include="clsMapRender.cs" />
+    <Compile Include="Collections\ConnectedList.cs" />
+    <Compile Include="Collections\ConnectedListItem.cs" />
+    <Compile Include="Collections\ConnectedListItemList.cs" />
+    <Compile Include="Collections\ConnectedListLink.cs" />
+    <Compile Include="Collections\SimpleClassList.cs" />
+    <Compile Include="Collections\AddNullItemBehavior.cs" />
+    <Compile Include="Collections\SimpleList.cs" />
+    <Compile Include="Collections\SimpleListTool.cs" />
     <Compile Include="frmKeyboardControl.Designer.cs">
       <DependentUpon>frmKeyboardControl.cs</DependentUpon>
     </Compile>
@@ -230,7 +238,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GLFont.cs" />
-    <Compile Include="modLists.cs" />
+    <Compile Include="Collections\ListUtil.cs" />
     <Compile Include="modBitmap.cs" />
     <Compile Include="modGenerator.cs" />
     <Compile Include="INI.cs" />

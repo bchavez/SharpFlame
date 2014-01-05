@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using Microsoft.VisualBasic;
+using SharpFlame.Collections;
 
 namespace SharpFlame
 {
@@ -521,10 +522,10 @@ namespace SharpFlame
                 int A = 0;
                 int B = 0;
                 int Tile_Num = 0;
-                modLists.SimpleList<string> LineData = default(modLists.SimpleList<string>);
+                SimpleList<string> LineData = default(SimpleList<string>);
                 int Line_Num = 0;
                 sLNDTile[] LNDTile = null;
-                modLists.SimpleList<clsLNDObject> LNDObjects = new modLists.SimpleList<clsLNDObject>();
+                SimpleList<clsLNDObject> LNDObjects = new SimpleList<clsLNDObject>();
                 clsUnitAdd UnitAdd = new clsUnitAdd();
 
                 UnitAdd.Map = this;
@@ -554,7 +555,7 @@ namespace SharpFlame
                 string[] GateText = new string[4];
                 string[] TileTypeText = new string[256];
                 int LNDTileTypeCount = 0;
-                modLists.SimpleList<clsGateway> LNDGates = new modLists.SimpleList<clsGateway>();
+                SimpleList<clsGateway> LNDGates = new SimpleList<clsGateway>();
                 clsGateway Gateway = default(clsGateway);
                 int C = 0;
                 int D = 0;

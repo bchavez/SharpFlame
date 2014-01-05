@@ -10,17 +10,18 @@ using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.ApplicationServices;
 using Microsoft.VisualBasic.CompilerServices;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Collections;
 using Timer = System.Windows.Forms.Timer;
 
 namespace SharpFlame
 {
     public partial class frmMain
     {
-        public class clsMaps : modLists.ConnectedList<clsMap, frmMain>
+        public class clsMaps : ConnectedList<clsMap, frmMain>
         {
             private clsMap _MainMap;
 
-            public override void Add(modLists.ConnectedListItem<clsMap, frmMain> NewItem)
+            public override void Add(ConnectedListItem<clsMap, frmMain> NewItem)
             {
                 clsMap NewMap = NewItem.Item;
 
@@ -112,7 +113,7 @@ namespace SharpFlame
 
         public byte[] HeightSetPalette = new byte[8];
 
-        public modLists.ConnectedList<clsUnitType, frmMain> SelectedObjectTypes;
+        public ConnectedList<clsUnitType, frmMain> SelectedObjectTypes;
 
         public modProgram.enumTextureTerrainAction TextureTerrainAction = modProgram.enumTextureTerrainAction.Reinterpret;
 
@@ -132,7 +133,7 @@ namespace SharpFlame
         public frmMain()
         {
             _LoadedMaps = new clsMaps(this);
-            SelectedObjectTypes = new modLists.ConnectedList<clsUnitType, frmMain>(this);
+            SelectedObjectTypes = new ConnectedList<clsUnitType, frmMain>(this);
 
             InitializeComponent();
 
@@ -435,7 +436,7 @@ namespace SharpFlame
             }
 
             int TilesetNum = Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultTilesetsPathNum));
-            modLists.SimpleList<string> TilesetsList = (modLists.SimpleList<string>)(modSettings.Settings.get_Value(modSettings.Setting_TilesetDirectories));
+            SimpleList<string> TilesetsList = (SimpleList<string>)(modSettings.Settings.get_Value(modSettings.Setting_TilesetDirectories));
             if ( TilesetNum >= 0 & TilesetNum < TilesetsList.Count )
             {
                 string TilesetsPath = TilesetsList[TilesetNum];
@@ -456,7 +457,7 @@ namespace SharpFlame
 
             modProgram.ObjectData = new clsObjectData();
             int ObjectDataNum = Convert.ToInt32(modSettings.Settings.get_Value(modSettings.Setting_DefaultObjectDataPathNum));
-            modLists.SimpleList<string> ObjectDataList = (modLists.SimpleList<string>)(modSettings.Settings.get_Value(modSettings.Setting_ObjectDataDirectories));
+            SimpleList<string> ObjectDataList = (SimpleList<string>)(modSettings.Settings.get_Value(modSettings.Setting_ObjectDataDirectories));
             if ( ObjectDataNum >= 0 & ObjectDataNum < TilesetsList.Count )
             {
                 string ObjectDataPath = ObjectDataList[ObjectDataNum];
@@ -1427,9 +1428,9 @@ namespace SharpFlame
             }
         }
 
-        private void ObjectListFill<ObjectType>(modLists.SimpleList<ObjectType> objects, DataGridView gridView) where ObjectType : clsUnitType
+        private void ObjectListFill<ObjectType>(SimpleList<ObjectType> objects, DataGridView gridView) where ObjectType : clsUnitType
         {
-            modLists.SimpleList<ObjectType> filtered = default(modLists.SimpleList<ObjectType>);
+            SimpleList<ObjectType> filtered = default(SimpleList<ObjectType>);
             string searchText = txtObjectFind.Text;
             bool doSearch = default(bool);
             if ( searchText == null )
@@ -1477,9 +1478,9 @@ namespace SharpFlame
 #endif
         }
 
-        public modLists.SimpleList<ItemType> ObjectFindText<ItemType>(modLists.SimpleList<ItemType> list, string text) where ItemType : clsUnitType
+        public SimpleList<ItemType> ObjectFindText<ItemType>(SimpleList<ItemType> list, string text) where ItemType : clsUnitType
         {
-            modLists.SimpleList<ItemType> result = new modLists.SimpleList<ItemType>();
+            SimpleList<ItemType> result = new SimpleList<ItemType>();
             result.MaintainOrder = true;
 
             text = text.ToLower();
@@ -4372,7 +4373,7 @@ namespace SharpFlame
                 return;
             }
 
-            modLists.SimpleClassList<clsMap.clsUnit> OilList = new modLists.SimpleClassList<clsMap.clsUnit>();
+            SimpleClassList<clsMap.clsUnit> OilList = new SimpleClassList<clsMap.clsUnit>();
             clsMap.clsUnit Unit = default(clsMap.clsUnit);
             foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.Units )
             {
@@ -4398,7 +4399,7 @@ namespace SharpFlame
                 return;
             }
 
-            modLists.SimpleClassList<clsMap.clsUnit> StructureList = new modLists.SimpleClassList<clsMap.clsUnit>();
+            SimpleClassList<clsMap.clsUnit> StructureList = new SimpleClassList<clsMap.clsUnit>();
             clsMap.clsUnit Unit = default(clsMap.clsUnit);
             foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.Units )
             {

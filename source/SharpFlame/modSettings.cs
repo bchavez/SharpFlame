@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using Microsoft.VisualBasic;
 using OpenTK;
+using SharpFlame.Collections;
 
 namespace SharpFlame
 {
@@ -102,8 +103,8 @@ namespace SharpFlame
         public static clsOption<int> Setting_TextureViewBPP;
         public static clsOption<int> Setting_MapViewDepth;
         public static clsOption<int> Setting_TextureViewDepth;
-        public static clsOption<modLists.SimpleList<string>> Setting_TilesetDirectories;
-        public static clsOption<modLists.SimpleList<string>> Setting_ObjectDataDirectories;
+        public static clsOption<SimpleList<string>> Setting_TilesetDirectories;
+        public static clsOption<SimpleList<string>> Setting_ObjectDataDirectories;
         public static clsOption<int> Setting_DefaultTilesetsPathNum;
         public static clsOption<int> Setting_DefaultObjectDataPathNum;
         public static clsOption<bool> Setting_PickOrientation;
@@ -241,14 +242,14 @@ namespace SharpFlame
                 get { return Convert.ToInt32(get_Value(Setting_TextureViewDepth)); }
             }
 
-            public modLists.SimpleList<string> TilesetDirectories
+            public SimpleList<string> TilesetDirectories
             {
-                get { return ((modLists.SimpleList<string>)(get_Value(Setting_TilesetDirectories))); }
+                get { return ((SimpleList<string>)(get_Value(Setting_TilesetDirectories))); }
             }
 
-            public modLists.SimpleList<string> ObjectDataDirectories
+            public SimpleList<string> ObjectDataDirectories
             {
-                get { return ((modLists.SimpleList<string>)(get_Value(Setting_ObjectDataDirectories))); }
+                get { return ((SimpleList<string>)(get_Value(Setting_ObjectDataDirectories))); }
             }
 
             public bool PickOrientation
@@ -326,8 +327,8 @@ namespace SharpFlame
             Setting_TextureViewBPP = CreateSetting<int>("TextureViewBPP", DisplayDevice.Default.BitsPerPixel);
             Setting_MapViewDepth = CreateSetting<int>("MapViewDepth", 24);
             Setting_TextureViewDepth = CreateSetting<int>("TextureViewDepth", 24);
-            Setting_TilesetDirectories = CreateSetting<modLists.SimpleList<string>>("TilesetsPath", new modLists.SimpleList<string>());
-            Setting_ObjectDataDirectories = CreateSetting<modLists.SimpleList<string>>("ObjectDataPath", new modLists.SimpleList<string>());
+            Setting_TilesetDirectories = CreateSetting<SimpleList<string>>("TilesetsPath", new SimpleList<string>());
+            Setting_ObjectDataDirectories = CreateSetting<SimpleList<string>>("ObjectDataPath", new SimpleList<string>());
             Setting_DefaultTilesetsPathNum = CreateSetting<int>("DefaultTilesetsPathNum", -1);
             Setting_DefaultObjectDataPathNum = CreateSetting<int>("DefaultObjectDataPathNum", -1);
             Setting_PickOrientation = CreateSetting<bool>("PickOrientation", true);

@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using SharpFlame.Collections;
 
 namespace SharpFlame
 {
@@ -47,7 +48,7 @@ namespace SharpFlame
             gbxTitle.Text = Title;
         }
 
-        public void SetPaths(modLists.SimpleList<string> NewPaths)
+        public void SetPaths(SimpleList<string> NewPaths)
         {
             int A = 0;
 

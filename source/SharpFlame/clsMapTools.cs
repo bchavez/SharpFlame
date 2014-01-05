@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using Microsoft.VisualBasic;
+using SharpFlame.Collections;
 
 namespace SharpFlame
 {
@@ -816,16 +817,16 @@ namespace SharpFlame
             public abstract void ActionPerform();
         }
 
-        public abstract class clsObjectAction : modLists.SimpleListTool<clsUnit>
+        public abstract class clsObjectAction : SimpleListTool<clsUnit>
         {
             public clsMap Map;
             public clsUnit Unit;
-            private modLists.SimpleClassList<clsUnit> _ResultUnits = new modLists.SimpleClassList<clsUnit>();
+            private SimpleClassList<clsUnit> _ResultUnits = new SimpleClassList<clsUnit>();
             public bool ActionPerformed;
 
             protected clsUnit ResultUnit;
 
-            public modLists.SimpleClassList<clsUnit> ResultUnits
+            public SimpleClassList<clsUnit> ResultUnits
             {
                 get { return _ResultUnits; }
             }
@@ -2344,7 +2345,7 @@ namespace SharpFlame
             }
         }
 
-        public class clsObjectSelect : modLists.SimpleListTool<clsUnit>
+        public class clsObjectSelect : SimpleListTool<clsUnit>
         {
             private clsUnit Unit;
 
@@ -2359,11 +2360,11 @@ namespace SharpFlame
             }
         }
 
-        public class clsObjectPriorityOrderList : modLists.SimpleListTool<clsUnit>
+        public class clsObjectPriorityOrderList : SimpleListTool<clsUnit>
         {
-            private modLists.SimpleClassList<clsUnit> _Result = new modLists.SimpleClassList<clsUnit>();
+            private SimpleClassList<clsUnit> _Result = new SimpleClassList<clsUnit>();
 
-            public modLists.SimpleClassList<clsUnit> Result
+            public SimpleClassList<clsUnit> Result
             {
                 get { return _Result; }
             }
@@ -2395,7 +2396,7 @@ namespace SharpFlame
             }
         }
 
-        public class clsObjectFlattenTerrain : modLists.SimpleListTool<clsUnit>
+        public class clsObjectFlattenTerrain : SimpleListTool<clsUnit>
         {
             private clsUnit Unit;
 
@@ -2451,7 +2452,7 @@ namespace SharpFlame
             }
         }
 
-        public class clsStructureWriteWZ : modLists.SimpleListTool<clsUnit>
+        public class clsStructureWriteWZ : SimpleListTool<clsUnit>
         {
             public BinaryWriter File;
             public sWrite_WZ_Args.enumCompileType CompileType;

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using Microsoft.VisualBasic;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Collections;
 
 namespace SharpFlame
 {
@@ -10,39 +11,39 @@ namespace SharpFlame
     {
         public clsObjectData()
         {
-            UnitTypes = new modLists.ConnectedList<clsUnitType, clsObjectData>(this);
-            FeatureTypes = new modLists.ConnectedList<clsFeatureType, clsObjectData>(this);
-            StructureTypes = new modLists.ConnectedList<clsStructureType, clsObjectData>(this);
-            DroidTemplates = new modLists.ConnectedList<clsDroidTemplate, clsObjectData>(this);
-            WallTypes = new modLists.ConnectedList<clsWallType, clsObjectData>(this);
-            Bodies = new modLists.ConnectedList<clsBody, clsObjectData>(this);
-            Propulsions = new modLists.ConnectedList<clsPropulsion, clsObjectData>(this);
-            Turrets = new modLists.ConnectedList<clsTurret, clsObjectData>(this);
-            Weapons = new modLists.ConnectedList<clsWeapon, clsObjectData>(this);
-            Sensors = new modLists.ConnectedList<clsSensor, clsObjectData>(this);
-            Repairs = new modLists.ConnectedList<clsRepair, clsObjectData>(this);
-            Constructors = new modLists.ConnectedList<clsConstruct, clsObjectData>(this);
-            Brains = new modLists.ConnectedList<clsBrain, clsObjectData>(this);
-            ECMs = new modLists.ConnectedList<clsECM, clsObjectData>(this);
+            UnitTypes = new ConnectedList<clsUnitType, clsObjectData>(this);
+            FeatureTypes = new ConnectedList<clsFeatureType, clsObjectData>(this);
+            StructureTypes = new ConnectedList<clsStructureType, clsObjectData>(this);
+            DroidTemplates = new ConnectedList<clsDroidTemplate, clsObjectData>(this);
+            WallTypes = new ConnectedList<clsWallType, clsObjectData>(this);
+            Bodies = new ConnectedList<clsBody, clsObjectData>(this);
+            Propulsions = new ConnectedList<clsPropulsion, clsObjectData>(this);
+            Turrets = new ConnectedList<clsTurret, clsObjectData>(this);
+            Weapons = new ConnectedList<clsWeapon, clsObjectData>(this);
+            Sensors = new ConnectedList<clsSensor, clsObjectData>(this);
+            Repairs = new ConnectedList<clsRepair, clsObjectData>(this);
+            Constructors = new ConnectedList<clsConstruct, clsObjectData>(this);
+            Brains = new ConnectedList<clsBrain, clsObjectData>(this);
+            ECMs = new ConnectedList<clsECM, clsObjectData>(this);
         }
 
-        public modLists.ConnectedList<clsUnitType, clsObjectData> UnitTypes;
+        public ConnectedList<clsUnitType, clsObjectData> UnitTypes;
 
-        public modLists.ConnectedList<clsFeatureType, clsObjectData> FeatureTypes;
-        public modLists.ConnectedList<clsStructureType, clsObjectData> StructureTypes;
-        public modLists.ConnectedList<clsDroidTemplate, clsObjectData> DroidTemplates;
+        public ConnectedList<clsFeatureType, clsObjectData> FeatureTypes;
+        public ConnectedList<clsStructureType, clsObjectData> StructureTypes;
+        public ConnectedList<clsDroidTemplate, clsObjectData> DroidTemplates;
 
-        public modLists.ConnectedList<clsWallType, clsObjectData> WallTypes;
+        public ConnectedList<clsWallType, clsObjectData> WallTypes;
 
-        public modLists.ConnectedList<clsBody, clsObjectData> Bodies;
-        public modLists.ConnectedList<clsPropulsion, clsObjectData> Propulsions;
-        public modLists.ConnectedList<clsTurret, clsObjectData> Turrets;
-        public modLists.ConnectedList<clsWeapon, clsObjectData> Weapons;
-        public modLists.ConnectedList<clsSensor, clsObjectData> Sensors;
-        public modLists.ConnectedList<clsRepair, clsObjectData> Repairs;
-        public modLists.ConnectedList<clsConstruct, clsObjectData> Constructors;
-        public modLists.ConnectedList<clsBrain, clsObjectData> Brains;
-        public modLists.ConnectedList<clsECM, clsObjectData> ECMs;
+        public ConnectedList<clsBody, clsObjectData> Bodies;
+        public ConnectedList<clsPropulsion, clsObjectData> Propulsions;
+        public ConnectedList<clsTurret, clsObjectData> Turrets;
+        public ConnectedList<clsWeapon, clsObjectData> Weapons;
+        public ConnectedList<clsSensor, clsObjectData> Sensors;
+        public ConnectedList<clsRepair, clsObjectData> Repairs;
+        public ConnectedList<clsConstruct, clsObjectData> Constructors;
+        public ConnectedList<clsBrain, clsObjectData> Brains;
+        public ConnectedList<clsECM, clsObjectData> ECMs;
 
         public class clsTexturePage
         {
@@ -50,7 +51,7 @@ namespace SharpFlame
             public int GLTexture_Num;
         }
 
-        public modLists.SimpleList<clsTexturePage> TexturePages = new modLists.SimpleList<clsTexturePage>();
+        public SimpleList<clsTexturePage> TexturePages = new SimpleList<clsTexturePage>();
 
         public class clsPIE
         {
@@ -65,7 +66,7 @@ namespace SharpFlame
             public int FieldCount = 0;
             public int UniqueField = 0;
 
-            public modLists.SimpleList<string[]> ResultData = new modLists.SimpleList<string[]>();
+            public SimpleList<string[]> ResultData = new SimpleList<string[]>();
 
             public bool CalcIsFieldCountValid()
             {
@@ -380,7 +381,7 @@ namespace SharpFlame
             SubDirFeaturePIE = SubDirPIEs;
             SubDirStructureWeapons = "stats" + Convert.ToString(modProgram.PlatformPathSeparator) + "structureweapons.txt";
 
-            modLists.SimpleList<clsTextFile> CommaFiles = new modLists.SimpleList<clsTextFile>();
+            SimpleList<clsTextFile> CommaFiles = new SimpleList<clsTextFile>();
 
             clsTextFile DataNames = new clsTextFile();
             DataNames.SubDirectory = SubDirNames;
@@ -553,7 +554,7 @@ namespace SharpFlame
             //load PIEs
 
             string[] PIE_Files = null;
-            modLists.SimpleList<clsPIE> PIE_List = new modLists.SimpleList<clsPIE>();
+            SimpleList<clsPIE> PIE_List = new SimpleList<clsPIE>();
             clsPIE NewPIE = default(clsPIE);
 
             try
@@ -914,7 +915,7 @@ namespace SharpFlame
                         if ( BaseAttachment.Models[0].ConnectorCount >= 1 )
                         {
                             Connector = BaseAttachment.Models[0].Connectors[0];
-                            modLists.SimpleList<string[]> StructureWeapons = default(modLists.SimpleList<string[]>);
+                            SimpleList<string[]> StructureWeapons = default(SimpleList<string[]>);
                             StructureWeapons = GetRowsWithValue(DataStructureWeapons.ResultData, StructureType.Code);
                             if ( StructureWeapons.Count > 0 )
                             {
@@ -1050,7 +1051,7 @@ namespace SharpFlame
                 LoadPartsArgs.Propulsion = FindPropulsionCode(Fields[7]);
                 LoadPartsArgs.Repair = FindRepairCode(Fields[8]);
                 LoadPartsArgs.Sensor = FindSensorCode(Fields[10]);
-                modLists.SimpleList<string[]> TemplateWeapons = GetRowsWithValue(DataAssignWeapons.ResultData, Template.Code);
+                SimpleList<string[]> TemplateWeapons = GetRowsWithValue(DataAssignWeapons.ResultData, Template.Code);
                 if ( TemplateWeapons.Count > 0 )
                 {
                     Text = Convert.ToString(TemplateWeapons[0][1]);
@@ -1086,9 +1087,9 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public modLists.SimpleList<string[]> GetRowsWithValue(modLists.SimpleList<string[]> TextLines, string Value)
+        public SimpleList<string[]> GetRowsWithValue(SimpleList<string[]> TextLines, string Value)
         {
-            modLists.SimpleList<string[]> Result = new modLists.SimpleList<string[]>();
+            SimpleList<string[]> Result = new SimpleList<string[]>();
 
             string[] Line = null;
             foreach ( string[] tempLoopVar_Line in TextLines )
@@ -1192,7 +1193,7 @@ namespace SharpFlame
             }
         }
 
-        public clsModel GetModelForPIE(modLists.SimpleList<clsPIE> PIE_List, string PIE_LCaseFileTitle, clsResult ResultOutput)
+        public clsModel GetModelForPIE(SimpleList<clsPIE> PIE_List, string PIE_LCaseFileTitle, clsResult ResultOutput)
         {
             if ( PIE_LCaseFileTitle == "0" )
             {
@@ -1247,9 +1248,9 @@ namespace SharpFlame
             return null;
         }
 
-        public void SetComponentName(modLists.SimpleList<string[]> Names, clsComponent Component, clsResult Result)
+        public void SetComponentName(SimpleList<string[]> Names, clsComponent Component, clsResult Result)
         {
-            modLists.SimpleList<string[]> ValueSearchResults = default(modLists.SimpleList<string[]>);
+            SimpleList<string[]> ValueSearchResults = default(SimpleList<string[]>);
 
             ValueSearchResults = GetRowsWithValue(Names, Component.Code);
             if ( ValueSearchResults.Count == 0 )
@@ -1262,9 +1263,9 @@ namespace SharpFlame
             }
         }
 
-        public void SetFeatureName(modLists.SimpleList<string[]> Names, clsFeatureType FeatureType, clsResult Result)
+        public void SetFeatureName(SimpleList<string[]> Names, clsFeatureType FeatureType, clsResult Result)
         {
-            modLists.SimpleList<string[]> ValueSearchResults = default(modLists.SimpleList<string[]>);
+            SimpleList<string[]> ValueSearchResults = default(SimpleList<string[]>);
 
             ValueSearchResults = GetRowsWithValue(Names, FeatureType.Code);
             if ( ValueSearchResults.Count == 0 )
@@ -1277,9 +1278,9 @@ namespace SharpFlame
             }
         }
 
-        public void SetStructureName(modLists.SimpleList<string[]> Names, clsStructureType StructureType, clsResult Result)
+        public void SetStructureName(SimpleList<string[]> Names, clsStructureType StructureType, clsResult Result)
         {
-            modLists.SimpleList<string[]> ValueSearchResults = default(modLists.SimpleList<string[]>);
+            SimpleList<string[]> ValueSearchResults = default(SimpleList<string[]>);
 
             ValueSearchResults = GetRowsWithValue(Names, StructureType.Code);
             if ( ValueSearchResults.Count == 0 )
@@ -1292,9 +1293,9 @@ namespace SharpFlame
             }
         }
 
-        public void SetTemplateName(modLists.SimpleList<string[]> Names, clsDroidTemplate Template, clsResult Result)
+        public void SetTemplateName(SimpleList<string[]> Names, clsDroidTemplate Template, clsResult Result)
         {
-            modLists.SimpleList<string[]> ValueSearchResults = default(modLists.SimpleList<string[]>);
+            SimpleList<string[]> ValueSearchResults = default(SimpleList<string[]>);
 
             ValueSearchResults = GetRowsWithValue(Names, Template.Code);
             if ( ValueSearchResults.Count == 0 )
@@ -1307,9 +1308,9 @@ namespace SharpFlame
             }
         }
 
-        public void SetWallName(modLists.SimpleList<string[]> Names, clsWallType WallType, clsResult Result)
+        public void SetWallName(SimpleList<string[]> Names, clsWallType WallType, clsResult Result)
         {
-            modLists.SimpleList<string[]> ValueSearchResults = default(modLists.SimpleList<string[]>);
+            SimpleList<string[]> ValueSearchResults = default(SimpleList<string[]>);
 
             ValueSearchResults = GetRowsWithValue(Names, WallType.Code);
             if ( ValueSearchResults.Count == 0 )

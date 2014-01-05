@@ -1,3 +1,5 @@
+using SharpFlame.Collections;
+
 namespace SharpFlame
 {
     public abstract class clsComponent
@@ -22,14 +24,14 @@ namespace SharpFlame
 
     public class clsBody : clsComponent
     {
-        public modLists.ConnectedListLink<clsBody, clsObjectData> ObjectDataLink;
+        public ConnectedListLink<clsBody, clsObjectData> ObjectDataLink;
 
         public clsUnitType.clsAttachment Attachment = new clsUnitType.clsAttachment();
         public int Hitpoints;
 
         public clsBody()
         {
-            ObjectDataLink = new modLists.ConnectedListLink<clsBody, clsObjectData>(this);
+            ObjectDataLink = new ConnectedListLink<clsBody, clsObjectData>(this);
 
 
             ComponentType = enumComponentType.Body;
@@ -38,7 +40,7 @@ namespace SharpFlame
 
     public class clsPropulsion : clsComponent
     {
-        public modLists.ConnectedListLink<clsPropulsion, clsObjectData> ObjectDataLink;
+        public ConnectedListLink<clsPropulsion, clsObjectData> ObjectDataLink;
 
         public struct sBody
         {
@@ -51,7 +53,7 @@ namespace SharpFlame
 
         public clsPropulsion(int BodyCount)
         {
-            ObjectDataLink = new modLists.ConnectedListLink<clsPropulsion, clsObjectData>(this);
+            ObjectDataLink = new ConnectedListLink<clsPropulsion, clsObjectData>(this);
 
 
             ComponentType = enumComponentType.Propulsion;
@@ -71,10 +73,10 @@ namespace SharpFlame
     {
         public clsTurret()
         {
-            TurretObjectDataLink = new modLists.ConnectedListLink<clsTurret, clsObjectData>(this);
+            TurretObjectDataLink = new ConnectedListLink<clsTurret, clsObjectData>(this);
         }
 
-        public modLists.ConnectedListLink<clsTurret, clsObjectData> TurretObjectDataLink;
+        public ConnectedListLink<clsTurret, clsObjectData> TurretObjectDataLink;
 
         public clsUnitType.clsAttachment Attachment = new clsUnitType.clsAttachment();
         public int HitPoints;
@@ -123,11 +125,11 @@ namespace SharpFlame
 
     public class clsWeapon : clsTurret
     {
-        public modLists.ConnectedListLink<clsWeapon, clsObjectData> ObjectDataLink;
+        public ConnectedListLink<clsWeapon, clsObjectData> ObjectDataLink;
 
         public clsWeapon()
         {
-            ObjectDataLink = new modLists.ConnectedListLink<clsWeapon, clsObjectData>(this);
+            ObjectDataLink = new ConnectedListLink<clsWeapon, clsObjectData>(this);
 
 
             TurretType = enumTurretType.Weapon;
@@ -136,11 +138,11 @@ namespace SharpFlame
 
     public class clsConstruct : clsTurret
     {
-        public modLists.ConnectedListLink<clsConstruct, clsObjectData> ObjectDataLink;
+        public ConnectedListLink<clsConstruct, clsObjectData> ObjectDataLink;
 
         public clsConstruct()
         {
-            ObjectDataLink = new modLists.ConnectedListLink<clsConstruct, clsObjectData>(this);
+            ObjectDataLink = new ConnectedListLink<clsConstruct, clsObjectData>(this);
 
 
             TurretType = enumTurretType.Construct;
@@ -149,11 +151,11 @@ namespace SharpFlame
 
     public class clsRepair : clsTurret
     {
-        public modLists.ConnectedListLink<clsRepair, clsObjectData> ObjectDataLink;
+        public ConnectedListLink<clsRepair, clsObjectData> ObjectDataLink;
 
         public clsRepair()
         {
-            ObjectDataLink = new modLists.ConnectedListLink<clsRepair, clsObjectData>(this);
+            ObjectDataLink = new ConnectedListLink<clsRepair, clsObjectData>(this);
 
 
             TurretType = enumTurretType.Repair;
@@ -162,7 +164,7 @@ namespace SharpFlame
 
     public class clsSensor : clsTurret
     {
-        public modLists.ConnectedListLink<clsSensor, clsObjectData> ObjectDataLink;
+        public ConnectedListLink<clsSensor, clsObjectData> ObjectDataLink;
 
         public enum enumLocation
         {
@@ -175,7 +177,7 @@ namespace SharpFlame
 
         public clsSensor()
         {
-            ObjectDataLink = new modLists.ConnectedListLink<clsSensor, clsObjectData>(this);
+            ObjectDataLink = new ConnectedListLink<clsSensor, clsObjectData>(this);
 
 
             TurretType = enumTurretType.Sensor;
@@ -184,13 +186,13 @@ namespace SharpFlame
 
     public class clsBrain : clsTurret
     {
-        public modLists.ConnectedListLink<clsBrain, clsObjectData> ObjectDataLink;
+        public ConnectedListLink<clsBrain, clsObjectData> ObjectDataLink;
 
         public clsWeapon Weapon;
 
         public clsBrain()
         {
-            ObjectDataLink = new modLists.ConnectedListLink<clsBrain, clsObjectData>(this);
+            ObjectDataLink = new ConnectedListLink<clsBrain, clsObjectData>(this);
 
 
             TurretType = enumTurretType.Brain;
@@ -199,11 +201,11 @@ namespace SharpFlame
 
     public class clsECM : clsTurret
     {
-        public modLists.ConnectedListLink<clsECM, clsObjectData> ObjectDataLink;
+        public ConnectedListLink<clsECM, clsObjectData> ObjectDataLink;
 
         public clsECM()
         {
-            ObjectDataLink = new modLists.ConnectedListLink<clsECM, clsObjectData>(this);
+            ObjectDataLink = new ConnectedListLink<clsECM, clsObjectData>(this);
 
 
             TurretType = enumTurretType.ECM;

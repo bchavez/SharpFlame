@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Microsoft.VisualBasic;
+using SharpFlame.Collections;
 
 namespace SharpFlame
 {
@@ -23,7 +24,7 @@ namespace SharpFlame
 #else
 			}
 #endif
-            public modLists.SimpleList<sProperty> Properties = new modLists.SimpleList<sProperty>();
+            public SimpleList<sProperty> Properties = new SimpleList<sProperty>();
 
             public void CreateProperty(string Name, string Value)
             {
@@ -184,7 +185,7 @@ namespace SharpFlame
             }
         }
 
-        public modLists.SimpleList<clsSection> Sections = new modLists.SimpleList<clsSection>();
+        public SimpleList<clsSection> Sections = new SimpleList<clsSection>();
         public clsSection RootSection;
 
         public void CreateSection(string Name)

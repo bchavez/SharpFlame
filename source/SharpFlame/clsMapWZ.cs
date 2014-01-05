@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows.Forms;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.VisualBasic;
+using SharpFlame.Collections;
 
 namespace SharpFlame
 {
@@ -34,7 +35,7 @@ namespace SharpFlame
             ZipEntry ZipEntry = default(ZipEntry);
             bool GameFound = default(bool);
             bool DatasetFound = default(bool);
-            modLists.SimpleList<clsWZMapEntry> Maps = new modLists.SimpleList<clsWZMapEntry>();
+            SimpleList<clsWZMapEntry> Maps = new SimpleList<clsWZMapEntry>();
             clsTileset GameTileset = null;
             string GameName = "";
             string strTemp = "";
@@ -77,7 +78,7 @@ namespace SharpFlame
                         return ReturnResult;
                     }
                     BinaryReader Reader = new BinaryReader(ZipStream);
-                    modLists.SimpleList<string> LineData = modIO.BytesToLinesRemoveComments(Reader);
+                    SimpleList<string> LineData = modIO.BytesToLinesRemoveComments(Reader);
                     //find each level block
                     for ( A = 0; A <= LineData.Count - 1; A++ )
                     {
@@ -242,7 +243,7 @@ namespace SharpFlame
                 }
             }
 
-            modLists.SimpleClassList<clsWZBJOUnit> BJOUnits = new modLists.SimpleClassList<clsWZBJOUnit>();
+            SimpleClassList<clsWZBJOUnit> BJOUnits = new SimpleClassList<clsWZBJOUnit>();
 
             clsINIFeatures INIFeatures = null;
 
@@ -487,7 +488,7 @@ namespace SharpFlame
                 return ReturnResult;
             }
 
-            modLists.SimpleClassList<clsWZBJOUnit> BJOUnits = new modLists.SimpleClassList<clsWZBJOUnit>();
+            SimpleClassList<clsWZBJOUnit> BJOUnits = new SimpleClassList<clsWZBJOUnit>();
 
             clsINIFeatures INIFeatures = null;
 
@@ -655,7 +656,7 @@ namespace SharpFlame
 
         public struct sCreateWZObjectsArgs
         {
-            public modLists.SimpleClassList<clsWZBJOUnit> BJOUnits;
+            public SimpleClassList<clsWZBJOUnit> BJOUnits;
             public clsINIStructures INIStructures;
             public clsINIDroids INIDroids;
             public clsINIFeatures INIFeatures;
@@ -666,7 +667,7 @@ namespace SharpFlame
             clsResult ReturnResult = new clsResult("Creating objects");
             clsUnit NewUnit = default(clsUnit);
             UInt32 AvailableID = 0;
-            modLists.SimpleClassList<clsWZBJOUnit> BJOUnits = Args.BJOUnits;
+            SimpleClassList<clsWZBJOUnit> BJOUnits = Args.BJOUnits;
             clsINIStructures INIStructures = Args.INIStructures;
             clsINIDroids INIDroids = Args.INIDroids;
             clsINIFeatures INIFeatures = Args.INIFeatures;
@@ -1758,7 +1759,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        private modProgram.sResult Read_WZ_Features(BinaryReader File, modLists.SimpleClassList<clsWZBJOUnit> WZUnits)
+        private modProgram.sResult Read_WZ_Features(BinaryReader File, SimpleClassList<clsWZBJOUnit> WZUnits)
         {
             modProgram.sResult ReturnResult = new modProgram.sResult();
             ReturnResult.Success = false;
@@ -1884,7 +1885,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        private modProgram.sResult Read_WZ_Structures(BinaryReader File, modLists.SimpleClassList<clsWZBJOUnit> WZUnits)
+        private modProgram.sResult Read_WZ_Structures(BinaryReader File, SimpleClassList<clsWZBJOUnit> WZUnits)
         {
             modProgram.sResult ReturnResult = new modProgram.sResult();
             ReturnResult.Success = false;
@@ -1949,7 +1950,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        private modProgram.sResult Read_WZ_Droids(BinaryReader File, modLists.SimpleClassList<clsWZBJOUnit> WZUnits)
+        private modProgram.sResult Read_WZ_Droids(BinaryReader File, SimpleClassList<clsWZBJOUnit> WZUnits)
         {
             modProgram.sResult ReturnResult = new modProgram.sResult();
             ReturnResult.Success = false;

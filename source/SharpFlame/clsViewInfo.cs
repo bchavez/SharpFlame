@@ -2,6 +2,7 @@ using System;
 using System.Windows.Forms;
 using Matrix3D;
 using Microsoft.VisualBasic;
+using SharpFlame.Collections;
 
 namespace SharpFlame
 {
@@ -728,7 +729,7 @@ namespace SharpFlame
             public class clsOverTerrain
             {
                 public modProgram.sWorldPos Pos;
-                public modLists.SimpleClassList<clsMap.clsUnit> Units = new modLists.SimpleClassList<clsMap.clsUnit>();
+                public SimpleClassList<clsMap.clsUnit> Units = new SimpleClassList<clsMap.clsUnit>();
                 public clsBrush.sPosNum Tile;
                 public clsBrush.sPosNum Vertex;
                 public bool Triangle;
