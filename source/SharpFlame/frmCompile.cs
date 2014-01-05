@@ -132,7 +132,7 @@ namespace SharpFlame
             bool IsXPlayerFormat = cbxLevFormat.Checked;
             if ( PlayerCount < 2 | PlayerCount > 10 )
             {
-                ReturnResult.ProblemAdd("The number of players must be from 2 to " + Convert.ToString(modProgram.PlayerCountMax));
+                ReturnResult.ProblemAdd("The number of players must be from 2 to " + Convert.ToString(Constants.PlayerCountMax));
             }
             if ( !IsXPlayerFormat )
             {
@@ -408,7 +408,7 @@ namespace SharpFlame
         {
             clsResult Result = new clsResult("Validate for multiplayer");
 
-            if ( PlayerCount < 2 | PlayerCount > modProgram.PlayerCountMax )
+            if ( PlayerCount < 2 | PlayerCount > Constants.PlayerCountMax )
             {
                 Result.ProblemAdd("Unable to evaluate for multiplayer due to bad number of players.");
                 return Result;
@@ -416,9 +416,9 @@ namespace SharpFlame
 
             //check HQs, Trucks and unit counts
 
-            int[] PlayerHQCount = new int[modProgram.PlayerCountMax];
-            int[] Player23TruckCount = new int[modProgram.PlayerCountMax];
-            int[] PlayerMasterTruckCount = new int[modProgram.PlayerCountMax];
+            int[] PlayerHQCount = new int[Constants.PlayerCountMax];
+            int[] Player23TruckCount = new int[Constants.PlayerCountMax];
+            int[] PlayerMasterTruckCount = new int[Constants.PlayerCountMax];
             int ScavPlayerNum = 0;
             int ScavObjectCount = 0;
             clsDroidDesign DroidType = default(clsDroidDesign);
@@ -510,13 +510,13 @@ namespace SharpFlame
         {
             clsResult ReturnResult = new clsResult("Validate map");
 
-            if ( Map.Terrain.TileSize.X > modProgram.WZMapMaxSize )
+            if ( Map.Terrain.TileSize.X > Constants.WzMapMaxSize )
             {
-                ReturnResult.WarningAdd("Map width is too large. The maximum is " + Convert.ToString(modProgram.WZMapMaxSize) + ".");
+                ReturnResult.WarningAdd("Map width is too large. The maximum is " + Convert.ToString(Constants.WzMapMaxSize) + ".");
             }
-            if ( Map.Terrain.TileSize.Y > modProgram.WZMapMaxSize )
+            if ( Map.Terrain.TileSize.Y > Constants.WzMapMaxSize )
             {
-                ReturnResult.WarningAdd("Map height is too large. The maximum is " + Convert.ToString(modProgram.WZMapMaxSize) + ".");
+                ReturnResult.WarningAdd("Map height is too large. The maximum is " + Convert.ToString(Constants.WzMapMaxSize) + ".");
             }
 
             if ( Map.Tileset == null )
@@ -524,7 +524,7 @@ namespace SharpFlame
                 ReturnResult.ProblemAdd("No tileset selected.");
             }
 
-            int[,] PlayerStructureTypeCount = new int[modProgram.PlayerCountMax, modProgram.ObjectData.StructureTypes.Count];
+            int[,] PlayerStructureTypeCount = new int[Constants.PlayerCountMax, modProgram.ObjectData.StructureTypes.Count];
             int[] ScavStructureTypeCount = new int[modProgram.ObjectData.StructureTypes.Count];
             clsStructureType StructureType = default(clsStructureType);
             clsMap.clsUnit Unit = default(clsMap.clsUnit);
@@ -551,7 +551,7 @@ namespace SharpFlame
                 StructureType = tempLoopVar_StructureType;
                 int StructureTypeNum = StructureType.StructureType_ObjectDataLink.ArrayPosition;
                 int PlayerNum = 0;
-                for ( PlayerNum = 0; PlayerNum <= modProgram.PlayerCountMax - 1; PlayerNum++ )
+                for ( PlayerNum = 0; PlayerNum <= Constants.PlayerCountMax - 1; PlayerNum++ )
                 {
                     if ( PlayerStructureTypeCount[PlayerNum, StructureTypeNum] > 255 )
                     {

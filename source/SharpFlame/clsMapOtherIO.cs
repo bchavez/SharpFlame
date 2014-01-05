@@ -105,7 +105,7 @@ namespace SharpFlame
                     MapWidth = File.ReadUInt16();
                     MapHeight = File.ReadUInt16();
 
-                    if ( MapWidth < 1U || MapHeight < 1U || MapWidth > modProgram.MapMaxSize || MapHeight > modProgram.MapMaxSize )
+                    if ( MapWidth < 1U || MapHeight < 1U || MapWidth > Constants.MapMaxSize || MapHeight > Constants.MapMaxSize )
                     {
                         ReturnResult.ProblemAdd("Map size is invalid.");
                         return ReturnResult;
@@ -350,7 +350,7 @@ namespace SharpFlame
                             NewUnit.ID = TempUnit[A].ID;
                             NewUnit.SavePriority = TempUnit[A].SavePriority;
                             //NewUnit.Name = TempUnit(A).Name
-                            if ( TempUnit[A].Player >= modProgram.PlayerCountMax )
+                            if ( TempUnit[A].Player >= Constants.PlayerCountMax )
                             {
                                 NewUnit.UnitGroup = ScavengerUnitGroup;
                             }
@@ -463,7 +463,7 @@ namespace SharpFlame
                     ResultInfo.CompileMultiLicense = IOUtil.ReadOldText(File);
                     strTemp = IOUtil.ReadOldText(File); //game time
                     ResultInfo.CampaignGameType = File.ReadInt32();
-                    if ( ResultInfo.CampaignGameType < -1 | ResultInfo.CampaignGameType >= modProgram.GameTypeCount )
+                    if ( ResultInfo.CampaignGameType < -1 | ResultInfo.CampaignGameType >= Constants.GameTypeCount )
                     {
                         ReturnResult.WarningAdd("Compile campaign type out of range.");
                         ResultInfo.CampaignGameType = -1;
@@ -1092,7 +1092,7 @@ namespace SharpFlame
                     {
                         NewUnit = new clsUnit();
                         NewUnit.Type = NewType;
-                        if ( CurrentObject.PlayerNum < 0 | CurrentObject.PlayerNum >= modProgram.PlayerCountMax )
+                        if ( CurrentObject.PlayerNum < 0 | CurrentObject.PlayerNum >= Constants.PlayerCountMax )
                         {
                             NewUnit.UnitGroup = ScavengerUnitGroup;
                         }

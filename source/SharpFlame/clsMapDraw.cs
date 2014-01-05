@@ -82,8 +82,8 @@ namespace SharpFlame
             DrawCentre.Y = MathUtil.Clamp_dbl(Convert.ToDouble(- DrawCentre.Y), 0.0D, Terrain.TileSize.Y * modProgram.TerrainGridSpacing - 1.0D);
             DrawCentreSector.Normal = GetPosSectorNum(new sXY_int((int)DrawCentre.X, (int)DrawCentre.Y));
             DrawCentreSector.Alignment =
-                GetPosSectorNum(new sXY_int((int)(DrawCentre.X - modProgram.SectorTileSize * modProgram.TerrainGridSpacing / 2.0D),
-                    (int)(DrawCentre.Y - modProgram.SectorTileSize * modProgram.TerrainGridSpacing / 2.0D)));
+                GetPosSectorNum(new sXY_int((int)(DrawCentre.X - Constants.SectorTileSize * modProgram.TerrainGridSpacing / 2.0D),
+                    (int)(DrawCentre.Y - Constants.SectorTileSize * modProgram.TerrainGridSpacing / 2.0D)));
 
             clsDrawSectorObjects DrawObjects = new clsDrawSectorObjects();
             DrawObjects.Map = this;
@@ -1388,9 +1388,9 @@ namespace SharpFlame
                 int X = 0;
                 int Y = 0;
 
-                for ( Y = PosNum.Y * modProgram.SectorTileSize; Y <= Math.Min((PosNum.Y + 1) * modProgram.SectorTileSize - 1, Map.Terrain.TileSize.Y - 1); Y++ )
+                for ( Y = PosNum.Y * Constants.SectorTileSize; Y <= Math.Min((PosNum.Y + 1) * Constants.SectorTileSize - 1, Map.Terrain.TileSize.Y - 1); Y++ )
                 {
-                    for ( X = PosNum.X * modProgram.SectorTileSize; X <= Math.Min((PosNum.X + 1) * modProgram.SectorTileSize - 1, Map.Terrain.TileSize.X - 1); X++ )
+                    for ( X = PosNum.X * Constants.SectorTileSize; X <= Math.Min((PosNum.X + 1) * Constants.SectorTileSize - 1, Map.Terrain.TileSize.X - 1); X++ )
                     {
                         Map.DrawTileOrientation(new sXY_int(X, Y));
                     }
@@ -1418,11 +1418,11 @@ namespace SharpFlame
                 int Y = 0;
                 int A = 0;
 
-                for ( Y = PosNum.Y * modProgram.SectorTileSize;
-                    Y <= Math.Min(Convert.ToInt32((PosNum.Y + 1) * modProgram.SectorTileSize - 1), Map.Terrain.TileSize.Y);
+                for ( Y = PosNum.Y * Constants.SectorTileSize;
+                    Y <= Math.Min(Convert.ToInt32((PosNum.Y + 1) * Constants.SectorTileSize - 1), Map.Terrain.TileSize.Y);
                     Y++ )
                 {
-                    for ( X = PosNum.X * modProgram.SectorTileSize; X <= Math.Min((PosNum.X + 1) * modProgram.SectorTileSize - 1, Map.Terrain.TileSize.X); X++ )
+                    for ( X = PosNum.X * Constants.SectorTileSize; X <= Math.Min((PosNum.X + 1) * Constants.SectorTileSize - 1, Map.Terrain.TileSize.X); X++ )
                     {
                         if ( Map.Terrain.Vertices[X, Y].Terrain != null )
                         {

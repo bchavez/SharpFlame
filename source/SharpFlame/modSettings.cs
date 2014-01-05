@@ -56,7 +56,7 @@ namespace SharpFlame
             public override bool IsValueValid(object value)
             {
                 int intValue = Convert.ToInt32(value);
-                return intValue >= 0 & intValue <= modProgram.MinimapMaxSize;
+                return intValue >= 0 & intValue <= Constants.MinimapMaxSize;
             }
         }
 

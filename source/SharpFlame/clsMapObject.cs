@@ -409,7 +409,7 @@ namespace SharpFlame
 
             public string GetFMapINIPlayerText()
             {
-                if ( WZ_StartPos < 0 | WZ_StartPos >= modProgram.PlayerCountMax )
+                if ( WZ_StartPos < 0 | WZ_StartPos >= Constants.PlayerCountMax )
                 {
                     return "scavenger";
                 }
@@ -421,7 +421,7 @@ namespace SharpFlame
 
             public string GetLNDPlayerText()
             {
-                if ( WZ_StartPos < 0 | WZ_StartPos >= modProgram.PlayerCountMax )
+                if ( WZ_StartPos < 0 | WZ_StartPos >= Constants.PlayerCountMax )
                 {
                     return IOUtil.InvariantToString_int(7);
                 }
@@ -433,7 +433,7 @@ namespace SharpFlame
 
             public int GetPlayerNum(int PlayerCount)
             {
-                if ( WZ_StartPos < 0 | WZ_StartPos >= modProgram.PlayerCountMax )
+                if ( WZ_StartPos < 0 | WZ_StartPos >= Constants.PlayerCountMax )
                 {
                     return Math.Max(PlayerCount, 7);
                 }
@@ -606,7 +606,7 @@ namespace SharpFlame
             clsUnitGroup NewGroup = default(clsUnitGroup);
 
             UnitGroups.Clear();
-            for ( A = 0; A <= modProgram.PlayerCountMax - 1; A++ )
+            for ( A = 0; A <= Constants.PlayerCountMax - 1; A++ )
             {
                 NewGroup = new clsUnitGroup();
                 NewGroup.WZ_StartPos = A;

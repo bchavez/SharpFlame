@@ -121,6 +121,7 @@
     <Compile Include="Collections\SimpleList.cs" />
     <Compile Include="Collections\SimpleListTool.cs" />
     <Compile Include="Colors\Definitions.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="frmKeyboardControl.Designer.cs">
       <DependentUpon>frmKeyboardControl.cs</DependentUpon>
     </Compile>

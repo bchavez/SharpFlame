@@ -6,8 +6,8 @@ namespace SharpFlame
         {
             InitializeComponent();
 
-            Text = modProgram.ProgramName + " " + modProgram.ProgramVersionNumber + " Loading";
-            lblVersion.Text = modProgram.ProgramVersionNumber;
+            Text = Constants.ProgramName + " " + Constants.ProgramVersionNumber + " Loading";
+            lblVersion.Text = Constants.ProgramVersionNumber;
         }
     }
 }

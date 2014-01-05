@@ -955,7 +955,7 @@ namespace SharpFlame
         {
             sXY_int NewSize = new sXY_int();
             sXY_int Offset = new sXY_int();
-            double Max = modProgram.MapMaxSize;
+            double Max = Constants.MapMaxSize;
 
             if ( !IOUtil.InvariantParse_int(txtSizeX.Text, ref NewSize.X) )
             {
@@ -997,10 +997,10 @@ namespace SharpFlame
                 Interaction.MsgBox("Map sizes must be at least 1.", MsgBoxStyle.OkOnly, "");
                 return;
             }
-            if ( NewSize.X > modProgram.WZMapMaxSize | NewSize.Y > modProgram.WZMapMaxSize )
+            if ( NewSize.X > Constants.WzMapMaxSize | NewSize.Y > Constants.WzMapMaxSize )
             {
                 if (
-                    Interaction.MsgBox("Warzone doesn\'t support map sizes above " + Convert.ToString(modProgram.WZMapMaxSize) + ". Continue anyway?",
+                    Interaction.MsgBox("Warzone doesn\'t support map sizes above " + Convert.ToString(Constants.WzMapMaxSize) + ". Continue anyway?",
                         MsgBoxStyle.YesNo, "") != MsgBoxResult.Yes )
                 {
                     return;
@@ -1092,7 +1092,7 @@ namespace SharpFlame
 
             Dialog.InitialDirectory = modSettings.Settings.SavePath;
             Dialog.FileName = "";
-            Dialog.Filter = modProgram.ProgramName + " FME Map Files (*.fme)|*.fme";
+            Dialog.Filter = Constants.ProgramName + " FME Map Files (*.fme)|*.fme";
             if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
@@ -2403,7 +2403,7 @@ namespace SharpFlame
                 Map.SetTabText();
             }
 
-            Text = MapFileTitle + " - " + modProgram.ProgramName + " " + modProgram.ProgramVersionNumber;
+            Text = MapFileTitle + " - " + Constants.ProgramName + " " + Constants.ProgramVersionNumber;
         }
 
         public void lstAutoTexture_SelectedIndexChanged(Object sender, EventArgs e)
@@ -4176,7 +4176,7 @@ namespace SharpFlame
             OpenFileDialog Dialog = new OpenFileDialog();
 
             Dialog.FileName = "";
-            Dialog.Filter = modProgram.ProgramName + " Files (*.fmap, *.fme)|*.fmap;*.fme|All Files (*.*)|*.*";
+            Dialog.Filter = Constants.ProgramName + " Files (*.fmap, *.fme)|*.fmap;*.fme|All Files (*.*)|*.*";
             Dialog.InitialDirectory = modProgram.AutoSavePath;
             if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {

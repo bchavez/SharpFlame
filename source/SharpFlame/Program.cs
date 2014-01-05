@@ -57,7 +57,7 @@ namespace SharpFlame
             }
             catch ( Exception ex )
             {
-                InitializeResult.WarningAdd(modProgram.ProgramName + " icon is missing: " + ex.Message);
+                InitializeResult.WarningAdd(Constants.ProgramName + " icon is missing: " + ex.Message);
             }
             frmMainInstance.Icon = modProgram.ProgramIcon;
             frmGeneratorInstance.Icon = modProgram.ProgramIcon;

@@ -176,7 +176,7 @@ namespace SharpFlame
         public class clsShadowSector
         {
             public sXY_int Num;
-            public clsTerrain Terrain = new clsTerrain(new sXY_int(modProgram.SectorTileSize, modProgram.SectorTileSize));
+            public clsTerrain Terrain = new clsTerrain(new sXY_int(Constants.SectorTileSize, Constants.SectorTileSize));
         }
 
         public clsShadowSector[,] ShadowSectors = new clsShadowSector[0, 0];
@@ -219,7 +219,7 @@ namespace SharpFlame
         public SimpleClassList<clsUnitChange> UnitChanges;
         public SimpleClassList<clsGatewayChange> GatewayChanges;
 
-        public int HeightMultiplier = modProgram.DefaultHeightMultiplier;
+        public int HeightMultiplier = Constants.DefaultHeightMultiplier;
 
         public bool ReadyForUserInput
         {
@@ -365,7 +365,7 @@ namespace SharpFlame
         {
             MakeMinimapTimer = new Timer();
             MakeMinimapTimer.Tick += MinimapTimer_Tick;
-            MakeMinimapTimer.Interval = modProgram.MinimapDelay;
+            MakeMinimapTimer.Interval = Constants.MinimapDelay;
 
             MakeDefaultUnitGroups();
             ScriptPositions.MaintainOrder = true;
@@ -429,8 +429,8 @@ namespace SharpFlame
                 }
             }
 
-            SectorCount.X = (int)(Math.Ceiling((double)(Area.X / modProgram.SectorTileSize)));
-            SectorCount.Y = (int)(Math.Ceiling((double)(Area.Y / modProgram.SectorTileSize)));
+            SectorCount.X = (int)(Math.Ceiling((double)(Area.X / Constants.SectorTileSize)));
+            SectorCount.Y = (int)(Math.Ceiling((double)(Area.Y / Constants.SectorTileSize)));
             Sectors = new clsSector[SectorCount.X, SectorCount.Y];
             for ( Y = 0; Y <= SectorCount.Y - 1; Y++ )
             {
@@ -478,8 +478,8 @@ namespace SharpFlame
             int Y = 0;
 
             Terrain = new clsTerrain(TileSize);
-            SectorCount.X = (int)(Math.Ceiling((double)(Terrain.TileSize.X / modProgram.SectorTileSize)));
-            SectorCount.Y = (int)(Math.Ceiling((double)(Terrain.TileSize.Y / modProgram.SectorTileSize)));
+            SectorCount.X = (int)(Math.Ceiling((double)(Terrain.TileSize.X / Constants.SectorTileSize)));
+            SectorCount.Y = (int)(Math.Ceiling((double)(Terrain.TileSize.Y / Constants.SectorTileSize)));
             Sectors = new clsSector[SectorCount.X, SectorCount.Y];
             for ( Y = 0; Y <= SectorCount.Y - 1; Y++ )
             {
@@ -901,17 +901,17 @@ namespace SharpFlame
 
             Sectors[X, Y].DeleteLists();
 
-            StartX = X * modProgram.SectorTileSize;
-            StartY = Y * modProgram.SectorTileSize;
-            FinishX = Math.Min(StartX + modProgram.SectorTileSize, Terrain.TileSize.X) - 1;
-            FinishY = Math.Min(StartY + modProgram.SectorTileSize, Terrain.TileSize.Y) - 1;
+            StartX = X * Constants.SectorTileSize;
+            StartY = Y * Constants.SectorTileSize;
+            FinishX = Math.Min(StartX + Constants.SectorTileSize, Terrain.TileSize.X) - 1;
+            FinishY = Math.Min(StartY + Constants.SectorTileSize, Terrain.TileSize.Y) - 1;
 
             Sectors[X, Y].GLList_Textured = GL.GenLists(1);
             GL.NewList(Convert.ToInt32(Sectors[X, Y].GLList_Textured), ListMode.Compile);
 
             if ( modProgram.Draw_Units )
             {
-                bool[,] IsBasePlate = new bool[modProgram.SectorTileSize, modProgram.SectorTileSize];
+                bool[,] IsBasePlate = new bool[Constants.SectorTileSize, Constants.SectorTileSize];
                 clsUnit Unit = default(clsUnit);
                 clsStructureType StructureType = default(clsStructureType);
                 sXY_int Footprint = new sXY_int();
@@ -1407,8 +1407,8 @@ namespace SharpFlame
         {
             sXY_int Result = new sXY_int();
 
-            Result.X = Conversion.Int(Tile.X / modProgram.SectorTileSize);
-            Result.Y = Conversion.Int(Tile.Y / modProgram.SectorTileSize);
+            Result.X = Conversion.Int(Tile.X / Constants.SectorTileSize);
+            Result.Y = Conversion.Int(Tile.Y / Constants.SectorTileSize);
 
             return Result;
         }
@@ -1581,10 +1581,10 @@ namespace SharpFlame
             Sector = new clsShadowSector();
             ShadowSectors[SectorNum.X, SectorNum.Y] = Sector;
             Sector.Num = SectorNum;
-            StartX = SectorNum.X * modProgram.SectorTileSize;
-            StartY = SectorNum.Y * modProgram.SectorTileSize;
-            LastTileX = Math.Min(modProgram.SectorTileSize, Terrain.TileSize.X - StartX);
-            LastTileY = Math.Min(modProgram.SectorTileSize, Terrain.TileSize.Y - StartY);
+            StartX = SectorNum.X * Constants.SectorTileSize;
+            StartY = SectorNum.Y * Constants.SectorTileSize;
+            LastTileX = Math.Min(Constants.SectorTileSize, Terrain.TileSize.X - StartX);
+            LastTileY = Math.Min(Constants.SectorTileSize, Terrain.TileSize.Y - StartY);
             for ( Y = 0; Y <= LastTileY; Y++ )
             {
                 for ( X = 0; X <= LastTileX; X++ )
@@ -1823,10 +1823,10 @@ namespace SharpFlame
             int LastTileX = 0;
             int LastTileZ = 0;
 
-            StartX = Shadow_Sector_To_Rejoin.Num.X * modProgram.SectorTileSize;
-            StartZ = Shadow_Sector_To_Rejoin.Num.Y * modProgram.SectorTileSize;
-            LastTileX = Math.Min(modProgram.SectorTileSize, Terrain.TileSize.X - StartX);
-            LastTileZ = Math.Min(modProgram.SectorTileSize, Terrain.TileSize.Y - StartZ);
+            StartX = Shadow_Sector_To_Rejoin.Num.X * Constants.SectorTileSize;
+            StartZ = Shadow_Sector_To_Rejoin.Num.Y * Constants.SectorTileSize;
+            LastTileX = Math.Min(Constants.SectorTileSize, Terrain.TileSize.X - StartX);
+            LastTileZ = Math.Min(Constants.SectorTileSize, Terrain.TileSize.Y - StartZ);
             for ( Y = 0; Y <= LastTileZ; Y++ )
             {
                 for ( X = 0; X <= LastTileX; X++ )
@@ -2337,8 +2337,8 @@ namespace SharpFlame
             int X = 0;
             int Y = 0;
 
-            SectorCount.X = (int)(Math.Ceiling((double)(Terrain.TileSize.X / modProgram.SectorTileSize)));
-            SectorCount.Y = (int)(Math.Ceiling((double)(Terrain.TileSize.Y / modProgram.SectorTileSize)));
+            SectorCount.X = (int)(Math.Ceiling((double)(Terrain.TileSize.X / Constants.SectorTileSize)));
+            SectorCount.Y = (int)(Math.Ceiling((double)(Terrain.TileSize.Y / Constants.SectorTileSize)));
             Sectors = new clsSector[SectorCount.X, SectorCount.Y];
             for ( Y = 0; Y <= SectorCount.Y - 1; Y++ )
             {
@@ -3831,7 +3831,7 @@ namespace SharpFlame
 
             Dialog.InitialDirectory = GetDirectory();
             Dialog.FileName = "";
-            Dialog.Filter = modProgram.ProgramName + " Map Files (*.fmap)|*.fmap";
+            Dialog.Filter = Constants.ProgramName + " Map Files (*.fmap)|*.fmap";
             if ( Dialog.ShowDialog(Program.frmMainInstance) != DialogResult.OK )
             {
                 return false;

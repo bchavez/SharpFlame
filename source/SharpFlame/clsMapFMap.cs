@@ -50,7 +50,7 @@ namespace SharpFlame
                     Objects[A].WallType = -1;
                     Objects[A].TurretCodes = new string[3];
                     Objects[A].TurretTypes = new clsTurret.enumTurretType[3];
-                    for ( B = 0; B <= modProgram.MaxDroidWeapons - 1; B++ )
+                    for ( B = 0; B <= Constants.MaxDroidWeapons - 1; B++ )
                     {
                         Objects[A].TurretTypes[B] = clsTurret.enumTurretType.Unknown;
                     }
@@ -120,7 +120,7 @@ namespace SharpFlame
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    if ( NewTurretCount < 0 | NewTurretCount > modProgram.MaxDroidWeapons )
+                    if ( NewTurretCount < 0 | NewTurretCount > Constants.MaxDroidWeapons )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1014,11 +1014,11 @@ namespace SharpFlame
             sXY_int NewTerrainSize = ResultInfo.TerrainSize;
             Tileset = ResultInfo.Tileset;
 
-            if ( NewTerrainSize.X <= 0 | NewTerrainSize.X > modProgram.MapMaxSize )
+            if ( NewTerrainSize.X <= 0 | NewTerrainSize.X > Constants.MapMaxSize )
             {
                 ReturnResult.ProblemAdd("Map width of " + Convert.ToString(NewTerrainSize.X) + " is not valid.");
             }
-            if ( NewTerrainSize.Y <= 0 | NewTerrainSize.Y > modProgram.MapMaxSize )
+            if ( NewTerrainSize.Y <= 0 | NewTerrainSize.Y > Constants.MapMaxSize )
             {
                 ReturnResult.ProblemAdd("Map height of " + Convert.ToString(NewTerrainSize.Y) + " is not valid.");
             }
@@ -1226,7 +1226,7 @@ namespace SharpFlame
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    if ( NewSize.X < 1 | NewSize.Y < 1 | NewSize.X > modProgram.MapMaxSize | NewSize.Y > modProgram.MapMaxSize )
+                    if ( NewSize.X < 1 | NewSize.Y < 1 | NewSize.X > Constants.MapMaxSize | NewSize.Y > Constants.MapMaxSize )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1877,7 +1877,7 @@ namespace SharpFlame
                                     {
                                         throw (new Exception());
                                     }
-                                    if ( PlayerNum < modProgram.PlayerCountMax )
+                                    if ( PlayerNum < Constants.PlayerCountMax )
                                     {
                                         UnitGroup = UnitGroups[Convert.ToInt32(PlayerNum)];
                                     }

@@ -122,7 +122,7 @@ namespace SharpFlame
 
             if ( NewMap == null )
             {
-                for ( A = 0; A <= modProgram.PlayerCountMax - 1; A++ )
+                for ( A = 0; A <= Constants.PlayerCountMax - 1; A++ )
                 {
                     tsbNumber[A].Tag = null;
                 }
@@ -130,7 +130,7 @@ namespace SharpFlame
             }
             else
             {
-                for ( A = 0; A <= modProgram.PlayerCountMax - 1; A++ )
+                for ( A = 0; A <= Constants.PlayerCountMax - 1; A++ )
                 {
                     tsbNumber[A].Tag = NewMap.UnitGroups[A];
                 }

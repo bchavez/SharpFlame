@@ -731,7 +731,7 @@ namespace SharpFlame
                     ReturnResult.ProblemAdd("Unable to create object type.");
                     return ReturnResult;
                 }
-                if ( BJOUnit.Player >= modProgram.PlayerCountMax )
+                if ( BJOUnit.Player >= Constants.PlayerCountMax )
                 {
                     NewUnit.UnitGroup = ScavengerUnitGroup;
                 }
@@ -1265,7 +1265,7 @@ namespace SharpFlame
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    if ( StartPos < 0 | StartPos >= modProgram.PlayerCountMax )
+                    if ( StartPos < 0 | StartPos >= Constants.PlayerCountMax )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1408,7 +1408,7 @@ namespace SharpFlame
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
-                    if ( StartPos < 0 | StartPos >= modProgram.PlayerCountMax )
+                    if ( StartPos < 0 | StartPos >= Constants.PlayerCountMax )
                     {
                         return clsINIRead.enumTranslatorResult.ValueInvalid;
                     }
@@ -1690,7 +1690,7 @@ namespace SharpFlame
                 }
                 MapWidth = File.ReadUInt32();
                 MapHeight = File.ReadUInt32();
-                if ( MapWidth < 1U || MapWidth > modProgram.MapMaxSize || MapHeight < 1U || MapHeight > modProgram.MapMaxSize )
+                if ( MapWidth < 1U || MapWidth > Constants.MapMaxSize || MapHeight < 1U || MapHeight > Constants.MapMaxSize )
                 {
                     ReturnResult.Problem = "Map size out of range.";
                     return ReturnResult;
@@ -2777,7 +2777,7 @@ namespace SharpFlame
                         return ReturnResult;
                     }
 
-                    Text = "// Made with " + modProgram.ProgramName + " " + modProgram.ProgramVersionNumber + " " + modProgram.ProgramPlatform +
+                    Text = "// Made with " + Constants.ProgramName + " " + Constants.ProgramVersionNumber + " " + Constants.ProgramPlatform +
                            Convert.ToString(EndChar);
                     File_LEV.Write(Text);
                     DateTime DateNow = DateTime.Now;

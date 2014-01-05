@@ -833,10 +833,10 @@ namespace SharpFlame
                 StartPos.Y = StartVertex.Y * modProgram.TerrainGridSpacing;
                 FinishPos.X = FinishVertex.X * modProgram.TerrainGridSpacing;
                 FinishPos.Y = FinishVertex.Y * modProgram.TerrainGridSpacing;
-                SectorStart.X = Math.Min(Conversion.Int(StartVertex.X / modProgram.SectorTileSize), Map.SectorCount.X - 1);
-                SectorStart.Y = Math.Min((int)(Conversion.Int(StartVertex.Y / modProgram.SectorTileSize)), Map.SectorCount.Y - 1);
-                SectorFinish.X = Math.Min(Conversion.Int(FinishVertex.X / modProgram.SectorTileSize), Map.SectorCount.X - 1);
-                SectorFinish.Y = Math.Min(Conversion.Int(FinishVertex.Y / modProgram.SectorTileSize), Map.SectorCount.Y - 1);
+                SectorStart.X = Math.Min(Conversion.Int(StartVertex.X / Constants.SectorTileSize), Map.SectorCount.X - 1);
+                SectorStart.Y = Math.Min((int)(Conversion.Int(StartVertex.Y / Constants.SectorTileSize)), Map.SectorCount.Y - 1);
+                SectorFinish.X = Math.Min(Conversion.Int(FinishVertex.X / Constants.SectorTileSize), Map.SectorCount.X - 1);
+                SectorFinish.Y = Math.Min(Conversion.Int(FinishVertex.Y / Constants.SectorTileSize), Map.SectorCount.Y - 1);
                 for ( SectorNum.Y = SectorStart.Y; SectorNum.Y <= SectorFinish.Y; SectorNum.Y++ )
                 {
                     for ( SectorNum.X = SectorStart.X; SectorNum.X <= SectorFinish.X; SectorNum.X++ )

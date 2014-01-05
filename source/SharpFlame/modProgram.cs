@@ -16,32 +16,6 @@ namespace SharpFlame
 {
     public sealed class modProgram
     {
-        public const string ProgramName = "FlaME";
-
-        public const string ProgramVersionNumber = "1.29";
-
-#if Mono
-		public const string ProgramPlatform = "Mono 2.10";
-#else
-        public const string ProgramPlatform = "Windows";
-#endif
-
-        public const int PlayerCountMax = 10;
-
-        public const int GameTypeCount = 3;
-
-        public const int DefaultHeightMultiplier = 2;
-
-        public const int MinimapDelay = 100;
-
-        public const int SectorTileSize = 8;
-
-        public const int MaxDroidWeapons = 3;
-
-        public const int WZMapMaxSize = 250;
-        public const int MapMaxSize = 512;
-
-        public const int MinimapMaxSize = 512;
         public static sRGB_sng MinimapFeatureColour;
 
         public static char PlatformPathSeparator;
@@ -621,7 +595,7 @@ namespace SharpFlame
 
         public static void View_Radius_Set(double Radius)
         {
-            VisionSectors.Radius = Radius / (TerrainGridSpacing * SectorTileSize);
+            VisionSectors.Radius = Radius / (TerrainGridSpacing * Constants.SectorTileSize);
         }
 
         public struct sLayerList

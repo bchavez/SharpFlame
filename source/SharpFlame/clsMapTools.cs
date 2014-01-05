@@ -347,7 +347,7 @@ namespace SharpFlame
             double difA = 0;
             double difB = 0;
             bool NewTri = default(bool);
-            double CliffSlope = Math.Atan(255.0D * modProgram.DefaultHeightMultiplier / (2.0D * (Args.LevelCount - 1.0D) * modProgram.TerrainGridSpacing)) -
+            double CliffSlope = Math.Atan(255.0D * Constants.DefaultHeightMultiplier / (2.0D * (Args.LevelCount - 1.0D) * modProgram.TerrainGridSpacing)) -
                                 MathUtil.RadOf1Deg; //divided by 2 due to the terrain height randomization
 
             Tileset = Args.Tileset.Tileset;
