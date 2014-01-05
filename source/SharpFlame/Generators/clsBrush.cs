@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Matrix3D;
 using Microsoft.VisualBasic;
 using SharpFlame.Mapping;
+using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 
 namespace SharpFlame
@@ -86,17 +87,17 @@ namespace SharpFlame
             CreateTiles();
         }
 
-        public void PerformActionMapTiles(clsMap.clsAction Tool, sPosNum Centre)
+        public void PerformActionMapTiles(clsAction Tool, sPosNum Centre)
         {
             PerformAction(Tool, Centre, new sXY_int(Tool.Map.Terrain.TileSize.X - 1, Tool.Map.Terrain.TileSize.Y - 1));
         }
 
-        public void PerformActionMapVertices(clsMap.clsAction Tool, sPosNum Centre)
+        public void PerformActionMapVertices(clsAction Tool, sPosNum Centre)
         {
             PerformAction(Tool, Centre, Tool.Map.Terrain.TileSize);
         }
 
-        public void PerformActionMapSectors(clsMap.clsAction Tool, sPosNum Centre)
+        public void PerformActionMapSectors(clsAction Tool, sPosNum Centre)
         {
             PerformAction(Tool, Centre, new sXY_int(Tool.Map.SectorCount.X - 1, Tool.Map.SectorCount.Y - 1));
         }
@@ -113,7 +114,7 @@ namespace SharpFlame
             }
         }
 
-        private void PerformAction(clsMap.clsAction Action, sPosNum PosNum, sXY_int LastValidNum)
+        private void PerformAction(clsAction Action, sPosNum PosNum, sXY_int LastValidNum)
         {
             int XNum = 0;
             int X = 0;

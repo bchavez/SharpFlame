@@ -6,11 +6,12 @@ using SharpFlame.AppSettings;
 using SharpFlame.Domain;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping.Objects;
+using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping.Drawing
 {
-    public class clsDrawSectorObjects : clsMap.clsAction
+    public class clsDrawSectorObjects : clsAction
     {
         public clsTextLabels UnitTextLabels;
 

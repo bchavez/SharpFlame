@@ -7,6 +7,7 @@ using SharpFlame.FileIO;
 using SharpFlame.Generators;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
+using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 
 namespace SharpFlame
@@ -395,7 +396,7 @@ namespace SharpFlame
                 double CliffAngle = Math.Atan(255.0D * Generator.Map.HeightMultiplier / (2.0D * (Generator.LevelCount - 1.0D) * App.TerrainGridSpacing)) -
                                     MathUtil.RadOf1Deg;
                 clsBrush tmpBrush = new clsBrush((Math.Max(Generator.Map.Terrain.TileSize.X, Generator.Map.Terrain.TileSize.Y)) * 1.1D, clsBrush.enumShape.Square);
-                clsMap.clsApplyCliff ApplyCliff = new clsMap.clsApplyCliff();
+                clsApplyCliff ApplyCliff = new clsApplyCliff();
                 ApplyCliff.Map = Generator.Map;
                 ApplyCliff.Angle = CliffAngle;
                 ApplyCliff.SetTris = true;

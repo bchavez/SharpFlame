@@ -1,8 +1,9 @@
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Mapping.Tools;
 
 namespace SharpFlame.Mapping.Drawing
 {
-    public class clsDrawCallTerrainWireframe : clsMap.clsAction
+    public class clsDrawCallTerrainWireframe : clsAction
     {
         public override void ActionPerform()
         {

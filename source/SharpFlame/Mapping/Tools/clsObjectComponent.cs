@@ -1,0 +1,39 @@
+using SharpFlame.Domain;
+
+namespace SharpFlame.Mapping.Tools
+{
+    public abstract class clsObjectComponent : clsObjectAction
+    {
+        private DroidDesign OldDroidType;
+        protected DroidDesign NewDroidType;
+
+        protected abstract void ChangeComponent();
+
+        protected override void ActionCondition()
+        {
+            base.ActionCondition();
+
+            if ( Unit.TypeBase.Type == UnitType.PlayerDroid )
+            {
+                OldDroidType = (DroidDesign)Unit.TypeBase;
+                ActionPerformed = !OldDroidType.IsTemplate;
+            }
+            else
+            {
+                OldDroidType = null;
+                ActionPerformed = false;
+            }
+        }
+
+        protected override void _ActionPerform()
+        {
+            NewDroidType = new DroidDesign();
+            ResultUnit.TypeBase = NewDroidType;
+            NewDroidType.CopyDesign(OldDroidType);
+
+            ChangeComponent();
+
+            NewDroidType.UpdateAttachments();
+        }
+    }
+}

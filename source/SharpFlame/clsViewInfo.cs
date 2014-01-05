@@ -8,6 +8,7 @@ using SharpFlame.FileIO;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
+using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
 using SharpFlame.AppSettings;
@@ -793,7 +794,7 @@ namespace SharpFlame
                 return;
             }
 
-            clsMap.clsApplyVertexTerrain ApplyVertexTerrain = new clsMap.clsApplyVertexTerrain();
+            clsApplyVertexTerrain ApplyVertexTerrain = new clsApplyVertexTerrain();
             ApplyVertexTerrain.Map = Map;
             ApplyVertexTerrain.VertexTerrain = App.SelectedTerrain;
             App.TerrainBrush.PerformActionMapVertices(ApplyVertexTerrain, MouseOverTerrain.Vertex);
@@ -1231,7 +1232,7 @@ namespace SharpFlame
                 return;
             }
 
-            clsMap.clsApplyTexture ApplyTexture = new clsMap.clsApplyTexture();
+            clsApplyTexture ApplyTexture = new clsApplyTexture();
             ApplyTexture.Map = Map;
             ApplyTexture.TextureNum = App.SelectedTextureNum;
             ApplyTexture.SetTexture = Program.frmMainInstance.chkSetTexture.Checked;
@@ -1257,7 +1258,7 @@ namespace SharpFlame
 
             if ( Remove )
             {
-                clsMap.clsApplyCliffTriangleRemove ApplyCliffTriangleRemove = new clsMap.clsApplyCliffTriangleRemove();
+                clsApplyCliffTriangleRemove ApplyCliffTriangleRemove = new clsApplyCliffTriangleRemove();
                 ApplyCliffTriangleRemove.Map = Map;
                 ApplyCliffTriangleRemove.PosNum = MouseOverTerrain.Tile.Normal;
                 ApplyCliffTriangleRemove.Triangle = MouseOverTerrain.Triangle;
@@ -1265,7 +1266,7 @@ namespace SharpFlame
             }
             else
             {
-                clsMap.clsApplyCliffTriangle ApplyCliffTriangle = new clsMap.clsApplyCliffTriangle();
+                clsApplyCliffTriangle ApplyCliffTriangle = new clsApplyCliffTriangle();
                 ApplyCliffTriangle.Map = Map;
                 ApplyCliffTriangle.PosNum = MouseOverTerrain.Tile.Normal;
                 ApplyCliffTriangle.Triangle = MouseOverTerrain.Triangle;
@@ -1286,7 +1287,7 @@ namespace SharpFlame
                 return;
             }
 
-            clsMap.clsApplyCliff ApplyCliff = new clsMap.clsApplyCliff();
+            clsApplyCliff ApplyCliff = new clsApplyCliff();
             ApplyCliff.Map = Map;
             double Angle = 0;
             if ( !IOUtil.InvariantParse(Program.frmMainInstance.txtAutoCliffSlope.Text, ref Angle) )
@@ -1311,7 +1312,7 @@ namespace SharpFlame
                 return;
             }
 
-            clsMap.clsApplyCliffRemove ApplyCliffRemove = new clsMap.clsApplyCliffRemove();
+            clsApplyCliffRemove ApplyCliffRemove = new clsApplyCliffRemove();
             ApplyCliffRemove.Map = Map;
             App.CliffBrush.PerformActionMapTiles(ApplyCliffRemove, MouseOverTerrain.Tile);
 
@@ -1329,7 +1330,7 @@ namespace SharpFlame
                 return;
             }
 
-            clsMap.clsApplyRoadRemove ApplyRoadRemove = new clsMap.clsApplyRoadRemove();
+            clsApplyRoadRemove ApplyRoadRemove = new clsApplyRoadRemove();
             ApplyRoadRemove.Map = Map;
             App.CliffBrush.PerformActionMapTiles(ApplyRoadRemove, MouseOverTerrain.Tile);
 
@@ -1442,7 +1443,7 @@ namespace SharpFlame
                 return;
             }
 
-            clsMap.clsApplyHeightSmoothing ApplyHeightSmoothing = new clsMap.clsApplyHeightSmoothing();
+            clsApplyHeightSmoothing ApplyHeightSmoothing = new clsApplyHeightSmoothing();
             ApplyHeightSmoothing.Map = Map;
             ApplyHeightSmoothing.Ratio = Ratio;
             int Radius = (int)(Math.Ceiling(App.HeightBrush.Radius));
@@ -1472,7 +1473,7 @@ namespace SharpFlame
                 return;
             }
 
-            clsMap.clsApplyHeightChange ApplyHeightChange = new clsMap.clsApplyHeightChange();
+            clsApplyHeightChange ApplyHeightChange = new clsApplyHeightChange();
             ApplyHeightChange.Map = Map;
             ApplyHeightChange.Rate = Rate;
             ApplyHeightChange.UseEffect = Program.frmMainInstance.cbxHeightChangeFade.Checked;
@@ -1492,7 +1493,7 @@ namespace SharpFlame
                 return;
             }
 
-            clsMap.clsApplyHeightSet ApplyHeightSet = new clsMap.clsApplyHeightSet();
+            clsApplyHeightSet ApplyHeightSet = new clsApplyHeightSet();
             ApplyHeightSet.Map = Map;
             ApplyHeightSet.Height = Height;
             Brush.PerformActionMapVertices(ApplyHeightSet, MouseOverTerrain.Vertex);

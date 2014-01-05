@@ -13,6 +13,7 @@ using SharpFlame.Graphics.OpenGL;
 using SharpFlame.AppSettings;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Objects;
+using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 using SharpFlame.Util;
 
@@ -645,7 +646,7 @@ namespace SharpFlame.Controls
                                        App.TerrainGridSpacing;
                             Offset.Y = ((int)(Math.Round(Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.Y - Centre.Y) / App.TerrainGridSpacing)))) *
                                        App.TerrainGridSpacing;
-                            clsMap.clsObjectPosOffset ObjectPosOffset = new clsMap.clsObjectPosOffset();
+                            clsObjectPosOffset ObjectPosOffset = new clsObjectPosOffset();
                             ObjectPosOffset.Map = Map;
                             ObjectPosOffset.Offset = Offset;
                             Map.SelectedUnitsAction(ObjectPosOffset);
@@ -660,7 +661,7 @@ namespace SharpFlame.Controls
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Clockwise) )
                 {
-                    clsMap.clsObjectRotationOffset ObjectRotationOffset = new clsMap.clsObjectRotationOffset();
+                    clsObjectRotationOffset ObjectRotationOffset = new clsObjectRotationOffset();
                     ObjectRotationOffset.Map = Map;
                     ObjectRotationOffset.Offset = -90;
                     Map.SelectedUnitsAction(ObjectRotationOffset);
@@ -671,7 +672,7 @@ namespace SharpFlame.Controls
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.CounterClockwise) )
                 {
-                    clsMap.clsObjectRotationOffset ObjectRotationOffset = new clsMap.clsObjectRotationOffset();
+                    clsObjectRotationOffset ObjectRotationOffset = new clsObjectRotationOffset();
                     ObjectRotationOffset.Map = Map;
                     ObjectRotationOffset.Offset = 90;
                     Map.SelectedUnitsAction(ObjectRotationOffset);

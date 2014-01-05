@@ -1,11 +1,12 @@
 using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
+using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping.Drawing
 {
-    public class clsDrawVertexMarker : clsMap.clsAction
+    public class clsDrawVertexMarker : clsAction
     {
         public sRGBA_sng Colour;
 

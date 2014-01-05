@@ -20,6 +20,7 @@ using SharpFlame.Mapping;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tiles;
+using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
 using SharpFlame.AppSettings;
@@ -1560,7 +1561,7 @@ namespace SharpFlame
                 }
             }
 
-            clsMap.clsObjectRotation ObjectRotation = new clsMap.clsObjectRotation();
+            clsObjectRotation ObjectRotation = new clsObjectRotation();
             ObjectRotation.Map = Map;
             ObjectRotation.Angle = Angle;
             Map.SelectedUnitsAction(ObjectRotation);
@@ -2472,7 +2473,7 @@ namespace SharpFlame
                 }
             }
 
-            clsMap.clsObjectUnitGroup ObjectUnitGroup = new clsMap.clsObjectUnitGroup();
+            clsObjectUnitGroup ObjectUnitGroup = new clsObjectUnitGroup();
             ObjectUnitGroup.Map = Map;
             ObjectUnitGroup.UnitGroup = ObjectPlayerNumControl.Target.Item;
             Map.SelectedUnitsAction(ObjectUnitGroup);
@@ -2758,7 +2759,7 @@ namespace SharpFlame
                 }
             }
 
-            clsMap.clsObjectPriority ObjectPriority = new clsMap.clsObjectPriority();
+            clsObjectPriority ObjectPriority = new clsObjectPriority();
             ObjectPriority.Map = Map;
             ObjectPriority.Priority = Priority;
             Map.SelectedUnitsAction(ObjectPriority);
@@ -2805,7 +2806,7 @@ namespace SharpFlame
                 }
             }
 
-            clsMap.clsObjectHealth ObjectHealth = new clsMap.clsObjectHealth();
+            clsObjectHealth ObjectHealth = new clsObjectHealth();
             ObjectHealth.Map = Map;
             ObjectHealth.Health = Health;
             Map.SelectedUnitsAction(ObjectHealth);
@@ -2845,7 +2846,7 @@ namespace SharpFlame
                 }
             }
 
-            clsMap.clsObjectTemplateToDesign ObjectTemplateToDesign = new clsMap.clsObjectTemplateToDesign();
+            clsObjectTemplateToDesign ObjectTemplateToDesign = new clsObjectTemplateToDesign();
             ObjectTemplateToDesign.Map = Map;
             Map.SelectedUnitsAction(ObjectTemplateToDesign);
 
@@ -2912,7 +2913,7 @@ namespace SharpFlame
                 }
             }
 
-            clsMap.clsObjectBody ObjectBody = new clsMap.clsObjectBody();
+            clsObjectBody ObjectBody = new clsObjectBody();
             ObjectBody.Map = Map;
             ObjectBody.Body = cboBody_Objects[cboDroidBody.SelectedIndex];
             Map.SelectedUnitsAction(ObjectBody);
@@ -2955,7 +2956,7 @@ namespace SharpFlame
                 }
             }
 
-            clsMap.clsObjectPropulsion ObjectPropulsion = new clsMap.clsObjectPropulsion();
+            clsObjectPropulsion ObjectPropulsion = new clsObjectPropulsion();
             ObjectPropulsion.Map = Map;
             ObjectPropulsion.Propulsion = cboPropulsion_Objects[cboDroidPropulsion.SelectedIndex];
             Map.SelectedUnitsAction(ObjectPropulsion);
@@ -3003,7 +3004,7 @@ namespace SharpFlame
                 }
             }
 
-            clsMap.clsObjectTurret ObjectTurret = new clsMap.clsObjectTurret();
+            clsObjectTurret ObjectTurret = new clsObjectTurret();
             ObjectTurret.Map = Map;
             ObjectTurret.Turret = cboTurret_Objects[cboDroidTurret1.SelectedIndex];
             ObjectTurret.TurretNum = 0;
@@ -3046,7 +3047,7 @@ namespace SharpFlame
                 }
             }
 
-            clsMap.clsObjectTurret ObjectTurret = new clsMap.clsObjectTurret();
+            clsObjectTurret ObjectTurret = new clsObjectTurret();
             ObjectTurret.Map = Map;
             ObjectTurret.Turret = cboTurret_Objects[cboDroidTurret2.SelectedIndex];
             ObjectTurret.TurretNum = 1;
@@ -3089,7 +3090,7 @@ namespace SharpFlame
                 }
             }
 
-            clsMap.clsObjectTurret ObjectTurret = new clsMap.clsObjectTurret();
+            clsObjectTurret ObjectTurret = new clsObjectTurret();
             ObjectTurret.Map = Map;
             ObjectTurret.Turret = cboTurret_Objects[cboDroidTurret3.SelectedIndex];
             ObjectTurret.TurretNum = 2;
@@ -3264,7 +3265,7 @@ namespace SharpFlame
                 return;
             }
 
-            clsMap.clsObjectTurretCount ObjectTurretCount = new clsMap.clsObjectTurretCount();
+            clsObjectTurretCount ObjectTurretCount = new clsObjectTurretCount();
             ObjectTurretCount.Map = Map;
             ObjectTurretCount.TurretCount = Count;
             Map.SelectedUnitsAction(ObjectTurretCount);
@@ -3286,7 +3287,7 @@ namespace SharpFlame
                 return;
             }
 
-            clsMap.clsObjectDroidType ObjectDroidType = new clsMap.clsObjectDroidType();
+            clsObjectDroidType ObjectDroidType = new clsObjectDroidType();
             ObjectDroidType.Map = Map;
             ObjectDroidType.DroidType = NewType;
             Map.SelectedUnitsAction(ObjectDroidType);
@@ -3649,7 +3650,7 @@ namespace SharpFlame
                 return;
             }
 
-            clsMap.clsObjectFlattenTerrain FlattenTool = new clsMap.clsObjectFlattenTerrain();
+            clsObjectFlattenTerrain FlattenTool = new clsObjectFlattenTerrain();
             Map.SelectedUnits.GetItemsAsSimpleClassList().PerformTool(FlattenTool);
 
             Map.Update();
@@ -4206,7 +4207,7 @@ namespace SharpFlame
                 return;
             }
 
-            clsMap.clsObjectAlignment AlignTool = new clsMap.clsObjectAlignment();
+            clsObjectAlignment AlignTool = new clsObjectAlignment();
             AlignTool.Map = Map;
             Map.SelectedUnits.GetItemsAsSimpleList().PerformTool(AlignTool);
 
@@ -4396,7 +4397,7 @@ namespace SharpFlame
                     OilList.Add(Unit);
                 }
             }
-            clsMap.clsObjectFlattenTerrain FlattenTool = new clsMap.clsObjectFlattenTerrain();
+            clsObjectFlattenTerrain FlattenTool = new clsObjectFlattenTerrain();
             OilList.PerformTool(FlattenTool);
 
             Map.Update();
@@ -4422,7 +4423,7 @@ namespace SharpFlame
                     StructureList.Add(Unit);
                 }
             }
-            clsMap.clsObjectFlattenTerrain FlattenTool = new clsMap.clsObjectFlattenTerrain();
+            clsObjectFlattenTerrain FlattenTool = new clsObjectFlattenTerrain();
             StructureList.PerformTool(FlattenTool);
 
             Map.Update();

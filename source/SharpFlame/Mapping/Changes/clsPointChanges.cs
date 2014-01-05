@@ -1,4 +1,5 @@
 using SharpFlame.Collections;
+using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping.Changes
@@ -53,7 +54,7 @@ namespace SharpFlame.Mapping.Changes
             ChangedPoints.Clear();
         }
 
-        public void PerformTool(clsMap.clsAction Tool)
+        public void PerformTool(clsAction Tool)
         {
             clsXY_int Point = default(clsXY_int);
 

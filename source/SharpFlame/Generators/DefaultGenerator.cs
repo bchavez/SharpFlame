@@ -1,6 +1,7 @@
 using System;
 using SharpFlame.Domain;
 using SharpFlame.Mapping;
+using SharpFlame.Mapping.Tools;
 
 namespace SharpFlame.Generators
 {
@@ -58,9 +59,9 @@ namespace SharpFlame.Generators
 
         public static UnitTypeBase UnitTypeBaseOilDrum;
 
-        public static clsMap.sGenerateMasterTerrainArgs TerrainStyle_Arizona;
-        public static clsMap.sGenerateMasterTerrainArgs TerrainStyle_Urban;
-        public static clsMap.sGenerateMasterTerrainArgs TerrainStyle_Rockies;
+        public static sGenerateMasterTerrainArgs TerrainStyle_Arizona;
+        public static sGenerateMasterTerrainArgs TerrainStyle_Urban;
+        public static sGenerateMasterTerrainArgs TerrainStyle_Rockies;
 
         public static UnitTypeBase GetUnitTypeFromCode(string Code)
         {
@@ -176,7 +177,7 @@ namespace SharpFlame.Generators
 
             Array.Resize(ref TerrainStyle_Arizona.Layers, Num + 1);
 
-            TerrainStyle_Arizona.Layers[Num] = new clsMap.sGenerateMasterTerrainArgs.clsLayer();
+            TerrainStyle_Arizona.Layers[Num] = new sGenerateMasterTerrainArgs.clsLayer();
             TerrainStyle_Arizona.Layers[Num].TileNum = 48; //red
             TerrainStyle_Arizona.Layers[Num].TerrainmapDensity = 1.0F;
             TerrainStyle_Arizona.Layers[Num].TerrainmapScale = 0.0F;
@@ -187,7 +188,7 @@ namespace SharpFlame.Generators
             Num++;
             Array.Resize(ref TerrainStyle_Arizona.Layers, Num + 1);
 
-            TerrainStyle_Arizona.Layers[Num] = new clsMap.sGenerateMasterTerrainArgs.clsLayer();
+            TerrainStyle_Arizona.Layers[Num] = new sGenerateMasterTerrainArgs.clsLayer();
             TerrainStyle_Arizona.Layers[Num].TileNum = 11; //yellow
             TerrainStyle_Arizona.Layers[Num].TerrainmapDensity = 0.5F;
             TerrainStyle_Arizona.Layers[Num].TerrainmapScale = 2.0F;
@@ -198,7 +199,7 @@ namespace SharpFlame.Generators
             Num++;
             Array.Resize(ref TerrainStyle_Arizona.Layers, Num + 1);
 
-            TerrainStyle_Arizona.Layers[Num] = new clsMap.sGenerateMasterTerrainArgs.clsLayer();
+            TerrainStyle_Arizona.Layers[Num] = new sGenerateMasterTerrainArgs.clsLayer();
             TerrainStyle_Arizona.Layers[Num].TileNum = 5; //brown
             TerrainStyle_Arizona.Layers[Num].TerrainmapDensity = 0.4F;
             TerrainStyle_Arizona.Layers[Num].TerrainmapScale = 1.5F;
@@ -209,7 +210,7 @@ namespace SharpFlame.Generators
             Num++;
             Array.Resize(ref TerrainStyle_Arizona.Layers, Num + 1);
 
-            TerrainStyle_Arizona.Layers[Num] = new clsMap.sGenerateMasterTerrainArgs.clsLayer();
+            TerrainStyle_Arizona.Layers[Num] = new sGenerateMasterTerrainArgs.clsLayer();
             TerrainStyle_Arizona.Layers[Num].TileNum = 23; //green
             TerrainStyle_Arizona.Layers[Num].TerrainmapDensity = 0.75F;
             TerrainStyle_Arizona.Layers[Num].TerrainmapScale = 1.5F;
@@ -220,7 +221,7 @@ namespace SharpFlame.Generators
             Num++;
             Array.Resize(ref TerrainStyle_Arizona.Layers, Num + 1);
 
-            TerrainStyle_Arizona.Layers[Num] = new clsMap.sGenerateMasterTerrainArgs.clsLayer();
+            TerrainStyle_Arizona.Layers[Num] = new sGenerateMasterTerrainArgs.clsLayer();
             TerrainStyle_Arizona.Layers[Num].TileNum = 18; //cliff
             TerrainStyle_Arizona.Layers[Num].TerrainmapDensity = 1.0F;
             TerrainStyle_Arizona.Layers[Num].TerrainmapScale = 0.0F;
@@ -241,7 +242,7 @@ namespace SharpFlame.Generators
 
             Array.Resize(ref TerrainStyle_Urban.Layers, Num + 1);
 
-            TerrainStyle_Urban.Layers[Num] = new clsMap.sGenerateMasterTerrainArgs.clsLayer();
+            TerrainStyle_Urban.Layers[Num] = new sGenerateMasterTerrainArgs.clsLayer();
             TerrainStyle_Urban.Layers[Num].TileNum = 7;
             TerrainStyle_Urban.Layers[Num].TerrainmapDensity = 1.0F;
             TerrainStyle_Urban.Layers[Num].HeightMax = 256.0F;
@@ -251,7 +252,7 @@ namespace SharpFlame.Generators
             Num++;
             Array.Resize(ref TerrainStyle_Urban.Layers, Num + 1);
 
-            TerrainStyle_Urban.Layers[Num] = new clsMap.sGenerateMasterTerrainArgs.clsLayer();
+            TerrainStyle_Urban.Layers[Num] = new sGenerateMasterTerrainArgs.clsLayer();
             TerrainStyle_Urban.Layers[Num].TileNum = 0;
             TerrainStyle_Urban.Layers[Num].TerrainmapDensity = 0.5F;
             TerrainStyle_Urban.Layers[Num].TerrainmapScale = 1.5F;
@@ -262,7 +263,7 @@ namespace SharpFlame.Generators
             Num++;
             Array.Resize(ref TerrainStyle_Urban.Layers, Num + 1);
 
-            TerrainStyle_Urban.Layers[Num] = new clsMap.sGenerateMasterTerrainArgs.clsLayer();
+            TerrainStyle_Urban.Layers[Num] = new sGenerateMasterTerrainArgs.clsLayer();
             TerrainStyle_Urban.Layers[Num].TileNum = 22;
             TerrainStyle_Urban.Layers[Num].TerrainmapDensity = 0.333F;
             TerrainStyle_Urban.Layers[Num].TerrainmapScale = 1.5F;
@@ -273,7 +274,7 @@ namespace SharpFlame.Generators
             Num++;
             Array.Resize(ref TerrainStyle_Urban.Layers, Num + 1);
 
-            TerrainStyle_Urban.Layers[Num] = new clsMap.sGenerateMasterTerrainArgs.clsLayer();
+            TerrainStyle_Urban.Layers[Num] = new sGenerateMasterTerrainArgs.clsLayer();
             TerrainStyle_Urban.Layers[Num].TileNum = 50;
             TerrainStyle_Urban.Layers[Num].TerrainmapDensity = 0.333F;
             TerrainStyle_Urban.Layers[Num].TerrainmapScale = 1.5F;
@@ -295,7 +296,7 @@ namespace SharpFlame.Generators
             Num++;
             Array.Resize(ref TerrainStyle_Urban.Layers, Num + 1);
 
-            TerrainStyle_Urban.Layers[Num] = new clsMap.sGenerateMasterTerrainArgs.clsLayer();
+            TerrainStyle_Urban.Layers[Num] = new sGenerateMasterTerrainArgs.clsLayer();
             TerrainStyle_Urban.Layers[Num].TileNum = 51;
             TerrainStyle_Urban.Layers[Num].TerrainmapDensity = 0.4F;
             TerrainStyle_Urban.Layers[Num].TerrainmapScale = 1.5F;
@@ -306,7 +307,7 @@ namespace SharpFlame.Generators
             Num++;
             Array.Resize(ref TerrainStyle_Urban.Layers, Num + 1);
 
-            TerrainStyle_Urban.Layers[Num] = new clsMap.sGenerateMasterTerrainArgs.clsLayer();
+            TerrainStyle_Urban.Layers[Num] = new sGenerateMasterTerrainArgs.clsLayer();
             TerrainStyle_Urban.Layers[Num].TileNum = 70;
             TerrainStyle_Urban.Layers[Num].TerrainmapDensity = 1.0F;
             TerrainStyle_Urban.Layers[Num].TerrainmapScale = 0.0F;
@@ -327,7 +328,7 @@ namespace SharpFlame.Generators
 
             Array.Resize(ref TerrainStyle_Rockies.Layers, Num + 1);
 
-            TerrainStyle_Rockies.Layers[Num] = new clsMap.sGenerateMasterTerrainArgs.clsLayer();
+            TerrainStyle_Rockies.Layers[Num] = new sGenerateMasterTerrainArgs.clsLayer();
             TerrainStyle_Rockies.Layers[Num].TileNum = 0; //green
             TerrainStyle_Rockies.Layers[Num].TerrainmapDensity = 1.0F;
             TerrainStyle_Rockies.Layers[Num].TerrainmapScale = 0.0F;
@@ -338,7 +339,7 @@ namespace SharpFlame.Generators
             Num++;
             Array.Resize(ref TerrainStyle_Rockies.Layers, Num + 1);
 
-            TerrainStyle_Rockies.Layers[Num] = new clsMap.sGenerateMasterTerrainArgs.clsLayer();
+            TerrainStyle_Rockies.Layers[Num] = new sGenerateMasterTerrainArgs.clsLayer();
             TerrainStyle_Rockies.Layers[Num].TileNum = 53; //brown
             TerrainStyle_Rockies.Layers[Num].TerrainmapDensity = 0.4F;
             TerrainStyle_Rockies.Layers[Num].TerrainmapScale = 1.5F;
@@ -349,7 +350,7 @@ namespace SharpFlame.Generators
             Num++;
             Array.Resize(ref TerrainStyle_Rockies.Layers, Num + 1);
 
-            TerrainStyle_Rockies.Layers[Num] = new clsMap.sGenerateMasterTerrainArgs.clsLayer();
+            TerrainStyle_Rockies.Layers[Num] = new sGenerateMasterTerrainArgs.clsLayer();
             TerrainStyle_Rockies.Layers[Num].TileNum = 23; //green & snow
             TerrainStyle_Rockies.Layers[Num].TerrainmapDensity = 0.333F;
             TerrainStyle_Rockies.Layers[Num].TerrainmapScale = 1.5F;
@@ -361,7 +362,7 @@ namespace SharpFlame.Generators
             Num++;
             Array.Resize(ref TerrainStyle_Rockies.Layers, Num + 1);
 
-            TerrainStyle_Rockies.Layers[Num] = new clsMap.sGenerateMasterTerrainArgs.clsLayer();
+            TerrainStyle_Rockies.Layers[Num] = new sGenerateMasterTerrainArgs.clsLayer();
             TerrainStyle_Rockies.Layers[Num].TileNum = 64; //snow
             TerrainStyle_Rockies.Layers[Num].TerrainmapDensity = 0.5F;
             TerrainStyle_Rockies.Layers[Num].TerrainmapScale = 1.0F;
@@ -373,7 +374,7 @@ namespace SharpFlame.Generators
             Num++;
             Array.Resize(ref TerrainStyle_Rockies.Layers, Num + 1);
 
-            TerrainStyle_Rockies.Layers[Num] = new clsMap.sGenerateMasterTerrainArgs.clsLayer();
+            TerrainStyle_Rockies.Layers[Num] = new sGenerateMasterTerrainArgs.clsLayer();
             TerrainStyle_Rockies.Layers[Num].TileNum = 41; //brown & snow
             TerrainStyle_Rockies.Layers[Num].TerrainmapDensity = 1.0F;
             TerrainStyle_Rockies.Layers[Num].TerrainmapScale = 0.0F;
@@ -385,7 +386,7 @@ namespace SharpFlame.Generators
             Num++;
             Array.Resize(ref TerrainStyle_Rockies.Layers, Num + 1);
 
-            TerrainStyle_Rockies.Layers[Num] = new clsMap.sGenerateMasterTerrainArgs.clsLayer();
+            TerrainStyle_Rockies.Layers[Num] = new sGenerateMasterTerrainArgs.clsLayer();
             TerrainStyle_Rockies.Layers[Num].TileNum = 64; //snow
             TerrainStyle_Rockies.Layers[Num].TerrainmapDensity = 0.875F;
             TerrainStyle_Rockies.Layers[Num].TerrainmapScale = 1.0F;
@@ -397,7 +398,7 @@ namespace SharpFlame.Generators
             Num++;
             Array.Resize(ref TerrainStyle_Rockies.Layers, Num + 1);
 
-            TerrainStyle_Rockies.Layers[Num] = new clsMap.sGenerateMasterTerrainArgs.clsLayer();
+            TerrainStyle_Rockies.Layers[Num] = new sGenerateMasterTerrainArgs.clsLayer();
             TerrainStyle_Rockies.Layers[Num].TileNum = 30; //cliff
             TerrainStyle_Rockies.Layers[Num].TerrainmapDensity = 1.0F;
             TerrainStyle_Rockies.Layers[Num].TerrainmapScale = 0.0F;

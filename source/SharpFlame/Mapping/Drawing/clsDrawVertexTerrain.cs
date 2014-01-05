@@ -2,10 +2,11 @@ using System;
 using Matrix3D;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
+using SharpFlame.Mapping.Tools;
 
 namespace SharpFlame.Mapping.Drawing
 {
-    public class clsDrawVertexTerrain : clsMap.clsAction
+    public class clsDrawVertexTerrain : clsAction
     {
         public Matrix3DMath.Matrix3D ViewAngleMatrix;
 

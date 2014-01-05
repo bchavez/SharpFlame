@@ -1,9 +1,10 @@
 using System;
+using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping.Drawing
 {
-    public class clsDrawTileOrientation : clsMap.clsAction
+    public class clsDrawTileOrientation : clsAction
     {
         public override void ActionPerform()
         {
