@@ -5,6 +5,7 @@ using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.FileIO.Ini;
 using SharpFlame.Mapping.Drawing;
+using SharpFlame.Mapping.Objects;
 using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping

@@ -9,6 +9,7 @@ using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping.Drawing;
+using SharpFlame.Mapping.Objects;
 using SharpFlame.Maths;
 using SharpFlame.Util;
 

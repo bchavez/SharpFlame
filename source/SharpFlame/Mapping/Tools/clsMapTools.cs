@@ -6,6 +6,7 @@ using SharpFlame.Collections;
 using SharpFlame.Collections.Specialized;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
+using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 using SharpFlame.Painters;

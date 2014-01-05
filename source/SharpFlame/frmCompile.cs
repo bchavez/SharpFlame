@@ -5,6 +5,7 @@ using Microsoft.VisualBasic;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping;
+using SharpFlame.Mapping.Objects;
 using SharpFlame.Maths;
 
 namespace SharpFlame
@@ -233,7 +234,7 @@ namespace SharpFlame
             bool[,] TileHasUnit = new bool[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
             StructureTypeBase[,] tileStructureTypeBase = new StructureTypeBase[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
             FeatureTypeBase[,] tileFeatureTypeBase = new FeatureTypeBase[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
-            clsMap.clsUnitGroup[,] TileObjectGroup = new clsMap.clsUnitGroup[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
+            clsUnitGroup[,] TileObjectGroup = new clsUnitGroup[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
             int X = 0;
             int Y = 0;
             sXY_int StartPos = new sXY_int();
@@ -244,8 +245,8 @@ namespace SharpFlame
             sXY_int Footprint = new sXY_int();
             bool[] UnitIsStructureModule = new bool[Map.Units.Count];
             bool IsValid = default(bool);
-            clsMap.clsUnit Unit = default(clsMap.clsUnit);
-            foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.Units )
+            clsUnit Unit = default(clsUnit);
+            foreach ( clsUnit tempLoopVar_Unit in Map.Units )
             {
                 Unit = tempLoopVar_Unit;
                 if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
@@ -257,7 +258,7 @@ namespace SharpFlame
                 }
             }
             //check and store non-module units first. modules need to check for the underlying unit.
-            foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.Units )
+            foreach ( clsUnit tempLoopVar_Unit in Map.Units )
             {
                 Unit = tempLoopVar_Unit;
                 if ( !UnitIsStructureModule[Unit.MapLink.ArrayPosition] )
@@ -302,7 +303,7 @@ namespace SharpFlame
                 }
             }
             //check modules and extractors
-            foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.Units )
+            foreach ( clsUnit tempLoopVar_Unit in Map.Units )
             {
                 Unit = tempLoopVar_Unit;
                 if ( UnitIsStructureModule[Unit.MapLink.ArrayPosition] )
@@ -426,11 +427,11 @@ namespace SharpFlame
             DroidDesign DroidType = default(DroidDesign);
             StructureTypeBase structureTypeBase;
             int UnusedPlayerUnitWarningCount = 0;
-            clsMap.clsUnit Unit = default(clsMap.clsUnit);
+            clsUnit Unit = default(clsUnit);
 
             ScavPlayerNum = Math.Max(PlayerCount, 7);
 
-            foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.Units )
+            foreach ( clsUnit tempLoopVar_Unit in Map.Units )
             {
                 Unit = tempLoopVar_Unit;
                 if ( Unit.UnitGroup == Map.ScavengerUnitGroup )
@@ -529,9 +530,9 @@ namespace SharpFlame
             int[,] PlayerStructureTypeCount = new int[Constants.PlayerCountMax, App.ObjectData.StructureTypes.Count];
             int[] ScavStructureTypeCount = new int[App.ObjectData.StructureTypes.Count];
             StructureTypeBase structureTypeBase = default(StructureTypeBase);
-            clsMap.clsUnit Unit = default(clsMap.clsUnit);
+            clsUnit Unit = default(clsUnit);
 
-            foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.Units )
+            foreach ( clsUnit tempLoopVar_Unit in Map.Units )
             {
                 Unit = tempLoopVar_Unit;
                 if ( Unit.TypeBase.Type == UnitType.PlayerStructure )

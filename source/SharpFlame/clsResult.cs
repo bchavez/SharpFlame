@@ -1,6 +1,7 @@
 using System.Windows.Forms;
 using SharpFlame.Collections;
 using SharpFlame.Mapping;
+using SharpFlame.Mapping.Objects;
 using SharpFlame.Maths;
 
 namespace SharpFlame
@@ -209,7 +210,7 @@ namespace SharpFlame
 
     public sealed class modResults
     {
-        public static clsResultProblemGoto<clsResultItemPosGoto> CreateResultProblemGotoForObject(clsMap.clsUnit unit)
+        public static clsResultProblemGoto<clsResultItemPosGoto> CreateResultProblemGotoForObject(clsUnit unit)
         {
             clsResultItemPosGoto resultGoto = new clsResultItemPosGoto();
             resultGoto.View = unit.MapLink.Source.ViewInfo;

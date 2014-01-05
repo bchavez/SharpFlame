@@ -133,6 +133,12 @@
     <Compile Include="Mapping\IO\clsLNDObject.cs" />
     <Compile Include="Mapping\IO\sFMEUnit.cs" />
     <Compile Include="Mapping\IO\sLNDTile.cs" />
+    <Compile Include="Mapping\Objects\clsUnit.cs" />
+    <Compile Include="Mapping\Objects\clsUnitAdd.cs" />
+    <Compile Include="Mapping\Objects\clsUnitCreate.cs" />
+    <Compile Include="Mapping\Objects\clsUnitGroup.cs" />
+    <Compile Include="Mapping\Objects\clsUnitGroupContainer.cs" />
+    <Compile Include="Mapping\Objects\clsUnitSectorConnection.cs" />
     <Compile Include="Mapping\Tiles\clsGeneratorTileset.cs" />
     <Compile Include="Mapping\clsHeightmap.cs" />
     <Compile Include="Mapping\Renderers\clsMapRender.cs" />
@@ -164,7 +170,7 @@
     <Compile Include="Mapping\clsMapChanges.cs" />
     <Compile Include="Mapping\clsMapDraw.cs" />
     <Compile Include="Mapping\clsMapFMap.cs" />
-    <Compile Include="Mapping\Objects\clsMapObject.cs" />
+    <Compile Include="Mapping\clsMapObject.cs" />
     <Compile Include="Mapping\clsMapOtherIO.cs" />
     <Compile Include="Mapping\Script\clsMapScriptMarkers.cs" />
     <Compile Include="Mapping\Tools\clsMapTools.cs" />

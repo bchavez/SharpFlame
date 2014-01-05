@@ -14,6 +14,7 @@ using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping;
+using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
@@ -371,7 +372,7 @@ namespace SharpFlame
 
         public static bool ShowIDErrorMessage = true;
 
-        public static void ErrorIDChange(UInt32 IntendedID, clsMap.clsUnit IDUnit, string NameOfErrorSource)
+        public static void ErrorIDChange(UInt32 IntendedID, clsUnit IDUnit, string NameOfErrorSource)
         {
             if ( !ShowIDErrorMessage )
             {
@@ -397,7 +398,7 @@ namespace SharpFlame
             }
         }
 
-        public static void ZeroIDWarning(clsMap.clsUnit IDUnit, UInt32 NewID, clsResult Output)
+        public static void ZeroIDWarning(clsUnit IDUnit, UInt32 NewID, clsResult Output)
         {
             string MessageText = "";
 
@@ -716,14 +717,14 @@ namespace SharpFlame
 
         public static sLayerList LayerList;
 
-        public static Position.XY_dbl CalcUnitsCentrePos(SimpleList<clsMap.clsUnit> Units)
+        public static Position.XY_dbl CalcUnitsCentrePos(SimpleList<clsUnit> Units)
         {
             Position.XY_dbl Result = default(Position.XY_dbl);
 
             Result.X = 0.0D;
             Result.Y = 0.0D;
-            clsMap.clsUnit Unit = default(clsMap.clsUnit);
-            foreach ( clsMap.clsUnit tempLoopVar_Unit in Units )
+            clsUnit Unit = default(clsUnit);
+            foreach ( clsUnit tempLoopVar_Unit in Units )
             {
                 Unit = tempLoopVar_Unit;
                 Result += Unit.Pos.Horizontal.ToDoubles();

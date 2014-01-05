@@ -8,6 +8,7 @@ using SharpFlame.Collections.Specialized;
 using SharpFlame.Domain;
 using SharpFlame.Generators;
 using SharpFlame.Mapping;
+using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 using SharpFlame.Pathfinding;
@@ -2135,7 +2136,7 @@ namespace SharpFlame
             return BestNode;
         }
 
-        public clsMap.clsUnit PlaceUnitNear(UnitTypeBase TypeBase, sXY_int Pos, clsMap.clsUnitGroup UnitGroup, int Clearance, int Rotation, int MaxDistFromPos)
+        public clsUnit PlaceUnitNear(UnitTypeBase TypeBase, sXY_int Pos, clsUnitGroup UnitGroup, int Clearance, int Rotation, int MaxDistFromPos)
         {
             PathfinderNode PosNode = default(PathfinderNode);
             clsNodeTag NodeTag = default(clsNodeTag);
@@ -2153,10 +2154,10 @@ namespace SharpFlame
                 NodeTag = (clsNodeTag)PosNode.Tag;
                 if ( (Pos - NodeTag.Pos).ToDoubles().GetMagnitude() <= MaxDistFromPos )
                 {
-                    clsMap.clsUnitAdd NewUnitAdd = new clsMap.clsUnitAdd();
+                    clsUnitAdd NewUnitAdd = new clsUnitAdd();
                     NewUnitAdd.Map = Map;
                     NewUnitAdd.StoreChange = true;
-                    clsMap.clsUnit NewUnit = new clsMap.clsUnit();
+                    clsUnit NewUnit = new clsUnit();
                     NewUnitAdd.NewUnit = NewUnit;
                     NewUnit.TypeBase = TypeBase;
                     NewUnit.UnitGroup = UnitGroup;
@@ -2227,7 +2228,7 @@ namespace SharpFlame
             }
         }
 
-        public clsMap.clsUnit PlaceUnit(UnitTypeBase TypeBase, App.sWorldPos Pos, clsMap.clsUnitGroup UnitGroup, int Rotation)
+        public clsUnit PlaceUnit(UnitTypeBase TypeBase, App.sWorldPos Pos, clsUnitGroup UnitGroup, int Rotation)
         {
             sXY_int TilePosA = new sXY_int();
             sXY_int TilePosB = new sXY_int();
@@ -2236,10 +2237,10 @@ namespace SharpFlame
             sXY_int FinalTilePos = new sXY_int();
             sXY_int Footprint = new sXY_int();
 
-            clsMap.clsUnitAdd NewUnitAdd = new clsMap.clsUnitAdd();
+            clsUnitAdd NewUnitAdd = new clsUnitAdd();
             NewUnitAdd.Map = Map;
             NewUnitAdd.StoreChange = true;
-            clsMap.clsUnit NewUnit = new clsMap.clsUnit();
+            clsUnit NewUnit = new clsUnit();
             NewUnitAdd.NewUnit = NewUnit;
             NewUnit.TypeBase = TypeBase;
             NewUnit.UnitGroup = UnitGroup;
@@ -2366,7 +2367,7 @@ namespace SharpFlame
             int B = 0;
             int C = 0;
             int D = 0;
-            clsMap.clsUnit tmpUnit = default(clsMap.clsUnit);
+            clsUnit tmpUnit = default(clsUnit);
             int Count = 0;
             int FeaturePlaceRange = 6 * 128;
             int BasePlaceRange = 16 * 128;

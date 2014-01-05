@@ -2,6 +2,7 @@ using System;
 using System.Windows.Forms;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping;
+using SharpFlame.Mapping.Objects;
 
 namespace SharpFlame.Controls
 {
@@ -9,7 +10,7 @@ namespace SharpFlame.Controls
     {
         public ToolStripButton[] tsbNumber = new ToolStripButton[11];
 
-        private clsMap.clsUnitGroupContainer _Target;
+        private clsUnitGroupContainer _Target;
 
         public const int ScavButtonNum = 10;
 
@@ -60,12 +61,12 @@ namespace SharpFlame.Controls
             }
 
             ToolStripButton tsb = (ToolStripButton)sender;
-            clsMap.clsUnitGroup UnitGroup = (clsMap.clsUnitGroup)tsb.Tag;
+            clsUnitGroup UnitGroup = (clsUnitGroup)tsb.Tag;
 
             _Target.Item = UnitGroup;
         }
 
-        public clsMap.clsUnitGroupContainer Target
+        public clsUnitGroupContainer Target
         {
             get { return _Target; }
             set
@@ -90,7 +91,7 @@ namespace SharpFlame.Controls
         private void SelectedChanged()
         {
             int A = 0;
-            clsMap.clsUnitGroup UnitGroup = default(clsMap.clsUnitGroup);
+            clsUnitGroup UnitGroup = default(clsUnitGroup);
 
             if ( _Target == null )
             {
@@ -112,7 +113,7 @@ namespace SharpFlame.Controls
             {
                 for ( A = 0; A <= 10; A++ )
                 {
-                    tsbNumber[A].Checked = ((clsMap.clsUnitGroup)(tsbNumber[A].Tag)) == UnitGroup;
+                    tsbNumber[A].Checked = ((clsUnitGroup)(tsbNumber[A].Tag)) == UnitGroup;
                 }
             }
         }

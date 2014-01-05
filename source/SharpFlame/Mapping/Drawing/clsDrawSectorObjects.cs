@@ -5,6 +5,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.AppSettings;
 using SharpFlame.Domain;
 using SharpFlame.Graphics.OpenGL;
+using SharpFlame.Mapping.Objects;
 using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping.Drawing
@@ -31,7 +32,7 @@ namespace SharpFlame.Mapping.Drawing
                 return;
             }
 
-            clsMap.clsUnit Unit = default(clsMap.clsUnit);
+            clsUnit Unit = default(clsUnit);
             clsMap.clsSector Sector = Map.Sectors[PosNum.X, PosNum.Y];
             bool DrawUnitLabel = default(bool);
             clsViewInfo ViewInfo = Map.ViewInfo;
@@ -40,9 +41,9 @@ namespace SharpFlame.Mapping.Drawing
             Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
             Position.XYZ_dbl XYZ_dbl2 = default(Position.XYZ_dbl);
             sXY_int ScreenPos = new sXY_int();
-            clsMap.clsUnitSectorConnection Connection = default(clsMap.clsUnitSectorConnection);
+            clsUnitSectorConnection Connection = default(clsUnitSectorConnection);
 
-            foreach ( clsMap.clsUnitSectorConnection tempLoopVar_Connection in Sector.Units )
+            foreach ( clsUnitSectorConnection tempLoopVar_Connection in Sector.Units )
             {
                 Connection = tempLoopVar_Connection;
                 Unit = Connection.Unit;

@@ -11,6 +11,7 @@ using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.Domain;
 using SharpFlame.Mapping.Changes;
+using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
@@ -2147,7 +2148,7 @@ namespace SharpFlame.Mapping
             }
         }
 
-        private void UnitSectorsGraphicsChanged(clsUnit UnitToUpdateFor)
+        internal void UnitSectorsGraphicsChanged(clsUnit UnitToUpdateFor)
         {
             if ( SectorGraphicsChanges == null )
             {

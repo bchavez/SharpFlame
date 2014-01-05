@@ -6,6 +6,7 @@ using SharpFlame.Collections;
 using SharpFlame.Controls;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping;
+using SharpFlame.Mapping.Objects;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
 using SharpFlame.AppSettings;
@@ -594,9 +595,9 @@ namespace SharpFlame
                         MouseOverTerrain.Side_Num.Y = MouseOverTerrain.Tile.Normal.Y;
                     }
                     sXY_int SectorNum = Map.GetPosSectorNum(MouseOverTerrain.Pos.Horizontal);
-                    clsMap.clsUnit Unit = default(clsMap.clsUnit);
-                    clsMap.clsUnitSectorConnection Connection = default(clsMap.clsUnitSectorConnection);
-                    foreach ( clsMap.clsUnitSectorConnection tempLoopVar_Connection in Map.Sectors[SectorNum.X, SectorNum.Y].Units )
+                    clsUnit Unit = default(clsUnit);
+                    clsUnitSectorConnection Connection = default(clsUnitSectorConnection);
+                    foreach ( clsUnitSectorConnection tempLoopVar_Connection in Map.Sectors[SectorNum.X, SectorNum.Y].Units )
                     {
                         Connection = tempLoopVar_Connection;
                         Unit = Connection.Unit;
@@ -736,7 +737,7 @@ namespace SharpFlame
             public class clsOverTerrain
             {
                 public App.sWorldPos Pos;
-                public SimpleClassList<clsMap.clsUnit> Units = new SimpleClassList<clsMap.clsUnit>();
+                public SimpleClassList<clsUnit> Units = new SimpleClassList<clsUnit>();
                 public clsBrush.sPosNum Tile;
                 public clsBrush.sPosNum Vertex;
                 public bool Triangle;
@@ -1712,7 +1713,7 @@ namespace SharpFlame
                         {
                             if ( Program.frmMainInstance.SingleSelectedObjectTypeBase != null && Map.SelectedUnitGroup != null )
                             {
-                                clsMap.clsUnitCreate objectCreator = new clsMap.clsUnitCreate();
+                                clsUnitCreate objectCreator = new clsUnitCreate();
                                 Map.SetObjectCreatorDefaults(objectCreator);
                                 objectCreator.Horizontal = MouseOverTerrain.Pos.Horizontal;
                                 objectCreator.Perform();
@@ -2087,7 +2088,7 @@ namespace SharpFlame
                             A = Map.Selected_Tile_A.Y;
                             B = Tile.Y;
                         }
-                        clsMap.clsUnitCreate objectCreator = new clsMap.clsUnitCreate();
+                        clsUnitCreate objectCreator = new clsUnitCreate();
                         Map.SetObjectCreatorDefaults(objectCreator);
                         for ( Num = A; Num <= B; Num++ )
                         {
@@ -2114,7 +2115,7 @@ namespace SharpFlame
                             A = Map.Selected_Tile_A.X;
                             B = Tile.X;
                         }
-                        clsMap.clsUnitCreate objectCreator = new clsMap.clsUnitCreate();
+                        clsUnitCreate objectCreator = new clsUnitCreate();
                         Map.SetObjectCreatorDefaults(objectCreator);
                         for ( Num = A; Num <= B; Num++ )
                         {

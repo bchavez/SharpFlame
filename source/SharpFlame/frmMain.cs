@@ -17,6 +17,7 @@ using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Generators;
 using SharpFlame.Mapping;
+using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
@@ -352,7 +353,7 @@ namespace SharpFlame
 
             ObjectPlayerNumControl.Left = 72;
             ObjectPlayerNumControl.Top = 60;
-            ObjectPlayerNumControl.Target = new clsMap.clsUnitGroupContainer();
+            ObjectPlayerNumControl.Target = new clsUnitGroupContainer();
             ObjectPlayerNumControl.Target.Changed += tabPlayerNum_SelectedIndexChanged;
             Panel14.Controls.Add(ObjectPlayerNumControl);
 
@@ -1624,7 +1625,7 @@ namespace SharpFlame
             {
                 lblObjectType.Text = "Multiple objects";
                 int A = 0;
-                clsMap.clsUnitGroup UnitGroup = Map.SelectedUnits[0].UnitGroup;
+                clsUnitGroup UnitGroup = Map.SelectedUnits[0].UnitGroup;
                 for ( A = 1; A <= Map.SelectedUnits.Count - 1; A++ )
                 {
                     if ( Map.SelectedUnits[A].UnitGroup != UnitGroup )
@@ -1651,8 +1652,8 @@ namespace SharpFlame
                 txtObjectHealth.Text = "";
                 txtObjectHealth.Enabled = true;
                 //design
-                clsMap.clsUnit Unit = default(clsMap.clsUnit);
-                foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.SelectedUnits )
+                clsUnit Unit = default(clsUnit);
+                foreach ( clsUnit tempLoopVar_Unit in Map.SelectedUnits )
                 {
                     Unit = tempLoopVar_Unit;
                     if ( Unit.TypeBase.Type == UnitType.PlayerDroid )
@@ -1668,7 +1669,7 @@ namespace SharpFlame
                     btnDroidToDesign.Enabled = true;
                 }
 
-                foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.SelectedUnits )
+                foreach ( clsUnit tempLoopVar_Unit in Map.SelectedUnits )
                 {
                     Unit = tempLoopVar_Unit;
                     if ( Unit.TypeBase.Type == UnitType.PlayerDroid )
@@ -1705,7 +1706,7 @@ namespace SharpFlame
             else if ( Map.SelectedUnits.Count == 1 )
             {
                 int A = 0;
-                clsMap.clsUnit with_1 = Map.SelectedUnits[0];
+                clsUnit with_1 = Map.SelectedUnits[0];
                 lblObjectType.Text = Convert.ToString(with_1.TypeBase.GetDisplayTextCode());
                 ObjectPlayerNumControl.Target.Item = with_1.UnitGroup;
                 txtObjectRotation.Text = Convert.ToInt32(with_1.Rotation).ToStringInvariant();
@@ -3373,9 +3374,9 @@ namespace SharpFlame
                 Map.SelectedUnits.Clear();
             }
 
-            clsMap.clsUnitGroup UnitGroup = Map.SelectedUnitGroup.Item;
-            clsMap.clsUnit Unit = default(clsMap.clsUnit);
-            foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.Units )
+            clsUnitGroup UnitGroup = Map.SelectedUnitGroup.Item;
+            clsUnit Unit = default(clsUnit);
+            foreach ( clsUnit tempLoopVar_Unit in Map.Units )
             {
                 Unit = tempLoopVar_Unit;
                 if ( Unit.UnitGroup == UnitGroup )
@@ -4088,8 +4089,8 @@ namespace SharpFlame
                 return;
             }
 
-            clsMap.clsUnit OldUnit = Map.SelectedUnits[0];
-            clsMap.clsUnit ResultUnit = new clsMap.clsUnit(OldUnit, Map);
+            clsUnit OldUnit = Map.SelectedUnits[0];
+            clsUnit ResultUnit = new clsUnit(OldUnit, Map);
             Map.UnitSwap(OldUnit, ResultUnit);
             App.sResult Result = ResultUnit.SetLabel(txtObjectLabel.Text);
             if ( !Result.Success )
@@ -4384,9 +4385,9 @@ namespace SharpFlame
                 return;
             }
 
-            SimpleClassList<clsMap.clsUnit> OilList = new SimpleClassList<clsMap.clsUnit>();
-            clsMap.clsUnit Unit = default(clsMap.clsUnit);
-            foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.Units )
+            SimpleClassList<clsUnit> OilList = new SimpleClassList<clsUnit>();
+            clsUnit Unit = default(clsUnit);
+            foreach ( clsUnit tempLoopVar_Unit in Map.Units )
             {
                 Unit = tempLoopVar_Unit;
                 if ( Unit.TypeBase == DefaultGenerator.UnitTypeBaseOilResource )
@@ -4410,9 +4411,9 @@ namespace SharpFlame
                 return;
             }
 
-            SimpleClassList<clsMap.clsUnit> StructureList = new SimpleClassList<clsMap.clsUnit>();
-            clsMap.clsUnit Unit = default(clsMap.clsUnit);
-            foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.Units )
+            SimpleClassList<clsUnit> StructureList = new SimpleClassList<clsUnit>();
+            clsUnit Unit = default(clsUnit);
+            foreach ( clsUnit tempLoopVar_Unit in Map.Units )
             {
                 Unit = tempLoopVar_Unit;
                 if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
@@ -4440,7 +4441,7 @@ namespace SharpFlame
             {
                 Map.SelectedUnits.Clear();
             }
-            foreach ( clsMap.clsUnit Unit in Map.Units )
+            foreach ( clsUnit Unit in Map.Units )
             {
                 if ( Unit.TypeBase.UnitType_frmMainSelectedLink.IsConnected )
                 {

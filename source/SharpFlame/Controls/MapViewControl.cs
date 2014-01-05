@@ -12,6 +12,7 @@ using SharpFlame.Domain;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.AppSettings;
 using SharpFlame.Mapping;
+using SharpFlame.Mapping.Objects;
 using SharpFlame.Maths;
 using SharpFlame.Util;
 
@@ -351,7 +352,7 @@ namespace SharpFlame.Controls
         private void ListSelect_Click(object Sender, ToolStripItemClickedEventArgs e)
         {
             ToolStripItem Button = e.ClickedItem;
-            clsMap.clsUnit Unit = (clsMap.clsUnit)Button.Tag;
+            clsUnit Unit = (clsUnit)Button.Tag;
 
             if ( ListSelectIsPicker )
             {
@@ -544,13 +545,13 @@ namespace SharpFlame.Controls
                 int X = 0;
                 int Y = 0;
                 sXY_int SectorNum = new sXY_int();
-                clsMap.clsUnit Unit = default(clsMap.clsUnit);
-                clsMap.clsUnitSectorConnection Connection = default(clsMap.clsUnitSectorConnection);
+                clsUnit Unit = default(clsUnit);
+                clsUnitSectorConnection Connection = default(clsUnitSectorConnection);
                 for ( Y = 0; Y <= Map.SectorCount.Y - 1; Y++ )
                 {
                     for ( X = 0; X <= Map.SectorCount.X - 1; X++ )
                     {
-                        foreach ( clsMap.clsUnitSectorConnection tempLoopVar_Connection in Map.Sectors[X, Y].Units )
+                        foreach ( clsUnitSectorConnection tempLoopVar_Connection in Map.Sectors[X, Y].Units )
                         {
                             Connection = tempLoopVar_Connection;
                             Unit = Connection.Unit;
@@ -619,8 +620,8 @@ namespace SharpFlame.Controls
                 {
                     if ( Map.SelectedUnits.Count > 0 )
                     {
-                        clsMap.clsUnit Unit = default(clsMap.clsUnit);
-                        foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.SelectedUnits.GetItemsAsSimpleList() )
+                        clsUnit Unit = default(clsUnit);
+                        foreach ( clsUnit tempLoopVar_Unit in Map.SelectedUnits.GetItemsAsSimpleList() )
                         {
                             Unit = tempLoopVar_Unit;
                             Map.UnitRemoveStoreChange(Unit.MapLink.ArrayPosition);
@@ -799,7 +800,7 @@ namespace SharpFlame.Controls
             clsMap Map = MainMap;
             clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
             sXY_int SectorNum = new sXY_int();
-            clsMap.clsUnit Unit = default(clsMap.clsUnit);
+            clsUnit Unit = default(clsUnit);
             sXY_int SectorStart = new sXY_int();
             sXY_int SectorFinish = new sXY_int();
             sXY_int StartPos = new sXY_int();
@@ -846,8 +847,8 @@ namespace SharpFlame.Controls
                 {
                     for ( SectorNum.X = SectorStart.X; SectorNum.X <= SectorFinish.X; SectorNum.X++ )
                     {
-                        clsMap.clsUnitSectorConnection Connection = default(clsMap.clsUnitSectorConnection);
-                        foreach ( clsMap.clsUnitSectorConnection tempLoopVar_Connection in Map.Sectors[SectorNum.X, SectorNum.Y].Units )
+                        clsUnitSectorConnection Connection = default(clsUnitSectorConnection);
+                        foreach ( clsUnitSectorConnection tempLoopVar_Connection in Map.Sectors[SectorNum.X, SectorNum.Y].Units )
                         {
                             Connection = tempLoopVar_Connection;
                             Unit = Connection.Unit;
@@ -980,7 +981,7 @@ namespace SharpFlame.Controls
             }
 
             int A = 0;
-            clsMap.clsUnit Unit = default(clsMap.clsUnit);
+            clsUnit Unit = default(clsUnit);
 
             ListSelect.Close();
             ListSelect.Items.Clear();
