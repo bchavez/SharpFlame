@@ -156,7 +156,7 @@ namespace SharpFlame
         public clsOptionProfile(clsOptionGroup options)
         {
             _Options = options;
-            _Changes = new clsChangeInterface[options.Options.Count - 1 + 1];
+            _Changes = new clsChangeInterface[options.Options.Count];
         }
 
         public virtual clsOptionProfile GetCopy(clsOptionProfileCreator creator)

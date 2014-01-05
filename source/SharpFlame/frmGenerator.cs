@@ -201,7 +201,7 @@ namespace SharpFlame
                     return;
                 }
             }
-            Generator.PlayerBasePos = new modMath.sXY_int[Generator.TopLeftPlayerCount - 1 + 1];
+            Generator.PlayerBasePos = new modMath.sXY_int[Generator.TopLeftPlayerCount];
             double BaseMin = 12.0D;
             Matrix3D.Position.XY_dbl BaseMax =
                 new Matrix3D.Position.XY_dbl(Math.Min(Generator.TileSize.X / Generator.SymmetryBlockCountXY.X, Generator.TileSize.X - 12.0D),
@@ -403,8 +403,8 @@ namespace SharpFlame
                 clsBooleanMap bmTemp = new clsBooleanMap();
                 int A = 0;
                 WaterMap = Generator.GetWaterMap();
-                RevertSlope = new bool[Generator.GenerateTileset.OldTextureLayers.LayerCount - 1 + 1];
-                RevertHeight = new bool[Generator.GenerateTileset.OldTextureLayers.LayerCount - 1 + 1];
+                RevertSlope = new bool[Generator.GenerateTileset.OldTextureLayers.LayerCount];
+                RevertHeight = new bool[Generator.GenerateTileset.OldTextureLayers.LayerCount];
                 for ( A = 0; A <= Generator.GenerateTileset.OldTextureLayers.LayerCount - 1; A++ )
                 {
                     modProgram.sLayerList.clsLayer with_2 = Generator.GenerateTileset.OldTextureLayers.Layers[A];

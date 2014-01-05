@@ -104,9 +104,9 @@ namespace SharpFlame
                 TileSize = NewSize;
 
                 Vertices = new clsMap.clsTerrain.Vertex[TileSize.X + 1, TileSize.Y + 1];
-                Tiles = new clsMap.clsTerrain.Tile[TileSize.X - 1 + 1, TileSize.Y - 1 + 1];
-                SideH = new clsMap.clsTerrain.Side[TileSize.X - 1 + 1, TileSize.Y + 1];
-                SideV = new clsMap.clsTerrain.Side[TileSize.X + 1, TileSize.Y - 1 + 1];
+                Tiles = new clsMap.clsTerrain.Tile[TileSize.X, TileSize.Y];
+                SideH = new clsMap.clsTerrain.Side[TileSize.X, TileSize.Y + 1];
+                SideV = new clsMap.clsTerrain.Side[TileSize.X + 1, TileSize.Y];
                 int X = 0;
                 int Y = 0;
 
@@ -424,7 +424,7 @@ namespace SharpFlame
 
             SectorCount.X = (int)(Math.Ceiling((double)(Area.X / modProgram.SectorTileSize)));
             SectorCount.Y = (int)(Math.Ceiling((double)(Area.Y / modProgram.SectorTileSize)));
-            Sectors = new clsSector[SectorCount.X - 1 + 1, SectorCount.Y - 1 + 1];
+            Sectors = new clsSector[SectorCount.X, SectorCount.Y];
             for ( Y = 0; Y <= SectorCount.Y - 1; Y++ )
             {
                 for ( X = 0; X <= SectorCount.X - 1; X++ )
@@ -473,7 +473,7 @@ namespace SharpFlame
             Terrain = new clsTerrain(TileSize);
             SectorCount.X = (int)(Math.Ceiling((double)(Terrain.TileSize.X / modProgram.SectorTileSize)));
             SectorCount.Y = (int)(Math.Ceiling((double)(Terrain.TileSize.Y / modProgram.SectorTileSize)));
-            Sectors = new clsSector[SectorCount.X - 1 + 1, SectorCount.Y - 1 + 1];
+            Sectors = new clsSector[SectorCount.X, SectorCount.Y];
             for ( Y = 0; Y <= SectorCount.Y - 1; Y++ )
             {
                 for ( X = 0; X <= SectorCount.X - 1; X++ )
@@ -904,7 +904,7 @@ namespace SharpFlame
 
             if ( modProgram.Draw_Units )
             {
-                bool[,] IsBasePlate = new bool[modProgram.SectorTileSize - 1 + 1, modProgram.SectorTileSize - 1 + 1];
+                bool[,] IsBasePlate = new bool[modProgram.SectorTileSize, modProgram.SectorTileSize];
                 clsUnit Unit = default(clsUnit);
                 clsStructureType StructureType = default(clsStructureType);
                 modMath.sXY_int Footprint = new modMath.sXY_int();
@@ -1075,8 +1075,8 @@ namespace SharpFlame
             modMath.sXY_int High = new modMath.sXY_int();
             modMath.sXY_int Footprint = new modMath.sXY_int();
             bool Flag = default(bool);
-            bool[,] UnitMap = new bool[Texture.Size.Y - 1 + 1, Texture.Size.X - 1 + 1];
-            float[,,] sngTexture = new float[Texture.Size.Y - 1 + 1, Texture.Size.X - 1 + 1, 3];
+            bool[,] UnitMap = new bool[Texture.Size.Y, Texture.Size.X];
+            float[,,] sngTexture = new float[Texture.Size.Y, Texture.Size.X, 3];
             float Alpha = 0;
             float AntiAlpha = 0;
             sRGB_sng RGB_sng = new sRGB_sng();
@@ -1353,7 +1353,7 @@ namespace SharpFlame
             public clsMinimapTexture(modMath.sXY_int Size)
             {
                 this.Size = Size;
-                InlinePixels = new sRGBA_sng[Size.X * Size.Y - 1 + 1];
+                InlinePixels = new sRGBA_sng[Size.X * Size.Y];
             }
         }
 
@@ -2105,7 +2105,7 @@ namespace SharpFlame
             {
                 int A = 0;
 
-                Tile_TypeNum = new byte[Tileset.TileCount - 1 + 1];
+                Tile_TypeNum = new byte[Tileset.TileCount];
                 for ( A = 0; A <= Tileset.TileCount - 1; A++ )
                 {
                     Tile_TypeNum[A] = Tileset.Tiles[A].Default_Type;
@@ -2332,7 +2332,7 @@ namespace SharpFlame
 
             SectorCount.X = (int)(Math.Ceiling((double)(Terrain.TileSize.X / modProgram.SectorTileSize)));
             SectorCount.Y = (int)(Math.Ceiling((double)(Terrain.TileSize.Y / modProgram.SectorTileSize)));
-            Sectors = new clsSector[SectorCount.X - 1 + 1, SectorCount.Y - 1 + 1];
+            Sectors = new clsSector[SectorCount.X, SectorCount.Y];
             for ( Y = 0; Y <= SectorCount.Y - 1; Y++ )
             {
                 for ( X = 0; X <= SectorCount.X - 1; X++ )
@@ -2348,7 +2348,7 @@ namespace SharpFlame
                 UnitSectorsCalc(Unit);
             }
 
-            ShadowSectors = new clsShadowSector[SectorCount.X - 1 + 1, SectorCount.Y - 1 + 1];
+            ShadowSectors = new clsShadowSector[SectorCount.X, SectorCount.Y];
             for ( Y = 0; Y <= SectorCount.Y - 1; Y++ )
             {
                 for ( X = 0; X <= SectorCount.X - 1; X++ )
@@ -2484,7 +2484,7 @@ namespace SharpFlame
 
             public void Start()
             {
-                OldUnits = new clsUnit[Map.Units.Count - 1 + 1];
+                OldUnits = new clsUnit[Map.Units.Count];
 
                 Started = true;
             }

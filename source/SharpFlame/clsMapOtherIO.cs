@@ -282,7 +282,7 @@ namespace SharpFlame
                     }
                     UInt32 TempUnitCount = 0;
                     TempUnitCount = File.ReadUInt32();
-                    sFMEUnit[] TempUnit = new sFMEUnit[(System.Convert.ToInt32(TempUnitCount)) - 1 + 1];
+                    sFMEUnit[] TempUnit = new sFMEUnit[(System.Convert.ToInt32(TempUnitCount))];
                     for ( A = 0; A <= (System.Convert.ToInt32(TempUnitCount)) - 1; A++ )
                     {
                         TempUnit[A].Code = new string(File.ReadChars(40));
@@ -540,7 +540,7 @@ namespace SharpFlame
                 LineData = modIO.BytesToLinesRemoveComments(Reader);
                 Reader.Close();
 
-                Array.Resize(ref LNDTile, LineData.Count - 1 + 1);
+                Array.Resize(ref LNDTile, LineData.Count);
 
                 string strTemp3 = "";
                 bool GotTiles = default(bool);
@@ -986,7 +986,7 @@ namespace SharpFlame
                     Line_Num++;
                 }
 
-                Array.Resize(ref LNDTile, Tile_Num - 1 + 1);
+                Array.Resize(ref LNDTile, Tile_Num);
 
                 SetPainterToDefaults();
 
@@ -1823,8 +1823,8 @@ namespace SharpFlame
                     }
                 }
 
-                clsUnit[] OutputUnits = new clsUnit[Units.Count - 1 + 1];
-                string[] OutputUnitCode = new string[Units.Count - 1 + 1];
+                clsUnit[] OutputUnits = new clsUnit[Units.Count];
+                string[] OutputUnitCode = new string[Units.Count];
                 int OutputUnitCount = 0;
                 clsUnit Unit = default(clsUnit);
                 int A = 0;

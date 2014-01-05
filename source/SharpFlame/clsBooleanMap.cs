@@ -16,14 +16,14 @@ namespace SharpFlame
         {
             ValueData.Size.X = SizeX;
             ValueData.Size.Y = SizeY;
-            ValueData.Value = new bool[SizeY - 1 + 1, SizeX - 1 + 1];
+            ValueData.Value = new bool[SizeY, SizeX];
         }
 
         public void SizeCopy(clsBooleanMap Source)
         {
             ValueData.Size.X = Source.ValueData.Size.X;
             ValueData.Size.Y = Source.ValueData.Size.Y;
-            ValueData.Value = new bool[ValueData.Size.Y - 1 + 1, ValueData.Size.X - 1 + 1];
+            ValueData.Value = new bool[ValueData.Size.Y, ValueData.Size.X];
         }
 
         public void Copy(clsBooleanMap Source)
@@ -48,7 +48,7 @@ namespace SharpFlame
 
             ValueData.Size.X = Source.HeightData.SizeX;
             ValueData.Size.Y = Source.HeightData.SizeY;
-            ValueData.Value = new bool[ValueData.Size.Y - 1 + 1, ValueData.Size.X - 1 + 1];
+            ValueData.Value = new bool[ValueData.Size.Y, ValueData.Size.X];
             for ( Y = 0; Y <= Source.HeightData.SizeY - 1; Y++ )
             {
                 for ( X = 0; X <= Source.HeightData.SizeX - 1; X++ )

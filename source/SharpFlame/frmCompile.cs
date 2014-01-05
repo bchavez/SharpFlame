@@ -226,10 +226,10 @@ namespace SharpFlame
 
             //check unit positions
 
-            bool[,] TileHasUnit = new bool[Map.Terrain.TileSize.X - 1 + 1, Map.Terrain.TileSize.Y - 1 + 1];
-            clsStructureType[,] TileStructureType = new clsStructureType[Map.Terrain.TileSize.X - 1 + 1, Map.Terrain.TileSize.Y - 1 + 1];
-            clsFeatureType[,] TileFeatureType = new clsFeatureType[Map.Terrain.TileSize.X - 1 + 1, Map.Terrain.TileSize.Y - 1 + 1];
-            clsMap.clsUnitGroup[,] TileObjectGroup = new clsMap.clsUnitGroup[Map.Terrain.TileSize.X - 1 + 1, Map.Terrain.TileSize.Y - 1 + 1];
+            bool[,] TileHasUnit = new bool[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
+            clsStructureType[,] TileStructureType = new clsStructureType[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
+            clsFeatureType[,] TileFeatureType = new clsFeatureType[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
+            clsMap.clsUnitGroup[,] TileObjectGroup = new clsMap.clsUnitGroup[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
             int X = 0;
             int Y = 0;
             modMath.sXY_int StartPos = new modMath.sXY_int();
@@ -238,7 +238,7 @@ namespace SharpFlame
             clsStructureType.enumStructureType StructureTypeType;
             clsStructureType StructureType = default(clsStructureType);
             modMath.sXY_int Footprint = new modMath.sXY_int();
-            bool[] UnitIsStructureModule = new bool[Map.Units.Count - 1 + 1];
+            bool[] UnitIsStructureModule = new bool[Map.Units.Count];
             bool IsValid = default(bool);
             clsMap.clsUnit Unit = default(clsMap.clsUnit);
             foreach ( clsMap.clsUnit tempLoopVar_Unit in Map.Units )
@@ -414,9 +414,9 @@ namespace SharpFlame
 
             //check HQs, Trucks and unit counts
 
-            int[] PlayerHQCount = new int[modProgram.PlayerCountMax - 1 + 1];
-            int[] Player23TruckCount = new int[modProgram.PlayerCountMax - 1 + 1];
-            int[] PlayerMasterTruckCount = new int[modProgram.PlayerCountMax - 1 + 1];
+            int[] PlayerHQCount = new int[modProgram.PlayerCountMax];
+            int[] Player23TruckCount = new int[modProgram.PlayerCountMax];
+            int[] PlayerMasterTruckCount = new int[modProgram.PlayerCountMax];
             int ScavPlayerNum = 0;
             int ScavObjectCount = 0;
             clsDroidDesign DroidType = default(clsDroidDesign);
@@ -522,8 +522,8 @@ namespace SharpFlame
                 ReturnResult.ProblemAdd("No tileset selected.");
             }
 
-            int[,] PlayerStructureTypeCount = new int[modProgram.PlayerCountMax - 1 + 1, modProgram.ObjectData.StructureTypes.Count - 1 + 1];
-            int[] ScavStructureTypeCount = new int[modProgram.ObjectData.StructureTypes.Count - 1 + 1];
+            int[,] PlayerStructureTypeCount = new int[modProgram.PlayerCountMax, modProgram.ObjectData.StructureTypes.Count];
+            int[] ScavStructureTypeCount = new int[modProgram.ObjectData.StructureTypes.Count];
             clsStructureType StructureType = default(clsStructureType);
             clsMap.clsUnit Unit = default(clsMap.clsUnit);
 

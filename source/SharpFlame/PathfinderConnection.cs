@@ -213,7 +213,7 @@ namespace SharpFlame
             Args.SourceParentNodeB = NodeB;
             Args.CurrentPath = NodeA.Layer.Network.NetworkLargeArrays.Nodes_Path;
             Args.FinishNodeCount = NodeB.NodeCount;
-            Args.FinishNodes = new PathfinderNode[NodeB.NodeCount - 1 + 1];
+            Args.FinishNodes = new PathfinderNode[NodeB.NodeCount];
             for ( A = 0; A <= NodeB.NodeCount - 1; A++ )
             {
                 Args.FinishNodes[A] = NodeB.Nodes[A];
@@ -230,7 +230,7 @@ namespace SharpFlame
                 {
                     Args.NodeValues[NodeB.Nodes[A].Layer_NodeNum] = float.MaxValue;
                 }
-                Args.BestPaths = new PathfinderNetwork.Path[Args.FinishNodeCount - 1 + 1];
+                Args.BestPaths = new PathfinderNetwork.Path[Args.FinishNodeCount];
                 NodeA.Layer.Network.FloodForValues(Args);
                 for ( A = 0; A <= NodeB.NodeCount - 1; A++ )
                 {

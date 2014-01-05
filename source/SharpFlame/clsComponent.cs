@@ -58,7 +58,7 @@ namespace SharpFlame
 
             int A = 0;
 
-            Bodies = new sBody[BodyCount - 1 + 1];
+            Bodies = new sBody[BodyCount];
             for ( A = 0; A <= BodyCount - 1; A++ )
             {
                 Bodies[A].LeftAttachment = new clsUnitType.clsAttachment();

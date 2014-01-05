@@ -976,7 +976,7 @@ namespace SharpFlame
 
             ListSelect.Close();
             ListSelect.Items.Clear();
-            ListSelectItems = new ToolStripItem[MouseOverTerrain.Units.Count - 1 + 1];
+            ListSelectItems = new ToolStripItem[MouseOverTerrain.Units.Count];
             for ( A = 0; A <= MouseOverTerrain.Units.Count - 1; A++ )
             {
                 Unit = MouseOverTerrain.Units[A];

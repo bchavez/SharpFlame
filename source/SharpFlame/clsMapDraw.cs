@@ -1549,7 +1549,7 @@ namespace SharpFlame
 
             public void Start()
             {
-                UnitDrawn = new bool[Map.Units.Count - 1 + 1];
+                UnitDrawn = new bool[Map.Units.Count];
 
                 Started = true;
             }

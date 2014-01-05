@@ -9,7 +9,7 @@ namespace SharpFlame
 
             public clsPointChanges(modMath.sXY_int PointSize)
             {
-                PointIsChanged = new bool[PointSize.X - 1 + 1, PointSize.Y - 1 + 1];
+                PointIsChanged = new bool[PointSize.X, PointSize.Y];
                 ChangedPoints.MinSize = PointSize.X * PointSize.Y;
                 ChangedPoints.Clear();
             }

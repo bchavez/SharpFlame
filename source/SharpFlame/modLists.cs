@@ -94,7 +94,7 @@ namespace SharpFlame
                 int ResultCount = ItemCount + NewItems.Count;
                 if ( (Items.Length - 1) + 1 < ResultCount )
                 {
-                    Array.Resize(ref Items, ResultCount * 2 - 1 + 1);
+                    Array.Resize(ref Items, ResultCount * 2);
                 }
                 int Position = 0;
                 for ( Position = 0; Position <= NewItems.Count - 1; Position++ )
@@ -119,7 +119,7 @@ namespace SharpFlame
                 int ResultCount = ItemCount + NewItems.Count;
                 if ( (Items.Length - 1) + 1 < ResultCount )
                 {
-                    Array.Resize(ref Items, ResultCount * 2 - 1 + 1);
+                    Array.Resize(ref Items, ResultCount * 2);
                 }
                 int Position = 0;
                 for ( Position = 0; Position <= NewItems.Count - 1; Position++ )
@@ -215,7 +215,7 @@ namespace SharpFlame
                 int ArraySize = (Items.Length - 1) + 1;
                 if ( ItemCount * 3 < ArraySize & ArraySize > MinSize )
                 {
-                    Items = (ItemType[])Microsoft.VisualBasic.CompilerServices.Utils.CopyArray((Array)Items, new ItemType[Math.Max(ItemCount * 2, MinSize) - 1 + 1]);
+                    Items = (ItemType[])Microsoft.VisualBasic.CompilerServices.Utils.CopyArray((Array)Items, new ItemType[Math.Max(ItemCount * 2, MinSize)]);
                 }
 
                 IsBusy = false;
@@ -261,7 +261,7 @@ namespace SharpFlame
             {
                 if ( (Items.Length - 1) + 1 != MinSize )
                 {
-                    Items = new ItemType[MinSize - 1 + 1];
+                    Items = new ItemType[MinSize];
                 }
                 ItemCount = 0;
             }
@@ -315,7 +315,7 @@ namespace SharpFlame
 
             public void RemoveBuffer()
             {
-                Array.Resize(ref Items, ItemCount - 1 + 1);
+                Array.Resize(ref Items, ItemCount);
             }
 
             protected virtual void AfterMoveAction(int position)
@@ -324,7 +324,7 @@ namespace SharpFlame
 
             public ItemType[] ToArray()
             {
-                ItemType[] result = new ItemType[ItemCount - 1 + 1];
+                ItemType[] result = new ItemType[ItemCount];
 
                 for ( int i = 0; i <= ItemCount - 1; i++ )
                 {

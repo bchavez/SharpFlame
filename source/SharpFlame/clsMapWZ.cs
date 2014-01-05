@@ -177,7 +177,7 @@ namespace SharpFlame
             else
             {
                 frmWZLoad.clsOutput SelectToLoadResult = new frmWZLoad.clsOutput();
-                string[] Names = new string[Maps.Count - 1 + 1];
+                string[] Names = new string[Maps.Count];
                 for ( A = 0; A <= Maps.Count - 1; A++ )
                 {
                     Names[A] = System.Convert.ToString(Maps[A].Name);
@@ -1224,7 +1224,7 @@ namespace SharpFlame
                 ParentMap = NewParentMap;
 
                 StructureCount = NewStructureCount;
-                Structures = new sStructure[StructureCount - 1 + 1];
+                Structures = new sStructure[StructureCount];
                 for ( A = 0; A <= StructureCount - 1; A++ )
                 {
                     Structures[A].HealthPercent = -1;
@@ -1366,7 +1366,7 @@ namespace SharpFlame
                 ParentMap = NewParentMap;
 
                 DroidCount = NewDroidCount;
-                Droids = new sDroid[DroidCount - 1 + 1];
+                Droids = new sDroid[DroidCount];
                 for ( A = 0; A <= DroidCount - 1; A++ )
                 {
                     Droids[A].HealthPercent = -1;
@@ -1528,7 +1528,7 @@ namespace SharpFlame
                 int A = 0;
 
                 FeatureCount = NewFeatureCount;
-                Features = new sFeatures[FeatureCount - 1 + 1];
+                Features = new sFeatures[FeatureCount];
                 for ( A = 0; A <= FeatureCount - 1; A++ )
                 {
                     Features[A].HealthPercent = -1;
@@ -2175,8 +2175,8 @@ namespace SharpFlame
 
             clsStructureType StructureType = default(clsStructureType);
             clsUnit Unit = default(clsUnit);
-            bool[] UnitIsModule = new bool[Units.Count - 1 + 1];
-            int[] UnitModuleCount = new int[Units.Count - 1 + 1];
+            bool[] UnitIsModule = new bool[Units.Count];
+            int[] UnitModuleCount = new int[Units.Count];
             modMath.sXY_int SectorNum = new modMath.sXY_int();
             clsStructureType OtherStructureType = default(clsStructureType);
             clsUnit OtherUnit = default(clsUnit);

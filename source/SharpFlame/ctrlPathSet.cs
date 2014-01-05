@@ -29,7 +29,7 @@ namespace SharpFlame
         {
             get
             {
-                string[] Paths = new string[lstPaths.Items.Count - 1 + 1];
+                string[] Paths = new string[lstPaths.Items.Count];
                 int A = 0;
                 for ( A = 0; A <= lstPaths.Items.Count - 1; A++ )
                 {

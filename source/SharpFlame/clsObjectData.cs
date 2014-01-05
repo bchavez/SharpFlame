@@ -628,7 +628,7 @@ namespace SharpFlame
 
             //interpret body-propulsions
 
-            BodyProp[,] BodyPropulsionPIEs = new BodyProp[Bodies.Count - 1 + 1, Propulsions.Count - 1 + 1];
+            BodyProp[,] BodyPropulsionPIEs = new BodyProp[Bodies.Count, Propulsions.Count];
             for ( int A = 0; A <= Bodies.Count - 1; A++ )
             {
                 for ( int B = 0; B <= Propulsions.Count - 1; B++ )

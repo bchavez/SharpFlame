@@ -57,7 +57,7 @@ namespace SharpFlame
         {
             if ( Nodes.GetUpperBound(0) < NodeCount )
             {
-                Array.Resize(ref Nodes, (NodeCount + 1) * 2 - 1 + 1);
+                Array.Resize(ref Nodes, (NodeCount + 1) * 2);
             }
             Nodes[NodeCount] = NewNode;
             Nodes[NodeCount].Layer_NodeNum = NodeCount;
@@ -77,7 +77,7 @@ namespace SharpFlame
             }
             if ( NodeCount * 3 < Nodes.GetUpperBound(0) )
             {
-                Array.Resize(ref Nodes, NodeCount * 2 - 1 + 1);
+                Array.Resize(ref Nodes, NodeCount * 2);
             }
         }
 
@@ -85,7 +85,7 @@ namespace SharpFlame
         {
             if ( Connections.GetUpperBound(0) < ConnectionCount )
             {
-                Array.Resize(ref Connections, (ConnectionCount + 1) * 2 - 1 + 1);
+                Array.Resize(ref Connections, (ConnectionCount + 1) * 2);
             }
             Connections[ConnectionCount] = NewConnection;
             Connections[ConnectionCount].Layer_ConnectionNum = ConnectionCount;
@@ -104,7 +104,7 @@ namespace SharpFlame
             }
             if ( ConnectionCount * 3 < Connections.GetUpperBound(0) )
             {
-                Array.Resize(ref Connections, ConnectionCount * 2 - 1 + 1);
+                Array.Resize(ref Connections, ConnectionCount * 2);
             }
         }
 
@@ -179,7 +179,7 @@ namespace SharpFlame
             }
             if ( ChangedNodeCount * 3 < ChangedNodes.GetUpperBound(0) )
             {
-                Array.Resize(ref ChangedNodes, ChangedNodeCount * 2 - 1 + 1);
+                Array.Resize(ref ChangedNodes, ChangedNodeCount * 2);
             }
         }
     }

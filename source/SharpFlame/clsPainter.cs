@@ -49,7 +49,7 @@ namespace SharpFlame
                 {
                     Tiles[Num] = Tiles[TileCount];
                 }
-                Array.Resize(ref Tiles, TileCount - 1 + 1);
+                Array.Resize(ref Tiles, TileCount);
             }
 
             public sTileOrientationChance GetRandom()
@@ -144,7 +144,7 @@ namespace SharpFlame
             {
                 TransitionBrushes[Num] = TransitionBrushes[TransitionBrushCount];
             }
-            Array.Resize(ref TransitionBrushes, TransitionBrushCount - 1 + 1);
+            Array.Resize(ref TransitionBrushes, TransitionBrushCount);
         }
 
         public void CliffBrush_Add(clsCliff_Brush NewBrush)
@@ -161,7 +161,7 @@ namespace SharpFlame
             {
                 CliffBrushes[Num] = CliffBrushes[CliffBrushCount];
             }
-            Array.Resize(ref CliffBrushes, CliffBrushCount - 1 + 1);
+            Array.Resize(ref CliffBrushes, CliffBrushCount);
         }
 
         public void Terrain_Add(clsTerrain NewTerrain)
@@ -181,7 +181,7 @@ namespace SharpFlame
                 Terrains[Num] = Terrains[TerrainCount];
                 Terrains[Num].Num = Num;
             }
-            Array.Resize(ref Terrains, TerrainCount - 1 + 1);
+            Array.Resize(ref Terrains, TerrainCount);
         }
 
         public void RoadBrush_Add(clsRoad_Brush NewRoadBrush)
@@ -198,7 +198,7 @@ namespace SharpFlame
             {
                 RoadBrushes[Num] = RoadBrushes[RoadBrushCount];
             }
-            Array.Resize(ref RoadBrushes, RoadBrushCount - 1 + 1);
+            Array.Resize(ref RoadBrushes, RoadBrushCount);
         }
 
         public void Road_Add(clsRoad NewRoad)
@@ -218,7 +218,7 @@ namespace SharpFlame
                 Roads[Num] = Roads[RoadCount];
                 Roads[Num].Num = Num;
             }
-            Array.Resize(ref Roads, RoadCount - 1 + 1);
+            Array.Resize(ref Roads, RoadCount);
         }
     }
 }

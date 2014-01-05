@@ -656,7 +656,7 @@ namespace SharpFlame
                     {
                         Layers[A].WithinLayer = Layers[A].WithinLayer + 1;
                     }
-                    Array.Resize(ref Layers[A].AvoidLayers, LayerCount - 1 + 1);
+                    Array.Resize(ref Layers[A].AvoidLayers, LayerCount);
                     for ( B = LayerCount - 2; B >= PositionNum; B-- )
                     {
                         Layers[A].AvoidLayers[B + 1] = Layers[A].AvoidLayers[B];
@@ -675,7 +675,7 @@ namespace SharpFlame
                 {
                     Layers[A] = Layers[A + 1];
                 }
-                Array.Resize(ref Layers, LayerCount - 1 + 1);
+                Array.Resize(ref Layers, LayerCount);
 
                 for ( A = 0; A <= LayerCount - 1; A++ )
                 {
@@ -691,7 +691,7 @@ namespace SharpFlame
                     {
                         Layers[A].AvoidLayers[B] = Layers[A].AvoidLayers[B + 1];
                     }
-                    Array.Resize(ref Layers[A].AvoidLayers, LayerCount - 1 + 1);
+                    Array.Resize(ref Layers[A].AvoidLayers, LayerCount);
                 }
             }
 

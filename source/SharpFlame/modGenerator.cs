@@ -179,7 +179,7 @@ namespace SharpFlame
             TerrainStyle_Arizona.Layers[Num].TerrainmapDensity = 1.0F;
             TerrainStyle_Arizona.Layers[Num].TerrainmapScale = 0.0F;
             TerrainStyle_Arizona.Layers[Num].HeightMax = 256.0F;
-            TerrainStyle_Arizona.Layers[Num].AvoidLayers = new bool[TerrainStyle_Arizona.LayerCount - 1 + 1];
+            TerrainStyle_Arizona.Layers[Num].AvoidLayers = new bool[TerrainStyle_Arizona.LayerCount];
             TerrainStyle_Arizona.Layers[Num].WithinLayer = -1;
 
             Num++;
@@ -190,7 +190,7 @@ namespace SharpFlame
             TerrainStyle_Arizona.Layers[Num].TerrainmapDensity = 0.5F;
             TerrainStyle_Arizona.Layers[Num].TerrainmapScale = 2.0F;
             TerrainStyle_Arizona.Layers[Num].HeightMax = 256.0F;
-            TerrainStyle_Arizona.Layers[Num].AvoidLayers = new bool[TerrainStyle_Arizona.LayerCount - 1 + 1];
+            TerrainStyle_Arizona.Layers[Num].AvoidLayers = new bool[TerrainStyle_Arizona.LayerCount];
             TerrainStyle_Arizona.Layers[Num].WithinLayer = -1;
 
             Num++;
@@ -201,7 +201,7 @@ namespace SharpFlame
             TerrainStyle_Arizona.Layers[Num].TerrainmapDensity = 0.4F;
             TerrainStyle_Arizona.Layers[Num].TerrainmapScale = 1.5F;
             TerrainStyle_Arizona.Layers[Num].HeightMax = 256.0F;
-            TerrainStyle_Arizona.Layers[Num].AvoidLayers = new bool[TerrainStyle_Arizona.LayerCount - 1 + 1];
+            TerrainStyle_Arizona.Layers[Num].AvoidLayers = new bool[TerrainStyle_Arizona.LayerCount];
             TerrainStyle_Arizona.Layers[Num].WithinLayer = -1;
 
             Num++;
@@ -212,7 +212,7 @@ namespace SharpFlame
             TerrainStyle_Arizona.Layers[Num].TerrainmapDensity = 0.75F;
             TerrainStyle_Arizona.Layers[Num].TerrainmapScale = 1.5F;
             TerrainStyle_Arizona.Layers[Num].HeightMax = 256.0F;
-            TerrainStyle_Arizona.Layers[Num].AvoidLayers = new bool[TerrainStyle_Arizona.LayerCount - 1 + 1];
+            TerrainStyle_Arizona.Layers[Num].AvoidLayers = new bool[TerrainStyle_Arizona.LayerCount];
             TerrainStyle_Arizona.Layers[Num].WithinLayer = Num - 1;
 
             Num++;
@@ -224,7 +224,7 @@ namespace SharpFlame
             TerrainStyle_Arizona.Layers[Num].TerrainmapScale = 0.0F;
             TerrainStyle_Arizona.Layers[Num].HeightMax = 256.0F;
             TerrainStyle_Arizona.Layers[Num].IsCliff = true;
-            TerrainStyle_Arizona.Layers[Num].AvoidLayers = new bool[TerrainStyle_Arizona.LayerCount - 1 + 1];
+            TerrainStyle_Arizona.Layers[Num].AvoidLayers = new bool[TerrainStyle_Arizona.LayerCount];
             TerrainStyle_Arizona.Layers[Num].WithinLayer = -1;
 
             TerrainStyle_Arizona.Tileset = Generator_TilesetArizona;
@@ -243,7 +243,7 @@ namespace SharpFlame
             TerrainStyle_Urban.Layers[Num].TileNum = 7;
             TerrainStyle_Urban.Layers[Num].TerrainmapDensity = 1.0F;
             TerrainStyle_Urban.Layers[Num].HeightMax = 256.0F;
-            TerrainStyle_Urban.Layers[Num].AvoidLayers = new bool[TerrainStyle_Urban.LayerCount - 1 + 1];
+            TerrainStyle_Urban.Layers[Num].AvoidLayers = new bool[TerrainStyle_Urban.LayerCount];
             TerrainStyle_Urban.Layers[Num].WithinLayer = -1;
 
             Num++;
@@ -254,7 +254,7 @@ namespace SharpFlame
             TerrainStyle_Urban.Layers[Num].TerrainmapDensity = 0.5F;
             TerrainStyle_Urban.Layers[Num].TerrainmapScale = 1.5F;
             TerrainStyle_Urban.Layers[Num].HeightMax = 256.0F;
-            TerrainStyle_Urban.Layers[Num].AvoidLayers = new bool[TerrainStyle_Urban.LayerCount - 1 + 1];
+            TerrainStyle_Urban.Layers[Num].AvoidLayers = new bool[TerrainStyle_Urban.LayerCount];
             TerrainStyle_Urban.Layers[Num].WithinLayer = -1;
 
             Num++;
@@ -265,7 +265,7 @@ namespace SharpFlame
             TerrainStyle_Urban.Layers[Num].TerrainmapDensity = 0.333F;
             TerrainStyle_Urban.Layers[Num].TerrainmapScale = 1.5F;
             TerrainStyle_Urban.Layers[Num].HeightMax = 256.0F;
-            TerrainStyle_Urban.Layers[Num].AvoidLayers = new bool[TerrainStyle_Urban.LayerCount - 1 + 1];
+            TerrainStyle_Urban.Layers[Num].AvoidLayers = new bool[TerrainStyle_Urban.LayerCount];
             TerrainStyle_Urban.Layers[Num].WithinLayer = -1;
 
             Num++;
@@ -276,7 +276,7 @@ namespace SharpFlame
             TerrainStyle_Urban.Layers[Num].TerrainmapDensity = 0.333F;
             TerrainStyle_Urban.Layers[Num].TerrainmapScale = 1.5F;
             TerrainStyle_Urban.Layers[Num].HeightMax = 256.0F;
-            TerrainStyle_Urban.Layers[Num].AvoidLayers = new bool[TerrainStyle_Urban.LayerCount - 1 + 1];
+            TerrainStyle_Urban.Layers[Num].AvoidLayers = new bool[TerrainStyle_Urban.LayerCount];
             TerrainStyle_Urban.Layers[Num].WithinLayer = -1;
 
             //Num += 1
@@ -298,7 +298,7 @@ namespace SharpFlame
             TerrainStyle_Urban.Layers[Num].TerrainmapDensity = 0.4F;
             TerrainStyle_Urban.Layers[Num].TerrainmapScale = 1.5F;
             TerrainStyle_Urban.Layers[Num].HeightMax = 256.0F;
-            TerrainStyle_Urban.Layers[Num].AvoidLayers = new bool[TerrainStyle_Urban.LayerCount - 1 + 1];
+            TerrainStyle_Urban.Layers[Num].AvoidLayers = new bool[TerrainStyle_Urban.LayerCount];
             TerrainStyle_Urban.Layers[Num].WithinLayer = -1;
 
             Num++;
@@ -310,7 +310,7 @@ namespace SharpFlame
             TerrainStyle_Urban.Layers[Num].TerrainmapScale = 0.0F;
             TerrainStyle_Urban.Layers[Num].HeightMax = 256.0F;
             TerrainStyle_Urban.Layers[Num].IsCliff = true;
-            TerrainStyle_Urban.Layers[Num].AvoidLayers = new bool[TerrainStyle_Urban.LayerCount - 1 + 1];
+            TerrainStyle_Urban.Layers[Num].AvoidLayers = new bool[TerrainStyle_Urban.LayerCount];
             TerrainStyle_Urban.Layers[Num].WithinLayer = -1;
 
             TerrainStyle_Urban.Tileset = Generator_TilesetUrban;
@@ -330,7 +330,7 @@ namespace SharpFlame
             TerrainStyle_Rockies.Layers[Num].TerrainmapDensity = 1.0F;
             TerrainStyle_Rockies.Layers[Num].TerrainmapScale = 0.0F;
             TerrainStyle_Rockies.Layers[Num].HeightMax = 256.0F;
-            TerrainStyle_Rockies.Layers[Num].AvoidLayers = new bool[TerrainStyle_Rockies.LayerCount - 1 + 1];
+            TerrainStyle_Rockies.Layers[Num].AvoidLayers = new bool[TerrainStyle_Rockies.LayerCount];
             TerrainStyle_Rockies.Layers[Num].WithinLayer = -1;
 
             Num++;
@@ -341,7 +341,7 @@ namespace SharpFlame
             TerrainStyle_Rockies.Layers[Num].TerrainmapDensity = 0.4F;
             TerrainStyle_Rockies.Layers[Num].TerrainmapScale = 1.5F;
             TerrainStyle_Rockies.Layers[Num].HeightMax = 256.0F;
-            TerrainStyle_Rockies.Layers[Num].AvoidLayers = new bool[TerrainStyle_Rockies.LayerCount - 1 + 1];
+            TerrainStyle_Rockies.Layers[Num].AvoidLayers = new bool[TerrainStyle_Rockies.LayerCount];
             TerrainStyle_Rockies.Layers[Num].WithinLayer = -1;
 
             Num++;
@@ -353,7 +353,7 @@ namespace SharpFlame
             TerrainStyle_Rockies.Layers[Num].TerrainmapScale = 1.5F;
             TerrainStyle_Rockies.Layers[Num].HeightMin = 85.0F;
             TerrainStyle_Rockies.Layers[Num].HeightMax = 256.0F;
-            TerrainStyle_Rockies.Layers[Num].AvoidLayers = new bool[TerrainStyle_Rockies.LayerCount - 1 + 1];
+            TerrainStyle_Rockies.Layers[Num].AvoidLayers = new bool[TerrainStyle_Rockies.LayerCount];
             TerrainStyle_Rockies.Layers[Num].WithinLayer = -1;
 
             Num++;
@@ -365,7 +365,7 @@ namespace SharpFlame
             TerrainStyle_Rockies.Layers[Num].TerrainmapScale = 1.0F;
             TerrainStyle_Rockies.Layers[Num].HeightMin = 85.0F;
             TerrainStyle_Rockies.Layers[Num].HeightMax = 256.0F;
-            TerrainStyle_Rockies.Layers[Num].AvoidLayers = new bool[TerrainStyle_Rockies.LayerCount - 1 + 1];
+            TerrainStyle_Rockies.Layers[Num].AvoidLayers = new bool[TerrainStyle_Rockies.LayerCount];
             TerrainStyle_Rockies.Layers[Num].WithinLayer = Num - 1;
 
             Num++;
@@ -377,7 +377,7 @@ namespace SharpFlame
             TerrainStyle_Rockies.Layers[Num].TerrainmapScale = 0.0F;
             TerrainStyle_Rockies.Layers[Num].HeightMin = 170.0F;
             TerrainStyle_Rockies.Layers[Num].HeightMax = 256.0F;
-            TerrainStyle_Rockies.Layers[Num].AvoidLayers = new bool[TerrainStyle_Rockies.LayerCount - 1 + 1];
+            TerrainStyle_Rockies.Layers[Num].AvoidLayers = new bool[TerrainStyle_Rockies.LayerCount];
             TerrainStyle_Rockies.Layers[Num].WithinLayer = -1;
 
             Num++;
@@ -389,7 +389,7 @@ namespace SharpFlame
             TerrainStyle_Rockies.Layers[Num].TerrainmapScale = 1.0F;
             TerrainStyle_Rockies.Layers[Num].HeightMin = 170.0F;
             TerrainStyle_Rockies.Layers[Num].HeightMax = 256.0F;
-            TerrainStyle_Rockies.Layers[Num].AvoidLayers = new bool[TerrainStyle_Rockies.LayerCount - 1 + 1];
+            TerrainStyle_Rockies.Layers[Num].AvoidLayers = new bool[TerrainStyle_Rockies.LayerCount];
             TerrainStyle_Rockies.Layers[Num].WithinLayer = Num - 1;
 
             Num++;
@@ -401,7 +401,7 @@ namespace SharpFlame
             TerrainStyle_Rockies.Layers[Num].TerrainmapScale = 0.0F;
             TerrainStyle_Rockies.Layers[Num].HeightMax = 256.0F;
             TerrainStyle_Rockies.Layers[Num].IsCliff = true;
-            TerrainStyle_Rockies.Layers[Num].AvoidLayers = new bool[TerrainStyle_Rockies.LayerCount - 1 + 1];
+            TerrainStyle_Rockies.Layers[Num].AvoidLayers = new bool[TerrainStyle_Rockies.LayerCount];
             TerrainStyle_Rockies.Layers[Num].WithinLayer = -1;
 
             TerrainStyle_Rockies.Tileset = Generator_TilesetRockies;

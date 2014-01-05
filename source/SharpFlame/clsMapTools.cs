@@ -332,7 +332,7 @@ namespace SharpFlame
 
             clsBooleanMap bmA = new clsBooleanMap();
             int Layer_Num = 0;
-            clsBooleanMap[] LayerResult = new clsBooleanMap[Args.LayerCount - 1 + 1];
+            clsBooleanMap[] LayerResult = new clsBooleanMap[Args.LayerCount];
             clsBooleanMap bmB = new clsBooleanMap();
             double BestSlope = 0;
             double CurrentSlope = 0;
@@ -384,7 +384,7 @@ namespace SharpFlame
                 Args.Layers[A].Terrainmap = new clsBooleanMap();
                 if ( Args.Layers[A].TerrainmapDensity == 1.0F )
                 {
-                    Args.Layers[A].Terrainmap.ValueData.Value = new bool[Terrain.TileSize.Y - 1 + 1, Terrain.TileSize.X - 1 + 1];
+                    Args.Layers[A].Terrainmap.ValueData.Value = new bool[Terrain.TileSize.Y, Terrain.TileSize.X];
                     Args.Layers[A].Terrainmap.ValueData.Size = Terrain.TileSize;
                     for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
                     {
@@ -404,8 +404,8 @@ namespace SharpFlame
 
             modMath.sXY_int Pos = new modMath.sXY_int();
 
-            TerrainType = new int[Terrain.TileSize.X - 1 + 1, Terrain.TileSize.Y - 1 + 1];
-            Slope = new float[Terrain.TileSize.X - 1 + 1, Terrain.TileSize.Y - 1 + 1];
+            TerrainType = new int[Terrain.TileSize.X, Terrain.TileSize.Y];
+            Slope = new float[Terrain.TileSize.X, Terrain.TileSize.Y];
             for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
             {
                 for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
@@ -590,14 +590,14 @@ namespace SharpFlame
             clsBooleanMap bmA = new clsBooleanMap();
             clsBooleanMap bmB = new clsBooleanMap();
             int LayerNum = 0;
-            clsBooleanMap[] LayerResult = new clsBooleanMap[LayerList.LayerCount - 1 + 1];
+            clsBooleanMap[] LayerResult = new clsBooleanMap[LayerList.LayerCount];
             double BestSlope = 0;
             double CurrentSlope = 0;
             bool AllowSlope = default(bool);
             modMath.sXY_int Pos = new modMath.sXY_int();
 
             TerrainType = new clsPainter.clsTerrain[Terrain.TileSize.X + 1, Terrain.TileSize.Y + 1];
-            Slope = new float[Terrain.TileSize.X - 1 + 1, Terrain.TileSize.Y - 1 + 1];
+            Slope = new float[Terrain.TileSize.X, Terrain.TileSize.Y];
             for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
             {
                 for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
@@ -1731,7 +1731,7 @@ namespace SharpFlame
                 Terrain = Map.Terrain;
 
                 Painter = Map.Painter;
-                TerrainCount = new int[Painter.TerrainCount - 1 + 1];
+                TerrainCount = new int[Painter.TerrainCount];
 
                 if ( PosNum.Y > 0 )
                 {
@@ -2011,7 +2011,7 @@ namespace SharpFlame
                 Terrain = Map.Terrain;
 
                 Painter = Map.Painter;
-                RoadCount = new int[Painter.RoadCount - 1 + 1];
+                RoadCount = new int[Painter.RoadCount];
             }
         }
 

@@ -441,7 +441,7 @@ namespace SharpFlame
             int C = 0;
             int D = 0;
 
-            PathfinderNode[] Children = new PathfinderNode[NodeCount - 1 + 1];
+            PathfinderNode[] Children = new PathfinderNode[NodeCount];
             for ( A = 0; A <= NodeCount - 1; A++ )
             {
                 Children[A] = Nodes[A];
@@ -555,7 +555,7 @@ namespace SharpFlame
             if ( NodeCount >= 2 )
             {
                 sVisited Visited = new sVisited();
-                Visited.Visited = new bool[NodeCount - 1 + 1];
+                Visited.Visited = new bool[NodeCount];
                 int A = 0;
                 FloodCheckInternal(Nodes[0], ref Visited);
                 for ( A = 0; A <= NodeCount - 1; A++ )
@@ -592,7 +592,7 @@ namespace SharpFlame
             return;
             DisbandAndFind:
             int B = 0;
-            PathfinderNode[] Children = new PathfinderNode[NodeCount - 1 + 1];
+            PathfinderNode[] Children = new PathfinderNode[NodeCount];
             for ( B = 0; B <= NodeCount - 1; B++ )
             {
                 Children[B] = Nodes[B];
@@ -790,7 +790,7 @@ namespace SharpFlame
             Args.SourceParentNode = this;
             Args.CurrentPath = Layer.Network.NetworkLargeArrays.Nodes_Path;
             Args.FinishNodeCount = NodeCount;
-            Args.FinishNodes = new PathfinderNode[NodeCount - 1 + 1];
+            Args.FinishNodes = new PathfinderNode[NodeCount];
             for ( A = 0; A <= NodeCount - 1; A++ )
             {
                 Args.FinishNodes[A] = Nodes[A];
@@ -808,7 +808,7 @@ namespace SharpFlame
                 {
                     Args.NodeValues[Nodes[A].Layer_NodeNum] = float.MaxValue;
                 }
-                Args.BestPaths = new PathfinderNetwork.Path[Args.FinishNodeCount - 1 + 1];
+                Args.BestPaths = new PathfinderNetwork.Path[Args.FinishNodeCount];
                 Layer.Network.FloodSpan(Args);
                 for ( A = NumA + 1; A <= NodeCount - 1; A++ )
                 {

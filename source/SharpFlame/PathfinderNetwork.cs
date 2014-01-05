@@ -108,7 +108,7 @@ namespace SharpFlame
 
             if ( FindParentNodes.GetUpperBound(0) < FindParentNodeCount )
             {
-                Array.Resize(ref FindParentNodes, (FindParentNodeCount + 1) * 2 - 1 + 1);
+                Array.Resize(ref FindParentNodes, (FindParentNodeCount + 1) * 2);
             }
             FindParentNodes[FindParentNodeCount] = NewFindParentNode;
             FindParentNodes[FindParentNodeCount].Network_FindParentNum = FindParentNodeCount;
@@ -128,7 +128,7 @@ namespace SharpFlame
             }
             if ( FindParentNodeCount * 3 < FindParentNodes.GetUpperBound(0) )
             {
-                Array.Resize(ref FindParentNodes, FindParentNodeCount * 2 - 1 + 1);
+                Array.Resize(ref FindParentNodes, FindParentNodeCount * 2);
             }
         }
 
@@ -154,9 +154,9 @@ namespace SharpFlame
         public PathList[] GetPath(PathfinderNode[] StartNodes, PathfinderNode FinishNode, int Accuracy, int MinClearance)
         {
             int StartNodeCount = StartNodes.GetUpperBound(0) + 1;
-            PathList[] Paths = new PathList[NodeLayerCount - 1 + 1];
-            PathfinderNode[,] LayerStartNodes = new PathfinderNode[NodeLayerCount - 1 + 1, StartNodeCount - 1 + 1];
-            PathfinderNode[] LayerFinishNodes = new PathfinderNode[NodeLayerCount - 1 + 1];
+            PathList[] Paths = new PathList[NodeLayerCount];
+            PathfinderNode[,] LayerStartNodes = new PathfinderNode[NodeLayerCount, StartNodeCount];
+            PathfinderNode[] LayerFinishNodes = new PathfinderNode[NodeLayerCount];
             int LayerNum = 0;
             PathfinderNode[] Destinations = new PathfinderNode[24];
             int DestinationCount = 0;
@@ -165,7 +165,7 @@ namespace SharpFlame
             int[] CalcNodeCount = new int[24];
             sFloodRouteArgs FloodRouteArgs = new sFloodRouteArgs();
             int FinalLayer = 0;
-            bool[] StartCanReach = new bool[StartNodeCount - 1 + 1];
+            bool[] StartCanReach = new bool[StartNodeCount];
             PathfinderNode tmpNodeA = default(PathfinderNode);
             PathfinderNode tmpNodeB = default(PathfinderNode);
             int CanReachCount = 0;
@@ -345,7 +345,7 @@ namespace SharpFlame
                         StartPath.NodeCount = 1;
                         StartPath.Nodes[0] = LayerStartNodes[LayerNum, A];
                         StartPath.Value = 0.0F;
-                        FloodRouteArgs.BestPaths = new Path[DestinationCount - 1 + 1];
+                        FloodRouteArgs.BestPaths = new Path[DestinationCount];
                         FloodRoute(FloodRouteArgs);
                         for ( PathNum = 0; PathNum <= DestinationCount - 1; PathNum++ )
                         {
@@ -370,7 +370,7 @@ namespace SharpFlame
                         Paths[LayerNum].PathCount++;
                     }
                 }
-                Array.Resize(ref Paths[LayerNum].Paths, Paths[LayerNum].PathCount - 1 + 1);
+                Array.Resize(ref Paths[LayerNum].Paths, Paths[LayerNum].PathCount);
                 if ( Paths[LayerNum].PathCount == 0 )
                 {
                     return null;
@@ -382,13 +382,13 @@ namespace SharpFlame
         public Path[] GetAllPaths(PathfinderNode[] StartNodes, PathfinderNode FinishNode, int MinClearance)
         {
             int StartNodeCount = StartNodes.GetUpperBound(0) + 1;
-            PathfinderNode[,] LayerStartNodes = new PathfinderNode[32, StartNodeCount - 1 + 1];
+            PathfinderNode[,] LayerStartNodes = new PathfinderNode[32, StartNodeCount];
             PathfinderNode[] LayerFinishNodes = new PathfinderNode[32];
             int LayerNum = 0;
             PathfinderNode[] Destinations = new PathfinderNode[24];
             sFloodRouteAllArgs FloodRouteDArgs = new sFloodRouteAllArgs();
             int FinalLayer = 0;
-            bool[] StartCanReach = new bool[StartNodeCount - 1 + 1];
+            bool[] StartCanReach = new bool[StartNodeCount];
             PathfinderNode tmpNodeA = default(PathfinderNode);
             int CanReachCount = 0;
             int FirstLayer = 0;
@@ -657,7 +657,7 @@ namespace SharpFlame
                 Args.BestPaths[A] = BestPath;
                 BestPath.Value = Args.NodeValues[Args.FinishNodes[A].Layer_NodeNum];
                 BestPath.NodeCount = SourceNodeCount;
-                BestPath.Nodes = new PathfinderNode[BestPath.NodeCount - 1 + 1];
+                BestPath.Nodes = new PathfinderNode[BestPath.NodeCount];
                 for ( B = 0; B <= BestPath.NodeCount - 1; B++ )
                 {
                     BestPath.Nodes[B] = Args.SourceNodes[SourceNodeCount - B - 1];
@@ -793,7 +793,7 @@ namespace SharpFlame
                 Args.BestPaths[A] = BestPath;
                 BestPath.Value = Args.NodeValues[Args.FinishNodes[A].Layer_NodeNum];
                 BestPath.NodeCount = SourceNodeCount;
-                BestPath.Nodes = new PathfinderNode[BestPath.NodeCount - 1 + 1];
+                BestPath.Nodes = new PathfinderNode[BestPath.NodeCount];
                 for ( B = 0; B <= BestPath.NodeCount - 1; B++ )
                 {
                     BestPath.Nodes[B] = Args.SourceNodes[SourceNodeCount - B - 1];
@@ -930,7 +930,7 @@ namespace SharpFlame
                 Args.BestPaths[A] = BestPath;
                 BestPath.Value = Args.NodeValues[Args.FinishNodes[A].Layer_NodeNum];
                 BestPath.NodeCount = SourceNodeCount;
-                BestPath.Nodes = new PathfinderNode[BestPath.NodeCount - 1 + 1];
+                BestPath.Nodes = new PathfinderNode[BestPath.NodeCount];
                 for ( B = 0; B <= BestPath.NodeCount - 1; B++ )
                 {
                     BestPath.Nodes[B] = Args.SourceNodes[SourceNodeCount - B - 1];
@@ -1034,9 +1034,9 @@ namespace SharpFlame
 
             while ( FindParentNodeCount > 0 )
             {
-                Positions = new int[FindParentNodeCount - 1 + 1];
+                Positions = new int[FindParentNodeCount];
                 ShuffledNodeCount = FindParentNodeCount;
-                ShuffledNodes = new PathfinderNode[ShuffledNodeCount - 1 + 1];
+                ShuffledNodes = new PathfinderNode[ShuffledNodeCount];
 
                 for ( A = 0; A <= FindParentNodeCount - 1; A++ )
                 {

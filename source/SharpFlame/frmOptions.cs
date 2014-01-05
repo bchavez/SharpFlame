@@ -248,7 +248,7 @@ namespace SharpFlame
         {
             lstKeyboardControls.Hide();
             lstKeyboardControls.Items.Clear();
-            lstKeyboardControls_Items = new clsOption<clsKeyboardControl>[modControls.Options_KeyboardControls.Options.Count - 1 + 1];
+            lstKeyboardControls_Items = new clsOption<clsKeyboardControl>[modControls.Options_KeyboardControls.Options.Count];
             for ( int i = 0; i <= modControls.Options_KeyboardControls.Options.Count - 1; i++ )
             {
                 clsOption<clsKeyboardControl> item = (clsOption<clsKeyboardControl>)(modControls.Options_KeyboardControls.Options[i]);
@@ -328,7 +328,7 @@ namespace SharpFlame
             clsOption<clsKeyboardControl> keyOption = lstKeyboardControls_Items[lstKeyboardControls.SelectedIndex];
             clsKeyboardControl previous = (clsKeyboardControl)(ChangedKeyControls.get_Value(keyOption));
 
-            Keys[] keys = new Keys[capture.Results.Count - 1 + 1];
+            Keys[] keys = new Keys[capture.Results.Count];
             for ( int i = 0; i <= capture.Results.Count - 1; i++ )
             {
                 keys[i] = capture.Results[i].Item;
@@ -357,7 +357,7 @@ namespace SharpFlame
             clsOption<clsKeyboardControl> keyOption = lstKeyboardControls_Items[lstKeyboardControls.SelectedIndex];
             clsKeyboardControl previous = (clsKeyboardControl)(ChangedKeyControls.get_Value(keyOption));
 
-            Keys[] unlessKeys = new Keys[capture.Results.Count - 1 + 1];
+            Keys[] unlessKeys = new Keys[capture.Results.Count];
             for ( int i = 0; i <= capture.Results.Count - 1; i++ )
             {
                 unlessKeys[i] = capture.Results[i].Item;

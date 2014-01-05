@@ -191,8 +191,8 @@ namespace SharpFlame
                 int A = 0;
                 int B = 0;
                 int C = 0;
-                sConnection[] NewOrder = new sConnection[ConnectionCount - 1 + 1];
-                double[] AwayAngles = new double[ConnectionCount - 1 + 1];
+                sConnection[] NewOrder = new sConnection[ConnectionCount];
+                double[] AwayAngles = new double[ConnectionCount];
                 clsPassageNode OtherNode = default(clsPassageNode);
                 modMath.sXY_int XY_int = new modMath.sXY_int();
                 double AwayAngle = 0;
@@ -339,7 +339,7 @@ namespace SharpFlame
             MaxLikelyPassageNodeCount =
                 (int)(Math.Ceiling(System.Convert.ToDecimal(2.0D * TileSize.X * 128 * TileSize.Y * 128 / (Math.PI * PassageRadius * PassageRadius))));
 
-            PassageNodes = new clsPassageNode[SymmetryBlockCount - 1 + 1, MaxLikelyPassageNodeCount - 1 + 1];
+            PassageNodes = new clsPassageNode[SymmetryBlockCount, MaxLikelyPassageNodeCount];
             int LoopCount = 0;
             int EdgeOffset = 0 * 128;
             bool PointIsValid;
@@ -473,7 +473,7 @@ namespace SharpFlame
             PointMakingFinished:
             PassageNodes =
                 (clsPassageNode[,])
-                    Microsoft.VisualBasic.CompilerServices.Utils.CopyArray((Array)PassageNodes, new clsPassageNode[SymmetryBlockCount - 1 + 1, PassageNodeCount - 1 + 1]);
+                    Microsoft.VisualBasic.CompilerServices.Utils.CopyArray((Array)PassageNodes, new clsPassageNode[SymmetryBlockCount, PassageNodeCount]);
 
             //connect until all are connected without intersecting
 
@@ -481,7 +481,7 @@ namespace SharpFlame
             int MaxConDist2 = PassageRadius * 2 * 4;
             MaxConDist2 *= MaxConDist2;
             clsNearest NearestA = default(clsNearest);
-            Nearests = new clsNearest[PassageNodeCount * 64 - 1 + 1];
+            Nearests = new clsNearest[PassageNodeCount * 64];
             clsPassageNode tmpPassageNodeA = default(clsPassageNode);
             clsPassageNode tmpPassageNodeB = default(clsPassageNode);
             clsTestNearestArgs NearestArgs = new clsTestNearestArgs();
@@ -561,7 +561,7 @@ namespace SharpFlame
             }
 
             int ChangeCount = 0;
-            Connections = new clsConnection[PassageNodeCount * 16 - 1 + 1];
+            Connections = new clsConnection[PassageNodeCount * 16];
 
             do
             {
@@ -584,7 +584,7 @@ namespace SharpFlame
                         {
                             A = F + D;
                             Connections[A].ReflectionCount = NearestA.NodeCount - 1;
-                            Connections[A].Reflections = new clsConnection[Connections[A].ReflectionCount - 1 + 1];
+                            Connections[A].Reflections = new clsConnection[Connections[A].ReflectionCount];
                             B = 0;
                             for ( E = 0; E <= NearestA.NodeCount - 1; E++ )
                             {
@@ -657,9 +657,9 @@ namespace SharpFlame
 
             //get nodes in random order
 
-            clsPassageNode[] PassageNodeListOrder = new clsPassageNode[PassageNodeCount - 1 + 1];
+            clsPassageNode[] PassageNodeListOrder = new clsPassageNode[PassageNodeCount];
             int PassageNodeListOrderCount = 0;
-            clsPassageNode[] PassageNodeOrder = new clsPassageNode[PassageNodeCount - 1 + 1];
+            clsPassageNode[] PassageNodeOrder = new clsPassageNode[PassageNodeCount];
             for ( A = 0; A <= PassageNodeCount - 1; A++ )
             {
                 PassageNodeListOrder[PassageNodeListOrderCount] = PassageNodes[0, A];
@@ -681,9 +681,9 @@ namespace SharpFlame
             int BestNum = 0;
             double Dist = 0;
             clsPassageNodeHeightLevelArgs HeightsArgs = new clsPassageNodeHeightLevelArgs();
-            HeightsArgs.PassageNodesMinLevel.Nodes = new int[PassageNodeCount - 1 + 1];
-            HeightsArgs.PassageNodesMaxLevel.Nodes = new int[PassageNodeCount - 1 + 1];
-            HeightsArgs.MapLevelCount = new int[LevelCount - 1 + 1];
+            HeightsArgs.PassageNodesMinLevel.Nodes = new int[PassageNodeCount];
+            HeightsArgs.PassageNodesMaxLevel.Nodes = new int[PassageNodeCount];
+            HeightsArgs.MapLevelCount = new int[LevelCount];
             modMath.sXY_int RotatedPos = new modMath.sXY_int();
 
             for ( A = 0; A <= PassageNodeCount - 1; A++ )
@@ -693,11 +693,11 @@ namespace SharpFlame
             }
 
             //create bases
-            double[] BestDists = new double[BaseFlatArea - 1 + 1];
-            clsPassageNode[] BestNodes = new clsPassageNode[BaseFlatArea - 1 + 1];
-            int[] BestNodesReflectionNums = new int[BaseFlatArea - 1 + 1];
+            double[] BestDists = new double[BaseFlatArea];
+            clsPassageNode[] BestNodes = new clsPassageNode[BaseFlatArea];
+            int[] BestNodesReflectionNums = new int[BaseFlatArea];
             int BestDistCount = 0;
-            PlayerBases = new sPlayerBase[TotalPlayerCount - 1 + 1];
+            PlayerBases = new sPlayerBase[TotalPlayerCount];
             for ( B = 0; B <= TopLeftPlayerCount - 1; B++ )
             {
                 BestDistCount = 0;
@@ -766,7 +766,7 @@ namespace SharpFlame
                 {
                     E = A * TopLeftPlayerCount + B;
                     PlayerBases[E].NodeCount = BestDistCount;
-                    PlayerBases[E].Nodes = new clsPassageNode[PlayerBases[E].NodeCount - 1 + 1];
+                    PlayerBases[E].Nodes = new clsPassageNode[PlayerBases[E].NodeCount];
                     for ( C = 0; C <= BestDistCount - 1; C++ )
                     {
                         if ( BestNodesReflectionNums[C] < 0 )
@@ -1085,8 +1085,8 @@ namespace SharpFlame
             NearestA.Dist2 = Dist2;
             if ( Args.PassageNodeA.MirrorNum == Args.PassageNodeB.MirrorNum )
             {
-                NearestA.NodeA = new clsPassageNode[SymmetryBlockCount - 1 + 1];
-                NearestA.NodeB = new clsPassageNode[SymmetryBlockCount - 1 + 1];
+                NearestA.NodeA = new clsPassageNode[SymmetryBlockCount];
+                NearestA.NodeB = new clsPassageNode[SymmetryBlockCount];
                 for ( A = 0; A <= SymmetryBlockCount - 1; A++ )
                 {
                     NearestA.NodeA[A] = PassageNodes[A, Args.PassageNodeA.Num];
@@ -1098,8 +1098,8 @@ namespace SharpFlame
             {
                 if ( SymmetryIsRotational )
                 {
-                    NearestA.NodeA = new clsPassageNode[SymmetryBlockCount - 1 + 1];
-                    NearestA.NodeB = new clsPassageNode[SymmetryBlockCount - 1 + 1];
+                    NearestA.NodeA = new clsPassageNode[SymmetryBlockCount];
+                    NearestA.NodeB = new clsPassageNode[SymmetryBlockCount];
                     ReflectionCount = (int)(SymmetryBlockCount / 2.0D);
                     for ( ReflectionNum = 0; ReflectionNum <= ReflectionCount - 1; ReflectionNum++ )
                     {
@@ -1218,7 +1218,7 @@ namespace SharpFlame
             bool Flag = default(bool);
 
             Map = new clsMap(TileSize);
-            GenerateTerrainTiles = new GenerateTerrainTile[Map.Terrain.TileSize.X - 1 + 1, Map.Terrain.TileSize.Y - 1 + 1];
+            GenerateTerrainTiles = new GenerateTerrainTile[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
             GenerateTerrainVertices = new GenerateTerrainVertex[Map.Terrain.TileSize.X + 1, Map.Terrain.TileSize.Y + 1];
 
             //set terrain heights
@@ -1292,7 +1292,7 @@ namespace SharpFlame
             A = JitterLayer.GetNodeCount - 1;
             int[] NodeLevel = new int[A + 1];
             clsBaseNodeLevels BaseNodeLevel = new clsBaseNodeLevels();
-            BaseNodeLevel.NodeLevels = new float[BaseLayer.GetNodeCount - 1 + 1];
+            BaseNodeLevel.NodeLevels = new float[BaseLayer.GetNodeCount];
 
             //set position of jitter layer nodes
 
@@ -1719,9 +1719,9 @@ namespace SharpFlame
             double dblTemp = 0;
             double Value = 0;
             clsGenerateMap.clsOilPossibilities.clsPossibility NewPossibility = new clsGenerateMap.clsOilPossibilities.clsPossibility();
-            double[] BaseOilScore = new double[TopLeftPlayerCount - 1 + 1];
+            double[] BaseOilScore = new double[TopLeftPlayerCount];
 
-            NewPossibility.PlayerOilScoreAddition = new double[TopLeftPlayerCount - 1 + 1];
+            NewPossibility.PlayerOilScoreAddition = new double[TopLeftPlayerCount];
 
             int NewOilNum = 0;
             int OtherOilNum = 0;
@@ -1848,7 +1848,7 @@ namespace SharpFlame
             //Value = OilDispersion * (OilDistScore * 4.0# + OilStraightDistScore) + UnbalancedScore
             Value = OilDispersion * NearestOilValue + UnbalancedScore;
             NewPossibility.Score = Value;
-            NewPossibility.Nodes = new clsPassageNode[OilAtATime - 1 + 1];
+            NewPossibility.Nodes = new clsPassageNode[OilAtATime];
             for ( NewOilNum = 0; NewOilNum <= OilAtATime - 1; NewOilNum++ )
             {
                 NewPossibility.Nodes[NewOilNum] = Args.OilNodes[NewOilNum];
@@ -2061,9 +2061,9 @@ namespace SharpFlame
         private PathfinderNode GetNearestNodeConnection(PathfinderNetwork Network, modMath.sXY_int Pos, int MinClearance, float MaxDistance)
         {
             int A = 0;
-            PathfinderNode[] TravelNodes = new PathfinderNode[Network.get_GetNodeLayer(0).GetNodeCount * 10 - 1 + 1];
+            PathfinderNode[] TravelNodes = new PathfinderNode[Network.get_GetNodeLayer(0).GetNodeCount * 10];
             int TravelNodeCount = 0;
-            float[] NodeTravelDists = new float[Network.get_GetNodeLayer(0).GetNodeCount - 1 + 1];
+            float[] NodeTravelDists = new float[Network.get_GetNodeLayer(0).GetNodeCount];
             int TravelNodeNum = 0;
             PathfinderNode CurrentNode = default(PathfinderNode);
             PathfinderNode OtherNode = default(PathfinderNode);
@@ -2642,7 +2642,7 @@ namespace SharpFlame
             int X = 0;
             int SpaceCount = 0;
             int Y = 0;
-            sPossibleGateway[] PossibleGateways = new sPossibleGateway[Terrain.TileSize.X * Terrain.TileSize.Y * 2 - 1 + 1];
+            sPossibleGateway[] PossibleGateways = new sPossibleGateway[Terrain.TileSize.X * Terrain.TileSize.Y * 2];
             int PossibleGatewayCount = 0;
 
             for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
@@ -2712,7 +2712,7 @@ namespace SharpFlame
             float Value = 0;
             float BestValue = 0;
             int BestNum = 0;
-            bool[,] TileIsGateway = new bool[Terrain.TileSize.X - 1 + 1, Terrain.TileSize.Y - 1 + 1];
+            bool[,] TileIsGateway = new bool[Terrain.TileSize.X, Terrain.TileSize.Y];
             bool Valid = default(bool);
             modMath.sXY_int InvalidPos = new modMath.sXY_int();
             double InvalidDist = 0;
@@ -3155,13 +3155,13 @@ namespace SharpFlame
             ReturnResult.Problem = "";
             ReturnResult.Success = false;
 
-            int[] LevelCounts = new int[LevelCount - 1 + 1];
+            int[] LevelCounts = new int[LevelCount];
             int WaterCount = 0;
             bool ConnectedToLevel = default(bool);
             clsPassageNode tmpPassageNodeB = default(clsPassageNode);
             clsPassageNode tmpPassageNodeC = default(clsPassageNode);
             int EligableCount = 0;
-            int[] Eligables = new int[LevelCount - 1 + 1];
+            int[] Eligables = new int[LevelCount];
             int NewHeightLevel = 0;
             int RandomAction = 0;
             int A = 0;
@@ -3348,14 +3348,14 @@ namespace SharpFlame
             clsPassageNodeNework PassageNodeNetwork = MakePassageNodeNetwork();
             PassageNodePathNodes = PassageNodeNetwork.PassageNodePathNodes;
 
-            clsConnection[] PossibleRamps = new clsConnection[ConnectionCount - 1 + 1];
+            clsConnection[] PossibleRamps = new clsConnection[ConnectionCount];
             int PossibleRampCount = 0;
             PathfinderNode[] GetPathStartNodes = new PathfinderNode[1];
             PathfinderNetwork.PathList[] ResultPaths = null;
 
             //ramp connections whose points are too far apart
 
-            bool[] ConnectionsCanRamp = new bool[ConnectionCount - 1 + 1];
+            bool[] ConnectionsCanRamp = new bool[ConnectionCount];
 
             for ( B = 0; B <= ConnectionCount - 1; B++ )
             {
@@ -3380,8 +3380,8 @@ namespace SharpFlame
             }
 
             clsNodeConnectedness Connectedness = new clsNodeConnectedness();
-            Connectedness.NodeConnectedness = new float[PassageNodeCount - 1 + 1];
-            Connectedness.PassageNodeVisited = new bool[SymmetryBlockCount - 1 + 1, PassageNodeCount - 1 + 1];
+            Connectedness.NodeConnectedness = new float[PassageNodeCount];
+            Connectedness.PassageNodeVisited = new bool[SymmetryBlockCount, PassageNodeCount];
             Connectedness.PassageNodePathNodes = PassageNodePathNodes;
             Connectedness.PassageNodePathMap = PassageNodeNetwork.Network;
 
@@ -3395,7 +3395,7 @@ namespace SharpFlame
 
             UpdateNodeConnectednessArgs.Args = Connectedness;
             UpdateNetworkConnectednessArgs.Args = Connectedness;
-            UpdateNetworkConnectednessArgs.PassageNodeUpdated = new bool[PassageNodeCount - 1 + 1];
+            UpdateNetworkConnectednessArgs.PassageNodeUpdated = new bool[PassageNodeCount];
             UpdateNetworkConnectednessArgs.SymmetryBlockCount = SymmetryBlockCount;
 
             for ( A = 0; A <= PassageNodeCount - 1; A++ )
@@ -3589,7 +3589,7 @@ namespace SharpFlame
             int B = 0;
 
             ReturnResult.Network = new PathfinderNetwork();
-            ReturnResult.PassageNodePathNodes = new PathfinderNode[SymmetryBlockCount - 1 + 1, PassageNodeCount - 1 + 1];
+            ReturnResult.PassageNodePathNodes = new PathfinderNode[SymmetryBlockCount, PassageNodeCount];
             for ( A = 0; A <= PassageNodeCount - 1; A++ )
             {
                 for ( B = 0; B <= SymmetryBlockCount - 1; B++ )
@@ -3640,7 +3640,7 @@ namespace SharpFlame
             PathfinderNode[] GetPathStartNodes = new PathfinderNode[1];
             PathfinderNetwork.PathList[] ResultPaths = null;
 
-            PassageNodeDists = new float[SymmetryBlockCount - 1 + 1, PassageNodeCount - 1 + 1, SymmetryBlockCount - 1 + 1, PassageNodeCount - 1 + 1];
+            PassageNodeDists = new float[SymmetryBlockCount, PassageNodeCount, SymmetryBlockCount, PassageNodeCount];
             for ( A = 0; A <= PassageNodeCount - 1; A++ )
             {
                 for ( D = 0; D <= SymmetryBlockCount - 1; D++ )
@@ -3692,9 +3692,9 @@ namespace SharpFlame
             }
             clsGenerateMap.clsOilPossibilities.clsPossibility BestPossibility = default(clsGenerateMap.clsOilPossibilities.clsPossibility);
             clsGenerateMap.clsOilBalanceLoopArgs OilArgs = new clsGenerateMap.clsOilBalanceLoopArgs();
-            OilArgs.OilClusterSizes = new int[OilAtATime - 1 + 1];
-            OilArgs.PlayerOilScore = new double[TopLeftPlayerCount - 1 + 1];
-            OilArgs.OilNodes = new clsPassageNode[OilAtATime - 1 + 1];
+            OilArgs.OilClusterSizes = new int[OilAtATime];
+            OilArgs.PlayerOilScore = new double[TopLeftPlayerCount];
+            OilArgs.OilNodes = new clsPassageNode[OilAtATime];
 
             //balanced oil
             while ( PlacedExtraOilCount < ExtraOilCount )

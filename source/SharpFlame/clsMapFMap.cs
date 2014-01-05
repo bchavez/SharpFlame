@@ -38,7 +38,7 @@ namespace SharpFlame
                 int B = 0;
 
                 ObjectCount = NewObjectCount;
-                Objects = new sObject[ObjectCount - 1 + 1];
+                Objects = new sObject[ObjectCount];
                 for ( A = 0; A <= ObjectCount - 1; A++ )
                 {
                     Objects[A].Type = clsUnitType.enumType.Unspecified;
@@ -1953,7 +1953,7 @@ namespace SharpFlame
                 int A = 0;
 
                 GatewayCount = NewGatewayCount;
-                Gateways = new sGateway[GatewayCount - 1 + 1];
+                Gateways = new sGateway[GatewayCount];
                 for ( A = 0; A <= GatewayCount - 1; A++ )
                 {
                     Gateways[A].PosA.X = -1;

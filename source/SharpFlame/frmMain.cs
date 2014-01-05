@@ -1371,7 +1371,7 @@ namespace SharpFlame
             int ListPosition = 0;
 
             cboDroidBody.Items.Clear();
-            cboBody_Objects = new clsBody[modProgram.ObjectData.Bodies.Count - 1 + 1];
+            cboBody_Objects = new clsBody[modProgram.ObjectData.Bodies.Count];
             foreach ( clsBody tempLoopVar_Body in modProgram.ObjectData.Bodies )
             {
                 Body = tempLoopVar_Body;
@@ -1381,10 +1381,10 @@ namespace SharpFlame
                     cboBody_Objects[ListPosition] = Body;
                 }
             }
-            Array.Resize(ref cboBody_Objects, cboDroidBody.Items.Count - 1 + 1);
+            Array.Resize(ref cboBody_Objects, cboDroidBody.Items.Count);
 
             cboDroidPropulsion.Items.Clear();
-            cboPropulsion_Objects = new clsPropulsion[modProgram.ObjectData.Propulsions.Count - 1 + 1];
+            cboPropulsion_Objects = new clsPropulsion[modProgram.ObjectData.Propulsions.Count];
             foreach ( clsPropulsion tempLoopVar_Propulsion in modProgram.ObjectData.Propulsions )
             {
                 Propulsion = tempLoopVar_Propulsion;
@@ -1394,12 +1394,12 @@ namespace SharpFlame
                     cboPropulsion_Objects[ListPosition] = Propulsion;
                 }
             }
-            Array.Resize(ref cboPropulsion_Objects, cboDroidPropulsion.Items.Count - 1 + 1);
+            Array.Resize(ref cboPropulsion_Objects, cboDroidPropulsion.Items.Count);
 
             cboDroidTurret1.Items.Clear();
             cboDroidTurret2.Items.Clear();
             cboDroidTurret3.Items.Clear();
-            cboTurret_Objects = new clsTurret[modProgram.ObjectData.Turrets.Count - 1 + 1];
+            cboTurret_Objects = new clsTurret[modProgram.ObjectData.Turrets.Count];
             foreach ( clsTurret tempLoopVar_Turret in modProgram.ObjectData.Turrets )
             {
                 Turret = tempLoopVar_Turret;
@@ -1414,7 +1414,7 @@ namespace SharpFlame
                     cboTurret_Objects[ListPosition] = Turret;
                 }
             }
-            Array.Resize(ref cboTurret_Objects, cboDroidTurret1.Items.Count - 1 + 1);
+            Array.Resize(ref cboTurret_Objects, cboDroidTurret1.Items.Count);
 
             cboDroidType.Items.Clear();
             for ( int A = 0; A <= modProgram.TemplateDroidTypeCount - 1; A++ )
@@ -3717,8 +3717,8 @@ namespace SharpFlame
             clsMap.clsScriptArea ScriptArea = default(clsMap.clsScriptArea);
             object NewSelectedScriptMarker = null;
 
-            lstScriptPositions_Objects = new clsMap.clsScriptPosition[Map.ScriptPositions.Count - 1 + 1];
-            lstScriptAreas_Objects = new clsMap.clsScriptArea[Map.ScriptAreas.Count - 1 + 1];
+            lstScriptPositions_Objects = new clsMap.clsScriptPosition[Map.ScriptPositions.Count];
+            lstScriptAreas_Objects = new clsMap.clsScriptArea[Map.ScriptAreas.Count];
 
             foreach ( clsMap.clsScriptPosition tempLoopVar_ScriptPosition in Map.ScriptPositions )
             {

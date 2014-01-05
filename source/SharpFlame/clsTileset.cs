@@ -72,7 +72,7 @@ namespace SharpFlame
 
                 uintTemp = File.ReadUInt32();
                 TileCount = System.Convert.ToInt32(uintTemp);
-                Tiles = new sTile[TileCount - 1 + 1];
+                Tiles = new sTile[TileCount];
 
                 for ( A = 0; A <= Math.Min(System.Convert.ToInt32(uintTemp), TileCount) - 1; A++ )
                 {

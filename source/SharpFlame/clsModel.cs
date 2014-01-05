@@ -175,7 +175,7 @@ namespace SharpFlame
                 else if ( strTemp.Substring(0, 6) == "LEVELS" )
                 {
                     LevelCount = int.Parse(strTemp.Substring(strTemp.Length - (strTemp.Length - 7), strTemp.Length - 7));
-                    Levels = new sPIELevel[LevelCount - 1 + 1];
+                    Levels = new sPIELevel[LevelCount];
                 }
                 else if ( strTemp.Substring(0, 6) == "LEVEL " )
                 {
@@ -253,7 +253,7 @@ namespace SharpFlame
                 else if ( strTemp.Substring(0, 8) == "POLYGONS" )
                 {
                     Levels[LevelNum].PolygonCount = int.Parse(strTemp.Substring(strTemp.Length - (strTemp.Length - 9), strTemp.Length - 9));
-                    Levels[LevelNum].Polygon = new sPIELevel.sPolygon[Levels[LevelNum].PolygonCount - 1 + 1];
+                    Levels[LevelNum].Polygon = new sPIELevel.sPolygon[Levels[LevelNum].PolygonCount];
                     A = 0;
                     do
                     {
@@ -287,7 +287,7 @@ namespace SharpFlame
                             }
                             if ( SplitText[C].Length == 0 )
                             {
-                                Array.Resize(ref SplitText, C - 1 + 1);
+                                Array.Resize(ref SplitText, C);
                             }
                             else
                             {
@@ -415,7 +415,7 @@ namespace SharpFlame
                 else if ( strTemp.Substring(0, 10) == "CONNECTORS" )
                 {
                     ConnectorCount = int.Parse(strTemp.Substring(strTemp.Length - (strTemp.Length - 11), strTemp.Length - 11));
-                    Connectors = new modMath.sXYZ_sng[ConnectorCount - 1 + 1];
+                    Connectors = new modMath.sXYZ_sng[ConnectorCount];
                     A = 0;
                     do
                     {
@@ -491,8 +491,8 @@ namespace SharpFlame
 
             TriangleCount = NewTriCount;
             QuadCount = NewQuadCount;
-            Triangles = new sTriangle[TriangleCount - 1 + 1];
-            Quads = new sQuad[QuadCount - 1 + 1];
+            Triangles = new sTriangle[TriangleCount];
+            Quads = new sQuad[QuadCount];
             NewTriCount = 0;
             NewQuadCount = 0;
             for ( LevelNum = 0; LevelNum <= LevelCount - 1; LevelNum++ )

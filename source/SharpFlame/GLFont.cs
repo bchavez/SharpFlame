@@ -232,7 +232,7 @@ namespace SharpFlame
         public clsTextLabels(int MaxItemCount)
         {
             MaxCount = MaxItemCount;
-            Items = new clsTextLabel[MaxCount - 1 + 1];
+            Items = new clsTextLabel[MaxCount];
         }
 
         public bool AtMaxCount()

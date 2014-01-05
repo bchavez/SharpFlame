@@ -28,7 +28,7 @@ namespace SharpFlame
         {
             HeightData.SizeX = SizeX;
             HeightData.SizeY = SizeY;
-            HeightData.Height = new long[SizeY - 1 + 1, SizeX - 1 + 1];
+            HeightData.Height = new long[SizeY, SizeX];
         }
 
         public void Randomize(double HeightMultiplier)
@@ -756,7 +756,7 @@ namespace SharpFlame
         {
             HeightData.SizeX = Source.HeightData.SizeX;
             HeightData.SizeY = Source.HeightData.SizeY;
-            HeightData.Height = new long[HeightData.SizeY - 1 + 1, HeightData.SizeX - 1 + 1];
+            HeightData.Height = new long[HeightData.SizeY, HeightData.SizeX];
         }
 
         public void Insert(clsHeightmap Source, int Y1, int X1)
