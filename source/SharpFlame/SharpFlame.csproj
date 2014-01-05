@@ -77,23 +77,19 @@
     <ApplicationIcon>flaME.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\packages\other\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Matrix3D">
+      <HintPath>..\packages\other\Matrix3D.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="mscorlib" />
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\ICSharpCode.SharpZipLib.dll</HintPath>
+    <Reference Include="OpenTK">
+      <HintPath>..\packages\other\OpenTK.dll</HintPath>
     </Reference>
-    <Reference Include="Matrix3D, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\Matrix3D.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\OpenTK.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenTK.GLControl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\OpenTK.GLControl.dll</HintPath>
+    <Reference Include="OpenTK.GLControl">
+      <HintPath>..\packages\other\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -115,10 +111,15 @@
     <Compile Include="Collections\Specialized\BooleanMap.cs" />
     <Compile Include="Generators\clsBrush.cs" />
     <Compile Include="Domain\ComponentBase.cs" />
+    <Compile Include="Mapping\Changes\clsAutoTextureChanges.cs" />
+    <Compile Include="Mapping\Changes\clsMapTileChanges.cs" />
+    <Compile Include="Mapping\Changes\clsPointChanges.cs" />
+    <Compile Include="Mapping\Changes\clsSectorChanges.cs" />
+    <Compile Include="Mapping\Changes\clsTerrainUpdate.cs" />
     <Compile Include="Mapping\clsGeneratorMap.cs" />
     <Compile Include="Mapping\Tiles\clsGeneratorTileset.cs" />
     <Compile Include="Mapping\clsHeightmap.cs" />
-    <Compile Include="Mapping\clsMapRender.cs" />
+    <Compile Include="Mapping\Renderers\clsMapRender.cs" />
     <Compile Include="Collections\ConnectedList.cs" />
     <Compile Include="Collections\ConnectedListItem.cs" />
     <Compile Include="Collections\ConnectedListItemList.cs" />
@@ -145,13 +146,13 @@
     <Compile Include="AppSettings\KeyboardManager.cs" />
     <Compile Include="Mapping\clsMap.cs" />
     <Compile Include="Mapping\clsMapChanges.cs" />
-    <Compile Include="Mapping\clsMapDraw.cs" />
-    <Compile Include="Mapping\clsMapFMap.cs" />
-    <Compile Include="Mapping\clsMapObject.cs" />
-    <Compile Include="Mapping\clsMapOtherIO.cs" />
-    <Compile Include="Mapping\clsMapScriptMarkers.cs" />
-    <Compile Include="Mapping\clsMapTools.cs" />
-    <Compile Include="Mapping\clsMapWZ.cs" />
+    <Compile Include="Mapping\Drawing\clsMapDraw.cs" />
+    <Compile Include="Mapping\FMap\clsMapFMap.cs" />
+    <Compile Include="Mapping\Objects\clsMapObject.cs" />
+    <Compile Include="Mapping\IO\clsMapOtherIO.cs" />
+    <Compile Include="Mapping\Script\clsMapScriptMarkers.cs" />
+    <Compile Include="Mapping\Tools\clsMapTools.cs" />
+    <Compile Include="Mapping\Wz\clsMapWZ.cs" />
     <Compile Include="Domain\clsModel.cs" />
     <Compile Include="Domain\clsObjectData.cs" />
     <Compile Include="Mapping\Tiles\TileDirection.cs" />

@@ -3,15 +3,15 @@ using Sprache;
 
 namespace SharpFlame.Core
 {
-    public class Parsers
+    public class Numerics
     {
         public static readonly Parser<float> SignedFloat =
             from sign in Parse.Char('-').Optional()
-            from number in Parse.Decimal
+            from number in Parse.Decimal.Token()
             select sign.IsDefined ? -float.Parse(number) : float.Parse(number);
     }
 
-    public class Pie
+    public class PieParser
     {
         public static readonly Parser<int> Version =
             from pie in Parse.String("PIE")
@@ -52,11 +52,10 @@ namespace SharpFlame.Core
             let n = int.Parse( number )
             select n;
 
-        public static readonly Parser<Xyz> XyzParser =
-            from whitespace in Parse.WhiteSpace
-            from x in Parsers.SignedFloat.Token()
-            from y in Parsers.SignedFloat.Token()
-            from z in Parsers.SignedFloat.Token()
+        public static readonly Parser<Xyz> XyzPoint =
+            from x in Numerics.SignedFloat.Token()
+            from y in Numerics.SignedFloat.Token()
+            from z in Numerics.SignedFloat.Token()
             select new Xyz {X = x, Y = y, Z = z};
 
         public static readonly Parser<int> Points =
@@ -65,8 +64,29 @@ namespace SharpFlame.Core
             select int.Parse(length);
 
         public static readonly Parser<Xyz[]> PointsData =
-            from points in XyzParser.Many()
+            from points in XyzPoint.Many()
             select points.ToArray();
+
+        public static readonly Parser<int> Polygons =
+            from levels in Parse.String( "POLYGONS" )
+            from number in Parse.Number.Token()
+            let n = int.Parse( number )
+            select n;
+
+        public static readonly Parser<Polygon> Polygon =
+            from 
+
+        public static readonly Parser<int> Connectors =
+            from levels in Parse.String( "CONNECTORS" )
+            from number in Parse.Number.Token()
+            let n = int.Parse( number )
+            select n;
+
+
+    }
+
+    public class Polygon
+    {
     }
 
     public class TextureDirective

@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using FluentAssertions;
 using NUnit.Framework;
 using SharpFlame.Core;
 using Sprache;
@@ -39,7 +40,7 @@ namespace SharpFlame.Tests.Parser
         {
             var data = @"PIE 2";
 
-            var result = Pie.Version.Parse(data);
+            var result = PieParser.Version.Parse(data);
 
             result.Should().Be(2);
         }
@@ -49,7 +50,7 @@ namespace SharpFlame.Tests.Parser
         {
             var data = @"TYPE 10200";
 
-            var result = Pie.Type.Parse(data);
+            var result = PieParser.Type.Parse(data);
             result.Should().Be(10200);
         }
 
@@ -58,7 +59,7 @@ namespace SharpFlame.Tests.Parser
         {
             var data = @"TEXTURE 0 page-17-droid-weapons.png 256 256";
 
-            var result = Pie.Texture.Parse(data);
+            var result = PieParser.Texture.Parse(data);
             result.ShouldBeEquivalentTo(new TextureDirective
                 {
                     Height = 256,
@@ -72,7 +73,7 @@ namespace SharpFlame.Tests.Parser
         {
             var data = @"LEVELS 3";
 
-            var result = Pie.Levels.Parse(data);
+            var result = PieParser.Levels.Parse(data);
 
             result.Should().Be(3);
         }
@@ -83,7 +84,7 @@ namespace SharpFlame.Tests.Parser
         {
             var data = @"	-52 7 22";
 
-            var result = Pie.XyzParser.Parse(data);
+            var result = PieParser.XyzPoint.Parse(data);
 
             result.ShouldBeEquivalentTo(new Xyz 
                 {
@@ -99,7 +100,7 @@ namespace SharpFlame.Tests.Parser
         {
             var data = @"POINTS 56";
 
-            var result = Pie.Points.Parse(data);
+            var result = PieParser.Points.Parse(data);
 
             result.Should().Be(56);
         }
@@ -109,7 +110,7 @@ namespace SharpFlame.Tests.Parser
         {
             var data = @"LEVEL 1";
 
-            var result = Pie.Level.Parse( data );
+            var result = PieParser.Level.Parse( data );
 
             result.Should().Be( 1 );
         }
@@ -122,16 +123,27 @@ namespace SharpFlame.Tests.Parser
 	-42 5 -18
 	17 77 -7";
 
-            var result = Pie.PointsData.Parse(data);
+            var result = PieParser.PointsData.Parse(data);
             
             result.Length.Should().Be(3);
+
             var truth = new[]
                 {
                     new Xyz {X = -45, Y = 8, Z = -18},
-                    new Xyz {X = -45, Y = 5, Z = -18},
+                    new Xyz {X = -42, Y = 5, Z = -18},
                     new Xyz {X = 17, Y = 77, Z = -7},
                 };
             truth.ShouldAllBeEquivalentTo(result);
+        }
+
+        [Test]
+        public void test()
+        {
+            var data = "1 2 3 4 5";
+            var x = Parse.Number.Token().Many().Parse(data);
+            var y = x.ToArray();
+
+            
         }
     }
 }
