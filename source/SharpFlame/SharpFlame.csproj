@@ -1,0 +1,368 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{152475A4-3ABE-41C4-B338-A2FB7B350FAF}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <StartupObject>SharpFlame.modMain</StartupObject>
+    <RootNamespace>SharpFlame</RootNamespace>
+    <AssemblyName>SharpFlame</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>Console</MyType>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>0.0.0.0</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>FlaME.xml</DocumentationFile>
+    <NOWARN>1591,660,661</NOWARN>
+    <DefineConstants>
+    </DefineConstants>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>FlaME.xml</DocumentationFile>
+    <NOWARN>1591,660,661</NOWARN>
+    <DefineConstants>Mono;Portable</DefineConstants>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>flaME.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="mscorlib" />
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Matrix3D, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Matrix3D.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\OpenTK.GLControl.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="clsBooleanMap.cs" />
+    <Compile Include="clsBrush.cs" />
+    <Compile Include="clsComponent.cs" />
+    <Compile Include="clsGeneratorMap.cs" />
+    <Compile Include="clsGeneratorTileset.cs" />
+    <Compile Include="clsHeightmap.cs" />
+    <Compile Include="clsMapRender.cs" />
+    <Compile Include="frmKeyboardControl.Designer.cs">
+      <DependentUpon>frmKeyboardControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmKeyboardControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KeyboardControls.cs" />
+    <Compile Include="clsMap.cs" />
+    <Compile Include="clsMapChanges.cs" />
+    <Compile Include="clsMapDraw.cs" />
+    <Compile Include="clsMapFMap.cs" />
+    <Compile Include="clsMapObject.cs" />
+    <Compile Include="clsMapOtherIO.cs" />
+    <Compile Include="clsMapScriptMarkers.cs" />
+    <Compile Include="clsMapTools.cs" />
+    <Compile Include="clsMapWZ.cs" />
+    <Compile Include="clsModel.cs" />
+    <Compile Include="clsObjectData.cs" />
+    <Compile Include="clsPainter.cs" />
+    <Compile Include="clsResult.cs" />
+    <Compile Include="clsTileset.cs" />
+    <Compile Include="Options.cs" />
+    <Compile Include="Tools.cs" />
+    <Compile Include="clsUnitType.cs" />
+    <Compile Include="clsViewInfo.cs" />
+    <Compile Include="modMain.cs" />
+    <Compile Include="modColour.cs" />
+    <Compile Include="frmQuit.Designer.cs">
+      <DependentUpon>frmQuit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmQuit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ctrlBrush.Designer.cs">
+      <DependentUpon>ctrlBrush.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ctrlBrush.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctrlColour.Designer.cs">
+      <DependentUpon>ctrlColour.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ctrlColour.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctrlMapView.Designer.cs">
+      <DependentUpon>ctrlMapView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ctrlMapView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctrlPathSet.Designer.cs">
+      <DependentUpon>ctrlPathSet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ctrlPathSet.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctrlPlayerNum.Designer.cs">
+      <DependentUpon>ctrlPlayerNum.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ctrlPlayerNum.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctrlTextureView.Designer.cs">
+      <DependentUpon>ctrlTextureView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ctrlTextureView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="frmClose.Designer.cs">
+      <DependentUpon>frmClose.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmClose.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCompile.Designer.cs">
+      <DependentUpon>frmCompile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmCompile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmGenerator.Designer.cs">
+      <DependentUpon>frmGenerator.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmGenerator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain.Designer.cs">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmOptions.Designer.cs">
+      <DependentUpon>frmOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSplash.Designer.cs">
+      <DependentUpon>frmSplash.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmSplash.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmWarnings.Designer.cs">
+      <DependentUpon>frmWarnings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmWarnings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmWZLoad.Designer.cs">
+      <DependentUpon>frmWZLoad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmWZLoad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GLFont.cs" />
+    <Compile Include="modLists.cs" />
+    <Compile Include="modBitmap.cs" />
+    <Compile Include="modGenerator.cs" />
+    <Compile Include="INI.cs" />
+    <Compile Include="modIO.cs" />
+    <Compile Include="modMath.cs" />
+    <Compile Include="modPainters.cs" />
+    <Compile Include="modProgram.cs" />
+    <Compile Include="modSettings.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Application.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="PathfinderConnection.cs" />
+    <Compile Include="PathfinderLayer.cs" />
+    <Compile Include="PathfinderNetwork.cs" />
+    <Compile Include="PathfinderNode.cs" />
+    <Compile Include="TileOrientation.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="frmKeyboardControl.resx">
+      <DependentUpon>frmKeyboardControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmQuit.resx">
+      <DependentUpon>frmQuit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ctrlBrush.resx">
+      <DependentUpon>ctrlBrush.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ctrlColour.resx">
+      <DependentUpon>ctrlColour.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ctrlMapView.resx">
+      <DependentUpon>ctrlMapView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ctrlPathSet.resx">
+      <DependentUpon>ctrlPathSet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ctrlPlayerNum.resx">
+      <DependentUpon>ctrlPlayerNum.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ctrlTextureView.resx">
+      <DependentUpon>ctrlTextureView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmClose.resx">
+      <DependentUpon>frmClose.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCompile.resx">
+      <DependentUpon>frmCompile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmGenerator.resx">
+      <DependentUpon>frmGenerator.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMain.resx">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmOptions.resx">
+      <DependentUpon>frmOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSplash.resx">
+      <DependentUpon>frmSplash.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmWarnings.resx">
+      <DependentUpon>frmWarnings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmWZLoad.resx">
+      <DependentUpon>frmWZLoad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\app.manifest">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="flaME.ico" />
+  </ItemGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
+</Project>

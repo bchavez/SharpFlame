@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectType>local</ProjectType>
+    <ProjectVersion>7.10.377</ProjectVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9D199569-DDF1-443F-B373-D1FCBD952A04}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <AssemblyName>FlaME</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Matrix3D" />
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.1.1.1456.5398\lib\NET40\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="OpenTK.GLControl" />
+    <Reference Include="ICSharpCode.SharpZipLib" />
+    <Reference Include="System.Data" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Global.cs" />
+    <Compile Include="FlaME\My\MyApplication.cs" />
+    <Compile Include="FlaME\My\MyComputer.cs" />
+    <Compile Include="FlaME\My\MyProject.cs" />
+    <Compile Include="FlaME\clsBooleanMap.cs" />
+    <Compile Include="FlaME\clsBrush.cs" />
+    <Compile Include="FlaME\sBrushTiles.cs" />
+    <Compile Include="FlaME\clsComponent.cs" />
+    <Compile Include="FlaME\clsBody.cs" />
+    <Compile Include="FlaME\clsPropulsion.cs" />
+    <Compile Include="FlaME\clsTurret.cs" />
+    <Compile Include="FlaME\clsWeapon.cs" />
+    <Compile Include="FlaME\clsConstruct.cs" />
+    <Compile Include="FlaME\clsRepair.cs" />
+    <Compile Include="FlaME\clsSensor.cs" />
+    <Compile Include="FlaME\clsBrain.cs" />
+    <Compile Include="FlaME\clsECM.cs" />
+    <Compile Include="FlaME\clsGenerateMap.cs" />
+    <Compile Include="FlaME\clsGeneratorTileset.cs" />
+    <Compile Include="FlaME\clsHeightmap.cs" />
+    <Compile Include="FlaME\sHeightmaps.cs" />
+    <Compile Include="FlaME\clsMap.cs" />
+    <Compile Include="FlaME\clsModel.cs" />
+    <Compile Include="FlaME\clsObjectData.cs" />
+    <Compile Include="FlaME\clsPainter.cs" />
+    <Compile Include="FlaME\clsResultItemInterface.cs" />
+    <Compile Include="FlaME\clsResult.cs" />
+    <Compile Include="FlaME\clsResultWarningGoto!1.cs" />
+    <Compile Include="FlaME\clsResultProblemGoto!1.cs" />
+    <Compile Include="FlaME\clsResultItemGotoInterface.cs" />
+    <Compile Include="FlaME\clsResultItemTileGoto.cs" />
+    <Compile Include="FlaME\clsResultItemPosGoto.cs" />
+    <Compile Include="FlaME\modResults.cs" />
+    <Compile Include="FlaME\clsTileset.cs" />
+    <Compile Include="FlaME\clsUnitType.cs" />
+    <Compile Include="FlaME\clsFeatureType.cs" />
+    <Compile Include="FlaME\clsStructureType.cs" />
+    <Compile Include="FlaME\clsDroidDesign.cs" />
+    <Compile Include="FlaME\clsDroidTemplate.cs" />
+    <Compile Include="FlaME\clsWallType.cs" />
+    <Compile Include="FlaME\clsViewInfo.cs" />
+    <Compile Include="FlaME\ctrlBrush.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlaME\ctrlColour.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlaME\ctrlMapView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlaME\ctrlPathSet.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlaME\ctrlPlayerNum.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlaME\ctrlTextureView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlaME\frmClose.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FlaME\frmCompile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FlaME\frmGenerator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FlaME\frmKeyboardControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FlaME\frmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FlaME\frmOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FlaME\frmQuit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FlaME\frmSplash.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FlaME\frmWarnings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FlaME\modWarnings.cs" />
+    <Compile Include="FlaME\frmWZLoad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FlaME\GLFont.cs" />
+    <Compile Include="FlaME\clsTextLabel.cs" />
+    <Compile Include="FlaME\clsTextLabels.cs" />
+    <Compile Include="FlaME\clsINIRead.cs" />
+    <Compile Include="FlaME\clsINIWrite.cs" />
+    <Compile Include="FlaME\modControls.cs" />
+    <Compile Include="FlaME\clsKeyboardControl.cs" />
+    <Compile Include="FlaME\modBitmap.cs" />
+    <Compile Include="FlaME\modColour.cs" />
+    <Compile Include="FlaME\sRGB_sng.cs" />
+    <Compile Include="FlaME\sRGBA_sng.cs" />
+    <Compile Include="FlaME\clsRGB_sng.cs" />
+    <Compile Include="FlaME\clsRGBA_sng.cs" />
+    <Compile Include="FlaME\modGenerator.cs" />
+    <Compile Include="FlaME\modIO.cs" />
+    <Compile Include="FlaME\clsPositionFromText.cs" />
+    <Compile Include="FlaME\clsZipStreamEntry.cs" />
+    <Compile Include="FlaME\clsSplitCommaText.cs" />
+    <Compile Include="FlaME\modLists.cs" />
+    <Compile Include="FlaME\modMain.cs" />
+    <Compile Include="FlaME\modMath.cs" />
+    <Compile Include="FlaME\modPainters.cs" />
+    <Compile Include="FlaME\modProgram.cs" />
+    <Compile Include="FlaME\clsContainer!1.cs" />
+    <Compile Include="FlaME\modSettings.cs" />
+    <Compile Include="FlaME\My\Resources\Resources.cs" />
+    <Compile Include="FlaME\My\MySettings.cs" />
+    <Compile Include="FlaME\clsOptionGroup.cs" />
+    <Compile Include="FlaME\clsOptionInterface.cs" />
+    <Compile Include="FlaME\clsOption!1.cs" />
+    <Compile Include="FlaME\clsOptionCreator!1.cs" />
+    <Compile Include="FlaME\clsOptionProfile.cs" />
+    <Compile Include="FlaME\clsOptionProfileCreator.cs" />
+    <Compile Include="FlaME\PathfinderConnection.cs" />
+    <Compile Include="FlaME\PathfinderLayer.cs" />
+    <Compile Include="FlaME\PathfinderNetwork.cs" />
+    <Compile Include="FlaME\PathfinderNode.cs" />
+    <Compile Include="FlaME\TileOrientation.cs" />
+    <Compile Include="FlaME\modTools.cs" />
+    <Compile Include="FlaME\clsTool.cs" />
+    <EmbeddedResource Include="FlaME.frmClose.resources" />
+    <EmbeddedResource Include="FlaME.ctrlBrush.resources" />
+    <EmbeddedResource Include="FlaME.ctrlColour.resources" />
+    <EmbeddedResource Include="FlaME.ctrlPathSet.resources" />
+    <EmbeddedResource Include="FlaME.frmOptions.resources" />
+    <EmbeddedResource Include="FlaME.ctrlPlayerNum.resources" />
+    <EmbeddedResource Include="FlaME.frmWZLoad.resources" />
+    <EmbeddedResource Include="FlaME.frmWarnings.resources" />
+    <EmbeddedResource Include="FlaME.ctrlTextureView.resources" />
+    <EmbeddedResource Include="FlaME.ctrlMapView.resources" />
+    <EmbeddedResource Include="FlaME.frmKeyboardControl.resources" />
+    <EmbeddedResource Include="FlaME.frmQuit.resources" />
+    <EmbeddedResource Include="FlaME.frmSplash.resources" />
+    <EmbeddedResource Include="FlaME.frmMain.resources" />
+    <EmbeddedResource Include="FlaME.frmGenerator.resources" />
+    <EmbeddedResource Include="FlaME.Resources.resources" />
+    <EmbeddedResource Include="FlaME.frmCompile.resources" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>
