@@ -8,6 +8,7 @@ using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
+using SharpFlame.Mapping.IO;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 
@@ -15,20 +16,6 @@ namespace SharpFlame.Mapping
 {
     public partial class clsMap
     {
-        public struct sFMEUnit
-        {
-            public string Code;
-            public UInt32 ID;
-            public int SavePriority;
-            public byte LNDType;
-            public UInt32 X;
-            public UInt32 Y;
-            public UInt32 Z;
-            public UInt16 Rotation;
-            public string Name;
-            public byte Player;
-        }
-
         public clsResult Load_FME(string Path)
         {
             clsResult ReturnResult =
@@ -489,29 +476,6 @@ namespace SharpFlame.Mapping
             }
 
             return ReturnResult;
-        }
-
-        public struct sLNDTile
-        {
-            public short Vertex0Height;
-            public short Vertex1Height;
-            public short Vertex2Height;
-            public short Vertex3Height;
-            public short TID;
-            public short VF;
-            public short TF;
-            public short F;
-        }
-
-        public class clsLNDObject
-        {
-            public UInt32 ID;
-            public int TypeNum;
-            public string Code;
-            public int PlayerNum;
-            public string Name;
-            public sXYZ_sng Pos;
-            public sXYZ_int Rotation;
         }
 
         public clsResult Load_LND(string Path)
