@@ -139,9 +139,10 @@
     <Compile Include="Mapping\Objects\clsUnitGroup.cs" />
     <Compile Include="Mapping\Objects\clsUnitGroupContainer.cs" />
     <Compile Include="Mapping\Objects\clsUnitSectorConnection.cs" />
+    <Compile Include="Mapping\Renderers\clsDrawTile.cs" />
+    <Compile Include="Mapping\Renderers\clsDrawTileOld.cs" />
     <Compile Include="Mapping\Tiles\clsGeneratorTileset.cs" />
     <Compile Include="Mapping\clsHeightmap.cs" />
-    <Compile Include="Mapping\Renderers\clsMapRender.cs" />
     <Compile Include="Collections\ConnectedList.cs" />
     <Compile Include="Collections\ConnectedListItem.cs" />
     <Compile Include="Collections\ConnectedListItemList.cs" />
