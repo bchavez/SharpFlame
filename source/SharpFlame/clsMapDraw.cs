@@ -784,13 +784,13 @@ namespace SharpFlame
                 GL.Enable(EnableCap.Texture2D);
                 if ( modTools.Tool == modTools.Tools.ObjectPlace )
                 {
-                    clsUnitType placeObject = modMain.frmMainInstance.SingleSelectedObjectType;
+                    clsUnitType placeObject = Program.frmMainInstance.SingleSelectedObjectType;
                     if ( placeObject != null )
                     {
                         int Rotation = 0;
                         try
                         {
-                            IOUtil.InvariantParse_int(modMain.frmMainInstance.txtNewObjectRotation.Text, ref Rotation);
+                            IOUtil.InvariantParse_int(Program.frmMainInstance.txtNewObjectRotation.Text, ref Rotation);
                             if ( Rotation < 0 | Rotation > 359 )
                             {
                                 Rotation = 0;

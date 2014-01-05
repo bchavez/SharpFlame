@@ -706,13 +706,13 @@ namespace SharpFlame
         {
             objectCreator.Map = this;
 
-            objectCreator.ObjectType = modMain.frmMainInstance.SingleSelectedObjectType;
-            objectCreator.AutoWalls = modMain.frmMainInstance.cbxAutoWalls.Checked;
+            objectCreator.ObjectType = Program.frmMainInstance.SingleSelectedObjectType;
+            objectCreator.AutoWalls = Program.frmMainInstance.cbxAutoWalls.Checked;
             objectCreator.UnitGroup = SelectedUnitGroup.Item;
             try
             {
                 int Rotation = 0;
-                IOUtil.InvariantParse_int(modMain.frmMainInstance.txtNewObjectRotation.Text, ref Rotation);
+                IOUtil.InvariantParse_int(Program.frmMainInstance.txtNewObjectRotation.Text, ref Rotation);
                 if ( Rotation < 0 | Rotation > 359 )
                 {
                     objectCreator.Rotation = 0;
@@ -726,7 +726,7 @@ namespace SharpFlame
             {
                 objectCreator.Rotation = 0;
             }
-            objectCreator.RandomizeRotation = modMain.frmMainInstance.cbxObjectRandomRotation.Checked;
+            objectCreator.RandomizeRotation = Program.frmMainInstance.cbxObjectRandomRotation.Checked;
         }
     }
 }

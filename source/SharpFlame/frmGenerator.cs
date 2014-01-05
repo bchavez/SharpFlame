@@ -455,8 +455,8 @@ namespace SharpFlame
 
             if ( Generator.Map == _Owner.MainMap )
             {
-                modMain.frmMainInstance.PainterTerrains_Refresh(-1, -1);
-                modMain.frmMainInstance.MainMapTilesetChanged();
+                Program.frmMainInstance.PainterTerrains_Refresh(-1, -1);
+                Program.frmMainInstance.MainMapTilesetChanged();
             }
 
             return ReturnResult;
@@ -556,7 +556,7 @@ namespace SharpFlame
             }
 
             lstResult_AddResult(FinishTextures());
-            modMain.frmMainInstance.View_DrawViewLater();
+            Program.frmMainInstance.View_DrawViewLater();
         }
 
         public void frmGenerator_FormClosing(object sender, FormClosingEventArgs e)

@@ -186,7 +186,7 @@ namespace SharpFlame
 
         public sXY_int get_GetFootprintSelected(int Rotation)
         {
-            if ( modMain.frmMainInstance.cbxFootprintRotate.Checked )
+            if ( Program.frmMainInstance.cbxFootprintRotate.Checked )
             {
                 return get_GetFootprintNew(Rotation);
             }

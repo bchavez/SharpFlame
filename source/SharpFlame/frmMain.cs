@@ -156,7 +156,7 @@ namespace SharpFlame
             MapView = new ctrlMapView(this);
             TextureView = new ctrlTextureView(this);
 
-            modMain.frmGeneratorInstance = new frmGenerator(this);
+            Program.frmGeneratorInstance = new frmGenerator(this);
 
             tmrKey = new Timer();
             tmrKey.Tick += tmrKey_Tick;
@@ -250,7 +250,7 @@ namespace SharpFlame
             if ( ChangedPrompt )
             {
                 frmQuit QuitPrompt = new frmQuit();
-                DialogResult QuitResult = QuitPrompt.ShowDialog(modMain.frmMainInstance);
+                DialogResult QuitResult = QuitPrompt.ShowDialog(Program.frmMainInstance);
                 switch ( QuitResult )
                 {
                     case DialogResult.Yes:
@@ -328,12 +328,12 @@ namespace SharpFlame
 
             modProgram.ProgramInitialized = true;
 
-            modMain.InitializeDelay.Enabled = false;
-            modMain.InitializeDelay.Tick -= Initialize;
-            modMain.InitializeDelay.Dispose();
-            modMain.InitializeDelay = null;
+            Program.InitializeDelay.Enabled = false;
+            Program.InitializeDelay.Tick -= Initialize;
+            Program.InitializeDelay.Dispose();
+            Program.InitializeDelay = null;
 
-            modMain.InitializeResult.Add(LoadInterfaceImages());
+            Program.InitializeResult.Add(LoadInterfaceImages());
 
             modTools.CreateTools();
 
@@ -431,9 +431,9 @@ namespace SharpFlame
 
             if ( modSettings.Settings.DirectoriesPrompt )
             {
-                modMain.frmOptionsInstance = new frmOptions();
-                modMain.frmOptionsInstance.FormClosing += modMain.frmOptionsInstance.frmOptions_FormClosing;
-                if ( modMain.frmOptionsInstance.ShowDialog() == DialogResult.Cancel )
+                Program.frmOptionsInstance = new frmOptions();
+                Program.frmOptionsInstance.FormClosing += Program.frmOptionsInstance.frmOptions_FormClosing;
+                if ( Program.frmOptionsInstance.ShowDialog() == DialogResult.Cancel )
                 {
                     ProjectData.EndApp();
                 }
@@ -447,14 +447,14 @@ namespace SharpFlame
                 if ( TilesetsPath != null && TilesetsPath != "" )
                 {
                     InitializeStatus = "Loading tilesets";
-                    modMain.InitializeResult.Add(modProgram.LoadTilesets(modProgram.EndWithPathSeperator(TilesetsPath)));
+                    Program.InitializeResult.Add(modProgram.LoadTilesets(modProgram.EndWithPathSeperator(TilesetsPath)));
                     InitializeStatus = "";
                 }
             }
 
             cboTileset_Update(-1);
 
-            modMain.InitializeResult.Add(NoTile_Texture_Load());
+            Program.InitializeResult.Add(NoTile_Texture_Load());
             cboTileType_Update();
 
             modProgram.CreateTemplateDroidTypes(); //do before loading data
@@ -468,7 +468,7 @@ namespace SharpFlame
                 if ( ObjectDataPath != null && ObjectDataPath != "" )
                 {
                     InitializeStatus = "Loading object data";
-                    modMain.InitializeResult.Add(modProgram.ObjectData.LoadDirectory(ObjectDataPath));
+                    Program.InitializeResult.Add(modProgram.ObjectData.LoadDirectory(ObjectDataPath));
                     InitializeStatus = "";
                 }
             }
@@ -533,7 +533,7 @@ namespace SharpFlame
             tmrKey.Enabled = true;
             tmrTool.Enabled = true;
 
-            modProgram.ShowWarnings(modMain.InitializeResult);
+            modProgram.ShowWarnings(Program.InitializeResult);
 
             modProgram.ProgramInitializeFinished = true;
         }
@@ -1236,7 +1236,7 @@ namespace SharpFlame
 
             if ( Map.Save_FMap_Prompt() )
             {
-                modMain.frmMainInstance.tsbSave.Enabled = false;
+                Program.frmMainInstance.tsbSave.Enabled = false;
                 TitleTextUpdate();
             }
         }
@@ -2039,7 +2039,7 @@ namespace SharpFlame
                 return;
             }
 
-            modProgram.Copied_Map.Rotate(TileOrientation.Orientation_Clockwise, modMain.frmMainInstance.PasteRotateObjects);
+            modProgram.Copied_Map.Rotate(TileOrientation.Orientation_Clockwise, Program.frmMainInstance.PasteRotateObjects);
         }
 
         public void tsbSelectionRotateAnticlockwise_Click(Object sender, EventArgs e)
@@ -2050,7 +2050,7 @@ namespace SharpFlame
                 return;
             }
 
-            modProgram.Copied_Map.Rotate(TileOrientation.Orientation_CounterClockwise, modMain.frmMainInstance.PasteRotateObjects);
+            modProgram.Copied_Map.Rotate(TileOrientation.Orientation_CounterClockwise, Program.frmMainInstance.PasteRotateObjects);
         }
 
         public void menuMiniShowTex_Click(Object sender, EventArgs e)
@@ -2349,7 +2349,7 @@ namespace SharpFlame
 
             if ( Map.Save_FMap_Quick() )
             {
-                modMain.frmMainInstance.tsbSave.Enabled = false;
+                Program.frmMainInstance.tsbSave.Enabled = false;
                 TitleTextUpdate();
             }
         }
@@ -2579,7 +2579,7 @@ namespace SharpFlame
                 return;
             }
 
-            modProgram.Copied_Map.Rotate(TileOrientation.Orientation_FlipX, modMain.frmMainInstance.PasteRotateObjects);
+            modProgram.Copied_Map.Rotate(TileOrientation.Orientation_FlipX, Program.frmMainInstance.PasteRotateObjects);
         }
 
         public void btnHeightsMultiplySelection_Click(Object sender, EventArgs e)
@@ -3393,14 +3393,14 @@ namespace SharpFlame
 
         public void menuOptions_Click(Object sender, EventArgs e)
         {
-            if ( modMain.frmOptionsInstance != null )
+            if ( Program.frmOptionsInstance != null )
             {
-                modMain.frmOptionsInstance.Activate();
+                Program.frmOptionsInstance.Activate();
                 return;
             }
-            modMain.frmOptionsInstance = new frmOptions();
-            modMain.frmOptionsInstance.FormClosing += modMain.frmOptionsInstance.frmOptions_FormClosing;
-            modMain.frmOptionsInstance.Show();
+            Program.frmOptionsInstance = new frmOptions();
+            Program.frmOptionsInstance.FormClosing += Program.frmOptionsInstance.frmOptions_FormClosing;
+            Program.frmOptionsInstance.Show();
         }
 
         public void rdoCliffTriBrush_CheckedChanged(Object sender, EventArgs e)
@@ -4324,8 +4324,8 @@ namespace SharpFlame
 
         public void GeneratorToolStripMenuItem_Click(Object sender, EventArgs e)
         {
-            modMain.frmGeneratorInstance.Show();
-            modMain.frmGeneratorInstance.Activate();
+            Program.frmGeneratorInstance.Show();
+            Program.frmGeneratorInstance.Activate();
         }
 
         public void ReinterpretTerrainToolStripMenuItem_Click(Object sender, EventArgs e)

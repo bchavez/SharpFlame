@@ -43,7 +43,7 @@ namespace SharpFlame
             UndoMessageTimer = new Timer();
             UndoMessageTimer.Tick += RemoveUndoMessage;
 
-            OpenGLControl = modMain.OpenGL1;
+            OpenGLControl = Program.OpenGL1;
             pnlDraw.Controls.Add(OpenGLControl);
 
             GLInitializeDelayTimer = new Timer();
@@ -350,7 +350,7 @@ namespace SharpFlame
 
             if ( ListSelectIsPicker )
             {
-                modMain.frmMainInstance.ObjectPicker(Unit.Type);
+                Program.frmMainInstance.ObjectPicker(Unit.Type);
             }
             else
             {
@@ -362,7 +362,7 @@ namespace SharpFlame
                 {
                     Unit.MapSelect();
                 }
-                modMain.frmMainInstance.SelectedObject_Changed();
+                Program.frmMainInstance.SelectedObject_Changed();
                 DrawViewLater();
             }
         }
@@ -620,7 +620,7 @@ namespace SharpFlame
                             Unit = tempLoopVar_Unit;
                             Map.UnitRemoveStoreChange(Unit.MapLink.ArrayPosition);
                         }
-                        modMain.frmMainInstance.SelectedObject_Changed();
+                        Program.frmMainInstance.SelectedObject_Changed();
                         Map.UndoStepCreate("Object Deleted");
                         Map.Update();
                         Map.MinimapMakeLater();
@@ -647,7 +647,7 @@ namespace SharpFlame
                             Map.UndoStepCreate("Objects Moved");
                             Map.Update();
                             Map.MinimapMakeLater();
-                            modMain.frmMainInstance.SelectedObject_Changed();
+                            Program.frmMainInstance.SelectedObject_Changed();
                             DrawViewLater();
                         }
                     }
@@ -659,7 +659,7 @@ namespace SharpFlame
                     ObjectRotationOffset.Offset = -90;
                     Map.SelectedUnitsAction(ObjectRotationOffset);
                     Map.Update();
-                    modMain.frmMainInstance.SelectedObject_Changed();
+                    Program.frmMainInstance.SelectedObject_Changed();
                     Map.UndoStepCreate("Object Rotated");
                     DrawViewLater();
                 }
@@ -670,7 +670,7 @@ namespace SharpFlame
                     ObjectRotationOffset.Offset = 90;
                     Map.SelectedUnitsAction(ObjectRotationOffset);
                     Map.Update();
-                    modMain.frmMainInstance.SelectedObject_Changed();
+                    Program.frmMainInstance.SelectedObject_Changed();
                     Map.UndoStepCreate("Object Rotated");
                     DrawViewLater();
                 }
@@ -858,7 +858,7 @@ namespace SharpFlame
                     }
                 }
             }
-            modMain.frmMainInstance.SelectedObject_Changed();
+            Program.frmMainInstance.SelectedObject_Changed();
             DrawViewLater();
         }
 
@@ -903,7 +903,7 @@ namespace SharpFlame
 
         public void OpenGL_MouseEnter(object sender, EventArgs e)
         {
-            if ( Form.ActiveForm == modMain.frmMainInstance )
+            if ( Form.ActiveForm == Program.frmMainInstance )
             {
                 OpenGLControl.Focus();
             }

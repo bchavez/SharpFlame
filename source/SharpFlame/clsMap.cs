@@ -1088,7 +1088,7 @@ namespace SharpFlame
             float AntiAlpha = 0;
             sRGB_sng RGB_sng = new sRGB_sng();
 
-            if ( modMain.frmMainInstance.menuMiniShowTex.Checked )
+            if ( Program.frmMainInstance.menuMiniShowTex.Checked )
             {
                 if ( Tileset != null )
                 {
@@ -1105,7 +1105,7 @@ namespace SharpFlame
                         }
                     }
                 }
-                if ( modMain.frmMainInstance.menuMiniShowHeight.Checked )
+                if ( Program.frmMainInstance.menuMiniShowHeight.Checked )
                 {
                     float Height = 0;
                     for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
@@ -1122,7 +1122,7 @@ namespace SharpFlame
                     }
                 }
             }
-            else if ( modMain.frmMainInstance.menuMiniShowHeight.Checked )
+            else if ( Program.frmMainInstance.menuMiniShowHeight.Checked )
             {
                 float Height = 0;
                 for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
@@ -1150,7 +1150,7 @@ namespace SharpFlame
                     }
                 }
             }
-            if ( modMain.frmMainInstance.menuMiniShowCliffs.Checked )
+            if ( Program.frmMainInstance.menuMiniShowCliffs.Checked )
             {
                 if ( Tileset != null )
                 {
@@ -1173,7 +1173,7 @@ namespace SharpFlame
                     }
                 }
             }
-            if ( modMain.frmMainInstance.menuMiniShowGateways.Checked )
+            if ( Program.frmMainInstance.menuMiniShowGateways.Checked )
             {
                 clsGateway Gateway = default(clsGateway);
                 foreach ( clsGateway tempLoopVar_Gateway in Gateways )
@@ -1191,7 +1191,7 @@ namespace SharpFlame
                     }
                 }
             }
-            if ( modMain.frmMainInstance.menuMiniShowUnits.Checked )
+            if ( Program.frmMainInstance.menuMiniShowUnits.Checked )
             {
                 //units that are not selected
                 clsUnit Unit = default(clsUnit);
@@ -1391,7 +1391,7 @@ namespace SharpFlame
             GL.TexImage2D<sRGBA_sng>(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Minimap_Texture_Size, Minimap_Texture_Size, 0, PixelFormat.Rgba,
                 PixelType.Float, Texture.InlinePixels);
 
-            modMain.frmMainInstance.View_DrawViewLater();
+            Program.frmMainInstance.View_DrawViewLater();
         }
 
         public void MinimapGLDelete()
@@ -1726,7 +1726,7 @@ namespace SharpFlame
 
             SectorsUpdateGraphics();
             MinimapMakeLater();
-            modMain.frmMainInstance.SelectedObject_Changed();
+            Program.frmMainInstance.SelectedObject_Changed();
         }
 
         public void RedoPerform()
@@ -1809,7 +1809,7 @@ namespace SharpFlame
 
             SectorsUpdateGraphics();
             MinimapMakeLater();
-            modMain.frmMainInstance.SelectedObject_Changed();
+            Program.frmMainInstance.SelectedObject_Changed();
         }
 
         public void Undo_Sector_Rejoin(clsShadowSector Shadow_Sector_To_Rejoin)
@@ -2386,7 +2386,7 @@ namespace SharpFlame
                 InterfaceOptions = new clsInterfaceOptions();
             }
 
-            ViewInfo = new clsViewInfo(this, modMain.frmMainInstance.MapView);
+            ViewInfo = new clsViewInfo(this, Program.frmMainInstance.MapView);
 
             _SelectedUnitGroup = new clsUnitGroupContainer();
             SelectedUnitGroup.Item = ScavengerUnitGroup;
@@ -2456,7 +2456,7 @@ namespace SharpFlame
         {
             clsUpdateAutotexture UpdateAutotextures = new clsUpdateAutotexture();
             UpdateAutotextures.Map = this;
-            UpdateAutotextures.MakeInvalidTiles = modMain.frmMainInstance.cbxInvalidTiles.Checked;
+            UpdateAutotextures.MakeInvalidTiles = Program.frmMainInstance.cbxInvalidTiles.Checked;
 
             AutoTextureChanges.PerformTool(UpdateAutotextures);
             AutoTextureChanges.Clear();
@@ -3832,7 +3832,7 @@ namespace SharpFlame
             Dialog.InitialDirectory = GetDirectory();
             Dialog.FileName = "";
             Dialog.Filter = modProgram.ProgramName + " Map Files (*.fmap)|*.fmap";
-            if ( Dialog.ShowDialog(modMain.frmMainInstance) != DialogResult.OK )
+            if ( Dialog.ShowDialog(Program.frmMainInstance) != DialogResult.OK )
             {
                 return false;
             }
@@ -3875,7 +3875,7 @@ namespace SharpFlame
             if ( ChangedSinceSave )
             {
                 frmClose Prompt = new frmClose(GetTitle());
-                DialogResult Result = Prompt.ShowDialog(modMain.frmMainInstance);
+                DialogResult Result = Prompt.ShowDialog(Program.frmMainInstance);
                 switch ( Result )
                 {
                     case DialogResult.OK:

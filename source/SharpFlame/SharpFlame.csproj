@@ -8,7 +8,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{152475A4-3ABE-41C4-B338-A2FB7B350FAF}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <StartupObject>SharpFlame.modMain</StartupObject>
+    <StartupObject>SharpFlame.Program</StartupObject>
     <RootNamespace>SharpFlame</RootNamespace>
     <AssemblyName>SharpFlame</AssemblyName>
     <FileAlignment>512</FileAlignment>
@@ -154,7 +154,7 @@
     <Compile Include="Tools.cs" />
     <Compile Include="clsUnitType.cs" />
     <Compile Include="clsViewInfo.cs" />
-    <Compile Include="modMain.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Colors\ColorUtil.cs" />
     <Compile Include="frmQuit.Designer.cs">
       <DependentUpon>frmQuit.cs</DependentUpon>

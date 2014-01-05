@@ -406,7 +406,7 @@ namespace SharpFlame
             {
                 modProgram.UnitLabelFont.Deallocate();
             }
-            modProgram.UnitLabelFont = modMain.frmMainInstance.MapView.CreateGLFont(newFont);
+            modProgram.UnitLabelFont = Program.frmMainInstance.MapView.CreateGLFont(newFont);
         }
 
         public static clsResult Settings_Write()

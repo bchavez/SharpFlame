@@ -160,12 +160,12 @@ namespace SharpFlame
 
             modSettings.UpdateSettings(NewSettings);
 
-            clsMap Map = modMain.frmMainInstance.MainMap;
+            clsMap Map = Program.frmMainInstance.MainMap;
             if ( Map != null )
             {
                 Map.MinimapMakeLater();
             }
-            modMain.frmMainInstance.View_DrawViewLater();
+            Program.frmMainInstance.View_DrawViewLater();
 
             modControls.KeyboardProfile = ChangedKeyControls;
 
@@ -189,7 +189,7 @@ namespace SharpFlame
         private void Finish(DialogResult result)
         {
             AllowClose = true;
-            modMain.frmOptionsInstance = null;
+            Program.frmOptionsInstance = null;
             if ( Modal )
             {
                 DialogResult = result; //mono closes here
@@ -227,7 +227,7 @@ namespace SharpFlame
 
         public void btnAutosaveOpen_Click(Object sender, EventArgs e)
         {
-            modMain.frmMainInstance.Load_Autosave_Prompt();
+            Program.frmMainInstance.Load_Autosave_Prompt();
         }
 
         private void UpdateDisplayFontLabel()

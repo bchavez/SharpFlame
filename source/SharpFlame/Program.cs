@@ -1,16 +1,15 @@
 using System;
 using System.Drawing;
 using System.IO;
-using System.Threading;
 using System.Windows.Forms;
 using Microsoft.VisualBasic.ApplicationServices;
 using OpenTK;
 using OpenTK.Graphics;
-using Timer = System.Windows.Forms.Timer;
+
 
 namespace SharpFlame
 {
-    public sealed class modMain
+    public sealed class Program
     {
         public static Timer InitializeDelay;
         public static clsResult InitializeResult = new clsResult("Startup result");
@@ -70,7 +69,7 @@ namespace SharpFlame
 
             while ( !modProgram.ProgramInitializeFinished )
             {
-                Thread.Sleep(50);
+                System.Threading.Thread.Sleep(50);
                 Application.DoEvents();
             }
 

@@ -611,14 +611,14 @@ namespace SharpFlame
                         if ( modTools.Tool == modTools.Tools.TerrainBrush )
                         {
                             Apply_Terrain();
-                            if ( modMain.frmMainInstance.cbxAutoTexSetHeight.Checked )
+                            if ( Program.frmMainInstance.cbxAutoTexSetHeight.Checked )
                             {
-                                Apply_Height_Set(modProgram.TerrainBrush, modMain.frmMainInstance.HeightSetPalette[modMain.frmMainInstance.tabHeightSetL.SelectedIndex]);
+                                Apply_Height_Set(modProgram.TerrainBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
                             }
                         }
                         else if ( modTools.Tool == modTools.Tools.HeightSetBrush )
                         {
-                            Apply_Height_Set(modProgram.HeightBrush, modMain.frmMainInstance.HeightSetPalette[modMain.frmMainInstance.tabHeightSetL.SelectedIndex]);
+                            Apply_Height_Set(modProgram.HeightBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
                         }
                         else if ( modTools.Tool == modTools.Tools.TextureBrush )
                         {
@@ -651,7 +651,7 @@ namespace SharpFlame
                         {
                             if ( MouseLeftDown == null )
                             {
-                                Apply_Height_Set(modProgram.HeightBrush, modMain.frmMainInstance.HeightSetPalette[modMain.frmMainInstance.tabHeightSetR.SelectedIndex]);
+                                Apply_Height_Set(modProgram.HeightBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetR.SelectedIndex]);
                             }
                         }
                         else if ( modTools.Tool == modTools.Tools.CliffTriangle )
@@ -1228,11 +1228,11 @@ namespace SharpFlame
             clsMap.clsApplyTexture ApplyTexture = new clsMap.clsApplyTexture();
             ApplyTexture.Map = Map;
             ApplyTexture.TextureNum = modProgram.SelectedTextureNum;
-            ApplyTexture.SetTexture = modMain.frmMainInstance.chkSetTexture.Checked;
+            ApplyTexture.SetTexture = Program.frmMainInstance.chkSetTexture.Checked;
             ApplyTexture.Orientation = modProgram.TextureOrientation;
-            ApplyTexture.RandomOrientation = modMain.frmMainInstance.chkTextureOrientationRandomize.Checked;
-            ApplyTexture.SetOrientation = modMain.frmMainInstance.chkSetTextureOrientation.Checked;
-            ApplyTexture.TerrainAction = modMain.frmMainInstance.TextureTerrainAction;
+            ApplyTexture.RandomOrientation = Program.frmMainInstance.chkTextureOrientationRandomize.Checked;
+            ApplyTexture.SetOrientation = Program.frmMainInstance.chkSetTextureOrientation.Checked;
+            ApplyTexture.TerrainAction = Program.frmMainInstance.TextureTerrainAction;
             modProgram.TextureBrush.PerformActionMapTiles(ApplyTexture, MouseOverTerrain.Tile);
 
             Map.Update();
@@ -1283,12 +1283,12 @@ namespace SharpFlame
             clsMap.clsApplyCliff ApplyCliff = new clsMap.clsApplyCliff();
             ApplyCliff.Map = Map;
             double Angle = 0;
-            if ( !IOUtil.InvariantParse_dbl(modMain.frmMainInstance.txtAutoCliffSlope.Text, ref Angle) )
+            if ( !IOUtil.InvariantParse_dbl(Program.frmMainInstance.txtAutoCliffSlope.Text, ref Angle) )
             {
                 return;
             }
             ApplyCliff.Angle = MathUtil.Clamp_dbl(Angle * MathUtil.RadOf1Deg, 0.0D, MathUtil.RadOf90Deg);
-            ApplyCliff.SetTris = modMain.frmMainInstance.cbxCliffTris.Checked;
+            ApplyCliff.SetTris = Program.frmMainInstance.cbxCliffTris.Checked;
             modProgram.CliffBrush.PerformActionMapTiles(ApplyCliff, MouseOverTerrain.Tile);
 
             Map.Update();
@@ -1344,7 +1344,7 @@ namespace SharpFlame
             sXY_int Tile = MouseOverTerrain.Tile.Normal;
 
             Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation.RotateClockwise();
-            Map.TileTextureChangeTerrainAction(Tile, modMain.frmMainInstance.TextureTerrainAction);
+            Map.TileTextureChangeTerrainAction(Tile, Program.frmMainInstance.TextureTerrainAction);
 
             Map.SectorGraphicsChanges.TileChanged(Tile);
             Map.SectorTerrainUndoChanges.TileChanged(Tile);
@@ -1368,7 +1368,7 @@ namespace SharpFlame
             sXY_int Tile = MouseOverTerrain.Tile.Normal;
 
             Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation.RotateAnticlockwise();
-            Map.TileTextureChangeTerrainAction(Tile, modMain.frmMainInstance.TextureTerrainAction);
+            Map.TileTextureChangeTerrainAction(Tile, Program.frmMainInstance.TextureTerrainAction);
 
             Map.SectorGraphicsChanges.TileChanged(Tile);
             Map.SectorTerrainUndoChanges.TileChanged(Tile);
@@ -1392,7 +1392,7 @@ namespace SharpFlame
             sXY_int Tile = MouseOverTerrain.Tile.Normal;
 
             Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation.ResultXFlip = !Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation.ResultXFlip;
-            Map.TileTextureChangeTerrainAction(Tile, modMain.frmMainInstance.TextureTerrainAction);
+            Map.TileTextureChangeTerrainAction(Tile, Program.frmMainInstance.TextureTerrainAction);
 
             Map.SectorGraphicsChanges.TileChanged(Tile);
             Map.SectorTerrainUndoChanges.TileChanged(Tile);
@@ -1469,7 +1469,7 @@ namespace SharpFlame
             clsMap.clsApplyHeightChange ApplyHeightChange = new clsMap.clsApplyHeightChange();
             ApplyHeightChange.Map = Map;
             ApplyHeightChange.Rate = Rate;
-            ApplyHeightChange.UseEffect = modMain.frmMainInstance.cbxHeightChangeFade.Checked;
+            ApplyHeightChange.UseEffect = Program.frmMainInstance.cbxHeightChangeFade.Checked;
             modProgram.HeightBrush.PerformActionMapVertices(ApplyHeightChange, MouseOverTerrain.Vertex);
 
             Map.Update();
@@ -1586,7 +1586,7 @@ namespace SharpFlame
                                 {
                                     if ( MouseOverTerrain.Units.Count == 1 )
                                     {
-                                        modMain.frmMainInstance.ObjectPicker(MouseOverTerrain.Units[0].Type);
+                                        Program.frmMainInstance.ObjectPicker(MouseOverTerrain.Units[0].Type);
                                     }
                                     else
                                     {
@@ -1601,7 +1601,7 @@ namespace SharpFlame
                                 {
                                     NewPosition.PosX = MouseLeftDown.OverTerrain.DownPos.Horizontal.X;
                                     NewPosition.PosY = MouseLeftDown.OverTerrain.DownPos.Horizontal.Y;
-                                    modMain.frmMainInstance.ScriptMarkerLists_Update();
+                                    Program.frmMainInstance.ScriptMarkerLists_Update();
                                 }
                             }
                             else
@@ -1610,7 +1610,7 @@ namespace SharpFlame
                                 {
                                     Map.SelectedUnits.Clear();
                                 }
-                                modMain.frmMainInstance.SelectedObject_Changed();
+                                Program.frmMainInstance.SelectedObject_Changed();
                                 Map.Unit_Selected_Area_VertexA = new clsXY_int(MouseOverTerrain.Vertex.Normal);
                                 MapView.DrawViewLater();
                             }
@@ -1621,15 +1621,15 @@ namespace SharpFlame
                             {
                                 if ( modControls.KeyboardProfile.Active(modControls.Control_Picker) )
                                 {
-                                    modMain.frmMainInstance.TerrainPicker();
+                                    Program.frmMainInstance.TerrainPicker();
                                 }
                                 else
                                 {
                                     Apply_Terrain();
-                                    if ( modMain.frmMainInstance.cbxAutoTexSetHeight.Checked )
+                                    if ( Program.frmMainInstance.cbxAutoTexSetHeight.Checked )
                                     {
                                         Apply_Height_Set(modProgram.TerrainBrush,
-                                            modMain.frmMainInstance.HeightSetPalette[modMain.frmMainInstance.tabHeightSetL.SelectedIndex]);
+                                            Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
                                     }
                                 }
                             }
@@ -1638,11 +1638,11 @@ namespace SharpFlame
                         {
                             if ( modControls.KeyboardProfile.Active(modControls.Control_Picker) )
                             {
-                                modMain.frmMainInstance.HeightPickerL();
+                                Program.frmMainInstance.HeightPickerL();
                             }
                             else
                             {
-                                Apply_Height_Set(modProgram.HeightBrush, modMain.frmMainInstance.HeightSetPalette[modMain.frmMainInstance.tabHeightSetL.SelectedIndex]);
+                                Apply_Height_Set(modProgram.HeightBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
                             }
                         }
                         else if ( modTools.Tool == modTools.Tools.TextureBrush )
@@ -1651,7 +1651,7 @@ namespace SharpFlame
                             {
                                 if ( modControls.KeyboardProfile.Active(modControls.Control_Picker) )
                                 {
-                                    modMain.frmMainInstance.TexturePicker();
+                                    Program.frmMainInstance.TexturePicker();
                                 }
                                 else
                                 {
@@ -1677,11 +1677,11 @@ namespace SharpFlame
                             {
                                 if ( modControls.KeyboardProfile.Active(modControls.Control_Picker) )
                                 {
-                                    modMain.frmMainInstance.TerrainPicker();
+                                    Program.frmMainInstance.TerrainPicker();
                                 }
                                 else
                                 {
-                                    Apply_Terrain_Fill(modMain.frmMainInstance.FillCliffAction, modMain.frmMainInstance.cbxFillInside.Checked);
+                                    Apply_Terrain_Fill(Program.frmMainInstance.FillCliffAction, Program.frmMainInstance.cbxFillInside.Checked);
                                     MapView.DrawViewLater();
                                 }
                             }
@@ -1706,7 +1706,7 @@ namespace SharpFlame
                         }
                         else if ( modTools.Tool == modTools.Tools.ObjectPlace )
                         {
-                            if ( modMain.frmMainInstance.SingleSelectedObjectType != null && Map.SelectedUnitGroup != null )
+                            if ( Program.frmMainInstance.SingleSelectedObjectType != null && Map.SelectedUnitGroup != null )
                             {
                                 clsMap.clsUnitCreate objectCreator = new clsMap.clsUnitCreate();
                                 Map.SetObjectCreatorDefaults(objectCreator);
@@ -1749,7 +1749,7 @@ namespace SharpFlame
                     else if ( modTools.Tool == modTools.Tools.ObjectSelect )
                     {
                         Map.SelectedUnits.Clear();
-                        modMain.frmMainInstance.SelectedObject_Changed();
+                        Program.frmMainInstance.SelectedObject_Changed();
                     }
                 }
             }
@@ -1795,11 +1795,11 @@ namespace SharpFlame
                 {
                     if ( modControls.KeyboardProfile.Active(modControls.Control_Picker) )
                     {
-                        modMain.frmMainInstance.HeightPickerR();
+                        Program.frmMainInstance.HeightPickerR();
                     }
                     else
                     {
-                        Apply_Height_Set(modProgram.HeightBrush, modMain.frmMainInstance.HeightSetPalette[modMain.frmMainInstance.tabHeightSetR.SelectedIndex]);
+                        Apply_Height_Set(modProgram.HeightBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetR.SelectedIndex]);
                     }
                 }
             }
@@ -2024,11 +2024,11 @@ namespace SharpFlame
                     if ( GetMouseLeftDownOverTerrain() != null )
                     {
                         double dblTemp = 0;
-                        if ( !IOUtil.InvariantParse_dbl(modMain.frmMainInstance.txtSmoothRate.Text, ref dblTemp) )
+                        if ( !IOUtil.InvariantParse_dbl(Program.frmMainInstance.txtSmoothRate.Text, ref dblTemp) )
                         {
                             return;
                         }
-                        Apply_HeightSmoothing(MathUtil.Clamp_dbl(dblTemp * modMain.frmMainInstance.tmrTool.Interval / 1000.0D, 0.0D, 1.0D));
+                        Apply_HeightSmoothing(MathUtil.Clamp_dbl(dblTemp * Program.frmMainInstance.tmrTool.Interval / 1000.0D, 0.0D, 1.0D));
                     }
                 }
             }
@@ -2037,7 +2037,7 @@ namespace SharpFlame
                 if ( GetMouseOverTerrain() != null )
                 {
                     double dblTemp = 0;
-                    if ( !IOUtil.InvariantParse_dbl(modMain.frmMainInstance.txtHeightChangeRate.Text, ref dblTemp) )
+                    if ( !IOUtil.InvariantParse_dbl(Program.frmMainInstance.txtHeightChangeRate.Text, ref dblTemp) )
                     {
                         return;
                     }
@@ -2055,7 +2055,7 @@ namespace SharpFlame
 
         public void ApplyObjectLine()
         {
-            if ( modMain.frmMainInstance.SingleSelectedObjectType != null && Map.SelectedUnitGroup != null )
+            if ( Program.frmMainInstance.SingleSelectedObjectType != null && Map.SelectedUnitGroup != null )
             {
                 clsMouseOver.clsOverTerrain MouseOverTerrian = GetMouseOverTerrain();
 

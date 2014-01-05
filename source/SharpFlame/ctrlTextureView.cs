@@ -42,7 +42,7 @@ namespace SharpFlame
 
             InitializeComponent();
 
-            OpenGLControl = modMain.OpenGL2;
+            OpenGLControl = Program.OpenGL2;
             pnlDraw.Controls.Add(OpenGLControl);
 
             GLInitializeDelayTimer = new Timer();
@@ -395,14 +395,14 @@ namespace SharpFlame
 
             if ( modProgram.SelectedTextureNum >= 0 )
             {
-                modMain.frmMainInstance.cboTileType.Enabled = false;
-                modMain.frmMainInstance.cboTileType.SelectedIndex = Map.Tile_TypeNum[modProgram.SelectedTextureNum];
-                modMain.frmMainInstance.cboTileType.Enabled = true;
+                Program.frmMainInstance.cboTileType.Enabled = false;
+                Program.frmMainInstance.cboTileType.SelectedIndex = Map.Tile_TypeNum[modProgram.SelectedTextureNum];
+                Program.frmMainInstance.cboTileType.Enabled = true;
             }
             else
             {
-                modMain.frmMainInstance.cboTileType.Enabled = false;
-                modMain.frmMainInstance.cboTileType.SelectedIndex = -1;
+                Program.frmMainInstance.cboTileType.Enabled = false;
+                Program.frmMainInstance.cboTileType.SelectedIndex = -1;
             }
 
             DrawViewLater();

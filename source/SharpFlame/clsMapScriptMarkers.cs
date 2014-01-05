@@ -185,7 +185,7 @@ namespace SharpFlame
                 clsDrawHorizontalPosOnTerrain Drawer = new clsDrawHorizontalPosOnTerrain();
                 Drawer.Map = _ParentMapLink.Source;
                 Drawer.Horizontal = _Pos;
-                if ( modMain.frmMainInstance.SelectedScriptMarker == this )
+                if ( Program.frmMainInstance.SelectedScriptMarker == this )
                 {
                     GL.LineWidth(4.5F);
                     Drawer.Colour = new sRGBA_sng(1.0F, 1.0F, 0.5F, 1.0F);
@@ -355,7 +355,7 @@ namespace SharpFlame
             {
                 clsDrawTerrainLine Drawer = new clsDrawTerrainLine();
                 Drawer.Map = _ParentMapLink.Source;
-                if ( modMain.frmMainInstance.SelectedScriptMarker == this )
+                if ( Program.frmMainInstance.SelectedScriptMarker == this )
                 {
                     GL.LineWidth(4.5F);
                     Drawer.Colour = new sRGBA_sng(1.0F, 1.0F, 0.5F, 0.75F);
