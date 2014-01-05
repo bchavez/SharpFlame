@@ -3692,11 +3692,12 @@ namespace SharpFlame
             {
                 MaxBestNodeCount *= PassageNodeCount;
             }
-            clsOilPossibilities.clsPossibility BestPossibility = default(clsOilPossibilities.clsPossibility);
-            clsOilBalanceLoopArgs OilArgs = new clsOilBalanceLoopArgs();
-            OilArgs.OilClusterSizes = new int[OilAtATime];
-            OilArgs.PlayerOilScore = new double[TopLeftPlayerCount];
-            OilArgs.OilNodes = new clsPassageNode[OilAtATime];
+            var oilArgs = new clsOilBalanceLoopArgs
+                {
+                    OilClusterSizes = new int[OilAtATime],
+                    PlayerOilScore = new double[TopLeftPlayerCount],
+                    OilNodes = new clsPassageNode[OilAtATime]
+                };
 
             //balanced oil
             while ( PlacedExtraOilCount < ExtraOilCount )
@@ -3704,27 +3705,28 @@ namespace SharpFlame
                 //place oil farthest away from other oil and where it best balances the player oil score
                 for ( A = 0; A <= OilAtATime - 1; A++ )
                 {
-                    OilArgs.OilClusterSizes[A] =
+                    oilArgs.OilClusterSizes[A] =
                         Math.Min(ExtraOilClusterSizeMin + (int)(Conversion.Int(VBMath.Rnd() * (ExtraOilClusterSizeMax - ExtraOilClusterSizeMin + 1))),
                             Math.Max((int)(Math.Ceiling(Convert.ToDecimal((ExtraOilCount - PlacedExtraOilCount) / SymmetryBlockCount))), 1));
                 }
-                OilArgs.OilPossibilities = new clsOilPossibilities();
-                OilBalanceLoop(OilArgs, 0);
+                oilArgs.OilPossibilities = new clsOilPossibilities();
+                OilBalanceLoop(oilArgs, 0);
 
-                BestPossibility = OilArgs.OilPossibilities.BestPossibility;
-                if ( BestPossibility != null )
+                clsOilPossibilities.clsPossibility bestPossibility = oilArgs.OilPossibilities.BestPossibility;
+
+                if ( bestPossibility != null )
                 {
                     for ( B = 0; B <= OilAtATime - 1; B++ )
                     {
                         for ( A = 0; A <= SymmetryBlockCount - 1; A++ )
                         {
-                            PassageNodes[A, BestPossibility.Nodes[B].Num].OilCount += OilArgs.OilClusterSizes[B];
+                            PassageNodes[A, bestPossibility.Nodes[B].Num].OilCount += oilArgs.OilClusterSizes[B];
                         }
-                        PlacedExtraOilCount += OilArgs.OilClusterSizes[B] * SymmetryBlockCount;
+                        PlacedExtraOilCount += oilArgs.OilClusterSizes[B] * SymmetryBlockCount;
                     }
                     for ( A = 0; A <= TopLeftPlayerCount - 1; A++ )
                     {
-                        OilArgs.PlayerOilScore[A] += BestPossibility.PlayerOilScoreAddition[A];
+                        oilArgs.PlayerOilScore[A] += bestPossibility.PlayerOilScoreAddition[A];
                     }
                 }
                 else
