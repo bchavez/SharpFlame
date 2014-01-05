@@ -5,8 +5,8 @@ using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.Controls;
 using SharpFlame.FileIO;
-using SharpFlame.MathExtra;
 using SharpFlame.AppSettings;
+using SharpFlame.Maths;
 
 namespace SharpFlame
 {

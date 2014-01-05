@@ -6,7 +6,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
 using SharpFlame.FileIO;
-using SharpFlame.MathExtra;
+using SharpFlame.Maths;
 
 namespace SharpFlame
 {

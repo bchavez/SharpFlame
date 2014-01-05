@@ -163,7 +163,7 @@
     <Compile Include="Painters\Painter.cs" />
     <Compile Include="clsResult.cs" />
     <Compile Include="clsTileset.cs" />
-    <Compile Include="MathExtra\Definitions.cs" />
+    <Compile Include="Maths\Definitions.cs" />
     <Compile Include="AppSettings\Options.cs" />
     <Compile Include="Painters\Road.cs" />
     <Compile Include="Painters\RoadBrush.cs" />
@@ -274,7 +274,7 @@
     <Compile Include="Generators\DefaultGenerator.cs" />
     <Compile Include="FileIO\Ini\IniWriter.cs" />
     <Compile Include="FileIO\IOUtil.cs" />
-    <Compile Include="MathExtra\MathUtil.cs" />
+    <Compile Include="Maths\MathUtil.cs" />
     <Compile Include="Painters\PainterFactory.cs" />
     <Compile Include="App.cs" />
     <Compile Include="AppSettings\SettingsManager.cs" />

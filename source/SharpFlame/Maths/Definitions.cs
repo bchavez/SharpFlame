@@ -1,7 +1,7 @@
 using System;
 using Matrix3D;
 
-namespace SharpFlame.MathExtra
+namespace SharpFlame.Maths
 {
     public struct sXYZ_sng
     {

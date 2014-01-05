@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using Microsoft.VisualBasic;
 using SharpFlame.Bitmaps;
-using SharpFlame.MathExtra;
+using SharpFlame.Maths;
 
 namespace SharpFlame
 {

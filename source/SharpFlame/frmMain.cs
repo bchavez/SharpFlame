@@ -17,7 +17,7 @@ using SharpFlame.FileIO;
 using SharpFlame.Generators;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
-using SharpFlame.MathExtra;
+using SharpFlame.Maths;
 using SharpFlame.Painters;
 using SharpFlame.AppSettings;
 using Timer = System.Windows.Forms.Timer;

@@ -1,5 +1,5 @@
 using System;
-using SharpFlame.MathExtra;
+using SharpFlame.Maths;
 
 namespace SharpFlame.Controls
 {

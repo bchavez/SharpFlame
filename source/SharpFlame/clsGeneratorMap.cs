@@ -7,7 +7,7 @@ using Microsoft.VisualBasic.CompilerServices;
 using SharpFlame.Generators;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
-using SharpFlame.MathExtra;
+using SharpFlame.Maths;
 using SharpFlame.Pathfinding;
 
 namespace SharpFlame

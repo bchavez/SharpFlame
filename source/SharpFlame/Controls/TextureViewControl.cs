@@ -8,7 +8,7 @@ using SharpFlame.FileIO;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
-using SharpFlame.MathExtra;
+using SharpFlame.Maths;
 
 namespace SharpFlame.Controls
 {

@@ -4,7 +4,7 @@ using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
-using SharpFlame.MathExtra;
+using SharpFlame.Maths;
 
 namespace SharpFlame.FileIO
 {

@@ -2,7 +2,7 @@ using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
-using SharpFlame.MathExtra;
+using SharpFlame.Maths;
 
 namespace SharpFlame
 {

@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using Matrix3D;
 using Microsoft.VisualBasic;
-using SharpFlame.MathExtra;
+using SharpFlame.Maths;
 using SharpFlame.Painters;
 
 namespace SharpFlame.Mapping.Tiles

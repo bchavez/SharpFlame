@@ -1,5 +1,5 @@
 using Microsoft.VisualBasic;
-using SharpFlame.MathExtra;
+using SharpFlame.Maths;
 
 namespace SharpFlame
 {

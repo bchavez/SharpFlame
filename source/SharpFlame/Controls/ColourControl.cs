@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using SharpFlame.Colors;
-using SharpFlame.MathExtra;
+using SharpFlame.Maths;
 
 namespace SharpFlame.Controls
 {

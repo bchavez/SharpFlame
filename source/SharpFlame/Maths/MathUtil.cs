@@ -1,7 +1,6 @@
 using System;
-using Matrix3D;
 
-namespace SharpFlame.MathExtra
+namespace SharpFlame.Maths
 {
     public sealed class MathUtil
     {

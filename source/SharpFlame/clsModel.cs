@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using Microsoft.VisualBasic;
 using OpenTK.Graphics.OpenGL;
-using SharpFlame.MathExtra;
+using SharpFlame.Maths;
 
 namespace SharpFlame
 {
