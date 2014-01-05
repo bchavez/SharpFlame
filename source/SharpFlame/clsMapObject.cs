@@ -189,14 +189,14 @@ namespace SharpFlame
                         default:
                             return;
                     }
-                    File.SectionName_Append("object_" + IOUtil.InvariantToString(MapLink.ArrayPosition));
-                    File.Property_Append("id", IOUtil.InvariantToString(ID));
+                    File.AppendSectionName("object_" + IOUtil.InvariantToString(MapLink.ArrayPosition));
+                    File.AppendProperty("id", IOUtil.InvariantToString(ID));
                     if ( PlayerCount >= 0 ) //not an FMap
                     {
-                        File.Property_Append("type", IOUtil.InvariantToString(TypeNum));
-                        File.Property_Append("player", IOUtil.InvariantToString(UnitGroup.GetPlayerNum(PlayerCount)));
+                        File.AppendProperty("type", IOUtil.InvariantToString(TypeNum));
+                        File.AppendProperty("player", IOUtil.InvariantToString(UnitGroup.GetPlayerNum(PlayerCount)));
                     }
-                    File.Property_Append("label", _Label);
+                    File.AppendProperty("label", _Label);
                     File.Gap_Append();
                 }
             }

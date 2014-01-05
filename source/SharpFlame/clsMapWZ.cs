@@ -2295,26 +2295,26 @@ namespace SharpFlame
                 }
                 else
                 {
-                    File.SectionName_Append("structure_" + IOUtil.InvariantToString(Unit.ID));
-                    File.Property_Append("id", IOUtil.InvariantToString(Unit.ID));
+                    File.AppendSectionName("structure_" + IOUtil.InvariantToString(Unit.ID));
+                    File.AppendProperty("id", IOUtil.InvariantToString(Unit.ID));
                     if ( Unit.UnitGroup == ScavengerUnitGroup || (PlayerCount >= 0 & Unit.UnitGroup.WZ_StartPos >= PlayerCount) )
                     {
-                        File.Property_Append("player", "scavenger");
+                        File.AppendProperty("player", "scavenger");
                     }
                     else
                     {
-                        File.Property_Append("startpos", IOUtil.InvariantToString(Unit.UnitGroup.WZ_StartPos));
+                        File.AppendProperty("startpos", IOUtil.InvariantToString(Unit.UnitGroup.WZ_StartPos));
                     }
-                    File.Property_Append("name", StructureType.Code);
+                    File.AppendProperty("name", StructureType.Code);
                     if ( StructureType.WallLink.IsConnected )
                     {
-                        File.Property_Append("wall/type", IOUtil.InvariantToString(StructureType.WallLink.ArrayPosition));
+                        File.AppendProperty("wall/type", IOUtil.InvariantToString(StructureType.WallLink.ArrayPosition));
                     }
-                    File.Property_Append("position", Unit.GetINIPosition());
-                    File.Property_Append("rotation", Unit.GetINIRotation());
+                    File.AppendProperty("position", Unit.GetINIPosition());
+                    File.AppendProperty("rotation", Unit.GetINIRotation());
                     if ( Unit.Health < 1.0D )
                     {
-                        File.Property_Append("health", Unit.GetINIHealthPercent());
+                        File.AppendProperty("health", Unit.GetINIHealthPercent());
                     }
                     switch ( StructureType.StructureType )
                     {
@@ -2348,7 +2348,7 @@ namespace SharpFlame
                     {
                         ModuleCount = UnitModuleCount[Unit.MapLink.ArrayPosition];
                     }
-                    File.Property_Append("modules", IOUtil.InvariantToString(ModuleCount));
+                    File.AppendProperty("modules", IOUtil.InvariantToString(ModuleCount));
                     File.Gap_Append();
                 }
             }
@@ -2445,34 +2445,34 @@ namespace SharpFlame
                     }
                     if ( ValidDroid )
                     {
-                        File.SectionName_Append("droid_" + IOUtil.InvariantToString(Unit.ID));
-                        File.Property_Append("id", IOUtil.InvariantToString(Unit.ID));
+                        File.AppendSectionName("droid_" + IOUtil.InvariantToString(Unit.ID));
+                        File.AppendProperty("id", IOUtil.InvariantToString(Unit.ID));
                         if ( Unit.UnitGroup == ScavengerUnitGroup || (PlayerCount >= 0 & Unit.UnitGroup.WZ_StartPos >= PlayerCount) )
                         {
-                            File.Property_Append("player", "scavenger");
+                            File.AppendProperty("player", "scavenger");
                         }
                         else
                         {
-                            File.Property_Append("startpos", IOUtil.InvariantToString(Unit.UnitGroup.WZ_StartPos));
+                            File.AppendProperty("startpos", IOUtil.InvariantToString(Unit.UnitGroup.WZ_StartPos));
                         }
                         if ( AsPartsNotTemplate )
                         {
-                            File.Property_Append("name", Droid.GenerateName());
+                            File.AppendProperty("name", Droid.GenerateName());
                         }
                         else
                         {
                             Template = (clsDroidTemplate)Droid;
-                            File.Property_Append("template", Template.Code);
+                            File.AppendProperty("template", Template.Code);
                         }
-                        File.Property_Append("position", Unit.GetINIPosition());
-                        File.Property_Append("rotation", Unit.GetINIRotation());
+                        File.AppendProperty("position", Unit.GetINIPosition());
+                        File.AppendProperty("rotation", Unit.GetINIRotation());
                         if ( Unit.Health < 1.0D )
                         {
-                            File.Property_Append("health", Unit.GetINIHealthPercent());
+                            File.AppendProperty("health", Unit.GetINIHealthPercent());
                         }
                         if ( AsPartsNotTemplate )
                         {
-                            File.Property_Append("droidType", IOUtil.InvariantToString(Convert.ToInt32(Droid.GetDroidType())));
+                            File.AppendProperty("droidType", IOUtil.InvariantToString(Convert.ToInt32(Droid.GetDroidType())));
                             if ( Droid.TurretCount == 0 )
                             {
                                 Text = "0";
@@ -2502,29 +2502,29 @@ namespace SharpFlame
                                     }
                                 }
                             }
-                            File.Property_Append("weapons", Text);
-                            File.Property_Append("parts\\body", Droid.Body.Code);
-                            File.Property_Append("parts\\propulsion", Droid.Propulsion.Code);
-                            File.Property_Append("parts\\sensor", Droid.GetSensorCode());
-                            File.Property_Append("parts\\construct", Droid.GetConstructCode());
-                            File.Property_Append("parts\\repair", Droid.GetRepairCode());
-                            File.Property_Append("parts\\brain", Droid.GetBrainCode());
-                            File.Property_Append("parts\\ecm", Droid.GetECMCode());
+                            File.AppendProperty("weapons", Text);
+                            File.AppendProperty("parts\\body", Droid.Body.Code);
+                            File.AppendProperty("parts\\propulsion", Droid.Propulsion.Code);
+                            File.AppendProperty("parts\\sensor", Droid.GetSensorCode());
+                            File.AppendProperty("parts\\construct", Droid.GetConstructCode());
+                            File.AppendProperty("parts\\repair", Droid.GetRepairCode());
+                            File.AppendProperty("parts\\brain", Droid.GetBrainCode());
+                            File.AppendProperty("parts\\ecm", Droid.GetECMCode());
                             if ( Droid.TurretCount >= 1 )
                             {
                                 if ( Droid.Turret1.TurretType == clsTurret.enumTurretType.Weapon )
                                 {
-                                    File.Property_Append("parts\\weapon\\1", Droid.Turret1.Code);
+                                    File.AppendProperty("parts\\weapon\\1", Droid.Turret1.Code);
                                     if ( Droid.TurretCount >= 2 )
                                     {
                                         if ( Droid.Turret2.TurretType == clsTurret.enumTurretType.Weapon )
                                         {
-                                            File.Property_Append("parts\\weapon\\2", Droid.Turret2.Code);
+                                            File.AppendProperty("parts\\weapon\\2", Droid.Turret2.Code);
                                             if ( Droid.TurretCount >= 3 )
                                             {
                                                 if ( Droid.Turret3.TurretType == clsTurret.enumTurretType.Weapon )
                                                 {
-                                                    File.Property_Append("parts\\weapon\\3", Droid.Turret3.Code);
+                                                    File.AppendProperty("parts\\weapon\\3", Droid.Turret3.Code);
                                                 }
                                             }
                                         }
@@ -2541,7 +2541,7 @@ namespace SharpFlame
                                     {
                                         Text = Brain.Weapon.Code;
                                     }
-                                    File.Property_Append("parts\\weapon\\1", Text);
+                                    File.AppendProperty("parts\\weapon\\1", Text);
                                 }
                             }
                         }
@@ -2579,14 +2579,14 @@ namespace SharpFlame
                     }
                     if ( Valid )
                     {
-                        File.SectionName_Append("feature_" + IOUtil.InvariantToString(Unit.ID));
-                        File.Property_Append("id", IOUtil.InvariantToString(Unit.ID));
-                        File.Property_Append("position", Unit.GetINIPosition());
-                        File.Property_Append("rotation", Unit.GetINIRotation());
-                        File.Property_Append("name", FeatureType.Code);
+                        File.AppendSectionName("feature_" + IOUtil.InvariantToString(Unit.ID));
+                        File.AppendProperty("id", IOUtil.InvariantToString(Unit.ID));
+                        File.AppendProperty("position", Unit.GetINIPosition());
+                        File.AppendProperty("rotation", Unit.GetINIRotation());
+                        File.AppendProperty("name", FeatureType.Code);
                         if ( Unit.Health < 1.0D )
                         {
-                            File.Property_Append("health", Unit.GetINIHealthPercent());
+                            File.AppendProperty("health", Unit.GetINIHealthPercent());
                         }
                         File.Gap_Append();
                     }

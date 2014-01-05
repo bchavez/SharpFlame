@@ -476,33 +476,33 @@ namespace SharpFlame
                 }
                 else if ( Tileset == App.Tileset_Arizona )
                 {
-                    File.Property_Append("Tileset", "Arizona");
+                    File.AppendProperty("Tileset", "Arizona");
                 }
                 else if ( Tileset == App.Tileset_Urban )
                 {
-                    File.Property_Append("Tileset", "Urban");
+                    File.AppendProperty("Tileset", "Urban");
                 }
                 else if ( Tileset == App.Tileset_Rockies )
                 {
-                    File.Property_Append("Tileset", "Rockies");
+                    File.AppendProperty("Tileset", "Rockies");
                 }
 
-                File.Property_Append("Size", IOUtil.InvariantToString(Terrain.TileSize.X) + ", " + IOUtil.InvariantToString(Terrain.TileSize.Y));
+                File.AppendProperty("Size", IOUtil.InvariantToString(Terrain.TileSize.X) + ", " + IOUtil.InvariantToString(Terrain.TileSize.Y));
 
-                File.Property_Append("AutoScrollLimits", IOUtil.InvariantToString(InterfaceOptions.AutoScrollLimits));
-                File.Property_Append("ScrollMinX", IOUtil.InvariantToString(InterfaceOptions.ScrollMin.X));
-                File.Property_Append("ScrollMinY", IOUtil.InvariantToString(InterfaceOptions.ScrollMin.Y));
-                File.Property_Append("ScrollMaxX", IOUtil.InvariantToString(InterfaceOptions.ScrollMax.X));
-                File.Property_Append("ScrollMaxY", IOUtil.InvariantToString(InterfaceOptions.ScrollMax.Y));
+                File.AppendProperty("AutoScrollLimits", IOUtil.InvariantToString(InterfaceOptions.AutoScrollLimits));
+                File.AppendProperty("ScrollMinX", IOUtil.InvariantToString(InterfaceOptions.ScrollMin.X));
+                File.AppendProperty("ScrollMinY", IOUtil.InvariantToString(InterfaceOptions.ScrollMin.Y));
+                File.AppendProperty("ScrollMaxX", IOUtil.InvariantToString(InterfaceOptions.ScrollMax.X));
+                File.AppendProperty("ScrollMaxY", IOUtil.InvariantToString(InterfaceOptions.ScrollMax.Y));
 
-                File.Property_Append("Name", InterfaceOptions.CompileName);
-                File.Property_Append("Players", InterfaceOptions.CompileMultiPlayers);
-                File.Property_Append("XPlayerLev", IOUtil.InvariantToString(InterfaceOptions.CompileMultiXPlayers));
-                File.Property_Append("Author", InterfaceOptions.CompileMultiAuthor);
-                File.Property_Append("License", InterfaceOptions.CompileMultiLicense);
+                File.AppendProperty("Name", InterfaceOptions.CompileName);
+                File.AppendProperty("Players", InterfaceOptions.CompileMultiPlayers);
+                File.AppendProperty("XPlayerLev", IOUtil.InvariantToString(InterfaceOptions.CompileMultiXPlayers));
+                File.AppendProperty("Author", InterfaceOptions.CompileMultiAuthor);
+                File.AppendProperty("License", InterfaceOptions.CompileMultiLicense);
                 if ( InterfaceOptions.CampaignGameType >= 0 )
                 {
-                    File.Property_Append("CampType", IOUtil.InvariantToString(InterfaceOptions.CampaignGameType));
+                    File.AppendProperty("CampType", IOUtil.InvariantToString(InterfaceOptions.CampaignGameType));
                 }
             }
             catch ( Exception ex )
@@ -843,61 +843,61 @@ namespace SharpFlame
                 for ( A = 0; A <= Units.Count - 1; A++ )
                 {
                     Unit = Units[A];
-                    File.SectionName_Append(IOUtil.InvariantToString(A));
+                    File.AppendSectionName(IOUtil.InvariantToString(A));
                     switch ( Unit.Type.Type )
                     {
                         case clsUnitType.enumType.Feature:
-                            File.Property_Append("Type", "Feature, " + ((clsFeatureType)Unit.Type).Code);
+                            File.AppendProperty("Type", "Feature, " + ((clsFeatureType)Unit.Type).Code);
                             break;
                         case clsUnitType.enumType.PlayerStructure:
                             clsStructureType StructureType = (clsStructureType)Unit.Type;
-                            File.Property_Append("Type", "Structure, " + StructureType.Code);
+                            File.AppendProperty("Type", "Structure, " + StructureType.Code);
                             if ( StructureType.WallLink.IsConnected )
                             {
-                                File.Property_Append("WallType", IOUtil.InvariantToString(StructureType.WallLink.ArrayPosition));
+                                File.AppendProperty("WallType", IOUtil.InvariantToString(StructureType.WallLink.ArrayPosition));
                             }
                             break;
                         case clsUnitType.enumType.PlayerDroid:
                             Droid = (clsDroidDesign)Unit.Type;
                             if ( Droid.IsTemplate )
                             {
-                                File.Property_Append("Type", "DroidTemplate, " + ((clsDroidTemplate)Unit.Type).Code);
+                                File.AppendProperty("Type", "DroidTemplate, " + ((clsDroidTemplate)Unit.Type).Code);
                             }
                             else
                             {
-                                File.Property_Append("Type", "DroidDesign");
+                                File.AppendProperty("Type", "DroidDesign");
                                 if ( Droid.TemplateDroidType != null )
                                 {
-                                    File.Property_Append("DroidType", Droid.TemplateDroidType.TemplateCode);
+                                    File.AppendProperty("DroidType", Droid.TemplateDroidType.TemplateCode);
                                 }
                                 if ( Droid.Body != null )
                                 {
-                                    File.Property_Append("Body", Droid.Body.Code);
+                                    File.AppendProperty("Body", Droid.Body.Code);
                                 }
                                 if ( Droid.Propulsion != null )
                                 {
-                                    File.Property_Append("Propulsion", Droid.Propulsion.Code);
+                                    File.AppendProperty("Propulsion", Droid.Propulsion.Code);
                                 }
-                                File.Property_Append("TurretCount", IOUtil.InvariantToString(Droid.TurretCount));
+                                File.AppendProperty("TurretCount", IOUtil.InvariantToString(Droid.TurretCount));
                                 if ( Droid.Turret1 != null )
                                 {
                                     if ( Droid.Turret1.GetTurretTypeName(ref Text) )
                                     {
-                                        File.Property_Append("Turret1", Text + ", " + Droid.Turret1.Code);
+                                        File.AppendProperty("Turret1", Text + ", " + Droid.Turret1.Code);
                                     }
                                 }
                                 if ( Droid.Turret2 != null )
                                 {
                                     if ( Droid.Turret2.GetTurretTypeName(ref Text) )
                                     {
-                                        File.Property_Append("Turret2", Text + ", " + Droid.Turret2.Code);
+                                        File.AppendProperty("Turret2", Text + ", " + Droid.Turret2.Code);
                                     }
                                 }
                                 if ( Droid.Turret3 != null )
                                 {
                                     if ( Droid.Turret3.GetTurretTypeName(ref Text) )
                                     {
-                                        File.Property_Append("Turret3", Text + ", " + Droid.Turret3.Code);
+                                        File.AppendProperty("Turret3", Text + ", " + Droid.Turret3.Code);
                                     }
                                 }
                             }
@@ -906,18 +906,18 @@ namespace SharpFlame
                             WarningCount++;
                             break;
                     }
-                    File.Property_Append("ID", IOUtil.InvariantToString(Unit.ID));
-                    File.Property_Append("Priority", IOUtil.InvariantToString(Unit.SavePriority));
-                    File.Property_Append("Pos", IOUtil.InvariantToString(Unit.Pos.Horizontal.X) + ", " + IOUtil.InvariantToString(Unit.Pos.Horizontal.Y));
-                    File.Property_Append("Heading", IOUtil.InvariantToString(Unit.Rotation));
-                    File.Property_Append("UnitGroup", Unit.UnitGroup.GetFMapINIPlayerText());
+                    File.AppendProperty("ID", IOUtil.InvariantToString(Unit.ID));
+                    File.AppendProperty("Priority", IOUtil.InvariantToString(Unit.SavePriority));
+                    File.AppendProperty("Pos", IOUtil.InvariantToString(Unit.Pos.Horizontal.X) + ", " + IOUtil.InvariantToString(Unit.Pos.Horizontal.Y));
+                    File.AppendProperty("Heading", IOUtil.InvariantToString(Unit.Rotation));
+                    File.AppendProperty("UnitGroup", Unit.UnitGroup.GetFMapINIPlayerText());
                     if ( Unit.Health < 1.0D )
                     {
-                        File.Property_Append("Health", IOUtil.InvariantToString(Unit.Health));
+                        File.AppendProperty("Health", IOUtil.InvariantToString(Unit.Health));
                     }
                     if ( Unit.Label != null )
                     {
-                        File.Property_Append("ScriptLabel", Unit.Label);
+                        File.AppendProperty("ScriptLabel", Unit.Label);
                     }
                     File.Gap_Append();
                 }
@@ -946,11 +946,11 @@ namespace SharpFlame
                 for ( A = 0; A <= Gateways.Count - 1; A++ )
                 {
                     Gateway = Gateways[A];
-                    File.SectionName_Append(IOUtil.InvariantToString(A));
-                    File.Property_Append("AX", IOUtil.InvariantToString(Gateway.PosA.X));
-                    File.Property_Append("AY", IOUtil.InvariantToString(Gateway.PosA.Y));
-                    File.Property_Append("BX", IOUtil.InvariantToString(Gateway.PosB.X));
-                    File.Property_Append("BY", IOUtil.InvariantToString(Gateway.PosB.Y));
+                    File.AppendSectionName(IOUtil.InvariantToString(A));
+                    File.AppendProperty("AX", IOUtil.InvariantToString(Gateway.PosA.X));
+                    File.AppendProperty("AY", IOUtil.InvariantToString(Gateway.PosA.Y));
+                    File.AppendProperty("BX", IOUtil.InvariantToString(Gateway.PosB.X));
+                    File.AppendProperty("BY", IOUtil.InvariantToString(Gateway.PosB.Y));
                     File.Gap_Append();
                 }
             }

@@ -125,7 +125,7 @@ namespace SharpFlame.AppSettings
                     SimpleList<string> list = (SimpleList<string>)optionValue;
                     for ( int i = 0; i <= list.Count - 1; i++ )
                     {
-                        file.Property_Append(item.SaveKey, list[i]);
+                        file.AppendProperty(item.SaveKey, list[i]);
                     }
                 }
                 else if ( item is Option<clsRGB_sng> )
@@ -180,7 +180,7 @@ namespace SharpFlame.AppSettings
                 }
                 if ( valueText != null )
                 {
-                    file.Property_Append(item.SaveKey, valueText);
+                    file.AppendProperty(item.SaveKey, valueText);
                 }
             }
 

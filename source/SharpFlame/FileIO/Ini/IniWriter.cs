@@ -23,14 +23,14 @@ namespace SharpFlame.FileIO.Ini
             return NewINI;
         }
 
-        public void SectionName_Append(string Name)
+        public void AppendSectionName(string Name)
         {
             Name = Name.Replace(LineEndChar.ToString(), "");
 
             File.Write('[' + Name + Convert.ToString(']') + Convert.ToString(LineEndChar));
         }
 
-        public void Property_Append(string Name, string Value)
+        public void AppendProperty(string Name, string Value)
         {
             Name = Name.Replace(LineEndChar.ToString(), "");
             Name = Name.Replace(EqualsChar.ToString(), "");

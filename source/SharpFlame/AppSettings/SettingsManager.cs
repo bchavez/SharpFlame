@@ -225,7 +225,7 @@ namespace SharpFlame.AppSettings
             ReturnResult.Take(Settings.INIWrite(File));
             if ( KeyboardManager.KeyboardProfile.IsAnythingChanged )
             {
-                File.SectionName_Append("KeyboardControls");
+                File.AppendSectionName("KeyboardControls");
                 ReturnResult.Take(KeyboardManager.KeyboardProfile.INIWrite(File));
             }
 
