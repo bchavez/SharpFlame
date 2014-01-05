@@ -4,7 +4,7 @@ SharpFlame
 
 Project Description
 -------------------
-A modern [Warzone 21000](http://wz2100.net/) map editor based on the original Warzone 2100 FlaME map editor, written in C#.
+A modern [Warzone 21000](http://wz2100.net/) map editor based on the original Warzone 2100 [FlaME](https://github.com/flail/flaME) map editor, written in C#.
 
 ### License
 * [MIT License](https://github.com/bchavez/Dwolla/blob/master/LICENSE)
@@ -22,7 +22,7 @@ Building
 
 Contributing
 --------
-* Please submit issues here.
+* Please submit [issues here](https://github.com/bchavez/SharpFlame/issues).
 * All pull requests ***should*** include associated unit tests in `SharpFlame.Tests`.
 * All pull requests ***should not*** break the build.
 
