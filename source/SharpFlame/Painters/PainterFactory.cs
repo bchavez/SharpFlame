@@ -16,31 +16,31 @@ namespace SharpFlame.Painters
 
             Terrain Terrain_Red = new Terrain();
             Terrain_Red.Name = "Red";
-            modProgram.Painter_Arizona.Terrain_Add(Terrain_Red);
+            modProgram.Painter_Arizona.AddTerrain(Terrain_Red);
 
             Terrain Terrain_Yellow = new Terrain();
             Terrain_Yellow.Name = "Yellow";
-            modProgram.Painter_Arizona.Terrain_Add(Terrain_Yellow);
+            modProgram.Painter_Arizona.AddTerrain(Terrain_Yellow);
 
             Terrain Terrain_Sand = new Terrain();
             Terrain_Sand.Name = "Sand";
-            modProgram.Painter_Arizona.Terrain_Add(Terrain_Sand);
+            modProgram.Painter_Arizona.AddTerrain(Terrain_Sand);
 
             Terrain Terrain_Brown = new Terrain();
             Terrain_Brown.Name = "Brown";
-            modProgram.Painter_Arizona.Terrain_Add(Terrain_Brown);
+            modProgram.Painter_Arizona.AddTerrain(Terrain_Brown);
 
             Terrain Terrain_Green = new Terrain();
             Terrain_Green.Name = "Green";
-            modProgram.Painter_Arizona.Terrain_Add(Terrain_Green);
+            modProgram.Painter_Arizona.AddTerrain(Terrain_Green);
 
             Terrain Terrain_Concrete = new Terrain();
             Terrain_Concrete.Name = "Concrete";
-            modProgram.Painter_Arizona.Terrain_Add(Terrain_Concrete);
+            modProgram.Painter_Arizona.AddTerrain(Terrain_Concrete);
 
             Terrain Terrain_Water = new Terrain();
             Terrain_Water.Name = "Water";
-            modProgram.Painter_Arizona.Terrain_Add(Terrain_Water);
+            modProgram.Painter_Arizona.AddTerrain(Terrain_Water);
 
             //red centre brush
             Terrain_Red.Tiles.Tile_Add(48, TileOrientation.TileDirection_None, 1);
@@ -74,7 +74,7 @@ namespace SharpFlame.Painters
             NewBrushCliff.Tiles_Corner_In.Tile_Add(75, TileOrientation.TileDirection_TopLeft, 1);
             NewBrushCliff.Tiles_Corner_Out.Tile_Add(45, TileOrientation.TileDirection_BottomLeft, 1);
             NewBrushCliff.Tiles_Corner_Out.Tile_Add(75, TileOrientation.TileDirection_BottomRight, 1);
-            modProgram.Painter_Arizona.CliffBrush_Add(NewBrushCliff);
+            modProgram.Painter_Arizona.AddBrush(NewBrushCliff);
             //water to sand transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Water->Sand";
@@ -83,7 +83,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(14, TileOrientation.TileDirection_Bottom, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(16, TileOrientation.TileDirection_BottomLeft, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(15, TileOrientation.TileDirection_BottomLeft, 1);
-            modProgram.Painter_Arizona.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Arizona.AddBrush(NewBrush);
             //water to green transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Water->Green";
@@ -92,7 +92,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(31, TileOrientation.TileDirection_Top, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(33, TileOrientation.TileDirection_TopLeft, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(32, TileOrientation.TileDirection_TopLeft, 1);
-            modProgram.Painter_Arizona.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Arizona.AddBrush(NewBrush);
             //yellow to red transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Yellow->Red";
@@ -101,7 +101,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(27, TileOrientation.TileDirection_Right, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(28, TileOrientation.TileDirection_BottomRight, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(29, TileOrientation.TileDirection_BottomRight, 1);
-            modProgram.Painter_Arizona.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Arizona.AddBrush(NewBrush);
             //sand to red transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Sand->Red";
@@ -110,7 +110,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(43, TileOrientation.TileDirection_Left, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(42, TileOrientation.TileDirection_TopLeft, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(41, TileOrientation.TileDirection_TopLeft, 1);
-            modProgram.Painter_Arizona.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Arizona.AddBrush(NewBrush);
             //sand to yellow transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Sand->Yellow";
@@ -119,7 +119,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(10, TileOrientation.TileDirection_Left, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(1, TileOrientation.TileDirection_TopLeft, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(0, TileOrientation.TileDirection_TopLeft, 1);
-            modProgram.Painter_Arizona.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Arizona.AddBrush(NewBrush);
             //brown to red transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Brown->Red";
@@ -128,7 +128,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(34, TileOrientation.TileDirection_Left, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(36, TileOrientation.TileDirection_TopLeft, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(35, TileOrientation.TileDirection_TopLeft, 1);
-            modProgram.Painter_Arizona.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Arizona.AddBrush(NewBrush);
             //brown to yellow transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Brown->Yellow";
@@ -137,7 +137,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(38, TileOrientation.TileDirection_Left, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(39, TileOrientation.TileDirection_BottomRight, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(40, TileOrientation.TileDirection_BottomRight, 1);
-            modProgram.Painter_Arizona.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Arizona.AddBrush(NewBrush);
             //brown to sand transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Brown->Sand";
@@ -146,7 +146,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(2, TileOrientation.TileDirection_Left, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(3, TileOrientation.TileDirection_BottomRight, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(4, TileOrientation.TileDirection_BottomRight, 1);
-            modProgram.Painter_Arizona.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Arizona.AddBrush(NewBrush);
             //brown to green transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Brown->Green";
@@ -155,7 +155,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(24, TileOrientation.TileDirection_Left, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(26, TileOrientation.TileDirection_TopLeft, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(25, TileOrientation.TileDirection_TopLeft, 1);
-            modProgram.Painter_Arizona.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Arizona.AddBrush(NewBrush);
             //concrete to red transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Concrete->Red";
@@ -164,20 +164,20 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(21, TileOrientation.TileDirection_Right, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(19, TileOrientation.TileDirection_BottomRight, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(20, TileOrientation.TileDirection_BottomRight, 1);
-            modProgram.Painter_Arizona.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Arizona.AddBrush(NewBrush);
 
 
             Road Road_Road = new Road();
 
             Road_Road = new Road();
             Road_Road.Name = "Road";
-            modProgram.Painter_Arizona.Road_Add(Road_Road);
+            modProgram.Painter_Arizona.AddRoad(Road_Road);
 
             Road Road_Track = new Road();
 
             Road_Track = new Road();
             Road_Track.Name = "Track";
-            modProgram.Painter_Arizona.Road_Add(Road_Track);
+            modProgram.Painter_Arizona.AddRoad(Road_Track);
 
             //road
             NewRoadBrush = new RoadBrush();
@@ -186,7 +186,7 @@ namespace SharpFlame.Painters
             NewRoadBrush.Tile_TIntersection.Tile_Add(57, TileOrientation.TileDirection_Bottom, 1);
             NewRoadBrush.Tile_Straight.Tile_Add(59, TileOrientation.TileDirection_Left, 1);
             NewRoadBrush.Tile_End.Tile_Add(47, TileOrientation.TileDirection_Left, 1);
-            modProgram.Painter_Arizona.RoadBrush_Add(NewRoadBrush);
+            modProgram.Painter_Arizona.AddBrush(NewRoadBrush);
             //track
             NewRoadBrush = new RoadBrush();
             NewRoadBrush.Road = Road_Track;
@@ -197,7 +197,7 @@ namespace SharpFlame.Painters
             NewRoadBrush.Tile_Straight.Tile_Add(51, TileOrientation.TileDirection_Top, 2);
             NewRoadBrush.Tile_Corner_In.Tile_Add(50, TileOrientation.TileDirection_BottomRight, 1);
             NewRoadBrush.Tile_End.Tile_Add(52, TileOrientation.TileDirection_Bottom, 1);
-            modProgram.Painter_Arizona.RoadBrush_Add(NewRoadBrush);
+            modProgram.Painter_Arizona.AddBrush(NewRoadBrush);
 
             modGenerator.Generator_TilesetArizona.OldTextureLayers.Layers = new modProgram.sLayerList.clsLayer[0];
             modGenerator.Generator_TilesetArizona.OldTextureLayers.LayerCount = 0;
@@ -281,27 +281,27 @@ namespace SharpFlame.Painters
 
             Terrain Terrain_Green = new Terrain();
             Terrain_Green.Name = "Green";
-            modProgram.Painter_Urban.Terrain_Add(Terrain_Green);
+            modProgram.Painter_Urban.AddTerrain(Terrain_Green);
 
             Terrain Terrain_Blue = new Terrain();
             Terrain_Blue.Name = "Blue";
-            modProgram.Painter_Urban.Terrain_Add(Terrain_Blue);
+            modProgram.Painter_Urban.AddTerrain(Terrain_Blue);
 
             Terrain Terrain_Gray = new Terrain();
             Terrain_Gray.Name = "Gray";
-            modProgram.Painter_Urban.Terrain_Add(Terrain_Gray);
+            modProgram.Painter_Urban.AddTerrain(Terrain_Gray);
 
             Terrain Terrain_Orange = new Terrain();
             Terrain_Orange.Name = "Orange";
-            modProgram.Painter_Urban.Terrain_Add(Terrain_Orange);
+            modProgram.Painter_Urban.AddTerrain(Terrain_Orange);
 
             Terrain Terrain_Concrete = new Terrain();
             Terrain_Concrete.Name = "Concrete";
-            modProgram.Painter_Urban.Terrain_Add(Terrain_Concrete);
+            modProgram.Painter_Urban.AddTerrain(Terrain_Concrete);
 
             Terrain Terrain_Water = new Terrain();
             Terrain_Water.Name = "Water";
-            modProgram.Painter_Urban.Terrain_Add(Terrain_Water);
+            modProgram.Painter_Urban.AddTerrain(Terrain_Water);
 
             //green centre brush
             Terrain_Green.Tiles.Tile_Add(50, TileOrientation.TileDirection_None, 1);
@@ -329,7 +329,7 @@ namespace SharpFlame.Painters
             NewBrushCliff.Tiles_Straight.Tile_Add(70, TileOrientation.TileDirection_Bottom, 1);
             NewBrushCliff.Tiles_Corner_In.Tile_Add(68, TileOrientation.TileDirection_TopRight, 1);
             NewBrushCliff.Tiles_Corner_Out.Tile_Add(68, TileOrientation.TileDirection_BottomLeft, 1);
-            modProgram.Painter_Urban.CliffBrush_Add(NewBrushCliff);
+            modProgram.Painter_Urban.AddBrush(NewBrushCliff);
             //water to gray transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Water->Gray";
@@ -339,7 +339,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(24, TileOrientation.TileDirection_Top, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(25, TileOrientation.TileDirection_TopLeft, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(26, TileOrientation.TileDirection_TopLeft, 1);
-            modProgram.Painter_Urban.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Urban.AddBrush(NewBrush);
             //water to concrete transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Water->Concrete";
@@ -349,7 +349,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(14, TileOrientation.TileDirection_Bottom, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(16, TileOrientation.TileDirection_BottomLeft, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(15, TileOrientation.TileDirection_BottomLeft, 1);
-            modProgram.Painter_Urban.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Urban.AddBrush(NewBrush);
             //gray to blue transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Gray->Blue";
@@ -358,7 +358,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(6, TileOrientation.TileDirection_Left, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(4, TileOrientation.TileDirection_BottomRight, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(3, TileOrientation.TileDirection_BottomRight, 1);
-            modProgram.Painter_Urban.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Urban.AddBrush(NewBrush);
             //concrete to gray transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Concrete->Gray";
@@ -369,7 +369,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Corner_In.Tile_Add(30, TileOrientation.TileDirection_BottomLeft, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(10, TileOrientation.TileDirection_BottomLeft, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(29, TileOrientation.TileDirection_BottomLeft, 1);
-            modProgram.Painter_Urban.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Urban.AddBrush(NewBrush);
             //orange to blue transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Orange->Blue";
@@ -378,7 +378,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(33, TileOrientation.TileDirection_Right, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(34, TileOrientation.TileDirection_BottomRight, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(35, TileOrientation.TileDirection_BottomRight, 1);
-            modProgram.Painter_Urban.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Urban.AddBrush(NewBrush);
             //orange to green transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Orange->Green";
@@ -387,7 +387,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(39, TileOrientation.TileDirection_Right, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(38, TileOrientation.TileDirection_TopLeft, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(37, TileOrientation.TileDirection_TopLeft, 1);
-            modProgram.Painter_Urban.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Urban.AddBrush(NewBrush);
             //orange to gray transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Orange->Gray";
@@ -396,7 +396,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(60, TileOrientation.TileDirection_Right, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(73, TileOrientation.TileDirection_TopLeft, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(72, TileOrientation.TileDirection_TopLeft, 1);
-            modProgram.Painter_Urban.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Urban.AddBrush(NewBrush);
             //orange to concrete transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Orange->Concrete";
@@ -405,7 +405,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(71, TileOrientation.TileDirection_Right, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(76, TileOrientation.TileDirection_BottomRight, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(75, TileOrientation.TileDirection_BottomRight, 1);
-            modProgram.Painter_Urban.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Urban.AddBrush(NewBrush);
             //gray to green transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Gray->Green";
@@ -414,12 +414,12 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(77, TileOrientation.TileDirection_Right, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(58, TileOrientation.TileDirection_BottomLeft, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(79, TileOrientation.TileDirection_BottomLeft, 1);
-            modProgram.Painter_Urban.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Urban.AddBrush(NewBrush);
 
             //road
             Road Road_Road = new Road();
             Road_Road.Name = "Road";
-            modProgram.Painter_Urban.Road_Add(Road_Road);
+            modProgram.Painter_Urban.AddRoad(Road_Road);
             //road green
             NewRoadBrush = new RoadBrush();
             NewRoadBrush.Road = Road_Road;
@@ -428,7 +428,7 @@ namespace SharpFlame.Painters
             NewRoadBrush.Tile_TIntersection.Tile_Add(40, TileOrientation.TileDirection_Bottom, 1);
             NewRoadBrush.Tile_Straight.Tile_Add(42, TileOrientation.TileDirection_Left, 1);
             NewRoadBrush.Tile_End.Tile_Add(45, TileOrientation.TileDirection_Left, 1);
-            modProgram.Painter_Urban.RoadBrush_Add(NewRoadBrush);
+            modProgram.Painter_Urban.AddBrush(NewRoadBrush);
             //road blue
             NewRoadBrush = new RoadBrush();
             NewRoadBrush.Road = Road_Road;
@@ -437,7 +437,7 @@ namespace SharpFlame.Painters
             NewRoadBrush.Tile_TIntersection.Tile_Add(40, TileOrientation.TileDirection_Bottom, 1);
             NewRoadBrush.Tile_Straight.Tile_Add(42, TileOrientation.TileDirection_Left, 1);
             NewRoadBrush.Tile_End.Tile_Add(41, TileOrientation.TileDirection_Left, 1);
-            modProgram.Painter_Urban.RoadBrush_Add(NewRoadBrush);
+            modProgram.Painter_Urban.AddBrush(NewRoadBrush);
             //road gray
             NewRoadBrush = new RoadBrush();
             NewRoadBrush.Road = Road_Road;
@@ -447,7 +447,7 @@ namespace SharpFlame.Painters
             NewRoadBrush.Tile_Straight.Tile_Add(42, TileOrientation.TileDirection_Left, 1);
             NewRoadBrush.Tile_End.Tile_Add(43, TileOrientation.TileDirection_Left, 1);
             NewRoadBrush.Tile_End.Tile_Add(44, TileOrientation.TileDirection_Left, 1);
-            modProgram.Painter_Urban.RoadBrush_Add(NewRoadBrush);
+            modProgram.Painter_Urban.AddBrush(NewRoadBrush);
             //road orange
             NewRoadBrush = new RoadBrush();
             NewRoadBrush.Road = Road_Road;
@@ -455,7 +455,7 @@ namespace SharpFlame.Painters
             NewRoadBrush.Tile_CrossIntersection.Tile_Add(49, TileOrientation.TileDirection_None, 1);
             NewRoadBrush.Tile_TIntersection.Tile_Add(40, TileOrientation.TileDirection_Bottom, 1);
             NewRoadBrush.Tile_Straight.Tile_Add(42, TileOrientation.TileDirection_Left, 1);
-            modProgram.Painter_Urban.RoadBrush_Add(NewRoadBrush);
+            modProgram.Painter_Urban.AddBrush(NewRoadBrush);
             //road concrete
             NewRoadBrush = new RoadBrush();
             NewRoadBrush.Road = Road_Road;
@@ -463,7 +463,7 @@ namespace SharpFlame.Painters
             NewRoadBrush.Tile_CrossIntersection.Tile_Add(49, TileOrientation.TileDirection_None, 1);
             NewRoadBrush.Tile_TIntersection.Tile_Add(40, TileOrientation.TileDirection_Bottom, 1);
             NewRoadBrush.Tile_Straight.Tile_Add(42, TileOrientation.TileDirection_Left, 1);
-            modProgram.Painter_Urban.RoadBrush_Add(NewRoadBrush);
+            modProgram.Painter_Urban.AddBrush(NewRoadBrush);
 
             modGenerator.Generator_TilesetUrban.OldTextureLayers.Layers = new modProgram.sLayerList.clsLayer[0];
             modGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount = 0;
@@ -567,35 +567,35 @@ namespace SharpFlame.Painters
 
             Terrain Terrain_Grass = new Terrain();
             Terrain_Grass.Name = "Grass";
-            modProgram.Painter_Rockies.Terrain_Add(Terrain_Grass);
+            modProgram.Painter_Rockies.AddTerrain(Terrain_Grass);
 
             Terrain Terrain_Gravel = new Terrain();
             Terrain_Gravel.Name = "Gravel";
-            modProgram.Painter_Rockies.Terrain_Add(Terrain_Gravel);
+            modProgram.Painter_Rockies.AddTerrain(Terrain_Gravel);
 
             Terrain Terrain_Dirt = new Terrain();
             Terrain_Dirt.Name = "Dirt";
-            modProgram.Painter_Rockies.Terrain_Add(Terrain_Dirt);
+            modProgram.Painter_Rockies.AddTerrain(Terrain_Dirt);
 
             Terrain Terrain_GrassSnow = new Terrain();
             Terrain_GrassSnow.Name = "Grass Snow";
-            modProgram.Painter_Rockies.Terrain_Add(Terrain_GrassSnow);
+            modProgram.Painter_Rockies.AddTerrain(Terrain_GrassSnow);
 
             Terrain Terrain_GravelSnow = new Terrain();
             Terrain_GravelSnow.Name = "Gravel Snow";
-            modProgram.Painter_Rockies.Terrain_Add(Terrain_GravelSnow);
+            modProgram.Painter_Rockies.AddTerrain(Terrain_GravelSnow);
 
             Terrain Terrain_Snow = new Terrain();
             Terrain_Snow.Name = "Snow";
-            modProgram.Painter_Rockies.Terrain_Add(Terrain_Snow);
+            modProgram.Painter_Rockies.AddTerrain(Terrain_Snow);
 
             Terrain Terrain_Concrete = new Terrain();
             Terrain_Concrete.Name = "Concrete";
-            modProgram.Painter_Rockies.Terrain_Add(Terrain_Concrete);
+            modProgram.Painter_Rockies.AddTerrain(Terrain_Concrete);
 
             Terrain Terrain_Water = new Terrain();
             Terrain_Water.Name = "Water";
-            modProgram.Painter_Rockies.Terrain_Add(Terrain_Water);
+            modProgram.Painter_Rockies.AddTerrain(Terrain_Water);
 
             //grass centre brush
             Terrain_Grass.Tiles.Tile_Add(0, TileOrientation.TileDirection_None, 1);
@@ -624,7 +624,7 @@ namespace SharpFlame.Painters
             NewBrushCliff.Tiles_Straight.Tile_Add(71, TileOrientation.TileDirection_Bottom, 1);
             NewBrushCliff.Tiles_Corner_In.Tile_Add(45, TileOrientation.TileDirection_TopRight, 1);
             NewBrushCliff.Tiles_Corner_Out.Tile_Add(45, TileOrientation.TileDirection_BottomLeft, 1);
-            modProgram.Painter_Rockies.CliffBrush_Add(NewBrushCliff);
+            modProgram.Painter_Rockies.AddBrush(NewBrushCliff);
             //gravel snow to gravel cliff brush
             NewBrushCliff = new CliffBrush();
             NewBrushCliff.Name = "Gravel Snow -> Gravel Cliff";
@@ -633,7 +633,7 @@ namespace SharpFlame.Painters
             NewBrushCliff.Tiles_Straight.Tile_Add(29, TileOrientation.TileDirection_Bottom, 1);
             NewBrushCliff.Tiles_Corner_In.Tile_Add(9, TileOrientation.TileDirection_TopLeft, 1);
             NewBrushCliff.Tiles_Corner_Out.Tile_Add(42, TileOrientation.TileDirection_BottomLeft, 1);
-            modProgram.Painter_Rockies.CliffBrush_Add(NewBrushCliff);
+            modProgram.Painter_Rockies.AddBrush(NewBrushCliff);
             //snow to gravel cliff brush
             NewBrushCliff = new CliffBrush();
             NewBrushCliff.Name = "Snow -> Gravel Cliff";
@@ -642,7 +642,7 @@ namespace SharpFlame.Painters
             NewBrushCliff.Tiles_Straight.Tile_Add(68, TileOrientation.TileDirection_Bottom, 1);
             NewBrushCliff.Tiles_Corner_In.Tile_Add(63, TileOrientation.TileDirection_TopLeft, 1);
             NewBrushCliff.Tiles_Corner_Out.Tile_Add(42, TileOrientation.TileDirection_BottomLeft, 1);
-            modProgram.Painter_Rockies.CliffBrush_Add(NewBrushCliff);
+            modProgram.Painter_Rockies.AddBrush(NewBrushCliff);
             //gravel snow cliff brush
             NewBrushCliff = new CliffBrush();
             NewBrushCliff.Name = "Gravel Snow Cliff";
@@ -651,7 +651,7 @@ namespace SharpFlame.Painters
             NewBrushCliff.Tiles_Straight.Tile_Add(44, TileOrientation.TileDirection_Bottom, 1);
             NewBrushCliff.Tiles_Corner_In.Tile_Add(9, TileOrientation.TileDirection_TopLeft, 1);
             NewBrushCliff.Tiles_Corner_Out.Tile_Add(9, TileOrientation.TileDirection_BottomRight, 1);
-            modProgram.Painter_Rockies.CliffBrush_Add(NewBrushCliff);
+            modProgram.Painter_Rockies.AddBrush(NewBrushCliff);
             //snow to gravel snow cliff brush
             NewBrushCliff = new CliffBrush();
             NewBrushCliff.Name = "Snow -> Gravel Snow Cliff";
@@ -660,7 +660,7 @@ namespace SharpFlame.Painters
             NewBrushCliff.Tiles_Straight.Tile_Add(78, TileOrientation.TileDirection_Bottom, 1);
             NewBrushCliff.Tiles_Corner_In.Tile_Add(63, TileOrientation.TileDirection_TopLeft, 1);
             NewBrushCliff.Tiles_Corner_Out.Tile_Add(9, TileOrientation.TileDirection_BottomRight, 1);
-            modProgram.Painter_Rockies.CliffBrush_Add(NewBrushCliff);
+            modProgram.Painter_Rockies.AddBrush(NewBrushCliff);
             //snow to snow cliff brush
             NewBrushCliff = new CliffBrush();
             NewBrushCliff.Name = "Snow -> Snow Cliff";
@@ -669,7 +669,7 @@ namespace SharpFlame.Painters
             NewBrushCliff.Tiles_Straight.Tile_Add(78, TileOrientation.TileDirection_Bottom, 1);
             NewBrushCliff.Tiles_Corner_In.Tile_Add(63, TileOrientation.TileDirection_TopLeft, 1);
             NewBrushCliff.Tiles_Corner_Out.Tile_Add(63, TileOrientation.TileDirection_BottomRight, 1);
-            modProgram.Painter_Rockies.CliffBrush_Add(NewBrushCliff);
+            modProgram.Painter_Rockies.AddBrush(NewBrushCliff);
             //water to grass transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Water -> Grass";
@@ -678,7 +678,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(14, TileOrientation.TileDirection_Bottom, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(16, TileOrientation.TileDirection_BottomLeft, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(15, TileOrientation.TileDirection_BottomLeft, 1);
-            modProgram.Painter_Rockies.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Rockies.AddBrush(NewBrush);
             //water to gravel transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Water -> Gravel";
@@ -687,7 +687,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(31, TileOrientation.TileDirection_Top, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(32, TileOrientation.TileDirection_TopLeft, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(33, TileOrientation.TileDirection_TopLeft, 1);
-            modProgram.Painter_Rockies.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Rockies.AddBrush(NewBrush);
             //grass to gravel transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Grass -> Gravel";
@@ -696,7 +696,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(2, TileOrientation.TileDirection_Left, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(3, TileOrientation.TileDirection_TopLeft, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(4, TileOrientation.TileDirection_TopLeft, 1);
-            modProgram.Painter_Rockies.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Rockies.AddBrush(NewBrush);
             //grass to grass snow transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Grass -> Grass Snow";
@@ -705,7 +705,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(26, TileOrientation.TileDirection_Top, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(25, TileOrientation.TileDirection_TopLeft, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(24, TileOrientation.TileDirection_TopLeft, 1);
-            modProgram.Painter_Rockies.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Rockies.AddBrush(NewBrush);
             //grass to dirt transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Grass -> Dirt";
@@ -714,7 +714,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(34, TileOrientation.TileDirection_Right, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(35, TileOrientation.TileDirection_BottomRight, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(36, TileOrientation.TileDirection_BottomRight, 1);
-            modProgram.Painter_Rockies.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Rockies.AddBrush(NewBrush);
             //gravel snow to gravel transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Gravel Snow -> Gravel";
@@ -723,7 +723,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(12, TileOrientation.TileDirection_Bottom, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(10, TileOrientation.TileDirection_BottomRight, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(11, TileOrientation.TileDirection_BottomRight, 1);
-            modProgram.Painter_Rockies.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Rockies.AddBrush(NewBrush);
             //snow to gravel snow transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Snow -> Gravel Snow";
@@ -732,7 +732,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(67, TileOrientation.TileDirection_Bottom, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(65, TileOrientation.TileDirection_BottomRight, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(66, TileOrientation.TileDirection_BottomRight, 1);
-            modProgram.Painter_Rockies.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Rockies.AddBrush(NewBrush);
             //concrete to dirt transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Concrete -> Dirt";
@@ -741,7 +741,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(21, TileOrientation.TileDirection_Right, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(19, TileOrientation.TileDirection_BottomRight, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(20, TileOrientation.TileDirection_BottomRight, 1);
-            modProgram.Painter_Rockies.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Rockies.AddBrush(NewBrush);
             //gravel to dirt transition brush
             NewBrush = new TransitionBrush();
             NewBrush.Name = "Gravel -> Dirt";
@@ -750,11 +750,11 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Straight.Tile_Add(38, TileOrientation.TileDirection_Left, 1);
             NewBrush.Tiles_Corner_In.Tile_Add(40, TileOrientation.TileDirection_TopLeft, 1);
             NewBrush.Tiles_Corner_Out.Tile_Add(39, TileOrientation.TileDirection_TopLeft, 1);
-            modProgram.Painter_Rockies.TransitionBrush_Add(NewBrush);
+            modProgram.Painter_Rockies.AddBrush(NewBrush);
             //road
             Road Road_Road = new Road();
             Road_Road.Name = "Road";
-            modProgram.Painter_Rockies.Road_Add(Road_Road);
+            modProgram.Painter_Rockies.AddRoad(Road_Road);
             //road brown
             NewRoadBrush = new RoadBrush();
             NewRoadBrush.Road = Road_Road;
@@ -762,11 +762,11 @@ namespace SharpFlame.Painters
             NewRoadBrush.Tile_TIntersection.Tile_Add(13, TileOrientation.TileDirection_Bottom, 1);
             NewRoadBrush.Tile_Straight.Tile_Add(59, TileOrientation.TileDirection_Left, 1);
             NewRoadBrush.Tile_End.Tile_Add(60, TileOrientation.TileDirection_Left, 1);
-            modProgram.Painter_Rockies.RoadBrush_Add(NewRoadBrush);
+            modProgram.Painter_Rockies.AddBrush(NewRoadBrush);
             //track
             Road Road_Track = new Road();
             Road_Track.Name = "Track";
-            modProgram.Painter_Rockies.Road_Add(Road_Track);
+            modProgram.Painter_Rockies.AddRoad(Road_Track);
             //track brown
             NewRoadBrush = new RoadBrush();
             NewRoadBrush.Road = Road_Track;
@@ -776,7 +776,7 @@ namespace SharpFlame.Painters
             NewRoadBrush.Tile_Straight.Tile_Add(51, TileOrientation.TileDirection_Top, 2);
             NewRoadBrush.Tile_Corner_In.Tile_Add(50, TileOrientation.TileDirection_BottomRight, 1);
             NewRoadBrush.Tile_End.Tile_Add(52, TileOrientation.TileDirection_Bottom, 1);
-            modProgram.Painter_Rockies.RoadBrush_Add(NewRoadBrush);
+            modProgram.Painter_Rockies.AddBrush(NewRoadBrush);
 
             modGenerator.Generator_TilesetRockies.OldTextureLayers.Layers = new modProgram.sLayerList.clsLayer[0];
             modGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount = 0;
