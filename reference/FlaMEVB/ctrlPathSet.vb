@@ -49,6 +49,8 @@ Public Class ctrlPathSet
     Private Sub btnAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnAdd.Click
         Dim DirSelect As New Windows.Forms.FolderBrowserDialog
 
+        DirSelect.SelectedPath = Application.StartupPath
+
         If lstPaths.Items.Count > 0 Then
             DirSelect.SelectedPath = CType(lstPaths.Items(lstPaths.Items.Count - 1), String)
         End If

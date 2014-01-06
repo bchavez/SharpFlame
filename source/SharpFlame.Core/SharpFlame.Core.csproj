@@ -30,6 +30,23 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FileHelpers">
+      <HintPath>..\packages\FileHelpers.2.0.0.0\lib\FileHelpers.dll</HintPath>
+    </Reference>
+    <Reference Include="FileHelpers.ExcelStorage">
+      <HintPath>..\packages\FileHelpers.2.0.0.0\lib\FileHelpers.ExcelStorage.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentValidation">
+      <HintPath>..\packages\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.Excel">
+      <HintPath>..\packages\FileHelpers.2.0.0.0\lib\Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.Office">
+      <HintPath>..\packages\FileHelpers.2.0.0.0\lib\Interop.Office.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Sprache">
       <HintPath>..\packages\Sprache.1.10.0.35\lib\net40\Sprache.dll</HintPath>
     </Reference>
@@ -42,8 +59,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PieParser.cs" />
+    <Compile Include="FileIO\Points.cs" />
+    <Compile Include="Parsers\Validators\LevelValidator.cs" />
+    <Compile Include="Parsers\Numerics.cs" />
+    <Compile Include="Parsers\PieGrammar.cs" />
+    <Compile Include="Parsers\Validators\PieValidator.cs" />
+    <Compile Include="Parsers\Scan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Parsers\ScanFormatted.cs" />
+    <Compile Include="Parsers\TextParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
