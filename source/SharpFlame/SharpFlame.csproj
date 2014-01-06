@@ -424,7 +424,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <CustomToolNamespace>SharpFlame</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
@@ -440,7 +440,7 @@
     </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
-      <CustomToolNamespace>My</CustomToolNamespace>
+      <CustomToolNamespace>SharpFlame</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
@@ -468,6 +468,22 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="flaME.ico" />
+    <None Include="Resources\overflow.png" />
+    <None Include="Resources\objectsselect.png" />
+    <None Include="Resources\notile.png" />
+    <None Include="Resources\gateways.png" />
+    <None Include="Resources\drawtileorientation.png" />
+    <None Include="Resources\displayautotexture.png" />
+    <None Include="Resources\warning.png" />
+    <None Include="Resources\selectionrotateclockwise.png" />
+    <None Include="Resources\selectionrotateanticlockwise.png" />
+    <None Include="Resources\selectionpasteoptions.png" />
+    <None Include="Resources\selectionpaste.png" />
+    <None Include="Resources\selectionflipx.png" />
+    <None Include="Resources\selectioncopy.png" />
+    <None Include="Resources\selection.png" />
+    <None Include="Resources\save.png" />
+    <None Include="Resources\problem.png" />
     <None Include="Resources\flaME.ico" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -197,23 +197,22 @@ namespace SharpFlame
             Bitmap InterfaceImage_SelectionPasteOptions = null;
             Bitmap InterfaceImage_Gateways = null;
 
-            LoadInterfaceImage(App.InterfaceImagesPath + "displayautotexture.png", ref InterfaceImage_DisplayAutoTexture, ReturnResult);
-            LoadInterfaceImage(App.InterfaceImagesPath + "drawtileorientation.png", ref InterfaceImage_DrawTileOrientation, ReturnResult);
-            LoadInterfaceImage(App.InterfaceImagesPath + "save.png", ref InterfaceImage_QuickSave, ReturnResult);
-            LoadInterfaceImage(App.InterfaceImagesPath + "selection.png", ref InterfaceImage_Selection, ReturnResult);
-            LoadInterfaceImage(App.InterfaceImagesPath + "objectsselect.png", ref InterfaceImage_ObjectSelect, ReturnResult);
-            LoadInterfaceImage(App.InterfaceImagesPath + "selectioncopy.png", ref InterfaceImage_SelectionCopy, ReturnResult);
-            LoadInterfaceImage(App.InterfaceImagesPath + "selectionflipx.png", ref InterfaceImage_SelectionFlipX, ReturnResult);
-            LoadInterfaceImage(App.InterfaceImagesPath + "selectionrotateclockwise.png", ref InterfaceImage_SelectionRotateClockwise, ReturnResult);
-            LoadInterfaceImage(App.InterfaceImagesPath + "selectionrotateanticlockwise.png", ref InterfaceImage_SelectionRotateCounterClockwise, ReturnResult);
-            LoadInterfaceImage(App.InterfaceImagesPath + "selectionpaste.png", ref InterfaceImage_SelectionPaste, ReturnResult);
-            LoadInterfaceImage(App.InterfaceImagesPath + "selectionpasteoptions.png", ref InterfaceImage_SelectionPasteOptions, ReturnResult);
-            LoadInterfaceImage(App.InterfaceImagesPath + "gateways.png", ref InterfaceImage_Gateways, ReturnResult);
+            InterfaceImage_DisplayAutoTexture = Resources.displayautotexture;
+            InterfaceImage_DrawTileOrientation = Resources.drawtileorientation;
+            InterfaceImage_QuickSave = Resources.save;
+            InterfaceImage_Selection = Resources.selection;
+            InterfaceImage_ObjectSelect = Resources.objectsselect;
+            InterfaceImage_SelectionCopy = Resources.selectioncopy;
+            InterfaceImage_SelectionFlipX = Resources.selectionflipx;
+            InterfaceImage_SelectionPaste = Resources.selectionpaste;
+            InterfaceImage_SelectionPasteOptions = Resources.selectionpasteoptions;
+            InterfaceImage_SelectionRotateClockwise = Resources.selectionrotateclockwise;
+            InterfaceImage_SelectionRotateCounterClockwise = Resources.selectionrotateanticlockwise;
+            InterfaceImage_Gateways = Resources.gateways;
 
-            Bitmap InterfaceImage_Problem = null;
-            LoadInterfaceImage(App.InterfaceImagesPath + "problem.png", ref InterfaceImage_Problem, ReturnResult);
-            Bitmap InterfaceImage_Warning = null;
-            LoadInterfaceImage(App.InterfaceImagesPath + "warning.png", ref InterfaceImage_Warning, ReturnResult);
+            Bitmap InterfaceImage_Problem = Resources.problem;
+            Bitmap InterfaceImage_Warning = Resources.warning;
+            
             modWarnings.WarningImages.ImageSize = new Size(16, 16);
             if ( InterfaceImage_Problem != null )
             {
@@ -3416,18 +3415,6 @@ namespace SharpFlame
         public void rdoCliffTriBrush_CheckedChanged(Object sender, EventArgs e)
         {
             modTools.Tool = modTools.Tools.CliffTriangle;
-        }
-
-        private void LoadInterfaceImage(string ImagePath, ref Bitmap ResultBitmap, clsResult Result)
-        {
-            App.sResult BitmapResult = new App.sResult();
-
-            ResultBitmap = null;
-            BitmapResult = BitmapUtil.LoadBitmap(ImagePath, ref ResultBitmap);
-            if ( !BitmapResult.Success )
-            {
-                Result.WarningAdd("Unable to load image " + Convert.ToString(ControlChars.Quote) + ImagePath + Convert.ToString(ControlChars.Quote));
-            }
         }
 
         public void MainMapAfterChanged()

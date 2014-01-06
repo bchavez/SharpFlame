@@ -3,7 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Microsoft.VisualBasic.ApplicationServices;
-using My.Resources;
+
 using OpenTK;
 using OpenTK.Graphics;
 using SharpFlame.AppSettings;
