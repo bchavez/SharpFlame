@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Microsoft.VisualBasic.ApplicationServices;
+using My.Resources;
 using OpenTK;
 using OpenTK.Graphics;
 using SharpFlame.AppSettings;
@@ -53,9 +54,7 @@ namespace SharpFlame
 
             try
             {
-                App.ProgramIcon =
-                    new Icon((new ConsoleApplicationBase()).Info.DirectoryPath +
-                             Convert.ToString(App.PlatformPathSeparator) + "flaME.ico");
+                App.ProgramIcon = Resources.flaME;
             }
             catch ( Exception ex )
             {
