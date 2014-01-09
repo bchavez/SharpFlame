@@ -86,21 +86,27 @@ namespace SharpFlame.Mapping
 
         public clsMap()
         {
-            frmMainLink = new ConnectedListLink<clsMap, frmMain>(this);
-            Gateways = new ConnectedList<clsGateway, clsMap>(this);
-
+            this.frmMainLink = new ConnectedListLink<clsMap, frmMain>( this );
+            this.Sectors = new clsSector[0, 0];
+            this.ShadowSectors = new clsShadowSector[0, 0];
+            this.HeightMultiplier = 2;
+            this._ReadyForUserInput = false;
+            this.ChangedSinceSave = false;
+            this.AutoSave = new clsAutoSave();
+            this.Painter = new Painter();
+            this.Tile_TypeNum = new byte[0];
+            this.Gateways = new ConnectedList<clsGateway, clsMap>( this );
+            this.Units = new ConnectedList<clsUnit, clsMap>( this );
+            this.UnitGroups = new ConnectedList<clsUnitGroup, clsMap>( this );
+            this.ScriptPositions = new ConnectedList<clsScriptPosition, clsMap>( this );
+            this.ScriptAreas = new ConnectedList<clsScriptArea, clsMap>( this );
 
             Initialize();
         }
 
-        public clsMap(sXY_int TileSize)
+        public clsMap(sXY_int TileSize) : this()
         {
-            frmMainLink = new ConnectedListLink<clsMap, frmMain>(this);
-            Gateways = new ConnectedList<clsGateway, clsMap>(this);
-
-
             Initialize();
-
             TerrainBlank(TileSize);
             TileType_Reset();
         }
@@ -116,11 +122,8 @@ namespace SharpFlame.Mapping
             ScriptAreas.MaintainOrder = true;
         }
 
-        public clsMap(clsMap MapToCopy, sXY_int Offset, sXY_int Area)
+        public clsMap(clsMap MapToCopy, sXY_int Offset, sXY_int Area) : this()
         {
-            frmMainLink = new ConnectedListLink<clsMap, frmMain>(this);
-            Gateways = new ConnectedList<clsGateway, clsMap>(this);
-
             int EndX = 0;
             int EndY = 0;
             int X = 0;
