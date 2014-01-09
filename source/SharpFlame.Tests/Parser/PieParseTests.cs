@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.IO;
+using System.Linq;
 using FluentAssertions;
 using FluentValidation.Attributes;
 using NUnit.Framework;
@@ -12,32 +13,6 @@ namespace SharpFlame.Tests.Parser
     [TestFixture]
     public class PieParseTests
     {
-        [TestFixtureSetUp]
-        public void BeforeRunningTestSession()
-        {
-
-        }
-
-        [TestFixtureTearDown]
-        public void AfterRunningTestSession()
-        {
-
-        }
-
-
-        [SetUp]
-        public void BeforeEachTest()
-        {
-
-        }
-
-        [TearDown]
-        public void AfterEachTest()
-        {
-
-        }
-
-
         [Test]
         public void can_parse_version_number()
         {
@@ -123,21 +98,81 @@ namespace SharpFlame.Tests.Parser
         public void can_parse_polygon_line()
         {
             var data = @"	200 3 3 2 1 237 220 239 220 239 222";
+ 
+            //          200                 3     3    2    1    237  220    239  220    239  222
+            //[PolygonFlags] [Number of Points] [P1] [P2] [P3]  [VU] [VV]   [VU] [VV]   [VU] [VV]
+
 
             var result = PieGrammar.PolygonLine.Parse(data);
 
             var truth = new Polygon
                 {
-                    Flags = 0x200,
+                    Flags = PolygonFlags.Texture,
                     PointCount = 3,
                     P1 = 3,
                     P2 = 2,
                     P3 = 1,
-                    TexX = 239f,
-                    TexY = 222f
+                    Frames = 1,
+                    PlaybackRate = 1,
+                    TexCoords = new[]
+                        {
+                            new TexCoord {U = 237f, V = 220f},
+                            new TexCoord {U = 239f, V = 220f},
+                            new TexCoord {U = 239f, V = 222f},
+                        }
                 };
 
-            truth.ShouldBeEquivalentTo(result);
+            result.ShouldBeEquivalentTo(truth);
+        }
+
+        [Test]
+        public void can_parse_texcoords()
+        {
+            var data = @" 237 220 239 220 239 222";
+
+            var result = PieGrammar.TexCoord.Repeat(3)
+                .Parse(data).ToArray();
+
+            var truth = new[]
+                {
+                    new TexCoord {U = 237f, V = 220f},
+                    new TexCoord {U = 239f, V = 220f},
+                    new TexCoord {U = 239f, V = 222f},
+                };
+
+            result.ShouldAllBeEquivalentTo(truth);
+        }
+
+        [Test]
+        public void can_parse_polygon_line_texture_animation()
+        {
+
+            var data = @"	4200 3 7 6 5 2 1 11 14 45 128 54 128 54 140";
+            //	        4200                  3    7    6    5        2               1       11        14      45  128     54  128     54  140
+            //[PolygonFlags] [Number of Points] [P1] [P2] [P3] [frames]  [playbackRate]  [width]  [height]    [VU] [VV]   [VU] [VV]   [VU] [VV]
+
+            var result = PieGrammar.PolygonLine.Parse( data );
+
+            var truth = new Polygon
+                {
+                    Flags = PolygonFlags.Animation | PolygonFlags.Texture,
+                    PointCount = 3,
+                    P1 = 7,
+                    P2 = 6,
+                    P3 = 5,
+                    Frames = 2,
+                    PlaybackRate = 1,
+                    Width = 11,
+                    Height = 14,
+                    TexCoords = new[]
+                        {
+                            new TexCoord {U = 45, V = 128},
+                            new TexCoord {U = 54, V = 128},
+                            new TexCoord {U = 54, V = 140},
+                        }
+                };
+
+            result.ShouldBeEquivalentTo(truth);
         }
 
         [Test]
@@ -218,13 +253,15 @@ POLYGONS 36
             pie.Levels[0].Points[12].Y.Should().Be( 37 );
             pie.Levels[0].Points[12].Z.Should().Be( 0 );
 
-            pie.Levels[0].Polygons[35].Flags.Should().Be( 0x200 );
+            pie.Levels[0].Polygons[35].Flags.Should().Be( PolygonFlags.Texture );
             pie.Levels[0].Polygons[35].PointCount.Should().Be(3 );
             pie.Levels[0].Polygons[35].P1.Should().Be( 11 );
             pie.Levels[0].Polygons[35].P2.Should().Be( 7 );
             pie.Levels[0].Polygons[35].P3.Should().Be( 12 );
-            pie.Levels[0].Polygons[35].TexX.Should().Be( 23 );
-            pie.Levels[0].Polygons[35].TexY.Should().Be( 185 );
+            
+            //TODO more thorough testing here
+            pie.Levels[0].Polygons[35].TexCoords[2].U.Should().Be( 23 );
+            pie.Levels[0].Polygons[35].TexCoords[2].V.Should().Be( 185 );
         }
 
         [Test]
@@ -459,27 +496,15 @@ POLYGONS 30
             pie.Levels[1].Points[1].Y.Should().Be( 73 );
             pie.Levels[2].Points[2].Z.Should().Be( 7 );
 
-            pie.Levels[2].Polygons[1].Flags.Should().Be( 0x200 );
+            pie.Levels[2].Polygons[1].Flags.Should().Be( PolygonFlags.Texture );
             pie.Levels[2].Polygons[1].PointCount.Should().Be( 3 );
             pie.Levels[2].Polygons[1].P1.Should().Be( 0 );
             pie.Levels[2].Polygons[1].P2.Should().Be( 2 );
             pie.Levels[2].Polygons[1].P3.Should().Be( 3);
-            pie.Levels[2].Polygons[1].TexX.Should().Be( 3 );
-            pie.Levels[2].Polygons[1].TexY.Should().Be( 243 );
-        }
 
-        [Test]
-        [Explicit]
-        public void test()
-        {
-
-        }
-
-        [Test]
-        [Explicit]
-        public void test2()
-        {
-
+            //TODO more thorough testing here
+            pie.Levels[2].Polygons[1].TexCoords[2].U.Should().Be( 3 );
+            pie.Levels[2].Polygons[1].TexCoords[2].V.Should().Be( 243 );
         }
 
         [Test]
@@ -504,14 +529,28 @@ POLYGONS 30
 
         [Test]
         [Explicit]
+        public void test()
+        {
+
+        }
+
+        [Test]
+        [Explicit]
+        public void test2()
+        {
+
+        }
+
+        [Test]
+        [Explicit]
         public void test3()
         {
-            var file = @"..\..\..\Data\3.1_b4-objects\pies\fireknee.pie";
+            var file = @"..\..\..\Data\3.1_b4-objects\pies\radarsensor.pie";
             var f = new AttributedValidatorFactory();
             var txt = File.ReadAllText( file );
             Console.WriteLine( "Parsing: {0}", file );
             var pie = PieGrammar.Pie.Parse( txt );
-//            PieGrammar.Pie.parse
+            //            PieGrammar.Pie.parse
 
             var v = f.GetValidator<Pie>();
             v.Validate( pie ).IsValid.Should().BeTrue();

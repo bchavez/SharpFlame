@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ExtensionsForEnum.cs" />
     <Compile Include="Parsers\Validators\LevelValidator.cs" />
     <Compile Include="Parsers\Numerics.cs" />
     <Compile Include="Parsers\PieGrammar.cs" />

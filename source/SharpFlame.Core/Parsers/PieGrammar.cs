@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using FluentValidation.Attributes;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Core.Parsers.Validators;
 using Sprache;
 
@@ -9,8 +10,8 @@ namespace SharpFlame.Core.Parsers
     [Flags]
     public enum PolygonFlags : uint
     {
-        Texture,
-        TextureAnimation
+        Texture = 0x200,
+        Animation = 0x4000
     }
 
     public class PieGrammar
@@ -65,9 +66,9 @@ namespace SharpFlame.Core.Parsers
         //	5 20 17 
         //  x, y, z
         public static readonly Parser<Point> PointLine =
-            from x in Numerics.SignedFloat.Token()
-            from y in Numerics.SignedFloat.Token()
-            from z in Numerics.SignedFloat.Token()
+            from x in Scan.F.Token()
+            from y in Scan.F.Token()
+            from z in Scan.F.Token()
             select new Point
                 {
                     X = x, Y = y, Z = z
@@ -98,32 +99,37 @@ namespace SharpFlame.Core.Parsers
 
         //data:
         //	200 3  3  2  1  237 220 239 220 239 222
-        //scan codes:
-        //  %x  %u %d %d %d %d  %d  %f  %f  %f  %f
+        //  4200 3 7 6 5 2 1 11 14 45 128 54 128 54 140
         // flag, numpoints, p1, p2, p3, [nFrames, pbRate, tWidth, tHeight], texcoord[]xy
-        //  hex, -any.number, 
         public static readonly Parser<Polygon> PolygonLine =
-            from flags in Scan.X.Token()
+            from flags in Scan.X.Token().Select(f => (PolygonFlags)f)
             from numpoints in Scan.U.Token()
-            from p1 in Scan.D.Token()
-            from p2 in Scan.D.Token()
-            from p3 in Scan.D.Token()
-            from nFrames in Scan.D.Token()
-            from pbRate in Scan.D.Token()
-            from tWidth in Scan.F.Token()
-            from tHeight in Scan.F.Token()
-            from xtex in Scan.F.Token()
-            from ytex in Scan.F.Token()
+            from p1 in Scan.F.Token()
+            from p2 in Scan.F.Token()
+            from p3 in Scan.F.Token()
+            from frames in Scan.F.Token().Where(frames => flags.Has(PolygonFlags.Animation)).Optional()
+            from pbRate in Scan.F.Token().Where(pbr => flags.Has(PolygonFlags.Animation)).Optional()
+            from width in Scan.F.Token().Where(w => flags.Has(PolygonFlags.Animation)).Optional()
+            from height in Scan.F.Token().Where(h => flags.Has(PolygonFlags.Animation)).Optional()
+            from texCoords in TexCoord.Token().Repeat((int)numpoints)
             select new Polygon
                 {
-                    Flags = (PolygonFlags)flags,
+                    Flags = flags,
                     PointCount = numpoints,
                     P1 = p1,
                     P2 = p2,
                     P3 = p3,
-                    TexX = xtex,
-                    TexY = ytex
+                    Frames = frames.IsDefined ? frames.Get() : 1,
+                    PlaybackRate = pbRate.IsDefined ? pbRate.Get() : 1,
+                    Width = width.GetOrDefault(),
+                    Height = height.GetOrDefault(),
+                    TexCoords = texCoords.ToArray()
                 };
+
+        public static readonly Parser<TexCoord> TexCoord =
+            from u in Scan.F.Token()
+            from v in Scan.F.Token()
+            select new TexCoord {U = u, V = v};
 
         //CONNECTORS 2
         public static readonly Parser<int> Connectors =
@@ -181,15 +187,23 @@ namespace SharpFlame.Core.Parsers
                 };
     }
 
+    public class TexCoord
+    {
+        public float U { get; set; }
+        public float V { get; set; }
+    }
     public class Polygon
     {
         public PolygonFlags Flags { get; set; }
         public uint PointCount { get; set; }
-        public int P1 { get; set; }
-        public int P2 { get; set; }
-        public int P3 { get; set; }
-        public float TexX { get; set; }
-        public float TexY { get; set; }
+        public float P1 { get; set; }
+        public float P2 { get; set; }
+        public float P3 { get; set; }
+        public float Frames { get; set; }
+        public float PlaybackRate { get; set; }
+        public float Width { get; set; }
+        public float Height { get; set; }
+        public TexCoord[] TexCoords { get; set; }
     }
 
     public class Texture
@@ -222,7 +236,7 @@ namespace SharpFlame.Core.Parsers
         internal int PointsCount { get; set; }
         internal int PolygonsCount { get; set; }
         internal int? ConnectorCount { get; set; }
-        internal Connector[] Connectors { get; set; }
+        public Connector[] Connectors { get; set; }
     }
 
     [Validator(typeof(PieValidator))]
