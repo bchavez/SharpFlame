@@ -1,13 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using FileHelpers;
 using FluentAssertions;
 using FluentValidation.Attributes;
 using NUnit.Framework;
-using SharpFlame.Core;
-using SharpFlame.Core.FileIO;
 using SharpFlame.Core.Parsers;
 using SharpFlame.Core.Parsers.Validators;
 using Sprache;
@@ -456,22 +451,21 @@ POLYGONS 30
             pie.Texture.Width.Should().Be( 254 );
             pie.Texture.Height.Should().Be( 256 );
             pie.Levels.Length.Should().Be( 3 );
-            //pie.Levels[0].Points.Length.Should().Be( 13 );
-            //pie.Levels[0].Polygons.Length.Should().Be( 36 );
+            pie.Levels[0].Points.Length.Should().Be( 56 );
+            pie.Levels[1].Points.Length.Should().Be( 8 );
+            pie.Levels[2].Points.Length.Should().Be( 26 );
 
-            //pie.Levels[0].Points[12].X.Should().Be( 0 );
-            //pie.Levels[0].Points[12].Y.Should().Be( 37 );
-            //pie.Levels[0].Points[12].Z.Should().Be( 0 );
+            pie.Levels[0].Points[0].X.Should().Be( -52 );
+            pie.Levels[1].Points[1].Y.Should().Be( 73 );
+            pie.Levels[2].Points[2].Z.Should().Be( 7 );
 
-            //pie.Levels[0].Polygons[35].Flags.Should().Be( 0x200 );
-            //pie.Levels[0].Polygons[35].PointCount.Should().Be( 3 );
-            //pie.Levels[0].Polygons[35].P1.Should().Be( 11 );
-            //pie.Levels[0].Polygons[35].P2.Should().Be( 7 );
-            //pie.Levels[0].Polygons[35].P3.Should().Be( 12 );
-            //pie.Levels[0].Polygons[35].TexX.Should().Be( 23 );
-            //pie.Levels[0].Polygons[35].TexY.Should().Be( 185 );
-
-            finish validating this pie
+            pie.Levels[2].Polygons[1].Flags.Should().Be( 0x200 );
+            pie.Levels[2].Polygons[1].PointCount.Should().Be( 3 );
+            pie.Levels[2].Polygons[1].P1.Should().Be( 0 );
+            pie.Levels[2].Polygons[1].P2.Should().Be( 2 );
+            pie.Levels[2].Polygons[1].P3.Should().Be( 3);
+            pie.Levels[2].Polygons[1].TexX.Should().Be( 3 );
+            pie.Levels[2].Polygons[1].TexY.Should().Be( 243 );
         }
 
         [Test]
@@ -485,62 +479,42 @@ POLYGONS 30
         [Explicit]
         public void test2()
         {
-            var engine = new MultiRecordEngine(RecordSelector,
-                typeof(Header),
-                typeof(TypeDirective),
-                typeof(TextureDirective),
-                typeof(LevelsDirective),
-                typeof(LevelDirective),
-                typeof(PointsDirective),
-                typeof(PointRecord),
-                typeof(PolygonsDirective),
-                typeof(PolygonRecord));
 
-            var objs = engine.ReadFile(@"Pies\mioil.pie");
+        }
+
+        [Test]
+        public void can_parse_all_pie_fiels_without_error()
+        {
+
+            var files = Directory.GetFiles( @"..\..\..\Data\3.1_b4-objects\pies", "*.pie" );
+            var f = new AttributedValidatorFactory();
+
+            foreach( var file in files )
+            {
+                var txt = File.ReadAllText( file );
+                Console.WriteLine("Parsing: {0}", file);
+                var pie = PieGrammar.Pie.Parse( txt );
+
+
+                var v = f.GetValidator<Pie>();
+                v.Validate( pie ).IsValid.Should().BeTrue();
+            }
+
         }
 
         [Test]
         [Explicit]
         public void test3()
         {
-            var txt = File.ReadAllText(@"Pies\mioil.pie");
-            var pie = PieGrammar.Pie.Parse(txt);
-
+            var file = @"..\..\..\Data\3.1_b4-objects\pies\fireknee.pie";
             var f = new AttributedValidatorFactory();
+            var txt = File.ReadAllText( file );
+            Console.WriteLine( "Parsing: {0}", file );
+            var pie = PieGrammar.Pie.Parse( txt );
+//            PieGrammar.Pie.parse
 
             var v = f.GetValidator<Pie>();
-            v.Validate(pie).IsValid.Should().BeTrue();
-        }
-
-        private Type RecordSelector(MultiRecordEngine engine, string r)
-        {
-            
-            if ( r.StartsWith("PIE") )
-                return typeof(Header);
-            if ( r.StartsWith("TYPE") )
-                return typeof(TypeDirective);
-            if ( r.StartsWith("TEXTURE") )
-                return typeof(TextureDirective);
-            if ( r.StartsWith("LEVELS") )
-                return typeof(LevelsDirective);
-            if ( r.StartsWith("LEVEL") )
-                return typeof(LevelDirective);
-            if ( r.StartsWith("POINTS") )
-                return typeof(PointsDirective);
-            if ( r.StartsWith("POLYGONS") )
-                return typeof(PolygonsDirective);
-
-            var last = engine.LastRecord;
-            if ( last is PointsDirective || last is PointRecord )
-            {
-                return typeof(PointRecord);
-            }
-            if ( last is PolygonsDirective || last is PolygonRecord )
-            {
-                return typeof(PolygonRecord);
-            }
-
-            return null;
+            v.Validate( pie ).IsValid.Should().BeTrue();
         }
     }
 }

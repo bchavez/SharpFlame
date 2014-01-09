@@ -1,17 +1,26 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using FluentValidation.Attributes;
 using SharpFlame.Core.Parsers.Validators;
 using Sprache;
 
 namespace SharpFlame.Core.Parsers
 {
+    [Flags]
+    public enum PolygonFlags : uint
+    {
+        Texture,
+        TextureAnimation
+    }
+
     public class PieGrammar
     {
         //PIE 2
         public static readonly Parser<int> Version =
             from pie in Parse.String("PIE")
             from number in Parse.Number.Token()
-            let n = int.Parse(number)
+            let n = 
+            int.Parse(number)
             select n;
 
         //TYPE 200
@@ -41,14 +50,16 @@ namespace SharpFlame.Core.Parsers
         public static readonly Parser<int> Levels =
             from levels in Parse.String("LEVELS")
             from number in Parse.Number.Token()
-            let n = int.Parse(number)
+            let n =
+            int.Parse(number)
             select n;
 
         //LEVEL 1
         public static readonly Parser<int> Level =
             from levels in Parse.String( "LEVEL" )
             from number in Parse.Number.Token()
-            let n = int.Parse( number )
+            let n = 
+            int.Parse( number )
             select n;
 
         //	5 20 17 
@@ -57,13 +68,17 @@ namespace SharpFlame.Core.Parsers
             from x in Numerics.SignedFloat.Token()
             from y in Numerics.SignedFloat.Token()
             from z in Numerics.SignedFloat.Token()
-            select new Point {X = x, Y = y, Z = z};
+            select new Point
+                {
+                    X = x, Y = y, Z = z
+                };
 
         //POINTS 41 
         public static readonly Parser<int> Points =
             from points in Parse.String("POINTS")
             from length in Parse.Number.Token()
-            select int.Parse(length);
+            select 
+            int.Parse(length);
 
         //	0 23 20 
         //  5 23 17 
@@ -77,7 +92,8 @@ namespace SharpFlame.Core.Parsers
         public static readonly Parser<int> Polygons =
             from levels in Parse.String( "POLYGONS" )
             from number in Parse.Number.Token()
-            let n = int.Parse( number )
+            let 
+            n = int.Parse( number )
             select n;
 
         //data:
@@ -100,7 +116,7 @@ namespace SharpFlame.Core.Parsers
             from ytex in Scan.F.Token()
             select new Polygon
                 {
-                    Flags = flags,
+                    Flags = (PolygonFlags)flags,
                     PointCount = numpoints,
                     P1 = p1,
                     P2 = p2,
@@ -113,7 +129,8 @@ namespace SharpFlame.Core.Parsers
         public static readonly Parser<int> Connectors =
             from levels in Parse.String( "CONNECTORS" )
             from number in Parse.Number.Token()
-            let n = int.Parse( number )
+            let 
+            n = int.Parse( number )
             select n;
 
         //	0 11 22
@@ -142,8 +159,8 @@ namespace SharpFlame.Core.Parsers
                     from polygons in Polygons
                     from polygonsData in PolygonLine.Repeat(polygons)
                     from connectors in Connectors.Optional()
-                    from connectorData in ConnectorLine.Repeat(connectors.GetOrDefault()).Optional()
-                    select new Level
+                    from connectorData in ConnectorLine.Repeat(connectors.GetOrDefault())
+                 select new Level
                         {
                             LevelNumber = level,
                             PointsCount = points,
@@ -151,7 +168,7 @@ namespace SharpFlame.Core.Parsers
                             PolygonsCount = polygons,
                             Polygons = polygonsData.ToArray(),
                             ConnectorCount = connectors.IsDefined ? connectors.Get() : default(int?),
-                            Connectors = connectorData.IsDefined ? connectorData.Get().ToArray() : null
+                            Connectors = connectorData.ToArray()
                         })
                     .Repeat(levels)
             select new Pie
@@ -166,7 +183,7 @@ namespace SharpFlame.Core.Parsers
 
     public class Polygon
     {
-        public uint Flags { get; set; }
+        public PolygonFlags Flags { get; set; }
         public uint PointCount { get; set; }
         public int P1 { get; set; }
         public int P2 { get; set; }
