@@ -4,7 +4,7 @@ namespace SharpFlame.Mapping.Tools
     {
         public bool Triangle;
 
-        private clsMap.clsTerrain Terrain;
+        private clsTerrain Terrain;
         private bool CliffChanged;
 
         public override void ActionPerform()

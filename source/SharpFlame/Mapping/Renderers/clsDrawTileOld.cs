@@ -9,7 +9,7 @@ namespace SharpFlame.Mapping.Renderers
     {
         public override void Perform()
         {
-            clsMap.clsTerrain Terrain = Map.Terrain;
+            clsTerrain Terrain = Map.Terrain;
             clsTileset Tileset = Map.Tileset;
             double[] TileTerrainHeight = new double[4];
             sXYZ_sng Vertex0 = new sXYZ_sng();

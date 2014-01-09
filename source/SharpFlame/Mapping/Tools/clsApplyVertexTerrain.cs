@@ -4,7 +4,7 @@ namespace SharpFlame.Mapping.Tools
     {
         public Painters.Terrain VertexTerrain;
 
-        private clsMap.clsTerrain Terrain;
+        private clsTerrain Terrain;
 
         public override void ActionPerform()
         {

@@ -2332,7 +2332,7 @@ namespace SharpFlame
         {
             int X = 0;
             int Y = 0;
-            clsMap.clsTerrain Terrain = Map.Terrain;
+            clsTerrain Terrain = Map.Terrain;
 
             for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
             {
@@ -2374,7 +2374,7 @@ namespace SharpFlame
             sXY_int TilePos = new sXY_int();
             byte AverageHeight = 0;
             int PlayerNum = 0;
-            clsMap.clsTerrain Terrain = Map.Terrain;
+            clsTerrain Terrain = Map.Terrain;
 
             for ( A = 0; A <= PassageNodeCount - 1; A++ )
             {
@@ -2647,7 +2647,7 @@ namespace SharpFlame
 
             //must be done before units otherwise the units will be treated as gateway obstacles
 
-            clsMap.clsTerrain Terrain = Map.Terrain;
+            clsTerrain Terrain = Map.Terrain;
 
             int X = 0;
             int SpaceCount = 0;

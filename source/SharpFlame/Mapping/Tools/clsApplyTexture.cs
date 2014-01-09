@@ -12,7 +12,7 @@ namespace SharpFlame.Mapping.Tools
         public bool RandomOrientation;
         public App.enumTextureTerrainAction TerrainAction;
 
-        private clsMap.clsTerrain Terrain;
+        private clsTerrain Terrain;
 
         public override void ActionPerform()
         {

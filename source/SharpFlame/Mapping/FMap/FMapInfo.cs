@@ -8,7 +8,7 @@ namespace SharpFlame.Mapping.FMap
     public class FMapInfo : Translator
     {
         public sXY_int TerrainSize = new sXY_int(-1, -1);
-        public clsMap.clsInterfaceOptions InterfaceOptions = new clsMap.clsInterfaceOptions();
+        public clsInterfaceOptions InterfaceOptions = new clsInterfaceOptions();
         public clsTileset Tileset;
 
         public override TranslatorResult Translate(Section.SectionProperty INIProperty)

@@ -8,16 +8,16 @@ namespace SharpFlame.Mapping.Tools
         protected Painter Painter;
         protected Painters.Terrain PainterTerrain;
         protected Road PainterRoad;
-        protected clsMap.clsTerrain.Tile.sTexture Texture;
+        protected clsTerrain.Tile.sTexture Texture;
         protected TileDirection ResultDirection;
         protected TileOrientationChance PainterTexture;
         protected TileDirection OppositeDirection;
-        protected clsMap.clsTerrain.Tile Tile;
+        protected clsTerrain.Tile Tile;
         protected int[] RoadCount;
         protected TileDirection SideDirection;
         protected int BestNum;
         protected int BestCount;
-        protected clsMap.clsTerrain Terrain;
+        protected clsTerrain Terrain;
 
         protected void ToolPerformTile()
         {

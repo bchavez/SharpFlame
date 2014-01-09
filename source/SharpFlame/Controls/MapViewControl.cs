@@ -426,7 +426,7 @@ namespace SharpFlame.Controls
                 if ( Map.UndoPosition > 0 )
                 {
                     Message = "Undid: " + Map.Undos[Map.UndoPosition - 1].Name;
-                    clsMap.clsMessage MapMessage = new clsMap.clsMessage();
+                    clsMessage MapMessage = new clsMessage();
                     MapMessage.Text = Message;
                     Map.Messages.Add(MapMessage);
                     Map.UndoPerform();
@@ -444,7 +444,7 @@ namespace SharpFlame.Controls
                 if ( Map.UndoPosition < Map.Undos.Count )
                 {
                     Message = "Redid: " + Map.Undos[Map.UndoPosition].Name;
-                    clsMap.clsMessage MapMessage = new clsMap.clsMessage();
+                    clsMessage MapMessage = new clsMessage();
                     MapMessage.Text = Message;
                     Map.Messages.Add(MapMessage);
                     Map.RedoPerform();

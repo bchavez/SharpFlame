@@ -325,7 +325,7 @@ namespace SharpFlame
 
             Generator.Map.RandomizeHeights(Generator.LevelCount);
 
-            Generator.Map.InterfaceOptions = new clsMap.clsInterfaceOptions();
+            Generator.Map.InterfaceOptions = new clsInterfaceOptions();
             Generator.Map.InterfaceOptions.CompileMultiPlayers = Generator.GetTotalPlayerCount.ToStringInvariant();
 
             _Owner.NewMainMap(Generator.Map);

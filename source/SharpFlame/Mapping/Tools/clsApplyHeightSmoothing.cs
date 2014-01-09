@@ -18,7 +18,7 @@ namespace SharpFlame.Mapping.Tools
         private int LimitY;
         private int XNum;
         private sXY_int VertexNum;
-        private clsMap.clsTerrain Terrain;
+        private clsTerrain Terrain;
 
         public void Start()
         {

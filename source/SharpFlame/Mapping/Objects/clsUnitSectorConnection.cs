@@ -7,7 +7,7 @@ namespace SharpFlame.Mapping.Objects
         public clsUnitSectorConnection()
         {
             _UnitLink = new Link<clsUnit>(this);
-            _SectorLink = new Link<clsMap.clsSector>(this);
+            _SectorLink = new Link<clsSector>(this);
         }
 
         protected class Link<SourceType> : ConnectedListLink<clsUnitSectorConnection, SourceType> where SourceType : class
@@ -25,19 +25,19 @@ namespace SharpFlame.Mapping.Objects
         }
 
         protected Link<clsUnit> _UnitLink;
-        protected Link<clsMap.clsSector> _SectorLink;
+        protected Link<clsSector> _SectorLink;
 
         public virtual clsUnit Unit
         {
             get { return _UnitLink.Source; }
         }
 
-        public virtual clsMap.clsSector Sector
+        public virtual clsSector Sector
         {
             get { return _SectorLink.Source; }
         }
 
-        public static clsUnitSectorConnection Create(clsUnit Unit, clsMap.clsSector Sector)
+        public static clsUnitSectorConnection Create(clsUnit Unit, clsSector Sector)
         {
             if ( Unit == null )
             {

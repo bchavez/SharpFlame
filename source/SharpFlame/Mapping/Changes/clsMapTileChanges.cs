@@ -5,7 +5,7 @@ namespace SharpFlame.Mapping.Changes
     public abstract class clsMapTileChanges : clsPointChanges
     {
         public clsMap Map;
-        public clsMap.clsTerrain Terrain;
+        public clsTerrain Terrain;
 
         public clsMapTileChanges(clsMap Map, sXY_int PointSize) : base(PointSize)
         {

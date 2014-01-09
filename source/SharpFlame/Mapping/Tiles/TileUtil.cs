@@ -24,9 +24,9 @@ namespace SharpFlame.Mapping.Tiles
         public static TileDirection Left = new TileDirection(0, 1);
         public static TileDirection None = new TileDirection(1, 1);
 
-        public static clsMap.clsTerrain.Tile.sTexture OrientateTile(TileOrientationChance tileChance, TileDirection newDirection)
+        public static clsTerrain.Tile.sTexture OrientateTile(TileOrientationChance tileChance, TileDirection newDirection)
         {
-            clsMap.clsTerrain.Tile.sTexture ReturnResult = new clsMap.clsTerrain.Tile.sTexture();
+            clsTerrain.Tile.sTexture ReturnResult = new clsTerrain.Tile.sTexture();
 
             //use random for empty tiles
             if ( tileChance.TextureNum < 0 )

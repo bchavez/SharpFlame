@@ -22,7 +22,7 @@ namespace SharpFlame.Mapping.Tools
         private bool CliffChanged;
         private bool TriChanged;
         private bool NewVal;
-        private clsMap.clsTerrain Terrain;
+        private clsTerrain Terrain;
         private sXY_int Pos;
 
         public override void ActionPerform()

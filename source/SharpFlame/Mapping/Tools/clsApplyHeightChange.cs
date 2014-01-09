@@ -7,7 +7,7 @@ namespace SharpFlame.Mapping.Tools
     {
         public double Rate;
 
-        private clsMap.clsTerrain Terrain;
+        private clsTerrain Terrain;
 
         public override void ActionPerform()
         {

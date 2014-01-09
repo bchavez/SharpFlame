@@ -45,8 +45,8 @@ namespace SharpFlame.Mapping.Objects
 
             if ( StoreChange )
             {
-                clsMap.clsUnitChange UnitChange = new clsMap.clsUnitChange();
-                UnitChange.Type = clsMap.clsUnitChange.enumType.Added;
+                clsUnitChange UnitChange = new clsUnitChange();
+                UnitChange.Type = clsUnitChange.enumType.Added;
                 UnitChange.Unit = NewUnit;
                 Map.UnitChanges.Add(UnitChange);
             }

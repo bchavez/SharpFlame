@@ -10,14 +10,14 @@ namespace SharpFlame.Mapping.Tools
         private Painter Painter;
         private Painters.Terrain PainterTerrainA;
         private Painters.Terrain PainterTerrainB;
-        private clsMap.clsTerrain.Tile.sTexture Texture;
+        private clsTerrain.Tile.sTexture Texture;
         private TileDirection ResultDirection;
         private TileOrientationChance PainterTexture;
         private TileDirection OppositeDirection;
         private int BestNum;
         private int BestCount;
-        private clsMap.clsTerrain.Tile Tile;
-        private clsMap.clsTerrain Terrain;
+        private clsTerrain.Tile Tile;
+        private clsTerrain Terrain;
 
         private void ToolPerformTile()
         {

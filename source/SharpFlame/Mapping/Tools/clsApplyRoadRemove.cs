@@ -4,7 +4,7 @@ namespace SharpFlame.Mapping.Tools
 {
     public class clsApplyRoadRemove : clsAction
     {
-        private clsMap.clsTerrain Terrain;
+        private clsTerrain Terrain;
 
         private void ToolPerformSideH(sXY_int SideNum)
         {

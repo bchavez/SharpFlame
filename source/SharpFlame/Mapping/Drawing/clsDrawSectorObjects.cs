@@ -34,7 +34,7 @@ namespace SharpFlame.Mapping.Drawing
             }
 
             clsUnit Unit = default(clsUnit);
-            clsMap.clsSector Sector = Map.Sectors[PosNum.X, PosNum.Y];
+            clsSector Sector = Map.Sectors[PosNum.X, PosNum.Y];
             bool DrawUnitLabel = default(bool);
             clsViewInfo ViewInfo = Map.ViewInfo;
             clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = ViewInfo.GetMouseOverTerrain();

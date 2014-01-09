@@ -4128,23 +4128,23 @@ namespace SharpFlame
             {
                 case "fmap":
                     ReturnResult.Add(ResultMap.Load_FMap(Path));
-                    ResultMap.PathInfo = new clsMap.clsPathInfo(Path, true);
+                    ResultMap.PathInfo = new clsPathInfo(Path, true);
                     break;
                 case "fme":
                     ReturnResult.Add(ResultMap.Load_FME(Path));
-                    ResultMap.PathInfo = new clsMap.clsPathInfo(Path, false);
+                    ResultMap.PathInfo = new clsPathInfo(Path, false);
                     break;
                 case "wz":
                     ReturnResult.Add(ResultMap.Load_WZ(Path));
-                    ResultMap.PathInfo = new clsMap.clsPathInfo(Path, false);
+                    ResultMap.PathInfo = new clsPathInfo(Path, false);
                     break;
                 case "gam":
                     ReturnResult.Add(ResultMap.Load_Game(Path));
-                    ResultMap.PathInfo = new clsMap.clsPathInfo(Path, false);
+                    ResultMap.PathInfo = new clsPathInfo(Path, false);
                     break;
                 case "lnd":
                     ReturnResult.Add(ResultMap.Load_LND(Path));
-                    ResultMap.PathInfo = new clsMap.clsPathInfo(Path, false);
+                    ResultMap.PathInfo = new clsPathInfo(Path, false);
                     break;
                 default:
                     ReturnResult.ProblemAdd("File extension not recognised.");
