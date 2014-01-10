@@ -1,5 +1,6 @@
 using System.Windows.Forms;
 using SharpFlame.Collections;
+using SharpFlame.FileIO;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
 

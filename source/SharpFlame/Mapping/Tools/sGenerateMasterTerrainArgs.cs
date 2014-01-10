@@ -1,4 +1,5 @@
 using SharpFlame.Collections.Specialized;
+using SharpFlame.Mapping.Tiles;
 
 namespace SharpFlame.Mapping.Tools
 {

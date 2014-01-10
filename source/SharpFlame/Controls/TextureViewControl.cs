@@ -225,7 +225,7 @@ namespace SharpFlame.Controls
                         {
                             goto EndOfTextures1;
                         }
-                        A = Map.Tileset.Tiles[Num].TextureView_GL_Texture_Num;
+                        A = Map.Tileset.Tiles[Num].TextureViewGlTextureNum;
                         if ( A == 0 )
                         {
                             GL.BindTexture(TextureTarget.Texture2D, 0);

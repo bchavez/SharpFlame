@@ -2848,7 +2848,7 @@ namespace SharpFlame.Mapping
                 }
                 else if ( Args.CompileType == sWrite_WZ_Args.enumCompileType.Campaign )
                 {
-                    string CampDirectory = App.EndWithPathSeperator(Args.Path);
+                    string CampDirectory = PathUtil.EndWithPathSeperator(Args.Path);
 
                     if ( !Directory.Exists(CampDirectory) )
                     {

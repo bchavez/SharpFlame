@@ -456,7 +456,7 @@ namespace SharpFlame
                 if ( TilesetsPath != null && TilesetsPath != "" )
                 {
                     InitializeStatus = "Loading tilesets";
-                    Program.InitializeResult.Add(App.LoadTilesets(App.EndWithPathSeperator(TilesetsPath)));
+                    Program.InitializeResult.Add(App.LoadTilesets(PathUtil.EndWithPathSeperator(TilesetsPath)));
                     InitializeStatus = "";
                 }
             }
@@ -2092,7 +2092,7 @@ namespace SharpFlame
 
             if (
                 BitmapUtil.LoadBitmap(
-                    App.EndWithPathSeperator((new ConsoleApplicationBase()).Info.DirectoryPath) + "notile.png",
+                    PathUtil.EndWithPathSeperator((new ConsoleApplicationBase()).Info.DirectoryPath) + "notile.png",
                     ref Bitmap).Success )
             {
                 clsResult Result = new clsResult("notile.png");
@@ -2104,7 +2104,7 @@ namespace SharpFlame
             }
             if (
                 BitmapUtil.LoadBitmap(
-                    App.EndWithPathSeperator((new ConsoleApplicationBase()).Info.DirectoryPath) + "overflow.png",
+                    PathUtil.EndWithPathSeperator((new ConsoleApplicationBase()).Info.DirectoryPath) + "overflow.png",
                     ref Bitmap).Success )
             {
                 clsResult Result = new clsResult("overflow.png");

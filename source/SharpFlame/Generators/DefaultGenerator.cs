@@ -1,6 +1,7 @@
 using System;
 using SharpFlame.Domain;
 using SharpFlame.Mapping;
+using SharpFlame.Mapping.Tiles;
 using SharpFlame.Mapping.Tools;
 
 namespace SharpFlame.Generators

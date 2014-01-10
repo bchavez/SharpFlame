@@ -1,5 +1,6 @@
 using System;
 using SharpFlame.Collections;
+using SharpFlame.FileIO;
 
 namespace SharpFlame.Mapping.Objects
 {

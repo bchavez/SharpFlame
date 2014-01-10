@@ -330,7 +330,7 @@ namespace SharpFlame.Domain
             clsResult ReturnResult =
                 new clsResult("Loading object data from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
 
-            Path = App.EndWithPathSeperator(Path);
+            Path = PathUtil.EndWithPathSeperator(Path);
 
             string SubDirNames = "";
             string SubDirStructures = "";

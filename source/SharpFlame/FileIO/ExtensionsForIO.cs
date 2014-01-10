@@ -1,40 +1,51 @@
 using System;
 using System.Globalization;
 
-static internal class ExtensionsForIO
+namespace SharpFlame.FileIO
 {
-    public static string ToStringInvariant(this bool Value)
+    static internal class ExtensionsForIO
     {
-        return Value.ToString(CultureInfo.InvariantCulture);
+        public static string ToStringInvariant(this bool Value)
+        {
+            return Value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public static string ToStringInvariant(this byte Value)
+        {
+            return Value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public static string ToStringInvariant(this short Value)
+        {
+            return Value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public static string ToStringInvariant(this int Value)
+        {
+            return Value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public static string ToStringInvariant(this UInt32 Value)
+        {
+            return Value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public static string ToStringInvariant(this float Value)
+        {
+            return Value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public static string ToStringInvariant(this double Value)
+        {
+            return Value.ToString(CultureInfo.InvariantCulture);
+        }
     }
 
-    public static string ToStringInvariant(this byte Value)
+    public static class ExtensionsForString
     {
-        return Value.ToString(CultureInfo.InvariantCulture);
-    }
-
-    public static string ToStringInvariant(this short Value)
-    {
-        return Value.ToString(CultureInfo.InvariantCulture);
-    }
-
-    public static string ToStringInvariant(this int Value)
-    {
-        return Value.ToString(CultureInfo.InvariantCulture);
-    }
-
-    public static string ToStringInvariant(this UInt32 Value)
-    {
-        return Value.ToString(CultureInfo.InvariantCulture);
-    }
-
-    public static string ToStringInvariant(this float Value)
-    {
-        return Value.ToString(CultureInfo.InvariantCulture);
-    }
-
-    public static string ToStringInvariant(this double Value)
-    {
-        return Value.ToString(CultureInfo.InvariantCulture);
+        public static string Format2( this string format, params object[] args )
+        {
+            return string.Format( format, args );
+        }
     }
 }

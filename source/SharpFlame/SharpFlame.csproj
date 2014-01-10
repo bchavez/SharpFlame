@@ -258,6 +258,7 @@
     <Compile Include="Painters\TransitionBrush.cs" />
     <Compile Include="Pathfinding\LargeArrays.cs" />
     <Compile Include="Pathfinding\Path.cs" />
+    <Compile Include="PathUtil.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Util\Tools.cs" />
     <Compile Include="Domain\UnitTypeBase.cs" />

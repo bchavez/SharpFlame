@@ -1,6 +1,7 @@
 using System;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
+using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping.FMap

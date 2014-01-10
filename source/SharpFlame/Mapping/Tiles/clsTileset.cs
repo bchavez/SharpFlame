@@ -1,114 +1,113 @@
 using System;
 using System.Drawing;
 using System.IO;
-using Microsoft.VisualBasic;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.AppSettings;
 using SharpFlame.Bitmaps;
 using SharpFlame.Colors;
 using SharpFlame.FileIO;
-using SharpFlame.AppSettings;
 
-namespace SharpFlame
+namespace SharpFlame.Mapping.Tiles
 {
     public class clsTileset
     {
-        public string Name;
+        public bool IsOriginal { get; set; }
 
-        public bool IsOriginal;
+        public sTile[] Tiles { get; set; }
+
+        public int TileCount { get; set; }
+
+        public string Name { get; set; }
 
         public struct sTile
         {
-            public int MapView_GL_Texture_Num;
-            public int TextureView_GL_Texture_Num;
+            public int MapViewGlTextureNum;
+            public int TextureViewGlTextureNum;
             public sRGB_sng AverageColour;
-            public byte Default_Type;
+            public byte DefaultType;
         }
-
-        public sTile[] Tiles;
-        public int TileCount;
 
         public sRGB_sng BGColour = new sRGB_sng(0.5F, 0.5F, 0.5F);
 
-        public App.sResult Default_TileTypes_Load(string Path)
+        public App.sResult LoadTileType(string path)
         {
-            App.sResult ReturnResult = new App.sResult();
-            BinaryReader File = default(BinaryReader);
+            App.sResult returnResult = new App.sResult();
+            BinaryReader file;
 
             try
             {
-                File = new BinaryReader(new FileStream(Path, FileMode.Open));
+                file = new BinaryReader(new FileStream(path, FileMode.Open));
             }
             catch ( Exception ex )
             {
-                ReturnResult.Problem = ex.Message;
-                return ReturnResult;
+                returnResult.Problem = ex.Message;
+                return returnResult;
             }
-            ReturnResult = Default_TileTypes_Read(File);
-            File.Close();
-            return ReturnResult;
+            returnResult = ReadTileType(file);
+            file.Close();
+            return returnResult;
         }
 
-        private App.sResult Default_TileTypes_Read(BinaryReader File)
+        private App.sResult ReadTileType(BinaryReader file)
         {
-            App.sResult ReturnResult = new App.sResult();
-            ReturnResult.Success = false;
-            ReturnResult.Problem = "";
+            App.sResult returnResult = new App.sResult();
+            returnResult.Success = false;
+            returnResult.Problem = "";
 
             UInt32 uintTemp = 0;
-            int A = 0;
+            int i = 0;
             UInt16 ushortTemp = 0;
             string strTemp = "";
 
             try
             {
-                strTemp = IOUtil.ReadOldTextOfLength(File, 4);
+                strTemp = IOUtil.ReadOldTextOfLength(file, 4);
                 if ( strTemp != "ttyp" )
                 {
-                    ReturnResult.Problem = "Bad identifier.";
-                    return ReturnResult;
+                    returnResult.Problem = "Bad identifier.";
+                    return returnResult;
                 }
 
-                uintTemp = File.ReadUInt32();
+                uintTemp = file.ReadUInt32();
                 if ( !(uintTemp == 8U) )
                 {
-                    ReturnResult.Problem = "Unknown version.";
-                    return ReturnResult;
+                    returnResult.Problem = "Unknown version.";
+                    return returnResult;
                 }
 
-                uintTemp = File.ReadUInt32();
+                uintTemp = file.ReadUInt32();
                 TileCount = Convert.ToInt32(uintTemp);
                 Tiles = new sTile[TileCount];
 
-                for ( A = 0; A <= Math.Min(Convert.ToInt32(uintTemp), TileCount) - 1; A++ )
+                for ( i = 0; i <= Math.Min(Convert.ToInt32(uintTemp), TileCount) - 1; i++ )
                 {
-                    ushortTemp = File.ReadUInt16();
+                    ushortTemp = file.ReadUInt16();
                     if ( ushortTemp > App.TileTypes.Count )
                     {
-                        ReturnResult.Problem = "Unknown tile type.";
-                        return ReturnResult;
+                        returnResult.Problem = "Unknown tile type.";
+                        return returnResult;
                     }
-                    Tiles[A].Default_Type = (byte)ushortTemp;
+                    Tiles[i].DefaultType = (byte)ushortTemp;
                 }
             }
             catch ( Exception ex )
             {
-                ReturnResult.Problem = ex.Message;
-                return ReturnResult;
+                returnResult.Problem = ex.Message;
+                return returnResult;
             }
 
-            ReturnResult.Success = true;
-            return ReturnResult;
+            returnResult.Success = true;
+            return returnResult;
         }
 
-        public clsResult LoadDirectory(string Path)
+        public clsResult LoadDirectory(string path)
         {
-            clsResult ReturnResult =
-                new clsResult("Loading tileset from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
+            var returnResult = new clsResult( "Loading tileset from '{0}'".Format2( path ) );
 
-            Bitmap Bitmap = null;
-            App.sSplitPath SplitPath = new App.sSplitPath(Path);
-            string SlashPath = App.EndWithPathSeperator(Path);
-            App.sResult Result = new App.sResult();
+            Bitmap bitmap = null;
+            App.sSplitPath SplitPath = new App.sSplitPath(path);
+            string slashPath = PathUtil.EndWithPathSeperator(path);
+            App.sResult result = new App.sResult();
 
             if ( SplitPath.FileTitle != "" )
             {
@@ -118,71 +117,76 @@ namespace SharpFlame
             {
                 Name = SplitPath.Parts[SplitPath.PartCount - 2];
             }
+            
+            var ttpFileName = Path.ChangeExtension(Name, ".ttp");
 
-            Result = Default_TileTypes_Load(SlashPath + Name + ".ttp");
-            if ( !Result.Success )
+            result = LoadTileType(Path.Combine(slashPath, ttpFileName));
+
+            if ( !result.Success )
             {
-                ReturnResult.ProblemAdd("Loading tile types: " + Result.Problem);
-                return ReturnResult;
+                returnResult.ProblemAdd("Loading tile types: " + result.Problem);
+                return returnResult;
             }
 
-            int RedTotal = 0;
-            int GreenTotal = 0;
-            int BlueTotal = 0;
-            int TileNum = 0;
+            int redTotal = 0;
+            int greenTotal = 0;
+            int blueTotal = 0;
+            int tileNum = 0;
             string strTile = "";
-            BitmapGLTexture BitmapTextureArgs = new BitmapGLTexture();
+            BitmapGLTexture bmpTextureArgs = new BitmapGLTexture();
             float[] AverageColour = new float[4];
-            int X = 0;
-            int Y = 0;
+            int x = 0;
+            int y = 0;
             Color Pixel = new Color();
 
-            string GraphicPath = "";
+            string graphicPath = "";
 
             //tile count has been set by the ttp file
 
-            for ( TileNum = 0; TileNum <= TileCount - 1; TileNum++ )
+            for ( tileNum = 0; tileNum <= TileCount - 1; tileNum++ )
             {
-                strTile = "tile-" + App.MinDigits(TileNum, 2) + ".png";
+                strTile = "tile-" + App.MinDigits(tileNum, 2) + ".png";
 
                 //-------- 128 --------
 
-                GraphicPath = SlashPath + Name + "-128" + Convert.ToString(App.PlatformPathSeparator) + strTile;
+                var tileDir = System.IO.Path.Combine(Name + "-128", strTile);
+                graphicPath = System.IO.Path.Combine(slashPath, tileDir);
 
-                Result = BitmapUtil.LoadBitmap(GraphicPath, ref Bitmap);
-                if ( !Result.Success )
+
+                result = BitmapUtil.LoadBitmap(graphicPath, ref bitmap);
+                if ( !result.Success )
                 {
                     //ignore and exit, since not all tile types have a corresponding tile graphic
-                    return ReturnResult;
+                    return returnResult;
                 }
 
-                if ( Bitmap.Width != 128 | Bitmap.Height != 128 )
+                if ( bitmap.Width != 128 | bitmap.Height != 128 )
                 {
-                    ReturnResult.WarningAdd("Tile graphic " + GraphicPath + " from tileset " + Name + " is not 128x128.");
-                    return ReturnResult;
+                    returnResult.WarningAdd("Tile graphic " + graphicPath + " from tileset " + Name + " is not 128x128.");
+                    return returnResult;
                 }
 
-                BitmapTextureArgs.Texture = Bitmap;
-                BitmapTextureArgs.MipMapLevel = 0;
-                BitmapTextureArgs.MagFilter = TextureMagFilter.Nearest;
-                BitmapTextureArgs.MinFilter = TextureMinFilter.Nearest;
-                BitmapTextureArgs.TextureNum = 0;
-                BitmapTextureArgs.Perform();
-                Tiles[TileNum].TextureView_GL_Texture_Num = BitmapTextureArgs.TextureNum;
+                bmpTextureArgs.Texture = bitmap;
+                bmpTextureArgs.MipMapLevel = 0;
+                bmpTextureArgs.MagFilter = TextureMagFilter.Nearest;
+                bmpTextureArgs.MinFilter = TextureMinFilter.Nearest;
+                bmpTextureArgs.TextureNum = 0;
+                bmpTextureArgs.Perform();
+                Tiles[tileNum].TextureViewGlTextureNum = bmpTextureArgs.TextureNum;
 
-                BitmapTextureArgs.MagFilter = TextureMagFilter.Nearest;
+                bmpTextureArgs.MagFilter = TextureMagFilter.Nearest;
                 if ( SettingsManager.Settings.Mipmaps )
                 {
-                    BitmapTextureArgs.MinFilter = TextureMinFilter.LinearMipmapLinear;
+                    bmpTextureArgs.MinFilter = TextureMinFilter.LinearMipmapLinear;
                 }
                 else
                 {
-                    BitmapTextureArgs.MinFilter = TextureMinFilter.Nearest;
+                    bmpTextureArgs.MinFilter = TextureMinFilter.Nearest;
                 }
-                BitmapTextureArgs.TextureNum = 0;
+                bmpTextureArgs.TextureNum = 0;
 
-                BitmapTextureArgs.Perform();
-                Tiles[TileNum].MapView_GL_Texture_Num = BitmapTextureArgs.TextureNum;
+                bmpTextureArgs.Perform();
+                Tiles[tileNum].MapViewGlTextureNum = bmpTextureArgs.TextureNum;
 
                 if ( SettingsManager.Settings.Mipmaps )
                 {
@@ -195,40 +199,40 @@ namespace SharpFlame
                     else
                     {
                         clsResult MipmapResult = default(clsResult);
-                        MipmapResult = GenerateMipMaps(SlashPath, strTile, BitmapTextureArgs, TileNum);
-                        ReturnResult.Add(MipmapResult);
+                        MipmapResult = GenerateMipMaps(slashPath, strTile, bmpTextureArgs, tileNum);
+                        returnResult.Add(MipmapResult);
                         if ( MipmapResult.HasProblems )
                         {
-                            return ReturnResult;
+                            return returnResult;
                         }
                     }
                     GL.GetTexImage<Single>(TextureTarget.Texture2D, 7, PixelFormat.Rgba, PixelType.Float, AverageColour);
-                    Tiles[TileNum].AverageColour.Red = AverageColour[0];
-                    Tiles[TileNum].AverageColour.Green = AverageColour[1];
-                    Tiles[TileNum].AverageColour.Blue = AverageColour[2];
+                    Tiles[tileNum].AverageColour.Red = AverageColour[0];
+                    Tiles[tileNum].AverageColour.Green = AverageColour[1];
+                    Tiles[tileNum].AverageColour.Blue = AverageColour[2];
                 }
                 else
                 {
-                    RedTotal = 0;
-                    GreenTotal = 0;
-                    BlueTotal = 0;
-                    for ( Y = 0; Y <= Bitmap.Height - 1; Y++ )
+                    redTotal = 0;
+                    greenTotal = 0;
+                    blueTotal = 0;
+                    for ( y = 0; y <= bitmap.Height - 1; y++ )
                     {
-                        for ( X = 0; X <= Bitmap.Width - 1; X++ )
+                        for ( x = 0; x <= bitmap.Width - 1; x++ )
                         {
-                            Pixel = Bitmap.GetPixel(X, Y);
-                            RedTotal += Pixel.R;
-                            GreenTotal += Pixel.G;
-                            BlueTotal += Pixel.B;
+                            Pixel = bitmap.GetPixel(x, y);
+                            redTotal += Pixel.R;
+                            greenTotal += Pixel.G;
+                            blueTotal += Pixel.B;
                         }
                     }
-                    Tiles[TileNum].AverageColour.Red = (float)(RedTotal / 4177920.0D);
-                    Tiles[TileNum].AverageColour.Green = (float)(GreenTotal / 4177920.0D);
-                    Tiles[TileNum].AverageColour.Blue = (float)(BlueTotal / 4177920.0D);
+                    Tiles[tileNum].AverageColour.Red = (float)(redTotal / 4177920.0D);
+                    Tiles[tileNum].AverageColour.Green = (float)(greenTotal / 4177920.0D);
+                    Tiles[tileNum].AverageColour.Blue = (float)(blueTotal / 4177920.0D);
                 }
             }
 
-            return ReturnResult;
+            return returnResult;
         }
 
         public clsResult GenerateMipMaps(string SlashPath, string strTile, BitmapGLTexture BitmapTextureArgs, int TileNum)

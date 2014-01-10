@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using SharpFlame.Collections;
 using SharpFlame.Domain;
+using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
 using SharpFlame.Maths;
 

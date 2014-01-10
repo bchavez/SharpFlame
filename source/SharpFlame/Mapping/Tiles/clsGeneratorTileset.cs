@@ -1,7 +1,7 @@
 using System;
 using SharpFlame.Domain;
 
-namespace SharpFlame
+namespace SharpFlame.Mapping.Tiles
 {
     public class clsGeneratorTileset
     {

@@ -10,6 +10,7 @@ using SharpFlame.AppSettings;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.Domain;
+using SharpFlame.FileIO;
 using SharpFlame.Mapping.Changes;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Renderers;
@@ -909,7 +910,7 @@ namespace SharpFlame.Mapping
                         {
                             if ( Terrain.Tiles[X, Y].Texture.TextureNum >= 0 && Terrain.Tiles[X, Y].Texture.TextureNum < Tileset.TileCount )
                             {
-                                if ( Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].Default_Type == App.TileTypeNum_Cliff )
+                                if ( Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == App.TileTypeNum_Cliff )
                                 {
                                     sngTexture[Y, X, 0] = sngTexture[Y, X, 0] * AntiAlpha + SettingsManager.Settings.MinimapCliffColour.Red * Alpha;
                                     sngTexture[Y, X, 1] = sngTexture[Y, X, 1] * AntiAlpha + SettingsManager.Settings.MinimapCliffColour.Green * Alpha;
@@ -1840,7 +1841,7 @@ namespace SharpFlame.Mapping
                 Tile_TypeNum = new byte[Tileset.TileCount];
                 for ( A = 0; A <= Tileset.TileCount - 1; A++ )
                 {
-                    Tile_TypeNum[A] = Tileset.Tiles[A].Default_Type;
+                    Tile_TypeNum[A] = Tileset.Tiles[A].DefaultType;
                 }
             }
         }

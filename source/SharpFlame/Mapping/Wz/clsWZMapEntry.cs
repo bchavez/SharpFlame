@@ -1,3 +1,5 @@
+using SharpFlame.Mapping.Tiles;
+
 namespace SharpFlame.Mapping.Wz
 {
     public class clsWZMapEntry

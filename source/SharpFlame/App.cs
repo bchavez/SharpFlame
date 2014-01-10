@@ -221,18 +221,6 @@ namespace SharpFlame
             }
         }
 
-        public static string EndWithPathSeperator(string Text)
-        {
-            if ( char.Parse(Strings.Right(Text, 1)) == PlatformPathSeparator )
-            {
-                return Text;
-            }
-            else
-            {
-                return Text + Convert.ToString(PlatformPathSeparator);
-            }
-        }
-
         public static string MinDigits(int Number, int Digits)
         {
             string ReturnResult = "";
