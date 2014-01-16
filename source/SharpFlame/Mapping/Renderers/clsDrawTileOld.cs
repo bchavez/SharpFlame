@@ -12,32 +12,23 @@ namespace SharpFlame.Mapping.Renderers
             clsTerrain Terrain = Map.Terrain;
             clsTileset Tileset = Map.Tileset;
             double[] TileTerrainHeight = new double[4];
-            sXYZ_sng Vertex0 = new sXYZ_sng();
-            sXYZ_sng Vertex1 = new sXYZ_sng();
-            sXYZ_sng Vertex2 = new sXYZ_sng();
-            sXYZ_sng Vertex3 = new sXYZ_sng();
-            sXYZ_sng Normal0 = new sXYZ_sng();
-            sXYZ_sng Normal1 = new sXYZ_sng();
-            sXYZ_sng Normal2 = new sXYZ_sng();
-            sXYZ_sng Normal3 = new sXYZ_sng();
-            sXY_sng TexCoord0 = new sXY_sng();
-            sXY_sng TexCoord1 = new sXY_sng();
-            sXY_sng TexCoord2 = new sXY_sng();
-            sXY_sng TexCoord3 = new sXY_sng();
+            sXYZ_sng[] Vertices = new sXYZ_sng[4];
+            sXYZ_sng[] Normals = new sXYZ_sng[4];
+            sXY_sng[] TexCoords = new sXY_sng[4];
             int A = 0;
 
-            if ( Terrain.Tiles[TileX, TileY].Texture.TextureNum < 0 )
+            if (Terrain.Tiles[TileX, TileY].Texture.TextureNum < 0)
             {
                 GL.BindTexture(TextureTarget.Texture2D, App.GLTexture_NoTile);
             }
-            else if ( Tileset == null )
+            else if (Tileset == null)
             {
                 GL.BindTexture(TextureTarget.Texture2D, App.GLTexture_OverflowTile);
             }
-            else if ( Terrain.Tiles[TileX, TileY].Texture.TextureNum < Tileset.TileCount )
+            else if (Terrain.Tiles[TileX, TileY].Texture.TextureNum < Tileset.TileCount)
             {
                 A = Tileset.Tiles[Terrain.Tiles[TileX, TileY].Texture.TextureNum].MapView_GL_Texture_Num;
-                if ( A == 0 )
+                if (A == 0)
                 {
                     GL.BindTexture(TextureTarget.Texture2D, App.GLTexture_OverflowTile);
                 }
@@ -57,70 +48,41 @@ namespace SharpFlame.Mapping.Renderers
             TileTerrainHeight[2] = Terrain.Vertices[TileX, TileY + 1].Height;
             TileTerrainHeight[3] = Terrain.Vertices[TileX + 1, TileY + 1].Height;
 
-            TileUtil.GetTileRotatedTexCoords(Terrain.Tiles[TileX, TileY].Texture.Orientation, TexCoord0, TexCoord1, TexCoord2, TexCoord3);
+            TileUtil.GetTileRotatedTexCoords(Terrain.Tiles[TileX, TileY].Texture.Orientation, TexCoords[0], TexCoords[1], TexCoords[2], TexCoords[3]);
 
-            Vertex0.X = TileX * App.TerrainGridSpacing;
-            Vertex0.Y = (float)(TileTerrainHeight[0] * Map.HeightMultiplier);
-            Vertex0.Z = - TileY * App.TerrainGridSpacing;
-            Vertex1.X = (TileX + 1) * App.TerrainGridSpacing;
-            Vertex1.Y = (float)(TileTerrainHeight[1] * Map.HeightMultiplier);
-            Vertex1.Z = - TileY * App.TerrainGridSpacing;
-            Vertex2.X = TileX * App.TerrainGridSpacing;
-            Vertex2.Y = (float)(TileTerrainHeight[2] * Map.HeightMultiplier);
-            Vertex2.Z = - (TileY + 1) * App.TerrainGridSpacing;
-            Vertex3.X = (TileX + 1) * App.TerrainGridSpacing;
-            Vertex3.Y = (float)(TileTerrainHeight[3] * Map.HeightMultiplier);
-            Vertex3.Z = - (TileY + 1) * App.TerrainGridSpacing;
+            Vertices[0].X = TileX * App.TerrainGridSpacing;
+            Vertices[0].Y = (float)(TileTerrainHeight[0] * Map.HeightMultiplier);
+            Vertices[0].Z = -TileY * App.TerrainGridSpacing;
+            Vertices[1].X = (TileX + 1) * App.TerrainGridSpacing;
+            Vertices[1].Y = (float)(TileTerrainHeight[1] * Map.HeightMultiplier);
+            Vertices[1].Z = -TileY * App.TerrainGridSpacing;
+            Vertices[2].X = TileX * App.TerrainGridSpacing;
+            Vertices[2].Y = (float)(TileTerrainHeight[2] * Map.HeightMultiplier);
+            Vertices[2].Z = -(TileY + 1) * App.TerrainGridSpacing;
+            Vertices[3].X = (TileX + 1) * App.TerrainGridSpacing;
+            Vertices[3].Y = (float)(TileTerrainHeight[3] * Map.HeightMultiplier);
+            Vertices[3].Z = -(TileY + 1) * App.TerrainGridSpacing;
 
-            Normal0 = Map.TerrainVertexNormalCalc(TileX, TileY);
-            Normal1 = Map.TerrainVertexNormalCalc(TileX + 1, TileY);
-            Normal2 = Map.TerrainVertexNormalCalc(TileX, TileY + 1);
-            Normal3 = Map.TerrainVertexNormalCalc(TileX + 1, TileY + 1);
+            Normals[0] = Map.TerrainVertexNormalCalc(TileX, TileY);
+            Normals[1] = Map.TerrainVertexNormalCalc(TileX + 1, TileY);
+            Normals[2] = Map.TerrainVertexNormalCalc(TileX, TileY + 1);
+            Normals[3] = Map.TerrainVertexNormalCalc(TileX + 1, TileY + 1);
 
             GL.Begin(BeginMode.Triangles);
-            if ( Terrain.Tiles[TileX, TileY].Tri )
+            int[] indices;
+            if (Terrain.Tiles[TileX, TileY].Tri)
             {
-                GL.Normal3(Normal0.X, Normal0.Y, Convert.ToDouble(- Normal0.Z));
-                GL.TexCoord2(TexCoord0.X, TexCoord0.Y);
-                GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
-                GL.Normal3(Normal2.X, Normal2.Y, Convert.ToDouble(- Normal2.Z));
-                GL.TexCoord2(TexCoord2.X, TexCoord2.Y);
-                GL.Vertex3(Vertex2.X, Vertex2.Y, Convert.ToDouble(- Vertex2.Z));
-                GL.Normal3(Normal1.X, Normal1.Y, Convert.ToDouble(- Normal1.Z));
-                GL.TexCoord2(TexCoord1.X, TexCoord1.Y);
-                GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
-
-                GL.Normal3(Normal1.X, Normal1.Y, Convert.ToDouble(- Normal1.Z));
-                GL.TexCoord2(TexCoord1.X, TexCoord1.Y);
-                GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
-                GL.Normal3(Normal2.X, Normal2.Y, Convert.ToDouble(- Normal2.Z));
-                GL.TexCoord2(TexCoord2.X, TexCoord2.Y);
-                GL.Vertex3(Vertex2.X, Vertex2.Y, Convert.ToDouble(- Vertex2.Z));
-                GL.Normal3(Normal3.X, Normal3.Y, Convert.ToDouble(- Normal3.Z));
-                GL.TexCoord2(TexCoord3.X, TexCoord3.Y);
-                GL.Vertex3(Vertex3.X, Vertex3.Y, Convert.ToDouble(- Vertex3.Z));
+                indices = new int[6] { 0, 2, 1, 1, 2, 3 };
             }
             else
             {
-                GL.Normal3(Normal0.X, Normal0.Y, Convert.ToDouble(- Normal0.Z));
-                GL.TexCoord2(TexCoord0.X, TexCoord0.Y);
-                GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
-                GL.Normal3(Normal2.X, Normal2.Y, Convert.ToDouble(- Normal2.Z));
-                GL.TexCoord2(TexCoord2.X, TexCoord2.Y);
-                GL.Vertex3(Vertex2.X, Vertex2.Y, Convert.ToDouble(- Vertex2.Z));
-                GL.Normal3(Normal3.X, Normal3.Y, Convert.ToDouble(- Normal3.Z));
-                GL.TexCoord2(TexCoord3.X, TexCoord3.Y);
-                GL.Vertex3(Vertex3.X, Vertex3.Y, Convert.ToDouble(- Vertex3.Z));
-
-                GL.Normal3(Normal0.X, Normal0.Y, Convert.ToDouble(- Normal0.Z));
-                GL.TexCoord2(TexCoord0.X, TexCoord0.Y);
-                GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
-                GL.Normal3(Normal3.X, Normal3.Y, Convert.ToDouble(- Normal3.Z));
-                GL.TexCoord2(TexCoord3.X, TexCoord3.Y);
-                GL.Vertex3(Vertex3.X, Vertex3.Y, Convert.ToDouble(- Vertex3.Z));
-                GL.Normal3(Normal1.X, Normal1.Y, Convert.ToDouble(- Normal1.Z));
-                GL.TexCoord2(TexCoord1.X, TexCoord1.Y);
-                GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
+                indices = new int[6] { 0, 2, 3, 0, 3, 1 };
+            }
+            for (int i = 0; i < 6; i++)
+            {
+                GL.Normal3(Normals[indices[i]].X, Normals[indices[i]].Y, -Normals[indices[i]].Z);
+                GL.TexCoord2(TexCoords[indices[i]].X, TexCoords[indices[i]].Y);
+                GL.Vertex3(Vertices[indices[i]].X, Vertices[indices[i]].Y, -Vertices[indices[i]].Z);
             }
             GL.End();
         }

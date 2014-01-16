@@ -61,6 +61,8 @@ namespace SharpFlame.Domain
 
             GL.BindTexture(TextureTarget.Texture2D, GLTextureNum);
             GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Modulate);
+            GL.AlphaFunc(AlphaFunction.Greater, 0.5f);
+            GL.Enable(EnableCap.AlphaTest);
 
             GL.Begin(BeginMode.Triangles);
             for ( A = 0; A <= TriangleCount - 1; A++ )

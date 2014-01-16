@@ -378,8 +378,8 @@ namespace SharpFlame.Mapping.Tiles
             {
                 if ( ReverseOrientation.ResultXFlip )
                 {
-                    coordA.X = 1.0F;
-                    coordB.X = 1.0F;
+                    coordA.X = 128.0F;
+                    coordB.X = 128.0F;
                     coordC.X = 0.0F;
                     coordD.X = 0.0F;
                 }
@@ -387,44 +387,44 @@ namespace SharpFlame.Mapping.Tiles
                 {
                     coordA.X = 0.0F;
                     coordB.X = 0.0F;
-                    coordC.X = 1.0F;
-                    coordD.X = 1.0F;
+                    coordC.X = 128.0F;
+                    coordD.X = 128.0F;
                 }
                 if ( ReverseOrientation.ResultYFlip )
                 {
-                    coordA.Y = 1.0F;
+                    coordA.Y = 128.0F;
                     coordB.Y = 0.0F;
-                    coordC.Y = 1.0F;
+                    coordC.Y = 128.0F;
                     coordD.Y = 0.0F;
                 }
                 else
                 {
                     coordA.Y = 0.0F;
-                    coordB.Y = 1.0F;
+                    coordB.Y = 128.0F;
                     coordC.Y = 0.0F;
-                    coordD.Y = 1.0F;
+                    coordD.Y = 128.0F;
                 }
             }
             else
             {
                 if ( ReverseOrientation.ResultXFlip )
                 {
-                    coordA.X = 1.0F;
+                    coordA.X = 128.0F;
                     coordB.X = 0.0F;
-                    coordC.X = 1.0F;
+                    coordC.X = 128.0F;
                     coordD.X = 0.0F;
                 }
                 else
                 {
                     coordA.X = 0.0F;
-                    coordB.X = 1.0F;
+                    coordB.X = 128.0F;
                     coordC.X = 0.0F;
-                    coordD.X = 1.0F;
+                    coordD.X = 128.0F;
                 }
                 if ( ReverseOrientation.ResultYFlip )
                 {
-                    coordA.Y = 1.0F;
-                    coordB.Y = 1.0F;
+                    coordA.Y = 128.0F;
+                    coordB.Y = 128.0F;
                     coordC.Y = 0.0F;
                     coordD.Y = 0.0F;
                 }
@@ -432,8 +432,8 @@ namespace SharpFlame.Mapping.Tiles
                 {
                     coordA.Y = 0.0F;
                     coordB.Y = 0.0F;
-                    coordC.Y = 1.0F;
-                    coordD.Y = 1.0F;
+                    coordC.Y = 128.0F;
+                    coordD.Y = 128.0F;
                 }
             }
         }

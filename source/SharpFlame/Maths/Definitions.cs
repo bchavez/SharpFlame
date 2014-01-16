@@ -15,6 +15,32 @@ namespace SharpFlame.Maths
             this.Y = Y;
             this.Z = Z;
         }
+
+        public static sXYZ_sng operator +(sXYZ_sng a, sXYZ_sng b)
+        {
+            sXYZ_sng result = new sXYZ_sng();
+
+            result.X = a.X + b.X;
+            result.Y = a.Y + b.Y;
+            result.Z = a.Z + b.Z;
+
+            return result;
+        }
+
+        public static sXYZ_sng operator /(sXYZ_sng a, float b)
+        {
+            sXYZ_sng result = new sXYZ_sng();
+
+            result.X = a.X / b;
+            result.Y = a.Y / b;
+            result.Z = a.Z / b;
+
+            return result;
+        }
+        public float length()
+        {
+            return (float)Math.Sqrt(X * X + Y * Y + Z * Z);
+        }
     }
 
     public struct sXYZ_int

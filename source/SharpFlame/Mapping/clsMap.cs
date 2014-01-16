@@ -686,7 +686,7 @@ namespace SharpFlame.Mapping
                         }
                     }
                 }
-                clsDrawTileOld drawTile = new clsDrawTileOld();
+                clsDrawTile drawTile = new clsDrawTileMiddleVertex();
                 drawTile.Map = this;
                 for ( TileY = StartY; TileY <= FinishY; TileY++ )
                 {
@@ -703,7 +703,7 @@ namespace SharpFlame.Mapping
             }
             else
             {
-                clsDrawTileOld drawTile = new clsDrawTileOld();
+                clsDrawTile drawTile = new clsDrawTileMiddleVertex();
                 drawTile.Map = this;
                 for ( TileY = StartY; TileY <= FinishY; TileY++ )
                 {
