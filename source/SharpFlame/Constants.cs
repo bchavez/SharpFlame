@@ -9,7 +9,7 @@ static internal class Constants
 #endif
     public const int PlayerCountMax = 10;
     public const int GameTypeCount = 3;
-    public const int DefaultHeightMultiplier = 3;
+    public const int DefaultHeightMultiplier = 2;
     public const int MinimapDelay = 100;
     public const int SectorTileSize = 8;
     public const int MaxDroidWeapons = 3;
