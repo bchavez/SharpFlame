@@ -26,7 +26,7 @@ namespace SharpFlame.Controls
         public bool DrawPending;
 
         public sXY_int GLSize;
-        public float GLSize_XPerY;
+        //public float GLSize_XPerY; //seems redundant, since OpenGLControl has a field called AspectRatio
 
         public bool DrawView_Enabled = false;
 
@@ -896,12 +896,12 @@ namespace SharpFlame.Controls
 
             GLSize.X = OpenGLControl.Width;
             GLSize.Y = OpenGLControl.Height;
-            if ( GLSize.Y != 0 )
-            {
-                GLSize_XPerY = (float)(GLSize.X / GLSize.Y);
-            }
+            //if (GLSize.Y != 0)
+            //{
+            //    GLSize_XPerY = (float)(GLSize.X / GLSize.Y);
+            //}
             Viewport_Resize();
-            if ( Map != null )
+            if (Map != null)
             {
                 Map.ViewInfo.FOV_Calc();
             }

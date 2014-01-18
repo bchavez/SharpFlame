@@ -2,6 +2,7 @@ using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
+using Matrix3D;
 
 namespace SharpFlame.Mapping.Renderers
 {
@@ -12,9 +13,9 @@ namespace SharpFlame.Mapping.Renderers
             clsTerrain Terrain = Map.Terrain;
             clsTileset Tileset = Map.Tileset;
             double[] TileTerrainHeight = new double[4];
-            sXYZ_sng[] Vertices = new sXYZ_sng[4];
-            sXYZ_sng[] Normals = new sXYZ_sng[4];
-            sXY_sng[] TexCoords = new sXY_sng[4];
+            Position.XYZ_dbl[] Vertices = new Position.XYZ_dbl[4];
+            Position.XYZ_dbl[] Normals = new Position.XYZ_dbl[4];
+            Position.XY_dbl[] TexCoords = new Position.XY_dbl[4];
             int A = 0;
 
             if (Terrain.Tiles[TileX, TileY].Texture.TextureNum < 0)
