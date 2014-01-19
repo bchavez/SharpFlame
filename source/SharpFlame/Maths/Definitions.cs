@@ -3,45 +3,45 @@ using Matrix3D;
 
 namespace SharpFlame.Maths
 {
-    public struct sXYZ_sng
-    {
-        public float X;
-        public float Y;
-        public float Z;
+    //public struct sXYZ_sng
+    //{
+    //    public float X;
+    //    public float Y;
+    //    public float Z;
 
-        public sXYZ_sng(float X, float Y, float Z)
-        {
-            this.X = X;
-            this.Y = Y;
-            this.Z = Z;
-        }
+    //    public sXYZ_sng(float X, float Y, float Z)
+    //    {
+    //        this.X = X;
+    //        this.Y = Y;
+    //        this.Z = Z;
+    //    }
 
-        public static sXYZ_sng operator +(sXYZ_sng a, sXYZ_sng b)
-        {
-            sXYZ_sng result = new sXYZ_sng();
+    //    public static sXYZ_sng operator +(sXYZ_sng a, sXYZ_sng b)
+    //    {
+    //        sXYZ_sng result = new sXYZ_sng();
 
-            result.X = a.X + b.X;
-            result.Y = a.Y + b.Y;
-            result.Z = a.Z + b.Z;
+    //        result.X = a.X + b.X;
+    //        result.Y = a.Y + b.Y;
+    //        result.Z = a.Z + b.Z;
 
-            return result;
-        }
+    //        return result;
+    //    }
 
-        public static sXYZ_sng operator /(sXYZ_sng a, float b)
-        {
-            sXYZ_sng result = new sXYZ_sng();
+    //    public static sXYZ_sng operator /(sXYZ_sng a, float b)
+    //    {
+    //        sXYZ_sng result = new sXYZ_sng();
 
-            result.X = a.X / b;
-            result.Y = a.Y / b;
-            result.Z = a.Z / b;
+    //        result.X = a.X / b;
+    //        result.Y = a.Y / b;
+    //        result.Z = a.Z / b;
 
-            return result;
-        }
-        public float length()
-        {
-            return (float)Math.Sqrt(X * X + Y * Y + Z * Z);
-        }
-    }
+    //        return result;
+    //    }
+    //    public float length()
+    //    {
+    //        return (float)Math.Sqrt(X * X + Y * Y + Z * Z);
+    //    }
+    //}
 
     public struct sXYZ_int
     {
@@ -71,17 +71,17 @@ namespace SharpFlame.Maths
         }
     }
 
-    public struct sXY_sng
-    {
-        public float X;
-        public float Y;
+    //public struct sXY_sng
+    //{
+    //    public float X;
+    //    public float Y;
 
-        public sXY_sng( float X, float Y )
-        {
-            this.X = X;
-            this.Y = Y;
-        }
-    }
+    //    public sXY_sng( float X, float Y )
+    //    {
+    //        this.X = X;
+    //        this.Y = Y;
+    //    }
+    //}
 
     public struct sXY_uint
     {
@@ -111,7 +111,7 @@ namespace SharpFlame.Maths
             set { XY.Y = value; }
         }
 
-        public clsXY_int( sXY_int XY )
+        public clsXY_int(sXY_int XY)
         {
             this.XY = XY;
         }

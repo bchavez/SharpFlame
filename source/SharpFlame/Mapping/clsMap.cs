@@ -736,10 +736,10 @@ namespace SharpFlame.Mapping
         public void DrawTileWireframe(int TileX, int TileY)
         {
             double[] TileTerrainHeight = new double[4];
-            sXYZ_sng Vertex0 = new sXYZ_sng();
-            sXYZ_sng Vertex1 = new sXYZ_sng();
-            sXYZ_sng Vertex2 = new sXYZ_sng();
-            sXYZ_sng Vertex3 = new sXYZ_sng();
+            Position.XYZ_dbl Vertex0 = new Position.XYZ_dbl();
+            Position.XYZ_dbl Vertex1 = new Position.XYZ_dbl();
+            Position.XYZ_dbl Vertex2 = new Position.XYZ_dbl();
+            Position.XYZ_dbl Vertex3 = new Position.XYZ_dbl();
 
             TileTerrainHeight[0] = Terrain.Vertices[TileX, TileY].Height;
             TileTerrainHeight[1] = Terrain.Vertices[TileX + 1, TileY].Height;

@@ -199,7 +199,7 @@ namespace SharpFlame.Domain
 
     public class clsAttachment
     {
-        public sXYZ_sng Pos_Offset;
+        public Position.XYZ_dbl Pos_Offset;
         public Matrix3DMath.Matrix3D AngleOffsetMatrix = new Matrix3DMath.Matrix3D();
         public SimpleClassList<clsModel> Models = new SimpleClassList<clsModel>();
         public SimpleClassList<clsAttachment> Attachments = new SimpleClassList<clsAttachment>();
@@ -490,7 +490,7 @@ namespace SharpFlame.Domain
                 return;
             }
 
-            sXYZ_sng TurretConnector = new sXYZ_sng();
+            Position.XYZ_dbl TurretConnector = new Position.XYZ_dbl();
 
             TurretConnector = Body.Attachment.Models[0].Connectors[0];
 

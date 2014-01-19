@@ -6,6 +6,7 @@ using Microsoft.VisualBasic;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
 using SharpFlame.Maths;
+using Matrix3D;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace SharpFlame.Graphics.OpenGL
@@ -187,7 +188,7 @@ namespace SharpFlame.Graphics.OpenGL
 
             int CharCode = 0;
             float CharWidth = 0;
-            sXY_sng TexRatio = new sXY_sng();
+            Position.XY_dbl TexRatio = new Position.XY_dbl();
             float LetterPosA = 0;
             float LetterPosB = 0;
             float PosY1 = 0;
