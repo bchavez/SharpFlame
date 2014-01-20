@@ -47,7 +47,7 @@ namespace SharpFlame.Mapping
             Position.XYZ_dbl Vertex3 = default(Position.XYZ_dbl);
             sXY_int ScreenPos = new sXY_int();
             Position.XYZ_dbl XYZ_dbl2 = default(Position.XYZ_dbl);
-            App.sWorldPos WorldPos = new App.sWorldPos();
+            sWorldPos WorldPos = new sWorldPos();
             Position.XY_dbl PosA = default(Position.XY_dbl);
             Position.XY_dbl PosB = default(Position.XY_dbl);
             Position.XY_dbl PosC = default(Position.XY_dbl);
@@ -120,13 +120,13 @@ namespace SharpFlame.Mapping
 
             GL.Disable(EnableCap.Light0);
             GL.Disable(EnableCap.Light1);
-            if ( App.Draw_Lighting != App.enumDrawLighting.Off )
+            if ( App.Draw_Lighting != enumDrawLighting.Off )
             {
-                if ( App.Draw_Lighting == App.enumDrawLighting.Half )
+                if ( App.Draw_Lighting == enumDrawLighting.Half )
                 {
                     GL.Enable(EnableCap.Light0);
                 }
-                else if ( App.Draw_Lighting == App.enumDrawLighting.Normal )
+                else if ( App.Draw_Lighting == enumDrawLighting.Normal )
                 {
                     GL.Enable(EnableCap.Light1);
                 }

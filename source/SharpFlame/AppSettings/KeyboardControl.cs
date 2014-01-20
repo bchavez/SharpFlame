@@ -1,4 +1,5 @@
 using System.Windows.Forms;
+using SharpFlame.Util;
 
 namespace SharpFlame.AppSettings
 {
@@ -7,7 +8,7 @@ namespace SharpFlame.AppSettings
         public Keys[] Keys;
         public Keys[] UnlessKeys;
 
-        private bool IsPressed(App.clsKeysActive KeysDown)
+        private bool IsPressed(clsKeysActive KeysDown)
         {
             foreach ( Keys keys in Keys )
             {
@@ -46,7 +47,7 @@ namespace SharpFlame.AppSettings
             get { return _Active; }
         }
 
-        public void KeysChanged(App.clsKeysActive KeysDown)
+        public void KeysChanged(clsKeysActive KeysDown)
         {
             _Active = IsPressed(KeysDown);
         }

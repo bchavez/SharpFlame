@@ -3,6 +3,7 @@ using SharpFlame.Collections;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
+using SharpFlame.Util;
 
 namespace SharpFlame.Mapping
 {
@@ -14,7 +15,7 @@ namespace SharpFlame.Mapping
         public string GetDefaultScriptLabel(string Prefix)
         {
             int Number = 1;
-            App.sResult Valid = new App.sResult();
+            sResult Valid = new sResult();
             string Label = "";
 
             do
@@ -34,9 +35,9 @@ namespace SharpFlame.Mapping
             } while ( true );
         }
 
-        public App.sResult ScriptLabelIsValid(string Text)
+        public sResult ScriptLabelIsValid(string Text)
         {
-            App.sResult ReturnResult = new App.sResult();
+            sResult ReturnResult = new sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 

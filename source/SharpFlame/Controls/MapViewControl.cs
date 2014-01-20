@@ -503,13 +503,13 @@ namespace SharpFlame.Controls
 
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveType) )
             {
-                if ( App.ViewMoveType == App.enumView_Move_Type.Free )
+                if ( App.ViewMoveType == enumView_Move_Type.Free )
                 {
-                    App.ViewMoveType = App.enumView_Move_Type.RTS;
+                    App.ViewMoveType = enumView_Move_Type.RTS;
                 }
-                else if ( App.ViewMoveType == App.enumView_Move_Type.RTS )
+                else if ( App.ViewMoveType == enumView_Move_Type.RTS )
                 {
-                    App.ViewMoveType = App.enumView_Move_Type.Free;
+                    App.ViewMoveType = enumView_Move_Type.Free;
                 }
             }
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRotateType) )
@@ -519,12 +519,12 @@ namespace SharpFlame.Controls
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewReset) )
             {
                 Map.ViewInfo.FOV_Multiplier_Set(SettingsManager.Settings.FOVDefault);
-                if ( App.ViewMoveType == App.enumView_Move_Type.Free )
+                if ( App.ViewMoveType == enumView_Move_Type.Free )
                 {
                     Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
                     Map.ViewInfo.ViewAngleSet_Rotate(matrixA);
                 }
-                else if ( App.ViewMoveType == App.enumView_Move_Type.RTS )
+                else if ( App.ViewMoveType == enumView_Move_Type.RTS )
                 {
                     Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
                     Map.ViewInfo.ViewAngleSet_Rotate(matrixA);
@@ -579,17 +579,17 @@ namespace SharpFlame.Controls
             }
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewLighting) )
             {
-                if ( App.Draw_Lighting == App.enumDrawLighting.Off )
+                if ( App.Draw_Lighting == enumDrawLighting.Off )
                 {
-                    App.Draw_Lighting = App.enumDrawLighting.Half;
+                    App.Draw_Lighting = enumDrawLighting.Half;
                 }
-                else if ( App.Draw_Lighting == App.enumDrawLighting.Half )
+                else if ( App.Draw_Lighting == enumDrawLighting.Half )
                 {
-                    App.Draw_Lighting = App.enumDrawLighting.Normal;
+                    App.Draw_Lighting = enumDrawLighting.Normal;
                 }
-                else if ( App.Draw_Lighting == App.enumDrawLighting.Normal )
+                else if ( App.Draw_Lighting == enumDrawLighting.Normal )
                 {
-                    App.Draw_Lighting = App.enumDrawLighting.Off;
+                    App.Draw_Lighting = enumDrawLighting.Off;
                 }
                 DrawViewLater();
             }

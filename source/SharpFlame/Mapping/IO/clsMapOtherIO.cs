@@ -12,6 +12,7 @@ using SharpFlame.Mapping.IO;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
+using SharpFlame.Util;
 
 namespace SharpFlame.Mapping
 {
@@ -1122,9 +1123,9 @@ namespace SharpFlame.Mapping
             return Result;
         }
 
-        public App.sWorldPos MapPos_From_LNDPos(sXYZ_int Pos)
+        public sWorldPos MapPos_From_LNDPos(sXYZ_int Pos)
         {
-            App.sWorldPos Result = new App.sWorldPos();
+            sWorldPos Result = new sWorldPos();
 
             Result.Horizontal.X = Pos.X + (int)(Terrain.TileSize.X * App.TerrainGridSpacing / 2.0D);
             Result.Horizontal.Y = ((int)(Terrain.TileSize.Y * App.TerrainGridSpacing / 2.0D)) - Pos.Z;
@@ -1489,9 +1490,9 @@ namespace SharpFlame.Mapping
             return ReturnResult;
         }
 
-        public App.sResult Write_MinimapFile(string Path, bool Overwrite)
+        public sResult Write_MinimapFile(string Path, bool Overwrite)
         {
-            App.sResult ReturnResult = new App.sResult();
+            sResult ReturnResult = new sResult();
             int X = 0;
             int Y = 0;
 
@@ -1517,9 +1518,9 @@ namespace SharpFlame.Mapping
             return ReturnResult;
         }
 
-        public App.sResult Write_Heightmap(string Path, bool Overwrite)
+        public sResult Write_Heightmap(string Path, bool Overwrite)
         {
-            App.sResult ReturnResult = new App.sResult();
+            sResult ReturnResult = new sResult();
             Bitmap HeightmapBitmap = new Bitmap(Terrain.TileSize.X + 1, Terrain.TileSize.Y + 1);
             int X = 0;
             int Y = 0;
@@ -1538,9 +1539,9 @@ namespace SharpFlame.Mapping
             return ReturnResult;
         }
 
-        public App.sResult Write_TTP(string Path, bool Overwrite)
+        public sResult Write_TTP(string Path, bool Overwrite)
         {
-            App.sResult ReturnResult = new App.sResult();
+            sResult ReturnResult = new sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -1592,9 +1593,9 @@ namespace SharpFlame.Mapping
             return ReturnResult;
         }
 
-        public App.sResult Load_TTP(string Path)
+        public sResult Load_TTP(string Path)
         {
-            App.sResult ReturnResult = new App.sResult();
+            sResult ReturnResult = new sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
             BinaryReader File = default(BinaryReader);
@@ -1614,9 +1615,9 @@ namespace SharpFlame.Mapping
             return ReturnResult;
         }
 
-        public App.sResult Write_FME(string Path, bool Overwrite, byte ScavengerPlayerNum)
+        public sResult Write_FME(string Path, bool Overwrite, byte ScavengerPlayerNum)
         {
-            App.sResult ReturnResult = new App.sResult();
+            sResult ReturnResult = new sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 

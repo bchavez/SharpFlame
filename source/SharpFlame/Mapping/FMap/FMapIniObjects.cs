@@ -22,7 +22,7 @@ namespace SharpFlame.Mapping.FMap
             public DroidDesign.clsTemplateDroidType TemplateDroidType;
             public string BodyCode;
             public string PropulsionCode;
-            public Turret.enumTurretType[] TurretTypes;
+            public enumTurretType[] TurretTypes;
             public string[] TurretCodes;
             public int TurretCount;
             public int Priority;
@@ -46,10 +46,10 @@ namespace SharpFlame.Mapping.FMap
                 Objects[A].Health = 1.0D;
                 Objects[A].WallType = -1;
                 Objects[A].TurretCodes = new string[3];
-                Objects[A].TurretTypes = new Turret.enumTurretType[3];
+                Objects[A].TurretTypes = new enumTurretType[3];
                 for ( B = 0; B <= Constants.MaxDroidWeapons - 1; B++ )
                 {
-                    Objects[A].TurretTypes[B] = Turret.enumTurretType.Unknown;
+                    Objects[A].TurretTypes[B] = enumTurretType.Unknown;
                 }
             }
         }
@@ -138,9 +138,9 @@ namespace SharpFlame.Mapping.FMap
                 {
                     CommaText[A] = Convert.ToString(CommaText[A].Trim());
                 }
-                Turret.enumTurretType TurretType = default(Turret.enumTurretType);
+                enumTurretType TurretType = default(enumTurretType);
                 TurretType = App.GetTurretTypeFromName(CommaText[0]);
-                if ( TurretType != Turret.enumTurretType.Unknown )
+                if ( TurretType != enumTurretType.Unknown )
                 {
                     Objects[INISectionNum].TurretTypes[0] = TurretType;
                     Objects[INISectionNum].TurretCodes[0] = CommaText[1];
@@ -161,9 +161,9 @@ namespace SharpFlame.Mapping.FMap
                 {
                     CommaText[A] = Convert.ToString(CommaText[A].Trim());
                 }
-                Turret.enumTurretType TurretType = default(Turret.enumTurretType);
+                enumTurretType TurretType = default(enumTurretType);
                 TurretType = App.GetTurretTypeFromName(CommaText[0]);
-                if ( TurretType != Turret.enumTurretType.Unknown )
+                if ( TurretType != enumTurretType.Unknown )
                 {
                     Objects[INISectionNum].TurretTypes[1] = TurretType;
                     Objects[INISectionNum].TurretCodes[1] = CommaText[1];
@@ -184,9 +184,9 @@ namespace SharpFlame.Mapping.FMap
                 {
                     CommaText[A] = Convert.ToString(CommaText[A].Trim());
                 }
-                Turret.enumTurretType TurretType = default(Turret.enumTurretType);
+                enumTurretType TurretType = default(enumTurretType);
                 TurretType = App.GetTurretTypeFromName(CommaText[0]);
-                if ( TurretType != Turret.enumTurretType.Unknown )
+                if ( TurretType != enumTurretType.Unknown )
                 {
                     Objects[INISectionNum].TurretTypes[2] = TurretType;
                     Objects[INISectionNum].TurretCodes[2] = CommaText[1];

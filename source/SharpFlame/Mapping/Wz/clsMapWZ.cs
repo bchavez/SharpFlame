@@ -14,6 +14,7 @@ using SharpFlame.Mapping.Tiles;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Mapping.Wz;
 using SharpFlame.Maths;
+using SharpFlame.Util;
 
 namespace SharpFlame.Mapping
 {
@@ -23,7 +24,7 @@ namespace SharpFlame.Mapping
         {
             clsResult ReturnResult =
                 new clsResult("Loading WZ from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
-            App.sResult SubResult = new App.sResult();
+            sResult SubResult = new sResult();
             string Quote = ControlChars.Quote.ToString();
             ZipEntry ZipEntry = default(ZipEntry);
             bool GameFound = default(bool);
@@ -179,7 +180,7 @@ namespace SharpFlame.Mapping
                     Names[A] = Convert.ToString(Maps[A].Name);
                 }
                 frmWZLoad SelectToLoadForm = new frmWZLoad(Names, SelectToLoadResult,
-                    "Select a map from " + Convert.ToString(new App.sSplitPath(Path).FileTitle));
+                    "Select a map from " + Convert.ToString(new sSplitPath(Path).FileTitle));
                 SelectToLoadForm.ShowDialog();
                 if ( SelectToLoadResult.Result < 0 )
                 {
@@ -406,7 +407,7 @@ namespace SharpFlame.Mapping
         {
             clsResult ReturnResult =
                 new clsResult("Loading game file from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
-            App.sResult SubResult = new App.sResult();
+            sResult SubResult = new sResult();
             string Quote = ControlChars.Quote.ToString();
 
             Tileset = null;
@@ -414,7 +415,7 @@ namespace SharpFlame.Mapping
             TileType_Reset();
             SetPainterToDefaults();
 
-            App.sSplitPath GameSplitPath = new App.sSplitPath(Path);
+            sSplitPath GameSplitPath = new sSplitPath(Path);
             string GameFilesPath = GameSplitPath.FilePath + GameSplitPath.FileTitleWithoutExtension + Convert.ToString(App.PlatformPathSeparator);
             string MapDirectory = "";
             FileStream File = null;
@@ -977,7 +978,7 @@ namespace SharpFlame.Mapping
                         if ( INIDroids.Droids[A].Template == null || INIDroids.Droids[A].Template == "" )
                         {
                             DroidType = new DroidDesign();
-                            if ( !DroidType.SetDroidType((App.enumDroidType)(INIDroids.Droids[A].DroidType)) )
+                            if ( !DroidType.SetDroidType((enumDroidType)(INIDroids.Droids[A].DroidType)) )
                             {
                                 UnknownDroidTypeCount++;
                             }
@@ -1186,9 +1187,9 @@ namespace SharpFlame.Mapping
             return ReturnResult;
         }
 
-        private App.sResult Read_WZ_gam(BinaryReader File)
+        private sResult Read_WZ_gam(BinaryReader File)
         {
-            App.sResult ReturnResult = new App.sResult();
+            sResult ReturnResult = new sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -1239,9 +1240,9 @@ namespace SharpFlame.Mapping
             return ReturnResult;
         }
 
-        private App.sResult Read_WZ_map(BinaryReader File)
+        private sResult Read_WZ_map(BinaryReader File)
         {
-            App.sResult ReturnResult = new App.sResult();
+            sResult ReturnResult = new sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -1354,9 +1355,9 @@ namespace SharpFlame.Mapping
             return ReturnResult;
         }
 
-        private App.sResult Read_WZ_Features(BinaryReader File, SimpleClassList<clsWZBJOUnit> WZUnits)
+        private sResult Read_WZ_Features(BinaryReader File, SimpleClassList<clsWZBJOUnit> WZUnits)
         {
-            App.sResult ReturnResult = new App.sResult();
+            sResult ReturnResult = new sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -1419,9 +1420,9 @@ namespace SharpFlame.Mapping
             return ReturnResult;
         }
 
-        private App.sResult Read_WZ_TileTypes(BinaryReader File)
+        private sResult Read_WZ_TileTypes(BinaryReader File)
         {
-            App.sResult ReturnResult = new App.sResult();
+            sResult ReturnResult = new sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -1480,9 +1481,9 @@ namespace SharpFlame.Mapping
             return ReturnResult;
         }
 
-        private App.sResult Read_WZ_Structures(BinaryReader File, SimpleClassList<clsWZBJOUnit> WZUnits)
+        private sResult Read_WZ_Structures(BinaryReader File, SimpleClassList<clsWZBJOUnit> WZUnits)
         {
-            App.sResult ReturnResult = new App.sResult();
+            sResult ReturnResult = new sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -1545,9 +1546,9 @@ namespace SharpFlame.Mapping
             return ReturnResult;
         }
 
-        private App.sResult Read_WZ_Droids(BinaryReader File, SimpleClassList<clsWZBJOUnit> WZUnits)
+        private sResult Read_WZ_Droids(BinaryReader File, SimpleClassList<clsWZBJOUnit> WZUnits)
         {
-            App.sResult ReturnResult = new App.sResult();
+            sResult ReturnResult = new sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -2013,7 +2014,7 @@ namespace SharpFlame.Mapping
                                 ValidDroid = false;
                                 InvalidPartCount++;
                             }
-                            else if ( Droid.Turret2.TurretType != Turret.enumTurretType.Weapon )
+                            else if ( Droid.Turret2.TurretType != enumTurretType.Weapon )
                             {
                                 ValidDroid = false;
                                 InvalidPartCount++;
@@ -2026,7 +2027,7 @@ namespace SharpFlame.Mapping
                                 ValidDroid = false;
                                 InvalidPartCount++;
                             }
-                            else if ( Droid.Turret3.TurretType != Turret.enumTurretType.Weapon )
+                            else if ( Droid.Turret3.TurretType != enumTurretType.Weapon )
                             {
                                 ValidDroid = false;
                                 InvalidPartCount++;
@@ -2069,7 +2070,7 @@ namespace SharpFlame.Mapping
                             }
                             else
                             {
-                                if ( Droid.Turret1.TurretType == Turret.enumTurretType.Brain )
+                                if ( Droid.Turret1.TurretType == enumTurretType.Brain )
                                 {
                                     if ( ((Brain)Droid.Turret1).Weapon == null )
                                     {
@@ -2082,7 +2083,7 @@ namespace SharpFlame.Mapping
                                 }
                                 else
                                 {
-                                    if ( Droid.Turret1.TurretType == Turret.enumTurretType.Weapon )
+                                    if ( Droid.Turret1.TurretType == enumTurretType.Weapon )
                                     {
                                         Text = Droid.TurretCount.ToStringInvariant();
                                     }
@@ -2102,17 +2103,17 @@ namespace SharpFlame.Mapping
                             File.AppendProperty("parts\\ecm", Droid.GetECMCode());
                             if ( Droid.TurretCount >= 1 )
                             {
-                                if ( Droid.Turret1.TurretType == Turret.enumTurretType.Weapon )
+                                if ( Droid.Turret1.TurretType == enumTurretType.Weapon )
                                 {
                                     File.AppendProperty("parts\\weapon\\1", Droid.Turret1.Code);
                                     if ( Droid.TurretCount >= 2 )
                                     {
-                                        if ( Droid.Turret2.TurretType == Turret.enumTurretType.Weapon )
+                                        if ( Droid.Turret2.TurretType == enumTurretType.Weapon )
                                         {
                                             File.AppendProperty("parts\\weapon\\2", Droid.Turret2.Code);
                                             if ( Droid.TurretCount >= 3 )
                                             {
-                                                if ( Droid.Turret3.TurretType == Turret.enumTurretType.Weapon )
+                                                if ( Droid.Turret3.TurretType == enumTurretType.Weapon )
                                                 {
                                                     File.AppendProperty("parts\\weapon\\3", Droid.Turret3.Code);
                                                 }
@@ -2120,7 +2121,7 @@ namespace SharpFlame.Mapping
                                         }
                                     }
                                 }
-                                else if ( Droid.Turret1.TurretType == Turret.enumTurretType.Brain )
+                                else if ( Droid.Turret1.TurretType == enumTurretType.Brain )
                                 {
                                     Brain = (Brain)Droid.Turret1;
                                     if ( Brain.Weapon == null )
@@ -2910,9 +2911,9 @@ namespace SharpFlame.Mapping
             return ReturnResult;
         }
 
-        private App.sResult Read_TTP(BinaryReader File)
+        private sResult Read_TTP(BinaryReader File)
         {
-            App.sResult ReturnResult = new App.sResult();
+            sResult ReturnResult = new sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 

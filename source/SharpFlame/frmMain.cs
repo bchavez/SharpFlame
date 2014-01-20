@@ -129,9 +129,9 @@ namespace SharpFlame
 
         public ConnectedList<UnitTypeBase, frmMain> SelectedObjectTypes;
 
-        public App.enumTextureTerrainAction TextureTerrainAction = App.enumTextureTerrainAction.Reinterpret;
+        public enumTextureTerrainAction TextureTerrainAction = enumTextureTerrainAction.Reinterpret;
 
-        public App.enumFillCliffAction FillCliffAction = App.enumFillCliffAction.Ignore;
+        public enumFillCliffAction FillCliffAction = enumFillCliffAction.Ignore;
 
         public Timer tmrKey;
         public Timer tmrTool;
@@ -376,7 +376,7 @@ namespace SharpFlame
 
             for ( int i = 0; i <= 15; i++ )
             {
-                App.PlayerColour[i] = new App.clsPlayer();
+                App.PlayerColour[i] = new clsPlayer();
             }
             App.PlayerColour[0].Colour.Red = 0.0F;
             App.PlayerColour[0].Colour.Green = 96.0F / 255.0F;
@@ -642,7 +642,7 @@ namespace SharpFlame
             SettingsManager.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
 
             Bitmap HeightmapBitmap = null;
-            App.sResult Result = BitmapUtil.LoadBitmap(Dialog.FileName, ref HeightmapBitmap);
+            sResult Result = BitmapUtil.LoadBitmap(Dialog.FileName, ref HeightmapBitmap);
             if ( !Result.Success )
             {
                 MessageBox.Show("Failed to load image: " + Result.Problem);
@@ -713,7 +713,7 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
-            App.sResult Result = Map.Load_TTP(Dialog.FileName);
+            sResult Result = Map.Load_TTP(Dialog.FileName);
             if ( Result.Success )
             {
                 TextureViewControl.DrawViewLater();
@@ -1115,7 +1115,7 @@ namespace SharpFlame
                 return;
             }
             ScavengerNum = Math.Min(ScavengerNum, (byte)10);
-            App.sResult Result = new App.sResult();
+            sResult Result = new sResult();
             Result = Map.Write_FME(Dialog.FileName, true, ScavengerNum);
             if ( !Result.Success )
             {
@@ -1142,7 +1142,7 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            App.sResult Result = new App.sResult();
+            sResult Result = new sResult();
             Result = Map.Write_MinimapFile(Dialog.FileName, true);
             if ( !Result.Success )
             {
@@ -1169,7 +1169,7 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            App.sResult Result = new App.sResult();
+            sResult Result = new sResult();
             Result = Map.Write_Heightmap(Dialog.FileName, true);
             if ( !Result.Success )
             {
@@ -1196,7 +1196,7 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            App.sResult Result = new App.sResult();
+            sResult Result = new sResult();
             Result = Map.Write_TTP(Dialog.FileName, true);
             if ( !Result.Success )
             {
@@ -2230,8 +2230,8 @@ namespace SharpFlame
         private void cboTileType_Update()
         {
             cboTileType.Items.Clear();
-            App.clsTileType tileType = default(App.clsTileType);
-            foreach ( App.clsTileType tempLoopVar_tileType in App.TileTypes )
+            clsTileType tileType = default(clsTileType);
+            foreach ( clsTileType tempLoopVar_tileType in App.TileTypes )
             {
                 tileType = tempLoopVar_tileType;
                 cboTileType.Items.Add(tileType.Name);
@@ -2240,86 +2240,86 @@ namespace SharpFlame
 
         private void CreateTileTypes()
         {
-            App.clsTileType NewTileType = default(App.clsTileType);
+            clsTileType NewTileType = default(clsTileType);
 
-            NewTileType = new App.clsTileType();
+            NewTileType = new clsTileType();
             NewTileType.Name = "Sand";
             NewTileType.DisplayColour.Red = 1.0F;
             NewTileType.DisplayColour.Green = 1.0F;
             NewTileType.DisplayColour.Blue = 0.0F;
             App.TileTypes.Add(NewTileType);
 
-            NewTileType = new App.clsTileType();
+            NewTileType = new clsTileType();
             NewTileType.Name = "Sandy Brush";
             NewTileType.DisplayColour.Red = 0.5F;
             NewTileType.DisplayColour.Green = 0.5F;
             NewTileType.DisplayColour.Blue = 0.0F;
             App.TileTypes.Add(NewTileType);
 
-            NewTileType = new App.clsTileType();
+            NewTileType = new clsTileType();
             NewTileType.Name = "Rubble";
             NewTileType.DisplayColour.Red = 0.25F;
             NewTileType.DisplayColour.Green = 0.25F;
             NewTileType.DisplayColour.Blue = 0.25F;
             App.TileTypes.Add(NewTileType);
 
-            NewTileType = new App.clsTileType();
+            NewTileType = new clsTileType();
             NewTileType.Name = "Green Mud";
             NewTileType.DisplayColour.Red = 0.0F;
             NewTileType.DisplayColour.Green = 0.5F;
             NewTileType.DisplayColour.Blue = 0.0F;
             App.TileTypes.Add(NewTileType);
 
-            NewTileType = new App.clsTileType();
+            NewTileType = new clsTileType();
             NewTileType.Name = "Red Brush";
             NewTileType.DisplayColour.Red = 1.0F;
             NewTileType.DisplayColour.Green = 0.0F;
             NewTileType.DisplayColour.Blue = 0.0F;
             App.TileTypes.Add(NewTileType);
 
-            NewTileType = new App.clsTileType();
+            NewTileType = new clsTileType();
             NewTileType.Name = "Pink Rock";
             NewTileType.DisplayColour.Red = 1.0F;
             NewTileType.DisplayColour.Green = 0.5F;
             NewTileType.DisplayColour.Blue = 0.5F;
             App.TileTypes.Add(NewTileType);
 
-            NewTileType = new App.clsTileType();
+            NewTileType = new clsTileType();
             NewTileType.Name = "Road";
             NewTileType.DisplayColour.Red = 0.0F;
             NewTileType.DisplayColour.Green = 0.0F;
             NewTileType.DisplayColour.Blue = 0.0F;
             App.TileTypes.Add(NewTileType);
 
-            NewTileType = new App.clsTileType();
+            NewTileType = new clsTileType();
             NewTileType.Name = "Water";
             NewTileType.DisplayColour.Red = 0.0F;
             NewTileType.DisplayColour.Green = 0.0F;
             NewTileType.DisplayColour.Blue = 1.0F;
             App.TileTypes.Add(NewTileType);
 
-            NewTileType = new App.clsTileType();
+            NewTileType = new clsTileType();
             NewTileType.Name = "Cliff Face";
             NewTileType.DisplayColour.Red = 0.5F;
             NewTileType.DisplayColour.Green = 0.5F;
             NewTileType.DisplayColour.Blue = 0.5F;
             App.TileTypes.Add(NewTileType);
 
-            NewTileType = new App.clsTileType();
+            NewTileType = new clsTileType();
             NewTileType.Name = "Baked Earth";
             NewTileType.DisplayColour.Red = 0.5F;
             NewTileType.DisplayColour.Green = 0.0F;
             NewTileType.DisplayColour.Blue = 0.0F;
             App.TileTypes.Add(NewTileType);
 
-            NewTileType = new App.clsTileType();
+            NewTileType = new clsTileType();
             NewTileType.Name = "Sheet Ice";
             NewTileType.DisplayColour.Red = 1.0F;
             NewTileType.DisplayColour.Green = 1.0F;
             NewTileType.DisplayColour.Blue = 1.0F;
             App.TileTypes.Add(NewTileType);
 
-            NewTileType = new App.clsTileType();
+            NewTileType = new clsTileType();
             NewTileType.Name = "Slush";
             NewTileType.DisplayColour.Red = 0.75F;
             NewTileType.DisplayColour.Green = 0.75F;
@@ -2384,7 +2384,7 @@ namespace SharpFlame
                 }
                 else
                 {
-                    App.sSplitPath SplitPath = new App.sSplitPath(Map.PathInfo.Path);
+                    sSplitPath SplitPath = new sSplitPath(Map.PathInfo.Path);
                     if ( Map.PathInfo.IsFMap )
                     {
                         MapFileTitle = SplitPath.FileTitleWithoutExtension;
@@ -2857,11 +2857,11 @@ namespace SharpFlame
             }
         }
 
-        public App.enumObjectRotateMode PasteRotateObjects = App.enumObjectRotateMode.Walls;
+        public enumObjectRotateMode PasteRotateObjects = enumObjectRotateMode.Walls;
 
         public void menuRotateUnits_Click(Object sender, EventArgs e)
         {
-            PasteRotateObjects = App.enumObjectRotateMode.All;
+            PasteRotateObjects = enumObjectRotateMode.All;
             menuRotateUnits.Checked = true;
             menuRotateWalls.Checked = false;
             menuRotateNothing.Checked = false;
@@ -2869,7 +2869,7 @@ namespace SharpFlame
 
         public void menuRotateWalls_Click(Object sender, EventArgs e)
         {
-            PasteRotateObjects = App.enumObjectRotateMode.Walls;
+            PasteRotateObjects = enumObjectRotateMode.Walls;
             menuRotateUnits.Checked = false;
             menuRotateWalls.Checked = true;
             menuRotateNothing.Checked = false;
@@ -2877,7 +2877,7 @@ namespace SharpFlame
 
         public void menuRotateNothing_Click(Object sender, EventArgs e)
         {
-            PasteRotateObjects = App.enumObjectRotateMode.None;
+            PasteRotateObjects = enumObjectRotateMode.None;
             menuRotateUnits.Checked = false;
             menuRotateWalls.Checked = false;
             menuRotateNothing.Checked = true;
@@ -3335,7 +3335,7 @@ namespace SharpFlame
         {
             if ( rdoTextureIgnoreTerrain.Checked )
             {
-                TextureTerrainAction = App.enumTextureTerrainAction.Ignore;
+                TextureTerrainAction = enumTextureTerrainAction.Ignore;
                 rdoTextureReinterpretTerrain.Checked = false;
                 rdoTextureRemoveTerrain.Checked = false;
             }
@@ -3345,7 +3345,7 @@ namespace SharpFlame
         {
             if ( rdoTextureReinterpretTerrain.Checked )
             {
-                TextureTerrainAction = App.enumTextureTerrainAction.Reinterpret;
+                TextureTerrainAction = enumTextureTerrainAction.Reinterpret;
                 rdoTextureIgnoreTerrain.Checked = false;
                 rdoTextureRemoveTerrain.Checked = false;
             }
@@ -3355,7 +3355,7 @@ namespace SharpFlame
         {
             if ( rdoTextureRemoveTerrain.Checked )
             {
-                TextureTerrainAction = App.enumTextureTerrainAction.Remove;
+                TextureTerrainAction = enumTextureTerrainAction.Remove;
                 rdoTextureIgnoreTerrain.Checked = false;
                 rdoTextureReinterpretTerrain.Checked = false;
             }
@@ -3646,17 +3646,17 @@ namespace SharpFlame
 
         public void rdoFillCliffIgnore_CheckedChanged(Object sender, EventArgs e)
         {
-            FillCliffAction = App.enumFillCliffAction.Ignore;
+            FillCliffAction = enumFillCliffAction.Ignore;
         }
 
         public void rdoFillCliffStopBefore_CheckedChanged(Object sender, EventArgs e)
         {
-            FillCliffAction = App.enumFillCliffAction.StopBefore;
+            FillCliffAction = enumFillCliffAction.StopBefore;
         }
 
         public void rdoFillCliffStopAfter_CheckedChanged(Object sender, EventArgs e)
         {
-            FillCliffAction = App.enumFillCliffAction.StopAfter;
+            FillCliffAction = enumFillCliffAction.StopAfter;
         }
 
         public void btnScriptAreaCreate_Click(Object sender, EventArgs e)
@@ -3901,7 +3901,7 @@ namespace SharpFlame
                 return;
             }
 
-            App.sResult Result = new App.sResult();
+            sResult Result = new sResult();
             if ( _SelectedScriptMarker is clsScriptPosition )
             {
                 clsScriptPosition ScriptPosition = (clsScriptPosition)_SelectedScriptMarker;
@@ -4081,7 +4081,7 @@ namespace SharpFlame
             clsUnit OldUnit = Map.SelectedUnits[0];
             clsUnit ResultUnit = new clsUnit(OldUnit, Map);
             Map.UnitSwap(OldUnit, ResultUnit);
-            App.sResult Result = ResultUnit.SetLabel(txtObjectLabel.Text);
+            sResult Result = ResultUnit.SetLabel(txtObjectLabel.Text);
             if ( !Result.Success )
             {
                 MessageBox.Show("Unable to set label: " + Result.Problem);
@@ -4120,7 +4120,7 @@ namespace SharpFlame
         public clsResult LoadMap(string Path)
         {
             clsResult ReturnResult = new clsResult("");
-            App.sSplitPath SplitPath = new App.sSplitPath(Path);
+            sSplitPath SplitPath = new sSplitPath(Path);
             clsMap ResultMap = new clsMap();
             string Extension = SplitPath.FileExtension.ToLower();
 

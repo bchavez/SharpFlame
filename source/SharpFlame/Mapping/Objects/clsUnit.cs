@@ -5,6 +5,7 @@ using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
 using SharpFlame.Maths;
+using SharpFlame.Util;
 
 namespace SharpFlame.Mapping.Objects
 {
@@ -23,7 +24,7 @@ namespace SharpFlame.Mapping.Objects
 
         public UInt32 ID;
         public UnitTypeBase TypeBase;
-        public App.sWorldPos Pos;
+        public sWorldPos Pos;
         public int Rotation;
         public clsUnitGroup UnitGroup;
         public int SavePriority;
@@ -124,9 +125,9 @@ namespace SharpFlame.Mapping.Objects
             return Pos.Horizontal.X.ToStringInvariant() + ", " + Pos.Horizontal.Y.ToStringInvariant();
         }
 
-        public App.sResult SetLabel(string Text)
+        public sResult SetLabel(string Text)
         {
-            App.sResult Result = new App.sResult();
+            sResult Result = new sResult();
 
             if ( TypeBase.Type == UnitType.PlayerStructure )
             {

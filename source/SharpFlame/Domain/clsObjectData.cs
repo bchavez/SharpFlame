@@ -7,6 +7,7 @@ using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
 using SharpFlame.FileIO;
 using SharpFlame.Maths;
+using SharpFlame.Util;
 
 namespace SharpFlame.Domain
 {
@@ -514,7 +515,7 @@ namespace SharpFlame.Domain
             Bitmap Bitmap = null;
             int InstrPos2 = 0;
             BitmapGLTexture BitmapTextureArgs = new BitmapGLTexture();
-            App.sResult BitmapResult = new App.sResult();
+            sResult BitmapResult = new sResult();
 
             foreach ( string tempLoopVar_Text in TexFiles )
             {
@@ -570,12 +571,12 @@ namespace SharpFlame.Domain
                 PIE_Files = new string[0];
             }
 
-            App.sSplitPath SplitPath = new App.sSplitPath();
+            sSplitPath SplitPath = new sSplitPath();
 
             foreach ( string tempLoopVar_Text in PIE_Files )
             {
                 Text = tempLoopVar_Text;
-                SplitPath = new App.sSplitPath(Text);
+                SplitPath = new sSplitPath(Text);
                 if ( SplitPath.FileExtension.ToLower() == "pie" )
                 {
                     NewPIE = new clsPIE();
@@ -1560,21 +1561,21 @@ namespace SharpFlame.Domain
             return Result;
         }
 
-        public Turret FindOrCreateTurret(Turret.enumTurretType TurretType, string TurretCode)
+        public Turret FindOrCreateTurret(enumTurretType TurretType, string TurretCode)
         {
             switch ( TurretType )
             {
-                case Turret.enumTurretType.Weapon:
+                case enumTurretType.Weapon:
                     return FindOrCreateWeapon(TurretCode);
-                case Turret.enumTurretType.Construct:
+                case enumTurretType.Construct:
                     return FindOrCreateConstruct(TurretCode);
-                case Turret.enumTurretType.Repair:
+                case enumTurretType.Repair:
                     return FindOrCreateRepair(TurretCode);
-                case Turret.enumTurretType.Sensor:
+                case enumTurretType.Sensor:
                     return FindOrCreateSensor(TurretCode);
-                case Turret.enumTurretType.Brain:
+                case enumTurretType.Brain:
                     return FindOrCreateBrain(TurretCode);
-                case Turret.enumTurretType.ECM:
+                case enumTurretType.ECM:
                     return FindOrCreateECM(TurretCode);
                 default:
                     return null;

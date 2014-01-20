@@ -2,6 +2,7 @@ using System;
 using System.Windows.Forms;
 using SharpFlame.Collections;
 using SharpFlame.FileIO;
+using SharpFlame.Util;
 
 namespace SharpFlame
 {

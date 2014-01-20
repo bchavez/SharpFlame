@@ -80,17 +80,6 @@ namespace SharpFlame.Domain
         public clsAttachment Attachment = new clsAttachment();
         public int HitPoints;
 
-        public enum enumTurretType
-        {
-            Unknown,
-            Weapon,
-            Construct,
-            Repair,
-            Sensor,
-            Brain,
-            ECM
-        }
-
         public enumTurretType TurretType = enumTurretType.Unknown;
 
         public bool GetTurretTypeName(ref string Result)
@@ -120,6 +109,17 @@ namespace SharpFlame.Domain
                     return false;
             }
         }
+    }
+
+    public enum enumTurretType
+    {
+        Unknown,
+        Weapon,
+        Construct,
+        Repair,
+        Sensor,
+        Brain,
+        ECM
     }
 
     public class Weapon : Turret

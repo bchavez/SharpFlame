@@ -1,14 +1,15 @@
 using System;
 using System.Drawing;
 using System.IO;
+using SharpFlame.Util;
 
 namespace SharpFlame.Bitmaps
 {
     public sealed class BitmapUtil
     {
-        public static App.sResult LoadBitmap(string Path, ref Bitmap ResultBitmap)
+        public static sResult LoadBitmap(string Path, ref Bitmap ResultBitmap)
         {
-            App.sResult ReturnResult = new App.sResult();
+            sResult ReturnResult = new sResult();
             ReturnResult.Problem = "";
             ReturnResult.Success = false;
 
@@ -31,9 +32,9 @@ namespace SharpFlame.Bitmaps
             return ReturnResult;
         }
 
-        public static App.sResult SaveBitmap(string Path, bool Overwrite, Bitmap BitmapToSave)
+        public static sResult SaveBitmap(string Path, bool Overwrite, Bitmap BitmapToSave)
         {
-            App.sResult ReturnResult = new App.sResult();
+            sResult ReturnResult = new sResult();
             ReturnResult.Problem = "";
             ReturnResult.Success = false;
 

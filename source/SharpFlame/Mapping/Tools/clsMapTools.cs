@@ -6,12 +6,13 @@ using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
+using SharpFlame.Util;
 
 namespace SharpFlame.Mapping
 {
     public partial class clsMap
     {
-        public void Rotate(TileOrientation Orientation, App.enumObjectRotateMode ObjectRotateMode)
+        public void Rotate(TileOrientation Orientation, enumObjectRotateMode ObjectRotateMode)
         {
             int X = 0;
             int Y = 0;
@@ -147,7 +148,7 @@ namespace SharpFlame.Mapping
             {
                 Unit = tempLoopVar_Unit;
                 Unit.Sectors.Clear();
-                if ( ObjectRotateMode == App.enumObjectRotateMode.All )
+                if ( ObjectRotateMode == enumObjectRotateMode.All )
                 {
                     Unit.Rotation =
                         (int)
@@ -159,7 +160,7 @@ namespace SharpFlame.Mapping
                         Unit.Rotation += 360;
                     }
                 }
-                else if ( ObjectRotateMode == App.enumObjectRotateMode.Walls )
+                else if ( ObjectRotateMode == enumObjectRotateMode.Walls )
                 {
                     if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
                     {
@@ -561,7 +562,7 @@ namespace SharpFlame.Mapping
             SectorGraphicsChanges.SetAllChanged();
         }
 
-        public void MapTexturer(App.sLayerList LayerList)
+        public void MapTexturer(sLayerList LayerList)
         {
             int X = 0;
             int Y = 0;

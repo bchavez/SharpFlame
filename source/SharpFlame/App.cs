@@ -8,7 +8,6 @@ using Microsoft.VisualBasic.ApplicationServices;
 using Microsoft.VisualBasic.Devices;
 using SharpFlame.AppSettings;
 using SharpFlame.Collections;
-using SharpFlame.Collections.Specialized;
 using SharpFlame.Colors;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
@@ -18,6 +17,7 @@ using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
+using SharpFlame.Util;
 
 namespace SharpFlame
 {
@@ -79,12 +79,6 @@ namespace SharpFlame
         public static Terrain SelectedTerrain;
         public static Road SelectedRoad;
 
-        public class clsTileType
-        {
-            public string Name;
-            public sRGB_sng DisplayColour;
-        }
-
         public static SimpleList<clsTileType> TileTypes = new SimpleList<clsTileType>();
 
         public const int TileTypeNum_Water = 7;
@@ -97,49 +91,6 @@ namespace SharpFlame
         public static readonly ASCIIEncoding ASCIIEncoding = new ASCIIEncoding();
 
         public const int INIRotationMax = 65536;
-
-        public enum enumTileWalls
-        {
-            None = 0,
-            Left = 1,
-            Right = 2,
-            Top = 4,
-            Bottom = 8
-        }
-
-        public enum enumObjectRotateMode
-        {
-            None,
-            Walls,
-            All
-        }
-
-        public enum enumTextureTerrainAction
-        {
-            Ignore,
-            Reinterpret,
-            Remove
-        }
-
-        public enum enumFillCliffAction
-        {
-            Ignore,
-            StopBefore,
-            StopAfter
-        }
-
-        public struct sResult
-        {
-            public bool Success;
-            public string Problem;
-        }
-
-        public struct sWZAngle
-        {
-            public UInt16 Direction;
-            public UInt16 Pitch;
-            public UInt16 Roll;
-        }
 
         public const int TerrainGridSpacing = 128;
 
@@ -161,55 +112,7 @@ namespace SharpFlame
         public static GLFont UnitLabelFont;
         //Public TextureViewFont As GLFont
 
-        public class clsPlayer
-        {
-            public sRGB_sng Colour;
-            public sRGB_sng MinimapColour;
-
-            public void CalcMinimapColour()
-            {
-                MinimapColour.Red = Math.Min(Colour.Red * 0.6666667F + 0.333333343F, 1.0F);
-                MinimapColour.Green = Math.Min(Colour.Green * 0.6666667F + 0.333333343F, 1.0F);
-                MinimapColour.Blue = Math.Min(Colour.Blue * 0.6666667F + 0.333333343F, 1.0F);
-            }
-        }
-
         public static clsPlayer[] PlayerColour = new clsPlayer[16];
-
-        public struct sSplitPath
-        {
-            public string[] Parts;
-            public int PartCount;
-            public string FilePath;
-            public string FileTitle;
-            public string FileTitleWithoutExtension;
-            public string FileExtension;
-
-            public sSplitPath(string Path)
-            {
-                int A = 0;
-
-                Parts = Path.Split(PlatformPathSeparator);
-                PartCount = Parts.GetUpperBound(0) + 1;
-                FilePath = "";
-                for ( A = 0; A <= PartCount - 2; A++ )
-                {
-                    FilePath += Parts[A] + Convert.ToString(PlatformPathSeparator);
-                }
-                FileTitle = Parts[A];
-                A = Strings.InStrRev(FileTitle, ".", -1, (CompareMethod)0);
-                if ( A > 0 )
-                {
-                    FileExtension = Strings.Right(FileTitle, FileTitle.Length - A);
-                    FileTitleWithoutExtension = Strings.Left(FileTitle, A - 1);
-                }
-                else
-                {
-                    FileExtension = "";
-                    FileTitleWithoutExtension = FileTitle;
-                }
-            }
-        }
 
         public static void VisionRadius_2E_Changed()
         {
@@ -308,23 +211,6 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public enum enumDroidType
-        {
-            Weapon = 0,
-            Sensor = 1,
-            ECM = 2,
-            Construct = 3,
-            Person = 4,
-            Cyborg = 5,
-            Transporter = 6,
-            Command = 7,
-            Repair = 8,
-            Default_ = 9,
-            Cyborg_Construct = 10,
-            Cyborg_Repair = 11,
-            Cyborg_Super = 12
-        }
-
         public static void ShowWarnings(clsResult Result)
         {
             if ( !Result.HasWarnings )
@@ -337,24 +223,24 @@ namespace SharpFlame
             WarningsForm.Activate();
         }
 
-        public static Turret.enumTurretType GetTurretTypeFromName(string TurretTypeName)
+        public static enumTurretType GetTurretTypeFromName(string TurretTypeName)
         {
             switch ( TurretTypeName.ToLower() )
             {
                 case "weapon":
-                    return Turret.enumTurretType.Weapon;
+                    return enumTurretType.Weapon;
                 case "construct":
-                    return Turret.enumTurretType.Construct;
+                    return enumTurretType.Construct;
                 case "repair":
-                    return Turret.enumTurretType.Repair;
+                    return enumTurretType.Repair;
                 case "sensor":
-                    return Turret.enumTurretType.Sensor;
+                    return enumTurretType.Sensor;
                 case "brain":
-                    return Turret.enumTurretType.Brain;
+                    return enumTurretType.Brain;
                 case "ecm":
-                    return Turret.enumTurretType.ECM;
+                    return enumTurretType.ECM;
                 default:
-                    return Turret.enumTurretType.Unknown;
+                    return enumTurretType.Unknown;
             }
         }
 
@@ -397,28 +283,6 @@ namespace SharpFlame
             Output.WarningAdd(MessageText);
         }
 
-        public struct sWorldPos
-        {
-            public sXY_int Horizontal;
-            public int Altitude;
-
-            public sWorldPos(sXY_int NewHorizontal, int NewAltitude)
-            {
-                Horizontal = NewHorizontal;
-                Altitude = NewAltitude;
-            }
-        }
-
-        public class clsWorldPos
-        {
-            public sWorldPos WorldPos;
-
-            public clsWorldPos(sWorldPos NewWorldPos)
-            {
-                WorldPos = NewWorldPos;
-            }
-        }
-
         public static bool PosIsWithinTileArea(sXY_int WorldHorizontal, sXY_int StartTile, sXY_int FinishTile)
         {
             return WorldHorizontal.X >= StartTile.X * TerrainGridSpacing &
@@ -431,19 +295,6 @@ namespace SharpFlame
         {
             double Power = Math.Log(Size) / Math.Log(2.0D);
             return Power == (int)Power;
-        }
-
-        public class clsKeysActive
-        {
-            public bool[] Keys = new bool[256];
-
-            public void Deactivate()
-            {
-                for ( int i = 0; i <= 255; i++ )
-                {
-                    Keys[i] = false;
-                }
-            }
         }
 
         public static clsResult LoadTilesets(string TilesetsPath)
@@ -526,25 +377,12 @@ namespace SharpFlame
 
         public static bool Draw_TileTextures = true;
 
-        public enum enumDrawLighting
-        {
-            Off,
-            Half,
-            Normal
-        }
-
         public static enumDrawLighting Draw_Lighting = enumDrawLighting.Half;
         public static bool Draw_TileWireframe;
         public static bool Draw_Units = true;
         public static bool Draw_VertexTerrain;
         public static bool Draw_Gateways;
         public static bool Draw_ScriptMarkers = true;
-
-        public enum enumView_Move_Type
-        {
-            Free,
-            RTS
-        }
 
         public static enumView_Move_Type ViewMoveType = enumView_Move_Type.RTS;
         public static bool RTSOrbit = true;
@@ -555,152 +393,6 @@ namespace SharpFlame
         public static void View_Radius_Set(double Radius)
         {
             VisionSectors.Radius = Radius / (TerrainGridSpacing * Constants.SectorTileSize);
-        }
-
-        public struct sLayerList
-        {
-            public class clsLayer
-            {
-                public int WithinLayer;
-                public bool[] AvoidLayers;
-                public Terrain Terrain;
-                public BooleanMap Terrainmap;
-                public float HeightMin;
-                public float HeightMax;
-                public float SlopeMin;
-                public float SlopeMax;
-                //for generator only
-                public float Scale;
-                public float Density;
-            }
-
-            public clsLayer[] Layers;
-            public int LayerCount;
-
-            public void Layer_Insert(int PositionNum, clsLayer NewLayer)
-            {
-                int A = 0;
-                int B = 0;
-
-                Array.Resize(ref Layers, LayerCount + 1);
-                //shift the ones below down
-                for ( A = LayerCount - 1; A >= PositionNum; A-- )
-                {
-                    Layers[A + 1] = Layers[A];
-                }
-                //insert the new entry
-                Layers[PositionNum] = NewLayer;
-                LayerCount++;
-
-                for ( A = 0; A <= LayerCount - 1; A++ )
-                {
-                    if ( Layers[A].WithinLayer >= PositionNum )
-                    {
-                        Layers[A].WithinLayer = Layers[A].WithinLayer + 1;
-                    }
-                    Array.Resize(ref Layers[A].AvoidLayers, LayerCount);
-                    for ( B = LayerCount - 2; B >= PositionNum; B-- )
-                    {
-                        Layers[A].AvoidLayers[B + 1] = Layers[A].AvoidLayers[B];
-                    }
-                    Layers[A].AvoidLayers[PositionNum] = false;
-                }
-            }
-
-            public void Layer_Remove(int Layer_Num)
-            {
-                int A = 0;
-                int B = 0;
-
-                LayerCount--;
-                for ( A = Layer_Num; A <= LayerCount - 1; A++ )
-                {
-                    Layers[A] = Layers[A + 1];
-                }
-                Array.Resize(ref Layers, LayerCount);
-
-                for ( A = 0; A <= LayerCount - 1; A++ )
-                {
-                    if ( Layers[A].WithinLayer == Layer_Num )
-                    {
-                        Layers[A].WithinLayer = -1;
-                    }
-                    else if ( Layers[A].WithinLayer > Layer_Num )
-                    {
-                        Layers[A].WithinLayer = Layers[A].WithinLayer - 1;
-                    }
-                    for ( B = Layer_Num; B <= LayerCount - 1; B++ )
-                    {
-                        Layers[A].AvoidLayers[B] = Layers[A].AvoidLayers[B + 1];
-                    }
-                    Array.Resize(ref Layers[A].AvoidLayers, LayerCount);
-                }
-            }
-
-            public void Layer_Move(int Layer_Num, int Layer_Dest_Num)
-            {
-                clsLayer Layer_Temp = default(clsLayer);
-                bool boolTemp = default(bool);
-                int A = 0;
-                int B = 0;
-
-                if ( Layer_Dest_Num < Layer_Num )
-                {
-                    //move the variables
-                    Layer_Temp = Layers[Layer_Num];
-                    for ( A = Layer_Num - 1; A >= Layer_Dest_Num; A-- )
-                    {
-                        Layers[A + 1] = Layers[A];
-                    }
-                    Layers[Layer_Dest_Num] = Layer_Temp;
-                    //update the layer nums
-                    for ( A = 0; A <= LayerCount - 1; A++ )
-                    {
-                        if ( Layers[A].WithinLayer == Layer_Num )
-                        {
-                            Layers[A].WithinLayer = Layer_Dest_Num;
-                        }
-                        else if ( Layers[A].WithinLayer >= Layer_Dest_Num && Layers[A].WithinLayer < Layer_Num )
-                        {
-                            Layers[A].WithinLayer = Layers[A].WithinLayer + 1;
-                        }
-                        boolTemp = Convert.ToBoolean(Layers[A].AvoidLayers[Layer_Num]);
-                        for ( B = Layer_Num - 1; B >= Layer_Dest_Num; B-- )
-                        {
-                            Layers[A].AvoidLayers[B + 1] = Layers[A].AvoidLayers[B];
-                        }
-                        Layers[A].AvoidLayers[Layer_Dest_Num] = boolTemp;
-                    }
-                }
-                else if ( Layer_Dest_Num > Layer_Num )
-                {
-                    //move the variables
-                    Layer_Temp = Layers[Layer_Num];
-                    for ( A = Layer_Num; A <= Layer_Dest_Num - 1; A++ )
-                    {
-                        Layers[A] = Layers[A + 1];
-                    }
-                    Layers[Layer_Dest_Num] = Layer_Temp;
-                    //update the layer nums
-                    for ( A = 0; A <= LayerCount - 1; A++ )
-                    {
-                        if ( Layers[A].WithinLayer == Layer_Num )
-                        {
-                            Layers[A].WithinLayer = Layer_Dest_Num;
-                        }
-                        else if ( Layers[A].WithinLayer > Layer_Num && Layers[A].WithinLayer <= Layer_Dest_Num )
-                        {
-                            Layers[A].WithinLayer = Layers[A].WithinLayer - 1;
-                        }
-                        boolTemp = Convert.ToBoolean(Layers[A].AvoidLayers[Layer_Num]);
-                        for ( B = Layer_Num; B <= Layer_Dest_Num - 1; B++ )
-                        {
-                            Layers[A].AvoidLayers[B] = Layers[A].AvoidLayers[B + 1];
-                        }
-                        Layers[A].AvoidLayers[Layer_Dest_Num] = boolTemp;
-                    }
-                }
-            }
         }
 
         public static sLayerList LayerList;
@@ -723,13 +415,5 @@ namespace SharpFlame
         }
     }
 
-    public class clsContainer<ItemType>
-    {
-        public ItemType Item;
-
-        public clsContainer(ItemType item)
-        {
-            Item = item;
-        }
-    }
+ 
 }

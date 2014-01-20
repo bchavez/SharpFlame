@@ -1,5 +1,6 @@
 using System;
 using SharpFlame.Domain;
+using SharpFlame.Util;
 
 namespace SharpFlame.Mapping.Wz
 {
@@ -7,7 +8,7 @@ namespace SharpFlame.Mapping.Wz
     {
         public string Code;
         public UInt32 ID;
-        public App.sWorldPos Pos;
+        public sWorldPos Pos;
         public UInt32 Rotation;
         public UInt32 Player;
         public UnitType ObjectType;

@@ -6,6 +6,7 @@ using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
 using SharpFlame.Mapping.Drawing;
 using SharpFlame.Maths;
+using SharpFlame.Util;
 
 namespace SharpFlame.Mapping.Script
 {
@@ -95,9 +96,9 @@ namespace SharpFlame.Mapping.Script
             File.Gap_Append();
         }
 
-        public App.sResult SetLabel(string Text)
+        public sResult SetLabel(string Text)
         {
-            App.sResult Result = new App.sResult();
+            sResult Result = new sResult();
 
             Result = _ParentMapLink.Source.ScriptLabelIsValid(Text);
             if ( Result.Success )

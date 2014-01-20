@@ -445,7 +445,7 @@ namespace SharpFlame
                         DroidType = (DroidDesign)Unit.TypeBase;
                         if ( DroidType.Body != null && DroidType.Propulsion != null && DroidType.Turret1 != null && DroidType.TurretCount == 1 )
                         {
-                            if ( DroidType.Turret1.TurretType == Turret.enumTurretType.Construct )
+                            if ( DroidType.Turret1.TurretType == enumTurretType.Construct )
                             {
                                 PlayerMasterTruckCount[Unit.UnitGroup.WZ_StartPos]++;
                                 if ( DroidType.IsTemplate )

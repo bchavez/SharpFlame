@@ -19,6 +19,7 @@ using SharpFlame.Mapping.Tiles;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
+using SharpFlame.Util;
 
 namespace SharpFlame.Mapping
 {
@@ -799,9 +800,9 @@ namespace SharpFlame.Mapping
         {
             TileOrientation TileOrientation;
             sXY_int UnrotatedPos = new sXY_int();
-            App.sWorldPos Vertex0 = new App.sWorldPos();
-            App.sWorldPos Vertex1 = new App.sWorldPos();
-            App.sWorldPos Vertex2 = new App.sWorldPos();
+            sWorldPos Vertex0 = new sWorldPos();
+            sWorldPos Vertex1 = new sWorldPos();
+            sWorldPos Vertex2 = new sWorldPos();
 
             TileOrientation = Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation;
 
@@ -1150,9 +1151,9 @@ namespace SharpFlame.Mapping
             ResultSectorFinish.Y = MathUtil.Clamp_int(ResultSectorFinish.Y, 0, SectorCount.Y - 1);
         }
 
-        public App.sWorldPos TileAlignedPos(sXY_int TileNum, sXY_int Footprint)
+        public sWorldPos TileAlignedPos(sXY_int TileNum, sXY_int Footprint)
         {
-            App.sWorldPos Result = new App.sWorldPos();
+            sWorldPos Result = new sWorldPos();
 
             Result.Horizontal.X = (int)((TileNum.X + Footprint.X / 2.0D) * App.TerrainGridSpacing);
             Result.Horizontal.Y = (int)((TileNum.Y + Footprint.Y / 2.0D) * App.TerrainGridSpacing);
@@ -1161,9 +1162,9 @@ namespace SharpFlame.Mapping
             return Result;
         }
 
-        public App.sWorldPos TileAlignedPosFromMapPos(sXY_int Horizontal, sXY_int Footprint)
+        public sWorldPos TileAlignedPosFromMapPos(sXY_int Horizontal, sXY_int Footprint)
         {
-            App.sWorldPos Result = new App.sWorldPos();
+            sWorldPos Result = new sWorldPos();
 
             Result.Horizontal.X =
                 (int)
@@ -1887,9 +1888,9 @@ namespace SharpFlame.Mapping
             }
         }
 
-        public App.sWorldPos GetTileOffsetRotatedWorldPos(sXY_int Tile, sXY_int TileOffsetToRotate)
+        public sWorldPos GetTileOffsetRotatedWorldPos(sXY_int Tile, sXY_int TileOffsetToRotate)
         {
-            App.sWorldPos Result = new App.sWorldPos();
+            sWorldPos Result = new sWorldPos();
 
             sXY_int RotatedOffset = new sXY_int();
 
@@ -2129,7 +2130,7 @@ namespace SharpFlame.Mapping
             }
             else
             {
-                App.sSplitPath SplitPath = new App.sSplitPath(PathInfo.Path);
+                sSplitPath SplitPath = new sSplitPath(PathInfo.Path);
                 return SplitPath.FilePath;
             }
         }
@@ -2210,17 +2211,17 @@ namespace SharpFlame.Mapping
             TerrainInterpretChanges.SidesV.Changed(new sXY_int(Pos.X + 1, Pos.Y));
         }
 
-        public void TileTextureChangeTerrainAction(sXY_int Pos, App.enumTextureTerrainAction Action)
+        public void TileTextureChangeTerrainAction(sXY_int Pos, enumTextureTerrainAction Action)
         {
             switch ( Action )
             {
-                case App.enumTextureTerrainAction.Ignore:
+                case enumTextureTerrainAction.Ignore:
                     break;
 
-                case App.enumTextureTerrainAction.Reinterpret:
+                case enumTextureTerrainAction.Reinterpret:
                     TileNeedsInterpreting(Pos);
                     break;
-                case App.enumTextureTerrainAction.Remove:
+                case enumTextureTerrainAction.Remove:
                     Terrain.Vertices[Pos.X, Pos.Y].Terrain = null;
                     Terrain.Vertices[Pos.X + 1, Pos.Y].Terrain = null;
                     Terrain.Vertices[Pos.X, Pos.Y + 1].Terrain = null;
@@ -2241,7 +2242,7 @@ namespace SharpFlame.Mapping
             }
             else
             {
-                App.sSplitPath SplitPath = new App.sSplitPath(PathInfo.Path);
+                sSplitPath SplitPath = new sSplitPath(PathInfo.Path);
                 if ( PathInfo.IsFMap )
                 {
                     ReturnResult = SplitPath.FileTitleWithoutExtension;
@@ -2481,7 +2482,7 @@ namespace SharpFlame.Mapping
             clsUnit Unit = default(clsUnit);
             sXY_int UnitTile = new sXY_int();
             sXY_int Difference = new sXY_int();
-            App.enumTileWalls TileWalls = App.enumTileWalls.None;
+            enumTileWalls TileWalls = enumTileWalls.None;
             SimpleList<clsUnit> Walls = new SimpleList<clsUnit>();
             SimpleList<clsUnit> Removals = new SimpleList<clsUnit>();
             UnitTypeBase unitTypeBase = default(UnitTypeBase);
@@ -2521,7 +2522,7 @@ namespace SharpFlame.Mapping
                                 {
                                     if ( Difference.X == 0 )
                                     {
-                                        TileWalls = (App.enumTileWalls)(TileWalls | App.enumTileWalls.Bottom);
+                                        TileWalls = (enumTileWalls)(TileWalls | enumTileWalls.Bottom);
                                         Walls.Add(Unit);
                                     }
                                 }
@@ -2533,12 +2534,12 @@ namespace SharpFlame.Mapping
                                     }
                                     else if ( Difference.X == -1 )
                                     {
-                                        TileWalls = (App.enumTileWalls)(TileWalls | App.enumTileWalls.Left);
+                                        TileWalls = (enumTileWalls)(TileWalls | enumTileWalls.Left);
                                         Walls.Add(Unit);
                                     }
                                     else if ( Difference.X == 1 )
                                     {
-                                        TileWalls = (App.enumTileWalls)(TileWalls | App.enumTileWalls.Right);
+                                        TileWalls = (enumTileWalls)(TileWalls | enumTileWalls.Right);
                                         Walls.Add(Unit);
                                     }
                                 }
@@ -2546,7 +2547,7 @@ namespace SharpFlame.Mapping
                                 {
                                     if ( Difference.X == 0 )
                                     {
-                                        TileWalls = (App.enumTileWalls)(TileWalls | App.enumTileWalls.Top);
+                                        TileWalls = (enumTileWalls)(TileWalls | enumTileWalls.Top);
                                         Walls.Add(Unit);
                                     }
                                 }

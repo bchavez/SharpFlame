@@ -4,6 +4,7 @@ using System.Drawing;
 using Microsoft.VisualBasic;
 using SharpFlame.Bitmaps;
 using SharpFlame.Maths;
+using SharpFlame.Util;
 
 namespace SharpFlame
 {
@@ -775,14 +776,14 @@ namespace SharpFlame
             }
         }
 
-        public App.sResult Load_Image(string Path)
+        public sResult Load_Image(string Path)
         {
-            App.sResult ReturnResult = new App.sResult();
+            sResult ReturnResult = new sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
             Bitmap HeightmapBitmap = null;
-            App.sResult Result = new App.sResult();
+            sResult Result = new sResult();
 
             Result = BitmapUtil.LoadBitmap(Path, ref HeightmapBitmap);
             if ( !Result.Success )

@@ -103,10 +103,7 @@ namespace SharpFlame.Util
             get { return _PreviousTool; }
         }
     }
-}
 
-namespace SharpFlame
-{
     public class clsTool
     {
     }

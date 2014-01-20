@@ -6,6 +6,7 @@ using SharpFlame.AppSettings;
 using SharpFlame.Bitmaps;
 using SharpFlame.Colors;
 using SharpFlame.FileIO;
+using SharpFlame.Util;
 
 namespace SharpFlame.Mapping.Tiles
 {
@@ -29,9 +30,9 @@ namespace SharpFlame.Mapping.Tiles
 
         public sRGB_sng BGColour = new sRGB_sng(0.5F, 0.5F, 0.5F);
 
-        public App.sResult LoadTileType(string path)
+        public sResult LoadTileType(string path)
         {
-            App.sResult returnResult = new App.sResult();
+            sResult returnResult = new sResult();
             BinaryReader file;
 
             try
@@ -48,9 +49,9 @@ namespace SharpFlame.Mapping.Tiles
             return returnResult;
         }
 
-        private App.sResult ReadTileType(BinaryReader file)
+        private sResult ReadTileType(BinaryReader file)
         {
-            App.sResult returnResult = new App.sResult();
+            sResult returnResult = new sResult();
             returnResult.Success = false;
             returnResult.Problem = "";
 
@@ -105,9 +106,9 @@ namespace SharpFlame.Mapping.Tiles
             var returnResult = new clsResult( "Loading tileset from '{0}'".Format2( path ) );
 
             Bitmap bitmap = null;
-            App.sSplitPath SplitPath = new App.sSplitPath(path);
+            sSplitPath SplitPath = new sSplitPath(path);
             string slashPath = PathUtil.EndWithPathSeperator(path);
-            App.sResult result = new App.sResult();
+            sResult result = new sResult();
 
             if ( SplitPath.FileTitle != "" )
             {
@@ -257,7 +258,7 @@ namespace SharpFlame.Mapping.Tiles
             Bitmap Bitmap2 = default(Bitmap);
             Bitmap Bitmap1 = default(Bitmap);
             Bitmap Bitmap = null;
-            App.sResult Result = new App.sResult();
+            sResult Result = new sResult();
 
             //-------- 64 --------
 

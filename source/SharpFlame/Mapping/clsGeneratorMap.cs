@@ -12,6 +12,7 @@ using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 using SharpFlame.Pathfinding;
+using SharpFlame.Util;
 
 namespace SharpFlame
 {
@@ -856,7 +857,7 @@ namespace SharpFlame
             }
 
             clsPassageNode tmpPassageNodeC = default(clsPassageNode);
-            App.sResult Result = new App.sResult();
+            sResult Result = new sResult();
 
             HeightsArgs.FlatsCutoff = 1;
             HeightsArgs.PassagesCutoff = 1;
@@ -2228,7 +2229,7 @@ namespace SharpFlame
             }
         }
 
-        public clsUnit PlaceUnit(UnitTypeBase TypeBase, App.sWorldPos Pos, clsUnitGroup UnitGroup, int Rotation)
+        public clsUnit PlaceUnit(UnitTypeBase TypeBase, sWorldPos Pos, clsUnitGroup UnitGroup, int Rotation)
         {
             sXY_int TilePosA = new sXY_int();
             sXY_int TilePosB = new sXY_int();
@@ -2639,9 +2640,9 @@ namespace SharpFlame
             public int Length;
         }
 
-        public App.sResult GenerateGateways()
+        public sResult GenerateGateways()
         {
-            App.sResult ReturnResult = new App.sResult();
+            sResult ReturnResult = new sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -3159,9 +3160,9 @@ namespace SharpFlame
             public int ActionTotal;
         }
 
-        private App.sResult PassageNodeHeightLevel(clsPassageNodeHeightLevelArgs Args)
+        private sResult PassageNodeHeightLevel(clsPassageNodeHeightLevelArgs Args)
         {
-            App.sResult ReturnResult = new App.sResult();
+            sResult ReturnResult = new sResult();
             ReturnResult.Problem = "";
             ReturnResult.Success = false;
 

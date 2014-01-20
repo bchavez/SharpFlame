@@ -1,5 +1,6 @@
 using Microsoft.VisualBasic;
 using SharpFlame.Mapping.Tiles;
+using SharpFlame.Util;
 
 namespace SharpFlame.Mapping.Tools
 {
@@ -10,7 +11,7 @@ namespace SharpFlame.Mapping.Tools
         public TileOrientation Orientation;
         public bool SetOrientation;
         public bool RandomOrientation;
-        public App.enumTextureTerrainAction TerrainAction;
+        public enumTextureTerrainAction TerrainAction;
 
         private clsTerrain Terrain;
 

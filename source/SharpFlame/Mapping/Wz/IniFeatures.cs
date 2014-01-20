@@ -1,6 +1,7 @@
 using System;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
+using SharpFlame.Util;
 
 namespace SharpFlame.Mapping.Wz
 {
@@ -10,8 +11,8 @@ namespace SharpFlame.Mapping.Wz
         {
             public UInt32 ID;
             public string Code;
-            public App.clsWorldPos Pos;
-            public App.sWZAngle Rotation;
+            public clsWorldPos Pos;
+            public sWZAngle Rotation;
             public int HealthPercent;
         }
 
@@ -53,7 +54,7 @@ namespace SharpFlame.Mapping.Wz
             }
             else if ( (string)INIProperty.Name == "position" )
             {
-                App.clsWorldPos temp_Result = Features[INISectionNum].Pos;
+                clsWorldPos temp_Result = Features[INISectionNum].Pos;
                 if ( !IOUtil.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result) )
                 {
                     return TranslatorResult.ValueInvalid;
@@ -61,7 +62,7 @@ namespace SharpFlame.Mapping.Wz
             }
             else if ( (string)INIProperty.Name == "rotation" )
             {
-                App.sWZAngle temp_Result2 = Features[INISectionNum].Rotation;
+                sWZAngle temp_Result2 = Features[INISectionNum].Rotation;
                 if ( !IOUtil.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result2) )
                 {
                     return TranslatorResult.ValueInvalid;

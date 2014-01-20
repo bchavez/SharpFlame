@@ -3,6 +3,7 @@ using Matrix3D;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
 using SharpFlame.Maths;
+using SharpFlame.Util;
 
 namespace SharpFlame.Domain
 {
@@ -26,13 +27,13 @@ namespace SharpFlame.Domain
         {
             switch ( App.Draw_Lighting )
             {
-                case App.enumDrawLighting.Off:
+                case enumDrawLighting.Off:
                     GL.Color3(1.0F, 1.0F, 1.0F);
                     break;
-                case App.enumDrawLighting.Half:
+                case enumDrawLighting.Half:
                     GL.Color3(0.875F, 0.875F, 0.875F);
                     break;
-                case App.enumDrawLighting.Normal:
+                case enumDrawLighting.Normal:
                     GL.Color3(0.75F, 0.75F, 0.75F);
                     break;
             }
@@ -545,7 +546,7 @@ namespace SharpFlame.Domain
             {
                 return Result;
             }
-            if ( Turret2.TurretType != Turret.enumTurretType.Weapon )
+            if ( Turret2.TurretType != enumTurretType.Weapon )
             {
                 return Result;
             }
@@ -554,7 +555,7 @@ namespace SharpFlame.Domain
             {
                 return Result;
             }
-            if ( Turret3.TurretType != Turret.enumTurretType.Weapon )
+            if ( Turret3.TurretType != enumTurretType.Weapon )
             {
                 return Result;
             }
@@ -625,7 +626,7 @@ namespace SharpFlame.Domain
                 bool UseWeapon = default(bool);
                 if ( Turret1 != null )
                 {
-                    if ( Turret1.TurretType == Turret.enumTurretType.Brain )
+                    if ( Turret1.TurretType == enumTurretType.Brain )
                     {
                         UseWeapon = false;
                     }
@@ -733,114 +734,114 @@ namespace SharpFlame.Domain
             return Result;
         }
 
-        public App.enumDroidType GetDroidType()
+        public enumDroidType GetDroidType()
         {
-            App.enumDroidType Result = default(App.enumDroidType);
+            enumDroidType Result = default(enumDroidType);
 
             if ( TemplateDroidType == App.TemplateDroidType_Null )
             {
-                Result = App.enumDroidType.Default_;
+                Result = enumDroidType.Default_;
             }
             else if ( TemplateDroidType == App.TemplateDroidType_Person )
             {
-                Result = App.enumDroidType.Person;
+                Result = enumDroidType.Person;
             }
             else if ( TemplateDroidType == App.TemplateDroidType_Cyborg )
             {
-                Result = App.enumDroidType.Cyborg;
+                Result = enumDroidType.Cyborg;
             }
             else if ( TemplateDroidType == App.TemplateDroidType_CyborgSuper )
             {
-                Result = App.enumDroidType.Cyborg_Super;
+                Result = enumDroidType.Cyborg_Super;
             }
             else if ( TemplateDroidType == App.TemplateDroidType_CyborgConstruct )
             {
-                Result = App.enumDroidType.Cyborg_Construct;
+                Result = enumDroidType.Cyborg_Construct;
             }
             else if ( TemplateDroidType == App.TemplateDroidType_CyborgRepair )
             {
-                Result = App.enumDroidType.Cyborg_Repair;
+                Result = enumDroidType.Cyborg_Repair;
             }
             else if ( TemplateDroidType == App.TemplateDroidType_Transporter )
             {
-                Result = App.enumDroidType.Transporter;
+                Result = enumDroidType.Transporter;
             }
             else if ( Turret1 == null )
             {
-                Result = App.enumDroidType.Default_;
+                Result = enumDroidType.Default_;
             }
-            else if ( Turret1.TurretType == Turret.enumTurretType.Brain )
+            else if ( Turret1.TurretType == enumTurretType.Brain )
             {
-                Result = App.enumDroidType.Command;
+                Result = enumDroidType.Command;
             }
-            else if ( Turret1.TurretType == Turret.enumTurretType.Sensor )
+            else if ( Turret1.TurretType == enumTurretType.Sensor )
             {
-                Result = App.enumDroidType.Sensor;
+                Result = enumDroidType.Sensor;
             }
-            else if ( Turret1.TurretType == Turret.enumTurretType.ECM )
+            else if ( Turret1.TurretType == enumTurretType.ECM )
             {
-                Result = App.enumDroidType.ECM;
+                Result = enumDroidType.ECM;
             }
-            else if ( Turret1.TurretType == Turret.enumTurretType.Construct )
+            else if ( Turret1.TurretType == enumTurretType.Construct )
             {
-                Result = App.enumDroidType.Construct;
+                Result = enumDroidType.Construct;
             }
-            else if ( Turret1.TurretType == Turret.enumTurretType.Repair )
+            else if ( Turret1.TurretType == enumTurretType.Repair )
             {
-                Result = App.enumDroidType.Repair;
+                Result = enumDroidType.Repair;
             }
-            else if ( Turret1.TurretType == Turret.enumTurretType.Weapon )
+            else if ( Turret1.TurretType == enumTurretType.Weapon )
             {
-                Result = App.enumDroidType.Weapon;
+                Result = enumDroidType.Weapon;
             }
             else
             {
-                Result = App.enumDroidType.Default_;
+                Result = enumDroidType.Default_;
             }
             return Result;
         }
 
-        public bool SetDroidType(App.enumDroidType DroidType)
+        public bool SetDroidType(enumDroidType DroidType)
         {
             switch ( DroidType )
             {
-                case App.enumDroidType.Weapon:
+                case enumDroidType.Weapon:
                     TemplateDroidType = App.TemplateDroidType_Droid;
                     break;
-                case App.enumDroidType.Sensor:
+                case enumDroidType.Sensor:
                     TemplateDroidType = App.TemplateDroidType_Droid;
                     break;
-                case App.enumDroidType.ECM:
+                case enumDroidType.ECM:
                     TemplateDroidType = App.TemplateDroidType_Droid;
                     break;
-                case App.enumDroidType.Construct:
+                case enumDroidType.Construct:
                     TemplateDroidType = App.TemplateDroidType_Droid;
                     break;
-                case App.enumDroidType.Person:
+                case enumDroidType.Person:
                     TemplateDroidType = App.TemplateDroidType_Person;
                     break;
-                case App.enumDroidType.Cyborg:
+                case enumDroidType.Cyborg:
                     TemplateDroidType = App.TemplateDroidType_Cyborg;
                     break;
-                case App.enumDroidType.Transporter:
+                case enumDroidType.Transporter:
                     TemplateDroidType = App.TemplateDroidType_Transporter;
                     break;
-                case App.enumDroidType.Command:
+                case enumDroidType.Command:
                     TemplateDroidType = App.TemplateDroidType_Droid;
                     break;
-                case App.enumDroidType.Repair:
+                case enumDroidType.Repair:
                     TemplateDroidType = App.TemplateDroidType_Droid;
                     break;
-                case App.enumDroidType.Default_:
+                case enumDroidType.Default_:
                     TemplateDroidType = App.TemplateDroidType_Null;
                     break;
-                case App.enumDroidType.Cyborg_Construct:
+                case enumDroidType.Cyborg_Construct:
                     TemplateDroidType = App.TemplateDroidType_CyborgConstruct;
                     break;
-                case App.enumDroidType.Cyborg_Repair:
+                case enumDroidType.Cyborg_Repair:
                     TemplateDroidType = App.TemplateDroidType_CyborgRepair;
                     break;
-                case App.enumDroidType.Cyborg_Super:
+                case enumDroidType.Cyborg_Super:
                     TemplateDroidType = App.TemplateDroidType_CyborgSuper;
                     break;
                 default:
@@ -860,7 +861,7 @@ namespace SharpFlame.Domain
                 {
                     NotThis = true;
                 }
-                else if ( Turret1.TurretType != Turret.enumTurretType.Construct )
+                else if ( Turret1.TurretType != enumTurretType.Construct )
                 {
                     NotThis = true;
                 }
@@ -894,7 +895,7 @@ namespace SharpFlame.Domain
                 {
                     NotThis = true;
                 }
-                else if ( Turret1.TurretType != Turret.enumTurretType.Repair )
+                else if ( Turret1.TurretType != enumTurretType.Repair )
                 {
                     NotThis = true;
                 }
@@ -928,7 +929,7 @@ namespace SharpFlame.Domain
                 {
                     NotThis = true;
                 }
-                else if ( Turret1.TurretType != Turret.enumTurretType.Sensor )
+                else if ( Turret1.TurretType != enumTurretType.Sensor )
                 {
                     NotThis = true;
                 }
@@ -962,7 +963,7 @@ namespace SharpFlame.Domain
                 {
                     NotThis = true;
                 }
-                else if ( Turret1.TurretType != Turret.enumTurretType.Brain )
+                else if ( Turret1.TurretType != enumTurretType.Brain )
                 {
                     NotThis = true;
                 }
@@ -996,7 +997,7 @@ namespace SharpFlame.Domain
                 {
                     NotThis = true;
                 }
-                else if ( Turret1.TurretType != Turret.enumTurretType.ECM )
+                else if ( Turret1.TurretType != enumTurretType.ECM )
                 {
                     NotThis = true;
                 }

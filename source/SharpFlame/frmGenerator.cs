@@ -9,6 +9,7 @@ using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
+using SharpFlame.Util;
 
 namespace SharpFlame
 {
@@ -415,7 +416,7 @@ namespace SharpFlame
                 RevertHeight = new bool[Generator.GenerateTileset.OldTextureLayers.LayerCount];
                 for ( A = 0; A <= Generator.GenerateTileset.OldTextureLayers.LayerCount - 1; A++ )
                 {
-                    App.sLayerList.clsLayer with_2 = Generator.GenerateTileset.OldTextureLayers.Layers[A];
+                    clsLayer with_2 = Generator.GenerateTileset.OldTextureLayers.Layers[A];
                     with_2.Terrainmap = Generator.Map.GenerateTerrainMap(with_2.Scale, with_2.Density);
                     if ( with_2.SlopeMax < 0.0F )
                     {
@@ -434,7 +435,7 @@ namespace SharpFlame
                 Generator.Map.MapTexturer(Generator.GenerateTileset.OldTextureLayers);
                 for ( A = 0; A <= Generator.GenerateTileset.OldTextureLayers.LayerCount - 1; A++ )
                 {
-                    App.sLayerList.clsLayer with_3 = Generator.GenerateTileset.OldTextureLayers.Layers[A];
+                    clsLayer with_3 = Generator.GenerateTileset.OldTextureLayers.Layers[A];
                     with_3.Terrainmap = null;
                     if ( RevertSlope[A] )
                     {

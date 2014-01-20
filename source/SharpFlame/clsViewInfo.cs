@@ -156,7 +156,7 @@ namespace SharpFlame
             //Dim XYZ_lng As sXYZ_lng
             Position.XY_dbl XY_dbl = default(Position.XY_dbl);
 
-            if ( App.ViewMoveType == App.enumView_Move_Type.RTS & App.RTSOrbit )
+            if ( App.ViewMoveType == enumView_Move_Type.RTS & App.RTSOrbit )
             {
                 Flag = true;
                 //If ScreenXY_Get_TerrainPos(CInt(Int(GLSize.X / 2.0#)), CInt(Int(GLSize.Y / 2.0#)), XYZ_lng) Then
@@ -306,7 +306,7 @@ namespace SharpFlame
             return true;
         }
 
-        public bool ScreenXY_Get_TerrainPos(sXY_int ScreenPos, App.sWorldPos ResultPos)
+        public bool ScreenXY_Get_TerrainPos(sXY_int ScreenPos, sWorldPos ResultPos)
         {
             double dblTemp = 0;
             Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
@@ -738,7 +738,7 @@ namespace SharpFlame
 
             public class clsOverTerrain
             {
-                public App.sWorldPos Pos;
+                public sWorldPos Pos;
                 public SimpleClassList<clsUnit> Units = new SimpleClassList<clsUnit>();
                 public clsBrush.sPosNum Tile;
                 public clsBrush.sPosNum Vertex;
@@ -754,7 +754,7 @@ namespace SharpFlame
         {
             public class clsOverTerrain
             {
-                public App.sWorldPos DownPos;
+                public sWorldPos DownPos;
             }
 
             public clsOverTerrain OverTerrain;
@@ -961,7 +961,7 @@ namespace SharpFlame
             }
         }
 
-        public void Apply_Terrain_Fill(App.enumFillCliffAction CliffAction, bool Inside)
+        public void Apply_Terrain_Fill(enumFillCliffAction CliffAction, bool Inside)
         {
             clsMouseOver.clsOverTerrain MouseOverTerrain = GetMouseOverTerrain();
 
@@ -1000,7 +1000,7 @@ namespace SharpFlame
             {
                 CurrentSource = SourceOfFill[SourceOfFillNum];
 
-                if ( CliffAction == App.enumFillCliffAction.StopBefore )
+                if ( CliffAction == enumFillCliffAction.StopBefore )
                 {
                     StopForCliff = Map.VertexIsCliffEdge(CurrentSource);
                 }
@@ -1091,7 +1091,7 @@ namespace SharpFlame
                         if ( NextSource.X >= 0 & NextSource.X <= Map.Terrain.TileSize.X
                              & NextSource.Y >= 0 & NextSource.Y <= Map.Terrain.TileSize.Y )
                         {
-                            if ( CliffAction == App.enumFillCliffAction.StopAfter )
+                            if ( CliffAction == enumFillCliffAction.StopAfter )
                             {
                                 StopForCliff = Map.SideHIsCliffOnBothSides(new sXY_int(CurrentSource.X, CurrentSource.Y));
                             }
@@ -1118,7 +1118,7 @@ namespace SharpFlame
                         if ( NextSource.X >= 0 & NextSource.X <= Map.Terrain.TileSize.X
                              & NextSource.Y >= 0 & NextSource.Y <= Map.Terrain.TileSize.Y )
                         {
-                            if ( CliffAction == App.enumFillCliffAction.StopAfter )
+                            if ( CliffAction == enumFillCliffAction.StopAfter )
                             {
                                 StopForCliff = Map.SideHIsCliffOnBothSides(new sXY_int(CurrentSource.X - 1, CurrentSource.Y));
                             }
@@ -1145,7 +1145,7 @@ namespace SharpFlame
                         if ( NextSource.X >= 0 & NextSource.X <= Map.Terrain.TileSize.X
                              & NextSource.Y >= 0 & NextSource.Y <= Map.Terrain.TileSize.Y )
                         {
-                            if ( CliffAction == App.enumFillCliffAction.StopAfter )
+                            if ( CliffAction == enumFillCliffAction.StopAfter )
                             {
                                 StopForCliff = Map.SideVIsCliffOnBothSides(new sXY_int(CurrentSource.X, CurrentSource.Y));
                             }
@@ -1172,7 +1172,7 @@ namespace SharpFlame
                         if ( NextSource.X >= 0 & NextSource.X <= Map.Terrain.TileSize.X
                              & NextSource.Y >= 0 & NextSource.Y <= Map.Terrain.TileSize.Y )
                         {
-                            if ( CliffAction == App.enumFillCliffAction.StopAfter )
+                            if ( CliffAction == enumFillCliffAction.StopAfter )
                             {
                                 StopForCliff = Map.SideVIsCliffOnBothSides(new sXY_int(CurrentSource.X, CurrentSource.Y - 1));
                             }
@@ -1834,7 +1834,7 @@ namespace SharpFlame
                 FOV_Scale_2E_Change(Zoom);
             }
 
-            if ( App.ViewMoveType == App.enumView_Move_Type.Free )
+            if ( App.ViewMoveType == enumView_Move_Type.Free )
             {
                 ViewPosChangeXYZ.X = 0;
                 ViewPosChangeXYZ.Y = 0;
@@ -1917,7 +1917,7 @@ namespace SharpFlame
                     ViewAngleSet_Rotate(matrixB);
                 }
             }
-            else if ( App.ViewMoveType == App.enumView_Move_Type.RTS )
+            else if ( App.ViewMoveType == enumView_Move_Type.RTS )
             {
                 ViewPosChangeXYZ = new sXYZ_int();
 

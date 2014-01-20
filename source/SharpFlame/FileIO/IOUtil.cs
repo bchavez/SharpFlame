@@ -5,6 +5,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.VisualBasic;
 using SharpFlame.Collections;
 using SharpFlame.Maths;
+using SharpFlame.Util;
 
 namespace SharpFlame.FileIO
 {
@@ -169,9 +170,9 @@ namespace SharpFlame.FileIO
             return ReturnResult;
         }
 
-        public static App.sResult TryOpenFileStream(string Path, ref FileStream Output)
+        public static sResult TryOpenFileStream(string Path, ref FileStream Output)
         {
-            App.sResult ReturnResult = new App.sResult();
+            sResult ReturnResult = new sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -190,10 +191,10 @@ namespace SharpFlame.FileIO
             return ReturnResult;
         }
 
-        public static bool WZAngleFromINIText(string Text, ref App.sWZAngle Result)
+        public static bool WZAngleFromINIText(string Text, ref sWZAngle Result)
         {
             SplitCommaText VectorText = new SplitCommaText(Text);
-            App.sWZAngle WZAngle = new App.sWZAngle();
+            sWZAngle WZAngle = new sWZAngle();
 
             if ( VectorText.PartCount != 3 )
             {
@@ -261,7 +262,7 @@ namespace SharpFlame.FileIO
             return true;
         }
 
-        public static bool WorldPosFromINIText(string Text, ref App.clsWorldPos Result)
+        public static bool WorldPosFromINIText(string Text, ref clsWorldPos Result)
         {
             SplitCommaText VectorText = new SplitCommaText(Text);
             int A = 0;
@@ -283,7 +284,7 @@ namespace SharpFlame.FileIO
                     return false;
                 }
             }
-            Result = new App.clsWorldPos(new App.sWorldPos(new sXY_int(Positions[0], Positions[1]), Positions[2]));
+            Result = new clsWorldPos(new sWorldPos(new sXY_int(Positions[0], Positions[1]), Positions[2]));
             return true;
         }
 

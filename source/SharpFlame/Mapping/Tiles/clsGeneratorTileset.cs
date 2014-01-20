@@ -1,5 +1,6 @@
 using System;
 using SharpFlame.Domain;
+using SharpFlame.Util;
 
 namespace SharpFlame.Mapping.Tiles
 {
@@ -28,7 +29,7 @@ namespace SharpFlame.Mapping.Tiles
 
         public int BorderTextureNum = -1;
 
-        public App.sLayerList OldTextureLayers;
+        public sLayerList OldTextureLayers;
 
         public void ScatteredUnit_Add(sUnitChance NewUnit)
         {
