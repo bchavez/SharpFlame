@@ -218,9 +218,9 @@ namespace SharpFlame.Mapping.Tiles
             return Result;
         }
 
-        public static sXY_sng GetTileRotatedPos_sng(TileOrientation tileOrientation, sXY_sng pos)
+        public static Position.XY_dbl GetTileRotatedPos_sng(TileOrientation tileOrientation, Position.XY_dbl pos)
         {
-            sXY_sng ReturnResult = new sXY_sng();
+            Position.XY_dbl ReturnResult = new Position.XY_dbl();
 
             if ( tileOrientation.SwitchedAxes )
             {
@@ -366,8 +366,8 @@ namespace SharpFlame.Mapping.Tiles
             return Math.Atan2(XY_dbl.Y, XY_dbl.X);
         }
 
-        public static void GetTileRotatedTexCoords(TileOrientation tileOrientation, sXY_sng coordA, sXY_sng coordB, sXY_sng coordC,
-            sXY_sng coordD)
+        public static void GetTileRotatedTexCoords(TileOrientation tileOrientation, Position.XY_dbl coordA, Position.XY_dbl coordB, Position.XY_dbl coordC,
+            Position.XY_dbl coordD)
         {
             TileOrientation ReverseOrientation = new TileOrientation();
 
@@ -378,8 +378,8 @@ namespace SharpFlame.Mapping.Tiles
             {
                 if ( ReverseOrientation.ResultXFlip )
                 {
-                    coordA.X = 1.0F;
-                    coordB.X = 1.0F;
+                    coordA.X = 128.0F;
+                    coordB.X = 128.0F;
                     coordC.X = 0.0F;
                     coordD.X = 0.0F;
                 }
@@ -387,44 +387,44 @@ namespace SharpFlame.Mapping.Tiles
                 {
                     coordA.X = 0.0F;
                     coordB.X = 0.0F;
-                    coordC.X = 1.0F;
-                    coordD.X = 1.0F;
+                    coordC.X = 128.0F;
+                    coordD.X = 128.0F;
                 }
                 if ( ReverseOrientation.ResultYFlip )
                 {
-                    coordA.Y = 1.0F;
+                    coordA.Y = 128.0F;
                     coordB.Y = 0.0F;
-                    coordC.Y = 1.0F;
+                    coordC.Y = 128.0F;
                     coordD.Y = 0.0F;
                 }
                 else
                 {
                     coordA.Y = 0.0F;
-                    coordB.Y = 1.0F;
+                    coordB.Y = 128.0F;
                     coordC.Y = 0.0F;
-                    coordD.Y = 1.0F;
+                    coordD.Y = 128.0F;
                 }
             }
             else
             {
                 if ( ReverseOrientation.ResultXFlip )
                 {
-                    coordA.X = 1.0F;
+                    coordA.X = 128.0F;
                     coordB.X = 0.0F;
-                    coordC.X = 1.0F;
+                    coordC.X = 128.0F;
                     coordD.X = 0.0F;
                 }
                 else
                 {
                     coordA.X = 0.0F;
-                    coordB.X = 1.0F;
+                    coordB.X = 128.0F;
                     coordC.X = 0.0F;
-                    coordD.X = 1.0F;
+                    coordD.X = 128.0F;
                 }
                 if ( ReverseOrientation.ResultYFlip )
                 {
-                    coordA.Y = 1.0F;
-                    coordB.Y = 1.0F;
+                    coordA.Y = 128.0F;
+                    coordB.Y = 128.0F;
                     coordC.Y = 0.0F;
                     coordD.Y = 0.0F;
                 }
@@ -432,8 +432,8 @@ namespace SharpFlame.Mapping.Tiles
                 {
                     coordA.Y = 0.0F;
                     coordB.Y = 0.0F;
-                    coordC.Y = 1.0F;
-                    coordD.Y = 1.0F;
+                    coordC.Y = 128.0F;
+                    coordD.Y = 128.0F;
                 }
             }
         }

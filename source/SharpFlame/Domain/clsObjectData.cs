@@ -8,6 +8,7 @@ using SharpFlame.Collections;
 using SharpFlame.FileIO;
 using SharpFlame.Maths;
 using SharpFlame.Util;
+using Matrix3D;
 
 namespace SharpFlame.Domain
 {
@@ -590,7 +591,7 @@ namespace SharpFlame.Domain
 
             clsAttachment Attachment = default(clsAttachment);
             clsAttachment BaseAttachment = default(clsAttachment);
-            sXYZ_sng Connector = new sXYZ_sng();
+            Position.XYZ_dbl Connector = new Position.XYZ_dbl();
             StructureTypeBase structureTypeBase = default(StructureTypeBase);
             FeatureTypeBase featureTypeBase = default(FeatureTypeBase);
             DroidTemplate Template = default(DroidTemplate);

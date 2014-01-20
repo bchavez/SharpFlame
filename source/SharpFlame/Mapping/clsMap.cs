@@ -418,17 +418,17 @@ namespace SharpFlame.Mapping
             return (Offset + GradientX * RatioX + GradientY * RatioY) * HeightMultiplier;
         }
 
-        public sXYZ_sng TerrainVertexNormalCalc(int X, int Y)
+        public Position.XYZ_dbl TerrainVertexNormalCalc(int X, int Y)
         {
-            sXYZ_sng ReturnResult = new sXYZ_sng();
+            Position.XYZ_dbl ReturnResult = default(Position.XYZ_dbl);
             int TerrainHeightX1 = 0;
             int TerrainHeightX2 = 0;
             int TerrainHeightY1 = 0;
             int TerrainHeightY2 = 0;
             int X2 = 0;
             int Y2 = 0;
-            Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
-            Position.XYZ_dbl XYZ_dbl2 = default(Position.XYZ_dbl);
+            Position.XYZ_dbl vector1 = default(Position.XYZ_dbl);
+            Position.XYZ_dbl vector2 = default(Position.XYZ_dbl);
             double dblTemp = 0;
 
             X2 = MathUtil.Clamp_int(X - 1, 0, Terrain.TileSize.X);
@@ -443,19 +443,20 @@ namespace SharpFlame.Mapping
             X2 = MathUtil.Clamp_int(X, 0, Terrain.TileSize.X);
             Y2 = MathUtil.Clamp_int(Y + 1, 0, Terrain.TileSize.Y);
             TerrainHeightY2 = Terrain.Vertices[X2, Y2].Height;
-            XYZ_dbl.X = (TerrainHeightX1 - TerrainHeightX2) * HeightMultiplier;
-            XYZ_dbl.Y = App.TerrainGridSpacing * 2.0D;
-            XYZ_dbl.Z = 0.0D;
-            XYZ_dbl2.X = 0.0D;
-            XYZ_dbl2.Y = App.TerrainGridSpacing * 2.0D;
-            XYZ_dbl2.Z = (TerrainHeightY1 - TerrainHeightY2) * HeightMultiplier;
-            XYZ_dbl.X = XYZ_dbl.X + XYZ_dbl2.X;
-            XYZ_dbl.Y = XYZ_dbl.Y + XYZ_dbl2.Y;
-            XYZ_dbl.Z = XYZ_dbl.Z + XYZ_dbl2.Z;
-            dblTemp = Math.Sqrt(XYZ_dbl.X * XYZ_dbl.X + XYZ_dbl.Y * XYZ_dbl.Y + XYZ_dbl.Z * XYZ_dbl.Z);
-            ReturnResult.X = (float)(XYZ_dbl.X / dblTemp);
-            ReturnResult.Y = (float)(XYZ_dbl.Y / dblTemp);
-            ReturnResult.Z = (float)(XYZ_dbl.Z / dblTemp);
+            vector1.X = (TerrainHeightX1 - TerrainHeightX2) * HeightMultiplier;
+            vector1.Y = App.TerrainGridSpacing * 2.0D;
+            vector1.Z = 0.0D;
+            vector2.X = 0.0D;
+            vector2.Y = App.TerrainGridSpacing * 2.0D;
+            vector2.Z = (TerrainHeightY1 - TerrainHeightY2) * HeightMultiplier;
+            vector1.X += vector2.X;
+            vector1.Y += vector2.Y;
+            vector1.Z += vector2.Z;
+            //dblTemp = Math.Sqrt(vector1.X * vector1.X + vector1.Y * vector1.Y + vector1.Z * vector1.Z);
+            dblTemp = vector1.GetMagnitude();
+            ReturnResult.X = vector1.X / dblTemp;
+            ReturnResult.Y = vector1.Y / dblTemp;
+            ReturnResult.Z = vector1.Z / dblTemp;
             return ReturnResult;
         }
 
@@ -688,7 +689,7 @@ namespace SharpFlame.Mapping
                         }
                     }
                 }
-                clsDrawTileOld drawTile = new clsDrawTileOld();
+                clsDrawTile drawTile = new clsDrawTileMiddleVertex();
                 drawTile.Map = this;
                 for ( TileY = StartY; TileY <= FinishY; TileY++ )
                 {
@@ -705,7 +706,7 @@ namespace SharpFlame.Mapping
             }
             else
             {
-                clsDrawTileOld drawTile = new clsDrawTileOld();
+                clsDrawTile drawTile = new clsDrawTileMiddleVertex();
                 drawTile.Map = this;
                 for ( TileY = StartY; TileY <= FinishY; TileY++ )
                 {
@@ -737,10 +738,10 @@ namespace SharpFlame.Mapping
         public void DrawTileWireframe(int TileX, int TileY)
         {
             double[] TileTerrainHeight = new double[4];
-            sXYZ_sng Vertex0 = new sXYZ_sng();
-            sXYZ_sng Vertex1 = new sXYZ_sng();
-            sXYZ_sng Vertex2 = new sXYZ_sng();
-            sXYZ_sng Vertex3 = new sXYZ_sng();
+            Position.XYZ_dbl Vertex0 = new Position.XYZ_dbl();
+            Position.XYZ_dbl Vertex1 = new Position.XYZ_dbl();
+            Position.XYZ_dbl Vertex2 = new Position.XYZ_dbl();
+            Position.XYZ_dbl Vertex3 = new Position.XYZ_dbl();
 
             TileTerrainHeight[0] = Terrain.Vertices[TileX, TileY].Height;
             TileTerrainHeight[1] = Terrain.Vertices[TileX + 1, TileY].Height;

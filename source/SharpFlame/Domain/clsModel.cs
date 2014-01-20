@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.VisualBasic;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Maths;
+using Matrix3D;
 
 namespace SharpFlame.Domain
 {
@@ -12,12 +13,12 @@ namespace SharpFlame.Domain
 
         public struct sTriangle
         {
-            public sXYZ_sng PosA;
-            public sXYZ_sng PosB;
-            public sXYZ_sng PosC;
-            public sXY_sng TexCoordA;
-            public sXY_sng TexCoordB;
-            public sXY_sng TexCoordC;
+            public Position.XYZ_dbl PosA;
+            public Position.XYZ_dbl PosB;
+            public Position.XYZ_dbl PosC;
+            public Position.XY_dbl TexCoordA;
+            public Position.XY_dbl TexCoordB;
+            public Position.XY_dbl TexCoordC;
         }
 
         public sTriangle[] Triangles;
@@ -25,14 +26,14 @@ namespace SharpFlame.Domain
 
         public struct sQuad
         {
-            public sXYZ_sng PosA;
-            public sXYZ_sng PosB;
-            public sXYZ_sng PosC;
-            public sXYZ_sng PosD;
-            public sXY_sng TexCoordA;
-            public sXY_sng TexCoordB;
-            public sXY_sng TexCoordC;
-            public sXY_sng TexCoordD;
+            public Position.XYZ_dbl PosA;
+            public Position.XYZ_dbl PosB;
+            public Position.XYZ_dbl PosC;
+            public Position.XYZ_dbl PosD;
+            public Position.XY_dbl TexCoordA;
+            public Position.XY_dbl TexCoordB;
+            public Position.XY_dbl TexCoordC;
+            public Position.XY_dbl TexCoordD;
         }
 
         public sQuad[] Quads;
@@ -61,6 +62,8 @@ namespace SharpFlame.Domain
 
             GL.BindTexture(TextureTarget.Texture2D, GLTextureNum);
             GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Modulate);
+            GL.AlphaFunc(AlphaFunction.Greater, 0.5f);
+            GL.Enable(EnableCap.AlphaTest);
 
             GL.Begin(BeginMode.Triangles);
             for ( A = 0; A <= TriangleCount - 1; A++ )
@@ -90,7 +93,7 @@ namespace SharpFlame.Domain
             GL.End();
         }
 
-        public sXYZ_sng[] Connectors = new sXYZ_sng[0];
+        public Position.XYZ_dbl[] Connectors = new Position.XYZ_dbl[0];
         public int ConnectorCount;
 
         public struct sPIELevel
@@ -98,13 +101,13 @@ namespace SharpFlame.Domain
             public struct sPolygon
             {
                 public int[] PointNum;
-                public sXY_sng[] TexCoord;
+                public Position.XY_dbl[] TexCoord;
                 public int PointCount;
             }
 
             public sPolygon[] Polygon;
             public int PolygonCount;
-            public sXYZ_sng[] Point;
+            public Position.XYZ_dbl[] Point;
             public int PointCount;
         }
 
@@ -191,7 +194,7 @@ namespace SharpFlame.Domain
                 else if ( strTemp.Substring(0, 6) == "POINTS" )
                 {
                     Levels[LevelNum].PointCount = int.Parse(strTemp.Substring(strTemp.Length - (strTemp.Length - 7), strTemp.Length - 7));
-                    Levels[LevelNum].Point = new sXYZ_sng[Levels[LevelNum].PointCount];
+                    Levels[LevelNum].Point = new Position.XYZ_dbl[Levels[LevelNum].PointCount];
                     A = 0;
                     do
                     {
@@ -315,7 +318,7 @@ namespace SharpFlame.Domain
                                 }
                                 Levels[LevelNum].Polygon[A].PointCount = Count;
                                 Levels[LevelNum].Polygon[A].PointNum = new int[Count];
-                                Levels[LevelNum].Polygon[A].TexCoord = new sXY_sng[Count];
+                                Levels[LevelNum].Polygon[A].TexCoord = new Position.XY_dbl[Count];
                                 if ( Count == 3 )
                                 {
                                     NewTriCount++;
@@ -375,7 +378,7 @@ namespace SharpFlame.Domain
                                     //flag, numpoints, points[], x4 ignore if animated, texcoord[]xy
                                     Levels[LevelNum].Polygon[A].PointCount = int.Parse(SplitText[D + 1]);
                                     Levels[LevelNum].Polygon[A].PointNum = new int[Levels[LevelNum].Polygon[A].PointCount];
-                                    Levels[LevelNum].Polygon[A].TexCoord = new sXY_sng[Levels[LevelNum].Polygon[A].PointCount];
+                                    Levels[LevelNum].Polygon[A].TexCoord = new Position.XY_dbl[Levels[LevelNum].Polygon[A].PointCount];
                                     if ( Levels[LevelNum].Polygon[A].PointCount == 3 )
                                     {
                                         NewTriCount++;
@@ -417,7 +420,7 @@ namespace SharpFlame.Domain
                 else if ( strTemp.Substring(0, 10) == "CONNECTORS" )
                 {
                     ConnectorCount = int.Parse(strTemp.Substring(strTemp.Length - (strTemp.Length - 11), strTemp.Length - 11));
-                    Connectors = new sXYZ_sng[ConnectorCount];
+                    Connectors = new Position.XYZ_dbl[ConnectorCount];
                     A = 0;
                     do
                     {

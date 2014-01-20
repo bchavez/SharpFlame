@@ -104,7 +104,7 @@ namespace SharpFlame.Mapping
 
             GL.Enable(EnableCap.DepthTest);
             GL.MatrixMode(MatrixMode.Projection);
-            Matrix4 temp_mat = Matrix4.CreatePerspectiveFieldOfView(ViewInfo.FieldOfViewY, MapViewControl.GLSize_XPerY, ZNearFar / 128.0F, ZNearFar * 128.0F);
+            Matrix4 temp_mat = Matrix4.CreatePerspectiveFieldOfView(ViewInfo.FieldOfViewY, MapViewControl.OpenGLControl.AspectRatio, ZNearFar / 128.0F, ZNearFar * 128.0F);
             GL.LoadMatrix(ref temp_mat);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();

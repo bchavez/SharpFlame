@@ -10,6 +10,7 @@ using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 using SharpFlame.Util;
+using Matrix3D;
 
 namespace SharpFlame.Controls
 {
@@ -194,14 +195,14 @@ namespace SharpFlame.Controls
             int Num = 0;
             sXY_int XY_int = new sXY_int();
             int A = 0;
-            sXY_sng Vertex0 = new sXY_sng();
-            sXY_sng Vertex1 = new sXY_sng();
-            sXY_sng Vertex2 = new sXY_sng();
-            sXY_sng UnrotatedPos = new sXY_sng();
-            sXY_sng TexCoord0 = new sXY_sng();
-            sXY_sng TexCoord1 = new sXY_sng();
-            sXY_sng TexCoord2 = new sXY_sng();
-            sXY_sng TexCoord3 = new sXY_sng();
+            Position.XY_dbl Vertex0 = new Position.XY_dbl();
+            Position.XY_dbl Vertex1 = new Position.XY_dbl();
+            Position.XY_dbl Vertex2 = new Position.XY_dbl();
+            Position.XY_dbl UnrotatedPos = new Position.XY_dbl();
+            Position.XY_dbl TexCoord0 = new Position.XY_dbl();
+            Position.XY_dbl TexCoord1 = new Position.XY_dbl();
+            Position.XY_dbl TexCoord2 = new Position.XY_dbl();
+            Position.XY_dbl TexCoord3 = new Position.XY_dbl();
 
             GL.MatrixMode(MatrixMode.Projection);
             Matrix4 temp_mat = Matrix4.CreateOrthographicOffCenter(0.0F, GLSize.X, GLSize.Y, 0.0F, -1.0F, 1.0F);
