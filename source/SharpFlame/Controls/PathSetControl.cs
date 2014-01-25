@@ -61,19 +61,22 @@ namespace SharpFlame.Controls
 
         public void btnAdd_Click(Object sender, EventArgs e)
         {
-            FolderBrowserDialog DirSelect = new FolderBrowserDialog();
+            var dialog = new FolderBrowserDialog
+                {
+                    SelectedPath = Application.StartupPath
+                };
 
             if ( lstPaths.Items.Count > 0 )
             {
-                DirSelect.SelectedPath = Convert.ToString(lstPaths.Items[lstPaths.Items.Count - 1]);
+                dialog.SelectedPath = Convert.ToString(lstPaths.Items[lstPaths.Items.Count - 1]);
             }
 
-            if ( DirSelect.ShowDialog() != DialogResult.OK )
+            if ( dialog.ShowDialog() != DialogResult.OK )
             {
                 return;
             }
 
-            lstPaths.Items.Add(DirSelect.SelectedPath);
+            lstPaths.Items.Add(dialog.SelectedPath);
             lstPaths.SelectedIndex = lstPaths.Items.Count - 1;
         }
 
