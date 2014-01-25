@@ -2089,11 +2089,8 @@ namespace SharpFlame
             BitmapTextureArgs.MinFilter = TextureMinFilter.Nearest;
             BitmapTextureArgs.TextureNum = 0;
             BitmapTextureArgs.MipMapLevel = 0;
-
-            if (
-                BitmapUtil.LoadBitmap(
-                    PathUtil.EndWithPathSeperator((new ConsoleApplicationBase()).Info.DirectoryPath) + "notile.png",
-                    ref Bitmap).Success )
+            
+            Bitmap = Resources.notile;
             {
                 clsResult Result = new clsResult("notile.png");
                 Result.Take(BitmapUtil.BitmapIsGLCompatible(Bitmap));
@@ -2102,10 +2099,8 @@ namespace SharpFlame
                 BitmapTextureArgs.Perform();
                 App.GLTexture_NoTile = BitmapTextureArgs.TextureNum;
             }
-            if (
-                BitmapUtil.LoadBitmap(
-                    PathUtil.EndWithPathSeperator((new ConsoleApplicationBase()).Info.DirectoryPath) + "overflow.png",
-                    ref Bitmap).Success )
+
+            Bitmap = Resources.overflow;
             {
                 clsResult Result = new clsResult("overflow.png");
                 Result.Take(BitmapUtil.BitmapIsGLCompatible(Bitmap));
