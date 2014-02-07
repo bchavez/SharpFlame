@@ -9,10 +9,8 @@ namespace SharpFlame.Colors
 #if !Mono
             return Information.RGB(Red, Green, Blue);
 #else
-    //			return Information.RGB(Blue, Green, Red);
+   			return Information.RGB(Blue, Green, Red);
 #endif
         }
-    }
-
-   
+	}
 }
