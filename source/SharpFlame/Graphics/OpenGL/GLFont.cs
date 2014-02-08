@@ -207,8 +207,8 @@ namespace SharpFlame.Graphics.OpenGL
                 if ( CharCode >= 0 & CharCode <= 255 )
                 {
                     CharWidth = (float)(SizeY * TextFont.Character[CharCode].Width / TextFont.Height);
-                    TexRatio.X = (float)(TextFont.Character[CharCode].Width / TextFont.Character[CharCode].TexSize);
-                    TexRatio.Y = (float)(TextFont.Height / TextFont.Character[CharCode].TexSize);
+                    TexRatio.X = (float)((double)TextFont.Character[CharCode].Width / TextFont.Character[CharCode].TexSize);
+                    TexRatio.Y = (float)((double)TextFont.Height / TextFont.Character[CharCode].TexSize);
                     LetterPosB = LetterPosA + CharWidth;
                     GL.BindTexture(TextureTarget.Texture2D, TextFont.Character[CharCode].GLTexture);
                     GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Modulate);

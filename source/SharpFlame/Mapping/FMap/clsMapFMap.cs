@@ -1053,7 +1053,7 @@ namespace SharpFlame.Mapping
                     {
                         Value = File.ReadByte();
 
-                        PartValue = (int)(Math.Floor((double)(Value / 16)));
+                        PartValue = (int)(Math.Floor(((double)Value / 16)));
                         if ( PartValue > 0 )
                         {
                             if ( WarningCount < 16 )

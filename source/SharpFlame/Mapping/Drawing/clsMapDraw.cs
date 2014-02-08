@@ -990,8 +990,8 @@ namespace SharpFlame.Mapping
             {
                 GL.Translate(0.0F, GLSize.Y - MinimapSizeXY.Y, 0.0F);
 
-                XYZ_dbl.X = Terrain.TileSize.X / Minimap_Texture_Size;
-                XYZ_dbl.Z = Terrain.TileSize.Y / Minimap_Texture_Size;
+                XYZ_dbl.X = (double)Terrain.TileSize.X / Minimap_Texture_Size;
+                XYZ_dbl.Z = (double)Terrain.TileSize.Y / Minimap_Texture_Size;
 
                 if ( Minimap_GLTexture > 0 )
                 {

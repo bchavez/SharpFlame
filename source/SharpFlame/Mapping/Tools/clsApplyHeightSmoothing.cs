@@ -104,7 +104,7 @@ namespace SharpFlame.Mapping.Tools
                 }
             }
             NewHeight[PosNum.X - Offset.X, PosNum.Y - Offset.Y] =
-                Math.Min((byte)(Convert.ToInt32(Terrain.Vertices[PosNum.X, PosNum.Y].Height * (1.0D - Ratio) + TempHeight / Samples * Ratio)), Byte.MaxValue);
+                Math.Min((byte)(Convert.ToInt32(Terrain.Vertices[PosNum.X, PosNum.Y].Height * (1.0D - Ratio) + TempHeight / (double)Samples * Ratio)), Byte.MaxValue);
         }
     }
 }

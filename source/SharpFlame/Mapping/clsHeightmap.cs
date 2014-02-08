@@ -632,7 +632,7 @@ namespace SharpFlame
                 {
                     HeightData.Height[Y, X] =
                         (int)
-                            (((1.0D - Math.Sin((1.0D - Convert.ToInt32(Source.HeightData.Height[Y, X] - HeightMin) / HeightRange) * MathUtil.RadOf90Deg)) *
+                            (((1.0D - Math.Sin((1.0D - Convert.ToInt32(Source.HeightData.Height[Y, X] - HeightMin) / (double)HeightRange) * MathUtil.RadOf90Deg)) *
                               HeightRange + HeightMin) * Source.HeightScale / HeightScale);
                 }
             }
@@ -881,8 +881,8 @@ namespace SharpFlame
 
             Blank(SizeY, SizeX);
             //new ratios convert original image positions into new image positions
-            New_Per_OldX = (float)(SizeX / OldSizeX);
-            New_Per_OldY = (float)(SizeY / OldSizeY);
+            New_Per_OldX = (float)((double)SizeX / OldSizeX);
+            New_Per_OldY = (float)((double)SizeY / OldSizeY);
             //cycles through each pixel in the new image
             for ( OldPixelY = 0; OldPixelY <= OldSizeY - 1; OldPixelY++ )
             {

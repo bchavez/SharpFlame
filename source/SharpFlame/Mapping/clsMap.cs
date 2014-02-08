@@ -178,8 +178,8 @@ namespace SharpFlame.Mapping
                 }
             }
 
-            SectorCount.X = (int)(Math.Ceiling((double)(Area.X / Constants.SectorTileSize)));
-            SectorCount.Y = (int)(Math.Ceiling((double)(Area.Y / Constants.SectorTileSize)));
+            SectorCount.X = (int)(Math.Ceiling(((double)Area.X / Constants.SectorTileSize)));
+            SectorCount.Y = (int)(Math.Ceiling(((double)Area.Y / Constants.SectorTileSize)));
             Sectors = new clsSector[SectorCount.X, SectorCount.Y];
             for ( Y = 0; Y <= SectorCount.Y - 1; Y++ )
             {
@@ -227,8 +227,8 @@ namespace SharpFlame.Mapping
             int Y = 0;
 
             Terrain = new clsTerrain(TileSize);
-            SectorCount.X = (int)(Math.Ceiling((double)(Terrain.TileSize.X / Constants.SectorTileSize)));
-            SectorCount.Y = (int)(Math.Ceiling((double)(Terrain.TileSize.Y / Constants.SectorTileSize)));
+            SectorCount.X = (int)(Math.Ceiling(((double)Terrain.TileSize.X / Constants.SectorTileSize)));
+            SectorCount.Y = (int)(Math.Ceiling(((double)Terrain.TileSize.Y / Constants.SectorTileSize)));
             Sectors = new clsSector[SectorCount.X, SectorCount.Y];
             for ( Y = 0; Y <= SectorCount.Y - 1; Y++ )
             {
@@ -1945,8 +1945,8 @@ namespace SharpFlame.Mapping
         {
             sXY_int Result = new sXY_int();
 
-            Result.X = (int)(Math.Round((double)(Horizontal.X / App.TerrainGridSpacing)));
-            Result.Y = (int)(Math.Round((double)(Horizontal.Y / App.TerrainGridSpacing)));
+            Result.X = (int)(Math.Round(((double)Horizontal.X / App.TerrainGridSpacing)));
+            Result.Y = (int)(Math.Round(((double)Horizontal.Y / App.TerrainGridSpacing)));
 
             return Result;
         }
@@ -2065,8 +2065,8 @@ namespace SharpFlame.Mapping
             int X = 0;
             int Y = 0;
 
-            SectorCount.X = (int)(Math.Ceiling((double)(Terrain.TileSize.X / Constants.SectorTileSize)));
-            SectorCount.Y = (int)(Math.Ceiling((double)(Terrain.TileSize.Y / Constants.SectorTileSize)));
+            SectorCount.X = (int)(Math.Ceiling(((double)Terrain.TileSize.X / Constants.SectorTileSize)));
+            SectorCount.Y = (int)(Math.Ceiling(((double)Terrain.TileSize.Y / Constants.SectorTileSize)));
             Sectors = new clsSector[SectorCount.X, SectorCount.Y];
             for ( Y = 0; Y <= SectorCount.Y - 1; Y++ )
             {

@@ -33,8 +33,20 @@ namespace SharpFlame
 
             SettingsManager.CreateSettingOptions();
             KeyboardManager.CreateControls(); //needed to load key control settings
+
+            try
+            {
+                Toolkit.Init();
+            }
+            catch
+            {
+
+            }
+
             clsResult SettingsLoadResult = SettingsManager.Settings_Load(ref SettingsManager.InitializeSettings);
+
             InitializeResult.Add(SettingsLoadResult);
+
 
             OpenGL1 =
                 new GLControl(new GraphicsMode(new ColorFormat(SettingsManager.InitializeSettings.MapViewBPP), SettingsManager.InitializeSettings.MapViewDepth, 0));

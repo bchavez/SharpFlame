@@ -481,7 +481,7 @@ namespace SharpFlame.Controls
             }
             else
             {
-                TextureScroll.Maximum = (int)(Math.Ceiling((double)(Map.Tileset.TileCount / TextureCount.X)));
+                TextureScroll.Maximum = (int)( Math.Ceiling( ( (double)Map.Tileset.TileCount / TextureCount.X ) ) );
                 TextureScroll.LargeChange = TextureCount.Y;
                 TextureScroll.Enabled = true;
             }
@@ -493,7 +493,7 @@ namespace SharpFlame.Controls
             GLSize.Y = OpenGLControl.Height;
             if ( GLSize.Y != 0 )
             {
-                GLSize_XPerY = GLSize.X / GLSize.Y;
+                GLSize_XPerY = (double)GLSize.X / GLSize.Y;
             }
             Viewport_Resize();
         }

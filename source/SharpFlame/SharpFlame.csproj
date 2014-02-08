@@ -7,7 +7,7 @@
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{152475A4-3ABE-41C4-B338-A2FB7B350FAF}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <StartupObject>SharpFlame.Program</StartupObject>
     <RootNamespace>SharpFlame</RootNamespace>
     <AssemblyName>SharpFlame</AssemblyName>
@@ -86,10 +86,12 @@
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="mscorlib" />
-    <Reference Include="OpenTK">
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\other\OpenTK.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK.GLControl">
+    <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\other\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="System" />

@@ -26,11 +26,11 @@ namespace SharpFlame.Bitmaps
             {
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)MagFilter);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)MinFilter);
+                GL.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)MagFilter );
+                GL.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)MinFilter );
             }
-            GL.TexImage2D(TextureTarget.Texture2D, MipMapLevel, PixelInternalFormat.Rgba8, Texture.Width, Texture.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra,
-                PixelType.UnsignedByte, BitmapData.Scan0);
+            GL.TexImage2D(TextureTarget.Texture2D, MipMapLevel, PixelInternalFormat.Rgba, Texture.Width, Texture.Height, 0,
+                OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, BitmapData.Scan0);
 
             Texture.UnlockBits(BitmapData);
         }

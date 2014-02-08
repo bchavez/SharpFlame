@@ -213,8 +213,8 @@ namespace SharpFlame
             Generator.PlayerBasePos = new sXY_int[Generator.TopLeftPlayerCount];
             double BaseMin = 12.0D;
             Position.XY_dbl BaseMax =
-                new Position.XY_dbl(Math.Min(Generator.TileSize.X / Generator.SymmetryBlockCountXY.X, Generator.TileSize.X - 12.0D),
-                    Math.Min(Generator.TileSize.Y / Generator.SymmetryBlockCountXY.Y, Generator.TileSize.Y - 12.0D));
+                new Position.XY_dbl(Math.Min((double)Generator.TileSize.X / Generator.SymmetryBlockCountXY.X, Generator.TileSize.X - 12.0D),
+                    Math.Min((double)Generator.TileSize.Y / Generator.SymmetryBlockCountXY.Y, Generator.TileSize.Y - 12.0D));
             Generator.PlayerBasePos[0] = new sXY_int(ValidateTextbox(txt1x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
                 ValidateTextbox(txt1y, BaseMin, BaseMax.X, App.TerrainGridSpacing));
             if ( Generator.TopLeftPlayerCount >= 2 )

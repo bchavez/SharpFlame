@@ -577,8 +577,8 @@ namespace SharpFlame
                     MouseOver.OverTerrain = MouseOverTerrain;
                     MouseOverTerrain.Tile.Normal.X = Conversion.Int(MouseOverTerrain.Pos.Horizontal.X / App.TerrainGridSpacing);
                     MouseOverTerrain.Tile.Normal.Y = (int)(Conversion.Int(MouseOverTerrain.Pos.Horizontal.Y / App.TerrainGridSpacing));
-                    MouseOverTerrain.Vertex.Normal.X = (int)(Math.Round((double)(MouseOverTerrain.Pos.Horizontal.X / App.TerrainGridSpacing)));
-                    MouseOverTerrain.Vertex.Normal.Y = (int)(Math.Round((double)(MouseOverTerrain.Pos.Horizontal.Y / App.TerrainGridSpacing)));
+                    MouseOverTerrain.Vertex.Normal.X = (int)( Math.Round( ( (double)MouseOverTerrain.Pos.Horizontal.X / App.TerrainGridSpacing ) ) );
+                    MouseOverTerrain.Vertex.Normal.Y = (int)( Math.Round( ( (double)MouseOverTerrain.Pos.Horizontal.Y / App.TerrainGridSpacing ) ) );
                     MouseOverTerrain.Tile.Alignment = MouseOverTerrain.Vertex.Normal;
                     MouseOverTerrain.Vertex.Alignment = new sXY_int(MouseOverTerrain.Tile.Normal.X + 1, MouseOverTerrain.Tile.Normal.Y + 1);
                     MouseOverTerrain.Triangle = Map.GetTerrainTri(MouseOverTerrain.Pos.Horizontal);

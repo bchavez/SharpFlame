@@ -2198,10 +2198,10 @@ namespace SharpFlame
                             NewUnit.Pos.Horizontal.Y = (int)(NodeTag.Pos.Y + App.TerrainGridSpacing / 2.0D);
                         }
                     }
-                    TilePosA.X = (int)Conversion.Int(NewUnit.Pos.Horizontal.X / App.TerrainGridSpacing - Footprint.X / 2.0D + 0.5D);
-                    TilePosA.Y = (int)Conversion.Int(NewUnit.Pos.Horizontal.Y / App.TerrainGridSpacing - Footprint.Y / 2.0D + 0.5D);
-                    TilePosB.X = (int)(Conversion.Int(NewUnit.Pos.Horizontal.X / App.TerrainGridSpacing + Footprint.X / 2.0D - 0.5D));
-                    TilePosB.Y = (int)(Conversion.Int(NewUnit.Pos.Horizontal.Y / App.TerrainGridSpacing + Footprint.Y / 2.0D - 0.5D));
+                    TilePosA.X = (int)Conversion.Int((double)NewUnit.Pos.Horizontal.X / App.TerrainGridSpacing - Footprint.X / 2.0D + 0.5D);
+                    TilePosA.Y = (int)Conversion.Int((double)NewUnit.Pos.Horizontal.Y / App.TerrainGridSpacing - Footprint.Y / 2.0D + 0.5D);
+                    TilePosB.X = (int)(Conversion.Int((double)NewUnit.Pos.Horizontal.X / App.TerrainGridSpacing + Footprint.X / 2.0D - 0.5D));
+                    TilePosB.Y = (int)(Conversion.Int((double)NewUnit.Pos.Horizontal.Y / App.TerrainGridSpacing + Footprint.Y / 2.0D - 0.5D));
                     NewUnit.Rotation = Rotation;
 
                     NewUnitAdd.Perform();
@@ -2252,10 +2252,10 @@ namespace SharpFlame
             Footprint = TypeBase.get_GetFootprintSelected(Rotation);
 
             NewUnit.Pos = Pos;
-            TilePosA.X = (int)(Conversion.Int(NewUnit.Pos.Horizontal.X / App.TerrainGridSpacing - Footprint.X / 2.0D + 0.5D));
-            TilePosA.Y = (int)(Conversion.Int(NewUnit.Pos.Horizontal.Y / App.TerrainGridSpacing - Footprint.Y / 2.0D + 0.5D));
-            TilePosB.X = (int)Conversion.Int(NewUnit.Pos.Horizontal.X / App.TerrainGridSpacing + Footprint.X / 2.0D - 0.5D);
-            TilePosB.Y = (int)Conversion.Int(NewUnit.Pos.Horizontal.Y / App.TerrainGridSpacing + Footprint.Y / 2.0D - 0.5D);
+            TilePosA.X = (int)(Conversion.Int((double)NewUnit.Pos.Horizontal.X / App.TerrainGridSpacing - Footprint.X / 2.0D + 0.5D));
+            TilePosA.Y = (int)(Conversion.Int((double)NewUnit.Pos.Horizontal.Y / App.TerrainGridSpacing - Footprint.Y / 2.0D + 0.5D));
+            TilePosB.X = (int)Conversion.Int((double)NewUnit.Pos.Horizontal.X / App.TerrainGridSpacing + Footprint.X / 2.0D - 0.5D);
+            TilePosB.Y = (int)Conversion.Int((double)NewUnit.Pos.Horizontal.Y / App.TerrainGridSpacing + Footprint.Y / 2.0D - 0.5D);
             NewUnit.Rotation = Rotation;
 
             NewUnitAdd.Perform();
