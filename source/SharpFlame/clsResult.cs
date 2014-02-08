@@ -1,3 +1,4 @@
+using NLog;
 using System.Windows.Forms;
 using SharpFlame.Collections;
 using SharpFlame.Mapping;
@@ -14,6 +15,8 @@ namespace SharpFlame
 
     public class clsResult : clsResultItemInterface
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         public string Text;
 
         public override string GetText
@@ -93,6 +96,7 @@ namespace SharpFlame
 
         public void ProblemAdd(string Text)
         {
+            logger.Error (Text);
             clsProblem Problem = new clsProblem();
             Problem.Text = Text;
             ItemAdd(Problem);
@@ -100,6 +104,7 @@ namespace SharpFlame
 
         public void WarningAdd(string Text)
         {
+            logger.Warn (Text);
             clsWarning Warning = new clsWarning();
             Warning.Text = Text;
             ItemAdd(Warning);
@@ -116,6 +121,7 @@ namespace SharpFlame
 
         public clsResult(string Text)
         {
+            logger.Debug (Text);
             Items.MaintainOrder = true;
 
             this.Text = Text;
