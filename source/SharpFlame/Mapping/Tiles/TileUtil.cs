@@ -366,8 +366,8 @@ namespace SharpFlame.Mapping.Tiles
             return Math.Atan2(XY_dbl.Y, XY_dbl.X);
         }
 
-        public static void GetTileRotatedTexCoords(TileOrientation tileOrientation, Position.XY_dbl coordA, Position.XY_dbl coordB, Position.XY_dbl coordC,
-            Position.XY_dbl coordD)
+        public static void GetTileRotatedTexCoords(TileOrientation tileOrientation, ref Position.XY_dbl coordA, ref Position.XY_dbl coordB, 
+            ref Position.XY_dbl coordC, ref Position.XY_dbl coordD)
         {
             TileOrientation ReverseOrientation = new TileOrientation();
 
@@ -378,62 +378,62 @@ namespace SharpFlame.Mapping.Tiles
             {
                 if ( ReverseOrientation.ResultXFlip )
                 {
-                    coordA.X = 128.0F;
-                    coordB.X = 128.0F;
-                    coordC.X = 0.0F;
-                    coordD.X = 0.0F;
+                    coordA.X = 1f;
+                    coordB.X = 1f;
+                    coordC.X = 0f;
+                    coordD.X = 0f;
                 }
                 else
                 {
-                    coordA.X = 0.0F;
-                    coordB.X = 0.0F;
-                    coordC.X = 128.0F;
-                    coordD.X = 128.0F;
+                    coordA.X = 0f;
+                    coordB.X = 0f;
+                    coordC.X = 1f;
+                    coordD.X = 1f;
                 }
                 if ( ReverseOrientation.ResultYFlip )
                 {
-                    coordA.Y = 128.0F;
-                    coordB.Y = 0.0F;
-                    coordC.Y = 128.0F;
-                    coordD.Y = 0.0F;
+                    coordA.Y = 1f;
+                    coordB.Y = 0f;
+                    coordC.Y = 1f;
+                    coordD.Y = 0f;
                 }
                 else
                 {
-                    coordA.Y = 0.0F;
-                    coordB.Y = 128.0F;
-                    coordC.Y = 0.0F;
-                    coordD.Y = 128.0F;
+                    coordA.Y = 0f;
+                    coordB.Y = 1f;
+                    coordC.Y = 0f;
+                    coordD.Y = 1f;
                 }
             }
             else
             {
                 if ( ReverseOrientation.ResultXFlip )
                 {
-                    coordA.X = 128.0F;
-                    coordB.X = 0.0F;
-                    coordC.X = 128.0F;
-                    coordD.X = 0.0F;
+                    coordA.X = 1f;
+                    coordB.X = 0f;
+                    coordC.X = 1f;
+                    coordD.X = 0f;
                 }
                 else
                 {
-                    coordA.X = 0.0F;
-                    coordB.X = 128.0F;
-                    coordC.X = 0.0F;
-                    coordD.X = 128.0F;
+                    coordA.X = 0f;
+                    coordB.X = 1F;
+                    coordC.X = 0f;
+                    coordD.X = 1f;
                 }
                 if ( ReverseOrientation.ResultYFlip )
                 {
-                    coordA.Y = 128.0F;
-                    coordB.Y = 128.0F;
-                    coordC.Y = 0.0F;
-                    coordD.Y = 0.0F;
+                    coordA.Y = 1f;
+                    coordB.Y = 1f;
+                    coordC.Y = 0f;
+                    coordD.Y = 0f;
                 }
                 else
                 {
-                    coordA.Y = 0.0F;
-                    coordB.Y = 0.0F;
-                    coordC.Y = 128.0F;
-                    coordD.Y = 128.0F;
+                    coordA.Y = 0f;
+                    coordB.Y = 0f;
+                    coordC.Y = 1f;
+                    coordD.Y = 1f;
                 }
             }
         }

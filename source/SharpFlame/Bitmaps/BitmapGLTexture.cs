@@ -22,6 +22,10 @@ namespace SharpFlame.Bitmaps
                 GL.GenTextures(1, out TextureNum);
             }
             GL.BindTexture(TextureTarget.Texture2D, TextureNum);
+
+            GL.TexImage2D(TextureTarget.Texture2D, MipMapLevel, PixelInternalFormat.Rgba, BitmapData.Width, BitmapData.Height, 0,
+                          OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, BitmapData.Scan0);
+
             if ( MipMapLevel == 0 )
             {
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
@@ -29,8 +33,6 @@ namespace SharpFlame.Bitmaps
                 GL.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)MagFilter );
                 GL.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)MinFilter );
             }
-            GL.TexImage2D(TextureTarget.Texture2D, MipMapLevel, PixelInternalFormat.Rgba, Texture.Width, Texture.Height, 0,
-                OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, BitmapData.Scan0);
 
             Texture.UnlockBits(BitmapData);
         }

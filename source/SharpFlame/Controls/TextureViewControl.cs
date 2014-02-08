@@ -138,9 +138,9 @@ namespace SharpFlame.Controls
 
             GL.ClearColor(0.0F, 0.0F, 0.0F, 1.0F);
             GL.Clear(ClearBufferMask.ColorBufferBit);
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-            GL.Enable(EnableCap.CullFace);
+//            GL.Enable(EnableCap.Blend);
+//            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+//            GL.Enable(EnableCap.CullFace);
 
             IsGLInitialized = true;
         }
@@ -212,7 +212,7 @@ namespace SharpFlame.Controls
 
             if ( Map.Tileset != null )
             {
-                TileUtil.GetTileRotatedTexCoords(App.TextureOrientation, TexCoord0, TexCoord1, TexCoord2, TexCoord3);
+                TileUtil.GetTileRotatedTexCoords(App.TextureOrientation, ref TexCoord0, ref TexCoord1, ref TexCoord2, ref TexCoord3);
 
                 GL.Enable(EnableCap.Texture2D);
                 GL.Color4(0.0F, 0.0F, 0.0F, 1.0F);
@@ -227,24 +227,18 @@ namespace SharpFlame.Controls
                             goto EndOfTextures1;
                         }
                         A = Map.Tileset.Tiles[Num].TextureViewGlTextureNum;
-                        if ( A == 0 )
-                        {
-                            GL.BindTexture(TextureTarget.Texture2D, 0);
-                        }
-                        else
-                        {
-                            GL.BindTexture(TextureTarget.Texture2D, A);
-                        }
+                        GL.BindTexture(TextureTarget.Texture2D, A);
                         GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Decal);
                         GL.Begin(BeginMode.Quads);
                         GL.TexCoord2(TexCoord0.X, TexCoord0.Y);
-                        GL.Vertex2(X * 64, Y * 64);
+                        GL.Vertex3(X * 64, Y * 64, 0);// Top Left
                         GL.TexCoord2(TexCoord2.X, TexCoord2.Y);
-                        GL.Vertex2(X * 64, Y * 64 + 64);
+                        GL.Vertex3(X * 64 + 64, Y * 64, 0); // Bottom Left
                         GL.TexCoord2(TexCoord3.X, TexCoord3.Y);
-                        GL.Vertex2(X * 64 + 64, Y * 64 + 64);
+                        GL.Vertex3(X * 64 + 64, Y * 64 + 64, 0); // Bottom right
                         GL.TexCoord2(TexCoord1.X, TexCoord1.Y);
-                        GL.Vertex2(X * 64 + 64, Y * 64);
+                        GL.Vertex3(X * 64, Y * 64 + 64, 0); // Top right
+
                         GL.End();
                     }
                 }

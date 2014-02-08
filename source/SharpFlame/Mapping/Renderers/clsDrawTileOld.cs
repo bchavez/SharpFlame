@@ -49,7 +49,7 @@ namespace SharpFlame.Mapping.Renderers
             TileTerrainHeight[2] = Terrain.Vertices[TileX, TileY + 1].Height;
             TileTerrainHeight[3] = Terrain.Vertices[TileX + 1, TileY + 1].Height;
 
-            TileUtil.GetTileRotatedTexCoords(Terrain.Tiles[TileX, TileY].Texture.Orientation, TexCoords[0], TexCoords[1], TexCoords[2], TexCoords[3]);
+            TileUtil.GetTileRotatedTexCoords(Terrain.Tiles[TileX, TileY].Texture.Orientation, ref TexCoords[0], ref TexCoords[1], ref TexCoords[2], ref TexCoords[3]);
 
             Vertices[0].X = TileX * App.TerrainGridSpacing;
             Vertices[0].Y = (float)(TileTerrainHeight[0] * Map.HeightMultiplier);
