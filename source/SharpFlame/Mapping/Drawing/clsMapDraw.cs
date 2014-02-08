@@ -227,7 +227,7 @@ namespace SharpFlame.Mapping
                 if ( Selected_Area_VertexB != null )
                 {
                     //area is selected
-                    MathUtil.ReorderXY(Selected_Area_VertexA.XY, Selected_Area_VertexB.XY, StartXY, FinishXY);
+                    MathUtil.ReorderXY(Selected_Area_VertexA.XY, Selected_Area_VertexB.XY, ref StartXY, ref FinishXY);
                     XYZ_dbl.X = Selected_Area_VertexB.X * App.TerrainGridSpacing - ViewInfo.ViewPos.X;
                     XYZ_dbl.Z = - Selected_Area_VertexB.Y * App.TerrainGridSpacing - ViewInfo.ViewPos.Z;
                     XYZ_dbl.Y = GetVertexAltitude(Selected_Area_VertexB.XY) - ViewInfo.ViewPos.Y;
@@ -238,7 +238,7 @@ namespace SharpFlame.Mapping
                     if ( MouseOverTerrain != null )
                     {
                         //selection is changing under pointer
-                        MathUtil.ReorderXY(Selected_Area_VertexA.XY, MouseOverTerrain.Vertex.Normal, StartXY, FinishXY);
+                        MathUtil.ReorderXY(Selected_Area_VertexA.XY, MouseOverTerrain.Vertex.Normal, ref StartXY, ref FinishXY);
                         XYZ_dbl.X = MouseOverTerrain.Vertex.Normal.X * App.TerrainGridSpacing - ViewInfo.ViewPos.X;
                         XYZ_dbl.Z = - MouseOverTerrain.Vertex.Normal.Y * App.TerrainGridSpacing - ViewInfo.ViewPos.Z;
                         XYZ_dbl.Y = GetVertexAltitude(MouseOverTerrain.Vertex.Normal) - ViewInfo.ViewPos.Y;
@@ -435,7 +435,7 @@ namespace SharpFlame.Mapping
                     if ( Unit_Selected_Area_VertexA != null )
                     {
                         //selection is changing under pointer
-                        MathUtil.ReorderXY(Unit_Selected_Area_VertexA.XY, MouseOverTerrain.Vertex.Normal, StartXY, FinishXY);
+                        MathUtil.ReorderXY(Unit_Selected_Area_VertexA.XY, MouseOverTerrain.Vertex.Normal, ref StartXY, ref FinishXY);
                         GL.LineWidth(2.0F);
                         GL.Color3(0.0F, 1.0F, 1.0F);
                         for ( X = StartXY.X; X <= FinishXY.X - 1; X++ )
@@ -1066,7 +1066,7 @@ namespace SharpFlame.Mapping
                     if ( Selected_Area_VertexB != null )
                     {
                         //area is selected
-                        MathUtil.ReorderXY(Selected_Area_VertexA.XY, Selected_Area_VertexB.XY, StartXY, FinishXY);
+                        MathUtil.ReorderXY(Selected_Area_VertexA.XY, Selected_Area_VertexB.XY, ref StartXY, ref FinishXY);
                         DrawIt = true;
                     }
                     else if ( modTools.Tool == modTools.Tools.TerrainSelect )
@@ -1074,7 +1074,7 @@ namespace SharpFlame.Mapping
                         if ( MouseOverTerrain != null )
                         {
                             //selection is changing under mouse
-                            MathUtil.ReorderXY(Selected_Area_VertexA.XY, MouseOverTerrain.Vertex.Normal, StartXY, FinishXY);
+                            MathUtil.ReorderXY(Selected_Area_VertexA.XY, MouseOverTerrain.Vertex.Normal, ref StartXY, ref FinishXY);
                             DrawIt = true;
                         }
                     }
@@ -1126,7 +1126,7 @@ namespace SharpFlame.Mapping
             int A = 0;
             int Altitude = Unit.Pos.Altitude - ViewInfo.ViewPos.Y;
 
-            GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation), PosA, PosB);
+            GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation), ref PosA, ref PosB);
             A = PosA.Y;
             PosA.X = (int)((PosA.X + 0.125D) * App.TerrainGridSpacing - ViewInfo.ViewPos.X);
             PosA.Y = (int)((PosB.Y + 0.875D) * - App.TerrainGridSpacing - ViewInfo.ViewPos.Z);

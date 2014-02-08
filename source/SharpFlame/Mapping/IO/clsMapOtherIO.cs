@@ -1019,7 +1019,7 @@ namespace SharpFlame.Mapping
 
                         //vf, tf, ignore
 
-                        TileUtil.OldOrientation_To_TileOrientation(Rotation, FlipX, FlipZ, Terrain.Tiles[X, Y].Texture.Orientation);
+                        TileUtil.OldOrientation_To_TileOrientation(Rotation, FlipX, FlipZ, ref Terrain.Tiles[X, Y].Texture.Orientation);
                     }
                 }
 

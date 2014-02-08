@@ -55,7 +55,7 @@ namespace SharpFlame.Mapping.Renderers
             TileTerrainHeight[3] = Terrain.Vertices[TileX + 1, TileY + 1].Height;
             TileTerrainHeight[4] = (TileTerrainHeight[0] + TileTerrainHeight[1] + TileTerrainHeight[2] + TileTerrainHeight[3]) / 4; //middle height is average of the corners
 
-            TileUtil.GetTileRotatedTexCoords(Terrain.Tiles[TileX, TileY].Texture.Orientation, TexCoords[0], TexCoords[1], TexCoords[2], TexCoords[3]);
+            TileUtil.GetTileRotatedTexCoords(Terrain.Tiles[TileX, TileY].Texture.Orientation, ref TexCoords[0], ref TexCoords[1], ref TexCoords[2], ref TexCoords[3]);
 
             Vertices[0].X = TileX * App.TerrainGridSpacing;
             Vertices[0].Y = (float)(TileTerrainHeight[0] * Map.HeightMultiplier);

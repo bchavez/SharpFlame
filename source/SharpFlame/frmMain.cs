@@ -1306,7 +1306,7 @@ namespace SharpFlame
                 return;
             }
 
-            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, StartXY, FinishXY);
+            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, ref StartXY, ref FinishXY);
             for ( Y = StartXY.Y; Y <= FinishXY.Y; Y++ )
             {
                 for ( X = StartXY.X; X <= FinishXY.X; X++ )
@@ -1971,7 +1971,7 @@ namespace SharpFlame
             sXY_int Area = new sXY_int();
             sXY_int Start = new sXY_int();
             sXY_int Finish = new sXY_int();
-            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, Start, Finish);
+            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, ref Start, ref Finish);
             Area.X = Finish.X - Start.X;
             Area.Y = Finish.Y - Start.Y;
             App.Copied_Map = new clsMap(Map, Start, Area);
@@ -2003,7 +2003,7 @@ namespace SharpFlame
             sXY_int Area = new sXY_int();
             sXY_int Start = new sXY_int();
             sXY_int Finish = new sXY_int();
-            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, Start, Finish);
+            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, ref Start, ref Finish);
             Area.X = Finish.X - Start.X;
             Area.Y = Finish.Y - Start.Y;
             Map.MapInsert(App.Copied_Map, Start, Area, menuSelPasteHeights.Checked, menuSelPasteTextures.Checked, menuSelPasteUnits.Checked,
@@ -2032,7 +2032,7 @@ namespace SharpFlame
 
             sXY_int Start = new sXY_int();
             sXY_int Finish = new sXY_int();
-            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, Start, Finish);
+            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, ref Start, ref Finish);
             sXY_int Area = new sXY_int();
             Area.X = Finish.X - Start.X;
             Area.Y = Finish.Y - Start.Y;
@@ -2550,7 +2550,7 @@ namespace SharpFlame
             sXY_int Finish = new sXY_int();
             int A = 0;
 
-            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, Start, Finish);
+            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, ref Start, ref Finish);
             for ( A = 0; A <= Map.Units.Count - 1; A++ )
             {
                 if ( App.PosIsWithinTileArea(Map.Units[A].Pos.Horizontal, Start, Finish) )
@@ -2613,7 +2613,7 @@ namespace SharpFlame
                 return;
             }
             Multiplier = MathUtil.Clamp_dbl(dblTemp, 0.0D, 255.0D);
-            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, StartXY, FinishXY);
+            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, ref StartXY, ref FinishXY);
             for ( Y = StartXY.Y; Y <= FinishXY.Y; Y++ )
             {
                 for ( X = StartXY.X; X <= FinishXY.X; X++ )

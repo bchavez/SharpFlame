@@ -212,7 +212,7 @@ namespace SharpFlame.Controls
 
             if ( Map.Tileset != null )
             {
-                TileUtil.GetTileRotatedTexCoords(App.TextureOrientation, TexCoord0, TexCoord1, TexCoord2, TexCoord3);
+                TileUtil.GetTileRotatedTexCoords(App.TextureOrientation, ref TexCoord0, ref TexCoord1, ref TexCoord2, ref TexCoord3);
 
                 GL.Enable(EnableCap.Texture2D);
                 GL.Color4(0.0F, 0.0F, 0.0F, 1.0F);

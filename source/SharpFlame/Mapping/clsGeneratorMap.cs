@@ -3561,7 +3561,7 @@ namespace SharpFlame
                     FloodArgs.NodeValues[PassageNodeNetwork.PassageNodePathNodes[B, A].Layer_NodeNum] = float.MaxValue;
                 }
             }
-            PassageNodeNetwork.Network.FloodProximity(FloodArgs);
+            PassageNodeNetwork.Network.FloodProximity(ref FloodArgs);
             for ( A = 0; A <= PassageNodeCount - 1; A++ )
             {
                 for ( B = 0; B <= SymmetryBlockCount - 1; B++ )

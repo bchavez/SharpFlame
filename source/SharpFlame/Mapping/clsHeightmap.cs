@@ -198,7 +198,7 @@ namespace SharpFlame
             }
         }
 
-        public void MinMaxGet(sMinMax MinMax_Output)
+        public void MinMaxGet(ref sMinMax MinMax_Output)
         {
             long HeightMin = 0;
             long HeightMax = 0;
@@ -616,7 +616,7 @@ namespace SharpFlame
             long HeightMin = 0;
             sMinMax MinMax = new sMinMax();
 
-            Source.MinMaxGet(MinMax);
+            Source.MinMaxGet(ref MinMax);
             HeightRange = Convert.ToInt64(MinMax.Max - MinMax.Min);
             HeightMin = MinMax.Min;
 
@@ -646,7 +646,7 @@ namespace SharpFlame
             long HeightMin = 0;
             sMinMax MinMax = new sMinMax();
 
-            Source.MinMaxGet(MinMax);
+            Source.MinMaxGet(ref MinMax);
             HeightRange = Convert.ToInt64(MinMax.Max - MinMax.Min);
             HeightMin = MinMax.Min;
 
@@ -675,7 +675,7 @@ namespace SharpFlame
             int X = 0;
             sMinMax MinMax = new sMinMax();
 
-            Source.MinMaxGet(MinMax);
+            Source.MinMaxGet(ref MinMax);
 
             long HeightRange = 0;
             long Offset = 0;
@@ -718,7 +718,7 @@ namespace SharpFlame
             sMinMax MinMax = new sMinMax();
             double dblTemp = Source.HeightScale / HeightScale;
 
-            Source.MinMaxGet(MinMax);
+            Source.MinMaxGet(ref MinMax);
 
             long Offset = 0;
             SizeCopy(Source);
@@ -949,7 +949,7 @@ namespace SharpFlame
             public float[] Heights;
         }
 
-        public void FadeMultiple(clsHeightmap hmSource, sHeightmaps AlterationMaps, sHeights AlterationHeights)
+        public void FadeMultiple(clsHeightmap hmSource, ref sHeightmaps AlterationMaps, ref sHeights AlterationHeights)
         {
             int Level = 0;
             int Y = 0;

@@ -809,7 +809,7 @@ namespace SharpFlame.Pathfinding
                     Args.NodeValues[Nodes[A].Layer_NodeNum] = float.MaxValue;
                 }
                 Args.BestPaths = new Path[Args.FinishNodeCount];
-                Layer.Network.FloodSpan(Args);
+                Layer.Network.FloodSpan(ref Args);
                 for ( A = NumA + 1; A <= NodeCount - 1; A++ )
                 {
                     if ( Args.BestPaths[A] == null )

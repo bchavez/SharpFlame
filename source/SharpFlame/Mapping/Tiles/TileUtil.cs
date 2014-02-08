@@ -24,7 +24,7 @@ namespace SharpFlame.Mapping.Tiles
         public static TileDirection Left = new TileDirection(0, 1);
         public static TileDirection None = new TileDirection(1, 1);
 
-        public static clsTerrain.Tile.sTexture OrientateTile(TileOrientationChance tileChance, TileDirection newDirection)
+        public static clsTerrain.Tile.sTexture OrientateTile(ref TileOrientationChance tileChance, TileDirection newDirection)
         {
             clsTerrain.Tile.sTexture ReturnResult = new clsTerrain.Tile.sTexture();
 
@@ -366,8 +366,7 @@ namespace SharpFlame.Mapping.Tiles
             return Math.Atan2(XY_dbl.Y, XY_dbl.X);
         }
 
-        public static void GetTileRotatedTexCoords(TileOrientation tileOrientation, Position.XY_dbl coordA, Position.XY_dbl coordB, Position.XY_dbl coordC,
-            Position.XY_dbl coordD)
+        public static void GetTileRotatedTexCoords(TileOrientation tileOrientation, ref Position.XY_dbl coordA, ref Position.XY_dbl coordB, ref Position.XY_dbl coordC, ref Position.XY_dbl coordD)
         {
             TileOrientation ReverseOrientation = new TileOrientation();
 
@@ -466,7 +465,7 @@ namespace SharpFlame.Mapping.Tiles
             }
         }
 
-        public static void OldOrientation_To_TileOrientation(byte OldRotation, bool OldFlipX, bool OldFlipZ, TileOrientation Result)
+        public static void OldOrientation_To_TileOrientation(byte OldRotation, bool OldFlipX, bool OldFlipZ, ref TileOrientation Result)
         {
             if ( OldRotation == 0 )
             {

@@ -22,7 +22,7 @@ namespace SharpFlame.Mapping.Tools
             sXY_int Finish = new sXY_int();
             int Samples = 0;
 
-            Map.GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Footprint, Start, Finish);
+            Map.GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Footprint, ref Start, ref Finish);
 
             for ( Y = Start.Y; Y <= Finish.Y + 1; Y++ )
             {

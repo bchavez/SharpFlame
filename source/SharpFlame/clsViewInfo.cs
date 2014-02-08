@@ -1522,7 +1522,7 @@ namespace SharpFlame
                 A = 0;
                 while ( A < Map.Gateways.Count )
                 {
-                    MathUtil.ReorderXY(Map.Gateways[A].PosA, Map.Gateways[A].PosB, Low, High);
+                    MathUtil.ReorderXY(Map.Gateways[A].PosA, Map.Gateways[A].PosB, ref Low, ref High);
                     if ( Low.X <= Tile.X
                          & High.X >= Tile.X
                          & Low.Y <= Tile.Y
