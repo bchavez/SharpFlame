@@ -821,12 +821,12 @@ namespace SharpFlame.Mapping
             {
                 if ( MakeInvalidTiles )
                 {
-                    Terrain.Tiles[PosNum.X, PosNum.Y].Texture = TileUtil.OrientateTile(ResultTexture, ResultDirection);
+                    Terrain.Tiles[PosNum.X, PosNum.Y].Texture = TileUtil.OrientateTile(ref ResultTexture, ResultDirection);
                 }
             }
             else
             {
-                Terrain.Tiles[PosNum.X, PosNum.Y].Texture = TileUtil.OrientateTile(ResultTexture, ResultDirection);
+                Terrain.Tiles[PosNum.X, PosNum.Y].Texture = TileUtil.OrientateTile(ref ResultTexture, ResultDirection);
             }
 
             Map.SectorGraphicsChanges.TileChanged(PosNum);

@@ -835,7 +835,7 @@ namespace SharpFlame.Controls
             }
             else
             {
-                MathUtil.ReorderXY(VertexA, VertexB, StartVertex, FinishVertex);
+                MathUtil.ReorderXY(VertexA, VertexB, ref StartVertex, ref FinishVertex);
                 StartPos.X = StartVertex.X * App.TerrainGridSpacing;
                 StartPos.Y = StartVertex.Y * App.TerrainGridSpacing;
                 FinishPos.X = FinishVertex.X * App.TerrainGridSpacing;

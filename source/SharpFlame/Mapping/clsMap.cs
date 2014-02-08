@@ -678,7 +678,7 @@ namespace SharpFlame.Mapping
                         if ( structureTypeBase.StructureBasePlate != null )
                         {
                             Footprint = structureTypeBase.get_GetFootprintSelected(Unit.Rotation);
-                            GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Footprint, FootprintStart, FootprintFinish);
+                            GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Footprint, ref FootprintStart, ref FootprintFinish);
                             for ( TileY = Math.Max(FootprintStart.Y, StartY); TileY <= Math.Min(FootprintFinish.Y, FinishY); TileY++ )
                             {
                                 for ( TileX = Math.Max(FootprintStart.X, StartX); TileX <= Math.Min(FootprintFinish.X, FinishX); TileX++ )
@@ -929,7 +929,7 @@ namespace SharpFlame.Mapping
                 foreach ( clsGateway tempLoopVar_Gateway in Gateways )
                 {
                     Gateway = tempLoopVar_Gateway;
-                    MathUtil.ReorderXY(Gateway.PosA, Gateway.PosB, Low, High);
+                    MathUtil.ReorderXY(Gateway.PosA, Gateway.PosB, ref Low, ref High);
                     for ( Y = Low.Y; Y <= High.Y; Y++ )
                     {
                         for ( X = Low.X; X <= High.X; X++ )
@@ -959,7 +959,7 @@ namespace SharpFlame.Mapping
                     }
                     if ( Flag )
                     {
-                        GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Footprint, Low, High);
+                        GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Footprint, ref Low, ref High);
                         for ( Y = Low.Y; Y <= High.Y; Y++ )
                         {
                             for ( X = Low.X; X <= High.X; X++ )
@@ -1018,7 +1018,7 @@ namespace SharpFlame.Mapping
                     }
                     if ( Flag )
                     {
-                        GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Footprint, Low, High);
+                        GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Footprint, ref Low, ref High);
                         for ( Y = Low.Y; Y <= High.Y; Y++ )
                         {
                             for ( X = Low.X; X <= High.X; X++ )
@@ -1190,7 +1190,7 @@ namespace SharpFlame.Mapping
             int X = 0;
             int Y = 0;
 
-            GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation), TileStart, TileFinish);
+            GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation), ref TileStart, ref TileFinish);
             Start = GetTileSectorNum(TileStart);
             Finish = GetTileSectorNum(TileFinish);
             Start.X = MathUtil.Clamp_int(Start.X, 0, SectorCount.X - 1);
@@ -1903,7 +1903,7 @@ namespace SharpFlame.Mapping
             return Result;
         }
 
-        public void GetFootprintTileRangeClamped(sXY_int Horizontal, sXY_int Footprint, sXY_int ResultStart, sXY_int ResultFinish)
+        public void GetFootprintTileRangeClamped(sXY_int Horizontal, sXY_int Footprint, ref sXY_int ResultStart, ref sXY_int ResultFinish)
         {
             int Remainder = 0;
             sXY_int Centre = GetPosTileNum(Horizontal);
@@ -1917,7 +1917,7 @@ namespace SharpFlame.Mapping
             ResultFinish.Y = MathUtil.Clamp_int(ResultStart.Y + Footprint.Y - 1, 0, Terrain.TileSize.Y - 1);
         }
 
-        public void GetFootprintTileRange(sXY_int Horizontal, sXY_int Footprint, sXY_int ResultStart, sXY_int ResultFinish)
+        public void GetFootprintTileRange(sXY_int Horizontal, sXY_int Footprint, ref sXY_int ResultStart, ref sXY_int ResultFinish)
         {
             int Remainder = 0;
             sXY_int Centre = GetPosTileNum(Horizontal);

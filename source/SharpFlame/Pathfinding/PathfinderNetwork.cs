@@ -285,7 +285,7 @@ namespace SharpFlame.Pathfinding
                         StartPath.Nodes[0] = LayerStartNodes[LayerNum, A];
                         StartPath.Value = 0.0F;
                         FloodRouteArgs.BestPaths = new Path[DestinationCount];
-                        FloodRoute(FloodRouteArgs);
+                        FloodRoute(ref FloodRouteArgs);
                         for ( PathNum = 0; PathNum <= DestinationCount - 1; PathNum++ )
                         {
                             if ( FloodRouteArgs.BestPaths[PathNum] != null )
@@ -429,7 +429,7 @@ namespace SharpFlame.Pathfinding
                     }
                 }
                 Array.Resize(ref FloodRouteDArgs.StartNodes, FloodRouteDArgs.StartNodeCount);
-                FloodRouteAll(FloodRouteDArgs);
+                FloodRouteAll(ref FloodRouteDArgs);
                 SubPaths[LayerNum] = new Path();
                 SubPaths[LayerNum].Nodes = new PathfinderNode[FloodRouteDArgs.BestNodeCount];
                 for ( A = 0; A <= FloodRouteDArgs.BestNodeCount - 1; A++ )
@@ -473,7 +473,7 @@ namespace SharpFlame.Pathfinding
             public int MinClearance;
         }
 
-        public void FloodRoute(sFloodRouteArgs Args)
+        public void FloodRoute(ref sFloodRouteArgs Args)
         {
             PathfinderNode CurrentNode = default(PathfinderNode);
             PathfinderNode ConnectedNode = default(PathfinderNode);
@@ -617,7 +617,7 @@ namespace SharpFlame.Pathfinding
             public int MinClearance;
         }
 
-        public void FloodSpan(sFloodSpanArgs Args)
+        public void FloodSpan(ref sFloodSpanArgs Args)
         {
             PathfinderNode CurrentNode = default(PathfinderNode);
             PathfinderNode ConnectedNode = default(PathfinderNode);
@@ -754,7 +754,7 @@ namespace SharpFlame.Pathfinding
             public int MinClearance;
         }
 
-        public void FloodForValues(sFloodForValuesArgs Args)
+        public void FloodForValues(ref sFloodForValuesArgs Args)
         {
             PathfinderNode CurrentNode = default(PathfinderNode);
             PathfinderNode ConnectedNode = default(PathfinderNode);
@@ -877,7 +877,7 @@ namespace SharpFlame.Pathfinding
             }
         }
 
-        public void FloodRouteAll(sFloodRouteAllArgs Args)
+        public void FloodRouteAll(ref sFloodRouteAllArgs Args)
         {
             PathfinderNode CurrentNode = default(PathfinderNode);
             PathfinderNode ConnectedNode = default(PathfinderNode);
@@ -1041,7 +1041,7 @@ namespace SharpFlame.Pathfinding
         }
 
         //maps lowest values from the start node to all other nodes
-        public void FloodProximity(sFloodProximityArgs Args)
+        public void FloodProximity(ref sFloodProximityArgs Args)
         {
             PathfinderNode CurrentNode = default(PathfinderNode);
             PathfinderNode ConnectedNode = default(PathfinderNode);

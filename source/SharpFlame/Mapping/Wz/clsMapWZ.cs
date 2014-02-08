@@ -1312,7 +1312,7 @@ namespace SharpFlame.Mapping
                         A = (int)(Conversion.Int(Flip / 16.0D));
                         Flip -= (byte)(A * 16);
                         Rotate = (byte)A;
-                        TileUtil.OldOrientation_To_TileOrientation(Rotate, FlipX, FlipZ, Terrain.Tiles[X, Y].Texture.Orientation);
+                        TileUtil.OldOrientation_To_TileOrientation(Rotate, FlipX, FlipZ, ref Terrain.Tiles[X, Y].Texture.Orientation);
                         //get tri direction
                         A = (int)(Conversion.Int(Flip / 8.0D));
                         Flip -= (byte)(A * 8);

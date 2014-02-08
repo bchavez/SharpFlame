@@ -200,7 +200,7 @@ namespace SharpFlame
             WriteWZArgs.MapName = MapName;
             WriteWZArgs.Path = CompileMultiDialog.FileName;
             WriteWZArgs.Overwrite = true;
-            SetScrollLimits(WriteWZArgs.ScrollMin, WriteWZArgs.ScrollMax);
+            SetScrollLimits(ref WriteWZArgs.ScrollMin, ref WriteWZArgs.ScrollMax);
             WriteWZArgs.Multiplayer = new sWrite_WZ_Args.clsMultiplayer();
             WriteWZArgs.Multiplayer.AuthorName = txtAuthor.Text;
             WriteWZArgs.Multiplayer.PlayerCount = PlayerCount;
@@ -265,7 +265,7 @@ namespace SharpFlame
                 if ( !UnitIsStructureModule[Unit.MapLink.ArrayPosition] )
                 {
                     Footprint = Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation);
-                    Map.GetFootprintTileRange(Unit.Pos.Horizontal, Footprint, StartPos, FinishPos);
+                    Map.GetFootprintTileRange(Unit.Pos.Horizontal, Footprint, ref StartPos, ref FinishPos);
                     if ( StartPos.X < 0 | FinishPos.X >= Map.Terrain.TileSize.X
                          | StartPos.Y < 0 | FinishPos.Y >= Map.Terrain.TileSize.Y )
                     {
@@ -649,7 +649,7 @@ namespace SharpFlame
             WriteWZArgs.MapName = MapName;
             WriteWZArgs.Path = CompileCampDialog.SelectedPath;
             WriteWZArgs.Overwrite = false;
-            SetScrollLimits(WriteWZArgs.ScrollMin, WriteWZArgs.ScrollMax);
+            SetScrollLimits(ref WriteWZArgs.ScrollMin, ref WriteWZArgs.ScrollMax);
             WriteWZArgs.Campaign = new sWrite_WZ_Args.clsCampaign();
             WriteWZArgs.Campaign.GAMType = (uint)TypeNum;
             WriteWZArgs.CompileType = sWrite_WZ_Args.enumCompileType.Campaign;
@@ -689,7 +689,7 @@ namespace SharpFlame
             AutoScrollLimits_Update();
         }
 
-        private void SetScrollLimits(sXY_int Min, sXY_uint Max)
+        private void SetScrollLimits(ref sXY_int Min, ref sXY_uint Max)
         {
             Min.X = 0;
             Min.Y = 0;

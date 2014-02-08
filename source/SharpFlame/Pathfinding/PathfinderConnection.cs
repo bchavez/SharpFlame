@@ -231,7 +231,7 @@ namespace SharpFlame.Pathfinding
                     Args.NodeValues[NodeB.Nodes[A].Layer_NodeNum] = float.MaxValue;
                 }
                 Args.BestPaths = new Path[Args.FinishNodeCount];
-                NodeA.Layer.Network.FloodForValues(Args);
+                NodeA.Layer.Network.FloodForValues(ref Args);
                 for ( A = 0; A <= NodeB.NodeCount - 1; A++ )
                 {
                     if ( Args.BestPaths[A] == null )

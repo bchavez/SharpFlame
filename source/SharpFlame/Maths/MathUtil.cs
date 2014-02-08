@@ -165,7 +165,7 @@ namespace SharpFlame.Maths
             }
         }
 
-        public static void ReorderXY(sXY_int A, sXY_int B, sXY_int Lesser, sXY_int Greater)
+        public static void ReorderXY(sXY_int A, sXY_int B, ref sXY_int Lesser, ref sXY_int Greater)
         {
             if ( A.X <= B.X )
             {

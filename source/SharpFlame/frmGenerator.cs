@@ -346,21 +346,21 @@ namespace SharpFlame
                         Generator.GenerateTileset = DefaultGenerator.Generator_TilesetArizona;
                         DefaultGenerator.TerrainStyle_Arizona.Watermap = Generator.GetWaterMap();
                         DefaultGenerator.TerrainStyle_Arizona.LevelCount = Generator.LevelCount;
-                        Generator.Map.GenerateMasterTerrain(DefaultGenerator.TerrainStyle_Arizona);
+                        Generator.Map.GenerateMasterTerrain(ref DefaultGenerator.TerrainStyle_Arizona);
                         DefaultGenerator.TerrainStyle_Arizona.Watermap = null;
                         break;
                     case 1:
                         Generator.GenerateTileset = DefaultGenerator.Generator_TilesetUrban;
                         DefaultGenerator.TerrainStyle_Urban.Watermap = Generator.GetWaterMap();
                         DefaultGenerator.TerrainStyle_Urban.LevelCount = Generator.LevelCount;
-                        Generator.Map.GenerateMasterTerrain(DefaultGenerator.TerrainStyle_Urban);
+                        Generator.Map.GenerateMasterTerrain(ref DefaultGenerator.TerrainStyle_Urban);
                         DefaultGenerator.TerrainStyle_Urban.Watermap = null;
                         break;
                     case 2:
                         Generator.GenerateTileset = DefaultGenerator.Generator_TilesetRockies;
                         DefaultGenerator.TerrainStyle_Rockies.Watermap = Generator.GetWaterMap();
                         DefaultGenerator.TerrainStyle_Rockies.LevelCount = Generator.LevelCount;
-                        Generator.Map.GenerateMasterTerrain(DefaultGenerator.TerrainStyle_Rockies);
+                        Generator.Map.GenerateMasterTerrain(ref DefaultGenerator.TerrainStyle_Rockies);
                         DefaultGenerator.TerrainStyle_Rockies.Watermap = null;
                         break;
                     default:
@@ -432,7 +432,7 @@ namespace SharpFlame
                         RevertSlope[A] = true;
                     }
                 }
-                Generator.Map.MapTexturer(Generator.GenerateTileset.OldTextureLayers);
+                Generator.Map.MapTexturer(ref Generator.GenerateTileset.OldTextureLayers);
                 for ( A = 0; A <= Generator.GenerateTileset.OldTextureLayers.LayerCount - 1; A++ )
                 {
                     clsLayer with_3 = Generator.GenerateTileset.OldTextureLayers.Layers[A];

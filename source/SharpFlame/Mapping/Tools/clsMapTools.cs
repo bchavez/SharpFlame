@@ -248,7 +248,7 @@ namespace SharpFlame.Mapping
                     hmSource.HeightData.Height[Y, X] = Convert.ToInt32(Terrain.Vertices[X, Y].Height / hmSource.HeightScale);
                 }
             }
-            hmSource.MinMaxGet(MinMax);
+            hmSource.MinMaxGet(ref MinMax);
             HeightRange = 255.0D;
             IntervalHeight = HeightRange / IntervalCount;
             Variation = IntervalHeight / 4.0D;
@@ -261,7 +261,7 @@ namespace SharpFlame.Mapping
                 hmAlteration.Heightmaps[Level] = new clsHeightmap();
                 hmAlteration.Heightmaps[Level].Rescale(hmB, LevelHeight - Variation, LevelHeight + Variation);
             }
-            hmA.FadeMultiple(hmSource, hmAlteration, AlterationLevels);
+            hmA.FadeMultiple(hmSource, ref hmAlteration, ref AlterationLevels);
             hmB.Rescale(hmA, Math.Max(Convert.ToDouble(Convert.ToDouble(MinMax.Min * hmSource.HeightScale) - Variation), 0.0D),
                 Math.Min(Convert.ToDouble(Convert.ToDouble(MinMax.Max * hmSource.HeightScale) + Variation), 255.9D));
             for ( Y = 0; Y <= Terrain.TileSize.Y; Y++ )
@@ -303,7 +303,7 @@ namespace SharpFlame.Mapping
             }
         }
 
-        public void GenerateMasterTerrain(sGenerateMasterTerrainArgs Args)
+        public void GenerateMasterTerrain(ref sGenerateMasterTerrainArgs Args)
         {
             int X = 0;
             int Y = 0;
@@ -562,7 +562,7 @@ namespace SharpFlame.Mapping
             SectorGraphicsChanges.SetAllChanged();
         }
 
-        public void MapTexturer(sLayerList LayerList)
+        public void MapTexturer(ref sLayerList LayerList)
         {
             int X = 0;
             int Y = 0;
