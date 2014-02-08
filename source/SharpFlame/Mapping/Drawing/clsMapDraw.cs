@@ -78,7 +78,7 @@ namespace SharpFlame.Mapping
                 MinimapSizeXY.Y = (int)(Terrain.TileSize.Y / ViewInfo.Tiles_Per_Minimap_Pixel);
             }
 
-            if ( !ViewInfo.ScreenXY_Get_ViewPlanePos(new sXY_int((int)(GLSize.X / 2.0D), (int)(GLSize.Y / 2.0D)), dblTemp, DrawCentre) )
+            if ( !ViewInfo.ScreenXY_Get_ViewPlanePos(new sXY_int((int)(GLSize.X / 2.0D), (int)(GLSize.Y / 2.0D)), dblTemp, ref DrawCentre) )
             {
                 Matrix3DMath.VectorForwardsRotationByMatrix(ViewInfo.ViewAngleMatrix, ref XYZ_dbl);
                 dblTemp2 = App.VisionRadius * 2.0D / Math.Sqrt(XYZ_dbl.X * XYZ_dbl.X + XYZ_dbl.Z * XYZ_dbl.Z);
@@ -138,10 +138,10 @@ namespace SharpFlame.Mapping
             }
 
             dblTemp = 127.5D * HeightMultiplier;
-            if ( ViewInfo.ScreenXY_Get_ViewPlanePos_ForwardDownOnly(0, 0, dblTemp, ViewCorner0)
-                 && ViewInfo.ScreenXY_Get_ViewPlanePos_ForwardDownOnly(GLSize.X, 0, dblTemp, ViewCorner1)
-                 && ViewInfo.ScreenXY_Get_ViewPlanePos_ForwardDownOnly(GLSize.X, GLSize.Y, dblTemp, ViewCorner2)
-                 && ViewInfo.ScreenXY_Get_ViewPlanePos_ForwardDownOnly(0, GLSize.Y, dblTemp, ViewCorner3) )
+            if ( ViewInfo.ScreenXY_Get_ViewPlanePos_ForwardDownOnly(0, 0, dblTemp, ref ViewCorner0)
+                 && ViewInfo.ScreenXY_Get_ViewPlanePos_ForwardDownOnly(GLSize.X, 0, dblTemp, ref ViewCorner1)
+                 && ViewInfo.ScreenXY_Get_ViewPlanePos_ForwardDownOnly(GLSize.X, GLSize.Y, dblTemp, ref ViewCorner2)
+                 && ViewInfo.ScreenXY_Get_ViewPlanePos_ForwardDownOnly(0, GLSize.Y, dblTemp, ref ViewCorner3) )
             {
                 ShowMinimapViewPosBox = true;
             }
@@ -248,7 +248,7 @@ namespace SharpFlame.Mapping
                 if ( DrawIt )
                 {
                     Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrix_Inverted, XYZ_dbl, ref XYZ_dbl2);
-                    if ( ViewInfo.Pos_Get_Screen_XY(XYZ_dbl2, ScreenPos) )
+                    if ( ViewInfo.Pos_Get_Screen_XY(XYZ_dbl2, ref ScreenPos) )
                     {
                         if ( ScreenPos.X >= 0 & ScreenPos.X <= GLSize.X & ScreenPos.Y >= 0 & ScreenPos.Y <= GLSize.Y )
                         {
@@ -850,7 +850,7 @@ namespace SharpFlame.Mapping
                     XYZ_dbl.Z = - ScriptPosition.PosY - ViewInfo.ViewPos.Z;
                     XYZ_dbl.Y = GetTerrainHeight(new sXY_int(ScriptPosition.PosX, ScriptPosition.PosY)) - ViewInfo.ViewPos.Y;
                     Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrix_Inverted, XYZ_dbl, ref XYZ_dbl2);
-                    if ( ViewInfo.Pos_Get_Screen_XY(XYZ_dbl2, ScreenPos) )
+                    if ( ViewInfo.Pos_Get_Screen_XY(XYZ_dbl2, ref ScreenPos) )
                     {
                         if ( ScreenPos.X >= 0 & ScreenPos.X <= GLSize.X & ScreenPos.Y >= 0 & ScreenPos.Y <= GLSize.Y )
                         {
@@ -879,7 +879,7 @@ namespace SharpFlame.Mapping
                     XYZ_dbl.Z = - ScriptArea.PosAY - ViewInfo.ViewPos.Z;
                     XYZ_dbl.Y = GetTerrainHeight(new sXY_int(ScriptArea.PosAX, ScriptArea.PosAY)) - ViewInfo.ViewPos.Y;
                     Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrix_Inverted, XYZ_dbl, ref XYZ_dbl2);
-                    if ( ViewInfo.Pos_Get_Screen_XY(XYZ_dbl2, ScreenPos) )
+                    if ( ViewInfo.Pos_Get_Screen_XY(XYZ_dbl2, ref ScreenPos) )
                     {
                         if ( ScreenPos.X >= 0 & ScreenPos.X <= GLSize.X & ScreenPos.Y >= 0 & ScreenPos.Y <= GLSize.Y )
                         {

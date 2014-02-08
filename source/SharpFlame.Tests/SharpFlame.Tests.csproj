@@ -68,12 +68,6 @@
     </None>
     <None Include="Pies\radarsensor.pie" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SharpFlame.Core\SharpFlame.Core.csproj">
-      <Project>{8ae7f7a3-841a-44a7-b016-4661bbbf7821}</Project>
-      <Name>SharpFlame.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

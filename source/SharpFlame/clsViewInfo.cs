@@ -165,7 +165,7 @@ namespace SharpFlame
                 //    XYZ_dbl.Z = XYZ_lng.Z
                 //Else
                 if ( ScreenXY_Get_ViewPlanePos_ForwardDownOnly((int)(Conversion.Int(MapViewControl.GLSize.X / 2.0D)), (int)(Conversion.Int(MapViewControl.GLSize.Y / 2.0D)), 127.5D,
-                    XY_dbl) )
+                    ref XY_dbl) )
                 {
                     XYZ_dbl.X = XY_dbl.X;
                     XYZ_dbl.Y = 127.5D;
@@ -259,7 +259,7 @@ namespace SharpFlame
             ViewPosSet(XYZ_int);
         }
 
-        public bool Pos_Get_Screen_XY(Position.XYZ_dbl Pos, sXY_int Result)
+        public bool Pos_Get_Screen_XY(Position.XYZ_dbl Pos, ref sXY_int Result)
         {
             if ( Pos.Z <= 0.0D )
             {
@@ -280,7 +280,7 @@ namespace SharpFlame
             return false;
         }
 
-        public bool ScreenXY_Get_ViewPlanePos(sXY_int ScreenPos, double PlaneHeight, Position.XY_dbl ResultPos)
+        public bool ScreenXY_Get_ViewPlanePos(sXY_int ScreenPos, double PlaneHeight, ref Position.XY_dbl ResultPos)
         {
             double dblTemp = 0;
             Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
@@ -306,7 +306,7 @@ namespace SharpFlame
             return true;
         }
 
-        public bool ScreenXY_Get_TerrainPos(sXY_int ScreenPos, sWorldPos ResultPos)
+        public bool ScreenXY_Get_TerrainPos(sXY_int ScreenPos, ref sWorldPos ResultPos)
         {
             double dblTemp = 0;
             Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
@@ -485,7 +485,7 @@ namespace SharpFlame
             return true;
         }
 
-        public bool ScreenXY_Get_ViewPlanePos_ForwardDownOnly(int ScreenX, int ScreenY, double PlaneHeight, Position.XY_dbl ResultPos)
+        public bool ScreenXY_Get_ViewPlanePos_ForwardDownOnly(int ScreenX, int ScreenY, double PlaneHeight, ref Position.XY_dbl ResultPos)
         {
             double dblTemp = 0;
             Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
@@ -550,7 +550,7 @@ namespace SharpFlame
                 Flag = false;
                 if ( SettingsManager.Settings.DirectPointer )
                 {
-                    if ( ScreenXY_Get_TerrainPos(MouseOver.ScreenPos, MouseOverTerrain.Pos) )
+                    if ( ScreenXY_Get_TerrainPos(MouseOver.ScreenPos, ref MouseOverTerrain.Pos) )
                     {
                         if ( Map.PosIsOnMap(MouseOverTerrain.Pos.Horizontal) )
                         {
@@ -561,7 +561,7 @@ namespace SharpFlame
                 else
                 {
                     MouseOverTerrain.Pos.Altitude = (int)(255.0D / 2.0D * Map.HeightMultiplier);
-                    if ( ScreenXY_Get_ViewPlanePos(MouseOver.ScreenPos, MouseOverTerrain.Pos.Altitude, XY_dbl) )
+                    if ( ScreenXY_Get_ViewPlanePos(MouseOver.ScreenPos, MouseOverTerrain.Pos.Altitude, ref XY_dbl) )
                     {
                         MouseOverTerrain.Pos.Horizontal.X = (int)XY_dbl.X;
                         MouseOverTerrain.Pos.Horizontal.Y = Convert.ToInt32(- XY_dbl.Y);
@@ -575,8 +575,8 @@ namespace SharpFlame
                 if ( Flag )
                 {
                     MouseOver.OverTerrain = MouseOverTerrain;
-                    MouseOverTerrain.Tile.Normal.X = Conversion.Int(MouseOverTerrain.Pos.Horizontal.X / App.TerrainGridSpacing);
-                    MouseOverTerrain.Tile.Normal.Y = (int)(Conversion.Int(MouseOverTerrain.Pos.Horizontal.Y / App.TerrainGridSpacing));
+                    MouseOverTerrain.Tile.Normal.X = (int)Conversion.Int((double)MouseOverTerrain.Pos.Horizontal.X / App.TerrainGridSpacing);
+                    MouseOverTerrain.Tile.Normal.Y = (int)(Conversion.Int((double)MouseOverTerrain.Pos.Horizontal.Y / App.TerrainGridSpacing));
                     MouseOverTerrain.Vertex.Normal.X = (int)( Math.Round( ( (double)MouseOverTerrain.Pos.Horizontal.X / App.TerrainGridSpacing ) ) );
                     MouseOverTerrain.Vertex.Normal.Y = (int)( Math.Round( ( (double)MouseOverTerrain.Pos.Horizontal.Y / App.TerrainGridSpacing ) ) );
                     MouseOverTerrain.Tile.Alignment = MouseOverTerrain.Vertex.Normal;
