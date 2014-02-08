@@ -597,11 +597,13 @@ namespace SharpFlame
             Pan = 1.0D / 16.0D;
             OrbitRate = 1.0D / 32.0D;
 
-            Map.ViewInfo.TimedActions(Zoom, Move, Pan, Roll, OrbitRate);
+            if (Map != null) {
+                Map.ViewInfo.TimedActions(Zoom, Move, Pan, Roll, OrbitRate);
 
-            if ( Map.CheckMessages() )
-            {
-                View_DrawViewLater();
+                if ( Map.CheckMessages() )
+                {
+                    View_DrawViewLater();
+                }
             }
         }
 
