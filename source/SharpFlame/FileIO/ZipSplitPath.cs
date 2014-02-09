@@ -1,4 +1,5 @@
-using Microsoft.VisualBasic;
+using System;
+using System.IO;
 
 namespace SharpFlame.FileIO
 {
@@ -13,27 +14,26 @@ namespace SharpFlame.FileIO
 
         public ZipSplitPath(string Path)
         {
-            string PathFixed = Path.ToLower().Replace('\\', '/');
-            int A = 0;
+            int A;
+            string PathFixed = Path.ToLower ().Replace ('\\', '/');
 
             Parts = PathFixed.Split('/');
-            PartCount = Parts.GetUpperBound(0) + 1;
+            PartCount = Parts.Length;
+
             FilePath = "";
-            for ( A = 0; A <= PartCount - 2; A++ )
+            for (A = 0; A <= PartCount - 2; A++ )
             {
                 FilePath += Parts[A] + "/";
             }
             FileTitle = Parts[A];
-            A = Strings.InStrRev(FileTitle, ".", -1, CompareMethod.Binary);
-            if ( A > 0 )
-            {
-                FileExtension = Strings.Right(FileTitle, FileTitle.Length - A);
-                FileTitleWithoutExtension = Strings.Left(FileTitle, A - 1);
-            }
-            else
-            {
-                FileExtension = "";
-                FileTitleWithoutExtension = FileTitle;
+
+            A = FileTitle.LastIndexOf ('.');
+
+            FileTitleWithoutExtension = "";
+            FileExtension = "";
+            if (A > 0) {
+                FileTitleWithoutExtension = FileTitle.Substring (0, A);
+                FileExtension = FileTitle.Substring (A + 1, FileTitle.Length - A - 1);
             }
         }
     }

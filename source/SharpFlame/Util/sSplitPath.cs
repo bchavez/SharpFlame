@@ -1,5 +1,4 @@
 using System;
-using Microsoft.VisualBasic;
 
 namespace SharpFlame.Util
 {
@@ -24,16 +23,13 @@ namespace SharpFlame.Util
                 FilePath += Parts[A] + Convert.ToString( App.PlatformPathSeparator );
             }
             FileTitle = Parts[A];
-            A = Strings.InStrRev( FileTitle, ".", -1, (CompareMethod)0 );
-            if( A > 0 )
-            {
-                FileExtension = Strings.Right( FileTitle, FileTitle.Length - A );
-                FileTitleWithoutExtension = Strings.Left( FileTitle, A - 1 );
-            }
-            else
-            {
-                FileExtension = "";
-                FileTitleWithoutExtension = FileTitle;
+            A = FileTitle.IndexOf ('.');
+
+            FileTitleWithoutExtension = "";
+            FileExtension = "";
+            if (A > 0) {
+                FileTitleWithoutExtension = FileTitle.Substring (0, A);
+                FileExtension = FileTitle.Substring (A + 1, FileTitle.Length - A - 1);
             }
         }
     }
