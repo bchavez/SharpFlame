@@ -39,11 +39,13 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>FlaME.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <NOWARN>1591,660,661</NOWARN>
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <WarningLevel>4</WarningLevel>
     <Optimize>false</Optimize>
+    <DefineConstants>DEBUG</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
