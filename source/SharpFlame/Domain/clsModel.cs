@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Microsoft.VisualBasic;
+using NLog;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Maths;
 using Matrix3D;
@@ -9,6 +10,8 @@ namespace SharpFlame.Domain
 {
     public class clsModel
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         public int GLTextureNum;
 
         public struct sTriangle
@@ -113,7 +116,8 @@ namespace SharpFlame.Domain
 
         public clsResult ReadPIE(StreamReader File, clsObjectData Owner)
         {
-            clsResult ReturnResult = new clsResult("Reading PIE");
+            clsResult ReturnResult = new clsResult("Reading PIE", false);
+            logger.Debug ("Reading PIE");
 
             int A = 0;
             int B = 0;

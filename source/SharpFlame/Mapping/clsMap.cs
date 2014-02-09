@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Matrix3D;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.Devices;
+using NLog;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.AppSettings;
 using SharpFlame.Collections;
@@ -25,6 +26,8 @@ namespace SharpFlame.Mapping
 {
     public partial class clsMap
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         public ConnectedListLink<clsMap, frmMain> frmMainLink;
 
         public clsTerrain Terrain;
@@ -1232,7 +1235,8 @@ namespace SharpFlame.Mapping
 
         public clsResult AutoSavePerform()
         {
-            clsResult ReturnResult = new clsResult("Autosave");
+            clsResult ReturnResult = new clsResult("Autosave", false);
+            logger.Info("Autosave");
 
             if ( !Directory.Exists(App.AutoSavePath) )
             {

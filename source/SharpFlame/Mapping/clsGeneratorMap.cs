@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Matrix3D;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
+using NLog;
 using SharpFlame.Collections.Specialized;
 using SharpFlame.Domain;
 using SharpFlame.Generators;
@@ -18,6 +19,8 @@ namespace SharpFlame
 {
     public class clsGenerateMap
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         public clsMap Map;
 
         public sXY_int TileSize;
@@ -323,7 +326,8 @@ namespace SharpFlame
 
         public clsResult GenerateLayout()
         {
-            clsResult ReturnResult = new clsResult("Layout");
+            clsResult ReturnResult = new clsResult("Layout", false);
+            logger.Info ("Generating Layouts");
 
             int X = 0;
             int Y = 0;
@@ -1212,7 +1216,8 @@ namespace SharpFlame
 
         public clsResult GenerateLayoutTerrain()
         {
-            clsResult ReturnResult = new clsResult("Terrain heights");
+            clsResult ReturnResult = new clsResult("Terrain heights", false);
+            logger.Info ("Generating Terrain heights");
 
             clsNodeTag NodeTag = default(clsNodeTag);
             PathfinderNode tmpNodeA = default(PathfinderNode);
@@ -2362,7 +2367,8 @@ namespace SharpFlame
 
         public clsResult GenerateUnits()
         {
-            clsResult ReturnResult = new clsResult("Objects");
+            clsResult ReturnResult = new clsResult("Objects", false);
+            logger.Info ("Generating Objects");
 
             int A = 0;
             int B = 0;
@@ -3331,7 +3337,8 @@ namespace SharpFlame
 
         public clsResult GenerateRamps()
         {
-            clsResult ReturnResult = new clsResult("Ramps");
+            clsResult ReturnResult = new clsResult("Ramps", false);
+            logger.Info ("Generating Ramps");
 
             int A = 0;
             int B = 0;
@@ -3631,7 +3638,8 @@ namespace SharpFlame
 
         public clsResult GenerateOil()
         {
-            clsResult ReturnResult = new clsResult("Oil");
+            clsResult ReturnResult = new clsResult("Oil", false);
+            logger.Info ("Generating Oil");
 
             int A = 0;
             int B = 0;

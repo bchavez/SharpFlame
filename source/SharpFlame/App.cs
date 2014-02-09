@@ -6,6 +6,7 @@ using Matrix3D;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.ApplicationServices;
 using Microsoft.VisualBasic.Devices;
+using NLog;
 using SharpFlame.AppSettings;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
@@ -23,6 +24,8 @@ namespace SharpFlame
 {
     public sealed class App
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         public static sRGB_sng MinimapFeatureColour;
 
         public static char PlatformPathSeparator;
@@ -299,7 +302,8 @@ namespace SharpFlame
 
         public static clsResult LoadTilesets(string TilesetsPath)
         {
-            clsResult ReturnResult = new clsResult("Loading tilesets");
+            clsResult ReturnResult = new clsResult("Loading tilesets", false);
+            logger.Info ("Loading tilesets");
 
             string[] TilesetDirs = null;
             try

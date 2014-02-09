@@ -1,12 +1,15 @@
 using System;
 using System.Drawing;
 using System.IO;
+using NLog;
 using SharpFlame.Util;
 
 namespace SharpFlame.Bitmaps
 {
     public sealed class BitmapUtil
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();  
+
         public static sResult LoadBitmap(string Path, ref Bitmap ResultBitmap)
         {
             sResult ReturnResult = new sResult();
@@ -66,7 +69,8 @@ namespace SharpFlame.Bitmaps
 
         public static clsResult BitmapIsGLCompatible(Bitmap BitmapToCheck)
         {
-            clsResult ReturnResult = new clsResult("Compatability check");
+            clsResult ReturnResult = new clsResult("Compatability check", false);
+            logger.Debug ("Compatability check");
 
             if ( !App.SizeIsPowerOf2(BitmapToCheck.Width) )
             {

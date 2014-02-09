@@ -1,3 +1,4 @@
+using NLog;
 using System;
 using System.IO;
 
@@ -5,6 +6,8 @@ namespace SharpFlame.FileIO.Ini
 {
     public class IniWriter
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         public StreamWriter File;
         public char LineEndChar;
         public char EqualsChar = '=';
@@ -16,6 +19,8 @@ namespace SharpFlame.FileIO.Ini
 
         public static IniWriter CreateFile(Stream Output)
         {
+            logger.Debug ("Writing INI.");
+
             IniWriter NewINI = new IniWriter();
 
             NewINI.File = new StreamWriter(Output, App.UTF8Encoding);

@@ -17,7 +17,8 @@ namespace SharpFlame.Mapping
         public clsResult Write_FMap(string Path, bool Overwrite, bool Compress)
         {
             clsResult ReturnResult =
-                new clsResult("Writing FMap to " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
+                new clsResult("Writing FMap to " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote), false);
+            logger.Info ("Writing FMap to " + Convert.ToString (ControlChars.Quote) + Path + Convert.ToString (ControlChars.Quote));
 
             if ( !Overwrite )
             {
@@ -181,7 +182,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_FMap_Info(IniWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing general map info");
+            clsResult ReturnResult = new clsResult("Serializing general map info", false);
+            logger.Info ("Serializing general map info");
 
             try
             {
@@ -229,7 +231,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_FMap_VertexHeight(BinaryWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing vertex heights");
+            clsResult ReturnResult = new clsResult("Serializing vertex heights", false);
+            logger.Info ("Serializing vertex heights");
             int X = 0;
             int Y = 0;
 
@@ -253,7 +256,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_FMap_VertexTerrain(BinaryWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing vertex terrain");
+            clsResult ReturnResult = new clsResult("Serializing vertex terrain", false);
+            logger.Info ("Serializing vertex terrain");
 
             int X = 0;
             int Y = 0;
@@ -303,7 +307,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_FMap_TileTexture(BinaryWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing tile textures");
+            clsResult ReturnResult = new clsResult("Serializing tile textures", false);
+            logger.Info ("Serializing tile textures");
 
             int X = 0;
             int Y = 0;
@@ -341,7 +346,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_FMap_TileOrientation(BinaryWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing tile orientations");
+            clsResult ReturnResult = new clsResult("Serializing tile orientations", false);
+            logger.Info ("Serializing tile orientations");
             int X = 0;
             int Y = 0;
             int Value = 0;
@@ -383,7 +389,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_FMap_TileCliff(BinaryWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing tile cliffs");
+            clsResult ReturnResult = new clsResult("Serializing tile cliffs", false);
+            logger.Info ("Serializing tile cliffs");
 
             int X = 0;
             int Y = 0;
@@ -469,7 +476,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_FMap_Roads(BinaryWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing roads");
+            clsResult ReturnResult = new clsResult("Serializing roads", false);
+            logger.Info ("Serializing roads");
 
             int X = 0;
             int Y = 0;
@@ -544,7 +552,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_FMap_Objects(IniWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing objects");
+            clsResult ReturnResult = new clsResult("Serializing objects", false);
+            logger.Info ("Serializing objects");
 
             int A = 0;
             clsUnit Unit = default(clsUnit);
@@ -651,7 +660,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_FMap_Gateways(IniWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing gateways");
+            clsResult ReturnResult = new clsResult("Serializing gateways", false);
+            logger.Info ("Serializing gateways");
             int A = 0;
             clsGateway Gateway = default(clsGateway);
 
@@ -678,7 +688,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_FMap_TileTypes(BinaryWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing tile types");
+            clsResult ReturnResult = new clsResult("Serializing tile types", false);
+            logger.Info ("Serializing tile types");
             int A = 0;
 
             try
@@ -702,7 +713,8 @@ namespace SharpFlame.Mapping
         public clsResult Load_FMap(string Path)
         {
             clsResult ReturnResult =
-                new clsResult("Loading FMap from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
+                new clsResult("Loading FMap from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote), false);
+            logger.Info ("Loading FMap from " + Convert.ToString (ControlChars.Quote) + Path + Convert.ToString (ControlChars.Quote));
 
             ZipStreamEntry ZipSearchResult = default(ZipStreamEntry);
             string FindPath = "";
@@ -881,7 +893,8 @@ namespace SharpFlame.Mapping
             }
             else
             {
-                clsResult Result = new clsResult("Reading labels");
+                clsResult Result = new clsResult("Reading labels", false);
+                logger.Info ("Reading labels");
                 IniReader LabelsINI = new IniReader();
                 StreamReader LabelsINI_Reader = new StreamReader(ZipSearchResult.Stream);
                 Result.Take(LabelsINI.ReadFile(LabelsINI_Reader));
@@ -897,7 +910,8 @@ namespace SharpFlame.Mapping
 
         private clsResult Read_FMap_Info(StreamReader File, ref FMapInfo ResultInfo)
         {
-            clsResult ReturnResult = new clsResult("Read general map info");
+            clsResult ReturnResult = new clsResult("Read general map info", false);
+            logger.Info ("Read general map info");
 
             Section InfoINI = new Section();
             ReturnResult.Take(InfoINI.ReadFile(File));
@@ -915,7 +929,8 @@ namespace SharpFlame.Mapping
 
         private clsResult Read_FMap_VertexHeight(BinaryReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading vertex heights");
+            clsResult ReturnResult = new clsResult("Reading vertex heights", false);
+            logger.Info ("Reading vertex heights");
 
             int X = 0;
             int Y = 0;
@@ -946,7 +961,8 @@ namespace SharpFlame.Mapping
 
         private clsResult Read_FMap_VertexTerrain(BinaryReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading vertex terrain");
+            clsResult ReturnResult = new clsResult("Reading vertex terrain", false);
+            logger.Info ("Reading vertex terrain");
 
             int X = 0;
             int Y = 0;
@@ -1004,7 +1020,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Read_FMap_TileTexture(BinaryReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading tile textures");
+            clsResult ReturnResult = new clsResult("Reading tile textures", false);
+            logger.Info ("Reading tile textures");
 
             int X = 0;
             int Y = 0;
@@ -1037,7 +1054,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Read_FMap_TileOrientation(BinaryReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading tile orientations");
+            clsResult ReturnResult = new clsResult("Reading tile orientations", false);
+            logger.Info ("Reading tile orientations");
 
             int X = 0;
             int Y = 0;
@@ -1102,7 +1120,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Read_FMap_TileCliff(BinaryReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading tile cliffs");
+            clsResult ReturnResult = new clsResult("Reading tile cliffs", false);
+            logger.Info ("Reading tile cliffs");
 
             int X = 0;
             int Y = 0;
@@ -1212,7 +1231,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Read_FMap_Roads(BinaryReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading roads");
+            clsResult ReturnResult = new clsResult("Reading roads", false);
+            logger.Info ("Reading roads");
 
             int X = 0;
             int Y = 0;
@@ -1293,7 +1313,8 @@ namespace SharpFlame.Mapping
 
         private clsResult Read_FMap_Objects(StreamReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading objects");
+            clsResult ReturnResult = new clsResult("Reading objects", false);
+            logger.Info ("Reading objects");
 
             int A = 0;
 
@@ -1529,7 +1550,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Read_FMap_Gateways(StreamReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading gateways");
+            clsResult ReturnResult = new clsResult("Reading gateways", false);
+            logger.Info ("Reading gateways");
 
             IniReader GatewaysINI = new IniReader();
             ReturnResult.Take(GatewaysINI.ReadFile(File));
@@ -1558,7 +1580,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Read_FMap_TileTypes(BinaryReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading tile types");
+            clsResult ReturnResult = new clsResult("Reading tile types", false);
+            logger.Info ("Reading tile types");
 
             int A = 0;
             byte byteTemp = 0;

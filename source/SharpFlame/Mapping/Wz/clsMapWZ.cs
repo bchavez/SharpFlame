@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows.Forms;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.VisualBasic;
+using NLog;
 using SharpFlame.Collections;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
@@ -23,7 +24,8 @@ namespace SharpFlame.Mapping
         public clsResult Load_WZ(string Path)
         {
             clsResult ReturnResult =
-                new clsResult("Loading WZ from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
+                new clsResult("Loading WZ from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote), false);
+            logger.Info ("Loading WZ from " + Convert.ToString (ControlChars.Quote) + Path + Convert.ToString (ControlChars.Quote));
             sResult SubResult = new sResult();
             string Quote = ControlChars.Quote.ToString();
             ZipEntry ZipEntry = default(ZipEntry);
@@ -247,7 +249,8 @@ namespace SharpFlame.Mapping
             }
             else
             {
-                clsResult Result = new clsResult("feature.ini");
+                clsResult Result = new clsResult("feature.ini", false);
+                logger.Info ("Loading feature.ini");
                 IniReader FeaturesINI = new IniReader();
                 StreamReader FeaturesINI_Reader = new StreamReader(ZipSearchResult.Stream);
                 Result.Take(FeaturesINI.ReadFile(FeaturesINI_Reader));
@@ -259,7 +262,8 @@ namespace SharpFlame.Mapping
 
             if ( INIFeatures == null )
             {
-                clsResult Result = new clsResult("feat.bjo");
+                clsResult Result = new clsResult("feat.bjo", false);
+                logger.Info ("Loading feat.bjo");
                 ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "feat.bjo");
                 if ( ZipSearchResult == null )
                 {
@@ -280,7 +284,8 @@ namespace SharpFlame.Mapping
 
             if ( true )
             {
-                clsResult Result = new clsResult("ttypes.ttp");
+                clsResult Result = new clsResult("ttypes.ttp", false);
+                logger.Info ("Loading ttypes.ttp");
                 ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "ttypes.ttp");
                 if ( ZipSearchResult == null )
                 {
@@ -307,7 +312,8 @@ namespace SharpFlame.Mapping
             }
             else
             {
-                clsResult Result = new clsResult("struct.ini");
+                clsResult Result = new clsResult("struct.ini", false);
+                logger.Info ("Loading struct.ini");
                 IniReader StructuresINI = new IniReader();
                 StreamReader StructuresINI_Reader = new StreamReader(ZipSearchResult.Stream);
                 Result.Take(StructuresINI.ReadFile(StructuresINI_Reader));
@@ -319,7 +325,8 @@ namespace SharpFlame.Mapping
 
             if ( INIStructures == null )
             {
-                clsResult Result = new clsResult("struct.bjo");
+                clsResult Result = new clsResult("struct.bjo", false);
+                logger.Info ("Loading struct.bjo");
                 ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "struct.bjo");
                 if ( ZipSearchResult == null )
                 {
@@ -346,7 +353,8 @@ namespace SharpFlame.Mapping
             }
             else
             {
-                clsResult Result = new clsResult("droid.ini");
+                clsResult Result = new clsResult("droid.ini", false);
+                logger.Info ("Loading droid.ini");
                 IniReader DroidsINI = new IniReader();
                 StreamReader DroidsINI_Reader = new StreamReader(ZipSearchResult.Stream);
                 Result.Take(DroidsINI.ReadFile(DroidsINI_Reader));
@@ -358,7 +366,8 @@ namespace SharpFlame.Mapping
 
             if ( INIDroids == null )
             {
-                clsResult Result = new clsResult("dinit.bjo");
+                clsResult Result = new clsResult("dinit.bjo", false);
+                logger.Info ("Loading dinit.bjo");
                 ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "dinit.bjo");
                 if ( ZipSearchResult == null )
                 {
@@ -391,7 +400,8 @@ namespace SharpFlame.Mapping
             }
             else
             {
-                clsResult Result = new clsResult("labels.ini");
+                clsResult Result = new clsResult("labels.ini", false);
+                logger.Info ("Loading labels.ini");
                 IniReader LabelsINI = new IniReader();
                 StreamReader LabelsINI_Reader = new StreamReader(ZipSearchResult.Stream);
                 Result.Take(LabelsINI.ReadFile(LabelsINI_Reader));
@@ -406,7 +416,8 @@ namespace SharpFlame.Mapping
         public clsResult Load_Game(string Path)
         {
             clsResult ReturnResult =
-                new clsResult("Loading game file from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
+                new clsResult("Loading game file from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote), false);
+            logger.Info ("Loading game file from " + Convert.ToString (ControlChars.Quote) + Path + Convert.ToString (ControlChars.Quote));
             sResult SubResult = new sResult();
             string Quote = ControlChars.Quote.ToString();
 
@@ -492,7 +503,8 @@ namespace SharpFlame.Mapping
             }
             else
             {
-                clsResult Result = new clsResult("feature.ini");
+                clsResult Result = new clsResult("feature.ini", false);
+                logger.Info ("Loading feature.ini");
                 IniReader FeaturesINI = new IniReader();
                 StreamReader FeaturesINI_Reader = new StreamReader(File);
                 Result.Take(FeaturesINI.ReadFile(FeaturesINI_Reader));
@@ -504,7 +516,8 @@ namespace SharpFlame.Mapping
 
             if ( INIFeatures == null )
             {
-                clsResult Result = new clsResult("feat.bjo");
+                clsResult Result = new clsResult("feat.bjo", false);
+                logger.Info ("Loading feat.bjo");
                 SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "feat.bjo", ref File);
                 if ( !SubResult.Success )
                 {
@@ -525,7 +538,8 @@ namespace SharpFlame.Mapping
 
             if ( true )
             {
-                clsResult Result = new clsResult("ttypes.ttp");
+                clsResult Result = new clsResult("ttypes.ttp", false);
+                logger.Info ("Loading ttypes.ttp");
                 SubResult = IOUtil.TryOpenFileStream(MapDirectory + "ttypes.ttp", ref File);
                 if ( !SubResult.Success )
                 {
@@ -552,7 +566,8 @@ namespace SharpFlame.Mapping
             }
             else
             {
-                clsResult Result = new clsResult("struct.ini");
+                clsResult Result = new clsResult("struct.ini", false);
+                logger.Info ("Loading struct.ini");
                 IniReader StructuresINI = new IniReader();
                 StreamReader StructuresINI_Reader = new StreamReader(File);
                 Result.Take(StructuresINI.ReadFile(StructuresINI_Reader));
@@ -564,7 +579,8 @@ namespace SharpFlame.Mapping
 
             if ( INIStructures == null )
             {
-                clsResult Result = new clsResult("struct.bjo");
+                clsResult Result = new clsResult("struct.bjo", false);
+                logger.Info ("Loading struct.bjo");
                 SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "struct.bjo", ref File);
                 if ( !SubResult.Success )
                 {
@@ -591,7 +607,8 @@ namespace SharpFlame.Mapping
             }
             else
             {
-                clsResult Result = new clsResult("droid.ini");
+                clsResult Result = new clsResult("droid.ini", false);
+                logger.Info ("Loading droid.ini");
                 IniReader DroidsINI = new IniReader();
                 StreamReader DroidsINI_Reader = new StreamReader(File);
                 Result.Take(DroidsINI.ReadFile(DroidsINI_Reader));
@@ -603,7 +620,8 @@ namespace SharpFlame.Mapping
 
             if ( INIStructures == null )
             {
-                clsResult Result = new clsResult("dinit.bjo");
+                clsResult Result = new clsResult("dinit.bjo", false);
+                logger.Info ("Loading dinit.bjo");
                 SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "dinit.bjo", ref File);
                 if ( !SubResult.Success )
                 {
@@ -636,7 +654,8 @@ namespace SharpFlame.Mapping
             }
             else
             {
-                clsResult Result = new clsResult("labels.ini");
+                clsResult Result = new clsResult("labels.ini", false);
+                logger.Info ("Loading labels.ini");
                 IniReader LabelsINI = new IniReader();
                 StreamReader LabelsINI_Reader = new StreamReader(File);
                 Result.Take(LabelsINI.ReadFile(LabelsINI_Reader));
@@ -650,7 +669,8 @@ namespace SharpFlame.Mapping
 
         public clsResult CreateWZObjects(sCreateWZObjectsArgs Args)
         {
-            clsResult ReturnResult = new clsResult("Creating objects");
+            clsResult ReturnResult = new clsResult("Creating objects", false);
+            logger.Info ("Creating objects");
             clsUnit NewUnit = default(clsUnit);
             UInt32 AvailableID = 0;
             SimpleClassList<clsWZBJOUnit> BJOUnits = Args.BJOUnits;
@@ -1613,7 +1633,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Read_WZ_Labels(IniReader INI, bool IsFMap)
         {
-            clsResult ReturnResult = new clsResult("Reading labels");
+            clsResult ReturnResult = new clsResult("Reading labels", false);
+            logger.Info ("Reading labels.");
 
             int CharNum = 0;
             PositionFromText PositionsA = default(PositionFromText);
@@ -1662,7 +1683,6 @@ namespace SharpFlame.Mapping
                         TypeNum = int.MaxValue;
                         FailedCount++;
                         continue;
-                        break;
                 }
                 strLabel = Convert.ToString(INISection.GetLastPropertyValue("label"));
                 if ( strLabel == null )
@@ -1770,7 +1790,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_WZ_StructuresINI(IniWriter File, int PlayerCount)
         {
-            clsResult ReturnResult = new clsResult("Serializing structures INI");
+            clsResult ReturnResult = new clsResult("Serializing structures INI", false);
+            logger.Info ("Serializing structures INI");
 
             StructureTypeBase structureTypeBase = default(StructureTypeBase);
             clsUnit Unit = default(clsUnit);
@@ -1954,7 +1975,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_WZ_DroidsINI(IniWriter File, int PlayerCount)
         {
-            clsResult ReturnResult = new clsResult("Serializing droids INI");
+            clsResult ReturnResult = new clsResult("Serializing droids INI", false);
+            logger.Info ("Serializing droids INI");
 
             DroidDesign Droid = default(DroidDesign);
             DroidTemplate Template = default(DroidTemplate);
@@ -2151,7 +2173,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_WZ_FeaturesINI(IniWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing features INI");
+            clsResult ReturnResult = new clsResult("Serializing features INI", false);
+            logger.Info ("Serializing features INI");
             FeatureTypeBase featureTypeBase = default(FeatureTypeBase);
             clsUnit Unit = default(clsUnit);
             bool Valid = default(bool);
@@ -2189,7 +2212,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_WZ_LabelsINI(IniWriter File, int PlayerCount)
         {
-            clsResult ReturnResult = new clsResult("Serializing labels INI");
+            clsResult ReturnResult = new clsResult("Serializing labels INI", false);
+            logger.Info ("Serializing labels INI");
 
             try
             {

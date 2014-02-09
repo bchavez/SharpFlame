@@ -1,3 +1,4 @@
+using NLog;
 using System;
 using System.Globalization;
 using System.IO;
@@ -11,6 +12,8 @@ namespace SharpFlame.FileIO
 {
     public static class IOUtil
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         public static ZipEntry ZipMakeEntry(ZipOutputStream ZipOutputStream, string Path, clsResult Result)
         {
             try
@@ -122,7 +125,8 @@ namespace SharpFlame.FileIO
 
         public static clsResult WriteMemoryToNewFile(MemoryStream Memory, string Path)
         {
-            clsResult ReturnResult = new clsResult("Writing to " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
+            clsResult ReturnResult = new clsResult("Writing to " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote), false);
+            logger.Info ("Writing to " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
 
             FileStream NewFile = default(FileStream);
             try
@@ -152,7 +156,8 @@ namespace SharpFlame.FileIO
 
         public static clsResult WriteMemoryToZipEntryAndFlush(MemoryStream Memory, ZipOutputStream Stream)
         {
-            clsResult ReturnResult = new clsResult("Writing to zip stream");
+            clsResult ReturnResult = new clsResult("Writing to zip stream", false);
+            logger.Info ("Writing to zip stream");
 
             try
             {

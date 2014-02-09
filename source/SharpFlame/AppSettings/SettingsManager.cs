@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using Microsoft.VisualBasic;
+using NLog;
 using OpenTK;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
@@ -12,6 +13,8 @@ namespace SharpFlame.AppSettings
 {
     public sealed class SettingsManager
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         public static OptionGroup Options_Settings = new OptionGroup();
         public static clsSettings InitializeSettings;
         public static clsSettings Settings;
@@ -106,7 +109,8 @@ namespace SharpFlame.AppSettings
 
         public static clsResult Read_Settings(StreamReader File, ref clsSettings Result)
         {
-            clsResult ReturnResult = new clsResult("Reading settings");
+            clsResult ReturnResult = new clsResult("Reading settings", false);
+            logger.Info ("Reading settings");
 
             IniReader INIReader = new IniReader();
             ReturnResult.Take(INIReader.ReadFile(File));
@@ -116,7 +120,8 @@ namespace SharpFlame.AppSettings
             {
                 if ( section.Name.ToLower() == "keyboardcontrols" )
                 {
-                    clsResult keyResults = new clsResult("Keyboard controls");
+                    clsResult keyResults = new clsResult("Keyboard controls", false);
+                    logger.Debug ("Reading keyboard controls");
                     keyResults.Take(section.Translate(KeyboardManager.KeyboardProfile));
                     ReturnResult.Take(keyResults);
                 }
@@ -182,7 +187,9 @@ namespace SharpFlame.AppSettings
         {
             clsResult ReturnResult =
                 new clsResult("Writing settings to " + Convert.ToString(ControlChars.Quote) + App.SettingsPath +
-                              Convert.ToString(ControlChars.Quote));
+                              Convert.ToString(ControlChars.Quote), false);
+            logger.Info ("Writing settings to " + Convert.ToString (ControlChars.Quote) + App.SettingsPath +
+                Convert.ToString (ControlChars.Quote));
 
 #if !Portable
             if ( !Directory.Exists(App.MyDocumentsProgramPath) )
@@ -220,7 +227,8 @@ namespace SharpFlame.AppSettings
 
         private static clsResult Serialize_Settings(IniWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing settings");
+            clsResult ReturnResult = new clsResult("Serializing settings", false);
+            logger.Info ("Serializing settings");
 
             ReturnResult.Take(Settings.INIWrite(File));
             if ( KeyboardManager.KeyboardProfile.IsAnythingChanged )
@@ -236,7 +244,9 @@ namespace SharpFlame.AppSettings
         {
             clsResult ReturnResult =
                 new clsResult("Loading settings from " + Convert.ToString(ControlChars.Quote) + App.SettingsPath +
-                              Convert.ToString(ControlChars.Quote));
+                              Convert.ToString(ControlChars.Quote), false);
+            logger.Info ("Loading settings from " + Convert.ToString (ControlChars.Quote) + App.SettingsPath +
+                Convert.ToString (ControlChars.Quote));
 
             StreamReader File_Settings = default(StreamReader);
             try

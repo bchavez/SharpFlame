@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.IO;
+using NLog;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.AppSettings;
 using SharpFlame.Bitmaps;
@@ -12,6 +13,8 @@ namespace SharpFlame.Mapping.Tiles
 {
     public class clsTileset
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         public bool IsOriginal { get; set; }
 
         public sTile[] Tiles { get; set; }
@@ -103,7 +106,8 @@ namespace SharpFlame.Mapping.Tiles
 
         public clsResult LoadDirectory(string path)
         {
-            var returnResult = new clsResult( "Loading tileset from '{0}'".Format2( path ) );
+            var returnResult = new clsResult( "Loading tileset from '{0}'".Format2( path ), false);
+            logger.Info ("Loading tileset from '{0}'".Format2 (path));
 
             Bitmap bitmap = null;
             sSplitPath SplitPath = new sSplitPath(path);
@@ -238,7 +242,8 @@ namespace SharpFlame.Mapping.Tiles
 
         public clsResult GenerateMipMaps(string SlashPath, string strTile, BitmapGLTexture BitmapTextureArgs, int TileNum)
         {
-            clsResult ReturnResult = new clsResult("Generating mipmaps");
+            clsResult ReturnResult = new clsResult("Generating mipmaps", false);
+            logger.Info ("Generating mipmaps");
             string GraphicPath = "";
             int PixX = 0;
             int PixY = 0;

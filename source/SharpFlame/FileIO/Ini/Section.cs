@@ -34,7 +34,7 @@ namespace SharpFlame.FileIO.Ini
 
         public clsResult ReadFile(StreamReader File)
         {
-            clsResult ReturnResult = new clsResult("");
+            clsResult ReturnResult = new clsResult("", false);
 
             int InvalidLineCount = 0;
             int CurrentEntryNum = -1;

@@ -21,7 +21,8 @@ namespace SharpFlame.Mapping
         public clsResult Load_FME(string Path)
         {
             clsResult ReturnResult =
-                new clsResult("Loading FME from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
+                new clsResult("Loading FME from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote), false);
+            logger.Info ("Loading FME from " + Convert.ToString (ControlChars.Quote) + Path + Convert.ToString (ControlChars.Quote));
 
             BinaryReader File = default(BinaryReader);
 
@@ -42,7 +43,8 @@ namespace SharpFlame.Mapping
 
         private clsResult Read_FME(BinaryReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading FME");
+            clsResult ReturnResult = new clsResult("Reading FME", false);
+            logger.Info ("Reading FME");
 
             UInt32 Version = 0;
 
@@ -483,8 +485,8 @@ namespace SharpFlame.Mapping
         public clsResult Load_LND(string Path)
         {
             clsResult ReturnResult =
-                new clsResult("Loading LND from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
-
+                new clsResult("Loading LND from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote), false);
+            logger.Info ("Loading LND from " + Convert.ToString (ControlChars.Quote) + Path + Convert.ToString (ControlChars.Quote));
             try
             {
                 string strTemp = "";
@@ -1137,7 +1139,9 @@ namespace SharpFlame.Mapping
         public clsResult Write_LND(string Path, bool Overwrite)
         {
             clsResult ReturnResult =
-                new clsResult("Writing LND to " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
+                new clsResult("Writing LND to " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote), false);
+
+            logger.Info ("Writing LND to " + Convert.ToString (ControlChars.Quote) + Path + Convert.ToString (ControlChars.Quote));
 
             if ( System.IO.File.Exists(Path) )
             {

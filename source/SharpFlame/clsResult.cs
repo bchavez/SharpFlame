@@ -94,17 +94,21 @@ namespace SharpFlame
             Items.AddSimpleList(ResultToMerge.Items);
         }
 
-        public void ProblemAdd(string Text)
+        public void ProblemAdd(string Text, bool log = true)
         {
-            logger.Error (Text);
+            if (log) {
+                logger.Error (Text);
+            }
             clsProblem Problem = new clsProblem();
             Problem.Text = Text;
             ItemAdd(Problem);
         }
 
-        public void WarningAdd(string Text)
+        public void WarningAdd(string Text, bool log = true)
         {
-            logger.Warn (Text);
+            if (log) {
+                logger.Warn (Text);
+            }
             clsWarning Warning = new clsWarning();
             Warning.Text = Text;
             ItemAdd(Warning);
@@ -119,9 +123,11 @@ namespace SharpFlame
             Items.Add(item);
         }
 
-        public clsResult(string Text)
+        public clsResult(string Text, bool log = true)
         {
-            logger.Debug (Text);
+            if (log) {
+                logger.Debug (Text);
+            }
             Items.MaintainOrder = true;
 
             this.Text = Text;

@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
+using NLog;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.FileIO;
@@ -11,6 +12,8 @@ namespace SharpFlame.AppSettings
 {
     public class OptionProfile : Translator
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         public bool IsAnythingChanged
         {
             get
@@ -83,7 +86,8 @@ namespace SharpFlame.AppSettings
 
         public clsResult INIWrite(IniWriter file)
         {
-            clsResult returnResult = new clsResult("Writing options to INI");
+            clsResult returnResult = new clsResult("Writing options to INI", false);
+            logger.Info ("Writing options to INI");
 
             foreach ( OptionInterface item in _Options.Options )
             {

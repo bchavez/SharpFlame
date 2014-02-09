@@ -14,7 +14,7 @@ namespace SharpFlame
     public sealed class Program
     {
         public static Timer InitializeDelay;
-        public static clsResult InitializeResult = new clsResult("Startup result");
+        public static clsResult InitializeResult = new clsResult("Startup result", false);
 
         public static frmMain frmMainInstance;
         public static frmGenerator frmGeneratorInstance;

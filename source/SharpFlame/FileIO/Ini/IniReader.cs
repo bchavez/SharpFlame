@@ -1,3 +1,4 @@
+using NLog;
 using System;
 using System.IO;
 using Microsoft.VisualBasic;
@@ -7,6 +8,8 @@ namespace SharpFlame.FileIO.Ini
 {
     public class IniReader
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         public SimpleList<Section> Sections = new SimpleList<Section>();
         public Section RootSection;
 
@@ -20,7 +23,8 @@ namespace SharpFlame.FileIO.Ini
 
         public clsResult ReadFile(StreamReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading INI");
+            clsResult ReturnResult = new clsResult("Reading INI", false);
+            logger.Debug ("Reading INI.");
 
             int InvalidLineCount = 0;
             int CurrentEntryNum = -1;
@@ -112,7 +116,8 @@ namespace SharpFlame.FileIO.Ini
 
         public clsResult Translate(SectionTranslator Translator)
         {
-            clsResult ReturnResult = new clsResult("Translating INI");
+            clsResult ReturnResult = new clsResult("Translating INI", false);
+            logger.Debug ("Translating INI");
 
             int A = 0;
             ErrorCount ErrorCount = new ErrorCount();

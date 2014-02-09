@@ -9,6 +9,7 @@ using Matrix3D;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.ApplicationServices;
 using Microsoft.VisualBasic.CompilerServices;
+using NLog;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
@@ -31,6 +32,8 @@ namespace SharpFlame
 {
     public partial class frmMain
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger ();
+
         public class clsMaps : ConnectedList<clsMap, frmMain>
         {
             private clsMap _MainMap;
@@ -182,7 +185,8 @@ namespace SharpFlame
 
         private clsResult LoadInterfaceImages()
         {
-            clsResult ReturnResult = new clsResult("Loading interface images");
+            clsResult ReturnResult = new clsResult("Loading interface images", false);
+            logger.Info ("Loading interface images");
 
             Bitmap InterfaceImage_DisplayAutoTexture = null;
             Bitmap InterfaceImage_DrawTileOrientation = null;
@@ -516,7 +520,8 @@ namespace SharpFlame
             if ( App.CommandLinePaths.Count >= 1 )
             {
                 string Path = "";
-                clsResult LoadResult = new clsResult("Loading startup command-line maps");
+                clsResult LoadResult = new clsResult("Loading startup command-line maps", false);
+                logger.Info ("Loading startup command-line maps");
                 foreach ( string tempLoopVar_Path in App.CommandLinePaths )
                 {
                     Path = tempLoopVar_Path;
@@ -620,12 +625,13 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
-            string FileName = "";
-            clsResult Results = new clsResult("Loading maps");
+            string fileName = "";
+            clsResult Results = new clsResult("Loading maps", false);
             foreach ( string tempLoopVar_FileName in Dialog.FileNames )
             {
-                FileName = tempLoopVar_FileName;
-                Results.Take(LoadMap(FileName));
+                fileName = tempLoopVar_FileName;
+                logger.Info ("Loading map '{0}'", fileName);
+                Results.Take(LoadMap(fileName));
             }
             App.ShowWarnings(Results);
         }
@@ -2081,7 +2087,8 @@ namespace SharpFlame
 
         private clsResult NoTile_Texture_Load()
         {
-            clsResult ReturnResult = new clsResult("Loading error terrain textures");
+            clsResult ReturnResult = new clsResult("Loading error terrain textures", false);
+            logger.Info ("Loading error terrain textures");
 
             Bitmap Bitmap = null;
 
@@ -2094,7 +2101,8 @@ namespace SharpFlame
             
             Bitmap = Resources.notile;
             {
-                clsResult Result = new clsResult("notile.png");
+                clsResult Result = new clsResult("Loading notile.png", false);
+                logger.Info ("Loading notile.png");
                 Result.Take(BitmapUtil.BitmapIsGLCompatible(Bitmap));
                 ReturnResult.Add(Result);
                 BitmapTextureArgs.Texture = Bitmap;
@@ -2104,7 +2112,8 @@ namespace SharpFlame
 
             Bitmap = Resources.overflow;
             {
-                clsResult Result = new clsResult("overflow.png");
+                clsResult Result = new clsResult("Loading overflow.png", false);
+                logger.Info ("Loading overflow.png");
                 Result.Take(BitmapUtil.BitmapIsGLCompatible(Bitmap));
                 ReturnResult.Add(Result);
                 BitmapTextureArgs.Texture = Bitmap;
@@ -3614,7 +3623,8 @@ namespace SharpFlame
         public void OpenGL_DragDrop(object sender, DragEventArgs e)
         {
             string[] Paths = (string[])(e.Data.GetData(DataFormats.FileDrop));
-            clsResult Result = new clsResult("Loading drag-dropped maps");
+            clsResult Result = new clsResult("Loading drag-dropped maps", false);
+            logger.Info ("Loading drag-dropped maps");
             string Path = "";
 
             foreach ( string tempLoopVar_Path in Paths )
@@ -4116,7 +4126,7 @@ namespace SharpFlame
 
         public clsResult LoadMap(string Path)
         {
-            clsResult ReturnResult = new clsResult("");
+            clsResult ReturnResult = new clsResult("", false);
             sSplitPath SplitPath = new sSplitPath(Path);
             clsMap ResultMap = new clsMap();
             string Extension = SplitPath.FileExtension.ToLower();
@@ -4177,7 +4187,7 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
-            clsResult Result = new clsResult("Loading map");
+            clsResult Result = new clsResult("Loading map", false);
             Result.Take(LoadMap(Dialog.FileName));
             App.ShowWarnings(Result);
         }

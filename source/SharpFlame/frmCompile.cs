@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
+using NLog;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping;
@@ -13,6 +14,8 @@ namespace SharpFlame
 {
     public partial class frmCompile
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         private clsMap Map;
 
         public static frmCompile Create(clsMap Map)
@@ -121,7 +124,8 @@ namespace SharpFlame
 
         public void btnCompile_Click(Object sender, EventArgs e)
         {
-            clsResult ReturnResult = new clsResult("Compile multiplayer");
+            clsResult ReturnResult = new clsResult("Compile multiplayer", false);
+            logger.Info ("Compile multiplayer");
             int A = 0;
 
             SaveToMap();
@@ -228,7 +232,8 @@ namespace SharpFlame
 
         private clsResult ValidateMap_UnitPositions()
         {
-            clsResult Result = new clsResult("Validate unit positions");
+            clsResult Result = new clsResult("Validate unit positions", false);
+            logger.Info ("Validate unit positions");
 
             //check unit positions
 
@@ -410,7 +415,8 @@ namespace SharpFlame
 
         private clsResult ValidateMap_Multiplayer(int PlayerCount, bool IsXPlayerFormat)
         {
-            clsResult Result = new clsResult("Validate for multiplayer");
+            clsResult Result = new clsResult("Validate for multiplayer", false);
+            logger.Info ("Validate for multiplayer");
 
             if ( PlayerCount < 2 | PlayerCount > Constants.PlayerCountMax )
             {
@@ -512,7 +518,8 @@ namespace SharpFlame
 
         private clsResult ValidateMap()
         {
-            clsResult ReturnResult = new clsResult("Validate map");
+            clsResult ReturnResult = new clsResult("Validate map", false);
+            logger.Info ("Validate map");
 
             if ( Map.Terrain.TileSize.X > Constants.WzMapMaxSize )
             {
@@ -608,7 +615,8 @@ namespace SharpFlame
 
         public void btnCompileCampaign_Click(Object sender, EventArgs e)
         {
-            clsResult ReturnResult = new clsResult("Compile campaign");
+            clsResult ReturnResult = new clsResult("Compile campaign", false);
+            logger.Info ("Compile campaign");
             int A = 0;
 
             SaveToMap();

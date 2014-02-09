@@ -281,7 +281,7 @@ namespace SharpFlame
             clsResult Result = default(clsResult);
             do
             {
-                Result = new clsResult("");
+                Result = new clsResult("", false);
                 Result = Generator.GenerateLayout();
                 if ( !Result.HasProblems )
                 {
@@ -316,7 +316,7 @@ namespace SharpFlame
 
         private clsResult FinishHeights()
         {
-            clsResult ReturnResult = new clsResult("");
+            clsResult ReturnResult = new clsResult("", false);
 
             ReturnResult.Take(Generator.GenerateLayoutTerrain());
             if ( ReturnResult.HasProblems )
@@ -336,7 +336,7 @@ namespace SharpFlame
 
         private clsResult FinishTextures()
         {
-            clsResult ReturnResult = new clsResult("");
+            clsResult ReturnResult = new clsResult("", false);
 
             if ( cbxMasterTexture.Checked )
             {
@@ -502,7 +502,7 @@ namespace SharpFlame
             Generator.GenerateGateways();
 
             lstResult_AddText("Generating objects.");
-            clsResult Result = new clsResult("");
+            clsResult Result = new clsResult("", false);
             Result.Take(Generator.GenerateOil());
             Result.Take(Generator.GenerateUnits());
             lstResult_AddResult(Result);
@@ -530,7 +530,7 @@ namespace SharpFlame
             Generator.MaxDisconnectionDist = ValidateTextbox(txtRampDistance, 0.0D, 99999.0D, App.TerrainGridSpacing);
             Generator.RampBase = ValidateTextbox(txtRampBase, 10.0D, 1000.0D, 10.0D) / 1000.0D;
 
-            clsResult Result = new clsResult("");
+            clsResult Result = new clsResult("", false);
 
             lstResult_AddText("Generating ramps.");
             Result = Generator.GenerateRamps();
