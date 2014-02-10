@@ -237,71 +237,70 @@ namespace SharpFlame
 
             //check unit positions
 
-            bool[,] TileHasUnit = new bool[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
-            StructureTypeBase[,] tileStructureTypeBase = new StructureTypeBase[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
-            FeatureTypeBase[,] tileFeatureTypeBase = new FeatureTypeBase[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
-            clsUnitGroup[,] TileObjectGroup = new clsUnitGroup[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
-            int X = 0;
-            int Y = 0;
+            var TileHasUnit = new bool[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
+            var tileStructureTypeBase = new StructureTypeBase[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
+            var tileFeatureTypeBase = new FeatureTypeBase[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
+            var TileObjectGroup = new clsUnitGroup[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
+
             sXY_int StartPos = new sXY_int();
             sXY_int FinishPos = new sXY_int();
             sXY_int CentrePos = new sXY_int();
             StructureTypeBase.enumStructureType StructureTypeType;
-            StructureTypeBase structureTypeBase = default(StructureTypeBase);
+            StructureTypeBase structureTypeBase;
             sXY_int Footprint = new sXY_int();
             bool[] UnitIsStructureModule = new bool[Map.Units.Count];
-            bool IsValid = default(bool);
-            clsUnit Unit = default(clsUnit);
-            foreach ( clsUnit tempLoopVar_Unit in Map.Units )
+            bool IsValid;
+
+            foreach ( var unit in Map.Units )
             {
-                Unit = tempLoopVar_Unit;
-                if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
+                if ( unit.TypeBase.Type == UnitType.PlayerStructure )
                 {
-                    structureTypeBase = (StructureTypeBase)Unit.TypeBase;
+                    structureTypeBase = (StructureTypeBase)unit.TypeBase;
                     StructureTypeType = structureTypeBase.StructureType;
-                    UnitIsStructureModule[Unit.MapLink.ArrayPosition] = structureTypeBase.IsModule() |
+                    UnitIsStructureModule[unit.MapLink.ArrayPosition] = structureTypeBase.IsModule() |
                                                                         StructureTypeType == StructureTypeBase.enumStructureType.ResourceExtractor;
                 }
             }
             //check and store non-module units first. modules need to check for the underlying unit.
-            foreach ( clsUnit tempLoopVar_Unit in Map.Units )
+            foreach ( var unit in Map.Units )
             {
-                Unit = tempLoopVar_Unit;
-                if ( !UnitIsStructureModule[Unit.MapLink.ArrayPosition] )
+                if ( !UnitIsStructureModule[unit.MapLink.ArrayPosition] )
                 {
-                    Footprint = Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation);
-                    Map.GetFootprintTileRange(Unit.Pos.Horizontal, Footprint, ref StartPos, ref FinishPos);
+                    Footprint = unit.TypeBase.get_GetFootprintSelected(unit.Rotation);
+                    Map.GetFootprintTileRange(unit.Pos.Horizontal, Footprint, ref StartPos, ref FinishPos);
                     if ( StartPos.X < 0 | FinishPos.X >= Map.Terrain.TileSize.X
                          | StartPos.Y < 0 | FinishPos.Y >= Map.Terrain.TileSize.Y )
                     {
-                        clsResultProblemGoto<clsResultItemPosGoto> resultItem = modResults.CreateResultProblemGotoForObject(Unit);
-                        resultItem.Text = "Unit off map at position " + Unit.GetPosText() + ".";
+                        clsResultProblemGoto<clsResultItemPosGoto> resultItem = modResults.CreateResultProblemGotoForObject(unit);
+                        resultItem.Text = "Unit off map at position " + unit.GetPosText() + ".";
                         Result.ItemAdd(resultItem);
                     }
                     else
                     {
-                        for ( Y = StartPos.Y; Y <= FinishPos.Y; Y++ )
+                        for (int y = StartPos.Y; y <= FinishPos.Y; y++ )
                         {
-                            for ( X = StartPos.X; X <= FinishPos.X; X++ )
+                            for (int x = StartPos.X; x <= FinishPos.X; x++ )
                             {
-                                if ( TileHasUnit[X, Y] )
+                                if ( TileHasUnit[x, y] )
                                 {
-                                    clsResultProblemGoto<clsResultItemPosGoto> resultItem = modResults.CreateResultProblemGotoForObject(Unit);
-                                    resultItem.Text = "Bad unit overlap on tile " + Convert.ToString(X) + ", " + Convert.ToString(Y) + ".";
+                                    clsResultProblemGoto<clsResultItemPosGoto> resultItem = modResults.CreateResultProblemGotoForObject(unit);
+                                    resultItem.Text = "Bad unit overlap on tile " + Convert.ToString(x) + ", " + Convert.ToString(y) + ".";
                                     Result.ItemAdd(resultItem);
                                 }
                                 else
                                 {
-                                    TileHasUnit[X, Y] = true;
-                                    if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
+                                    logger.Debug("{0} on X:{1}, Y:{2} tile.", unit.TypeBase.GetDisplayTextName(), x, y);
+
+                                    TileHasUnit[x, y] = true;
+                                    if ( unit.TypeBase.Type == UnitType.PlayerStructure )
                                     {
-                                        tileStructureTypeBase[X, Y] = (StructureTypeBase)Unit.TypeBase;
+                                        tileStructureTypeBase[x, y] = (StructureTypeBase)unit.TypeBase;
                                     }
-                                    else if ( Unit.TypeBase.Type == UnitType.Feature )
+                                    else if ( unit.TypeBase.Type == UnitType.Feature )
                                     {
-                                        tileFeatureTypeBase[X, Y] = (FeatureTypeBase)Unit.TypeBase;
+                                        tileFeatureTypeBase[x, y] = (FeatureTypeBase)unit.TypeBase;
                                     }
-                                    TileObjectGroup[X, Y] = Unit.UnitGroup;
+                                    TileObjectGroup[x, y] = unit.UnitGroup;
                                 }
                             }
                         }
@@ -309,26 +308,25 @@ namespace SharpFlame
                 }
             }
             //check modules and extractors
-            foreach ( clsUnit tempLoopVar_Unit in Map.Units )
+            foreach ( var unit in Map.Units )
             {
-                Unit = tempLoopVar_Unit;
-                if ( UnitIsStructureModule[Unit.MapLink.ArrayPosition] )
+                if ( UnitIsStructureModule[unit.MapLink.ArrayPosition] )
                 {
-                    StructureTypeType = ((StructureTypeBase)Unit.TypeBase).StructureType;
-                    CentrePos.X = Conversion.Int(Unit.Pos.Horizontal.X / App.TerrainGridSpacing);
-                    CentrePos.Y = (int)(Conversion.Int(Unit.Pos.Horizontal.Y / App.TerrainGridSpacing));
+                    StructureTypeType = ((StructureTypeBase)unit.TypeBase).StructureType;
+                    CentrePos.X = Conversion.Int(unit.Pos.Horizontal.X / App.TerrainGridSpacing);
+                    CentrePos.Y = (int)(Conversion.Int(unit.Pos.Horizontal.Y / App.TerrainGridSpacing));
                     if ( CentrePos.X < 0 | CentrePos.X >= Map.Terrain.TileSize.X
                          | CentrePos.Y < 0 | CentrePos.Y >= Map.Terrain.TileSize.Y )
                     {
-                        clsResultProblemGoto<clsResultItemPosGoto> resultItem = modResults.CreateResultProblemGotoForObject(Unit);
-                        resultItem.Text = "Module off map at position " + Unit.GetPosText() + ".";
+                        clsResultProblemGoto<clsResultItemPosGoto> resultItem = modResults.CreateResultProblemGotoForObject(unit);
+                        resultItem.Text = "Module off map at position " + unit.GetPosText() + ".";
                         Result.ItemAdd(resultItem);
                     }
                     else
                     {
                         if ( tileStructureTypeBase[CentrePos.X, CentrePos.Y] != null )
                         {
-                            if ( TileObjectGroup[CentrePos.X, CentrePos.Y] == Unit.UnitGroup )
+                            if ( TileObjectGroup[CentrePos.X, CentrePos.Y] == unit.UnitGroup )
                             {
                                 if ( StructureTypeType == StructureTypeBase.enumStructureType.FactoryModule )
                                 {
@@ -402,7 +400,7 @@ namespace SharpFlame
                         }
                         if ( !IsValid )
                         {
-                            clsResultProblemGoto<clsResultItemPosGoto> resultItem = modResults.CreateResultProblemGotoForObject(Unit);
+                            clsResultProblemGoto<clsResultItemPosGoto> resultItem = modResults.CreateResultProblemGotoForObject(unit);
                             resultItem.Text = "Bad module on tile " + Convert.ToString(CentrePos.X) + ", " + Convert.ToString(CentrePos.Y) + ".";
                             Result.ItemAdd(resultItem);
                         }

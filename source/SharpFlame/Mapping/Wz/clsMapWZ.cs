@@ -2452,8 +2452,8 @@ namespace SharpFlame.Mapping
 
                 IOUtil.WriteText(File_MAP, false, "map ");
                 File_MAP.Write(10U);
-                File_MAP.Write(Convert.ToBoolean((uint)Terrain.TileSize.X));
-                File_MAP.Write(Convert.ToBoolean((uint)Terrain.TileSize.Y));
+                File_MAP.Write((uint)Terrain.TileSize.X);
+                File_MAP.Write((uint)Terrain.TileSize.Y);
                 byte Flip = 0;
                 byte Rotation = 0;
                 bool DoFlipX = default(bool);
@@ -2488,7 +2488,7 @@ namespace SharpFlame.Mapping
                         }
                         File_MAP.Write((byte)TextureNum);
                         File_MAP.Write(Flip);
-                        File_MAP.Write(Convert.ToBoolean(Terrain.Vertices[X, Y].Height));
+                        File_MAP.Write(Terrain.Vertices[X, Y].Height);
                     }
                 }
                 if ( InvalidTileCount > 0 )
@@ -2496,25 +2496,25 @@ namespace SharpFlame.Mapping
                     ReturnResult.WarningAdd(InvalidTileCount + " tile texture numbers were invalid.");
                 }
                 File_MAP.Write(1U); //gateway version
-                File_MAP.Write(Convert.ToBoolean((uint)Gateways.Count));
-                clsGateway Gateway = default(clsGateway);
-                foreach ( clsGateway tempLoopVar_Gateway in Gateways )
+                File_MAP.Write((uint)Gateways.Count);
+                foreach ( clsGateway gateway in Gateways )
                 {
-                    Gateway = tempLoopVar_Gateway;
-                    File_MAP.Write((byte)(MathUtil.Clamp_int(Gateway.PosA.X, 0, 255)));
-                    File_MAP.Write((byte)(MathUtil.Clamp_int(Gateway.PosA.Y, 0, 255)));
-                    File_MAP.Write((byte)(MathUtil.Clamp_int(Gateway.PosB.X, 0, 255)));
-                    File_MAP.Write((byte)(MathUtil.Clamp_int(Gateway.PosB.Y, 0, 255)));
+                    File_MAP.Write((byte)(MathUtil.Clamp_int(gateway.PosA.X, 0, 255)));
+                    File_MAP.Write((byte)(MathUtil.Clamp_int(gateway.PosA.Y, 0, 255)));
+                    File_MAP.Write((byte)(MathUtil.Clamp_int(gateway.PosB.X, 0, 255)));
+                    File_MAP.Write((byte)(MathUtil.Clamp_int(gateway.PosB.Y, 0, 255)));
                 }
 
-                FeatureTypeBase featureTypeBase = default(FeatureTypeBase);
-                StructureTypeBase structureTypeBase = default(StructureTypeBase);
-                DroidDesign DroidType = default(DroidDesign);
-                DroidTemplate DroidTemplate = default(DroidTemplate);
-                clsUnit Unit = default(clsUnit);
-                clsStructureWriteWZ StructureWrite = new clsStructureWriteWZ();
-                StructureWrite.File = File_structBJO;
-                StructureWrite.CompileType = Args.CompileType;
+                FeatureTypeBase featureTypeBase;
+                StructureTypeBase structureTypeBase;
+                DroidDesign DroidType;
+                DroidTemplate DroidTemplate;
+                clsUnit Unit;
+                clsStructureWriteWZ StructureWrite = new clsStructureWriteWZ
+                    {
+                        File = File_structBJO, 
+                        CompileType = Args.CompileType
+                    };
                 if ( Args.CompileType == sWrite_WZ_Args.enumCompileType.Multiplayer )
                 {
                     StructureWrite.PlayerCount = Args.Multiplayer.PlayerCount;
@@ -2538,17 +2538,17 @@ namespace SharpFlame.Mapping
                         FeatureOrder.ActionPerform();
                     }
                 }
-                File_featBJO.Write(Convert.ToBoolean((uint)FeatureOrder.Result.Count));
+                File_featBJO.Write((uint)FeatureOrder.Result.Count);
                 for ( A = 0; A <= FeatureOrder.Result.Count - 1; A++ )
                 {
                     Unit = FeatureOrder.Result[A];
                     featureTypeBase = (FeatureTypeBase)Unit.TypeBase;
                     IOUtil.WriteTextOfLength(File_featBJO, 40, featureTypeBase.Code);
                     File_featBJO.Write(Unit.ID);
-                    File_featBJO.Write(Convert.ToBoolean((uint)Unit.Pos.Horizontal.X));
-                    File_featBJO.Write(Convert.ToBoolean((uint)Unit.Pos.Horizontal.Y));
-                    File_featBJO.Write(Convert.ToBoolean((uint)Unit.Pos.Altitude));
-                    File_featBJO.Write(Convert.ToBoolean((uint)Unit.Rotation));
+                    File_featBJO.Write((uint)Unit.Pos.Horizontal.X);
+                    File_featBJO.Write((uint)Unit.Pos.Horizontal.Y);
+                    File_featBJO.Write((uint)Unit.Pos.Altitude);
+                    File_featBJO.Write((uint)Unit.Rotation);
                     switch ( Args.CompileType )
                     {
                         case sWrite_WZ_Args.enumCompileType.Multiplayer:
@@ -2566,10 +2566,10 @@ namespace SharpFlame.Mapping
 
                 IOUtil.WriteText(File_TTP, false, "ttyp");
                 File_TTP.Write(8U);
-                File_TTP.Write(Convert.ToBoolean((uint)Tileset.TileCount));
+                File_TTP.Write((uint)Tileset.TileCount);
                 for ( A = 0; A <= Tileset.TileCount - 1; A++ )
                 {
-                    File_TTP.Write(Convert.ToBoolean(Tile_TypeNum[A]));
+                    File_TTP.Write((uint)Tile_TypeNum[A]);
                 }
 
                 IOUtil.WriteText(File_structBJO, false, "stru");
@@ -2604,7 +2604,7 @@ namespace SharpFlame.Mapping
                         }
                     }
                 }
-                File_structBJO.Write(Convert.ToBoolean((uint)(NonModuleStructureOrder.Result.Count + ModuleStructureOrder.Result.Count)));
+                File_structBJO.Write((uint)(NonModuleStructureOrder.Result.Count + ModuleStructureOrder.Result.Count));
                 NonModuleStructureOrder.Result.PerformTool(StructureWrite);
                 ModuleStructureOrder.Result.PerformTool(StructureWrite);
 
@@ -2626,17 +2626,17 @@ namespace SharpFlame.Mapping
                         }
                     }
                 }
-                File_droidBJO.Write(Convert.ToBoolean((uint)Droids.Result.Count));
+                File_droidBJO.Write((uint)Droids.Result.Count);
                 for ( A = 0; A <= Droids.Result.Count - 1; A++ )
                 {
                     Unit = Droids.Result[A];
                     DroidTemplate = (DroidTemplate)Unit.TypeBase;
                     IOUtil.WriteTextOfLength(File_droidBJO, 40, DroidTemplate.Code);
                     File_droidBJO.Write(Unit.ID);
-                    File_droidBJO.Write(Convert.ToBoolean((uint)Unit.Pos.Horizontal.X));
-                    File_droidBJO.Write(Convert.ToBoolean((uint)Unit.Pos.Horizontal.Y));
-                    File_droidBJO.Write(Convert.ToBoolean((uint)Unit.Pos.Altitude));
-                    File_droidBJO.Write(Convert.ToBoolean((uint)Unit.Rotation));
+                    File_droidBJO.Write((uint)Unit.Pos.Horizontal.X);
+                    File_droidBJO.Write((uint)Unit.Pos.Horizontal.Y);
+                    File_droidBJO.Write((uint)Unit.Pos.Altitude);
+                    File_droidBJO.Write((uint)Unit.Rotation);
                     switch ( Args.CompileType )
                     {
                         case sWrite_WZ_Args.enumCompileType.Multiplayer:

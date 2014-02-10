@@ -32,10 +32,10 @@ namespace SharpFlame.Mapping.Tools
             structureTypeBase = (StructureTypeBase)Unit.TypeBase;
             IOUtil.WriteTextOfLength(File, 40, structureTypeBase.Code);
             File.Write(Unit.ID);
-            File.Write(Convert.ToBoolean((uint)Unit.Pos.Horizontal.X));
-            File.Write(Convert.ToBoolean((uint)Unit.Pos.Horizontal.Y));
-            File.Write(Convert.ToBoolean((uint)Unit.Pos.Altitude));
-            File.Write(Convert.ToBoolean((uint)Unit.Rotation));
+            File.Write((uint)Unit.Pos.Horizontal.X);
+            File.Write((uint)Unit.Pos.Horizontal.Y);
+            File.Write((uint)Unit.Pos.Altitude);
+            File.Write((uint)Unit.Rotation);
             switch ( CompileType )
             {
                 case sWrite_WZ_Args.enumCompileType.Multiplayer:

@@ -1562,7 +1562,7 @@ namespace SharpFlame.Mapping
                 }
             }
 
-            BinaryWriter File_TTP = default(BinaryWriter);
+            BinaryWriter File_TTP;
 
             try
             {
@@ -1585,10 +1585,10 @@ namespace SharpFlame.Mapping
             }
             else
             {
-                File_TTP.Write(Convert.ToBoolean((uint)Tileset.TileCount));
+                File_TTP.Write((uint)Tileset.TileCount);
                 for ( A = 0; A <= Tileset.TileCount - 1; A++ )
                 {
-                    File_TTP.Write(Convert.ToBoolean(Tile_TypeNum[A]));
+                    File_TTP.Write((uint)Tile_TypeNum[A]);
                 }
             }
             File_TTP.Close();
@@ -1666,8 +1666,8 @@ namespace SharpFlame.Mapping
                     File.Write((byte)3);
                 }
 
-                File.Write(Convert.ToBoolean((ushort)Terrain.TileSize.X));
-                File.Write(Convert.ToBoolean((ushort)Terrain.TileSize.Y));
+                File.Write((ushort)Terrain.TileSize.X);
+                File.Write((ushort)Terrain.TileSize.Y);
 
                 byte TileAttributes = 0;
                 byte DownSideData = 0;
@@ -1818,7 +1818,7 @@ namespace SharpFlame.Mapping
                     }
                 }
 
-                File.Write(Convert.ToBoolean((uint)OutputUnitCount));
+                File.Write((uint)OutputUnitCount);
 
                 for ( A = 0; A <= OutputUnitCount - 1; A++ )
                 {
@@ -1838,10 +1838,10 @@ namespace SharpFlame.Mapping
                     }
                     File.Write(Unit.ID);
                     File.Write(Unit.SavePriority);
-                    File.Write(Convert.ToBoolean((uint)Unit.Pos.Horizontal.X));
-                    File.Write(Convert.ToBoolean((uint)Unit.Pos.Horizontal.Y));
-                    File.Write(Convert.ToBoolean((uint)Unit.Pos.Altitude));
-                    File.Write(Convert.ToBoolean((ushort)Unit.Rotation));
+                    File.Write((uint)Unit.Pos.Horizontal.X);
+                    File.Write((uint)Unit.Pos.Horizontal.Y);
+                    File.Write((uint)Unit.Pos.Altitude);
+                    File.Write((ushort)Unit.Rotation);
                     IOUtil.WriteText(File, true, "");
                     if ( Unit.UnitGroup == ScavengerUnitGroup )
                     {
@@ -1853,16 +1853,14 @@ namespace SharpFlame.Mapping
                     }
                 }
 
-                File.Write(Convert.ToBoolean((uint)Gateways.Count));
+                File.Write((uint)Gateways.Count);
 
-                clsGateway Gateway = default(clsGateway);
-                foreach ( clsGateway tempLoopVar_Gateway in Gateways )
+                foreach ( clsGateway Gateway in Gateways )
                 {
-                    Gateway = tempLoopVar_Gateway;
-                    File.Write(Convert.ToBoolean((ushort)Gateway.PosA.X));
-                    File.Write(Convert.ToBoolean((ushort)Gateway.PosA.Y));
-                    File.Write(Convert.ToBoolean((ushort)Gateway.PosB.X));
-                    File.Write(Convert.ToBoolean((ushort)Gateway.PosB.Y));
+                    File.Write((ushort)Gateway.PosA.X);
+                    File.Write((ushort)Gateway.PosA.Y);
+                    File.Write((ushort)Gateway.PosB.X);
+                    File.Write((ushort)Gateway.PosB.Y);
                 }
 
                 if ( Tileset != null )

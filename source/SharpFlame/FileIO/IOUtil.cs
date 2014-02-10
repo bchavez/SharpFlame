@@ -99,7 +99,7 @@ namespace SharpFlame.FileIO
         {
             if ( WriteLength )
             {
-                File.Write(Convert.ToBoolean((uint)Text.Length));
+                File.Write((uint)Text.Length);
             }
             int A = 0;
             for ( A = 0; A <= Text.Length - 1; A++ )
