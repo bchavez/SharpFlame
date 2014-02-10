@@ -1,7 +1,5 @@
-using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Mapping.Tiles;
-using SharpFlame.Maths;
 using Matrix3D;
 
 namespace SharpFlame.Mapping.Renderers

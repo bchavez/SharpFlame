@@ -161,7 +161,6 @@
     <Compile Include="Mapping\Objects\clsUnitSectorConnection.cs" />
     <Compile Include="Mapping\Renderers\clsDrawTile.cs" />
     <Compile Include="Mapping\Renderers\clsDrawTileMiddleVertex.cs" />
-    <Compile Include="Mapping\Renderers\clsDrawTileOld.cs" />
     <Compile Include="Mapping\Script\clsScriptArea.cs" />
     <Compile Include="Mapping\Script\clsScriptPosition.cs" />
     <Compile Include="Mapping\Tiles\clsGeneratorTileset.cs" />
