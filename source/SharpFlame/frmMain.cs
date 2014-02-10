@@ -5,10 +5,8 @@ using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using Matrix3D;
 using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.ApplicationServices;
-using Microsoft.VisualBasic.CompilerServices;
+using Matrix3D;
 using NLog;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Bitmaps;
@@ -374,8 +372,6 @@ namespace SharpFlame
             ctrlHeightBrush = new BrushControl(App.HeightBrush);
             pnlHeightSetBrush.Controls.Add(ctrlHeightBrush);
 
-            VBMath.Randomize();
-
             CreateTileTypes();
 
             for ( int i = 0; i <= 15; i++ )
@@ -448,7 +444,7 @@ namespace SharpFlame
                 Program.frmOptionsInstance.FormClosing += Program.frmOptionsInstance.frmOptions_FormClosing;
                 if ( Program.frmOptionsInstance.ShowDialog() == DialogResult.Cancel )
                 {
-                    ProjectData.EndApp();
+                    Application.Exit();
                 }
             }
 
@@ -539,11 +535,10 @@ namespace SharpFlame
             TextureViewControl.DrawView_SetEnabled(true);
 
             WindowState = FormWindowState.Maximized;
+
 #if !Mono
             Show();
 #endif
-            Activate();
-
             tmrKey.Enabled = true;
             tmrTool.Enabled = true;
 
@@ -662,7 +657,7 @@ namespace SharpFlame
             if ( Map == null )
             {
             }
-            else if ( Interaction.MsgBox("Apply heightmap to the current map?", MsgBoxStyle.YesNo, null) == MsgBoxResult.Yes )
+            else if ( MessageBox.Show("Apply heightmap to the current map?", "", MessageBoxButtons.YesNo) == DialogResult.Yes )
             {
                 ApplyToMap = Map;
             }
@@ -1002,23 +997,22 @@ namespace SharpFlame
             {
                 return;
             }
-
-            if ( Interaction.MsgBox("Resizing can\'t be undone. Continue?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), "") !=
-                 MsgBoxResult.Ok )
+                      
+            if ( MessageBox.Show("Resizing can\'t be undone. Continue?", "", MessageBoxButtons.OKCancel) == DialogResult.OK )
             {
                 return;
             }
 
             if ( NewSize.X < 1 | NewSize.Y < 1 )
             {
-                Interaction.MsgBox("Map sizes must be at least 1.", MsgBoxStyle.OkOnly, "");
+                MessageBox.Show ("Map sizes must be at least 1.", "", MessageBoxButtons.OK);
                 return;
             }
             if ( NewSize.X > Constants.WzMapMaxSize | NewSize.Y > Constants.WzMapMaxSize )
             {
-                if (
-                    Interaction.MsgBox("Warzone doesn\'t support map sizes above " + Convert.ToString(Constants.WzMapMaxSize) + ". Continue anyway?",
-                        MsgBoxStyle.YesNo, "") != MsgBoxResult.Yes )
+                if (MessageBox.Show (
+                    "Warzone doesn\'t support map sizes above {0} Continue anyway?".Format2(Constants.WzMapMaxSize), 
+                    "", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     return;
                 }

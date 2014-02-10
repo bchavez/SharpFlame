@@ -3,7 +3,6 @@ using System;
 using System.Globalization;
 using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
-using Microsoft.VisualBasic;
 using SharpFlame.Collections;
 using SharpFlame.Maths;
 using SharpFlame.Util;
@@ -25,7 +24,7 @@ namespace SharpFlame.FileIO
             }
             catch ( Exception ex )
             {
-                Result.ProblemAdd("Zip entry " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote) + " failed: " +
+                Result.ProblemAdd("Zip entry \"" + Path + "\" failed: " +
                                   ex.Message);
                 return null;
             }
@@ -79,7 +78,7 @@ namespace SharpFlame.FileIO
 
             for ( A = 0; A <= Length - 1; A++ )
             {
-                Result += Convert.ToString(Strings.Chr(File.ReadByte()));
+                Result += Convert.ToString((char)File.ReadByte());
             }
             return Result;
         }
@@ -91,7 +90,7 @@ namespace SharpFlame.FileIO
 
             for ( A = 0; A <= Length - 1; A++ )
             {
-                Result += Convert.ToString(Strings.Chr(File.ReadByte()));
+                Result += Convert.ToString((char)File.ReadByte());
             }
             return Result;
         }
@@ -105,7 +104,7 @@ namespace SharpFlame.FileIO
             int A = 0;
             for ( A = 0; A <= Text.Length - 1; A++ )
             {
-                File.Write((byte)(Strings.Asc(Text[A])));
+                File.Write((byte)Text[A]);
             }
         }
 
@@ -115,7 +114,7 @@ namespace SharpFlame.FileIO
 
             for ( A = 0; A <= Math.Min(Text.Length, Length) - 1; A++ )
             {
-                File.Write((byte)(Strings.Asc(Text[A])));
+                File.Write((byte)Text[A]);
             }
             for ( A = Text.Length; A <= Length - 1; A++ )
             {
@@ -125,8 +124,8 @@ namespace SharpFlame.FileIO
 
         public static clsResult WriteMemoryToNewFile(MemoryStream Memory, string Path)
         {
-            clsResult ReturnResult = new clsResult("Writing to " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote), false);
-            logger.Info ("Writing to " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
+            clsResult ReturnResult = new clsResult("Writing to \"{0}".Format2(Path), false);
+            logger.Info ("Writing to \"{0}".Format2(Path));
 
             FileStream NewFile = default(FileStream);
             try
@@ -360,8 +359,8 @@ namespace SharpFlame.FileIO
                 {
                     switch ( CurrentChar )
                     {
-                        case ControlChars.Cr:
-                        case ControlChars.Lf:
+                        case '\r':
+                        case '\n':
                             InLineComment = false;
                             if ( PrevCharExists )
                             {

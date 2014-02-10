@@ -1,7 +1,6 @@
 using NLog;
 using System;
 using System.IO;
-using Microsoft.VisualBasic;
 using SharpFlame.Collections;
 
 namespace SharpFlame.FileIO.Ini
@@ -45,7 +44,7 @@ namespace SharpFlame.FileIO.Ini
                 A = LineText.IndexOf('#');
                 if ( A >= 0 )
                 {
-                    LineText = Strings.Left(LineText, A).Trim();
+                    LineText = LineText.Substring(0, A).Trim();
                 }
                 if ( LineText.Length >= 2 )
                 {

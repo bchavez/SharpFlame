@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using Microsoft.VisualBasic;
 using SharpFlame.Collections;
 
 namespace SharpFlame.FileIO.Ini
@@ -37,7 +36,6 @@ namespace SharpFlame.FileIO.Ini
             clsResult ReturnResult = new clsResult("", false);
 
             int InvalidLineCount = 0;
-            int CurrentEntryNum = -1;
             string LineText = null;
             int A = 0;
 
@@ -52,7 +50,7 @@ namespace SharpFlame.FileIO.Ini
                 A = LineText.IndexOf('#');
                 if ( A >= 0 )
                 {
-                    LineText = Strings.Left(LineText, A).Trim();
+                    LineText = LineText.Substring(0, A).Trim();
                 }
                 if ( LineText.Length >= 1 )
                 {
@@ -97,18 +95,15 @@ namespace SharpFlame.FileIO.Ini
                     case Ini.TranslatorResult.NameUnknown:
                         if ( ErrorCount.NameErrorCount < 16 )
                         {
-                            ReturnResult.WarningAdd("Property name " + Convert.ToString(ControlChars.Quote) + Properties[A].Name +
-                                                    Convert.ToString(ControlChars.Quote) + " is unknown.");
+                            ReturnResult.WarningAdd ("Property name \"{0}\" is unknown.".Format2(Properties [A].Name));
                         }
                         ErrorCount.NameErrorCount++;
                         break;
                     case Ini.TranslatorResult.ValueInvalid:
                         if ( ErrorCount.ValueErrorCount < 16 )
                         {
-                            ReturnResult.WarningAdd("Value " + Convert.ToString(ControlChars.Quote) + Properties[A].Value +
-                                                    Convert.ToString(ControlChars.Quote) + " for property name " +
-                                                    Convert.ToString(ControlChars.Quote) + Properties[A].Name +
-                                                    Convert.ToString(ControlChars.Quote) + " is not valid.");
+                            ReturnResult.WarningAdd ("Value \"{0}\" for property name \"{1}\" is not valid."
+                                                 .Format2(Properties[A].Value, Properties[A].Name));
                         }
                         ErrorCount.ValueErrorCount++;
                         break;
@@ -137,18 +132,15 @@ namespace SharpFlame.FileIO.Ini
                     case TranslatorResult.NameUnknown:
                         if ( ErrorCount.NameErrorCount < 16 )
                         {
-                            ReturnResult.WarningAdd("Property name " + Convert.ToString(ControlChars.Quote) + Properties[A].Name +
-                                                    Convert.ToString(ControlChars.Quote) + " is unknown.");
+                            ReturnResult.WarningAdd ("Property name \"{0}\" is unknown.".Format2(Properties [A].Name));
                         }
                         ErrorCount.NameErrorCount++;
                         break;
                     case TranslatorResult.ValueInvalid:
                         if ( ErrorCount.ValueErrorCount < 16 )
                         {
-                            ReturnResult.WarningAdd("Value " + Convert.ToString(ControlChars.Quote) + Properties[A].Value +
-                                                    Convert.ToString(ControlChars.Quote) + " for property name " +
-                                                    Convert.ToString(ControlChars.Quote) + Properties[A].Name +
-                                                    Convert.ToString(ControlChars.Quote) + " is not valid.");
+                            ReturnResult.WarningAdd ("Value \"{0}\" for property name \"{1}\" is not valid."
+                                                 .Format2(Properties[A].Value, Properties[A].Name));
                         }
                         ErrorCount.ValueErrorCount++;
                         break;
