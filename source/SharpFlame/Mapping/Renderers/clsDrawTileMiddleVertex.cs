@@ -91,7 +91,6 @@ namespace SharpFlame.Mapping.Renderers
 
             GL.Begin(BeginMode.Triangles);
             int[] indices = { 1, 0, 4, 3, 1, 4, 2, 3, 4, 0, 2, 4 };
-            //int[] indices = { 0, 1, 2, 3, 1, 4, 2, 3, 4, 0, 2, 4 };
             for( int i = 0; i < indices.Length; i++ )
             {
                 GL.Normal3(Normals[indices[i]].X, Normals[indices[i]].Y, -Normals[indices[i]].Z);
