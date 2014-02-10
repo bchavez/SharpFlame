@@ -2,10 +2,9 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Text;
-using Matrix3D;
+using System.Windows.Forms;
 using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.ApplicationServices;
-using Microsoft.VisualBasic.Devices;
+using Matrix3D;
 using NLog;
 using SharpFlame.AppSettings;
 using SharpFlame.Collections;
@@ -40,17 +39,15 @@ namespace SharpFlame
 
         public static void SetProgramSubDirs()
         {
-            MyDocumentsProgramPath = (new ServerComputer()).FileSystem.SpecialDirectories.MyDocuments +
-                                     Convert.ToString(PlatformPathSeparator) + ".flaME";
+            MyDocumentsProgramPath = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments), ".flaME");
 #if !Portable
             SettingsPath = MyDocumentsProgramPath + Convert.ToString(PlatformPathSeparator) + "settings.ini";
             AutoSavePath = MyDocumentsProgramPath + Convert.ToString(PlatformPathSeparator) + "autosave" + Convert.ToString(PlatformPathSeparator);
 #else
-			SettingsPath = (new Microsoft.VisualBasic.ApplicationServices.ConsoleApplicationBase()).Info.DirectoryPath + System.Convert.ToString(PlatformPathSeparator) + "settings.ini";
-			AutoSavePath = (new Microsoft.VisualBasic.ApplicationServices.ConsoleApplicationBase()).Info.DirectoryPath + System.Convert.ToString(PlatformPathSeparator) + "autosave" + System.Convert.ToString(PlatformPathSeparator);
+            SettingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.ini");
+            AutoSavePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "autosave");
 #endif
-            InterfaceImagesPath = (new ConsoleApplicationBase()).Info.DirectoryPath +
-                                  Convert.ToString(PlatformPathSeparator) + "interface" + Convert.ToString(PlatformPathSeparator);
+            InterfaceImagesPath = Path.Combine (AppDomain.CurrentDomain.BaseDirectory, "interface");
         }
 
         public static bool ProgramInitialized = false;
@@ -129,16 +126,10 @@ namespace SharpFlame
 
         public static string MinDigits(int Number, int Digits)
         {
-            string ReturnResult = "";
-            int A = 0;
+            string ReturnResult = Number.ToStringInvariant();         
+            ReturnResult = ReturnResult.PadLeft (Digits, '0');
 
-            ReturnResult = Number.ToStringInvariant();
-            A = Digits - ReturnResult.Length;
-            if ( A > 0 )
-            {
-                ReturnResult = Strings.StrDup(A, '0') + ReturnResult;
-            }
-            return ReturnResult;
+            return ReturnResult;          
         }
 
         public static void ViewKeyDown_Clear()
@@ -261,16 +252,15 @@ namespace SharpFlame
                 return;
             }
 
-            string MessageText = "";
+            string messageText = "An object\'s ID has been changed unexpectedly. The error was in \"{0}\"\n\n" +
+                "The object is of type {1} and is at map position {2}. " +
+                "It\'s ID was {3}, but is now {4}.\n\n" +
+                "Click Cancel to stop seeing this message. Otherwise, click OK.".Format2 (NameOfErrorSource, IDUnit.TypeBase.GetDisplayTextCode(), IDUnit.GetPosText(), IntendedID.ToStringInvariant(), IDUnit.ID.ToStringInvariant());
+            const string caption = "An object\'s ID has been changed unexpectedly.";
 
-            MessageText = "An object\'s ID has been changed unexpectedly. The error was in " + Convert.ToString(ControlChars.Quote) + NameOfErrorSource +
-                          Convert.ToString(ControlChars.Quote) + "." + ControlChars.CrLf + ControlChars.CrLf + "The object is of type " +
-                          IDUnit.TypeBase.GetDisplayTextCode() + " and is at map position " + IDUnit.GetPosText() + ". It\'s ID was " +
-                          IntendedID.ToStringInvariant() + ", but is now " + IDUnit.ID.ToStringInvariant() + "." + ControlChars.CrLf +
-                          ControlChars.CrLf + "Click Cancel to stop seeing this message. Otherwise, click OK.";
+            var result = MessageBox.Show (messageText, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.None);
+            if (result == DialogResult.Cancel) {
 
-            if ( Interaction.MsgBox(MessageText, MsgBoxStyle.OkCancel, null) == MsgBoxResult.Cancel )
-            {
                 ShowIDErrorMessage = false;
             }
         }
