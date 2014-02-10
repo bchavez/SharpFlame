@@ -57,32 +57,41 @@ namespace SharpFlame.Mapping.Renderers
 
             TileUtil.GetTileRotatedTexCoords(Terrain.Tiles[TileX, TileY].Texture.Orientation, ref TexCoords[0], ref TexCoords[1], ref TexCoords[2], ref TexCoords[3]);
 
+            //cowboy: don't forget the middle texture coordinate regardless of rotation.
+            TexCoords[4].X = 0.5f;
+            TexCoords[4].Y = 0.5f;
+
             Vertices[0].X = TileX * App.TerrainGridSpacing;
             Vertices[0].Y = (float)(TileTerrainHeight[0] * Map.HeightMultiplier);
             Vertices[0].Z = -TileY * App.TerrainGridSpacing;
+
             Vertices[1].X = (TileX + 1) * App.TerrainGridSpacing;
             Vertices[1].Y = (float)(TileTerrainHeight[1] * Map.HeightMultiplier);
             Vertices[1].Z = -TileY * App.TerrainGridSpacing;
+
             Vertices[2].X = TileX * App.TerrainGridSpacing;
             Vertices[2].Y = (float)(TileTerrainHeight[2] * Map.HeightMultiplier);
             Vertices[2].Z = -(TileY + 1) * App.TerrainGridSpacing;
+
             Vertices[3].X = (TileX + 1) * App.TerrainGridSpacing;
             Vertices[3].Y = (float)(TileTerrainHeight[3] * Map.HeightMultiplier);
             Vertices[3].Z = -(TileY + 1) * App.TerrainGridSpacing;
-            Vertices[4].X = (TileX + 0.5f) * App.TerrainGridSpacing;
-            Vertices[4].Y = (float)(TileTerrainHeight[4] * Map.HeightMultiplier);
-            Vertices[4].Z = -(TileY + 0.5f) * App.TerrainGridSpacing;
+
+            Vertices[4].X = ( TileX + 0.5f ) * App.TerrainGridSpacing;
+            Vertices[4].Y = (float)( TileTerrainHeight[4] * Map.HeightMultiplier );
+            Vertices[4].Z = -( TileY + 0.5f ) * App.TerrainGridSpacing;
 
             Normals[0] = Map.TerrainVertexNormalCalc(TileX, TileY);
             Normals[1] = Map.TerrainVertexNormalCalc(TileX + 1, TileY);
             Normals[2] = Map.TerrainVertexNormalCalc(TileX, TileY + 1);
             Normals[3] = Map.TerrainVertexNormalCalc(TileX + 1, TileY + 1);
+
             Normals[4] = (Normals[0] + Normals[1] + Normals[2] + Normals[3])/4; //Linearly interpolate from corner vertices
             Normals[4] /= Normals[4].GetMagnitude(); //normalize vector length
 
             GL.Begin(BeginMode.Triangles);
             int[] indices = { 1, 0, 4, 3, 1, 4, 2, 3, 4, 0, 2, 4 };
-            for (int i = 0; i < indices.Length; i++)
+            for( int i = 0; i < indices.Length; i++ )
             {
                 GL.Normal3(Normals[indices[i]].X, Normals[indices[i]].Y, -Normals[indices[i]].Z);
                 GL.TexCoord2(TexCoords[indices[i]].X, TexCoords[indices[i]].Y);
