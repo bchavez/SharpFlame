@@ -1,4 +1,5 @@
 using System;
+using Microsoft.VisualBasic;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
 
@@ -40,8 +41,7 @@ namespace SharpFlame.Painters
             int intRandom = 0;
             int Total = 0;
 
-            Random rnd = new Random ();
-            intRandom = rnd.Next () * TileChanceTotal;
+            intRandom = (int)(Conversion.Int(VBMath.Rnd() * TileChanceTotal));
             for ( A = 0; A <= TileCount - 1; A++ )
             {
                 Total += Convert.ToInt32(Tiles[A].Chance);

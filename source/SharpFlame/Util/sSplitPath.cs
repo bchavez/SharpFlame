@@ -23,13 +23,13 @@ namespace SharpFlame.Util
                 FilePath += Parts[A] + Convert.ToString( App.PlatformPathSeparator );
             }
             FileTitle = Parts[A];
-            A = FileTitle.IndexOf ('.');
-
-            FileTitleWithoutExtension = "";
-            FileExtension = "";
+            A = FileTitle.LastIndexOf ('.');
             if (A > 0) {
                 FileTitleWithoutExtension = FileTitle.Substring (0, A);
                 FileExtension = FileTitle.Substring (A + 1, FileTitle.Length - A - 1);
+            } else {
+                FileTitleWithoutExtension = FileTitle;
+                FileExtension = "";
             }
         }
     }

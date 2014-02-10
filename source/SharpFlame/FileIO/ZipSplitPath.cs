@@ -29,11 +29,12 @@ namespace SharpFlame.FileIO
 
             A = FileTitle.LastIndexOf ('.');
 
-            FileTitleWithoutExtension = "";
-            FileExtension = "";
             if (A > 0) {
                 FileTitleWithoutExtension = FileTitle.Substring (0, A);
                 FileExtension = FileTitle.Substring (A + 1, FileTitle.Length - A - 1);
+            } else {
+                FileTitleWithoutExtension = FileTitle;
+                FileExtension = "";
             }
         }
     }
