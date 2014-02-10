@@ -536,15 +536,20 @@ namespace SharpFlame
 
             WindowState = FormWindowState.Maximized;
 
-#if !Mono
-            Show();
-#endif
+            Activated += Me_Activated;
+
             tmrKey.Enabled = true;
             tmrTool.Enabled = true;
 
             App.ShowWarnings(Program.InitializeResult);
 
             App.ProgramInitializeFinished = true;
+        }
+
+        public void Me_Activated(Object eventSender, EventArgs eventArgs)
+        {
+            MapViewControl.DrawViewLater ();
+            TextureViewControl.DrawViewLater ();
         }
 
         public void Me_LostFocus(Object eventSender, EventArgs eventArgs)
