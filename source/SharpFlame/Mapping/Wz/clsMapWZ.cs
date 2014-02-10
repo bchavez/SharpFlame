@@ -2569,7 +2569,7 @@ namespace SharpFlame.Mapping
                 File_TTP.Write((uint)Tileset.TileCount);
                 for ( A = 0; A <= Tileset.TileCount - 1; A++ )
                 {
-                    File_TTP.Write((uint)Tile_TypeNum[A]);
+                    File_TTP.Write((ushort)Tile_TypeNum[A]);
                 }
 
                 IOUtil.WriteText(File_structBJO, false, "stru");
