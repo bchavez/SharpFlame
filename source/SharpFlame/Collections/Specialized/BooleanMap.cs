@@ -1,4 +1,4 @@
-using Microsoft.VisualBasic;
+using System;
 using SharpFlame.Maths;
 
 namespace SharpFlame.Collections.Specialized
@@ -59,8 +59,8 @@ namespace SharpFlame.Collections.Specialized
             int Y = 0;
             bool Flag = default(bool);
 
-            X = 0;
-            Y = 0;
+			Random rnd = new Random ();
+
             while ( Y < ValueData.Size.Y - 1 )
             {
                 X = 0;
@@ -112,7 +112,7 @@ namespace SharpFlame.Collections.Specialized
                                 if ( ValueData.Value[Y + 1, X + 1] )
                                 {
                                     //i o o i
-                                    if ( VBMath.Rnd() < 0.5F )
+                                    if ( rnd.Next() < 0.5F )
                                     {
                                         ValueData.Value[Y, X] = false;
                                     }
@@ -142,7 +142,7 @@ namespace SharpFlame.Collections.Specialized
                                 else if ( !ValueData.Value[Y + 1, X + 1] )
                                 {
                                     //o i i o
-                                    if ( VBMath.Rnd() < 0.5F )
+									if ( rnd.Next() < 0.5F )
                                     {
                                         ValueData.Value[Y, X + 1] = false;
                                     }

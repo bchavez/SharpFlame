@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using Matrix3D;
-using Microsoft.VisualBasic;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -840,10 +839,10 @@ namespace SharpFlame.Controls
                 StartPos.Y = StartVertex.Y * App.TerrainGridSpacing;
                 FinishPos.X = FinishVertex.X * App.TerrainGridSpacing;
                 FinishPos.Y = FinishVertex.Y * App.TerrainGridSpacing;
-                SectorStart.X = Math.Min(Conversion.Int(StartVertex.X / Constants.SectorTileSize), Map.SectorCount.X - 1);
-                SectorStart.Y = Math.Min((int)(Conversion.Int(StartVertex.Y / Constants.SectorTileSize)), Map.SectorCount.Y - 1);
-                SectorFinish.X = Math.Min(Conversion.Int(FinishVertex.X / Constants.SectorTileSize), Map.SectorCount.X - 1);
-                SectorFinish.Y = Math.Min(Conversion.Int(FinishVertex.Y / Constants.SectorTileSize), Map.SectorCount.Y - 1);
+                SectorStart.X = Math.Min((int)(StartVertex.X / Constants.SectorTileSize), Map.SectorCount.X - 1);
+                SectorStart.Y = Math.Min((int)(StartVertex.Y / Constants.SectorTileSize), Map.SectorCount.Y - 1);
+                SectorFinish.X = Math.Min((int)(FinishVertex.X / Constants.SectorTileSize), Map.SectorCount.X - 1);
+                SectorFinish.Y = Math.Min((int)(FinishVertex.Y / Constants.SectorTileSize), Map.SectorCount.Y - 1);
                 for ( SectorNum.Y = SectorStart.Y; SectorNum.Y <= SectorFinish.Y; SectorNum.Y++ )
                 {
                     for ( SectorNum.X = SectorStart.X; SectorNum.X <= SectorFinish.X; SectorNum.X++ )

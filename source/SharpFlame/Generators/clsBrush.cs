@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using Matrix3D;
-using Microsoft.VisualBasic;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
@@ -65,8 +64,8 @@ namespace SharpFlame
 
         private void CreateTiles()
         {
-            double AlignmentOffset = _Radius - Conversion.Int(_Radius);
-            double RadiusB = Conversion.Int(_Radius + 0.25D);
+            double AlignmentOffset = _Radius - (int)_Radius;
+            double RadiusB = (int)(_Radius + 0.25D);
 
             _Alignment = AlignmentOffset >= 0.25D & AlignmentOffset < 0.75D;
             switch ( _Shape )
@@ -207,7 +206,7 @@ namespace SharpFlame
             if ( Alignment )
             {
                 RadiusB += 1.0D;
-                Y = (int)(Conversion.Int(RadiusB));
+                Y = (int)RadiusB;
                 YMin = Convert.ToInt32(- Y);
                 YMax = Y - 1;
                 B = YMax - YMin;
@@ -219,7 +218,7 @@ namespace SharpFlame
                     dblY = Y + 0.5D;
                     dblX = Math.Sqrt(RadiusC - dblY * dblY) + 0.5D;
                     A = Y - YMin;
-                    X = (int)(Conversion.Int(dblX));
+                    X = (int)dblX;
                     XMin[A] = Convert.ToInt32(- X);
                     XMax[A] = X - 1;
                 }
@@ -227,7 +226,7 @@ namespace SharpFlame
             else
             {
                 RadiusB += 0.125D;
-                Y = (int)(Conversion.Int(RadiusB));
+                Y = (int)RadiusB;
                 YMin = Convert.ToInt32(- Y);
                 YMax = Y;
                 B = YMax - YMin;
@@ -239,7 +238,7 @@ namespace SharpFlame
                     dblY = Y;
                     dblX = Math.Sqrt(RadiusC - dblY * dblY);
                     A = Y - YMin;
-                    X = (int)(Conversion.Int(dblX));
+                    X = (int)dblX;
                     XMin[A] = Convert.ToInt32(- X);
                     XMax[A] = X;
                 }
@@ -259,13 +258,13 @@ namespace SharpFlame
             if ( Alignment )
             {
                 RadiusB += 0.5D;
-                A = (int)(Conversion.Int(RadiusB));
+                A = (int)RadiusB;
                 YMin = Convert.ToInt32(- A);
                 YMax = A - 1;
             }
             else
             {
-                A = (int)(Conversion.Int(RadiusB));
+                A = (int)RadiusB;
                 YMin = Convert.ToInt32(- A);
                 YMax = A;
             }

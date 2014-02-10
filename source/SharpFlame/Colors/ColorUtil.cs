@@ -1,16 +1,17 @@
-using Microsoft.VisualBasic;
+using System.Drawing;
 
 namespace SharpFlame.Colors
 {
     public sealed class ColorUtil
     {
-        public static int OSRGB(int Red, int Green, int Blue)
-        {
+        public static int OSRGB(int red, int green, int blue)
+        {		
 #if !Mono
-            return Information.RGB(Red, Green, Blue);
+            Color c = Color.FromArgb(red, green, blue);
 #else
-   			return Information.RGB(Blue, Green, Red);
+			Color c = Color.FromArgb(blue, green, red);
 #endif
+			return c.ToArgb ();
         }
 	}
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Windows.Forms;
-using Microsoft.VisualBasic;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -340,8 +339,8 @@ namespace SharpFlame.Controls
                 if ( App.SelectedTextureNum >= 0 & TextureCount.X > 0 )
                 {
                     A = App.SelectedTextureNum - TextureYOffset * TextureCount.X;
-                    XY_int.X = A - ((int)(Conversion.Int(A / TextureCount.X))) * TextureCount.X;
-                    XY_int.Y = (int)(Conversion.Int(A / TextureCount.X));
+                    XY_int.X = A - (int)(A / TextureCount.X) * TextureCount.X;
+                    XY_int.Y = (int)A / TextureCount.X;
                     GL.Begin(BeginMode.LineLoop);
                     GL.Color3(1.0F, 1.0F, 0.0F);
                     GL.Vertex2(XY_int.X * 64, XY_int.Y * 64);
@@ -377,7 +376,7 @@ namespace SharpFlame.Controls
             }
             else if ( e.X >= 0 & e.X < TextureCount.X * 64 & e.Y >= 0 & e.Y < TextureCount.Y * 64 )
             {
-                App.SelectedTextureNum = (int)((TextureYOffset + (int)(Conversion.Int(e.Y / 64.0D))) * TextureCount.X + Conversion.Int(e.X / 64.0D));
+                App.SelectedTextureNum = (int)((TextureYOffset + (int)(e.Y / 64.0D)) * TextureCount.X + (e.X / 64.0D));
                 if ( App.SelectedTextureNum >= Map.Tileset.TileCount )
                 {
                     App.SelectedTextureNum = -1;
