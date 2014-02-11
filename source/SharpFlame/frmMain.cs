@@ -152,15 +152,15 @@ namespace SharpFlame
             InitializeComponent();
 
 #if Mono
-            int A = 0;
-            for (A = 0; A <= TabControl.TabPages.Count - 1; A++)
-            {
-                TabControl.TabPages[A].Text += " ";
-            }
-            for (A = 0; A <= TabControl1.TabPages.Count - 1; A++)
-            {
-                TabControl1.TabPages[A].Text += " ";
-            }
+			int A = 0;
+			for (A = 0; A <= TabControl.TabPages.Count - 1; A++)
+			{
+				TabControl.TabPages[A].Text += " ";
+			}
+			for (A = 0; A <= TabControl1.TabPages.Count - 1; A++)
+			{
+				TabControl1.TabPages[A].Text += " ";
+			}
 #endif
 
             MapViewControl = new MapViewControl(this);
@@ -1494,7 +1494,7 @@ namespace SharpFlame
 #if !Mono
             ObjectTypeSelectionUpdate(gridView);
 #else
-            gridView.ClearSelection(); //mono selects its rows too late
+			gridView.ClearSelection(); //mono selects its rows too late
 #endif
         }
 
@@ -2395,7 +2395,7 @@ namespace SharpFlame
                     {
                         MapFileTitle = SplitPath.FileTitleWithoutExtension;
                         string quickSavePath = Map.PathInfo.Path;
-                        tsbSave.ToolTipText = "Quick save FMap to {0}".Format2(quickSavePath);
+						tsbSave.ToolTipText = "Quick save FMap to {0}".Format2(quickSavePath);
                         menuSaveFMapQuick.Text = "Quick Save fmap to \"";
                         if ( quickSavePath.Length <= 32 )
                         {
@@ -2800,7 +2800,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if (MessageBox.Show("Change health of multiple objects?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK)
+				if (MessageBox.Show("Change health of multiple objects?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK)
                 {
                     //SelectedObject_Changed()
                     //todo
@@ -2833,14 +2833,14 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if (MessageBox.Show("Change design of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK)
+				if (MessageBox.Show("Change design of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK)
                 {
                     return;
                 }
             }
             else
             {
-                if ( MessageBox.Show("Change design of a droid?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK) 
+				if ( MessageBox.Show("Change design of a droid?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK) 
                 {
                     return;
                 }
@@ -2906,7 +2906,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if ( MessageBox.Show("Change body of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
+				if ( MessageBox.Show("Change body of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     return;
                 }
@@ -2947,7 +2947,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if ( MessageBox.Show("Change propulsion of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK ) 
+				if ( MessageBox.Show("Change propulsion of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK ) 
                 {
                     return;
                 }
@@ -2994,7 +2994,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if ( MessageBox.Show("Change turret of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
+				if ( MessageBox.Show("Change turret of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     return;
                 }
@@ -3036,7 +3036,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if ( MessageBox.Show("Change turret of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
+				if ( MessageBox.Show("Change turret of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     return;
                 }
@@ -3078,7 +3078,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if ( MessageBox.Show("Change turret of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
+				if ( MessageBox.Show("Change turret of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     return;
                 }
@@ -3125,7 +3125,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if ( MessageBox.Show("Change number of turrets of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
+				if ( MessageBox.Show("Change number of turrets of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     return;
                 }
@@ -3161,7 +3161,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if ( MessageBox.Show("Change number of turrets of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
+				if ( MessageBox.Show("Change number of turrets of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     return;
                 }
@@ -3197,7 +3197,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if ( MessageBox.Show("Change number of turrets of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
+				if ( MessageBox.Show("Change number of turrets of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     return;
                 }
@@ -3233,7 +3233,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if ( MessageBox.Show("Change number of turrets of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
+				if ( MessageBox.Show("Change number of turrets of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     return;
                 }
@@ -3308,7 +3308,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if ( MessageBox.Show("Change type of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
+				if ( MessageBox.Show("Change type of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     return;
                 }
@@ -4154,7 +4154,7 @@ namespace SharpFlame
         {
             if ( !Directory.Exists(App.AutoSavePath) )
             {
-                MessageBox.Show ("Autosave directory does not exist. There are no autosaves.", "", MessageBoxButtons.OK, MessageBoxIcon.None);
+				MessageBox.Show ("Autosave directory does not exist. There are no autosaves.", "", MessageBoxButtons.OK, MessageBoxIcon.None);
                 return;
             }
             OpenFileDialog Dialog = new OpenFileDialog();

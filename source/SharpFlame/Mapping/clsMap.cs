@@ -2283,7 +2283,7 @@ namespace SharpFlame.Mapping
                 Result = Strings.Left(Result, MaxLength - 3) + "...";
             }
 #if Mono
-            MapView_TabPage.Text = Result + " ";
+			MapView_TabPage.Text = Result + " ";
 #else
             MapView_TabPage.Text = Result;
 #endif

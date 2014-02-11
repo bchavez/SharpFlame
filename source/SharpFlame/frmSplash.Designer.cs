@@ -1,33 +1,33 @@
 namespace SharpFlame
 {
-    [global::Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]public 
-    partial class frmSplash : System.Windows.Forms.Form
-    {
-        
-        //Form overrides dispose to clean up the component list.
-        [System.Diagnostics.DebuggerNonUserCode()]protected override void Dispose(bool disposing)
-        {
-            try
-            {
-                if (disposing && components != null)
-                {
-                    components.Dispose();
-                }
-            }
-            finally
-            {
-                base.Dispose(disposing);
-            }
-        }
-        
-        //Required by the Windows Form Designer
-        private System.ComponentModel.Container components = null;
-        
-        //NOTE: The following procedure is required by the Windows Form Designer
-        //It can be modified using the Windows Form Designer.
-        //Do not modify it using the code editor.
-        [System.Diagnostics.DebuggerStepThrough()]private void InitializeComponent()
-        {
+	[global::Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]public 
+	partial class frmSplash : System.Windows.Forms.Form
+	{
+		
+		//Form overrides dispose to clean up the component list.
+		[System.Diagnostics.DebuggerNonUserCode()]protected override void Dispose(bool disposing)
+		{
+			try
+			{
+				if (disposing && components != null)
+				{
+					components.Dispose();
+				}
+			}
+			finally
+			{
+				base.Dispose(disposing);
+			}
+		}
+		
+		//Required by the Windows Form Designer
+		private System.ComponentModel.Container components = null;
+		
+		//NOTE: The following procedure is required by the Windows Form Designer
+		//It can be modified using the Windows Form Designer.
+		//Do not modify it using the code editor.
+		[System.Diagnostics.DebuggerStepThrough()]private void InitializeComponent()
+		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSplash));
             this.lblVersion = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
@@ -108,11 +108,11 @@ namespace SharpFlame
             this.ResumeLayout(false);
             this.PerformLayout();
 
-        }
-        internal System.Windows.Forms.Label lblVersion;
-        internal System.Windows.Forms.Label lblStatus;
+		}
+		internal System.Windows.Forms.Label lblVersion;
+		internal System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
-    }
-    
+	}
+	
 }

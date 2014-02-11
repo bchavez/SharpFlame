@@ -1306,19 +1306,19 @@ namespace SharpFlame.Mapping
                 File.Write(Text);
                 if ( Tileset == App.Tileset_Arizona )
                 {
-                    Text = "    FeatureSet WarzoneDataC1.eds" + Convert.ToString(EndChar);
+                    Text = "	FeatureSet WarzoneDataC1.eds" + Convert.ToString(EndChar);
                 }
                 else if ( Tileset == App.Tileset_Urban )
                 {
-                    Text = "    FeatureSet WarzoneDataC2.eds" + Convert.ToString(EndChar);
+                    Text = "	FeatureSet WarzoneDataC2.eds" + Convert.ToString(EndChar);
                 }
                 else if ( Tileset == App.Tileset_Rockies )
                 {
-                    Text = "    FeatureSet WarzoneDataC3.eds" + Convert.ToString(EndChar);
+                    Text = "	FeatureSet WarzoneDataC3.eds" + Convert.ToString(EndChar);
                 }
                 else
                 {
-                    Text = "    FeatureSet " + Convert.ToString(EndChar);
+                    Text = "	FeatureSet " + Convert.ToString(EndChar);
                 }
                 File.Write(Text);
                 Text = "    NumObjects " + Units.Count.ToStringInvariant() + Convert.ToString(EndChar);

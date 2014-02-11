@@ -33,10 +33,10 @@ namespace SharpFlame
             Icon = App.ProgramIcon;
 
 #if Mono
-            foreach (TabPage tab in TabControl1.TabPages)
-            {
-                tab.Text += " ";
-            }
+			foreach (TabPage tab in TabControl1.TabPages)
+			{
+				tab.Text += " ";
+			}
 #endif
 
             tilesetsPathSetControl.Dock = DockStyle.Fill;

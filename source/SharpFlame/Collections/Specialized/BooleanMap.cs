@@ -59,7 +59,7 @@ namespace SharpFlame.Collections.Specialized
             int Y = 0;
             bool Flag = default(bool);
 
-            Random rnd = new Random ();
+			Random rnd = new Random ();
 
             while ( Y < ValueData.Size.Y - 1 )
             {
@@ -142,7 +142,7 @@ namespace SharpFlame.Collections.Specialized
                                 else if ( !ValueData.Value[Y + 1, X + 1] )
                                 {
                                     //o i i o
-                                    if ( rnd.Next() < 0.5F )
+									if ( rnd.Next() < 0.5F )
                                     {
                                         ValueData.Value[Y, X + 1] = false;
                                     }
