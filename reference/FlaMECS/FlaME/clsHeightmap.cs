@@ -328,7 +328,7 @@
                     while (num7 <= num12)
                     {
                         num4 = (long) Math.Round((double) (((double) (((this.HeightData.Height[num8 - 1, num7 - 1] + this.HeightData.Height[num8 - 1, num7 + 1]) + this.HeightData.Height[num8 + 1, num7 - 1]) + this.HeightData.Height[num8 + 1, num7 + 1])) / 4.0));
-                        this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (VBMath.Rnd() * num5)))) - num6;
+                        this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (App.Random.Next() * num5)))) - num6;
                         num7 += 2;
                     }
                 }
@@ -338,13 +338,13 @@
                 int num13 = this.HeightData.SizeY - 2;
                 for (num8 = 1; num8 <= num13; num8++)
                 {
-                    int num = num8 - (((int) Math.Round(Conversion.Int((double) (((double) num8) / 2.0)))) * 2);
+                    int num = num8 - (((int) Math.Round(((double) (((double) num8) / 2.0)))) * 2);
                     int num14 = (this.HeightData.SizeX - 2) - num;
                     num7 = 1 + num;
                     while (num7 <= num14)
                     {
                         num4 = (long) Math.Round((double) (((double) (((this.HeightData.Height[num8 - 1, num7] + this.HeightData.Height[num8, num7 - 1]) + this.HeightData.Height[num8, num7 + 1]) + this.HeightData.Height[num8 + 1, num7])) / 4.0));
-                        this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (VBMath.Rnd() * num5)))) - num6;
+                        this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (App.Random.Next() * num5)))) - num6;
                         num7 += 2;
                     }
                 }
@@ -353,28 +353,28 @@
                 for (num7 = 1; num7 <= num15; num7 += 2)
                 {
                     num4 = (long) Math.Round((double) (((double) ((this.HeightData.Height[num8, num7 - 1] + this.HeightData.Height[num8, num7 + 1]) + this.HeightData.Height[num8 + 1, num7])) / 3.0));
-                    this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (VBMath.Rnd() * num5)))) - num6;
+                    this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (App.Random.Next() * num5)))) - num6;
                 }
                 num7 = 0;
                 int num16 = this.HeightData.SizeY - 2;
                 for (num8 = 1; num8 <= num16; num8 += 2)
                 {
                     num4 = (long) Math.Round((double) (((double) ((this.HeightData.Height[num8 - 1, num7] + this.HeightData.Height[num8, num7 + 1]) + this.HeightData.Height[num8 + 1, num7])) / 3.0));
-                    this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (VBMath.Rnd() * num5)))) - num6;
+                    this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (App.Random.Next() * num5)))) - num6;
                 }
                 num7 = this.HeightData.SizeX - 1;
                 int num17 = this.HeightData.SizeY - 2;
                 for (num8 = 1; num8 <= num17; num8 += 2)
                 {
                     num4 = (long) Math.Round((double) (((double) ((this.HeightData.Height[num8 - 1, num7] + this.HeightData.Height[num8, num7 - 1]) + this.HeightData.Height[num8 + 1, num7])) / 3.0));
-                    this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (VBMath.Rnd() * num5)))) - num6;
+                    this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (App.Random.Next() * num5)))) - num6;
                 }
                 num8 = this.HeightData.SizeY - 1;
                 int num18 = this.HeightData.SizeX - 2;
                 for (num7 = 1; num7 <= num18; num7 += 2)
                 {
                     num4 = (long) Math.Round((double) (((double) ((this.HeightData.Height[num8 - 1, num7] + this.HeightData.Height[num8, num7 - 1]) + this.HeightData.Height[num8, num7 + 1])) / 3.0));
-                    this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (VBMath.Rnd() * num5)))) - num6;
+                    this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (App.Random.Next() * num5)))) - num6;
                 }
             }
         }
@@ -403,7 +403,7 @@
                 int num6 = this.HeightData.SizeX - 1;
                 for (int j = 0; j <= num6; j++)
                 {
-                    this.HeightData.Height[i, j] = (long) Math.Round((double) (Conversion.Int((double) (Source.HeightData.Height[i, j] * num)) * num2));
+                    this.HeightData.Height[i, j] = (long) Math.Round((double) (((double) (Source.HeightData.Height[i, j] * num)) * num2));
                 }
             }
         }
@@ -580,7 +580,7 @@
                 int num5 = this.HeightData.SizeX - 1;
                 for (int j = 0; j <= num5; j++)
                 {
-                    this.HeightData.Height[i, j] = (long) Math.Round((double) ((VBMath.Rnd() * HeightMultiplier) - num));
+                    this.HeightData.Height[i, j] = (long) Math.Round((double) ((App.Random.Next() * HeightMultiplier) - num));
                 }
             }
         }
@@ -686,15 +686,15 @@
                     float num10 = i * num2;
                     float num7 = (j + 1) * num;
                     float num8 = (i + 1) * num2;
-                    int num19 = (int) Math.Round((double) -Conversion.Int(-num8));
-                    for (int k = (int) Math.Round((double) Conversion.Int(num10)); k <= num19; k++)
+                    int num19 = (int) Math.Round((double) -(-num8));
+                    for (int k = (int) Math.Round((double) (num10)); k <= num19; k++)
                     {
                         if (k >= SizeY)
                         {
                             break;
                         }
-                        int num20 = (int) Math.Round((double) -Conversion.Int(-num7));
-                        for (int m = (int) Math.Round((double) Conversion.Int(number)); m <= num20; m++)
+                        int num20 = (int) Math.Round((double) -(-num7));
+                        for (int m = (int) Math.Round((double) (number)); m <= num20; m++)
                         {
                             if (m >= SizeX)
                             {

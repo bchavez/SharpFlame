@@ -33,8 +33,8 @@ namespace SharpFlame.Mapping.Tools
             {
                 if ( RandomOrientation )
                 {
-                    Terrain.Tiles[PosNum.X, PosNum.Y].Texture.Orientation = new TileOrientation(VBMath.Rnd() < 0.5F, VBMath.Rnd() < 0.5F,
-                        VBMath.Rnd() < 0.5F);
+                    Terrain.Tiles[PosNum.X, PosNum.Y].Texture.Orientation = new TileOrientation(App.Random.Next() < 0.5F, App.Random.Next() < 0.5F,
+                        App.Random.Next() < 0.5F);
                 }
                 else
                 {

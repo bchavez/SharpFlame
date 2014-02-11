@@ -25,7 +25,7 @@
             if (Alignment)
             {
                 number++;
-                num8 = (int) Math.Round(Conversion.Int(number));
+                num8 = (int) Math.Round((number));
                 this.YMin = 0 - num8;
                 this.YMax = num8 - 1;
                 num2 = this.YMax - this.YMin;
@@ -38,7 +38,7 @@
                     num4 = num8 + 0.5;
                     num3 = Math.Sqrt(num6 - (num4 * num4)) + 0.5;
                     num = num8 - this.YMin;
-                    num7 = (int) Math.Round(Conversion.Int(num3));
+                    num7 = (int) Math.Round((num3));
                     this.XMin[num] = 0 - num7;
                     this.XMax[num] = num7 - 1;
                 }
@@ -46,7 +46,7 @@
             else
             {
                 number += 0.125;
-                num8 = (int) Math.Round(Conversion.Int(number));
+                num8 = (int) Math.Round((number));
                 this.YMin = 0 - num8;
                 this.YMax = num8;
                 num2 = this.YMax - this.YMin;
@@ -59,7 +59,7 @@
                     num4 = num8;
                     num3 = Math.Sqrt(num6 - (num4 * num4));
                     num = num8 - this.YMin;
-                    num7 = (int) Math.Round(Conversion.Int(num3));
+                    num7 = (int) Math.Round((num3));
                     this.XMin[num] = 0 - num7;
                     this.XMax[num] = num7;
                 }
@@ -74,13 +74,13 @@
             if (Alignment)
             {
                 number += 0.5;
-                num = (int) Math.Round(Conversion.Int(number));
+                num = (int) Math.Round((number));
                 this.YMin = 0 - num;
                 this.YMax = num - 1;
             }
             else
             {
-                num = (int) Math.Round(Conversion.Int(number));
+                num = (int) Math.Round((number));
                 this.YMin = 0 - num;
                 this.YMax = num;
             }

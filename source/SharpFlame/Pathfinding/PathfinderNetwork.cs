@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using Microsoft.VisualBasic;
 
 namespace SharpFlame.Pathfinding
 {
@@ -984,7 +983,7 @@ namespace SharpFlame.Pathfinding
                 }
                 for ( A = 0; A <= FindParentNodeCount - 1; A++ )
                 {
-                    RandNum = (int)Conversion.Int(VBMath.Rnd() * PositionCount);
+                    RandNum = (int)(App.Random.Next() * PositionCount);
                     ShuffledNodes[Positions[RandNum]] = FindParentNodes[A];
                     PositionCount--;
                     if ( RandNum < PositionCount )

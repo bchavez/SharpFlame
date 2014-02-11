@@ -1,7 +1,6 @@
 using System;
 using System.Windows.Forms;
 using Matrix3D;
-using Microsoft.VisualBasic;
 using SharpFlame.Collections.Specialized;
 using SharpFlame.FileIO;
 using SharpFlame.Generators;
@@ -29,7 +28,7 @@ namespace SharpFlame
             {
                 return 0;
             }
-            Result = (int)(Conversion.Int(MathUtil.Clamp_dbl(dblTemp, Min, Max) * Multiplier));
+            Result = (int)(MathUtil.Clamp_dbl(dblTemp, Min, Max) * Multiplier);
             TextBoxToValidate.Text = ((float)(Result / Multiplier)).ToStringInvariant();
             return Result;
         }
@@ -402,8 +401,8 @@ namespace SharpFlame
                 ApplyCliff.Angle = CliffAngle;
                 ApplyCliff.SetTris = true;
                 clsBrush.sPosNum Alignments = new clsBrush.sPosNum();
-                Alignments.Normal = new sXY_int((int)(Conversion.Int(Generator.Map.Terrain.TileSize.X / 2.0D)),
-                    (int)(Conversion.Int(Generator.Map.Terrain.TileSize.Y / 2.0D)));
+                Alignments.Normal = new sXY_int((int)(Generator.Map.Terrain.TileSize.X / 2.0D),
+                    (int)(Generator.Map.Terrain.TileSize.Y / 2.0D));
                 Alignments.Alignment = Alignments.Normal;
                 tmpBrush.PerformActionMapTiles(ApplyCliff, Alignments);
                 bool[] RevertSlope = null;

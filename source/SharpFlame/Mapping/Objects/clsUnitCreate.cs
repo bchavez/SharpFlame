@@ -1,4 +1,3 @@
-using Microsoft.VisualBasic;
 using SharpFlame.Domain;
 using SharpFlame.Maths;
 
@@ -33,7 +32,7 @@ namespace SharpFlame.Mapping.Objects
             clsUnit newUnit = new clsUnit();
             if ( RandomizeRotation )
             {
-                newUnit.Rotation = (int)(Conversion.Int(VBMath.Rnd() * 360.0D));
+                newUnit.Rotation = (int)(App.Random.Next() * 360.0D);
             }
             else
             {

@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace SharpFlame.Collections
 {
@@ -201,10 +199,12 @@ namespace SharpFlame.Collections
                 }
             }
             Items[ItemCount] = default(ItemType);
-            int ArraySize = (Items.Length - 1) + 1;
+            int ArraySize = Items.Length;
             if ( ItemCount * 3 < ArraySize & ArraySize > MinSize )
             {
-                Items = (ItemType[])Utils.CopyArray((Array)Items, new ItemType[Math.Max(ItemCount * 2, MinSize)]);
+                ItemType[] nItems = new ItemType[Math.Max(ItemCount * 2, MinSize)];
+                Array.Copy (Items, nItems, Math.Max(ItemCount * 2, MinSize));
+                Items = nItems;
             }
 
             IsBusy = false;
@@ -296,7 +296,7 @@ namespace SharpFlame.Collections
             }
             for ( A = 0; A <= ItemCount - 1; A++ )
             {
-                Position = Math.Min((int)(Conversion.Int(NumberGenerator.NextDouble() * Copy.Count)), Copy.Count - 1);
+                Position = Math.Min((int)(NumberGenerator.NextDouble() * Copy.Count), Copy.Count - 1);
                 OtherList.Add(Copy[Position]);
                 Copy.Remove(Position);
             }
@@ -339,7 +339,7 @@ namespace SharpFlame.Collections
         //#if !Mono
         //return new Enumerator(this);
         //#else
-        //				return new Enumerator(MonoWorkaroundSimpleList<ItemType>(this));
+        //################return new Enumerator(MonoWorkaroundSimpleList<ItemType>(this));
         //#endif
         //}
 

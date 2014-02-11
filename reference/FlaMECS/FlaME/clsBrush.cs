@@ -22,8 +22,8 @@
 
         private void CreateTiles()
         {
-            double num = this._Radius - Conversion.Int(this._Radius);
-            double radius = Conversion.Int((double) (this._Radius + 0.25));
+            double num = this._Radius - (this._Radius);
+            double radius = ((double) (this._Radius + 0.25));
             this._Alignment = (num >= 0.25) & (num < 0.75);
             switch (this._Shape)
             {

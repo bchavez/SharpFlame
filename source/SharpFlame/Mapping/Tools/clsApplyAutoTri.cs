@@ -16,7 +16,7 @@ namespace SharpFlame.Mapping.Tools
             difB = Math.Abs((Map.Terrain.Vertices[PosNum.X, PosNum.Y + 1].Height) - Map.Terrain.Vertices[PosNum.X + 1, PosNum.Y].Height);
             if ( difA == difB )
             {
-                NewTri = VBMath.Rnd() < 0.5F;
+                NewTri = App.Random.Next() < 0.5F;
             }
             else
             {

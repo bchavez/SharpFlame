@@ -1017,8 +1017,8 @@
                         continue;
                     }
                     structureType = ((clsStructureType) current.Type).StructureType;
-                    _int.X = (int) Math.Round(Conversion.Int((double) (((double) current.Pos.Horizontal.X) / 128.0)));
-                    _int.Y = (int) Math.Round(Conversion.Int((double) (((double) current.Pos.Horizontal.Y) / 128.0)));
+                    _int.X = (int) Math.Round(((double) (((double) current.Pos.Horizontal.X) / 128.0)));
+                    _int.Y = (int) Math.Round(((double) (((double) current.Pos.Horizontal.Y) / 128.0)));
                     if ((((_int.X < 0) | (_int.X >= this.Map.Terrain.TileSize.X)) | (_int.Y < 0)) | (_int.Y >= this.Map.Terrain.TileSize.Y))
                     {
                         clsResultProblemGoto<clsResultItemPosGoto> goto3 = modResults.CreateResultProblemGotoForObject(current);

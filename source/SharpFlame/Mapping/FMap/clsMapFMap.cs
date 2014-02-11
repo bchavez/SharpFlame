@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
-using Microsoft.VisualBasic;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
@@ -17,8 +16,8 @@ namespace SharpFlame.Mapping
         public clsResult Write_FMap(string Path, bool Overwrite, bool Compress)
         {
             clsResult ReturnResult =
-                new clsResult("Writing FMap to " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote), false);
-            logger.Info ("Writing FMap to " + Convert.ToString (ControlChars.Quote) + Path + Convert.ToString (ControlChars.Quote));
+                new clsResult("Writing FMap to \"{0}\"".Format2(Path), false);
+            logger.Info ("Writing FMap to \"{0}\"".Format2(Path));
 
             if ( !Overwrite )
             {
@@ -713,8 +712,8 @@ namespace SharpFlame.Mapping
         public clsResult Load_FMap(string Path)
         {
             clsResult ReturnResult =
-                new clsResult("Loading FMap from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote), false);
-            logger.Info ("Loading FMap from " + Convert.ToString (ControlChars.Quote) + Path + Convert.ToString (ControlChars.Quote));
+                new clsResult("Loading FMap from \"{0}\"".Format2(Path), false);
+            logger.Info ("Loading FMap from \"{0}\"".Format2(Path));
 
             ZipStreamEntry ZipSearchResult = default(ZipStreamEntry);
             string FindPath = "";
@@ -725,8 +724,7 @@ namespace SharpFlame.Mapping
             ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
-                ReturnResult.ProblemAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
-                                        ".");
+                ReturnResult.ProblemAdd("Unable to find file \"{0}\".".Format2(FindPath));
                 return ReturnResult;
             }
             else
@@ -764,8 +762,7 @@ namespace SharpFlame.Mapping
             ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
-                ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
-                                        ".");
+                ReturnResult.ProblemAdd("Unable to find file \"{0}\".".Format2(FindPath));
             }
             else
             {
@@ -778,9 +775,7 @@ namespace SharpFlame.Mapping
             ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
-                ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
-                                        ".");
-            }
+                ReturnResult.ProblemAdd("Unable to find file \"{0}\".".Format2(FindPath));            }
             else
             {
                 BinaryReader VertexTerrain_Reader = new BinaryReader(ZipSearchResult.Stream);
@@ -792,8 +787,7 @@ namespace SharpFlame.Mapping
             ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
-                ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
-                                        ".");
+                ReturnResult.ProblemAdd("Unable to find file \"{0}\".".Format2(FindPath));
             }
             else
             {
@@ -806,8 +800,7 @@ namespace SharpFlame.Mapping
             ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
-                ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
-                                        ".");
+                ReturnResult.ProblemAdd("Unable to find file \"{0}\".".Format2(FindPath));
             }
             else
             {
@@ -820,8 +813,7 @@ namespace SharpFlame.Mapping
             ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
-                ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
-                                        ".");
+                ReturnResult.ProblemAdd("Unable to find file \"{0}\".".Format2(FindPath));
             }
             else
             {
@@ -834,9 +826,7 @@ namespace SharpFlame.Mapping
             ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
-                ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
-                                        ".");
-            }
+                ReturnResult.ProblemAdd("Unable to find file \"{0}\".".Format2(FindPath));            }
             else
             {
                 BinaryReader Roads_Reader = new BinaryReader(ZipSearchResult.Stream);
@@ -848,9 +838,7 @@ namespace SharpFlame.Mapping
             ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
-                ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
-                                        ".");
-            }
+                ReturnResult.ProblemAdd("Unable to find file \"{0}\".".Format2(FindPath));            }
             else
             {
                 StreamReader Objects_Reader = new StreamReader(ZipSearchResult.Stream);
@@ -862,8 +850,7 @@ namespace SharpFlame.Mapping
             ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
-                ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
-                                        ".");
+                ReturnResult.ProblemAdd("Unable to find file \"{0}\".".Format2(FindPath));
             }
             else
             {
@@ -876,8 +863,7 @@ namespace SharpFlame.Mapping
             ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
             if ( ZipSearchResult == null )
             {
-                ReturnResult.WarningAdd("Unable to find file " + Convert.ToString(ControlChars.Quote) + FindPath + Convert.ToString(ControlChars.Quote) +
-                                        ".");
+                ReturnResult.ProblemAdd("Unable to find file \"{0}\".".Format2(FindPath));
             }
             else
             {
@@ -1082,15 +1068,15 @@ namespace SharpFlame.Mapping
                         }
                         Value -= PartValue * 16;
 
-                        PartValue = (int)(Conversion.Int(Value / 8.0D));
+                        PartValue = (int)(Value / 8.0D);
                         Terrain.Tiles[X, Y].Texture.Orientation.SwitchedAxes = PartValue > 0;
                         Value -= PartValue * 8;
 
-                        PartValue = (int)(Conversion.Int(Value / 4.0D));
+                        PartValue = (int)(Value / 4.0D);
                         Terrain.Tiles[X, Y].Texture.Orientation.ResultXFlip = PartValue > 0;
                         Value -= PartValue * 4;
 
-                        PartValue = (int)(Conversion.Int(Value / 2.0D));
+                        PartValue = (int)(Value / 2.0D);
                         Terrain.Tiles[X, Y].Texture.Orientation.ResultYFlip = PartValue > 0;
                         Value -= PartValue * 2;
 
@@ -1138,7 +1124,7 @@ namespace SharpFlame.Mapping
                     {
                         Value = File.ReadByte();
 
-                        PartValue = (int)(Conversion.Int(Value / 64.0D));
+                        PartValue = (int)(Value / 64.0D);
                         if ( PartValue > 0 )
                         {
                             if ( WarningCount < 16 )
@@ -1149,7 +1135,7 @@ namespace SharpFlame.Mapping
                         }
                         Value -= PartValue * 64;
 
-                        PartValue = (int)(Conversion.Int(Value / 8.0D));
+                        PartValue = (int)(Value / 8.0D);
                         switch ( PartValue )
                         {
                             case 0:
@@ -1179,11 +1165,11 @@ namespace SharpFlame.Mapping
                         }
                         Value -= PartValue * 8;
 
-                        PartValue = (int)(Conversion.Int(Value / 4.0D));
+                        PartValue = (int)(Value / 4.0D);
                         Terrain.Tiles[X, Y].Terrain_IsCliff = PartValue > 0;
                         Value -= PartValue * 4;
 
-                        PartValue = (int)(Conversion.Int(Value / 2.0D));
+                        PartValue = (int)(Value / 2.0D);
                         if ( Terrain.Tiles[X, Y].Tri )
                         {
                             Terrain.Tiles[X, Y].TriTopLeftIsCliff = PartValue > 0;
@@ -1437,8 +1423,7 @@ namespace SharpFlame.Mapping
                             {
                                 if ( UnknownUnitTypeCount < MaxUnknownUnitTypeWarningCount )
                                 {
-                                    ReturnResult.WarningAdd(ControlChars.Quote + INIObjects.Objects[A].Code + Convert.ToString(ControlChars.Quote) +
-                                                            " is not a loaded object.");
+                                    ReturnResult.WarningAdd ("\"{0}\" is ont a loaded object.".Format2 (INIObjects.Objects[A].Code));
                                 }
                                 UnknownUnitTypeCount++;
                             }

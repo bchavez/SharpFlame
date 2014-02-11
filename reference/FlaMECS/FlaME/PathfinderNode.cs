@@ -291,7 +291,7 @@
                     if (parentNode == null)
                     {
                         parentNode = connection.GetOtherNode(this);
-                        num6 = connection.Value * (0.98f + (VBMath.Rnd() * 0.04f));
+                        num6 = connection.Value * (0.98f + (App.Random.Next() * 0.04f));
                         if (num6 < maxValue)
                         {
                             maxValue = num6;
@@ -328,7 +328,7 @@
                     }
                     if (flag)
                     {
-                        num6 = (otherNode.SiblingSpan + connection.Value) * (0.98f + (VBMath.Rnd() * 0.04f));
+                        num6 = (otherNode.SiblingSpan + connection.Value) * (0.98f + (App.Random.Next() * 0.04f));
                         if (num6 < maxValue)
                         {
                             maxValue = num6;

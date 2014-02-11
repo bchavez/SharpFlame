@@ -191,22 +191,6 @@ namespace SharpFlame.AppSettings
             logger.Info ("Writing settings to " + Convert.ToString (ControlChars.Quote) + App.SettingsPath +
                 Convert.ToString (ControlChars.Quote));
 
-#if !Portable
-            if ( !Directory.Exists(App.MyDocumentsProgramPath) )
-            {
-                try
-                {
-                    Directory.CreateDirectory(App.MyDocumentsProgramPath);
-                }
-                catch ( Exception ex )
-                {
-                    ReturnResult.ProblemAdd("Unable to create folder " + Convert.ToString(ControlChars.Quote) + App.MyDocumentsProgramPath +
-                                            Convert.ToString(ControlChars.Quote) + ": " + ex.Message);
-                    return ReturnResult;
-                }
-            }
-#endif
-
             IniWriter INI_Settings = default(IniWriter);
 
             try

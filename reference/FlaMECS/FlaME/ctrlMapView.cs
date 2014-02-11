@@ -1037,10 +1037,10 @@
                 _int6.Y = _int7.Y * 0x80;
                 _int.X = _int2.X * 0x80;
                 _int.Y = _int2.Y * 0x80;
-                _int5.X = Math.Min((int) Math.Round(Conversion.Int((double) (((double) _int7.X) / 8.0))), mainMap.SectorCount.X - 1);
-                _int5.Y = Math.Min((int) Math.Round(Conversion.Int((double) (((double) _int7.Y) / 8.0))), mainMap.SectorCount.Y - 1);
-                _int3.X = Math.Min((int) Math.Round(Conversion.Int((double) (((double) _int2.X) / 8.0))), mainMap.SectorCount.X - 1);
-                _int3.Y = Math.Min((int) Math.Round(Conversion.Int((double) (((double) _int2.Y) / 8.0))), mainMap.SectorCount.Y - 1);
+                _int5.X = Math.Min((int) Math.Round(((double) (((double) _int7.X) / 8.0))), mainMap.SectorCount.X - 1);
+                _int5.Y = Math.Min((int) Math.Round(((double) (((double) _int7.Y) / 8.0))), mainMap.SectorCount.Y - 1);
+                _int3.X = Math.Min((int) Math.Round(((double) (((double) _int2.X) / 8.0))), mainMap.SectorCount.X - 1);
+                _int3.Y = Math.Min((int) Math.Round(((double) (((double) _int2.Y) / 8.0))), mainMap.SectorCount.Y - 1);
                 int y = _int3.Y;
                 _int4.Y = _int5.Y;
                 while (_int4.Y <= y)

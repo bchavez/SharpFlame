@@ -30,24 +30,34 @@ namespace SharpFlame
 
         public static bool Debug_GL = false;
 
-        public static string MyDocumentsProgramPath;
-
         public static string SettingsPath;
         public static string AutoSavePath;
-        public static string InterfaceImagesPath;
+
+        public static Random Random;
 
         public static void SetProgramSubDirs()
         {
 #if !Portable
-			MyDocumentsProgramPath = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments), ".flaME", Path.PathSeparator);
-            SettingsPath = MyDocumentsProgramPath + Convert.ToString(PlatformPathSeparator) + "settings.ini";
-            AutoSavePath = MyDocumentsProgramPath + Convert.ToString(PlatformPathSeparator) + "autosave" + Convert.ToString(PlatformPathSeparator);
+            string myDocumentsProgramPath = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments), ".flaME" + Path.DirectorySeparatorChar);
+            SettingsPath = Path.Combine(myDocumentsProgramPath, "settings.ini");
+            AutoSavePath = Path.Combine(myDocumentsProgramPath, "autosave" + Path.DirectorySeparatorChar)
+
 #else
-			MyDocumentsProgramPath = Path.Combine (AppDomain.CurrentDomain.BaseDirectory, ".flaME", Path.PathSeparator);
             SettingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.ini");
-            AutoSavePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "autosave", Path.PathSeparator);
+            AutoSavePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "autosave" + Path.PathSeparator);
 #endif
-			InterfaceImagesPath = Path.Combine (AppDomain.CurrentDomain.BaseDirectory, "interface", Path.PathSeparator);
+            // Create the directories.
+            if (!Directory.Exists (AutoSavePath)) {
+                try
+                {
+                    Directory.CreateDirectory(AutoSavePath);
+                }
+                catch ( Exception ex )
+                {
+                    logger.Error ("Unable to create folder \"{0}\": {1}", AutoSavePath, ex.Message);
+                    Application.Exit ();
+                }
+            }
         }
 
         public static bool ProgramInitialized = false;

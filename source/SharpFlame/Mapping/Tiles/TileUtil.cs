@@ -31,9 +31,9 @@ namespace SharpFlame.Mapping.Tiles
             //use random for empty tiles
             if ( tileChance.TextureNum < 0 )
             {
-                ReturnResult.Orientation.ResultXFlip = VBMath.Rnd() >= 0.5F;
-                ReturnResult.Orientation.ResultYFlip = VBMath.Rnd() >= 0.5F;
-                ReturnResult.Orientation.SwitchedAxes = VBMath.Rnd() >= 0.5F;
+                ReturnResult.Orientation.ResultXFlip = App.Random.Next() >= 0.5F;
+                ReturnResult.Orientation.ResultYFlip = App.Random.Next() >= 0.5F;
+                ReturnResult.Orientation.SwitchedAxes = App.Random.Next() >= 0.5F;
                 ReturnResult.TextureNum = -1;
                 return ReturnResult;
             }
@@ -55,9 +55,9 @@ namespace SharpFlame.Mapping.Tiles
             //if a direction is neutral then give a random orientation
             if ( (newDirection.X == 1 & newDirection.Y == 1) || (tileChance.Direction.X == 1 & tileChance.Direction.Y == 1) )
             {
-                ReturnResult.Orientation.SwitchedAxes = VBMath.Rnd() >= 0.5F;
-                ReturnResult.Orientation.ResultXFlip = VBMath.Rnd() >= 0.5F;
-                ReturnResult.Orientation.ResultYFlip = VBMath.Rnd() >= 0.5F;
+                ReturnResult.Orientation.SwitchedAxes = App.Random.Next() >= 0.5F;
+                ReturnResult.Orientation.ResultXFlip = App.Random.Next() >= 0.5F;
+                ReturnResult.Orientation.ResultYFlip = App.Random.Next() >= 0.5F;
                 return ReturnResult;
             }
 
@@ -85,7 +85,7 @@ namespace SharpFlame.Mapping.Tiles
                     ReturnResult.Orientation.ResultYFlip = false;
                 }
                 //randomly switch to the alternate orientation
-                if ( VBMath.Rnd() >= 0.5F )
+                if ( App.Random.Next() >= 0.5F )
                 {
                     ReturnResult.Orientation.SwitchedAxes = !ReturnResult.Orientation.SwitchedAxes;
                     if ( (newDirection.X == 0 ^ newDirection.Y == 0) ^ (ReturnResult.Orientation.ResultXFlip ^ ReturnResult.Orientation.ResultYFlip) )
@@ -139,7 +139,7 @@ namespace SharpFlame.Mapping.Tiles
                     }
                 }
                 //randomly switch to the alternate orientation
-                if ( VBMath.Rnd() >= 0.5F )
+                if ( App.Random.Next() >= 0.5F )
                 {
                     if ( newDirection.X == 1 )
                     {
