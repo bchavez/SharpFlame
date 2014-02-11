@@ -417,7 +417,6 @@ namespace SharpFlame.Mapping
                 new clsResult("Loading game file from \"{0}\"".Format2(Path), false);
             logger.Info ("Loading game file from \"{0}\"".Format2(Path));
             sResult SubResult = new sResult();
-            string Quote = "\"";
 
             Tileset = null;
 
@@ -1495,7 +1494,6 @@ namespace SharpFlame.Mapping
             UInt32 Version = 0;
             UInt32 uintTemp = 0;
             int A = 0;
-            int B = 0;
             clsWZBJOUnit WZBJOUnit = default(clsWZBJOUnit);
 
             try
@@ -1554,7 +1552,6 @@ namespace SharpFlame.Mapping
             UInt32 Version = 0;
             UInt32 uintTemp = 0;
             int A = 0;
-            int B = 0;
             clsWZBJOUnit WZBJOUnit = default(clsWZBJOUnit);
 
             try
