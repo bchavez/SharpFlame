@@ -1,19 +1,9 @@
-﻿using System;
-using System.Linq;
-using FluentValidation.Attributes;
+﻿using System.Linq;
 using SharpFlame.Core.Extensions;
-using SharpFlame.Core.Parsers.Validators;
 using Sprache;
 
-namespace SharpFlame.Core.Parsers
+namespace SharpFlame.Core.Parsers.Pie
 {
-    [Flags]
-    public enum PolygonFlags : uint
-    {
-        Texture = 0x200,
-        Animation = 0x4000
-    }
-
     public class PieGrammar
     {
         //PIE 2
@@ -185,68 +175,5 @@ namespace SharpFlame.Core.Parsers
                     LevelCount = levels,
                     Levels = levelArray.ToArray()
                 };
-    }
-
-    public class TexCoord
-    {
-        public float U { get; set; }
-        public float V { get; set; }
-    }
-    public class Polygon
-    {
-        public PolygonFlags Flags { get; set; }
-        public uint PointCount { get; set; }
-        public float P1 { get; set; }
-        public float P2 { get; set; }
-        public float P3 { get; set; }
-        public float Frames { get; set; }
-        public float PlaybackRate { get; set; }
-        public float Width { get; set; }
-        public float Height { get; set; }
-        public TexCoord[] TexCoords { get; set; }
-    }
-
-    public class Texture
-    {
-        public string Path { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
-    }
-
-    public class Point
-    {
-        public float X { get; set; }
-        public float Y { get; set; }
-        public float Z { get; set; }
-    }
-
-    public class Connector
-    {
-        public float X { get; set; }
-        public float Y { get; set; }
-        public float Z { get; set; }
-    }
-
-    [Validator(typeof(LevelValidator))]
-    public class Level
-    {
-        public int LevelNumber { get; set; }
-        public Point[] Points { get; set; }
-        public Polygon[] Polygons { get; set; }
-        internal int PointsCount { get; set; }
-        internal int PolygonsCount { get; set; }
-        internal int? ConnectorCount { get; set; }
-        public Connector[] Connectors { get; set; }
-    }
-
-    [Validator(typeof(PieValidator))]
-    public class Pie
-    {
-        public string FileName { get; set; }
-        public int Version { get; set; }
-        public int Type { get; set; }
-        public Texture Texture { get; set; }
-        public Level[] Levels { get; set; }
-        internal int LevelCount { get; set; }
     }
 }

@@ -23,11 +23,11 @@ namespace SharpFlame.Mapping
     {
         public clsResult Load_WZ(string Path)
         {
-            clsResult ReturnResult =
-                new clsResult("Loading WZ from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote), false);
-            logger.Info ("Loading WZ from " + Convert.ToString (ControlChars.Quote) + Path + Convert.ToString (ControlChars.Quote));
+            var ReturnResult = new clsResult("Loading WZ from '{0}'.".Format2(Path), false);
+            logger.Info("Loading WZ from '{0}'".Format2(Path));
             sResult SubResult = new sResult();
-            string Quote = ControlChars.Quote.ToString();
+            string Quote = "\"";
+
             ZipEntry ZipEntry = default(ZipEntry);
             bool GameFound = default(bool);
             bool DatasetFound = default(bool);
@@ -40,7 +40,6 @@ namespace SharpFlame.Mapping
             int B = 0;
             int C = 0;
             int D = 0;
-
             FileStream File = default(FileStream);
             try
             {

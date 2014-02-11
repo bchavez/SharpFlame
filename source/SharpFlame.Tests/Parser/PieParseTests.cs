@@ -4,7 +4,7 @@ using System.Linq;
 using FluentAssertions;
 using FluentValidation.Attributes;
 using NUnit.Framework;
-using SharpFlame.Core.Parsers;
+using SharpFlame.Core.Parsers.Pie;
 using SharpFlame.Core.Parsers.Validators;
 using Sprache;
 

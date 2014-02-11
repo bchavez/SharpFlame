@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GeneralTests.cs" />
+    <Compile Include="Parser\LevParserTests.cs" />
     <Compile Include="Parser\PieParseTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -68,7 +69,12 @@
     </None>
     <None Include="Pies\radarsensor.pie" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SharpFlame.Core\SharpFlame.Core.csproj">
+      <Project>{8ae7f7a3-841a-44a7-b016-4661bbbf7821}</Project>
+      <Name>SharpFlame.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

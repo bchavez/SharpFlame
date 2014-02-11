@@ -46,9 +46,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ExtensionsForEnum.cs" />
+    <Compile Include="Parsers\Lev\LevGrammar.cs" />
+    <Compile Include="Parsers\Pie\Connector.cs" />
+    <Compile Include="Parsers\Pie\Level.cs" />
+    <Compile Include="Parsers\Pie\Pie.cs" />
+    <Compile Include="Parsers\Pie\Point.cs" />
+    <Compile Include="Parsers\Pie\Polygon.cs" />
+    <Compile Include="Parsers\Pie\PolygonFlags.cs" />
+    <Compile Include="Parsers\Pie\TexCoord.cs" />
+    <Compile Include="Parsers\Pie\Texture.cs" />
     <Compile Include="Parsers\Validators\LevelValidator.cs" />
     <Compile Include="Parsers\Numerics.cs" />
-    <Compile Include="Parsers\PieGrammar.cs" />
+    <Compile Include="Parsers\Pie\PieGrammar.cs" />
     <Compile Include="Parsers\Validators\PieValidator.cs" />
     <Compile Include="Parsers\Scan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
