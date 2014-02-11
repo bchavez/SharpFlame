@@ -1321,20 +1321,20 @@ namespace SharpFlame.Mapping
                         Flip = File.ReadByte();
                         Terrain.Vertices[X, Y].Height = File.ReadByte();
                         //get flipx
-                        A = (int)(Conversion.Int(Flip / 128.0D));
+                        A = (int)((Flip / 128.0D));
                         Flip -= (byte)(A * 128);
                         FlipX = A == 1;
                         //get flipy
-                        A = (int)(Conversion.Int(Flip / 64.0D));
+                        A = (int)((Flip / 64.0D));
                         Flip -= (byte)(A * 64);
                         FlipZ = A == 1;
                         //get rotation
-                        A = (int)(Conversion.Int(Flip / 16.0D));
+                        A = (int)((Flip / 16.0D));
                         Flip -= (byte)(A * 16);
                         Rotate = (byte)A;
                         TileUtil.OldOrientation_To_TileOrientation(Rotate, FlipX, FlipZ, ref Terrain.Tiles[X, Y].Texture.Orientation);
                         //get tri direction
-                        A = (int)(Conversion.Int(Flip / 8.0D));
+                        A = (int)((Flip / 8.0D));
                         Flip -= (byte)(A * 8);
                         Terrain.Tiles[X, Y].Tri = A == 1;
                     }

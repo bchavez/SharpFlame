@@ -268,7 +268,7 @@ namespace SharpFlame.Mapping
             {
                 for ( X = 0; X <= Terrain.TileSize.X; X++ )
                 {
-                    Terrain.Vertices[X, Y].Height = Convert.ToByte(Conversion.Int(hmB.HeightData.Height[Y, X] * hmB.HeightScale));
+                    Terrain.Vertices[X, Y].Height = Convert.ToByte((hmB.HeightData.Height[Y, X] * hmB.HeightScale));
                 }
             }
         }

@@ -313,8 +313,8 @@ namespace SharpFlame
                 if ( UnitIsStructureModule[unit.MapLink.ArrayPosition] )
                 {
                     StructureTypeType = ((StructureTypeBase)unit.TypeBase).StructureType;
-                    CentrePos.X = Conversion.Int(unit.Pos.Horizontal.X / App.TerrainGridSpacing);
-                    CentrePos.Y = (int)(Conversion.Int(unit.Pos.Horizontal.Y / App.TerrainGridSpacing));
+                    CentrePos.X = (unit.Pos.Horizontal.X / App.TerrainGridSpacing);
+                    CentrePos.Y = (int)((unit.Pos.Horizontal.Y / App.TerrainGridSpacing));
                     if ( CentrePos.X < 0 | CentrePos.X >= Map.Terrain.TileSize.X
                          | CentrePos.Y < 0 | CentrePos.Y >= Map.Terrain.TileSize.Y )
                     {

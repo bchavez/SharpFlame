@@ -497,25 +497,25 @@
             int x = 0;
             if (this.SymmetryBlockCountXY.X == 1)
             {
-                _int.X = (int) Math.Round(Conversion.Int((double) (((this.TileSize.X * 0x80) - (x * 2.0)) / ((double) ((this.NodeScale * 128f) * 2f)))));
+                _int.X = (int) Math.Round(((double) (((this.TileSize.X * 0x80) - (x * 2.0)) / ((double) ((this.NodeScale * 128f) * 2f)))));
                 _dbl.X = ((this.TileSize.X * 0x80) - (x * 2.0)) / ((double) _int.X);
                 _int.X--;
             }
             else
             {
-                _int.X = (int) Math.Round(Conversion.Int((double) ((((((double) (this.TileSize.X * 0x80)) / ((double) this.SymmetryBlockCountXY.X)) - x) / ((double) ((this.NodeScale * 128f) * 2f))) - 0.5)));
-                _dbl.X = ((((double) (this.TileSize.X * 0x80)) / ((double) this.SymmetryBlockCountXY.X)) - x) / (Conversion.Int((double) ((((((double) (this.TileSize.X * 0x80)) / ((double) this.SymmetryBlockCountXY.X)) - x) / ((double) ((this.NodeScale * 128f) * 2f))) - 0.5)) + 0.5);
+                _int.X = (int) Math.Round(((double) ((((((double) (this.TileSize.X * 0x80)) / ((double) this.SymmetryBlockCountXY.X)) - x) / ((double) ((this.NodeScale * 128f) * 2f))) - 0.5)));
+                _dbl.X = ((((double) (this.TileSize.X * 0x80)) / ((double) this.SymmetryBlockCountXY.X)) - x) / (((double) ((((((double) (this.TileSize.X * 0x80)) / ((double) this.SymmetryBlockCountXY.X)) - x) / ((double) ((this.NodeScale * 128f) * 2f))) - 0.5)) + 0.5);
             }
             if (this.SymmetryBlockCountXY.Y == 1)
             {
-                _int.Y = (int) Math.Round(Conversion.Int((double) (((this.TileSize.Y * 0x80) - (x * 2.0)) / ((double) ((this.NodeScale * 128f) * 2f)))));
+                _int.Y = (int) Math.Round(((double) (((this.TileSize.Y * 0x80) - (x * 2.0)) / ((double) ((this.NodeScale * 128f) * 2f)))));
                 _dbl.Y = ((this.TileSize.Y * 0x80) - (x * 2.0)) / ((double) _int.Y);
                 _int.Y--;
             }
             else
             {
-                _int.Y = (int) Math.Round(Conversion.Int((double) ((((((double) (this.TileSize.Y * 0x80)) / ((double) this.SymmetryBlockCountXY.Y)) - x) / ((double) ((this.NodeScale * 128f) * 2f))) - 0.5)));
-                _dbl.Y = ((((double) (this.TileSize.Y * 0x80)) / ((double) this.SymmetryBlockCountXY.Y)) - x) / (Conversion.Int((double) ((((((double) (this.TileSize.Y * 0x80)) / ((double) this.SymmetryBlockCountXY.Y)) - x) / ((double) ((this.NodeScale * 128f) * 2f))) - 0.5)) + 0.5);
+                _int.Y = (int) Math.Round(((double) ((((((double) (this.TileSize.Y * 0x80)) / ((double) this.SymmetryBlockCountXY.Y)) - x) / ((double) ((this.NodeScale * 128f) * 2f))) - 0.5)));
+                _dbl.Y = ((((double) (this.TileSize.Y * 0x80)) / ((double) this.SymmetryBlockCountXY.Y)) - x) / (((double) ((((((double) (this.TileSize.Y * 0x80)) / ((double) this.SymmetryBlockCountXY.Y)) - x) / ((double) ((this.NodeScale * 128f) * 2f))) - 0.5)) + 0.5);
             }
             this.PassageNodeCount = 0;
             int y = _int.Y;
@@ -563,19 +563,19 @@
                 modMath.sXY_int _int2;
                 if (this.SymmetryBlockCountXY.X == 1)
                 {
-                    _int2.X = x + ((int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * ((_int4.X - (x * 2)) + 1)))));
+                    _int2.X = x + ((int) Math.Round((double) ((float) (App.Random.Next() * ((_int4.X - (x * 2)) + 1)))));
                 }
                 else
                 {
-                    _int2.X = x + ((int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * ((_int4.X - x) + 1)))));
+                    _int2.X = x + ((int) Math.Round((double) ((float) (App.Random.Next() * ((_int4.X - x) + 1)))));
                 }
                 if (this.SymmetryBlockCountXY.Y == 1)
                 {
-                    _int2.Y = x + ((int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * ((_int4.Y - (x * 2)) + 1)))));
+                    _int2.Y = x + ((int) Math.Round((double) ((float) (App.Random.Next() * ((_int4.Y - (x * 2)) + 1)))));
                 }
                 else
                 {
-                    _int2.Y = x + ((int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * ((_int4.Y - x) + 1)))));
+                    _int2.Y = x + ((int) Math.Round((double) ((float) (App.Random.Next() * ((_int4.Y - x) + 1)))));
                 }
                 int num27 = this.PassageNodeCount - 1;
                 num = 0;
@@ -812,7 +812,7 @@
             num2 = 0;
             while (index > 0)
             {
-                num = (int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * index)));
+                num = (int) Math.Round((double) ((float) (App.Random.Next() * index)));
                 nodeArray3[num2] = nodeArray2[num];
                 num2++;
                 index--;
@@ -885,7 +885,7 @@
                 }
                 if (this.BaseLevel < 0)
                 {
-                    baseLevel = (int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * this.LevelCount)));
+                    baseLevel = (int) Math.Round((double) ((float) (App.Random.Next() * this.LevelCount)));
                 }
                 else
                 {
@@ -1485,7 +1485,7 @@
                 num = 0;
                 while (num <= num14)
                 {
-                    args.OilClusterSizes[num] = Math.Min(this.ExtraOilClusterSizeMin + ((int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * ((this.ExtraOilClusterSizeMax - this.ExtraOilClusterSizeMin) + 1))))), Math.Max((int) Math.Round(Math.Ceiling((double) (((double) (this.ExtraOilCount - num6)) / ((double) this.SymmetryBlockCount)))), 1));
+                    args.OilClusterSizes[num] = Math.Min(this.ExtraOilClusterSizeMin + ((int) Math.Round((double) ((float) (App.Random.Next() * ((this.ExtraOilClusterSizeMax - this.ExtraOilClusterSizeMin) + 1))))), Math.Max((int) Math.Round(Math.Ceiling((double) (((double) (this.ExtraOilCount - num6)) / ((double) this.SymmetryBlockCount)))), 1));
                     num++;
                 }
                 args.OilPossibilities = new clsOilPossibilities();
@@ -1701,7 +1701,7 @@
             }
             if (num10 > 0)
             {
-                num6 = (int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * num10)));
+                num6 = (int) Math.Round((double) ((float) (App.Random.Next() * num10)));
                 connectionArray[num6].IsRamp = true;
                 clsPassageNode passageNodeA = connectionArray[num6].PassageNodeA;
                 clsPassageNode passageNodeB = connectionArray[num6].PassageNodeB;
@@ -1969,8 +1969,8 @@
                             result2.ProblemAdd("No room for oil.");
                             return result2;
                         }
-                        _int2.X = (int) Math.Round(Conversion.Int((double) (((double) unit.Pos.Horizontal.X) / 128.0)));
-                        _int2.Y = (int) Math.Round(Conversion.Int((double) (((double) unit.Pos.Horizontal.Y) / 128.0)));
+                        _int2.X = (int) Math.Round(((double) (((double) unit.Pos.Horizontal.X) / 128.0)));
+                        _int2.Y = (int) Math.Round(((double) (((double) unit.Pos.Horizontal.Y) / 128.0)));
                         byte num2 = (byte) Math.Round((double) (((double) (((terrain.Vertices[_int2.X, _int2.Y].Height + terrain.Vertices[_int2.X + 1, _int2.Y].Height) + terrain.Vertices[_int2.X, _int2.Y + 1].Height) + terrain.Vertices[_int2.X + 1, _int2.Y + 1].Height)) / 4.0));
                         terrain.Vertices[_int2.X, _int2.Y].Height = num2;
                         terrain.Vertices[_int2.X + 1, _int2.Y].Height = num2;
@@ -2015,12 +2015,12 @@
                     {
                         if (this.PassageNodes[num7, num].HasFeatureCluster)
                         {
-                            int num6 = this.FeatureClusterMinUnits + ((int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * ((this.FeatureClusterMaxUnits - this.FeatureClusterMinUnits) + 1)))));
+                            int num6 = this.FeatureClusterMinUnits + ((int) Math.Round((double) ((float) (App.Random.Next() * ((this.FeatureClusterMaxUnits - this.FeatureClusterMinUnits) + 1)))));
                             int num26 = num6;
                             num3 = 1;
                             while (num3 <= num26)
                             {
-                                num12 = (uint) Math.Round(Conversion.Int((double) (App.Random.Next() * this.GenerateTileset.ClusteredUnitChanceTotal)));
+                                num12 = (uint) Math.Round(((double) (App.Random.Next() * this.GenerateTileset.ClusteredUnitChanceTotal)));
                                 num14 = 0;
                                 int num27 = this.GenerateTileset.ClusteredUnitCount - 1;
                                 num5 = 0;
@@ -2062,7 +2062,7 @@
                 num = 1;
                 while (num <= featureScatterCount)
                 {
-                    num12 = (uint) Math.Round(Conversion.Int((double) (App.Random.Next() * this.GenerateTileset.ScatteredUnitChanceTotal)));
+                    num12 = (uint) Math.Round(((double) (App.Random.Next() * this.GenerateTileset.ScatteredUnitChanceTotal)));
                     num14 = 0;
                     int num29 = this.GenerateTileset.ScatteredUnitCount - 1;
                     num5 = 0;
@@ -2207,7 +2207,7 @@
             }
             do
             {
-                num = (int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * InputNode.GetChildNodeCount)));
+                num = (int) Math.Round((double) ((float) (App.Random.Next() * InputNode.GetChildNodeCount)));
             }
             while (InputNode.get_GetChildNode(num).GetClearance < MinClearance);
             return this.GetRandomChildNode(InputNode.get_GetChildNode(num), MinClearance);
@@ -2591,11 +2591,11 @@
                             num3++;
                         }
                     }
-                    num4 = numArray[(int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * num3)))];
+                    num4 = numArray[(int) Math.Round((double) ((float) (App.Random.Next() * num3)))];
                 }
                 else
                 {
-                    int num5 = (int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * Args.ActionTotal)));
+                    int num5 = (int) Math.Round((double) ((float) (App.Random.Next() * Args.ActionTotal)));
                     if (num5 < Args.FlatsCutoff)
                     {
                         num = 0;
@@ -2691,7 +2691,7 @@
                             }
                         }
                     }
-                    num4 = numArray[(int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * num3)))];
+                    num4 = numArray[(int) Math.Round((double) ((float) (App.Random.Next() * num3)))];
                 }
             }
             int num14 = this.SymmetryBlockCount - 1;
@@ -2763,14 +2763,14 @@
             add.NewUnit = unit;
             unit.Type = Type;
             unit.UnitGroup = UnitGroup;
-            _int.X = (int) Math.Round(Conversion.Int((double) (((double) Pos.Horizontal.X) / 128.0)));
-            _int.Y = (int) Math.Round(Conversion.Int((double) (((double) Pos.Horizontal.Y) / 128.0)));
+            _int.X = (int) Math.Round(((double) (((double) Pos.Horizontal.X) / 128.0)));
+            _int.Y = (int) Math.Round(((double) (((double) Pos.Horizontal.Y) / 128.0)));
             modMath.sXY_int _int2 = Type.get_GetFootprintSelected(Rotation);
             unit.Pos = Pos;
-            _int3.X = (int) Math.Round(Conversion.Int((double) (((((double) unit.Pos.Horizontal.X) / 128.0) - (((double) _int2.X) / 2.0)) + 0.5)));
-            _int3.Y = (int) Math.Round(Conversion.Int((double) (((((double) unit.Pos.Horizontal.Y) / 128.0) - (((double) _int2.Y) / 2.0)) + 0.5)));
-            _int4.X = (int) Math.Round(Conversion.Int((double) (((((double) unit.Pos.Horizontal.X) / 128.0) + (((double) _int2.X) / 2.0)) - 0.5)));
-            _int4.Y = (int) Math.Round(Conversion.Int((double) (((((double) unit.Pos.Horizontal.Y) / 128.0) + (((double) _int2.Y) / 2.0)) - 0.5)));
+            _int3.X = (int) Math.Round(((double) (((((double) unit.Pos.Horizontal.X) / 128.0) - (((double) _int2.X) / 2.0)) + 0.5)));
+            _int3.Y = (int) Math.Round(((double) (((((double) unit.Pos.Horizontal.Y) / 128.0) - (((double) _int2.Y) / 2.0)) + 0.5)));
+            _int4.X = (int) Math.Round(((double) (((((double) unit.Pos.Horizontal.X) / 128.0) + (((double) _int2.X) / 2.0)) - 0.5)));
+            _int4.Y = (int) Math.Round(((double) (((((double) unit.Pos.Horizontal.Y) / 128.0) + (((double) _int2.Y) / 2.0)) - 0.5)));
             unit.Rotation = Rotation;
             add.Perform();
             int num3 = Math.Min(_int4.Y, this.Map.Terrain.TileSize.Y - 1);
@@ -2810,8 +2810,8 @@
             add.NewUnit = unit2;
             unit2.Type = Type;
             unit2.UnitGroup = UnitGroup;
-            _int.X = (int) Math.Round(Conversion.Int((double) (((double) tag.Pos.X) / 128.0)));
-            _int.Y = (int) Math.Round(Conversion.Int((double) (((double) tag.Pos.Y) / 128.0)));
+            _int.X = (int) Math.Round(((double) (((double) tag.Pos.X) / 128.0)));
+            _int.Y = (int) Math.Round(((double) (((double) tag.Pos.Y) / 128.0)));
             modMath.sXY_int _int2 = Type.get_GetFootprintSelected(Rotation);
             int num = _int2.X % 2;
             if (num > 0)
@@ -2839,10 +2839,10 @@
             {
                 unit2.Pos.Horizontal.Y = tag.Pos.Y + 0x40;
             }
-            _int3.X = (int) Math.Round(Conversion.Int((double) (((((double) unit2.Pos.Horizontal.X) / 128.0) - (((double) _int2.X) / 2.0)) + 0.5)));
-            _int3.Y = (int) Math.Round(Conversion.Int((double) (((((double) unit2.Pos.Horizontal.Y) / 128.0) - (((double) _int2.Y) / 2.0)) + 0.5)));
-            _int4.X = (int) Math.Round(Conversion.Int((double) (((((double) unit2.Pos.Horizontal.X) / 128.0) + (((double) _int2.X) / 2.0)) - 0.5)));
-            _int4.Y = (int) Math.Round(Conversion.Int((double) (((((double) unit2.Pos.Horizontal.Y) / 128.0) + (((double) _int2.Y) / 2.0)) - 0.5)));
+            _int3.X = (int) Math.Round(((double) (((((double) unit2.Pos.Horizontal.X) / 128.0) - (((double) _int2.X) / 2.0)) + 0.5)));
+            _int3.Y = (int) Math.Round(((double) (((((double) unit2.Pos.Horizontal.Y) / 128.0) - (((double) _int2.Y) / 2.0)) + 0.5)));
+            _int4.X = (int) Math.Round(((double) (((((double) unit2.Pos.Horizontal.X) / 128.0) + (((double) _int2.X) / 2.0)) - 0.5)));
+            _int4.Y = (int) Math.Round(((double) (((((double) unit2.Pos.Horizontal.Y) / 128.0) + (((double) _int2.Y) / 2.0)) - 0.5)));
             unit2.Rotation = Rotation;
             add.Perform();
             int num4 = Math.Min(_int4.Y, this.Map.Terrain.TileSize.Y - 1);
@@ -2912,7 +2912,7 @@
                     if (num6 < Args.RampRadius)
                     {
                         float num7 = 1f;
-                        if (Args.BaseLevel.NodeLevels[index] == Conversion.Int(Args.BaseLevel.NodeLevels[index]))
+                        if (Args.BaseLevel.NodeLevels[index] == (Args.BaseLevel.NodeLevels[index]))
                         {
                             Args.BaseLevel.NodeLevels[index] = (Args.BaseLevel.NodeLevels[index] * (1f - num7)) + (((Args.Connection.PassageNodeA.Level * (1f - num5)) + (Args.Connection.PassageNodeB.Level * num5)) * num7);
                         }

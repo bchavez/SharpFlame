@@ -338,7 +338,7 @@
                 int num13 = this.HeightData.SizeY - 2;
                 for (num8 = 1; num8 <= num13; num8++)
                 {
-                    int num = num8 - (((int) Math.Round(Conversion.Int((double) (((double) num8) / 2.0)))) * 2);
+                    int num = num8 - (((int) Math.Round(((double) (((double) num8) / 2.0)))) * 2);
                     int num14 = (this.HeightData.SizeX - 2) - num;
                     num7 = 1 + num;
                     while (num7 <= num14)
@@ -403,7 +403,7 @@
                 int num6 = this.HeightData.SizeX - 1;
                 for (int j = 0; j <= num6; j++)
                 {
-                    this.HeightData.Height[i, j] = (long) Math.Round((double) (Conversion.Int((double) (Source.HeightData.Height[i, j] * num)) * num2));
+                    this.HeightData.Height[i, j] = (long) Math.Round((double) (((double) (Source.HeightData.Height[i, j] * num)) * num2));
                 }
             }
         }
@@ -686,15 +686,15 @@
                     float num10 = i * num2;
                     float num7 = (j + 1) * num;
                     float num8 = (i + 1) * num2;
-                    int num19 = (int) Math.Round((double) -Conversion.Int(-num8));
-                    for (int k = (int) Math.Round((double) Conversion.Int(num10)); k <= num19; k++)
+                    int num19 = (int) Math.Round((double) -(-num8));
+                    for (int k = (int) Math.Round((double) (num10)); k <= num19; k++)
                     {
                         if (k >= SizeY)
                         {
                             break;
                         }
-                        int num20 = (int) Math.Round((double) -Conversion.Int(-num7));
-                        for (int m = (int) Math.Round((double) Conversion.Int(number)); m <= num20; m++)
+                        int num20 = (int) Math.Round((double) -(-num7));
+                        for (int m = (int) Math.Round((double) (number)); m <= num20; m++)
                         {
                             if (m >= SizeX)
                             {

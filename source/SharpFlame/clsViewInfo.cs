@@ -164,7 +164,7 @@ namespace SharpFlame
                 //    XYZ_dbl.Y = XYZ_lng.Y
                 //    XYZ_dbl.Z = XYZ_lng.Z
                 //Else
-                if ( ScreenXY_Get_ViewPlanePos_ForwardDownOnly((int)(Conversion.Int(MapViewControl.GLSize.X / 2.0D)), (int)(Conversion.Int(MapViewControl.GLSize.Y / 2.0D)), 127.5D,
+                if ( ScreenXY_Get_ViewPlanePos_ForwardDownOnly((int)((MapViewControl.GLSize.X / 2.0D)), (int)((MapViewControl.GLSize.Y / 2.0D)), 127.5D,
                     ref XY_dbl) )
                 {
                     XYZ_dbl.X = XY_dbl.X;
@@ -350,10 +350,10 @@ namespace SharpFlame
                 dblTemp = TerrainViewPos.Y / TerrainViewVector.Y;
                 LimitB.X = TerrainViewPos.X + TerrainViewVector.X * dblTemp;
                 LimitB.Y = TerrainViewPos.Z + TerrainViewVector.Z * dblTemp;
-                Min.X = Math.Max(Convert.ToInt32(Conversion.Int(Math.Min(LimitA.X, LimitB.X) / App.TerrainGridSpacing)), 0);
-                Min.Y = Math.Max((int)(Conversion.Int(Math.Min(LimitA.Y, LimitB.Y) / App.TerrainGridSpacing)), 0);
-                Max.X = Math.Min(Convert.ToInt32(Conversion.Int(Math.Max(LimitA.X, LimitB.X) / App.TerrainGridSpacing)), Map.Terrain.TileSize.X - 1);
-                Max.Y = Math.Min(Convert.ToInt32(Conversion.Int(Math.Max(LimitA.Y, LimitB.Y) / App.TerrainGridSpacing)), Map.Terrain.TileSize.Y - 1);
+                Min.X = Math.Max(Convert.ToInt32((Math.Min(LimitA.X, LimitB.X) / App.TerrainGridSpacing)), 0);
+                Min.Y = Math.Max((int)((Math.Min(LimitA.Y, LimitB.Y) / App.TerrainGridSpacing)), 0);
+                Max.X = Math.Min(Convert.ToInt32((Math.Max(LimitA.X, LimitB.X) / App.TerrainGridSpacing)), Map.Terrain.TileSize.X - 1);
+                Max.Y = Math.Min(Convert.ToInt32((Math.Max(LimitA.Y, LimitB.Y) / App.TerrainGridSpacing)), Map.Terrain.TileSize.Y - 1);
                 //find the nearest valid tile to the view
                 BestDist = double.MaxValue;
                 BestPos.X = double.NaN;
@@ -538,8 +538,8 @@ namespace SharpFlame
                 }
                 else if ( IsViewPosOverMinimap(MouseOver.ScreenPos) )
                 {
-                    sXY_int Pos = new sXY_int((int)Conversion.Int(MouseOver.ScreenPos.X * Tiles_Per_Minimap_Pixel),
-                        (int)(Conversion.Int(MouseOver.ScreenPos.Y * Tiles_Per_Minimap_Pixel)));
+                    sXY_int Pos = new sXY_int((int)(MouseOver.ScreenPos.X * Tiles_Per_Minimap_Pixel),
+                        (int)((MouseOver.ScreenPos.Y * Tiles_Per_Minimap_Pixel)));
                     Map.TileNumClampToMap(Pos);
                     LookAtTile(Pos);
                 }
@@ -575,8 +575,8 @@ namespace SharpFlame
                 if ( Flag )
                 {
                     MouseOver.OverTerrain = MouseOverTerrain;
-                    MouseOverTerrain.Tile.Normal.X = (int)Conversion.Int((double)MouseOverTerrain.Pos.Horizontal.X / App.TerrainGridSpacing);
-                    MouseOverTerrain.Tile.Normal.Y = (int)(Conversion.Int((double)MouseOverTerrain.Pos.Horizontal.Y / App.TerrainGridSpacing));
+                    MouseOverTerrain.Tile.Normal.X = (int)((double)MouseOverTerrain.Pos.Horizontal.X / App.TerrainGridSpacing);
+                    MouseOverTerrain.Tile.Normal.Y = (int)(((double)MouseOverTerrain.Pos.Horizontal.Y / App.TerrainGridSpacing));
                     MouseOverTerrain.Vertex.Normal.X = (int)( Math.Round( ( (double)MouseOverTerrain.Pos.Horizontal.X / App.TerrainGridSpacing ) ) );
                     MouseOverTerrain.Vertex.Normal.Y = (int)( Math.Round( ( (double)MouseOverTerrain.Pos.Horizontal.Y / App.TerrainGridSpacing ) ) );
                     MouseOverTerrain.Tile.Alignment = MouseOverTerrain.Vertex.Normal;
@@ -1573,8 +1573,8 @@ namespace SharpFlame
                 {
                     MouseLeftDown.OverMinimap = new clsMouseDown.clsOverMinimap();
                     MouseLeftDown.OverMinimap.DownPos = ScreenPos;
-                    sXY_int Pos = new sXY_int((int)(Conversion.Int(ScreenPos.X * Tiles_Per_Minimap_Pixel)),
-                        (int)Conversion.Int(ScreenPos.Y * Tiles_Per_Minimap_Pixel));
+                    sXY_int Pos = new sXY_int((int)((ScreenPos.X * Tiles_Per_Minimap_Pixel)),
+                        (int)(ScreenPos.Y * Tiles_Per_Minimap_Pixel));
                     Map.TileNumClampToMap(Pos);
                     LookAtTile(Pos);
                 }

@@ -846,7 +846,7 @@
                 {
                     this.MouseLeftDown.OverMinimap = new clsMouseDown.clsOverMinimap();
                     this.MouseLeftDown.OverMinimap.DownPos = _int;
-                    modMath.sXY_int tileNum = new modMath.sXY_int((int) Math.Round(Conversion.Int((double) (_int.X * this.Tiles_Per_Minimap_Pixel))), (int) Math.Round(Conversion.Int((double) (_int.Y * this.Tiles_Per_Minimap_Pixel))));
+                    modMath.sXY_int tileNum = new modMath.sXY_int((int) Math.Round(((double) (_int.X * this.Tiles_Per_Minimap_Pixel))), (int) Math.Round(((double) (_int.Y * this.Tiles_Per_Minimap_Pixel))));
                     this.Map.TileNumClampToMap(tileNum);
                     this.LookAtTile(tileNum);
                 }
@@ -1089,7 +1089,7 @@
             {
                 if ((this.MouseOver != null) && this.IsViewPosOverMinimap(this.MouseOver.ScreenPos))
                 {
-                    modMath.sXY_int tileNum = new modMath.sXY_int((int) Math.Round(Conversion.Int((double) (this.MouseOver.ScreenPos.X * this.Tiles_Per_Minimap_Pixel))), (int) Math.Round(Conversion.Int((double) (this.MouseOver.ScreenPos.Y * this.Tiles_Per_Minimap_Pixel))));
+                    modMath.sXY_int tileNum = new modMath.sXY_int((int) Math.Round(((double) (this.MouseOver.ScreenPos.X * this.Tiles_Per_Minimap_Pixel))), (int) Math.Round(((double) (this.MouseOver.ScreenPos.Y * this.Tiles_Per_Minimap_Pixel))));
                     this.Map.TileNumClampToMap(tileNum);
                     this.LookAtTile(tileNum);
                 }
@@ -1124,8 +1124,8 @@
                 {
                     IEnumerator enumerator;
                     this.MouseOver.OverTerrain = terrain;
-                    terrain.Tile.Normal.X = (int) Math.Round(Conversion.Int((double) (((double) terrain.Pos.Horizontal.X) / 128.0)));
-                    terrain.Tile.Normal.Y = (int) Math.Round(Conversion.Int((double) (((double) terrain.Pos.Horizontal.Y) / 128.0)));
+                    terrain.Tile.Normal.X = (int) Math.Round(((double) (((double) terrain.Pos.Horizontal.X) / 128.0)));
+                    terrain.Tile.Normal.Y = (int) Math.Round(((double) (((double) terrain.Pos.Horizontal.Y) / 128.0)));
                     terrain.Vertex.Normal.X = (int) Math.Round(Math.Round((double) (((double) terrain.Pos.Horizontal.X) / 128.0)));
                     terrain.Vertex.Normal.Y = (int) Math.Round(Math.Round((double) (((double) terrain.Pos.Horizontal.Y) / 128.0)));
                     terrain.Tile.Alignment = terrain.Vertex.Normal;
@@ -1287,10 +1287,10 @@
                 num2 = _dbl5.Y / _dbl6.Y;
                 _dbl4.X = _dbl5.X + (_dbl6.X * num2);
                 _dbl4.Y = _dbl5.Z + (_dbl6.Z * num2);
-                _int2.X = Math.Max((int) Math.Round(Conversion.Int((double) (Math.Min(_dbl3.X, _dbl4.X) / 128.0))), 0);
-                _int2.Y = Math.Max((int) Math.Round(Conversion.Int((double) (Math.Min(_dbl3.Y, _dbl4.Y) / 128.0))), 0);
-                _int.X = Math.Min((int) Math.Round(Conversion.Int((double) (Math.Max(_dbl3.X, _dbl4.X) / 128.0))), this.Map.Terrain.TileSize.X - 1);
-                _int.Y = Math.Min((int) Math.Round(Conversion.Int((double) (Math.Max(_dbl3.Y, _dbl4.Y) / 128.0))), this.Map.Terrain.TileSize.Y - 1);
+                _int2.X = Math.Max((int) Math.Round(((double) (Math.Min(_dbl3.X, _dbl4.X) / 128.0))), 0);
+                _int2.Y = Math.Max((int) Math.Round(((double) (Math.Min(_dbl3.Y, _dbl4.Y) / 128.0))), 0);
+                _int.X = Math.Min((int) Math.Round(((double) (Math.Max(_dbl3.X, _dbl4.X) / 128.0))), this.Map.Terrain.TileSize.X - 1);
+                _int.Y = Math.Min((int) Math.Round(((double) (Math.Max(_dbl3.Y, _dbl4.Y) / 128.0))), this.Map.Terrain.TileSize.Y - 1);
                 double maxValue = double.MaxValue;
                 _dbl.X = double.NaN;
                 _dbl.Y = double.NaN;
@@ -1696,7 +1696,7 @@
             {
                 Position.XY_dbl _dbl;
                 flag = true;
-                if (this.ScreenXY_Get_ViewPlanePos_ForwardDownOnly((int) Math.Round(Conversion.Int((double) (((double) this.MapView.GLSize.X) / 2.0))), (int) Math.Round(Conversion.Int((double) (((double) this.MapView.GLSize.Y) / 2.0))), 127.5, ref _dbl))
+                if (this.ScreenXY_Get_ViewPlanePos_ForwardDownOnly((int) Math.Round(((double) (((double) this.MapView.GLSize.X) / 2.0))), (int) Math.Round(((double) (((double) this.MapView.GLSize.Y) / 2.0))), 127.5, ref _dbl))
                 {
                     _dbl2.X = _dbl.X;
                     _dbl2.Y = 127.5;

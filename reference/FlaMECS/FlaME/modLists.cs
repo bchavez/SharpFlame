@@ -756,7 +756,7 @@
                 int num4 = this.ItemCount - 1;
                 for (num = 0; num <= num4; num++)
                 {
-                    int position = Math.Min((int) Math.Round(Conversion.Int((double) (NumberGenerator.NextDouble() * list.Count))), list.Count - 1);
+                    int position = Math.Min((int) Math.Round(((double) (NumberGenerator.NextDouble() * list.Count))), list.Count - 1);
                     OtherList.Add(list[position]);
                     list.Remove(position);
                 }

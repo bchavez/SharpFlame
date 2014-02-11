@@ -152,32 +152,32 @@ namespace SharpFlame.Mapping
                             byteTemp = File.ReadByte();
 
                             intTemp = 128;
-                            A = (int)(Conversion.Int(byteTemp / intTemp));
+                            A = (int)((byteTemp / intTemp));
                             byteTemp -= (byte)(A * intTemp);
                             Terrain.Tiles[X, Y].Terrain_IsCliff = A == 1;
 
                             intTemp = 64;
-                            A = (int)(Conversion.Int(byteTemp / intTemp));
+                            A = (int)((byteTemp / intTemp));
                             byteTemp -= (byte)(A * intTemp);
                             Terrain.Tiles[X, Y].Texture.Orientation.SwitchedAxes = A == 1;
 
                             intTemp = 32;
-                            A = (int)(Conversion.Int(byteTemp / intTemp));
+                            A = (int)((byteTemp / intTemp));
                             byteTemp -= (byte)(A * intTemp);
                             Terrain.Tiles[X, Y].Texture.Orientation.ResultXFlip = A == 1;
 
                             intTemp = 16;
-                            A = (int)(Conversion.Int(byteTemp / intTemp));
+                            A = (int)((byteTemp / intTemp));
                             byteTemp -= (byte)(A * intTemp);
                             Terrain.Tiles[X, Y].Texture.Orientation.ResultYFlip = A == 1;
 
                             intTemp = 4;
-                            A = (int)(Conversion.Int(byteTemp / intTemp));
+                            A = (int)((byteTemp / intTemp));
                             byteTemp -= (byte)(A * intTemp);
                             Terrain.Tiles[X, Y].Tri = A == 1;
 
                             intTemp = 2;
-                            A = (int)(Conversion.Int(byteTemp / intTemp));
+                            A = (int)((byteTemp / intTemp));
                             byteTemp -= (byte)(A * intTemp);
                             if ( Terrain.Tiles[X, Y].Tri )
                             {
@@ -189,7 +189,7 @@ namespace SharpFlame.Mapping
                             }
 
                             intTemp = 1;
-                            A = (int)(Conversion.Int(byteTemp / intTemp));
+                            A = (int)((byteTemp / intTemp));
                             byteTemp -= (byte)(A * intTemp);
                             if ( Terrain.Tiles[X, Y].Tri )
                             {
@@ -995,10 +995,10 @@ namespace SharpFlame.Mapping
                         Terrain.Tiles[X, Y].Texture.TextureNum = LNDTile[Tile_Num].TID - 1;
 
                         //ignore higher values
-                        A = Convert.ToInt32(Conversion.Int(LNDTile[Tile_Num].F / 64.0D));
+                        A = Convert.ToInt32((LNDTile[Tile_Num].F / 64.0D));
                         LNDTile[Tile_Num].F = (short)(LNDTile[Tile_Num].F - A * 64);
 
-                        A = (int)(Conversion.Int(LNDTile[Tile_Num].F / 16.0D));
+                        A = (int)((LNDTile[Tile_Num].F / 16.0D));
                         LNDTile[Tile_Num].F = (short)(LNDTile[Tile_Num].F - A * 16);
                         if ( A < 0 | A > 3 )
                         {
@@ -1007,15 +1007,15 @@ namespace SharpFlame.Mapping
                         }
                         Rotation = (byte)A;
 
-                        A = (int)(Conversion.Int(LNDTile[Tile_Num].F / 8.0D));
+                        A = (int)((LNDTile[Tile_Num].F / 8.0D));
                         LNDTile[Tile_Num].F -= (short)(A * 8);
                         FlipZ = A == 1;
 
-                        A = (int)(Conversion.Int(LNDTile[Tile_Num].F / 4.0D));
+                        A = (int)((LNDTile[Tile_Num].F / 4.0D));
                         LNDTile[Tile_Num].F -= (short)(A * 4);
                         FlipX = A == 1;
 
-                        A = Convert.ToInt32(Conversion.Int(LNDTile[Tile_Num].F / 2.0D));
+                        A = Convert.ToInt32((LNDTile[Tile_Num].F / 2.0D));
                         LNDTile[Tile_Num].F -= (short)(A * 2);
                         Terrain.Tiles[X, Y].Tri = A == 1;
 

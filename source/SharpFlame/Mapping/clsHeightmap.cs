@@ -146,7 +146,7 @@ namespace SharpFlame
             //inner side points
             for ( Y = 1; Y <= HeightData.SizeY - 2; Y++ )
             {
-                A = Y - ((int)(Conversion.Int(Y / 2.0D))) * 2;
+                A = Y - ((int)((Y / 2.0D))) * 2;
                 for ( X = 1 + A; X <= HeightData.SizeX - 2 - A; X += 2 )
                 {
                     Mean =
@@ -339,7 +339,7 @@ namespace SharpFlame
             {
                 for ( X = 0; X <= HeightData.SizeX - 1; X++ )
                 {
-                    HeightData.Height[Y, X] = Convert.ToInt32(Convert.ToDouble(Conversion.Int(Source.HeightData.Height[Y, X] * dblTemp)) * dblTemp2);
+                    HeightData.Height[Y, X] = Convert.ToInt32(Convert.ToDouble((Source.HeightData.Height[Y, X] * dblTemp)) * dblTemp2);
                 }
             }
         }

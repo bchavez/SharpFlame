@@ -251,8 +251,8 @@ namespace SharpFlame.Mapping
             int XG = 0;
             int YG = 0;
 
-            XG = (int)(Conversion.Int(Horizontal.X / App.TerrainGridSpacing));
-            YG = Conversion.Int(Horizontal.Y / App.TerrainGridSpacing);
+            XG = (int)((Horizontal.X / App.TerrainGridSpacing));
+            YG = (Horizontal.Y / App.TerrainGridSpacing);
             InTileX = MathUtil.Clamp_dbl(Horizontal.X / App.TerrainGridSpacing - XG, 0.0D, 1.0D);
             InTileZ = MathUtil.Clamp_dbl(Horizontal.Y / App.TerrainGridSpacing - YG, 0.0D, 1.0D);
             X1 = MathUtil.Clamp_int(XG, 0, Terrain.TileSize.X - 1);
@@ -299,8 +299,8 @@ namespace SharpFlame.Mapping
             Position.XYZ_dbl XYZ_dbl3 = default(Position.XYZ_dbl);
             Angles.AnglePY AnglePY = default(Angles.AnglePY);
 
-            XG = Conversion.Int(Horizontal.X / App.TerrainGridSpacing);
-            YG = (int)(Conversion.Int(Horizontal.Y / App.TerrainGridSpacing));
+            XG = (Horizontal.X / App.TerrainGridSpacing);
+            YG = (int)((Horizontal.Y / App.TerrainGridSpacing));
             InTileX = MathUtil.Clamp_dbl(Horizontal.X / App.TerrainGridSpacing - XG, 0.0D, 1.0D);
             InTileZ = MathUtil.Clamp_dbl(Horizontal.Y / App.TerrainGridSpacing - YG, 0.0D, 1.0D);
             X1 = MathUtil.Clamp_int(XG, 0, Terrain.TileSize.X - 1);
@@ -372,8 +372,8 @@ namespace SharpFlame.Mapping
             double RatioX = 0;
             double RatioY = 0;
 
-            XG = Conversion.Int(Horizontal.X / App.TerrainGridSpacing);
-            YG = (int)(Conversion.Int(Horizontal.Y / App.TerrainGridSpacing));
+            XG = (Horizontal.X / App.TerrainGridSpacing);
+            YG = (int)((Horizontal.Y / App.TerrainGridSpacing));
             InTileX = MathUtil.Clamp_dbl(Horizontal.X / App.TerrainGridSpacing - XG, 0.0D, 1.0D);
             InTileZ = MathUtil.Clamp_dbl(Horizontal.Y / App.TerrainGridSpacing - YG, 0.0D, 1.0D);
             X1 = MathUtil.Clamp_int(XG, 0, Terrain.TileSize.X - 1);
@@ -1138,8 +1138,8 @@ namespace SharpFlame.Mapping
         {
             sXY_int Result = new sXY_int();
 
-            Result.X = Conversion.Int(Tile.X / Constants.SectorTileSize);
-            Result.Y = Conversion.Int(Tile.Y / Constants.SectorTileSize);
+            Result.X = (Tile.X / Constants.SectorTileSize);
+            Result.Y = (Tile.Y / Constants.SectorTileSize);
 
             return Result;
         }
@@ -1939,8 +1939,8 @@ namespace SharpFlame.Mapping
         {
             sXY_int Result = new sXY_int();
 
-            Result.X = (int)(Conversion.Int(Horizontal.X / App.TerrainGridSpacing));
-            Result.Y = Conversion.Int(Horizontal.Y / App.TerrainGridSpacing);
+            Result.X = (int)((Horizontal.X / App.TerrainGridSpacing));
+            Result.Y = (Horizontal.Y / App.TerrainGridSpacing);
 
             return Result;
         }

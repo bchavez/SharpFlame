@@ -1446,8 +1446,8 @@
         public modMath.sXY_int GetPosTileNum(modMath.sXY_int Horizontal)
         {
             modMath.sXY_int _int2;
-            _int2.X = (int) Math.Round(Conversion.Int((double) (((double) Horizontal.X) / 128.0)));
-            _int2.Y = (int) Math.Round(Conversion.Int((double) (((double) Horizontal.Y) / 128.0)));
+            _int2.X = (int) Math.Round(((double) (((double) Horizontal.X) / 128.0)));
+            _int2.Y = (int) Math.Round(((double) (((double) Horizontal.Y) / 128.0)));
             return _int2;
         }
 
@@ -1474,8 +1474,8 @@
             double height;
             double num7;
             double num8;
-            int amount = (int) Math.Round(Conversion.Int((double) (((double) Horizontal.X) / 128.0)));
-            int num14 = (int) Math.Round(Conversion.Int((double) (((double) Horizontal.Y) / 128.0)));
+            int amount = (int) Math.Round(((double) (((double) Horizontal.X) / 128.0)));
+            int num14 = (int) Math.Round(((double) (((double) Horizontal.Y) / 128.0)));
             double num4 = modMath.Clamp_dbl((((double) Horizontal.X) / 128.0) - amount, 0.0, 1.0);
             double num5 = modMath.Clamp_dbl((((double) Horizontal.Y) / 128.0) - num14, 0.0, 1.0);
             int num9 = modMath.Clamp_int(amount, 0, this.Terrain.TileSize.X - 1);
@@ -1528,8 +1528,8 @@
             Position.XYZ_dbl _dbl;
             Position.XYZ_dbl _dbl2;
             Position.XYZ_dbl _dbl3;
-            int amount = (int) Math.Round(Conversion.Int((double) (((double) Horizontal.X) / 128.0)));
-            int num12 = (int) Math.Round(Conversion.Int((double) (((double) Horizontal.Y) / 128.0)));
+            int amount = (int) Math.Round(((double) (((double) Horizontal.X) / 128.0)));
+            int num12 = (int) Math.Round(((double) (((double) Horizontal.Y) / 128.0)));
             double num4 = modMath.Clamp_dbl((((double) Horizontal.X) / 128.0) - amount, 0.0, 1.0);
             double num5 = modMath.Clamp_dbl((((double) Horizontal.Y) / 128.0) - num12, 0.0, 1.0);
             int num7 = modMath.Clamp_int(amount, 0, this.Terrain.TileSize.X - 1);
@@ -1581,8 +1581,8 @@
 
         public bool GetTerrainTri(modMath.sXY_int Horizontal)
         {
-            int amount = (int) Math.Round(Conversion.Int((double) (((double) Horizontal.X) / 128.0)));
-            int num6 = (int) Math.Round(Conversion.Int((double) (((double) Horizontal.Y) / 128.0)));
+            int amount = (int) Math.Round(((double) (((double) Horizontal.X) / 128.0)));
+            int num6 = (int) Math.Round(((double) (((double) Horizontal.Y) / 128.0)));
             double num = modMath.Clamp_dbl((((double) Horizontal.X) / 128.0) - amount, 0.0, 1.0);
             double num2 = modMath.Clamp_dbl((((double) Horizontal.Y) / 128.0) - num6, 0.0, 1.0);
             int num3 = modMath.Clamp_int(amount, 0, this.Terrain.TileSize.X - 1);
@@ -1611,8 +1611,8 @@
         public modMath.sXY_int GetTileSectorNum(modMath.sXY_int Tile)
         {
             modMath.sXY_int _int2;
-            _int2.X = (int) Math.Round(Conversion.Int((double) (((double) Tile.X) / 8.0)));
-            _int2.Y = (int) Math.Round(Conversion.Int((double) (((double) Tile.Y) / 8.0)));
+            _int2.X = (int) Math.Round(((double) (((double) Tile.X) / 8.0)));
+            _int2.Y = (int) Math.Round(((double) (((double) Tile.Y) / 8.0)));
             return _int2;
         }
 
@@ -3647,9 +3647,9 @@
                     {
                         num10 = (num12 * this.Terrain.TileSize.X) + num11;
                         this.Terrain.Tiles[num11, num12].Texture.TextureNum = tileArray[num10].TID - 1;
-                        num = (int) Math.Round(Conversion.Int((double) (((double) tileArray[num10].F) / 64.0)));
+                        num = (int) Math.Round(((double) (((double) tileArray[num10].F) / 64.0)));
                         tileArray[num10].F = (short) (tileArray[num10].F - (num * 0x40));
-                        num = (int) Math.Round(Conversion.Int((double) (((double) tileArray[num10].F) / 16.0)));
+                        num = (int) Math.Round(((double) (((double) tileArray[num10].F) / 16.0)));
                         tileArray[num10].F = (short) (tileArray[num10].F - (num * 0x10));
                         if ((num < 0) | (num > 3))
                         {
@@ -3657,17 +3657,17 @@
                             return output;
                         }
                         byte oldRotation = (byte) num;
-                        num = (int) Math.Round(Conversion.Int((double) (((double) tileArray[num10].F) / 8.0)));
+                        num = (int) Math.Round(((double) (((double) tileArray[num10].F) / 8.0)));
                         sLNDTile[] tileArray2 = tileArray;
                         num14 = num10;
                         tileArray2[num14].F = (short) (tileArray2[num14].F - ((short) (num * 8)));
                         bool oldFlipZ = num == 1;
-                        num = (int) Math.Round(Conversion.Int((double) (((double) tileArray[num10].F) / 4.0)));
+                        num = (int) Math.Round(((double) (((double) tileArray[num10].F) / 4.0)));
                         tileArray2 = tileArray;
                         num14 = num10;
                         tileArray2[num14].F = (short) (tileArray2[num14].F - ((short) (num * 4)));
                         bool oldFlipX = num == 1;
-                        num = (int) Math.Round(Conversion.Int((double) (((double) tileArray[num10].F) / 2.0)));
+                        num = (int) Math.Round(((double) (((double) tileArray[num10].F) / 2.0)));
                         tileArray2 = tileArray;
                         num14 = num10;
                         tileArray2[num14].F = (short) (tileArray2[num14].F - ((short) (num * 2)));
@@ -5140,7 +5140,7 @@
                 int num13 = this.Terrain.TileSize.X;
                 for (num7 = 0; num7 <= num13; num7++)
                 {
-                    this.Terrain.Vertices[num7, num8].Height = (byte) Math.Round(Conversion.Int((double) (heightmap2.HeightData.Height[num8, num7] * heightmap2.HeightScale)));
+                    this.Terrain.Vertices[num7, num8].Height = (byte) Math.Round(((double) (heightmap2.HeightData.Height[num8, num7] * heightmap2.HeightScale)));
                 }
             }
         }
@@ -5515,7 +5515,7 @@
                     for (int j = 0; j <= num8; j++)
                     {
                         int num3 = File.ReadByte();
-                        int num2 = (int) Math.Round(Conversion.Int((double) (((double) num3) / 64.0)));
+                        int num2 = (int) Math.Round(((double) (((double) num3) / 64.0)));
                         if (num2 > 0)
                         {
                             if (num4 < 0x10)
@@ -5525,7 +5525,7 @@
                             num4++;
                         }
                         num3 -= num2 * 0x40;
-                        num2 = (int) Math.Round(Conversion.Int((double) (((double) num3) / 8.0)));
+                        num2 = (int) Math.Round(((double) (((double) num3) / 8.0)));
                         switch (num2)
                         {
                             case 0:
@@ -5558,10 +5558,10 @@
                                 break;
                         }
                         num3 -= num2 * 8;
-                        num2 = (int) Math.Round(Conversion.Int((double) (((double) num3) / 4.0)));
+                        num2 = (int) Math.Round(((double) (((double) num3) / 4.0)));
                         this.Terrain.Tiles[j, i].Terrain_IsCliff = num2 > 0;
                         num3 -= num2 * 4;
-                        num2 = (int) Math.Round(Conversion.Int((double) (((double) num3) / 2.0)));
+                        num2 = (int) Math.Round(((double) (((double) num3) / 2.0)));
                         if (this.Terrain.Tiles[j, i].Tri)
                         {
                             this.Terrain.Tiles[j, i].TriTopLeftIsCliff = num2 > 0;
@@ -5630,13 +5630,13 @@
                             num3++;
                         }
                         num2 -= num * 0x10;
-                        num = (int) Math.Round(Conversion.Int((double) (((double) num2) / 8.0)));
+                        num = (int) Math.Round(((double) (((double) num2) / 8.0)));
                         this.Terrain.Tiles[j, i].Texture.Orientation.SwitchedAxes = num > 0;
                         num2 -= num * 8;
-                        num = (int) Math.Round(Conversion.Int((double) (((double) num2) / 4.0)));
+                        num = (int) Math.Round(((double) (((double) num2) / 4.0)));
                         this.Terrain.Tiles[j, i].Texture.Orientation.ResultXFlip = num > 0;
                         num2 -= num * 4;
-                        num = (int) Math.Round(Conversion.Int((double) (((double) num2) / 2.0)));
+                        num = (int) Math.Round(((double) (((double) num2) / 2.0)));
                         this.Terrain.Tiles[j, i].Texture.Orientation.ResultYFlip = num > 0;
                         num2 -= num * 2;
                         num = num2;
@@ -5921,27 +5921,27 @@
                             this.Terrain.Tiles[num12, num13].Texture.TextureNum = num5 - 1;
                             num5 = File.ReadByte();
                             num6 = 0x80;
-                            num2 = (int) Math.Round(Conversion.Int((double) (((double) num5) / ((double) num6))));
+                            num2 = (int) Math.Round(((double) (((double) num5) / ((double) num6))));
                             num5 = (byte) (num5 - ((byte) (num2 * num6)));
                             this.Terrain.Tiles[num12, num13].Terrain_IsCliff = num2 == 1;
                             num6 = 0x40;
-                            num2 = (int) Math.Round(Conversion.Int((double) (((double) num5) / ((double) num6))));
+                            num2 = (int) Math.Round(((double) (((double) num5) / ((double) num6))));
                             num5 = (byte) (num5 - ((byte) (num2 * num6)));
                             this.Terrain.Tiles[num12, num13].Texture.Orientation.SwitchedAxes = num2 == 1;
                             num6 = 0x20;
-                            num2 = (int) Math.Round(Conversion.Int((double) (((double) num5) / ((double) num6))));
+                            num2 = (int) Math.Round(((double) (((double) num5) / ((double) num6))));
                             num5 = (byte) (num5 - ((byte) (num2 * num6)));
                             this.Terrain.Tiles[num12, num13].Texture.Orientation.ResultXFlip = num2 == 1;
                             num6 = 0x10;
-                            num2 = (int) Math.Round(Conversion.Int((double) (((double) num5) / ((double) num6))));
+                            num2 = (int) Math.Round(((double) (((double) num5) / ((double) num6))));
                             num5 = (byte) (num5 - ((byte) (num2 * num6)));
                             this.Terrain.Tiles[num12, num13].Texture.Orientation.ResultYFlip = num2 == 1;
                             num6 = 4;
-                            num2 = (int) Math.Round(Conversion.Int((double) (((double) num5) / ((double) num6))));
+                            num2 = (int) Math.Round(((double) (((double) num5) / ((double) num6))));
                             num5 = (byte) (num5 - ((byte) (num2 * num6)));
                             this.Terrain.Tiles[num12, num13].Tri = num2 == 1;
                             num6 = 2;
-                            num2 = (int) Math.Round(Conversion.Int((double) (((double) num5) / ((double) num6))));
+                            num2 = (int) Math.Round(((double) (((double) num5) / ((double) num6))));
                             num5 = (byte) (num5 - ((byte) (num2 * num6)));
                             if (this.Terrain.Tiles[num12, num13].Tri)
                             {
@@ -5952,7 +5952,7 @@
                                 this.Terrain.Tiles[num12, num13].TriBottomLeftIsCliff = num2 == 1;
                             }
                             num6 = 1;
-                            num2 = (int) Math.Round(Conversion.Int((double) (((double) num5) / ((double) num6))));
+                            num2 = (int) Math.Round(((double) (((double) num5) / ((double) num6))));
                             num5 = (byte) (num5 - ((byte) (num2 * num6)));
                             if (this.Terrain.Tiles[num12, num13].Tri)
                             {
@@ -6615,17 +6615,17 @@
                         this.Terrain.Tiles[j, i].Texture.TextureNum = num6;
                         byte num2 = File.ReadByte();
                         this.Terrain.Vertices[j, i].Height = File.ReadByte();
-                        num = (int) Math.Round(Conversion.Int((double) (((double) num2) / 128.0)));
+                        num = (int) Math.Round(((double) (((double) num2) / 128.0)));
                         num2 = (byte) (num2 - ((byte) (num * 0x80)));
                         bool oldFlipX = num == 1;
-                        num = (int) Math.Round(Conversion.Int((double) (((double) num2) / 64.0)));
+                        num = (int) Math.Round(((double) (((double) num2) / 64.0)));
                         num2 = (byte) (num2 - ((byte) (num * 0x40)));
                         bool oldFlipZ = num == 1;
-                        num = (int) Math.Round(Conversion.Int((double) (((double) num2) / 16.0)));
+                        num = (int) Math.Round(((double) (((double) num2) / 16.0)));
                         num2 = (byte) (num2 - ((byte) (num * 0x10)));
                         byte oldRotation = (byte) num;
                         TileOrientation.OldOrientation_To_TileOrientation(oldRotation, oldFlipX, oldFlipZ, ref this.Terrain.Tiles[j, i].Texture.Orientation);
-                        num = (int) Math.Round(Conversion.Int((double) (((double) num2) / 8.0)));
+                        num = (int) Math.Round(((double) (((double) num2) / 8.0)));
                         num2 = (byte) (num2 - ((byte) (num * 8)));
                         this.Terrain.Tiles[j, i].Tri = num == 1;
                     }
@@ -11050,7 +11050,7 @@
                 this.DifB = this.HeightB - this.HeightA;
                 if (Math.Abs(this.DifA) == Math.Abs(this.DifB))
                 {
-                    this.RandomNum = (int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * 4f)));
+                    this.RandomNum = (int) Math.Round((double) ((float) (App.Random.Next() * 4f)));
                     if (this.RandomNum == 0)
                     {
                         this.Terrain.Tiles[this.PosNum.X, this.PosNum.Y].DownSide = TileOrientation.TileDirection_Top;
@@ -11282,7 +11282,7 @@
                     double num3 = num5 - num4;
                     if (Math.Abs(num2) == Math.Abs(num3))
                     {
-                        switch (((int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * 4f)))))
+                        switch (((int) Math.Round((double) ((float) (App.Random.Next() * 4f)))))
                         {
                             case 0:
                                 this.Terrain.Tiles[this.PosNum.X, this.PosNum.Y].DownSide = TileOrientation.TileDirection_Top;
@@ -12423,9 +12423,9 @@
                 int num;
                 GL.Begin(BeginMode.LineStrip);
                 GL.Color4(this.Colour.Red, this.Colour.Green, this.Colour.Blue, this.Colour.Alpha);
-                this.StartTile.Y = (int) Math.Round(Conversion.Int((double) (((double) this.StartXY.Y) / 128.0)));
-                this.FinishTile.Y = (int) Math.Round(Conversion.Int((double) (((double) this.FinishXY.Y) / 128.0)));
-                this.LastXTile = (int) Math.Round(Conversion.Int((double) (((double) this.StartXY.X) / 128.0)));
+                this.StartTile.Y = (int) Math.Round(((double) (((double) this.StartXY.Y) / 128.0)));
+                this.FinishTile.Y = (int) Math.Round(((double) (((double) this.FinishXY.Y) / 128.0)));
+                this.LastXTile = (int) Math.Round(((double) (((double) this.StartXY.X) / 128.0)));
                 this.Horizontal = this.StartXY;
                 this.Vertex.X = this.Horizontal.X;
                 this.Vertex.Y = (int) Math.Round(this.Map.GetTerrainHeight(this.Horizontal));
@@ -12444,7 +12444,7 @@
                         if (this.IntersectY.Exists)
                         {
                             this.StartTile.X = this.LastXTile;
-                            this.FinishTile.X = (int) Math.Round(Conversion.Int((double) (((double) this.IntersectY.Pos.X) / 128.0)));
+                            this.FinishTile.X = (int) Math.Round(((double) (((double) this.IntersectY.Pos.X) / 128.0)));
                             int x = this.FinishTile.X;
                             num = this.StartTile.X + 1;
                             while (num <= x)
@@ -12476,7 +12476,7 @@
                 else
                 {
                     this.StartTile.X = this.LastXTile;
-                    this.FinishTile.X = (int) Math.Round(Conversion.Int((double) (((double) this.FinishXY.X) / 128.0)));
+                    this.FinishTile.X = (int) Math.Round(((double) (((double) this.FinishXY.X) / 128.0)));
                     int num5 = this.FinishTile.X;
                     for (num = this.StartTile.X + 1; num <= num5; num++)
                     {
@@ -15430,7 +15430,7 @@
                 clsMap.clsUnit unit = new clsMap.clsUnit();
                 if (this.RandomizeRotation)
                 {
-                    unit.Rotation = (int) Math.Round(Conversion.Int((double) (App.Random.Next() * 360.0)));
+                    unit.Rotation = (int) Math.Round(((double) (App.Random.Next() * 360.0)));
                 }
                 else
                 {

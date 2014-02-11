@@ -1,5 +1,4 @@
 using System;
-using Microsoft.VisualBasic;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
 using SharpFlame.Maths;
@@ -33,9 +32,9 @@ namespace SharpFlame.Mapping.Drawing
             GL.Begin(BeginMode.LineStrip);
             GL.Color4(Colour.Red, Colour.Green, Colour.Blue, Colour.Alpha);
 
-            StartTile.Y = (int)(Conversion.Int(StartXY.Y / App.TerrainGridSpacing));
-            FinishTile.Y = Conversion.Int(FinishXY.Y / App.TerrainGridSpacing);
-            LastXTile = Conversion.Int(StartXY.X / App.TerrainGridSpacing);
+            StartTile.Y = (int)(StartXY.Y / App.TerrainGridSpacing);
+            FinishTile.Y = FinishXY.Y / App.TerrainGridSpacing;
+            LastXTile = StartXY.X / App.TerrainGridSpacing;
 
             Horizontal = StartXY;
             Vertex.X = Horizontal.X;
@@ -55,7 +54,7 @@ namespace SharpFlame.Mapping.Drawing
                     if ( IntersectY.Exists )
                     {
                         StartTile.X = LastXTile;
-                        FinishTile.X = (int)(Conversion.Int(IntersectY.Pos.X / App.TerrainGridSpacing));
+                        FinishTile.X = (int)(IntersectY.Pos.X / App.TerrainGridSpacing);
 
                         for ( X = StartTile.X + 1; X <= FinishTile.X; X++ )
                         {
@@ -87,7 +86,7 @@ namespace SharpFlame.Mapping.Drawing
             else
             {
                 StartTile.X = LastXTile;
-                FinishTile.X = Conversion.Int(FinishXY.X / App.TerrainGridSpacing);
+                FinishTile.X = FinishXY.X / App.TerrainGridSpacing;
                 for ( X = StartTile.X + 1; X <= FinishTile.X; X++ )
                 {
                     TileEdgeStart.X = X * App.TerrainGridSpacing;

@@ -668,7 +668,7 @@
                 Angle = num3,
                 SetTris = true
             };
-            num2.Normal = new modMath.sXY_int((int) Math.Round(Conversion.Int((double) (((double) this.Generator.Map.Terrain.TileSize.X) / 2.0))), (int) Math.Round(Conversion.Int((double) (((double) this.Generator.Map.Terrain.TileSize.Y) / 2.0))));
+            num2.Normal = new modMath.sXY_int((int) Math.Round(((double) (((double) this.Generator.Map.Terrain.TileSize.X) / 2.0))), (int) Math.Round(((double) (((double) this.Generator.Map.Terrain.TileSize.Y) / 2.0))));
             num2.Alignment = num2.Normal;
             brush.PerformActionMapTiles(tool, num2);
             clsBooleanMap exterior = new clsBooleanMap();
@@ -2017,7 +2017,7 @@
             {
                 return 0;
             }
-            int num2 = (int) Math.Round(Conversion.Int((double) (modMath.Clamp_dbl(num, Min, Max) * Multiplier)));
+            int num2 = (int) Math.Round(((double) (modMath.Clamp_dbl(num, Min, Max) * Multiplier)));
             TextBoxToValidate.Text = modIO.InvariantToString_sng((float) (((double) num2) / Multiplier));
             return num2;
         }

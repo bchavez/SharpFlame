@@ -239,8 +239,8 @@
                         {
                             modMath.sXY_int _int;
                             num = modProgram.SelectedTextureNum - (this.TextureYOffset * this.TextureCount.X);
-                            _int.X = num - (((int) Math.Round(Conversion.Int((double) (((double) num) / ((double) this.TextureCount.X))))) * this.TextureCount.X);
-                            _int.Y = (int) Math.Round(Conversion.Int((double) (((double) num) / ((double) this.TextureCount.X))));
+                            _int.X = num - (((int) Math.Round(((double) (((double) num) / ((double) this.TextureCount.X))))) * this.TextureCount.X);
+                            _int.Y = (int) Math.Round(((double) (((double) num) / ((double) this.TextureCount.X))));
                             GL.Begin(BeginMode.LineLoop);
                             GL.Color3((float) 1f, (float) 1f, (float) 0f);
                             GL.Vertex2((int) (_int.X * 0x40), (int) (_int.Y * 0x40));
@@ -375,7 +375,7 @@
                 }
                 else if ((((e.X >= 0) & (e.X < (this.TextureCount.X * 0x40))) & (e.Y >= 0)) & (e.Y < (this.TextureCount.Y * 0x40)))
                 {
-                    modProgram.SelectedTextureNum = ((this.TextureYOffset + ((int) Math.Round(Conversion.Int((double) (((double) e.Y) / 64.0))))) * this.TextureCount.X) + ((int) Math.Round(Conversion.Int((double) (((double) e.X) / 64.0))));
+                    modProgram.SelectedTextureNum = ((this.TextureYOffset + ((int) Math.Round(((double) (((double) e.Y) / 64.0))))) * this.TextureCount.X) + ((int) Math.Round(((double) (((double) e.X) / 64.0))));
                     if (modProgram.SelectedTextureNum >= mainMap.Tileset.TileCount)
                     {
                         modProgram.SelectedTextureNum = -1;

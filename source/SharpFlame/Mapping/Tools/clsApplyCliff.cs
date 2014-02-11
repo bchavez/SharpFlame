@@ -37,7 +37,7 @@ namespace SharpFlame.Mapping.Tools
             DifB = HeightB - HeightA;
             if ( Math.Abs(DifA) == Math.Abs(DifB) )
             {
-                RandomNum = (int)(Conversion.Int(App.Random.Next() * 4.0F));
+                RandomNum = (int)((App.Random.Next() * 4.0F));
                 if ( RandomNum == 0 )
                 {
                     Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileUtil.Top;
