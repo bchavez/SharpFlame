@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
-using Microsoft.VisualBasic;
 using SharpFlame.Bitmaps;
 using SharpFlame.Maths;
 using SharpFlame.Util;

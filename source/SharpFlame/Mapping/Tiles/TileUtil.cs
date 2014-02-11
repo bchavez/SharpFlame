@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using Matrix3D;
-using Microsoft.VisualBasic;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
 

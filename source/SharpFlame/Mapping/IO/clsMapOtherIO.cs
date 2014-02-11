@@ -2,7 +2,6 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Text;
-using Microsoft.VisualBasic;
 using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
@@ -21,8 +20,8 @@ namespace SharpFlame.Mapping
         public clsResult Load_FME(string Path)
         {
             clsResult ReturnResult =
-                new clsResult("Loading FME from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote), false);
-            logger.Info ("Loading FME from " + Convert.ToString (ControlChars.Quote) + Path + Convert.ToString (ControlChars.Quote));
+                new clsResult("Loading FME from \"{0}\"".Format2(Path), false);
+            logger.Info ("Loading FME from \"{0}\"".Format2(Path));
 
             BinaryReader File = default(BinaryReader);
 
@@ -285,12 +284,7 @@ namespace SharpFlame.Mapping
                     sFMEUnit[] TempUnit = new sFMEUnit[(Convert.ToInt32(TempUnitCount))];
                     for ( A = 0; A <= (Convert.ToInt32(TempUnitCount)) - 1; A++ )
                     {
-                        TempUnit[A].Code = new string(File.ReadChars(40));
-                        B = Strings.InStr(TempUnit[A].Code, Convert.ToString('\0'), (CompareMethod)0);
-                        if ( B > 0 )
-                        {
-                            TempUnit[A].Code = Strings.Left(TempUnit[A].Code, B - 1);
-                        }
+                        TempUnit[A].Code = new string(File.ReadChars(40)).Trim('\0');
                         TempUnit[A].LNDType = File.ReadByte();
                         TempUnit[A].ID = File.ReadUInt32();
                         if ( Version == 6U )
@@ -485,8 +479,8 @@ namespace SharpFlame.Mapping
         public clsResult Load_LND(string Path)
         {
             clsResult ReturnResult =
-                new clsResult("Loading LND from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote), false);
-            logger.Info ("Loading LND from " + Convert.ToString (ControlChars.Quote) + Path + Convert.ToString (ControlChars.Quote));
+                new clsResult("Loading LND from \"{0}\"".Format2(Path), false);
+            logger.Info ("Loading LND from \"{0}\"".Format2(Path));
             try
             {
                 string strTemp = "";
@@ -689,11 +683,11 @@ namespace SharpFlame.Mapping
                                 }
                                 else
                                 {
-                                    strTemp2 = Strings.Right(strTemp, strTemp.Length - A - 2);
-                                    A = strTemp2.IndexOf(" ") + 1;
+                                    strTemp2 = strTemp.Substring(strTemp.Length - A - 2, strTemp.Length - A - 2);
+                                    A = strTemp2.IndexOf(" ");
                                     if ( A > 0 )
                                     {
-                                        strTemp2 = strTemp2.Substring(0, A - 1);
+                                        strTemp2 = strTemp2.Substring(0, A);
                                     }
                                     short temp_Result4 = LNDTile[Tile_Num].F;
                                     IOUtil.InvariantParse(strTemp2, ref temp_Result4);
@@ -1139,9 +1133,9 @@ namespace SharpFlame.Mapping
         public clsResult Write_LND(string Path, bool Overwrite)
         {
             clsResult ReturnResult =
-                new clsResult("Writing LND to " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote), false);
+                new clsResult("Writing LND to \"{0}\"".Format2(Path), false);
 
-            logger.Info ("Writing LND to " + Convert.ToString (ControlChars.Quote) + Path + Convert.ToString (ControlChars.Quote));
+            logger.Info ("Writing LND to \"{0}\"".Format2(Path));
 
             if ( System.IO.File.Exists(Path) )
             {
@@ -1174,7 +1168,7 @@ namespace SharpFlame.Mapping
                 byte Rotation = 0;
                 bool FlipX = default(bool);
 
-                Quote = ControlChars.Quote;
+                Quote = '\"';
                 EndChar = '\n';
 
                 File = new StreamWriter(new FileStream(Path, FileMode.CreateNew), new UTF8Encoding(false, false));

@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using ICSharpCode.SharpZipLib.Zip;
-using Microsoft.VisualBasic;
 using NLog;
 using SharpFlame.Collections;
 using SharpFlame.Domain;
@@ -72,25 +71,25 @@ namespace SharpFlame.Mapping
                         ZipStream.Close();
                         return ReturnResult;
                     }
-                    BinaryReader Reader = new BinaryReader(ZipStream);
-                    SimpleList<string> LineData = IOUtil.BytesToLinesRemoveComments(Reader);
+                    BinaryReader reader = new BinaryReader(ZipStream);
+                    SimpleList<string> LineData = IOUtil.BytesToLinesRemoveComments(reader);
                     //find each level block
                     for ( A = 0; A <= LineData.Count - 1; A++ )
                     {
-                        if ( Strings.LCase(Strings.Left(LineData[A], 5)) == "level" )
+                        if ( LineData[A].Length > 4 && LineData[A].Substring(0, 5).ToLower() == "level" )
                         {
                             //find each levels game file
                             GameFound = false;
                             B = 1;
                             while ( A + B < LineData.Count )
                             {
-                                if ( Strings.LCase(Strings.Left(Convert.ToString(LineData[A + B]), 4)) == "game" )
+                                if ( LineData[A + B].Substring(0, 4).ToLower() == "game" )
                                 {
-                                    C = Strings.InStr(Convert.ToString(LineData[A + B]), Quote, (CompareMethod)0);
-                                    D = Strings.InStrRev(Convert.ToString(LineData[A + B]), Quote, -1, (CompareMethod)0);
+                                    C = LineData[A + B].IndexOf(Quote);
+                                    D = LineData[A + B].IndexOf(Quote, C+1);
                                     if ( C > 0 & D > 0 & D - C > 1 )
                                     {
-                                        GameName = Strings.LCase(Strings.Mid(Convert.ToString(LineData[A + B]), C + 1, D - C - 1));
+                                        GameName = LineData[A + B].Substring(C+1, D - C - 1);
                                         //see if map is already counted
                                         for ( C = 0; C <= Maps.Count - 1; C++ )
                                         {
@@ -106,7 +105,7 @@ namespace SharpFlame.Mapping
                                     }
                                     break;
                                 }
-                                else if ( Strings.LCase(Strings.Left(Convert.ToString(LineData[A + B]), 5)) == "level" )
+                                else if ( LineData[A + B].Substring(0, 5).ToLower() == "level" )
                                 {
                                     break;
                                 }
@@ -119,9 +118,9 @@ namespace SharpFlame.Mapping
                                 B = 1;
                                 while ( A + B < LineData.Count )
                                 {
-                                    if ( Strings.LCase(Strings.Left(Convert.ToString(LineData[A + B]), 7)) == "dataset" )
+                                    if ( LineData[A + B].Substring(0, 7).ToLower() == "dataset" )
                                     {
-                                        strTemp = Strings.LCase(Strings.Right(Convert.ToString(LineData[A + B]), 1));
+                                        strTemp = LineData[A + B].Substring(LineData[A + B].Length - 1, 1);
                                         if ( strTemp == "1" )
                                         {
                                             GameTileset = App.Tileset_Arizona;
@@ -139,7 +138,7 @@ namespace SharpFlame.Mapping
                                         }
                                         break;
                                     }
-                                    else if ( Strings.LCase(Strings.Left(Convert.ToString(LineData[A + B]), 5)) == "level" )
+                                    else if ( LineData[A + B].Substring(0, 5).ToLower() == "level" )
                                     {
                                         break;
                                     }
@@ -415,10 +414,10 @@ namespace SharpFlame.Mapping
         public clsResult Load_Game(string Path)
         {
             clsResult ReturnResult =
-                new clsResult("Loading game file from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote), false);
-            logger.Info ("Loading game file from " + Convert.ToString (ControlChars.Quote) + Path + Convert.ToString (ControlChars.Quote));
+                new clsResult("Loading game file from \"{0}\"".Format2(Path), false);
+            logger.Info ("Loading game file from \"{0}\"".Format2(Path));
             sResult SubResult = new sResult();
-            string Quote = ControlChars.Quote.ToString();
+            string Quote = "\"";
 
             Tileset = null;
 
@@ -452,11 +451,9 @@ namespace SharpFlame.Mapping
             SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "game.map", ref File);
             if ( !SubResult.Success )
             {
-                MsgBoxResult PromptResult =
-                    Interaction.MsgBox(
-                        "game.map file not found at " + GameFilesPath + ControlChars.NewLine + "Do you want to select another directory to load the underlying map from?",
-                        (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question), null);
-                if ( PromptResult != MsgBoxResult.Ok )
+                if (MessageBox.Show("game.map file not found at \"{0}\"\n" +
+                    "Do you want to select another directory to load the underlying map from?".Format2(GameFilesPath), 
+                                    "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.Cancel)
                 {
                     ReturnResult.ProblemAdd("Aborted.");
                     return ReturnResult;
@@ -1227,9 +1224,7 @@ namespace SharpFlame.Mapping
                 Version = File.ReadUInt32();
                 if ( Version != 8U )
                 {
-                    if (
-                        Interaction.MsgBox("Game file version is unknown. Continue?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question),
-                            null) != MsgBoxResult.Ok )
+                    if ( MessageBox.Show("Game file version is unknown. Continue?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK )
                     {
                         ReturnResult.Problem = "Aborted.";
                         return ReturnResult;
@@ -1293,9 +1288,7 @@ namespace SharpFlame.Mapping
                 Version = File.ReadUInt32();
                 if ( Version != 10U )
                 {
-                    if (
-                        Interaction.MsgBox("game.map version is unknown. Continue?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question),
-                            null) != MsgBoxResult.Ok )
+                    if ( MessageBox.Show("game.map version is unknown. Continue?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK )
                     {
                         ReturnResult.Problem = "Aborted.";
                         return ReturnResult;
@@ -1399,9 +1392,7 @@ namespace SharpFlame.Mapping
                 Version = File.ReadUInt32();
                 if ( Version != 8U )
                 {
-                    if (
-                        Interaction.MsgBox("feat.bjo version is unknown. Continue?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question),
-                            null) != MsgBoxResult.Ok )
+                    if ( MessageBox.Show("feat.bjo version is unknown. Continue?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK )
                     {
                         ReturnResult.Problem = "Aborted.";
                         return ReturnResult;
@@ -1414,11 +1405,7 @@ namespace SharpFlame.Mapping
                     WZBJOUnit = new clsWZBJOUnit();
                     WZBJOUnit.ObjectType = UnitType.Feature;
                     WZBJOUnit.Code = IOUtil.ReadOldTextOfLength(File, 40);
-                    B = Strings.InStr(WZBJOUnit.Code, Convert.ToString('\0'), (CompareMethod)0);
-                    if ( B > 0 )
-                    {
-                        WZBJOUnit.Code = Strings.Left(WZBJOUnit.Code, B - 1);
-                    }
+                    WZBJOUnit.Code = WZBJOUnit.Code.Substring(0, WZBJOUnit.Code.IndexOf('\0'));
                     WZBJOUnit.ID = File.ReadUInt32();
                     WZBJOUnit.Pos.Horizontal.X = (int)(File.ReadUInt32());
                     WZBJOUnit.Pos.Horizontal.Y = (int)(File.ReadUInt32());
@@ -1465,9 +1452,7 @@ namespace SharpFlame.Mapping
                 {
                     //Load_WZ.Problem = "Unknown ttypes.ttp version."
                     //Exit Function
-                    if (
-                        Interaction.MsgBox("ttypes.ttp version is unknown. Continue?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question),
-                            null) != MsgBoxResult.Ok )
+                    if ( MessageBox.Show("ttypes.ttp version is unknown. Continue?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK )
                     {
                         ReturnResult.Problem = "Aborted.";
                         return ReturnResult;
@@ -1525,9 +1510,7 @@ namespace SharpFlame.Mapping
                 Version = File.ReadUInt32();
                 if ( Version != 8U )
                 {
-                    if (
-                        Interaction.MsgBox("struct.bjo version is unknown. Continue?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question),
-                            null) != MsgBoxResult.Ok )
+                    if ( MessageBox.Show("struct.bjo version is unknown. Continue?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK )
                     {
                         ReturnResult.Problem = "Aborted.";
                         return ReturnResult;
@@ -1540,11 +1523,7 @@ namespace SharpFlame.Mapping
                     WZBJOUnit = new clsWZBJOUnit();
                     WZBJOUnit.ObjectType = UnitType.PlayerStructure;
                     WZBJOUnit.Code = IOUtil.ReadOldTextOfLength(File, 40);
-                    B = Strings.InStr(WZBJOUnit.Code, Convert.ToString('\0'), (CompareMethod)0);
-                    if ( B > 0 )
-                    {
-                        WZBJOUnit.Code = Strings.Left(WZBJOUnit.Code, B - 1);
-                    }
+                    WZBJOUnit.Code = WZBJOUnit.Code.Substring(0, WZBJOUnit.Code.IndexOf('\0'));
                     WZBJOUnit.ID = File.ReadUInt32();
                     WZBJOUnit.Pos.Horizontal.X = (int)(File.ReadUInt32());
                     WZBJOUnit.Pos.Horizontal.Y = (int)(File.ReadUInt32());
@@ -1590,9 +1569,7 @@ namespace SharpFlame.Mapping
                 Version = File.ReadUInt32();
                 if ( Version > 19U )
                 {
-                    if (
-                        Interaction.MsgBox("dinit.bjo version is unknown. Continue?", (MsgBoxStyle)(MsgBoxStyle.OkCancel | MsgBoxStyle.Question),
-                            null) != MsgBoxResult.Ok )
+                    if ( MessageBox.Show("dinit.bjo version is unknown. Continue?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK )
                     {
                         ReturnResult.Problem = "Aborted.";
                         return ReturnResult;
@@ -1605,11 +1582,7 @@ namespace SharpFlame.Mapping
                     WZBJOUnit = new clsWZBJOUnit();
                     WZBJOUnit.ObjectType = UnitType.PlayerDroid;
                     WZBJOUnit.Code = IOUtil.ReadOldTextOfLength(File, 40);
-                    B = Strings.InStr(WZBJOUnit.Code, Convert.ToString('\0'), (CompareMethod)0);
-                    if ( B > 0 )
-                    {
-                        WZBJOUnit.Code = Strings.Left(WZBJOUnit.Code, B - 1);
-                    }
+                    WZBJOUnit.Code = WZBJOUnit.Code.Substring(0, WZBJOUnit.Code.IndexOf('\0'));
                     WZBJOUnit.ID = File.ReadUInt32();
                     WZBJOUnit.Pos.Horizontal.X = (int)(File.ReadUInt32());
                     WZBJOUnit.Pos.Horizontal.Y = (int)(File.ReadUInt32());
@@ -1635,7 +1608,6 @@ namespace SharpFlame.Mapping
             clsResult ReturnResult = new clsResult("Reading labels", false);
             logger.Info ("Reading labels.");
 
-            int CharNum = 0;
             PositionFromText PositionsA = default(PositionFromText);
             PositionFromText PositionsB = default(PositionFromText);
             int TypeNum = 0;
@@ -1655,9 +1627,7 @@ namespace SharpFlame.Mapping
             foreach ( Section tempLoopVar_INISection in INI.Sections )
             {
                 INISection = tempLoopVar_INISection;
-                NameText = INISection.Name;
-                CharNum = NameText.IndexOf('_');
-                NameText = Strings.Left(NameText, CharNum);
+                NameText = INISection.Name.Substring(0, NameText.IndexOf('_') - 1);
                 switch ( NameText )
                 {
                     case "position":
@@ -1689,7 +1659,7 @@ namespace SharpFlame.Mapping
                     FailedCount++;
                     continue;
                 }
-                strLabel = strLabel.Replace((ControlChars.Quote).ToString(), "");
+                strLabel = strLabel.Replace("\"", "");
                 switch ( TypeNum )
                 {
                     case 0: //position
@@ -2249,7 +2219,8 @@ namespace SharpFlame.Mapping
         public clsResult Write_WZ(sWrite_WZ_Args Args)
         {
             clsResult ReturnResult =
-                new clsResult("Compiling to " + Convert.ToString(ControlChars.Quote) + Args.Path + Convert.ToString(ControlChars.Quote));
+                new clsResult("Compiling to \"{0}\"".Format2(Args.Path), false);
+            logger.Info ("Compiling to \"{0}\"".Format2(Args.Path));
 
             try
             {
@@ -2296,7 +2267,7 @@ namespace SharpFlame.Mapping
                     }
                 }
 
-                char Quote = ControlChars.Quote;
+                char Quote = '\"';
                 char EndChar = '\n';
                 string Text = "";
 
