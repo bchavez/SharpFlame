@@ -338,7 +338,7 @@ namespace SharpFlame.Mapping
                     difB = Math.Abs((Terrain.Vertices[X, Y + 1].Height) - Terrain.Vertices[X + 1, Y].Height);
                     if ( difA == difB )
                     {
-                        if ( VBMath.Rnd() >= 0.5F )
+                        if ( App.Random.Next() >= 0.5F )
                         {
                             NewTri = false;
                         }
@@ -555,7 +555,7 @@ namespace SharpFlame.Mapping
             {
                 for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
                 {
-                    Terrain.Tiles[X, Y].Texture.Orientation = new TileOrientation(VBMath.Rnd() >= 0.5F, VBMath.Rnd() >= 0.5F, VBMath.Rnd() >= 0.5F);
+                    Terrain.Tiles[X, Y].Texture.Orientation = new TileOrientation(App.Random.Next() >= 0.5F, App.Random.Next() >= 0.5F, App.Random.Next() >= 0.5F);
                 }
             }
             SectorTerrainUndoChanges.SetAllChanged();

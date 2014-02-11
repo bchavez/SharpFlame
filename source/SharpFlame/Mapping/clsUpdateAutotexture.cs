@@ -742,7 +742,7 @@ namespace SharpFlame.Mapping
                     else if ( RoadTop && RoadBottom )
                     {
                         ResultTiles = Painter.RoadBrushes[BrushNum].Tile_Straight;
-                        if ( VBMath.Rnd() >= 0.5F )
+                        if ( App.Random.Next() >= 0.5F )
                         {
                             ResultDirection = TileUtil.Top;
                         }
@@ -754,7 +754,7 @@ namespace SharpFlame.Mapping
                     else if ( RoadLeft && RoadRight )
                     {
                         ResultTiles = Painter.RoadBrushes[BrushNum].Tile_Straight;
-                        if ( VBMath.Rnd() >= 0.5F )
+                        if ( App.Random.Next() >= 0.5F )
                         {
                             ResultDirection = TileUtil.Left;
                         }

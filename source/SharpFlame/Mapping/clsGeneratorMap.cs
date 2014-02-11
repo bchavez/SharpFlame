@@ -446,19 +446,19 @@ namespace SharpFlame
                     PointIsValid = true;
                     if ( SymmetryBlockCountXY.X == 1 )
                     {
-                        NewPointPos.X = (int)(EdgeOffset + Conversion.Int(VBMath.Rnd() * (SymmetrySize.X - EdgeOffset * 2 + 1)));
+                        NewPointPos.X = (int)(EdgeOffset + Conversion.Int(App.Random.Next() * (SymmetrySize.X - EdgeOffset * 2 + 1)));
                     }
                     else
                     {
-                        NewPointPos.X = EdgeOffset + (int)(Conversion.Int(VBMath.Rnd() * (SymmetrySize.X - EdgeOffset + 1)));
+                        NewPointPos.X = EdgeOffset + (int)(Conversion.Int(App.Random.Next() * (SymmetrySize.X - EdgeOffset + 1)));
                     }
                     if ( SymmetryBlockCountXY.Y == 1 )
                     {
-                        NewPointPos.Y = EdgeOffset + (int)(Conversion.Int(VBMath.Rnd() * (SymmetrySize.Y - EdgeOffset * 2 + 1)));
+                        NewPointPos.Y = EdgeOffset + (int)(Conversion.Int(App.Random.Next() * (SymmetrySize.Y - EdgeOffset * 2 + 1)));
                     }
                     else
                     {
-                        NewPointPos.Y = EdgeOffset + Convert.ToInt32(Conversion.Int(VBMath.Rnd() * (SymmetrySize.Y - EdgeOffset + 1)));
+                        NewPointPos.Y = EdgeOffset + Convert.ToInt32(Conversion.Int(App.Random.Next() * (SymmetrySize.Y - EdgeOffset + 1)));
                     }
                     for ( A = 0; A <= PassageNodeCount - 1; A++ )
                     {
@@ -683,7 +683,7 @@ namespace SharpFlame
             B = 0;
             while ( PassageNodeListOrderCount > 0 )
             {
-                A = (int)(Conversion.Int(VBMath.Rnd() * PassageNodeListOrderCount));
+                A = (int)(Conversion.Int(App.Random.Next() * PassageNodeListOrderCount));
                 PassageNodeOrder[B] = PassageNodeListOrder[A];
                 B++;
                 PassageNodeListOrderCount--;
@@ -749,7 +749,7 @@ namespace SharpFlame
 
                 if ( BaseLevel < 0 )
                 {
-                    D = Convert.ToInt32(Conversion.Int(VBMath.Rnd() * LevelCount));
+                    D = Convert.ToInt32(Conversion.Int(App.Random.Next() * LevelCount));
                 }
                 else
                 {
@@ -2178,7 +2178,7 @@ namespace SharpFlame
                     }
                     else
                     {
-                        if ( VBMath.Rnd() >= 0.5F )
+                        if ( App.Random.Next() >= 0.5F )
                         {
                             NewUnit.Pos.Horizontal.X = (int)(NodeTag.Pos.X - App.TerrainGridSpacing / 2.0D);
                         }
@@ -2194,7 +2194,7 @@ namespace SharpFlame
                     }
                     else
                     {
-                        if ( VBMath.Rnd() >= 0.5F )
+                        if ( App.Random.Next() >= 0.5F )
                         {
                             NewUnit.Pos.Horizontal.Y = (int)(NodeTag.Pos.Y - App.TerrainGridSpacing / 2.0D);
                         }
@@ -2513,7 +2513,7 @@ namespace SharpFlame
                 {
                     if ( PassageNodes[D, A].PlayerBaseNum < 0 && !PassageNodes[D, A].IsOnBorder )
                     {
-                        PassageNodes[D, A].HasFeatureCluster = VBMath.Rnd() < FeatureClusterChance;
+                        PassageNodes[D, A].HasFeatureCluster = App.Random.Next() < FeatureClusterChance;
                     }
                 }
             }
@@ -2535,10 +2535,10 @@ namespace SharpFlame
                         if ( PassageNodes[D, A].HasFeatureCluster )
                         {
                             Count = FeatureClusterMinUnits +
-                                    Convert.ToInt32(Conversion.Int(VBMath.Rnd() * (FeatureClusterMaxUnits - FeatureClusterMinUnits + 1)));
+                                    Convert.ToInt32(Conversion.Int(App.Random.Next() * (FeatureClusterMaxUnits - FeatureClusterMinUnits + 1)));
                             for ( B = 1; B <= Count; B++ )
                             {
-                                RandNum = (uint)(Conversion.Int(VBMath.Rnd() * GenerateTileset.ClusteredUnitChanceTotal));
+                                RandNum = (uint)(Conversion.Int(App.Random.Next() * GenerateTileset.ClusteredUnitChanceTotal));
                                 uintTemp = 0;
                                 for ( C = 0; C <= GenerateTileset.ClusteredUnitCount - 1; C++ )
                                 {
@@ -2578,7 +2578,7 @@ namespace SharpFlame
             {
                 for ( A = 1; A <= FeatureScatterCount; A++ )
                 {
-                    RandNum = (uint)(Conversion.Int(VBMath.Rnd() * GenerateTileset.ScatteredUnitChanceTotal));
+                    RandNum = (uint)(Conversion.Int(App.Random.Next() * GenerateTileset.ScatteredUnitChanceTotal));
                     uintTemp = 0;
                     for ( C = 0; C <= GenerateTileset.ScatteredUnitCount - 1; C++ )
                     {
@@ -2630,7 +2630,7 @@ namespace SharpFlame
                 int A = 0;
                 do
                 {
-                    A = Convert.ToInt32(Conversion.Int(VBMath.Rnd() * InputNode.GetChildNodeCount));
+                    A = Convert.ToInt32(Conversion.Int(App.Random.Next() * InputNode.GetChildNodeCount));
                 } while ( InputNode.get_GetChildNode(A).GetClearance < MinClearance );
 
                 PathfinderNode ReturnResult = GetRandomChildNode(InputNode.get_GetChildNode(A), MinClearance);
@@ -3225,11 +3225,11 @@ namespace SharpFlame
                         EligableCount++;
                     }
                 }
-                NewHeightLevel = Eligables[(int)(Conversion.Int(VBMath.Rnd() * EligableCount))];
+                NewHeightLevel = Eligables[(int)(Conversion.Int(App.Random.Next() * EligableCount))];
             }
             else
             {
-                RandomAction = Convert.ToInt32(Conversion.Int(VBMath.Rnd() * Args.ActionTotal));
+                RandomAction = Convert.ToInt32(Conversion.Int(App.Random.Next() * Args.ActionTotal));
                 if ( RandomAction < Args.FlatsCutoff )
                 {
                     //extend the level that surrounds this most
@@ -3321,7 +3321,7 @@ namespace SharpFlame
                         }
                     }
                 }
-                NewHeightLevel = Eligables[(int)(Conversion.Int(VBMath.Rnd() * EligableCount))];
+                NewHeightLevel = Eligables[(int)(Conversion.Int(App.Random.Next() * EligableCount))];
             }
             for ( B = 0; B <= SymmetryBlockCount - 1; B++ )
             {
@@ -3517,7 +3517,7 @@ namespace SharpFlame
                 }
                 if ( PossibleRampCount > 0 )
                 {
-                    BestNum = (int)(Conversion.Int(VBMath.Rnd() * PossibleRampCount));
+                    BestNum = (int)(Conversion.Int(App.Random.Next() * PossibleRampCount));
                     PossibleRamps[BestNum].IsRamp = true;
                     tmpPassageNodeA = PossibleRamps[BestNum].PassageNodeA;
                     tmpPassageNodeB = PossibleRamps[BestNum].PassageNodeB;
@@ -3723,7 +3723,7 @@ namespace SharpFlame
                 for ( A = 0; A <= OilAtATime - 1; A++ )
                 {
                     oilArgs.OilClusterSizes[A] =
-                        Math.Min(ExtraOilClusterSizeMin + (int)(Conversion.Int(VBMath.Rnd() * (ExtraOilClusterSizeMax - ExtraOilClusterSizeMin + 1))),
+                        Math.Min(ExtraOilClusterSizeMin + (int)(Conversion.Int(App.Random.Next() * (ExtraOilClusterSizeMax - ExtraOilClusterSizeMin + 1))),
                             Math.Max((int)(Math.Ceiling(Convert.ToDecimal((ExtraOilCount - PlacedExtraOilCount) / SymmetryBlockCount))), 1));
                 }
                 oilArgs.OilPossibilities = new clsOilPossibilities();

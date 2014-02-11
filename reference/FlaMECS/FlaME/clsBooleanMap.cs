@@ -173,7 +173,7 @@
                             {
                                 if (this.ValueData.Value[num2 + 1, num + 1])
                                 {
-                                    if (VBMath.Rnd() < 0.5f)
+                                    if (App.Random.Next() < 0.5f)
                                     {
                                         this.ValueData.Value[num2, num] = false;
                                     }
@@ -198,7 +198,7 @@
                             {
                                 if (!this.ValueData.Value[num2 + 1, num + 1] && !this.ValueData.Value[num2 + 1, num + 1])
                                 {
-                                    if (VBMath.Rnd() < 0.5f)
+                                    if (App.Random.Next() < 0.5f)
                                     {
                                         this.ValueData.Value[num2, num + 1] = false;
                                     }

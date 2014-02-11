@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using Microsoft.VisualBasic;
 
 namespace SharpFlame.Pathfinding
 {
@@ -305,7 +304,7 @@ namespace SharpFlame.Pathfinding
                 if ( tmpNodeA == null )
                 {
                     tmpNodeA = tmpConnection.GetOtherNode(this);
-                    Score = tmpConnection.Value * (0.98F + VBMath.Rnd() * 0.04F);
+                    Score = tmpConnection.Value * (0.98F + App.Random.Next() * 0.04F);
                     if ( Score < BestScore )
                     {
                         BestScore = Score;
@@ -345,7 +344,7 @@ namespace SharpFlame.Pathfinding
                     }
                     if ( Allow )
                     {
-                        Score = (DestNode.SiblingSpan + tmpConnection.Value) * (0.98F + VBMath.Rnd() * 0.04F);
+                        Score = (DestNode.SiblingSpan + tmpConnection.Value) * (0.98F + App.Random.Next() * 0.04F);
                         if ( Score < BestScore )
                         {
                             BestScore = Score;

@@ -54,7 +54,7 @@
                 num = 0;
                 while (num <= num7)
                 {
-                    int num4 = (int) Math.Round((double) Conversion.Int((float) (VBMath.Rnd() * num3)));
+                    int num4 = (int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * num3)));
                     nodeArray[numArray[num4]] = this.FindParentNodes[num];
                     num3--;
                     if (num4 < num3)

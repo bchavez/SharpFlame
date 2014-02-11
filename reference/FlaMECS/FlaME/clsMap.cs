@@ -1122,7 +1122,7 @@
                     double num6 = Math.Abs((double) (this.Terrain.Vertices[num9, num10 + 1].Height - this.Terrain.Vertices[num9 + 1, num10].Height));
                     if (num5 == num6)
                     {
-                        if (VBMath.Rnd() >= 0.5f)
+                        if (App.Random.Next() >= 0.5f)
                         {
                             flag = false;
                         }
@@ -5153,7 +5153,7 @@
                 int num4 = this.Terrain.TileSize.X - 1;
                 for (int j = 0; j <= num4; j++)
                 {
-                    this.Terrain.Tiles[j, i].Texture.Orientation = new TileOrientation.sTileOrientation(VBMath.Rnd() >= 0.5f, VBMath.Rnd() >= 0.5f, VBMath.Rnd() >= 0.5f);
+                    this.Terrain.Tiles[j, i].Texture.Orientation = new TileOrientation.sTileOrientation(App.Random.Next() >= 0.5f, App.Random.Next() >= 0.5f, App.Random.Next() >= 0.5f);
                 }
             }
             this.SectorTerrainUndoChanges.SetAllChanged();
@@ -11007,7 +11007,7 @@
                 this.difB = Math.Abs((double) (base.Map.Terrain.Vertices[this.PosNum.X, this.PosNum.Y + 1].Height - base.Map.Terrain.Vertices[this.PosNum.X + 1, this.PosNum.Y].Height));
                 if (this.difA == this.difB)
                 {
-                    this.NewTri = VBMath.Rnd() < 0.5f;
+                    this.NewTri = App.Random.Next() < 0.5f;
                 }
                 else
                 {
@@ -11050,7 +11050,7 @@
                 this.DifB = this.HeightB - this.HeightA;
                 if (Math.Abs(this.DifA) == Math.Abs(this.DifB))
                 {
-                    this.RandomNum = (int) Math.Round((double) Conversion.Int((float) (VBMath.Rnd() * 4f)));
+                    this.RandomNum = (int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * 4f)));
                     if (this.RandomNum == 0)
                     {
                         this.Terrain.Tiles[this.PosNum.X, this.PosNum.Y].DownSide = TileOrientation.TileDirection_Top;
@@ -11095,7 +11095,7 @@
                     this.DifB = Math.Abs((double) (this.Terrain.Vertices[this.PosNum.X, this.PosNum.Y + 1].Height - this.Terrain.Vertices[this.PosNum.X + 1, this.PosNum.Y].Height));
                     if (this.DifA == this.DifB)
                     {
-                        if (VBMath.Rnd() >= 0.5f)
+                        if (App.Random.Next() >= 0.5f)
                         {
                             this.NewVal = false;
                         }
@@ -11282,7 +11282,7 @@
                     double num3 = num5 - num4;
                     if (Math.Abs(num2) == Math.Abs(num3))
                     {
-                        switch (((int) Math.Round((double) Conversion.Int((float) (VBMath.Rnd() * 4f)))))
+                        switch (((int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * 4f)))))
                         {
                             case 0:
                                 this.Terrain.Tiles[this.PosNum.X, this.PosNum.Y].DownSide = TileOrientation.TileDirection_Top;
@@ -11768,7 +11768,7 @@
                 {
                     if (this.RandomOrientation)
                     {
-                        this.Terrain.Tiles[this.PosNum.X, this.PosNum.Y].Texture.Orientation = new TileOrientation.sTileOrientation(VBMath.Rnd() < 0.5f, VBMath.Rnd() < 0.5f, VBMath.Rnd() < 0.5f);
+                        this.Terrain.Tiles[this.PosNum.X, this.PosNum.Y].Texture.Orientation = new TileOrientation.sTileOrientation(App.Random.Next() < 0.5f, App.Random.Next() < 0.5f, App.Random.Next() < 0.5f);
                     }
                     else
                     {
@@ -15430,7 +15430,7 @@
                 clsMap.clsUnit unit = new clsMap.clsUnit();
                 if (this.RandomizeRotation)
                 {
-                    unit.Rotation = (int) Math.Round(Conversion.Int((double) (VBMath.Rnd() * 360.0)));
+                    unit.Rotation = (int) Math.Round(Conversion.Int((double) (App.Random.Next() * 360.0)));
                 }
                 else
                 {
@@ -16294,7 +16294,7 @@
                         else if (this.RoadTop & this.RoadBottom)
                         {
                             this.ResultTiles = this.Painter.RoadBrushes[num19].Tile_Straight;
-                            if (VBMath.Rnd() >= 0.5f)
+                            if (App.Random.Next() >= 0.5f)
                             {
                                 this.ResultDirection = TileOrientation.TileDirection_Top;
                             }
@@ -16306,7 +16306,7 @@
                         else if (this.RoadLeft & this.RoadRight)
                         {
                             this.ResultTiles = this.Painter.RoadBrushes[num19].Tile_Straight;
-                            if (VBMath.Rnd() >= 0.5f)
+                            if (App.Random.Next() >= 0.5f)
                             {
                                 this.ResultDirection = TileOrientation.TileDirection_Left;
                             }

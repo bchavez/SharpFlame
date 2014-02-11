@@ -563,19 +563,19 @@
                 modMath.sXY_int _int2;
                 if (this.SymmetryBlockCountXY.X == 1)
                 {
-                    _int2.X = x + ((int) Math.Round((double) Conversion.Int((float) (VBMath.Rnd() * ((_int4.X - (x * 2)) + 1)))));
+                    _int2.X = x + ((int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * ((_int4.X - (x * 2)) + 1)))));
                 }
                 else
                 {
-                    _int2.X = x + ((int) Math.Round((double) Conversion.Int((float) (VBMath.Rnd() * ((_int4.X - x) + 1)))));
+                    _int2.X = x + ((int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * ((_int4.X - x) + 1)))));
                 }
                 if (this.SymmetryBlockCountXY.Y == 1)
                 {
-                    _int2.Y = x + ((int) Math.Round((double) Conversion.Int((float) (VBMath.Rnd() * ((_int4.Y - (x * 2)) + 1)))));
+                    _int2.Y = x + ((int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * ((_int4.Y - (x * 2)) + 1)))));
                 }
                 else
                 {
-                    _int2.Y = x + ((int) Math.Round((double) Conversion.Int((float) (VBMath.Rnd() * ((_int4.Y - x) + 1)))));
+                    _int2.Y = x + ((int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * ((_int4.Y - x) + 1)))));
                 }
                 int num27 = this.PassageNodeCount - 1;
                 num = 0;
@@ -812,7 +812,7 @@
             num2 = 0;
             while (index > 0)
             {
-                num = (int) Math.Round((double) Conversion.Int((float) (VBMath.Rnd() * index)));
+                num = (int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * index)));
                 nodeArray3[num2] = nodeArray2[num];
                 num2++;
                 index--;
@@ -885,7 +885,7 @@
                 }
                 if (this.BaseLevel < 0)
                 {
-                    baseLevel = (int) Math.Round((double) Conversion.Int((float) (VBMath.Rnd() * this.LevelCount)));
+                    baseLevel = (int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * this.LevelCount)));
                 }
                 else
                 {
@@ -1485,7 +1485,7 @@
                 num = 0;
                 while (num <= num14)
                 {
-                    args.OilClusterSizes[num] = Math.Min(this.ExtraOilClusterSizeMin + ((int) Math.Round((double) Conversion.Int((float) (VBMath.Rnd() * ((this.ExtraOilClusterSizeMax - this.ExtraOilClusterSizeMin) + 1))))), Math.Max((int) Math.Round(Math.Ceiling((double) (((double) (this.ExtraOilCount - num6)) / ((double) this.SymmetryBlockCount)))), 1));
+                    args.OilClusterSizes[num] = Math.Min(this.ExtraOilClusterSizeMin + ((int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * ((this.ExtraOilClusterSizeMax - this.ExtraOilClusterSizeMin) + 1))))), Math.Max((int) Math.Round(Math.Ceiling((double) (((double) (this.ExtraOilCount - num6)) / ((double) this.SymmetryBlockCount)))), 1));
                     num++;
                 }
                 args.OilPossibilities = new clsOilPossibilities();
@@ -1701,7 +1701,7 @@
             }
             if (num10 > 0)
             {
-                num6 = (int) Math.Round((double) Conversion.Int((float) (VBMath.Rnd() * num10)));
+                num6 = (int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * num10)));
                 connectionArray[num6].IsRamp = true;
                 clsPassageNode passageNodeA = connectionArray[num6].PassageNodeA;
                 clsPassageNode passageNodeB = connectionArray[num6].PassageNodeB;
@@ -1999,7 +1999,7 @@
                 {
                     if ((this.PassageNodes[num7, num].PlayerBaseNum < 0) & !this.PassageNodes[num7, num].IsOnBorder)
                     {
-                        this.PassageNodes[num7, num].HasFeatureCluster = VBMath.Rnd() < this.FeatureClusterChance;
+                        this.PassageNodes[num7, num].HasFeatureCluster = App.Random.Next() < this.FeatureClusterChance;
                     }
                     num7++;
                 }
@@ -2015,12 +2015,12 @@
                     {
                         if (this.PassageNodes[num7, num].HasFeatureCluster)
                         {
-                            int num6 = this.FeatureClusterMinUnits + ((int) Math.Round((double) Conversion.Int((float) (VBMath.Rnd() * ((this.FeatureClusterMaxUnits - this.FeatureClusterMinUnits) + 1)))));
+                            int num6 = this.FeatureClusterMinUnits + ((int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * ((this.FeatureClusterMaxUnits - this.FeatureClusterMinUnits) + 1)))));
                             int num26 = num6;
                             num3 = 1;
                             while (num3 <= num26)
                             {
-                                num12 = (uint) Math.Round(Conversion.Int((double) (VBMath.Rnd() * this.GenerateTileset.ClusteredUnitChanceTotal)));
+                                num12 = (uint) Math.Round(Conversion.Int((double) (App.Random.Next() * this.GenerateTileset.ClusteredUnitChanceTotal)));
                                 num14 = 0;
                                 int num27 = this.GenerateTileset.ClusteredUnitCount - 1;
                                 num5 = 0;
@@ -2062,7 +2062,7 @@
                 num = 1;
                 while (num <= featureScatterCount)
                 {
-                    num12 = (uint) Math.Round(Conversion.Int((double) (VBMath.Rnd() * this.GenerateTileset.ScatteredUnitChanceTotal)));
+                    num12 = (uint) Math.Round(Conversion.Int((double) (App.Random.Next() * this.GenerateTileset.ScatteredUnitChanceTotal)));
                     num14 = 0;
                     int num29 = this.GenerateTileset.ScatteredUnitCount - 1;
                     num5 = 0;
@@ -2207,7 +2207,7 @@
             }
             do
             {
-                num = (int) Math.Round((double) Conversion.Int((float) (VBMath.Rnd() * InputNode.GetChildNodeCount)));
+                num = (int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * InputNode.GetChildNodeCount)));
             }
             while (InputNode.get_GetChildNode(num).GetClearance < MinClearance);
             return this.GetRandomChildNode(InputNode.get_GetChildNode(num), MinClearance);
@@ -2591,11 +2591,11 @@
                             num3++;
                         }
                     }
-                    num4 = numArray[(int) Math.Round((double) Conversion.Int((float) (VBMath.Rnd() * num3)))];
+                    num4 = numArray[(int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * num3)))];
                 }
                 else
                 {
-                    int num5 = (int) Math.Round((double) Conversion.Int((float) (VBMath.Rnd() * Args.ActionTotal)));
+                    int num5 = (int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * Args.ActionTotal)));
                     if (num5 < Args.FlatsCutoff)
                     {
                         num = 0;
@@ -2691,7 +2691,7 @@
                             }
                         }
                     }
-                    num4 = numArray[(int) Math.Round((double) Conversion.Int((float) (VBMath.Rnd() * num3)))];
+                    num4 = numArray[(int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * num3)))];
                 }
             }
             int num14 = this.SymmetryBlockCount - 1;
@@ -2818,7 +2818,7 @@
             {
                 unit2.Pos.Horizontal.X = tag.Pos.X;
             }
-            else if (VBMath.Rnd() >= 0.5f)
+            else if (App.Random.Next() >= 0.5f)
             {
                 unit2.Pos.Horizontal.X = tag.Pos.X - 0x40;
             }
@@ -2831,7 +2831,7 @@
             {
                 unit2.Pos.Horizontal.Y = tag.Pos.Y;
             }
-            else if (VBMath.Rnd() >= 0.5f)
+            else if (App.Random.Next() >= 0.5f)
             {
                 unit2.Pos.Horizontal.Y = tag.Pos.Y - 0x40;
             }

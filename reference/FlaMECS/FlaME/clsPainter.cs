@@ -151,7 +151,7 @@
 
             public sTileOrientationChance GetRandom()
             {
-                int num2 = (int) Math.Round((double) Conversion.Int((float) (VBMath.Rnd() * this.TileChanceTotal)));
+                int num2 = (int) Math.Round((double) Conversion.Int((float) (App.Random.Next() * this.TileChanceTotal)));
                 int num4 = this.TileCount - 1;
                 int index = 0;
                 while (index <= num4)

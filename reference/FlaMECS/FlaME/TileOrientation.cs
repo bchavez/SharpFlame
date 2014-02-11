@@ -323,9 +323,9 @@
             clsMap.clsTerrain.Tile.sTexture texture2;
             if (TileChance.TextureNum < 0)
             {
-                texture2.Orientation.ResultXFlip = VBMath.Rnd() >= 0.5f;
-                texture2.Orientation.ResultYFlip = VBMath.Rnd() >= 0.5f;
-                texture2.Orientation.SwitchedAxes = VBMath.Rnd() >= 0.5f;
+                texture2.Orientation.ResultXFlip = App.Random.Next() >= 0.5f;
+                texture2.Orientation.ResultYFlip = App.Random.Next() >= 0.5f;
+                texture2.Orientation.SwitchedAxes = App.Random.Next() >= 0.5f;
                 texture2.TextureNum = -1;
                 return texture2;
             }
@@ -342,9 +342,9 @@
             texture2.TextureNum = TileChance.TextureNum;
             if (((NewDirection.X == 1) & (NewDirection.Y == 1)) | ((TileChance.Direction.X == 1) & (TileChance.Direction.Y == 1)))
             {
-                texture2.Orientation.SwitchedAxes = VBMath.Rnd() >= 0.5f;
-                texture2.Orientation.ResultXFlip = VBMath.Rnd() >= 0.5f;
-                texture2.Orientation.ResultYFlip = VBMath.Rnd() >= 0.5f;
+                texture2.Orientation.SwitchedAxes = App.Random.Next() >= 0.5f;
+                texture2.Orientation.ResultXFlip = App.Random.Next() >= 0.5f;
+                texture2.Orientation.ResultYFlip = App.Random.Next() >= 0.5f;
                 return texture2;
             }
             if ((NewDirection.X != 1) & (NewDirection.Y != 1))
@@ -366,7 +366,7 @@
                 {
                     texture2.Orientation.ResultYFlip = false;
                 }
-                if (VBMath.Rnd() >= 0.5f)
+                if (App.Random.Next() >= 0.5f)
                 {
                     texture2.Orientation.SwitchedAxes = !texture2.Orientation.SwitchedAxes;
                     if (((NewDirection.X == 0) ^ (NewDirection.Y == 0)) ^ (texture2.Orientation.ResultXFlip ^ texture2.Orientation.ResultYFlip))
@@ -416,7 +416,7 @@
                     texture2.Orientation.ResultYFlip = false;
                 }
             }
-            if (VBMath.Rnd() >= 0.5f)
+            if (App.Random.Next() >= 0.5f)
             {
                 if (NewDirection.X == 1)
                 {

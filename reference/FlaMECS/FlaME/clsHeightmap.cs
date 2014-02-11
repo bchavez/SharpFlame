@@ -328,7 +328,7 @@
                     while (num7 <= num12)
                     {
                         num4 = (long) Math.Round((double) (((double) (((this.HeightData.Height[num8 - 1, num7 - 1] + this.HeightData.Height[num8 - 1, num7 + 1]) + this.HeightData.Height[num8 + 1, num7 - 1]) + this.HeightData.Height[num8 + 1, num7 + 1])) / 4.0));
-                        this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (VBMath.Rnd() * num5)))) - num6;
+                        this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (App.Random.Next() * num5)))) - num6;
                         num7 += 2;
                     }
                 }
@@ -344,7 +344,7 @@
                     while (num7 <= num14)
                     {
                         num4 = (long) Math.Round((double) (((double) (((this.HeightData.Height[num8 - 1, num7] + this.HeightData.Height[num8, num7 - 1]) + this.HeightData.Height[num8, num7 + 1]) + this.HeightData.Height[num8 + 1, num7])) / 4.0));
-                        this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (VBMath.Rnd() * num5)))) - num6;
+                        this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (App.Random.Next() * num5)))) - num6;
                         num7 += 2;
                     }
                 }
@@ -353,28 +353,28 @@
                 for (num7 = 1; num7 <= num15; num7 += 2)
                 {
                     num4 = (long) Math.Round((double) (((double) ((this.HeightData.Height[num8, num7 - 1] + this.HeightData.Height[num8, num7 + 1]) + this.HeightData.Height[num8 + 1, num7])) / 3.0));
-                    this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (VBMath.Rnd() * num5)))) - num6;
+                    this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (App.Random.Next() * num5)))) - num6;
                 }
                 num7 = 0;
                 int num16 = this.HeightData.SizeY - 2;
                 for (num8 = 1; num8 <= num16; num8 += 2)
                 {
                     num4 = (long) Math.Round((double) (((double) ((this.HeightData.Height[num8 - 1, num7] + this.HeightData.Height[num8, num7 + 1]) + this.HeightData.Height[num8 + 1, num7])) / 3.0));
-                    this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (VBMath.Rnd() * num5)))) - num6;
+                    this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (App.Random.Next() * num5)))) - num6;
                 }
                 num7 = this.HeightData.SizeX - 1;
                 int num17 = this.HeightData.SizeY - 2;
                 for (num8 = 1; num8 <= num17; num8 += 2)
                 {
                     num4 = (long) Math.Round((double) (((double) ((this.HeightData.Height[num8 - 1, num7] + this.HeightData.Height[num8, num7 - 1]) + this.HeightData.Height[num8 + 1, num7])) / 3.0));
-                    this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (VBMath.Rnd() * num5)))) - num6;
+                    this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (App.Random.Next() * num5)))) - num6;
                 }
                 num8 = this.HeightData.SizeY - 1;
                 int num18 = this.HeightData.SizeX - 2;
                 for (num7 = 1; num7 <= num18; num7 += 2)
                 {
                     num4 = (long) Math.Round((double) (((double) ((this.HeightData.Height[num8 - 1, num7] + this.HeightData.Height[num8, num7 - 1]) + this.HeightData.Height[num8, num7 + 1])) / 3.0));
-                    this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (VBMath.Rnd() * num5)))) - num6;
+                    this.HeightData.Height[num8, num7] = (num4 + ((long) Math.Round((double) (App.Random.Next() * num5)))) - num6;
                 }
             }
         }
@@ -580,7 +580,7 @@
                 int num5 = this.HeightData.SizeX - 1;
                 for (int j = 0; j <= num5; j++)
                 {
-                    this.HeightData.Height[i, j] = (long) Math.Round((double) ((VBMath.Rnd() * HeightMultiplier) - num));
+                    this.HeightData.Height[i, j] = (long) Math.Round((double) ((App.Random.Next() * HeightMultiplier) - num));
                 }
             }
         }
