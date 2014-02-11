@@ -38,15 +38,16 @@ namespace SharpFlame
 
         public static void SetProgramSubDirs()
         {
-            MyDocumentsProgramPath = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments), ".flaME");
 #if !Portable
+			MyDocumentsProgramPath = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments), ".flaME", Path.PathSeparator);
             SettingsPath = MyDocumentsProgramPath + Convert.ToString(PlatformPathSeparator) + "settings.ini";
             AutoSavePath = MyDocumentsProgramPath + Convert.ToString(PlatformPathSeparator) + "autosave" + Convert.ToString(PlatformPathSeparator);
 #else
+			MyDocumentsProgramPath = Path.Combine (AppDomain.CurrentDomain.BaseDirectory, ".flaME", Path.PathSeparator);
             SettingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.ini");
-            AutoSavePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "autosave");
+            AutoSavePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "autosave", Path.PathSeparator);
 #endif
-            InterfaceImagesPath = Path.Combine (AppDomain.CurrentDomain.BaseDirectory, "interface");
+			InterfaceImagesPath = Path.Combine (AppDomain.CurrentDomain.BaseDirectory, "interface", Path.PathSeparator);
         }
 
         public static bool ProgramInitialized = false;
