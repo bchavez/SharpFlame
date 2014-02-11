@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.IO;
 
 namespace SharpFlame.FileIO
 {
@@ -43,9 +44,17 @@ namespace SharpFlame.FileIO
 
     public static class ExtensionsForString
     {
-        public static string Format2( this string format, params object[] args )
+        public static string Format2(this string format, params object[] args)
         {
-            return string.Format( format, args );
+            return string.Format(format, args);
+        }
+
+        public static string CombinePathWith(this string path1, string path2, bool endWithPathSeporator = false)
+        {
+            if ( endWithPathSeporator )
+                return Path.Combine(path1, path2) + Path.DirectorySeparatorChar;
+
+            return Path.Combine(path1, path2);
         }
     }
 }
