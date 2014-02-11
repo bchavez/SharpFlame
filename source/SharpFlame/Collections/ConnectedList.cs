@@ -144,7 +144,7 @@ namespace SharpFlame.Collections
         //#if !Mono
         //return new Enumerator(this);
         //#else
-        //							return new Enumerator(modLists.MonoWorkaroundConnectedList<ItemType, SourceType>(this));
+        //                          return new Enumerator(modLists.MonoWorkaroundConnectedList<ItemType, SourceType>(this));
         //#endif
         //}
 

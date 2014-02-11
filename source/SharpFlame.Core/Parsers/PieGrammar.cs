@@ -63,7 +63,7 @@ namespace SharpFlame.Core.Parsers
             int.Parse( number )
             select n;
 
-        //	5 20 17 
+        //  5 20 17 
         //  x, y, z
         public static readonly Parser<Point> PointLine =
             from x in Scan.F.Token()
@@ -81,9 +81,9 @@ namespace SharpFlame.Core.Parsers
             select 
             int.Parse(length);
 
-        //	0 23 20 
+        //  0 23 20 
         //  5 23 17 
-	    //  0 20 11 
+        //  0 20 11 
         //  x, y, z
         //public static readonly Parser<Point[]> PointsData =
         //    from points in PointLine.Many()
@@ -98,7 +98,7 @@ namespace SharpFlame.Core.Parsers
             select n;
 
         //data:
-        //	200 3  3  2  1  237 220 239 220 239 222
+        //  200 3  3  2  1  237 220 239 220 239 222
         //  4200 3 7 6 5 2 1 11 14 45 128 54 128 54 140
         // flag, numpoints, p1, p2, p3, [nFrames, pbRate, tWidth, tHeight], texcoord[]xy
         public static readonly Parser<Polygon> PolygonLine =
@@ -139,7 +139,7 @@ namespace SharpFlame.Core.Parsers
             n = int.Parse( number )
             select n;
 
-        //	0 11 22
+        //  0 11 22
         //  x, y, z
         public static readonly Parser<Connector> ConnectorLine =
             from x in Scan.D.Token()

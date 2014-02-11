@@ -11,7 +11,7 @@ namespace SharpFlame.FileIO.Ini
 #if !Mono
         public struct SectionProperty
 #else
-				public class SectionProperty
+                public class SectionProperty
 #endif
 
         {
