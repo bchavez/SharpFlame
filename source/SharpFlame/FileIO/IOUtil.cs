@@ -213,7 +213,6 @@ namespace SharpFlame.FileIO
                     return false;
                 }
                 int Remainder = 0;
-                int Multiplier = Math.DivRem(ErrorValue, App.INIRotationMax, out Remainder);
                 try
                 {
                     if ( Remainder < 0 )

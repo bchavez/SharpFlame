@@ -800,13 +800,10 @@ namespace SharpFlame.Mapping
 
         public void DrawTileOrientation(sXY_int Tile)
         {
-            TileOrientation TileOrientation;
             sXY_int UnrotatedPos = new sXY_int();
             sWorldPos Vertex0 = new sWorldPos();
             sWorldPos Vertex1 = new sWorldPos();
             sWorldPos Vertex2 = new sWorldPos();
-
-            TileOrientation = Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation;
 
             UnrotatedPos.X = 32;
             UnrotatedPos.Y = 32;

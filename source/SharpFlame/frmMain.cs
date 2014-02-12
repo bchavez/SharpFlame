@@ -971,7 +971,6 @@ namespace SharpFlame
         {
             sXY_int NewSize = new sXY_int();
             sXY_int Offset = new sXY_int();
-            double Max = Constants.MapMaxSize;
 
             if ( !IOUtil.InvariantParse(txtSizeX.Text, ref NewSize.X) )
             {

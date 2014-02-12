@@ -99,7 +99,6 @@ namespace SharpFlame.Pathfinding
             PathfinderNode[] Destinations = new PathfinderNode[24];
             int DestinationCount = 0;
             bool FinishIsParent = default(bool);
-            bool IsInaccurate;
             int[] CalcNodeCount = new int[24];
             sFloodRouteArgs FloodRouteArgs = new sFloodRouteArgs();
             int FinalLayer = 0;
@@ -187,7 +186,6 @@ namespace SharpFlame.Pathfinding
                     Destinations[0] = Paths[LastLayer].Paths[0].Nodes[CalcNodeCount[0]];
                     DestinationCount = 1;
                     FinishIsParent = true;
-                    IsInaccurate = true;
                 }
                 else
                 {
@@ -323,7 +321,6 @@ namespace SharpFlame.Pathfinding
             PathfinderNode[,] LayerStartNodes = new PathfinderNode[32, StartNodeCount];
             PathfinderNode[] LayerFinishNodes = new PathfinderNode[32];
             int LayerNum = 0;
-            PathfinderNode[] Destinations = new PathfinderNode[24];
             sFloodRouteAllArgs FloodRouteDArgs = new sFloodRouteAllArgs();
             int FinalLayer = 0;
             bool[] StartCanReach = new bool[StartNodeCount];
@@ -1109,7 +1106,6 @@ namespace SharpFlame.Pathfinding
                     return false;
                 }
             } while ( true );
-            return false;
         }
     }
 }
