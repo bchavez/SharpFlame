@@ -1,6 +1,5 @@
 namespace SharpFlame.Controls
 {
-	[global::Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]public 
 	partial class PathSetControl : System.Windows.Forms.UserControl
 	{
 		

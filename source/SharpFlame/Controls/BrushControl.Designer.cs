@@ -1,6 +1,5 @@
 namespace SharpFlame.Controls
 {
-	[global::Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]public 
 	partial class BrushControl : System.Windows.Forms.UserControl
 	{
 		

@@ -86,7 +86,6 @@
     <Reference Include="Matrix3D">
       <HintPath>..\packages\other\Matrix3D.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
