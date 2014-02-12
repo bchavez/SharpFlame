@@ -408,6 +408,7 @@
     <Compile Include="Mapping\Tiles\TileUtil.cs" />
     <Compile Include="FileIO\ZipSplitPath.cs" />
     <Compile Include="Util\clsInputBox.cs" />
+    <Compile Include="EmptyClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">

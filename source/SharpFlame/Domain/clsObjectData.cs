@@ -1,7 +1,6 @@
 using System;
 using System.Drawing;
 using System.IO;
-using Microsoft.VisualBasic;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
@@ -114,9 +113,7 @@ namespace SharpFlame.Domain
 
             public clsResult LoadCommaFile(string Path)
             {
-                clsResult Result =
-                    new clsResult("Loading comma separated file " + Convert.ToString(ControlChars.Quote) + SubDirectory +
-                                  Convert.ToString(ControlChars.Quote));
+                clsResult Result = new clsResult(string.Format("Loading comma separated file \"{0}\"", SubDirectory));
                 StreamReader Reader = default(StreamReader);
 
                 try
@@ -155,8 +152,7 @@ namespace SharpFlame.Domain
 
             public clsResult LoadNamesFile(string Path)
             {
-                clsResult Result =
-                    new clsResult("Loading names file " + Convert.ToString(ControlChars.Quote) + SubDirectory + Convert.ToString(ControlChars.Quote));
+                clsResult Result = new clsResult(string.Format("Loading names file \"{0}\"", SubDirectory));                   
                 FileStream File = default(FileStream);
                 BinaryReader Reader = default(BinaryReader);
 
@@ -207,8 +203,8 @@ namespace SharpFlame.Domain
                     {
                         switch ( CurrentChar )
                         {
-                            case ControlChars.Cr:
-                            case ControlChars.Lf:
+                            case '\r':
+                            case '\n':
                                 InLineComment = false;
                                 if ( PrevCharExists )
                                 {
@@ -218,7 +214,7 @@ namespace SharpFlame.Domain
 
                                 if ( Line.Length > 0 )
                                 {
-                                    int EndCodeTab = Line.IndexOf(ControlChars.Tab);
+                                    int EndCodeTab = Line.IndexOf('\t');
                                     int EndCodeSpace = Line.IndexOf(' ');
                                     int EndCode = EndCodeTab;
                                     if ( EndCodeSpace >= 0 && (EndCodeSpace < EndCode | EndCode < 0) )
@@ -227,10 +223,10 @@ namespace SharpFlame.Domain
                                     }
                                     if ( EndCode >= 0 )
                                     {
-                                        int FirstQuote = Line.IndexOf(ControlChars.Quote, EndCode + 1, Line.Length - (EndCode + 1));
+                                        int FirstQuote = Line.IndexOf('"', EndCode + 1, Line.Length - (EndCode + 1));
                                         if ( FirstQuote >= 0 )
                                         {
-                                            int SecondQuote = Line.IndexOf(ControlChars.Quote, FirstQuote + 1, Line.Length - (FirstQuote + 1));
+                                        int SecondQuote = Line.IndexOf('"', FirstQuote + 1, Line.Length - (FirstQuote + 1));
                                             if ( SecondQuote >= 0 )
                                             {
                                                 string[] Value = new string[2];
@@ -279,7 +275,7 @@ namespace SharpFlame.Domain
                         }
                         if ( Line.Length > 0 )
                         {
-                            int EndCodeTab = Line.IndexOf(ControlChars.Tab);
+                            int EndCodeTab = Line.IndexOf('\t');
                             int EndCodeSpace = Line.IndexOf(' ');
                             int EndCode = EndCodeTab;
                             if ( EndCodeSpace >= 0 && (EndCodeSpace < EndCode | EndCode < 0) )
@@ -288,10 +284,10 @@ namespace SharpFlame.Domain
                             }
                             if ( EndCode >= 0 )
                             {
-                                int FirstQuote = Line.IndexOf(ControlChars.Quote, EndCode + 1, Line.Length - (EndCode + 1));
+                                int FirstQuote = Line.IndexOf('"', EndCode + 1, Line.Length - (EndCode + 1));
                                 if ( FirstQuote >= 0 )
                                 {
-                                    int SecondQuote = Line.IndexOf(ControlChars.Quote, FirstQuote + 1, Line.Length - (FirstQuote + 1));
+                                    int SecondQuote = Line.IndexOf('"', FirstQuote + 1, Line.Length - (FirstQuote + 1));
                                     if ( SecondQuote >= 0 )
                                     {
                                         string[] Value = new string[2];
@@ -329,8 +325,7 @@ namespace SharpFlame.Domain
 
         public clsResult LoadDirectory(string Path)
         {
-            clsResult ReturnResult =
-                new clsResult("Loading object data from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote));
+            clsResult ReturnResult = new clsResult(string.Format("Loading object data from \"{0}\"", Path));
 
             Path = PathUtil.EndWithPathSeperator(Path);
 
@@ -523,8 +518,7 @@ namespace SharpFlame.Domain
                 Text = tempLoopVar_Text;
                 if ( Text.Substring(Text.Length - 4, 4).ToLower() == ".png" )
                 {
-                    clsResult Result =
-                        new clsResult("Loading texture page " + Convert.ToString(ControlChars.Quote) + Text + Convert.ToString(ControlChars.Quote));
+                    clsResult Result = new clsResult(string.Format("Loading texture page \"{0}\"", Text));
                     if ( File.Exists(Text) )
                     {
                         BitmapResult = BitmapUtil.LoadBitmap(Text, ref Bitmap);
@@ -544,8 +538,9 @@ namespace SharpFlame.Domain
                         {
                             Result.WarningAdd(BitmapResult.Problem);
                         }
-                        InstrPos2 = Strings.InStrRev(Text, App.PlatformPathSeparator.ToString(), -1, (CompareMethod)0);
-                        NewPage.FileTitle = Strings.Mid(Text, InstrPos2 + 1, Text.Length - 4 - InstrPos2);
+                        InstrPos2 = Text.LastIndexOf (System.IO.Path.DirectorySeparatorChar);
+                        NewPage.FileTitle = Text.Substring (InstrPos2 + 1, Text.Length - 5 - InstrPos2);
+
                         TexturePages.Add(NewPage);
                     }
                     else
@@ -1140,7 +1135,7 @@ namespace SharpFlame.Domain
                         {
                             if ( InCommentBlock )
                             {
-                                Lines[LineNum] = Strings.Left(Lines[LineNum], CommentStart);
+                                Lines[LineNum] = Lines[LineNum].Substring(0, CommentStart);
                             }
                             break;
                         }
@@ -1157,9 +1152,8 @@ namespace SharpFlame.Domain
                                     CharNum++;
                                     CommentLength = CharNum - CommentStart;
                                     InCommentBlock = false;
-                                    Lines[LineNum] = Strings.Left(Lines[LineNum], CommentStart) +
-                                                     Strings.Right(Lines[LineNum], Convert.ToInt32(Lines[LineNum].Length - (CommentStart + CommentLength)));
-                                    CharNum -= CommentLength;
+                                    Lines[LineNum] = Lines[LineNum].Substring(CommentStart, Lines[LineNum].Length - CommentStart)
+                                        .Substring(CommentStart + CommentLength, Lines[LineNum].Length - CommentStart - CommentLength);                                    CharNum -= CommentLength;
                                 }
                             }
                             else
@@ -1178,8 +1172,8 @@ namespace SharpFlame.Domain
                                 CommentStart = CharNum - 1;
                                 CharNum = Lines[LineNum].Length;
                                 CommentLength = CharNum - CommentStart;
-                                Lines[LineNum] = Strings.Left(Lines[LineNum], CommentStart) +
-                                                 Strings.Right(Lines[LineNum], Convert.ToInt32(Lines[LineNum].Length - (CommentStart + CommentLength)));
+                                Lines[LineNum] = Lines[LineNum].Substring(CommentStart, Lines[LineNum].Length - CommentStart)
+                                    .Substring(CommentStart + CommentLength, Lines[LineNum].Length - CommentStart - CommentLength);                                    CharNum -= CommentLength;
                                 break;
                             }
                             else if ( Lines[LineNum][CharNum] == '*' )
