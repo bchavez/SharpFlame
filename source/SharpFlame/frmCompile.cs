@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
-using Microsoft.VisualBasic;
 using NLog;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
@@ -564,17 +563,19 @@ namespace SharpFlame
                 {
                     if ( PlayerStructureTypeCount[PlayerNum, StructureTypeNum] > 255 )
                     {
-                        ReturnResult.ProblemAdd("Player " + Convert.ToString(PlayerNum) + " has too many (" +
-                                                Convert.ToString(PlayerStructureTypeCount[PlayerNum, StructureTypeNum]) + ") of structure " +
-                                                Convert.ToString(ControlChars.Quote) + structureTypeBase.Code + Convert.ToString(ControlChars.Quote) +
-                                                ". The limit is 255 of any one structure type.");
+                        ReturnResult.ProblemAdd("Player {0} has to  many ({1}) of structure \"{2}\"" +
+                                                ". The limit is 255 of any one structure type.".Format2(
+                                                    PlayerNum, PlayerStructureTypeCount[PlayerNum, StructureTypeNum], 
+                                                    structureTypeBase.Code)
+                                               );
                     }
                 }
                 if ( ScavStructureTypeCount[StructureTypeNum] > 255 )
                 {
-                    ReturnResult.ProblemAdd("Scavengers have too many (" + Convert.ToString(ScavStructureTypeCount[StructureTypeNum]) + ") of structure " +
-                                            Convert.ToString(ControlChars.Quote) + structureTypeBase.Code + Convert.ToString(ControlChars.Quote) +
-                                            ". The limit is 255 of any one structure type.");
+                    ReturnResult.ProblemAdd ("Scavengers have to many ({0}) of structure \"{1}\"" +
+                                             ". The limit is 255 of any one structure type.".Format2 
+                                                (ScavStructureTypeCount [StructureTypeNum], structureTypeBase.Code)
+                                             );
                 }
             }
 

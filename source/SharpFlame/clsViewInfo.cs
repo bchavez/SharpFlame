@@ -1,7 +1,6 @@
 using System;
 using System.Windows.Forms;
 using Matrix3D;
-using Microsoft.VisualBasic;
 using SharpFlame.Collections;
 using SharpFlame.Controls;
 using SharpFlame.FileIO;

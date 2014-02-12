@@ -2,8 +2,6 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 using Matrix3D;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
 using NLog;
 using SharpFlame.Collections.Specialized;
 using SharpFlame.Domain;
@@ -486,10 +484,9 @@ namespace SharpFlame
                 } while ( true );
             } while ( true );
             PointMakingFinished:
-            PassageNodes =
-                (clsPassageNode[,])
-                    Utils.CopyArray((Array)PassageNodes, new clsPassageNode[SymmetryBlockCount, PassageNodeCount]);
-
+                clsPassageNode[,] tmpPassgeNodes = new clsPassageNode[SymmetryBlockCount, PassageNodeCount];
+            Array.Copy (PassageNodes, tmpPassgeNodes, PassageNodeCount);
+            PassageNodes = tmpPassgeNodes;
             //connect until all are connected without intersecting
 
             MathUtil.sIntersectPos IntersectPos = new MathUtil.sIntersectPos();

@@ -1,5 +1,4 @@
 using System;
-using Microsoft.VisualBasic;
 using SharpFlame.Collections.Specialized;
 using SharpFlame.Domain;
 using SharpFlame.Mapping.Objects;

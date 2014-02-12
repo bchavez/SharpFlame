@@ -1,7 +1,6 @@
 using System;
 using System.Drawing;
 using System.IO;
-using Microsoft.VisualBasic;
 using NLog;
 using OpenTK;
 using SharpFlame.Collections;
@@ -185,11 +184,8 @@ namespace SharpFlame.AppSettings
 
         public static clsResult Settings_Write()
         {
-            clsResult ReturnResult =
-                new clsResult("Writing settings to " + Convert.ToString(ControlChars.Quote) + App.SettingsPath +
-                              Convert.ToString(ControlChars.Quote), false);
-            logger.Info ("Writing settings to " + Convert.ToString (ControlChars.Quote) + App.SettingsPath +
-                Convert.ToString (ControlChars.Quote));
+            clsResult ReturnResult = new clsResult("Writing settings to \"{0}\"".Format2(App.SettingsPath), false);
+            logger.Info ("Writing settings to \"{0}\"".Format2 (App.SettingsPath));
 
             IniWriter INI_Settings = default(IniWriter);
 
@@ -226,11 +222,8 @@ namespace SharpFlame.AppSettings
 
         public static clsResult Settings_Load(ref clsSettings Result)
         {
-            clsResult ReturnResult =
-                new clsResult("Loading settings from " + Convert.ToString(ControlChars.Quote) + App.SettingsPath +
-                              Convert.ToString(ControlChars.Quote), false);
-            logger.Info ("Loading settings from " + Convert.ToString (ControlChars.Quote) + App.SettingsPath +
-                Convert.ToString (ControlChars.Quote));
+            clsResult ReturnResult = new clsResult ("Loading settings from \"{0}\"".Format2 (App.SettingsPath), false);
+            logger.Info ("Loading settings from \"{0}\"".Format2 (App.SettingsPath));
 
             StreamReader File_Settings = default(StreamReader);
             try
