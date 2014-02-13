@@ -53,7 +53,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile>FlaME.xml</DocumentationFile>
     <NOWARN>1591,660,661</NOWARN>
     <DefineConstants>Mono;Portable</DefineConstants>
