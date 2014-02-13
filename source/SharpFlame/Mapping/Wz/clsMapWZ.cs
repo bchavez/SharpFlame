@@ -795,10 +795,12 @@ namespace SharpFlame.Mapping
                 {
                     if ( INIStructures.Structures[A].Pos == null )
                     {
+                        logger.Debug ("{0} pos was null", INIStructures.Structures[A].Code);
                         StructureBadPositionCount++;
                     }
                     else if ( !App.PosIsWithinTileArea(INIStructures.Structures[A].Pos.WorldPos.Horizontal, ZeroPos, Terrain.TileSize) )
                     {
+                        logger.Debug ("{0} structure pos x{1} y{2}, is wrong.", INIStructures.Structures[A].Code, INIStructures.Structures [A].Pos.WorldPos.Horizontal.X, INIStructures.Structures [A].Pos.WorldPos.Horizontal.Y);
                         StructureBadPositionCount++;
                     }
                     else
@@ -1717,7 +1719,7 @@ namespace SharpFlame.Mapping
                         break;
                     case 2: //object
                         IDText = Convert.ToString(INISection.GetLastPropertyValue("id"));
-                        if ( IOUtil.InvariantParse(IDText, IDNum) )
+                        if ( IOUtil.InvariantParse(IDText, ref IDNum) )
                         {
                             clsUnit Unit = IDUsage(IDNum);
                             if ( Unit != null )

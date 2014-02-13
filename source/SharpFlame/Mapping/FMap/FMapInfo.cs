@@ -83,14 +83,14 @@ namespace SharpFlame.Mapping.FMap
             }
             else if ( (string)INIProperty.Name == "scrollmaxx" )
             {
-                if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), InterfaceOptions.ScrollMax.X) )
+                if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref InterfaceOptions.ScrollMax.X) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
             else if ( (string)INIProperty.Name == "scrollmaxy" )
             {
-                if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), InterfaceOptions.ScrollMax.Y) )
+                if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref InterfaceOptions.ScrollMax.Y) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }

@@ -53,15 +53,7 @@ namespace SharpFlame.Mapping.Wz
         {
             if ( (string)INIProperty.Name == "id" )
             {
-                UInt32 uintTemp = 0;
-                if ( IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), uintTemp) )
-                {
-                    if ( uintTemp > 0 )
-                    {
-                        Droids[INISectionNum].ID = uintTemp;
-                    }
-                }
-                else
+                if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref Droids[INISectionNum].ID) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
@@ -97,16 +89,14 @@ namespace SharpFlame.Mapping.Wz
             }
             else if ( (string)INIProperty.Name == "position" )
             {
-                clsWorldPos temp_Result = Droids[INISectionNum].Pos;
-                if ( !IOUtil.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result) )
+                if ( !IOUtil.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref Droids[INISectionNum].Pos) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
             else if ( (string)INIProperty.Name == "rotation" )
             {
-                sWZAngle temp_Result2 = Droids[INISectionNum].Rotation;
-                if ( !IOUtil.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result2) )
+                if ( !IOUtil.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref Droids[INISectionNum].Rotation) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
@@ -121,16 +111,14 @@ namespace SharpFlame.Mapping.Wz
             }
             else if ( (string)INIProperty.Name == "droidtype" )
             {
-                int temp_Result4 = Droids[INISectionNum].DroidType;
-                if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref temp_Result4) )
+                if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref Droids[INISectionNum].DroidType) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
             else if ( (string)INIProperty.Name == "weapons" )
             {
-                Int32 temp_Result5 = Droids[INISectionNum].WeaponCount;
-                if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref temp_Result5) )
+                if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref Droids[INISectionNum].WeaponCount) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }

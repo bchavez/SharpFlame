@@ -375,7 +375,7 @@ namespace SharpFlame.AppSettings
                 else if ( item is Option<UInt32> )
                 {
                     UInt32 value = 0;
-                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), value) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref value) )
                     {
                         return TranslatorResult.ValueInvalid;
                     }

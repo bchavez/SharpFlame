@@ -35,15 +35,7 @@ namespace SharpFlame.Mapping.Wz
         {
             if ( (string)INIProperty.Name == "id" )
             {
-                UInt32 uintTemp = 0;
-                if ( IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), uintTemp) )
-                {
-                    if ( uintTemp > 0 )
-                    {
-                        Features[INISectionNum].ID = uintTemp;
-                    }
-                }
-                else
+                if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref Features[INISectionNum].ID) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
@@ -54,24 +46,21 @@ namespace SharpFlame.Mapping.Wz
             }
             else if ( (string)INIProperty.Name == "position" )
             {
-                clsWorldPos temp_Result = Features[INISectionNum].Pos;
-                if ( !IOUtil.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result) )
+                if ( !IOUtil.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref Features[INISectionNum].Pos) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
             else if ( (string)INIProperty.Name == "rotation" )
             {
-                sWZAngle temp_Result2 = Features[INISectionNum].Rotation;
-                if ( !IOUtil.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result2) )
+                if ( !IOUtil.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref Features[INISectionNum].Rotation) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
             else if ( (string)INIProperty.Name == "health" )
             {
-                Int32 temp_Result3 = Features[INISectionNum].HealthPercent;
-                if ( !IOUtil.HealthFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result3) )
+                if ( !IOUtil.HealthFromINIText(Convert.ToString(INIProperty.Value), ref Features[INISectionNum].HealthPercent) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }

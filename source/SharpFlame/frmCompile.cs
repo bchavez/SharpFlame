@@ -706,8 +706,8 @@ namespace SharpFlame
             {
                 IOUtil.InvariantParse(txtScrollMinX.Text, ref Min.X);
                 IOUtil.InvariantParse(txtScrollMinY.Text, ref Min.Y);
-                IOUtil.InvariantParse(txtScrollMaxX.Text, Max.X);
-                IOUtil.InvariantParse(txtScrollMaxY.Text, Max.Y);
+                IOUtil.InvariantParse(txtScrollMaxX.Text, ref Max.X);
+                IOUtil.InvariantParse(txtScrollMaxY.Text, ref Max.Y);
             }
         }
     }

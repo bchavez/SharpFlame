@@ -194,7 +194,7 @@ namespace SharpFlame.Mapping.FMap
             }
             else if ( (string)INIProperty.Name == "id" )
             {
-                if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), Objects[INISectionNum].ID) )
+                if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref Objects[INISectionNum].ID) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }

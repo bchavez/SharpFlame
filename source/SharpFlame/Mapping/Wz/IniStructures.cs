@@ -44,15 +44,7 @@ namespace SharpFlame.Mapping.Wz
         {
             if ( (string)INIProperty.Name == "id" )
             {
-                UInt32 uintTemp = 0;
-                if ( IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), uintTemp) )
-                {
-                    if ( uintTemp > 0 )
-                    {
-                        Structures[INISectionNum].ID = uintTemp;
-                    }
-                }
-                else
+                if ( !IOUtil.InvariantParse(INIProperty.Value, ref Structures[INISectionNum].ID) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
@@ -84,16 +76,14 @@ namespace SharpFlame.Mapping.Wz
             }
             else if ( (string)INIProperty.Name == "position" )
             {
-                clsWorldPos temp_Result = Structures[INISectionNum].Pos;
-                if ( !IOUtil.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result) )
+                if ( !IOUtil.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref Structures [INISectionNum].Pos) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
             else if ( (string)INIProperty.Name == "rotation" )
             {
-                sWZAngle temp_Result2 = Structures[INISectionNum].Rotation;
-                if ( !IOUtil.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result2) )
+                if ( !IOUtil.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref Structures[INISectionNum].Rotation) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
@@ -113,8 +103,7 @@ namespace SharpFlame.Mapping.Wz
             }
             else if ( (string)INIProperty.Name == "health" )
             {
-                int temp_Result3 = Structures[INISectionNum].HealthPercent;
-                if ( !IOUtil.HealthFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result3) )
+                if ( !IOUtil.HealthFromINIText(Convert.ToString(INIProperty.Value), ref Structures[INISectionNum].HealthPercent) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
@@ -136,6 +125,7 @@ namespace SharpFlame.Mapping.Wz
             {
                 return TranslatorResult.NameUnknown;
             }
+
             return TranslatorResult.Translated;
         }
     }

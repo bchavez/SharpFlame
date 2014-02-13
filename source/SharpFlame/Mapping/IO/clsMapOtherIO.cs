@@ -786,7 +786,7 @@ namespace SharpFlame.Mapping
                                 }
 
                                 clsLNDObject NewObject = new clsLNDObject();
-                                IOUtil.InvariantParse(ObjectText[0], NewObject.ID);
+                                IOUtil.InvariantParse(ObjectText[0], ref NewObject.ID);
                                 IOUtil.InvariantParse(ObjectText[1], ref NewObject.TypeNum);
                                 NewObject.Code = ObjectText[2].Substring(1, ObjectText[2].Length - 2); //remove quotes
                                 IOUtil.InvariantParse(ObjectText[3], ref NewObject.PlayerNum);

@@ -55,7 +55,7 @@ namespace SharpFlame.FileIO
             return int.TryParse(Text, NumberStyles.Any, CultureInfo.InvariantCulture, out Result);
         }
 
-        public static bool InvariantParse(string Text, UInt32 Result)
+        public static bool InvariantParse(string Text, ref UInt32 Result)
         {
             return UInt32.TryParse(Text, NumberStyles.Any, CultureInfo.InvariantCulture, out Result);
         }
