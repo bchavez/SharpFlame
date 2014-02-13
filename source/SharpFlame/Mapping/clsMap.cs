@@ -1178,13 +1178,13 @@ namespace SharpFlame.Mapping
             return Result;
         }
 
+        // TODO: Think that code is useless - René
         public void UnitSectorsCalc(clsUnit Unit)
         {
             sXY_int Start = new sXY_int();
             sXY_int Finish = new sXY_int();
             sXY_int TileStart = new sXY_int();
             sXY_int TileFinish = new sXY_int();
-            clsUnitSectorConnection Connection;
             int X = 0;
             int Y = 0;
 
@@ -1200,7 +1200,7 @@ namespace SharpFlame.Mapping
             {
                 for ( X = Start.X; X <= Finish.X; X++ )
                 {
-                    Connection = clsUnitSectorConnection.Create(Unit, Sectors[X, Y]);
+                    clsUnitSectorConnection.Create(Unit, Sectors[X, Y]);
                 }
             }
         }
@@ -1703,7 +1703,6 @@ namespace SharpFlame.Mapping
             if ( DeleteUnits )
             {
                 SimpleList<clsUnit> UnitsToDelete = new SimpleList<clsUnit>();
-                int UnitToDeleteCount = 0;
                 clsUnit Unit = default(clsUnit);
                 for ( Y = SectorStart.Y; Y <= SectorFinish.Y; Y++ )
                 {

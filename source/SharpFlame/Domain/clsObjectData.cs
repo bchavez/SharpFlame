@@ -342,13 +342,8 @@ namespace SharpFlame.Domain
             string SubDirWeapons = "";
             string SubDirECM = "";
             string SubDirFeatures = "";
-            string SubDirStructurePIE;
-            string SubDirBodiesPIE;
-            string SubDirPropPIE;
-            string SubDirWeaponsPIE;
             string SubDirTexpages = "";
             string SubDirAssignWeapons = "";
-            string SubDirFeaturePIE;
             string SubDirStructureWeapons = "";
             string SubDirPIEs = "";
 
@@ -368,17 +363,12 @@ namespace SharpFlame.Domain
             SubDirFeatures = "stats" + Convert.ToString(App.PlatformPathSeparator) + "features.txt";
             SubDirPIEs = "pies" + Convert.ToString(App.PlatformPathSeparator);
             //SubDirStructurePIE = "structs" & ospathseperator
-            SubDirStructurePIE = SubDirPIEs;
             //SubDirBodiesPIE = "components" & ospathseperator & "bodies" & ospathseperator
-            SubDirBodiesPIE = SubDirPIEs;
             //SubDirPropPIE = "components" & ospathseperator & "prop" & ospathseperator
-            SubDirPropPIE = SubDirPIEs;
             //SubDirWeaponsPIE = "components" & ospathseperator & "weapons" & ospathseperator
-            SubDirWeaponsPIE = SubDirPIEs;
             SubDirTexpages = "texpages" + Convert.ToString(App.PlatformPathSeparator);
             SubDirAssignWeapons = "stats" + Convert.ToString(App.PlatformPathSeparator) + "assignweapons.txt";
             //SubDirFeaturePIE = "features" & ospathseperator
-            SubDirFeaturePIE = SubDirPIEs;
             SubDirStructureWeapons = "stats" + Convert.ToString(App.PlatformPathSeparator) + "structureweapons.txt";
 
             SimpleList<clsTextFile> CommaFiles = new SimpleList<clsTextFile>();

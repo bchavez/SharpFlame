@@ -24,7 +24,6 @@ namespace SharpFlame.Mapping
         public void GLDraw()
         {
             Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
-            sXY_int Footprint;
             int X = 0;
             int Y = 0;
             int X2 = 0;
@@ -60,7 +59,6 @@ namespace SharpFlame.Mapping
             clsBrush.sPosNum DrawCentreSector = new clsBrush.sPosNum();
             clsTextLabel SelectionLabel = new clsTextLabel();
             float[] light_position = new float[4];
-            Matrix3DMath.Matrix3D matrixA = new Matrix3DMath.Matrix3D();
             Matrix3DMath.Matrix3D matrixB = new Matrix3DMath.Matrix3D();
             clsAction MapAction = default(clsAction);
             float ZNearFar = 0;
@@ -929,7 +927,6 @@ namespace SharpFlame.Mapping
             foreach ( clsUnit tempLoopVar_Unit in SelectedUnits )
             {
                 Unit = tempLoopVar_Unit;
-                Footprint = Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation);
                 RGB_sng = GetUnitGroupColour(Unit.UnitGroup);
                 ColourA = new sRGBA_sng((1.0F + RGB_sng.Red) / 2.0F, (1.0F + RGB_sng.Green) / 2.0F, (1.0F + RGB_sng.Blue) / 2.0F, 0.75F);
                 ColourB = new sRGBA_sng(RGB_sng.Red, RGB_sng.Green, RGB_sng.Blue, 0.75F);
@@ -944,7 +941,6 @@ namespace SharpFlame.Mapping
                     {
                         RGB_sng = GetUnitGroupColour(Unit.UnitGroup);
                         GL.Color4((0.5F + RGB_sng.Red) / 1.5F, (0.5F + RGB_sng.Green) / 1.5F, (0.5F + RGB_sng.Blue) / 1.5F, 0.75F);
-                        Footprint = Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation);
                         ColourA = new sRGBA_sng((1.0F + RGB_sng.Red) / 2.0F, (1.0F + RGB_sng.Green) / 2.0F, (1.0F + RGB_sng.Blue) / 2.0F, 0.75F);
                         ColourB = new sRGBA_sng(RGB_sng.Red, RGB_sng.Green, RGB_sng.Blue, 0.875F);
                         DrawUnitRectangle(Unit, 16, ColourA, ColourB);

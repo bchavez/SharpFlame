@@ -3339,8 +3339,6 @@ namespace SharpFlame
             double BestDist = 0;
             int BestNum = 0;
             sXY_int XY_int = new sXY_int();
-            clsPassageNode tmpPassageNodeA = default(clsPassageNode);
-            clsPassageNode tmpPassageNodeB = default(clsPassageNode);
             double Dist = 0;
 
             //make ramps
@@ -3350,8 +3348,6 @@ namespace SharpFlame
                 Connections[A].IsRamp = false;
             }
 
-            PathfinderNode tmpNodeA = default(PathfinderNode);
-            PathfinderNode tmpNodeB = default(PathfinderNode);
             PathfinderNode[,] PassageNodePathNodes = null;
 
             clsPassageNodeNework PassageNodeNetwork = MakePassageNodeNetwork();
@@ -3509,17 +3505,9 @@ namespace SharpFlame
                 {
                     BestNum = (int)((App.Random.Next() * PossibleRampCount));
                     PossibleRamps[BestNum].IsRamp = true;
-                    tmpPassageNodeA = PossibleRamps[BestNum].PassageNodeA;
-                    tmpPassageNodeB = PossibleRamps[BestNum].PassageNodeB;
-                    tmpNodeA = PassageNodePathNodes[tmpPassageNodeA.MirrorNum, tmpPassageNodeA.Num];
-                    tmpNodeB = PassageNodePathNodes[tmpPassageNodeB.MirrorNum, tmpPassageNodeB.Num];
                     for ( C = 0; C <= PossibleRamps[BestNum].ReflectionCount - 1; C++ )
                     {
                         PossibleRamps[BestNum].Reflections[C].IsRamp = true;
-                        tmpPassageNodeA = PossibleRamps[BestNum].Reflections[C].PassageNodeA;
-                        tmpPassageNodeB = PossibleRamps[BestNum].Reflections[C].PassageNodeB;
-                        tmpNodeA = PassageNodePathNodes[tmpPassageNodeA.MirrorNum, tmpPassageNodeA.Num];
-                        tmpNodeB = PassageNodePathNodes[tmpPassageNodeB.MirrorNum, tmpPassageNodeB.Num];
                     }
                     PassageNodeNetwork.Network.FindCalc();
                     for ( E = 0; E <= PassageNodeCount - 1; E++ )
@@ -3588,8 +3576,6 @@ namespace SharpFlame
         {
             clsPassageNodeNework ReturnResult = new clsPassageNodeNework();
             clsNodeTag NodeTag = default(clsNodeTag);
-            PathfinderNode tmpNodeA = default(PathfinderNode);
-            PathfinderNode tmpNodeB = default(PathfinderNode);
             int A = 0;
             int B = 0;
 
@@ -3603,17 +3589,6 @@ namespace SharpFlame
                     NodeTag = new clsNodeTag();
                     NodeTag.Pos = PassageNodes[B, A].Pos;
                     ReturnResult.PassageNodePathNodes[B, A].Tag = NodeTag;
-                }
-            }
-            for ( A = 0; A <= ConnectionCount - 1; A++ )
-            {
-                if ( Connections[A].PassageNodeA.Level == Connections[A].PassageNodeB.Level || Connections[A].IsRamp )
-                {
-                    if ( !(Connections[A].PassageNodeA.IsWater || Connections[A].PassageNodeB.IsWater) )
-                    {
-                        tmpNodeA = ReturnResult.PassageNodePathNodes[Connections[A].PassageNodeA.MirrorNum, Connections[A].PassageNodeA.Num];
-                        tmpNodeB = ReturnResult.PassageNodePathNodes[Connections[A].PassageNodeB.MirrorNum, Connections[A].PassageNodeB.Num];
-                    }
                 }
             }
             ReturnResult.Network.LargeArraysResize();

@@ -131,7 +131,6 @@ namespace SharpFlame.Domain
                         Result = null;
                         return false;
                     }
-                    break;
                 default:
                     Result = null;
                     return false;
@@ -159,7 +158,6 @@ namespace SharpFlame.Domain
                     {
                         return "<droid> (" + DroidType.GenerateName() + ")";
                     }
-                    break;
                 default:
                     return "";
             }
@@ -186,7 +184,6 @@ namespace SharpFlame.Domain
                     {
                         return DroidType.GenerateName() + " (<droid>)";
                     }
-                    break;
                 default:
                     return "";
             }

@@ -285,7 +285,7 @@ namespace SharpFlame
                 }
             }
 
-            clsResult Result = SettingsManager.Settings_Write();
+            SettingsManager.Settings_Write();
         }
 
 #if !Mono

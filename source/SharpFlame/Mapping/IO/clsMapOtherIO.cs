@@ -109,7 +109,6 @@ namespace SharpFlame.Mapping
                     int X = 0;
                     int Y = 0;
                     int A = 0;
-                    int B = 0;
                     int intTemp = 0;
                     int WarningCount = 0;
 
@@ -412,8 +411,6 @@ namespace SharpFlame.Mapping
 
                     //other compile info
 
-                    string strTemp = null;
-
                     ResultInfo.CompileName = IOUtil.ReadOldText(File);
                     byteTemp = File.ReadByte();
                     if ( byteTemp == ((byte)0) )
@@ -448,7 +445,7 @@ namespace SharpFlame.Mapping
                     }
                     ResultInfo.CompileMultiAuthor = IOUtil.ReadOldText(File);
                     ResultInfo.CompileMultiLicense = IOUtil.ReadOldText(File);
-                    strTemp = IOUtil.ReadOldText(File); //game time
+                    IOUtil.ReadOldText(File); //game time
                     ResultInfo.CampaignGameType = File.ReadInt32();
                     if ( ResultInfo.CampaignGameType < -1 | ResultInfo.CampaignGameType >= Constants.GameTypeCount )
                     {
