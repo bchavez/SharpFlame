@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using ICSharpCode.SharpZipLib.Zip;
+using Ionic.Zip;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
@@ -13,170 +13,94 @@ namespace SharpFlame.Mapping
 {
     public partial class clsMap
     {
-        public clsResult Write_FMap(string Path, bool Overwrite, bool Compress)
+        public clsResult Write_FMap(string path, bool overwrite, bool compress)
         {
-            clsResult ReturnResult =
-                new clsResult("Writing FMap to \"{0}\"".Format2(Path), false);
-            logger.Info ("Writing FMap to \"{0}\"".Format2(Path));
+            clsResult returnResult = new clsResult(string.Format("Writing FMap to \"{0}\"", path), false);
+            logger.Info (string.Format("Writing FMap to \"{0}\"", path));
 
-            if ( !Overwrite )
+            if ( !overwrite )
             {
-                if ( File.Exists(Path) )
+                if ( File.Exists(path) )
                 {
-                    ReturnResult.ProblemAdd("The file already exists");
-                    return ReturnResult;
+                    returnResult.ProblemAdd("The file already exists");
+                    return returnResult;
                 }
             }
 
-            FileStream FileStream = default(FileStream);
-            try
+            using (var zip = new ZipOutputStream(path)) 
             {
-                FileStream = File.Create(Path);
-            }
-            catch ( Exception )
-            {
-                ReturnResult.ProblemAdd("Unable to create file");
-                return ReturnResult;
-            }
+                // Set encoding
+                zip.AlternateEncoding = System.Text.Encoding.GetEncoding ("UTF-8");
+                zip.AlternateEncodingUsage = ZipOption.Always;
 
-            ZipOutputStream WZStream = new ZipOutputStream(FileStream);
-            WZStream.UseZip64 = UseZip64.Off;
-            if ( Compress )
-            {
-                WZStream.SetLevel(9);
-            }
-            else
-            {
-                WZStream.SetLevel(0);
-            }
+                // Set compression
+                if (compress) {
+                    zip.CompressionLevel = Ionic.Zlib.CompressionLevel.BestCompression;
+                } else {
+                    zip.CompressionMethod = CompressionMethod.None;
+                }
 
-            BinaryWriter BinaryWriter = new BinaryWriter(WZStream, App.UTF8Encoding);
-            StreamWriter StreamWriter = new StreamWriter(WZStream, App.UTF8Encoding);
-            ZipEntry ZipEntry = default(ZipEntry);
-            string ZipPath = "";
+                var binaryWriter = new BinaryWriter (zip, App.UTF8Encoding);
+                var streamWriter = new StreamWriter (zip, App.UTF8Encoding);
 
-            ZipPath = "Info.ini";
-            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-            if ( ZipEntry != null )
-            {
-                IniWriter INI_Info = new IniWriter();
-                INI_Info.File = StreamWriter;
-                ReturnResult.Add(Serialize_FMap_Info(INI_Info));
+                zip.PutNextEntry ("Info.ini");             
+                var infoIniWriter = new IniWriter ();
+                infoIniWriter.File = streamWriter;
+                returnResult.Add(Serialize_FMap_Info(infoIniWriter));
+                streamWriter.Flush ();
 
-                StreamWriter.Flush();
-                WZStream.CloseEntry();
-            }
+                zip.PutNextEntry ("VertexHeight.dat");
+                returnResult.Add(Serialize_FMap_VertexHeight(binaryWriter));
+                binaryWriter.Flush ();
+               
+                zip.PutNextEntry ("VertexTerrain.dat");
+                returnResult.Add(Serialize_FMap_VertexTerrain(binaryWriter));
+                binaryWriter.Flush ();
 
-            ZipPath = "VertexHeight.dat";
-            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-            if ( ZipEntry != null )
-            {
-                ReturnResult.Add(Serialize_FMap_VertexHeight(BinaryWriter));
+                zip.PutNextEntry ("TileTexture.dat");
+                returnResult.Add(Serialize_FMap_TileTexture(binaryWriter));
+                binaryWriter.Flush ();
 
-                BinaryWriter.Flush();
-                WZStream.CloseEntry();
-            }
+                zip.PutNextEntry ("TileOrientation.dat");
+                returnResult.Add(Serialize_FMap_TileOrientation(binaryWriter));
+                binaryWriter.Flush ();
 
-            ZipPath = "VertexTerrain.dat";
-            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-            if ( ZipEntry != null )
-            {
-                ReturnResult.Add(Serialize_FMap_VertexTerrain(BinaryWriter));
+                zip.PutNextEntry ("TileCliff.dat");
+                returnResult.Add(Serialize_FMap_TileCliff(binaryWriter));
+                binaryWriter.Flush ();
 
-                BinaryWriter.Flush();
-                WZStream.CloseEntry();
-            }
+                zip.PutNextEntry ("Roads.dat");
+                returnResult.Add(Serialize_FMap_Roads(binaryWriter));
+                binaryWriter.Flush ();
 
-            ZipPath = "TileTexture.dat";
-            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-            if ( ZipEntry != null )
-            {
-                ReturnResult.Add(Serialize_FMap_TileTexture(BinaryWriter));
+                zip.PutNextEntry ("Objects.ini");
+                var objectsIniWriter = new IniWriter ();
+                objectsIniWriter.File = streamWriter;
+                returnResult.Add(Serialize_FMap_Gateways(objectsIniWriter));
+                streamWriter.Flush ();
 
-                BinaryWriter.Flush();
-                WZStream.CloseEntry();
-            }
+                zip.PutNextEntry ("Gateways.ini");             
+                var gatewaysIniWriter = new IniWriter ();
+                gatewaysIniWriter.File = streamWriter;
+                returnResult.Add(Serialize_FMap_Gateways(gatewaysIniWriter));
+                streamWriter.Flush ();
 
-            ZipPath = "TileOrientation.dat";
-            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-            if ( ZipEntry != null )
-            {
-                ReturnResult.Add(Serialize_FMap_TileOrientation(BinaryWriter));
+                zip.PutNextEntry ("TileTypes.dat");
+                returnResult.Add(Serialize_FMap_TileTypes(binaryWriter));
+                binaryWriter.Flush ();
 
-                BinaryWriter.Flush();
-                WZStream.CloseEntry();
+                zip.PutNextEntry ("ScriptLabels.ini");             
+                var scriptLabelsIniWriter = new IniWriter ();
+                scriptLabelsIniWriter.File = streamWriter;
+                returnResult.Add(Serialize_WZ_LabelsINI(scriptLabelsIniWriter, -1));
+                streamWriter.Flush ();
+
+                streamWriter.Close ();
+                binaryWriter.Close ();
+
             }
 
-            ZipPath = "TileCliff.dat";
-            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-            if ( ZipEntry != null )
-            {
-                ReturnResult.Add(Serialize_FMap_TileCliff(BinaryWriter));
-
-                BinaryWriter.Flush();
-                WZStream.CloseEntry();
-            }
-
-            ZipPath = "Roads.dat";
-            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-            if ( ZipEntry != null )
-            {
-                ReturnResult.Add(Serialize_FMap_Roads(BinaryWriter));
-
-                BinaryWriter.Flush();
-                WZStream.CloseEntry();
-            }
-
-            ZipPath = "Objects.ini";
-            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-            if ( ZipEntry != null )
-            {
-                IniWriter INI_Objects = new IniWriter();
-                INI_Objects.File = StreamWriter;
-                ReturnResult.Add(Serialize_FMap_Objects(INI_Objects));
-
-                StreamWriter.Flush();
-                WZStream.CloseEntry();
-            }
-
-            ZipPath = "Gateways.ini";
-            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-            if ( ZipEntry != null )
-            {
-                IniWriter INI_Gateways = new IniWriter();
-                INI_Gateways.File = StreamWriter;
-                ReturnResult.Add(Serialize_FMap_Gateways(INI_Gateways));
-
-                StreamWriter.Flush();
-                WZStream.CloseEntry();
-            }
-
-            ZipPath = "TileTypes.dat";
-            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-            if ( ZipEntry != null )
-            {
-                ReturnResult.Add(Serialize_FMap_TileTypes(BinaryWriter));
-
-                BinaryWriter.Flush();
-                WZStream.CloseEntry();
-            }
-
-            ZipPath = "ScriptLabels.ini";
-            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-            if ( ZipEntry != null )
-            {
-                IniWriter INI_ScriptLabels = new IniWriter();
-                INI_ScriptLabels.File = StreamWriter;
-                ReturnResult.Add(Serialize_WZ_LabelsINI(INI_ScriptLabels, -1));
-
-                StreamWriter.Flush();
-                WZStream.CloseEntry();
-            }
-
-            WZStream.Finish();
-            WZStream.Close();
-            BinaryWriter.Close();
-            return ReturnResult;
+            return returnResult;
         }
 
         public clsResult Serialize_FMap_Info(IniWriter File)
@@ -709,189 +633,180 @@ namespace SharpFlame.Mapping
             return ReturnResult;
         }
 
-        public clsResult Load_FMap(string Path)
+        public clsResult Load_FMap(string path)
         {
-            clsResult ReturnResult =
-                new clsResult("Loading FMap from \"{0}\"".Format2(Path), false);
-            logger.Info ("Loading FMap from \"{0}\"".Format2(Path));
+            clsResult returnResult = new clsResult(string.Format("Loading FMap from \"{0}\"", path), false);
+            logger.Info (string.Format("Loading FMap from \"{0}\"", path));
 
-            ZipStreamEntry ZipSearchResult = default(ZipStreamEntry);
-            string FindPath = "";
-
-            FMapInfo ResultInfo = null;
-
-            FindPath = "info.ini";
-            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
-            if ( ZipSearchResult == null )
-            {
-                ReturnResult.ProblemAdd("Unable to find file \"{0}\".".Format2(FindPath));
-                return ReturnResult;
-            }
-            else
-            {
-                StreamReader Info_StreamReader = new StreamReader(ZipSearchResult.Stream);
-                ReturnResult.Add(Read_FMap_Info(Info_StreamReader, ref ResultInfo));
-                Info_StreamReader.Close();
-                if ( ReturnResult.HasProblems )
-                {
-                    return ReturnResult;
+            using (var zip = ZipFile.Read(path)) {
+                /*
+                 * Info.ini loading
+                 */
+                ZipEntry infoIniEntry = zip ["info.ini"]; // Case insensetive.
+                if (infoIniEntry == null) {
+                    returnResult.ProblemAdd ("Unable to find file \"info.ini\".");
+                    return returnResult;
                 }
-            }
 
-            sXY_int NewTerrainSize = ResultInfo.TerrainSize;
-            Tileset = ResultInfo.Tileset;
+                FMapInfo resultInfo = null;
+                using (Stream s = infoIniEntry.OpenReader()) {
+                    StreamReader reader = new StreamReader (s);
+                    returnResult.Add (Read_FMap_Info (reader, ref resultInfo));
+                    reader.Close ();
+                    if (returnResult.HasProblems) {
+                        return returnResult;
+                    }
+                }
 
-            if ( NewTerrainSize.X <= 0 | NewTerrainSize.X > Constants.MapMaxSize )
-            {
-                ReturnResult.ProblemAdd("Map width of " + Convert.ToString(NewTerrainSize.X) + " is not valid.");
-            }
-            if ( NewTerrainSize.Y <= 0 | NewTerrainSize.Y > Constants.MapMaxSize )
-            {
-                ReturnResult.ProblemAdd("Map height of " + Convert.ToString(NewTerrainSize.Y) + " is not valid.");
-            }
-            if ( ReturnResult.HasProblems )
-            {
-                return ReturnResult;
-            }
+                sXY_int newTerrainSize = resultInfo.TerrainSize;
+                Tileset = resultInfo.Tileset;
 
-            SetPainterToDefaults(); //depends on tileset. must be called before loading the terrains.
-            TerrainBlank(NewTerrainSize);
-            TileType_Reset();
+                if (newTerrainSize.X <= 0 | newTerrainSize.X > Constants.MapMaxSize) {
+                    returnResult.ProblemAdd (string.Format ("Map width of {0} is not valid.", newTerrainSize.X));
+                }
+                if (newTerrainSize.Y <= 0 | newTerrainSize.Y > Constants.MapMaxSize) {
+                    returnResult.ProblemAdd (string.Format ("Map height of {0} is not valid.", newTerrainSize.Y));
+                }
+                if (returnResult.HasProblems) {
+                    return returnResult;
+                }
 
-            FindPath = "vertexheight.dat";
-            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
-            if ( ZipSearchResult == null )
-            {
-                ReturnResult.ProblemAdd("Unable to find file \"{0}\".".Format2(FindPath));
-            }
-            else
-            {
-                BinaryReader VertexHeight_Reader = new BinaryReader(ZipSearchResult.Stream);
-                ReturnResult.Add(Read_FMap_VertexHeight(VertexHeight_Reader));
-                VertexHeight_Reader.Close();
-            }
+                SetPainterToDefaults (); //depends on tileset. must be called before loading the terrains.
+                TerrainBlank (newTerrainSize);
+                TileType_Reset ();
 
-            FindPath = "vertexterrain.dat";
-            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
-            if ( ZipSearchResult == null )
-            {
-                ReturnResult.ProblemAdd("Unable to find file \"{0}\".".Format2(FindPath));            }
-            else
-            {
-                BinaryReader VertexTerrain_Reader = new BinaryReader(ZipSearchResult.Stream);
-                ReturnResult.Add(Read_FMap_VertexTerrain(VertexTerrain_Reader));
-                VertexTerrain_Reader.Close();
-            }
+                // vertexheight.dat
+                ZipEntry vhEntry = zip ["vertexheight.dat"]; // Case insensetive.
+                if (vhEntry == null) {
+                    returnResult.ProblemAdd ("Unable to find file \"vertexheight.dat\".");
+                } else {
+                    using (Stream s = vhEntry.OpenReader()) {
+                        BinaryReader reader = new BinaryReader (s);
+                        returnResult.Add (Read_FMap_VertexHeight (reader));
+                        reader.Close ();
+                    }
+                }
 
-            FindPath = "tiletexture.dat";
-            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
-            if ( ZipSearchResult == null )
-            {
-                ReturnResult.ProblemAdd("Unable to find file \"{0}\".".Format2(FindPath));
-            }
-            else
-            {
-                BinaryReader TileTexture_Reader = new BinaryReader(ZipSearchResult.Stream);
-                ReturnResult.Add(Read_FMap_TileTexture(TileTexture_Reader));
-                TileTexture_Reader.Close();
-            }
+                // vertexterrain.dat
+                ZipEntry vtEntry = zip ["vertexterrain.dat"]; // Case insensetive.
+                if (vtEntry == null) {
+                    returnResult.ProblemAdd ("Unable to find file \"vertexterrain.dat\".");
+                } else {
+                    using (Stream s = vtEntry.OpenReader()) {
+                        BinaryReader reader = new BinaryReader (s);
+                        returnResult.Add (Read_FMap_VertexTerrain (reader));
+                        reader.Close ();
+                    }
+                }            
 
-            FindPath = "tileorientation.dat";
-            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
-            if ( ZipSearchResult == null )
-            {
-                ReturnResult.ProblemAdd("Unable to find file \"{0}\".".Format2(FindPath));
-            }
-            else
-            {
-                BinaryReader TileOrientation_Reader = new BinaryReader(ZipSearchResult.Stream);
-                ReturnResult.Add(Read_FMap_TileOrientation(TileOrientation_Reader));
-                TileOrientation_Reader.Close();
-            }
+                // tiletexture.dat
+                ZipEntry ttEntry = zip ["tiletexture.dat"]; // Case insensetive.
+                if (vtEntry == null) {
+                    returnResult.ProblemAdd ("Unable to find file \"tiletexture.dat\".");
+                } else {
+                    using (Stream s = ttEntry.OpenReader()) {
+                        BinaryReader reader = new BinaryReader (s);
+                        returnResult.Add (Read_FMap_TileTexture (reader));
+                        reader.Close ();
+                    }
+                }
 
-            FindPath = "tilecliff.dat";
-            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
-            if ( ZipSearchResult == null )
-            {
-                ReturnResult.ProblemAdd("Unable to find file \"{0}\".".Format2(FindPath));
-            }
-            else
-            {
-                BinaryReader TileCliff_Reader = new BinaryReader(ZipSearchResult.Stream);
-                ReturnResult.Add(Read_FMap_TileCliff(TileCliff_Reader));
-                TileCliff_Reader.Close();
-            }
+                // tileorientation.dat
+                ZipEntry toEntry = zip ["tileorientation.dat"]; // Case insensetive.
+                if (toEntry == null) {
+                    returnResult.ProblemAdd ("Unable to find file \"tileorientation.dat\".");
+                } else {
+                    using (Stream s = toEntry.OpenReader()) {
+                        BinaryReader reader = new BinaryReader (s);
+                        returnResult.Add (Read_FMap_TileOrientation (reader));
+                        reader.Close ();
+                    }
+                }
 
-            FindPath = "roads.dat";
-            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
-            if ( ZipSearchResult == null )
-            {
-                ReturnResult.ProblemAdd("Unable to find file \"{0}\".".Format2(FindPath));            }
-            else
-            {
-                BinaryReader Roads_Reader = new BinaryReader(ZipSearchResult.Stream);
-                ReturnResult.Add(Read_FMap_Roads(Roads_Reader));
-                Roads_Reader.Close();
-            }
+                // tilecliff.dat
+                ZipEntry tcEntry = zip ["tilecliff.dat"]; // Case insensetive.
+                if (tcEntry == null) {
+                    returnResult.ProblemAdd ("Unable to find file \"tilecliff.dat\".");
+                } else {
+                    using (Stream s = tcEntry.OpenReader()) {
+                        BinaryReader reader = new BinaryReader (s);
+                        returnResult.Add (Read_FMap_TileCliff (reader));
+                        reader.Close ();
+                    }
+                }
 
-            FindPath = "objects.ini";
-            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
-            if ( ZipSearchResult == null )
-            {
-                ReturnResult.ProblemAdd("Unable to find file \"{0}\".".Format2(FindPath));            }
-            else
-            {
-                StreamReader Objects_Reader = new StreamReader(ZipSearchResult.Stream);
-                ReturnResult.Add(Read_FMap_Objects(Objects_Reader));
-                Objects_Reader.Close();
-            }
+                // roads.dat
+                ZipEntry roEntry = zip ["roads.dat"]; // Case insensetive.
+                if (roEntry == null) {
+                    returnResult.ProblemAdd ("Unable to find file \"roads.dat\".");
+                } else {
+                    using (Stream s = roEntry.OpenReader()) {
+                        BinaryReader reader = new BinaryReader (s);
+                        returnResult.Add (Read_FMap_Roads (reader));
+                        reader.Close ();
+                    }
+                }
 
-            FindPath = "gateways.ini";
-            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
-            if ( ZipSearchResult == null )
-            {
-                ReturnResult.ProblemAdd("Unable to find file \"{0}\".".Format2(FindPath));
-            }
-            else
-            {
-                StreamReader Gateway_Reader = new StreamReader(ZipSearchResult.Stream);
-                ReturnResult.Add(Read_FMap_Gateways(Gateway_Reader));
-                Gateway_Reader.Close();
-            }
+                // objects.ini
+                ZipEntry obEntry = zip ["objects.ini"]; // Case insensetive.
+                if (obEntry == null) {
+                    returnResult.ProblemAdd ("Unable to find file \"objects.ini\".");
+                } else {
+                    using (Stream s = obEntry.OpenReader()) {
+                        StreamReader reader = new StreamReader (s);
+                        returnResult.Add (Read_FMap_Objects (reader));
+                        reader.Close ();
+                    }
+                }
 
-            FindPath = "tiletypes.dat";
-            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
-            if ( ZipSearchResult == null )
-            {
-                ReturnResult.ProblemAdd("Unable to find file \"{0}\".".Format2(FindPath));
-            }
-            else
-            {
-                BinaryReader TileTypes_Reader = new BinaryReader(ZipSearchResult.Stream);
-                ReturnResult.Add(Read_FMap_TileTypes(TileTypes_Reader));
-                TileTypes_Reader.Close();
-            }
+                // gateways.ini
+                ZipEntry gaEntry = zip ["gateways.ini"]; // Case insensetive.
+                if (gaEntry == null) {
+                    returnResult.ProblemAdd ("Unable to find file \"gateways.ini\".");
+                    return returnResult;
+                } else {
+                    using (Stream s = gaEntry.OpenReader()) {
+                        StreamReader reader = new StreamReader (s);
+                        returnResult.Add (Read_FMap_Gateways (reader));
+                        reader.Close ();
+                    }
+                }
 
-            FindPath = "scriptlabels.ini";
-            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, FindPath);
-            if ( ZipSearchResult == null )
-            {
-            }
-            else
-            {
-                clsResult Result = new clsResult("Reading labels", false);
-                logger.Info ("Reading labels");
-                IniReader LabelsINI = new IniReader();
-                StreamReader LabelsINI_Reader = new StreamReader(ZipSearchResult.Stream);
-                Result.Take(LabelsINI.ReadFile(LabelsINI_Reader));
-                LabelsINI_Reader.Close();
-                Result.Take(Read_WZ_Labels(LabelsINI, true));
-                ReturnResult.Add(Result);
-            }
+                // tiletypes.dat
+                ZipEntry tileTypesEntry = zip ["tiletypes.dat"]; // Case insensetive.
+                if (tileTypesEntry == null) {
+                    returnResult.ProblemAdd ("Unable to find file \"tiletypes.dat\".");
+                } else {
+                    using (Stream s = tileTypesEntry.OpenReader()) {
+                        BinaryReader reader = new BinaryReader (s);
+                        returnResult.Add (Read_FMap_TileTypes (reader));
+                        reader.Close ();
+                    }
+                }
 
-            InterfaceOptions = ResultInfo.InterfaceOptions;
+                // scriptlabels.ini
+                ZipEntry scriptLabelsEntry = zip ["scriptlabels.ini"]; // Case insensetive.
+                if (scriptLabelsEntry == null) {
+                    returnResult.ProblemAdd ("Unable to find file \"scriptlabels.ini\".");
+                    return returnResult;
+                } else {
+                    using (Stream s = scriptLabelsEntry.OpenReader()) {
+                        clsResult result = new clsResult("Reading labels", false);
+                        logger.Info ("Reading labels");
 
-            return ReturnResult;
+                        StreamReader reader = new StreamReader (s);
+                        IniReader labelsINI = new IniReader();
+                        result.Take(labelsINI.ReadFile(reader));
+                        reader.Close ();
+                        result.Take(Read_WZ_Labels(labelsINI, true));
+                        returnResult.Add(result);
+                    }
+                }
+
+                InterfaceOptions = resultInfo.InterfaceOptions;
+            }           
+
+            return returnResult;
         }
 
         private clsResult Read_FMap_Info(StreamReader File, ref FMapInfo ResultInfo)
