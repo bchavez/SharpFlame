@@ -271,7 +271,7 @@ namespace SharpFlame
                          | StartPos.Y < 0 | FinishPos.Y >= Map.Terrain.TileSize.Y )
                     {
                         clsResultProblemGoto<clsResultItemPosGoto> resultItem = modResults.CreateResultProblemGotoForObject(unit);
-                        resultItem.Text = "Unit off map at position " + unit.GetPosText() + ".";
+                        resultItem.Text = string.Format("Unit off map at position {0}.", unit.GetPosText());
                         Result.ItemAdd(resultItem);
                     }
                     else
@@ -283,7 +283,8 @@ namespace SharpFlame
                                 if ( TileHasUnit[x, y] )
                                 {
                                     clsResultProblemGoto<clsResultItemPosGoto> resultItem = modResults.CreateResultProblemGotoForObject(unit);
-                                    resultItem.Text = "Bad unit overlap on tile " + Convert.ToString(x) + ", " + Convert.ToString(y) + ".";
+                                    logger.Info("Bad overlap of {0} on tile {1}, {2}.", unit.TypeBase.GetDisplayTextName(), x, y);
+                                    resultItem.Text = string.Format("Bad unit overlap of {0} on tile {1}, {2}.", unit.TypeBase.GetDisplayTextName(), x, y);
                                     Result.ItemAdd(resultItem);
                                 }
                                 else
