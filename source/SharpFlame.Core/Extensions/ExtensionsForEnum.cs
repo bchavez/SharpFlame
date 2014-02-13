@@ -64,7 +64,6 @@ namespace SharpFlame.Core.Extensions
             Type type = value.GetType();
 
             //determine the values
-            object result = value;
             _Value parsed = new _Value(check, type);
             if ( parsed.Signed is long )
             {

@@ -1,8 +1,9 @@
 using NLog;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using ICSharpCode.SharpZipLib.Zip;
+using System.Text.RegularExpressions;
 using SharpFlame.Collections;
 using SharpFlame.Maths;
 using SharpFlame.Util;
@@ -12,23 +13,6 @@ namespace SharpFlame.FileIO
     public static class IOUtil
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
-
-        public static ZipEntry ZipMakeEntry(ZipOutputStream ZipOutputStream, string Path, clsResult Result)
-        {
-            try
-            {
-                ZipEntry NewZipEntry = new ZipEntry(Path);
-                NewZipEntry.DateTime = DateTime.Now;
-                ZipOutputStream.PutNextEntry(NewZipEntry);
-                return NewZipEntry;
-            }
-            catch ( Exception ex )
-            {
-                Result.ProblemAdd("Zip entry \"" + Path + "\" failed: " +
-                                  ex.Message);
-                return null;
-            }
-        }
 
         public static bool InvariantParse(string Text, ref bool Result)
         {
@@ -153,27 +137,6 @@ namespace SharpFlame.FileIO
             return ReturnResult;
         }
 
-        public static clsResult WriteMemoryToZipEntryAndFlush(MemoryStream Memory, ZipOutputStream Stream)
-        {
-            clsResult ReturnResult = new clsResult("Writing to zip stream", false);
-            logger.Info ("Writing to zip stream");
-
-            try
-            {
-                Memory.WriteTo(Stream);
-                Memory.Flush();
-                Stream.Flush();
-                Stream.CloseEntry();
-            }
-            catch ( Exception ex )
-            {
-                ReturnResult.ProblemAdd(ex.Message);
-                return ReturnResult;
-            }
-
-            return ReturnResult;
-        }
-
         public static sResult TryOpenFileStream(string Path, ref FileStream Output)
         {
             sResult ReturnResult = new sResult();
@@ -291,141 +254,106 @@ namespace SharpFlame.FileIO
             return true;
         }
 
-        public static ZipStreamEntry FindZipEntryFromPath(string Path, string ZipPathToFind)
+        public static List<string> BytesToLinesRemoveComments(BinaryReader reader)
         {
-            ZipInputStream ZipStream = default(ZipInputStream);
-            ZipEntry ZipEntry = default(ZipEntry);
-            string FindPath = ZipPathToFind.ToLower().Replace('\\', '/');
-            string ZipPath;
-
-            ZipStream = new ZipInputStream(File.OpenRead(Path));
-            do
-            {
-                try
-                {
-                    ZipEntry = ZipStream.GetNextEntry();
-                }
-                catch ( Exception )
-                {
-                    goto endOfDoLoop;
-                }
-                if ( ZipEntry == null )
-                {
-                    break;
-                }
-
-                ZipPath = ZipEntry.Name.ToLower().Replace('\\', '/');
-                if ( ZipPath == FindPath )
-                {
-                    ZipStreamEntry Result = new ZipStreamEntry();
-                    Result.Stream = ZipStream;
-                    Result.Entry = ZipEntry;
-                    return Result;
-                }
-            } while ( true );
-            endOfDoLoop:
-            ZipStream.Close();
-
-            return null;
-        }
-
-        public static SimpleList<string> BytesToLinesRemoveComments(BinaryReader reader)
-        {
-            char CurrentChar = (char)0;
-            bool CurrentCharExists = default(bool);
-            bool InLineComment = default(bool);
-            bool InCommentBlock = default(bool);
-            char PrevChar = (char)0;
-            bool PrevCharExists = default(bool);
+            char currentChar = (char)0;
+            bool currentCharExists = false;
+            bool inLineComment = false;
+            bool inCommentBlock = false;
+            char prevChar = (char)0;
+            bool prevCharExists = false;
             string Line = "";
-            SimpleList<string> Result = new SimpleList<string>();
+            List<string> result = new List<string>();
 
             do
             {
-                MonoContinueDo:
-                PrevChar = CurrentChar;
-                PrevCharExists = CurrentCharExists;
+                prevChar = currentChar;
+                prevCharExists = currentCharExists;
+
                 try
                 {
-                    CurrentChar = reader.ReadChar();
-                    CurrentCharExists = true;
+                    currentChar = reader.ReadChar();
+                    currentCharExists = true;
                 }
                 catch ( Exception )
                 {
-                    CurrentCharExists = false;
+                    currentCharExists = false;
                 }
-                if ( CurrentCharExists )
+
+                if ( currentCharExists )
                 {
-                    switch ( CurrentChar )
+                    switch ( currentChar )
                     {
                         case '\r':
                         case '\n':
-                            InLineComment = false;
-                            if ( PrevCharExists )
+                        if (!inLineComment) {    
+                            if ( prevCharExists )
                             {
-                                Line += PrevChar.ToString();
+                                Line += prevChar.ToString();
                             }
-                            CurrentCharExists = false;
 
                             if ( Line.Length > 0 )
-                            {
-                                Result.Add(Line);
+                            {   
+                                result.Add(Line);
                                 Line = "";
                             }
+                        }
 
-                            goto MonoContinueDo;
+                        inLineComment = false;
+                        currentCharExists = false;
+                        continue;
                         case '*':
-                            if ( PrevCharExists && PrevChar == '/' )
-                            {
-                                InCommentBlock = true;
-                                CurrentCharExists = false;
-                                goto MonoContinueDo;
-                            }
-                            break;
+                        if ( prevCharExists && prevChar == '/' )
+                        {
+                            inCommentBlock = true;
+                            currentCharExists = false;
+                            continue;
+                        }
+                        break;
                         case '/':
-                            if ( PrevCharExists )
+                        if ( prevCharExists )
+                        {
+                            if ( prevChar == '/' )
                             {
-                                if ( PrevChar == '/' )
-                                {
-                                    InLineComment = true;
-                                    CurrentCharExists = false;
-                                    goto MonoContinueDo;
-                                }
-                                else if ( PrevChar == '*' )
-                                {
-                                    InCommentBlock = false;
-                                    CurrentCharExists = false;
-                                    goto MonoContinueDo;
-                                }
+                                inLineComment = true;
+                                currentCharExists = false;
+                                continue;
                             }
-                            break;
+                            else if ( prevChar == '*' )
+                            {
+                                inCommentBlock = false;
+                                currentCharExists = false;
+                                continue;
+                            }
+                        }
+                        break;
                     }
                 }
                 else
                 {
-                    InLineComment = false;
-                    if ( PrevCharExists )
+                    inLineComment = false;
+                    if ( prevCharExists )
                     {
-                        Line += PrevChar.ToString();
+                        Line += prevChar.ToString();
                     }
                     if ( Line.Length > 0 )
                     {
-                        Result.Add(Line);
+                        result.Add(Line);
                         Line = "";
                     }
 
                     break;
                 }
-                if ( PrevCharExists )
+                if ( prevCharExists )
                 {
-                    if ( !(InCommentBlock || InLineComment) )
+                    if ( !(inCommentBlock || inLineComment) )
                     {
-                        Line += PrevChar.ToString();
+                        Line += prevChar.ToString();
                     }
                 }
             } while ( true );
 
-            return Result;
+            return result;  
         }
     }
 
@@ -460,12 +388,6 @@ namespace SharpFlame.FileIO
             }
             return true;
         }
-    }
-
-    public class ZipStreamEntry
-    {
-        public ZipInputStream Stream;
-        public ZipEntry Entry;
     }
 
     public class SplitCommaText

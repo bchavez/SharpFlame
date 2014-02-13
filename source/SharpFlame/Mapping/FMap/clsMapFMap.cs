@@ -26,78 +26,85 @@ namespace SharpFlame.Mapping
                     return returnResult;
                 }
             }
-
-            using (var zip = new ZipOutputStream(path)) 
+            try
             {
-                // Set encoding
-                zip.AlternateEncoding = System.Text.Encoding.GetEncoding ("UTF-8");
-                zip.AlternateEncodingUsage = ZipOption.Always;
+                using (var zip = new ZipOutputStream(path)) 
+                {
+                    // Set encoding
+                    zip.AlternateEncoding = System.Text.Encoding.GetEncoding ("UTF-8");
+                    zip.AlternateEncodingUsage = ZipOption.Always;
 
-                // Set compression
-                if (compress) {
-                    zip.CompressionLevel = Ionic.Zlib.CompressionLevel.BestCompression;
-                } else {
-                    zip.CompressionMethod = CompressionMethod.None;
+                    // Set compression
+                    if (compress) {
+                        zip.CompressionLevel = Ionic.Zlib.CompressionLevel.BestCompression;
+                    } else {
+                        zip.CompressionMethod = CompressionMethod.None;
+                    }
+
+                    var binaryWriter = new BinaryWriter (zip, App.UTF8Encoding);
+                    var streamWriter = new StreamWriter (zip, App.UTF8Encoding);
+
+                    zip.PutNextEntry ("Info.ini");             
+                    var infoIniWriter = new IniWriter ();
+                    infoIniWriter.File = streamWriter;
+                    returnResult.Add(Serialize_FMap_Info(infoIniWriter));
+                    streamWriter.Flush ();
+
+                    zip.PutNextEntry ("VertexHeight.dat");
+                    returnResult.Add(Serialize_FMap_VertexHeight(binaryWriter));
+                    binaryWriter.Flush ();
+                   
+                    zip.PutNextEntry ("VertexTerrain.dat");
+                    returnResult.Add(Serialize_FMap_VertexTerrain(binaryWriter));
+                    binaryWriter.Flush ();
+
+                    zip.PutNextEntry ("TileTexture.dat");
+                    returnResult.Add(Serialize_FMap_TileTexture(binaryWriter));
+                    binaryWriter.Flush ();
+
+                    zip.PutNextEntry ("TileOrientation.dat");
+                    returnResult.Add(Serialize_FMap_TileOrientation(binaryWriter));
+                    binaryWriter.Flush ();
+
+                    zip.PutNextEntry ("TileCliff.dat");
+                    returnResult.Add(Serialize_FMap_TileCliff(binaryWriter));
+                    binaryWriter.Flush ();
+
+                    zip.PutNextEntry ("Roads.dat");
+                    returnResult.Add(Serialize_FMap_Roads(binaryWriter));
+                    binaryWriter.Flush ();
+
+                    zip.PutNextEntry ("Objects.ini");
+                    var objectsIniWriter = new IniWriter ();
+                    objectsIniWriter.File = streamWriter;
+                    returnResult.Add(Serialize_FMap_Gateways(objectsIniWriter));
+                    streamWriter.Flush ();
+
+                    zip.PutNextEntry ("Gateways.ini");             
+                    var gatewaysIniWriter = new IniWriter ();
+                    gatewaysIniWriter.File = streamWriter;
+                    returnResult.Add(Serialize_FMap_Gateways(gatewaysIniWriter));
+                    streamWriter.Flush ();
+
+                    zip.PutNextEntry ("TileTypes.dat");
+                    returnResult.Add(Serialize_FMap_TileTypes(binaryWriter));
+                    binaryWriter.Flush ();
+
+                    zip.PutNextEntry ("ScriptLabels.ini");             
+                    var scriptLabelsIniWriter = new IniWriter ();
+                    scriptLabelsIniWriter.File = streamWriter;
+                    returnResult.Add(Serialize_WZ_LabelsINI(scriptLabelsIniWriter, -1));
+                    streamWriter.Flush ();
+
+                    streamWriter.Close ();
+                    binaryWriter.Close ();
+
                 }
-
-                var binaryWriter = new BinaryWriter (zip, App.UTF8Encoding);
-                var streamWriter = new StreamWriter (zip, App.UTF8Encoding);
-
-                zip.PutNextEntry ("Info.ini");             
-                var infoIniWriter = new IniWriter ();
-                infoIniWriter.File = streamWriter;
-                returnResult.Add(Serialize_FMap_Info(infoIniWriter));
-                streamWriter.Flush ();
-
-                zip.PutNextEntry ("VertexHeight.dat");
-                returnResult.Add(Serialize_FMap_VertexHeight(binaryWriter));
-                binaryWriter.Flush ();
-               
-                zip.PutNextEntry ("VertexTerrain.dat");
-                returnResult.Add(Serialize_FMap_VertexTerrain(binaryWriter));
-                binaryWriter.Flush ();
-
-                zip.PutNextEntry ("TileTexture.dat");
-                returnResult.Add(Serialize_FMap_TileTexture(binaryWriter));
-                binaryWriter.Flush ();
-
-                zip.PutNextEntry ("TileOrientation.dat");
-                returnResult.Add(Serialize_FMap_TileOrientation(binaryWriter));
-                binaryWriter.Flush ();
-
-                zip.PutNextEntry ("TileCliff.dat");
-                returnResult.Add(Serialize_FMap_TileCliff(binaryWriter));
-                binaryWriter.Flush ();
-
-                zip.PutNextEntry ("Roads.dat");
-                returnResult.Add(Serialize_FMap_Roads(binaryWriter));
-                binaryWriter.Flush ();
-
-                zip.PutNextEntry ("Objects.ini");
-                var objectsIniWriter = new IniWriter ();
-                objectsIniWriter.File = streamWriter;
-                returnResult.Add(Serialize_FMap_Gateways(objectsIniWriter));
-                streamWriter.Flush ();
-
-                zip.PutNextEntry ("Gateways.ini");             
-                var gatewaysIniWriter = new IniWriter ();
-                gatewaysIniWriter.File = streamWriter;
-                returnResult.Add(Serialize_FMap_Gateways(gatewaysIniWriter));
-                streamWriter.Flush ();
-
-                zip.PutNextEntry ("TileTypes.dat");
-                returnResult.Add(Serialize_FMap_TileTypes(binaryWriter));
-                binaryWriter.Flush ();
-
-                zip.PutNextEntry ("ScriptLabels.ini");             
-                var scriptLabelsIniWriter = new IniWriter ();
-                scriptLabelsIniWriter.File = streamWriter;
-                returnResult.Add(Serialize_WZ_LabelsINI(scriptLabelsIniWriter, -1));
-                streamWriter.Flush ();
-
-                streamWriter.Close ();
-                binaryWriter.Close ();
-
+            }
+            catch ( Exception ex )
+            {
+                returnResult.ProblemAdd(ex.Message);
+                return returnResult;
             }
 
             return returnResult;

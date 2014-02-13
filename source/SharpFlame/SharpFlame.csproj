@@ -101,9 +101,6 @@
     <Reference Include="Ionic.Zip.Reduced">
       <HintPath>..\packages\DotNetZipLib.1.9\zip-v1.9-Reduced\Release\Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

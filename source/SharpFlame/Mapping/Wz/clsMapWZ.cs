@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
-using ICSharpCode.SharpZipLib.Zip;
+using System.Collections.Generic;
 using NLog;
 using SharpFlame.Collections;
 using SharpFlame.Domain;
@@ -15,397 +15,331 @@ using SharpFlame.Mapping.Tools;
 using SharpFlame.Mapping.Wz;
 using SharpFlame.Maths;
 using SharpFlame.Util;
+using Ionic.Zip;
 
 namespace SharpFlame.Mapping
 {
     public partial class clsMap
     {
-        public clsResult Load_WZ(string Path)
+        public clsResult Load_WZ(string path)
         {
-            var ReturnResult = new clsResult("Loading WZ from '{0}'.".Format2(Path), false);
-            logger.Info("Loading WZ from '{0}'".Format2(Path));
+            var ReturnResult = new clsResult (string.Format ("Loading WZ from '{0}'.", path), false);
+            logger.Info (string.Format ("Loading WZ from '{0}'.", path));
             sResult SubResult = new sResult ();         
 
-            ZipEntry ZipEntry = default(ZipEntry);
             bool GameFound = default(bool);
             bool DatasetFound = default(bool);
-            SimpleList<clsWZMapEntry> Maps = new SimpleList<clsWZMapEntry>();
+            SimpleList<clsWZMapEntry> Maps = new SimpleList<clsWZMapEntry> ();
             clsTileset GameTileset = null;
             string GameName = "";
             string strTemp = "";
-            ZipSplitPath SplitPath;
+            ZipSplitPath splitPath;
             int A = 0;
             int B = 0;
             int C = 0;
             int D = 0;
-            FileStream File = default(FileStream);
-            try
-            {
-                File = System.IO.File.OpenRead(Path);
-            }
-            catch ( Exception ex )
-            {
-                ReturnResult.ProblemAdd(ex.Message);
-                return ReturnResult;
-            }
 
-            ZipInputStream ZipStream = new ZipInputStream(File);
+            using (var zip = ZipFile.Read(path)) {
+                foreach (ZipEntry e in zip) {
+                    if (e.IsDirectory) {
+                        continue;
+                    }                  
 
-            //get all usable lev entries
-            do
-            {
-                ZipEntry = ZipStream.GetNextEntry();
-                if ( ZipEntry == null )
-                {
-                    break;
-                }
+                    splitPath = new ZipSplitPath (e.FileName);
+                    logger.Debug ("Found file \"{0}\".", e.FileName);
+                    // Find the maps .lev
+                    if (splitPath.FileExtension != "lev" || splitPath.PartCount != 1) {
+                        continue;
+                    }
 
-                SplitPath = new ZipSplitPath(ZipEntry.Name);
-
-                if ( SplitPath.FileExtension == "lev" && SplitPath.PartCount == 1 )
-                {
-                    if ( ZipEntry.Size > 10 * 1024 * 1024 )
-                    {
-                        ReturnResult.ProblemAdd("lev file is too large.");
-                        ZipStream.Close();
+                    // Buggy file > 1MB
+                    if (e.UncompressedSize > 1 * 1024 * 1024) {
+                        ReturnResult.ProblemAdd ("lev file is too large.");
                         return ReturnResult;
                     }
-                    BinaryReader reader = new BinaryReader(ZipStream);
-                    SimpleList<string> LineData = IOUtil.BytesToLinesRemoveComments(reader);
-                    //find each level block
-                    for ( A = 0; A <= LineData.Count - 1; A++ )
-                    {
-                        if ( LineData[A].Length > 4 && LineData[A].Substring(0, 5).ToLower() == "level" )
-                        {
-                            //find each levels game file
-                            GameFound = false;
-                            B = 1;
-                            while ( A + B < LineData.Count )
-                            {
-                                if ( LineData[A + B].Substring(0, 4).ToLower() == "game" )
-                                {
-                                    C = LineData[A + B].IndexOf('"');
-                                    D = LineData[A + B].IndexOf('"', C+1);
-                                    if ( C > 0 & D > 0 & D - C > 1 )
-                                    {
-                                        GameName = LineData[A + B].Substring(C+1, D - C - 1);
-                                        //see if map is already counted
-                                        for ( C = 0; C <= Maps.Count - 1; C++ )
-                                        {
-                                            if ( GameName == Maps[C].Name )
-                                            {
-                                                break;
+
+                    using (var s = e.OpenReader()) {
+                        BinaryReader reader = new BinaryReader (s);
+                        List<string> LineData = IOUtil.BytesToLinesRemoveComments (reader); // reads the whole file into the memory.                    
+
+                        for (A = 0; A < LineData.Count; A++) {
+                            if (LineData [A].Length > 4 && LineData [A].Substring (0, 5).ToLower () == "level") {
+                                //find each levels game file
+                                GameFound = false;
+                                B = 1;
+                                while (A + B < LineData.Count) {
+                                    if (LineData [A + B].Substring (0, 4).ToLower () == "game") {
+                                        C = LineData [A + B].IndexOf ('"');
+                                        D = LineData [A + B].IndexOf ('"', C + 1);
+                                        if (C > 0 & D > 0 & D - C > 1) {
+                                            GameName = LineData [A + B].Substring (C + 1, D - C - 1);
+                                            //see if map is already counted
+                                            for (C = 0; C <= Maps.Count - 1; C++) {
+                                                if (GameName == Maps [C].Name) {
+                                                    break;
+                                                }
+                                            }
+                                            if (C == Maps.Count) {
+                                                GameFound = true;
                                             }
                                         }
-                                        if ( C == Maps.Count )
-                                        {
-                                            GameFound = true;
-                                        }
-                                    }
-                                    break;
-                                }
-                                else if ( LineData[A + B].Substring(0, 5).ToLower() == "level" )
-                                {
-                                    break;
-                                }
-                                B++;
-                            }
-                            if ( GameFound )
-                            {
-                                //find the dataset (determines tileset)
-                                DatasetFound = false;
-                                B = 1;
-                                while ( A + B < LineData.Count )
-                                {
-                                    if ( LineData[A + B].Substring(0, 7).ToLower() == "dataset" )
-                                    {
-                                        strTemp = LineData[A + B].Substring(LineData[A + B].Length - 1, 1);
-                                        if ( strTemp == "1" )
-                                        {
-                                            GameTileset = App.Tileset_Arizona;
-                                            DatasetFound = true;
-                                        }
-                                        else if ( strTemp == "2" )
-                                        {
-                                            GameTileset = App.Tileset_Urban;
-                                            DatasetFound = true;
-                                        }
-                                        else if ( strTemp == "3" )
-                                        {
-                                            GameTileset = App.Tileset_Rockies;
-                                            DatasetFound = true;
-                                        }
                                         break;
-                                    }
-                                    else if ( LineData[A + B].Substring(0, 5).ToLower() == "level" )
-                                    {
+                                    } else if (LineData [A + B].Substring (0, 5).ToLower () == "level") {
                                         break;
                                     }
                                     B++;
                                 }
-                                if ( DatasetFound )
-                                {
-                                    clsWZMapEntry NewMap = new clsWZMapEntry();
-                                    NewMap.Name = GameName;
-                                    NewMap.Tileset = GameTileset;
-                                    Maps.Add(NewMap);
+                                if (GameFound) {
+                                    //find the dataset (determines tileset)
+                                    DatasetFound = false;
+                                    B = 1;
+                                    while (A + B < LineData.Count) {
+                                        if (LineData [A + B].Substring (0, 7).ToLower () == "dataset") {
+                                            strTemp = LineData [A + B].Substring (LineData [A + B].Length - 1, 1);
+                                            if (strTemp == "1") {
+                                                GameTileset = App.Tileset_Arizona;
+                                                DatasetFound = true;
+                                            } else if (strTemp == "2") {
+                                                GameTileset = App.Tileset_Urban;
+                                                DatasetFound = true;
+                                            } else if (strTemp == "3") {
+                                                GameTileset = App.Tileset_Rockies;
+                                                DatasetFound = true;
+                                            }
+                                            break;
+                                        } else if (LineData [A + B].Substring (0, 5).ToLower () == "level") {
+                                            break;
+                                        }
+                                        B++;
+                                    }
+                                    if (DatasetFound) {
+                                        clsWZMapEntry NewMap = new clsWZMapEntry ();
+                                        NewMap.Name = GameName;
+                                        NewMap.Tileset = GameTileset;
+                                        Maps.Add (NewMap);
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            } while ( true );
-            ZipStream.Close();
 
-            string MapLoadName = "";
-
-            //prompt user for which of the entries to load
-            if ( Maps.Count < 1 )
-            {
-                ReturnResult.ProblemAdd("No maps found in file.");
-                return ReturnResult;
-            }
-            else if ( Maps.Count == 1 )
-            {
-                MapLoadName = Convert.ToString(Maps[0].Name);
-                Tileset = Maps[0].Tileset;
-            }
-            else
-            {
-                frmWZLoad.clsOutput SelectToLoadResult = new frmWZLoad.clsOutput();
-                string[] Names = new string[Maps.Count];
-                for ( A = 0; A <= Maps.Count - 1; A++ )
-                {
-                    Names[A] = Convert.ToString(Maps[A].Name);
-                }
-                frmWZLoad SelectToLoadForm = new frmWZLoad(Names, SelectToLoadResult,
-                    "Select a map from " + Convert.ToString(new sSplitPath(Path).FileTitle));
-                SelectToLoadForm.ShowDialog();
-                if ( SelectToLoadResult.Result < 0 )
-                {
-                    ReturnResult.ProblemAdd("No map selected.");
+                if (Maps.Count < 1) {
+                    ReturnResult.ProblemAdd ("No maps found in file.");
                     return ReturnResult;
                 }
-                MapLoadName = Convert.ToString(Maps[SelectToLoadResult.Result].Name);
-                Tileset = Maps[SelectToLoadResult.Result].Tileset;
-            }
 
-            TileType_Reset();
-            SetPainterToDefaults();
+                string mapLoadName = "";
+                //prompt user for which of the entries to load
+                if (Maps.Count == 1) {
+                    mapLoadName = Convert.ToString (Maps [0].Name);
+                    Tileset = Maps [0].Tileset;
+                } else {
+                    frmWZLoad.clsOutput SelectToLoadResult = new frmWZLoad.clsOutput ();
+                    string[] Names = new string[Maps.Count];
+                    for (A = 0; A <= Maps.Count - 1; A++) {
+                        Names [A] = Convert.ToString (Maps [A].Name);
+                    }
+                    frmWZLoad SelectToLoadForm = new frmWZLoad (Names, SelectToLoadResult,
+                                                                "Select a map from " + new sSplitPath (path).FileTitle);
+                    SelectToLoadForm.ShowDialog ();
+                    if (SelectToLoadResult.Result < 0) {
+                        ReturnResult.ProblemAdd ("No map selected.");
+                        return ReturnResult;
+                    }
+                    mapLoadName = Convert.ToString (Maps [SelectToLoadResult.Result].Name);
+                    Tileset = Maps [SelectToLoadResult.Result].Tileset;
+                }
 
-            ZipSplitPath GameSplitPath = new ZipSplitPath(MapLoadName);
-            string GameFilesPath = GameSplitPath.FilePath + GameSplitPath.FileTitleWithoutExtension + "/";
+                TileType_Reset ();
+                SetPainterToDefaults ();
 
-            ZipStreamEntry ZipSearchResult = default(ZipStreamEntry);
+                // mapLoadName is now multiplay/maps/<mapname>.gam (thats "game" from the .lev file
+                ZipSplitPath gameSplitPath = new ZipSplitPath (mapLoadName);
+                string gameFilesPath = gameSplitPath.FilePath + gameSplitPath.FileTitleWithoutExtension + "/";
 
-            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, MapLoadName);
-            if ( ZipSearchResult == null )
-            {
-                ReturnResult.ProblemAdd("Game file not found.");
-                return ReturnResult;
-            }
-            else
-            {
-                BinaryReader Map_Reader = new BinaryReader(ZipSearchResult.Stream);
-                SubResult = Read_WZ_gam(Map_Reader);
-                Map_Reader.Close();
-
-                if ( !SubResult.Success )
-                {
-                    ReturnResult.ProblemAdd(SubResult.Problem);
+                var gameZipEntry = zip [mapLoadName]; 
+                if (gameZipEntry == null) {
+                    ReturnResult.ProblemAdd ("Game file not found.");
                     return ReturnResult;
                 }
-            }
-
-            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "game.map");
-            if ( ZipSearchResult == null )
-            {
-                ReturnResult.ProblemAdd("game.map file not found");
-                return ReturnResult;
-            }
-            else
-            {
-                BinaryReader Map_Reader = new BinaryReader(ZipSearchResult.Stream);
-                SubResult = Read_WZ_map(Map_Reader);
-                Map_Reader.Close();
-
-                if ( !SubResult.Success )
-                {
-                    ReturnResult.ProblemAdd(SubResult.Problem);
-                    return ReturnResult;
-                }
-            }
-
-            SimpleClassList<clsWZBJOUnit> BJOUnits = new SimpleClassList<clsWZBJOUnit>();
-
-            IniFeatures INIFeatures = null;
-
-            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "feature.ini");
-            if ( ZipSearchResult == null )
-            {
-            }
-            else
-            {
-                clsResult Result = new clsResult("feature.ini", false);
-                logger.Info ("Loading feature.ini");
-                IniReader FeaturesINI = new IniReader();
-                StreamReader FeaturesINI_Reader = new StreamReader(ZipSearchResult.Stream);
-                Result.Take(FeaturesINI.ReadFile(FeaturesINI_Reader));
-                FeaturesINI_Reader.Close();
-                INIFeatures = new IniFeatures(FeaturesINI.Sections.Count);
-                Result.Take(FeaturesINI.Translate(INIFeatures));
-                ReturnResult.Add(Result);
-            }
-
-            if ( INIFeatures == null )
-            {
-                clsResult Result = new clsResult("feat.bjo", false);
-                logger.Info ("Loading feat.bjo");
-                ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "feat.bjo");
-                if ( ZipSearchResult == null )
-                {
-                    Result.WarningAdd("file not found");
-                }
-                else
-                {
-                    BinaryReader Features_Reader = new BinaryReader(ZipSearchResult.Stream);
-                    SubResult = Read_WZ_Features(Features_Reader, BJOUnits);
-                    Features_Reader.Close();
-                    if ( !SubResult.Success )
-                    {
-                        Result.WarningAdd(SubResult.Problem);
+                using (Stream s = gameZipEntry.OpenReader()) {              
+                    BinaryReader reader = new BinaryReader (s);
+                    SubResult = Read_WZ_gam (reader);
+                    reader.Close ();
+                    if (!SubResult.Success) {
+                        ReturnResult.ProblemAdd (SubResult.Problem);
+                        return ReturnResult;
                     }
                 }
-                ReturnResult.Add(Result);
-            }
 
-            if ( true )
-            {
-                clsResult Result = new clsResult("ttypes.ttp", false);
+
+                var gameMapZipEntry = zip [gameFilesPath + "game.map"];
+                if (gameMapZipEntry == null) {
+                    ReturnResult.ProblemAdd (string.Format ("{0}game.map file not found", gameFilesPath));
+                    return ReturnResult;
+                }
+                using (Stream s = gameMapZipEntry.OpenReader()) {              
+                    BinaryReader reader = new BinaryReader (s);
+                    SubResult = Read_WZ_map (reader);
+                    reader.Close ();
+                    if (!SubResult.Success) {
+                        ReturnResult.ProblemAdd (SubResult.Problem);
+                        return ReturnResult;
+                    }
+                }
+
+                SimpleClassList<clsWZBJOUnit> BJOUnits = new SimpleClassList<clsWZBJOUnit> ();
+
+                IniFeatures INIFeatures = null;
+                var featureIniZipEntry = zip [gameFilesPath + "feature.ini"];
+                if (featureIniZipEntry != null) {
+                    using (Stream s = featureIniZipEntry.OpenReader()) {              
+                        clsResult Result = new clsResult ("feature.ini", false);
+                        logger.Info ("Loading feature.ini");
+                        IniReader FeaturesINI = new IniReader ();
+                        StreamReader reader = new StreamReader (s);
+                        Result.Take (FeaturesINI.ReadFile (reader));
+                        reader.Close ();
+                        INIFeatures = new IniFeatures (FeaturesINI.Sections.Count);
+                        Result.Take (FeaturesINI.Translate (INIFeatures));
+                        ReturnResult.Add (Result);
+                    }
+                }
+
+                if (INIFeatures == null) {
+                    clsResult Result = new clsResult ("feat.bjo", false);
+                    logger.Info ("Loading feat.bjo");
+
+                    var featBJOZipEntry = zip [gameFilesPath + "feat.bjo"];
+                    if (featBJOZipEntry == null) {
+                        Result.WarningAdd (string.Format ("{0}feat.bjo / feature.ini file not found", gameFilesPath));
+                    } else {
+                        using (Stream s = featBJOZipEntry.OpenReader()) {
+                            BinaryReader reader = new BinaryReader (s);
+                            SubResult = Read_WZ_Features (reader, BJOUnits);
+                            reader.Close ();
+                            if (!SubResult.Success) {
+                                Result.WarningAdd (SubResult.Problem);
+                            }
+                        }
+                    }
+                    ReturnResult.Add (Result);
+                }
+
+                clsResult result = new clsResult ("ttypes.ttp", false);
                 logger.Info ("Loading ttypes.ttp");
-                ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "ttypes.ttp");
-                if ( ZipSearchResult == null )
-                {
-                    Result.WarningAdd("file not found");
-                }
-                else
-                {
-                    BinaryReader TileTypes_Reader = new BinaryReader(ZipSearchResult.Stream);
-                    SubResult = Read_WZ_TileTypes(TileTypes_Reader);
-                    TileTypes_Reader.Close();
-                    if ( !SubResult.Success )
-                    {
-                        Result.WarningAdd(SubResult.Problem);
+                var ttypesEntry = zip [gameFilesPath + "ttypes.ttp"];
+                if (ttypesEntry == null) {
+                    result.WarningAdd (string.Format ("{0}ttypes.ttp file not found", gameFilesPath));
+                } else {
+                    using (Stream s = ttypesEntry.OpenReader()) {
+                        BinaryReader reader = new BinaryReader (s);
+                        SubResult = Read_WZ_TileTypes (reader);
+                        reader.Close ();
+                        if (!SubResult.Success) {
+                            result.WarningAdd (SubResult.Problem);
+                        }
                     }
                 }
-                ReturnResult.Add(Result);
-            }
+                ReturnResult.Add (result);
 
-            IniStructures INIStructures = null;
-
-            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "struct.ini");
-            if ( ZipSearchResult == null )
-            {
-            }
-            else
-            {
-                clsResult Result = new clsResult("struct.ini", false);
-                logger.Info ("Loading struct.ini");
-                IniReader StructuresINI = new IniReader();
-                StreamReader StructuresINI_Reader = new StreamReader(ZipSearchResult.Stream);
-                Result.Take(StructuresINI.ReadFile(StructuresINI_Reader));
-                StructuresINI_Reader.Close();
-                INIStructures = new IniStructures(StructuresINI.Sections.Count, this);
-                Result.Take(StructuresINI.Translate(INIStructures));
-                ReturnResult.Add(Result);
-            }
-
-            if ( INIStructures == null )
-            {
-                clsResult Result = new clsResult("struct.bjo", false);
-                logger.Info ("Loading struct.bjo");
-                ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "struct.bjo");
-                if ( ZipSearchResult == null )
-                {
-                    Result.WarningAdd("file not found");
-                }
-                else
-                {
-                    BinaryReader Structures_Reader = new BinaryReader(ZipSearchResult.Stream);
-                    SubResult = Read_WZ_Structures(Structures_Reader, BJOUnits);
-                    Structures_Reader.Close();
-                    if ( !SubResult.Success )
+                IniStructures INIStructures = null;
+                var structIniEntry = zip [gameFilesPath + "struct.ini"];
+                if (structIniEntry != null) {
                     {
-                        Result.WarningAdd(SubResult.Problem);
+                        using (Stream s = structIniEntry.OpenReader()) {
+                            result = new clsResult ("struct.ini", false);
+                            logger.Info ("Loading struct.ini");
+                            IniReader StructuresINI = new IniReader ();
+                            StreamReader reader = new StreamReader (s);
+                            result.Take (StructuresINI.ReadFile (reader));
+                            reader.Close ();
+                            INIStructures = new IniStructures (StructuresINI.Sections.Count, this);
+                            result.Take (StructuresINI.Translate (INIStructures));
+                            ReturnResult.Add (result);
+                        }
                     }
                 }
-                ReturnResult.Add(Result);
-            }
 
-            IniDroids INIDroids = null;
-
-            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "droid.ini");
-            if ( ZipSearchResult == null )
-            {
-            }
-            else
-            {
-                clsResult Result = new clsResult("droid.ini", false);
-                logger.Info ("Loading droid.ini");
-                IniReader DroidsINI = new IniReader();
-                StreamReader DroidsINI_Reader = new StreamReader(ZipSearchResult.Stream);
-                Result.Take(DroidsINI.ReadFile(DroidsINI_Reader));
-                DroidsINI_Reader.Close();
-                INIDroids = new IniDroids(DroidsINI.Sections.Count, this);
-                Result.Take(DroidsINI.Translate(INIDroids));
-                ReturnResult.Add(Result);
-            }
-
-            if ( INIDroids == null )
-            {
-                clsResult Result = new clsResult("dinit.bjo", false);
-                logger.Info ("Loading dinit.bjo");
-                ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "dinit.bjo");
-                if ( ZipSearchResult == null )
-                {
-                    Result.WarningAdd("file not found");
+                if (INIStructures == null) {
+                    clsResult Result = new clsResult ("struct.bjo", false);
+                    logger.Info ("Loading struct.bjo");
+                    var structBjoEntry = zip [gameFilesPath + "struct.bjo"];
+                    if (structBjoEntry == null) {
+                        Result.WarningAdd (string.Format ("{0}struct.bjo / struct.ini file not found", gameFilesPath));
+                    } else {
+                        using (Stream s = structBjoEntry.OpenReader()) {
+                            BinaryReader reader = new BinaryReader (s);
+                            SubResult = Read_WZ_Structures (reader, BJOUnits);
+                            reader.Close ();
+                            if (!SubResult.Success) {
+                                Result.WarningAdd (SubResult.Problem);
+                            }
+                        }
+                    }
+                    ReturnResult.Add (Result);
                 }
-                else
-                {
-                    BinaryReader Droids_Reader = new BinaryReader(ZipSearchResult.Stream);
-                    SubResult = Read_WZ_Droids(Droids_Reader, BJOUnits);
-                    Droids_Reader.Close();
-                    if ( !SubResult.Success )
+
+                IniDroids INIDroids = null;
+                var droidIniEntry = zip [gameFilesPath + "droid.ini"];
+                if (structIniEntry != null) {
                     {
-                        Result.WarningAdd(SubResult.Problem);
+                        using (Stream s = droidIniEntry.OpenReader()) {
+                        clsResult Result = new clsResult ("droid.ini", false);
+                        logger.Info ("Loading droid.ini");
+                        IniReader DroidsINI = new IniReader ();
+                        StreamReader reader = new StreamReader (s);
+                        Result.Take (DroidsINI.ReadFile (reader));
+                        reader.Close ();
+                        INIDroids = new IniDroids (DroidsINI.Sections.Count, this);
+                        Result.Take (DroidsINI.Translate (INIDroids));
+                        ReturnResult.Add (Result);
+                        }
                     }
                 }
-                ReturnResult.Add(Result);
-            }
 
-            sCreateWZObjectsArgs CreateObjectsArgs = new sCreateWZObjectsArgs();
-            CreateObjectsArgs.BJOUnits = BJOUnits;
-            CreateObjectsArgs.INIStructures = INIStructures;
-            CreateObjectsArgs.INIDroids = INIDroids;
-            CreateObjectsArgs.INIFeatures = INIFeatures;
-            ReturnResult.Add(CreateWZObjects(CreateObjectsArgs));
+                if (INIDroids == null) {
+                    clsResult Result = new clsResult ("dinit.bjo", false);
+                    logger.Info ("Loading dinit.bjo");
+                    var diniBjoEntry = zip [gameFilesPath + "dinit.bjo"];
+                    if (diniBjoEntry == null) {
+                        Result.WarningAdd (string.Format ("{0}dinit.bjo / droid.ini file not found", gameFilesPath));
+                    } else {
+                        using (Stream s = diniBjoEntry.OpenReader()) {
+                            BinaryReader reader = new BinaryReader (s);
+                            SubResult = Read_WZ_Droids (reader, BJOUnits);
+                            reader.Close ();
+                            if (!SubResult.Success) {
+                                Result.WarningAdd (SubResult.Problem);
+                            }
+                        }
+                    }
+                    ReturnResult.Add (Result);
+                }
 
-            //objects are modified by this and must already exist
-            ZipSearchResult = IOUtil.FindZipEntryFromPath(Path, GameFilesPath + "labels.ini");
-            if ( ZipSearchResult == null )
-            {
-            }
-            else
-            {
-                clsResult Result = new clsResult("labels.ini", false);
-                logger.Info ("Loading labels.ini");
-                IniReader LabelsINI = new IniReader();
-                StreamReader LabelsINI_Reader = new StreamReader(ZipSearchResult.Stream);
-                Result.Take(LabelsINI.ReadFile(LabelsINI_Reader));
-                LabelsINI_Reader.Close();
-                Result.Take(Read_WZ_Labels(LabelsINI, false));
-                ReturnResult.Add(Result);
-            }
+                sCreateWZObjectsArgs CreateObjectsArgs = new sCreateWZObjectsArgs ();
+                CreateObjectsArgs.BJOUnits = BJOUnits;
+                CreateObjectsArgs.INIStructures = INIStructures;
+                CreateObjectsArgs.INIDroids = INIDroids;
+                CreateObjectsArgs.INIFeatures = INIFeatures;
+                ReturnResult.Add (CreateWZObjects (CreateObjectsArgs));
+
+                //objects are modified by this and must already exist
+                var labelsIniEntry = zip [gameFilesPath + "labels.ini"];
+                if (labelsIniEntry != null) {
+                    using (Stream s = labelsIniEntry.OpenReader()) {
+                        clsResult Result = new clsResult ("labels.ini", false);
+                        logger.Info ("Loading labels.ini");
+                        IniReader LabelsINI = new IniReader ();
+                        StreamReader reader = new StreamReader (s);
+                        Result.Take (LabelsINI.ReadFile (reader));
+                        reader.Close ();
+                        Result.Take (Read_WZ_Labels (LabelsINI, false));
+                        ReturnResult.Add (Result);
+                    }
+                }
+            }            
 
             return ReturnResult;
         }
@@ -2655,188 +2589,83 @@ namespace SharpFlame.Mapping
                             return ReturnResult;
                         }
                     }
-                    else
-                    {
-                        if ( File.Exists(Args.Path) )
-                        {
-                            try
-                            {
-                                File.Delete(Args.Path);
-                            }
-                            catch ( Exception ex )
-                            {
-                                ReturnResult.ProblemAdd("Unable to delete existing file: " + ex.Message);
-                                return ReturnResult;
-                            }
-                        }
-                    }
-
-                    ZipOutputStream WZStream = default(ZipOutputStream);
-
+   
                     try
                     {
-                        WZStream = new ZipOutputStream(File.Create(Args.Path));
-                    }
-                    catch ( Exception ex )
-                    {
-                        ReturnResult.ProblemAdd(ex.Message);
-                        return ReturnResult;
-                    }
+                        using (var zip = new ZipOutputStream(Args.Path)) 
+                        {
+                            // Set encoding
+                            zip.AlternateEncoding = System.Text.Encoding.GetEncoding ("UTF-8");
+                            zip.AlternateEncodingUsage = ZipOption.Always;
 
-                    WZStream.SetLevel(9);
-                    WZStream.UseZip64 = UseZip64.Off; //warzone crashes without this
+                            // Set compression
+                            zip.CompressionLevel = Ionic.Zlib.CompressionLevel.BestCompression;
 
-                    try
-                    {
-                        string ZipPath = "";
-                        ZipEntry ZipEntry = default(ZipEntry);
-
-                        if ( Args.Multiplayer.IsBetaPlayerFormat )
-                        {
-                            ZipPath = PlayersPrefix + Args.MapName + ".xplayers.lev";
-                        }
-                        else
-                        {
-                            ZipPath = PlayersPrefix + Args.MapName + ".addon.lev";
-                        }
-                        ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-                        if ( ZipEntry != null )
-                        {
-                            File_LEV_Memory.WriteTo(WZStream);
-                            WZStream.Flush();
-                            WZStream.CloseEntry();
-                        }
-
-                        ZipEntry = new ZipEntry("multiplay/");
-                        WZStream.PutNextEntry(ZipEntry);
-                        ZipEntry = new ZipEntry("multiplay/maps/");
-                        WZStream.PutNextEntry(ZipEntry);
-                        ZipEntry = new ZipEntry("multiplay/maps/" + PlayersPrefix + Args.MapName + "/");
-                        WZStream.PutNextEntry(ZipEntry);
-
-                        ZipPath = "multiplay/maps/" + PlayersPrefix + Args.MapName + ".gam";
-                        ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-                        if ( ZipEntry != null )
-                        {
-                            ReturnResult.Add(IOUtil.WriteMemoryToZipEntryAndFlush(File_GAM_Memory, WZStream));
-                        }
-                        else
-                        {
-                            ReturnResult.ProblemAdd("Unable to make entry " + ZipPath);
-                        }
-
-                        ZipPath = "multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "dinit.bjo";
-                        ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-                        if ( ZipEntry != null )
-                        {
-                            ReturnResult.Add(IOUtil.WriteMemoryToZipEntryAndFlush(File_droidBJO_Memory, WZStream));
-                        }
-                        else
-                        {
-                            ReturnResult.ProblemAdd("Unable to make entry " + ZipPath);
-                        }
-
-                        ZipPath = "multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "droid.ini";
-                        ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-                        if ( ZipEntry != null )
-                        {
-                            ReturnResult.Add(IOUtil.WriteMemoryToZipEntryAndFlush(INI_droid_Memory, WZStream));
-                        }
-                        else
-                        {
-                            ReturnResult.ProblemAdd("Unable to make entry " + ZipPath);
-                        }
-
-                        ZipPath = "multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "feat.bjo";
-                        ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-                        if ( ZipEntry != null )
-                        {
-                            ReturnResult.Add(IOUtil.WriteMemoryToZipEntryAndFlush(File_featBJO_Memory, WZStream));
-                        }
-                        else
-                        {
-                            ReturnResult.ProblemAdd("Unable to make entry " + ZipPath);
-                        }
-
-                        ZipPath = "multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "feature.ini";
-                        ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-                        if ( ZipEntry != null )
-                        {
-                            ReturnResult.Add(IOUtil.WriteMemoryToZipEntryAndFlush(INI_feature_Memory, WZStream));
-                        }
-                        else
-                        {
-                            ReturnResult.ProblemAdd("Unable to make entry " + ZipPath);
-                        }
-
-                        ZipPath = "multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "game.map";
-                        ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-                        if ( ZipEntry != null )
-                        {
-                            ReturnResult.Add(IOUtil.WriteMemoryToZipEntryAndFlush(File_MAP_Memory, WZStream));
-                        }
-                        else
-                        {
-                            ReturnResult.ProblemAdd("Unable to make entry " + ZipPath);
-                        }
-
-                        ZipPath = "multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "struct.bjo";
-                        ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-                        if ( ZipEntry != null )
-                        {
-                            ReturnResult.Add(IOUtil.WriteMemoryToZipEntryAndFlush(File_structBJO_Memory, WZStream));
-                        }
-                        else
-                        {
-                            ReturnResult.ProblemAdd("Unable to make entry " + ZipPath);
-                        }
-
-                        ZipPath = "multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "struct.ini";
-                        ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-                        if ( ZipEntry != null )
-                        {
-                            ReturnResult.Add(IOUtil.WriteMemoryToZipEntryAndFlush(INI_struct_Memory, WZStream));
-                        }
-                        else
-                        {
-                            ReturnResult.ProblemAdd("Unable to make entry " + ZipPath);
-                        }
-
-                        ZipPath = "multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "ttypes.ttp";
-                        ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-                        if ( ZipEntry != null )
-                        {
-                            ReturnResult.Add(IOUtil.WriteMemoryToZipEntryAndFlush(File_TTP_Memory, WZStream));
-                        }
-                        else
-                        {
-                            ReturnResult.ProblemAdd("Unable to make entry " + ZipPath);
-                        }
-
-                        if ( INI_Labels_Memory.Length > 0 )
-                        {
-                            ZipPath = "multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "labels.ini";
-                            ZipEntry = IOUtil.ZipMakeEntry(WZStream, ZipPath, ReturnResult);
-                            if ( ZipEntry != null )
+                            // .addon.lev / .xplayers.lev
+                            string zipPath = "";
+                            if ( Args.Multiplayer.IsBetaPlayerFormat )
                             {
-                                ReturnResult.Add(IOUtil.WriteMemoryToZipEntryAndFlush(INI_Labels_Memory, WZStream));
+                                zipPath = PlayersPrefix + Args.MapName + ".xplayers.lev";
                             }
                             else
                             {
-                                ReturnResult.ProblemAdd("Unable to make entry " + ZipPath);
+                                zipPath = PlayersPrefix + Args.MapName + ".addon.lev";
                             }
-                        }
+                            zip.PutNextEntry (zipPath);
+                            File_LEV_Memory.WriteTo(zip);                       
+                            File_LEV_Memory.Flush();
 
-                        WZStream.Finish();
-                        WZStream.Close();
-                        return ReturnResult;
+                            zip.PutNextEntry("multiplay/maps/" + PlayersPrefix + Args.MapName + ".gam");
+                            File_GAM_Memory.WriteTo(zip);
+                            File_GAM_Memory.Flush();
+
+                            zip.PutNextEntry("multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "dinit.bjo");
+                            File_droidBJO_Memory.WriteTo(zip);
+                            File_droidBJO_Memory.Flush();
+
+                            zip.PutNextEntry("multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "droid.ini");
+                            INI_droid_Memory.WriteTo(zip);
+                            INI_droid_Memory.Flush();
+
+                            zip.PutNextEntry("multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "feat.bjo");
+                            File_featBJO_Memory.WriteTo(zip);
+                            File_featBJO_Memory.Flush();
+
+                            zip.PutNextEntry("multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "feature.ini");
+                            INI_feature_Memory.WriteTo(zip);
+                            INI_feature_Memory.Flush();
+
+                            zip.PutNextEntry("multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "game.map");
+                            File_MAP_Memory.WriteTo(zip);
+                            File_MAP_Memory.Flush();
+
+                            zip.PutNextEntry("multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "struct.bjo");
+                            File_structBJO_Memory.WriteTo(zip);
+                            File_structBJO_Memory.Flush();
+
+                            zip.PutNextEntry("multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "struct.ini");
+                            INI_struct_Memory.WriteTo(zip);
+                            INI_struct_Memory.Flush();
+
+                            zip.PutNextEntry("multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "ttypes.ttp");
+                            File_TTP_Memory.WriteTo(zip);
+                            File_TTP_Memory.Flush();
+
+                            if ( INI_Labels_Memory.Length > 0 ) 
+                            {
+                                zip.PutNextEntry("multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "labels.ini");
+                                INI_Labels_Memory.WriteTo(zip);
+                                INI_Labels_Memory.Flush();
+                            }
+                        }                    
                     }
                     catch ( Exception ex )
                     {
-                        WZStream.Close();
                         ReturnResult.ProblemAdd(ex.Message);
                         return ReturnResult;
                     }
+
+                    return ReturnResult;
                 }
                 else if ( Args.CompileType == sWrite_WZ_Args.enumCompileType.Campaign )
                 {

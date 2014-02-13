@@ -1219,6 +1219,8 @@ namespace SharpFlame.Mapping
             TimeSpan timeDiff = DateTime.Now - AutoSave.SavedDate;
             if (timeDiff.Seconds < SettingsManager.Settings.AutoSaveMinInterval_s)
             {
+                logger.Debug(string.Format("No autosave, we have {0} seconds of {1}", 
+                                           timeDiff.Seconds, SettingsManager.Settings.AutoSaveMinInterval_s));
                 return;
             }
 
@@ -1231,16 +1233,17 @@ namespace SharpFlame.Mapping
         public clsResult AutoSavePerform()
         {
             clsResult ReturnResult = new clsResult("Autosave", false);
-            logger.Info("Autosave");
 
             DateTime DateNow = DateTime.Now;
-            string Path = "";
+            var path = string.Format ("{0}autosaved-{1}-{2}-{3}-{4}-{5}-{6}-{7}.fmap", 
+                                        App.AutoSavePath, DateNow.Year, App.MinDigits (DateNow.Month, 2), 
+                                        App.MinDigits (DateNow.Day, 2), App.MinDigits (DateNow.Hour, 2), 
+                                        App.MinDigits (DateNow.Minute, 2), App.MinDigits (DateNow.Second, 2),
+                                        App.MinDigits (DateNow.Millisecond, 3));
 
-            Path = App.AutoSavePath + "autosaved-" + DateNow.Year.ToStringInvariant() + "-" + App.MinDigits(DateNow.Month, 2) + "-" +
-                   App.MinDigits(DateNow.Day, 2) + "-" + App.MinDigits(DateNow.Hour, 2) + "-" + App.MinDigits(DateNow.Minute, 2) + "-" +
-                   App.MinDigits(DateNow.Second, 2) + "-" + App.MinDigits(DateNow.Millisecond, 3) + ".fmap";
+            logger.Info(string.Format("Autosave to: \"{0}\"", path));
 
-            ReturnResult.Add(Write_FMap(Path, false, SettingsManager.Settings.AutoSaveCompress));
+            ReturnResult.Add(Write_FMap(path, false, SettingsManager.Settings.AutoSaveCompress));
 
             return ReturnResult;
         }

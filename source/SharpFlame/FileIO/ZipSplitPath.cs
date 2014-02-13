@@ -12,26 +12,26 @@ namespace SharpFlame.FileIO
         public string FileTitleWithoutExtension;
         public string FileExtension;
 
-        public ZipSplitPath(string Path)
+        public ZipSplitPath(string path)
         {
-            int A;
-            string PathFixed = Path.ToLower ().Replace ('\\', '/');
+            int a;
+            string PathFixed = path.ToLower ().Replace ('\\', '/');
 
             Parts = PathFixed.Split('/');
             PartCount = Parts.Length;
 
             FilePath = "";
-            for (A = 0; A <= PartCount - 2; A++ )
+            for (a = 0; a <= PartCount - 2; a++ )
             {
-                FilePath += Parts[A] + "/";
+                FilePath += Parts[a] + "/";
             }
-            FileTitle = Parts[A];
+            FileTitle = Parts[a];
 
-            A = FileTitle.LastIndexOf ('.');
+            a = FileTitle.LastIndexOf ('.');
 
-            if (A > 0) {
-                FileTitleWithoutExtension = FileTitle.Substring (0, A);
-                FileExtension = FileTitle.Substring (A + 1, FileTitle.Length - A - 1);
+            if (a > 0) {
+                FileTitleWithoutExtension = FileTitle.Substring (0, a);
+                FileExtension = FileTitle.Substring (a + 1, FileTitle.Length - a - 1);
             } else {
                 FileTitleWithoutExtension = FileTitle;
                 FileExtension = "";

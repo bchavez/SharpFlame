@@ -487,7 +487,7 @@ namespace SharpFlame.Mapping
                 int A = 0;
                 int B = 0;
                 int Tile_Num = 0;
-                SimpleList<string> LineData = default(SimpleList<string>);
+                // SimpleList<string> LineData = default(SimpleList<string>);
                 int Line_Num = 0;
                 sLNDTile[] LNDTile = null;
                 SimpleList<clsLNDObject> LNDObjects = new SimpleList<clsLNDObject>();
@@ -505,7 +505,7 @@ namespace SharpFlame.Mapping
                     ReturnResult.ProblemAdd(ex.Message);
                     return ReturnResult;
                 }
-                LineData = IOUtil.BytesToLinesRemoveComments(Reader);
+                var LineData = IOUtil.BytesToLinesRemoveComments(Reader);
                 Reader.Close();
 
                 Array.Resize(ref LNDTile, LineData.Count);
