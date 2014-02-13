@@ -19,11 +19,11 @@ namespace SharpFlame.Mapping.Wz
         public sFeatures[] Features;
         public int FeatureCount;
 
-        public IniFeatures(int NewFeatureCount)
+        public IniFeatures(int newFeatureCount)
         {
             int A = 0;
 
-            FeatureCount = NewFeatureCount;
+            FeatureCount = newFeatureCount;
             Features = new sFeatures[FeatureCount];
             for ( A = 0; A <= FeatureCount - 1; A++ )
             {
@@ -31,36 +31,36 @@ namespace SharpFlame.Mapping.Wz
             }
         }
 
-        public override TranslatorResult Translate(int INISectionNum, Section.SectionProperty INIProperty)
+        public override TranslatorResult Translate(int iNISectionNum, Section.SectionProperty iNIProperty)
         {
-            if ( (string)INIProperty.Name == "id" )
+            if ( (string)iNIProperty.Name == "id" )
             {
-                if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref Features[INISectionNum].ID) )
+                if ( !IOUtil.InvariantParse(Convert.ToString(iNIProperty.Value), ref Features[iNISectionNum].ID) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "name" )
+            else if ( (string)iNIProperty.Name == "name" )
             {
-                Features[INISectionNum].Code = Convert.ToString(INIProperty.Value);
+                Features[iNISectionNum].Code = Convert.ToString(iNIProperty.Value);
             }
-            else if ( (string)INIProperty.Name == "position" )
+            else if ( (string)iNIProperty.Name == "position" )
             {
-                if ( !IOUtil.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref Features[INISectionNum].Pos) )
+                if ( !IOUtil.WorldPosFromINIText(Convert.ToString(iNIProperty.Value), ref Features[iNISectionNum].Pos) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "rotation" )
+            else if ( (string)iNIProperty.Name == "rotation" )
             {
-                if ( !IOUtil.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref Features[INISectionNum].Rotation) )
+                if ( !IOUtil.WZAngleFromINIText(Convert.ToString(iNIProperty.Value), ref Features[iNISectionNum].Rotation) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "health" )
+            else if ( (string)iNIProperty.Name == "health" )
             {
-                if ( !IOUtil.HealthFromINIText(Convert.ToString(INIProperty.Value), ref Features[INISectionNum].HealthPercent) )
+                if ( !IOUtil.HealthFromINIText(Convert.ToString(iNIProperty.Value), ref Features[iNISectionNum].HealthPercent) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
