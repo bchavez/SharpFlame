@@ -24,8 +24,7 @@ namespace SharpFlame.Mapping
         {
             var ReturnResult = new clsResult("Loading WZ from '{0}'.".Format2(Path), false);
             logger.Info("Loading WZ from '{0}'".Format2(Path));
-            sResult SubResult = new sResult();
-            string Quote = "\"";
+            sResult SubResult = new sResult ();         
 
             ZipEntry ZipEntry = default(ZipEntry);
             bool GameFound = default(bool);
@@ -85,8 +84,8 @@ namespace SharpFlame.Mapping
                             {
                                 if ( LineData[A + B].Substring(0, 4).ToLower() == "game" )
                                 {
-                                    C = LineData[A + B].IndexOf(Quote);
-                                    D = LineData[A + B].IndexOf(Quote, C+1);
+                                    C = LineData[A + B].IndexOf('"');
+                                    D = LineData[A + B].IndexOf('"', C+1);
                                     if ( C > 0 & D > 0 & D - C > 1 )
                                     {
                                         GameName = LineData[A + B].Substring(C+1, D - C - 1);

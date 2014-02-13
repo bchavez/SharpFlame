@@ -43,8 +43,8 @@ namespace SharpFlame
             AutoSavePath = myDocumentsProgramPath.CombinePathWith("autosave", true);
 
 #else
-            SettingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.ini");
-            AutoSavePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "autosave" + Path.PathSeparator);
+            SettingsPath = AppDomain.CurrentDomain.BaseDirectory.CombinePathWith("settings.ini");
+            AutoSavePath = AppDomain.CurrentDomain.BaseDirectory.CombinePathWith("autosave", true);
 #endif
             // Create the directories.
             if (!Directory.Exists (AutoSavePath)) {
