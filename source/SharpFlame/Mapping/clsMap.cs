@@ -482,7 +482,6 @@ namespace SharpFlame.Mapping
             MakeMinimapTimer.Enabled = false;
             MakeMinimapTimer.Dispose();
             MakeMinimapTimer = null;
-            MakeMinimapTimer.Tick += MinimapTimer_Tick;
 
             frmMainLink.Deallocate();
             frmMainLink = null;
