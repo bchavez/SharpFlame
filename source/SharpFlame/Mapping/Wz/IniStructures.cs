@@ -25,13 +25,13 @@ namespace SharpFlame.Mapping.Wz
         public sStructure[] Structures;
         public int StructureCount;
 
-        public IniStructures(int NewStructureCount, clsMap NewParentMap)
+        public IniStructures(int newStructureCount, clsMap newParentMap)
         {
             int A = 0;
 
-            ParentMap = NewParentMap;
+            ParentMap = newParentMap;
 
-            StructureCount = NewStructureCount;
+            StructureCount = newStructureCount;
             Structures = new sStructure[StructureCount];
             for ( A = 0; A <= StructureCount - 1; A++ )
             {
@@ -40,31 +40,23 @@ namespace SharpFlame.Mapping.Wz
             }
         }
 
-        public override TranslatorResult Translate(int INISectionNum, Section.SectionProperty INIProperty)
+        public override TranslatorResult Translate(int iNISectionNum, Section.SectionProperty iNIProperty)
         {
-            if ( (string)INIProperty.Name == "id" )
+            if ( (string)iNIProperty.Name == "id" )
             {
-                UInt32 uintTemp = 0;
-                if ( IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), uintTemp) )
-                {
-                    if ( uintTemp > 0 )
-                    {
-                        Structures[INISectionNum].ID = uintTemp;
-                    }
-                }
-                else
+                if ( !IOUtil.InvariantParse(iNIProperty.Value, ref Structures[iNISectionNum].ID) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "name" )
+            else if ( (string)iNIProperty.Name == "name" )
             {
-                Structures[INISectionNum].Code = Convert.ToString(INIProperty.Value);
+                Structures[iNISectionNum].Code = Convert.ToString(iNIProperty.Value);
             }
-            else if ( (string)INIProperty.Name == "startpos" )
+            else if ( (string)iNIProperty.Name == "startpos" )
             {
                 int StartPos = 0;
-                if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref StartPos) )
+                if ( !IOUtil.InvariantParse(Convert.ToString(iNIProperty.Value), ref StartPos) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
@@ -72,36 +64,34 @@ namespace SharpFlame.Mapping.Wz
                 {
                     return TranslatorResult.ValueInvalid;
                 }
-                Structures[INISectionNum].UnitGroup = ParentMap.UnitGroups[StartPos];
+                Structures[iNISectionNum].UnitGroup = ParentMap.UnitGroups[StartPos];
             }
-            else if ( (string)INIProperty.Name == "player" )
+            else if ( (string)iNIProperty.Name == "player" )
             {
-                if ( INIProperty.Value.ToLower() != "scavenger" )
+                if ( iNIProperty.Value.ToLower() != "scavenger" )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
-                Structures[INISectionNum].UnitGroup = ParentMap.ScavengerUnitGroup;
+                Structures[iNISectionNum].UnitGroup = ParentMap.ScavengerUnitGroup;
             }
-            else if ( (string)INIProperty.Name == "position" )
+            else if ( (string)iNIProperty.Name == "position" )
             {
-                clsWorldPos temp_Result = Structures[INISectionNum].Pos;
-                if ( !IOUtil.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result) )
-                {
-                    return TranslatorResult.ValueInvalid;
-                }
-            }
-            else if ( (string)INIProperty.Name == "rotation" )
-            {
-                sWZAngle temp_Result2 = Structures[INISectionNum].Rotation;
-                if ( !IOUtil.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result2) )
+                if ( !IOUtil.WorldPosFromINIText(Convert.ToString(iNIProperty.Value), ref Structures [iNISectionNum].Pos) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "modules" )
+            else if ( (string)iNIProperty.Name == "rotation" )
+            {
+                if ( !IOUtil.WZAngleFromINIText(Convert.ToString(iNIProperty.Value), ref Structures[iNISectionNum].Rotation) )
+                {
+                    return TranslatorResult.ValueInvalid;
+                }
+            }
+            else if ( (string)iNIProperty.Name == "modules" )
             {
                 int ModuleCount = 0;
-                if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref ModuleCount) )
+                if ( !IOUtil.InvariantParse(Convert.ToString(iNIProperty.Value), ref ModuleCount) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
@@ -109,20 +99,19 @@ namespace SharpFlame.Mapping.Wz
                 {
                     return TranslatorResult.ValueInvalid;
                 }
-                Structures[INISectionNum].ModuleCount = ModuleCount;
+                Structures[iNISectionNum].ModuleCount = ModuleCount;
             }
-            else if ( (string)INIProperty.Name == "health" )
+            else if ( (string)iNIProperty.Name == "health" )
             {
-                int temp_Result3 = Structures[INISectionNum].HealthPercent;
-                if ( !IOUtil.HealthFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result3) )
+                if ( !IOUtil.HealthFromINIText(Convert.ToString(iNIProperty.Value), ref Structures[iNISectionNum].HealthPercent) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "wall/type" )
+            else if ( (string)iNIProperty.Name == "wall/type" )
             {
                 int WallType = 0;
-                if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref WallType) )
+                if ( !IOUtil.InvariantParse(Convert.ToString(iNIProperty.Value), ref WallType) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
@@ -130,12 +119,13 @@ namespace SharpFlame.Mapping.Wz
                 {
                     return TranslatorResult.ValueInvalid;
                 }
-                Structures[INISectionNum].WallType = WallType;
+                Structures[iNISectionNum].WallType = WallType;
             }
             else
             {
                 return TranslatorResult.NameUnknown;
             }
+
             return TranslatorResult.Translated;
         }
     }

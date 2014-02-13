@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using Microsoft.VisualBasic;
 using NLog;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Maths;
@@ -161,16 +160,17 @@ namespace SharpFlame.Domain
                 else if ( strTemp.Substring(0, 7) == "TEXTURE" )
                 {
                     TextureName = strTemp.Substring(strTemp.Length - (strTemp.Length - 10), strTemp.Length - 10);
-                    A = Strings.InStrRev(TextureName, " ", -1, (CompareMethod)0);
+                    A = TextureName.LastIndexOf(" ");
                     if ( A > 0 )
                     {
-                        A = Strings.InStrRev(TextureName, " ", A - 1, (CompareMethod)0);
+                        A = TextureName.LastIndexOf(" ", A-1)+1;
                     }
                     else
                     {
                         ReturnResult.ProblemAdd("Bad texture name.");
                         return ReturnResult;
                     }
+
                     if ( A > 0 )
                     {
                         TextureName = TextureName.Substring(0, A - 1);
@@ -208,7 +208,7 @@ namespace SharpFlame.Domain
                             goto FileFinished;
                         }
 
-                        strTemp2 = Strings.Left(strTemp, 1);
+                        strTemp2 = strTemp.Left(1);
                         if ( char.Parse(strTemp2) == '\t' || strTemp2 == " " )
                         {
                             SplitText = new string[3];
@@ -217,7 +217,7 @@ namespace SharpFlame.Domain
                             GotText = false;
                             for ( B = 0; B <= strTemp.Length - 1; B++ )
                             {
-                                if ( strTemp[B] != ' ' && strTemp[B] != ControlChars.Tab )
+                                if ( strTemp[B] != ' ' && strTemp[B] != '\t' )
                                 {
                                     GotText = true;
                                     SplitText[C] += strTemp[B].ToString();
@@ -272,7 +272,7 @@ namespace SharpFlame.Domain
                             goto FileFinished;
                         }
 
-                        strTemp2 = Strings.Left(strTemp, 1);
+                        strTemp2 = strTemp.Left(1);
                         if ( char.Parse(strTemp2) == '\t' || strTemp2 == " " )
                         {
                             C = 0;
@@ -280,7 +280,7 @@ namespace SharpFlame.Domain
                             SplitText[C] = "";
                             for ( B = 0; B <= strTemp.Length - 1; B++ )
                             {
-                                if ( strTemp[B] == ' ' || strTemp[B] == ControlChars.Tab )
+                                if ( strTemp[B] == ' ' || strTemp[B] == '\t' )
                                 {
                                     if ( SplitText[C].Length > 0 )
                                     {
@@ -434,7 +434,7 @@ namespace SharpFlame.Domain
                             goto FileFinished;
                         }
 
-                        strTemp2 = Strings.Left(strTemp, 1);
+                        strTemp2 = strTemp.Left(1);
                         if ( char.Parse(strTemp2) == '\t' || strTemp2 == " " )
                         {
                             SplitText = new string[3];
@@ -443,7 +443,7 @@ namespace SharpFlame.Domain
                             GotText = false;
                             for ( B = 0; B <= strTemp.Length - 1; B++ )
                             {
-                                if ( strTemp[B] != ' ' && strTemp[B] != ControlChars.Tab )
+                                if ( strTemp[B] != ' ' && strTemp[B] != '\t' )
                                 {
                                     GotText = true;
                                     SplitText[C] += strTemp[B].ToString();
@@ -494,8 +494,7 @@ namespace SharpFlame.Domain
             GLTextureNum = Owner.Get_TexturePage_GLTexture(TextureName.Substring(0, TextureName.Length - 4));
             if ( GLTextureNum == 0 )
             {
-                ReturnResult.WarningAdd("Texture " + Convert.ToString(ControlChars.Quote) + TextureName + Convert.ToString(ControlChars.Quote) +
-                                        " was not loaded");
+                ReturnResult.WarningAdd("Texture \"{0}\" was not loaded".Format2(TextureName));
             }
 
             TriangleCount = NewTriCount;

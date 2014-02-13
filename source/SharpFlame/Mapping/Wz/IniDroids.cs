@@ -33,13 +33,13 @@ namespace SharpFlame.Mapping.Wz
         public sDroid[] Droids;
         public int DroidCount;
 
-        public IniDroids(int NewDroidCount, clsMap NewParentMap)
+        public IniDroids(int newDroidCount, clsMap NewParentMap)
         {
             int A = 0;
 
             ParentMap = NewParentMap;
 
-            DroidCount = NewDroidCount;
+            DroidCount = newDroidCount;
             Droids = new sDroid[DroidCount];
             for ( A = 0; A <= DroidCount - 1; A++ )
             {
@@ -49,31 +49,23 @@ namespace SharpFlame.Mapping.Wz
             }
         }
 
-        public override TranslatorResult Translate(int INISectionNum, Section.SectionProperty INIProperty)
+        public override TranslatorResult Translate(int iNISectionNum, Section.SectionProperty iNIProperty)
         {
-            if ( (string)INIProperty.Name == "id" )
+            if ( (string)iNIProperty.Name == "id" )
             {
-                UInt32 uintTemp = 0;
-                if ( IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), uintTemp) )
-                {
-                    if ( uintTemp > 0 )
-                    {
-                        Droids[INISectionNum].ID = uintTemp;
-                    }
-                }
-                else
+                if ( !IOUtil.InvariantParse(Convert.ToString(iNIProperty.Value), ref Droids[iNISectionNum].ID) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "template" )
+            else if ( (string)iNIProperty.Name == "template" )
             {
-                Droids[INISectionNum].Template = Convert.ToString(INIProperty.Value);
+                Droids[iNISectionNum].Template = Convert.ToString(iNIProperty.Value);
             }
-            else if ( (string)INIProperty.Name == "startpos" )
+            else if ( (string)iNIProperty.Name == "startpos" )
             {
                 int StartPos = 0;
-                if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref StartPos) )
+                if ( !IOUtil.InvariantParse(Convert.ToString(iNIProperty.Value), ref StartPos) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
@@ -81,99 +73,95 @@ namespace SharpFlame.Mapping.Wz
                 {
                     return TranslatorResult.ValueInvalid;
                 }
-                Droids[INISectionNum].UnitGroup = ParentMap.UnitGroups[StartPos];
+                Droids[iNISectionNum].UnitGroup = ParentMap.UnitGroups[StartPos];
             }
-            else if ( (string)INIProperty.Name == "player" )
+            else if ( (string)iNIProperty.Name == "player" )
             {
-                if ( INIProperty.Value.ToLower() != "scavenger" )
+                if ( iNIProperty.Value.ToLower() != "scavenger" )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
-                Droids[INISectionNum].UnitGroup = ParentMap.ScavengerUnitGroup;
+                Droids[iNISectionNum].UnitGroup = ParentMap.ScavengerUnitGroup;
             }
-            else if ( (string)INIProperty.Name == "name" )
+            else if ( (string)iNIProperty.Name == "name" )
             {
                 //ignore
             }
-            else if ( (string)INIProperty.Name == "position" )
+            else if ( (string)iNIProperty.Name == "position" )
             {
-                clsWorldPos temp_Result = Droids[INISectionNum].Pos;
-                if ( !IOUtil.WorldPosFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result) )
+                if ( !IOUtil.WorldPosFromINIText(Convert.ToString(iNIProperty.Value), ref Droids[iNISectionNum].Pos) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "rotation" )
+            else if ( (string)iNIProperty.Name == "rotation" )
             {
-                sWZAngle temp_Result2 = Droids[INISectionNum].Rotation;
-                if ( !IOUtil.WZAngleFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result2) )
+                if ( !IOUtil.WZAngleFromINIText(Convert.ToString(iNIProperty.Value), ref Droids[iNISectionNum].Rotation) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "health" )
+            else if ( (string)iNIProperty.Name == "health" )
             {
-                int temp_Result3 = Droids[INISectionNum].HealthPercent;
-                if ( !IOUtil.HealthFromINIText(Convert.ToString(INIProperty.Value), ref temp_Result3) )
+                int temp_Result3 = Droids[iNISectionNum].HealthPercent;
+                if ( !IOUtil.HealthFromINIText(Convert.ToString(iNIProperty.Value), ref temp_Result3) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "droidtype" )
+            else if ( (string)iNIProperty.Name == "droidtype" )
             {
-                int temp_Result4 = Droids[INISectionNum].DroidType;
-                if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref temp_Result4) )
+                if ( !IOUtil.InvariantParse(Convert.ToString(iNIProperty.Value), ref Droids[iNISectionNum].DroidType) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "weapons" )
+            else if ( (string)iNIProperty.Name == "weapons" )
             {
-                Int32 temp_Result5 = Droids[INISectionNum].WeaponCount;
-                if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref temp_Result5) )
+                if ( !IOUtil.InvariantParse(Convert.ToString(iNIProperty.Value), ref Droids[iNISectionNum].WeaponCount) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "parts\\body" )
+            else if ( (string)iNIProperty.Name == "parts\\body" )
             {
-                Droids[INISectionNum].Body = Convert.ToString(INIProperty.Value);
+                Droids[iNISectionNum].Body = Convert.ToString(iNIProperty.Value);
             }
-            else if ( (string)INIProperty.Name == "parts\\propulsion" )
+            else if ( (string)iNIProperty.Name == "parts\\propulsion" )
             {
-                Droids[INISectionNum].Propulsion = Convert.ToString(INIProperty.Value);
+                Droids[iNISectionNum].Propulsion = Convert.ToString(iNIProperty.Value);
             }
-            else if ( (string)INIProperty.Name == "parts\\brain" )
+            else if ( (string)iNIProperty.Name == "parts\\brain" )
             {
-                Droids[INISectionNum].Brain = Convert.ToString(INIProperty.Value);
+                Droids[iNISectionNum].Brain = Convert.ToString(iNIProperty.Value);
             }
-            else if ( (string)INIProperty.Name == "parts\\repair" )
+            else if ( (string)iNIProperty.Name == "parts\\repair" )
             {
-                Droids[INISectionNum].Repair = Convert.ToString(INIProperty.Value);
+                Droids[iNISectionNum].Repair = Convert.ToString(iNIProperty.Value);
             }
-            else if ( (string)INIProperty.Name == "parts\\ecm" )
+            else if ( (string)iNIProperty.Name == "parts\\ecm" )
             {
-                Droids[INISectionNum].ECM = Convert.ToString(INIProperty.Value);
+                Droids[iNISectionNum].ECM = Convert.ToString(iNIProperty.Value);
             }
-            else if ( (string)INIProperty.Name == "parts\\sensor" )
+            else if ( (string)iNIProperty.Name == "parts\\sensor" )
             {
-                Droids[INISectionNum].Sensor = Convert.ToString(INIProperty.Value);
+                Droids[iNISectionNum].Sensor = Convert.ToString(iNIProperty.Value);
             }
-            else if ( (string)INIProperty.Name == "parts\\construct" )
+            else if ( (string)iNIProperty.Name == "parts\\construct" )
             {
-                Droids[INISectionNum].Construct = Convert.ToString(INIProperty.Value);
+                Droids[iNISectionNum].Construct = Convert.ToString(iNIProperty.Value);
             }
-            else if ( (string)INIProperty.Name == "parts\\weapon\\1" )
+            else if ( (string)iNIProperty.Name == "parts\\weapon\\1" )
             {
-                Droids[INISectionNum].Weapons[0] = INIProperty.Value;
+                Droids[iNISectionNum].Weapons[0] = iNIProperty.Value;
             }
-            else if ( (string)INIProperty.Name == "parts\\weapon\\2" )
+            else if ( (string)iNIProperty.Name == "parts\\weapon\\2" )
             {
-                Droids[INISectionNum].Weapons[1] = INIProperty.Value;
+                Droids[iNISectionNum].Weapons[1] = iNIProperty.Value;
             }
-            else if ( (string)INIProperty.Name == "parts\\weapon\\3" )
+            else if ( (string)iNIProperty.Name == "parts\\weapon\\3" )
             {
-                Droids[INISectionNum].Weapons[2] = INIProperty.Value;
+                Droids[iNISectionNum].Weapons[2] = iNIProperty.Value;
             }
             else
             {

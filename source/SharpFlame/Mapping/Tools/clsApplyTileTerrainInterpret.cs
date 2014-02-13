@@ -6,8 +6,6 @@ namespace SharpFlame.Mapping.Tools
     public class clsApplyTileTerrainInterpret : clsAction
     {
         private Painter Painter;
-        private Painters.Terrain PainterTerrainA;
-        private Painters.Terrain PainterTerrainB;
         private clsTerrain.Tile.sTexture Texture;
         private TileDirection ResultDirection;
         private TileOrientationChance PainterTexture;
@@ -35,8 +33,6 @@ namespace SharpFlame.Mapping.Tools
 
             for ( PainterBrushNum = 0; PainterBrushNum <= Painter.CliffBrushCount - 1; PainterBrushNum++ )
             {
-                PainterTerrainA = Painter.CliffBrushes[PainterBrushNum].Terrain_Inner;
-                PainterTerrainB = Painter.CliffBrushes[PainterBrushNum].Terrain_Outer;
                 for ( A = 0; A <= Painter.CliffBrushes[PainterBrushNum].Tiles_Straight.TileCount - 1; A++ )
                 {
                     PainterTexture = Painter.CliffBrushes[PainterBrushNum].Tiles_Straight.Tiles[A];

@@ -204,7 +204,6 @@ namespace SharpFlame.Pathfinding
             PathfinderNetwork.sFloodForValuesArgs Args = new PathfinderNetwork.sFloodForValuesArgs();
             int A = 0;
             int NumA = 0;
-            PathfinderNetwork Map = NodeA.Layer.Network;
             float TotalValue = 0;
             Args.NodeValues = NodeA.Layer.Network.NetworkLargeArrays.Nodes_ValuesA;
             Args.FinishIsParent = false;

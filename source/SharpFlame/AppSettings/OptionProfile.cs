@@ -1,7 +1,6 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Microsoft.VisualBasic;
 using NLog;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
@@ -178,9 +177,10 @@ namespace SharpFlame.AppSettings
                 }
                 else
                 {
-                    returnResult.ProblemAdd("Value for option " + Convert.ToString(ControlChars.Quote) + item.SaveKey +
-                                            Convert.ToString(ControlChars.Quote) + " could not be written because it is of type " +
-                                            optionValue.GetType().FullName);
+                    returnResult.ProblemAdd(
+                        "Value for option \"{0\" could not be written because it is of type \"{1}\""
+                            .Format2(item.SaveKey, optionValue.GetType().FullName)
+                        );
                 }
                 if ( valueText != null )
                 {
@@ -375,7 +375,7 @@ namespace SharpFlame.AppSettings
                 else if ( item is Option<UInt32> )
                 {
                     UInt32 value = 0;
-                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), value) )
+                    if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref value) )
                     {
                         return TranslatorResult.ValueInvalid;
                     }

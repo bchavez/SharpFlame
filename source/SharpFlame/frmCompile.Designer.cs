@@ -1,6 +1,5 @@
 namespace SharpFlame
 {
-	[global::Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]public 
 	partial class frmCompile : System.Windows.Forms.Form
 	{
 		

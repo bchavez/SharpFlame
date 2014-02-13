@@ -1,6 +1,5 @@
 namespace SharpFlame
 {
-	[global::Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]public 
 	partial class frmQuit : System.Windows.Forms.Form
 	{
 		

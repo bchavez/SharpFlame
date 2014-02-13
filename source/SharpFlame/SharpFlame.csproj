@@ -53,7 +53,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile>FlaME.xml</DocumentationFile>
     <NOWARN>1591,660,661</NOWARN>
     <DefineConstants>Mono;Portable</DefineConstants>
@@ -86,7 +86,6 @@
     <Reference Include="Matrix3D">
       <HintPath>..\packages\other\Matrix3D.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -408,6 +407,7 @@
     <Compile Include="Mapping\Tiles\TileUtil.cs" />
     <Compile Include="FileIO\ZipSplitPath.cs" />
     <Compile Include="Util\clsInputBox.cs" />
+    <Compile Include="ExtensionsForString.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">

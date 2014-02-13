@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
-using Microsoft.VisualBasic;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
 using SharpFlame.Maths;
@@ -48,7 +47,7 @@ namespace SharpFlame.Graphics.OpenGL
             Height = BaseFont.Height;
             for ( A = 0; A <= 255; A++ )
             {
-                Text = Convert.ToString(Strings.ChrW(A));
+                Text = ((char)A).ToString();
                 TempBitmap = new Bitmap(Height * 2, Height, PixelFormat.Format32bppArgb);
                 gfx = System.Drawing.Graphics.FromImage(TempBitmap);
                 gfx.Clear(Color.Transparent);
@@ -163,7 +162,7 @@ namespace SharpFlame.Graphics.OpenGL
 
             for ( A = 0; A <= Text.Length - 1; A++ )
             {
-                CharWidth = TextFont.Character[Strings.Asc(Text[A])].Width * CharSize;
+                CharWidth = TextFont.Character[(int)Text[A]].Width * CharSize;
                 SizeX += CharWidth;
             }
             SizeX += CharSpacing * (Text.Length - 1);
@@ -203,7 +202,7 @@ namespace SharpFlame.Graphics.OpenGL
             LetterPosA = Pos.X;
             for ( A = 0; A <= Text.Length - 1; A++ )
             {
-                CharCode = Strings.AscW(Text[A]);
+                CharCode = (int)Text[A];
                 if ( CharCode >= 0 & CharCode <= 255 )
                 {
                     CharWidth = (float)(SizeY * TextFont.Character[CharCode].Width / TextFont.Height);

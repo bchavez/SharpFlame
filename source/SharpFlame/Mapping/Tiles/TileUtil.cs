@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using Matrix3D;
-using Microsoft.VisualBasic;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
 
@@ -369,14 +368,14 @@ namespace SharpFlame.Mapping.Tiles
         public static void GetTileRotatedTexCoords(TileOrientation tileOrientation, ref Position.XY_dbl coordA, ref Position.XY_dbl coordB, 
             ref Position.XY_dbl coordC, ref Position.XY_dbl coordD)
         {
-            TileOrientation ReverseOrientation = new TileOrientation();
+            TileOrientation reverseOrientation = new TileOrientation();
 
-            ReverseOrientation = tileOrientation;
-            ReverseOrientation.Reverse();
+            reverseOrientation = tileOrientation;
+            reverseOrientation.Reverse();
 
-            if ( ReverseOrientation.SwitchedAxes )
+            if ( reverseOrientation.SwitchedAxes )
             {
-                if ( ReverseOrientation.ResultXFlip )
+                if ( reverseOrientation.ResultXFlip )
                 {
                     coordA.X = 1f;
                     coordB.X = 1f;
@@ -390,7 +389,7 @@ namespace SharpFlame.Mapping.Tiles
                     coordC.X = 1f;
                     coordD.X = 1f;
                 }
-                if ( ReverseOrientation.ResultYFlip )
+                if ( reverseOrientation.ResultYFlip )
                 {
                     coordA.Y = 1f;
                     coordB.Y = 0f;
@@ -407,7 +406,7 @@ namespace SharpFlame.Mapping.Tiles
             }
             else
             {
-                if ( ReverseOrientation.ResultXFlip )
+                if ( reverseOrientation.ResultXFlip )
                 {
                     coordA.X = 1f;
                     coordB.X = 0f;
@@ -421,7 +420,7 @@ namespace SharpFlame.Mapping.Tiles
                     coordC.X = 0f;
                     coordD.X = 1f;
                 }
-                if ( ReverseOrientation.ResultYFlip )
+                if ( reverseOrientation.ResultYFlip )
                 {
                     coordA.Y = 1f;
                     coordB.Y = 1f;

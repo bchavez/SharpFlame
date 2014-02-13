@@ -1465,7 +1465,7 @@ namespace SharpFlame.Mapping
                                 UInt32 PlayerNum = 0;
                                 try
                                 {
-                                    if ( !IOUtil.InvariantParse(INIObjects.Objects[A].UnitGroup, PlayerNum) )
+                                    if ( !IOUtil.InvariantParse(INIObjects.Objects[A].UnitGroup, ref PlayerNum) )
                                     {
                                         throw (new Exception());
                                     }

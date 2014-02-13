@@ -1,4 +1,3 @@
-using Microsoft.VisualBasic;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Util;
 

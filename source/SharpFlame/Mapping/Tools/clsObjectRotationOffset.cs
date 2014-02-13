@@ -6,8 +6,6 @@ namespace SharpFlame.Mapping.Tools
     {
         public int Offset;
 
-        private sXY_int NewPos;
-
         protected override void _ActionPerform()
         {
             ResultUnit.Rotation = Unit.Rotation + Offset;

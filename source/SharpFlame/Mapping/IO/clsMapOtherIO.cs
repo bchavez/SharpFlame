@@ -2,7 +2,6 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Text;
-using Microsoft.VisualBasic;
 using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
@@ -21,8 +20,8 @@ namespace SharpFlame.Mapping
         public clsResult Load_FME(string Path)
         {
             clsResult ReturnResult =
-                new clsResult("Loading FME from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote), false);
-            logger.Info ("Loading FME from " + Convert.ToString (ControlChars.Quote) + Path + Convert.ToString (ControlChars.Quote));
+                new clsResult("Loading FME from \"{0}\"".Format2(Path), false);
+            logger.Info ("Loading FME from \"{0}\"".Format2(Path));
 
             BinaryReader File = default(BinaryReader);
 
@@ -110,7 +109,6 @@ namespace SharpFlame.Mapping
                     int X = 0;
                     int Y = 0;
                     int A = 0;
-                    int B = 0;
                     int intTemp = 0;
                     int WarningCount = 0;
 
@@ -285,12 +283,7 @@ namespace SharpFlame.Mapping
                     sFMEUnit[] TempUnit = new sFMEUnit[(Convert.ToInt32(TempUnitCount))];
                     for ( A = 0; A <= (Convert.ToInt32(TempUnitCount)) - 1; A++ )
                     {
-                        TempUnit[A].Code = new string(File.ReadChars(40));
-                        B = Strings.InStr(TempUnit[A].Code, Convert.ToString('\0'), (CompareMethod)0);
-                        if ( B > 0 )
-                        {
-                            TempUnit[A].Code = Strings.Left(TempUnit[A].Code, B - 1);
-                        }
+                        TempUnit[A].Code = new string(File.ReadChars(40)).Trim('\0');
                         TempUnit[A].LNDType = File.ReadByte();
                         TempUnit[A].ID = File.ReadUInt32();
                         if ( Version == 6U )
@@ -418,8 +411,6 @@ namespace SharpFlame.Mapping
 
                     //other compile info
 
-                    string strTemp = null;
-
                     ResultInfo.CompileName = IOUtil.ReadOldText(File);
                     byteTemp = File.ReadByte();
                     if ( byteTemp == ((byte)0) )
@@ -454,7 +445,7 @@ namespace SharpFlame.Mapping
                     }
                     ResultInfo.CompileMultiAuthor = IOUtil.ReadOldText(File);
                     ResultInfo.CompileMultiLicense = IOUtil.ReadOldText(File);
-                    strTemp = IOUtil.ReadOldText(File); //game time
+                    IOUtil.ReadOldText(File); //game time
                     ResultInfo.CampaignGameType = File.ReadInt32();
                     if ( ResultInfo.CampaignGameType < -1 | ResultInfo.CampaignGameType >= Constants.GameTypeCount )
                     {
@@ -485,8 +476,8 @@ namespace SharpFlame.Mapping
         public clsResult Load_LND(string Path)
         {
             clsResult ReturnResult =
-                new clsResult("Loading LND from " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote), false);
-            logger.Info ("Loading LND from " + Convert.ToString (ControlChars.Quote) + Path + Convert.ToString (ControlChars.Quote));
+                new clsResult("Loading LND from \"{0}\"".Format2(Path), false);
+            logger.Info ("Loading LND from \"{0}\"".Format2(Path));
             try
             {
                 string strTemp = "";
@@ -689,11 +680,11 @@ namespace SharpFlame.Mapping
                                 }
                                 else
                                 {
-                                    strTemp2 = Strings.Right(strTemp, strTemp.Length - A - 2);
-                                    A = strTemp2.IndexOf(" ") + 1;
+                                    strTemp2 = strTemp.Substring(strTemp.Length - A - 2, strTemp.Length - A - 2);
+                                    A = strTemp2.IndexOf(" ");
                                     if ( A > 0 )
                                     {
-                                        strTemp2 = strTemp2.Substring(0, A - 1);
+                                        strTemp2 = strTemp2.Substring(0, A);
                                     }
                                     short temp_Result4 = LNDTile[Tile_Num].F;
                                     IOUtil.InvariantParse(strTemp2, ref temp_Result4);
@@ -795,7 +786,7 @@ namespace SharpFlame.Mapping
                                 }
 
                                 clsLNDObject NewObject = new clsLNDObject();
-                                IOUtil.InvariantParse(ObjectText[0], NewObject.ID);
+                                IOUtil.InvariantParse(ObjectText[0], ref NewObject.ID);
                                 IOUtil.InvariantParse(ObjectText[1], ref NewObject.TypeNum);
                                 NewObject.Code = ObjectText[2].Substring(1, ObjectText[2].Length - 2); //remove quotes
                                 IOUtil.InvariantParse(ObjectText[3], ref NewObject.PlayerNum);
@@ -1139,9 +1130,9 @@ namespace SharpFlame.Mapping
         public clsResult Write_LND(string Path, bool Overwrite)
         {
             clsResult ReturnResult =
-                new clsResult("Writing LND to " + Convert.ToString(ControlChars.Quote) + Path + Convert.ToString(ControlChars.Quote), false);
+                new clsResult("Writing LND to \"{0}\"".Format2(Path), false);
 
-            logger.Info ("Writing LND to " + Convert.ToString (ControlChars.Quote) + Path + Convert.ToString (ControlChars.Quote));
+            logger.Info ("Writing LND to \"{0}\"".Format2(Path));
 
             if ( System.IO.File.Exists(Path) )
             {
@@ -1174,7 +1165,7 @@ namespace SharpFlame.Mapping
                 byte Rotation = 0;
                 bool FlipX = default(bool);
 
-                Quote = ControlChars.Quote;
+                Quote = '\"';
                 EndChar = '\n';
 
                 File = new StreamWriter(new FileStream(Path, FileMode.CreateNew), new UTF8Encoding(false, false));

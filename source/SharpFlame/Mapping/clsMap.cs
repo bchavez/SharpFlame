@@ -3,8 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using Matrix3D;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.Devices;
 using NLog;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.AppSettings;
@@ -802,13 +800,10 @@ namespace SharpFlame.Mapping
 
         public void DrawTileOrientation(sXY_int Tile)
         {
-            TileOrientation TileOrientation;
             sXY_int UnrotatedPos = new sXY_int();
             sWorldPos Vertex0 = new sWorldPos();
             sWorldPos Vertex1 = new sWorldPos();
             sWorldPos Vertex2 = new sWorldPos();
-
-            TileOrientation = Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation;
 
             UnrotatedPos.X = 32;
             UnrotatedPos.Y = 32;
@@ -1183,13 +1178,13 @@ namespace SharpFlame.Mapping
             return Result;
         }
 
+        // TODO: Think that code is useless - René
         public void UnitSectorsCalc(clsUnit Unit)
         {
             sXY_int Start = new sXY_int();
             sXY_int Finish = new sXY_int();
             sXY_int TileStart = new sXY_int();
             sXY_int TileFinish = new sXY_int();
-            clsUnitSectorConnection Connection;
             int X = 0;
             int Y = 0;
 
@@ -1205,7 +1200,7 @@ namespace SharpFlame.Mapping
             {
                 for ( X = Start.X; X <= Finish.X; X++ )
                 {
-                    Connection = clsUnitSectorConnection.Create(Unit, Sectors[X, Y]);
+                    clsUnitSectorConnection.Create(Unit, Sectors[X, Y]);
                 }
             }
         }
@@ -1220,9 +1215,9 @@ namespace SharpFlame.Mapping
             {
                 return;
             }
-            if (
-                DateAndTime.DateDiff("s", AutoSave.SavedDate, DateTime.Now, (FirstDayOfWeek)FirstDayOfWeek.Sunday,
-                    (FirstWeekOfYear)FirstWeekOfYear.Jan1) < SettingsManager.Settings.AutoSaveMinInterval_s )
+
+            TimeSpan timeDiff = DateTime.Now - AutoSave.SavedDate;
+            if (timeDiff.Seconds < SettingsManager.Settings.AutoSaveMinInterval_s)
             {
                 return;
             }
@@ -1237,19 +1232,6 @@ namespace SharpFlame.Mapping
         {
             clsResult ReturnResult = new clsResult("Autosave", false);
             logger.Info("Autosave");
-
-            if ( !Directory.Exists(App.AutoSavePath) )
-            {
-                try
-                {
-                    Directory.CreateDirectory(App.AutoSavePath);
-                }
-                catch ( Exception )
-                {
-                    ReturnResult.ProblemAdd("Unable to create directory at " + Convert.ToString(ControlChars.Quote) + App.AutoSavePath +
-                                            Convert.ToString(ControlChars.Quote));
-                }
-            }
 
             DateTime DateNow = DateTime.Now;
             string Path = "";
@@ -1721,7 +1703,6 @@ namespace SharpFlame.Mapping
             if ( DeleteUnits )
             {
                 SimpleList<clsUnit> UnitsToDelete = new SimpleList<clsUnit>();
-                int UnitToDeleteCount = 0;
                 clsUnit Unit = default(clsUnit);
                 for ( Y = SectorStart.Y; Y <= SectorFinish.Y; Y++ )
                 {
@@ -2127,19 +2108,6 @@ namespace SharpFlame.Mapping
             Messages.MaintainOrder = true;
         }
 
-        public string GetDirectory()
-        {
-            if ( PathInfo == null )
-            {
-                return (new ServerComputer()).FileSystem.SpecialDirectories.MyDocuments;
-            }
-            else
-            {
-                sSplitPath SplitPath = new sSplitPath(PathInfo.Path);
-                return SplitPath.FilePath;
-            }
-        }
-
         public void Update()
         {
             bool PrevSuppress = SuppressMinimap;
@@ -2280,7 +2248,7 @@ namespace SharpFlame.Mapping
             Result = GetTitle();
             if ( Result.Length > MaxLength )
             {
-                Result = Strings.Left(Result, MaxLength - 3) + "...";
+                Result = Result.Substring (0, MaxLength - 3) + "...";
             }
 #if Mono
 			MapView_TabPage.Text = Result + " ";
@@ -2450,10 +2418,9 @@ namespace SharpFlame.Mapping
             A = 0;
             while ( A < Messages.Count )
             {
-                if (
-                    DateAndTime.DateDiff(DateInterval.Second, Convert.ToDateTime(Messages[A].CreatedDate), DateNow,
-                        (FirstDayOfWeek)FirstDayOfWeek.Sunday,
-                        (FirstWeekOfYear)FirstWeekOfYear.Jan1) >= 6 )
+
+                TimeSpan timeDiff = DateTime.Now - Convert.ToDateTime(Messages[A].CreatedDate);
+                if (timeDiff.Seconds >= 6)
                 {
                     Messages.Remove(A);
                     Changed = true;
@@ -2607,7 +2574,7 @@ namespace SharpFlame.Mapping
         {
             SaveFileDialog Dialog = new SaveFileDialog();
 
-            Dialog.InitialDirectory = GetDirectory();
+            Dialog.InitialDirectory = Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments);
             Dialog.FileName = "";
             Dialog.Filter = Constants.ProgramName + " Map Files (*.fmap)|*.fmap";
             if ( Dialog.ShowDialog(Program.frmMainInstance) != DialogResult.OK )
