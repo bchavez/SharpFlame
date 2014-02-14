@@ -1,6 +1,5 @@
 using System;
 using SharpFlame.Maths;
-using Matrix3D;
 
 namespace SharpFlame.Mapping.IO
 {

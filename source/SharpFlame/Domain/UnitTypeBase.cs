@@ -1,5 +1,4 @@
 using System;
-using Matrix3D;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
 using SharpFlame.Maths;

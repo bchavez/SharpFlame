@@ -7,7 +7,6 @@ using SharpFlame.Collections;
 using SharpFlame.FileIO;
 using SharpFlame.Maths;
 using SharpFlame.Util;
-using Matrix3D;
 
 namespace SharpFlame.Domain
 {

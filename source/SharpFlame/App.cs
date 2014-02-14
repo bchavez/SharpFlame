@@ -3,7 +3,6 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using Matrix3D;
 using NLog;
 using SharpFlame.AppSettings;
 using SharpFlame.Collections;

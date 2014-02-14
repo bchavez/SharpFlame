@@ -5,7 +5,6 @@ using System.Drawing.Imaging;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
 using SharpFlame.Maths;
-using Matrix3D;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace SharpFlame.Graphics.OpenGL

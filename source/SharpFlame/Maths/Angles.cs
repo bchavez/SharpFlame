@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-namespace Matrix3D
+
+namespace SharpFlame.Maths
 {
     public sealed class Angles
     {

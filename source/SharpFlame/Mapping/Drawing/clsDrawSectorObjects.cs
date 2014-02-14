@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using Matrix3D;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.AppSettings;
 using SharpFlame.Domain;

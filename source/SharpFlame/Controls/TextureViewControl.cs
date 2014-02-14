@@ -9,7 +9,6 @@ using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 using SharpFlame.Util;
-using Matrix3D;
 
 namespace SharpFlame.Controls
 {

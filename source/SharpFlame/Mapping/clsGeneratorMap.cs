@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
-using Matrix3D;
 using NLog;
 using SharpFlame.Collections.Specialized;
 using SharpFlame.Domain;

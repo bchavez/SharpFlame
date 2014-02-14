@@ -3,7 +3,6 @@ using System.IO;
 using NLog;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Maths;
-using Matrix3D;
 
 namespace SharpFlame.Domain
 {

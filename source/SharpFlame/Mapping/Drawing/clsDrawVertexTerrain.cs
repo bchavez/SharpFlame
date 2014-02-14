@@ -1,8 +1,8 @@
 using System;
-using Matrix3D;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
 using SharpFlame.Mapping.Tools;
+using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping.Drawing
 {

@@ -1,5 +1,4 @@
 using System;
-using Matrix3D;
 
 namespace SharpFlame.Maths
 {

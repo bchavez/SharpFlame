@@ -5,7 +5,6 @@ using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using Matrix3D;
 using NLog;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Bitmaps;
