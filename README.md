@@ -20,6 +20,8 @@ Building
 * Download the source code.
 * Compile.
 
+Build Status: ![Build Status](http://www.bitarmory.com/Main/BuildStatus.ashx?Project=SharpFlame)
+
 Contributing
 --------
 * Please submit [issues here](https://github.com/bchavez/SharpFlame/issues).
