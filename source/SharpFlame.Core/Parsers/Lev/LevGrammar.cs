@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Sprache;
 
 namespace SharpFlame.Core.Parsers.Lev
@@ -77,12 +78,16 @@ namespace SharpFlame.Core.Parsers.Lev
                 from name in QuotedText
                 select name;
 
-        internal static Parser<Campaign> Campaign = 
-            from data in Data.Many ()
-                select new Campaign 
-                    {   
-                        Data = (List<string>)data
-                    };
+        internal static Parser<Campaign> Campaign =
+            from directive in Parse.String( "campaign" )
+            from ignore in Parse.WhiteSpace.Many()
+            from name in Parse.AnyChar.Until(Parse.WhiteSpace).Text().Token()
+            from data in Data.AtLeastOnce()
+            select new Campaign
+                       {
+                           Name = name,
+                           Data = data.ToList()
+                       };
 
         internal static Parser<Identifier> CommentOrIdentifier = 
             from c in Comment.Many ()
@@ -93,5 +98,9 @@ namespace SharpFlame.Core.Parsers.Lev
             from ident in CommentOrIdentifier
                 select ident;
 
+        public static Parser<string> CampaignDirective =
+            from directive in Parse.String( "campaign" )
+            from name in Parse.AnyChar.Many().Except( Parse.WhiteSpace ).Token().Text()
+            select name;
     }
 }

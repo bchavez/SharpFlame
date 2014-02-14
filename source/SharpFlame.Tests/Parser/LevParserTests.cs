@@ -77,15 +77,25 @@ namespace SharpFlame.Tests.Parser
         }
 
         [Test]
+        public void can_parse_campaign_name()
+        {
+            var data = "campaign	MULTI_CAM_1";
+
+            var result = LevGrammar.CampaignDirective.Parse( data );
+
+            result.Should().Be( "MULTI_CAM_1" );
+        }
+        [Test]
         public void CanParseCampaign()
         {
-            var data = @"data       ""wrf/vidmem.wrf""
-data        ""wrf/basic.wrf""
-data        ""wrf/cam1.wrf""
-data        ""wrf/audio.wrf""
-data        ""wrf/piestats.wrf""
-data        ""wrf/stats.wrf""
-data        ""wrf/multires.wrf""";
+            var data = @"campaign	MULTI_CAM_1
+data		""wrf/vidmem.wrf""
+data		""wrf/basic.wrf""
+data		""wrf/cam1.wrf""
+data		""wrf/audio.wrf""
+data		""wrf/piestats.wrf""
+data		""wrf/stats.wrf""
+data		""wrf/multires.wrf""";
 
             var result = LevGrammar.Campaign.Parse (data);
             result.Data.Count.Should ().Be (7);
