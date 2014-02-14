@@ -136,9 +136,9 @@ namespace SharpFlame.Controls
 
             GL.ClearColor(0.0F, 0.0F, 0.0F, 1.0F);
             GL.Clear(ClearBufferMask.ColorBufferBit);
-//            GL.Enable(EnableCap.Blend);
-//            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-//            GL.Enable(EnableCap.CullFace);
+            //GL.Enable(EnableCap.Blend);
+            //GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            //GL.Enable(EnableCap.CullFace);
 
             IsGLInitialized = true;
         }
@@ -229,13 +229,13 @@ namespace SharpFlame.Controls
                         GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Decal);
                         GL.Begin(BeginMode.Quads);
                         GL.TexCoord2(TexCoord0.X, TexCoord0.Y);
-                        GL.Vertex3(X * 64, Y * 64, 0);// Top Left
-                        GL.TexCoord2(TexCoord2.X, TexCoord2.Y);
-                        GL.Vertex3(X * 64 + 64, Y * 64, 0); // Bottom Left
-                        GL.TexCoord2(TexCoord3.X, TexCoord3.Y);
-                        GL.Vertex3(X * 64 + 64, Y * 64 + 64, 0); // Bottom right
+                        GL.Vertex2(X * 64, Y * 64);// Top Left
                         GL.TexCoord2(TexCoord1.X, TexCoord1.Y);
-                        GL.Vertex3(X * 64, Y * 64 + 64, 0); // Top right
+                        GL.Vertex2(X * 64 + 64, Y * 64); // Bottom Left
+                        GL.TexCoord2(TexCoord3.X, TexCoord3.Y);
+                        GL.Vertex2(X * 64 + 64, Y * 64 + 64); // Bottom right
+                        GL.TexCoord2(TexCoord2.X, TexCoord2.Y);
+                        GL.Vertex2(X * 64, Y * 64 + 64); // Top right
 
                         GL.End();
                     }
