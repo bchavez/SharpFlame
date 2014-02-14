@@ -510,8 +510,14 @@ POLYGONS 30
         [Test]
         public void can_parse_all_pie_fiels_without_error()
         {
+            Console.WriteLine (Directory.GetCurrentDirectory());
 
-            var files = Directory.GetFiles( @"..\..\..\Data\3.1_b4-objects\pies", "*.pie" );
+            var files = Directory.GetFiles( Path.Combine("..", 
+                                            Path.Combine("..", 
+                                            Path.Combine("..",
+                                            Path.Combine("Data",
+                                            Path.Combine("3.1_b4-objects",
+                                            Path.Combine("pies")))))), "*.pie" );
             var f = new AttributedValidatorFactory();
 
             foreach( var file in files )
@@ -529,23 +535,15 @@ POLYGONS 30
 
         [Test]
         [Explicit]
-        public void test()
+        public void can_parse_pie_fiel_without_error()
         {
-
-        }
-
-        [Test]
-        [Explicit]
-        public void test2()
-        {
-
-        }
-
-        [Test]
-        [Explicit]
-        public void test3()
-        {
-            var file = @"..\..\..\Data\3.1_b4-objects\pies\radarsensor.pie";
+            var file = Path.Combine("..", 
+                         Path.Combine("..", 
+                         Path.Combine("..",
+                         Path.Combine("Data",
+                         Path.Combine("3.1_b4-objects",
+                         Path.Combine("pies"),
+                         Path.Combine("radarsensor.pie"))))));
             var f = new AttributedValidatorFactory();
             var txt = File.ReadAllText( file );
             Console.WriteLine( "Parsing: {0}", file );
