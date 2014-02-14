@@ -537,13 +537,9 @@ POLYGONS 30
         [Explicit]
         public void can_parse_pie_fiel_without_error()
         {
-            var file = Path.Combine("..", 
-                         Path.Combine("..", 
-                         Path.Combine("..",
-                         Path.Combine("Data",
-                         Path.Combine("3.1_b4-objects",
-                         Path.Combine("pies"),
-                         Path.Combine("radarsensor.pie"))))));
+            var file = Path.Combine("Data", 
+                         Path.Combine("Pies", 
+                         Path.Combine("radarsensor.pie")));
             var f = new AttributedValidatorFactory();
             var txt = File.ReadAllText( file );
             Console.WriteLine( "Parsing: {0}", file );

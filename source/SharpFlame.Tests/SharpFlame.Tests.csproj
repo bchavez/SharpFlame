@@ -62,14 +62,7 @@
     <None Include="Maps\2c-Tinny-War.wz" />
     <None Include="Maps\6c-NTW_3v3wBases-3oil.wz" />
     <None Include="Maps\6c-NTW_3v3wBases-4oil.wz" />
-    <None Include="Pies\blderik.pie">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
-    <None Include="Pies\mioil.pie">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Pies\radarsensor.pie" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpFlame.Core\SharpFlame.Core.csproj">
@@ -85,4 +78,25 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Data\" />
+    <Folder Include="Data\Levels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\Levels\2c-Tinny-War.addon.lev">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Levels\addon.lev">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Pies\blderik.pie">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Pies\radarsensor.pie">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Pies\mioil.pie">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>
