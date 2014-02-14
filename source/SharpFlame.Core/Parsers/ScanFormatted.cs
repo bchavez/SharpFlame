@@ -90,7 +90,6 @@ namespace SharpFlame.Core.Parsers
         {
             TextParser inp = new TextParser( input );
             TextParser fmt = new TextParser( format );
-            List<object> results = new List<object>();
             FormatSpecifier spec = new FormatSpecifier();
             int count = 0;
 
