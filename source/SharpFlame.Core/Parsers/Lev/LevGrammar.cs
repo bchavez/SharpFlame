@@ -6,9 +6,6 @@ namespace SharpFlame.Core.Parsers.Lev
 {
     public class LevGrammar
     {
-        private static readonly Parser<string> newLine =
-            Parse.String(Environment.NewLine).Text();
-
         private static Parser<T> endOfComment<T> (Parser<T> following)
         {
             return from escape in Parse.Char ('*')
