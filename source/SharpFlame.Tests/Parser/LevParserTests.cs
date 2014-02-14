@@ -1,4 +1,7 @@
-﻿using FluentAssertions;
+﻿using System;
+using System.IO;
+using System.Collections.Generic;
+using FluentAssertions;
 using NUnit.Framework;
 using SharpFlame.Core.Parsers.Lev;
 using Sprache;
@@ -9,11 +12,20 @@ namespace SharpFlame.Tests.Parser
     public class LevParseTests
     {
         [Test]
-        public void can_parse_level()
+        public void CanParseIdentifier()
         {
             var data = "level   test_flame-T1";
-            var result = LevGrammar.Level.Parse(data);
-            result.Should().Be("test_flame-T1");
+            var result = LevGrammar.Identifier.Parse(data);
+            result.Name.Should ().Be ("level");
+            result.Data.Should().Be("test_flame-T1");
+        }
+
+        public void CanParseQuottedIdentifier()
+        {
+            var data = "data    \"wrf/multi/skirmish2.wrf\"";
+            var result = LevGrammar.Identifier.Parse(data);
+            result.Name.Should ().Be ("data");
+            result.Data.Should().Be("wrf/multi/skirmish2.wrf");
         }
 
         [Test]
@@ -62,7 +74,35 @@ namespace SharpFlame.Tests.Parser
             var data = "/*** Test123\n ***/";
             var result = LevGrammar.Comment.Parse (data);
             result.Should ().Be ("** Test123\n **");
+        }
 
+        [Test]
+        public void CanParseCampaign()
+        {
+            var data = @"data       ""wrf/vidmem.wrf""
+data        ""wrf/basic.wrf""
+data        ""wrf/cam1.wrf""
+data        ""wrf/audio.wrf""
+data        ""wrf/piestats.wrf""
+data        ""wrf/stats.wrf""
+data        ""wrf/multires.wrf""";
+
+            var result = LevGrammar.Campaign.Parse (data);
+            result.Data.Count.Should ().Be (7);
+            result.Data [4].Should ().Be ("wrf/piestats.wrf");
+        }
+
+        [Test]
+        public void CanParseAddonLev()
+        {
+            var file = Path.Combine ("Data", 
+                      Path.Combine ("Levels", 
+                      Path.Combine ("addon.lev")));
+
+            var txt = File.ReadAllText( file );
+            Console.WriteLine( "Parsing: {0}", file );
+            var tmp = LevGrammar.Lev.Parse (txt);
+            Console.WriteLine (tmp.Name);
         }
     }
 

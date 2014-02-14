@@ -68,6 +68,7 @@
     <Compile Include="Parsers\Lev\Level.cs" />
     <Compile Include="Parsers\Lev\LevelsFile.cs" />
     <Compile Include="Parsers\Lev\Campaign.cs" />
+    <Compile Include="Parsers\Lev\Identifier.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
