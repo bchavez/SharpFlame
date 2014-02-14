@@ -80,9 +80,6 @@
     <ApplicationIcon>flaME.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Matrix3D">
-      <HintPath>..\packages\other\Matrix3D.dll</HintPath>
-    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -248,6 +245,9 @@
     <Compile Include="Mapping\Wz\IniStructures.cs" />
     <Compile Include="Mapping\Wz\sCreateWZObjectsArgs.cs" />
     <Compile Include="Mapping\Wz\sWrite_WZ_Args.cs" />
+    <Compile Include="Maths\Angles.cs" />
+    <Compile Include="Maths\Matrix3DMath.cs" />
+    <Compile Include="Maths\Position.cs" />
     <Compile Include="Painters\CliffBrush.cs" />
     <Compile Include="Painters\Painter.cs" />
     <Compile Include="clsResult.cs" />
