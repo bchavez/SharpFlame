@@ -32,10 +32,10 @@ namespace SharpFlame.Core.Parsers.Ini
 
         internal static readonly Parser<string> Section =
             from open in Parse.Char('[')
-            from content in Parse.AnyChar.Except(Parse.Char(']')).Except(General.EndOfLineOrFile).AtLeastOnce().Text()
+            from co in Parse.AnyChar.Except(Parse.Char(']')).Except(General.EndOfLineOrFile).AtLeastOnce().Text()
             from end in Parse.Char(']')
             from nl in General.EndOfLineOrFile.Once()
-            select content;       
+            select co;       
 
         public static readonly Parser<List<Section>> Ini = 
             from secs in (
