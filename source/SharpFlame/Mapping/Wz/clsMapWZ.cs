@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using NLog;
 using SharpFlame.Collections;
+using SharpFlame.Core.Parsers;
 using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.Core.Parsers.Lev;
 using SharpFlame.Domain;
@@ -276,6 +277,7 @@ namespace SharpFlame.Mapping
                         using (Stream s = droidIniEntry.OpenReader()) {
                             var reader = new StreamReader (s);
                             var text = reader.ReadToEnd ();
+                            reader.Close ();
                             returnResult.Add (Read_INI_Droid (text, ref iniDroids));
                         }
                     }
@@ -328,9 +330,9 @@ namespace SharpFlame.Mapping
 
         public clsResult Load_Game(string Path)
         {
-            clsResult ReturnResult =
+            clsResult returnResult =
                 new clsResult("Loading game file from \"{0}\"".Format2(Path), false);
-            logger.Info ("Loading game file from \"{0}\"".Format2(Path));
+            logger.Info ("Loading game file from \"{0}\"", Path);
             sResult SubResult = new sResult();
 
             Tileset = null;
@@ -346,8 +348,8 @@ namespace SharpFlame.Mapping
             SubResult = IOUtil.TryOpenFileStream(Path, ref File);
             if ( !SubResult.Success )
             {
-                ReturnResult.ProblemAdd("Game file not found: " + SubResult.Problem);
-                return ReturnResult;
+                returnResult.ProblemAdd("Game file not found: " + SubResult.Problem);
+                return returnResult;
             }
             else
             {
@@ -357,8 +359,8 @@ namespace SharpFlame.Mapping
 
                 if ( !SubResult.Success )
                 {
-                    ReturnResult.ProblemAdd(SubResult.Problem);
-                    return ReturnResult;
+                    returnResult.ProblemAdd(SubResult.Problem);
+                    return returnResult;
                 }
             }
 
@@ -369,23 +371,23 @@ namespace SharpFlame.Mapping
                     "Do you want to select another directory to load the underlying map from?".Format2(GameFilesPath), 
                                     "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.Cancel)
                 {
-                    ReturnResult.ProblemAdd("Aborted.");
-                    return ReturnResult;
+                    returnResult.ProblemAdd("Aborted.");
+                    return returnResult;
                 }
                 FolderBrowserDialog DirectorySelect = new FolderBrowserDialog();
                 DirectorySelect.SelectedPath = GameFilesPath;
                 if ( DirectorySelect.ShowDialog() != DialogResult.OK )
                 {
-                    ReturnResult.ProblemAdd("Aborted.");
-                    return ReturnResult;
+                    returnResult.ProblemAdd("Aborted.");
+                    return returnResult;
                 }
                 MapDirectory = DirectorySelect.SelectedPath + Convert.ToString(App.PlatformPathSeparator);
 
                 SubResult = IOUtil.TryOpenFileStream(MapDirectory + "game.map", ref File);
                 if ( !SubResult.Success )
                 {
-                    ReturnResult.ProblemAdd("game.map file not found: " + SubResult.Problem);
-                    return ReturnResult;
+                    returnResult.ProblemAdd("game.map file not found: " + SubResult.Problem);
+                    return returnResult;
                 }
             }
             else
@@ -399,8 +401,8 @@ namespace SharpFlame.Mapping
 
             if ( !SubResult.Success )
             {
-                ReturnResult.ProblemAdd(SubResult.Problem);
-                return ReturnResult;
+                returnResult.ProblemAdd(SubResult.Problem);
+                return returnResult;
             }
 
             SimpleClassList<clsWZBJOUnit> BJOUnits = new SimpleClassList<clsWZBJOUnit>();
@@ -421,7 +423,7 @@ namespace SharpFlame.Mapping
                 FeaturesINI_Reader.Close();
                 INIFeatures = new IniFeatures(FeaturesINI.Sections.Count);
                 Result.Take(FeaturesINI.Translate(INIFeatures));
-                ReturnResult.Add(Result);
+                returnResult.Add(Result);
             }
 
             if ( INIFeatures == null )
@@ -443,7 +445,7 @@ namespace SharpFlame.Mapping
                         Result.WarningAdd(SubResult.Problem);
                     }
                 }
-                ReturnResult.Add(Result);
+                returnResult.Add(Result);
             }
 
             if ( true )
@@ -465,7 +467,7 @@ namespace SharpFlame.Mapping
                         Result.WarningAdd(SubResult.Problem);
                     }
                 }
-                ReturnResult.Add(Result);
+                returnResult.Add(Result);
             }
 
             IniStructures INIStructures = null;
@@ -484,7 +486,7 @@ namespace SharpFlame.Mapping
                 StructuresINI_Reader.Close();
                 INIStructures = new IniStructures(StructuresINI.Sections.Count, this);
                 Result.Take(StructuresINI.Translate(INIStructures));
-                ReturnResult.Add(Result);
+                returnResult.Add(Result);
             }
 
             if ( INIStructures == null )
@@ -506,26 +508,21 @@ namespace SharpFlame.Mapping
                         Result.WarningAdd(SubResult.Problem);
                     }
                 }
-                ReturnResult.Add(Result);
+                returnResult.Add(Result);
             }
 
-            IniDroids INIDroids = null;
+            IniDroids iniDroids = null;
 
             SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "droid.ini", ref File);
-            if ( !SubResult.Success )
+            if ( SubResult.Success )
             {
-            }
-            else
-            {
-                clsResult Result = new clsResult("droid.ini", false);
-                logger.Info ("Loading droid.ini");
-                IniReader DroidsINI = new IniReader();
-                StreamReader DroidsINI_Reader = new StreamReader(File);
-                Result.Take(DroidsINI.ReadFile(DroidsINI_Reader));
-                DroidsINI_Reader.Close();
-                INIDroids = new IniDroids(DroidsINI.Sections.Count, this);
-                Result.Take(DroidsINI.Translate(INIDroids));
-                ReturnResult.Add(Result);
+                iniDroids = new IniDroids ();
+                using (File) {
+                    var reader = new StreamReader (File);
+                    var text = reader.ReadToEnd ();
+                    reader.Close ();
+                    returnResult.Add (Read_INI_Droid (text, ref iniDroids));
+                }
             }
 
             if ( INIStructures == null )
@@ -547,15 +544,15 @@ namespace SharpFlame.Mapping
                         Result.WarningAdd(SubResult.Problem);
                     }
                 }
-                ReturnResult.Add(Result);
+                returnResult.Add(Result);
             }
 
             sCreateWZObjectsArgs CreateObjectsArgs = new sCreateWZObjectsArgs();
             CreateObjectsArgs.BJOUnits = BJOUnits;
             CreateObjectsArgs.INIStructures = INIStructures;
-            CreateObjectsArgs.INIDroids = INIDroids;
+            CreateObjectsArgs.INIDroids = iniDroids;
             CreateObjectsArgs.INIFeatures = INIFeatures;
-            ReturnResult.Add(CreateWZObjects(CreateObjectsArgs));
+            returnResult.Add(CreateWZObjects(CreateObjectsArgs));
 
             //map objects are modified by this and must already exist
             SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "labels.ini", ref File);
@@ -571,10 +568,10 @@ namespace SharpFlame.Mapping
                 Result.Take(LabelsINI.ReadFile(LabelsINI_Reader));
                 LabelsINI_Reader.Close();
                 Result.Take(Read_WZ_Labels(LabelsINI, false));
-                ReturnResult.Add(Result);
+                returnResult.Add(Result);
             }
 
-            return ReturnResult;
+            return returnResult;
         }
 
         public clsResult CreateWZObjects(sCreateWZObjectsArgs Args)
@@ -1125,9 +1122,6 @@ namespace SharpFlame.Mapping
 
             try {
                 var iniSections = IniGrammar.Ini.Parse(iniText);
-                resultData.DroidCount = iniSections.Count;
-                resultData.ParentMap = this;
-                resultData.Droids = new List<IniDroids.sDroid>();
                 foreach (var iniSection in iniSections) {
                     var droid = new IniDroids.sDroid();
                     foreach (var iniToken in iniSection.Data) {
@@ -1199,6 +1193,7 @@ namespace SharpFlame.Mapping
                                     }
                                 }
                                 catch (Exception ex) {
+                                    Debugger.Break();
                                     resultObject.ProblemAdd(string.Format("#{0} invalid health: \"{1}\", got exception: {2}", iniToken.Name, iniToken.Data, ex.Message), false);
                                     logger.ErrorException(string.Format("#{0} invalid health \"{1}\"", iniSection.Name, iniToken.Data), ex);                                    
                                     continue;
@@ -1207,10 +1202,11 @@ namespace SharpFlame.Mapping
                             case "droidtype":
                                 try
                                 {   
-                                    droid.DroidType = IniGrammar.Int.Parse(iniToken.Data);
+                                    droid.DroidType = Numerics.Int.Parse(iniToken.Data);
                                 }
                                 catch (Exception ex) 
                                 {
+                                    Debugger.Break();
                                     resultObject.ProblemAdd(string.Format("#{0} invalid droidtype: \"{1}\", got exception: {2}", iniToken.Name, iniToken.Data, ex.Message), false);
                                     logger.ErrorException(string.Format("#{0} invalid droidtype \"{1}\"", iniToken.Name, iniToken.Data), ex);                                    
                                     continue;
@@ -1219,10 +1215,11 @@ namespace SharpFlame.Mapping
                             case "weapons":
                                 try
                                 {   
-                                    droid.WeaponCount = IniGrammar.Int.Parse(iniToken.Data);
+                                    droid.WeaponCount = Numerics.Int.Parse(iniToken.Data);
                                 }
                                 catch (Exception ex) 
                                 {
+                                    Debugger.Break();
                                     resultObject.ProblemAdd(string.Format("#{0} invalid weapons: \"{1}\", got exception: {2}", iniSection.Name, iniToken.Data, ex.Message), false);
                                     logger.ErrorException(string.Format("#{0} invalid weapons \"{1}\"", iniSection.Name, iniToken.Data), ex);                                    
                                     continue;
