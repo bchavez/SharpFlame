@@ -121,8 +121,8 @@ data    ""wrf/multi/fog1.wrf""";
         public void CanParseAddonLev()
         {
             var file = Path.Combine ("Data", 
-                      Path.Combine ("Levels", 
-                      Path.Combine ("addon.lev")));
+                                     Path.Combine ("Levels", 
+                                     Path.Combine ("addon.lev")));
 
             var txt = File.ReadAllText( file );
             Console.WriteLine( "Parsing: {0}", file );
@@ -131,8 +131,39 @@ data    ""wrf/multi/fog1.wrf""";
             Console.WriteLine ("# of campaigns: {0}", levfile.Campaigns.Count);
             Console.WriteLine ("# of levels: {0}", levfile.Levels.Count);
 
-            levfile.Campaigns.Count.Should ().Be (9);           
+            levfile.Campaigns.Count.Should ().Be (9);
+            levfile.Campaigns [0].Name.Should ().Be ("MULTI_CAM_1");
+            levfile.Campaigns [0].Data [3].Should ().Be ("wrf/audio.wrf");
+            levfile.Campaigns [4].Data [0].Should ().Be ("wrf/vidmem2.wrf");
             levfile.Levels.Count.Should ().Be (114);
+        }
+
+        [Test]
+        public void CanParseTinnyWarLev()
+        {
+            var file = Path.Combine ("Data", 
+                                     Path.Combine ("Levels", 
+                                     Path.Combine ("2c-Tinny-War.addon.lev")));
+
+            var txt = File.ReadAllText( file );
+            Console.WriteLine( "Parsing: {0}", file );
+            var levfile = LevGrammar.Lev.Parse (txt);
+
+            Console.WriteLine ("# of campaigns: {0}", levfile.Campaigns.Count);
+            Console.WriteLine ("# of levels: {0}", levfile.Levels.Count);
+
+            levfile.Campaigns.Count.Should ().Be (0);
+            levfile.Levels.Count.Should ().Be (3);
+            levfile.Levels [0].Name.Should ().Be ("Tinny-War-T1");
+            levfile.Levels [0].Players.Should ().Be (2);
+            levfile.Levels [0].Type.Should ().Be (14);
+            levfile.Levels [0].Dataset.Should ().Be ("MULTI_CAM_1");
+            levfile.Levels [0].Game.Should ().Be ("multiplay/maps/2c-Tinny-War.gam");
+            levfile.Levels [0].Data.Count.Should ().Be (2);
+            levfile.Levels [0].Data [0].Should ().Be ("wrf/multi/skirmish2.wrf");
+            levfile.Levels [0].Data [1].Should ().Be ("wrf/multi/fog1.wrf");
+            levfile.Levels [1].Name.Should ().Be ("Tinny-War-T2");
+            levfile.Levels [2].Name.Should ().Be ("Tinny-War-T3");
         }
     }
 }
