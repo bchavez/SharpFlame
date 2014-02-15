@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace SharpFlame.Core.Parsers.Lev
 {
@@ -9,7 +10,7 @@ namespace SharpFlame.Core.Parsers.Lev
         public int Type { get; internal set; }
         public string Dataset { get; internal set; }
         public string Game { get; internal set; }
-        public string[] Data { get; internal set; }
+        public List<string> Data { get; internal set; }
     }
 }
 

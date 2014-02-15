@@ -14,139 +14,117 @@ namespace SharpFlame.Core.Parsers.Lev
                     select f;
         }
 
-        internal static readonly Parser<string> Comment =
+        private static readonly Parser<string> newLine =
+            Parse.String(Environment.NewLine).Text();
+
+        private static readonly Parser<string> recordTerminator =
+            Parse.Return("").End().XOr(
+                newLine.End()).Or(
+                newLine);
+
+        private static readonly Parser<char> quotedCellDelimiter = Parse.Char('"');
+
+        private static readonly Parser<char> quotedCellContent =
+            Parse.AnyChar.Except(quotedCellDelimiter);
+
+        private static readonly Parser<string> quotedText =
+            from open in quotedCellDelimiter
+            from content in quotedCellContent.Many().Text()
+            from end in quotedCellDelimiter
+            select content;
+
+        private static readonly Parser<char> content = 
+            Parse.AnyChar.Except(Parse.WhiteSpace).Except(recordTerminator);
+
+        private static readonly Parser<string> Cell =
+            quotedText.XOr(
+                content.XMany().Text());
+        
+        internal static readonly Parser<string> SingleLineComment =
+            from ignore in Parse.String ("//")
+                from comment in Parse.AnyChar.Except(Parse.String(Environment.NewLine)).Many().Text()
+                from nl in recordTerminator.Text()
+                select comment;
+
+        internal static readonly Parser<string> MultilineComment =
             (from open in Parse.String ("/*")
              from comment in Parse.AnyChar.Except (endOfComment (Parse.Char ('/'))).Many ().Text ()
              from close in Parse.String ("*/")
              select comment).Token ();
-
-        internal static readonly Parser<string> QuotedText =
-            (from open in Parse.Char ('"')
-             from content in Parse.CharExcept ('"').Many ().Text ()
-             from close in Parse.Char ('"')
-             select content).Token();
 
         /**
          * Parses:
          * text     "Tmp"
          * text     Tmp
          */
-        internal static Parser<Identifier> Identifier =
-            from name in Parse.Letter.AtLeastOnce ().Text ().Token ()
-            from data in QuotedText.Or(Parse.AnyChar.Many().Text().Token())
-                select new Identifier {
-                        Name = name,
-                        Data = data
-                };
-
-        //level   test_flame-T1
-        public static readonly Parser<string> Level =
-            from level in Parse.String ("level")
-                from name in Parse.AnyChar.AtLeastOnce ().Token ().Text ()
-                select name;
-
-        //level   Tinny-War-T3
-        //players 2
-        //type    19
-        //dataset MULTI_T3_C1
-        //game    ""multiplay/maps/2c-Tinny-War.gam""
-        //data    ""wrf/multi/t3-skirmish2.wrf""
-        //data    ""wrf/multi/fog1.wrf""
-
-        public static readonly Parser<Level> LevelSection =
-            from level in LevGrammar.Level
-            from players in Players
-            from type in Type
-            from dataset in Dataset
-            from game in Game
-            from dataArray in Data.AtLeastOnce()
-            select new Level
-                {
-                    Name = level,
-                    Players = players,
-                    Type = type,
-                    Game = game,
-                    Data = dataArray.ToArray()
-                };
-
-
-        //players 2
-        public static readonly Parser<int> Players =
-            from players in Parse.String ("players")
-                from number in Parse.Number.Token ()
-                let n = int.Parse (number)
-                select n;
-
-        //type 14
-        public static readonly Parser<int> Type = 
-            from type in Parse.String ("type")
-                from number in Parse.Number.Token ()
-                let n = int.Parse (number)
-                select n;
-
-        //dataset MULTI_CAM_1
-        public static readonly Parser<string> Dataset = 
-            from dataset in Parse.String ("dataset")
-                from name in Parse.AnyChar.AtLeastOnce ().Token ().Text ()
-                select name;
-
-        //game    "multiplay/maps/2c-Tinny-War.gam"
-        public static readonly Parser<string> Game = 
-            from game in Parse.String ("game")
-                from name in QuotedText
-                select name;
-
-        //data    "wrf/multi/skirmish2.wrf"
-        //data    "wrf/multi/fog1.wrf"
-        public static readonly Parser<string> Data = 
-            from game in Parse.String ("data")
-                from name in QuotedText
-                select name;
+        internal static Parser<Token> Token =
+            from leading in Parse.Char(' ').Or(Parse.Char('\t')).Many()
+            from name in content.Many().Text()
+            from trailing in Parse.Char(' ').Or(Parse.Char('\t')).AtLeastOnce()
+            from data in Cell
+            from nl in recordTerminator.Once()
+            select new Token {
+                    Name = name,
+                    Data = data
+            };
 
         internal static Parser<Campaign> Campaign =
-            from directive in Parse.String( "campaign" )
-            from ignore in Parse.WhiteSpace.Many()
-            from name in Parse.AnyChar.Until(Parse.WhiteSpace).Text().Token()
-            from data in Data.AtLeastOnce()
-            select new Campaign
-                       {
-                           Name = name,
-                           Data = data.ToList()
-                       };
+            from directive in Parse.String("campaign")
+            from spaces in Parse.WhiteSpace.Many()
+            from name in Cell
+            from nl in recordTerminator
+            from tokens in Token.AtLeastOnce()       
+            select new Campaign {
+                Name = name,
+                Data = tokens.Where(d => d.Name == "data").Select(d => d.Data).ToList<string>()
+            };
 
-        internal static Parser<Identifier> CommentOrIdentifier = 
-            from c in Comment.Many ()
-            from i in Identifier
-                select i;
+        internal static Parser<Level> Level = 
+            from directive in Parse.String ("level")
+            from name in Parse.CharExcept ('\r').Except (Parse.Char ('\n')).AtLeastOnce ().Text ().Token ()
+            from tokens in Token.Many ()
+            let players = tokens.Where (p => p.Name == "players").FirstOrDefault()
+            let type = tokens.Where (p => p.Name == "type").FirstOrDefault()
+            let dataset = tokens.Where (p => p.Name == "dataset").FirstOrDefault()
+            let game = tokens.Where (p => p.Name == "game").FirstOrDefault()
+            let data = tokens.Where (p => p.Name == "data")
 
-        internal static Parser<Identifier> Lev = 
-            from ident in CommentOrIdentifier
-                select ident;
-
-        public static Parser<Lev2> Lev2 =
-            from campaingArray in
-                (from ignore in Parse.AnyChar.Until(Campaign)
-                    from campaign in Campaign
-                    select campaign).Optional().AtLeastOnce()
-            from levelArray in
-                (from ignore in Parse.AnyChar.Until(LevelSection)
-                    from level in LevelSection
-                    select level).AtLeastOnce()
-            select new Lev2
+            select new Level
                 {
-                    Campaigns = campaingArray.Where(option => option.IsDefined).Select(option => option.Get()).ToArray(),
-                    Levels = levelArray.ToArray()
+                    Name = name,
+                    Players = players != null ? int.Parse(players.Data) : 0,
+                    Type = type != null ? int.Parse(type.Data) : 0,
+                    Dataset = dataset != null ? dataset.Data : "",
+                    Game = game != null ? game.Data : "",
+                    Data = data.Select(p => p.Data).ToList<string>()
                 };
 
-        public static Parser<string> CampaignDirective =
-            from directive in Parse.String( "campaign" )
-            from name in Parse.AnyChar.Many().Except( Parse.WhiteSpace ).Token().Text()
-            select name;
-    }
+        public static Parser<LevelsFile> Lev =
+            from lf in (
+                from stripout in
+                (from nl in recordTerminator.Many()
+                from c1 in MultilineComment.Optional ().Many()
+                from c2 in SingleLineComment.Optional ().Many()
+                select c1).Many()
 
-    public class Lev2
-    {
-        public Campaign[] Campaigns { get; set; }
-        public Level[] Levels { get; set; }
+                from campaingArray in
+                    (from camp in Campaign
+                     select camp).Many()
+
+                from levelArray in
+                    (from level in Level
+                     select level).Many()
+
+                select new LevelsFile
+                {
+                    Campaigns = campaingArray.Where(option => option != null).ToList<Campaign>(),
+                    Levels = levelArray.Where(option => option != null).ToList<Level>(),
+                }).Many ()
+            from nl in recordTerminator.AtLeastOnce().End()
+
+            select new LevelsFile {
+                Campaigns = lf.SelectMany(l => l.Campaigns).ToList<Campaign>(),
+                Levels = lf.SelectMany(l => l.Levels).ToList<Level>()
+            };      
     }
 }
