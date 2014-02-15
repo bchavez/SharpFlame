@@ -31,29 +31,6 @@ test   test123
         }
 
         [Test]
-        public void CanParseMultilineComment()
-        {
-            var data = @"/*** Test123
-Test123
-***/
-
-level    Sk-Rush-T1
-";
-            var result = LevGrammar.MultilineComment.Parse (data);
-            result.Should ().Be ("** Test123\nTest123\n**");
-        }
-
-        [Test]
-        public void CanParseSingleLineComment()
-        {
-            var data = @"// Test123
-            
-data        ""wrf/vidmem.wrf""";
-            var result = LevGrammar.SingleLineComment.Parse (data);
-            result.Should ().Be (" Test123");
-        }
-
-        [Test]
         public void CanParseCampaign()
         {
             var data = @"campaign	MULTI_CAM_1

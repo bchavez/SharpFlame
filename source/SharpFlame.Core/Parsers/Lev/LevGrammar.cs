@@ -7,49 +7,8 @@ namespace SharpFlame.Core.Parsers.Lev
 {
     public class LevGrammar
     {
-        private static Parser<T> endOfComment<T> (Parser<T> following)
-        {
-            return from escape in Parse.Char ('*')
-                   from f in following
-                    select f;
-        }
-
-        private static readonly Parser<string> newLine =
-            Parse.String ("\r\n").XOr (Parse.Char ('\n').Once ().Text ()).Text();
-
-        private static readonly Parser<string> recordTerminator =
-            Parse.Return("").End().XOr(
-                newLine.End()).Or(
-                newLine);
-
-        private static readonly Parser<char> quotedCellDelimiter = Parse.Char('"');
-
-        private static readonly Parser<char> quotedCellContent =
-            Parse.AnyChar.Except(quotedCellDelimiter);
-
-        private static readonly Parser<string> quotedText =
-            from open in quotedCellDelimiter
-            from content in quotedCellContent.Many().Text()
-            from end in quotedCellDelimiter
-            select content;
-
         private static readonly Parser<char> content = 
-            Parse.AnyChar.Except(Parse.WhiteSpace).Except(recordTerminator);
-
-        private static readonly Parser<string> Cell =
-            quotedText.XOr(Parse.AnyChar.Except(Parse.WhiteSpace).Except(recordTerminator).XMany().Text());
-        
-        internal static readonly Parser<string> SingleLineComment =
-            from ignore in Parse.String ("//")
-                from comment in Parse.AnyChar.Except(recordTerminator).Many().Text()
-                from nl in recordTerminator.Text()
-                select comment;
-
-        internal static readonly Parser<string> MultilineComment =
-            (from open in Parse.String ("/*")
-             from comment in Parse.AnyChar.Except (endOfComment (Parse.Char ('/'))).Many ().Text ()
-             from close in Parse.String ("*/")
-             select comment).Token ();
+            Parse.AnyChar.Except(Parse.WhiteSpace).Except(General.EndOfLineOrFile);
 
         /**
          * Parses:
@@ -60,8 +19,8 @@ namespace SharpFlame.Core.Parsers.Lev
             from leading in Parse.Char(' ').Or(Parse.Char('\t')).Many()
             from name in content.Many().Text()
             from trailing in Parse.Char(' ').Or(Parse.Char('\t')).AtLeastOnce()
-            from data in Cell
-            from nl in recordTerminator.Once()
+            from data in General.Cell
+            from nl in General.EndOfLineOrFile.Once()
             select new Token {
                     Name = name,
                     Data = data
@@ -70,8 +29,8 @@ namespace SharpFlame.Core.Parsers.Lev
         internal static Parser<Campaign> Campaign =
             from directive in Parse.String("campaign")
             from spaces in Parse.WhiteSpace.Many()
-            from name in Cell
-            from nl in recordTerminator
+            from name in General.Cell
+            from nl in General.EndOfLineOrFile
             from tokens in Token.AtLeastOnce()       
             select new Campaign {
                 Name = name,
@@ -101,9 +60,9 @@ namespace SharpFlame.Core.Parsers.Lev
         public static Parser<LevelsFile> Lev =
             from lf in (
                 from stripout in
-                (from nl in recordTerminator.Many()
-                from c1 in MultilineComment.Optional ().Many()
-                from c2 in SingleLineComment.Optional ().Many()
+                (from nl in General.EndOfLineOrFile.Many()
+                from c1 in General.MultilineComment.Optional ().Many()
+                from c2 in General.SingleLineComment.Optional ().Many()
                 select c1).Many()
 
                 from campaingArray in
@@ -119,7 +78,7 @@ namespace SharpFlame.Core.Parsers.Lev
                     Campaigns = campaingArray.Where(option => option != null).ToList<Campaign>(),
                     Levels = levelArray.Where(option => option != null).ToList<Level>(),
                 }).Many ()
-            from nl in recordTerminator.AtLeastOnce().End()
+                from nl in General.EndOfLineOrFile.AtLeastOnce().End()
 
             select new LevelsFile {
                 Campaigns = lf.SelectMany(l => l.Campaigns).ToList<Campaign>(),

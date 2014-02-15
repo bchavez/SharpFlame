@@ -72,6 +72,7 @@
     <Compile Include="Parsers\Ini\Token.cs" />
     <Compile Include="Parsers\Ini\Section.cs" />
     <Compile Include="Parsers\Ini\DataTypes.cs" />
+    <Compile Include="Parsers\General.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

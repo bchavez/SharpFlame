@@ -49,15 +49,7 @@ rotation = 32768, 0, 0";
             d4.P2.Should ().Be (0.25D);
             d4.P3.Should ().Be (0.25D);
             d4.P4.Should ().Be (0.5D);
-        }
-
-        [Test]
-        public void CanParseInt()
-        {
-            var data = @"123";
-            var myInt = IniGrammar.Int.Parse(data);
-            myInt.Should ().Be (123);
-        }
+        }       
 
         [Test]
         public void CanParseInt3()
