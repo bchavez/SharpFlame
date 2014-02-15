@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Sprache;
 
@@ -54,6 +55,7 @@ namespace SharpFlame.Core.Parsers.Ini
             from open in Parse.Char('[')
             from content in Parse.AnyChar.Except(Parse.Char(']')).Except(recordTerminator).AtLeastOnce().Text()
             from end in Parse.Char(']')
+            from nl in recordTerminator.Once()
             select content;       
 
         public static readonly Parser<List<Section>> Ini = 
@@ -67,7 +69,7 @@ namespace SharpFlame.Core.Parsers.Ini
                         (from section in Section.Optional ()
                          from tokens in Token.Many ()
                          select new Section {
-                            Name = section.IsDefined ? section.ToString() : GlobalSectionName,
+                            Name = section.IsDefined ? section.Get() : GlobalSectionName,
                             Data = tokens.ToList<Token>()
                         }).Many ()
 
@@ -91,10 +93,10 @@ namespace SharpFlame.Core.Parsers.Ini
             from i3 in Parse.String(", ")
             from p4 in Parse.Digit.Or(Parse.Char('.')).AtLeastOnce().Text()
             select new Double4 {
-                P1 = double.Parse(p1),
-                P2 = double.Parse(p2),
-                P3 = double.Parse(p3),
-                P4 = double.Parse(p4)
+                P1 = double.Parse(p1, CultureInfo.InvariantCulture),
+                P2 = double.Parse(p2, CultureInfo.InvariantCulture),
+                P3 = double.Parse(p3, CultureInfo.InvariantCulture),
+                P4 = double.Parse(p4, CultureInfo.InvariantCulture)
             };
 
         // Parses: 19136, 4288, 0
