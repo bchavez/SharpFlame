@@ -103,6 +103,23 @@ data		""wrf/multires.wrf""";
         }
 
         [Test]
+        public void can_parse_lev_section()
+        {
+            var data = @"level   Tinny-War-T3
+players 2
+type    19
+dataset MULTI_T3_C1
+game    ""multiplay/maps/2c-Tinny-War.gam""
+data    ""wrf/multi/t3-skirmish2.wrf""
+data    ""wrf/multi/fog1.wrf""
+";
+
+            var result = LevGrammar.LevelSection.Parse(data);
+            result.Name.Should().Be("Tinny-War-T3");
+            result.Players.Should().Be(2);
+        }
+
+        [Test]
         public void CanParseAddonLev()
         {
             var file = Path.Combine ("Data", 

@@ -45,6 +45,31 @@ namespace SharpFlame.Core.Parsers.Lev
                 from name in Parse.AnyChar.AtLeastOnce ().Token ().Text ()
                 select name;
 
+        //level   Tinny-War-T3
+        //players 2
+        //type    19
+        //dataset MULTI_T3_C1
+        //game    ""multiplay/maps/2c-Tinny-War.gam""
+        //data    ""wrf/multi/t3-skirmish2.wrf""
+        //data    ""wrf/multi/fog1.wrf""
+
+        public static readonly Parser<Level> LevelSection =
+            from level in LevGrammar.Level
+            from players in Players
+            from type in Type
+            from dataset in Dataset
+            from game in Game
+            from dataArray in Data.AtLeastOnce()
+            select new Level
+                {
+                    Name = level,
+                    Players = players,
+                    Type = type,
+                    Game = game,
+                    Data = dataArray.ToArray()
+                };
+
+
         //players 2
         public static readonly Parser<int> Players =
             from players in Parse.String ("players")
@@ -98,9 +123,30 @@ namespace SharpFlame.Core.Parsers.Lev
             from ident in CommentOrIdentifier
                 select ident;
 
+        public static Parser<Lev2> Lev2 =
+            from campaingArray in
+                (from ignore in Parse.AnyChar.Until(Campaign)
+                    from campaign in Campaign
+                    select campaign).Optional().AtLeastOnce()
+            from levelArray in
+                (from ignore in Parse.AnyChar.Until(LevelSection)
+                    from level in LevelSection
+                    select level).AtLeastOnce()
+            select new Lev2
+                {
+                    Campaigns = campaingArray.Where(option => option.IsDefined).Select(option => option.Get()).ToArray(),
+                    Levels = levelArray.ToArray()
+                };
+
         public static Parser<string> CampaignDirective =
             from directive in Parse.String( "campaign" )
             from name in Parse.AnyChar.Many().Except( Parse.WhiteSpace ).Token().Text()
             select name;
+    }
+
+    public class Lev2
+    {
+        public Campaign[] Campaigns { get; set; }
+        public Level[] Levels { get; set; }
     }
 }
