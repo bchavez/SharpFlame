@@ -112,11 +112,7 @@ rotation = 32768, 0, 0";
             Console.WriteLine ("Parsing: {0}", file);
             var iniFile = IniGrammar.Ini.Parse (txt);
             iniFile.Count.Should().Be (40);
-
-            foreach (var sec in iniFile) {
-                Console.WriteLine ("Section {0} Token count is: {1}", sec.Name, sec.Data.Count);              
-            }
-
+ 
             // Parse:
             // id = 3693
             // startpos = 3
@@ -145,6 +141,36 @@ rotation = 32768, 0, 0";
                     tmpRotation.I1.Should ().Be (0);
                     tmpRotation.I2.Should ().Be (0);
                     tmpRotation.I3.Should ().Be (0);
+                    break;
+                case "player":
+                    break;
+                case "name":
+                    break;
+                case "health":
+                    break;
+                case "droidtype":
+                    break;
+                case "weapons":
+                    break;
+                case "parts\\body":
+                    break;
+                case "parts\\propulsion":
+                    break;
+                case "parts\\brain":
+                    break;
+                case "parts\\repair":
+                    break;
+                case "parts\\ecm":
+                    break;
+                case "parts\\sensor":
+                    break;
+                case "parts\\construct":
+                    break;
+                case "parts\\weapon\\1":
+                    break;
+                case "parts\\weapon\\2":
+                    break;
+                case "parts\\weapon\\3":
                     break;
                 }
             }

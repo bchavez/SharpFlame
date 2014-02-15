@@ -41,7 +41,7 @@ namespace SharpFlame.Core.Parsers.Lev
         
         internal static readonly Parser<string> SingleLineComment =
             from ignore in Parse.String ("//")
-                from comment in Parse.AnyChar.Except(Parse.String(Environment.NewLine)).Many().Text()
+                from comment in Parse.AnyChar.Except(recordTerminator).Many().Text()
                 from nl in recordTerminator.Text()
                 select comment;
 

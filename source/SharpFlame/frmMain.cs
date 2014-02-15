@@ -988,7 +988,7 @@ namespace SharpFlame
                 return;
             }
                       
-            if ( MessageBox.Show("Resizing can\'t be undone. Continue?", "", MessageBoxButtons.OKCancel) == DialogResult.OK )
+            if ( MessageBox.Show("Resizing can\'t be undone. Continue?", "", MessageBoxButtons.OKCancel) != DialogResult.OK )
             {
                 return;
             }
@@ -1002,7 +1002,7 @@ namespace SharpFlame
             {
                 if (MessageBox.Show (
                     "Warzone doesn\'t support map sizes above {0} Continue anyway?".Format2(Constants.WzMapMaxSize), 
-                    "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    "", MessageBoxButtons.YesNo) != DialogResult.Yes)
                 {
                     return;
                 }

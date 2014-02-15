@@ -1,9 +1,9 @@
 static internal class Constants
 {
     public const string ProgramName = "SharpFlame";
-    public const string ProgramVersionNumber = "0.22";
+    public const string ProgramVersionNumber = "0.23";
 #if Mono
-		public const string ProgramPlatform = "Mono 0.22";
+		public const string ProgramPlatform = "Mono 0.23";
 #else
     public const string ProgramPlatform = "Windows";
 #endif
