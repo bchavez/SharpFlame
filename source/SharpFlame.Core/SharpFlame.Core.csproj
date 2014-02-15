@@ -67,6 +67,10 @@
     <Compile Include="Parsers\Lev\LevelsFile.cs" />
     <Compile Include="Parsers\Lev\Campaign.cs" />
     <Compile Include="Parsers\Lev\Token.cs" />
+    <Compile Include="Parsers\Ini\IniGrammer.cs" />
+    <Compile Include="Parsers\Ini\Token.cs" />
+    <Compile Include="Parsers\Ini\Section.cs" />
+    <Compile Include="Parsers\Ini\DataTypes.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -79,4 +83,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Parsers\Ini\" />
+  </ItemGroup>
 </Project>

@@ -15,7 +15,7 @@ namespace SharpFlame.Core.Parsers.Lev
         }
 
         private static readonly Parser<string> newLine =
-            Parse.String(Environment.NewLine).Text();
+            Parse.String ("\r\n").XOr (Parse.Char ('\n').Once ().Text ()).Text();
 
         private static readonly Parser<string> recordTerminator =
             Parse.Return("").End().XOr(

@@ -56,6 +56,7 @@
     <Compile Include="Parser\LevParserTests.cs" />
     <Compile Include="Parser\PieParseTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Parser\IniParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Maps\2c-Tinny-War.wz" />
@@ -80,6 +81,7 @@
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Data\Levels\" />
+    <Folder Include="Data\Inis\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Data\Levels\2c-Tinny-War.addon.lev">
@@ -95,6 +97,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\Pies\mioil.pie">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Inis\droid.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Inis\feature.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Inis\settings.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Inis\struct.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
