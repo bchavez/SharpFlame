@@ -37,8 +37,7 @@ namespace SharpFlame.Core.Parsers.Lev
             Parse.AnyChar.Except(Parse.WhiteSpace).Except(recordTerminator);
 
         private static readonly Parser<string> Cell =
-            quotedText.XOr(
-                content.XMany().Text());
+            quotedText.XOr(Parse.AnyChar.Except(Parse.WhiteSpace).Except(recordTerminator).XMany().Text());
         
         internal static readonly Parser<string> SingleLineComment =
             from ignore in Parse.String ("//")

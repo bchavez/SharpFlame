@@ -1,10 +1,12 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using NLog;
 using SharpFlame.Collections;
+using SharpFlame.Core.Parsers.Lev;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
@@ -15,6 +17,7 @@ using SharpFlame.Mapping.Tools;
 using SharpFlame.Mapping.Wz;
 using SharpFlame.Maths;
 using SharpFlame.Util;
+using Sprache;
 using Ionic.Zip;
 
 namespace SharpFlame.Mapping
@@ -23,21 +26,12 @@ namespace SharpFlame.Mapping
     {
         public clsResult Load_WZ(string path)
         {
-            var ReturnResult = new clsResult (string.Format ("Loading WZ from '{0}'.", path), false);
-            logger.Info (string.Format ("Loading WZ from '{0}'.", path));
-            sResult SubResult = new sResult ();         
+            var returnResult = new clsResult (string.Format ("Loading WZ from '{0}'.", path), false);
+            logger.Info ("Loading WZ from '{0}'.", path);
+            sResult subResult = new sResult ();         
 
-            bool GameFound = default(bool);
-            bool DatasetFound = default(bool);
-            SimpleList<clsWZMapEntry> Maps = new SimpleList<clsWZMapEntry> ();
-            clsTileset GameTileset = null;
-            string GameName = "";
-            string strTemp = "";
             ZipSplitPath splitPath;
-            int A = 0;
-            int B = 0;
-            int C = 0;
-            int D = 0;
+            var mapLoadName = "";
 
             using (var zip = ZipFile.Read(path)) {
                 foreach (ZipEntry e in zip) {
@@ -54,103 +48,93 @@ namespace SharpFlame.Mapping
 
                     // Buggy file > 1MB
                     if (e.UncompressedSize > 1 * 1024 * 1024) {
-                        ReturnResult.ProblemAdd ("lev file is too large.");
-                        return ReturnResult;
+                        returnResult.ProblemAdd ("lev file is too large.");
+                        return returnResult;
                     }
 
                     using (var s = e.OpenReader()) {
-                        BinaryReader reader = new BinaryReader (s);
-                        List<string> LineData = IOUtil.BytesToLinesRemoveComments (reader); // reads the whole file into the memory.                    
+                        var myresult = new clsResult (string.Format ("Parsing .lev file \"{0}\"", e.FileName), false);
+                        logger.Info ("Parsing .lev file \"{0}\"", e.FileName);
 
-                        for (A = 0; A < LineData.Count; A++) {
-                            if (LineData [A].Length > 4 && LineData [A].Substring (0, 5).ToLower () == "level") {
-                                //find each levels game file
-                                GameFound = false;
-                                B = 1;
-                                while (A + B < LineData.Count) {
-                                    if (LineData [A + B].Substring (0, 4).ToLower () == "game") {
-                                        C = LineData [A + B].IndexOf ('"');
-                                        D = LineData [A + B].IndexOf ('"', C + 1);
-                                        if (C > 0 & D > 0 & D - C > 1) {
-                                            GameName = LineData [A + B].Substring (C + 1, D - C - 1);
-                                            //see if map is already counted
-                                            for (C = 0; C <= Maps.Count - 1; C++) {
-                                                if (GameName == Maps [C].Name) {
-                                                    break;
-                                                }
-                                            }
-                                            if (C == Maps.Count) {
-                                                GameFound = true;
-                                            }
-                                        }
-                                        break;
-                                    } else if (LineData [A + B].Substring (0, 5).ToLower () == "level") {
-                                        break;
-                                    }
-                                    B++;
-                                }
-                                if (GameFound) {
-                                    //find the dataset (determines tileset)
-                                    DatasetFound = false;
-                                    B = 1;
-                                    while (A + B < LineData.Count) {
-                                        if (LineData [A + B].Substring (0, 7).ToLower () == "dataset") {
-                                            strTemp = LineData [A + B].Substring (LineData [A + B].Length - 1, 1);
-                                            if (strTemp == "1") {
-                                                GameTileset = App.Tileset_Arizona;
-                                                DatasetFound = true;
-                                            } else if (strTemp == "2") {
-                                                GameTileset = App.Tileset_Urban;
-                                                DatasetFound = true;
-                                            } else if (strTemp == "3") {
-                                                GameTileset = App.Tileset_Rockies;
-                                                DatasetFound = true;
-                                            }
-                                            break;
-                                        } else if (LineData [A + B].Substring (0, 5).ToLower () == "level") {
-                                            break;
-                                        }
-                                        B++;
-                                    }
-                                    if (DatasetFound) {
-                                        clsWZMapEntry NewMap = new clsWZMapEntry ();
-                                        NewMap.Name = GameName;
-                                        NewMap.Tileset = GameTileset;
-                                        Maps.Add (NewMap);
-                                    }
-                                }
+                        try {
+                            var r = new StreamReader (s);
+                            var text = r.ReadToEnd ();
+                            var levFile = LevGrammar.Lev.Parse (text);
+
+
+                            if (levFile.Levels.Count < 1) {
+                                myresult.ProblemAdd ("No maps found in file.");
+                                returnResult.Add (myresult);
+                                return returnResult;
                             }
-                        }
+
+                            var groupGames = 
+                                from l in levFile.Levels
+                                    group l by l.Game into g
+                                        select new { Key = g.Key, Levels = g };
+
+                            //prompt user for which of the entries to load
+                            if (groupGames.Count() == 1) {
+                                var level = groupGames.First().Levels.First();
+                                mapLoadName = level.Game;
+
+                                switch (level.Dataset.Substring (level.Dataset.Length - 1, 1)) {
+                                case "1":
+                                    Tileset = App.Tileset_Arizona;
+                                    break;
+                                case "2":
+                                    Tileset = App.Tileset_Urban;
+                                    break;
+                                case "3":
+                                    Tileset = App.Tileset_Urban;
+                                    break;  
+                                default:
+                                    myresult.ProblemAdd ("Unknown tileset.");
+                                    returnResult.Add (myresult);
+                                    return returnResult;
+                                }
+                            } else {
+                                frmWZLoad.clsOutput selectToLoadResult = new frmWZLoad.clsOutput ();
+                                var names =
+                                    (from g in groupGames
+                                        select g.Levels.First().Name).ToArray();
+
+                                frmWZLoad selectToLoadForm = new frmWZLoad (names, selectToLoadResult,
+                                                                            "Select a map from " + new sSplitPath (path).FileTitle);
+                                selectToLoadForm.ShowDialog ();
+                                if (selectToLoadResult.Result < 0) {
+                                    returnResult.ProblemAdd ("No map selected.");
+                                    return returnResult;
+                                }
+
+                                var level = groupGames.ToList()[selectToLoadResult.Result].Levels.First();
+                                mapLoadName = level.Game;
+
+                                switch (level.Dataset.Substring (level.Dataset.Length - 1, 1)) {
+                                    case "1":
+                                    Tileset = App.Tileset_Arizona;
+                                    break;
+                                    case "2":
+                                    Tileset = App.Tileset_Urban;
+                                    break;
+                                    case "3":
+                                    Tileset = App.Tileset_Urban;
+                                    break;  
+                                    default:
+                                        myresult.ProblemAdd ("Unknown tileset.");
+                                        returnResult.Add (myresult);
+                                        return returnResult;
+                                }
+                            }                                                   
+                        } catch (Exception ex) {
+                            myresult.ProblemAdd (string.Format ("Got an exception while parsing the .lev file: {0}", ex), false);
+                            returnResult.Add (myresult);
+                            logger.ErrorException ("Got an exception while parsing the .lev file", ex);
+                            Debugger.Break ();
+                        }                       
                     }
                 }
-
-                if (Maps.Count < 1) {
-                    ReturnResult.ProblemAdd ("No maps found in file.");
-                    return ReturnResult;
-                }
-
-                string mapLoadName = "";
-                //prompt user for which of the entries to load
-                if (Maps.Count == 1) {
-                    mapLoadName = Convert.ToString (Maps [0].Name);
-                    Tileset = Maps [0].Tileset;
-                } else {
-                    frmWZLoad.clsOutput SelectToLoadResult = new frmWZLoad.clsOutput ();
-                    string[] Names = new string[Maps.Count];
-                    for (A = 0; A <= Maps.Count - 1; A++) {
-                        Names [A] = Convert.ToString (Maps [A].Name);
-                    }
-                    frmWZLoad SelectToLoadForm = new frmWZLoad (Names, SelectToLoadResult,
-                                                                "Select a map from " + new sSplitPath (path).FileTitle);
-                    SelectToLoadForm.ShowDialog ();
-                    if (SelectToLoadResult.Result < 0) {
-                        ReturnResult.ProblemAdd ("No map selected.");
-                        return ReturnResult;
-                    }
-                    mapLoadName = Convert.ToString (Maps [SelectToLoadResult.Result].Name);
-                    Tileset = Maps [SelectToLoadResult.Result].Tileset;
-                }
-
+                                             
                 TileType_Reset ();
                 SetPainterToDefaults ();
 
@@ -160,32 +144,33 @@ namespace SharpFlame.Mapping
 
                 var gameZipEntry = zip [mapLoadName]; 
                 if (gameZipEntry == null) {
-                    ReturnResult.ProblemAdd ("Game file not found.");
-                    return ReturnResult;
+                    returnResult.ProblemAdd (string.Format("Game file \"{0}\" not found.", mapLoadName), false);
+                    logger.Error ("Game file \"{0}\" not found.", mapLoadName);
+                    return returnResult;
                 }
                 using (Stream s = gameZipEntry.OpenReader()) {              
                     BinaryReader reader = new BinaryReader (s);
-                    SubResult = Read_WZ_gam (reader);
+                    subResult = Read_WZ_gam (reader);
                     reader.Close ();
-                    if (!SubResult.Success) {
-                        ReturnResult.ProblemAdd (SubResult.Problem);
-                        return ReturnResult;
+                    if (!subResult.Success) {
+                        returnResult.ProblemAdd (subResult.Problem);
+                        return returnResult;
                     }
                 }
 
 
                 var gameMapZipEntry = zip [gameFilesPath + "game.map"];
                 if (gameMapZipEntry == null) {
-                    ReturnResult.ProblemAdd (string.Format ("{0}game.map file not found", gameFilesPath));
-                    return ReturnResult;
+                    returnResult.ProblemAdd (string.Format ("{0}game.map file not found", gameFilesPath));
+                    return returnResult;
                 }
                 using (Stream s = gameMapZipEntry.OpenReader()) {              
                     BinaryReader reader = new BinaryReader (s);
-                    SubResult = Read_WZ_map (reader);
+                    subResult = Read_WZ_map (reader);
                     reader.Close ();
-                    if (!SubResult.Success) {
-                        ReturnResult.ProblemAdd (SubResult.Problem);
-                        return ReturnResult;
+                    if (!subResult.Success) {
+                        returnResult.ProblemAdd (subResult.Problem);
+                        return returnResult;
                     }
                 }
 
@@ -203,7 +188,7 @@ namespace SharpFlame.Mapping
                         reader.Close ();
                         INIFeatures = new IniFeatures (FeaturesINI.Sections.Count);
                         Result.Take (FeaturesINI.Translate (INIFeatures));
-                        ReturnResult.Add (Result);
+                        returnResult.Add (Result);
                     }
                 }
 
@@ -217,14 +202,14 @@ namespace SharpFlame.Mapping
                     } else {
                         using (Stream s = featBJOZipEntry.OpenReader()) {
                             BinaryReader reader = new BinaryReader (s);
-                            SubResult = Read_WZ_Features (reader, BJOUnits);
+                            subResult = Read_WZ_Features (reader, BJOUnits);
                             reader.Close ();
-                            if (!SubResult.Success) {
-                                Result.WarningAdd (SubResult.Problem);
+                            if (!subResult.Success) {
+                                Result.WarningAdd (subResult.Problem);
                             }
                         }
                     }
-                    ReturnResult.Add (Result);
+                    returnResult.Add (Result);
                 }
 
                 clsResult result = new clsResult ("ttypes.ttp", false);
@@ -235,14 +220,14 @@ namespace SharpFlame.Mapping
                 } else {
                     using (Stream s = ttypesEntry.OpenReader()) {
                         BinaryReader reader = new BinaryReader (s);
-                        SubResult = Read_WZ_TileTypes (reader);
+                        subResult = Read_WZ_TileTypes (reader);
                         reader.Close ();
-                        if (!SubResult.Success) {
-                            result.WarningAdd (SubResult.Problem);
+                        if (!subResult.Success) {
+                            result.WarningAdd (subResult.Problem);
                         }
                     }
                 }
-                ReturnResult.Add (result);
+                returnResult.Add (result);
 
                 IniStructures INIStructures = null;
                 var structIniEntry = zip [gameFilesPath + "struct.ini"];
@@ -257,7 +242,7 @@ namespace SharpFlame.Mapping
                             reader.Close ();
                             INIStructures = new IniStructures (StructuresINI.Sections.Count, this);
                             result.Take (StructuresINI.Translate (INIStructures));
-                            ReturnResult.Add (result);
+                            returnResult.Add (result);
                         }
                     }
                 }
@@ -271,14 +256,14 @@ namespace SharpFlame.Mapping
                     } else {
                         using (Stream s = structBjoEntry.OpenReader()) {
                             BinaryReader reader = new BinaryReader (s);
-                            SubResult = Read_WZ_Structures (reader, BJOUnits);
+                            subResult = Read_WZ_Structures (reader, BJOUnits);
                             reader.Close ();
-                            if (!SubResult.Success) {
-                                Result.WarningAdd (SubResult.Problem);
+                            if (!subResult.Success) {
+                                Result.WarningAdd (subResult.Problem);
                             }
                         }
                     }
-                    ReturnResult.Add (Result);
+                    returnResult.Add (Result);
                 }
 
                 IniDroids INIDroids = null;
@@ -286,15 +271,15 @@ namespace SharpFlame.Mapping
                 if (structIniEntry != null) {
                     {
                         using (Stream s = droidIniEntry.OpenReader()) {
-                        clsResult Result = new clsResult ("droid.ini", false);
-                        logger.Info ("Loading droid.ini");
-                        IniReader DroidsINI = new IniReader ();
-                        StreamReader reader = new StreamReader (s);
-                        Result.Take (DroidsINI.ReadFile (reader));
-                        reader.Close ();
-                        INIDroids = new IniDroids (DroidsINI.Sections.Count, this);
-                        Result.Take (DroidsINI.Translate (INIDroids));
-                        ReturnResult.Add (Result);
+                            clsResult Result = new clsResult ("droid.ini", false);
+                            logger.Info ("Loading droid.ini");
+                            IniReader DroidsINI = new IniReader ();
+                            StreamReader reader = new StreamReader (s);
+                            Result.Take (DroidsINI.ReadFile (reader));
+                            reader.Close ();
+                            INIDroids = new IniDroids (DroidsINI.Sections.Count, this);
+                            Result.Take (DroidsINI.Translate (INIDroids));
+                            returnResult.Add (Result);
                         }
                     }
                 }
@@ -308,14 +293,14 @@ namespace SharpFlame.Mapping
                     } else {
                         using (Stream s = diniBjoEntry.OpenReader()) {
                             BinaryReader reader = new BinaryReader (s);
-                            SubResult = Read_WZ_Droids (reader, BJOUnits);
+                            subResult = Read_WZ_Droids (reader, BJOUnits);
                             reader.Close ();
-                            if (!SubResult.Success) {
-                                Result.WarningAdd (SubResult.Problem);
+                            if (!subResult.Success) {
+                                Result.WarningAdd (subResult.Problem);
                             }
                         }
                     }
-                    ReturnResult.Add (Result);
+                    returnResult.Add (Result);
                 }
 
                 sCreateWZObjectsArgs CreateObjectsArgs = new sCreateWZObjectsArgs ();
@@ -323,7 +308,7 @@ namespace SharpFlame.Mapping
                 CreateObjectsArgs.INIStructures = INIStructures;
                 CreateObjectsArgs.INIDroids = INIDroids;
                 CreateObjectsArgs.INIFeatures = INIFeatures;
-                ReturnResult.Add (CreateWZObjects (CreateObjectsArgs));
+                returnResult.Add (CreateWZObjects (CreateObjectsArgs));
 
                 //objects are modified by this and must already exist
                 var labelsIniEntry = zip [gameFilesPath + "labels.ini"];
@@ -336,12 +321,12 @@ namespace SharpFlame.Mapping
                         Result.Take (LabelsINI.ReadFile (reader));
                         reader.Close ();
                         Result.Take (Read_WZ_Labels (LabelsINI, false));
-                        ReturnResult.Add (Result);
+                        returnResult.Add (Result);
                     }
-                }
-            }            
+                }                       
+            }
 
-            return ReturnResult;
+            return returnResult;
         }
 
         public clsResult Load_Game(string Path)

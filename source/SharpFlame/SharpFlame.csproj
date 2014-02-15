@@ -97,6 +97,9 @@
     <Reference Include="Ionic.Zip.Reduced">
       <HintPath>..\packages\DotNetZipLib.1.9\zip-v1.9-Reduced\Release\Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
+    <Reference Include="Sprache">
+      <HintPath>..\packages\Sprache.1.10.0.35\lib\net40\Sprache.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -238,7 +241,6 @@
     <Compile Include="AppSettings\OptionInterface.cs" />
     <Compile Include="AppSettings\OptionProfileCreator.cs" />
     <Compile Include="Mapping\Wz\clsWZBJOUnit.cs" />
-    <Compile Include="Mapping\Wz\clsWZMapEntry.cs" />
     <Compile Include="Mapping\Wz\IniDroids.cs" />
     <Compile Include="Mapping\Wz\IniFeatures.cs" />
     <Compile Include="Mapping\Wz\IniStructures.cs" />
