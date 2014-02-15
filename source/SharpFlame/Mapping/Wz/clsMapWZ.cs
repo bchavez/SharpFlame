@@ -53,14 +53,13 @@ namespace SharpFlame.Mapping
                     }
 
                     using (var s = e.OpenReader()) {
-                        var myresult = new clsResult (string.Format ("Parsing .lev file \"{0}\"", e.FileName), false);
-                        logger.Info ("Parsing .lev file \"{0}\"", e.FileName);
+                        var myresult = new clsResult (string.Format ("Parsing file \"{0}\"", e.FileName), false);
+                        logger.Info ("Parsing file \"{0}\"", e.FileName);
 
                         try {
                             var r = new StreamReader (s);
                             var text = r.ReadToEnd ();
                             var levFile = LevGrammar.Lev.Parse (text);
-
 
                             if (levFile.Levels.Count < 1) {
                                 myresult.ProblemAdd ("No maps found in file.");
@@ -68,12 +67,13 @@ namespace SharpFlame.Mapping
                                 return returnResult;
                             }
 
+                            // Group games by the Game key.
                             var groupGames = 
                                 from l in levFile.Levels
                                     group l by l.Game into g
                                         select new { Key = g.Key, Levels = g };
 
-                            //prompt user for which of the entries to load
+                            // Load default map if only one Game file is found.
                             if (groupGames.Count() == 1) {
                                 var level = groupGames.First().Levels.First();
                                 mapLoadName = level.Game;
@@ -94,6 +94,7 @@ namespace SharpFlame.Mapping
                                     return returnResult;
                                 }
                             } else {
+                                //prompt user for which of the entries to load
                                 frmWZLoad.clsOutput selectToLoadResult = new frmWZLoad.clsOutput ();
                                 var names =
                                     (from g in groupGames

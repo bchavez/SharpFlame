@@ -150,18 +150,6 @@ namespace SharpFlame
 
             InitializeComponent();
 
-#if Mono
-			int A = 0;
-			for (A = 0; A <= TabControl.TabPages.Count - 1; A++)
-			{
-				TabControl.TabPages[A].Text += " ";
-			}
-			for (A = 0; A <= TabControl1.TabPages.Count - 1; A++)
-			{
-				TabControl1.TabPages[A].Text += " ";
-			}
-#endif
-
             MapViewControl = new MapViewControl(this);
             TextureViewControl = new TextureViewControl(this);
 

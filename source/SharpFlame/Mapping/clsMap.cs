@@ -2251,11 +2251,7 @@ namespace SharpFlame.Mapping
             {
                 Result = Result.Substring (0, MaxLength - 3) + "...";
             }
-#if Mono
-			MapView_TabPage.Text = Result + " ";
-#else
             MapView_TabPage.Text = Result;
-#endif
         }
 
         public bool SideHIsCliffOnBothSides(sXY_int SideNum)
