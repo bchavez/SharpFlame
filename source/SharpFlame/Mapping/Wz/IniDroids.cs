@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
 using SharpFlame.Mapping.Objects;
@@ -8,9 +9,9 @@ namespace SharpFlame.Mapping.Wz
 {
     public class IniDroids : SectionTranslator
     {
-        private clsMap ParentMap;
+        public clsMap ParentMap;
 
-        public struct sDroid
+        public class sDroid
         {
             public UInt32 ID;
             public string Template;
@@ -30,22 +31,27 @@ namespace SharpFlame.Mapping.Wz
             public int WeaponCount;
         }
 
-        public sDroid[] Droids;
+        public List<sDroid> Droids;
         public int DroidCount;
+
+        public IniDroids() {
+        }
 
         public IniDroids(int newDroidCount, clsMap NewParentMap)
         {
-            int A = 0;
+            int a = 0;
 
             ParentMap = NewParentMap;
 
             DroidCount = newDroidCount;
-            Droids = new sDroid[DroidCount];
-            for ( A = 0; A <= DroidCount - 1; A++ )
+            // Droids = new sDroid[DroidCount];
+            for ( a = 0; a <= DroidCount - 1; a++ )
             {
-                Droids[A].HealthPercent = -1;
-                Droids[A].DroidType = -1;
-                Droids[A].Weapons = new string[3];
+                Droids.Add (new sDroid { 
+                    HealthPercent = -1,
+                    DroidType = -1,
+                    Weapons = new string[3]
+                });
             }
         }
 

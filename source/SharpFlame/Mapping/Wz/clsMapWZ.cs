@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using NLog;
 using SharpFlame.Collections;
+using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.Core.Parsers.Lev;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
@@ -59,7 +60,7 @@ namespace SharpFlame.Mapping
                         try {
                             var r = new StreamReader (s);
                             var text = r.ReadToEnd ();
-                            var levFile = LevGrammar.Lev.Parse (text);
+                            var levFile = LevGrammar.Lev.Parse(text);
 
                             if (levFile.Levels.Count < 1) {
                                 myresult.ProblemAdd ("No maps found in file.");
@@ -267,25 +268,20 @@ namespace SharpFlame.Mapping
                     returnResult.Add (Result);
                 }
 
-                IniDroids INIDroids = null;
-                var droidIniEntry = zip [gameFilesPath + "droid.ini"];
+                IniDroids iniDroids = null;              
                 if (structIniEntry != null) {
-                    {
+                    var droidIniEntry = zip [gameFilesPath + "droid.ini"];
+                    if (droidIniEntry != null) {
+                        iniDroids = new IniDroids ();
                         using (Stream s = droidIniEntry.OpenReader()) {
-                            clsResult Result = new clsResult ("droid.ini", false);
-                            logger.Info ("Loading droid.ini");
-                            IniReader DroidsINI = new IniReader ();
-                            StreamReader reader = new StreamReader (s);
-                            Result.Take (DroidsINI.ReadFile (reader));
-                            reader.Close ();
-                            INIDroids = new IniDroids (DroidsINI.Sections.Count, this);
-                            Result.Take (DroidsINI.Translate (INIDroids));
-                            returnResult.Add (Result);
+                            var reader = new StreamReader (s);
+                            var text = reader.ReadToEnd ();
+                            returnResult.Add (Read_INI_Droid (text, ref iniDroids));
                         }
                     }
                 }
 
-                if (INIDroids == null) {
+                if (iniDroids == null) {
                     clsResult Result = new clsResult ("dinit.bjo", false);
                     logger.Info ("Loading dinit.bjo");
                     var diniBjoEntry = zip [gameFilesPath + "dinit.bjo"];
@@ -307,7 +303,7 @@ namespace SharpFlame.Mapping
                 sCreateWZObjectsArgs CreateObjectsArgs = new sCreateWZObjectsArgs ();
                 CreateObjectsArgs.BJOUnits = BJOUnits;
                 CreateObjectsArgs.INIStructures = INIStructures;
-                CreateObjectsArgs.INIDroids = INIDroids;
+                CreateObjectsArgs.INIDroids = iniDroids;
                 CreateObjectsArgs.INIFeatures = INIFeatures;
                 returnResult.Add (CreateWZObjects (CreateObjectsArgs));
 
@@ -1123,6 +1119,172 @@ namespace SharpFlame.Mapping
             return ReturnResult;
         }
 
+        private clsResult Read_INI_Droid(string iniText, ref IniDroids resultData)
+        {
+            var resultObject = new clsResult ("Reading droids.ini.", false);
+
+            try {
+                var iniSections = IniGrammar.Ini.Parse(iniText);
+                resultData.DroidCount = iniSections.Count;
+                resultData.ParentMap = this;
+                resultData.Droids = new List<IniDroids.sDroid>();
+                foreach (var iniSection in iniSections) {
+                    var droid = new IniDroids.sDroid();
+                    foreach (var iniToken in iniSection.Data) {
+                        switch (iniToken.Name) {
+                            case "id":
+                                droid.ID = uint.Parse (iniToken.Data);
+                            break;
+                            case "startpos":
+                                var tmpStartPos = int.Parse (iniToken.Data);
+                                if (tmpStartPos < 0 | tmpStartPos >= Constants.PlayerCountMax) {
+                                    resultObject.ProblemAdd(string.Format("#{0} invalid startpos {1}", iniSection.Name, tmpStartPos), false);
+                                    logger.Error("#{0} invalid startpos {1}", iniSection.Name, tmpStartPos);                                    
+                                    continue;
+                                }
+                                droid.UnitGroup = UnitGroups[tmpStartPos];
+                            break;
+                            case "template":
+                                droid.Template = iniToken.Data;
+                            break;
+                            case "position":
+                                try 
+                                {
+                                    var tmpPosition = IniGrammar.Int3.Parse(iniToken.Data);
+                                    droid.Pos =  new clsWorldPos(new sWorldPos(new sXY_int(tmpPosition.I1, tmpPosition.I2), tmpPosition.I3));
+                                } 
+                                catch (Exception ex) 
+                                {
+                                    Debugger.Break();
+                                    resultObject.ProblemAdd(string.Format("#{0} exception while reading the position: {1}", iniSection.Name, ex.Message), false);
+                                    logger.ErrorException(string.Format("#{0} exception while reading the position", iniSection.Name), ex);
+                                    continue;
+                                }
+                            break;
+                            case "rotation":
+                                try 
+                                {
+                                    var tmpRotation = IniGrammar.Int3.Parse(iniToken.Data);
+                                    droid.Rotation.Direction = (ushort)tmpRotation.I1;
+                                    droid.Rotation.Pitch = (ushort)tmpRotation.I2;
+                                    droid.Rotation.Roll = (ushort)tmpRotation.I3;
+                                }
+                                catch (Exception ex)
+                                {
+                                    Debugger.Break();
+                                    resultObject.ProblemAdd(string.Format("#{0} error while reading the rotation \"{1}\", got exception: {2}", iniSection.Name, iniToken.Data, ex.Message), false);
+                                    logger.ErrorException(string.Format("#{0} exception while reading the rotation", iniSection.Name), ex);
+                                    continue;
+                                }
+                            break;
+                            case "player":
+                                if (iniToken.Data.ToLower() == "scavenger") {
+                                    droid.UnitGroup = ScavengerUnitGroup;
+                                } else {
+                                    resultObject.ProblemAdd(string.Format("#{0} invalid player: \"{1}\"", iniToken.Name, iniToken.Data), false);
+                                    logger.Error("#{0} invalid player \"{1}\"", iniToken.Name, iniToken.Data);                                    
+                                    continue;
+                                }
+                            break;
+                            case "name":
+                                // ignore
+                            break;
+                            case "health":
+                                try
+                                {
+                                    droid.HealthPercent = IniGrammar.Health.Parse(iniToken.Data); 
+                                    if (droid.HealthPercent < 0 || droid.HealthPercent > 100) {
+                                        resultObject.ProblemAdd(string.Format("#{0} invalid health: \"{1}\"", iniSection.Name, droid.HealthPercent), false);
+                                        continue;
+                                    }
+                                }
+                                catch (Exception ex) {
+                                    resultObject.ProblemAdd(string.Format("#{0} invalid health: \"{1}\", got exception: {2}", iniToken.Name, iniToken.Data, ex.Message), false);
+                                    logger.ErrorException(string.Format("#{0} invalid health \"{1}\"", iniSection.Name, iniToken.Data), ex);                                    
+                                    continue;
+                                }
+                            break;
+                            case "droidtype":
+                                try
+                                {   
+                                    droid.DroidType = IniGrammar.Int.Parse(iniToken.Data);
+                                }
+                                catch (Exception ex) 
+                                {
+                                    resultObject.ProblemAdd(string.Format("#{0} invalid droidtype: \"{1}\", got exception: {2}", iniToken.Name, iniToken.Data, ex.Message), false);
+                                    logger.ErrorException(string.Format("#{0} invalid droidtype \"{1}\"", iniToken.Name, iniToken.Data), ex);                                    
+                                    continue;
+                                }
+                            break;
+                            case "weapons":
+                                try
+                                {   
+                                    droid.WeaponCount = IniGrammar.Int.Parse(iniToken.Data);
+                                }
+                                catch (Exception ex) 
+                                {
+                                    resultObject.ProblemAdd(string.Format("#{0} invalid weapons: \"{1}\", got exception: {2}", iniSection.Name, iniToken.Data, ex.Message), false);
+                                    logger.ErrorException(string.Format("#{0} invalid weapons \"{1}\"", iniSection.Name, iniToken.Data), ex);                                    
+                                    continue;
+                                }
+                            break;
+                            case "parts\\body":
+                                droid.Body = iniToken.Data;
+                            break;
+                            case "parts\\propulsion":
+                                droid.Propulsion = iniToken.Data;
+                            break;
+                            case "parts\\brain":
+                                droid.Brain = iniToken.Data;
+                            break;
+                            case "parts\\repair":
+                                droid.Repair = iniToken.Data;
+                            break;
+                            case "parts\\ecm":
+                                droid.ECM = iniToken.Data;
+                            break;
+                            case "parts\\sensor":
+                                droid.Sensor = iniToken.Data;
+                            break;
+                            case "parts\\construct":
+                                droid.Construct = iniToken.Data;
+                            break;
+                            case "parts\\weapon\\1":
+                                if (droid.Weapons == null) {
+                                    droid.Weapons = new string[3];
+                                }
+                                droid.Weapons[0] = iniToken.Data;
+                            break;
+                            case "parts\\weapon\\2":
+                                if (droid.Weapons == null) {
+                                    droid.Weapons = new string[3];
+                                }
+
+                                droid.Weapons[1] = iniToken.Data;
+                            break;
+                            case "parts\\weapon\\3":
+                                if (droid.Weapons == null) {
+                                    droid.Weapons = new string[3];
+                                }
+
+                                droid.Weapons[2] = iniToken.Data;
+                            break;
+                        }
+                    }
+
+                    resultData.Droids.Add(droid);
+                }
+            }
+            catch (Exception ex) {
+                Debugger.Break ();
+                logger.ErrorException ("Got exception while reading droid.ini", ex);
+                resultObject.ProblemAdd (string.Format ("Got exception: {0}", ex.Message), false);
+                return resultObject;
+            }
+
+            return resultObject;
+        }
+
         private sResult Read_WZ_gam(BinaryReader File)
         {
             sResult ReturnResult = new sResult();
@@ -1540,8 +1702,8 @@ namespace SharpFlame.Mapping
             int FailedCount = 0;
             int ModifiedCount = 0;
 
-            Section INISection = default(Section);
-            foreach ( Section tempLoopVar_INISection in INI.Sections )
+            SharpFlame.FileIO.Ini.Section INISection = default(SharpFlame.FileIO.Ini.Section);
+            foreach ( SharpFlame.FileIO.Ini.Section tempLoopVar_INISection in INI.Sections )
             {
                 INISection = tempLoopVar_INISection;
                 NameText = INISection.Name.Substring(0, NameText.IndexOf('_') - 1);

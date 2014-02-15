@@ -99,18 +99,28 @@ namespace SharpFlame.Core.Parsers.Ini
                 P4 = double.Parse(p4, CultureInfo.InvariantCulture)
             };
 
+        public static readonly Parser<int> Int =
+            from result in Parse.Digit.AtLeastOnce().Text()
+                select int.Parse(result);
+
         // Parses: 19136, 4288, 0
         public static readonly Parser<Int3> Int3 = 
-            from p1 in Parse.Digit.AtLeastOnce().Text()
+            from p1 in Int
             from i1 in Parse.String(", ")
-            from p2 in Parse.Digit.AtLeastOnce().Text()
+            from p2 in Int
             from i2 in Parse.String(", ")
-            from p3 in Parse.Digit.AtLeastOnce().Text()
+            from p3 in Int
             select new Int3 {
-                I1 = Int32.Parse(p1),
-                I2 = Int32.Parse(p2),
-                I3 = Int32.Parse(p3)
+                I1 = p1,
+                I2 = p2,
+                I3 = p3
             };
+
+        // Parses: %100
+        public static readonly Parser<int> Health =
+            from sign in Parse.Char('%')
+            from result in Parse.Digit.AtLeastOnce().Text()
+            select int.Parse(result);
     }
 }
 

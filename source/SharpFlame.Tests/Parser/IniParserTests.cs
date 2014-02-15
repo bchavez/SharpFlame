@@ -52,6 +52,24 @@ rotation = 32768, 0, 0";
         }
 
         [Test]
+        public void CanParseInt()
+        {
+            var data = @"123";
+            var myInt = IniGrammar.Int.Parse(data);
+            myInt.Should ().Be (123);
+        }
+
+        [Test]
+        public void CanParseInt3()
+        {
+            var data = @"19136, 4288, 0";
+            var int3 = IniGrammar.Int3.Parse (data);
+            int3.I1.Should ().Be (19136);
+            int3.I2.Should ().Be (4288);
+            int3.I3.Should ().Be (0);
+        }
+
+        [Test]
         public void CanParseSettingsIni()
         {
             var file = Path.Combine ("Data", 
