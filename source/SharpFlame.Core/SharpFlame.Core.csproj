@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ExtensionsForEnum.cs" />
+    <Compile Include="Parsers\Lev2\Lev2Grammar.cs" />
     <Compile Include="Parsers\Lev\LevGrammar.cs" />
     <Compile Include="Parsers\Pie\Connector.cs" />
     <Compile Include="Parsers\Pie\Level.cs" />
@@ -83,7 +84,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <Folder Include="Parsers\Ini\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

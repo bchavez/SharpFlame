@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GeneralTests.cs" />
+    <Compile Include="Parser\Lev2ParserTests.cs" />
     <Compile Include="Parser\LevParserTests.cs" />
     <Compile Include="Parser\PieParseTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -78,11 +79,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <Folder Include="Data\" />
-    <Folder Include="Data\Levels\" />
-    <Folder Include="Data\Inis\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Data\Levels\2c-Tinny-War.addon.lev">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
