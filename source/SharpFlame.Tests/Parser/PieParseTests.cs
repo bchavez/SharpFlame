@@ -508,6 +508,7 @@ POLYGONS 30
         }
 
         [Test]
+        [Explicit]
         public void can_parse_all_pie_fiels_without_error()
         {
             Console.WriteLine (Directory.GetCurrentDirectory());
@@ -534,7 +535,6 @@ POLYGONS 30
         }
 
         [Test]
-        [Explicit]
         public void can_parse_pie_fiel_without_error()
         {
             var file = Path.Combine("Data", 

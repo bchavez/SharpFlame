@@ -52,11 +52,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GeneralTests.cs" />
     <Compile Include="Parser\LevParserTests.cs" />
     <Compile Include="Parser\PieParseTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Parser\IniParserTests.cs" />
+    <Compile Include="Parser\NumericsTests.cs" />
+    <Compile Include="GeneralTests.cs" />
+    <Compile Include="Parser\GeneralTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Maps\2c-Tinny-War.wz" />
