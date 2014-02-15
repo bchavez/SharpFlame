@@ -53,6 +53,8 @@ namespace SharpFlame
                 new GLControl(new GraphicsMode(new ColorFormat(SettingsManager.InitializeSettings.TextureViewBPP), SettingsManager.InitializeSettings.TextureViewDepth,
                     0));
 
+            App.Random = new Random ();             
+
             while ( OpenGL1.Context == null || OpenGL2.Context == null )
             {
                 //todo, why is this needed
