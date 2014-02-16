@@ -75,9 +75,13 @@ namespace SharpFlame.Mapping
                                     group l by l.Game into g
                                         select new { Key = g.Key, Levels = g };
 
+                            var groupGames2 = levFile.Levels.GroupBy(level => level.Game);
+
                             // Load default map if only one Game file is found.
                             if (groupGames.Count() == 1) {
                                 var level = groupGames.First().Levels.First();
+                                var level2 = groupGames2.First().First(); //first group, first level
+
                                 mapLoadName = level.Game;
 
                                 switch (level.Dataset.Substring (level.Dataset.Length - 1, 1)) {
@@ -102,6 +106,10 @@ namespace SharpFlame.Mapping
                                     (from g in groupGames
                                         select g.Levels.First().Name).ToArray();
 
+                                var names2 = groupGames2
+                                    .SelectMany(gameGroup => gameGroup.First().Name)
+                                    .ToArray();
+
                                 frmWZLoad selectToLoadForm = new frmWZLoad (names, selectToLoadResult,
                                                                             "Select a map from " + new sSplitPath (path).FileTitle);
                                 selectToLoadForm.ShowDialog ();
@@ -111,6 +119,8 @@ namespace SharpFlame.Mapping
                                 }
 
                                 var level = groupGames.ToList()[selectToLoadResult.Result].Levels.First();
+                                var level2 = groupGames2.ElementAt(selectToLoadResult.Result).First();
+                                
                                 mapLoadName = level.Game;
 
                                 switch (level.Dataset.Substring (level.Dataset.Length - 1, 1)) {
