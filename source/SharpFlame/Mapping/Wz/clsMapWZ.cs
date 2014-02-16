@@ -70,17 +70,11 @@ namespace SharpFlame.Mapping
                             }
 
                             // Group games by the Game key.
-                            var groupGames = 
-                                from l in levFile.Levels
-                                    group l by l.Game into g
-                                        select new { Key = g.Key, Levels = g };
-
-                            var groupGames2 = levFile.Levels.GroupBy(level => level.Game);
+                            var groupGames = levFile.Levels.GroupBy(level => level.Game);
 
                             // Load default map if only one Game file is found.
                             if (groupGames.Count() == 1) {
-                                var level = groupGames.First().Levels.First();
-                                var level2 = groupGames2.First().First(); //first group, first level
+                                var level = groupGames.First().First(); //first group, first level
 
                                 mapLoadName = level.Game;
 
@@ -102,12 +96,9 @@ namespace SharpFlame.Mapping
                             } else {
                                 //prompt user for which of the entries to load
                                 frmWZLoad.clsOutput selectToLoadResult = new frmWZLoad.clsOutput ();
-                                var names =
-                                    (from g in groupGames
-                                        select g.Levels.First().Name).ToArray();
 
-                                var names2 = groupGames2
-                                    .SelectMany(gameGroup => gameGroup.First().Name)
+                                var names = groupGames
+                                    .Select(gameGroup => gameGroup.First().Name)
                                     .ToArray();
 
                                 frmWZLoad selectToLoadForm = new frmWZLoad (names, selectToLoadResult,
@@ -118,8 +109,7 @@ namespace SharpFlame.Mapping
                                     return returnResult;
                                 }
 
-                                var level = groupGames.ToList()[selectToLoadResult.Result].Levels.First();
-                                var level2 = groupGames2.ElementAt(selectToLoadResult.Result).First();
+                                var level = groupGames.ElementAt(selectToLoadResult.Result).First();
                                 
                                 mapLoadName = level.Game;
 
