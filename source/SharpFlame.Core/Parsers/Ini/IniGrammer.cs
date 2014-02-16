@@ -41,8 +41,8 @@ namespace SharpFlame.Core.Parsers.Ini
             from secs in (
                     from stripout in
                         (from spaces in Parse.Char (' ').Or (Parse.Char('\t')).Many ()
-                         from nl in General.EndOfLineOrFile.AtLeastOnce ()
-                         select nl).Many ()
+                         from nl in General.EndOfLineOrFile
+                         select spaces).Many ()
                     
                     from sectionArray in 
                         (from section in Section.Optional ()
@@ -53,10 +53,10 @@ namespace SharpFlame.Core.Parsers.Ini
                         }).Many ()
 
                     select sectionArray
-                ).Many ()
-                from nl in General.EndOfLineOrFile.AtLeastOnce().End()
+            ).Many ()              
+            from nl in General.EndOfLineOrFile.AtLeastOnce().End()
 
-                select new List<Section> (secs.SelectMany (l => l).ToList<Section> ());
+            select new List<Section> (secs.SelectMany (l => l).ToList<Section> ());
 
         public static readonly Parser<List<Token>> Tokens = 
             from tokens in Token.Many ()
@@ -93,8 +93,8 @@ namespace SharpFlame.Core.Parsers.Ini
 
         // Parses: %100
         public static readonly Parser<int> Health =
+            from result in Numerics.Int
             from sign in Parse.Char ('%')
-                from result in Numerics.Int
             select result;
     }
 }

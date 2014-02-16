@@ -20,7 +20,7 @@ Test123
 level    Sk-Rush-T1
 ";
             var result = General.MultilineComment.Parse (data);
-            result.Should ().Be ("** Test123\nTest123\n**");
+            result.Should ().Be ("** Test123\r\nTest123\r\n**");
         }
 
         [Test]

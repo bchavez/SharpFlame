@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using FluentAssertions;
 using NUnit.Framework;
+using SharpFlame.Core.Parsers;
 using SharpFlame.Core.Parsers.Ini;
 using Sprache;
 
@@ -181,6 +182,88 @@ rotation = 32768, 0, 0";
                 case "parts\\weapon\\2":
                     break;
                 case "parts\\weapon\\3":
+                    break;
+                }
+            }
+        }
+
+        [Test]
+        public void CanParseFeatureIni()
+        {
+            var file = Path.Combine ("Data", 
+                                     Path.Combine ("Inis", 
+                                     Path.Combine ("feature.ini")));
+
+            var txt = File.ReadAllText (file);
+            Console.WriteLine ("Parsing: {0}", file);
+            var iniFile = IniGrammar.Ini.Parse (txt);
+            iniFile.Count.Should().Be (730);
+
+            iniFile [3].Name.Should ().Be ("feature_1493");
+            foreach (var d in iniFile[3].Data) {
+                switch (d.Name) {
+                case "id":
+                    int.Parse (d.Data).Should ().Be (1493);
+                    break;
+                case "position":
+                    var tmpPosition = IniGrammar.Int3.Parse (d.Data);
+                    tmpPosition.I1.Should ().Be (2496);
+                    tmpPosition.I2.Should ().Be (26688);
+                    tmpPosition.I3.Should ().Be (0);
+                    break;
+                case "rotation":
+                    var tmpRotation = IniGrammar.Int3.Parse (d.Data);
+                    tmpRotation.I1.Should ().Be (0);
+                    tmpRotation.I2.Should ().Be (0);
+                    tmpRotation.I3.Should ().Be (0);
+                    break;
+                case "name":
+                    d.Data.Should ().Be ("AirTrafficControl");
+                    break;
+                }
+            }
+        }
+
+        [Test]
+        public void CanParseStructIni()
+        {
+            var file = Path.Combine ("Data", 
+                                     Path.Combine ("Inis", 
+                                     Path.Combine ("struct.ini")));
+
+            var txt = File.ReadAllText (file);
+            Console.WriteLine ("Parsing: {0}", file);
+            var iniFile = IniGrammar.Ini.Parse (txt);
+            iniFile.Count.Should ().Be (2006);          
+
+            iniFile [2].Name.Should ().Be ("structure_1248");
+            foreach (var d in iniFile[2].Data) {
+                switch (d.Name) {
+                case "id":
+                    int.Parse (d.Data).Should ().Be (1248);
+                    break;
+                case "startpos":
+                    int.Parse (d.Data).Should ().Be (5);
+                    break;
+                case "name":
+                    break;
+                case "wall/type":
+                    int.Parse (d.Data).Should ().Be (0);
+                    break;
+                case "position":
+                    var tmpPosition = IniGrammar.Int3.Parse (d.Data);
+                    tmpPosition.I1.Should ().Be (6208);
+                    tmpPosition.I2.Should ().Be (5440);
+                    tmpPosition.I3.Should ().Be (0);
+                    break;
+                case "rotation":
+                    var tmpRotation = IniGrammar.Int3.Parse (d.Data);
+                    tmpRotation.I1.Should ().Be (16384);
+                    tmpRotation.I2.Should ().Be (0);
+                    tmpRotation.I3.Should ().Be (0);
+                    break;
+                case "modules":
+                    int.Parse (d.Data).Should ().Be (0);
                     break;
                 }
             }

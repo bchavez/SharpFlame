@@ -179,23 +179,19 @@ namespace SharpFlame.Mapping
 
                 SimpleClassList<clsWZBJOUnit> BJOUnits = new SimpleClassList<clsWZBJOUnit> ();
 
-                IniFeatures INIFeatures = null;
+                IniFeatures iniFeatures = null;
                 var featureIniZipEntry = zip [gameFilesPath + "feature.ini"];
                 if (featureIniZipEntry != null) {
-                    using (Stream s = featureIniZipEntry.OpenReader()) {              
-                        clsResult Result = new clsResult ("feature.ini", false);
-                        logger.Info ("Loading feature.ini");
-                        IniReader FeaturesINI = new IniReader ();
-                        StreamReader reader = new StreamReader (s);
-                        Result.Take (FeaturesINI.ReadFile (reader));
+                    iniFeatures = new IniFeatures ();
+                    using (Stream s = featureIniZipEntry.OpenReader()) {
+                        var reader = new StreamReader (s);
+                        var text = reader.ReadToEnd ();
                         reader.Close ();
-                        INIFeatures = new IniFeatures (FeaturesINI.Sections.Count);
-                        Result.Take (FeaturesINI.Translate (INIFeatures));
-                        returnResult.Add (Result);
+                        returnResult.Add (Read_INI_Features (text, ref iniFeatures));
                     }
                 }
-
-                if (INIFeatures == null) {
+                              
+                if (iniFeatures == null) {
                     clsResult Result = new clsResult ("feat.bjo", false);
                     logger.Info ("Loading feat.bjo");
 
@@ -232,25 +228,19 @@ namespace SharpFlame.Mapping
                 }
                 returnResult.Add (result);
 
-                IniStructures INIStructures = null;
+                IniStructures iniStructures = null;
                 var structIniEntry = zip [gameFilesPath + "struct.ini"];
                 if (structIniEntry != null) {
-                    {
-                        using (Stream s = structIniEntry.OpenReader()) {
-                            result = new clsResult ("struct.ini", false);
-                            logger.Info ("Loading struct.ini");
-                            IniReader StructuresINI = new IniReader ();
-                            StreamReader reader = new StreamReader (s);
-                            result.Take (StructuresINI.ReadFile (reader));
-                            reader.Close ();
-                            INIStructures = new IniStructures (StructuresINI.Sections.Count, this);
-                            result.Take (StructuresINI.Translate (INIStructures));
-                            returnResult.Add (result);
-                        }
+                    iniStructures = new IniStructures ();
+                    using (Stream s = structIniEntry.OpenReader()) {
+                        var reader = new StreamReader (s);
+                        var text = reader.ReadToEnd ();
+                        reader.Close ();
+                        returnResult.Add (Read_INI_Structures (text, ref iniStructures));
                     }
                 }
 
-                if (INIStructures == null) {
+                if (iniStructures == null) {
                     clsResult Result = new clsResult ("struct.bjo", false);
                     logger.Info ("Loading struct.bjo");
                     var structBjoEntry = zip [gameFilesPath + "struct.bjo"];
@@ -278,7 +268,7 @@ namespace SharpFlame.Mapping
                             var reader = new StreamReader (s);
                             var text = reader.ReadToEnd ();
                             reader.Close ();
-                            returnResult.Add (Read_INI_Droid (text, ref iniDroids));
+                            returnResult.Add (Read_INI_Droids (text, ref iniDroids));
                         }
                     }
                 }
@@ -304,9 +294,9 @@ namespace SharpFlame.Mapping
 
                 sCreateWZObjectsArgs CreateObjectsArgs = new sCreateWZObjectsArgs ();
                 CreateObjectsArgs.BJOUnits = BJOUnits;
-                CreateObjectsArgs.INIStructures = INIStructures;
+                CreateObjectsArgs.INIStructures = iniStructures;
                 CreateObjectsArgs.INIDroids = iniDroids;
-                CreateObjectsArgs.INIFeatures = INIFeatures;
+                CreateObjectsArgs.INIFeatures = iniFeatures;
                 returnResult.Add (CreateWZObjects (CreateObjectsArgs));
 
                 //objects are modified by this and must already exist
@@ -407,26 +397,20 @@ namespace SharpFlame.Mapping
 
             SimpleClassList<clsWZBJOUnit> BJOUnits = new SimpleClassList<clsWZBJOUnit>();
 
-            IniFeatures INIFeatures = null;
-
+            IniFeatures iniFeatures = null;
             SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "feature.ini", ref File);
-            if ( !SubResult.Success )
+            if ( SubResult.Success )
             {
-            }
-            else
-            {
-                clsResult Result = new clsResult("feature.ini", false);
-                logger.Info ("Loading feature.ini");
-                IniReader FeaturesINI = new IniReader();
-                StreamReader FeaturesINI_Reader = new StreamReader(File);
-                Result.Take(FeaturesINI.ReadFile(FeaturesINI_Reader));
-                FeaturesINI_Reader.Close();
-                INIFeatures = new IniFeatures(FeaturesINI.Sections.Count);
-                Result.Take(FeaturesINI.Translate(INIFeatures));
-                returnResult.Add(Result);
+                iniFeatures = new IniFeatures ();
+                using (File) {
+                    var reader = new StreamReader (File);
+                    var text = reader.ReadToEnd ();
+                    reader.Close ();
+                    returnResult.Add (Read_INI_Features (text, ref iniFeatures));
+                }
             }
 
-            if ( INIFeatures == null )
+            if ( iniFeatures == null )
             {
                 clsResult Result = new clsResult("feat.bjo", false);
                 logger.Info ("Loading feat.bjo");
@@ -470,26 +454,19 @@ namespace SharpFlame.Mapping
                 returnResult.Add(Result);
             }
 
-            IniStructures INIStructures = null;
-
+            IniStructures iniStructures = null;
             SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "struct.ini", ref File);
-            if ( !SubResult.Success )
-            {
-            }
-            else
-            {
-                clsResult Result = new clsResult("struct.ini", false);
-                logger.Info ("Loading struct.ini");
-                IniReader StructuresINI = new IniReader();
-                StreamReader StructuresINI_Reader = new StreamReader(File);
-                Result.Take(StructuresINI.ReadFile(StructuresINI_Reader));
-                StructuresINI_Reader.Close();
-                INIStructures = new IniStructures(StructuresINI.Sections.Count, this);
-                Result.Take(StructuresINI.Translate(INIStructures));
-                returnResult.Add(Result);
+            if (SubResult.Success) {
+                iniStructures = new IniStructures ();
+                using (File) {
+                    var reader = new StreamReader (File);
+                    var text = reader.ReadToEnd ();
+                    reader.Close ();
+                    returnResult.Add (Read_INI_Structures (text, ref iniStructures));
+                }
             }
 
-            if ( INIStructures == null )
+            if ( iniStructures == null )
             {
                 clsResult Result = new clsResult("struct.bjo", false);
                 logger.Info ("Loading struct.bjo");
@@ -521,11 +498,11 @@ namespace SharpFlame.Mapping
                     var reader = new StreamReader (File);
                     var text = reader.ReadToEnd ();
                     reader.Close ();
-                    returnResult.Add (Read_INI_Droid (text, ref iniDroids));
+                    returnResult.Add (Read_INI_Droids (text, ref iniDroids));
                 }
             }
 
-            if ( INIStructures == null )
+            if ( iniStructures == null )
             {
                 clsResult Result = new clsResult("dinit.bjo", false);
                 logger.Info ("Loading dinit.bjo");
@@ -549,9 +526,9 @@ namespace SharpFlame.Mapping
 
             sCreateWZObjectsArgs CreateObjectsArgs = new sCreateWZObjectsArgs();
             CreateObjectsArgs.BJOUnits = BJOUnits;
-            CreateObjectsArgs.INIStructures = INIStructures;
+            CreateObjectsArgs.INIStructures = iniStructures;
             CreateObjectsArgs.INIDroids = iniDroids;
-            CreateObjectsArgs.INIFeatures = INIFeatures;
+            CreateObjectsArgs.INIFeatures = iniFeatures;
             returnResult.Add(CreateWZObjects(CreateObjectsArgs));
 
             //map objects are modified by this and must already exist
@@ -1116,160 +1093,336 @@ namespace SharpFlame.Mapping
             return ReturnResult;
         }
 
-        private clsResult Read_INI_Droid(string iniText, ref IniDroids resultData)
+        private clsResult Read_INI_Features(string iniText, ref IniFeatures resultData)
         {
-            var resultObject = new clsResult ("Reading droids.ini.", false);
+            var resultObject = new clsResult ("Reading feature.ini.", false);
+            logger.Info ("Reading feature.ini");
 
             try {
                 var iniSections = IniGrammar.Ini.Parse(iniText);
                 foreach (var iniSection in iniSections) {
-                    var droid = new IniDroids.sDroid();
+                    var feature = new IniFeatures.Feature();
+                    var invalid = false;
                     foreach (var iniToken in iniSection.Data) {
-                        switch (iniToken.Name) {
+                        if (invalid) {
+                            break;
+                        }
+
+                        try {
+                            switch (iniToken.Name) {
+                            case "id":
+                                feature.ID = uint.Parse(iniToken.Data);
+                                break;
+                            case "name":
+                                feature.Code = iniToken.Data;
+                                break;
+                            case "position":
+                                var tmpPosition = IniGrammar.Int3.Parse(iniToken.Data);
+                                feature.Pos =  new clsWorldPos(new sWorldPos(new sXY_int(tmpPosition.I1, tmpPosition.I2), tmpPosition.I3));
+                                break;
+                            case "rotation":
+                                var tmpRotation = IniGrammar.Int3.Parse(iniToken.Data);
+                                feature.Rotation.Direction = (ushort)tmpRotation.I1;
+                                feature.Rotation.Pitch = (ushort)tmpRotation.I2;
+                                feature.Rotation.Roll = (ushort)tmpRotation.I3;
+                                break;
+                            case "health":
+                                feature.HealthPercent = IniGrammar.Health.Parse(iniToken.Data); 
+                                if (feature.HealthPercent < 0 || feature.HealthPercent > 100) {
+                                    resultObject.WarningAdd(string.Format("#{0} invalid health: \"{1}\"", iniSection.Name, feature.HealthPercent), false);
+                                    logger.Warn("#{0} invalid health: \"{1}\"", iniSection.Name, feature.HealthPercent);
+                                    invalid = true;
+                                    continue;
+                                }
+                                break;
+                            default:
+                                resultObject.WarningAdd(string.Format("Found an invalid key: {0}={1}", iniToken.Name, iniToken.Data), false);
+                                logger.Warn("Found an invalid key: {0} = {1}", iniToken.Name, iniToken.Data);
+                                break;
+                            }
+                        } catch (Exception ex) {
+                            Debugger.Break();
+                            resultObject.WarningAdd(string.Format("#{0} invalid {2}: \"{3}\", got exception: {2}", iniSection.Name, iniToken.Name, iniToken.Data, ex.Message), false);
+                            logger.WarnException(string.Format("#{0} invalid {2} \"{1}\"", iniSection.Name, iniToken.Name, iniToken.Data), ex);                                    
+                            invalid = true;
+                            continue;
+                        }
+                    }
+
+                    if (!invalid) {
+                        resultData.Features.Add(feature);
+                    }
+                }
+            }
+            catch (Exception ex) {
+                Debugger.Break ();
+                logger.ErrorException ("Got exception while reading feature.ini", ex);
+                resultObject.ProblemAdd (string.Format ("Got exception: {0}", ex.Message), false);
+                return resultObject;
+            }
+
+            return resultObject;
+        }
+
+        private clsResult Read_INI_Droids(string iniText, ref IniDroids resultData)
+        {
+            var resultObject = new clsResult ("Reading droids.ini.", false);
+
+            try {
+                var iniSections = IniGrammar.Ini.Parse(iniText);            
+                foreach (var iniSection in iniSections) {                
+                    var droid = new IniDroids.Droid();
+                    var invalid = false;
+                    foreach (var iniToken in iniSection.Data) {                        
+                        if (invalid) {
+                            break;
+                        }
+
+                        try {
+                            switch (iniToken.Name) {
+                            
                             case "id":
                                 droid.ID = uint.Parse (iniToken.Data);
-                            break;
+                                break;
+                            
                             case "startpos":
                                 var tmpStartPos = int.Parse (iniToken.Data);
                                 if (tmpStartPos < 0 | tmpStartPos >= Constants.PlayerCountMax) {
-                                    resultObject.ProblemAdd(string.Format("#{0} invalid startpos {1}", iniSection.Name, tmpStartPos), false);
-                                    logger.Error("#{0} invalid startpos {1}", iniSection.Name, tmpStartPos);                                    
+                                    resultObject.WarningAdd(string.Format("#{0} invalid startpos {1}", iniSection.Name, tmpStartPos), false);
+                                    logger.Warn("#{0} invalid startpos {1}", iniSection.Name, tmpStartPos);                                    
+                                    invalid = true;
                                     continue;
                                 }
                                 droid.UnitGroup = UnitGroups[tmpStartPos];
-                            break;
+                                break;
+
                             case "template":
                                 droid.Template = iniToken.Data;
-                            break;
+                                break;
+
                             case "position":
-                                try 
-                                {
-                                    var tmpPosition = IniGrammar.Int3.Parse(iniToken.Data);
-                                    droid.Pos =  new clsWorldPos(new sWorldPos(new sXY_int(tmpPosition.I1, tmpPosition.I2), tmpPosition.I3));
-                                } 
-                                catch (Exception ex) 
-                                {
-                                    Debugger.Break();
-                                    resultObject.ProblemAdd(string.Format("#{0} exception while reading the position: {1}", iniSection.Name, ex.Message), false);
-                                    logger.ErrorException(string.Format("#{0} exception while reading the position", iniSection.Name), ex);
-                                    continue;
-                                }
-                            break;
+                                var tmpPosition = IniGrammar.Int3.Parse(iniToken.Data);
+                                droid.Pos =  new clsWorldPos(new sWorldPos(new sXY_int(tmpPosition.I1, tmpPosition.I2), tmpPosition.I3));
+                                break;
+
                             case "rotation":
-                                try 
-                                {
-                                    var tmpRotation = IniGrammar.Int3.Parse(iniToken.Data);
-                                    droid.Rotation.Direction = (ushort)tmpRotation.I1;
-                                    droid.Rotation.Pitch = (ushort)tmpRotation.I2;
-                                    droid.Rotation.Roll = (ushort)tmpRotation.I3;
-                                }
-                                catch (Exception ex)
-                                {
-                                    Debugger.Break();
-                                    resultObject.ProblemAdd(string.Format("#{0} error while reading the rotation \"{1}\", got exception: {2}", iniSection.Name, iniToken.Data, ex.Message), false);
-                                    logger.ErrorException(string.Format("#{0} exception while reading the rotation", iniSection.Name), ex);
-                                    continue;
-                                }
-                            break;
+                                var tmpRotation = IniGrammar.Int3.Parse(iniToken.Data);
+                                droid.Rotation.Direction = (ushort)tmpRotation.I1;
+                                droid.Rotation.Pitch = (ushort)tmpRotation.I2;
+                                droid.Rotation.Roll = (ushort)tmpRotation.I3;
+                                break;
+
                             case "player":
                                 if (iniToken.Data.ToLower() == "scavenger") {
                                     droid.UnitGroup = ScavengerUnitGroup;
                                 } else {
-                                    resultObject.ProblemAdd(string.Format("#{0} invalid player: \"{1}\"", iniToken.Name, iniToken.Data), false);
-                                    logger.Error("#{0} invalid player \"{1}\"", iniToken.Name, iniToken.Data);                                    
+                                    resultObject.WarningAdd(string.Format("#{0} invalid player: \"{1}\"", iniToken.Name, iniToken.Data), false);
+                                    logger.Warn("#{0} invalid player \"{1}\"", iniToken.Name, iniToken.Data);                                    
+                                    invalid = true;
                                     continue;
                                 }
-                            break;
+                                break;
+
                             case "name":
                                 // ignore
-                            break;
+                                break;
+
                             case "health":
-                                try
-                                {
-                                    droid.HealthPercent = IniGrammar.Health.Parse(iniToken.Data); 
-                                    if (droid.HealthPercent < 0 || droid.HealthPercent > 100) {
-                                        resultObject.ProblemAdd(string.Format("#{0} invalid health: \"{1}\"", iniSection.Name, droid.HealthPercent), false);
-                                        continue;
-                                    }
-                                }
-                                catch (Exception ex) {
-                                    Debugger.Break();
-                                    resultObject.ProblemAdd(string.Format("#{0} invalid health: \"{1}\", got exception: {2}", iniToken.Name, iniToken.Data, ex.Message), false);
-                                    logger.ErrorException(string.Format("#{0} invalid health \"{1}\"", iniSection.Name, iniToken.Data), ex);                                    
+                                droid.HealthPercent = IniGrammar.Health.Parse(iniToken.Data); 
+                                if (droid.HealthPercent < 0 || droid.HealthPercent > 100) {
+                                    resultObject.WarningAdd(string.Format("#{0} invalid health: \"{1}\"", iniSection.Name, droid.HealthPercent), false);
+                                    invalid = true;
                                     continue;
                                 }
-                            break;
+                                break;
+                            
                             case "droidtype":
-                                try
-                                {   
-                                    droid.DroidType = Numerics.Int.Parse(iniToken.Data);
-                                }
-                                catch (Exception ex) 
-                                {
-                                    Debugger.Break();
-                                    resultObject.ProblemAdd(string.Format("#{0} invalid droidtype: \"{1}\", got exception: {2}", iniToken.Name, iniToken.Data, ex.Message), false);
-                                    logger.ErrorException(string.Format("#{0} invalid droidtype \"{1}\"", iniToken.Name, iniToken.Data), ex);                                    
-                                    continue;
-                                }
-                            break;
+                                droid.DroidType = Numerics.Int.Parse(iniToken.Data);
+                                break;
+
                             case "weapons":
-                                try
-                                {   
-                                    droid.WeaponCount = Numerics.Int.Parse(iniToken.Data);
-                                }
-                                catch (Exception ex) 
-                                {
-                                    Debugger.Break();
-                                    resultObject.ProblemAdd(string.Format("#{0} invalid weapons: \"{1}\", got exception: {2}", iniSection.Name, iniToken.Data, ex.Message), false);
-                                    logger.ErrorException(string.Format("#{0} invalid weapons \"{1}\"", iniSection.Name, iniToken.Data), ex);                                    
-                                    continue;
-                                }
-                            break;
+                                droid.WeaponCount = Numerics.Int.Parse(iniToken.Data);
+                                break;
+
                             case "parts\\body":
                                 droid.Body = iniToken.Data;
-                            break;
+                                break;
+                            
                             case "parts\\propulsion":
                                 droid.Propulsion = iniToken.Data;
-                            break;
+                                break;
+                        
                             case "parts\\brain":
                                 droid.Brain = iniToken.Data;
-                            break;
+                                break;
+                        
                             case "parts\\repair":
                                 droid.Repair = iniToken.Data;
-                            break;
+                                break;
+                        
                             case "parts\\ecm":
                                 droid.ECM = iniToken.Data;
-                            break;
+                                break;
+                        
                             case "parts\\sensor":
                                 droid.Sensor = iniToken.Data;
-                            break;
+                                break;
+                        
                             case "parts\\construct":
                                 droid.Construct = iniToken.Data;
-                            break;
+                                break;
+                        
                             case "parts\\weapon\\1":
                                 if (droid.Weapons == null) {
                                     droid.Weapons = new string[3];
                                 }
                                 droid.Weapons[0] = iniToken.Data;
-                            break;
+                                break;
+                            
                             case "parts\\weapon\\2":
                                 if (droid.Weapons == null) {
                                     droid.Weapons = new string[3];
                                 }
 
                                 droid.Weapons[1] = iniToken.Data;
-                            break;
+                                break;
+
                             case "parts\\weapon\\3":
                                 if (droid.Weapons == null) {
                                     droid.Weapons = new string[3];
                                 }
 
                                 droid.Weapons[2] = iniToken.Data;
-                            break;
+                                break;
+                            
+                            default:
+                                resultObject.WarningAdd(string.Format("Found an invalid key: {0} = {1}", iniToken.Name, iniToken.Data), false);
+                                logger.Warn("Found an invalid key: {0} = {1}", iniToken.Name, iniToken.Data);
+                                break;                        
+                            }
+                        } catch (Exception ex) {
+                            Debugger.Break();
+                            resultObject.WarningAdd(string.Format("#{0} invalid {2}: \"{3}\", got exception: {2}", iniSection.Name, iniToken.Name, iniToken.Data, ex.Message), false);
+                            logger.ErrorException(string.Format("#{0} invalid {2} \"{1}\"", iniSection.Name, iniToken.Name, iniToken.Data), ex);                                    
+                            invalid = true;
+                            continue;
                         }
                     }
 
-                    resultData.Droids.Add(droid);
+                    if (!invalid) {
+                        resultData.Droids.Add(droid);
+                    }
+                }            
+            }
+            catch (Exception ex) {
+                Debugger.Break ();
+                logger.ErrorException ("Got exception while reading droid.ini", ex);
+                resultObject.ProblemAdd (string.Format ("Got exception: {0}", ex.Message), false);
+                return resultObject;
+            }
+
+            return resultObject;
+        }
+
+        private clsResult Read_INI_Structures(string iniText, ref IniStructures resultData)
+        {
+            var resultObject = new clsResult ("Reading struct.ini.", false);
+            logger.Info ("Reading struct.ini");
+
+            try {
+                var iniSections = IniGrammar.Ini.Parse(iniText);
+                foreach (var iniSection in iniSections) {
+                    var structure = new IniStructures.Structure();
+                    var invalid = false;
+                    foreach (var iniToken in iniSection.Data) {
+                        if (invalid) {
+                            break;
+                        }
+
+                        try {
+                            switch (iniToken.Name) {
+                            case "id":
+                                structure.ID = uint.Parse (iniToken.Data);
+                                break;
+
+                            case "name":
+                                structure.Code = iniToken.Data;
+                                break;
+
+                            case "startpos":
+                                var tmpStartPos = int.Parse (iniToken.Data);
+                                if (tmpStartPos < 0 | tmpStartPos >= Constants.PlayerCountMax) {
+                                    resultObject.WarningAdd(string.Format("#{0} invalid startpos {1}", iniSection.Name, tmpStartPos), false);
+                                    logger.Warn("#{0} invalid startpos {1}", iniSection.Name, tmpStartPos);                                    
+                                    invalid = true;
+                                    continue;
+                                }
+                                structure.UnitGroup = UnitGroups[tmpStartPos];
+                                break;
+
+                            case "player":
+                                if (iniToken.Data.ToLower() == "scavenger") {
+                                    structure.UnitGroup = ScavengerUnitGroup;
+                                } else {
+                                    resultObject.WarningAdd(string.Format("#{0} invalid player: \"{1}\"", iniToken.Name, iniToken.Data), false);
+                                    logger.Warn("#{0} invalid player \"{1}\"", iniToken.Name, iniToken.Data);                                    
+                                    invalid = true;
+                                    continue;
+                                }
+                                break;
+
+                            case "position":
+                                var tmpPosition = IniGrammar.Int3.Parse(iniToken.Data);
+                                structure.Pos =  new clsWorldPos(new sWorldPos(new sXY_int(tmpPosition.I1, tmpPosition.I2), tmpPosition.I3));
+                                break;
+
+                            case "rotation":
+                                var tmpRotation = IniGrammar.Int3.Parse(iniToken.Data);
+                                structure.Rotation.Direction = (ushort)tmpRotation.I1;
+                                structure.Rotation.Pitch = (ushort)tmpRotation.I2;
+                                structure.Rotation.Roll = (ushort)tmpRotation.I3;
+                                break;
+
+                            case "modules":
+                                structure.ModuleCount = int.Parse(iniToken.Data);
+                                break;
+
+                            case "health":
+                                structure.HealthPercent = IniGrammar.Health.Parse(iniToken.Data); 
+                                if (structure.HealthPercent < 0 || structure.HealthPercent > 100) {
+                                    resultObject.WarningAdd(string.Format("#{0} invalid health: \"{1}\"", iniSection.Name, structure.HealthPercent), false);
+                                    invalid = true;
+                                    continue;
+                                }
+                                break;
+
+                            case "wall/type":
+                                structure.WallType = int.Parse(iniToken.Data);
+                                if (structure.WallType < 0) {
+                                    resultObject.WarningAdd(string.Format("#{0} invalid wall/type: \"{1}\"", iniSection.Name, structure.WallType), false);
+                                    invalid = true;
+                                    continue;
+                                }
+                                break;
+
+                            default:
+                                resultObject.WarningAdd(string.Format("Found an invalid key: {0} = {1}", iniToken.Name, iniToken.Data), false);
+                                logger.Warn("Found an invalid key: {0} = {1}", iniToken.Name, iniToken.Data);
+                                break;                        
+                            }
+
+                        } catch (Exception ex) {
+                            Debugger.Break();
+                            resultObject.WarningAdd(string.Format("#{0} invalid {2}: \"{3}\", got exception: {2}", iniSection.Name, iniToken.Name, iniToken.Data, ex.Message), false);
+                            logger.WarnException(string.Format("#{0} invalid {2} \"{1}\"", iniSection.Name, iniToken.Name, iniToken.Data), ex);                                    
+                            invalid = true;
+                            continue;
+                        }
+                    }
+
+                    if (!invalid) {
+                        resultData.Structures.Add(structure);
+                    }
                 }
             }
             catch (Exception ex) {

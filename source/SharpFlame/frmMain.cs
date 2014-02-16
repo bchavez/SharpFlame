@@ -4094,30 +4094,29 @@ namespace SharpFlame
         {
             clsResult ReturnResult = new clsResult("", false);
             sSplitPath SplitPath = new sSplitPath(Path);
-            clsMap ResultMap = new clsMap();
-            string Extension = SplitPath.FileExtension.ToLower();
+            clsMap resultMap = new clsMap();
 
-            switch ( Extension )
+            switch ( SplitPath.FileExtension.ToLower() )
             {
                 case "fmap":
-                    ReturnResult.Add(ResultMap.Load_FMap(Path));
-                    ResultMap.PathInfo = new clsPathInfo(Path, true);
+                    ReturnResult.Add(resultMap.Load_FMap(Path));
+                    resultMap.PathInfo = new clsPathInfo(Path, true);
                     break;
                 case "fme":
-                    ReturnResult.Add(ResultMap.Load_FME(Path));
-                    ResultMap.PathInfo = new clsPathInfo(Path, false);
+                    ReturnResult.Add(resultMap.Load_FME(Path));
+                    resultMap.PathInfo = new clsPathInfo(Path, false);
                     break;
                 case "wz":
-                    ReturnResult.Add(ResultMap.Load_WZ(Path));
-                    ResultMap.PathInfo = new clsPathInfo(Path, false);
+                    ReturnResult.Add(resultMap.Load_WZ(Path));
+                    resultMap.PathInfo = new clsPathInfo(Path, false);
                     break;
                 case "gam":
-                    ReturnResult.Add(ResultMap.Load_Game(Path));
-                    ResultMap.PathInfo = new clsPathInfo(Path, false);
+                    ReturnResult.Add(resultMap.Load_Game(Path));
+                    resultMap.PathInfo = new clsPathInfo(Path, false);
                     break;
                 case "lnd":
-                    ReturnResult.Add(ResultMap.Load_LND(Path));
-                    ResultMap.PathInfo = new clsPathInfo(Path, false);
+                    ReturnResult.Add(resultMap.Load_LND(Path));
+                    resultMap.PathInfo = new clsPathInfo(Path, false);
                     break;
                 default:
                     ReturnResult.ProblemAdd("File extension not recognised.");
@@ -4126,11 +4125,11 @@ namespace SharpFlame
 
             if ( ReturnResult.HasProblems )
             {
-                ResultMap.Deallocate();
+                resultMap.Deallocate();
             }
             else
             {
-                NewMainMap(ResultMap);
+                NewMainMap(resultMap);
             }
 
             return ReturnResult;
