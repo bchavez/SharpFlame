@@ -1093,6 +1093,7 @@ namespace SharpFlame.Mapping
                 var iniSections = SharpFlame.Core.Parsers.Ini.IniReader.ReadString (iniText);
                 foreach (var iniSection in iniSections) {
                     var feature = new IniFeatures.Feature();
+                    feature.HealthPercent = -1;
                     var invalid = false;
                     foreach (var iniToken in iniSection.Data) {
                         if (invalid) {
@@ -1163,6 +1164,7 @@ namespace SharpFlame.Mapping
                 var iniSections = SharpFlame.Core.Parsers.Ini.IniReader.ReadString (iniText);            
                 foreach (var iniSection in iniSections) {                
                     var droid = new IniDroids.Droid();
+                    droid.HealthPercent = -1;
                     var invalid = false;
                     foreach (var iniToken in iniSection.Data) {                        
                         if (invalid) {
