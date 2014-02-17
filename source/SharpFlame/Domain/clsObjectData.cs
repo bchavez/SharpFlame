@@ -1616,34 +1616,29 @@ namespace SharpFlame.Domain
                     featureTypeBase.Footprint.X = 1;
                     featureTypeBase.Footprint.Y = 1;
                     return featureTypeBase;
-                case UnitType.PlayerStructure:
-                    StructureTypeBase structureTypeBase = default(StructureTypeBase);
-                    foreach ( StructureTypeBase tempLoopVar_StructureType in StructureTypes )
-                    {
-                        structureTypeBase = tempLoopVar_StructureType;
-                        if ( structureTypeBase.Code == Code )
-                        {
-                            if ( WallType < 0 )
-                            {
+            case UnitType.PlayerStructure:
+                StructureTypeBase structureTypeBase = default(StructureTypeBase);
+                foreach (StructureTypeBase tempLoopVar_StructureType in StructureTypes) {
+                    structureTypeBase = tempLoopVar_StructureType;
+                    if (structureTypeBase.Code == Code) {
+                        if (WallType < 0) {
+                            return structureTypeBase;
+                        } else if (structureTypeBase.WallLink.IsConnected) {
+                            if (structureTypeBase.WallLink.ArrayPosition == WallType) {
                                 return structureTypeBase;
-                            }
-                            else if ( structureTypeBase.WallLink.IsConnected )
-                            {
-                                if ( structureTypeBase.WallLink.ArrayPosition == WallType )
-                                {
-                                    return structureTypeBase;
-                                }
                             }
                         }
                     }
-                    structureTypeBase = new StructureTypeBase();
-                    structureTypeBase.IsUnknown = true;
-                    structureTypeBase.Code = Code;
-                    structureTypeBase.Footprint.X = 1;
-                    structureTypeBase.Footprint.Y = 1;
-                    return structureTypeBase;
-                case UnitType.PlayerDroid:
-                    DroidTemplate DroidType = default(DroidTemplate);
+                }
+                structureTypeBase = new StructureTypeBase ();
+                structureTypeBase.IsUnknown = true;
+                structureTypeBase.Code = Code;
+                structureTypeBase.Footprint.X = 1;
+                structureTypeBase.Footprint.Y = 1;
+                return structureTypeBase;
+
+            case UnitType.PlayerDroid:
+                DroidTemplate DroidType = default(DroidTemplate);
                     foreach ( DroidTemplate tempLoopVar_DroidType in DroidTemplates )
                     {
                         DroidType = tempLoopVar_DroidType;

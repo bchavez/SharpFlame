@@ -1324,6 +1324,8 @@ namespace SharpFlame.Mapping
                 var iniSections = SharpFlame.Core.Parsers.Ini.IniReader.ReadString (iniText);
                 foreach (var iniSection in iniSections) {
                     var structure = new IniStructures.Structure();
+                    structure.WallType = -1;
+                    structure.HealthPercent = -1;
                     var invalid = false;
                     foreach (var iniToken in iniSection.Data) {
                         if (invalid) {
