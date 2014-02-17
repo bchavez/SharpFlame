@@ -24,11 +24,23 @@ namespace SharpFlame.Mapping.Script
             get { return _ParentMapLink; }
         }
 
-        private string _Label;
+        private string label;
 
         public string Label
         {
-            get { return _Label; }
+            get { return label; }
+        }
+        
+        public sResult SetLabel(string Text)
+        {
+            sResult Result = new sResult();
+
+            Result = _ParentMapLink.Source.ScriptLabelIsValid(Text);
+            if ( Result.Success )
+            {
+                label = Text;
+            }
+            return Result;
         }
 
         private sXY_int _Pos;
@@ -53,15 +65,10 @@ namespace SharpFlame.Mapping.Script
             }
         }
 
-        public static clsScriptPosition Create(clsMap Map)
-        {
-            clsScriptPosition Result = new clsScriptPosition();
+        public clsScriptPosition(clsMap map) {
+            label = map.GetDefaultScriptLabel("Position");
 
-            Result._Label = Map.GetDefaultScriptLabel("Position");
-
-            Result._ParentMapLink.Connect(Map.ScriptPositions);
-
-            return Result;
+            _ParentMapLink.Connect(map.ScriptPositions);
         }
 
         public void GLDraw()
@@ -92,20 +99,8 @@ namespace SharpFlame.Mapping.Script
         {
             File.AppendSectionName("position_" + _ParentMapLink.ArrayPosition.ToStringInvariant());
             File.AppendProperty("pos", _Pos.X.ToStringInvariant() + ", " + _Pos.Y.ToStringInvariant());
-            File.AppendProperty("label", _Label);
+            File.AppendProperty("label", label);
             File.Gap_Append();
-        }
-
-        public sResult SetLabel(string Text)
-        {
-            sResult Result = new sResult();
-
-            Result = _ParentMapLink.Source.ScriptLabelIsValid(Text);
-            if ( Result.Success )
-            {
-                _Label = Text;
-            }
-            return Result;
         }
 
         public void Deallocate()

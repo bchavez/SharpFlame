@@ -1372,7 +1372,7 @@ namespace SharpFlame
                                     }
                                 }
                             } else if (KeyboardManager.KeyboardProfile.Active (KeyboardManager.ScriptPosition)) {
-                                clsScriptPosition NewPosition = clsScriptPosition.Create (Map);
+                                clsScriptPosition NewPosition = new clsScriptPosition (Map);
                                 if (NewPosition != null) {
                                     NewPosition.PosX = MouseLeftDown.OverTerrain.DownPos.Horizontal.X;
                                     NewPosition.PosY = MouseLeftDown.OverTerrain.DownPos.Horizontal.Y;

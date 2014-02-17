@@ -187,7 +187,7 @@ namespace SharpFlame.Mapping
                         var reader = new StreamReader (s);
                         var text = reader.ReadToEnd ();
                         reader.Close ();
-                        returnResult.Add (Read_INI_Features (text, ref iniFeatures));
+                        returnResult.Add (read_INI_Features (text, ref iniFeatures));
                     }
                 }
                               
@@ -236,7 +236,7 @@ namespace SharpFlame.Mapping
                         var reader = new StreamReader (s);
                         var text = reader.ReadToEnd ();
                         reader.Close ();
-                        returnResult.Add (Read_INI_Structures (text, ref iniStructures));
+                        returnResult.Add (read_INI_Structures (text, ref iniStructures));
                     }
                 }
 
@@ -268,7 +268,7 @@ namespace SharpFlame.Mapping
                             var reader = new StreamReader (s);
                             var text = reader.ReadToEnd ();
                             reader.Close ();
-                            returnResult.Add (Read_INI_Droids (text, ref iniDroids));
+                            returnResult.Add (read_INI_Droids (text, ref iniDroids));
                         }
                     }
                 }
@@ -406,7 +406,7 @@ namespace SharpFlame.Mapping
                     var reader = new StreamReader (File);
                     var text = reader.ReadToEnd ();
                     reader.Close ();
-                    returnResult.Add (Read_INI_Features (text, ref iniFeatures));
+                    returnResult.Add (read_INI_Features (text, ref iniFeatures));
                 }
             }
 
@@ -462,7 +462,7 @@ namespace SharpFlame.Mapping
                     var reader = new StreamReader (File);
                     var text = reader.ReadToEnd ();
                     reader.Close ();
-                    returnResult.Add (Read_INI_Structures (text, ref iniStructures));
+                    returnResult.Add (read_INI_Structures (text, ref iniStructures));
                 }
             }
 
@@ -498,7 +498,7 @@ namespace SharpFlame.Mapping
                     var reader = new StreamReader (File);
                     var text = reader.ReadToEnd ();
                     reader.Close ();
-                    returnResult.Add (Read_INI_Droids (text, ref iniDroids));
+                    returnResult.Add (read_INI_Droids (text, ref iniDroids));
                 }
             }
 
@@ -1084,7 +1084,7 @@ namespace SharpFlame.Mapping
             return ReturnResult;
         }
 
-        private clsResult Read_INI_Features(string iniText, ref IniFeatures resultData)
+        private clsResult read_INI_Features(string iniText, ref IniFeatures resultData)
         {
             var resultObject = new clsResult ("Reading feature.ini.", false);
             logger.Info ("Reading feature.ini");
@@ -1109,17 +1109,17 @@ namespace SharpFlame.Mapping
                                 feature.Code = iniToken.Data;
                                 break;
                             case "position":
-                                var tmpPosition = IniGrammar.Int3.Parse(iniToken.Data);
+                                var tmpPosition = SharpFlame.Core.Parsers.Ini.IniReader.Int3.Parse(iniToken.Data);
                                 feature.Pos =  new clsWorldPos(new sWorldPos(new sXY_int(tmpPosition.I1, tmpPosition.I2), tmpPosition.I3));
                                 break;
                             case "rotation":
-                                var tmpRotation = IniGrammar.Int3.Parse(iniToken.Data);
+                                var tmpRotation = SharpFlame.Core.Parsers.Ini.IniReader.Int3.Parse(iniToken.Data);
                                 feature.Rotation.Direction = (ushort)tmpRotation.I1;
                                 feature.Rotation.Pitch = (ushort)tmpRotation.I2;
                                 feature.Rotation.Roll = (ushort)tmpRotation.I3;
                                 break;
                             case "health":
-                                feature.HealthPercent = IniGrammar.Health.Parse(iniToken.Data); 
+                                feature.HealthPercent = SharpFlame.Core.Parsers.Ini.IniReader.Health.Parse(iniToken.Data); 
                                 if (feature.HealthPercent < 0 || feature.HealthPercent > 100) {
                                     resultObject.WarningAdd(string.Format("#{0} invalid health: \"{1}\"", iniSection.Name, feature.HealthPercent), false);
                                     logger.Warn("#{0} invalid health: \"{1}\"", iniSection.Name, feature.HealthPercent);
@@ -1156,7 +1156,7 @@ namespace SharpFlame.Mapping
             return resultObject;
         }
 
-        private clsResult Read_INI_Droids(string iniText, ref IniDroids resultData)
+        private clsResult read_INI_Droids(string iniText, ref IniDroids resultData)
         {
             var resultObject = new clsResult ("Reading droids.ini.", false);
 
@@ -1194,12 +1194,12 @@ namespace SharpFlame.Mapping
                                 break;
 
                             case "position":
-                                var tmpPosition = IniGrammar.Int3.Parse(iniToken.Data);
+                                var tmpPosition = SharpFlame.Core.Parsers.Ini.IniReader.Int3.Parse(iniToken.Data);
                                 droid.Pos =  new clsWorldPos(new sWorldPos(new sXY_int(tmpPosition.I1, tmpPosition.I2), tmpPosition.I3));
                                 break;
 
                             case "rotation":
-                                var tmpRotation = IniGrammar.Int3.Parse(iniToken.Data);
+                                var tmpRotation = SharpFlame.Core.Parsers.Ini.IniReader.Int3.Parse(iniToken.Data);
                                 droid.Rotation.Direction = (ushort)tmpRotation.I1;
                                 droid.Rotation.Pitch = (ushort)tmpRotation.I2;
                                 droid.Rotation.Roll = (ushort)tmpRotation.I3;
@@ -1221,7 +1221,7 @@ namespace SharpFlame.Mapping
                                 break;
 
                             case "health":
-                                droid.HealthPercent = IniGrammar.Health.Parse(iniToken.Data); 
+                                droid.HealthPercent = SharpFlame.Core.Parsers.Ini.IniReader.Health.Parse(iniToken.Data); 
                                 if (droid.HealthPercent < 0 || droid.HealthPercent > 100) {
                                     resultObject.WarningAdd(string.Format("#{0} invalid health: \"{1}\"", iniSection.Name, droid.HealthPercent), false);
                                     invalid = true;
@@ -1317,7 +1317,7 @@ namespace SharpFlame.Mapping
             return resultObject;
         }
 
-        private clsResult Read_INI_Structures(string iniText, ref IniStructures resultData)
+        private clsResult read_INI_Structures(string iniText, ref IniStructures resultData)
         {
             var resultObject = new clsResult ("Reading struct.ini.", false);
             logger.Info ("Reading struct.ini");
@@ -1367,12 +1367,12 @@ namespace SharpFlame.Mapping
                                 break;
 
                             case "position":
-                                var tmpPosition = IniGrammar.Int3.Parse(iniToken.Data);
+                                var tmpPosition = SharpFlame.Core.Parsers.Ini.IniReader.Int3.Parse(iniToken.Data);
                                 structure.Pos =  new clsWorldPos(new sWorldPos(new sXY_int(tmpPosition.I1, tmpPosition.I2), tmpPosition.I3));
                                 break;
 
                             case "rotation":
-                                var tmpRotation = IniGrammar.Int3.Parse(iniToken.Data);
+                                var tmpRotation = SharpFlame.Core.Parsers.Ini.IniReader.Int3.Parse(iniToken.Data);
                                 structure.Rotation.Direction = (ushort)tmpRotation.I1;
                                 structure.Rotation.Pitch = (ushort)tmpRotation.I2;
                                 structure.Rotation.Roll = (ushort)tmpRotation.I3;
@@ -1383,7 +1383,7 @@ namespace SharpFlame.Mapping
                                 break;
 
                             case "health":
-                                structure.HealthPercent = IniGrammar.Health.Parse(iniToken.Data); 
+                                structure.HealthPercent = SharpFlame.Core.Parsers.Ini.IniReader.Health.Parse(iniToken.Data); 
                                 if (structure.HealthPercent < 0 || structure.HealthPercent > 100) {
                                     resultObject.WarningAdd(string.Format("#{0} invalid health: \"{1}\"", iniSection.Name, structure.HealthPercent), false);
                                     invalid = true;
@@ -1896,7 +1896,7 @@ namespace SharpFlame.Mapping
                         PositionsA = new PositionFromText();
                         if ( PositionsA.Translate(strPosA) )
                         {
-                            NewPosition = clsScriptPosition.Create(this);
+                            NewPosition = new clsScriptPosition(this);
                             NewPosition.PosX = PositionsA.Pos.X;
                             NewPosition.PosY = PositionsA.Pos.Y;
                             NewPosition.SetLabel(strLabel);

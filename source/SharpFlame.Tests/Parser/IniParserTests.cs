@@ -17,7 +17,7 @@ namespace SharpFlame.Tests.Parser
         public void CanParseDouble4()
         {
             var data = @"1, 0.25, 0.25, 0.5";
-            var d4 = IniGrammar.Double4.Parse (data);
+            var d4 = IniReader.Double4.Parse (data);
             d4.P1.Should ().Be (1D);
             d4.P2.Should ().Be (0.25D);
             d4.P3.Should ().Be (0.25D);
@@ -28,7 +28,7 @@ namespace SharpFlame.Tests.Parser
         public void CanParseInt3()
         {
             var data = @"19136, 4288, 0";
-            var int3 = IniGrammar.Int3.Parse (data);
+            var int3 = IniReader.Int3.Parse (data);
             int3.I1.Should ().Be (19136);
             int3.I2.Should ().Be (4288);
             int3.I3.Should ().Be (0);
@@ -63,7 +63,7 @@ namespace SharpFlame.Tests.Parser
                         Convert.ToInt32 (d.Data).Should ().Be (20);
                         break;
                     case "MinimapCliffColour":
-                        var d4 = IniGrammar.Double4.Parse (d.Data);
+                        var d4 = IniReader.Double4.Parse (d.Data);
                         d4.P1.Should ().Be (1D);
                         d4.P2.Should ().Be (0.25D);
                         d4.P3.Should ().Be (0.25D);
@@ -115,13 +115,13 @@ namespace SharpFlame.Tests.Parser
                     d.Data.Should ().Be ("ConstructionDroid");
                     break;
                 case "position":
-                    var tmpPosition = IniGrammar.Int3.Parse (d.Data);
+                    var tmpPosition = IniReader.Int3.Parse (d.Data);
                     tmpPosition.I1.Should ().Be (9792);
                     tmpPosition.I2.Should ().Be (26048);
                     tmpPosition.I3.Should ().Be (0);
                     break;
                 case "rotation":
-                    var tmpRotation = IniGrammar.Int3.Parse (d.Data);
+                    var tmpRotation = IniReader.Int3.Parse (d.Data);
                     tmpRotation.I1.Should ().Be (0);
                     tmpRotation.I2.Should ().Be (0);
                     tmpRotation.I3.Should ().Be (0);
@@ -177,13 +177,13 @@ namespace SharpFlame.Tests.Parser
                     int.Parse (d.Data).Should ().Be (1493);
                     break;
                     case "position":
-                    var tmpPosition = IniGrammar.Int3.Parse (d.Data);
+                    var tmpPosition = IniReader.Int3.Parse (d.Data);
                     tmpPosition.I1.Should ().Be (2496);
                     tmpPosition.I2.Should ().Be (26688);
                     tmpPosition.I3.Should ().Be (0);
                     break;
                     case "rotation":
-                    var tmpRotation = IniGrammar.Int3.Parse (d.Data);
+                    var tmpRotation = IniReader.Int3.Parse (d.Data);
                     tmpRotation.I1.Should ().Be (0);
                     tmpRotation.I2.Should ().Be (0);
                     tmpRotation.I3.Should ().Be (0);
@@ -223,13 +223,13 @@ namespace SharpFlame.Tests.Parser
                     int.Parse (d.Data).Should ().Be (0);
                     break;
                 case "position":
-                    var tmpPosition = IniGrammar.Int3.Parse (d.Data);
+                    var tmpPosition = IniReader.Int3.Parse (d.Data);
                     tmpPosition.I1.Should ().Be (6208);
                     tmpPosition.I2.Should ().Be (5440);
                     tmpPosition.I3.Should ().Be (0);
                     break;
                 case "rotation":
-                    var tmpRotation = IniGrammar.Int3.Parse (d.Data);
+                    var tmpRotation = IniReader.Int3.Parse (d.Data);
                     tmpRotation.I1.Should ().Be (16384);
                     tmpRotation.I2.Should ().Be (0);
                     tmpRotation.I3.Should ().Be (0);

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Sprache;
 
 namespace SharpFlame.Core.Parsers.Ini
 {
@@ -50,5 +51,40 @@ namespace SharpFlame.Core.Parsers.Ini
             var txt = File.ReadAllText(file);
             return ReadString (txt);
         }
+
+        // Parses: 1, 0.25, 0.25, 0.5
+        public static readonly Parser<Double4> Double4 = 
+            from p1 in Numerics.Double
+            from i1 in Parse.String(", ")
+            from p2 in Numerics.Double
+            from i2 in Parse.String(", ")
+            from p3 in Numerics.Double
+            from i3 in Parse.String(", ")
+            from p4 in Numerics.Double
+            select new Double4 {
+                P1 = p1,
+                P2 = p2,
+                P3 = p3,
+                P4 = p4
+            };       
+
+        // Parses: 19136, 4288, 0
+        public static readonly Parser<Int3> Int3 = 
+            from p1 in Numerics.Int
+            from i1 in Parse.String(", ")
+            from p2 in Numerics.Int
+            from i2 in Parse.String(", ")
+            from p3 in Numerics.Int
+            select new Int3 {
+                I1 = p1,
+                I2 = p2,
+                I3 = p3
+            };
+
+        // Parses: %100
+        public static readonly Parser<int> Health =
+            from result in Numerics.Int
+            from sign in Parse.Char ('%')
+            select result;
     }
 }
