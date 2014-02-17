@@ -305,7 +305,7 @@ namespace SharpFlame.Mapping
                     using (Stream s = labelsIniEntry.OpenReader()) {
                         clsResult Result = new clsResult ("labels.ini", false);
                         logger.Info ("Loading labels.ini");
-                        IniReader LabelsINI = new IniReader ();
+                        var LabelsINI = new SharpFlame.FileIO.Ini.IniReader ();
                         StreamReader reader = new StreamReader (s);
                         Result.Take (LabelsINI.ReadFile (reader));
                         reader.Close ();
@@ -540,7 +540,7 @@ namespace SharpFlame.Mapping
             {
                 clsResult Result = new clsResult("labels.ini", false);
                 logger.Info ("Loading labels.ini");
-                IniReader LabelsINI = new IniReader();
+                var LabelsINI = new SharpFlame.FileIO.Ini.IniReader();
                 StreamReader LabelsINI_Reader = new StreamReader(File);
                 Result.Take(LabelsINI.ReadFile(LabelsINI_Reader));
                 LabelsINI_Reader.Close();
@@ -1099,7 +1099,7 @@ namespace SharpFlame.Mapping
             logger.Info ("Reading feature.ini");
 
             try {
-                var iniSections = IniGrammar.Ini.Parse(iniText);
+                var iniSections = SharpFlame.Core.Parsers.Ini.IniReader.ReadString (iniText);
                 foreach (var iniSection in iniSections) {
                     var feature = new IniFeatures.Feature();
                     var invalid = false;
@@ -1169,7 +1169,7 @@ namespace SharpFlame.Mapping
             var resultObject = new clsResult ("Reading droids.ini.", false);
 
             try {
-                var iniSections = IniGrammar.Ini.Parse(iniText);            
+                var iniSections = SharpFlame.Core.Parsers.Ini.IniReader.ReadString (iniText);            
                 foreach (var iniSection in iniSections) {                
                     var droid = new IniDroids.Droid();
                     var invalid = false;
@@ -1330,7 +1330,7 @@ namespace SharpFlame.Mapping
             logger.Info ("Reading struct.ini");
 
             try {
-                var iniSections = IniGrammar.Ini.Parse(iniText);
+                var iniSections = SharpFlame.Core.Parsers.Ini.IniReader.ReadString (iniText);
                 foreach (var iniSection in iniSections) {
                     var structure = new IniStructures.Structure();
                     var invalid = false;
@@ -1832,7 +1832,7 @@ namespace SharpFlame.Mapping
             return ReturnResult;
         }
 
-        public clsResult Read_WZ_Labels(IniReader INI, bool IsFMap)
+        public clsResult Read_WZ_Labels(SharpFlame.FileIO.Ini.IniReader INI, bool IsFMap)
         {
             clsResult ReturnResult = new clsResult("Reading labels", false);
             logger.Info ("Reading labels.");

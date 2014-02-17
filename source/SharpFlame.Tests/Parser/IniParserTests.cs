@@ -14,34 +14,6 @@ namespace SharpFlame.Tests.Parser
     public class IniParserTests
     {
         [Test]
-        public void CanParseToken()
-        {
-            var data = @"id = 3496
-startpos = 8
-template = ConstructionDroid
-position = 19136, 4288, 0
-rotation = 32768, 0, 0
-";
-            var result = IniGrammar.Token.Parse(data);
-            result.Name.Should ().Be ("id");
-            result.Data.Should().Be ("3496");
-        }
-
-        [Test]
-        public void CanParseSection()
-        {
-            var data = @"[droid_3695]
-id = 3695
-startpos = 1
-template = ConstructionDroid
-position = 19264, 26048, 0
-rotation = 32768, 0, 0";
-
-            var result = IniGrammar.Section.Parse(data);
-            result.Should ().Be ("droid_3695");
-        }
-
-        [Test]
         public void CanParseDouble4()
         {
             var data = @"1, 0.25, 0.25, 0.5";
@@ -65,13 +37,12 @@ rotation = 32768, 0, 0";
         [Test]
         public void CanParseSettingsIni()
         {
-            var file = Path.Combine ("Data", 
+            var path = Path.Combine ("Data", 
                        Path.Combine ("Inis", 
                        Path.Combine ("settings.ini")));
 
-            var txt = File.ReadAllText( file );
-            Console.WriteLine( "Parsing: {0}", file );
-            var iniFile = IniGrammar.Ini.Parse (txt);
+            Console.WriteLine( "Parsing: {0}", path );
+            var iniFile = IniReader.ReadFile (path);
             iniFile.Count.Should ().Be (1);
             foreach (var sec in iniFile) {
                 sec.Name.Should ().Be ("Global");
@@ -107,6 +78,9 @@ rotation = 32768, 0, 0";
                     case "TilesetsPath":
                         d.Data.Should ().Be ("/home/pcdummy/Projekte/wzlobby/SharpFlame/source/Data/tilesets");
                         break;
+                    case "PickOrientation":
+                        Convert.ToBoolean (d.Data).Should ().Be (true);
+                        break;                    
                     }
                 }
             }
@@ -115,13 +89,12 @@ rotation = 32768, 0, 0";
         [Test]
         public void CanParseDroidIni()
         {
-            var file = Path.Combine ("Data", 
+            var path = Path.Combine ("Data", 
                        Path.Combine ("Inis", 
                        Path.Combine ("droid.ini")));
 
-            var txt = File.ReadAllText (file);
-            Console.WriteLine ("Parsing: {0}", file);
-            var iniFile = IniGrammar.Ini.Parse (txt);
+            Console.WriteLine ("Parsing: {0}", path);
+            var iniFile = IniReader.ReadFile (path);
             iniFile.Count.Should().Be (40);
  
             // Parse:
@@ -190,36 +163,36 @@ rotation = 32768, 0, 0";
         [Test]
         public void CanParseFeatureIni()
         {
-            var file = Path.Combine ("Data", 
-                                     Path.Combine ("Inis", 
-                                     Path.Combine ("feature.ini")));
+            var path = Path.Combine ("Data", 
+                          Path.Combine ("Inis", 
+                          Path.Combine ("feature.ini")));
 
-            var txt = File.ReadAllText (file);
-            Console.WriteLine ("Parsing: {0}", file);
-            var iniFile = IniGrammar.Ini.Parse (txt);
-            iniFile.Count.Should().Be (730);
+            Console.WriteLine ("Parsing: {0}", path);
+            var iniFile = IniReader.ReadFile (path);
 
             iniFile [3].Name.Should ().Be ("feature_1493");
             foreach (var d in iniFile[3].Data) {
                 switch (d.Name) {
-                case "id":
+                    case "id":
                     int.Parse (d.Data).Should ().Be (1493);
                     break;
-                case "position":
+                    case "position":
                     var tmpPosition = IniGrammar.Int3.Parse (d.Data);
                     tmpPosition.I1.Should ().Be (2496);
                     tmpPosition.I2.Should ().Be (26688);
                     tmpPosition.I3.Should ().Be (0);
                     break;
-                case "rotation":
+                    case "rotation":
                     var tmpRotation = IniGrammar.Int3.Parse (d.Data);
                     tmpRotation.I1.Should ().Be (0);
                     tmpRotation.I2.Should ().Be (0);
                     tmpRotation.I3.Should ().Be (0);
                     break;
-                case "name":
+                    case "name":
                     d.Data.Should ().Be ("AirTrafficControl");
                     break;
+                default:
+                    throw new Exception (string.Format ("Invalid ID \"{0}\" value \"{1}\"", d.Name, d.Data));
                 }
             }
         }
@@ -227,13 +200,12 @@ rotation = 32768, 0, 0";
         [Test]
         public void CanParseStructIni()
         {
-            var file = Path.Combine ("Data", 
+            var path = Path.Combine ("Data", 
                                      Path.Combine ("Inis", 
-                                     Path.Combine ("struct.ini")));
+                          Path.Combine ("struct.ini")));
 
-            var txt = File.ReadAllText (file);
-            Console.WriteLine ("Parsing: {0}", file);
-            var iniFile = IniGrammar.Ini.Parse (txt);
+            Console.WriteLine ("Parsing: {0}", path);
+            var iniFile = IniReader.ReadFile (path);
             iniFile.Count.Should ().Be (2006);          
 
             iniFile [2].Name.Should ().Be ("structure_1248");
@@ -265,6 +237,8 @@ rotation = 32768, 0, 0";
                 case "modules":
                     int.Parse (d.Data).Should ().Be (0);
                     break;
+                default:
+                    throw new Exception (string.Format ("Invalid ID \"{0}\" value \"{1}\"", d.Name, d.Data));
                 }
             }
         }

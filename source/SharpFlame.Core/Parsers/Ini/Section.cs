@@ -7,6 +7,14 @@ namespace SharpFlame.Core.Parsers.Ini
     {
         public string Name { get; set; }
         public List<Token> Data { get; internal set; }
+
+        public Section() {
+        }
+
+        public Section(string name) {
+            Name = name;
+            Data = new List<Token>();
+        }
     }
 }
 

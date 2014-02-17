@@ -73,6 +73,7 @@
     <Compile Include="Parsers\Ini\Section.cs" />
     <Compile Include="Parsers\Ini\DataTypes.cs" />
     <Compile Include="Parsers\General.cs" />
+    <Compile Include="Parsers\Ini\IniReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

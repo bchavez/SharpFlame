@@ -15,48 +15,38 @@ namespace SharpFlame.Core.Parsers.Ini
             set { rootSectionName = value; }      
         }       
 
-        private static readonly Parser<char> content = 
-            Parse.AnyChar.Except(Parse.Char('=')).Except(Parse.WhiteSpace).Except(General.EndOfLineOrFile);
-
         internal static Parser<Token> Token =
-            from name in content.Many().Text()
-            from leading in Parse.Char(' ').Or(Parse.Char('\t')).Many()
-            from equalSign in Parse.Char('=')
-            from trailing in Parse.Char(' ').Or(Parse.Char('\t')).Many()
-            from data in General.Cell
-            from nl in General.EndOfLineOrFile.Once()
+            from first in Parse.LetterOrDigit.Once().Text()
+            from name in Parse.CharExcept('=').Except(Parse.Char(' ')).Except(General.NewLine).Many().Text()
+            from equalSign in Parse.String(" = ")
+            from data in Parse.AnyChar.Except(General.NewLine).AtLeastOnce().Text()
+            from nl in General.EndOfLineOrFile
             select new Token {
-                Name = name,
+                Name = first + name,
                 Data = data
             };
 
         internal static readonly Parser<string> Section =
-            from open in Parse.Char('[')
-            from co in Parse.AnyChar.Except(Parse.Char(']')).Except(General.EndOfLineOrFile).AtLeastOnce().Text()
+            from co in Parse.AnyChar.Except(Parse.Char(']')).Except(General.EndOfLineOrFile).Many().Text()
             from end in Parse.Char(']')
-            from nl in General.EndOfLineOrFile.Once()
-            select co;       
+            from nl in General.NewLine.Once()
+            select co;
 
         public static readonly Parser<List<Section>> Ini = 
             from secs in (
-                    from stripout in
-                        (from spaces in Parse.Char (' ').Or (Parse.Char('\t')).Many ()
-                         from nl in General.EndOfLineOrFile
-                         select spaces).Many ()
-                    
-                    from sectionArray in 
-                        (from section in Section.Optional ()
-                         from tokens in Token.Many ()
-                         select new Section {
-                            Name = section.IsDefined ? section.Get() : RootSectionName,
-                            Data = tokens.ToList<Token>()
-                        }).Many ()
+                from spaces in Parse.Char (' ').Or (Parse.Char('\t')).Or(Parse.Char ('\r')).Or(Parse.Char('\n')).Many ()
+                from section in Parse.Char('[').Then(s => Section).Optional()
 
-                    select sectionArray
-            ).Many ()              
-            from nl in General.EndOfLineOrFile.AtLeastOnce().End()
+                // from section in Section.Optional ()
+                from tokens in Token.AtLeastOnce()
+                select new Section {
+                    Name = section.IsDefined ? section.Get() : RootSectionName,
+                    Data = tokens.ToList<Token>()
+                }
+            ).Many ()
+            from nl in General.EndOfLineOrFile
 
-            select new List<Section> (secs.SelectMany (l => l).ToList<Section> ());
+            select secs.ToList<Section>();
 
         public static readonly Parser<List<Token>> Tokens = 
             from tokens in Token.Many ()
