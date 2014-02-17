@@ -579,32 +579,23 @@ namespace SharpFlame.Mapping
             }
             if ( INIStructures != null )
             {
-                for ( A = 0; A <= INIStructures.StructureCount - 1; A++ )
-                {
-                    if ( INIStructures.Structures[A].ID >= AvailableID )
-                    {
-                        AvailableID = INIStructures.Structures[A].ID + 1U;
-                    }
+                var structMaxId = INIStructures.Structures.Max(w => w.ID)+10;
+                if (structMaxId > AvailableID) {
+                    AvailableID = structMaxId;
                 }
             }
             if ( INIFeatures != null )
             {
-                for ( A = 0; A <= INIFeatures.FeatureCount - 1; A++ )
-                {
-                    if ( INIFeatures.Features[A].ID >= AvailableID )
-                    {
-                        AvailableID = INIFeatures.Features[A].ID + 1U;
-                    }
+                var featuresMaxId = INIFeatures.Features.Max (w => w.ID) + 10;
+                if (featuresMaxId > AvailableID) {
+                    AvailableID = featuresMaxId;
                 }
             }
             if ( INIDroids != null )
             {
-                for ( A = 0; A <= INIDroids.DroidCount - 1; A++ )
-                {
-                    if ( INIDroids.Droids[A].ID >= AvailableID )
-                    {
-                        AvailableID = INIDroids.Droids[A].ID + 1U;
-                    }
+                var droidsMaxId = INIDroids.Droids.Max (w => w.ID) + 10;
+                if (droidsMaxId > AvailableID) {
+                    AvailableID += droidsMaxId;
                 }
             }
 
