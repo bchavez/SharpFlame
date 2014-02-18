@@ -1,6 +1,7 @@
 using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
+using SharpFlame.Core.Domain;
 using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping.Drawing
@@ -11,11 +12,11 @@ namespace SharpFlame.Mapping.Drawing
 
         public clsMap Map;
         public sRGBA_sng Colour;
-        public sXY_int StartXY;
-        public sXY_int FinishXY;
+        public XYInt StartXY;
+        public XYInt FinishXY;
 
-        private sXYZ_int Vertex0;
-        private sXYZ_int Vertex1;
+        private XYZInt Vertex0;
+        private XYZInt Vertex1;
 
         public void ActionPerform()
         {

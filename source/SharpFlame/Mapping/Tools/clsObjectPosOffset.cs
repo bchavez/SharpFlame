@@ -1,12 +1,12 @@
-using SharpFlame.Maths;
+using SharpFlame.Core.Domain;
 
 namespace SharpFlame.Mapping.Tools
 {
     public class clsObjectPosOffset : clsObjectAction
     {
-        public sXY_int Offset;
+        public XYInt Offset;
 
-        private sXY_int NewPos;
+        private XYInt NewPos;
 
         protected override void _ActionPerform()
         {

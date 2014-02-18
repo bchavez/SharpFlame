@@ -1,13 +1,13 @@
-using SharpFlame.Maths;
+using SharpFlame.Core.Domain;
 
 namespace SharpFlame.Util
 {
     public struct sWorldPos
     {
-        public sXY_int Horizontal;
+        public XYInt Horizontal;
         public int Altitude;
 
-        public sWorldPos( sXY_int NewHorizontal, int NewAltitude )
+        public sWorldPos( XYInt NewHorizontal, int NewAltitude )
         {
             Horizontal = NewHorizontal;
             Altitude = NewAltitude;

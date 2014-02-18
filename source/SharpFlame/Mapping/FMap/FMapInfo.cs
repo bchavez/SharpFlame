@@ -1,4 +1,5 @@
 using System;
+using SharpFlame.Core.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
 using SharpFlame.Mapping.Tiles;
@@ -8,7 +9,7 @@ namespace SharpFlame.Mapping.FMap
 {
     public class FMapInfo : Translator
     {
-        public sXY_int TerrainSize = new sXY_int(-1, -1);
+        public XYInt TerrainSize = new XYInt(-1, -1);
         public clsInterfaceOptions InterfaceOptions = new clsInterfaceOptions();
         public clsTileset Tileset;
 
@@ -45,7 +46,7 @@ namespace SharpFlame.Mapping.FMap
                 {
                     CommaText[A] = CommaText[A].Trim();
                 }
-                sXY_int NewSize = new sXY_int();
+                XYInt NewSize = new XYInt();
                 if ( !IOUtil.InvariantParse(CommaText[0], ref NewSize.X) )
                 {
                     return TranslatorResult.ValueInvalid;

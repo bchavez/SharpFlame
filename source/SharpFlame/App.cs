@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using NLog;
 using SharpFlame.AppSettings;
+using SharpFlame.Core.Domain;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.Domain;
@@ -285,12 +286,12 @@ namespace SharpFlame
             Output.WarningAdd(MessageText);
         }
 
-        public static bool PosIsWithinTileArea(sXY_int WorldHorizontal, sXY_int StartTile, sXY_int FinishTile)
+        public static bool PosIsWithinTileArea(XYInt worldHorizontal, XYInt startTile, XYInt finishTile)
         {
-            return WorldHorizontal.X >= StartTile.X * TerrainGridSpacing &
-                   WorldHorizontal.Y >= StartTile.Y * TerrainGridSpacing &
-                   WorldHorizontal.X < FinishTile.X * TerrainGridSpacing &
-                   WorldHorizontal.Y < FinishTile.Y * TerrainGridSpacing;
+            return worldHorizontal.X >= startTile.X * TerrainGridSpacing &
+                   worldHorizontal.Y >= startTile.Y * TerrainGridSpacing &
+                   worldHorizontal.X < finishTile.X * TerrainGridSpacing &
+                   worldHorizontal.Y < finishTile.Y * TerrainGridSpacing;
         }
 
         public static bool SizeIsPowerOf2(int Size)
@@ -400,9 +401,9 @@ namespace SharpFlame
 
         public static sLayerList LayerList;
 
-        public static Position.XY_dbl CalcUnitsCentrePos(SimpleList<clsUnit> Units)
+        public static XYDouble CalcUnitsCentrePos(SimpleList<clsUnit> Units)
         {
-            Position.XY_dbl Result = default(Position.XY_dbl);
+            XYDouble Result = default(XYDouble);
 
             Result.X = 0.0D;
             Result.Y = 0.0D;

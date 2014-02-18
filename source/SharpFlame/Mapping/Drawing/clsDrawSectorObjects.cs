@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.AppSettings;
+using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping.Objects;
@@ -38,9 +39,9 @@ namespace SharpFlame.Mapping.Drawing
             clsViewInfo ViewInfo = Map.ViewInfo;
             clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = ViewInfo.GetMouseOverTerrain();
             clsTextLabel TextLabel = default(clsTextLabel);
-            Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
-            Position.XYZ_dbl XYZ_dbl2 = default(Position.XYZ_dbl);
-            sXY_int ScreenPos = new sXY_int();
+            XYZDouble XYZ_dbl = default(XYZDouble);
+            XYZDouble XYZ_dbl2 = default(XYZDouble);
+            XYInt ScreenPos = new XYInt();
             clsUnitSectorConnection Connection = default(clsUnitSectorConnection);
 
             foreach ( clsUnitSectorConnection tempLoopVar_Connection in Sector.Units )

@@ -1,6 +1,7 @@
 using NLog;
 using System.Windows.Forms;
 using SharpFlame.Collections;
+using SharpFlame.Core.Domain;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Maths;
@@ -201,7 +202,7 @@ namespace SharpFlame
     public class clsResultItemTileGoto : clsResultItemGotoInterface
     {
         public clsViewInfo View;
-        public sXY_int TileNum;
+        public XYInt TileNum;
 
         public override void Perform()
         {
@@ -212,7 +213,7 @@ namespace SharpFlame
     public class clsResultItemPosGoto : clsResultItemGotoInterface
     {
         public clsViewInfo View;
-        public sXY_int Horizontal;
+        public XYInt Horizontal;
 
         public override void Perform()
         {

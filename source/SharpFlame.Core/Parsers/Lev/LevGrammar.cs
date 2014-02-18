@@ -60,10 +60,10 @@ namespace SharpFlame.Core.Parsers.Lev
         public static Parser<LevelsFile> Lev =
             from lf in (
                 from stripout in
-                (from nl in General.EndOfLineOrFile.Many()
-                from c1 in General.MultilineComment.Optional ().Many()
-                from c2 in General.SingleLineComment.Optional ().Many()
-                select c1).Many()
+                    (from nl in General.EndOfLineOrFile.Many()
+                    from c1 in General.MultilineComment.Optional ().Many()
+                    from c2 in General.SingleLineComment.Optional ().Many()
+                    select c1).Many()
 
                 from campaingArray in
                     (from camp in Campaign

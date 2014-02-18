@@ -1,6 +1,6 @@
 using System;
 using SharpFlame.Mapping.Tools;
-using SharpFlame.Maths;
+using SharpFlame.Core.Domain;
 
 namespace SharpFlame.Mapping.Drawing
 {
@@ -15,7 +15,7 @@ namespace SharpFlame.Mapping.Drawing
             {
                 for ( X = PosNum.X * Constants.SectorTileSize; X <= Math.Min((PosNum.X + 1) * Constants.SectorTileSize - 1, Map.Terrain.TileSize.X - 1); X++ )
                 {
-                    Map.DrawTileOrientation(new sXY_int(X, Y));
+                    Map.DrawTileOrientation(new XYInt(X, Y));
                 }
             }
         }

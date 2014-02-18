@@ -1,6 +1,7 @@
 using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
+using SharpFlame.Core.Domain;
 using SharpFlame.Maths;
 using SharpFlame.Util;
 
@@ -47,7 +48,7 @@ namespace SharpFlame.Domain
         {
         }
 
-        public sXY_int GetFootprintOld
+        public XYInt GetFootprintOld
         {
             get
             {
@@ -58,16 +59,16 @@ namespace SharpFlame.Domain
                     case UnitType.PlayerStructure:
                         return ((StructureTypeBase)this).Footprint;
                     default:
-                        sXY_int XY_int = new sXY_int(1, 1);
+                        XYInt XY_int = new XYInt(1, 1);
                         return XY_int;
                 }
             }
         }
 
-        public sXY_int get_GetFootprintNew(int Rotation)
+        public XYInt get_GetFootprintNew(int Rotation)
         {
             //get initial footprint
-            sXY_int Result = new sXY_int();
+            XYInt Result = new XYInt();
             switch ( Type )
             {
                 case UnitType.Feature:
@@ -78,7 +79,7 @@ namespace SharpFlame.Domain
                     break;
                 default:
                     //return droid footprint
-                    Result = new sXY_int(1, 1);
+                    Result = new XYInt(1, 1);
                     return Result;
             }
             //switch footprint axes if not a droid
@@ -96,7 +97,7 @@ namespace SharpFlame.Domain
             return Result;
         }
 
-        public sXY_int get_GetFootprintSelected(int Rotation)
+        public XYInt get_GetFootprintSelected(int Rotation)
         {
             if ( Program.frmMainInstance.cbxFootprintRotate.Checked )
             {
@@ -196,7 +197,7 @@ namespace SharpFlame.Domain
 
     public class clsAttachment
     {
-        public Position.XYZ_dbl Pos_Offset;
+        public XYZDouble Pos_Offset;
         public Matrix3DMath.Matrix3D AngleOffsetMatrix = new Matrix3DMath.Matrix3D();
         public SimpleClassList<clsModel> Models = new SimpleClassList<clsModel>();
         public SimpleClassList<clsAttachment> Attachments = new SimpleClassList<clsAttachment>();
@@ -288,7 +289,7 @@ namespace SharpFlame.Domain
 
         public string Code = "";
         public string Name = "Unknown";
-        public sXY_int Footprint;
+        public XYInt Footprint;
 
         public enum enumFeatureType
         {
@@ -302,6 +303,7 @@ namespace SharpFlame.Domain
 
         public FeatureTypeBase()
         {
+			Footprint = new XYInt (0, 0);
             FeatureType_ObjectDataLink = new ConnectedListLink<FeatureTypeBase, clsObjectData>(this);
 
 
@@ -328,7 +330,7 @@ namespace SharpFlame.Domain
 
         public string Code = "";
         public string Name = "Unknown";
-        public sXY_int Footprint;
+        public XYInt Footprint;
 
         public enum enumStructureType
         {
@@ -487,7 +489,7 @@ namespace SharpFlame.Domain
                 return;
             }
 
-            Position.XYZ_dbl TurretConnector = new Position.XYZ_dbl();
+            XYZDouble TurretConnector = new XYZDouble();
 
             TurretConnector = Body.Attachment.Models[0].Connectors[0];
 

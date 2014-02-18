@@ -1,3 +1,4 @@
+using SharpFlame.Core.Domain;
 using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping.Changes
@@ -8,11 +9,9 @@ namespace SharpFlame.Mapping.Changes
         {
         }
 
-        public override void TileChanged(sXY_int Num)
+        public override void TileChanged(XYInt Num)
         {
-            sXY_int SectorNum = new sXY_int();
-
-            SectorNum = Map.GetTileSectorNum(Num);
+            var SectorNum = Map.GetTileSectorNum(Num);
             Changed(SectorNum);
         }
     }

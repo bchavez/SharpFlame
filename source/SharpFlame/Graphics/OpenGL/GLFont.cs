@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
+using SharpFlame.Core.Domain;
 using SharpFlame.Maths;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
@@ -149,7 +150,7 @@ namespace SharpFlame.Graphics.OpenGL
         public GLFont TextFont;
         public float SizeY;
         public sRGBA_sng Colour;
-        public sXY_int Pos;
+        public XYInt Pos;
 
         public float GetSizeX()
         {
@@ -186,7 +187,7 @@ namespace SharpFlame.Graphics.OpenGL
 
             int CharCode = 0;
             float CharWidth = 0;
-            Position.XY_dbl TexRatio = new Position.XY_dbl();
+            XYDouble TexRatio = new XYDouble();
             float LetterPosA = 0;
             float LetterPosB = 0;
             float PosY1 = 0;

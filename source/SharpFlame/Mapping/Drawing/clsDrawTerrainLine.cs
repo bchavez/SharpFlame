@@ -1,6 +1,7 @@
 using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
+using SharpFlame.Core.Domain;
 using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping.Drawing
@@ -11,18 +12,18 @@ namespace SharpFlame.Mapping.Drawing
 
         public clsMap Map;
         public sRGBA_sng Colour;
-        public sXY_int StartXY;
-        public sXY_int FinishXY;
+        public XYInt StartXY;
+        public XYInt FinishXY;
 
-        private sXYZ_int Vertex;
-        private sXY_int StartTile;
-        private sXY_int FinishTile;
+        private XYZInt Vertex;
+        private XYInt StartTile;
+        private XYInt FinishTile;
         private MathUtil.sIntersectPos IntersectX;
         private MathUtil.sIntersectPos IntersectY;
-        private sXY_int TileEdgeStart;
-        private sXY_int TileEdgeFinish;
+        private XYInt TileEdgeStart;
+        private XYInt TileEdgeFinish;
         private int LastXTile;
-        private sXY_int Horizontal;
+        private XYInt Horizontal;
 
         public void ActionPerform()
         {

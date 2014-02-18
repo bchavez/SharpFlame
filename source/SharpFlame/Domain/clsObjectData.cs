@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Core.Domain;
 using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
 using SharpFlame.FileIO;
@@ -575,7 +576,7 @@ namespace SharpFlame.Domain
 
             clsAttachment Attachment = default(clsAttachment);
             clsAttachment BaseAttachment = default(clsAttachment);
-            Position.XYZ_dbl Connector = new Position.XYZ_dbl();
+            XYZDouble Connector = new XYZDouble();
             StructureTypeBase structureTypeBase = default(StructureTypeBase);
             FeatureTypeBase featureTypeBase = default(FeatureTypeBase);
             DroidTemplate Template = default(DroidTemplate);
@@ -807,7 +808,7 @@ namespace SharpFlame.Domain
                 string StructureCode = Fields[0];
                 string StructureTypeText = Fields[1];
                 string[] StructurePIEs = Fields[21].ToLower().Split('@');
-                sXY_int StructureFootprint = new sXY_int();
+                XYInt StructureFootprint = new XYInt();
                 string StructureBasePIE = Fields[22].ToLower();
                 if ( !IOUtil.InvariantParse(Fields[5], ref StructureFootprint.X) )
                 {
@@ -1616,34 +1617,29 @@ namespace SharpFlame.Domain
                     featureTypeBase.Footprint.X = 1;
                     featureTypeBase.Footprint.Y = 1;
                     return featureTypeBase;
-                case UnitType.PlayerStructure:
-                    StructureTypeBase structureTypeBase = default(StructureTypeBase);
-                    foreach ( StructureTypeBase tempLoopVar_StructureType in StructureTypes )
-                    {
-                        structureTypeBase = tempLoopVar_StructureType;
-                        if ( structureTypeBase.Code == Code )
-                        {
-                            if ( WallType < 0 )
-                            {
+            case UnitType.PlayerStructure:
+                StructureTypeBase structureTypeBase = default(StructureTypeBase);
+                foreach (StructureTypeBase tempLoopVar_StructureType in StructureTypes) {
+                    structureTypeBase = tempLoopVar_StructureType;
+                    if (structureTypeBase.Code == Code) {
+                        if (WallType < 0) {
+                            return structureTypeBase;
+                        } else if (structureTypeBase.WallLink.IsConnected) {
+                            if (structureTypeBase.WallLink.ArrayPosition == WallType) {
                                 return structureTypeBase;
-                            }
-                            else if ( structureTypeBase.WallLink.IsConnected )
-                            {
-                                if ( structureTypeBase.WallLink.ArrayPosition == WallType )
-                                {
-                                    return structureTypeBase;
-                                }
                             }
                         }
                     }
-                    structureTypeBase = new StructureTypeBase();
-                    structureTypeBase.IsUnknown = true;
-                    structureTypeBase.Code = Code;
-                    structureTypeBase.Footprint.X = 1;
-                    structureTypeBase.Footprint.Y = 1;
-                    return structureTypeBase;
-                case UnitType.PlayerDroid:
-                    DroidTemplate DroidType = default(DroidTemplate);
+                }
+                structureTypeBase = new StructureTypeBase ();
+                structureTypeBase.IsUnknown = true;
+                structureTypeBase.Code = Code;
+                structureTypeBase.Footprint.X = 1;
+                structureTypeBase.Footprint.Y = 1;
+                return structureTypeBase;
+
+            case UnitType.PlayerDroid:
+                DroidTemplate DroidType = default(DroidTemplate);
                     foreach ( DroidTemplate tempLoopVar_DroidType in DroidTemplates )
                     {
                         DroidType = tempLoopVar_DroidType;

@@ -1,5 +1,6 @@
 using System;
 using SharpFlame.Collections.Specialized;
+using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tiles;
@@ -15,17 +16,17 @@ namespace SharpFlame.Mapping
         {
             int X = 0;
             int Y = 0;
-            sXY_int Pos = new sXY_int();
-            sXY_int RotatedPos = new sXY_int();
-            sXY_int NewTerrainPosA = TileUtil.GetRotatedPos(Orientation, new sXY_int(0, 0), Terrain.TileSize);
-            sXY_int NewTerrainPosB = TileUtil.GetRotatedPos(Orientation, Terrain.TileSize, Terrain.TileSize);
-            sXY_int VertexLimits = new sXY_int(Math.Max(NewTerrainPosA.X, NewTerrainPosB.X), Math.Max(NewTerrainPosA.Y, NewTerrainPosB.Y));
+            XYInt Pos = new XYInt(0, 0);
+            XYInt RotatedPos = new XYInt();
+            XYInt NewTerrainPosA = TileUtil.GetRotatedPos(Orientation, new XYInt(0, 0), Terrain.TileSize);
+            XYInt NewTerrainPosB = TileUtil.GetRotatedPos(Orientation, Terrain.TileSize, Terrain.TileSize);
+            XYInt VertexLimits = new XYInt(Math.Max(NewTerrainPosA.X, NewTerrainPosB.X), Math.Max(NewTerrainPosA.Y, NewTerrainPosB.Y));
             clsTerrain NewTerrain = new clsTerrain(VertexLimits);
-            sXY_int NewTileLimits = new sXY_int(NewTerrain.TileSize.X - 1, NewTerrain.TileSize.Y - 1);
-            sXY_int NewSideHLimits = new sXY_int(NewTerrain.TileSize.X - 1, NewTerrain.TileSize.Y);
-            sXY_int NewSideVLimits = new sXY_int(NewTerrain.TileSize.X, NewTerrain.TileSize.Y - 1);
-            sXY_int OldTileLimits = new sXY_int(Terrain.TileSize.X - 1, Terrain.TileSize.Y - 1);
-            sXY_int OldPosLimits = new sXY_int(Terrain.TileSize.X * App.TerrainGridSpacing, Terrain.TileSize.Y * App.TerrainGridSpacing);
+            XYInt NewTileLimits = new XYInt(NewTerrain.TileSize.X - 1, NewTerrain.TileSize.Y - 1);
+            XYInt NewSideHLimits = new XYInt(NewTerrain.TileSize.X - 1, NewTerrain.TileSize.Y);
+            XYInt NewSideVLimits = new XYInt(NewTerrain.TileSize.X, NewTerrain.TileSize.Y - 1);
+            XYInt OldTileLimits = new XYInt(Terrain.TileSize.X - 1, Terrain.TileSize.Y - 1);
+            XYInt OldPosLimits = new XYInt(Terrain.TileSize.X * App.TerrainGridSpacing, Terrain.TileSize.Y * App.TerrainGridSpacing);
             TileOrientation ReverseOrientation = new TileOrientation();
             TileDirection TriDirection = new TileDirection();
 
@@ -185,7 +186,7 @@ namespace SharpFlame.Mapping
                 Unit.Pos.Horizontal = TileUtil.GetRotatedPos(Orientation, Unit.Pos.Horizontal, OldPosLimits);
             }
 
-            sXY_int ZeroPos = new sXY_int(0, 0);
+            XYInt ZeroPos = new XYInt(0, 0);
 
             int Position = 0;
             foreach ( clsUnit tempLoopVar_Unit in Units.GetItemsAsSimpleList() )
@@ -384,7 +385,7 @@ namespace SharpFlame.Mapping
                 }
             }
 
-            sXY_int Pos = new sXY_int();
+            XYInt Pos = new XYInt();
 
             TerrainType = new int[Terrain.TileSize.X, Terrain.TileSize.Y];
             Slope = new float[Terrain.TileSize.X, Terrain.TileSize.Y];
@@ -576,7 +577,7 @@ namespace SharpFlame.Mapping
             double BestSlope = 0;
             double CurrentSlope = 0;
             bool AllowSlope = default(bool);
-            sXY_int Pos = new sXY_int();
+            XYInt Pos = new XYInt();
 
             TerrainType = new Painters.Terrain[Terrain.TileSize.X + 1, Terrain.TileSize.Y + 1];
             Slope = new float[Terrain.TileSize.X, Terrain.TileSize.Y];
@@ -763,7 +764,7 @@ namespace SharpFlame.Mapping
 
             int X = 0;
             int Y = 0;
-            sXY_int TileNum = new sXY_int();
+            XYInt TileNum = new XYInt();
 
             for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
             {

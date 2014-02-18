@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Core.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping;
@@ -18,12 +19,12 @@ namespace SharpFlame.Controls
 
         public bool DrawPending;
 
-        public sXY_int GLSize;
+        public XYInt GLSize;
         public double GLSize_XPerY;
 
-        public sXY_int View_Pos;
+        public XYInt View_Pos;
 
-        public sXY_int TextureCount;
+        public XYInt TextureCount;
         public int TextureYOffset;
 
         public bool DrawView_Enabled = false;
@@ -42,6 +43,8 @@ namespace SharpFlame.Controls
         public TextureViewControl(frmMain Owner)
         {
             _Owner = Owner;
+			TextureCount = new XYInt (0, 0);
+			GLSize = new XYInt (0, 0);
 
             InitializeComponent();
 
@@ -191,16 +194,16 @@ namespace SharpFlame.Controls
             int X = 0;
             int Y = 0;
             int Num = 0;
-            sXY_int XY_int = new sXY_int();
+            XYInt XY_int = new XYInt();
             int A = 0;
-            Position.XY_dbl Vertex0 = new Position.XY_dbl();
-            Position.XY_dbl Vertex1 = new Position.XY_dbl();
-            Position.XY_dbl Vertex2 = new Position.XY_dbl();
-            Position.XY_dbl UnrotatedPos = new Position.XY_dbl();
-            Position.XY_dbl TexCoord0 = new Position.XY_dbl();
-            Position.XY_dbl TexCoord1 = new Position.XY_dbl();
-            Position.XY_dbl TexCoord2 = new Position.XY_dbl();
-            Position.XY_dbl TexCoord3 = new Position.XY_dbl();
+            XYDouble Vertex0 = new XYDouble();
+            XYDouble Vertex1 = new XYDouble();
+            XYDouble Vertex2 = new XYDouble();
+            XYDouble UnrotatedPos = new XYDouble();
+            XYDouble TexCoord0 = new XYDouble();
+            XYDouble TexCoord1 = new XYDouble();
+            XYDouble TexCoord2 = new XYDouble();
+            XYDouble TexCoord3 = new XYDouble();
 
             GL.MatrixMode(MatrixMode.Projection);
             Matrix4 temp_mat = Matrix4.CreateOrthographicOffCenter(0.0F, GLSize.X, GLSize.Y, 0.0F, -1.0F, 1.0F);

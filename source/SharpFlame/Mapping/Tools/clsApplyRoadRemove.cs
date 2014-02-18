@@ -1,3 +1,4 @@
+using SharpFlame.Core.Domain;
 using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping.Tools
@@ -6,7 +7,7 @@ namespace SharpFlame.Mapping.Tools
     {
         private clsTerrain Terrain;
 
-        private void ToolPerformSideH(sXY_int SideNum)
+        private void ToolPerformSideH(XYInt SideNum)
         {
             Terrain = Map.Terrain;
 
@@ -19,7 +20,7 @@ namespace SharpFlame.Mapping.Tools
             }
         }
 
-        private void ToolPerformSideV(sXY_int SideNum)
+        private void ToolPerformSideV(XYInt SideNum)
         {
             Terrain = Map.Terrain;
 
@@ -35,9 +36,9 @@ namespace SharpFlame.Mapping.Tools
         public override void ActionPerform()
         {
             ToolPerformSideH(PosNum);
-            ToolPerformSideH(new sXY_int(PosNum.X, PosNum.Y + 1));
+            ToolPerformSideH(new XYInt(PosNum.X, PosNum.Y + 1));
             ToolPerformSideV(PosNum);
-            ToolPerformSideV(new sXY_int(PosNum.X + 1, PosNum.Y));
+            ToolPerformSideV(new XYInt(PosNum.X + 1, PosNum.Y));
         }
     }
 }

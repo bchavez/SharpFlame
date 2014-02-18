@@ -1,4 +1,5 @@
 using System;
+using SharpFlame.Core.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
 using SharpFlame.Maths;
@@ -9,8 +10,8 @@ namespace SharpFlame.Mapping.FMap
     {
         public struct sGateway
         {
-            public sXY_int PosA;
-            public sXY_int PosB;
+            public XYInt PosA;
+            public XYInt PosB;
         }
 
         public sGateway[] Gateways;

@@ -2,6 +2,7 @@ using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
+using SharpFlame.Core.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
 using SharpFlame.Mapping.Drawing;
@@ -31,10 +32,10 @@ namespace SharpFlame.Mapping.Script
             get { return _Label; }
         }
 
-        private sXY_int _PosA;
-        private sXY_int _PosB;
+        private XYInt _PosA;
+        private XYInt _PosB;
 
-        public sXY_int PosA
+        public XYInt PosA
         {
             set
             {
@@ -45,7 +46,7 @@ namespace SharpFlame.Mapping.Script
             }
         }
 
-        public sXY_int PosB
+        public XYInt PosB
         {
             set
             {
@@ -111,7 +112,7 @@ namespace SharpFlame.Mapping.Script
             return Result;
         }
 
-        public void SetPositions(sXY_int PosA, sXY_int PosB)
+        public void SetPositions(XYInt PosA, XYInt PosB)
         {
             clsMap Map = _ParentMapLink.Source;
 
@@ -159,9 +160,9 @@ namespace SharpFlame.Mapping.Script
             Drawer.ActionPerform();
         }
 
-        public void MapResizing(sXY_int PosOffset)
+        public void MapResizing(XYInt PosOffset)
         {
-            SetPositions(new sXY_int(_PosA.X - PosOffset.X, _PosA.Y - PosOffset.Y), new sXY_int(_PosB.X - PosOffset.X, _PosB.Y - PosOffset.Y));
+            SetPositions(new XYInt(_PosA.X - PosOffset.X, _PosA.Y - PosOffset.Y), new XYInt(_PosB.X - PosOffset.X, _PosB.Y - PosOffset.Y));
         }
 
         public void WriteWZ(IniWriter File)

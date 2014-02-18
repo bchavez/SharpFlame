@@ -1,4 +1,5 @@
 using System;
+using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
@@ -16,7 +17,7 @@ namespace SharpFlame.Mapping.FMap
             public string Code;
             public string UnitGroup;
             public bool GotAltitude;
-            public clsXY_int Pos;
+            public XYInt Pos;
             public double Heading;
             public double Health;
             public DroidDesign.clsTemplateDroidType TemplateDroidType;
@@ -222,7 +223,7 @@ namespace SharpFlame.Mapping.FMap
                 {
                     CommaText[A] = Convert.ToString(CommaText[A].Trim());
                 }
-                sXY_int Pos = new sXY_int();
+                XYInt Pos = new XYInt();
                 if ( !IOUtil.InvariantParse(CommaText[0], ref Pos.X) )
                 {
                     return TranslatorResult.ValueInvalid;
@@ -233,7 +234,7 @@ namespace SharpFlame.Mapping.FMap
                 }
                 try
                 {
-                    Objects[INISectionNum].Pos = new clsXY_int(Pos);
+                    Objects[INISectionNum].Pos = Pos;
                 }
                 catch ( Exception )
                 {

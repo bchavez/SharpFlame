@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using SharpFlame.Core.Domain;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
@@ -10,8 +11,8 @@ namespace SharpFlame
     {
         public struct sPosNum
         {
-            public sXY_int Normal;
-            public sXY_int Alignment;
+            public XYInt Normal;
+            public XYInt Alignment;
         }
 
         private double _Radius;
@@ -87,7 +88,7 @@ namespace SharpFlame
 
         public void PerformActionMapTiles(clsAction Tool, sPosNum Centre)
         {
-            PerformAction(Tool, Centre, new sXY_int(Tool.Map.Terrain.TileSize.X - 1, Tool.Map.Terrain.TileSize.Y - 1));
+            PerformAction(Tool, Centre, new XYInt(Tool.Map.Terrain.TileSize.X - 1, Tool.Map.Terrain.TileSize.Y - 1));
         }
 
         public void PerformActionMapVertices(clsAction Tool, sPosNum Centre)
@@ -97,10 +98,10 @@ namespace SharpFlame
 
         public void PerformActionMapSectors(clsAction Tool, sPosNum Centre)
         {
-            PerformAction(Tool, Centre, new sXY_int(Tool.Map.SectorCount.X - 1, Tool.Map.SectorCount.Y - 1));
+            PerformAction(Tool, Centre, new XYInt(Tool.Map.SectorCount.X - 1, Tool.Map.SectorCount.Y - 1));
         }
 
-        public sXY_int GetPosNum(sPosNum PosNum)
+        public XYInt GetPosNum(sPosNum PosNum)
         {
             if ( _Alignment )
             {
@@ -112,12 +113,12 @@ namespace SharpFlame
             }
         }
 
-        private void PerformAction(clsAction Action, sPosNum PosNum, sXY_int LastValidNum)
+        private void PerformAction(clsAction Action, sPosNum PosNum, XYInt LastValidNum)
         {
             int XNum = 0;
             int X = 0;
             int Y = 0;
-            sXY_int Centre = new sXY_int();
+            XYInt Centre = new XYInt(0, 0);
 
             if ( Action.Map == null )
             {
@@ -150,8 +151,8 @@ namespace SharpFlame
                                     {
                                         Action.Effect =
                                             Convert.ToDouble(1.0D -
-                                                                    (new Position.XY_dbl(Action.PosNum.X, Action.PosNum.Y) -
-                                                                     new Position.XY_dbl(Centre.X - 0.5D, Centre.Y - 0.5D)).GetMagnitude() /
+                                                                    (new XYDouble(Action.PosNum.X, Action.PosNum.Y) -
+                                                                     new XYDouble(Centre.X - 0.5D, Centre.Y - 0.5D)).GetMagnitude() /
                                                                     (Tiles.ResultRadius + 0.5D));
                                     }
                                     else

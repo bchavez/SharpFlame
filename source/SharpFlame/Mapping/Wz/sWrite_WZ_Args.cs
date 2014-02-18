@@ -1,4 +1,5 @@
 using System;
+using SharpFlame.Core.Domain;
 using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping.Wz
@@ -34,7 +35,7 @@ namespace SharpFlame.Mapping.Wz
             Campaign
         }
 
-        public sXY_int ScrollMin;
+        public XYInt ScrollMin;
         public sXY_uint ScrollMax;
         public enumCompileType CompileType;
     }

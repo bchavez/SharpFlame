@@ -68,11 +68,16 @@
     <Compile Include="Parsers\Lev\LevelsFile.cs" />
     <Compile Include="Parsers\Lev\Campaign.cs" />
     <Compile Include="Parsers\Lev\Token.cs" />
-    <Compile Include="Parsers\Ini\IniGrammer.cs" />
     <Compile Include="Parsers\Ini\Token.cs" />
     <Compile Include="Parsers\Ini\Section.cs" />
-    <Compile Include="Parsers\Ini\DataTypes.cs" />
     <Compile Include="Parsers\General.cs" />
+    <Compile Include="Parsers\Ini\IniReader.cs" />
+    <Compile Include="Domain\RGBA.cs" />
+    <Compile Include="Domain\Rotation.cs" />
+    <Compile Include="Domain\XYZInt.cs" />
+    <Compile Include="Domain\XYInt.cs" />
+    <Compile Include="Domain\XYDouble.cs" />
+    <Compile Include="Domain\XYZDouble.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -86,4 +91,7 @@
   </Target>
   -->
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Domain\" />
+  </ItemGroup>
 </Project>

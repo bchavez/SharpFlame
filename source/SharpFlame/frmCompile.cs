@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 using NLog;
+using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping;
@@ -241,12 +242,12 @@ namespace SharpFlame
             var tileFeatureTypeBase = new FeatureTypeBase[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
             var TileObjectGroup = new clsUnitGroup[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
 
-            sXY_int StartPos = new sXY_int();
-            sXY_int FinishPos = new sXY_int();
-            sXY_int CentrePos = new sXY_int();
+            XYInt StartPos = new XYInt();
+            XYInt FinishPos = new XYInt();
+            XYInt CentrePos = new XYInt();
             StructureTypeBase.enumStructureType StructureTypeType;
             StructureTypeBase structureTypeBase;
-            sXY_int Footprint = new sXY_int();
+            XYInt Footprint = new XYInt();
             bool[] UnitIsStructureModule = new bool[Map.Units.Count];
             bool IsValid;
 
@@ -697,7 +698,7 @@ namespace SharpFlame
             AutoScrollLimits_Update();
         }
 
-        private void SetScrollLimits(ref sXY_int Min, ref sXY_uint Max)
+        private void SetScrollLimits(ref XYInt Min, ref sXY_uint Max)
         {
             Min.X = 0;
             Min.Y = 0;

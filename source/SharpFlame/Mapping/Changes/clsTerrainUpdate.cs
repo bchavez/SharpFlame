@@ -1,3 +1,4 @@
+using SharpFlame.Core.Domain;
 using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping.Changes
@@ -13,12 +14,12 @@ namespace SharpFlame.Mapping.Changes
         {
         }
 
-        public clsTerrainUpdate(sXY_int TileSize)
+        public clsTerrainUpdate(XYInt TileSize)
         {
-            Vertices = new clsPointChanges(new sXY_int(TileSize.X + 1, TileSize.Y + 1));
-            Tiles = new clsPointChanges(new sXY_int(TileSize.X, TileSize.Y));
-            SidesH = new clsPointChanges(new sXY_int(TileSize.X, TileSize.Y + 1));
-            SidesV = new clsPointChanges(new sXY_int(TileSize.X + 1, TileSize.Y));
+            Vertices = new clsPointChanges(new XYInt(TileSize.X + 1, TileSize.Y + 1));
+            Tiles = new clsPointChanges(new XYInt(TileSize.X, TileSize.Y));
+            SidesH = new clsPointChanges(new XYInt(TileSize.X, TileSize.Y + 1));
+            SidesV = new clsPointChanges(new XYInt(TileSize.X + 1, TileSize.Y));
         }
 
         public void SetAllChanged()

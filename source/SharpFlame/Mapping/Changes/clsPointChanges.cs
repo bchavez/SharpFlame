@@ -1,4 +1,5 @@
 using SharpFlame.Collections;
+using SharpFlame.Core.Domain;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 
@@ -7,21 +8,21 @@ namespace SharpFlame.Mapping.Changes
     public class clsPointChanges
     {
         public bool[,] PointIsChanged;
-        public SimpleList<clsXY_int> ChangedPoints = new SimpleList<clsXY_int>();
+        public SimpleList<XYInt> ChangedPoints = new SimpleList<XYInt>();
 
-        public clsPointChanges(sXY_int PointSize)
+        public clsPointChanges(XYInt PointSize)
         {
             PointIsChanged = new bool[PointSize.X, PointSize.Y];
             ChangedPoints.MinSize = PointSize.X * PointSize.Y;
             ChangedPoints.Clear();
         }
 
-        public void Changed(sXY_int Num)
+        public void Changed(XYInt Num)
         {
             if ( !PointIsChanged[Num.X, Num.Y] )
             {
                 PointIsChanged[Num.X, Num.Y] = true;
-                ChangedPoints.Add(new clsXY_int(Num));
+                ChangedPoints.Add(Num);
             }
         }
 
@@ -29,7 +30,7 @@ namespace SharpFlame.Mapping.Changes
         {
             int X = 0;
             int Y = 0;
-            sXY_int Num = new sXY_int();
+            XYInt Num = new XYInt(0, 0);
 
             for ( Y = 0; Y <= PointIsChanged.GetUpperBound(1); Y++ )
             {
@@ -44,9 +45,9 @@ namespace SharpFlame.Mapping.Changes
 
         public void Clear()
         {
-            clsXY_int Point = default(clsXY_int);
+            XYInt Point = default(XYInt);
 
-            foreach ( clsXY_int tempLoopVar_Point in ChangedPoints )
+            foreach ( XYInt tempLoopVar_Point in ChangedPoints )
             {
                 Point = tempLoopVar_Point;
                 PointIsChanged[Point.X, Point.Y] = false;
@@ -56,12 +57,11 @@ namespace SharpFlame.Mapping.Changes
 
         public void PerformTool(clsAction Tool)
         {
-            clsXY_int Point = default(clsXY_int);
+            XYInt Point = default(XYInt);
 
-            foreach ( clsXY_int tempLoopVar_Point in ChangedPoints )
+            foreach ( var tempLoopVar_Point in ChangedPoints )
             {
-                Point = tempLoopVar_Point;
-                Tool.PosNum = Point.XY;
+				Tool.PosNum = tempLoopVar_Point;
                 Tool.ActionPerform();
             }
         }

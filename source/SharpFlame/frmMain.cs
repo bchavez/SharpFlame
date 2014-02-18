@@ -9,6 +9,7 @@ using NLog;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
+using SharpFlame.Core.Domain;
 using SharpFlame.Controls;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
@@ -654,7 +655,7 @@ namespace SharpFlame
             }
             if ( ApplyToMap == null )
             {
-                ApplyToMap = new clsMap(new sXY_int(HeightmapBitmap.Width - 1, HeightmapBitmap.Height - 1));
+                ApplyToMap = new clsMap(new XYInt(HeightmapBitmap.Width - 1, HeightmapBitmap.Height - 1));
             }
 
             int X = 0;
@@ -956,8 +957,8 @@ namespace SharpFlame
 
         public void btnResize_Click(Object sender, EventArgs e)
         {
-            sXY_int NewSize = new sXY_int();
-            sXY_int Offset = new sXY_int();
+            XYInt NewSize = new XYInt();
+            XYInt Offset = new XYInt();
 
             if ( !IOUtil.InvariantParse(txtSizeX.Text, ref NewSize.X) )
             {
@@ -979,7 +980,7 @@ namespace SharpFlame
             Map_Resize(Offset, NewSize);
         }
 
-        public void Map_Resize(sXY_int Offset, sXY_int NewSize)
+        public void Map_Resize(XYInt Offset, XYInt NewSize)
         {
             clsMap Map = MainMap;
 
@@ -1204,7 +1205,7 @@ namespace SharpFlame
 
         public void NewMap()
         {
-            clsMap NewMap = new clsMap(new sXY_int(64, 64));
+            clsMap NewMap = new clsMap(new XYInt(64, 64));
             NewMainMap(NewMap);
 
             NewMap.RandomizeTileOrientations();
@@ -1290,16 +1291,16 @@ namespace SharpFlame
             int X = 0;
             int Y = 0;
             double Offset = 0;
-            sXY_int StartXY = new sXY_int();
-            sXY_int FinishXY = new sXY_int();
-            sXY_int Pos = new sXY_int();
+            XYInt StartXY = new XYInt();
+            XYInt FinishXY = new XYInt();
+            XYInt Pos = new XYInt();
 
             if ( !IOUtil.InvariantParse(txtHeightOffset.Text, ref Offset) )
             {
                 return;
             }
 
-            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, ref StartXY, ref FinishXY);
+            MathUtil.ReorderXY(Map.Selected_Area_VertexA, Map.Selected_Area_VertexB, ref StartXY, ref FinishXY);
             for ( Y = StartXY.Y; Y <= FinishXY.Y; Y++ )
             {
                 for ( X = StartXY.X; X <= FinishXY.X; X++ )
@@ -1962,10 +1963,10 @@ namespace SharpFlame
             {
                 App.Copied_Map.Deallocate();
             }
-            sXY_int Area = new sXY_int();
-            sXY_int Start = new sXY_int();
-            sXY_int Finish = new sXY_int();
-            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, ref Start, ref Finish);
+            XYInt Area = new XYInt();
+            XYInt Start = new XYInt();
+            XYInt Finish = new XYInt();
+            MathUtil.ReorderXY(Map.Selected_Area_VertexA, Map.Selected_Area_VertexB, ref Start, ref Finish);
             Area.X = Finish.X - Start.X;
             Area.Y = Finish.Y - Start.Y;
             App.Copied_Map = new clsMap(Map, Start, Area);
@@ -1994,10 +1995,10 @@ namespace SharpFlame
             {
                 return;
             }
-            sXY_int Area = new sXY_int();
-            sXY_int Start = new sXY_int();
-            sXY_int Finish = new sXY_int();
-            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, ref Start, ref Finish);
+            XYInt Area = new XYInt();
+            XYInt Start = new XYInt();
+            XYInt Finish = new XYInt();
+            MathUtil.ReorderXY(Map.Selected_Area_VertexA, Map.Selected_Area_VertexB, ref Start, ref Finish);
             Area.X = Finish.X - Start.X;
             Area.Y = Finish.Y - Start.Y;
             Map.MapInsert(App.Copied_Map, Start, Area, menuSelPasteHeights.Checked, menuSelPasteTextures.Checked, menuSelPasteUnits.Checked,
@@ -2024,10 +2025,10 @@ namespace SharpFlame
                 return;
             }
 
-            sXY_int Start = new sXY_int();
-            sXY_int Finish = new sXY_int();
-            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, ref Start, ref Finish);
-            sXY_int Area = new sXY_int();
+            XYInt Start = new XYInt();
+            XYInt Finish = new XYInt();
+            MathUtil.ReorderXY(Map.Selected_Area_VertexA, Map.Selected_Area_VertexB, ref Start, ref Finish);
+            XYInt Area = new XYInt();
             Area.X = Finish.X - Start.X;
             Area.Y = Finish.Y - Start.Y;
 
@@ -2542,11 +2543,11 @@ namespace SharpFlame
             {
                 return;
             }
-            sXY_int Start = new sXY_int();
-            sXY_int Finish = new sXY_int();
+            XYInt Start = new XYInt();
+            XYInt Finish = new XYInt();
             int A = 0;
 
-            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, ref Start, ref Finish);
+            MathUtil.ReorderXY(Map.Selected_Area_VertexA, Map.Selected_Area_VertexB, ref Start, ref Finish);
             for ( A = 0; A <= Map.Units.Count - 1; A++ )
             {
                 if ( App.PosIsWithinTileArea(Map.Units[A].Pos.Horizontal, Start, Finish) )
@@ -2599,9 +2600,9 @@ namespace SharpFlame
             int X = 0;
             int Y = 0;
             double Multiplier = 0;
-            sXY_int StartXY = new sXY_int();
-            sXY_int FinishXY = new sXY_int();
-            sXY_int Pos = new sXY_int();
+            XYInt StartXY = new XYInt();
+            XYInt FinishXY = new XYInt();
+            XYInt Pos = new XYInt();
             double dblTemp = 0;
 
             if ( !IOUtil.InvariantParse(txtHeightMultiply.Text, ref dblTemp) )
@@ -2609,7 +2610,7 @@ namespace SharpFlame
                 return;
             }
             Multiplier = MathUtil.Clamp_dbl(dblTemp, 0.0D, 255.0D);
-            MathUtil.ReorderXY(Map.Selected_Area_VertexA.XY, Map.Selected_Area_VertexB.XY, ref StartXY, ref FinishXY);
+            MathUtil.ReorderXY(Map.Selected_Area_VertexA, Map.Selected_Area_VertexB, ref StartXY, ref FinishXY);
             for ( Y = StartXY.Y; Y <= FinishXY.Y; Y++ )
             {
                 for ( X = StartXY.X; X <= FinishXY.X; X++ )
@@ -3493,7 +3494,7 @@ namespace SharpFlame
                 return;
             }
 
-            sXY_int Vertex = MouseOverTerrain.Vertex.Normal;
+            XYInt Vertex = MouseOverTerrain.Vertex.Normal;
             int A = 0;
 
             lstAutoTexture.Enabled = false;
@@ -3524,7 +3525,7 @@ namespace SharpFlame
                 return;
             }
 
-            sXY_int Tile = MouseOverTerrain.Tile.Normal;
+            XYInt Tile = MouseOverTerrain.Tile.Normal;
 
             if ( Map.Tileset != null )
             {
@@ -3663,8 +3664,8 @@ namespace SharpFlame
             }
 
             NewArea.SetPositions(
-                new sXY_int(Map.Selected_Area_VertexA.X * App.TerrainGridSpacing, Map.Selected_Area_VertexA.Y * App.TerrainGridSpacing),
-                new sXY_int(Map.Selected_Area_VertexB.X * App.TerrainGridSpacing, Map.Selected_Area_VertexB.Y * App.TerrainGridSpacing));
+                new XYInt(Map.Selected_Area_VertexA.X * App.TerrainGridSpacing, Map.Selected_Area_VertexA.Y * App.TerrainGridSpacing),
+                new XYInt(Map.Selected_Area_VertexB.X * App.TerrainGridSpacing, Map.Selected_Area_VertexB.Y * App.TerrainGridSpacing));
 
             ScriptMarkerLists_Update();
 
@@ -4094,30 +4095,29 @@ namespace SharpFlame
         {
             clsResult ReturnResult = new clsResult("", false);
             sSplitPath SplitPath = new sSplitPath(Path);
-            clsMap ResultMap = new clsMap();
-            string Extension = SplitPath.FileExtension.ToLower();
+            clsMap resultMap = new clsMap();
 
-            switch ( Extension )
+            switch ( SplitPath.FileExtension.ToLower() )
             {
                 case "fmap":
-                    ReturnResult.Add(ResultMap.Load_FMap(Path));
-                    ResultMap.PathInfo = new clsPathInfo(Path, true);
+                    ReturnResult.Add(resultMap.Load_FMap(Path));
+                    resultMap.PathInfo = new clsPathInfo(Path, true);
                     break;
                 case "fme":
-                    ReturnResult.Add(ResultMap.Load_FME(Path));
-                    ResultMap.PathInfo = new clsPathInfo(Path, false);
+                    ReturnResult.Add(resultMap.Load_FME(Path));
+                    resultMap.PathInfo = new clsPathInfo(Path, false);
                     break;
                 case "wz":
-                    ReturnResult.Add(ResultMap.Load_WZ(Path));
-                    ResultMap.PathInfo = new clsPathInfo(Path, false);
+                    ReturnResult.Add(resultMap.Load_WZ(Path));
+                    resultMap.PathInfo = new clsPathInfo(Path, false);
                     break;
                 case "gam":
-                    ReturnResult.Add(ResultMap.Load_Game(Path));
-                    ResultMap.PathInfo = new clsPathInfo(Path, false);
+                    ReturnResult.Add(resultMap.Load_Game(Path));
+                    resultMap.PathInfo = new clsPathInfo(Path, false);
                     break;
                 case "lnd":
-                    ReturnResult.Add(ResultMap.Load_LND(Path));
-                    ResultMap.PathInfo = new clsPathInfo(Path, false);
+                    ReturnResult.Add(resultMap.Load_LND(Path));
+                    resultMap.PathInfo = new clsPathInfo(Path, false);
                     break;
                 default:
                     ReturnResult.ProblemAdd("File extension not recognised.");
@@ -4126,11 +4126,11 @@ namespace SharpFlame
 
             if ( ReturnResult.HasProblems )
             {
-                ResultMap.Deallocate();
+                resultMap.Deallocate();
             }
             else
             {
-                NewMainMap(ResultMap);
+                NewMainMap(resultMap);
             }
 
             return ReturnResult;

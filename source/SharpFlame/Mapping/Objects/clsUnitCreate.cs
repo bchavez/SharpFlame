@@ -1,3 +1,4 @@
+using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 using SharpFlame.Maths;
 
@@ -7,7 +8,7 @@ namespace SharpFlame.Mapping.Objects
     {
         public clsMap Map;
         public UnitTypeBase ObjectTypeBase;
-        public sXY_int Horizontal;
+        public XYInt Horizontal;
         public clsUnitGroup UnitGroup;
         public bool AutoWalls = false;
         public int Rotation = 0;

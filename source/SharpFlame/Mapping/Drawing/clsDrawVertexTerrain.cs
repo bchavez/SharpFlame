@@ -1,6 +1,7 @@
 using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
+using SharpFlame.Core.Domain;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 
@@ -12,13 +13,13 @@ namespace SharpFlame.Mapping.Drawing
 
         private sRGB_sng RGB_sng;
         private sRGB_sng RGB_sng2;
-        private Position.XYZ_dbl XYZ_dbl;
-        private Position.XYZ_dbl XYZ_dbl2;
-        private Position.XYZ_dbl XYZ_dbl3;
-        private Position.XYZ_dbl Vertex0;
-        private Position.XYZ_dbl Vertex1;
-        private Position.XYZ_dbl Vertex2;
-        private Position.XYZ_dbl Vertex3;
+        private XYZDouble XYZ_dbl;
+        private XYZDouble XYZ_dbl2;
+        private XYZDouble XYZ_dbl3;
+        private XYZDouble Vertex0;
+        private XYZDouble Vertex1;
+        private XYZDouble Vertex2;
+        private XYZDouble Vertex3;
 
         public override void ActionPerform()
         {

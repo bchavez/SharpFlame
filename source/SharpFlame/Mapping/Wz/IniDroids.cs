@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using SharpFlame.FileIO;
-using SharpFlame.FileIO.Ini;
+using SharpFlame.Core.Domain;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Util;
 
@@ -9,13 +8,13 @@ namespace SharpFlame.Mapping.Wz
 {
     public class IniDroids
     {
-        public class sDroid
+        public class Droid
         {
             public UInt32 ID;
             public string Template;
             public clsUnitGroup UnitGroup;
-            public clsWorldPos Pos;
-            public sWZAngle Rotation;
+            public XYZInt Pos;
+            public Rotation Rotation;
             public int HealthPercent;
             public int DroidType;
             public string Body;
@@ -29,13 +28,13 @@ namespace SharpFlame.Mapping.Wz
             public int WeaponCount;
         }
 
-        public List<sDroid> Droids;
+        public List<Droid> Droids;
         public int DroidCount { 
             get { return Droids.Count; }
         }
 
         public IniDroids() {
-            Droids = new List<sDroid> ();
+            Droids = new List<Droid> ();
         }
     }
 }

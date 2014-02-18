@@ -1,4 +1,5 @@
 using System;
+using SharpFlame.Core.Domain;
 
 namespace SharpFlame.Maths
 {
@@ -77,10 +78,10 @@ namespace SharpFlame.Maths
         public struct sIntersectPos
         {
             public bool Exists;
-            public sXY_int Pos;
+            public XYInt Pos;
         }
 
-        public static sIntersectPos GetLinesIntersectBetween(sXY_int A1, sXY_int A2, sXY_int B1, sXY_int B2)
+        public static sIntersectPos GetLinesIntersectBetween(XYInt A1, XYInt A2, XYInt B1, XYInt B2)
         {
             sIntersectPos Result = new sIntersectPos();
 
@@ -130,7 +131,7 @@ namespace SharpFlame.Maths
             return Result;
         }
 
-        public static sXY_int PointGetClosestPosOnLine(sXY_int LinePointA, sXY_int LinePointB, sXY_int Point)
+        public static XYInt PointGetClosestPosOnLine(XYInt LinePointA, XYInt LinePointB, XYInt Point)
         {
             double x1dif = Point.X - LinePointA.X;
             double y1dif = Point.Y - LinePointA.Y;
@@ -157,7 +158,7 @@ namespace SharpFlame.Maths
                 }
                 else
                 {
-                    sXY_int Result = new sXY_int();
+                    XYInt Result = new XYInt();
                     Result.X = LinePointA.X + (int)(adifx * ar);
                     Result.Y = LinePointA.Y + (int)(adify * ar);
                     return Result;
@@ -165,7 +166,7 @@ namespace SharpFlame.Maths
             }
         }
 
-        public static void ReorderXY(sXY_int A, sXY_int B, ref sXY_int Lesser, ref sXY_int Greater)
+        public static void ReorderXY(XYInt A, XYInt B, ref XYInt Lesser, ref XYInt Greater)
         {
             if ( A.X <= B.X )
             {

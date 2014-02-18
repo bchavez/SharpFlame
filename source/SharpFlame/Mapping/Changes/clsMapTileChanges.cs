@@ -1,4 +1,5 @@
 using SharpFlame.Maths;
+using SharpFlame.Core.Domain;
 
 namespace SharpFlame.Mapping.Changes
 {
@@ -7,7 +8,7 @@ namespace SharpFlame.Mapping.Changes
         public clsMap Map;
         public clsTerrain Terrain;
 
-        public clsMapTileChanges(clsMap Map, sXY_int PointSize) : base(PointSize)
+        public clsMapTileChanges(clsMap Map, XYInt PointSize) : base(PointSize)
         {
             this.Map = Map;
             Terrain = Map.Terrain;
@@ -18,26 +19,26 @@ namespace SharpFlame.Mapping.Changes
             Map = null;
         }
 
-        public abstract void TileChanged(sXY_int Num);
+        public abstract void TileChanged(XYInt Num);
 
-        public void VertexChanged(sXY_int Num)
+        public void VertexChanged(XYInt Num)
         {
             if ( Num.X > 0 )
             {
                 if ( Num.Y > 0 )
                 {
-                    TileChanged(new sXY_int(Num.X - 1, Num.Y - 1));
+                    TileChanged(new XYInt(Num.X - 1, Num.Y - 1));
                 }
                 if ( Num.Y < Terrain.TileSize.Y )
                 {
-                    TileChanged(new sXY_int(Num.X - 1, Num.Y));
+                    TileChanged(new XYInt(Num.X - 1, Num.Y));
                 }
             }
             if ( Num.X < Terrain.TileSize.X )
             {
                 if ( Num.Y > 0 )
                 {
-                    TileChanged(new sXY_int(Num.X, Num.Y - 1));
+                    TileChanged(new XYInt(Num.X, Num.Y - 1));
                 }
                 if ( Num.Y < Terrain.TileSize.Y )
                 {
@@ -46,47 +47,47 @@ namespace SharpFlame.Mapping.Changes
             }
         }
 
-        public void VertexAndNormalsChanged(sXY_int Num)
+        public void VertexAndNormalsChanged(XYInt Num)
         {
             if ( Num.X > 1 )
             {
                 if ( Num.Y > 0 )
                 {
-                    TileChanged(new sXY_int(Num.X - 2, Num.Y - 1));
+                    TileChanged(new XYInt(Num.X - 2, Num.Y - 1));
                 }
                 if ( Num.Y < Terrain.TileSize.Y )
                 {
-                    TileChanged(new sXY_int(Num.X - 2, Num.Y));
+                    TileChanged(new XYInt(Num.X - 2, Num.Y));
                 }
             }
             if ( Num.X > 0 )
             {
                 if ( Num.Y > 1 )
                 {
-                    TileChanged(new sXY_int(Num.X - 1, Num.Y - 2));
+                    TileChanged(new XYInt(Num.X - 1, Num.Y - 2));
                 }
                 if ( Num.Y > 0 )
                 {
-                    TileChanged(new sXY_int(Num.X - 1, Num.Y - 1));
+                    TileChanged(new XYInt(Num.X - 1, Num.Y - 1));
                 }
                 if ( Num.Y < Terrain.TileSize.Y )
                 {
-                    TileChanged(new sXY_int(Num.X - 1, Num.Y));
+                    TileChanged(new XYInt(Num.X - 1, Num.Y));
                 }
                 if ( Num.Y < Terrain.TileSize.Y - 1 )
                 {
-                    TileChanged(new sXY_int(Num.X - 1, Num.Y + 1));
+                    TileChanged(new XYInt(Num.X - 1, Num.Y + 1));
                 }
             }
             if ( Num.X < Terrain.TileSize.X )
             {
                 if ( Num.Y > 1 )
                 {
-                    TileChanged(new sXY_int(Num.X, Num.Y - 2));
+                    TileChanged(new XYInt(Num.X, Num.Y - 2));
                 }
                 if ( Num.Y > 0 )
                 {
-                    TileChanged(new sXY_int(Num.X, Num.Y - 1));
+                    TileChanged(new XYInt(Num.X, Num.Y - 1));
                 }
                 if ( Num.Y < Terrain.TileSize.Y )
                 {
@@ -94,27 +95,27 @@ namespace SharpFlame.Mapping.Changes
                 }
                 if ( Num.Y < Terrain.TileSize.Y - 1 )
                 {
-                    TileChanged(new sXY_int(Num.X, Num.Y + 1));
+                    TileChanged(new XYInt(Num.X, Num.Y + 1));
                 }
             }
             if ( Num.X < Terrain.TileSize.X - 1 )
             {
                 if ( Num.Y > 0 )
                 {
-                    TileChanged(new sXY_int(Num.X + 1, Num.Y - 1));
+                    TileChanged(new XYInt(Num.X + 1, Num.Y - 1));
                 }
                 if ( Num.Y < Terrain.TileSize.Y )
                 {
-                    TileChanged(new sXY_int(Num.X + 1, Num.Y));
+                    TileChanged(new XYInt(Num.X + 1, Num.Y));
                 }
             }
         }
 
-        public void SideHChanged(sXY_int Num)
+        public void SideHChanged(XYInt Num)
         {
             if ( Num.Y > 0 )
             {
-                TileChanged(new sXY_int(Num.X, Num.Y - 1));
+                TileChanged(new XYInt(Num.X, Num.Y - 1));
             }
             if ( Num.Y < Map.Terrain.TileSize.Y )
             {
@@ -122,11 +123,11 @@ namespace SharpFlame.Mapping.Changes
             }
         }
 
-        public void SideVChanged(sXY_int Num)
+        public void SideVChanged(XYInt Num)
         {
             if ( Num.X > 0 )
             {
-                TileChanged(new sXY_int(Num.X - 1, Num.Y));
+                TileChanged(new XYInt(Num.X - 1, Num.Y));
             }
             if ( Num.X < Map.Terrain.TileSize.X )
             {
