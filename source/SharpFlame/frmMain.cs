@@ -3656,7 +3656,7 @@ namespace SharpFlame
                 return;
             }
 
-            clsScriptArea NewArea = clsScriptArea.Create(Map);
+            var NewArea = new clsScriptArea(Map);
             if ( NewArea == null )
             {
                 MessageBox.Show("Error: Creating area failed.");

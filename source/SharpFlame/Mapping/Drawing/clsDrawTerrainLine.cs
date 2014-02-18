@@ -15,7 +15,7 @@ namespace SharpFlame.Mapping.Drawing
         public XYInt StartXY;
         public XYInt FinishXY;
 
-        private XYZInt Vertex;
+        private XYZInt vertex;
         private XYInt StartTile;
         private XYInt FinishTile;
         private MathUtil.sIntersectPos IntersectX;
@@ -24,6 +24,11 @@ namespace SharpFlame.Mapping.Drawing
         private XYInt TileEdgeFinish;
         private int LastXTile;
         private XYInt Horizontal;
+
+		public clsDrawTerrainLine()
+		{
+			vertex = new XYZInt (0, 0, 0);
+		}
 
         public void ActionPerform()
         {
@@ -38,10 +43,10 @@ namespace SharpFlame.Mapping.Drawing
             LastXTile = StartXY.X / App.TerrainGridSpacing;
 
             Horizontal = StartXY;
-            Vertex.X = Horizontal.X;
-            Vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
-            Vertex.Z = Convert.ToInt32(- Horizontal.Y);
-            GL.Vertex3(Vertex.X, Vertex.Y, Convert.ToInt32(- Vertex.Z));
+            vertex.X = Horizontal.X;
+            vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
+            vertex.Z = Convert.ToInt32(- Horizontal.Y);
+            GL.Vertex3(vertex.X, vertex.Y, Convert.ToInt32(- vertex.Z));
 
             if ( StartTile.Y + 1 <= FinishTile.Y )
             {
@@ -67,20 +72,20 @@ namespace SharpFlame.Mapping.Drawing
                             if ( IntersectX.Exists )
                             {
                                 Horizontal = IntersectX.Pos;
-                                Vertex.X = Horizontal.X;
-                                Vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
-                                Vertex.Z = Convert.ToInt32(- Horizontal.Y);
-                                GL.Vertex3(Vertex.X, Vertex.Y, Convert.ToInt32(- Vertex.Z));
+                                vertex.X = Horizontal.X;
+                                vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
+                                vertex.Z = Convert.ToInt32(- Horizontal.Y);
+                                GL.Vertex3(vertex.X, vertex.Y, Convert.ToInt32(- vertex.Z));
                             }
                         }
 
                         LastXTile = FinishTile.X;
 
                         Horizontal = IntersectY.Pos;
-                        Vertex.X = Horizontal.X;
-                        Vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
-                        Vertex.Z = Convert.ToInt32(- Horizontal.Y);
-                        GL.Vertex3(Vertex.X, Vertex.Y, Convert.ToInt32(- Vertex.Z));
+                        vertex.X = Horizontal.X;
+                        vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
+                        vertex.Z = Convert.ToInt32(- Horizontal.Y);
+                        GL.Vertex3(vertex.X, vertex.Y, Convert.ToInt32(- vertex.Z));
                     }
                 }
             }
@@ -98,19 +103,19 @@ namespace SharpFlame.Mapping.Drawing
                     if ( IntersectX.Exists )
                     {
                         Horizontal = IntersectX.Pos;
-                        Vertex.X = Horizontal.X;
-                        Vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
-                        Vertex.Z = Convert.ToInt32(- Horizontal.Y);
-                        GL.Vertex3(Vertex.X, Vertex.Y, Convert.ToInt32(- Vertex.Z));
+                        vertex.X = Horizontal.X;
+                        vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
+                        vertex.Z = Convert.ToInt32(- Horizontal.Y);
+                        GL.Vertex3(vertex.X, vertex.Y, Convert.ToInt32(- vertex.Z));
                     }
                 }
             }
 
             Horizontal = FinishXY;
-            Vertex.X = Horizontal.X;
-            Vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
-            Vertex.Z = Convert.ToInt32(- Horizontal.Y);
-            GL.Vertex3(Vertex.X, Vertex.Y, Convert.ToInt32(- Vertex.Z));
+            vertex.X = Horizontal.X;
+            vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
+            vertex.Z = Convert.ToInt32(- Horizontal.Y);
+            GL.Vertex3(vertex.X, vertex.Y, Convert.ToInt32(- vertex.Z));
 
             GL.End();
         }

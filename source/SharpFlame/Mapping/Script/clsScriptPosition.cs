@@ -44,24 +44,24 @@ namespace SharpFlame.Mapping.Script
             return Result;
         }
 
-        private XYInt _Pos;
+        private XYInt pos;
 
         public int PosX
         {
-            get { return _Pos.X; }
+            get { return pos.X; }
             set
             {
-                _Pos.X = MathUtil.Clamp_int(value, 0,
+                pos.X = MathUtil.Clamp_int(value, 0,
                     Convert.ToInt32(Convert.ToInt32(parentMapLink.Source.Terrain.TileSize.X * App.TerrainGridSpacing) - 1));
             }
         }
 
         public int PosY
         {
-            get { return _Pos.Y; }
+            get { return pos.Y; }
             set
             {
-                _Pos.Y = MathUtil.Clamp_int(value, 0,
+                pos.Y = MathUtil.Clamp_int(value, 0,
                     Convert.ToInt32(Convert.ToInt32(parentMapLink.Source.Terrain.TileSize.Y * App.TerrainGridSpacing) - 1));
             }
         }
@@ -76,7 +76,7 @@ namespace SharpFlame.Mapping.Script
         {
             clsDrawHorizontalPosOnTerrain Drawer = new clsDrawHorizontalPosOnTerrain();
             Drawer.Map = parentMapLink.Source;
-            Drawer.Horizontal = _Pos;
+            Drawer.Horizontal = pos;
             if ( Program.frmMainInstance.SelectedScriptMarker == this )
             {
                 GL.LineWidth(4.5F);
@@ -92,14 +92,14 @@ namespace SharpFlame.Mapping.Script
 
         public void MapResizing(XYInt PosOffset)
         {
-            PosX = _Pos.X - PosOffset.X;
-            PosY = _Pos.Y - PosOffset.Y;
+            PosX = pos.X - PosOffset.X;
+            PosY = pos.Y - PosOffset.Y;
         }
 
         public void WriteWZ(IniWriter File)
         {
             File.AppendSectionName("position_" + parentMapLink.ArrayPosition.ToStringInvariant());
-            File.AppendProperty("pos", _Pos.X.ToStringInvariant() + ", " + _Pos.Y.ToStringInvariant());
+            File.AppendProperty("pos", pos.X.ToStringInvariant() + ", " + pos.Y.ToStringInvariant());
             File.AppendProperty("label", label);
             File.Gap_Append();
         }

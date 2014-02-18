@@ -13,11 +13,6 @@ namespace SharpFlame.Mapping.Script
 {
     public class clsScriptArea
     {
-        public clsScriptArea()
-        {
-            _ParentMapLink = new ConnectedListLink<clsScriptArea, clsMap>(this);
-        }
-
         private ConnectedListLink<clsScriptArea, clsMap> _ParentMapLink;
 
         public ConnectedListLink<clsScriptArea, clsMap> ParentMap
@@ -25,11 +20,9 @@ namespace SharpFlame.Mapping.Script
             get { return _ParentMapLink; }
         }
 
-        private string _Label;
-
-        public string Label
-        {
-            get { return _Label; }
+        public string Label {
+			get;
+			private set;
         }
 
         private XYInt _PosA;
@@ -101,27 +94,23 @@ namespace SharpFlame.Mapping.Script
             }
         }
 
-        public static clsScriptArea Create(clsMap Map)
+        public clsScriptArea(clsMap map)
         {
-            clsScriptArea Result = new clsScriptArea();
-
-            Result._Label = Map.GetDefaultScriptLabel("Area");
-
-            Result._ParentMapLink.Connect(Map.ScriptAreas);
-
-            return Result;
+			_ParentMapLink = new ConnectedListLink<clsScriptArea, clsMap>(this);
+            Label = map.GetDefaultScriptLabel("Area");
+            _ParentMapLink.Connect(map.ScriptAreas);
         }
 
-        public void SetPositions(XYInt PosA, XYInt PosB)
+        public void SetPositions(XYInt posA, XYInt posB)
         {
-            clsMap Map = _ParentMapLink.Source;
+            clsMap map = _ParentMapLink.Source;
 
-            PosA.X = MathUtil.Clamp_int(PosA.X, 0, Map.Terrain.TileSize.X * App.TerrainGridSpacing - 1);
-            PosA.Y = MathUtil.Clamp_int(PosA.Y, 0, Map.Terrain.TileSize.Y * App.TerrainGridSpacing - 1);
-            PosB.X = MathUtil.Clamp_int(PosB.X, 0, Map.Terrain.TileSize.X * App.TerrainGridSpacing - 1);
-            PosB.Y = MathUtil.Clamp_int(PosB.Y, 0, Map.Terrain.TileSize.Y * App.TerrainGridSpacing - 1);
+            posA.X = MathUtil.Clamp_int(posA.X, 0, map.Terrain.TileSize.X * App.TerrainGridSpacing - 1);
+            posA.Y = MathUtil.Clamp_int(posA.Y, 0, map.Terrain.TileSize.Y * App.TerrainGridSpacing - 1);
+            posB.X = MathUtil.Clamp_int(posB.X, 0, map.Terrain.TileSize.X * App.TerrainGridSpacing - 1);
+            posB.Y = MathUtil.Clamp_int(posB.Y, 0, map.Terrain.TileSize.Y * App.TerrainGridSpacing - 1);
 
-            MathUtil.ReorderXY(PosA, PosB, ref _PosA, ref _PosB);
+            MathUtil.ReorderXY(posA, posB, ref _PosA, ref _PosB);
         }
 
         public void GLDraw()
@@ -160,28 +149,28 @@ namespace SharpFlame.Mapping.Script
             Drawer.ActionPerform();
         }
 
-        public void MapResizing(XYInt PosOffset)
+        public void MapResizing(XYInt posOffset)
         {
-            SetPositions(new XYInt(_PosA.X - PosOffset.X, _PosA.Y - PosOffset.Y), new XYInt(_PosB.X - PosOffset.X, _PosB.Y - PosOffset.Y));
+            SetPositions(new XYInt(_PosA.X - posOffset.X, _PosA.Y - posOffset.Y), new XYInt(_PosB.X - posOffset.X, _PosB.Y - posOffset.Y));
         }
 
-        public void WriteWZ(IniWriter File)
+        public void WriteWZ(IniWriter file)
         {
-            File.AppendSectionName("area_" + _ParentMapLink.ArrayPosition.ToStringInvariant());
-            File.AppendProperty("pos1", _PosA.X.ToStringInvariant() + ", " + _PosA.Y.ToStringInvariant());
-            File.AppendProperty("pos2", _PosB.X.ToStringInvariant() + ", " + _PosB.Y.ToStringInvariant());
-            File.AppendProperty("label", _Label);
-            File.Gap_Append();
+            file.AppendSectionName("area_" + _ParentMapLink.ArrayPosition.ToStringInvariant());
+            file.AppendProperty("pos1", _PosA.X.ToStringInvariant() + ", " + _PosA.Y.ToStringInvariant());
+            file.AppendProperty("pos2", _PosB.X.ToStringInvariant() + ", " + _PosB.Y.ToStringInvariant());
+            file.AppendProperty("label", Label);
+            file.Gap_Append();
         }
 
-        public sResult SetLabel(string Text)
+        public sResult SetLabel(string text)
         {
             sResult Result = new sResult();
 
-            Result = _ParentMapLink.Source.ScriptLabelIsValid(Text);
+            Result = _ParentMapLink.Source.ScriptLabelIsValid(text);
             if ( Result.Success )
             {
-                _Label = Text;
+                Label = text;
             }
             return Result;
         }

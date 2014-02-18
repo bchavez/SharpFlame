@@ -184,12 +184,10 @@ namespace SharpFlame.Mapping
                 var featureIniZipEntry = zip [gameFilesPath + "feature.ini"];
                 if (featureIniZipEntry != null) {
                     iniFeatures = new IniFeatures ();
-                    using (Stream s = featureIniZipEntry.OpenReader()) {
-                        var reader = new StreamReader (s);
-                        var text = reader.ReadToEnd ();
-                        reader.Close ();
-                        returnResult.Add (read_INI_Features (text, ref iniFeatures));
-                    }
+					using (var reader = new StreamReader (featureIniZipEntry.OpenReader())) {
+						var text = reader.ReadToEnd ();
+						returnResult.Add (read_INI_Features (text, ref iniFeatures));
+					}
                 }
                               
                 if (iniFeatures == null) {
@@ -233,12 +231,10 @@ namespace SharpFlame.Mapping
                 var structIniEntry = zip [gameFilesPath + "struct.ini"];
                 if (structIniEntry != null) {
                     iniStructures = new IniStructures ();
-                    using (Stream s = structIniEntry.OpenReader()) {
-                        var reader = new StreamReader (s);
-                        var text = reader.ReadToEnd ();
-                        reader.Close ();
-                        returnResult.Add (read_INI_Structures (text, ref iniStructures));
-                    }
+					using (var reader = new StreamReader (structIniEntry.OpenReader())) {
+						var text = reader.ReadToEnd ();
+						returnResult.Add (read_INI_Structures (text, ref iniStructures));
+					}
                 }
 
                 if (iniStructures == null) {
@@ -265,10 +261,8 @@ namespace SharpFlame.Mapping
                     var droidIniEntry = zip [gameFilesPath + "droid.ini"];
                     if (droidIniEntry != null) {
                         iniDroids = new IniDroids ();
-                        using (Stream s = droidIniEntry.OpenReader()) {
-                            var reader = new StreamReader (s);
+						using (var reader = new StreamReader (droidIniEntry.OpenReader())) {
                             var text = reader.ReadToEnd ();
-                            reader.Close ();
                             returnResult.Add (read_INI_Droids (text, ref iniDroids));
                         }
                     }
@@ -303,16 +297,10 @@ namespace SharpFlame.Mapping
                 //objects are modified by this and must already exist
                 var labelsIniEntry = zip [gameFilesPath + "labels.ini"];
                 if (labelsIniEntry != null) {
-                    using (Stream s = labelsIniEntry.OpenReader()) {
-                        clsResult Result = new clsResult ("labels.ini", false);
-                        logger.Info ("Loading labels.ini");
-                        var LabelsINI = new SharpFlame.FileIO.Ini.IniReader ();
-                        StreamReader reader = new StreamReader (s);
-                        Result.Take (LabelsINI.ReadFile (reader));
-                        reader.Close ();
-                        Result.Take (Read_WZ_Labels (LabelsINI, false));
-                        returnResult.Add (Result);
-                    }
+					using (var reader = new StreamReader(labelsIniEntry.OpenReader())) {
+						var text = reader.ReadToEnd ();
+						returnResult.Add (Read_INI_Labels (text, false));
+					}
                 }                       
             }
 
@@ -402,11 +390,9 @@ namespace SharpFlame.Mapping
             SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "feature.ini", ref File);
             if ( SubResult.Success )
             {
-                iniFeatures = new IniFeatures ();
-                using (File) {
-                    var reader = new StreamReader (File);
+                iniFeatures = new IniFeatures ();			
+                using (var reader = new StreamReader(File)) {
                     var text = reader.ReadToEnd ();
-                    reader.Close ();
                     returnResult.Add (read_INI_Features (text, ref iniFeatures));
                 }
             }
@@ -459,10 +445,8 @@ namespace SharpFlame.Mapping
             SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "struct.ini", ref File);
             if (SubResult.Success) {
                 iniStructures = new IniStructures ();
-                using (File) {
-                    var reader = new StreamReader (File);
+				using (var reader = new StreamReader(File)) {
                     var text = reader.ReadToEnd ();
-                    reader.Close ();
                     returnResult.Add (read_INI_Structures (text, ref iniStructures));
                 }
             }
@@ -495,10 +479,8 @@ namespace SharpFlame.Mapping
             if ( SubResult.Success )
             {
                 iniDroids = new IniDroids ();
-                using (File) {
-                    var reader = new StreamReader (File);
+				using (var reader = new StreamReader(File)) {
                     var text = reader.ReadToEnd ();
-                    reader.Close ();
                     returnResult.Add (read_INI_Droids (text, ref iniDroids));
                 }
             }
@@ -534,20 +516,12 @@ namespace SharpFlame.Mapping
 
             //map objects are modified by this and must already exist
             SubResult = IOUtil.TryOpenFileStream(GameFilesPath + "labels.ini", ref File);
-            if ( !SubResult.Success )
-            {
-            }
-            else
-            {
-                clsResult Result = new clsResult("labels.ini", false);
-                logger.Info ("Loading labels.ini");
-                var LabelsINI = new SharpFlame.FileIO.Ini.IniReader();
-                StreamReader LabelsINI_Reader = new StreamReader(File);
-                Result.Take(LabelsINI.ReadFile(LabelsINI_Reader));
-                LabelsINI_Reader.Close();
-                Result.Take(Read_WZ_Labels(LabelsINI, false));
-                returnResult.Add(Result);
-            }
+			if (SubResult.Success) {
+				using (var reader = new StreamReader(File)) {
+					var text = reader.ReadToEnd ();
+					returnResult.Add (Read_INI_Labels (text, false));
+				}
+			}
 
             return returnResult;
         }
@@ -1419,6 +1393,158 @@ namespace SharpFlame.Mapping
             return resultObject;
         }
 
+		public clsResult Read_INI_Labels(string iniText, bool isFMap)
+		{
+			clsResult resultObject = new clsResult("Reading labels", false);
+			logger.Info ("Reading labels.");
+
+			int typeNum = 0;
+			clsScriptPosition NewPosition = default(clsScriptPosition);
+			clsScriptArea NewArea = default(clsScriptArea);
+			string nameText = "";
+			string strLabel = "";
+			string strPosA = "";
+			string strPosB = "";
+			string idText = "";
+			UInt32 idNum = 0;
+			XYInt xyIntA = null;
+			XYInt xyIntB = null;
+
+			int failedCount = 0;
+			int modifiedCount = 0;
+
+			try {
+				var iniSections = SharpFlame.Core.Parsers.Ini.IniReader.ReadString (iniText);
+				foreach (var iniSection in iniSections) {
+					nameText = iniSection.Name.Substring(0, iniSection.Name.IndexOf('_'));
+					switch (nameText) {
+					case "position":
+						typeNum = 0;
+						break;
+					case "area":
+						typeNum = 1;
+						break;
+					case "object":
+						if (isFMap)  {
+							typeNum = int.MaxValue;
+							failedCount++;
+							continue;
+						} else {
+							typeNum = 2;
+						}
+						break;
+					default:
+						typeNum = int.MaxValue;
+						failedCount++;
+						continue;
+					}
+
+					// Raised an exception if nothing was found
+					try {
+						strLabel = iniSection.Data.Where(d => d.Name == "label").First().Data;
+					} catch (Exception ex) {
+						resultObject.WarningAdd(string.Format("Failed to parse \"label\", error was: {0}", ex.Message));
+						logger.WarnException("Failed to parse \"label\", error was", ex);
+						failedCount++;
+						continue;
+					}
+					strLabel = strLabel.Replace("\"", "");
+
+					switch (typeNum) {
+					case 0: //position
+						strPosA = iniSection.Data.Where(d => d.Name == "pos").First().Data;
+						if (strPosA == null) {
+							failedCount++;
+							continue;
+						}
+						try {
+							xyIntA = XYInt.FromString(strPosA);
+							NewPosition = new clsScriptPosition(this);
+							NewPosition.PosX = xyIntA.X;
+							NewPosition.PosY = xyIntA.Y;
+							NewPosition.SetLabel(strLabel);
+							if ( NewPosition.Label != strLabel || 
+							     NewPosition.PosX != xyIntA.X || NewPosition.PosY != xyIntA.Y )
+							{
+								modifiedCount++;
+							}
+						} 
+						catch (Exception ex) {
+							resultObject.WarningAdd(string.Format("Failed to parse \"pos\", error was: {0}", ex.Message));
+							logger.WarnException("Failed to parse \"pos\", error was", ex);
+							failedCount++;
+							continue;
+						}
+						break;
+					case 1: //area
+						try {
+							strPosA = iniSection.Data.Where(d => d.Name == "pos1").First().Data;
+							strPosB = iniSection.Data.Where(d => d.Name == "pos2").First().Data;
+
+							xyIntA = XYInt.FromString(strPosA);
+							xyIntB = XYInt.FromString(strPosA);
+							NewArea = new clsScriptArea(this);
+							NewArea.SetPositions(xyIntA, xyIntB);
+							NewArea.SetLabel(strLabel);
+							if ( NewArea.Label != strLabel || NewArea.PosAX != xyIntA.X | NewArea.PosAY != xyIntA.Y
+							    | NewArea.PosBX != xyIntB.X | NewArea.PosBY != xyIntB.Y )
+							{
+								modifiedCount++;
+							}
+						}
+						catch (Exception ex) {
+							Debugger.Break();
+							resultObject.WarningAdd(string.Format("Failed to parse \"pos1\" or \"pos2\", error was: {0}", ex.Message));
+							logger.WarnException("Failed to parse \"pos1\" or \"pos2\".", ex);
+							failedCount++;
+							continue;
+						}
+						break;
+					case 2: //object
+						idText = iniSection.Data.Where(d => d.Name == "id").First().Data;
+						if ( IOUtil.InvariantParse(idText, ref idNum) )
+						{
+							clsUnit Unit = IDUsage(idNum);
+							if ( Unit != null )
+							{
+								if ( !Unit.SetLabel(strLabel).Success )
+								{
+									failedCount++;
+									continue;
+								}
+							}
+							else
+							{
+								failedCount++;
+								continue;
+							}
+						}
+						break;
+					default:
+						resultObject.WarningAdd("Error! Bad type number for script label.");
+						break;
+					}
+				}
+			}
+			catch ( Exception ex ) {
+				Debugger.Break ();
+				logger.ErrorException ("Got exception while reading labels.ini", ex);
+				resultObject.ProblemAdd (string.Format ("Got exception: {0}", ex.Message), false);
+				return resultObject;
+			}
+
+			if ( failedCount > 0 )
+			{
+				resultObject.WarningAdd(string.Format("Unable to translate {0} script labels.", failedCount));
+			}
+			if ( modifiedCount > 0 )
+			{
+				resultObject.WarningAdd(string.Format("{0} script labels had invalid values and were modified.", modifiedCount));
+			}
+
+			return resultObject;
+		}
+
         private sResult Read_WZ_gam(BinaryReader File)
         {
             sResult ReturnResult = new sResult();
@@ -1821,161 +1947,7 @@ namespace SharpFlame.Mapping
             ReturnResult.Success = true;
             return ReturnResult;
         }
-
-        public clsResult Read_WZ_Labels(SharpFlame.FileIO.Ini.IniReader INI, bool IsFMap)
-        {
-            clsResult ReturnResult = new clsResult("Reading labels", false);
-            logger.Info ("Reading labels.");
-
-            PositionFromText PositionsA = default(PositionFromText);
-            PositionFromText PositionsB = default(PositionFromText);
-            int TypeNum = 0;
-            clsScriptPosition NewPosition = default(clsScriptPosition);
-            clsScriptArea NewArea = default(clsScriptArea);
-            string NameText = "";
-            string strLabel = "";
-            string strPosA = "";
-            string strPosB = "";
-            string IDText = "";
-            UInt32 IDNum = 0;
-
-            int FailedCount = 0;
-            int ModifiedCount = 0;
-
-            SharpFlame.FileIO.Ini.Section INISection = default(SharpFlame.FileIO.Ini.Section);
-            foreach ( SharpFlame.FileIO.Ini.Section tempLoopVar_INISection in INI.Sections )
-            {
-                INISection = tempLoopVar_INISection;
-                NameText = INISection.Name.Substring(0, NameText.IndexOf('_') - 1);
-                switch ( NameText )
-                {
-                    case "position":
-                        TypeNum = 0;
-                        break;
-                    case "area":
-                        TypeNum = 1;
-                        break;
-                    case "object":
-                        if ( IsFMap )
-                        {
-                            TypeNum = int.MaxValue;
-                            FailedCount++;
-                            continue;
-                        }
-                        else
-                        {
-                            TypeNum = 2;
-                        }
-                        break;
-                    default:
-                        TypeNum = int.MaxValue;
-                        FailedCount++;
-                        continue;
-                }
-                strLabel = Convert.ToString(INISection.GetLastPropertyValue("label"));
-                if ( strLabel == null )
-                {
-                    FailedCount++;
-                    continue;
-                }
-                strLabel = strLabel.Replace("\"", "");
-                switch ( TypeNum )
-                {
-                    case 0: //position
-                        strPosA = Convert.ToString(INISection.GetLastPropertyValue("pos"));
-                        if ( strPosA == null )
-                        {
-                            FailedCount++;
-                            continue;
-                        }
-                        PositionsA = new PositionFromText();
-                        if ( PositionsA.Translate(strPosA) )
-                        {
-                            NewPosition = new clsScriptPosition(this);
-                            NewPosition.PosX = PositionsA.Pos.X;
-                            NewPosition.PosY = PositionsA.Pos.Y;
-                            NewPosition.SetLabel(strLabel);
-                            if ( NewPosition.Label != strLabel || NewPosition.PosX != PositionsA.Pos.X | NewPosition.PosY != PositionsA.Pos.Y )
-                            {
-                                ModifiedCount++;
-                            }
-                        }
-                        else
-                        {
-                            FailedCount++;
-                            continue;
-                        }
-                        break;
-                    case 1: //area
-                        strPosA = Convert.ToString(INISection.GetLastPropertyValue("pos1"));
-                        if ( strPosA == null )
-                        {
-                            FailedCount++;
-                            continue;
-                        }
-                        strPosB = Convert.ToString(INISection.GetLastPropertyValue("pos2"));
-                        if ( strPosB == null )
-                        {
-                            FailedCount++;
-                            continue;
-                        }
-                        PositionsA = new PositionFromText();
-                        PositionsB = new PositionFromText();
-                        if ( PositionsA.Translate(strPosA) && PositionsB.Translate(strPosB) )
-                        {
-                            NewArea = clsScriptArea.Create(this);
-                            NewArea.SetPositions(PositionsA.Pos, PositionsB.Pos);
-                            NewArea.SetLabel(strLabel);
-                            if ( NewArea.Label != strLabel || NewArea.PosAX != PositionsA.Pos.X | NewArea.PosAY != PositionsA.Pos.Y
-                                 | NewArea.PosBX != PositionsB.Pos.X | NewArea.PosBY != PositionsB.Pos.Y )
-                            {
-                                ModifiedCount++;
-                            }
-                        }
-                        else
-                        {
-                            FailedCount++;
-                            continue;
-                        }
-                        break;
-                    case 2: //object
-                        IDText = Convert.ToString(INISection.GetLastPropertyValue("id"));
-                        if ( IOUtil.InvariantParse(IDText, ref IDNum) )
-                        {
-                            clsUnit Unit = IDUsage(IDNum);
-                            if ( Unit != null )
-                            {
-                                if ( !Unit.SetLabel(strLabel).Success )
-                                {
-                                    FailedCount++;
-                                    continue;
-                                }
-                            }
-                            else
-                            {
-                                FailedCount++;
-                                continue;
-                            }
-                        }
-                        break;
-                    default:
-                        ReturnResult.WarningAdd("Error! Bad type number for script label.");
-                        break;
-                }
-            }
-
-            if ( FailedCount > 0 )
-            {
-                ReturnResult.WarningAdd("Unable to translate " + Convert.ToString(FailedCount) + " script labels.");
-            }
-            if ( ModifiedCount > 0 )
-            {
-                ReturnResult.WarningAdd(ModifiedCount + " script labels had invalid values and were modified.");
-            }
-
-            return ReturnResult;
-        }
-
+		
         public clsResult Serialize_WZ_StructuresINI(IniWriter File, int PlayerCount)
         {
             clsResult ReturnResult = new clsResult("Serializing structures INI", false);
