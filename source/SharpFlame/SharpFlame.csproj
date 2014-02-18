@@ -278,7 +278,6 @@
     <Compile Include="Util\sLayerList.cs" />
     <Compile Include="Util\sResult.cs" />
     <Compile Include="Util\sSplitPath.cs" />
-    <Compile Include="Util\sWZAngle.cs" />
     <Compile Include="Util\Tools.cs" />
     <Compile Include="Domain\UnitTypeBase.cs" />
     <Compile Include="clsViewInfo.cs" />
