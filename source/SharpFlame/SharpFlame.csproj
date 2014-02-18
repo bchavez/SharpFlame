@@ -543,7 +543,7 @@
     <MonoDevelop>
       <Properties>
         <Policies>
-          <TextStylePolicy EolMarker="Windows" inheritsSet="Mono" inheritsScope="text/plain" scope="text/plain" />
+          <TextStylePolicy EolMarker="Windows" inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/plain" />
           <NameConventionPolicy>
             <Rules>
               <NamingRule Name="Namespaces" AffectedEntity="Namespace" VisibilityMask="VisibilityMask" NamingStyle="PascalCase" IncludeInstanceMembers="True" IncludeStaticEntities="True" />
