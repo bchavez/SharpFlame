@@ -59,25 +59,25 @@ namespace SharpFlame.Mapping.Renderers
             texCoords[4].X = 0.5f;
             texCoords[4].Y = 0.5f;
 
-            vertices[0].X = TileX * App.TerrainGridSpacing;
+            vertices[0].X = TileX * Constants.TerrainGridSpacing;
             vertices[0].Y = (float)(tileTerrainHeight[0] * Map.HeightMultiplier);
-            vertices[0].Z = -TileY * App.TerrainGridSpacing;
+            vertices[0].Z = -TileY * Constants.TerrainGridSpacing;
 
-            vertices[1].X = (TileX + 1) * App.TerrainGridSpacing;
+            vertices[1].X = (TileX + 1) * Constants.TerrainGridSpacing;
             vertices[1].Y = (float)(tileTerrainHeight[1] * Map.HeightMultiplier);
-            vertices[1].Z = -TileY * App.TerrainGridSpacing;
+            vertices[1].Z = -TileY * Constants.TerrainGridSpacing;
 
-            vertices[2].X = TileX * App.TerrainGridSpacing;
+            vertices[2].X = TileX * Constants.TerrainGridSpacing;
             vertices[2].Y = (float)(tileTerrainHeight[2] * Map.HeightMultiplier);
-            vertices[2].Z = -(TileY + 1) * App.TerrainGridSpacing;
+            vertices[2].Z = -(TileY + 1) * Constants.TerrainGridSpacing;
 
-            vertices[3].X = (TileX + 1) * App.TerrainGridSpacing;
+            vertices[3].X = (TileX + 1) * Constants.TerrainGridSpacing;
             vertices[3].Y = (float)(tileTerrainHeight[3] * Map.HeightMultiplier);
-            vertices[3].Z = -(TileY + 1) * App.TerrainGridSpacing;
+            vertices[3].Z = -(TileY + 1) * Constants.TerrainGridSpacing;
 
-            vertices[4].X = ( TileX + 0.5f ) * App.TerrainGridSpacing;
+            vertices[4].X = ( TileX + 0.5f ) * Constants.TerrainGridSpacing;
             vertices[4].Y = (float)( tileTerrainHeight[4] * Map.HeightMultiplier );
-            vertices[4].Z = -( TileY + 0.5f ) * App.TerrainGridSpacing;
+            vertices[4].Z = -( TileY + 0.5f ) * Constants.TerrainGridSpacing;
 
             normals[0] = Map.TerrainVertexNormalCalc(TileX, TileY);
             normals[1] = Map.TerrainVertexNormalCalc(TileX + 1, TileY);

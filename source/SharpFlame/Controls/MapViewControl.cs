@@ -643,10 +643,10 @@ namespace SharpFlame.Controls
                         {
                             XYDouble Centre = App.CalcUnitsCentrePos(Map.SelectedUnits.GetItemsAsSimpleList());
                             XYInt Offset = new XYInt();
-                            Offset.X = ((int)(Math.Round(Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.X - Centre.X) / App.TerrainGridSpacing)))) *
-                                       App.TerrainGridSpacing;
-                            Offset.Y = ((int)(Math.Round(Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.Y - Centre.Y) / App.TerrainGridSpacing)))) *
-                                       App.TerrainGridSpacing;
+                            Offset.X = ((int)(Math.Round(Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.X - Centre.X) / Constants.TerrainGridSpacing)))) *
+                                       Constants.TerrainGridSpacing;
+                            Offset.Y = ((int)(Math.Round(Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.Y - Centre.Y) / Constants.TerrainGridSpacing)))) *
+                                       Constants.TerrainGridSpacing;
                             clsObjectPosOffset ObjectPosOffset = new clsObjectPosOffset();
                             ObjectPosOffset.Map = Map;
                             ObjectPosOffset.Offset = Offset;
@@ -837,10 +837,10 @@ namespace SharpFlame.Controls
             else
             {
                 MathUtil.ReorderXY(VertexA, VertexB, ref StartVertex, ref FinishVertex);
-                StartPos.X = StartVertex.X * App.TerrainGridSpacing;
-                StartPos.Y = StartVertex.Y * App.TerrainGridSpacing;
-                FinishPos.X = FinishVertex.X * App.TerrainGridSpacing;
-                FinishPos.Y = FinishVertex.Y * App.TerrainGridSpacing;
+                StartPos.X = StartVertex.X * Constants.TerrainGridSpacing;
+                StartPos.Y = StartVertex.Y * Constants.TerrainGridSpacing;
+                FinishPos.X = FinishVertex.X * Constants.TerrainGridSpacing;
+                FinishPos.Y = FinishVertex.Y * Constants.TerrainGridSpacing;
                 SectorStart.X = Math.Min((int)(StartVertex.X / Constants.SectorTileSize), Map.SectorCount.X - 1);
                 SectorStart.Y = Math.Min((int)(StartVertex.Y / Constants.SectorTileSize), Map.SectorCount.Y - 1);
                 SectorFinish.X = Math.Min((int)(FinishVertex.X / Constants.SectorTileSize), Map.SectorCount.X - 1);

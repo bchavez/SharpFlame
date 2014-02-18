@@ -53,9 +53,9 @@ namespace SharpFlame.Mapping.Drawing
                                     RGB_sng2.Green = RGB_sng.Green / 2.0F;
                                     RGB_sng2.Blue = RGB_sng.Blue / 2.0F;
                                 }
-                                XYZ_dbl.X = X * App.TerrainGridSpacing;
+                                XYZ_dbl.X = X * Constants.TerrainGridSpacing;
                                 XYZ_dbl.Y = Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height * Map.HeightMultiplier);
-                                XYZ_dbl.Z = - Y * App.TerrainGridSpacing;
+                                XYZ_dbl.Z = - Y * Constants.TerrainGridSpacing;
                                 XYZ_dbl2.X = 10.0D;
                                 XYZ_dbl2.Y = 10.0D;
                                 XYZ_dbl2.Z = 0.0D;

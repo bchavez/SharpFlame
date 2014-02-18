@@ -732,7 +732,7 @@ namespace SharpFlame.Mapping
                                 NewUnit.UnitGroup = INIStructures.Structures [A].UnitGroup;
                             }
                             NewUnit.Pos = new WorldPos (INIStructures.Structures [A].Pos, INIStructures.Structures [A].Pos.Z);
-                            NewUnit.Rotation = Convert.ToInt32 (INIStructures.Structures [A].Rotation.Direction * 360.0D / App.INIRotationMax);
+                            NewUnit.Rotation = Convert.ToInt32 (INIStructures.Structures [A].Rotation.Direction * 360.0D / Constants.INIRotationMax);
                             if (NewUnit.Rotation == 360)
                             {
                                 NewUnit.Rotation = 0;
@@ -843,7 +843,7 @@ namespace SharpFlame.Mapping
                             NewUnit.TypeBase = featureTypeBase;
                             NewUnit.UnitGroup = ScavengerUnitGroup;
                             NewUnit.Pos = new WorldPos ((XYInt)INIFeatures.Features [A].Pos, INIFeatures.Features [A].Pos.Z);
-                            NewUnit.Rotation = Convert.ToInt32 (INIFeatures.Features [A].Rotation.Direction * 360.0D / App.INIRotationMax);
+                            NewUnit.Rotation = Convert.ToInt32 (INIFeatures.Features [A].Rotation.Direction * 360.0D / Constants.INIRotationMax);
                             if (NewUnit.Rotation == 360)
                             {
                                 NewUnit.Rotation = 0;
@@ -1035,7 +1035,7 @@ namespace SharpFlame.Mapping
                                 NewUnit.UnitGroup = INIDroids.Droids [A].UnitGroup;
                             }
                             NewUnit.Pos = new WorldPos (INIDroids.Droids [A].Pos, INIDroids.Droids [A].Pos.Z);
-                            NewUnit.Rotation = Convert.ToInt32 (INIDroids.Droids [A].Rotation.Direction * 360.0D / App.INIRotationMax);
+                            NewUnit.Rotation = Convert.ToInt32 (INIDroids.Droids [A].Rotation.Direction * 360.0D / Constants.INIRotationMax);
                             if (NewUnit.Rotation == 360)
                             {
                                 NewUnit.Rotation = 0;
@@ -2018,86 +2018,87 @@ namespace SharpFlame.Mapping
             logger.Info ("Serializing structures INI");
 
             StructureTypeBase structureTypeBase = default(StructureTypeBase);
-            clsUnit Unit = default(clsUnit);
-            bool[] UnitIsModule = new bool[Units.Count];
-            int[] UnitModuleCount = new int[Units.Count];
-            XYInt SectorNum = new XYInt ();
+            clsUnit unit = default(clsUnit);
+            bool[] unitIsModule = new bool[Units.Count];
+            int[] unitModuleCount = new int[Units.Count];
+            XYInt sectorNum = new XYInt ();
             StructureTypeBase otherStructureTypeBase = default(StructureTypeBase);
-            clsUnit OtherUnit = default(clsUnit);
-            XYInt ModuleMin = new XYInt ();
-            XYInt ModuleMax = new XYInt ();
-            XYInt Footprint = new XYInt ();
+            clsUnit otherUnit = default(clsUnit);
+            XYInt moduleMin = new XYInt ();
+            XYInt moduleMax = new XYInt ();
+            XYInt footprint = new XYInt ();
             int A = 0;
-            StructureTypeBase.enumStructureType[] UnderneathTypes = new StructureTypeBase.enumStructureType[2];
-            int UnderneathTypeCount = 0;
-            int BadModuleCount = 0;
-            clsObjectPriorityOrderList PriorityOrder = new clsObjectPriorityOrderList ();
+            StructureTypeBase.enumStructureType[] underneathTypes = new StructureTypeBase.enumStructureType[2];
+            int underneathTypeCount = 0;
+            int badModuleCount = 0;
+            clsObjectPriorityOrderList priorityOrder = new clsObjectPriorityOrderList ();
 
             foreach (clsUnit tempLoopVar_Unit in Units)
             {
-                Unit = tempLoopVar_Unit;
-                if (!Unit.TypeBase.Type == UnitType.PlayerStructure)
+                unit = tempLoopVar_Unit;
+                if (unit.TypeBase.Type != UnitType.PlayerStructure)
                 {
                     continue;
                 }
-                structureTypeBase = (StructureTypeBase)Unit.TypeBase;
+
+                structureTypeBase = (StructureTypeBase)unit.TypeBase;
                 switch (structureTypeBase.StructureType)
                 {
                 case StructureTypeBase.enumStructureType.FactoryModule:
-                    UnderneathTypes [0] = StructureTypeBase.enumStructureType.Factory;
-                    UnderneathTypes [1] = StructureTypeBase.enumStructureType.VTOLFactory;
-                    UnderneathTypeCount = 2;
+                    underneathTypes [0] = StructureTypeBase.enumStructureType.Factory;
+                    underneathTypes [1] = StructureTypeBase.enumStructureType.VTOLFactory;
+                    underneathTypeCount = 2;
                     break;
                 case StructureTypeBase.enumStructureType.PowerModule:
-                    UnderneathTypes [0] = StructureTypeBase.enumStructureType.PowerGenerator;
-                    UnderneathTypeCount = 1;
+                    underneathTypes [0] = StructureTypeBase.enumStructureType.PowerGenerator;
+                    underneathTypeCount = 1;
                     break;
                 case StructureTypeBase.enumStructureType.ResearchModule:
-                    UnderneathTypes [0] = StructureTypeBase.enumStructureType.Research;
-                    UnderneathTypeCount = 1;
+                    underneathTypes [0] = StructureTypeBase.enumStructureType.Research;
+                    underneathTypeCount = 1;
                     break;
                 default:
-                    UnderneathTypeCount = 0;
+                    underneathTypeCount = 0;
                     break;
                 }
-                if (UnderneathTypeCount == 0)
+                if (underneathTypeCount == 0)
                 {
-                    PriorityOrder.SetItem (Unit);
-                    PriorityOrder.ActionPerform ();
+                    priorityOrder.SetItem (unit);
+                    priorityOrder.ActionPerform ();
                 } else
                 {
-                    UnitIsModule [Unit.MapLink.ArrayPosition] = true;
-                    SectorNum = GetPosSectorNum (Unit.Pos.Horizontal);
+                    unitIsModule [unit.MapLink.ArrayPosition] = true;
+                    sectorNum = GetPosSectorNum (unit.Pos.Horizontal);
                     clsUnit Underneath = null;
                     clsUnitSectorConnection Connection = default(clsUnitSectorConnection);
-                    foreach (clsUnitSectorConnection tempLoopVar_Connection in Sectors[SectorNum.X, SectorNum.Y].Units)
+                    foreach (clsUnitSectorConnection tempLoopVar_Connection in Sectors[sectorNum.X, sectorNum.Y].Units)
                     {
                         Connection = tempLoopVar_Connection;
-                        OtherUnit = Connection.Unit;
-                        if (OtherUnit.TypeBase.Type == UnitType.PlayerStructure)
+                        otherUnit = Connection.Unit;
+                        if (otherUnit.TypeBase.Type == UnitType.PlayerStructure)
                         {
-                            otherStructureTypeBase = (StructureTypeBase)OtherUnit.TypeBase;
-                            if (OtherUnit.UnitGroup == Unit.UnitGroup)
+                            otherStructureTypeBase = (StructureTypeBase)otherUnit.TypeBase;
+                            if (otherUnit.UnitGroup == unit.UnitGroup)
                             {
-                                for (A = 0; A <= UnderneathTypeCount - 1; A++)
+                                for (A = 0; A <= underneathTypeCount - 1; A++)
                                 {
-                                    if (otherStructureTypeBase.StructureType == UnderneathTypes [A])
+                                    if (otherStructureTypeBase.StructureType == underneathTypes [A])
                                     {
                                         break;
                                     }
                                 }
-                                if (A < UnderneathTypeCount)
+                                if (A < underneathTypeCount)
                                 {
-                                    Footprint = otherStructureTypeBase.get_GetFootprintSelected (OtherUnit.Rotation);
-                                    ModuleMin.X = OtherUnit.Pos.Horizontal.X - (int)(Footprint.X * App.TerrainGridSpacing / 2.0D);
-                                    ModuleMin.Y = OtherUnit.Pos.Horizontal.Y - (int)(Footprint.Y * App.TerrainGridSpacing / 2.0D);
-                                    ModuleMax.X = OtherUnit.Pos.Horizontal.X + (int)(Footprint.X * App.TerrainGridSpacing / 2.0D);
-                                    ModuleMax.Y = OtherUnit.Pos.Horizontal.Y + (int)(Footprint.Y * App.TerrainGridSpacing / 2.0D);
-                                    if (Unit.Pos.Horizontal.X >= ModuleMin.X & Unit.Pos.Horizontal.X < ModuleMax.X &
-                                        Unit.Pos.Horizontal.Y >= ModuleMin.Y & Unit.Pos.Horizontal.Y < ModuleMax.Y)
+                                    footprint = otherStructureTypeBase.get_GetFootprintSelected (otherUnit.Rotation);
+                                    moduleMin.X = otherUnit.Pos.Horizontal.X - (int)(footprint.X * Constants.TerrainGridSpacing / 2.0D);
+                                    moduleMin.Y = otherUnit.Pos.Horizontal.Y - (int)(footprint.Y * Constants.TerrainGridSpacing / 2.0D);
+                                    moduleMax.X = otherUnit.Pos.Horizontal.X + (int)(footprint.X * Constants.TerrainGridSpacing / 2.0D);
+                                    moduleMax.Y = otherUnit.Pos.Horizontal.Y + (int)(footprint.Y * Constants.TerrainGridSpacing / 2.0D);
+                                    if (unit.Pos.Horizontal.X >= moduleMin.X & unit.Pos.Horizontal.X < moduleMax.X &
+                                        unit.Pos.Horizontal.Y >= moduleMin.Y & unit.Pos.Horizontal.Y < moduleMax.Y)
                                     {
-                                        UnitModuleCount [OtherUnit.MapLink.ArrayPosition]++;
-                                        Underneath = OtherUnit;
+                                        unitModuleCount [otherUnit.MapLink.ArrayPosition]++;
+                                        Underneath = otherUnit;
                                         break;
                                     }
                                 }
@@ -2106,89 +2107,91 @@ namespace SharpFlame.Mapping
                     }
                     if (Underneath == null)
                     {
-                        BadModuleCount++;
+                        badModuleCount++;
                     }
                 }              
             }
 
-            if (BadModuleCount > 0)
+            if (badModuleCount > 0)
             {
-                ReturnResult.WarningAdd (BadModuleCount + " modules had no underlying structure.");
+                ReturnResult.WarningAdd (badModuleCount + " modules had no underlying structure.");
             }
 
-            int TooManyModulesWarningCount = 0;
-            int TooManyModulesWarningMaxCount = 16;
-            int ModuleCount = 0;
-            int ModuleLimit = 0;
+            int tooManyModulesWarningCount = 0;
+            int tooManyModulesWarningMaxCount = 16;
+            int moduleCount = 0;
+            int moduleLimit = 0;
 
-            for (A = 0; A <= PriorityOrder.Result.Count - 1; A++)
+            for (A = 0; A <= priorityOrder.Result.Count - 1; A++)
             {
-                Unit = PriorityOrder.Result [A];
-                structureTypeBase = (StructureTypeBase)Unit.TypeBase;
-                if (Unit.ID <= 0)
+                unit = priorityOrder.Result [A];
+                structureTypeBase = (StructureTypeBase)unit.TypeBase;
+                if (unit.ID <= 0)
                 {
                     ReturnResult.WarningAdd ("Error. A structure\'s ID was zero. It was NOT saved. Delete and replace it to allow save.");
                 } else
                 {
-                    File.AppendSectionName ("structure_" + Unit.ID.ToStringInvariant ());
-                    File.AppendProperty ("id", Unit.ID.ToStringInvariant ());
-                    if (Unit.UnitGroup == ScavengerUnitGroup || (PlayerCount >= 0 & Unit.UnitGroup.WZ_StartPos >= PlayerCount))
+                    File.AppendSectionName ("structure_" + unit.ID.ToStringInvariant ());
+                    File.AppendProperty ("id", unit.ID.ToStringInvariant ());
+                    if (unit.UnitGroup == ScavengerUnitGroup || (PlayerCount >= 0 & unit.UnitGroup.WZ_StartPos >= PlayerCount))
                     {
                         File.AppendProperty ("player", "scavenger");
                     } else
                     {
-                        File.AppendProperty ("startpos", Unit.UnitGroup.WZ_StartPos.ToStringInvariant ());
+                        File.AppendProperty ("startpos", unit.UnitGroup.WZ_StartPos.ToStringInvariant ());
                     }
                     File.AppendProperty ("name", structureTypeBase.Code);
                     if (structureTypeBase.WallLink.IsConnected)
                     {
                         File.AppendProperty ("wall/type", structureTypeBase.WallLink.ArrayPosition.ToStringInvariant ());
                     }
-                    File.AppendProperty ("position", Unit.GetINIPosition ());
-                    File.AppendProperty ("rotation", Unit.GetINIRotation ());
-                    if (Unit.Health < 1.0D)
+                    File.AppendProperty ("position", unit.GetINIPosition ());
+                    File.AppendProperty ("rotation", unit.GetINIRotation ());
+                    if (unit.Health < 1.0D)
                     {
-                        File.AppendProperty ("health", Unit.GetINIHealthPercent ());
+                        File.AppendProperty ("health", unit.GetINIHealthPercent ());
                     }
                     switch (structureTypeBase.StructureType)
                     {
                     case StructureTypeBase.enumStructureType.Factory:
-                        ModuleLimit = 2;
+                        moduleLimit = 2;
                         break;
                     case StructureTypeBase.enumStructureType.VTOLFactory:
-                        ModuleLimit = 2;
+                        moduleLimit = 2;
                         break;
                     case StructureTypeBase.enumStructureType.PowerGenerator:
-                        ModuleLimit = 1;
+                        moduleLimit = 1;
                         break;
                     case StructureTypeBase.enumStructureType.Research:
-                        ModuleLimit = 1;
+                        moduleLimit = 1;
                         break;
                     default:
-                        ModuleLimit = 0;
+                        moduleLimit = 0;
                         break;
                     }
-                    if (UnitModuleCount [Unit.MapLink.ArrayPosition] > ModuleLimit)
+                    if (unitModuleCount [unit.MapLink.ArrayPosition] > moduleLimit)
                     {
-                        ModuleCount = ModuleLimit;
-                        if (TooManyModulesWarningCount < TooManyModulesWarningMaxCount)
+                        moduleCount = moduleLimit;
+                        if (tooManyModulesWarningCount < tooManyModulesWarningMaxCount)
                         {
-                            ReturnResult.WarningAdd ("Structure " + structureTypeBase.GetDisplayTextCode () + " at " + Unit.GetPosText () + " has too many modules (" +
-                                Convert.ToString (UnitModuleCount [Unit.MapLink.ArrayPosition]) + ").");
+                            ReturnResult.WarningAdd (string.Format("Structure {0} at {1} has too many modules ({2})", 
+                                                                   structureTypeBase.GetDisplayTextCode (), 
+                                                                   unit.GetPosText (), 
+                                                                   unitModuleCount [unit.MapLink.ArrayPosition]));
                         }
-                        TooManyModulesWarningCount++;
+                        tooManyModulesWarningCount++;
                     } else
                     {
-                        ModuleCount = UnitModuleCount [Unit.MapLink.ArrayPosition];
+                        moduleCount = unitModuleCount [unit.MapLink.ArrayPosition];
                     }
-                    File.AppendProperty ("modules", ModuleCount.ToStringInvariant ());
+                    File.AppendProperty ("modules", moduleCount.ToStringInvariant ());
                     File.Gap_Append ();
                 }
             }
 
-            if (TooManyModulesWarningCount > TooManyModulesWarningMaxCount)
+            if (tooManyModulesWarningCount > tooManyModulesWarningMaxCount)
             {
-                ReturnResult.WarningAdd (TooManyModulesWarningCount + " structures had too many modules.");
+                ReturnResult.WarningAdd (tooManyModulesWarningCount + " structures had too many modules.");
             }
 
             return ReturnResult;
@@ -2388,28 +2391,30 @@ namespace SharpFlame.Mapping
             foreach (clsUnit tempLoopVar_Unit in Units)
             {
                 Unit = tempLoopVar_Unit;
-                if (Unit.TypeBase.Type == UnitType.Feature)
+                if (Unit.TypeBase.Type != UnitType.Feature)
                 {
-                    featureTypeBase = (FeatureTypeBase)Unit.TypeBase;
-                    Valid = true;
-                    if (Unit.ID <= 0)
+                    continue;
+                }
+
+                featureTypeBase = (FeatureTypeBase)Unit.TypeBase;
+                Valid = true;
+                if (Unit.ID <= 0)
+                {
+                    Valid = false;
+                    ReturnResult.WarningAdd ("Error. A features\'s ID was zero. It was NOT saved. Delete and replace it to allow save.");
+                }
+                if (Valid)
+                {
+                    File.AppendSectionName ("feature_" + Unit.ID.ToStringInvariant ());
+                    File.AppendProperty ("id", Unit.ID.ToStringInvariant ());
+                    File.AppendProperty ("position", Unit.GetINIPosition ());
+                    File.AppendProperty ("rotation", Unit.GetINIRotation ());
+                    File.AppendProperty ("name", featureTypeBase.Code);
+                    if (Unit.Health < 1.0D)
                     {
-                        Valid = false;
-                        ReturnResult.WarningAdd ("Error. A features\'s ID was zero. It was NOT saved. Delete and replace it to allow save.");
+                        File.AppendProperty ("health", Unit.GetINIHealthPercent ());
                     }
-                    if (Valid)
-                    {
-                        File.AppendSectionName ("feature_" + Unit.ID.ToStringInvariant ());
-                        File.AppendProperty ("id", Unit.ID.ToStringInvariant ());
-                        File.AppendProperty ("position", Unit.GetINIPosition ());
-                        File.AppendProperty ("rotation", Unit.GetINIRotation ());
-                        File.AppendProperty ("name", featureTypeBase.Code);
-                        if (Unit.Health < 1.0D)
-                        {
-                            File.AppendProperty ("health", Unit.GetINIHealthPercent ());
-                        }
-                        File.Gap_Append ();
-                    }
+                    File.Gap_Append ();
                 }
             }
 

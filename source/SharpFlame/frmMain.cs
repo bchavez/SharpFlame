@@ -3664,8 +3664,8 @@ namespace SharpFlame
             }
 
             NewArea.SetPositions(
-                new XYInt(Map.Selected_Area_VertexA.X * App.TerrainGridSpacing, Map.Selected_Area_VertexA.Y * App.TerrainGridSpacing),
-                new XYInt(Map.Selected_Area_VertexB.X * App.TerrainGridSpacing, Map.Selected_Area_VertexB.Y * App.TerrainGridSpacing));
+                new XYInt(Map.Selected_Area_VertexA.X * Constants.TerrainGridSpacing, Map.Selected_Area_VertexA.Y * Constants.TerrainGridSpacing),
+                new XYInt(Map.Selected_Area_VertexB.X * Constants.TerrainGridSpacing, Map.Selected_Area_VertexB.Y * Constants.TerrainGridSpacing));
 
             ScriptMarkerLists_Update();
 

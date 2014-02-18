@@ -15,9 +15,9 @@ namespace SharpFlame.Mapping.Drawing
 
         public override void ActionPerform()
         {
-            Vertex0.X = PosNum.X * App.TerrainGridSpacing;
+            Vertex0.X = PosNum.X * Constants.TerrainGridSpacing;
             Vertex0.Y = Convert.ToInt32(Map.Terrain.Vertices[PosNum.X, PosNum.Y].Height * Map.HeightMultiplier);
-            Vertex0.Z = - PosNum.Y * App.TerrainGridSpacing;
+            Vertex0.Z = - PosNum.Y * Constants.TerrainGridSpacing;
             GL.Begin(BeginMode.Lines);
             GL.Color4(Colour.Red, Colour.Green, Colour.Blue, Colour.Alpha);
             GL.Vertex3(Vertex0.X - 8, Vertex0.Y, Convert.ToInt32(- Vertex0.Z));

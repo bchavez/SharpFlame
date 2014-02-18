@@ -38,9 +38,9 @@ namespace SharpFlame.Mapping.Drawing
             GL.Begin(BeginMode.LineStrip);
             GL.Color4(Colour.Red, Colour.Green, Colour.Blue, Colour.Alpha);
 
-            StartTile.Y = (int)(StartXY.Y / App.TerrainGridSpacing);
-            FinishTile.Y = FinishXY.Y / App.TerrainGridSpacing;
-            LastXTile = StartXY.X / App.TerrainGridSpacing;
+            StartTile.Y = (int)(StartXY.Y / Constants.TerrainGridSpacing);
+            FinishTile.Y = FinishXY.Y / Constants.TerrainGridSpacing;
+            LastXTile = StartXY.X / Constants.TerrainGridSpacing;
 
             Horizontal = StartXY;
             vertex.X = Horizontal.X;
@@ -53,21 +53,21 @@ namespace SharpFlame.Mapping.Drawing
                 for ( Y = StartTile.Y + 1; Y <= FinishTile.Y; Y++ )
                 {
                     TileEdgeStart.X = 0;
-                    TileEdgeStart.Y = Y * App.TerrainGridSpacing;
-                    TileEdgeFinish.X = Map.Terrain.TileSize.X * App.TerrainGridSpacing;
-                    TileEdgeFinish.Y = Y * App.TerrainGridSpacing;
+                    TileEdgeStart.Y = Y * Constants.TerrainGridSpacing;
+                    TileEdgeFinish.X = Map.Terrain.TileSize.X * Constants.TerrainGridSpacing;
+                    TileEdgeFinish.Y = Y * Constants.TerrainGridSpacing;
                     IntersectY = MathUtil.GetLinesIntersectBetween(StartXY, FinishXY, TileEdgeStart, TileEdgeFinish);
                     if ( IntersectY.Exists )
                     {
                         StartTile.X = LastXTile;
-                        FinishTile.X = (int)(IntersectY.Pos.X / App.TerrainGridSpacing);
+                        FinishTile.X = (int)(IntersectY.Pos.X / Constants.TerrainGridSpacing);
 
                         for ( X = StartTile.X + 1; X <= FinishTile.X; X++ )
                         {
-                            TileEdgeStart.X = X * App.TerrainGridSpacing;
+                            TileEdgeStart.X = X * Constants.TerrainGridSpacing;
                             TileEdgeStart.Y = 0;
-                            TileEdgeFinish.X = X * App.TerrainGridSpacing;
-                            TileEdgeFinish.Y = Map.Terrain.TileSize.Y * App.TerrainGridSpacing;
+                            TileEdgeFinish.X = X * Constants.TerrainGridSpacing;
+                            TileEdgeFinish.Y = Map.Terrain.TileSize.Y * Constants.TerrainGridSpacing;
                             IntersectX = MathUtil.GetLinesIntersectBetween(StartXY, FinishXY, TileEdgeStart, TileEdgeFinish);
                             if ( IntersectX.Exists )
                             {
@@ -92,13 +92,13 @@ namespace SharpFlame.Mapping.Drawing
             else
             {
                 StartTile.X = LastXTile;
-                FinishTile.X = FinishXY.X / App.TerrainGridSpacing;
+                FinishTile.X = FinishXY.X / Constants.TerrainGridSpacing;
                 for ( X = StartTile.X + 1; X <= FinishTile.X; X++ )
                 {
-                    TileEdgeStart.X = X * App.TerrainGridSpacing;
+                    TileEdgeStart.X = X * Constants.TerrainGridSpacing;
                     TileEdgeStart.Y = 0;
-                    TileEdgeFinish.X = X * App.TerrainGridSpacing;
-                    TileEdgeFinish.Y = Map.Terrain.TileSize.Y * App.TerrainGridSpacing;
+                    TileEdgeFinish.X = X * Constants.TerrainGridSpacing;
+                    TileEdgeFinish.Y = Map.Terrain.TileSize.Y * Constants.TerrainGridSpacing;
                     IntersectX = MathUtil.GetLinesIntersectBetween(StartXY, FinishXY, TileEdgeStart, TileEdgeFinish);
                     if ( IntersectX.Exists )
                     {

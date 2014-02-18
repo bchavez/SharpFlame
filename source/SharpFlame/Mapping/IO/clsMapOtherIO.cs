@@ -1108,8 +1108,8 @@ namespace SharpFlame.Mapping
 
         public XYZInt LNDPos_From_MapPos(XYInt Horizontal)
         {
-            return new XYZInt(Horizontal.X - (int)(Terrain.TileSize.X * App.TerrainGridSpacing / 2.0D),
-            				  ((int)(Terrain.TileSize.Y * App.TerrainGridSpacing / 2.0D)) - Horizontal.Y,
+            return new XYZInt(Horizontal.X - (int)(Terrain.TileSize.X * Constants.TerrainGridSpacing / 2.0D),
+            				  ((int)(Terrain.TileSize.Y * Constants.TerrainGridSpacing / 2.0D)) - Horizontal.Y,
 			                  (int)(GetTerrainHeight(Horizontal)));
         }
 
@@ -1117,8 +1117,8 @@ namespace SharpFlame.Mapping
         {
             WorldPos Result = new WorldPos();
 
-            Result.Horizontal.X = Pos.X + (int)(Terrain.TileSize.X * App.TerrainGridSpacing / 2.0D);
-            Result.Horizontal.Y = ((int)(Terrain.TileSize.Y * App.TerrainGridSpacing / 2.0D)) - Pos.Z;
+            Result.Horizontal.X = Pos.X + (int)(Terrain.TileSize.X * Constants.TerrainGridSpacing / 2.0D);
+            Result.Horizontal.Y = ((int)(Terrain.TileSize.Y * Constants.TerrainGridSpacing / 2.0D)) - Pos.Z;
             Result.Altitude = (int)(GetTerrainHeight(Result.Horizontal));
 
             return Result;

@@ -314,8 +314,8 @@ namespace SharpFlame
                 if ( UnitIsStructureModule[unit.MapLink.ArrayPosition] )
                 {
                     StructureTypeType = ((StructureTypeBase)unit.TypeBase).StructureType;
-                    CentrePos.X = (unit.Pos.Horizontal.X / App.TerrainGridSpacing);
-                    CentrePos.Y = (int)((unit.Pos.Horizontal.Y / App.TerrainGridSpacing));
+                    CentrePos.X = (unit.Pos.Horizontal.X / Constants.TerrainGridSpacing);
+                    CentrePos.Y = (int)((unit.Pos.Horizontal.Y / Constants.TerrainGridSpacing));
                     if ( CentrePos.X < 0 | CentrePos.X >= Map.Terrain.TileSize.X
                          | CentrePos.Y < 0 | CentrePos.Y >= Map.Terrain.TileSize.Y )
                     {
@@ -603,7 +603,7 @@ namespace SharpFlame
                     {
                         if ( Map.Terrain.Tiles[X, Y].Texture.TextureNum >= 0 && Map.Terrain.Tiles[X, Y].Texture.TextureNum < Map.Tileset.TileCount )
                         {
-                            if ( Map.Tileset.Tiles[Map.Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == App.TileTypeNum_Water )
+                            if ( Map.Tileset.Tiles[Map.Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNum_Water )
                             {
                                 Count++;
                             }

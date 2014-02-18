@@ -179,7 +179,7 @@ namespace SharpFlame.Mapping.Tiles
             {
                 if ( tileOrientation.ResultXFlip )
                 {
-                    Result.X = App.TerrainGridSpacing - pos.Y;
+                    Result.X = Constants.TerrainGridSpacing - pos.Y;
                 }
                 else
                 {
@@ -187,7 +187,7 @@ namespace SharpFlame.Mapping.Tiles
                 }
                 if ( tileOrientation.ResultYFlip )
                 {
-                    Result.Y = App.TerrainGridSpacing - pos.X;
+                    Result.Y = Constants.TerrainGridSpacing - pos.X;
                 }
                 else
                 {
@@ -198,7 +198,7 @@ namespace SharpFlame.Mapping.Tiles
             {
                 if ( tileOrientation.ResultXFlip )
                 {
-                    Result.X = App.TerrainGridSpacing - pos.X;
+                    Result.X = Constants.TerrainGridSpacing - pos.X;
                 }
                 else
                 {
@@ -206,7 +206,7 @@ namespace SharpFlame.Mapping.Tiles
                 }
                 if ( tileOrientation.ResultYFlip )
                 {
-                    Result.Y = App.TerrainGridSpacing - pos.Y;
+                    Result.Y = Constants.TerrainGridSpacing - pos.Y;
                 }
                 else
                 {

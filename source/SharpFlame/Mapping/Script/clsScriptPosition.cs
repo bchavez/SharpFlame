@@ -52,7 +52,7 @@ namespace SharpFlame.Mapping.Script
             set
             {
                 pos.X = MathUtil.Clamp_int(value, 0,
-                    Convert.ToInt32(Convert.ToInt32(parentMapLink.Source.Terrain.TileSize.X * App.TerrainGridSpacing) - 1));
+                    Convert.ToInt32(Convert.ToInt32(parentMapLink.Source.Terrain.TileSize.X * Constants.TerrainGridSpacing) - 1));
             }
         }
 
@@ -62,7 +62,7 @@ namespace SharpFlame.Mapping.Script
             set
             {
                 pos.Y = MathUtil.Clamp_int(value, 0,
-                    Convert.ToInt32(Convert.ToInt32(parentMapLink.Source.Terrain.TileSize.Y * App.TerrainGridSpacing) - 1));
+                    Convert.ToInt32(Convert.ToInt32(parentMapLink.Source.Terrain.TileSize.Y * Constants.TerrainGridSpacing) - 1));
             }
         }
 

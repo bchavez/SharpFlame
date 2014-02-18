@@ -26,7 +26,7 @@ namespace SharpFlame.Mapping
             XYInt NewSideHLimits = new XYInt(NewTerrain.TileSize.X - 1, NewTerrain.TileSize.Y);
             XYInt NewSideVLimits = new XYInt(NewTerrain.TileSize.X, NewTerrain.TileSize.Y - 1);
             XYInt OldTileLimits = new XYInt(Terrain.TileSize.X - 1, Terrain.TileSize.Y - 1);
-            XYInt OldPosLimits = new XYInt(Terrain.TileSize.X * App.TerrainGridSpacing, Terrain.TileSize.Y * App.TerrainGridSpacing);
+            XYInt OldPosLimits = new XYInt(Terrain.TileSize.X * Constants.TerrainGridSpacing, Terrain.TileSize.Y * Constants.TerrainGridSpacing);
             TileOrientation ReverseOrientation = new TileOrientation();
             TileDirection TriDirection = new TileDirection();
 
@@ -291,7 +291,7 @@ namespace SharpFlame.Mapping
                     TextureNum = Terrain.Tiles[X, Y].Texture.TextureNum;
                     if ( TextureNum >= 0 & TextureNum < Tileset.TileCount )
                     {
-                        if ( Tileset.Tiles[TextureNum].DefaultType == App.TileTypeNum_Water )
+                        if ( Tileset.Tiles[TextureNum].DefaultType == Constants.TileTypeNum_Water )
                         {
                             Terrain.Vertices[X, Y].Height = (byte)0;
                             Terrain.Vertices[X + 1, Y].Height = (byte)0;
@@ -325,7 +325,7 @@ namespace SharpFlame.Mapping
             double difA = 0;
             double difB = 0;
             bool NewTri = default(bool);
-            double CliffSlope = Math.Atan(255.0D * Constants.DefaultHeightMultiplier / (2.0D * (Args.LevelCount - 1.0D) * App.TerrainGridSpacing)) -
+            double CliffSlope = Math.Atan(255.0D * Constants.DefaultHeightMultiplier / (2.0D * (Args.LevelCount - 1.0D) * Constants.TerrainGridSpacing)) -
                                 MathUtil.RadOf1Deg; //divided by 2 due to the terrain height randomization
 
             Tileset = Args.Tileset.Tileset;
@@ -396,32 +396,32 @@ namespace SharpFlame.Mapping
                     //get slope
                     BestSlope = 0.0D;
 
-                    Pos.X = (int)((X + 0.25D) * App.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.25D) * App.TerrainGridSpacing);
+                    Pos.X = (int)((X + 0.25D) * Constants.TerrainGridSpacing);
+                    Pos.Y = (int)((Y + 0.25D) * Constants.TerrainGridSpacing);
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
                         BestSlope = CurrentSlope;
                     }
 
-                    Pos.X = (int)((X + 0.75D) * App.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.25D) * App.TerrainGridSpacing);
+                    Pos.X = (int)((X + 0.75D) * Constants.TerrainGridSpacing);
+                    Pos.Y = (int)((Y + 0.25D) * Constants.TerrainGridSpacing);
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
                         BestSlope = CurrentSlope;
                     }
 
-                    Pos.X = (int)((X + 0.25D) * App.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.75D) * App.TerrainGridSpacing);
+                    Pos.X = (int)((X + 0.25D) * Constants.TerrainGridSpacing);
+                    Pos.Y = (int)((Y + 0.75D) * Constants.TerrainGridSpacing);
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
                         BestSlope = CurrentSlope;
                     }
 
-                    Pos.X = (int)((X + 0.75D) * App.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.75D) * App.TerrainGridSpacing);
+                    Pos.X = (int)((X + 0.75D) * Constants.TerrainGridSpacing);
+                    Pos.Y = (int)((Y + 0.75D) * Constants.TerrainGridSpacing);
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
@@ -588,32 +588,32 @@ namespace SharpFlame.Mapping
                     //get slope
                     BestSlope = 0.0D;
 
-                    Pos.X = (int)((X + 0.25D) * App.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.25D) * App.TerrainGridSpacing);
+                    Pos.X = (int)((X + 0.25D) * Constants.TerrainGridSpacing);
+                    Pos.Y = (int)((Y + 0.25D) * Constants.TerrainGridSpacing);
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
                         BestSlope = CurrentSlope;
                     }
 
-                    Pos.X = (int)((X + 0.75D) * App.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.25D) * App.TerrainGridSpacing);
+                    Pos.X = (int)((X + 0.75D) * Constants.TerrainGridSpacing);
+                    Pos.Y = (int)((Y + 0.25D) * Constants.TerrainGridSpacing);
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
                         BestSlope = CurrentSlope;
                     }
 
-                    Pos.X = (int)((X + 0.25D) * App.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.75D) * App.TerrainGridSpacing);
+                    Pos.X = (int)((X + 0.25D) * Constants.TerrainGridSpacing);
+                    Pos.Y = (int)((Y + 0.75D) * Constants.TerrainGridSpacing);
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
                         BestSlope = CurrentSlope;
                     }
 
-                    Pos.X = (int)((X + 0.75D) * App.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.75D) * App.TerrainGridSpacing);
+                    Pos.X = (int)((X + 0.75D) * Constants.TerrainGridSpacing);
+                    Pos.Y = (int)((Y + 0.75D) * Constants.TerrainGridSpacing);
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
@@ -776,7 +776,7 @@ namespace SharpFlame.Mapping
                     {
                         if ( Terrain.Tiles[X, Y].Texture.TextureNum >= 0 )
                         {
-                            if ( Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == App.TileTypeNum_Water )
+                            if ( Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNum_Water )
                             {
                                 Terrain.Tiles[X, Y].Tri = false;
                                 SectorGraphicsChanges.TileChanged(TileNum);

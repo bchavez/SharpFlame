@@ -100,25 +100,25 @@ namespace SharpFlame.Mapping.Objects
 
         public string GetINIRotation()
         {
-            int Rotation16 = 0;
+            int rotation16 = 0;
 
-            Rotation16 = (int)(Rotation * App.INIRotationMax / 360.0D);
-            if ( Rotation16 >= App.INIRotationMax )
+            rotation16 = (int)(Rotation * Constants.INIRotationMax / 360.0D);
+            if ( rotation16 >= Constants.INIRotationMax )
             {
-                Rotation16 -= App.INIRotationMax;
+                rotation16 -= Constants.INIRotationMax;
             }
-            else if ( Rotation16 < 0 )
+            else if ( rotation16 < 0 )
             {
                 Debugger.Break();
-                Rotation16 += App.INIRotationMax;
+                rotation16 += Constants.INIRotationMax;
             }
 
-            return Rotation16.ToStringInvariant() + ", 0, 0";
+            return string.Format("{0}, 0, 0", rotation16);
         }
 
         public string GetINIHealthPercent()
         {
-            return ((int)(MathUtil.Clamp_dbl(Health * 100.0D, 1.0D, 100.0D))).ToStringInvariant() + "%";
+            return string.Format ("{0}%", (int)(MathUtil.Clamp_dbl (Health * 100.0D, 1.0D, 100.0D)));
         }
 
         public string GetPosText()
