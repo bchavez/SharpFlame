@@ -78,6 +78,7 @@
     <Compile Include="Domain\XYInt.cs" />
     <Compile Include="Domain\XYDouble.cs" />
     <Compile Include="Domain\XYZDouble.cs" />
+    <Compile Include="Domain\WorldPos.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

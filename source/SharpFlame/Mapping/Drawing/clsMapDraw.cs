@@ -46,7 +46,7 @@ namespace SharpFlame.Mapping
             XYZDouble Vertex3 = default(XYZDouble);
             XYInt ScreenPos = new XYInt();
             XYZDouble XYZ_dbl2 = default(XYZDouble);
-            sWorldPos WorldPos = new sWorldPos();
+            WorldPos WorldPos = new WorldPos();
             XYDouble PosA = default(XYDouble);
             XYDouble PosB = default(XYDouble);
             XYDouble PosC = default(XYDouble);

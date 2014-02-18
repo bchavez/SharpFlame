@@ -712,7 +712,7 @@ namespace SharpFlame.Mapping
                             {
                                 NewUnit.UnitGroup = INIStructures.Structures[A].UnitGroup;
                             }
-							NewUnit.Pos = new sWorldPos(INIStructures.Structures[A].Pos, INIStructures.Structures[A].Pos.Z);
+							NewUnit.Pos = new WorldPos(INIStructures.Structures[A].Pos, INIStructures.Structures[A].Pos.Z);
                             NewUnit.Rotation = Convert.ToInt32(INIStructures.Structures[A].Rotation.Direction * 360.0D / App.INIRotationMax);
                             if ( NewUnit.Rotation == 360 )
                             {
@@ -828,7 +828,7 @@ namespace SharpFlame.Mapping
                             NewUnit = new clsUnit();
                             NewUnit.TypeBase = featureTypeBase;
                             NewUnit.UnitGroup = ScavengerUnitGroup;
-							NewUnit.Pos = new sWorldPos ((XYInt)INIFeatures.Features [A].Pos, INIFeatures.Features [A].Pos.Z);
+							NewUnit.Pos = new WorldPos ((XYInt)INIFeatures.Features [A].Pos, INIFeatures.Features [A].Pos.Z);
                             NewUnit.Rotation = Convert.ToInt32(INIFeatures.Features[A].Rotation.Direction * 360.0D / App.INIRotationMax);
                             if ( NewUnit.Rotation == 360 )
                             {
@@ -1037,7 +1037,7 @@ namespace SharpFlame.Mapping
                             {
                                 NewUnit.UnitGroup = INIDroids.Droids[A].UnitGroup;
                             }
-							NewUnit.Pos = new sWorldPos(INIDroids.Droids[A].Pos, INIDroids.Droids[A].Pos.Z);
+							NewUnit.Pos = new WorldPos(INIDroids.Droids[A].Pos, INIDroids.Droids[A].Pos.Z);
                             NewUnit.Rotation = Convert.ToInt32(INIDroids.Droids[A].Rotation.Direction * 360.0D / App.INIRotationMax);
                             if ( NewUnit.Rotation == 360 )
                             {

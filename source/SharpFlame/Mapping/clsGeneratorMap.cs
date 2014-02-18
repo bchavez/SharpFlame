@@ -2229,7 +2229,7 @@ namespace SharpFlame
             }
         }
 
-        public clsUnit PlaceUnit(UnitTypeBase TypeBase, sWorldPos Pos, clsUnitGroup UnitGroup, int Rotation)
+        public clsUnit PlaceUnit(UnitTypeBase TypeBase, WorldPos Pos, clsUnitGroup UnitGroup, int Rotation)
         {
             XYInt TilePosA = new XYInt();
             XYInt TilePosB = new XYInt();

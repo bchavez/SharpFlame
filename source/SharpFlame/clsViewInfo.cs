@@ -281,7 +281,7 @@ namespace SharpFlame
             return true;
         }
 
-        public bool ScreenXY_Get_TerrainPos (XYInt screenPos, ref sWorldPos resultPos)
+        public bool ScreenXY_Get_TerrainPos (XYInt screenPos, ref WorldPos resultPos)
         {
             double dblTemp = 0;
             XYZDouble xYZ_dbl = default(XYZDouble);
@@ -635,7 +635,7 @@ namespace SharpFlame
 
             public class clsOverTerrain
             {
-                public sWorldPos Pos;
+                public WorldPos Pos;
                 public SimpleClassList<clsUnit> Units = new SimpleClassList<clsUnit> ();
                 public clsBrush.sPosNum Tile;
                 public clsBrush.sPosNum Vertex;
@@ -655,7 +655,7 @@ namespace SharpFlame
         {
             public class clsOverTerrain
             {
-                public sWorldPos DownPos;
+                public WorldPos DownPos;
             }
 
             public clsOverTerrain OverTerrain;

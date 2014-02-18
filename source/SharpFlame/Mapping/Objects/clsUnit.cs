@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using SharpFlame.Collections;
+using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
@@ -24,7 +25,7 @@ namespace SharpFlame.Mapping.Objects
 
         public UInt32 ID;
         public UnitTypeBase TypeBase;
-        public sWorldPos Pos;
+        public WorldPos Pos;
         public int Rotation;
         public clsUnitGroup UnitGroup;
         public int SavePriority;

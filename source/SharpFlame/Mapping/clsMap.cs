@@ -804,9 +804,9 @@ namespace SharpFlame.Mapping
         public void DrawTileOrientation(XYInt Tile)
         {
             XYInt UnrotatedPos = new XYInt();
-            sWorldPos Vertex0 = new sWorldPos();
-            sWorldPos Vertex1 = new sWorldPos();
-            sWorldPos Vertex2 = new sWorldPos();
+            WorldPos Vertex0 = new WorldPos();
+            WorldPos Vertex1 = new WorldPos();
+            WorldPos Vertex2 = new WorldPos();
 
             UnrotatedPos.X = 32;
             UnrotatedPos.Y = 32;
@@ -1153,9 +1153,9 @@ namespace SharpFlame.Mapping
             ResultSectorFinish.Y = MathUtil.Clamp_int(ResultSectorFinish.Y, 0, SectorCount.Y - 1);
         }
 
-        public sWorldPos TileAlignedPos(XYInt TileNum, XYInt Footprint)
+        public WorldPos TileAlignedPos(XYInt TileNum, XYInt Footprint)
         {
-            sWorldPos Result = new sWorldPos();
+            WorldPos Result = new WorldPos();
 
             Result.Horizontal.X = (int)((TileNum.X + Footprint.X / 2.0D) * App.TerrainGridSpacing);
             Result.Horizontal.Y = (int)((TileNum.Y + Footprint.Y / 2.0D) * App.TerrainGridSpacing);
@@ -1164,9 +1164,9 @@ namespace SharpFlame.Mapping
             return Result;
         }
 
-        public sWorldPos TileAlignedPosFromMapPos(XYInt Horizontal, XYInt Footprint)
+        public WorldPos TileAlignedPosFromMapPos(XYInt Horizontal, XYInt Footprint)
         {
-            sWorldPos Result = new sWorldPos();
+            WorldPos Result = new WorldPos();
 
             Result.Horizontal.X =
                 (int)
@@ -1880,9 +1880,9 @@ namespace SharpFlame.Mapping
             }
         }
 
-        public sWorldPos GetTileOffsetRotatedWorldPos(XYInt Tile, XYInt TileOffsetToRotate)
+        public WorldPos GetTileOffsetRotatedWorldPos(XYInt Tile, XYInt TileOffsetToRotate)
         {
-            sWorldPos Result = new sWorldPos();
+            WorldPos Result = new WorldPos();
 
             XYInt RotatedOffset = new XYInt();
 
