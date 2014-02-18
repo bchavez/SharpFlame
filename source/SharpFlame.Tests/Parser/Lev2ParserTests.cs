@@ -9,6 +9,19 @@ namespace SharpFlame.Tests.Parser
     public class TestFixture
     {
         [Test]
+        public void test()
+        {
+            var parser = Parse.CharExcept( "]" )
+                .AtLeastOnce()
+                .Text()
+                .Contained( Parse.Char( '[' ), Parse.Char( ']' ) );
+
+
+            var result = parser.Parse("[ab]");
+            
+            result.Should().Be("ab");
+        }
+        [Test]
         public void can_parse_campaign_directive()
         {
             var data = @"campaign	MULTI_CAM_1
@@ -27,6 +40,113 @@ namespace SharpFlame.Tests.Parser
             var result = Lev2Grammar.DataDirective.Parse(data);
 
             result.Should().Be("wrf/basic.wrf");
+        }
+
+        [Test]
+        public void can_parse_campaign_section()
+        {
+            var data = @"campaign	MULTI_CAM_3
+data		""wrf/vidmem3.wrf""
+data		""wrf/basic.wrf""
+data		""wrf/cam3.wrf""
+data		""wrf/audio.wrf""
+data		""wrf/piestats.wrf""
+data		""wrf/stats.wrf""
+data		""wrf/multires.wrf""
+";
+
+            var result = Lev2Grammar.Campaign.Parse(data);
+            result.Data.Length.Should().Be(7);
+            result.Data[3].Should().Be("wrf/audio.wrf");
+            result.Name.Should().Be("MULTI_CAM_3");
+        }
+
+        [Test]
+        public void can_parse_level_directive()
+        {
+            var data = @"level 		Sk-Rush-T3
+";
+            var result = Lev2Grammar.LevelDirective.Parse(data);
+            result.Should().Be("Sk-Rush-T3");
+        }
+
+        [Test]
+        public void can_parse_player_directive()
+        {
+            var data = @"players		4
+";
+            var result = Lev2Grammar.PlayersDirective.Parse(data);
+            result.Should().Be(4);
+        }
+
+        [Test]
+        public void can_parse_type_directive()
+        {
+            var data = @"type		18
+";
+            var result = Lev2Grammar.TypeDirective.Parse( data );
+            result.Should().Be( 18 );
+        }
+
+
+        [Test]
+        public void can_parse_dataset_directive()
+        {
+            var data = @"dataset		MULTI_T2_C1
+";
+
+            var result = Lev2Grammar.DatasetDirective.Parse(data);
+            result.Should().Be("MULTI_T2_C1");
+        }
+
+
+        [Test]
+        public void can_parse_game_directive()
+        {
+            var data = @"game		""multiplay/maps/4c-rush.gam""
+";
+            var result = Lev2Grammar.GameDirective.Parse( data );
+            result.Should().Be( "multiplay/maps/4c-rush.gam" );
+        }
+
+        [Test]
+        public void can_parse_level_section()
+        {
+            var data = @"level 		Sk-Rush2-T2
+players		4
+type		18
+dataset		MULTI_T2_C1
+game		""multiplay/maps/4c-rush2.gam""
+";
+            var result = Lev2Grammar.Level.Parse(data);
+
+            result.Name.Should().Be("Sk-Rush2-T2");
+            result.Players.Should().Be(4);
+            result.Type.Should().Be(18);
+            result.Dataset.Should().Be("MULTI_T2_C1");
+            result.Game.Should().Be("multiplay/maps/4c-rush2.gam");
+        }
+
+        [Test]
+        public void can_parse_level_with_mutiple_game_directives()
+        {
+            var data = @"level   Tinny-War-T3
+players 2
+type    19
+dataset MULTI_T3_C1
+game    ""multiplay/maps/2c-Tinny-War.gam""
+data    ""wrf/multi/t3-skirmish2.wrf""
+data    ""wrf/multi/fog1.wrf""
+";
+            var result = Lev2Grammar.Level.Parse( data );
+            result.Name.Should().Be( "Tinny-War-T3" );
+            result.Players.Should().Be( 2 );
+            result.Type.Should().Be( 19 );
+            result.Dataset.Should().Be( "MULTI_T3_C1" );
+            result.Game.Should().Be( "multiplay/maps/2c-Tinny-War.gam" );
+            result.Data[0].Should().Be( "wrf/multi/t3-skirmish2.wrf" );
+            result.Data[1].Should().Be( "wrf/multi/fog1.wrf" );
+
         }
     }
 
