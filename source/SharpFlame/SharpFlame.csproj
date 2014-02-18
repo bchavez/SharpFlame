@@ -265,7 +265,6 @@
     <Compile Include="Pathfinding\Path.cs" />
     <Compile Include="PathUtil.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Util\clsContainer.cs" />
     <Compile Include="Util\clsKeysActive.cs" />
     <Compile Include="Util\clsLayer.cs" />
     <Compile Include="Util\clsPlayer.cs" />
