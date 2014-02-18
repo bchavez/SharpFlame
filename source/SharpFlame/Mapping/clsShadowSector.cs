@@ -1,10 +1,11 @@
+using SharpFlame.Core.Domain;
 using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping
 {
     public class clsShadowSector
     {
-        public sXY_int Num;
-        public clsTerrain Terrain = new clsTerrain(new sXY_int(Constants.SectorTileSize, Constants.SectorTileSize));
+        public XYInt Num;
+        public clsTerrain Terrain = new clsTerrain(new XYInt(Constants.SectorTileSize, Constants.SectorTileSize));
     }
 }

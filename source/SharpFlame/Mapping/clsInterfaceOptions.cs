@@ -1,4 +1,5 @@
 using SharpFlame.FileIO;
+using SharpFlame.Core.Domain;
 using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping
@@ -11,7 +12,7 @@ namespace SharpFlame.Mapping
         public string CompileMultiAuthor;
         public string CompileMultiLicense;
         public bool AutoScrollLimits;
-        public sXY_int ScrollMin;
+        public XYInt ScrollMin;
         public sXY_uint ScrollMax;
         public int CampaignGameType;
 
@@ -24,8 +25,7 @@ namespace SharpFlame.Mapping
             CompileMultiAuthor = "";
             CompileMultiLicense = "";
             AutoScrollLimits = true;
-            ScrollMin.X = 0;
-            ScrollMin.Y = 0;
+			ScrollMin = new XYInt (0, 0);
             ScrollMax.X = 0U;
             ScrollMax.Y = 0U;
             CampaignGameType = -1;

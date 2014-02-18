@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using SharpFlame.Core.Domain;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
@@ -86,16 +87,16 @@ namespace SharpFlame.Mapping
             public Road Road;
         }
 
-        public sXY_int TileSize;
+        public XYInt TileSize;
 
         public Vertex[,] Vertices;
         public Tile[,] Tiles;
         public Side[,] SideH;
         public Side[,] SideV;
 
-        public clsTerrain(sXY_int NewSize)
+        public clsTerrain(XYInt newSize)
         {
-            TileSize = NewSize;
+            TileSize = newSize;
 
             Vertices = new Vertex[TileSize.X + 1, TileSize.Y + 1];
             Tiles = new Tile[TileSize.X, TileSize.Y];

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using SharpFlame.Core.Domain;
 
 namespace SharpFlame.Maths
 {
@@ -44,7 +45,7 @@ namespace SharpFlame.Maths
             return (Angle - (num2 * 6.2831853071795862));
         }
 
-        public static double GetAngle(Position.XY_dbl Length)
+        public static double GetAngle(XYDouble Length)
         {
             return Math.Atan2(Length.Y, Length.X);
         }

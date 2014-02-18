@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using SharpFlame.Core.Domain;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Util;
 
@@ -12,8 +13,8 @@ namespace SharpFlame.Mapping.Wz
             public UInt32 ID;
             public string Template;
             public clsUnitGroup UnitGroup;
-            public clsWorldPos Pos;
-            public sWZAngle Rotation;
+            public XYZInt Pos;
+            public Rotation Rotation;
             public int HealthPercent;
             public int DroidType;
             public string Body;

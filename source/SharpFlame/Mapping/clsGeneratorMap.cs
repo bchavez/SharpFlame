@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 using NLog;
+using SharpFlame.Core.Domain;
 using SharpFlame.Collections.Specialized;
 using SharpFlame.Domain;
 using SharpFlame.Generators;
@@ -20,27 +21,27 @@ namespace SharpFlame
 
         public clsMap Map;
 
-        public sXY_int TileSize;
+        public XYInt TileSize;
         public int LevelCount;
         public float LevelHeight;
         public bool SymmetryIsRotational;
 
         public struct sSymmetryBlock
         {
-            public sXY_int XYNum;
+            public XYInt XYNum;
             public TileOrientation Orientation;
             public int[] ReflectToNum;
         }
 
         public sSymmetryBlock[] SymmetryBlocks;
-        public sXY_int SymmetryBlockCountXY;
+        public XYInt SymmetryBlockCountXY;
         public int SymmetryBlockCount;
         public int JitterScale;
         public int MaxLevelTransition;
         public float NodeScale;
         public int BaseLevel;
         public int BaseFlatArea;
-        public sXY_int[] PlayerBasePos;
+        public XYInt[] PlayerBasePos;
         public int TopLeftPlayerCount;
         public int PassagesChance;
         public int VariationChance;
@@ -74,12 +75,12 @@ namespace SharpFlame
         {
             public clsPassageNode[] Nodes;
             public int NodeCount;
-            public sXY_int Pos;
+            public XYInt Pos;
 
             public void CalcPos()
             {
                 int A = 0;
-                Position.XY_dbl Total = default(Position.XY_dbl);
+                XYDouble Total = default(XYDouble);
 
                 for ( A = 0; A <= NodeCount - 1; A++ )
                 {
@@ -107,7 +108,7 @@ namespace SharpFlame
 
             public int Level = -1;
 
-            public sXY_int Pos;
+            public XYInt Pos;
 
             public bool IsOnBorder;
             public bool IsNearBorder;
@@ -205,7 +206,7 @@ namespace SharpFlame
                 sConnection[] NewOrder = new sConnection[ConnectionCount];
                 double[] AwayAngles = new double[ConnectionCount];
                 clsPassageNode OtherNode = default(clsPassageNode);
-                sXY_int XY_int = new sXY_int();
+                var XY_int = new XYInt(0, 0);
                 double AwayAngle = 0;
 
                 for ( A = 0; A <= ConnectionCount - 1; A++ )
@@ -339,7 +340,7 @@ namespace SharpFlame
 
             TotalPlayerCount = TopLeftPlayerCount * SymmetryBlockCount;
 
-            sXY_int SymmetrySize = new sXY_int();
+            XYInt SymmetrySize = new XYInt();
 
             SymmetrySize.X = (int)(TileSize.X * App.TerrainGridSpacing / SymmetryBlockCountXY.X);
             SymmetrySize.Y = (int)(TileSize.Y * App.TerrainGridSpacing / SymmetryBlockCountXY.Y);
@@ -354,9 +355,9 @@ namespace SharpFlame
             PassageNodes = new clsPassageNode[SymmetryBlockCount, MaxLikelyPassageNodeCount];
             int LoopCount = 0;
             int EdgeOffset = 0 * 128;
-            sXY_int EdgeSections = new sXY_int();
-            Position.XY_dbl EdgeSectionSize = default(Position.XY_dbl);
-            sXY_int NewPointPos = new sXY_int();
+            XYInt EdgeSections = new XYInt();
+            XYDouble EdgeSectionSize = default(XYDouble);
+            XYInt NewPointPos = new XYInt();
 
             if ( SymmetryBlockCountXY.X == 1 )
             {
@@ -402,7 +403,7 @@ namespace SharpFlame
             PassageNodeCount = 0;
             for ( Y = 0; Y <= EdgeSections.Y; Y++ )
             {
-                if ( !MakePassageNodes(new sXY_int(EdgeOffset, EdgeOffset + (int)(Y * EdgeSectionSize.Y)), true) )
+                if ( !MakePassageNodes(new XYInt(EdgeOffset, EdgeOffset + (int)(Y * EdgeSectionSize.Y)), true) )
                 {
                     ReturnResult.ProblemAdd("Error: Bad border node.");
                     return ReturnResult;
@@ -410,7 +411,7 @@ namespace SharpFlame
                 if ( SymmetryBlockCountXY.X == 1 )
                 {
                     if (
-                        !MakePassageNodes(new sXY_int(TileSize.X * App.TerrainGridSpacing - EdgeOffset, EdgeOffset + (int)(Y * EdgeSectionSize.Y)), true) )
+                        !MakePassageNodes(new XYInt(TileSize.X * App.TerrainGridSpacing - EdgeOffset, EdgeOffset + (int)(Y * EdgeSectionSize.Y)), true) )
                     {
                         ReturnResult.ProblemAdd("Error: Bad border node.");
                         return ReturnResult;
@@ -419,7 +420,7 @@ namespace SharpFlame
             }
             for ( X = 1; X <= EdgeSections.X; X++ )
             {
-                if ( !MakePassageNodes(new sXY_int(EdgeOffset + (int)(X * EdgeSectionSize.X), EdgeOffset), true) )
+                if ( !MakePassageNodes(new XYInt(EdgeOffset + (int)(X * EdgeSectionSize.X), EdgeOffset), true) )
                 {
                     ReturnResult.ProblemAdd("Error: Bad border node.");
                     return ReturnResult;
@@ -427,7 +428,7 @@ namespace SharpFlame
                 if ( SymmetryBlockCountXY.Y == 1 )
                 {
                     if (
-                        !MakePassageNodes(new sXY_int(EdgeOffset + (int)(X * EdgeSectionSize.X), TileSize.Y * App.TerrainGridSpacing - EdgeOffset), true) )
+                        !MakePassageNodes(new XYInt(EdgeOffset + (int)(X * EdgeSectionSize.X), TileSize.Y * App.TerrainGridSpacing - EdgeOffset), true) )
                     {
                         ReturnResult.ProblemAdd("Error: Bad border node.");
                         return ReturnResult;
@@ -693,7 +694,7 @@ namespace SharpFlame
             HeightsArgs.PassageNodesMinLevel.Nodes = new int[PassageNodeCount];
             HeightsArgs.PassageNodesMaxLevel.Nodes = new int[PassageNodeCount];
             HeightsArgs.MapLevelCount = new int[LevelCount];
-            sXY_int RotatedPos = new sXY_int();
+            XYInt RotatedPos = new XYInt();
 
             for ( A = 0; A <= PassageNodeCount - 1; A++ )
             {
@@ -793,7 +794,7 @@ namespace SharpFlame
                     }
                     //PlayerBases(E).CalcPos()
                     RotatedPos = TileUtil.GetRotatedPos(SymmetryBlocks[A].Orientation, PlayerBasePos[B],
-                        new sXY_int(SymmetrySize.X - 1, SymmetrySize.Y - 1));
+                        new XYInt(SymmetrySize.X - 1, SymmetrySize.Y - 1));
                     PlayerBases[E].Pos.X = SymmetryBlocks[A].XYNum.X * SymmetrySize.X + RotatedPos.X;
                     PlayerBases[E].Pos.Y = SymmetryBlocks[A].XYNum.Y * SymmetrySize.Y + RotatedPos.Y;
                 }
@@ -1053,7 +1054,7 @@ namespace SharpFlame
 
         private bool TestNearest(clsTestNearestArgs Args)
         {
-            sXY_int XY_int = new sXY_int();
+            XYInt XY_int = new XYInt();
             clsNearest NearestA = default(clsNearest);
             int Dist2 = 0;
             int A = 0;
@@ -1177,7 +1178,7 @@ namespace SharpFlame
 
         public class clsNodeTag
         {
-            public sXY_int Pos;
+            public XYInt Pos;
         }
 
         public float GetNodePosDist(PathfinderNode NodeA, PathfinderNode NodeB)
@@ -1188,7 +1189,7 @@ namespace SharpFlame
             return Convert.ToSingle((TagA.Pos - TagB.Pos).ToDoubles().GetMagnitude());
         }
 
-        public void CalcNodePos(PathfinderNode Node, ref Position.XY_dbl Pos, ref int SampleCount)
+        public void CalcNodePos(PathfinderNode Node, ref XYDouble Pos, ref int SampleCount)
         {
             if ( Node.GetLayer.GetNetwork_LayerNum == 0 )
             {
@@ -1222,7 +1223,7 @@ namespace SharpFlame
             int D = 0;
             int X = 0;
             int Y = 0;
-            sXY_int XY_int = new sXY_int();
+            XYInt XY_int = new XYInt();
             double Dist = 0;
             double BestDist = 0;
             bool Flag = default(bool);
@@ -1242,7 +1243,7 @@ namespace SharpFlame
                     GenerateTerrainVertices[X, Y] = new GenerateTerrainVertex();
                     GenerateTerrainVertices[X, Y].Node = new PathfinderNode(VertexPathMap);
                     NodeTag = new clsNodeTag();
-                    NodeTag.Pos = new sXY_int(X * 128, Y * 128);
+                    NodeTag.Pos = new XYInt(X * 128, Y * 128);
                     GenerateTerrainVertices[X, Y].Node.Tag = NodeTag;
                 }
             }
@@ -1306,7 +1307,7 @@ namespace SharpFlame
 
             //set position of jitter layer nodes
 
-            Position.XY_dbl XY_dbl = default(Position.XY_dbl);
+            XYDouble XY_dbl = default(XYDouble);
 
             if ( A > 0 )
             {
@@ -1455,7 +1456,7 @@ namespace SharpFlame
                     GenerateTerrainTiles[X, Y] = new GenerateTerrainTile();
                     GenerateTerrainTiles[X, Y].Node = new PathfinderNode(TilePathMap);
                     NodeTag = new clsNodeTag();
-                    NodeTag.Pos = new sXY_int((int)((X + 0.5D) * 128.0D), (int)((Y + 0.5D) * 128.0D));
+                    NodeTag.Pos = new XYInt((int)((X + 0.5D) * 128.0D), (int)((Y + 0.5D) * 128.0D));
                     GenerateTerrainTiles[X, Y].Node.Tag = NodeTag;
                 }
             }
@@ -1918,7 +1919,7 @@ namespace SharpFlame
             if ( Node.GetChildNodeCount == 0 )
             {
                 clsNodeTag NodeTag = (clsNodeTag)Node.Tag;
-                sXY_int XY_int = MathUtil.PointGetClosestPosOnLine(Args.Connection.PassageNodeA.Pos, Args.Connection.PassageNodeB.Pos, NodeTag.Pos);
+                XYInt XY_int = MathUtil.PointGetClosestPosOnLine(Args.Connection.PassageNodeA.Pos, Args.Connection.PassageNodeB.Pos, NodeTag.Pos);
                 float ConnectionLength = Convert.ToSingle((Args.Connection.PassageNodeA.Pos - Args.Connection.PassageNodeB.Pos).ToDoubles().GetMagnitude());
                 float Extra = ConnectionLength - Args.RampLength;
                 float ConnectionPos = Convert.ToSingle((XY_int - Args.Connection.PassageNodeA.Pos).ToDoubles().GetMagnitude());
@@ -1983,11 +1984,11 @@ namespace SharpFlame
             BooleanMap ReturnResult = new BooleanMap();
             float BestDist = 0;
             bool BestIsWater = default(bool);
-            sXY_int Pos = new sXY_int();
+            XYInt Pos = new XYInt();
             float Dist = 0;
             int B = 0;
             int C = 0;
-            sXY_int XY_int = new sXY_int();
+            XYInt XY_int = new XYInt();
             int X = 0;
             int Y = 0;
 
@@ -1997,7 +1998,7 @@ namespace SharpFlame
                 for ( X = 0; X <= Map.Terrain.TileSize.X; X++ )
                 {
                     BestDist = float.MaxValue;
-                    Pos = new sXY_int(X * App.TerrainGridSpacing, Y * App.TerrainGridSpacing);
+                    Pos = new XYInt(X * App.TerrainGridSpacing, Y * App.TerrainGridSpacing);
                     for ( B = 0; B <= ConnectionCount - 1; B++ )
                     {
                         //If Not (Connections(B).PassageNodeA.IsOnBorder Or Connections(B).PassageNodeB.IsOnBorder) Then
@@ -2040,7 +2041,7 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public PathfinderNode GetNearestNode(PathfinderNetwork Network, sXY_int Pos, int MinClearance)
+        public PathfinderNode GetNearestNode(PathfinderNetwork Network, XYInt Pos, int MinClearance)
         {
             int A = 0;
             double Dist = 0;
@@ -2068,7 +2069,7 @@ namespace SharpFlame
             return BestNode;
         }
 
-        private PathfinderNode GetNearestNodeConnection(PathfinderNetwork Network, sXY_int Pos, int MinClearance, float MaxDistance)
+        private PathfinderNode GetNearestNodeConnection(PathfinderNetwork Network, XYInt Pos, int MinClearance, float MaxDistance)
         {
             int A = 0;
             PathfinderNode[] TravelNodes = new PathfinderNode[Network.get_GetNodeLayer(0).GetNodeCount * 10];
@@ -2136,17 +2137,17 @@ namespace SharpFlame
             return BestNode;
         }
 
-        public clsUnit PlaceUnitNear(UnitTypeBase TypeBase, sXY_int Pos, clsUnitGroup UnitGroup, int Clearance, int Rotation, int MaxDistFromPos)
+        public clsUnit PlaceUnitNear(UnitTypeBase TypeBase, XYInt Pos, clsUnitGroup UnitGroup, int Clearance, int Rotation, int MaxDistFromPos)
         {
             PathfinderNode PosNode = default(PathfinderNode);
             clsNodeTag NodeTag = default(clsNodeTag);
-            sXY_int FinalTilePos = new sXY_int();
-            sXY_int TilePosA = new sXY_int();
-            sXY_int TilePosB = new sXY_int();
+            XYInt FinalTilePos = new XYInt();
+            XYInt TilePosA = new XYInt();
+            XYInt TilePosB = new XYInt();
             int X2 = 0;
             int Y2 = 0;
             int Remainder = 0;
-            sXY_int Footprint = new sXY_int();
+            XYInt Footprint = new XYInt();
 
             PosNode = GetNearestNodeConnection(TilePathMap, Pos, Clearance, MaxDistFromPos);
             if ( PosNode != null )
@@ -2230,12 +2231,12 @@ namespace SharpFlame
 
         public clsUnit PlaceUnit(UnitTypeBase TypeBase, sWorldPos Pos, clsUnitGroup UnitGroup, int Rotation)
         {
-            sXY_int TilePosA = new sXY_int();
-            sXY_int TilePosB = new sXY_int();
+            XYInt TilePosA = new XYInt();
+            XYInt TilePosB = new XYInt();
             int X2 = 0;
             int Y2 = 0;
-            sXY_int FinalTilePos = new sXY_int();
-            sXY_int Footprint = new sXY_int();
+            XYInt FinalTilePos = new XYInt();
+            XYInt Footprint = new XYInt();
 
             clsUnitAdd NewUnitAdd = new clsUnitAdd();
             NewUnitAdd.Map = Map;
@@ -2372,7 +2373,7 @@ namespace SharpFlame
             int Count = 0;
             int FeaturePlaceRange = 6 * 128;
             int BasePlaceRange = 16 * 128;
-            sXY_int TilePos = new sXY_int();
+            XYInt TilePos = new XYInt();
             byte AverageHeight = 0;
             int PlayerNum = 0;
             clsTerrain Terrain = Map.Terrain;
@@ -2516,7 +2517,7 @@ namespace SharpFlame
             UInt32 uintTemp = 0;
             PathfinderNode tmpNode = default(PathfinderNode);
             int E = 0;
-            sXY_int Footprint = new sXY_int();
+            XYInt Footprint = new XYInt();
             int MissingUnitCount = 0;
             int Rotation = 0;
 
@@ -2634,8 +2635,8 @@ namespace SharpFlame
 
         private struct sPossibleGateway
         {
-            public sXY_int StartPos;
-            public sXY_int MiddlePos;
+            public XYInt StartPos;
+            public XYInt MiddlePos;
             public bool IsVertical;
             public int Length;
         }
@@ -2725,7 +2726,7 @@ namespace SharpFlame
             int BestNum = 0;
             bool[,] TileIsGateway = new bool[Terrain.TileSize.X, Terrain.TileSize.Y];
             bool Valid = default(bool);
-            sXY_int InvalidPos = new sXY_int();
+            XYInt InvalidPos = new XYInt();
             double InvalidDist = 0;
 
             while ( PossibleGatewayCount > 0 )
@@ -2748,7 +2749,7 @@ namespace SharpFlame
                 if ( PossibleGateways[BestNum].IsVertical )
                 {
                     Map.GatewayCreateStoreChange(PossibleGateways[BestNum].StartPos,
-                        new sXY_int(PossibleGateways[BestNum].StartPos.X, PossibleGateways[BestNum].StartPos.Y + PossibleGateways[BestNum].Length - 1));
+                        new XYInt(PossibleGateways[BestNum].StartPos.X, PossibleGateways[BestNum].StartPos.Y + PossibleGateways[BestNum].Length - 1));
                     for ( Y = PossibleGateways[BestNum].StartPos.Y; Y <= PossibleGateways[BestNum].StartPos.Y + PossibleGateways[BestNum].Length - 1; Y++ )
                     {
                         TileIsGateway[PossibleGateways[BestNum].StartPos.X, Y] = true;
@@ -2757,7 +2758,7 @@ namespace SharpFlame
                 else
                 {
                     Map.GatewayCreateStoreChange(PossibleGateways[BestNum].StartPos,
-                        new sXY_int(PossibleGateways[BestNum].StartPos.X + PossibleGateways[BestNum].Length - 1, PossibleGateways[BestNum].StartPos.Y));
+                        new XYInt(PossibleGateways[BestNum].StartPos.X + PossibleGateways[BestNum].Length - 1, PossibleGateways[BestNum].StartPos.Y));
                     for ( X = PossibleGateways[BestNum].StartPos.X; X <= PossibleGateways[BestNum].StartPos.X + PossibleGateways[BestNum].Length - 1; X++ )
                     {
                         TileIsGateway[X, PossibleGateways[BestNum].StartPos.Y] = true;
@@ -2934,15 +2935,15 @@ namespace SharpFlame
             NearestCount = 0;
         }
 
-        private bool MakePassageNodes(sXY_int Pos, bool IsOnBorder)
+        private bool MakePassageNodes(XYInt Pos, bool IsOnBorder)
         {
             int A = 0;
             int B = 0;
             clsPassageNode tmpNode = default(clsPassageNode);
-            sXY_int RotatedPos = new sXY_int();
-            sXY_int SymmetrySize = new sXY_int();
-            sXY_int[] Positions = new sXY_int[4];
-            sXY_int Limits = new sXY_int();
+            XYInt RotatedPos = new XYInt();
+            XYInt SymmetrySize = new XYInt();
+            XYInt[] Positions = new XYInt[4];
+            XYInt Limits = new XYInt();
 
             SymmetrySize.X = (int)(TileSize.X * App.TerrainGridSpacing / SymmetryBlockCountXY.X);
             SymmetrySize.Y = (int)(TileSize.Y * App.TerrainGridSpacing / SymmetryBlockCountXY.Y);
@@ -2980,7 +2981,7 @@ namespace SharpFlame
 
         private bool CheckRampAngles(clsConnection NewRampConnection, double MinSpacingAngle, double MinSpacingAngle2, double MinPassageSpacingAngle)
         {
-            sXY_int XY_int = new sXY_int();
+            XYInt XY_int = new XYInt();
             double NodeAAwayAngle = 0;
             double NodeBAwayAngle = 0;
 
@@ -3021,7 +3022,7 @@ namespace SharpFlame
             int ConnectionNum = 0;
             clsConnection tmpConnection = default(clsConnection);
             clsPassageNode OtherNode = default(clsPassageNode);
-            sXY_int XY_int = new sXY_int();
+            XYInt XY_int = new XYInt();
             double SpacingAngle = 0;
             int RampDifference = 0;
 
@@ -3079,7 +3080,7 @@ namespace SharpFlame
             clsPassageNode OtherPassageNode = default(clsPassageNode);
             int OtherNum = 0;
             bool NarrowConnection = default(bool);
-            sXY_int XY_int = new sXY_int();
+            XYInt XY_int = new XYInt();
 
             for ( ConnectionNum = 0; ConnectionNum <= RampPassageNode.ConnectionCount - 1; ConnectionNum++ )
             {
@@ -3337,7 +3338,7 @@ namespace SharpFlame
             int E = 0;
             double BestDist = 0;
             int BestNum = 0;
-            sXY_int XY_int = new sXY_int();
+            XYInt XY_int = new XYInt();
             double Dist = 0;
 
             //make ramps

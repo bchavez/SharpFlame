@@ -1,4 +1,5 @@
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Core.Domain;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 
@@ -11,9 +12,9 @@ namespace SharpFlame.Mapping.Renderers
             var terrain = Map.Terrain;
             var tileset = Map.Tileset;
             var tileTerrainHeight = new double[5];
-            var vertices = new Position.XYZ_dbl[5]; //4 corners + center
-            var normals = new Position.XYZ_dbl[5];
-            var texCoords = new Position.XY_dbl[5];
+            var vertices = new XYZDouble[5]; //4 corners + center
+            var normals = new XYZDouble[5];
+            var texCoords = new XYDouble[5];
 
             //Texture binding code copied from clsDrawTileOld
             if (terrain.Tiles[TileX, TileY].Texture.TextureNum < 0)

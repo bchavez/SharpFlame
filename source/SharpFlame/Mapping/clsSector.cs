@@ -1,6 +1,7 @@
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
 using SharpFlame.Mapping.Objects;
+using SharpFlame.Core.Domain;
 using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping
@@ -12,7 +13,7 @@ namespace SharpFlame.Mapping
             Units = new ConnectedList<clsUnitSectorConnection, clsSector>(this);
         }
 
-        public sXY_int Pos;
+        public XYInt Pos;
         public int GLList_Textured;
         public int GLList_Wireframe;
         public ConnectedList<clsUnitSectorConnection, clsSector> Units;
@@ -36,7 +37,7 @@ namespace SharpFlame.Mapping
             Units.Deallocate();
         }
 
-        public clsSector(sXY_int NewPos)
+        public clsSector(XYInt NewPos)
         {
             Units = new ConnectedList<clsUnitSectorConnection, clsSector>(this);
 

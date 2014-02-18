@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using SharpFlame.Core.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
 using SharpFlame.Mapping.Objects;
@@ -14,8 +15,8 @@ namespace SharpFlame.Mapping.Wz
             public UInt32 ID;
             public string Code;
             public clsUnitGroup UnitGroup;
-            public clsWorldPos Pos;
-            public sWZAngle Rotation;
+            public XYZInt Pos;
+            public Rotation Rotation;
             public int ModuleCount;
             public int HealthPercent;
             public int WallType;

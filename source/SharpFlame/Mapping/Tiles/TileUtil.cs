@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using SharpFlame.Core.Domain;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
 
@@ -170,9 +171,9 @@ namespace SharpFlame.Mapping.Tiles
             }
         }
 
-        public static sXY_int GetTileRotatedOffset(TileOrientation tileOrientation, sXY_int pos)
+        public static XYInt GetTileRotatedOffset(TileOrientation tileOrientation, XYInt pos)
         {
-            sXY_int Result = new sXY_int();
+            XYInt Result = new XYInt();
 
             if ( tileOrientation.SwitchedAxes )
             {
@@ -216,9 +217,9 @@ namespace SharpFlame.Mapping.Tiles
             return Result;
         }
 
-        public static Position.XY_dbl GetTileRotatedPos_sng(TileOrientation tileOrientation, Position.XY_dbl pos)
+        public static XYDouble GetTileRotatedPos_sng(TileOrientation tileOrientation, XYDouble pos)
         {
-            Position.XY_dbl ReturnResult = new Position.XY_dbl();
+            XYDouble ReturnResult = new XYDouble();
 
             if ( tileOrientation.SwitchedAxes )
             {
@@ -262,9 +263,9 @@ namespace SharpFlame.Mapping.Tiles
             return ReturnResult;
         }
 
-        public static Position.XY_dbl GetTileRotatedPos_dbl(TileOrientation tileOrientation, Position.XY_dbl pos)
+        public static XYDouble GetTileRotatedPos_dbl(TileOrientation tileOrientation, XYDouble pos)
         {
-            Position.XY_dbl ReturnResult = default(Position.XY_dbl);
+            XYDouble ReturnResult = default(XYDouble);
 
             if ( tileOrientation.SwitchedAxes )
             {
@@ -308,9 +309,9 @@ namespace SharpFlame.Mapping.Tiles
             return ReturnResult;
         }
 
-        public static sXY_int GetRotatedPos(TileOrientation orientation, sXY_int pos, sXY_int limits)
+        public static XYInt GetRotatedPos(TileOrientation orientation, XYInt pos, XYInt limits)
         {
-            sXY_int Result = new sXY_int();
+            XYInt Result = new XYInt();
 
             if ( orientation.SwitchedAxes )
             {
@@ -356,16 +357,16 @@ namespace SharpFlame.Mapping.Tiles
 
         public static double GetRotatedAngle(TileOrientation orientation, double angle)
         {
-            Position.XY_dbl XY_dbl = default(Position.XY_dbl);
+            XYDouble XY_dbl = default(XYDouble);
 
-            XY_dbl = GetTileRotatedPos_dbl(orientation, new Position.XY_dbl((Math.Cos(angle) + 1.0D) / 2.0D, (Math.Sin(angle) + 1.0D) / 2.0D));
+            XY_dbl = GetTileRotatedPos_dbl(orientation, new XYDouble((Math.Cos(angle) + 1.0D) / 2.0D, (Math.Sin(angle) + 1.0D) / 2.0D));
             XY_dbl.X = XY_dbl.X * 2.0D - 1.0D;
             XY_dbl.Y = XY_dbl.Y * 2.0D - 1.0D;
             return Math.Atan2(XY_dbl.Y, XY_dbl.X);
         }
 
-        public static void GetTileRotatedTexCoords(TileOrientation tileOrientation, ref Position.XY_dbl coordA, ref Position.XY_dbl coordB, 
-            ref Position.XY_dbl coordC, ref Position.XY_dbl coordD)
+        public static void GetTileRotatedTexCoords(TileOrientation tileOrientation, ref XYDouble coordA, ref XYDouble coordB, 
+            ref XYDouble coordC, ref XYDouble coordD)
         {
             TileOrientation reverseOrientation = new TileOrientation();
 

@@ -1,4 +1,5 @@
 using SharpFlame.Collections;
+using SharpFlame.Core.Domain;
 using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping
@@ -11,12 +12,12 @@ namespace SharpFlame.Mapping
         }
 
         public ConnectedListLink<clsGateway, clsMap> MapLink;
-        public sXY_int PosA;
-        public sXY_int PosB;
+        public XYInt PosA;
+        public XYInt PosB;
 
         public bool IsOffMap()
         {
-            sXY_int TerrainSize = MapLink.Source.Terrain.TileSize;
+            XYInt TerrainSize = MapLink.Source.Terrain.TileSize;
 
             return PosA.X < 0
                    | PosA.X >= TerrainSize.X

@@ -3,6 +3,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.AppSettings;
 using SharpFlame.Colors;
+using SharpFlame.Core.Domain;
 using SharpFlame.Controls;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
@@ -22,7 +23,7 @@ namespace SharpFlame.Mapping
 
         public void GLDraw()
         {
-            Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
+            XYZDouble XYZ_dbl = default(XYZDouble);
             int X = 0;
             int Y = 0;
             int X2 = 0;
@@ -34,26 +35,26 @@ namespace SharpFlame.Mapping
             sRGBA_sng ColourA = new sRGBA_sng();
             sRGBA_sng ColourB = new sRGBA_sng();
             bool ShowMinimapViewPosBox = default(bool);
-            Position.XY_dbl ViewCorner0 = default(Position.XY_dbl);
-            Position.XY_dbl ViewCorner1 = default(Position.XY_dbl);
-            Position.XY_dbl ViewCorner2 = default(Position.XY_dbl);
-            Position.XY_dbl ViewCorner3 = default(Position.XY_dbl);
+            XYDouble ViewCorner0 = default(XYDouble);
+            XYDouble ViewCorner1 = default(XYDouble);
+            XYDouble ViewCorner2 = default(XYDouble);
+            XYDouble ViewCorner3 = default(XYDouble);
             double dblTemp = 0;
-            Position.XYZ_dbl Vertex0 = default(Position.XYZ_dbl);
-            Position.XYZ_dbl Vertex1 = default(Position.XYZ_dbl);
-            Position.XYZ_dbl Vertex2 = default(Position.XYZ_dbl);
-            Position.XYZ_dbl Vertex3 = default(Position.XYZ_dbl);
-            sXY_int ScreenPos = new sXY_int();
-            Position.XYZ_dbl XYZ_dbl2 = default(Position.XYZ_dbl);
+            XYZDouble Vertex0 = default(XYZDouble);
+            XYZDouble Vertex1 = default(XYZDouble);
+            XYZDouble Vertex2 = default(XYZDouble);
+            XYZDouble Vertex3 = default(XYZDouble);
+            XYInt ScreenPos = new XYInt();
+            XYZDouble XYZ_dbl2 = default(XYZDouble);
             sWorldPos WorldPos = new sWorldPos();
-            Position.XY_dbl PosA = default(Position.XY_dbl);
-            Position.XY_dbl PosB = default(Position.XY_dbl);
-            Position.XY_dbl PosC = default(Position.XY_dbl);
-            Position.XY_dbl PosD = default(Position.XY_dbl);
-            sXY_int MinimapSizeXY = new sXY_int();
+            XYDouble PosA = default(XYDouble);
+            XYDouble PosB = default(XYDouble);
+            XYDouble PosC = default(XYDouble);
+            XYDouble PosD = default(XYDouble);
+            XYInt MinimapSizeXY = new XYInt();
             clsUnit Unit = default(clsUnit);
-            sXY_int StartXY = new sXY_int();
-            sXY_int FinishXY = new sXY_int();
+            XYInt StartXY = new XYInt();
+            XYInt FinishXY = new XYInt();
             bool DrawIt = default(bool);
             clsBrush.sPosNum DrawCentreSector = new clsBrush.sPosNum();
             clsTextLabel SelectionLabel = new clsTextLabel();
@@ -62,8 +63,8 @@ namespace SharpFlame.Mapping
             clsAction MapAction = default(clsAction);
             float ZNearFar = 0;
             MapViewControl MapViewControl = ViewInfo.MapViewControl;
-            sXY_int GLSize = ViewInfo.MapViewControl.GLSize;
-            Position.XY_dbl DrawCentre = default(Position.XY_dbl);
+            XYInt GLSize = ViewInfo.MapViewControl.GLSize;
+            XYDouble DrawCentre = default(XYDouble);
             double dblTemp2 = 0;
 
             dblTemp = SettingsManager.Settings.MinimapSize;
@@ -75,7 +76,7 @@ namespace SharpFlame.Mapping
                 MinimapSizeXY.Y = (int)(Terrain.TileSize.Y / ViewInfo.Tiles_Per_Minimap_Pixel);
             }
 
-            if ( !ViewInfo.ScreenXY_Get_ViewPlanePos(new sXY_int((int)(GLSize.X / 2.0D), (int)(GLSize.Y / 2.0D)), dblTemp, ref DrawCentre) )
+            if ( !ViewInfo.ScreenXY_Get_ViewPlanePos(new XYInt((int)(GLSize.X / 2.0D), (int)(GLSize.Y / 2.0D)), dblTemp, ref DrawCentre) )
             {
                 Matrix3DMath.VectorForwardsRotationByMatrix(ViewInfo.ViewAngleMatrix, ref XYZ_dbl);
                 dblTemp2 = App.VisionRadius * 2.0D / Math.Sqrt(XYZ_dbl.X * XYZ_dbl.X + XYZ_dbl.Z * XYZ_dbl.Z);
@@ -84,9 +85,9 @@ namespace SharpFlame.Mapping
             }
             DrawCentre.X = MathUtil.Clamp_dbl(DrawCentre.X, 0.0D, Terrain.TileSize.X * App.TerrainGridSpacing - 1.0D);
             DrawCentre.Y = MathUtil.Clamp_dbl(Convert.ToDouble(- DrawCentre.Y), 0.0D, Terrain.TileSize.Y * App.TerrainGridSpacing - 1.0D);
-            DrawCentreSector.Normal = GetPosSectorNum(new sXY_int((int)DrawCentre.X, (int)DrawCentre.Y));
+            DrawCentreSector.Normal = GetPosSectorNum(new XYInt((int)DrawCentre.X, (int)DrawCentre.Y));
             DrawCentreSector.Alignment =
-                GetPosSectorNum(new sXY_int((int)(DrawCentre.X - Constants.SectorTileSize * App.TerrainGridSpacing / 2.0D),
+                GetPosSectorNum(new XYInt((int)(DrawCentre.X - Constants.SectorTileSize * App.TerrainGridSpacing / 2.0D),
                     (int)(DrawCentre.Y - Constants.SectorTileSize * App.TerrainGridSpacing / 2.0D)));
 
             clsDrawSectorObjects DrawObjects = new clsDrawSectorObjects();
@@ -224,10 +225,10 @@ namespace SharpFlame.Mapping
                 if ( Selected_Area_VertexB != null )
                 {
                     //area is selected
-                    MathUtil.ReorderXY(Selected_Area_VertexA.XY, Selected_Area_VertexB.XY, ref StartXY, ref FinishXY);
+                    MathUtil.ReorderXY(Selected_Area_VertexA, Selected_Area_VertexB, ref StartXY, ref FinishXY);
                     XYZ_dbl.X = Selected_Area_VertexB.X * App.TerrainGridSpacing - ViewInfo.ViewPos.X;
                     XYZ_dbl.Z = - Selected_Area_VertexB.Y * App.TerrainGridSpacing - ViewInfo.ViewPos.Z;
-                    XYZ_dbl.Y = GetVertexAltitude(Selected_Area_VertexB.XY) - ViewInfo.ViewPos.Y;
+                    XYZ_dbl.Y = GetVertexAltitude(Selected_Area_VertexB) - ViewInfo.ViewPos.Y;
                     DrawIt = true;
                 }
                 else if ( modTools.Tool == modTools.Tools.TerrainSelect )
@@ -235,7 +236,7 @@ namespace SharpFlame.Mapping
                     if ( MouseOverTerrain != null )
                     {
                         //selection is changing under pointer
-                        MathUtil.ReorderXY(Selected_Area_VertexA.XY, MouseOverTerrain.Vertex.Normal, ref StartXY, ref FinishXY);
+                        MathUtil.ReorderXY(Selected_Area_VertexA, MouseOverTerrain.Vertex.Normal, ref StartXY, ref FinishXY);
                         XYZ_dbl.X = MouseOverTerrain.Vertex.Normal.X * App.TerrainGridSpacing - ViewInfo.ViewPos.X;
                         XYZ_dbl.Z = - MouseOverTerrain.Vertex.Normal.Y * App.TerrainGridSpacing - ViewInfo.ViewPos.Z;
                         XYZ_dbl.Y = GetVertexAltitude(MouseOverTerrain.Vertex.Normal) - ViewInfo.ViewPos.Y;
@@ -432,7 +433,7 @@ namespace SharpFlame.Mapping
                     if ( Unit_Selected_Area_VertexA != null )
                     {
                         //selection is changing under pointer
-                        MathUtil.ReorderXY(Unit_Selected_Area_VertexA.XY, MouseOverTerrain.Vertex.Normal, ref StartXY, ref FinishXY);
+                        MathUtil.ReorderXY(Unit_Selected_Area_VertexA, MouseOverTerrain.Vertex.Normal, ref StartXY, ref FinishXY);
                         GL.LineWidth(2.0F);
                         GL.Color3(0.0F, 1.0F, 1.0F);
                         for ( X = StartXY.X; X <= FinishXY.X - 1; X++ )
@@ -845,7 +846,7 @@ namespace SharpFlame.Mapping
                     }
                     XYZ_dbl.X = ScriptPosition.PosX - ViewInfo.ViewPos.X;
                     XYZ_dbl.Z = - ScriptPosition.PosY - ViewInfo.ViewPos.Z;
-                    XYZ_dbl.Y = GetTerrainHeight(new sXY_int(ScriptPosition.PosX, ScriptPosition.PosY)) - ViewInfo.ViewPos.Y;
+                    XYZ_dbl.Y = GetTerrainHeight(new XYInt(ScriptPosition.PosX, ScriptPosition.PosY)) - ViewInfo.ViewPos.Y;
                     Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrix_Inverted, XYZ_dbl, ref XYZ_dbl2);
                     if ( ViewInfo.Pos_Get_Screen_XY(XYZ_dbl2, ref ScreenPos) )
                     {
@@ -874,7 +875,7 @@ namespace SharpFlame.Mapping
                     }
                     XYZ_dbl.X = ScriptArea.PosAX - ViewInfo.ViewPos.X;
                     XYZ_dbl.Z = - ScriptArea.PosAY - ViewInfo.ViewPos.Z;
-                    XYZ_dbl.Y = GetTerrainHeight(new sXY_int(ScriptArea.PosAX, ScriptArea.PosAY)) - ViewInfo.ViewPos.Y;
+                    XYZ_dbl.Y = GetTerrainHeight(new XYInt(ScriptArea.PosAX, ScriptArea.PosAY)) - ViewInfo.ViewPos.Y;
                     Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrix_Inverted, XYZ_dbl, ref XYZ_dbl2);
                     if ( ViewInfo.Pos_Get_Screen_XY(XYZ_dbl2, ref ScreenPos) )
                     {
@@ -1061,7 +1062,7 @@ namespace SharpFlame.Mapping
                     if ( Selected_Area_VertexB != null )
                     {
                         //area is selected
-                        MathUtil.ReorderXY(Selected_Area_VertexA.XY, Selected_Area_VertexB.XY, ref StartXY, ref FinishXY);
+                        MathUtil.ReorderXY(Selected_Area_VertexA, Selected_Area_VertexB, ref StartXY, ref FinishXY);
                         DrawIt = true;
                     }
                     else if ( modTools.Tool == modTools.Tools.TerrainSelect )
@@ -1069,7 +1070,7 @@ namespace SharpFlame.Mapping
                         if ( MouseOverTerrain != null )
                         {
                             //selection is changing under mouse
-                            MathUtil.ReorderXY(Selected_Area_VertexA.XY, MouseOverTerrain.Vertex.Normal, ref StartXY, ref FinishXY);
+                            MathUtil.ReorderXY(Selected_Area_VertexA, MouseOverTerrain.Vertex.Normal, ref StartXY, ref FinishXY);
                             DrawIt = true;
                         }
                     }
@@ -1116,8 +1117,8 @@ namespace SharpFlame.Mapping
 
         public void DrawUnitRectangle(clsUnit Unit, int BorderInsideThickness, sRGBA_sng InsideColour, sRGBA_sng OutsideColour)
         {
-            sXY_int PosA = new sXY_int();
-            sXY_int PosB = new sXY_int();
+            XYInt PosA = new XYInt();
+            XYInt PosB = new XYInt();
             int A = 0;
             int Altitude = Unit.Pos.Altitude - ViewInfo.ViewPos.Y;
 

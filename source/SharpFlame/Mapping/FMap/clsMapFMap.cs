@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Ionic.Zip;
 using SharpFlame.Domain;
+using SharpFlame.Core.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
 using SharpFlame.Mapping.FMap;
@@ -665,7 +666,7 @@ namespace SharpFlame.Mapping
                     }
                 }
 
-                sXY_int newTerrainSize = resultInfo.TerrainSize;
+                XYInt newTerrainSize = resultInfo.TerrainSize;
                 Tileset = resultInfo.Tileset;
 
                 if (newTerrainSize.X <= 0 | newTerrainSize.X > Constants.MapMaxSize) {
@@ -1246,7 +1247,7 @@ namespace SharpFlame.Mapping
             UnitTypeBase unitTypeBase = default(UnitTypeBase);
             bool IsDesign = default(bool);
             clsUnitGroup UnitGroup = default(clsUnitGroup);
-            sXY_int ZeroPos = new sXY_int(0, 0);
+            XYInt ZeroPos = new XYInt(0, 0);
             UInt32 AvailableID = 0;
 
             UnitAdd.Map = this;
@@ -1265,7 +1266,7 @@ namespace SharpFlame.Mapping
                 {
                     ObjectPosInvalidCount++;
                 }
-                else if ( !App.PosIsWithinTileArea(INIObjects.Objects[A].Pos.XY, ZeroPos, Terrain.TileSize) )
+                else if ( !App.PosIsWithinTileArea(INIObjects.Objects[A].Pos, ZeroPos, Terrain.TileSize) )
                 {
                     ObjectPosInvalidCount++;
                 }

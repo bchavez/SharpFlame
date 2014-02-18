@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpFlame.Core.Domain;
 
 namespace SharpFlame.Maths
 {
@@ -29,7 +30,7 @@ namespace SharpFlame.Maths
             ResultArcAngle = Math.Atan2(num4, num3);
         }
 
-        public static double MatrixAngleToVector(Matrix3D Matrix, Position.XYZ_dbl Vector)
+        public static double MatrixAngleToVector(Matrix3D Matrix, XYZDouble Vector)
         {
             Matrix3D matrixOut = new Matrix3D();
             MatrixInvert(Matrix, matrixOut);
@@ -41,7 +42,7 @@ namespace SharpFlame.Maths
             return Math.Atan2(num5, num3);
         }
 
-        public static void MatrixAngleToVector(Matrix3D Matrix, Position.XYZ_dbl Vector, ref double ResultArcAngle, ref double ResultDirectionAngle)
+        public static void MatrixAngleToVector(Matrix3D Matrix, XYZDouble Vector, ref double ResultArcAngle, ref double ResultDirectionAngle)
         {
             Matrix3D matrixOut = new Matrix3D();
             MatrixInvert(Matrix, matrixOut);
@@ -221,7 +222,7 @@ namespace SharpFlame.Maths
 
         public static void MatrixToPY(Matrix3D Matrix, ref Angles.AnglePY ResultPY)
         {
-            Position.XYZ_dbl _dbl = new Position.XYZ_dbl();
+            XYZDouble _dbl = new XYZDouble();
             VectorForwardsRotationByMatrix(Matrix, ref _dbl);
             VectorToPY(_dbl, ref ResultPY);
         }
@@ -229,8 +230,8 @@ namespace SharpFlame.Maths
         public static void MatrixToRPY(Matrix3D Matrix, ref Angles.AngleRPY ResultRPY)
         {
             Angles.AnglePY epy = new Angles.AnglePY();
-            Position.XYZ_dbl _dbl = new Position.XYZ_dbl();
-            Position.XYZ_dbl _dbl2 = new Position.XYZ_dbl();
+            XYZDouble _dbl = new XYZDouble();
+            XYZDouble _dbl2 = new XYZDouble();
             Matrix3D matrix = new Matrix3D();
             Matrix3D matrixd = new Matrix3D();
             VectorForwardsRotationByMatrix(Matrix, ref _dbl2);
@@ -244,7 +245,7 @@ namespace SharpFlame.Maths
             ResultRPY.Roll = Math.Atan2(_dbl2.Y, _dbl2.X);
         }
 
-        public static double VectorAngleToVector(Position.XYZ_dbl VectorA, Position.XYZ_dbl VectorB)
+        public static double VectorAngleToVector(XYZDouble VectorA, XYZDouble VectorB)
         {
             Angles.AnglePY epy = new Angles.AnglePY();
             Matrix3D matrix = new Matrix3D();
@@ -253,91 +254,91 @@ namespace SharpFlame.Maths
             return MatrixAngleToVector(matrix, VectorB);
         }
 
-        public static void VectorBackwardsRotationByMatrix(Matrix3D Matrix, ref Position.XYZ_dbl ResultVector)
+        public static void VectorBackwardsRotationByMatrix(Matrix3D Matrix, ref XYZDouble ResultVector)
         {
             ResultVector.X = -Matrix.Values[2];
             ResultVector.Y = -Matrix.Values[5];
             ResultVector.Z = -Matrix.Values[8];
         }
 
-        public static void VectorBackwardsRotationByMatrix(Matrix3D Matrix, double Scale, ref Position.XYZ_dbl ResultVector)
+        public static void VectorBackwardsRotationByMatrix(Matrix3D Matrix, double Scale, ref XYZDouble ResultVector)
         {
             ResultVector.X = Matrix.Values[2] * -Scale;
             ResultVector.Y = Matrix.Values[5] * -Scale;
             ResultVector.Z = Matrix.Values[8] * -Scale;
         }
 
-        public static void VectorCrossProduct(Position.XYZ_dbl VectorA, Position.XYZ_dbl VectorB, ref Position.XYZ_dbl ResultVector)
+        public static void VectorCrossProduct(XYZDouble VectorA, XYZDouble VectorB, ref XYZDouble ResultVector)
         {
             ResultVector.X = (VectorA.Y * VectorB.Z) - (VectorB.Y * VectorA.Z);
             ResultVector.Y = (VectorA.Z * VectorB.X) - (VectorB.Z * VectorA.X);
             ResultVector.Z = (VectorA.X * VectorB.Y) - (VectorB.X * VectorA.Y);
         }
 
-        public static void VectorDownRotationByMatrix(Matrix3D Matrix, ref Position.XYZ_dbl ResultVector)
+        public static void VectorDownRotationByMatrix(Matrix3D Matrix, ref XYZDouble ResultVector)
         {
             ResultVector.X = -Matrix.Values[1];
             ResultVector.Y = -Matrix.Values[4];
             ResultVector.Z = -Matrix.Values[7];
         }
 
-        public static void VectorDownRotationByMatrix(Matrix3D Matrix, double Scale, ref Position.XYZ_dbl ResultVector)
+        public static void VectorDownRotationByMatrix(Matrix3D Matrix, double Scale, ref XYZDouble ResultVector)
         {
             ResultVector.X = Matrix.Values[1] * -Scale;
             ResultVector.Y = Matrix.Values[4] * -Scale;
             ResultVector.Z = Matrix.Values[7] * -Scale;
         }
 
-        public static void VectorForwardsRotationByMatrix(Matrix3D Matrix, ref Position.XYZ_dbl ResultVector)
+        public static void VectorForwardsRotationByMatrix(Matrix3D Matrix, ref XYZDouble ResultVector)
         {
             ResultVector.X = Matrix.Values[2];
             ResultVector.Y = Matrix.Values[5];
             ResultVector.Z = Matrix.Values[8];
         }
 
-        public static void VectorForwardsRotationByMatrix(Matrix3D Matrix, double Scale, ref Position.XYZ_dbl ResultVector)
+        public static void VectorForwardsRotationByMatrix(Matrix3D Matrix, double Scale, ref XYZDouble ResultVector)
         {
             ResultVector.X = Matrix.Values[2] * Scale;
             ResultVector.Y = Matrix.Values[5] * Scale;
             ResultVector.Z = Matrix.Values[8] * Scale;
         }
 
-        public static void VectorLeftRotationByMatrix(Matrix3D Matrix, ref Position.XYZ_dbl ResultVector)
+        public static void VectorLeftRotationByMatrix(Matrix3D Matrix, ref XYZDouble ResultVector)
         {
             ResultVector.X = -Matrix.Values[0];
             ResultVector.Y = -Matrix.Values[3];
             ResultVector.Z = -Matrix.Values[6];
         }
 
-        public static void VectorLeftRotationByMatrix(Matrix3D Matrix, double Scale, ref Position.XYZ_dbl ResultVector)
+        public static void VectorLeftRotationByMatrix(Matrix3D Matrix, double Scale, ref XYZDouble ResultVector)
         {
             ResultVector.X = Matrix.Values[0] * -Scale;
             ResultVector.Y = Matrix.Values[3] * -Scale;
             ResultVector.Z = Matrix.Values[6] * -Scale;
         }
 
-        public static void VectorRightRotationByMatrix(Matrix3D Matrix, ref Position.XYZ_dbl ResultVector)
+        public static void VectorRightRotationByMatrix(Matrix3D Matrix, ref XYZDouble ResultVector)
         {
             ResultVector.X = Matrix.Values[0];
             ResultVector.Y = Matrix.Values[3];
             ResultVector.Z = Matrix.Values[6];
         }
 
-        public static void VectorRightRotationByMatrix(Matrix3D Matrix, double Scale, ref Position.XYZ_dbl ResultVector)
+        public static void VectorRightRotationByMatrix(Matrix3D Matrix, double Scale, ref XYZDouble ResultVector)
         {
             ResultVector.X = Matrix.Values[0] * Scale;
             ResultVector.Y = Matrix.Values[3] * Scale;
             ResultVector.Z = Matrix.Values[6] * Scale;
         }
 
-        public static void VectorRotationByMatrix(Matrix3D Matrix, Position.XYZ_dbl Vector, ref Position.XYZ_dbl ResultVector)
+        public static void VectorRotationByMatrix(Matrix3D Matrix, XYZDouble Vector, ref XYZDouble ResultVector)
         {
             ResultVector.X = ((Vector.X * Matrix.Values[0]) + (Vector.Y * Matrix.Values[1])) + (Vector.Z * Matrix.Values[2]);
             ResultVector.Y = ((Vector.X * Matrix.Values[3]) + (Vector.Y * Matrix.Values[4])) + (Vector.Z * Matrix.Values[5]);
             ResultVector.Z = ((Vector.X * Matrix.Values[6]) + (Vector.Y * Matrix.Values[7])) + (Vector.Z * Matrix.Values[8]);
         }
 
-        public static void VectorToPY(Position.XYZ_dbl Vector, ref Angles.AnglePY ResultPY)
+        public static void VectorToPY(XYZDouble Vector, ref Angles.AnglePY ResultPY)
         {
             ResultPY.Pitch = Math.Atan2(-Vector.Y, Math.Sqrt((Vector.X * Vector.X) + (Vector.Z * Vector.Z)));
             if (ResultPY.Pitch > 1.5707963267948966)
@@ -351,14 +352,14 @@ namespace SharpFlame.Maths
             ResultPY.Yaw = Math.Atan2(Vector.X, Vector.Z);
         }
 
-        public static void VectorUpRotationByMatrix(Matrix3D Matrix, ref Position.XYZ_dbl ResultVector)
+        public static void VectorUpRotationByMatrix(Matrix3D Matrix, ref XYZDouble ResultVector)
         {
             ResultVector.X = Matrix.Values[1];
             ResultVector.Y = Matrix.Values[4];
             ResultVector.Z = Matrix.Values[7];
         }
 
-        public static void VectorUpRotationByMatrix(Matrix3D Matrix, double Scale, ref Position.XYZ_dbl ResultVector)
+        public static void VectorUpRotationByMatrix(Matrix3D Matrix, double Scale, ref XYZDouble ResultVector)
         {
             ResultVector.X = Matrix.Values[1] * Scale;
             ResultVector.Y = Matrix.Values[4] * Scale;

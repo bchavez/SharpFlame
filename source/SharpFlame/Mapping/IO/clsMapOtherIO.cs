@@ -5,6 +5,7 @@ using System.Text;
 using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
+using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.IO;
@@ -103,7 +104,7 @@ namespace SharpFlame.Mapping
                         return ReturnResult;
                     }
 
-                    TerrainBlank(new sXY_int(MapWidth, MapHeight));
+                    TerrainBlank(new XYInt(MapWidth, MapHeight));
                     TileType_Reset();
 
                     int X = 0;
@@ -373,8 +374,8 @@ namespace SharpFlame.Mapping
                     }
 
                     UInt32 NewGatewayCount = 0;
-                    sXY_int NewGateStart = new sXY_int();
-                    sXY_int NewGateFinish = new sXY_int();
+                    XYInt NewGateStart = new XYInt();
+                    XYInt NewGateFinish = new XYInt();
 
                     NewGatewayCount = File.ReadUInt32();
                     WarningCount = 0;
@@ -528,7 +529,7 @@ namespace SharpFlame.Mapping
                 bool FlipX = default(bool);
                 bool FlipZ = default(bool);
                 byte Rotation = 0;
-                sXY_int NewTileSize = new sXY_int();
+                XYInt NewTileSize = new XYInt();
                 double dblTemp = 0;
 
                 Line_Num = 0;
@@ -1017,7 +1018,7 @@ namespace SharpFlame.Mapping
                 }
 
                 clsUnit NewUnit = default(clsUnit);
-                sXYZ_int XYZ_int = new sXYZ_int();
+                XYZInt XYZ_int = new XYZInt(0, 0, 0);
                 UnitTypeBase newTypeBase = default(UnitTypeBase);
                 UInt32 AvailableID = 0;
                 clsLNDObject CurrentObject = default(clsLNDObject);
@@ -1105,18 +1106,14 @@ namespace SharpFlame.Mapping
             return ReturnResult;
         }
 
-        public sXYZ_int LNDPos_From_MapPos(sXY_int Horizontal)
+        public XYZInt LNDPos_From_MapPos(XYInt Horizontal)
         {
-            sXYZ_int Result = new sXYZ_int();
-
-            Result.X = Horizontal.X - (int)(Terrain.TileSize.X * App.TerrainGridSpacing / 2.0D);
-            Result.Z = ((int)(Terrain.TileSize.Y * App.TerrainGridSpacing / 2.0D)) - Horizontal.Y;
-            Result.Y = (int)(GetTerrainHeight(Horizontal));
-
-            return Result;
+            return new XYZInt(Horizontal.X - (int)(Terrain.TileSize.X * App.TerrainGridSpacing / 2.0D),
+            				  ((int)(Terrain.TileSize.Y * App.TerrainGridSpacing / 2.0D)) - Horizontal.Y,
+			                  (int)(GetTerrainHeight(Horizontal)));
         }
 
-        public sWorldPos MapPos_From_LNDPos(sXYZ_int Pos)
+        public sWorldPos MapPos_From_LNDPos(XYZInt Pos)
         {
             sWorldPos Result = new sWorldPos();
 
@@ -1316,7 +1313,7 @@ namespace SharpFlame.Mapping
                 File.Write(Text);
                 Text = "    Objects {" + Convert.ToString(EndChar);
                 File.Write(Text);
-                sXYZ_int XYZ_int = new sXYZ_int();
+                XYZInt XYZ_int = new XYZInt(0, 0, 0);
                 string Code = null;
                 int CustomDroidCount = 0;
                 clsUnit Unit = default(clsUnit);
@@ -1493,7 +1490,7 @@ namespace SharpFlame.Mapping
 
             Bitmap MinimapBitmap = new Bitmap(Terrain.TileSize.X, Terrain.TileSize.Y);
 
-            clsMinimapTexture Texture = new clsMinimapTexture(new sXY_int(Terrain.TileSize.X, Terrain.TileSize.Y));
+            clsMinimapTexture Texture = new clsMinimapTexture(new XYInt(Terrain.TileSize.X, Terrain.TileSize.Y));
             MinimapTextureFill(Texture);
 
             for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )

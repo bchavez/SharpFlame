@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using NLog;
 using SharpFlame.Collections;
+using SharpFlame.Core.Domain;
 using SharpFlame.Core.Parsers;
 using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.Core.Parsers.Lev;
@@ -648,7 +649,7 @@ namespace SharpFlame.Mapping
             int StructureBadModulesCount = 0;
             int FeatureBadPositionCount = 0;
             int ModuleLimit = 0;
-            sXY_int ZeroPos = new sXY_int(0, 0);
+            XYInt ZeroPos = new XYInt(0, 0);
             StructureTypeBase moduleTypeBase = default(StructureTypeBase);
             clsUnit NewModule = default(clsUnit);
 
@@ -678,9 +679,9 @@ namespace SharpFlame.Mapping
                         logger.Debug ("{0} pos was null", INIStructures.Structures[A].Code);
                         StructureBadPositionCount++;
                     }
-                    else if ( !App.PosIsWithinTileArea(INIStructures.Structures[A].Pos.WorldPos.Horizontal, ZeroPos, Terrain.TileSize) )
+                    else if ( !App.PosIsWithinTileArea(INIStructures.Structures[A].Pos, ZeroPos, Terrain.TileSize) )
                     {
-                        logger.Debug ("{0} structure pos x{1} y{2}, is wrong.", INIStructures.Structures[A].Code, INIStructures.Structures [A].Pos.WorldPos.Horizontal.X, INIStructures.Structures [A].Pos.WorldPos.Horizontal.Y);
+                        logger.Debug ("{0} structure pos x{1} y{2}, is wrong.", INIStructures.Structures[A].Code, INIStructures.Structures [A].Pos.X, INIStructures.Structures [A].Pos.Y);
                         StructureBadPositionCount++;
                     }
                     else
@@ -711,7 +712,7 @@ namespace SharpFlame.Mapping
                             {
                                 NewUnit.UnitGroup = INIStructures.Structures[A].UnitGroup;
                             }
-                            NewUnit.Pos = INIStructures.Structures[A].Pos.WorldPos;
+							NewUnit.Pos = new sWorldPos(INIStructures.Structures[A].Pos, INIStructures.Structures[A].Pos.Z);
                             NewUnit.Rotation = Convert.ToInt32(INIStructures.Structures[A].Rotation.Direction * 360.0D / App.INIRotationMax);
                             if ( NewUnit.Rotation == 360 )
                             {
@@ -803,7 +804,7 @@ namespace SharpFlame.Mapping
                     {
                         FeatureBadPositionCount++;
                     }
-                    else if ( !App.PosIsWithinTileArea(INIFeatures.Features[A].Pos.WorldPos.Horizontal, ZeroPos, Terrain.TileSize) )
+                    else if ( !App.PosIsWithinTileArea(INIFeatures.Features[A].Pos, ZeroPos, Terrain.TileSize) )
                     {
                         FeatureBadPositionCount++;
                     }
@@ -827,7 +828,7 @@ namespace SharpFlame.Mapping
                             NewUnit = new clsUnit();
                             NewUnit.TypeBase = featureTypeBase;
                             NewUnit.UnitGroup = ScavengerUnitGroup;
-                            NewUnit.Pos = INIFeatures.Features[A].Pos.WorldPos;
+							NewUnit.Pos = new sWorldPos ((XYInt)INIFeatures.Features [A].Pos, INIFeatures.Features [A].Pos.Z);
                             NewUnit.Rotation = Convert.ToInt32(INIFeatures.Features[A].Rotation.Direction * 360.0D / App.INIRotationMax);
                             if ( NewUnit.Rotation == 360 )
                             {
@@ -866,7 +867,7 @@ namespace SharpFlame.Mapping
                     {
                         DroidBadPositionCount++;
                     }
-                    else if ( !App.PosIsWithinTileArea(INIDroids.Droids[A].Pos.WorldPos.Horizontal, ZeroPos, Terrain.TileSize) )
+                    else if ( !App.PosIsWithinTileArea(INIDroids.Droids[A].Pos, ZeroPos, Terrain.TileSize) )
                     {
                         DroidBadPositionCount++;
                     }
@@ -1036,7 +1037,7 @@ namespace SharpFlame.Mapping
                             {
                                 NewUnit.UnitGroup = INIDroids.Droids[A].UnitGroup;
                             }
-                            NewUnit.Pos = INIDroids.Droids[A].Pos.WorldPos;
+							NewUnit.Pos = new sWorldPos(INIDroids.Droids[A].Pos, INIDroids.Droids[A].Pos.Z);
                             NewUnit.Rotation = Convert.ToInt32(INIDroids.Droids[A].Rotation.Direction * 360.0D / App.INIRotationMax);
                             if ( NewUnit.Rotation == 360 )
                             {
@@ -1109,17 +1110,13 @@ namespace SharpFlame.Mapping
                                 feature.Code = iniToken.Data;
                                 break;
                             case "position":
-                                var tmpPosition = SharpFlame.Core.Parsers.Ini.IniReader.Int3.Parse(iniToken.Data);
-                                feature.Pos =  new clsWorldPos(new sWorldPos(new sXY_int(tmpPosition.I1, tmpPosition.I2), tmpPosition.I3));
+								feature.Pos =  XYZInt.FromString(iniToken.Data);
                                 break;
                             case "rotation":
-                                var tmpRotation = SharpFlame.Core.Parsers.Ini.IniReader.Int3.Parse(iniToken.Data);
-                                feature.Rotation.Direction = (ushort)tmpRotation.I1;
-                                feature.Rotation.Pitch = (ushort)tmpRotation.I2;
-                                feature.Rotation.Roll = (ushort)tmpRotation.I3;
+								feature.Rotation = Rotation.FromString(iniToken.Data);
                                 break;
                             case "health":
-                                feature.HealthPercent = SharpFlame.Core.Parsers.Ini.IniReader.Health.Parse(iniToken.Data); 
+                                feature.HealthPercent = SharpFlame.Core.Parsers.Ini.IniReader.ReadHealthPercent(iniToken.Data); 
                                 if (feature.HealthPercent < 0 || feature.HealthPercent > 100) {
                                     resultObject.WarningAdd(string.Format("#{0} invalid health: \"{1}\"", iniSection.Name, feature.HealthPercent), false);
                                     logger.Warn("#{0} invalid health: \"{1}\"", iniSection.Name, feature.HealthPercent);
@@ -1194,15 +1191,11 @@ namespace SharpFlame.Mapping
                                 break;
 
                             case "position":
-                                var tmpPosition = SharpFlame.Core.Parsers.Ini.IniReader.Int3.Parse(iniToken.Data);
-                                droid.Pos =  new clsWorldPos(new sWorldPos(new sXY_int(tmpPosition.I1, tmpPosition.I2), tmpPosition.I3));
+								droid.Pos =  XYZInt.FromString(iniToken.Data);
                                 break;
 
                             case "rotation":
-                                var tmpRotation = SharpFlame.Core.Parsers.Ini.IniReader.Int3.Parse(iniToken.Data);
-                                droid.Rotation.Direction = (ushort)tmpRotation.I1;
-                                droid.Rotation.Pitch = (ushort)tmpRotation.I2;
-                                droid.Rotation.Roll = (ushort)tmpRotation.I3;
+								droid.Rotation = Rotation.FromString(iniToken.Data);
                                 break;
 
                             case "player":
@@ -1221,7 +1214,7 @@ namespace SharpFlame.Mapping
                                 break;
 
                             case "health":
-                                droid.HealthPercent = SharpFlame.Core.Parsers.Ini.IniReader.Health.Parse(iniToken.Data); 
+                                droid.HealthPercent = SharpFlame.Core.Parsers.Ini.IniReader.ReadHealthPercent(iniToken.Data); 
                                 if (droid.HealthPercent < 0 || droid.HealthPercent > 100) {
                                     resultObject.WarningAdd(string.Format("#{0} invalid health: \"{1}\"", iniSection.Name, droid.HealthPercent), false);
                                     invalid = true;
@@ -1367,15 +1360,11 @@ namespace SharpFlame.Mapping
                                 break;
 
                             case "position":
-                                var tmpPosition = SharpFlame.Core.Parsers.Ini.IniReader.Int3.Parse(iniToken.Data);
-                                structure.Pos =  new clsWorldPos(new sWorldPos(new sXY_int(tmpPosition.I1, tmpPosition.I2), tmpPosition.I3));
+								structure.Pos = XYZInt.FromString(iniToken.Data);
                                 break;
 
                             case "rotation":
-                                var tmpRotation = SharpFlame.Core.Parsers.Ini.IniReader.Int3.Parse(iniToken.Data);
-                                structure.Rotation.Direction = (ushort)tmpRotation.I1;
-                                structure.Rotation.Pitch = (ushort)tmpRotation.I2;
-                                structure.Rotation.Roll = (ushort)tmpRotation.I3;
+								structure.Rotation = Rotation.FromString(iniToken.Data);
                                 break;
 
                             case "modules":
@@ -1383,7 +1372,7 @@ namespace SharpFlame.Mapping
                                 break;
 
                             case "health":
-                                structure.HealthPercent = SharpFlame.Core.Parsers.Ini.IniReader.Health.Parse(iniToken.Data); 
+                                structure.HealthPercent = SharpFlame.Core.Parsers.Ini.IniReader.ReadHealthPercent(iniToken.Data); 
                                 if (structure.HealthPercent < 0 || structure.HealthPercent > 100) {
                                     resultObject.WarningAdd(string.Format("#{0} invalid health: \"{1}\"", iniSection.Name, structure.HealthPercent), false);
                                     invalid = true;
@@ -1474,6 +1463,7 @@ namespace SharpFlame.Mapping
             catch ( Exception ex )
             {
                 ReturnResult.Problem = ex.Message;
+				logger.ErrorException ("Got an exception", ex);
                 return ReturnResult;
             }
 
@@ -1500,8 +1490,8 @@ namespace SharpFlame.Mapping
             int A = 0;
             int X = 0;
             int Y = 0;
-            sXY_int PosA = new sXY_int();
-            sXY_int PosB = new sXY_int();
+            XYInt PosA = new XYInt();
+            XYInt PosB = new XYInt();
 
             try
             {
@@ -1529,7 +1519,7 @@ namespace SharpFlame.Mapping
                     return ReturnResult;
                 }
 
-                TerrainBlank(new sXY_int(Convert.ToInt32(MapWidth), Convert.ToInt32(MapHeight)));
+                TerrainBlank(new XYInt(Convert.ToInt32(MapWidth), Convert.ToInt32(MapHeight)));
 
                 for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
                 {
@@ -1587,6 +1577,7 @@ namespace SharpFlame.Mapping
             catch ( Exception ex )
             {
                 ReturnResult.Problem = ex.Message;
+				logger.ErrorException ("Got an exception", ex);
                 return ReturnResult;
             }
 
@@ -1645,6 +1636,7 @@ namespace SharpFlame.Mapping
             catch ( Exception ex )
             {
                 ReturnResult.Problem = ex.Message;
+				logger.ErrorException ("Got an exception", ex);
                 return ReturnResult;
             }
 
@@ -1704,6 +1696,7 @@ namespace SharpFlame.Mapping
             catch ( Exception ex )
             {
                 ReturnResult.Problem = ex.Message;
+				logger.ErrorException ("Got an exception", ex);
                 return ReturnResult;
             }
 
@@ -1762,6 +1755,7 @@ namespace SharpFlame.Mapping
             catch ( Exception ex )
             {
                 ReturnResult.Problem = ex.Message;
+				logger.ErrorException ("Got an exception", ex);
                 return ReturnResult;
             }
 
@@ -1820,6 +1814,7 @@ namespace SharpFlame.Mapping
             catch ( Exception ex )
             {
                 ReturnResult.Problem = ex.Message;
+				logger.ErrorException ("Got an exception", ex);
                 return ReturnResult;
             }
 
@@ -1990,12 +1985,12 @@ namespace SharpFlame.Mapping
             clsUnit Unit = default(clsUnit);
             bool[] UnitIsModule = new bool[Units.Count];
             int[] UnitModuleCount = new int[Units.Count];
-            sXY_int SectorNum = new sXY_int();
+            XYInt SectorNum = new XYInt();
             StructureTypeBase otherStructureTypeBase = default(StructureTypeBase);
             clsUnit OtherUnit = default(clsUnit);
-            sXY_int ModuleMin = new sXY_int();
-            sXY_int ModuleMax = new sXY_int();
-            sXY_int Footprint = new sXY_int();
+            XYInt ModuleMin = new XYInt();
+            XYInt ModuleMax = new XYInt();
+            XYInt Footprint = new XYInt();
             int A = 0;
             StructureTypeBase.enumStructureType[] UnderneathTypes = new StructureTypeBase.enumStructureType[2];
             int UnderneathTypeCount = 0;
@@ -2435,6 +2430,7 @@ namespace SharpFlame.Mapping
             catch ( Exception ex )
             {
                 ReturnResult.WarningAdd(ex.Message);
+				logger.ErrorException ("Got an exception", ex);
             }
 
             return ReturnResult;
@@ -2955,6 +2951,7 @@ namespace SharpFlame.Mapping
                     catch ( Exception ex )
                     {
                         ReturnResult.ProblemAdd(ex.Message);
+						logger.ErrorException ("Got an exception", ex);
                         return ReturnResult;
                     }
 
@@ -2980,9 +2977,10 @@ namespace SharpFlame.Mapping
                     {
                         Directory.CreateDirectory(CampDirectory);
                     }
-                    catch ( Exception )
+                    catch ( Exception ex)
                     {
                         ReturnResult.ProblemAdd("Unable to create directory " + CampDirectory);
+						logger.ErrorException ("Got an exception", ex);
                         return ReturnResult;
                     }
 
@@ -3018,6 +3016,7 @@ namespace SharpFlame.Mapping
             {
                 Debugger.Break();
                 ReturnResult.ProblemAdd(ex.Message);
+				logger.ErrorException ("Got an exception", ex);
                 return ReturnResult;
             }
 
@@ -3065,6 +3064,7 @@ namespace SharpFlame.Mapping
             catch ( Exception ex )
             {
                 ReturnResult.Problem = ex.Message;
+				logger.ErrorException ("Got an exception", ex);
                 return ReturnResult;
             }
 

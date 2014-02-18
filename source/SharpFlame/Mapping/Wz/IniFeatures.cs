@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using SharpFlame.Util;
+using SharpFlame.Core.Domain;
 
 namespace SharpFlame.Mapping.Wz
 {
@@ -10,8 +11,8 @@ namespace SharpFlame.Mapping.Wz
         {
             public UInt32 ID;
             public string Code;
-            public clsWorldPos Pos;
-            public sWZAngle Rotation;
+            public XYZInt Pos;
+			public Rotation Rotation;
             public int HealthPercent;
         }
 

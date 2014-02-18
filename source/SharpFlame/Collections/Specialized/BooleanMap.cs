@@ -1,5 +1,6 @@
 using System;
 using SharpFlame.Maths;
+using SharpFlame.Core.Domain;
 
 namespace SharpFlame.Collections.Specialized
 {
@@ -397,7 +398,7 @@ namespace SharpFlame.Collections.Specialized
 
     public class BooleanMapDataValue
     {
-        public sXY_int Size;
+        public XYInt Size;
         public bool[,] Value;
     }
 }

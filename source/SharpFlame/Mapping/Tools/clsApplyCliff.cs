@@ -1,4 +1,5 @@
 using System;
+using SharpFlame.Core.Domain;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 
@@ -22,7 +23,7 @@ namespace SharpFlame.Mapping.Tools
         private bool TriChanged;
         private bool NewVal;
         private clsTerrain Terrain;
-        private sXY_int Pos;
+        private XYInt Pos;
 
         public override void ActionPerform()
         {

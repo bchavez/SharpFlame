@@ -7,6 +7,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.AppSettings;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
+using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.Changes;
@@ -30,7 +31,7 @@ namespace SharpFlame.Mapping
         public clsTerrain Terrain;
 
         public clsSector[,] Sectors = new clsSector[0, 0];
-        public sXY_int SectorCount;
+        public XYInt SectorCount;
 
         public clsShadowSector[,] ShadowSectors = new clsShadowSector[0, 0];
 
@@ -50,11 +51,11 @@ namespace SharpFlame.Mapping
         private bool _ReadyForUserInput = false;
 
         public ConnectedList<clsUnit, clsMap> SelectedUnits;
-        public clsXY_int Selected_Tile_A;
-        public clsXY_int Selected_Tile_B;
-        public clsXY_int Selected_Area_VertexA;
-        public clsXY_int Selected_Area_VertexB;
-        public clsXY_int Unit_Selected_Area_VertexA;
+        public XYInt Selected_Tile_A;
+        public XYInt Selected_Tile_B;
+        public XYInt Selected_Area_VertexA;
+        public XYInt Selected_Area_VertexB;
+        public XYInt Unit_Selected_Area_VertexA;
 
         public int Minimap_GLTexture;
         public int Minimap_Texture_Size;
@@ -88,6 +89,10 @@ namespace SharpFlame.Mapping
 
         public clsMap()
         {
+			SectorCount = new XYInt (0, 0);
+			Selected_Area_VertexA = new XYInt (0, 0);
+			Selected_Area_VertexB = new XYInt (0, 0);
+
             this.frmMainLink = new ConnectedListLink<clsMap, frmMain>( this );
             this.Sectors = new clsSector[0, 0];
             this.ShadowSectors = new clsShadowSector[0, 0];
@@ -106,7 +111,7 @@ namespace SharpFlame.Mapping
             Initialize();
         }
 
-        public clsMap(sXY_int TileSize) : this()
+        public clsMap(XYInt TileSize) : this()
         {
             Initialize();
             TerrainBlank(TileSize);
@@ -124,7 +129,7 @@ namespace SharpFlame.Mapping
             ScriptAreas.MaintainOrder = true;
         }
 
-        public clsMap(clsMap MapToCopy, sXY_int Offset, sXY_int Area) : this()
+        public clsMap(clsMap MapToCopy, XYInt Offset, XYInt Area) : this()
         {
             int EndX = 0;
             int EndY = 0;
@@ -185,11 +190,11 @@ namespace SharpFlame.Mapping
             {
                 for ( X = 0; X <= SectorCount.X - 1; X++ )
                 {
-                    Sectors[X, Y] = new clsSector(new sXY_int(X, Y));
+                    Sectors[X, Y] = new clsSector(new XYInt(X, Y));
                 }
             }
 
-            sXY_int PosDif = new sXY_int();
+            XYInt PosDif = new XYInt();
             clsUnitAdd NewUnitAdd = new clsUnitAdd();
             NewUnitAdd.Map = this;
             clsUnit NewUnit = default(clsUnit);
@@ -198,14 +203,14 @@ namespace SharpFlame.Mapping
             foreach ( clsGateway tempLoopVar_Gateway in MapToCopy.Gateways )
             {
                 Gateway = tempLoopVar_Gateway;
-                GatewayCreate(new sXY_int(Gateway.PosA.X - Offset.X, Gateway.PosA.Y - Offset.Y),
-                    new sXY_int(Gateway.PosB.X - Offset.X, Gateway.PosB.Y - Offset.Y));
+                GatewayCreate(new XYInt(Gateway.PosA.X - Offset.X, Gateway.PosA.Y - Offset.Y),
+                    new XYInt(Gateway.PosB.X - Offset.X, Gateway.PosB.Y - Offset.Y));
             }
 
             PosDif.X = - Offset.X * App.TerrainGridSpacing;
             PosDif.Y = - Offset.Y * App.TerrainGridSpacing;
             clsUnit Unit = default(clsUnit);
-            sXY_int NewPos = new sXY_int();
+            XYInt NewPos = new XYInt();
             foreach ( clsUnit tempLoopVar_Unit in MapToCopy.Units )
             {
                 Unit = tempLoopVar_Unit;
@@ -221,7 +226,7 @@ namespace SharpFlame.Mapping
             }
         }
 
-        protected void TerrainBlank(sXY_int TileSize)
+        protected void TerrainBlank(XYInt TileSize)
         {
             int X = 0;
             int Y = 0;
@@ -234,12 +239,12 @@ namespace SharpFlame.Mapping
             {
                 for ( X = 0; X <= SectorCount.X - 1; X++ )
                 {
-                    Sectors[X, Y] = new clsSector(new sXY_int(X, Y));
+                    Sectors[X, Y] = new clsSector(new XYInt(X, Y));
                 }
             }
         }
 
-        public bool GetTerrainTri(sXY_int Horizontal)
+        public bool GetTerrainTri(XYInt Horizontal)
         {
             int X1 = 0;
             int Y1 = 0;
@@ -278,7 +283,7 @@ namespace SharpFlame.Mapping
             }
         }
 
-        public double GetTerrainSlopeAngle(sXY_int Horizontal)
+        public double GetTerrainSlopeAngle(XYInt Horizontal)
         {
             int X1 = 0;
             int X2 = 0;
@@ -291,9 +296,9 @@ namespace SharpFlame.Mapping
             double GradientX = 0;
             double GradientY = 0;
             double Offset = 0;
-            Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
-            Position.XYZ_dbl XYZ_dbl2 = default(Position.XYZ_dbl);
-            Position.XYZ_dbl XYZ_dbl3 = default(Position.XYZ_dbl);
+            XYZDouble XYZ_dbl = default(XYZDouble);
+            XYZDouble XYZ_dbl2 = default(XYZDouble);
+            XYZDouble XYZ_dbl3 = default(XYZDouble);
             Angles.AnglePY AnglePY = default(Angles.AnglePY);
 
             XG = (Horizontal.X / App.TerrainGridSpacing);
@@ -353,7 +358,7 @@ namespace SharpFlame.Mapping
             }
         }
 
-        public double GetTerrainHeight(sXY_int Horizontal)
+        public double GetTerrainHeight(XYInt Horizontal)
         {
             int X1 = 0;
             int X2 = 0;
@@ -418,17 +423,17 @@ namespace SharpFlame.Mapping
             return (Offset + GradientX * RatioX + GradientY * RatioY) * HeightMultiplier;
         }
 
-        public Position.XYZ_dbl TerrainVertexNormalCalc(int X, int Y)
+        public XYZDouble TerrainVertexNormalCalc(int X, int Y)
         {
-            Position.XYZ_dbl ReturnResult = default(Position.XYZ_dbl);
+            XYZDouble ReturnResult = default(XYZDouble);
             int TerrainHeightX1 = 0;
             int TerrainHeightX2 = 0;
             int TerrainHeightY1 = 0;
             int TerrainHeightY2 = 0;
             int X2 = 0;
             int Y2 = 0;
-            Position.XYZ_dbl vector1 = default(Position.XYZ_dbl);
-            Position.XYZ_dbl vector2 = default(Position.XYZ_dbl);
+            XYZDouble vector1 = default(XYZDouble);
+            XYZDouble vector2 = default(XYZDouble);
             double dblTemp = 0;
 
             X2 = MathUtil.Clamp_int(X - 1, 0, Terrain.TileSize.X);
@@ -517,7 +522,7 @@ namespace SharpFlame.Mapping
             ScriptAreas = null;
         }
 
-        public void TerrainResize(sXY_int Offset, sXY_int Size)
+        public void TerrainResize(XYInt Offset, XYInt Size)
         {
             int StartX = 0;
             int StartY = 0;
@@ -592,7 +597,7 @@ namespace SharpFlame.Mapping
                 Gateway.PosB.Y -= Offset.Y;
             }
 
-            sXY_int ZeroPos = new sXY_int(0, 0);
+            XYInt ZeroPos = new XYInt(0, 0);
 
             int Position = 0;
             foreach ( clsUnit tempLoopVar_Unit in Units.GetItemsAsSimpleList() )
@@ -616,7 +621,7 @@ namespace SharpFlame.Mapping
                 }
             }
 
-            sXY_int PosOffset = new sXY_int(Offset.X * App.TerrainGridSpacing, Offset.Y * App.TerrainGridSpacing);
+            XYInt PosOffset = new XYInt(Offset.X * App.TerrainGridSpacing, Offset.Y * App.TerrainGridSpacing);
 
             clsScriptPosition ScriptPosition = default(clsScriptPosition);
             foreach ( clsScriptPosition tempLoopVar_ScriptPosition in ScriptPositions.GetItemsAsSimpleList() )
@@ -663,10 +668,10 @@ namespace SharpFlame.Mapping
                 bool[,] IsBasePlate = new bool[Constants.SectorTileSize, Constants.SectorTileSize];
                 clsUnit Unit = default(clsUnit);
                 StructureTypeBase structureTypeBase = default(StructureTypeBase);
-                sXY_int Footprint = new sXY_int();
+                XYInt Footprint = new XYInt();
                 clsUnitSectorConnection Connection = default(clsUnitSectorConnection);
-                sXY_int FootprintStart = new sXY_int();
-                sXY_int FootprintFinish = new sXY_int();
+                XYInt FootprintStart = new XYInt();
+                XYInt FootprintFinish = new XYInt();
                 foreach ( clsUnitSectorConnection tempLoopVar_Connection in Sectors[X, Y].Units )
                 {
                     Connection = tempLoopVar_Connection;
@@ -737,10 +742,10 @@ namespace SharpFlame.Mapping
         public void DrawTileWireframe(int TileX, int TileY)
         {
             double[] TileTerrainHeight = new double[4];
-            Position.XYZ_dbl Vertex0 = new Position.XYZ_dbl();
-            Position.XYZ_dbl Vertex1 = new Position.XYZ_dbl();
-            Position.XYZ_dbl Vertex2 = new Position.XYZ_dbl();
-            Position.XYZ_dbl Vertex3 = new Position.XYZ_dbl();
+            XYZDouble Vertex0 = new XYZDouble();
+            XYZDouble Vertex1 = new XYZDouble();
+            XYZDouble Vertex2 = new XYZDouble();
+            XYZDouble Vertex3 = new XYZDouble();
 
             TileTerrainHeight[0] = Terrain.Vertices[TileX, TileY].Height;
             TileTerrainHeight[1] = Terrain.Vertices[TileX + 1, TileY].Height;
@@ -796,9 +801,9 @@ namespace SharpFlame.Mapping
             GL.End();
         }
 
-        public void DrawTileOrientation(sXY_int Tile)
+        public void DrawTileOrientation(XYInt Tile)
         {
-            sXY_int UnrotatedPos = new sXY_int();
+            XYInt UnrotatedPos = new XYInt();
             sWorldPos Vertex0 = new sWorldPos();
             sWorldPos Vertex1 = new sWorldPos();
             sWorldPos Vertex2 = new sWorldPos();
@@ -824,9 +829,9 @@ namespace SharpFlame.Mapping
         {
             int X = 0;
             int Y = 0;
-            sXY_int Low = new sXY_int();
-            sXY_int High = new sXY_int();
-            sXY_int Footprint = new sXY_int();
+            XYInt Low = new XYInt();
+            XYInt High = new XYInt();
+            XYInt Footprint = new XYInt();
             bool Flag = default(bool);
             bool[,] UnitMap = new bool[Texture.Size.Y, Texture.Size.X];
             float[,,] sngTexture = new float[Texture.Size.Y, Texture.Size.X, 3];
@@ -1100,7 +1105,7 @@ namespace SharpFlame.Mapping
                 Minimap_Texture_Size = NewTextureSize;
             }
 
-            clsMinimapTexture Texture = new clsMinimapTexture(new sXY_int(Minimap_Texture_Size, Minimap_Texture_Size));
+            clsMinimapTexture Texture = new clsMinimapTexture(new XYInt(Minimap_Texture_Size, Minimap_Texture_Size));
 
             MinimapTextureFill(Texture);
 
@@ -1127,9 +1132,9 @@ namespace SharpFlame.Mapping
             }
         }
 
-        public sXY_int GetTileSectorNum(sXY_int Tile)
+        public XYInt GetTileSectorNum(XYInt Tile)
         {
-            sXY_int Result = new sXY_int();
+            XYInt Result = new XYInt();
 
             Result.X = (Tile.X / Constants.SectorTileSize);
             Result.Y = (Tile.Y / Constants.SectorTileSize);
@@ -1137,8 +1142,8 @@ namespace SharpFlame.Mapping
             return Result;
         }
 
-        public void GetTileSectorRange(sXY_int StartTile, sXY_int FinishTile, ref sXY_int ResultSectorStart,
-            ref sXY_int ResultSectorFinish)
+        public void GetTileSectorRange(XYInt StartTile, XYInt FinishTile, ref XYInt ResultSectorStart,
+            ref XYInt ResultSectorFinish)
         {
             ResultSectorStart = GetTileSectorNum(StartTile);
             ResultSectorFinish = GetTileSectorNum(FinishTile);
@@ -1148,7 +1153,7 @@ namespace SharpFlame.Mapping
             ResultSectorFinish.Y = MathUtil.Clamp_int(ResultSectorFinish.Y, 0, SectorCount.Y - 1);
         }
 
-        public sWorldPos TileAlignedPos(sXY_int TileNum, sXY_int Footprint)
+        public sWorldPos TileAlignedPos(XYInt TileNum, XYInt Footprint)
         {
             sWorldPos Result = new sWorldPos();
 
@@ -1159,7 +1164,7 @@ namespace SharpFlame.Mapping
             return Result;
         }
 
-        public sWorldPos TileAlignedPosFromMapPos(sXY_int Horizontal, sXY_int Footprint)
+        public sWorldPos TileAlignedPosFromMapPos(XYInt Horizontal, XYInt Footprint)
         {
             sWorldPos Result = new sWorldPos();
 
@@ -1179,10 +1184,10 @@ namespace SharpFlame.Mapping
         // TODO: Think that code is useless - René
         public void UnitSectorsCalc(clsUnit Unit)
         {
-            sXY_int Start = new sXY_int();
-            sXY_int Finish = new sXY_int();
-            sXY_int TileStart = new sXY_int();
-            sXY_int TileFinish = new sXY_int();
+            XYInt Start = new XYInt();
+            XYInt Finish = new XYInt();
+            XYInt TileStart = new XYInt();
+            XYInt TileFinish = new XYInt();
             int X = 0;
             int Y = 0;
 
@@ -1252,12 +1257,12 @@ namespace SharpFlame.Mapping
 
             NewUndo.Name = StepName;
 
-            clsXY_int SectorNum = default(clsXY_int);
-            foreach ( clsXY_int tempLoopVar_SectorNum in SectorTerrainUndoChanges.ChangedPoints )
+            XYInt SectorNum = default(XYInt);
+            foreach ( XYInt tempLoopVar_SectorNum in SectorTerrainUndoChanges.ChangedPoints )
             {
                 SectorNum = tempLoopVar_SectorNum;
                 NewUndo.ChangedSectors.Add(ShadowSectors[SectorNum.X, SectorNum.Y]);
-                ShadowSector_Create(SectorNum.XY);
+                ShadowSector_Create(SectorNum);
             }
             SectorTerrainUndoChanges.Clear();
 
@@ -1281,7 +1286,7 @@ namespace SharpFlame.Mapping
             }
         }
 
-        public void ShadowSector_Create(sXY_int SectorNum)
+        public void ShadowSector_Create(XYInt SectorNum)
         {
             int TileX = 0;
             int TileY = 0;
@@ -1369,7 +1374,7 @@ namespace SharpFlame.Mapping
 
             ThisUndo = Undos[UndoPosition];
 
-            sXY_int SectorNum = new sXY_int();
+            XYInt SectorNum = new XYInt();
             clsShadowSector CurrentSector = default(clsShadowSector);
             clsShadowSector UndoSector = default(clsShadowSector);
             SimpleList<clsShadowSector> NewSectorsForThisUndo = new SimpleList<clsShadowSector>();
@@ -1450,7 +1455,7 @@ namespace SharpFlame.Mapping
 
             ThisUndo = Undos[UndoPosition];
 
-            sXY_int SectorNum = new sXY_int();
+            XYInt SectorNum = new XYInt();
             clsShadowSector CurrentSector = default(clsShadowSector);
             clsShadowSector UndoSector = default(clsShadowSector);
             SimpleList<clsShadowSector> NewSectorsForThisUndo = new SimpleList<clsShadowSector>();
@@ -1581,23 +1586,23 @@ namespace SharpFlame.Mapping
             }
         }
 
-        public void MapInsert(clsMap MapToInsert, sXY_int Offset, sXY_int Area, bool InsertHeights, bool InsertTextures, bool InsertUnits,
+        public void MapInsert(clsMap MapToInsert, XYInt Offset, XYInt Area, bool InsertHeights, bool InsertTextures, bool InsertUnits,
             bool DeleteUnits, bool InsertGateways, bool DeleteGateways)
         {
-            sXY_int Finish = new sXY_int();
+            XYInt Finish = new XYInt();
             int X = 0;
             int Y = 0;
-            sXY_int SectorStart = new sXY_int();
-            sXY_int SectorFinish = new sXY_int();
-            sXY_int AreaAdjusted = new sXY_int();
-            sXY_int SectorNum = new sXY_int();
+            XYInt SectorStart = new XYInt();
+            XYInt SectorFinish = new XYInt();
+            XYInt AreaAdjusted = new XYInt();
+            XYInt SectorNum = new XYInt();
 
             Finish.X = Math.Min(Offset.X + Math.Min(Area.X, MapToInsert.Terrain.TileSize.X), Terrain.TileSize.X);
             Finish.Y = Math.Min(Offset.Y + Math.Min(Area.Y, MapToInsert.Terrain.TileSize.Y), Terrain.TileSize.Y);
             AreaAdjusted.X = Finish.X - Offset.X;
             AreaAdjusted.Y = Finish.Y - Offset.Y;
 
-            GetTileSectorRange(new sXY_int(Offset.X - 1, Offset.Y - 1), Finish, ref SectorStart, ref SectorFinish);
+            GetTileSectorRange(new XYInt(Offset.X - 1, Offset.Y - 1), Finish, ref SectorStart, ref SectorFinish);
             for ( Y = SectorStart.Y; Y <= SectorFinish.Y; Y++ )
             {
                 SectorNum.Y = Y;
@@ -1662,7 +1667,7 @@ namespace SharpFlame.Mapping
                 }
             }
 
-            sXY_int LastTile = new sXY_int();
+            XYInt LastTile = new XYInt();
             LastTile = Finish;
             LastTile.X--;
             LastTile.Y--;
@@ -1684,8 +1689,8 @@ namespace SharpFlame.Mapping
             }
             if ( InsertGateways )
             {
-                sXY_int GateStart = new sXY_int();
-                sXY_int GateFinish = new sXY_int();
+                XYInt GateStart = new XYInt();
+                XYInt GateFinish = new XYInt();
                 clsGateway Gateway = default(clsGateway);
                 foreach ( clsGateway tempLoopVar_Gateway in MapToInsert.Gateways )
                 {
@@ -1732,10 +1737,10 @@ namespace SharpFlame.Mapping
             }
             if ( InsertUnits )
             {
-                sXY_int PosDif = new sXY_int();
+                XYInt PosDif = new XYInt();
                 clsUnit NewUnit = default(clsUnit);
                 clsUnit Unit = default(clsUnit);
-                sXY_int ZeroPos = new sXY_int(0, 0);
+                XYInt ZeroPos = new XYInt(0, 0);
                 clsUnitAdd UnitAdd = new clsUnitAdd();
 
                 UnitAdd.Map = this;
@@ -1763,7 +1768,7 @@ namespace SharpFlame.Mapping
             MinimapMakeLater();
         }
 
-        public clsGateway GatewayCreate(sXY_int PosA, sXY_int PosB)
+        public clsGateway GatewayCreate(XYInt PosA, XYInt PosB)
         {
             if ( PosA.X >= 0 & PosA.X < Terrain.TileSize.X &
                  PosA.Y >= 0 & PosA.Y < Terrain.TileSize.Y &
@@ -1792,7 +1797,7 @@ namespace SharpFlame.Mapping
             }
         }
 
-        public clsGateway GatewayCreateStoreChange(sXY_int PosA, sXY_int PosB)
+        public clsGateway GatewayCreateStoreChange(XYInt PosA, XYInt PosB)
         {
             clsGateway Gateway = default(clsGateway);
 
@@ -1875,11 +1880,11 @@ namespace SharpFlame.Mapping
             }
         }
 
-        public sWorldPos GetTileOffsetRotatedWorldPos(sXY_int Tile, sXY_int TileOffsetToRotate)
+        public sWorldPos GetTileOffsetRotatedWorldPos(XYInt Tile, XYInt TileOffsetToRotate)
         {
             sWorldPos Result = new sWorldPos();
 
-            sXY_int RotatedOffset = new sXY_int();
+            XYInt RotatedOffset = new XYInt();
 
             RotatedOffset = TileUtil.GetTileRotatedOffset(Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation, TileOffsetToRotate);
             Result.Horizontal.X = Tile.X * App.TerrainGridSpacing + RotatedOffset.X;
@@ -1889,10 +1894,10 @@ namespace SharpFlame.Mapping
             return Result;
         }
 
-        public void GetFootprintTileRangeClamped(sXY_int Horizontal, sXY_int Footprint, ref sXY_int ResultStart, ref sXY_int ResultFinish)
+        public void GetFootprintTileRangeClamped(XYInt Horizontal, XYInt Footprint, ref XYInt ResultStart, ref XYInt ResultFinish)
         {
             int Remainder = 0;
-            sXY_int Centre = GetPosTileNum(Horizontal);
+            XYInt Centre = GetPosTileNum(Horizontal);
             int Half = 0;
 
             Half = Math.DivRem(Footprint.X, 2, out Remainder);
@@ -1903,10 +1908,10 @@ namespace SharpFlame.Mapping
             ResultFinish.Y = MathUtil.Clamp_int(ResultStart.Y + Footprint.Y - 1, 0, Terrain.TileSize.Y - 1);
         }
 
-        public void GetFootprintTileRange(sXY_int Horizontal, sXY_int Footprint, ref sXY_int ResultStart, ref sXY_int ResultFinish)
+        public void GetFootprintTileRange(XYInt Horizontal, XYInt Footprint, ref XYInt ResultStart, ref XYInt ResultFinish)
         {
             int Remainder = 0;
-            sXY_int Centre = GetPosTileNum(Horizontal);
+            XYInt Centre = GetPosTileNum(Horizontal);
             int Half = 0;
 
             Half = Math.DivRem(Footprint.X, 2, out Remainder);
@@ -1917,9 +1922,9 @@ namespace SharpFlame.Mapping
             ResultFinish.Y = ResultStart.Y + Footprint.Y - 1;
         }
 
-        public sXY_int GetPosTileNum(sXY_int Horizontal)
+        public XYInt GetPosTileNum(XYInt Horizontal)
         {
-            sXY_int Result = new sXY_int();
+            XYInt Result = new XYInt();
 
             Result.X = (int)((Horizontal.X / App.TerrainGridSpacing));
             Result.Y = (Horizontal.Y / App.TerrainGridSpacing);
@@ -1927,9 +1932,9 @@ namespace SharpFlame.Mapping
             return Result;
         }
 
-        public sXY_int GetPosVertexNum(sXY_int Horizontal)
+        public XYInt GetPosVertexNum(XYInt Horizontal)
         {
-            sXY_int Result = new sXY_int();
+            XYInt Result = new XYInt();
 
             Result.X = (int)(Math.Round(((double)Horizontal.X / App.TerrainGridSpacing)));
             Result.Y = (int)(Math.Round(((double)Horizontal.Y / App.TerrainGridSpacing)));
@@ -1937,18 +1942,18 @@ namespace SharpFlame.Mapping
             return Result;
         }
 
-        public sXY_int GetPosSectorNum(sXY_int Horizontal)
+        public XYInt GetPosSectorNum(XYInt Horizontal)
         {
-            sXY_int Result = new sXY_int();
+            XYInt Result = new XYInt();
 
             Result = GetTileSectorNum(GetPosTileNum(Horizontal));
 
             return Result;
         }
 
-        public sXY_int GetSectorNumClamped(sXY_int SectorNum)
+        public XYInt GetSectorNumClamped(XYInt SectorNum)
         {
-            sXY_int Result = new sXY_int();
+            XYInt Result = new XYInt();
 
             Result.X = MathUtil.Clamp_int(SectorNum.X, 0, SectorCount.X - 1);
             Result.Y = MathUtil.Clamp_int(SectorNum.Y, 0, SectorCount.Y - 1);
@@ -1956,19 +1961,19 @@ namespace SharpFlame.Mapping
             return Result;
         }
 
-        public int GetVertexAltitude(sXY_int VertexNum)
+        public int GetVertexAltitude(XYInt VertexNum)
         {
             return Terrain.Vertices[VertexNum.X, VertexNum.Y].Height * HeightMultiplier;
         }
 
-        public bool PosIsOnMap(sXY_int Horizontal)
+        public bool PosIsOnMap(XYInt Horizontal)
         {
-            return App.PosIsWithinTileArea(Horizontal, new sXY_int(0, 0), Terrain.TileSize);
+            return App.PosIsWithinTileArea(Horizontal, new XYInt(0, 0), Terrain.TileSize);
         }
 
-        public sXY_int TileNumClampToMap(sXY_int TileNum)
+        public XYInt TileNumClampToMap(XYInt TileNum)
         {
-            sXY_int Result = new sXY_int();
+            XYInt Result = new XYInt();
 
             Result.X = MathUtil.Clamp_int(TileNum.X, 0, Terrain.TileSize.X - 1);
             Result.Y = MathUtil.Clamp_int(TileNum.Y, 0, Terrain.TileSize.Y - 1);
@@ -2026,11 +2031,11 @@ namespace SharpFlame.Mapping
             SelectedUnits.Deallocate();
             SelectedUnits = null;
 
-            Selected_Tile_A = null;
-            Selected_Tile_B = null;
-            Selected_Area_VertexA = null;
-            Selected_Area_VertexB = null;
-            Unit_Selected_Area_VertexA = null;
+            Selected_Tile_A = new XYInt(0, 0);
+			Selected_Tile_B = new XYInt(0, 0);
+			Selected_Area_VertexA = new XYZInt(0, 0, 0);
+			Selected_Area_VertexB = new XYZInt(0, 0, 0);
+			Unit_Selected_Area_VertexA = new XYZInt(0, 0, 0);
 
             ViewInfo = null;
 
@@ -2058,7 +2063,7 @@ namespace SharpFlame.Mapping
             {
                 for ( X = 0; X <= SectorCount.X - 1; X++ )
                 {
-                    Sectors[X, Y] = new clsSector(new sXY_int(X, Y));
+                    Sectors[X, Y] = new clsSector(new XYInt(X, Y));
                 }
             }
 
@@ -2074,7 +2079,7 @@ namespace SharpFlame.Mapping
             {
                 for ( X = 0; X <= SectorCount.X - 1; X++ )
                 {
-                    ShadowSector_Create(new sXY_int(X, Y));
+                    ShadowSector_Create(new XYInt(X, Y));
                 }
             }
 
@@ -2172,20 +2177,20 @@ namespace SharpFlame.Mapping
             TerrainInterpretChanges.ClearAll();
         }
 
-        public void TileNeedsInterpreting(sXY_int Pos)
+        public void TileNeedsInterpreting(XYInt Pos)
         {
             TerrainInterpretChanges.Tiles.Changed(Pos);
-            TerrainInterpretChanges.Vertices.Changed(new sXY_int(Pos.X, Pos.Y));
-            TerrainInterpretChanges.Vertices.Changed(new sXY_int(Pos.X + 1, Pos.Y));
-            TerrainInterpretChanges.Vertices.Changed(new sXY_int(Pos.X, Pos.Y + 1));
-            TerrainInterpretChanges.Vertices.Changed(new sXY_int(Pos.X + 1, Pos.Y + 1));
-            TerrainInterpretChanges.SidesH.Changed(new sXY_int(Pos.X, Pos.Y));
-            TerrainInterpretChanges.SidesH.Changed(new sXY_int(Pos.X, Pos.Y + 1));
-            TerrainInterpretChanges.SidesV.Changed(new sXY_int(Pos.X, Pos.Y));
-            TerrainInterpretChanges.SidesV.Changed(new sXY_int(Pos.X + 1, Pos.Y));
+            TerrainInterpretChanges.Vertices.Changed(new XYInt(Pos.X, Pos.Y));
+            TerrainInterpretChanges.Vertices.Changed(new XYInt(Pos.X + 1, Pos.Y));
+            TerrainInterpretChanges.Vertices.Changed(new XYInt(Pos.X, Pos.Y + 1));
+            TerrainInterpretChanges.Vertices.Changed(new XYInt(Pos.X + 1, Pos.Y + 1));
+            TerrainInterpretChanges.SidesH.Changed(new XYInt(Pos.X, Pos.Y));
+            TerrainInterpretChanges.SidesH.Changed(new XYInt(Pos.X, Pos.Y + 1));
+            TerrainInterpretChanges.SidesV.Changed(new XYInt(Pos.X, Pos.Y));
+            TerrainInterpretChanges.SidesV.Changed(new XYInt(Pos.X + 1, Pos.Y));
         }
 
-        public void TileTextureChangeTerrainAction(sXY_int Pos, enumTextureTerrainAction Action)
+        public void TileTextureChangeTerrainAction(XYInt Pos, enumTextureTerrainAction Action)
         {
             switch ( Action )
             {
@@ -2254,9 +2259,9 @@ namespace SharpFlame.Mapping
             MapView_TabPage.Text = Result;
         }
 
-        public bool SideHIsCliffOnBothSides(sXY_int SideNum)
+        public bool SideHIsCliffOnBothSides(XYInt SideNum)
         {
-            sXY_int TileNum = new sXY_int();
+            XYInt TileNum = new XYInt();
 
             if ( SideNum.Y > 0 )
             {
@@ -2301,9 +2306,9 @@ namespace SharpFlame.Mapping
             return true;
         }
 
-        public bool SideVIsCliffOnBothSides(sXY_int SideNum)
+        public bool SideVIsCliffOnBothSides(XYInt SideNum)
         {
-            sXY_int TileNum = new sXY_int();
+            XYInt TileNum = new XYInt();
 
             if ( SideNum.X > 0 )
             {
@@ -2348,9 +2353,9 @@ namespace SharpFlame.Mapping
             return true;
         }
 
-        public bool VertexIsCliffEdge(sXY_int VertexNum)
+        public bool VertexIsCliffEdge(XYInt VertexNum)
         {
-            sXY_int TileNum = new sXY_int();
+            XYInt TileNum = new XYInt();
 
             if ( VertexNum.X > 0 )
             {
@@ -2445,12 +2450,12 @@ namespace SharpFlame.Mapping
             }
         }
 
-        public void PerformTileWall(clsWallType WallType, sXY_int TileNum, bool Expand)
+        public void PerformTileWall(clsWallType WallType, XYInt TileNum, bool Expand)
         {
-            sXY_int SectorNum = new sXY_int();
+            XYInt SectorNum = new XYInt();
             clsUnit Unit = default(clsUnit);
-            sXY_int UnitTile = new sXY_int();
-            sXY_int Difference = new sXY_int();
+            XYInt UnitTile = new XYInt();
+            XYInt Difference = new XYInt();
             enumTileWalls TileWalls = enumTileWalls.None;
             SimpleList<clsUnit> Walls = new SimpleList<clsUnit>();
             SimpleList<clsUnit> Removals = new SimpleList<clsUnit>();
@@ -2458,15 +2463,15 @@ namespace SharpFlame.Mapping
             StructureTypeBase structureTypeBase = default(StructureTypeBase);
             int X = 0;
             int Y = 0;
-            sXY_int MinTile = new sXY_int();
-            sXY_int MaxTile = new sXY_int();
+            XYInt MinTile = new XYInt();
+            XYInt MaxTile = new XYInt();
             clsUnitSectorConnection Connection = default(clsUnitSectorConnection);
             MinTile.X = TileNum.X - 1;
             MinTile.Y = TileNum.Y - 1;
             MaxTile.X = TileNum.X + 1;
             MaxTile.Y = TileNum.Y + 1;
-            sXY_int SectorStart = GetSectorNumClamped(GetTileSectorNum(MinTile));
-            sXY_int SectorFinish = GetSectorNumClamped(GetTileSectorNum(MaxTile));
+            XYInt SectorStart = GetSectorNumClamped(GetTileSectorNum(MinTile));
+            XYInt SectorFinish = GetSectorNumClamped(GetTileSectorNum(MaxTile));
 
             for ( Y = SectorStart.Y; Y <= SectorFinish.Y; Y++ )
             {
@@ -2548,7 +2553,7 @@ namespace SharpFlame.Mapping
                 }
                 NewUnit.UnitGroup = Removals[0].UnitGroup;
             }
-            NewUnit.Pos = TileAlignedPos(TileNum, new sXY_int(1, 1));
+            NewUnit.Pos = TileAlignedPos(TileNum, new XYInt(1, 1));
             NewUnit.TypeBase = newUnitTypeBase;
             clsUnitAdd UnitAdd = new clsUnitAdd();
             UnitAdd.Map = this;

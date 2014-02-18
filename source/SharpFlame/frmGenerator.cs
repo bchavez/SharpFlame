@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Forms;
 using SharpFlame.Collections.Specialized;
+using SharpFlame.Core.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Generators;
 using SharpFlame.Mapping;
@@ -59,7 +60,7 @@ namespace SharpFlame
                     Generator.SymmetryBlockCountXY.Y = 1;
                     Generator.SymmetryBlockCount = 1;
                     Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(Generator.SymmetryBlockCount - 1) + 1];
-                    Generator.SymmetryBlocks[0].XYNum = new sXY_int(0, 0);
+                    Generator.SymmetryBlocks[0].XYNum = new XYInt(0, 0);
                     Generator.SymmetryBlocks[0].Orientation = new TileOrientation(false, false, false);
                     Generator.SymmetryIsRotational = false;
                     break;
@@ -68,11 +69,11 @@ namespace SharpFlame
                     Generator.SymmetryBlockCountXY.Y = 1;
                     Generator.SymmetryBlockCount = 2;
                     Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(Generator.SymmetryBlockCount - 1) + 1];
-                    Generator.SymmetryBlocks[0].XYNum = new sXY_int(0, 0);
+                    Generator.SymmetryBlocks[0].XYNum = new XYInt(0, 0);
                     Generator.SymmetryBlocks[0].Orientation = new TileOrientation(false, false, false);
                     Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
                     Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
-                    Generator.SymmetryBlocks[1].XYNum = new sXY_int(1, 0);
+                    Generator.SymmetryBlocks[1].XYNum = new XYInt(1, 0);
                     Generator.SymmetryBlocks[1].Orientation = new TileOrientation(true, true, false);
                     Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
                     Generator.SymmetryBlocks[1].ReflectToNum[0] = 0;
@@ -83,11 +84,11 @@ namespace SharpFlame
                     Generator.SymmetryBlockCountXY.Y = 2;
                     Generator.SymmetryBlockCount = 2;
                     Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(Generator.SymmetryBlockCount - 1) + 1];
-                    Generator.SymmetryBlocks[0].XYNum = new sXY_int(0, 0);
+                    Generator.SymmetryBlocks[0].XYNum = new XYInt(0, 0);
                     Generator.SymmetryBlocks[0].Orientation = new TileOrientation(false, false, false);
                     Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
                     Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
-                    Generator.SymmetryBlocks[1].XYNum = new sXY_int(0, 1);
+                    Generator.SymmetryBlocks[1].XYNum = new XYInt(0, 1);
                     Generator.SymmetryBlocks[1].Orientation = new TileOrientation(true, true, false);
                     Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
                     Generator.SymmetryBlocks[1].ReflectToNum[0] = 0;
@@ -98,11 +99,11 @@ namespace SharpFlame
                     Generator.SymmetryBlockCountXY.Y = 1;
                     Generator.SymmetryBlockCount = 2;
                     Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(Generator.SymmetryBlockCount - 1) + 1];
-                    Generator.SymmetryBlocks[0].XYNum = new sXY_int(0, 0);
+                    Generator.SymmetryBlocks[0].XYNum = new XYInt(0, 0);
                     Generator.SymmetryBlocks[0].Orientation = new TileOrientation(false, false, false);
                     Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
                     Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
-                    Generator.SymmetryBlocks[1].XYNum = new sXY_int(1, 0);
+                    Generator.SymmetryBlocks[1].XYNum = new XYInt(1, 0);
                     Generator.SymmetryBlocks[1].Orientation = new TileOrientation(true, false, false);
                     Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
                     Generator.SymmetryBlocks[1].ReflectToNum[0] = 0;
@@ -113,11 +114,11 @@ namespace SharpFlame
                     Generator.SymmetryBlockCountXY.Y = 2;
                     Generator.SymmetryBlockCount = 2;
                     Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(Generator.SymmetryBlockCount - 1) + 1];
-                    Generator.SymmetryBlocks[0].XYNum = new sXY_int(0, 0);
+                    Generator.SymmetryBlocks[0].XYNum = new XYInt(0, 0);
                     Generator.SymmetryBlocks[0].Orientation = new TileOrientation(false, false, false);
                     Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
                     Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
-                    Generator.SymmetryBlocks[1].XYNum = new sXY_int(0, 1);
+                    Generator.SymmetryBlocks[1].XYNum = new XYInt(0, 1);
                     Generator.SymmetryBlocks[1].Orientation = new TileOrientation(false, true, false);
                     Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
                     Generator.SymmetryBlocks[1].ReflectToNum[0] = 0;
@@ -129,22 +130,22 @@ namespace SharpFlame
                     Generator.SymmetryBlockCountXY.Y = 2;
                     Generator.SymmetryBlockCount = 4;
                     Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(Generator.SymmetryBlockCount - 1) + 1];
-                    Generator.SymmetryBlocks[0].XYNum = new sXY_int(0, 0);
+                    Generator.SymmetryBlocks[0].XYNum = new XYInt(0, 0);
                     Generator.SymmetryBlocks[0].Orientation = new TileOrientation(false, false, false);
                     Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
                     Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
                     Generator.SymmetryBlocks[0].ReflectToNum[1] = 2;
-                    Generator.SymmetryBlocks[1].XYNum = new sXY_int(1, 0);
+                    Generator.SymmetryBlocks[1].XYNum = new XYInt(1, 0);
                     Generator.SymmetryBlocks[1].Orientation = new TileOrientation(true, false, true);
                     Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
                     Generator.SymmetryBlocks[1].ReflectToNum[0] = 3;
                     Generator.SymmetryBlocks[1].ReflectToNum[1] = 0;
-                    Generator.SymmetryBlocks[2].XYNum = new sXY_int(0, 1);
+                    Generator.SymmetryBlocks[2].XYNum = new XYInt(0, 1);
                     Generator.SymmetryBlocks[2].Orientation = new TileOrientation(false, true, true);
                     Generator.SymmetryBlocks[2].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
                     Generator.SymmetryBlocks[2].ReflectToNum[0] = 0;
                     Generator.SymmetryBlocks[2].ReflectToNum[1] = 3;
-                    Generator.SymmetryBlocks[3].XYNum = new sXY_int(1, 1);
+                    Generator.SymmetryBlocks[3].XYNum = new XYInt(1, 1);
                     Generator.SymmetryBlocks[3].Orientation = new TileOrientation(true, true, false);
                     Generator.SymmetryBlocks[3].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
                     Generator.SymmetryBlocks[3].ReflectToNum[0] = 2;
@@ -156,22 +157,22 @@ namespace SharpFlame
                     Generator.SymmetryBlockCountXY.Y = 2;
                     Generator.SymmetryBlockCount = 4;
                     Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(Generator.SymmetryBlockCount - 1) + 1];
-                    Generator.SymmetryBlocks[0].XYNum = new sXY_int(0, 0);
+                    Generator.SymmetryBlocks[0].XYNum = new XYInt(0, 0);
                     Generator.SymmetryBlocks[0].Orientation = new TileOrientation(false, false, false);
                     Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
                     Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
                     Generator.SymmetryBlocks[0].ReflectToNum[1] = 2;
-                    Generator.SymmetryBlocks[1].XYNum = new sXY_int(1, 0);
+                    Generator.SymmetryBlocks[1].XYNum = new XYInt(1, 0);
                     Generator.SymmetryBlocks[1].Orientation = new TileOrientation(true, false, false);
                     Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
                     Generator.SymmetryBlocks[1].ReflectToNum[0] = 0;
                     Generator.SymmetryBlocks[1].ReflectToNum[1] = 3;
-                    Generator.SymmetryBlocks[2].XYNum = new sXY_int(0, 1);
+                    Generator.SymmetryBlocks[2].XYNum = new XYInt(0, 1);
                     Generator.SymmetryBlocks[2].Orientation = new TileOrientation(false, true, false);
                     Generator.SymmetryBlocks[2].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
                     Generator.SymmetryBlocks[2].ReflectToNum[0] = 3;
                     Generator.SymmetryBlocks[2].ReflectToNum[1] = 0;
-                    Generator.SymmetryBlocks[3].XYNum = new sXY_int(1, 1);
+                    Generator.SymmetryBlocks[3].XYNum = new XYInt(1, 1);
                     Generator.SymmetryBlocks[3].Orientation = new TileOrientation(true, true, false);
                     Generator.SymmetryBlocks[3].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
                     Generator.SymmetryBlocks[3].ReflectToNum[0] = 2;
@@ -208,50 +209,50 @@ namespace SharpFlame
                     return;
                 }
             }
-            Generator.PlayerBasePos = new sXY_int[Generator.TopLeftPlayerCount];
+            Generator.PlayerBasePos = new XYInt[Generator.TopLeftPlayerCount];
             double BaseMin = 12.0D;
-            Position.XY_dbl BaseMax =
-                new Position.XY_dbl(Math.Min((double)Generator.TileSize.X / Generator.SymmetryBlockCountXY.X, Generator.TileSize.X - 12.0D),
+            XYDouble BaseMax =
+                new XYDouble(Math.Min((double)Generator.TileSize.X / Generator.SymmetryBlockCountXY.X, Generator.TileSize.X - 12.0D),
                     Math.Min((double)Generator.TileSize.Y / Generator.SymmetryBlockCountXY.Y, Generator.TileSize.Y - 12.0D));
-            Generator.PlayerBasePos[0] = new sXY_int(ValidateTextbox(txt1x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
+            Generator.PlayerBasePos[0] = new XYInt(ValidateTextbox(txt1x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
                 ValidateTextbox(txt1y, BaseMin, BaseMax.X, App.TerrainGridSpacing));
             if ( Generator.TopLeftPlayerCount >= 2 )
             {
-                Generator.PlayerBasePos[1] = new sXY_int(ValidateTextbox(txt2x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
+                Generator.PlayerBasePos[1] = new XYInt(ValidateTextbox(txt2x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
                     ValidateTextbox(txt2y, BaseMin, BaseMax.Y, App.TerrainGridSpacing));
                 if ( Generator.TopLeftPlayerCount >= 3 )
                 {
-                    Generator.PlayerBasePos[2] = new sXY_int(ValidateTextbox(txt3x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
+                    Generator.PlayerBasePos[2] = new XYInt(ValidateTextbox(txt3x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
                         ValidateTextbox(txt3y, BaseMin, BaseMax.Y, App.TerrainGridSpacing));
                     if ( Generator.TopLeftPlayerCount >= 4 )
                     {
-                        Generator.PlayerBasePos[3] = new sXY_int(ValidateTextbox(txt4x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
+                        Generator.PlayerBasePos[3] = new XYInt(ValidateTextbox(txt4x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
                             ValidateTextbox(txt4y, BaseMin, BaseMax.Y, App.TerrainGridSpacing));
                         if ( Generator.TopLeftPlayerCount >= 5 )
                         {
-                            Generator.PlayerBasePos[4] = new sXY_int(ValidateTextbox(txt5x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
+                            Generator.PlayerBasePos[4] = new XYInt(ValidateTextbox(txt5x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
                                 ValidateTextbox(txt5y, BaseMin, BaseMax.Y, App.TerrainGridSpacing));
                             if ( Generator.TopLeftPlayerCount >= 6 )
                             {
-                                Generator.PlayerBasePos[5] = new sXY_int(ValidateTextbox(txt6x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
+                                Generator.PlayerBasePos[5] = new XYInt(ValidateTextbox(txt6x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
                                     ValidateTextbox(txt6y, BaseMin, BaseMax.Y, App.TerrainGridSpacing));
                                 if ( Generator.TopLeftPlayerCount >= 7 )
                                 {
-                                    Generator.PlayerBasePos[6] = new sXY_int(ValidateTextbox(txt7x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
+                                    Generator.PlayerBasePos[6] = new XYInt(ValidateTextbox(txt7x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
                                         ValidateTextbox(txt7y, BaseMin, BaseMax.Y, App.TerrainGridSpacing));
                                     if ( Generator.TopLeftPlayerCount >= 8 )
                                     {
-                                        Generator.PlayerBasePos[7] = new sXY_int(ValidateTextbox(txt8x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
+                                        Generator.PlayerBasePos[7] = new XYInt(ValidateTextbox(txt8x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
                                             ValidateTextbox(txt8y, BaseMin, BaseMax.Y, App.TerrainGridSpacing));
                                         if ( Generator.TopLeftPlayerCount >= 9 )
                                         {
-                                            Generator.PlayerBasePos[8] = new sXY_int(
+                                            Generator.PlayerBasePos[8] = new XYInt(
                                                 ValidateTextbox(txt9x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
                                                 ValidateTextbox(txt9y, BaseMin, BaseMax.Y, App.TerrainGridSpacing));
                                             if ( Generator.TopLeftPlayerCount >= 10 )
                                             {
                                                 Generator.PlayerBasePos[9] =
-                                                    new sXY_int(ValidateTextbox(txt10x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
+                                                    new XYInt(ValidateTextbox(txt10x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
                                                         ValidateTextbox(txt10y, BaseMin, BaseMax.Y, App.TerrainGridSpacing));
                                             }
                                         }
@@ -400,7 +401,7 @@ namespace SharpFlame
                 ApplyCliff.Angle = CliffAngle;
                 ApplyCliff.SetTris = true;
                 clsBrush.sPosNum Alignments = new clsBrush.sPosNum();
-                Alignments.Normal = new sXY_int((int)(Generator.Map.Terrain.TileSize.X / 2.0D),
+                Alignments.Normal = new XYInt((int)(Generator.Map.Terrain.TileSize.X / 2.0D),
                     (int)(Generator.Map.Terrain.TileSize.Y / 2.0D));
                 Alignments.Alignment = Alignments.Normal;
                 tmpBrush.PerformActionMapTiles(ApplyCliff, Alignments);

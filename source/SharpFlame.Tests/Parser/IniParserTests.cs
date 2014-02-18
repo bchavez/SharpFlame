@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using FluentAssertions;
 using NUnit.Framework;
+using SharpFlame.Core.Domain;
 using SharpFlame.Core.Parsers;
 using SharpFlame.Core.Parsers.Ini;
 using Sprache;
@@ -14,24 +15,10 @@ namespace SharpFlame.Tests.Parser
     public class IniParserTests
     {
         [Test]
-        public void CanParseDouble4()
-        {
-            var data = @"1, 0.25, 0.25, 0.5";
-            var d4 = IniReader.Double4.Parse (data);
-            d4.P1.Should ().Be (1D);
-            d4.P2.Should ().Be (0.25D);
-            d4.P3.Should ().Be (0.25D);
-            d4.P4.Should ().Be (0.5D);
-        }       
-
-        [Test]
-        public void CanParseInt3()
-        {
-            var data = @"19136, 4288, 0";
-            var int3 = IniReader.Int3.Parse (data);
-            int3.I1.Should ().Be (19136);
-            int3.I2.Should ().Be (4288);
-            int3.I3.Should ().Be (0);
+        public void CanReadHealthPercent() {
+            var data = @"100%";
+            var tmpInt = IniReader.ReadHealthPercent (data);
+            tmpInt.Should ().Be (100);
         }
 
         [Test]
@@ -63,11 +50,11 @@ namespace SharpFlame.Tests.Parser
                         Convert.ToInt32 (d.Data).Should ().Be (20);
                         break;
                     case "MinimapCliffColour":
-                        var d4 = IniReader.Double4.Parse (d.Data);
-                        d4.P1.Should ().Be (1D);
-                        d4.P2.Should ().Be (0.25D);
-                        d4.P3.Should ().Be (0.25D);
-                        d4.P4.Should ().Be (0.5D);
+                        var color = RGBA.FromString (d.Data);
+                        color.R.Should ().Be (1D);
+                        color.G.Should ().Be (0.25D);
+                        color.B.Should ().Be (0.25D);
+                        color.A.Should ().Be (0.5D);
                         break;
                     case "FOVDefault":
                         Convert.ToDouble (d.Data, CultureInfo.InvariantCulture).Should ().Be (0.000666666666666667D);
@@ -115,16 +102,16 @@ namespace SharpFlame.Tests.Parser
                     d.Data.Should ().Be ("ConstructionDroid");
                     break;
                 case "position":
-                    var tmpPosition = IniReader.Int3.Parse (d.Data);
-                    tmpPosition.I1.Should ().Be (9792);
-                    tmpPosition.I2.Should ().Be (26048);
-                    tmpPosition.I3.Should ().Be (0);
+                    var tmpPosition = XYZInt.FromString (d.Data);
+                    tmpPosition.X.Should ().Be (9792);
+                    tmpPosition.Y.Should ().Be (26048);
+                    tmpPosition.Z.Should ().Be (0);
                     break;
                 case "rotation":
-                    var tmpRotation = IniReader.Int3.Parse (d.Data);
-                    tmpRotation.I1.Should ().Be (0);
-                    tmpRotation.I2.Should ().Be (0);
-                    tmpRotation.I3.Should ().Be (0);
+                    var tmpRotation = Rotation.FromString (d.Data);
+                    tmpRotation.Direction.Should ().Be (0);
+                    tmpRotation.Pitch.Should ().Be (0);
+                    tmpRotation.Roll.Should ().Be (0);
                     break;
                 case "player":
                     break;
@@ -173,20 +160,20 @@ namespace SharpFlame.Tests.Parser
             iniFile [3].Name.Should ().Be ("feature_1493");
             foreach (var d in iniFile[3].Data) {
                 switch (d.Name) {
-                    case "id":
+                case "id":
                     int.Parse (d.Data).Should ().Be (1493);
                     break;
-                    case "position":
-                    var tmpPosition = IniReader.Int3.Parse (d.Data);
-                    tmpPosition.I1.Should ().Be (2496);
-                    tmpPosition.I2.Should ().Be (26688);
-                    tmpPosition.I3.Should ().Be (0);
+                case "position":
+                    var tmpPosition = XYZInt.FromString (d.Data);
+                    tmpPosition.X.Should ().Be (2496);
+                    tmpPosition.Y.Should ().Be (26688);
+                    tmpPosition.Z.Should ().Be (0);
                     break;
                     case "rotation":
-                    var tmpRotation = IniReader.Int3.Parse (d.Data);
-                    tmpRotation.I1.Should ().Be (0);
-                    tmpRotation.I2.Should ().Be (0);
-                    tmpRotation.I3.Should ().Be (0);
+                    var tmpRotation = Rotation.FromString (d.Data);
+                    tmpRotation.Direction.Should ().Be (0);
+                    tmpRotation.Pitch.Should ().Be (0);
+                    tmpRotation.Roll.Should ().Be (0);
                     break;
                     case "name":
                     d.Data.Should ().Be ("AirTrafficControl");
@@ -223,16 +210,16 @@ namespace SharpFlame.Tests.Parser
                     int.Parse (d.Data).Should ().Be (0);
                     break;
                 case "position":
-                    var tmpPosition = IniReader.Int3.Parse (d.Data);
-                    tmpPosition.I1.Should ().Be (6208);
-                    tmpPosition.I2.Should ().Be (5440);
-                    tmpPosition.I3.Should ().Be (0);
+                    var tmpPosition = XYZInt.FromString (d.Data);
+                    tmpPosition.X.Should ().Be (6208);
+                    tmpPosition.Y.Should ().Be (5440);
+                    tmpPosition.Z.Should ().Be (0);
                     break;
                 case "rotation":
-                    var tmpRotation = IniReader.Int3.Parse (d.Data);
-                    tmpRotation.I1.Should ().Be (16384);
-                    tmpRotation.I2.Should ().Be (0);
-                    tmpRotation.I3.Should ().Be (0);
+                    var tmpRotation = Rotation.FromString (d.Data);
+                    tmpRotation.Direction.Should ().Be (16384);
+                    tmpRotation.Pitch.Should ().Be (0);
+                    tmpRotation.Roll.Should ().Be (0);
                     break;
                 case "modules":
                     int.Parse (d.Data).Should ().Be (0);

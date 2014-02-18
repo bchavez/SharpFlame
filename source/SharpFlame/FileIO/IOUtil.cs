@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using SharpFlame.Collections;
+using SharpFlame.Core.Domain;
 using SharpFlame.Maths;
 using SharpFlame.Util;
 
@@ -250,7 +251,7 @@ namespace SharpFlame.FileIO
                     return false;
                 }
             }
-            Result = new clsWorldPos(new sWorldPos(new sXY_int(Positions[0], Positions[1]), Positions[2]));
+            Result = new clsWorldPos(new sWorldPos(new XYInt(Positions[0], Positions[1]), Positions[2]));
             return true;
         }
 
@@ -359,7 +360,7 @@ namespace SharpFlame.FileIO
 
     public class PositionFromText
     {
-        public sXY_int Pos;
+        public XYInt Pos;
 
         public bool Translate(string Text)
         {

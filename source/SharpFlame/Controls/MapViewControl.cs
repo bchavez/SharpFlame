@@ -6,6 +6,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
+using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.AppSettings;
@@ -23,7 +24,7 @@ namespace SharpFlame.Controls
 
         public bool DrawPending;
 
-        public sXY_int GLSize;
+        public XYInt GLSize;
         //public float GLSize_XPerY; //seems redundant, since OpenGLControl has a field called AspectRatio
 
         public bool DrawView_Enabled = false;
@@ -39,6 +40,8 @@ namespace SharpFlame.Controls
         public MapViewControl(frmMain Owner)
         {
             _Owner = Owner;
+
+			GLSize = new XYInt (0, 0);
 
             InitializeComponent();
 
@@ -543,7 +546,7 @@ namespace SharpFlame.Controls
                 App.Draw_Units = !App.Draw_Units;
                 int X = 0;
                 int Y = 0;
-                sXY_int SectorNum = new sXY_int();
+                XYInt SectorNum = new XYInt();
                 clsUnit Unit = default(clsUnit);
                 clsUnitSectorConnection Connection = default(clsUnitSectorConnection);
                 for ( Y = 0; Y <= Map.SectorCount.Y - 1; Y++ )
@@ -638,8 +641,8 @@ namespace SharpFlame.Controls
                     {
                         if ( Map.SelectedUnits.Count > 0 )
                         {
-                            Position.XY_dbl Centre = App.CalcUnitsCentrePos(Map.SelectedUnits.GetItemsAsSimpleList());
-                            sXY_int Offset = new sXY_int();
+                            XYDouble Centre = App.CalcUnitsCentrePos(Map.SelectedUnits.GetItemsAsSimpleList());
+                            XYInt Offset = new XYInt();
                             Offset.X = ((int)(Math.Round(Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.X - Centre.X) / App.TerrainGridSpacing)))) *
                                        App.TerrainGridSpacing;
                             Offset.Y = ((int)(Math.Round(Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.Y - Centre.Y) / App.TerrainGridSpacing)))) *
@@ -766,7 +769,7 @@ namespace SharpFlame.Controls
                         {
                             if ( MouseOverTerrain != null )
                             {
-                                SelectUnits(Map.Unit_Selected_Area_VertexA.XY, MouseOverTerrain.Vertex.Normal);
+                                SelectUnits(Map.Unit_Selected_Area_VertexA, MouseOverTerrain.Vertex.Normal);
                             }
                             Map.Unit_Selected_Area_VertexA = null;
                         }
@@ -794,18 +797,18 @@ namespace SharpFlame.Controls
             }
         }
 
-        private void SelectUnits(sXY_int VertexA, sXY_int VertexB)
+        private void SelectUnits(XYInt VertexA, XYInt VertexB)
         {
             clsMap Map = MainMap;
             clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
-            sXY_int SectorNum = new sXY_int();
+            XYInt SectorNum = new XYInt();
             clsUnit Unit = default(clsUnit);
-            sXY_int SectorStart = new sXY_int();
-            sXY_int SectorFinish = new sXY_int();
-            sXY_int StartPos = new sXY_int();
-            sXY_int FinishPos = new sXY_int();
-            sXY_int StartVertex = new sXY_int();
-            sXY_int FinishVertex = new sXY_int();
+            XYInt SectorStart = new XYInt();
+            XYInt SectorFinish = new XYInt();
+            XYInt StartPos = new XYInt();
+            XYInt FinishPos = new XYInt();
+            XYInt StartVertex = new XYInt();
+            XYInt FinishVertex = new XYInt();
 
             if ( Math.Abs(VertexA.X - VertexB.X) <= 1 &&
                  Math.Abs(VertexA.Y - VertexB.Y) <= 1 &&
@@ -923,8 +926,8 @@ namespace SharpFlame.Controls
                 return;
             }
 
-            sXYZ_int Move = new sXYZ_int();
-            Position.XYZ_dbl XYZ_dbl = default(Position.XYZ_dbl);
+            XYZInt Move = new XYZInt(0, 0, 0);
+            XYZDouble XYZ_dbl = default(XYZDouble);
             int A = 0;
 
             for ( A = 0; A <= (int)(Math.Abs(e.Delta / 120.0D)); A++ )
