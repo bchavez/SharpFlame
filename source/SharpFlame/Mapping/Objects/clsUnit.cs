@@ -10,15 +10,8 @@ using SharpFlame.Util;
 
 namespace SharpFlame.Mapping.Objects
 {
-    public class clsUnit
+    public class clsUnit : IEquatable<clsUnit>
     {
-        public clsUnit()
-        {
-            MapLink = new ConnectedListLink<clsUnit, clsMap>(this);
-            MapSelectedUnitLink = new ConnectedListLink<clsUnit, clsMap>(this);
-            Sectors = new ConnectedList<clsUnitSectorConnection, clsUnit>(this);
-        }
-
         public ConnectedListLink<clsUnit, clsMap> MapLink;
         public ConnectedListLink<clsUnit, clsMap> MapSelectedUnitLink;
         public ConnectedList<clsUnitSectorConnection, clsUnit> Sectors;
@@ -33,18 +26,19 @@ namespace SharpFlame.Mapping.Objects
         public bool PreferPartsOutput = false;
 
         private string _Label;
+        public string Label
+        {
+            get { return _Label; }
+        }
 
-        //public clsUnit()
-        //{
+        public clsUnit()
+        {
+            MapLink = new ConnectedListLink<clsUnit, clsMap>(this);
+            MapSelectedUnitLink = new ConnectedListLink<clsUnit, clsMap>(this);
+            Sectors = new ConnectedList<clsUnitSectorConnection, clsUnit>(this);
+        }
 
-        //MapLink = new ConnectedListLink<clsUnit, clsMap>(this);
-        //MapSelectedUnitLink = new ConnectedListLink<clsUnit, clsMap>(this);
-        //Sectors = new ConnectedList<clsUnitSectorConnection, clsUnit>(this);
-
-
-        //}
-
-        public clsUnit(clsUnit UnitToCopy, clsMap TargetMap)
+        public clsUnit(clsUnit unitToCopy, clsMap targetMap)
         {
             MapLink = new ConnectedListLink<clsUnit, clsMap>(this);
             MapSelectedUnitLink = new ConnectedListLink<clsUnit, clsMap>(this);
@@ -52,9 +46,9 @@ namespace SharpFlame.Mapping.Objects
 
             bool IsDesign = default(bool);
 
-            if ( UnitToCopy.TypeBase.Type == UnitType.PlayerDroid )
+            if ( unitToCopy.TypeBase.Type == UnitType.PlayerDroid )
             {
-                IsDesign = !((DroidDesign)UnitToCopy.TypeBase).IsTemplate;
+                IsDesign = !((DroidDesign)unitToCopy.TypeBase).IsTemplate;
             }
             else
             {
@@ -64,33 +58,28 @@ namespace SharpFlame.Mapping.Objects
             {
                 DroidDesign DroidDesign = new DroidDesign();
                 TypeBase = DroidDesign;
-                DroidDesign.CopyDesign((DroidDesign)UnitToCopy.TypeBase);
+                DroidDesign.CopyDesign((DroidDesign)unitToCopy.TypeBase);
                 DroidDesign.UpdateAttachments();
             }
             else
             {
-                TypeBase = UnitToCopy.TypeBase;
+                TypeBase = unitToCopy.TypeBase;
             }
-            Pos = UnitToCopy.Pos;
-            Rotation = UnitToCopy.Rotation;
-            clsUnitGroup OtherUnitGroup = default(clsUnitGroup);
-            OtherUnitGroup = UnitToCopy.UnitGroup;
-            if ( OtherUnitGroup.WZ_StartPos < 0 )
+            Pos = unitToCopy.Pos;
+            Rotation = unitToCopy.Rotation;
+            clsUnitGroup otherUnitGroup = default(clsUnitGroup);
+            otherUnitGroup = unitToCopy.UnitGroup;
+            if ( otherUnitGroup.WZ_StartPos < 0 )
             {
-                UnitGroup = TargetMap.ScavengerUnitGroup;
+                UnitGroup = targetMap.ScavengerUnitGroup;
             }
             else
             {
-                UnitGroup = TargetMap.UnitGroups[OtherUnitGroup.WZ_StartPos];
+                UnitGroup = targetMap.UnitGroups[otherUnitGroup.WZ_StartPos];
             }
-            SavePriority = UnitToCopy.SavePriority;
-            Health = UnitToCopy.Health;
-            PreferPartsOutput = UnitToCopy.PreferPartsOutput;
-        }
-
-        public string Label
-        {
-            get { return _Label; }
+            SavePriority = unitToCopy.SavePriority;
+            Health = unitToCopy.Health;
+            PreferPartsOutput = unitToCopy.PreferPartsOutput;
         }
 
         public string GetINIPosition()
@@ -269,6 +258,30 @@ namespace SharpFlame.Mapping.Objects
             MapLink.Deallocate();
             MapSelectedUnitLink.Deallocate();
             Sectors.Deallocate();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+
+            clsUnit objAsUnit = obj as clsUnit;
+            if (objAsUnit == null)
+                return false;
+
+            return Equals (objAsUnit);
+        }
+
+        public override int GetHashCode()
+        {
+            return (int)ID;
+        }
+
+        public bool Equals(clsUnit other)
+        {
+            if (other == null)
+                return false;
+            return (this.ID.Equals (other.ID));
         }
     }
 }
