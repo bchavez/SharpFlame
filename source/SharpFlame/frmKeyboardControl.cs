@@ -8,7 +8,7 @@ namespace SharpFlame
 {
     public partial class frmKeyboardControl
     {
-        public SimpleList<clsContainer<Keys>> Results = new SimpleList<clsContainer<Keys>>();
+        public SimpleList<Keys> Results = new SimpleList<Keys>();
 
         public frmKeyboardControl()
         {
@@ -28,7 +28,7 @@ namespace SharpFlame
                 string text = Enum.GetName(typeof(Keys), key);
                 if ( text == null )
                 {
-                    lblKeys.Text += Convert.ToInt32(Results[i].Item).ToStringInvariant();
+                    lblKeys.Text += Convert.ToInt32(Results[i]).ToStringInvariant();
                 }
                 else
                 {
@@ -54,14 +54,14 @@ namespace SharpFlame
             {
                 return;
             }
-            foreach ( clsContainer<Keys> key in Results )
+            foreach ( var key in Results )
             {
-                if ( key.Item == e.KeyCode )
+                if ( key == e.KeyCode )
                 {
                     return;
                 }
             }
-            Results.Add(new clsContainer<Keys>(e.KeyCode));
+            Results.Add(e.KeyCode);
             UpdateLabel();
         }
     }

@@ -214,46 +214,46 @@ namespace SharpFlame
             XYDouble BaseMax =
                 new XYDouble(Math.Min((double)Generator.TileSize.X / Generator.SymmetryBlockCountXY.X, Generator.TileSize.X - 12.0D),
                     Math.Min((double)Generator.TileSize.Y / Generator.SymmetryBlockCountXY.Y, Generator.TileSize.Y - 12.0D));
-            Generator.PlayerBasePos[0] = new XYInt(ValidateTextbox(txt1x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
-                ValidateTextbox(txt1y, BaseMin, BaseMax.X, App.TerrainGridSpacing));
+            Generator.PlayerBasePos[0] = new XYInt(ValidateTextbox(txt1x, BaseMin, BaseMax.X, Constants.TerrainGridSpacing),
+                ValidateTextbox(txt1y, BaseMin, BaseMax.X, Constants.TerrainGridSpacing));
             if ( Generator.TopLeftPlayerCount >= 2 )
             {
-                Generator.PlayerBasePos[1] = new XYInt(ValidateTextbox(txt2x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
-                    ValidateTextbox(txt2y, BaseMin, BaseMax.Y, App.TerrainGridSpacing));
+                Generator.PlayerBasePos[1] = new XYInt(ValidateTextbox(txt2x, BaseMin, BaseMax.X, Constants.TerrainGridSpacing),
+                    ValidateTextbox(txt2y, BaseMin, BaseMax.Y, Constants.TerrainGridSpacing));
                 if ( Generator.TopLeftPlayerCount >= 3 )
                 {
-                    Generator.PlayerBasePos[2] = new XYInt(ValidateTextbox(txt3x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
-                        ValidateTextbox(txt3y, BaseMin, BaseMax.Y, App.TerrainGridSpacing));
+                    Generator.PlayerBasePos[2] = new XYInt(ValidateTextbox(txt3x, BaseMin, BaseMax.X, Constants.TerrainGridSpacing),
+                        ValidateTextbox(txt3y, BaseMin, BaseMax.Y, Constants.TerrainGridSpacing));
                     if ( Generator.TopLeftPlayerCount >= 4 )
                     {
-                        Generator.PlayerBasePos[3] = new XYInt(ValidateTextbox(txt4x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
-                            ValidateTextbox(txt4y, BaseMin, BaseMax.Y, App.TerrainGridSpacing));
+                        Generator.PlayerBasePos[3] = new XYInt(ValidateTextbox(txt4x, BaseMin, BaseMax.X, Constants.TerrainGridSpacing),
+                            ValidateTextbox(txt4y, BaseMin, BaseMax.Y, Constants.TerrainGridSpacing));
                         if ( Generator.TopLeftPlayerCount >= 5 )
                         {
-                            Generator.PlayerBasePos[4] = new XYInt(ValidateTextbox(txt5x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
-                                ValidateTextbox(txt5y, BaseMin, BaseMax.Y, App.TerrainGridSpacing));
+                            Generator.PlayerBasePos[4] = new XYInt(ValidateTextbox(txt5x, BaseMin, BaseMax.X, Constants.TerrainGridSpacing),
+                                ValidateTextbox(txt5y, BaseMin, BaseMax.Y, Constants.TerrainGridSpacing));
                             if ( Generator.TopLeftPlayerCount >= 6 )
                             {
-                                Generator.PlayerBasePos[5] = new XYInt(ValidateTextbox(txt6x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
-                                    ValidateTextbox(txt6y, BaseMin, BaseMax.Y, App.TerrainGridSpacing));
+                                Generator.PlayerBasePos[5] = new XYInt(ValidateTextbox(txt6x, BaseMin, BaseMax.X, Constants.TerrainGridSpacing),
+                                    ValidateTextbox(txt6y, BaseMin, BaseMax.Y, Constants.TerrainGridSpacing));
                                 if ( Generator.TopLeftPlayerCount >= 7 )
                                 {
-                                    Generator.PlayerBasePos[6] = new XYInt(ValidateTextbox(txt7x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
-                                        ValidateTextbox(txt7y, BaseMin, BaseMax.Y, App.TerrainGridSpacing));
+                                    Generator.PlayerBasePos[6] = new XYInt(ValidateTextbox(txt7x, BaseMin, BaseMax.X, Constants.TerrainGridSpacing),
+                                        ValidateTextbox(txt7y, BaseMin, BaseMax.Y, Constants.TerrainGridSpacing));
                                     if ( Generator.TopLeftPlayerCount >= 8 )
                                     {
-                                        Generator.PlayerBasePos[7] = new XYInt(ValidateTextbox(txt8x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
-                                            ValidateTextbox(txt8y, BaseMin, BaseMax.Y, App.TerrainGridSpacing));
+                                        Generator.PlayerBasePos[7] = new XYInt(ValidateTextbox(txt8x, BaseMin, BaseMax.X, Constants.TerrainGridSpacing),
+                                            ValidateTextbox(txt8y, BaseMin, BaseMax.Y, Constants.TerrainGridSpacing));
                                         if ( Generator.TopLeftPlayerCount >= 9 )
                                         {
                                             Generator.PlayerBasePos[8] = new XYInt(
-                                                ValidateTextbox(txt9x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
-                                                ValidateTextbox(txt9y, BaseMin, BaseMax.Y, App.TerrainGridSpacing));
+                                                ValidateTextbox(txt9x, BaseMin, BaseMax.X, Constants.TerrainGridSpacing),
+                                                ValidateTextbox(txt9y, BaseMin, BaseMax.Y, Constants.TerrainGridSpacing));
                                             if ( Generator.TopLeftPlayerCount >= 10 )
                                             {
                                                 Generator.PlayerBasePos[9] =
-                                                    new XYInt(ValidateTextbox(txt10x, BaseMin, BaseMax.X, App.TerrainGridSpacing),
-                                                        ValidateTextbox(txt10y, BaseMin, BaseMax.Y, App.TerrainGridSpacing));
+                                                    new XYInt(ValidateTextbox(txt10x, BaseMin, BaseMax.X, Constants.TerrainGridSpacing),
+                                                        ValidateTextbox(txt10y, BaseMin, BaseMax.Y, Constants.TerrainGridSpacing));
                                             }
                                         }
                                     }
@@ -393,7 +393,7 @@ namespace SharpFlame
                 }
                 Generator.Map.TileType_Reset();
                 Generator.Map.SetPainterToDefaults();
-                double CliffAngle = Math.Atan(255.0D * Generator.Map.HeightMultiplier / (2.0D * (Generator.LevelCount - 1.0D) * App.TerrainGridSpacing)) -
+                double CliffAngle = Math.Atan(255.0D * Generator.Map.HeightMultiplier / (2.0D * (Generator.LevelCount - 1.0D) * Constants.TerrainGridSpacing)) -
                                     MathUtil.RadOf1Deg;
                 clsBrush tmpBrush = new clsBrush((Math.Max(Generator.Map.Terrain.TileSize.X, Generator.Map.Terrain.TileSize.Y)) * 1.1D, clsBrush.enumShape.Square);
                 clsApplyCliff ApplyCliff = new clsApplyCliff();
@@ -526,7 +526,7 @@ namespace SharpFlame
                 return;
             }
 
-            Generator.MaxDisconnectionDist = ValidateTextbox(txtRampDistance, 0.0D, 99999.0D, App.TerrainGridSpacing);
+            Generator.MaxDisconnectionDist = ValidateTextbox(txtRampDistance, 0.0D, 99999.0D, Constants.TerrainGridSpacing);
             Generator.RampBase = ValidateTextbox(txtRampBase, 10.0D, 1000.0D, 10.0D) / 1000.0D;
 
             clsResult Result = new clsResult("", false);

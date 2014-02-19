@@ -16,4 +16,9 @@ static internal class Constants
     public const int WzMapMaxSize = 250;
     public const int MapMaxSize = 512;
     public const int MinimapMaxSize = 512;
+
+    public const int INIRotationMax = 65536;
+    public const int TileTypeNum_Water = 7;
+    public const int TileTypeNum_Cliff = 8;
+    public const int TerrainGridSpacing = 128;
 }

@@ -25,18 +25,18 @@ namespace SharpFlame.Mapping.Drawing
 
         public override void ActionPerform()
         {
-            vertex0.X = PosNum.X * App.TerrainGridSpacing;
+            vertex0.X = PosNum.X * Constants.TerrainGridSpacing;
             vertex0.Y = Convert.ToInt32(Map.Terrain.Vertices[PosNum.X, PosNum.Y].Height * Map.HeightMultiplier);
-            vertex0.Z = - PosNum.Y * App.TerrainGridSpacing;
-            vertex1.X = (PosNum.X + 1) * App.TerrainGridSpacing;
+            vertex0.Z = - PosNum.Y * Constants.TerrainGridSpacing;
+            vertex1.X = (PosNum.X + 1) * Constants.TerrainGridSpacing;
             vertex1.Y = Convert.ToInt32(Map.Terrain.Vertices[PosNum.X + 1, PosNum.Y].Height * Map.HeightMultiplier);
-            vertex1.Z = - PosNum.Y * App.TerrainGridSpacing;
-            vertex2.X = PosNum.X * App.TerrainGridSpacing;
+            vertex1.Z = - PosNum.Y * Constants.TerrainGridSpacing;
+            vertex2.X = PosNum.X * Constants.TerrainGridSpacing;
             vertex2.Y = Convert.ToInt32(Map.Terrain.Vertices[PosNum.X, PosNum.Y + 1].Height * Map.HeightMultiplier);
-            vertex2.Z = - (PosNum.Y + 1) * App.TerrainGridSpacing;
-            vertex3.X = (PosNum.X + 1) * App.TerrainGridSpacing;
+            vertex2.Z = - (PosNum.Y + 1) * Constants.TerrainGridSpacing;
+            vertex3.X = (PosNum.X + 1) * Constants.TerrainGridSpacing;
             vertex3.Y = Convert.ToInt32(Map.Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Height * Map.HeightMultiplier);
-            vertex3.Z = - (PosNum.Y + 1) * App.TerrainGridSpacing;
+            vertex3.Z = - (PosNum.Y + 1) * Constants.TerrainGridSpacing;
             GL.Begin(BeginMode.LineLoop);
             GL.Color4(Colour.Red, Colour.Green, Colour.Blue, Colour.Alpha);
             GL.Vertex3(vertex0.X, vertex0.Y, Convert.ToInt32(- vertex0.Z));

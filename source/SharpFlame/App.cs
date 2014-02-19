@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Drawing;
 using System.IO;
@@ -5,9 +7,9 @@ using System.Text;
 using System.Windows.Forms;
 using NLog;
 using SharpFlame.AppSettings;
-using SharpFlame.Core.Domain;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
+using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Graphics.OpenGL;
@@ -18,11 +20,13 @@ using SharpFlame.Maths;
 using SharpFlame.Painters;
 using SharpFlame.Util;
 
+#endregion
+
 namespace SharpFlame
 {
     public sealed class App
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public static sRGB_sng MinimapFeatureColour;
 
@@ -34,31 +38,6 @@ namespace SharpFlame
         public static string AutoSavePath;
 
         public static Random Random;
-
-        public static void SetProgramSubDirs()
-        {
-#if !Portable
-            string myDocumentsProgramPath = Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments).CombinePathWith( ".flaME", true);
-            SettingsPath = myDocumentsProgramPath.CombinePathWith("settings.ini");
-            AutoSavePath = myDocumentsProgramPath.CombinePathWith("autosave", true);
-
-#else
-            SettingsPath = AppDomain.CurrentDomain.BaseDirectory.CombinePathWith("settings.ini");
-            AutoSavePath = AppDomain.CurrentDomain.BaseDirectory.CombinePathWith("autosave", true);
-#endif
-            // Create the directories.
-            if (!Directory.Exists (AutoSavePath)) {
-                try
-                {
-                    Directory.CreateDirectory(AutoSavePath);
-                }
-                catch ( Exception ex )
-                {
-                    logger.Error ("Unable to create folder \"{0}\": {1}", AutoSavePath, ex.Message);
-                    Application.Exit ();
-                }
-            }
-        }
 
         public static bool ProgramInitialized = false;
         public static bool ProgramInitializeFinished = false;
@@ -91,18 +70,11 @@ namespace SharpFlame
 
         public static SimpleList<clsTileType> TileTypes = new SimpleList<clsTileType>();
 
-        public const int TileTypeNum_Water = 7;
-        public const int TileTypeNum_Cliff = 8;
-
         public static DroidDesign.clsTemplateDroidType[] TemplateDroidTypes = new DroidDesign.clsTemplateDroidType[0];
         public static int TemplateDroidTypeCount;
 
         public static readonly UTF8Encoding UTF8Encoding = new UTF8Encoding(false, false);
         public static readonly ASCIIEncoding ASCIIEncoding = new ASCIIEncoding();
-
-        public const int INIRotationMax = 65536;
-
-        public const int TerrainGridSpacing = 128;
 
         public static int VisionRadius_2E;
         public static double VisionRadius;
@@ -124,6 +96,60 @@ namespace SharpFlame
 
         public static clsPlayer[] PlayerColour = new clsPlayer[16];
 
+        public static DroidDesign.clsTemplateDroidType TemplateDroidType_Droid;
+        public static DroidDesign.clsTemplateDroidType TemplateDroidType_Cyborg;
+        public static DroidDesign.clsTemplateDroidType TemplateDroidType_CyborgConstruct;
+        public static DroidDesign.clsTemplateDroidType TemplateDroidType_CyborgRepair;
+        public static DroidDesign.clsTemplateDroidType TemplateDroidType_CyborgSuper;
+        public static DroidDesign.clsTemplateDroidType TemplateDroidType_Transporter;
+        public static DroidDesign.clsTemplateDroidType TemplateDroidType_Person;
+        public static DroidDesign.clsTemplateDroidType TemplateDroidType_Null;
+
+        public static bool ShowIDErrorMessage = true;
+
+        public static bool Draw_TileTextures = true;
+
+        public static enumDrawLighting Draw_Lighting = enumDrawLighting.Half;
+        public static bool Draw_TileWireframe;
+        public static bool Draw_Units = true;
+        public static bool Draw_VertexTerrain;
+        public static bool Draw_Gateways;
+        public static bool Draw_ScriptMarkers = true;
+
+        public static enumView_Move_Type ViewMoveType = enumView_Move_Type.RTS;
+        public static bool RTSOrbit = true;
+
+        public static Matrix3DMath.Matrix3D SunAngleMatrix = new Matrix3DMath.Matrix3D();
+        public static clsBrush VisionSectors = new clsBrush(0.0D, clsBrush.enumShape.Circle);
+
+        public static sLayerList LayerList;
+
+        public static void SetProgramSubDirs()
+        {
+#if !Portable
+            var myDocumentsProgramPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments).CombinePathWith(".flaME", true);
+            SettingsPath = myDocumentsProgramPath.CombinePathWith("settings.ini");
+            AutoSavePath = myDocumentsProgramPath.CombinePathWith("autosave", true);
+
+#else
+            SettingsPath = AppDomain.CurrentDomain.BaseDirectory.CombinePathWith("settings.ini");
+            AutoSavePath = AppDomain.CurrentDomain.BaseDirectory.CombinePathWith("autosave", true);
+#endif
+            // Create the directories.
+            if ( !Directory.Exists(AutoSavePath) )
+            {
+                try
+                {
+                    Directory.CreateDirectory(AutoSavePath);
+                }
+                catch ( Exception ex )
+                {
+                    logger.Error("Unable to create folder \"{0}\": {1}", AutoSavePath, ex.Message);
+                    Application.Exit();
+                }
+            }
+        }
+
         public static void VisionRadius_2E_Changed()
         {
             VisionRadius = 256.0D * Math.Pow(2.0D, (VisionRadius_2E / 2.0D));
@@ -136,10 +162,10 @@ namespace SharpFlame
 
         public static string MinDigits(int Number, int Digits)
         {
-            string ReturnResult = Number.ToStringInvariant();         
-            ReturnResult = ReturnResult.PadLeft (Digits, '0');
+            var ReturnResult = Number.ToStringInvariant();
+            ReturnResult = ReturnResult.PadLeft(Digits, '0');
 
-            return ReturnResult;          
+            return ReturnResult;
         }
 
         public static void ViewKeyDown_Clear()
@@ -151,15 +177,6 @@ namespace SharpFlame
                 ((KeyboardControl)(KeyboardManager.KeyboardProfile.get_Value(control))).KeysChanged(IsViewKeyDown);
             }
         }
-
-        public static DroidDesign.clsTemplateDroidType TemplateDroidType_Droid;
-        public static DroidDesign.clsTemplateDroidType TemplateDroidType_Cyborg;
-        public static DroidDesign.clsTemplateDroidType TemplateDroidType_CyborgConstruct;
-        public static DroidDesign.clsTemplateDroidType TemplateDroidType_CyborgRepair;
-        public static DroidDesign.clsTemplateDroidType TemplateDroidType_CyborgSuper;
-        public static DroidDesign.clsTemplateDroidType TemplateDroidType_Transporter;
-        public static DroidDesign.clsTemplateDroidType TemplateDroidType_Person;
-        public static DroidDesign.clsTemplateDroidType TemplateDroidType_Null;
 
         public static void CreateTemplateDroidTypes()
         {
@@ -190,8 +207,8 @@ namespace SharpFlame
 
         public static DroidDesign.clsTemplateDroidType GetTemplateDroidTypeFromTemplateCode(string Code)
         {
-            string LCaseCode = Code.ToLower();
-            int A = 0;
+            var LCaseCode = Code.ToLower();
+            var A = 0;
 
             for ( A = 0; A <= TemplateDroidTypeCount - 1; A++ )
             {
@@ -205,7 +222,7 @@ namespace SharpFlame
 
         public static int TemplateDroidType_Add(DroidDesign.clsTemplateDroidType NewDroidType)
         {
-            int ReturnResult = 0;
+            var ReturnResult = 0;
 
             Array.Resize(ref TemplateDroidTypes, TemplateDroidTypeCount + 1);
             TemplateDroidTypes[TemplateDroidTypeCount] = NewDroidType;
@@ -222,7 +239,7 @@ namespace SharpFlame
                 return;
             }
 
-            frmWarnings WarningsForm = new frmWarnings(Result, Result.Text);
+            var WarningsForm = new frmWarnings(Result, Result.Text);
             WarningsForm.Show();
             WarningsForm.Activate();
         }
@@ -248,8 +265,6 @@ namespace SharpFlame
             }
         }
 
-        public static bool ShowIDErrorMessage = true;
-
         public static void ErrorIDChange(UInt32 IntendedID, clsUnit IDUnit, string NameOfErrorSource)
         {
             if ( !ShowIDErrorMessage )
@@ -262,22 +277,23 @@ namespace SharpFlame
                 return;
             }
 
-            string messageText = "An object\'s ID has been changed unexpectedly. The error was in \"{0}\"\n\n" +
-                "The object is of type {1} and is at map position {2}. " +
-                "It\'s ID was {3}, but is now {4}.\n\n" +
-                "Click Cancel to stop seeing this message. Otherwise, click OK.".Format2 (NameOfErrorSource, IDUnit.TypeBase.GetDisplayTextCode(), IDUnit.GetPosText(), IntendedID.ToStringInvariant(), IDUnit.ID.ToStringInvariant());
+            var messageText = "An object\'s ID has been changed unexpectedly. The error was in \"{0}\"\n\n" +
+                              "The object is of type {1} and is at map position {2}. " +
+                              "It\'s ID was {3}, but is now {4}.\n\n" +
+                              "Click Cancel to stop seeing this message. Otherwise, click OK.".Format2(NameOfErrorSource, IDUnit.TypeBase.GetDisplayTextCode(),
+                                  IDUnit.GetPosText(), IntendedID.ToStringInvariant(), IDUnit.ID.ToStringInvariant());
             const string caption = "An object\'s ID has been changed unexpectedly.";
 
-            var result = MessageBox.Show (messageText, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.None);
-            if (result == DialogResult.Cancel) {
-
+            var result = MessageBox.Show(messageText, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.None);
+            if ( result == DialogResult.Cancel )
+            {
                 ShowIDErrorMessage = false;
             }
         }
 
         public static void ZeroIDWarning(clsUnit IDUnit, UInt32 NewID, clsResult Output)
         {
-            string MessageText = "";
+            var MessageText = "";
 
             MessageText = "An object\'s ID has been changed from 0 to " + NewID.ToStringInvariant() + ". Zero is not a valid ID. The object is of type " +
                           IDUnit.TypeBase.GetDisplayTextCode() + " and is at map position " + IDUnit.GetPosText() + ".";
@@ -288,22 +304,22 @@ namespace SharpFlame
 
         public static bool PosIsWithinTileArea(XYInt worldHorizontal, XYInt startTile, XYInt finishTile)
         {
-            return worldHorizontal.X >= startTile.X * TerrainGridSpacing &
-                   worldHorizontal.Y >= startTile.Y * TerrainGridSpacing &
-                   worldHorizontal.X < finishTile.X * TerrainGridSpacing &
-                   worldHorizontal.Y < finishTile.Y * TerrainGridSpacing;
+            return worldHorizontal.X >= startTile.X * Constants.TerrainGridSpacing &
+                   worldHorizontal.Y >= startTile.Y * Constants.TerrainGridSpacing &
+                   worldHorizontal.X < finishTile.X * Constants.TerrainGridSpacing &
+                   worldHorizontal.Y < finishTile.Y * Constants.TerrainGridSpacing;
         }
 
         public static bool SizeIsPowerOf2(int Size)
         {
-            double Power = Math.Log(Size) / Math.Log(2.0D);
+            var Power = Math.Log(Size) / Math.Log(2.0D);
             return Power == (int)Power;
         }
 
         public static clsResult LoadTilesets(string TilesetsPath)
         {
-            clsResult ReturnResult = new clsResult("Loading tilesets", false);
-            logger.Info ("Loading tilesets");
+            var ReturnResult = new clsResult("Loading tilesets", false);
+            logger.Info("Loading tilesets");
 
             string[] TilesetDirs = null;
             try
@@ -321,11 +337,11 @@ namespace SharpFlame
                 return ReturnResult;
             }
 
-            clsResult Result = default(clsResult);
-            string Path = "";
-            clsTileset Tileset = default(clsTileset);
+            var Result = default(clsResult);
+            var Path = "";
+            var Tileset = default(clsTileset);
 
-            foreach ( string tempLoopVar_Path in TilesetDirs )
+            foreach ( var tempLoopVar_Path in TilesetDirs )
             {
                 Path = tempLoopVar_Path;
                 Tileset = new clsTileset();
@@ -337,7 +353,7 @@ namespace SharpFlame
                 }
             }
 
-            foreach ( clsTileset tempLoopVar_Tileset in Tilesets )
+            foreach ( var tempLoopVar_Tileset in Tilesets )
             {
                 Tileset = tempLoopVar_Tileset;
                 if ( Tileset.Name == "tertilesc1hw" )
@@ -379,36 +395,19 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public static bool Draw_TileTextures = true;
-
-        public static enumDrawLighting Draw_Lighting = enumDrawLighting.Half;
-        public static bool Draw_TileWireframe;
-        public static bool Draw_Units = true;
-        public static bool Draw_VertexTerrain;
-        public static bool Draw_Gateways;
-        public static bool Draw_ScriptMarkers = true;
-
-        public static enumView_Move_Type ViewMoveType = enumView_Move_Type.RTS;
-        public static bool RTSOrbit = true;
-
-        public static Matrix3DMath.Matrix3D SunAngleMatrix = new Matrix3DMath.Matrix3D();
-        public static clsBrush VisionSectors = new clsBrush(0.0D, clsBrush.enumShape.Circle);
-
         public static void View_Radius_Set(double Radius)
         {
-            VisionSectors.Radius = Radius / (TerrainGridSpacing * Constants.SectorTileSize);
+            VisionSectors.Radius = Radius / (Constants.TerrainGridSpacing * Constants.SectorTileSize);
         }
-
-        public static sLayerList LayerList;
 
         public static XYDouble CalcUnitsCentrePos(SimpleList<clsUnit> Units)
         {
-            XYDouble Result = default(XYDouble);
+            var Result = default(XYDouble);
 
             Result.X = 0.0D;
             Result.Y = 0.0D;
-            clsUnit Unit = default(clsUnit);
-            foreach ( clsUnit tempLoopVar_Unit in Units )
+            var Unit = default(clsUnit);
+            foreach ( var tempLoopVar_Unit in Units )
             {
                 Unit = tempLoopVar_Unit;
                 Result += Unit.Pos.Horizontal.ToDoubles();
@@ -418,6 +417,4 @@ namespace SharpFlame
             return Result;
         }
     }
-
- 
 }

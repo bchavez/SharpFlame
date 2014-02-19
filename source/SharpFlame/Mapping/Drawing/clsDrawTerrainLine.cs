@@ -15,7 +15,7 @@ namespace SharpFlame.Mapping.Drawing
         public XYInt StartXY;
         public XYInt FinishXY;
 
-        private XYZInt Vertex;
+        private XYZInt vertex;
         private XYInt StartTile;
         private XYInt FinishTile;
         private MathUtil.sIntersectPos IntersectX;
@@ -25,6 +25,11 @@ namespace SharpFlame.Mapping.Drawing
         private int LastXTile;
         private XYInt Horizontal;
 
+		public clsDrawTerrainLine()
+		{
+			vertex = new XYZInt (0, 0, 0);
+		}
+
         public void ActionPerform()
         {
             int X = 0;
@@ -33,84 +38,84 @@ namespace SharpFlame.Mapping.Drawing
             GL.Begin(BeginMode.LineStrip);
             GL.Color4(Colour.Red, Colour.Green, Colour.Blue, Colour.Alpha);
 
-            StartTile.Y = (int)(StartXY.Y / App.TerrainGridSpacing);
-            FinishTile.Y = FinishXY.Y / App.TerrainGridSpacing;
-            LastXTile = StartXY.X / App.TerrainGridSpacing;
+            StartTile.Y = (int)(StartXY.Y / Constants.TerrainGridSpacing);
+            FinishTile.Y = FinishXY.Y / Constants.TerrainGridSpacing;
+            LastXTile = StartXY.X / Constants.TerrainGridSpacing;
 
             Horizontal = StartXY;
-            Vertex.X = Horizontal.X;
-            Vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
-            Vertex.Z = Convert.ToInt32(- Horizontal.Y);
-            GL.Vertex3(Vertex.X, Vertex.Y, Convert.ToInt32(- Vertex.Z));
+            vertex.X = Horizontal.X;
+            vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
+            vertex.Z = Convert.ToInt32(- Horizontal.Y);
+            GL.Vertex3(vertex.X, vertex.Y, Convert.ToInt32(- vertex.Z));
 
             if ( StartTile.Y + 1 <= FinishTile.Y )
             {
                 for ( Y = StartTile.Y + 1; Y <= FinishTile.Y; Y++ )
                 {
                     TileEdgeStart.X = 0;
-                    TileEdgeStart.Y = Y * App.TerrainGridSpacing;
-                    TileEdgeFinish.X = Map.Terrain.TileSize.X * App.TerrainGridSpacing;
-                    TileEdgeFinish.Y = Y * App.TerrainGridSpacing;
+                    TileEdgeStart.Y = Y * Constants.TerrainGridSpacing;
+                    TileEdgeFinish.X = Map.Terrain.TileSize.X * Constants.TerrainGridSpacing;
+                    TileEdgeFinish.Y = Y * Constants.TerrainGridSpacing;
                     IntersectY = MathUtil.GetLinesIntersectBetween(StartXY, FinishXY, TileEdgeStart, TileEdgeFinish);
                     if ( IntersectY.Exists )
                     {
                         StartTile.X = LastXTile;
-                        FinishTile.X = (int)(IntersectY.Pos.X / App.TerrainGridSpacing);
+                        FinishTile.X = (int)(IntersectY.Pos.X / Constants.TerrainGridSpacing);
 
                         for ( X = StartTile.X + 1; X <= FinishTile.X; X++ )
                         {
-                            TileEdgeStart.X = X * App.TerrainGridSpacing;
+                            TileEdgeStart.X = X * Constants.TerrainGridSpacing;
                             TileEdgeStart.Y = 0;
-                            TileEdgeFinish.X = X * App.TerrainGridSpacing;
-                            TileEdgeFinish.Y = Map.Terrain.TileSize.Y * App.TerrainGridSpacing;
+                            TileEdgeFinish.X = X * Constants.TerrainGridSpacing;
+                            TileEdgeFinish.Y = Map.Terrain.TileSize.Y * Constants.TerrainGridSpacing;
                             IntersectX = MathUtil.GetLinesIntersectBetween(StartXY, FinishXY, TileEdgeStart, TileEdgeFinish);
                             if ( IntersectX.Exists )
                             {
                                 Horizontal = IntersectX.Pos;
-                                Vertex.X = Horizontal.X;
-                                Vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
-                                Vertex.Z = Convert.ToInt32(- Horizontal.Y);
-                                GL.Vertex3(Vertex.X, Vertex.Y, Convert.ToInt32(- Vertex.Z));
+                                vertex.X = Horizontal.X;
+                                vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
+                                vertex.Z = Convert.ToInt32(- Horizontal.Y);
+                                GL.Vertex3(vertex.X, vertex.Y, Convert.ToInt32(- vertex.Z));
                             }
                         }
 
                         LastXTile = FinishTile.X;
 
                         Horizontal = IntersectY.Pos;
-                        Vertex.X = Horizontal.X;
-                        Vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
-                        Vertex.Z = Convert.ToInt32(- Horizontal.Y);
-                        GL.Vertex3(Vertex.X, Vertex.Y, Convert.ToInt32(- Vertex.Z));
+                        vertex.X = Horizontal.X;
+                        vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
+                        vertex.Z = Convert.ToInt32(- Horizontal.Y);
+                        GL.Vertex3(vertex.X, vertex.Y, Convert.ToInt32(- vertex.Z));
                     }
                 }
             }
             else
             {
                 StartTile.X = LastXTile;
-                FinishTile.X = FinishXY.X / App.TerrainGridSpacing;
+                FinishTile.X = FinishXY.X / Constants.TerrainGridSpacing;
                 for ( X = StartTile.X + 1; X <= FinishTile.X; X++ )
                 {
-                    TileEdgeStart.X = X * App.TerrainGridSpacing;
+                    TileEdgeStart.X = X * Constants.TerrainGridSpacing;
                     TileEdgeStart.Y = 0;
-                    TileEdgeFinish.X = X * App.TerrainGridSpacing;
-                    TileEdgeFinish.Y = Map.Terrain.TileSize.Y * App.TerrainGridSpacing;
+                    TileEdgeFinish.X = X * Constants.TerrainGridSpacing;
+                    TileEdgeFinish.Y = Map.Terrain.TileSize.Y * Constants.TerrainGridSpacing;
                     IntersectX = MathUtil.GetLinesIntersectBetween(StartXY, FinishXY, TileEdgeStart, TileEdgeFinish);
                     if ( IntersectX.Exists )
                     {
                         Horizontal = IntersectX.Pos;
-                        Vertex.X = Horizontal.X;
-                        Vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
-                        Vertex.Z = Convert.ToInt32(- Horizontal.Y);
-                        GL.Vertex3(Vertex.X, Vertex.Y, Convert.ToInt32(- Vertex.Z));
+                        vertex.X = Horizontal.X;
+                        vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
+                        vertex.Z = Convert.ToInt32(- Horizontal.Y);
+                        GL.Vertex3(vertex.X, vertex.Y, Convert.ToInt32(- vertex.Z));
                     }
                 }
             }
 
             Horizontal = FinishXY;
-            Vertex.X = Horizontal.X;
-            Vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
-            Vertex.Z = Convert.ToInt32(- Horizontal.Y);
-            GL.Vertex3(Vertex.X, Vertex.Y, Convert.ToInt32(- Vertex.Z));
+            vertex.X = Horizontal.X;
+            vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
+            vertex.Z = Convert.ToInt32(- Horizontal.Y);
+            GL.Vertex3(vertex.X, vertex.Y, Convert.ToInt32(- vertex.Z));
 
             GL.End();
         }

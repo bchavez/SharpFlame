@@ -798,17 +798,12 @@ namespace SharpFlame.Mapping
                     returnResult.ProblemAdd ("Unable to find file \"scriptlabels.ini\".");
                     return returnResult;
                 } else {
-                    using (Stream s = scriptLabelsEntry.OpenReader()) {
-                        clsResult result = new clsResult("Reading labels", false);
-                        logger.Info ("Reading labels");
-
-                        StreamReader reader = new StreamReader (s);
-                        IniReader labelsINI = new IniReader();
-                        result.Take(labelsINI.ReadFile(reader));
-                        reader.Close ();
-                        result.Take(Read_WZ_Labels(labelsINI, true));
-                        returnResult.Add(result);
-                    }
+					if (scriptLabelsEntry != null) {
+						using (var reader = new StreamReader(scriptLabelsEntry.OpenReader())) {
+							var text = reader.ReadToEnd ();
+							returnResult.Add (Read_INI_Labels (text, true));
+						}
+					}
                 }
 
                 InterfaceOptions = resultInfo.InterfaceOptions;

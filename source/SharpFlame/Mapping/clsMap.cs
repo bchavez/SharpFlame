@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
@@ -207,8 +207,8 @@ namespace SharpFlame.Mapping
                     new XYInt(Gateway.PosB.X - Offset.X, Gateway.PosB.Y - Offset.Y));
             }
 
-            PosDif.X = - Offset.X * App.TerrainGridSpacing;
-            PosDif.Y = - Offset.Y * App.TerrainGridSpacing;
+            PosDif.X = - Offset.X * Constants.TerrainGridSpacing;
+            PosDif.Y = - Offset.Y * Constants.TerrainGridSpacing;
             clsUnit Unit = default(clsUnit);
             XYInt NewPos = new XYInt();
             foreach ( clsUnit tempLoopVar_Unit in MapToCopy.Units )
@@ -253,10 +253,10 @@ namespace SharpFlame.Mapping
             int XG = 0;
             int YG = 0;
 
-            XG = (int)((Horizontal.X / App.TerrainGridSpacing));
-            YG = (Horizontal.Y / App.TerrainGridSpacing);
-            InTileX = MathUtil.Clamp_dbl(Horizontal.X / App.TerrainGridSpacing - XG, 0.0D, 1.0D);
-            InTileZ = MathUtil.Clamp_dbl(Horizontal.Y / App.TerrainGridSpacing - YG, 0.0D, 1.0D);
+            XG = (int)((Horizontal.X / Constants.TerrainGridSpacing));
+            YG = (Horizontal.Y / Constants.TerrainGridSpacing);
+            InTileX = MathUtil.Clamp_dbl(Horizontal.X / Constants.TerrainGridSpacing - XG, 0.0D, 1.0D);
+            InTileZ = MathUtil.Clamp_dbl(Horizontal.Y / Constants.TerrainGridSpacing - YG, 0.0D, 1.0D);
             X1 = MathUtil.Clamp_int(XG, 0, Terrain.TileSize.X - 1);
             Y1 = MathUtil.Clamp_int(YG, 0, Terrain.TileSize.Y - 1);
             if ( Terrain.Tiles[X1, Y1].Tri )
@@ -301,10 +301,10 @@ namespace SharpFlame.Mapping
             XYZDouble XYZ_dbl3 = default(XYZDouble);
             Angles.AnglePY AnglePY = default(Angles.AnglePY);
 
-            XG = (Horizontal.X / App.TerrainGridSpacing);
-            YG = (int)((Horizontal.Y / App.TerrainGridSpacing));
-            InTileX = MathUtil.Clamp_dbl(Horizontal.X / App.TerrainGridSpacing - XG, 0.0D, 1.0D);
-            InTileZ = MathUtil.Clamp_dbl(Horizontal.Y / App.TerrainGridSpacing - YG, 0.0D, 1.0D);
+            XG = (Horizontal.X / Constants.TerrainGridSpacing);
+            YG = (int)((Horizontal.Y / Constants.TerrainGridSpacing));
+            InTileX = MathUtil.Clamp_dbl(Horizontal.X / Constants.TerrainGridSpacing - XG, 0.0D, 1.0D);
+            InTileZ = MathUtil.Clamp_dbl(Horizontal.Y / Constants.TerrainGridSpacing - YG, 0.0D, 1.0D);
             X1 = MathUtil.Clamp_int(XG, 0, Terrain.TileSize.X - 1);
             Y1 = MathUtil.Clamp_int(YG, 0, Terrain.TileSize.Y - 1);
             X2 = MathUtil.Clamp_int(XG + 1, 0, Terrain.TileSize.X);
@@ -340,12 +340,12 @@ namespace SharpFlame.Mapping
                 }
             }
 
-            XYZ_dbl.X = App.TerrainGridSpacing;
+            XYZ_dbl.X = Constants.TerrainGridSpacing;
             XYZ_dbl.Y = GradientX * HeightMultiplier;
             XYZ_dbl.Z = 0.0D;
             XYZ_dbl2.X = 0.0D;
             XYZ_dbl2.Y = GradientY * HeightMultiplier;
-            XYZ_dbl2.Z = App.TerrainGridSpacing;
+            XYZ_dbl2.Z = Constants.TerrainGridSpacing;
             Matrix3DMath.VectorCrossProduct(XYZ_dbl, XYZ_dbl2, ref XYZ_dbl3);
             if ( XYZ_dbl3.X != 0.0D | XYZ_dbl3.Z != 0.0D )
             {
@@ -374,10 +374,10 @@ namespace SharpFlame.Mapping
             double RatioX = 0;
             double RatioY = 0;
 
-            XG = (Horizontal.X / App.TerrainGridSpacing);
-            YG = (int)((Horizontal.Y / App.TerrainGridSpacing));
-            InTileX = MathUtil.Clamp_dbl(Horizontal.X / App.TerrainGridSpacing - XG, 0.0D, 1.0D);
-            InTileZ = MathUtil.Clamp_dbl(Horizontal.Y / App.TerrainGridSpacing - YG, 0.0D, 1.0D);
+            XG = (Horizontal.X / Constants.TerrainGridSpacing);
+            YG = (int)((Horizontal.Y / Constants.TerrainGridSpacing));
+            InTileX = MathUtil.Clamp_dbl(Horizontal.X / Constants.TerrainGridSpacing - XG, 0.0D, 1.0D);
+            InTileZ = MathUtil.Clamp_dbl(Horizontal.Y / Constants.TerrainGridSpacing - YG, 0.0D, 1.0D);
             X1 = MathUtil.Clamp_int(XG, 0, Terrain.TileSize.X - 1);
             Y1 = MathUtil.Clamp_int(YG, 0, Terrain.TileSize.Y - 1);
             X2 = MathUtil.Clamp_int(XG + 1, 0, Terrain.TileSize.X);
@@ -449,10 +449,10 @@ namespace SharpFlame.Mapping
             Y2 = MathUtil.Clamp_int(Y + 1, 0, Terrain.TileSize.Y);
             TerrainHeightY2 = Terrain.Vertices[X2, Y2].Height;
             vector1.X = (TerrainHeightX1 - TerrainHeightX2) * HeightMultiplier;
-            vector1.Y = App.TerrainGridSpacing * 2.0D;
+            vector1.Y = Constants.TerrainGridSpacing * 2.0D;
             vector1.Z = 0.0D;
             vector2.X = 0.0D;
-            vector2.Y = App.TerrainGridSpacing * 2.0D;
+            vector2.Y = Constants.TerrainGridSpacing * 2.0D;
             vector2.Z = (TerrainHeightY1 - TerrainHeightY2) * HeightMultiplier;
             vector1.X += vector2.X;
             vector1.Y += vector2.Y;
@@ -580,8 +580,8 @@ namespace SharpFlame.Mapping
             clsUnit Unit = default(clsUnit);
             clsGateway Gateway = default(clsGateway);
 
-            PosDifX = - Offset.X * App.TerrainGridSpacing;
-            PosDifZ = - Offset.Y * App.TerrainGridSpacing;
+            PosDifX = - Offset.X * Constants.TerrainGridSpacing;
+            PosDifZ = - Offset.Y * Constants.TerrainGridSpacing;
             foreach ( clsUnit tempLoopVar_Unit in Units )
             {
                 Unit = tempLoopVar_Unit;
@@ -621,7 +621,7 @@ namespace SharpFlame.Mapping
                 }
             }
 
-            XYInt PosOffset = new XYInt(Offset.X * App.TerrainGridSpacing, Offset.Y * App.TerrainGridSpacing);
+            XYInt PosOffset = new XYInt(Offset.X * Constants.TerrainGridSpacing, Offset.Y * Constants.TerrainGridSpacing);
 
             clsScriptPosition ScriptPosition = default(clsScriptPosition);
             foreach ( clsScriptPosition tempLoopVar_ScriptPosition in ScriptPositions.GetItemsAsSimpleList() )
@@ -752,18 +752,18 @@ namespace SharpFlame.Mapping
             TileTerrainHeight[2] = Terrain.Vertices[TileX, TileY + 1].Height;
             TileTerrainHeight[3] = Terrain.Vertices[TileX + 1, TileY + 1].Height;
 
-            Vertex0.X = TileX * App.TerrainGridSpacing;
+            Vertex0.X = TileX * Constants.TerrainGridSpacing;
             Vertex0.Y = (float)(TileTerrainHeight[0] * HeightMultiplier);
-            Vertex0.Z = - TileY * App.TerrainGridSpacing;
-            Vertex1.X = (TileX + 1) * App.TerrainGridSpacing;
+            Vertex0.Z = - TileY * Constants.TerrainGridSpacing;
+            Vertex1.X = (TileX + 1) * Constants.TerrainGridSpacing;
             Vertex1.Y = (float)(TileTerrainHeight[1] * HeightMultiplier);
-            Vertex1.Z = - TileY * App.TerrainGridSpacing;
-            Vertex2.X = TileX * App.TerrainGridSpacing;
+            Vertex1.Z = - TileY * Constants.TerrainGridSpacing;
+            Vertex2.X = TileX * Constants.TerrainGridSpacing;
             Vertex2.Y = (float)(TileTerrainHeight[2] * HeightMultiplier);
-            Vertex2.Z = - (TileY + 1) * App.TerrainGridSpacing;
-            Vertex3.X = (TileX + 1) * App.TerrainGridSpacing;
+            Vertex2.Z = - (TileY + 1) * Constants.TerrainGridSpacing;
+            Vertex3.X = (TileX + 1) * Constants.TerrainGridSpacing;
             Vertex3.Y = (float)(TileTerrainHeight[3] * HeightMultiplier);
-            Vertex3.Z = - (TileY + 1) * App.TerrainGridSpacing;
+            Vertex3.Z = - (TileY + 1) * Constants.TerrainGridSpacing;
 
             GL.Begin(BeginMode.Lines);
             if ( Terrain.Tiles[TileX, TileY].Tri )
@@ -804,9 +804,9 @@ namespace SharpFlame.Mapping
         public void DrawTileOrientation(XYInt Tile)
         {
             XYInt UnrotatedPos = new XYInt();
-            sWorldPos Vertex0 = new sWorldPos();
-            sWorldPos Vertex1 = new sWorldPos();
-            sWorldPos Vertex2 = new sWorldPos();
+            WorldPos Vertex0 = new WorldPos();
+            WorldPos Vertex1 = new WorldPos();
+            WorldPos Vertex2 = new WorldPos();
 
             UnrotatedPos.X = 32;
             UnrotatedPos.Y = 32;
@@ -913,7 +913,7 @@ namespace SharpFlame.Mapping
                         {
                             if ( Terrain.Tiles[X, Y].Texture.TextureNum >= 0 && Terrain.Tiles[X, Y].Texture.TextureNum < Tileset.TileCount )
                             {
-                                if ( Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == App.TileTypeNum_Cliff )
+                                if ( Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNum_Cliff )
                                 {
                                     sngTexture[Y, X, 0] = sngTexture[Y, X, 0] * AntiAlpha + SettingsManager.Settings.MinimapCliffColour.Red * Alpha;
                                     sngTexture[Y, X, 1] = sngTexture[Y, X, 1] * AntiAlpha + SettingsManager.Settings.MinimapCliffColour.Green * Alpha;
@@ -1153,29 +1153,29 @@ namespace SharpFlame.Mapping
             ResultSectorFinish.Y = MathUtil.Clamp_int(ResultSectorFinish.Y, 0, SectorCount.Y - 1);
         }
 
-        public sWorldPos TileAlignedPos(XYInt TileNum, XYInt Footprint)
+        public WorldPos TileAlignedPos(XYInt TileNum, XYInt Footprint)
         {
-            sWorldPos Result = new sWorldPos();
+            WorldPos Result = new WorldPos();
 
-            Result.Horizontal.X = (int)((TileNum.X + Footprint.X / 2.0D) * App.TerrainGridSpacing);
-            Result.Horizontal.Y = (int)((TileNum.Y + Footprint.Y / 2.0D) * App.TerrainGridSpacing);
+            Result.Horizontal.X = (int)((TileNum.X + Footprint.X / 2.0D) * Constants.TerrainGridSpacing);
+            Result.Horizontal.Y = (int)((TileNum.Y + Footprint.Y / 2.0D) * Constants.TerrainGridSpacing);
             Result.Altitude = (int)(GetTerrainHeight(Result.Horizontal));
 
             return Result;
         }
 
-        public sWorldPos TileAlignedPosFromMapPos(XYInt Horizontal, XYInt Footprint)
+        public WorldPos TileAlignedPosFromMapPos(XYInt Horizontal, XYInt Footprint)
         {
-            sWorldPos Result = new sWorldPos();
+            WorldPos Result = new WorldPos();
 
             Result.Horizontal.X =
                 (int)
-                    ((Math.Round(Convert.ToDouble((Horizontal.X - Footprint.X * App.TerrainGridSpacing / 2.0D) / App.TerrainGridSpacing)) +
-                      Footprint.X / 2.0D) * App.TerrainGridSpacing);
+                    ((Math.Round(Convert.ToDouble((Horizontal.X - Footprint.X * Constants.TerrainGridSpacing / 2.0D) / Constants.TerrainGridSpacing)) +
+                      Footprint.X / 2.0D) * Constants.TerrainGridSpacing);
             Result.Horizontal.Y =
                 (int)
-                    ((Math.Round(Convert.ToDouble((Horizontal.Y - Footprint.Y * App.TerrainGridSpacing / 2.0D) / App.TerrainGridSpacing)) +
-                      Footprint.Y / 2.0D) * App.TerrainGridSpacing);
+                    ((Math.Round(Convert.ToDouble((Horizontal.Y - Footprint.Y * Constants.TerrainGridSpacing / 2.0D) / Constants.TerrainGridSpacing)) +
+                      Footprint.Y / 2.0D) * Constants.TerrainGridSpacing);
             Result.Altitude = (int)(GetTerrainHeight(Result.Horizontal));
 
             return Result;
@@ -1746,8 +1746,8 @@ namespace SharpFlame.Mapping
                 UnitAdd.Map = this;
                 UnitAdd.StoreChange = true;
 
-                PosDif.X = Offset.X * App.TerrainGridSpacing;
-                PosDif.Y = Offset.Y * App.TerrainGridSpacing;
+                PosDif.X = Offset.X * Constants.TerrainGridSpacing;
+                PosDif.Y = Offset.Y * Constants.TerrainGridSpacing;
                 foreach ( clsUnit tempLoopVar_Unit in MapToInsert.Units )
                 {
                     Unit = tempLoopVar_Unit;
@@ -1880,15 +1880,15 @@ namespace SharpFlame.Mapping
             }
         }
 
-        public sWorldPos GetTileOffsetRotatedWorldPos(XYInt Tile, XYInt TileOffsetToRotate)
+        public WorldPos GetTileOffsetRotatedWorldPos(XYInt Tile, XYInt TileOffsetToRotate)
         {
-            sWorldPos Result = new sWorldPos();
+            WorldPos Result = new WorldPos();
 
             XYInt RotatedOffset = new XYInt();
 
             RotatedOffset = TileUtil.GetTileRotatedOffset(Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation, TileOffsetToRotate);
-            Result.Horizontal.X = Tile.X * App.TerrainGridSpacing + RotatedOffset.X;
-            Result.Horizontal.Y = Tile.Y * App.TerrainGridSpacing + RotatedOffset.Y;
+            Result.Horizontal.X = Tile.X * Constants.TerrainGridSpacing + RotatedOffset.X;
+            Result.Horizontal.Y = Tile.Y * Constants.TerrainGridSpacing + RotatedOffset.Y;
             Result.Altitude = (int)(GetTerrainHeight(Result.Horizontal));
 
             return Result;
@@ -1926,8 +1926,8 @@ namespace SharpFlame.Mapping
         {
             XYInt Result = new XYInt();
 
-            Result.X = (int)((Horizontal.X / App.TerrainGridSpacing));
-            Result.Y = (Horizontal.Y / App.TerrainGridSpacing);
+            Result.X = (int)((Horizontal.X / Constants.TerrainGridSpacing));
+            Result.Y = (Horizontal.Y / Constants.TerrainGridSpacing);
 
             return Result;
         }
@@ -1936,8 +1936,8 @@ namespace SharpFlame.Mapping
         {
             XYInt Result = new XYInt();
 
-            Result.X = (int)(Math.Round(((double)Horizontal.X / App.TerrainGridSpacing)));
-            Result.Y = (int)(Math.Round(((double)Horizontal.Y / App.TerrainGridSpacing)));
+            Result.X = (int)(Math.Round(((double)Horizontal.X / Constants.TerrainGridSpacing)));
+            Result.Y = (int)(Math.Round(((double)Horizontal.Y / Constants.TerrainGridSpacing)));
 
             return Result;
         }

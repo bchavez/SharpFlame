@@ -331,7 +331,7 @@ namespace SharpFlame
             Keys[] keys = new Keys[capture.Results.Count];
             for ( int i = 0; i <= capture.Results.Count - 1; i++ )
             {
-                keys[i] = capture.Results[i].Item;
+                keys[i] = capture.Results[i];
             }
             KeyboardControl copy = new KeyboardControl(keys, previous.UnlessKeys);
             ChangedKeyControls.set_Changes(keyOption, new Change<KeyboardControl>(copy));
@@ -360,7 +360,7 @@ namespace SharpFlame
             Keys[] unlessKeys = new Keys[capture.Results.Count];
             for ( int i = 0; i <= capture.Results.Count - 1; i++ )
             {
-                unlessKeys[i] = capture.Results[i].Item;
+                unlessKeys[i] = capture.Results[i];
             }
             KeyboardControl copy = new KeyboardControl(previous.Keys, unlessKeys);
             ChangedKeyControls.set_Changes(keyOption, new Change<KeyboardControl>(copy));

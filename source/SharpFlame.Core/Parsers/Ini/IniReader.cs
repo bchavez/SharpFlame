@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using SharpFlame.Core.Domain;
 
 namespace SharpFlame.Core.Parsers.Ini
@@ -49,7 +50,7 @@ namespace SharpFlame.Core.Parsers.Ini
 
         public static List<Section> ReadFile (string file) 
         {
-            var txt = File.ReadAllText(file);
+            var txt = File.ReadAllText(file, Encoding.UTF8);
             return ReadString (txt);
         }
 

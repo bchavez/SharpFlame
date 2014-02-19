@@ -265,12 +265,10 @@
     <Compile Include="Pathfinding\Path.cs" />
     <Compile Include="PathUtil.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Util\clsContainer.cs" />
     <Compile Include="Util\clsKeysActive.cs" />
     <Compile Include="Util\clsLayer.cs" />
     <Compile Include="Util\clsPlayer.cs" />
     <Compile Include="Util\clsTileType.cs" />
-    <Compile Include="Util\clsWorldPos.cs" />
     <Compile Include="Util\enumDroidType.cs" />
     <Compile Include="Util\enumFillCliffAction.cs" />
     <Compile Include="Util\enumObjectRotateMode.cs" />
@@ -279,8 +277,6 @@
     <Compile Include="Util\sLayerList.cs" />
     <Compile Include="Util\sResult.cs" />
     <Compile Include="Util\sSplitPath.cs" />
-    <Compile Include="Util\sWorldPos.cs" />
-    <Compile Include="Util\sWZAngle.cs" />
     <Compile Include="Util\Tools.cs" />
     <Compile Include="Domain\UnitTypeBase.cs" />
     <Compile Include="clsViewInfo.cs" />
@@ -547,7 +543,7 @@
     <MonoDevelop>
       <Properties>
         <Policies>
-          <TextStylePolicy EolMarker="Windows" inheritsSet="Mono" inheritsScope="text/plain" scope="text/plain" />
+          <TextStylePolicy EolMarker="Windows" inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/plain" />
           <NameConventionPolicy>
             <Rules>
               <NamingRule Name="Namespaces" AffectedEntity="Namespace" VisibilityMask="VisibilityMask" NamingStyle="PascalCase" IncludeInstanceMembers="True" IncludeStaticEntities="True" />

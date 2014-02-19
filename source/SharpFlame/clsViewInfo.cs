@@ -35,8 +35,8 @@ namespace SharpFlame
             ViewPos = new XYZInt (0, 3072, 0);
             FOV_Multiplier_Set (SettingsManager.Settings.FOVDefault);
             ViewAngleSetToDefault ();
-            LookAtPos (new XYInt ((int)(map.Terrain.TileSize.X * App.TerrainGridSpacing / 2.0D),
-                                  (int)(map.Terrain.TileSize.Y * App.TerrainGridSpacing / 2.0D)));
+            LookAtPos (new XYInt ((int)(map.Terrain.TileSize.X * Constants.TerrainGridSpacing / 2.0D),
+                                  (int)(map.Terrain.TileSize.Y * Constants.TerrainGridSpacing / 2.0D)));
         }
 
         public void FOV_Scale_2E_Set (double power)
@@ -117,8 +117,8 @@ namespace SharpFlame
             const int maxHeight = 1048576;
             const int maxDist = 1048576;
 
-            ViewPos.X = MathUtil.Clamp_int (ViewPos.X, Convert.ToInt32 (- maxDist), Map.Terrain.TileSize.X * App.TerrainGridSpacing + maxDist);
-            ViewPos.Z = MathUtil.Clamp_int (ViewPos.Z, - Map.Terrain.TileSize.Y * App.TerrainGridSpacing - maxDist, maxDist);
+            ViewPos.X = MathUtil.Clamp_int (ViewPos.X, Convert.ToInt32 (- maxDist), Map.Terrain.TileSize.X * Constants.TerrainGridSpacing + maxDist);
+            ViewPos.Z = MathUtil.Clamp_int (ViewPos.Z, - Map.Terrain.TileSize.Y * Constants.TerrainGridSpacing - maxDist, maxDist);
             ViewPos.Y = MathUtil.Clamp_int (ViewPos.Y, ((int)(Math.Ceiling (Map.GetTerrainHeight (new XYInt (ViewPos.X, - ViewPos.Z))))) + 16, maxHeight);
         }
 
@@ -192,8 +192,8 @@ namespace SharpFlame
         {
             XYInt Pos = new XYInt ();
 
-            Pos.X = (int)((TileNum.X + 0.5D) * App.TerrainGridSpacing);
-            Pos.Y = (int)((TileNum.Y + 0.5D) * App.TerrainGridSpacing);
+            Pos.X = (int)((TileNum.X + 0.5D) * Constants.TerrainGridSpacing);
+            Pos.Y = (int)((TileNum.Y + 0.5D) * Constants.TerrainGridSpacing);
             LookAtPos (Pos);
         }
 
@@ -281,7 +281,7 @@ namespace SharpFlame
             return true;
         }
 
-        public bool ScreenXY_Get_TerrainPos (XYInt screenPos, ref sWorldPos resultPos)
+        public bool ScreenXY_Get_TerrainPos (XYInt screenPos, ref WorldPos resultPos)
         {
             double dblTemp = 0;
             XYZDouble xYZ_dbl = default(XYZDouble);
@@ -324,10 +324,10 @@ namespace SharpFlame
                 dblTemp = terrainViewPos.Y / terrainViewVector.Y;
                 limitB.X = terrainViewPos.X + terrainViewVector.X * dblTemp;
                 limitB.Y = terrainViewPos.Z + terrainViewVector.Z * dblTemp;
-                min.X = Math.Max (Convert.ToInt32 ((Math.Min (limitA.X, limitB.X) / App.TerrainGridSpacing)), 0);
-                min.Y = Math.Max ((int)((Math.Min (limitA.Y, limitB.Y) / App.TerrainGridSpacing)), 0);
-                max.X = Math.Min (Convert.ToInt32 ((Math.Max (limitA.X, limitB.X) / App.TerrainGridSpacing)), Map.Terrain.TileSize.X - 1);
-                max.Y = Math.Min (Convert.ToInt32 ((Math.Max (limitA.Y, limitB.Y) / App.TerrainGridSpacing)), Map.Terrain.TileSize.Y - 1);
+                min.X = Math.Max (Convert.ToInt32 ((Math.Min (limitA.X, limitB.X) / Constants.TerrainGridSpacing)), 0);
+                min.Y = Math.Max ((int)((Math.Min (limitA.Y, limitB.Y) / Constants.TerrainGridSpacing)), 0);
+                max.X = Math.Min (Convert.ToInt32 ((Math.Max (limitA.X, limitB.X) / Constants.TerrainGridSpacing)), Map.Terrain.TileSize.X - 1);
+                max.Y = Math.Min (Convert.ToInt32 ((Math.Max (limitA.Y, limitB.Y) / Constants.TerrainGridSpacing)), Map.Terrain.TileSize.Y - 1);
                 //find the nearest valid tile to the view
                 bestDist = double.MaxValue;
                 bestPos.X = double.NaN;
@@ -335,8 +335,8 @@ namespace SharpFlame
                 bestPos.Z = double.NaN;
                 for (y = min.Y; y <= max.Y; y++) {
                     for (x = min.X; x <= max.X; x++) {
-                        tilePos.X = x * App.TerrainGridSpacing;
-                        tilePos.Y = y * App.TerrainGridSpacing;
+                        tilePos.X = x * Constants.TerrainGridSpacing;
+                        tilePos.Y = y * Constants.TerrainGridSpacing;
 
                         if (Map.Terrain.Tiles [x, y].Tri) {
                             triHeightOffset = Convert.ToDouble (Map.Terrain.Vertices [x, y].Height * Map.HeightMultiplier);
@@ -345,13 +345,13 @@ namespace SharpFlame
                             xYZ_dbl.Y = (triHeightOffset +
                                 (triGradientX * (terrainViewPos.X - tilePos.X) + triGradientZ * (terrainViewPos.Z - tilePos.Y) +
                                 (triGradientX * terrainViewVector.X + triGradientZ * terrainViewVector.Z) * terrainViewPos.Y / terrainViewVector.Y) /
-                                App.TerrainGridSpacing) /
+                                Constants.TerrainGridSpacing) /
                                 (1.0D +
-                                (triGradientX * terrainViewVector.X + triGradientZ * terrainViewVector.Z) / (terrainViewVector.Y * App.TerrainGridSpacing));
+                                (triGradientX * terrainViewVector.X + triGradientZ * terrainViewVector.Z) / (terrainViewVector.Y * Constants.TerrainGridSpacing));
                             xYZ_dbl.X = terrainViewPos.X + terrainViewVector.X * (terrainViewPos.Y - xYZ_dbl.Y) / terrainViewVector.Y;
                             xYZ_dbl.Z = terrainViewPos.Z + terrainViewVector.Z * (terrainViewPos.Y - xYZ_dbl.Y) / terrainViewVector.Y;
-                            inTileX = xYZ_dbl.X / App.TerrainGridSpacing - x;
-                            inTileZ = xYZ_dbl.Z / App.TerrainGridSpacing - y;
+                            inTileX = xYZ_dbl.X / Constants.TerrainGridSpacing - x;
+                            inTileZ = xYZ_dbl.Z / Constants.TerrainGridSpacing - y;
                             if (inTileZ <= 1.0D - inTileX & inTileX >= 0.0D & inTileZ >= 0.0D & inTileX <= 1.0D & inTileZ <= 1.0D) {
                                 dif = xYZ_dbl - terrainViewPos;
                                 dist = dif.GetMagnitude ();
@@ -367,13 +367,13 @@ namespace SharpFlame
                             xYZ_dbl.Y = (triHeightOffset + triGradientX + triGradientZ +
                                 (triGradientX * (tilePos.X - terrainViewPos.X) + triGradientZ * (tilePos.Y - terrainViewPos.Z) -
                                 (triGradientX * terrainViewVector.X + triGradientZ * terrainViewVector.Z) * terrainViewPos.Y / terrainViewVector.Y) /
-                                App.TerrainGridSpacing) /
+                                Constants.TerrainGridSpacing) /
                                 (1.0D -
-                                (triGradientX * terrainViewVector.X + triGradientZ * terrainViewVector.Z) / (terrainViewVector.Y * App.TerrainGridSpacing));
+                                (triGradientX * terrainViewVector.X + triGradientZ * terrainViewVector.Z) / (terrainViewVector.Y * Constants.TerrainGridSpacing));
                             xYZ_dbl.X = terrainViewPos.X + terrainViewVector.X * (terrainViewPos.Y - xYZ_dbl.Y) / terrainViewVector.Y;
                             xYZ_dbl.Z = terrainViewPos.Z + terrainViewVector.Z * (terrainViewPos.Y - xYZ_dbl.Y) / terrainViewVector.Y;
-                            inTileX = xYZ_dbl.X / App.TerrainGridSpacing - x;
-                            inTileZ = xYZ_dbl.Z / App.TerrainGridSpacing - y;
+                            inTileX = xYZ_dbl.X / Constants.TerrainGridSpacing - x;
+                            inTileZ = xYZ_dbl.Z / Constants.TerrainGridSpacing - y;
                             if (inTileZ >= 1.0D - inTileX & inTileX >= 0.0D & inTileZ >= 0.0D & inTileX <= 1.0D & inTileZ <= 1.0D) {
                                 dif = xYZ_dbl - terrainViewPos;
                                 dist = dif.GetMagnitude ();
@@ -389,13 +389,13 @@ namespace SharpFlame
                             xYZ_dbl.Y = (triHeightOffset + triGradientX +
                                 (triGradientX * (tilePos.X - terrainViewPos.X) + triGradientZ * (terrainViewPos.Z - tilePos.Y) -
                                 (triGradientX * terrainViewVector.X - triGradientZ * terrainViewVector.Z) * terrainViewPos.Y / terrainViewVector.Y) /
-                                App.TerrainGridSpacing) /
+                                Constants.TerrainGridSpacing) /
                                 (1.0D -
-                                (triGradientX * terrainViewVector.X - triGradientZ * terrainViewVector.Z) / (terrainViewVector.Y * App.TerrainGridSpacing));
+                                (triGradientX * terrainViewVector.X - triGradientZ * terrainViewVector.Z) / (terrainViewVector.Y * Constants.TerrainGridSpacing));
                             xYZ_dbl.X = terrainViewPos.X + terrainViewVector.X * (terrainViewPos.Y - xYZ_dbl.Y) / terrainViewVector.Y;
                             xYZ_dbl.Z = terrainViewPos.Z + terrainViewVector.Z * (terrainViewPos.Y - xYZ_dbl.Y) / terrainViewVector.Y;
-                            inTileX = xYZ_dbl.X / App.TerrainGridSpacing - x;
-                            inTileZ = xYZ_dbl.Z / App.TerrainGridSpacing - y;
+                            inTileX = xYZ_dbl.X / Constants.TerrainGridSpacing - x;
+                            inTileZ = xYZ_dbl.Z / Constants.TerrainGridSpacing - y;
                             if (inTileZ <= inTileX & inTileX >= 0.0D & inTileZ >= 0.0D & inTileX <= 1.0D & inTileZ <= 1.0D) {
                                 dif = xYZ_dbl - terrainViewPos;
                                 dist = dif.GetMagnitude ();
@@ -411,13 +411,13 @@ namespace SharpFlame
                             xYZ_dbl.Y = (triHeightOffset + triGradientZ +
                                 (triGradientX * (terrainViewPos.X - tilePos.X) + triGradientZ * (tilePos.Y - terrainViewPos.Z) +
                                 (triGradientX * terrainViewVector.X - triGradientZ * terrainViewVector.Z) * terrainViewPos.Y / terrainViewVector.Y) /
-                                App.TerrainGridSpacing) /
+                                Constants.TerrainGridSpacing) /
                                 (1.0D +
-                                (triGradientX * terrainViewVector.X - triGradientZ * terrainViewVector.Z) / (terrainViewVector.Y * App.TerrainGridSpacing));
+                                (triGradientX * terrainViewVector.X - triGradientZ * terrainViewVector.Z) / (terrainViewVector.Y * Constants.TerrainGridSpacing));
                             xYZ_dbl.X = terrainViewPos.X + terrainViewVector.X * (terrainViewPos.Y - xYZ_dbl.Y) / terrainViewVector.Y;
                             xYZ_dbl.Z = terrainViewPos.Z + terrainViewVector.Z * (terrainViewPos.Y - xYZ_dbl.Y) / terrainViewVector.Y;
-                            inTileX = xYZ_dbl.X / App.TerrainGridSpacing - x;
-                            inTileZ = xYZ_dbl.Z / App.TerrainGridSpacing - y;
+                            inTileX = xYZ_dbl.X / Constants.TerrainGridSpacing - x;
+                            inTileZ = xYZ_dbl.Z / Constants.TerrainGridSpacing - y;
                             if (inTileZ >= inTileX & inTileX >= 0.0D & inTileZ >= 0.0D & inTileX <= 1.0D & inTileZ <= 1.0D) {
                                 dif = xYZ_dbl - terrainViewPos;
                                 dist = dif.GetMagnitude ();
@@ -514,15 +514,15 @@ namespace SharpFlame
                 }
                 if (flag) {
                     MouseOver.OverTerrain = mouseOverTerrain;
-                    mouseOverTerrain.Tile.Normal.X = (int)((double)mouseOverTerrain.Pos.Horizontal.X / App.TerrainGridSpacing);
-                    mouseOverTerrain.Tile.Normal.Y = (int)(((double)mouseOverTerrain.Pos.Horizontal.Y / App.TerrainGridSpacing));
-                    mouseOverTerrain.Vertex.Normal.X = (int)(Math.Round (((double)mouseOverTerrain.Pos.Horizontal.X / App.TerrainGridSpacing)));
-                    mouseOverTerrain.Vertex.Normal.Y = (int)(Math.Round (((double)mouseOverTerrain.Pos.Horizontal.Y / App.TerrainGridSpacing)));
+                    mouseOverTerrain.Tile.Normal.X = (int)((double)mouseOverTerrain.Pos.Horizontal.X / Constants.TerrainGridSpacing);
+                    mouseOverTerrain.Tile.Normal.Y = (int)(((double)mouseOverTerrain.Pos.Horizontal.Y / Constants.TerrainGridSpacing));
+                    mouseOverTerrain.Vertex.Normal.X = (int)(Math.Round (((double)mouseOverTerrain.Pos.Horizontal.X / Constants.TerrainGridSpacing)));
+                    mouseOverTerrain.Vertex.Normal.Y = (int)(Math.Round (((double)mouseOverTerrain.Pos.Horizontal.Y / Constants.TerrainGridSpacing)));
                     mouseOverTerrain.Tile.Alignment = mouseOverTerrain.Vertex.Normal;
                     mouseOverTerrain.Vertex.Alignment = new XYInt (mouseOverTerrain.Tile.Normal.X + 1, mouseOverTerrain.Tile.Normal.Y + 1);
                     mouseOverTerrain.Triangle = Map.GetTerrainTri (mouseOverTerrain.Pos.Horizontal);
-                    xY_dbl.X = mouseOverTerrain.Pos.Horizontal.X - mouseOverTerrain.Vertex.Normal.X * App.TerrainGridSpacing;
-                    xY_dbl.Y = mouseOverTerrain.Pos.Horizontal.Y - mouseOverTerrain.Vertex.Normal.Y * App.TerrainGridSpacing;
+                    xY_dbl.X = mouseOverTerrain.Pos.Horizontal.X - mouseOverTerrain.Vertex.Normal.X * Constants.TerrainGridSpacing;
+                    xY_dbl.Y = mouseOverTerrain.Pos.Horizontal.Y - mouseOverTerrain.Vertex.Normal.Y * Constants.TerrainGridSpacing;
                     if (Math.Abs (xY_dbl.Y) <= Math.Abs (xY_dbl.X)) {
                         mouseOverTerrain.Side_IsV = false;
                         mouseOverTerrain.Side_Num.X = mouseOverTerrain.Tile.Normal.X;
@@ -541,8 +541,8 @@ namespace SharpFlame
                         xY_dbl.X = unit.Pos.Horizontal.X - mouseOverTerrain.Pos.Horizontal.X;
                         xY_dbl.Y = unit.Pos.Horizontal.Y - mouseOverTerrain.Pos.Horizontal.Y;
                         footprint = unit.TypeBase.get_GetFootprintSelected (unit.Rotation);
-                        if (Math.Abs (xY_dbl.X) <= Math.Max (footprint.X / 2.0D, 0.5D) * App.TerrainGridSpacing
-                            && Math.Abs (xY_dbl.Y) <= Math.Max (footprint.Y / 2.0D, 0.5D) * App.TerrainGridSpacing) {
+                        if (Math.Abs (xY_dbl.X) <= Math.Max (footprint.X / 2.0D, 0.5D) * Constants.TerrainGridSpacing
+                            && Math.Abs (xY_dbl.Y) <= Math.Max (footprint.Y / 2.0D, 0.5D) * Constants.TerrainGridSpacing) {
                             mouseOverTerrain.Units.Add (unit);
                         }
                     }
@@ -635,7 +635,7 @@ namespace SharpFlame
 
             public class clsOverTerrain
             {
-                public sWorldPos Pos;
+                public WorldPos Pos;
                 public SimpleClassList<clsUnit> Units = new SimpleClassList<clsUnit> ();
                 public clsBrush.sPosNum Tile;
                 public clsBrush.sPosNum Vertex;
@@ -655,7 +655,7 @@ namespace SharpFlame
         {
             public class clsOverTerrain
             {
-                public sWorldPos DownPos;
+                public WorldPos DownPos;
             }
 
             public clsOverTerrain OverTerrain;
@@ -1735,8 +1735,8 @@ namespace SharpFlame
                         clsUnitCreate objectCreator = new clsUnitCreate ();
                         Map.SetObjectCreatorDefaults (objectCreator);
                         for (num = a; num <= b; num++) {
-                            objectCreator.Horizontal.X = (int)((tile.X + 0.5D) * App.TerrainGridSpacing);
-                            objectCreator.Horizontal.Y = (int)((num + 0.5D) * App.TerrainGridSpacing);
+                            objectCreator.Horizontal.X = (int)((tile.X + 0.5D) * Constants.TerrainGridSpacing);
+                            objectCreator.Horizontal.Y = (int)((num + 0.5D) * Constants.TerrainGridSpacing);
                             objectCreator.Perform ();
                         }
 
@@ -1756,8 +1756,8 @@ namespace SharpFlame
                         clsUnitCreate objectCreator = new clsUnitCreate ();
                         Map.SetObjectCreatorDefaults (objectCreator);
                         for (num = a; num <= b; num++) {
-                            objectCreator.Horizontal.X = (int)((num + 0.5D) * App.TerrainGridSpacing);
-                            objectCreator.Horizontal.Y = (int)((tile.Y + 0.5D) * App.TerrainGridSpacing);
+                            objectCreator.Horizontal.X = (int)((num + 0.5D) * Constants.TerrainGridSpacing);
+                            objectCreator.Horizontal.Y = (int)((tile.Y + 0.5D) * Constants.TerrainGridSpacing);
                             objectCreator.Perform ();
                         }
 
