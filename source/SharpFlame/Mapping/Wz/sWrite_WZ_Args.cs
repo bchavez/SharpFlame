@@ -15,7 +15,6 @@ namespace SharpFlame.Mapping.Wz
             public int PlayerCount;
             public string AuthorName;
             public string License;
-            public bool IsBetaPlayerFormat;
         }
 
         public clsMultiplayer Multiplayer;

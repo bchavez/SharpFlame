@@ -52,7 +52,6 @@ namespace SharpFlame
             txtName.Text = Map.InterfaceOptions.CompileName;
 
             txtMultiPlayers.Text = Map.InterfaceOptions.CompileMultiPlayers;
-            cbxLevFormat.Checked = Map.InterfaceOptions.CompileMultiXPlayers;
             txtAuthor.Text = Map.InterfaceOptions.CompileMultiAuthor;
             cboLicense.Text = Map.InterfaceOptions.CompileMultiLicense;
 
@@ -71,7 +70,6 @@ namespace SharpFlame
             Map.InterfaceOptions.CompileName = txtName.Text;
 
             Map.InterfaceOptions.CompileMultiPlayers = txtMultiPlayers.Text;
-            Map.InterfaceOptions.CompileMultiXPlayers = cbxLevFormat.Checked;
             Map.InterfaceOptions.CompileMultiAuthor = txtAuthor.Text;
             Map.InterfaceOptions.CompileMultiLicense = cboLicense.Text;
 
@@ -137,28 +135,20 @@ namespace SharpFlame
             {
                 PlayerCount = 0;
             }
-            bool IsXPlayerFormat = cbxLevFormat.Checked;
-            if ( PlayerCount < 2 | PlayerCount > 10 )
+            if ( PlayerCount < 2 | PlayerCount > Constants.PlayerCountMax )
             {
-                ReturnResult.ProblemAdd("The number of players must be from 2 to " + Convert.ToString(Constants.PlayerCountMax));
-            }
-            if ( !IsXPlayerFormat )
-            {
-                if ( PlayerCount != 2 & PlayerCount != 4 & PlayerCount != 8 )
-                {
-                    ReturnResult.ProblemAdd("You must enable support for this number of players.");
-                }
+                ReturnResult.ProblemAdd (string.Format ("The number of players must be from 2 to {0}", Constants.PlayerCountMax));
             }
 
             A = ValidateMap_WaterTris();
             if ( A > 0 )
             {
-                ReturnResult.WarningAdd(A + " water tiles have an incorrect triangle direction. There might be in-game graphical glitches on those tiles.");
+                ReturnResult.WarningAdd (string.Format ("{0} water tiles have an incorrect triangle direction. There might be in-game graphical glitches on those tiles.", A));
             }
 
             ReturnResult.Add(ValidateMap());
             ReturnResult.Add(ValidateMap_UnitPositions());
-            ReturnResult.Add(ValidateMap_Multiplayer(PlayerCount, IsXPlayerFormat));
+            ReturnResult.Add(ValidateMap_Multiplayer(PlayerCount));
 
             MapName = txtName.Text;
             char CurrentChar = (char)0;
@@ -208,7 +198,6 @@ namespace SharpFlame
             WriteWZArgs.Multiplayer = new sWrite_WZ_Args.clsMultiplayer();
             WriteWZArgs.Multiplayer.AuthorName = txtAuthor.Text;
             WriteWZArgs.Multiplayer.PlayerCount = PlayerCount;
-            WriteWZArgs.Multiplayer.IsBetaPlayerFormat = IsXPlayerFormat;
             WriteWZArgs.Multiplayer.License = License;
             WriteWZArgs.CompileType = sWrite_WZ_Args.enumCompileType.Multiplayer;
             ReturnResult.Add(Map.Write_WZ(WriteWZArgs));
@@ -412,7 +401,7 @@ namespace SharpFlame
             return Result;
         }
 
-        private clsResult ValidateMap_Multiplayer(int PlayerCount, bool IsXPlayerFormat)
+        private clsResult ValidateMap_Multiplayer(int PlayerCount)
         {
             clsResult Result = new clsResult("Validate for multiplayer", false);
             logger.Info ("Validate for multiplayer");
@@ -481,19 +470,11 @@ namespace SharpFlame
                         {
                             UnusedPlayerUnitWarningCount++;
                             clsResultProblemGoto<clsResultItemPosGoto> resultItem = modResults.CreateResultProblemGotoForObject(Unit);
-                            resultItem.Text = "An unused player (" + Convert.ToString(Unit.UnitGroup.WZ_StartPos) + ") has a unit at " + Unit.GetPosText() + ".";
+                            resultItem.Text = string.Format ("An unused player ({0}) has a unit at {1}.", Unit.UnitGroup.WZ_StartPos, Unit.GetPosText ());
                             Result.ItemAdd(resultItem);
                         }
                     }
                 }
-            }
-
-            if ( ScavPlayerNum <= 7 || IsXPlayerFormat )
-            {
-            }
-            else if ( ScavObjectCount > 0 ) //only counts non-features
-            {
-                Result.ProblemAdd("Scavengers are not supported on a map with this number of players without enabling X player support.");
             }
 
             for ( int A = 0; A <= PlayerCount - 1; A++ )

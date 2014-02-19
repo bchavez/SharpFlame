@@ -2455,6 +2455,119 @@ namespace SharpFlame.Mapping
             return returnResult;
         }
 
+        public clsResult Serialize_WZ_Gam(Stream stream , UInt32 gamType, sWrite_WZ_Args.enumCompileType compileType, XYInt scrollMin, sXY_uint scrollMax) {
+            clsResult returnResult = new clsResult ("Serializing .gam", false);
+            logger.Info ("Serializing .gam");
+
+            BinaryWriter fileGAM = new BinaryWriter (stream, App.ASCIIEncoding);
+
+            IOUtil.WriteText (fileGAM, false, "game");
+            fileGAM.Write (8U);
+            fileGAM.Write (0U); //Time
+            if (compileType == sWrite_WZ_Args.enumCompileType.Multiplayer)
+            {
+                fileGAM.Write (0U);
+            } else if (compileType == sWrite_WZ_Args.enumCompileType.Campaign)
+            {
+                fileGAM.Write (gamType);
+            }
+            fileGAM.Write (scrollMin.X);
+            fileGAM.Write (scrollMin.Y);
+            fileGAM.Write (scrollMax.X);
+            fileGAM.Write (scrollMax.Y);
+            fileGAM.Write (new byte[20]);
+            fileGAM.Flush ();
+
+            return returnResult;
+        }
+
+        public clsResult Serialize_WZ_TTP(Stream stream) {
+            clsResult returnResult = new clsResult ("Serializing ttypes.ttp", false);
+            logger.Info ("Serializing ttypes.ttp");
+
+            BinaryWriter fileTTP = new BinaryWriter (stream, App.ASCIIEncoding);
+
+            IOUtil.WriteText (fileTTP, false, "ttyp");
+            fileTTP.Write (8U);
+            fileTTP.Write ((uint)Tileset.TileCount);
+            for (var a = 0; a <= Tileset.TileCount - 1; a++)
+            {
+                fileTTP.Write ((ushort)Tile_TypeNum [a]);
+            }
+
+            fileTTP.Flush ();
+
+            return returnResult;
+        }
+
+        public clsResult Serialize_WZ_Map(Stream stream) {
+            clsResult returnResult = new clsResult ("Serializing game.map", false);
+            logger.Info ("Serializing game.map");
+
+            BinaryWriter fileMAP = new BinaryWriter (stream, App.ASCIIEncoding);
+
+            int x = 0;
+            int y = 0;
+
+            IOUtil.WriteText (fileMAP, false, "map ");
+            fileMAP.Write (10U);
+            fileMAP.Write ((uint)Terrain.TileSize.X);
+            fileMAP.Write ((uint)Terrain.TileSize.Y);
+            byte flip = 0;
+            byte rotation = 0;
+            bool doFlipX = default(bool);
+            int invalidTileCount = 0;
+            int textureNum = 0;
+            for (y = 0; y <= Terrain.TileSize.Y - 1; y++)
+            {
+                for (x = 0; x <= Terrain.TileSize.X - 1; x++)
+                {
+                    TileUtil.TileOrientation_To_OldOrientation (Terrain.Tiles [x, y].Texture.Orientation, ref rotation, ref doFlipX);
+                    flip = (byte)0;
+                    if (Terrain.Tiles [x, y].Tri)
+                    {
+                        flip += (byte)8;
+                    }
+                    flip += (byte)(rotation * 16);
+                    if (doFlipX)
+                    {
+                        flip += (byte)128;
+                    }
+                    textureNum = Terrain.Tiles [x, y].Texture.TextureNum;
+                    if (textureNum < 0 | textureNum > 255)
+                    {
+                        textureNum = 0;
+                        if (invalidTileCount < 16)
+                        {
+                            returnResult.WarningAdd ("Tile texture number " + Convert.ToString (Terrain.Tiles [x, y].Texture.TextureNum) +
+                                                     " is invalid on tile " + Convert.ToString (x) + ", " + Convert.ToString (y) +
+                                                     " and was compiled as texture number " + Convert.ToString (textureNum) + ".");
+                        }
+                        invalidTileCount++;
+                    }
+                    fileMAP.Write ((byte)textureNum);
+                    fileMAP.Write (flip);
+                    fileMAP.Write (Terrain.Vertices [x, y].Height);
+                }
+            }
+            if (invalidTileCount > 0)
+            {
+                returnResult.WarningAdd (invalidTileCount + " tile texture numbers were invalid.");
+            }
+            fileMAP.Write (1U); //gateway version
+            fileMAP.Write ((uint)Gateways.Count);
+            foreach (clsGateway gateway in Gateways)
+            {
+                fileMAP.Write ((byte)(MathUtil.Clamp_int (gateway.PosA.X, 0, 255)));
+                fileMAP.Write ((byte)(MathUtil.Clamp_int (gateway.PosA.Y, 0, 255)));
+                fileMAP.Write ((byte)(MathUtil.Clamp_int (gateway.PosB.X, 0, 255)));
+                fileMAP.Write ((byte)(MathUtil.Clamp_int (gateway.PosB.Y, 0, 255)));
+            }
+            fileMAP.Flush ();
+
+            return returnResult;
+        }
+
         public clsResult Serialize_WZ_LEV(Stream stream, int playercount, string authorname, string license, string mapName)
         {
             clsResult returnResult = new clsResult ("Serializing .lev", false);
@@ -2540,14 +2653,6 @@ namespace SharpFlame.Mapping
                         returnResult.ProblemAdd (string.Format("Number of players was below 2 or above {0}.", Constants.PlayerCountMax));
                         return returnResult;
                     }
-                    if (!Args.Multiplayer.IsBetaPlayerFormat)
-                    {
-                        if (!(Args.Multiplayer.PlayerCount == 2 | Args.Multiplayer.PlayerCount == 4 | Args.Multiplayer.PlayerCount == 8))
-                        {
-                            returnResult.ProblemAdd ("Number of players was not 2, 4 or 8 in original format.");
-                            return returnResult;
-                        }
-                    }
                     break;
                 case sWrite_WZ_Args.enumCompileType.Campaign:
                     if (Args.Campaign == null)
@@ -2568,249 +2673,7 @@ namespace SharpFlame.Mapping
                         returnResult.ProblemAdd ("The selected file already exists.");
                         return returnResult;
                     }
-                }
-
-                MemoryStream fileMAPMemory = new MemoryStream ();
-                BinaryWriter fileMAP = new BinaryWriter (fileMAPMemory, App.ASCIIEncoding);
-                MemoryStream fileGAMMemory = new MemoryStream ();
-                BinaryWriter fileGAM = new BinaryWriter (fileGAMMemory, App.ASCIIEncoding);
-                MemoryStream filefeatBJOMemory = new MemoryStream ();
-                BinaryWriter fileFeatBJO = new BinaryWriter (filefeatBJOMemory, App.ASCIIEncoding);
-                MemoryStream fileTTPMemory = new MemoryStream ();
-                BinaryWriter fileTTP = new BinaryWriter (fileTTPMemory, App.ASCIIEncoding);
-                MemoryStream filestructBJOMemory = new MemoryStream ();
-                BinaryWriter fileStructBJO = new BinaryWriter (filestructBJOMemory, App.ASCIIEncoding);
-                MemoryStream fileDroidBJOMemory = new MemoryStream ();
-                BinaryWriter fileDroidBJO = new BinaryWriter (fileDroidBJOMemory, App.ASCIIEncoding);
-
-                byte[] GameZeroBytes = new byte[20];
-
-                IOUtil.WriteText (fileGAM, false, "game");
-                fileGAM.Write (8U);
-                fileGAM.Write (0U); //Time
-                if (Args.CompileType == sWrite_WZ_Args.enumCompileType.Multiplayer)
-                {
-                    fileGAM.Write (0U);
-                } else if (Args.CompileType == sWrite_WZ_Args.enumCompileType.Campaign)
-                {
-                    fileGAM.Write (Args.Campaign.GAMType);
-                }
-                fileGAM.Write (Args.ScrollMin.X);
-                fileGAM.Write (Args.ScrollMin.Y);
-                fileGAM.Write (Args.ScrollMax.X);
-                fileGAM.Write (Args.ScrollMax.Y);
-                fileGAM.Write (GameZeroBytes);
-
-                int A = 0;
-                int X = 0;
-                int Y = 0;
-
-                IOUtil.WriteText (fileMAP, false, "map ");
-                fileMAP.Write (10U);
-                fileMAP.Write ((uint)Terrain.TileSize.X);
-                fileMAP.Write ((uint)Terrain.TileSize.Y);
-                byte Flip = 0;
-                byte Rotation = 0;
-                bool DoFlipX = default(bool);
-                int InvalidTileCount = 0;
-                int TextureNum = 0;
-                for (Y = 0; Y <= Terrain.TileSize.Y - 1; Y++)
-                {
-                    for (X = 0; X <= Terrain.TileSize.X - 1; X++)
-                    {
-                        TileUtil.TileOrientation_To_OldOrientation (Terrain.Tiles [X, Y].Texture.Orientation, ref Rotation, ref DoFlipX);
-                        Flip = (byte)0;
-                        if (Terrain.Tiles [X, Y].Tri)
-                        {
-                            Flip += (byte)8;
-                        }
-                        Flip += (byte)(Rotation * 16);
-                        if (DoFlipX)
-                        {
-                            Flip += (byte)128;
-                        }
-                        TextureNum = Terrain.Tiles [X, Y].Texture.TextureNum;
-                        if (TextureNum < 0 | TextureNum > 255)
-                        {
-                            TextureNum = 0;
-                            if (InvalidTileCount < 16)
-                            {
-                                returnResult.WarningAdd ("Tile texture number " + Convert.ToString (Terrain.Tiles [X, Y].Texture.TextureNum) +
-                                    " is invalid on tile " + Convert.ToString (X) + ", " + Convert.ToString (Y) +
-                                    " and was compiled as texture number " + Convert.ToString (TextureNum) + ".");
-                            }
-                            InvalidTileCount++;
-                        }
-                        fileMAP.Write ((byte)TextureNum);
-                        fileMAP.Write (Flip);
-                        fileMAP.Write (Terrain.Vertices [X, Y].Height);
-                    }
-                }
-                if (InvalidTileCount > 0)
-                {
-                    returnResult.WarningAdd (InvalidTileCount + " tile texture numbers were invalid.");
-                }
-                fileMAP.Write (1U); //gateway version
-                fileMAP.Write ((uint)Gateways.Count);
-                foreach (clsGateway gateway in Gateways)
-                {
-                    fileMAP.Write ((byte)(MathUtil.Clamp_int (gateway.PosA.X, 0, 255)));
-                    fileMAP.Write ((byte)(MathUtil.Clamp_int (gateway.PosA.Y, 0, 255)));
-                    fileMAP.Write ((byte)(MathUtil.Clamp_int (gateway.PosB.X, 0, 255)));
-                    fileMAP.Write ((byte)(MathUtil.Clamp_int (gateway.PosB.Y, 0, 255)));
-                }
-
-                FeatureTypeBase featureTypeBase;
-                StructureTypeBase structureTypeBase;
-                DroidDesign DroidType;
-                DroidTemplate DroidTemplate;
-                clsUnit Unit;
-                clsStructureWriteWZ StructureWrite = new clsStructureWriteWZ {
-                    File = fileStructBJO, 
-                    CompileType = Args.CompileType
-                };
-                if (Args.CompileType == sWrite_WZ_Args.enumCompileType.Multiplayer)
-                {
-                    StructureWrite.PlayerCount = Args.Multiplayer.PlayerCount;
-                } else
-                {
-                    StructureWrite.PlayerCount = 0;
-                }
-
-                byte[] FeatZeroBytes = new byte[12];
-
-                IOUtil.WriteText (fileFeatBJO, false, "feat");
-                fileFeatBJO.Write (8U);
-                clsObjectPriorityOrderList FeatureOrder = new clsObjectPriorityOrderList ();
-                foreach (clsUnit tempLoopVar_Unit in Units)
-                {
-                    Unit = tempLoopVar_Unit;
-                    if (Unit.TypeBase.Type == UnitType.Feature)
-                    {
-                        FeatureOrder.SetItem (Unit);
-                        FeatureOrder.ActionPerform ();
-                    }
-                }
-                fileFeatBJO.Write ((uint)FeatureOrder.Result.Count);
-                for (A = 0; A <= FeatureOrder.Result.Count - 1; A++)
-                {
-                    Unit = FeatureOrder.Result [A];
-                    featureTypeBase = (FeatureTypeBase)Unit.TypeBase;
-                    IOUtil.WriteTextOfLength (fileFeatBJO, 40, featureTypeBase.Code);
-                    fileFeatBJO.Write (Unit.ID);
-                    fileFeatBJO.Write ((uint)Unit.Pos.Horizontal.X);
-                    fileFeatBJO.Write ((uint)Unit.Pos.Horizontal.Y);
-                    fileFeatBJO.Write ((uint)Unit.Pos.Altitude);
-                    fileFeatBJO.Write ((uint)Unit.Rotation);
-                    switch (Args.CompileType)
-                    {
-                    case sWrite_WZ_Args.enumCompileType.Multiplayer:
-                        fileFeatBJO.Write (Unit.GetBJOMultiplayerPlayerNum (Args.Multiplayer.PlayerCount));
-                        break;
-                    case sWrite_WZ_Args.enumCompileType.Campaign:
-                        fileFeatBJO.Write (Unit.GetBJOCampaignPlayerNum ());
-                        break;
-                    default:
-                        Debugger.Break ();
-                        break;
-                    }
-                    fileFeatBJO.Write (FeatZeroBytes);
-                }
-
-                IOUtil.WriteText (fileTTP, false, "ttyp");
-                fileTTP.Write (8U);
-                fileTTP.Write ((uint)Tileset.TileCount);
-                for (A = 0; A <= Tileset.TileCount - 1; A++)
-                {
-                    fileTTP.Write ((ushort)Tile_TypeNum [A]);
-                }
-
-                IOUtil.WriteText (fileStructBJO, false, "stru");
-                fileStructBJO.Write (8U);
-                clsObjectPriorityOrderList NonModuleStructureOrder = new clsObjectPriorityOrderList ();
-                //non-module structures
-                foreach (clsUnit tempLoopVar_Unit in Units)
-                {
-                    Unit = tempLoopVar_Unit;
-                    if (Unit.TypeBase.Type == UnitType.PlayerStructure)
-                    {
-                        structureTypeBase = (StructureTypeBase)Unit.TypeBase;
-                        if (!structureTypeBase.IsModule ())
-                        {
-                            NonModuleStructureOrder.SetItem (Unit);
-                            NonModuleStructureOrder.ActionPerform ();
-                        }
-                    }
-                }
-                clsObjectPriorityOrderList ModuleStructureOrder = new clsObjectPriorityOrderList ();
-                //module structures
-                foreach (clsUnit tempLoopVar_Unit in Units)
-                {
-                    Unit = tempLoopVar_Unit;
-                    if (Unit.TypeBase.Type == UnitType.PlayerStructure)
-                    {
-                        structureTypeBase = (StructureTypeBase)Unit.TypeBase;
-                        if (structureTypeBase.IsModule ())
-                        {
-                            ModuleStructureOrder.SetItem (Unit);
-                            ModuleStructureOrder.ActionPerform ();
-                        }
-                    }
-                }
-                fileStructBJO.Write ((uint)(NonModuleStructureOrder.Result.Count + ModuleStructureOrder.Result.Count));
-                NonModuleStructureOrder.Result.PerformTool (StructureWrite);
-                ModuleStructureOrder.Result.PerformTool (StructureWrite);
-
-                byte[] DintZeroBytes = new byte[12];
-
-                IOUtil.WriteText (fileDroidBJO, false, "dint");
-                fileDroidBJO.Write (8U);
-                clsObjectPriorityOrderList Droids = new clsObjectPriorityOrderList ();
-                foreach (clsUnit tempLoopVar_Unit in Units)
-                {
-                    Unit = tempLoopVar_Unit;
-                    if (Unit.TypeBase.Type == UnitType.PlayerDroid)
-                    {
-                        DroidType = (DroidDesign)Unit.TypeBase;
-                        if (DroidType.IsTemplate)
-                        {
-                            Droids.SetItem (Unit);
-                            Droids.ActionPerform ();
-                        }
-                    }
-                }
-                fileDroidBJO.Write ((uint)Droids.Result.Count);
-                for (A = 0; A <= Droids.Result.Count - 1; A++)
-                {
-                    Unit = Droids.Result [A];
-                    DroidTemplate = (DroidTemplate)Unit.TypeBase;
-                    IOUtil.WriteTextOfLength (fileDroidBJO, 40, DroidTemplate.Code);
-                    fileDroidBJO.Write (Unit.ID);
-                    fileDroidBJO.Write ((uint)Unit.Pos.Horizontal.X);
-                    fileDroidBJO.Write ((uint)Unit.Pos.Horizontal.Y);
-                    fileDroidBJO.Write ((uint)Unit.Pos.Altitude);
-                    fileDroidBJO.Write ((uint)Unit.Rotation);
-                    switch (Args.CompileType)
-                    {
-                    case sWrite_WZ_Args.enumCompileType.Multiplayer:
-                        fileDroidBJO.Write (Unit.GetBJOMultiplayerPlayerNum (Args.Multiplayer.PlayerCount));
-                        break;
-                    case sWrite_WZ_Args.enumCompileType.Campaign:
-                        fileDroidBJO.Write (Unit.GetBJOCampaignPlayerNum ());
-                        break;
-                    default:
-                        Debugger.Break ();
-                        break;
-                    }
-                    fileDroidBJO.Write (DintZeroBytes);
-                }
-
-                fileMAP.Flush ();
-                fileGAM.Flush ();
-                fileFeatBJO.Flush ();
-                fileTTP.Flush ();
-                fileStructBJO.Flush ();
-                fileDroidBJO.Flush ();
+                }              
 
                 if (Args.CompileType == sWrite_WZ_Args.enumCompileType.Multiplayer)
                 {
@@ -2834,15 +2697,8 @@ namespace SharpFlame.Mapping
                             // Set compression
                             zip.CompressionLevel = Ionic.Zlib.CompressionLevel.BestCompression;
 
-                            // .addon.lev / .xplayers.lev
-                            string zipPath = "";
-                            if (Args.Multiplayer.IsBetaPlayerFormat)
-                            {
-                                zipPath = string.Format ("{0}c-{1}.xplayers.lev", Args.Multiplayer.PlayerCount, Args.MapName);
-                            } else
-                            {
-                                zipPath = string.Format ("{0}c-{1}.addon.lev", Args.Multiplayer.PlayerCount, Args.MapName);
-                            }
+                            // .xplayers.lev
+                            var zipPath = string.Format ("{0}c-{1}.xplayers.lev", Args.Multiplayer.PlayerCount, Args.MapName);
                             if (Args.CompileType == sWrite_WZ_Args.enumCompileType.Multiplayer)
                             {
                                 zip.PutNextEntry (zipPath);
@@ -2853,8 +2709,8 @@ namespace SharpFlame.Mapping
 
                             var path = string.Format ("multiplay/maps/{0}c-{1}", Args.Multiplayer.PlayerCount, Args.MapName);
                             zip.PutNextEntry (string.Format ("{0}.gam", path));
-                            fileGAMMemory.WriteTo (zip);
-                            fileGAMMemory.Flush ();
+                            returnResult.Add(Serialize_WZ_Gam(zip, 0U, 
+                                                              Args.CompileType, Args.ScrollMin, Args.ScrollMax));
 
                             
                             zip.PutNextEntry (string.Format ("{0}/struct.ini", path));
@@ -2872,34 +2728,20 @@ namespace SharpFlame.Mapping
                             returnResult.Add (Serialize_WZ_LabelsINI (iniLabels, Args.Multiplayer.PlayerCount));
                             iniLabels.Flush();
 
-                            zip.PutNextEntry (string.Format ("{0}/dinit.bjo", path));
-                            fileDroidBJOMemory.WriteTo (zip);
-                            fileDroidBJOMemory.Flush ();
-
-     
-                            zip.PutNextEntry (string.Format ("{0}/feat.bjo", path));
-                            filefeatBJOMemory.WriteTo (zip);
-                            filefeatBJOMemory.Flush ();
-
                             zip.PutNextEntry (string.Format ("{0}/feature.ini", path));
                             IniWriter iniFeature = new IniWriter(zip);
                             returnResult.Add (Serialize_WZ_FeaturesINI (iniFeature));
                             iniFeature.Flush();
 
                             zip.PutNextEntry (string.Format ("{0}/game.map", path));
-                            fileMAPMemory.WriteTo (zip);
-                            fileMAPMemory.Flush ();
-
-                            zip.PutNextEntry (string.Format ("{0}/struct.bjo", path));
-                            filestructBJOMemory.WriteTo (zip);
-                            filestructBJOMemory.Flush ();
+                            returnResult.Add (Serialize_WZ_Map(zip));
 
                             zip.PutNextEntry (string.Format ("{0}/ttypes.ttp", path));
-                            fileTTPMemory.WriteTo (zip);
-                            fileTTPMemory.Flush ();
+                            returnResult.Add(Serialize_WZ_TTP(zip));
                         }                    
                     } catch (Exception ex)
                     {
+                        Debugger.Break();
                         returnResult.ProblemAdd (ex.Message);
                         logger.ErrorException ("Got an exception", ex);
                         return returnResult;
@@ -2916,10 +2758,11 @@ namespace SharpFlame.Mapping
                         return returnResult;
                     }
 
-                    string FilePath = "";
-
-                    FilePath = CampDirectory + Args.MapName + ".gam";
-                    returnResult.Add (IOUtil.WriteMemoryToNewFile (fileGAMMemory, CampDirectory + Args.MapName + ".gam"));
+                    var filePath = string.Format ("{0}{1}.gam", CampDirectory, Args.MapName);
+                    using (var file = File.Open(filePath, FileMode.Open | FileMode.CreateNew)) {
+                        returnResult.Add(Serialize_WZ_Gam(file, Args.Campaign.GAMType, 
+                                                          Args.CompileType, Args.ScrollMin, Args.ScrollMax));
+                    }
 
                     CampDirectory += Args.MapName + Convert.ToString (App.PlatformPathSeparator);
                     try
@@ -2932,44 +2775,39 @@ namespace SharpFlame.Mapping
                         return returnResult;
                     }
 
-                    FilePath = CampDirectory + "dinit.bjo";
-                    returnResult.Add (IOUtil.WriteMemoryToNewFile (fileDroidBJOMemory, FilePath));
-
-                    FilePath = CampDirectory + "droid.ini";
-                    using (var file = File.Open(FilePath, FileMode.Open | FileMode.CreateNew)) {
+                    filePath = CampDirectory + "droid.ini";
+                    using (var file = File.Open(filePath, FileMode.Open | FileMode.CreateNew)) {
                         IniWriter iniDroid = new IniWriter(file);
                         returnResult.Add (Serialize_WZ_DroidsINI (iniDroid, -1));
                         iniDroid.Flush();
                     }
 
-                    FilePath = CampDirectory + "feat.bjo";
-                    returnResult.Add (IOUtil.WriteMemoryToNewFile (filefeatBJOMemory, FilePath));
-
-                    FilePath = CampDirectory + "feature.ini";
-                    using (var file = File.Open(FilePath, FileMode.Open | FileMode.CreateNew)) {
+                    filePath = CampDirectory + "feature.ini";
+                    using (var file = File.Open(filePath, FileMode.Open | FileMode.CreateNew)) {
                         IniWriter iniFeatures = new IniWriter(file);
                         returnResult.Add (Serialize_WZ_FeaturesINI (iniFeatures));
                         iniFeatures.Flush();
                     }
 
-                    FilePath = CampDirectory + "game.map";
-                    returnResult.Add (IOUtil.WriteMemoryToNewFile (fileMAPMemory, FilePath));
+                    filePath = CampDirectory + "game.map";
+                    using (var file = File.Open(filePath, FileMode.Open | FileMode.CreateNew)) {
+                        returnResult.Add (Serialize_WZ_Map (file));
+                    }                   
 
-                    FilePath = CampDirectory + "struct.bjo";
-                    returnResult.Add (IOUtil.WriteMemoryToNewFile (filestructBJOMemory, FilePath));
-
-                    FilePath = CampDirectory + "struct.ini";
-                    using (var file = File.Open(FilePath, FileMode.Open | FileMode.CreateNew)) {
+                    filePath = CampDirectory + "struct.ini";
+                    using (var file = File.Open(filePath, FileMode.Open | FileMode.CreateNew)) {
                         IniWriter iniStruct = new IniWriter(file);
                         returnResult.Add (Serialize_WZ_StructuresINI (iniStruct, -1));
                         iniStruct.Flush();
                     }
 
-                    FilePath = CampDirectory + "ttypes.ttp";
-                    returnResult.Add (IOUtil.WriteMemoryToNewFile (fileTTPMemory, FilePath));
+                    filePath = CampDirectory + "ttypes.ttp";
+                    using (var file = File.Open(filePath, FileMode.Open | FileMode.CreateNew)) {
+                        returnResult.Add(Serialize_WZ_TTP(file));
+                    }
 
-                    FilePath = CampDirectory + "labels.ini";
-                    using (var file = File.Open(FilePath, FileMode.Open | FileMode.CreateNew)) {
+                    filePath = CampDirectory + "labels.ini";
+                    using (var file = File.Open(filePath, FileMode.Open | FileMode.CreateNew)) {
                         IniWriter iniLabels = new IniWriter(file);
                         returnResult.Add (Serialize_WZ_LabelsINI (iniLabels, 0));
                         iniLabels.Flush();
