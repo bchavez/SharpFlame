@@ -43,6 +43,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.2.1.0\net35\NLog.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ExtensionsForEnum.cs" />
@@ -79,6 +82,7 @@
     <Compile Include="Domain\XYDouble.cs" />
     <Compile Include="Domain\XYZDouble.cs" />
     <Compile Include="Domain\WorldPos.cs" />
+    <Compile Include="Parsers\Ini\IniWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

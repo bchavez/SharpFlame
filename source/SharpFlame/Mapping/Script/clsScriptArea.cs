@@ -3,6 +3,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
 using SharpFlame.Mapping.Drawing;
@@ -156,11 +157,10 @@ namespace SharpFlame.Mapping.Script
 
         public void WriteWZ(IniWriter file)
         {
-            file.AppendSectionName("area_" + _ParentMapLink.ArrayPosition.ToStringInvariant());
-            file.AppendProperty("pos1", _PosA.X.ToStringInvariant() + ", " + _PosA.Y.ToStringInvariant());
-            file.AppendProperty("pos2", _PosB.X.ToStringInvariant() + ", " + _PosB.Y.ToStringInvariant());
-            file.AppendProperty("label", Label);
-            file.Gap_Append();
+            file.AddSection("area_" + _ParentMapLink.ArrayPosition.ToStringInvariant());
+            file.AddProperty("pos1", _PosA.X.ToStringInvariant() + ", " + _PosA.Y.ToStringInvariant());
+            file.AddProperty("pos2", _PosB.X.ToStringInvariant() + ", " + _PosB.Y.ToStringInvariant());
+            file.AddProperty("label", Label);
         }
 
         public sResult SetLabel(string text)

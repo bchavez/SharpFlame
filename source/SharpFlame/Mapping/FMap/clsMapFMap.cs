@@ -1,14 +1,16 @@
 using System;
 using System.IO;
 using Ionic.Zip;
+using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.Domain;
 using SharpFlame.Core.Domain;
 using SharpFlame.FileIO;
-using SharpFlame.FileIO.Ini;
 using SharpFlame.Mapping.FMap;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
+using IniReader = SharpFlame.FileIO.Ini.IniReader;
+using Section = SharpFlame.FileIO.Ini.Section;
 
 namespace SharpFlame.Mapping
 {
@@ -46,8 +48,7 @@ namespace SharpFlame.Mapping
                     var streamWriter = new StreamWriter (zip, App.UTF8Encoding);
 
                     zip.PutNextEntry ("Info.ini");             
-                    var infoIniWriter = new IniWriter ();
-                    infoIniWriter.File = streamWriter;
+                    var infoIniWriter = new IniWriter (streamWriter);
                     returnResult.Add(Serialize_FMap_Info(infoIniWriter));
                     streamWriter.Flush ();
 
@@ -76,14 +77,12 @@ namespace SharpFlame.Mapping
                     binaryWriter.Flush ();
 
                     zip.PutNextEntry ("Objects.ini");
-                    var objectsIniWriter = new IniWriter ();
-                    objectsIniWriter.File = streamWriter;
+                    var objectsIniWriter = new IniWriter (streamWriter);
                     returnResult.Add(Serialize_FMap_Objects(objectsIniWriter));
                     streamWriter.Flush ();
 
                     zip.PutNextEntry ("Gateways.ini");             
-                    var gatewaysIniWriter = new IniWriter ();
-                    gatewaysIniWriter.File = streamWriter;
+                    var gatewaysIniWriter = new IniWriter (streamWriter);
                     returnResult.Add(Serialize_FMap_Gateways(gatewaysIniWriter));
                     streamWriter.Flush ();
 
@@ -92,8 +91,7 @@ namespace SharpFlame.Mapping
                     binaryWriter.Flush ();
 
                     zip.PutNextEntry ("ScriptLabels.ini");             
-                    var scriptLabelsIniWriter = new IniWriter ();
-                    scriptLabelsIniWriter.File = streamWriter;
+                    var scriptLabelsIniWriter = new IniWriter (streamWriter);
                     returnResult.Add(Serialize_WZ_LabelsINI(scriptLabelsIniWriter, -1));
                     streamWriter.Flush ();
 
@@ -123,33 +121,33 @@ namespace SharpFlame.Mapping
                 }
                 else if ( Tileset == App.Tileset_Arizona )
                 {
-                    File.AppendProperty("Tileset", "Arizona");
+                    File.AddProperty("Tileset", "Arizona");
                 }
                 else if ( Tileset == App.Tileset_Urban )
                 {
-                    File.AppendProperty("Tileset", "Urban");
+                    File.AddProperty("Tileset", "Urban");
                 }
                 else if ( Tileset == App.Tileset_Rockies )
                 {
-                    File.AppendProperty("Tileset", "Rockies");
+                    File.AddProperty("Tileset", "Rockies");
                 }
 
-                File.AppendProperty("Size", Terrain.TileSize.X.ToStringInvariant() + ", " + Terrain.TileSize.Y.ToStringInvariant());
+                File.AddProperty("Size", Terrain.TileSize.X.ToStringInvariant() + ", " + Terrain.TileSize.Y.ToStringInvariant());
 
-                File.AppendProperty("AutoScrollLimits", InterfaceOptions.AutoScrollLimits.ToStringInvariant());
-                File.AppendProperty("ScrollMinX", InterfaceOptions.ScrollMin.X.ToStringInvariant());
-                File.AppendProperty("ScrollMinY", InterfaceOptions.ScrollMin.Y.ToStringInvariant());
-                File.AppendProperty("ScrollMaxX", InterfaceOptions.ScrollMax.X.ToStringInvariant());
-                File.AppendProperty("ScrollMaxY", InterfaceOptions.ScrollMax.Y.ToStringInvariant());
+                File.AddProperty("AutoScrollLimits", InterfaceOptions.AutoScrollLimits.ToStringInvariant());
+                File.AddProperty("ScrollMinX", InterfaceOptions.ScrollMin.X.ToStringInvariant());
+                File.AddProperty("ScrollMinY", InterfaceOptions.ScrollMin.Y.ToStringInvariant());
+                File.AddProperty("ScrollMaxX", InterfaceOptions.ScrollMax.X.ToStringInvariant());
+                File.AddProperty("ScrollMaxY", InterfaceOptions.ScrollMax.Y.ToStringInvariant());
 
-                File.AppendProperty("Name", InterfaceOptions.CompileName);
-                File.AppendProperty("Players", InterfaceOptions.CompileMultiPlayers);
-                File.AppendProperty("XPlayerLev", InterfaceOptions.CompileMultiXPlayers.ToStringInvariant());
-                File.AppendProperty("Author", InterfaceOptions.CompileMultiAuthor);
-                File.AppendProperty("License", InterfaceOptions.CompileMultiLicense);
+                File.AddProperty("Name", InterfaceOptions.CompileName);
+                File.AddProperty("Players", InterfaceOptions.CompileMultiPlayers);
+                File.AddProperty("XPlayerLev", InterfaceOptions.CompileMultiXPlayers.ToStringInvariant());
+                File.AddProperty("Author", InterfaceOptions.CompileMultiAuthor);
+                File.AddProperty("License", InterfaceOptions.CompileMultiLicense);
                 if ( InterfaceOptions.CampaignGameType >= 0 )
                 {
-                    File.AppendProperty("CampType", InterfaceOptions.CampaignGameType.ToStringInvariant());
+                    File.AddProperty("CampType", InterfaceOptions.CampaignGameType.ToStringInvariant());
                 }
             }
             catch ( Exception ex )
@@ -497,61 +495,61 @@ namespace SharpFlame.Mapping
                 for ( A = 0; A <= Units.Count - 1; A++ )
                 {
                     Unit = Units[A];
-                    File.AppendSectionName(A.ToStringInvariant());
+                    File.AddSection(A.ToStringInvariant());
                     switch ( Unit.TypeBase.Type )
                     {
                         case UnitType.Feature:
-                            File.AppendProperty("Type", "Feature, " + ((FeatureTypeBase)Unit.TypeBase).Code);
+                            File.AddProperty("Type", "Feature, " + ((FeatureTypeBase)Unit.TypeBase).Code);
                             break;
                         case UnitType.PlayerStructure:
                             StructureTypeBase structureTypeBase = (StructureTypeBase)Unit.TypeBase;
-                            File.AppendProperty("Type", "Structure, " + structureTypeBase.Code);
+                            File.AddProperty("Type", "Structure, " + structureTypeBase.Code);
                             if ( structureTypeBase.WallLink.IsConnected )
                             {
-                                File.AppendProperty("WallType", structureTypeBase.WallLink.ArrayPosition.ToStringInvariant());
+                                File.AddProperty("WallType", structureTypeBase.WallLink.ArrayPosition.ToStringInvariant());
                             }
                             break;
                         case UnitType.PlayerDroid:
                             Droid = (DroidDesign)Unit.TypeBase;
                             if ( Droid.IsTemplate )
                             {
-                                File.AppendProperty("Type", "DroidTemplate, " + ((DroidTemplate)Unit.TypeBase).Code);
+                                File.AddProperty("Type", "DroidTemplate, " + ((DroidTemplate)Unit.TypeBase).Code);
                             }
                             else
                             {
-                                File.AppendProperty("Type", "DroidDesign");
+                                File.AddProperty("Type", "DroidDesign");
                                 if ( Droid.TemplateDroidType != null )
                                 {
-                                    File.AppendProperty("DroidType", Droid.TemplateDroidType.TemplateCode);
+                                    File.AddProperty("DroidType", Droid.TemplateDroidType.TemplateCode);
                                 }
                                 if ( Droid.Body != null )
                                 {
-                                    File.AppendProperty("Body", Droid.Body.Code);
+                                    File.AddProperty("Body", Droid.Body.Code);
                                 }
                                 if ( Droid.Propulsion != null )
                                 {
-                                    File.AppendProperty("Propulsion", Droid.Propulsion.Code);
+                                    File.AddProperty("Propulsion", Droid.Propulsion.Code);
                                 }
-                                File.AppendProperty("TurretCount", Droid.TurretCount.ToStringInvariant());
+                                File.AddProperty("TurretCount", Droid.TurretCount.ToStringInvariant());
                                 if ( Droid.Turret1 != null )
                                 {
                                     if ( Droid.Turret1.GetTurretTypeName(ref Text) )
                                     {
-                                        File.AppendProperty("Turret1", Text + ", " + Droid.Turret1.Code);
+                                        File.AddProperty("Turret1", Text + ", " + Droid.Turret1.Code);
                                     }
                                 }
                                 if ( Droid.Turret2 != null )
                                 {
                                     if ( Droid.Turret2.GetTurretTypeName(ref Text) )
                                     {
-                                        File.AppendProperty("Turret2", Text + ", " + Droid.Turret2.Code);
+                                        File.AddProperty("Turret2", Text + ", " + Droid.Turret2.Code);
                                     }
                                 }
                                 if ( Droid.Turret3 != null )
                                 {
                                     if ( Droid.Turret3.GetTurretTypeName(ref Text) )
                                     {
-                                        File.AppendProperty("Turret3", Text + ", " + Droid.Turret3.Code);
+                                        File.AddProperty("Turret3", Text + ", " + Droid.Turret3.Code);
                                     }
                                 }
                             }
@@ -560,20 +558,19 @@ namespace SharpFlame.Mapping
                             WarningCount++;
                             break;
                     }
-                    File.AppendProperty("ID", Unit.ID.ToStringInvariant());
-                    File.AppendProperty("Priority", Unit.SavePriority.ToStringInvariant());
-                    File.AppendProperty("Pos", Unit.Pos.Horizontal.X.ToStringInvariant() + ", " + Unit.Pos.Horizontal.Y.ToStringInvariant());
-                    File.AppendProperty("Heading", Unit.Rotation.ToStringInvariant());
-                    File.AppendProperty("UnitGroup", Unit.UnitGroup.GetFMapINIPlayerText());
+                    File.AddProperty("ID", Unit.ID.ToStringInvariant());
+                    File.AddProperty("Priority", Unit.SavePriority.ToStringInvariant());
+                    File.AddProperty("Pos", Unit.Pos.Horizontal.X.ToStringInvariant() + ", " + Unit.Pos.Horizontal.Y.ToStringInvariant());
+                    File.AddProperty("Heading", Unit.Rotation.ToStringInvariant());
+                    File.AddProperty("UnitGroup", Unit.UnitGroup.GetFMapINIPlayerText());
                     if ( Unit.Health < 1.0D )
                     {
-                        File.AppendProperty("Health", Unit.Health.ToStringInvariant());
+                        File.AddProperty("Health", Unit.Health.ToStringInvariant());
                     }
                     if ( Unit.Label != null )
                     {
-                        File.AppendProperty("ScriptLabel", Unit.Label);
+                        File.AddProperty("ScriptLabel", Unit.Label);
                     }
-                    File.Gap_Append();
                 }
             }
             catch ( Exception ex )
@@ -601,12 +598,11 @@ namespace SharpFlame.Mapping
                 for ( A = 0; A <= Gateways.Count - 1; A++ )
                 {
                     Gateway = Gateways[A];
-                    File.AppendSectionName(A.ToStringInvariant());
-                    File.AppendProperty("AX", Gateway.PosA.X.ToStringInvariant());
-                    File.AppendProperty("AY", Gateway.PosA.Y.ToStringInvariant());
-                    File.AppendProperty("BX", Gateway.PosB.X.ToStringInvariant());
-                    File.AppendProperty("BY", Gateway.PosB.Y.ToStringInvariant());
-                    File.Gap_Append();
+                    File.AddSection(A.ToStringInvariant());
+                    File.AddProperty("AX", Gateway.PosA.X.ToStringInvariant());
+                    File.AddProperty("AY", Gateway.PosA.Y.ToStringInvariant());
+                    File.AddProperty("BX", Gateway.PosB.X.ToStringInvariant());
+                    File.AddProperty("BY", Gateway.PosB.Y.ToStringInvariant());
                 }
             }
             catch ( Exception ex )

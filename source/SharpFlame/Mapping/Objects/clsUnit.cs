@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using SharpFlame.Collections;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
@@ -25,10 +26,9 @@ namespace SharpFlame.Mapping.Objects
         public double Health = 1.0D;
         public bool PreferPartsOutput = false;
 
-        private string _Label;
-        public string Label
-        {
-            get { return _Label; }
+        private string label;
+        public string Label {
+            get { return label; }
         }
 
         public clsUnit()
@@ -141,7 +141,7 @@ namespace SharpFlame.Mapping.Objects
 
             if ( Text == null )
             {
-                _Label = null;
+                label = null;
                 Result.Success = true;
                 Result.Problem = "";
                 return Result;
@@ -151,7 +151,7 @@ namespace SharpFlame.Mapping.Objects
                 Result = MapLink.Source.ScriptLabelIsValid(Text);
                 if ( Result.Success )
                 {
-                    _Label = Text;
+                    label = Text;
                 }
                 return Result;
             }
@@ -159,7 +159,7 @@ namespace SharpFlame.Mapping.Objects
 
         public void WriteWZLabel(IniWriter File, int PlayerCount)
         {
-            if ( _Label != null )
+            if ( label != null )
             {
                 int TypeNum = 0;
                 switch ( TypeBase.Type )
@@ -176,15 +176,14 @@ namespace SharpFlame.Mapping.Objects
                     default:
                         return;
                 }
-                File.AppendSectionName("object_" + MapLink.ArrayPosition.ToStringInvariant());
-                File.AppendProperty("id", ID.ToStringInvariant());
+                File.AddSection("object_" + MapLink.ArrayPosition.ToStringInvariant());
+                File.AddProperty("id", ID.ToStringInvariant());
                 if ( PlayerCount >= 0 ) //not an FMap
                 {
-                    File.AppendProperty("type", TypeNum.ToStringInvariant());
-                    File.AppendProperty("player", UnitGroup.GetPlayerNum(PlayerCount).ToStringInvariant());
+                    File.AddProperty("type", TypeNum.ToStringInvariant());
+                    File.AddProperty("player", UnitGroup.GetPlayerNum(PlayerCount).ToStringInvariant());
                 }
-                File.AppendProperty("label", _Label);
-                File.Gap_Append();
+                File.AddProperty("label", label);
             }
         }
 

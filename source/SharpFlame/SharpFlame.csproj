@@ -44,7 +44,7 @@
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <WarningLevel>4</WarningLevel>
     <Optimize>false</Optimize>
-    <DefineConstants>DEBUG</DefineConstants>
+    <DefineConstants>Trace;DEBUG;Mono;Portable</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -376,7 +376,6 @@
     <Compile Include="Collections\ListUtil.cs" />
     <Compile Include="Bitmaps\BitmapUtil.cs" />
     <Compile Include="Generators\DefaultGenerator.cs" />
-    <Compile Include="FileIO\Ini\IniWriter.cs" />
     <Compile Include="FileIO\IOUtil.cs" />
     <Compile Include="Maths\MathUtil.cs" />
     <Compile Include="Painters\PainterFactory.cs" />

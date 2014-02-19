@@ -4,8 +4,10 @@ using System.Windows.Forms;
 using NLog;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
+using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
+using Section = SharpFlame.FileIO.Ini.Section;
 
 namespace SharpFlame.AppSettings
 {
@@ -128,7 +130,7 @@ namespace SharpFlame.AppSettings
                     SimpleList<string> list = (SimpleList<string>)optionValue;
                     for ( int i = 0; i <= list.Count - 1; i++ )
                     {
-                        file.AppendProperty(item.SaveKey, list[i]);
+                        file.AddProperty(item.SaveKey, list[i]);
                     }
                 }
                 else if ( item is Option<clsRGB_sng> )
@@ -184,7 +186,7 @@ namespace SharpFlame.AppSettings
                 }
                 if ( valueText != null )
                 {
-                    file.AppendProperty(item.SaveKey, valueText);
+                    file.AddProperty(item.SaveKey, valueText);
                 }
             }
 

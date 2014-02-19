@@ -5,8 +5,10 @@ using NLog;
 using OpenTK;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
+using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.FileIO;
-using SharpFlame.FileIO.Ini;
+using IniReader = SharpFlame.FileIO.Ini.IniReader;
+using Section = SharpFlame.FileIO.Ini.Section;
 
 namespace SharpFlame.AppSettings
 {
@@ -187,37 +189,34 @@ namespace SharpFlame.AppSettings
             clsResult ReturnResult = new clsResult("Writing settings to \"{0}\"".Format2(App.SettingsPath), false);
             logger.Info ("Writing settings to \"{0}\"".Format2 (App.SettingsPath));
 
-            IniWriter INI_Settings = default(IniWriter);
-
-            try
-            {
-                INI_Settings = IniWriter.CreateFile(File.Create(App.SettingsPath));
+            try {
+                using (var file = File.Create(App.SettingsPath)) {
+                    var iniSettings = new IniWriter(file);
+                    ReturnResult.Take(Serialize_Settings(iniSettings));
+                    iniSettings.Flush();
+                }
             }
-            catch ( Exception ex )
-            {
+            catch ( Exception ex ) {
                 ReturnResult.ProblemAdd(ex.Message);
                 return ReturnResult;
             }
-
-            ReturnResult.Take(Serialize_Settings(INI_Settings));
-            INI_Settings.File.Close();
 
             return ReturnResult;
         }
 
         private static clsResult Serialize_Settings(IniWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing settings", false);
+            clsResult returnResult = new clsResult("Serializing settings", false);
             logger.Info ("Serializing settings");
 
-            ReturnResult.Take(Settings.INIWrite(File));
+            returnResult.Take(Settings.INIWrite(File));
             if ( KeyboardManager.KeyboardProfile.IsAnythingChanged )
             {
-                File.AppendSectionName("KeyboardControls");
-                ReturnResult.Take(KeyboardManager.KeyboardProfile.INIWrite(File));
+                File.AddSection("KeyboardControls");
+                returnResult.Take(KeyboardManager.KeyboardProfile.INIWrite(File));
             }
 
-            return ReturnResult;
+            return returnResult;
         }
 
         public static clsResult Settings_Load(ref clsSettings Result)

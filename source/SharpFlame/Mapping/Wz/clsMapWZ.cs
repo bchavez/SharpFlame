@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using NLog;
@@ -1904,60 +1905,60 @@ namespace SharpFlame.Mapping
 
         private sResult Read_WZ_Structures(BinaryReader File, SimpleClassList<clsWZBJOUnit> WZUnits)
         {
-            sResult ReturnResult = new sResult ();
-            ReturnResult.Success = false;
-            ReturnResult.Problem = "";
+            sResult returnResult = new sResult ();
+            returnResult.Success = false;
+            returnResult.Problem = "";
 
             string strTemp = null;
-            UInt32 Version = 0;
+            UInt32 version = 0;
             UInt32 uintTemp = 0;
-            int A = 0;
-            clsWZBJOUnit WZBJOUnit = default(clsWZBJOUnit);
+            int a = 0;
+            clsWZBJOUnit wzBJOUnit = default(clsWZBJOUnit);
 
             try
             {
                 strTemp = IOUtil.ReadOldTextOfLength (File, 4);
                 if (strTemp != "stru")
                 {
-                    ReturnResult.Problem = "Unknown struct.bjo identifier.";
-                    return ReturnResult;
+                    returnResult.Problem = "Unknown struct.bjo identifier.";
+                    return returnResult;
                 }
 
-                Version = File.ReadUInt32 ();
-                if (Version != 8U)
+                version = File.ReadUInt32 ();
+                if (version != 8U)
                 {
                     if (MessageBox.Show ("struct.bjo version is unknown. Continue?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
                     {
-                        ReturnResult.Problem = "Aborted.";
-                        return ReturnResult;
+                        returnResult.Problem = "Aborted.";
+                        return returnResult;
                     }
                 }
 
                 uintTemp = File.ReadUInt32 ();
-                for (A = 0; A <= (Convert.ToInt32(uintTemp)) - 1; A++)
+                for (a = 0; a <= (Convert.ToInt32(uintTemp)) - 1; a++)
                 {
-                    WZBJOUnit = new clsWZBJOUnit ();
-                    WZBJOUnit.ObjectType = UnitType.PlayerStructure;
-                    WZBJOUnit.Code = IOUtil.ReadOldTextOfLength (File, 40);
-                    WZBJOUnit.Code = WZBJOUnit.Code.Substring (0, WZBJOUnit.Code.IndexOf ('\0'));
-                    WZBJOUnit.ID = File.ReadUInt32 ();
-                    WZBJOUnit.Pos.Horizontal.X = (int)(File.ReadUInt32 ());
-                    WZBJOUnit.Pos.Horizontal.Y = (int)(File.ReadUInt32 ());
-                    WZBJOUnit.Pos.Altitude = (int)(File.ReadUInt32 ());
-                    WZBJOUnit.Rotation = File.ReadUInt32 ();
-                    WZBJOUnit.Player = File.ReadUInt32 ();
+                    wzBJOUnit = new clsWZBJOUnit ();
+                    wzBJOUnit.ObjectType = UnitType.PlayerStructure;
+                    wzBJOUnit.Code = IOUtil.ReadOldTextOfLength (File, 40);
+                    wzBJOUnit.Code = wzBJOUnit.Code.Substring (0, wzBJOUnit.Code.IndexOf ('\0'));
+                    wzBJOUnit.ID = File.ReadUInt32 ();
+                    wzBJOUnit.Pos.Horizontal.X = (int)(File.ReadUInt32 ());
+                    wzBJOUnit.Pos.Horizontal.Y = (int)(File.ReadUInt32 ());
+                    wzBJOUnit.Pos.Altitude = (int)(File.ReadUInt32 ());
+                    wzBJOUnit.Rotation = File.ReadUInt32 ();
+                    wzBJOUnit.Player = File.ReadUInt32 ();
                     File.ReadBytes (56);
-                    WZUnits.Add (WZBJOUnit);
+                    WZUnits.Add (wzBJOUnit);
                 }
             } catch (Exception ex)
             {
-                ReturnResult.Problem = ex.Message;
+                returnResult.Problem = ex.Message;
                 logger.ErrorException ("Got an exception", ex);
-                return ReturnResult;
+                return returnResult;
             }
 
-            ReturnResult.Success = true;
-            return ReturnResult;
+            returnResult.Success = true;
+            return returnResult;
         }
 
         private sResult Read_WZ_Droids(BinaryReader File, SimpleClassList<clsWZBJOUnit> WZUnits)
@@ -2024,8 +2025,6 @@ namespace SharpFlame.Mapping
             logger.Info ("Serializing structures INI");
 
             StructureTypeBase structureTypeBase = default(StructureTypeBase);
-            clsUnit unit = default(clsUnit);
-            bool[] unitIsModule = new bool[Units.Count];
             int[] unitModuleCount = new int[Units.Count];
             XYInt sectorNum = new XYInt ();
             StructureTypeBase otherStructureTypeBase = default(StructureTypeBase);
@@ -2039,14 +2038,8 @@ namespace SharpFlame.Mapping
             int badModuleCount = 0;
             clsObjectPriorityOrderList priorityOrder = new clsObjectPriorityOrderList ();
 
-            foreach (clsUnit tempLoopVar_Unit in Units)
+            foreach (var unit in Units.Where(d => d.TypeBase.Type == UnitType.PlayerStructure))
             {
-                unit = tempLoopVar_Unit;
-                if (unit.TypeBase.Type != UnitType.PlayerStructure)
-                {
-                    continue;
-                }
-
                 structureTypeBase = (StructureTypeBase)unit.TypeBase;
                 switch (structureTypeBase.StructureType)
                 {
@@ -2074,14 +2067,14 @@ namespace SharpFlame.Mapping
                     priorityOrder.ActionPerform ();
                 } else
                 {
-                    unitIsModule [unit.MapLink.ArrayPosition] = true;
+                    // IS module.
                     sectorNum = GetPosSectorNum (unit.Pos.Horizontal);
-                    clsUnit Underneath = null;
-                    clsUnitSectorConnection Connection = default(clsUnitSectorConnection);
+                    clsUnit underneath = null;
+                    clsUnitSectorConnection connection = default(clsUnitSectorConnection);
                     foreach (clsUnitSectorConnection tempLoopVar_Connection in Sectors[sectorNum.X, sectorNum.Y].Units)
                     {
-                        Connection = tempLoopVar_Connection;
-                        otherUnit = Connection.Unit;
+                        connection = tempLoopVar_Connection;
+                        otherUnit = connection.Unit;
                         if (otherUnit.TypeBase.Type == UnitType.PlayerStructure)
                         {
                             otherStructureTypeBase = (StructureTypeBase)otherUnit.TypeBase;
@@ -2105,14 +2098,14 @@ namespace SharpFlame.Mapping
                                         unit.Pos.Horizontal.Y >= moduleMin.Y & unit.Pos.Horizontal.Y < moduleMax.Y)
                                     {
                                         unitModuleCount [otherUnit.MapLink.ArrayPosition]++;
-                                        Underneath = otherUnit;
+                                        underneath = otherUnit;
                                         break;
                                     }
                                 }
                             }
                         }
                     }
-                    if (Underneath == null)
+                    if (underneath == null)
                     {
                         badModuleCount++;
                     }
@@ -2131,32 +2124,32 @@ namespace SharpFlame.Mapping
 
             for (A = 0; A <= priorityOrder.Result.Count - 1; A++)
             {
-                unit = priorityOrder.Result [A];
+                var unit = priorityOrder.Result [A];
                 structureTypeBase = (StructureTypeBase)unit.TypeBase;
                 if (unit.ID <= 0)
                 {
                     ReturnResult.WarningAdd ("Error. A structure\'s ID was zero. It was NOT saved. Delete and replace it to allow save.");
                 } else
                 {
-                    File.AppendSectionName ("structure_" + unit.ID.ToStringInvariant ());
-                    File.AppendProperty ("id", unit.ID.ToStringInvariant ());
+                    File.AddSection ("structure_" + unit.ID.ToStringInvariant ());
+                    File.AddProperty ("id", unit.ID.ToStringInvariant ());
                     if (unit.UnitGroup == ScavengerUnitGroup || (PlayerCount >= 0 & unit.UnitGroup.WZ_StartPos >= PlayerCount))
                     {
-                        File.AppendProperty ("player", "scavenger");
+                        File.AddProperty ("player", "scavenger");
                     } else
                     {
-                        File.AppendProperty ("startpos", unit.UnitGroup.WZ_StartPos.ToStringInvariant ());
+                        File.AddProperty ("startpos", unit.UnitGroup.WZ_StartPos.ToStringInvariant ());
                     }
-                    File.AppendProperty ("name", structureTypeBase.Code);
+                    File.AddProperty ("name", structureTypeBase.Code);
                     if (structureTypeBase.WallLink.IsConnected)
                     {
-                        File.AppendProperty ("wall/type", structureTypeBase.WallLink.ArrayPosition.ToStringInvariant ());
+                        File.AddProperty ("wall/type", structureTypeBase.WallLink.ArrayPosition.ToStringInvariant ());
                     }
-                    File.AppendProperty ("position", unit.GetINIPosition ());
-                    File.AppendProperty ("rotation", unit.GetINIRotation ());
+                    File.AddProperty ("position", unit.GetINIPosition ());
+                    File.AddProperty ("rotation", unit.GetINIRotation ());
                     if (unit.Health < 1.0D)
                     {
-                        File.AppendProperty ("health", unit.GetINIHealthPercent ());
+                        File.AddProperty ("health", unit.GetINIHealthPercent ());
                     }
                     switch (structureTypeBase.StructureType)
                     {
@@ -2191,8 +2184,7 @@ namespace SharpFlame.Mapping
                     {
                         moduleCount = unitModuleCount [unit.MapLink.ArrayPosition];
                     }
-                    File.AppendProperty ("modules", moduleCount.ToStringInvariant ());
-                    File.Gap_Append ();
+                    File.AddProperty ("modules", moduleCount.ToStringInvariant ());
                 }
             }
 
@@ -2282,32 +2274,32 @@ namespace SharpFlame.Mapping
                     }
                     if (ValidDroid)
                     {
-                        File.AppendSectionName ("droid_" + Unit.ID.ToStringInvariant ());
-                        File.AppendProperty ("id", Unit.ID.ToStringInvariant ());
+                        File.AddSection ("droid_" + Unit.ID.ToStringInvariant ());
+                        File.AddProperty ("id", Unit.ID.ToStringInvariant ());
                         if (Unit.UnitGroup == ScavengerUnitGroup || (PlayerCount >= 0 & Unit.UnitGroup.WZ_StartPos >= PlayerCount))
                         {
-                            File.AppendProperty ("player", "scavenger");
+                            File.AddProperty ("player", "scavenger");
                         } else
                         {
-                            File.AppendProperty ("startpos", Unit.UnitGroup.WZ_StartPos.ToStringInvariant ());
+                            File.AddProperty ("startpos", Unit.UnitGroup.WZ_StartPos.ToStringInvariant ());
                         }
                         if (AsPartsNotTemplate)
                         {
-                            File.AppendProperty ("name", Droid.GenerateName ());
+                            File.AddProperty ("name", Droid.GenerateName ());
                         } else
                         {
                             Template = (DroidTemplate)Droid;
-                            File.AppendProperty ("template", Template.Code);
+                            File.AddProperty ("template", Template.Code);
                         }
-                        File.AppendProperty ("position", Unit.GetINIPosition ());
-                        File.AppendProperty ("rotation", Unit.GetINIRotation ());
+                        File.AddProperty ("position", Unit.GetINIPosition ());
+                        File.AddProperty ("rotation", Unit.GetINIRotation ());
                         if (Unit.Health < 1.0D)
                         {
-                            File.AppendProperty ("health", Unit.GetINIHealthPercent ());
+                            File.AddProperty ("health", Unit.GetINIHealthPercent ());
                         }
                         if (AsPartsNotTemplate)
                         {
-                            File.AppendProperty ("droidType", Convert.ToInt32 (Droid.GetDroidType ()).ToStringInvariant ());
+                            File.AddProperty ("droidType", Convert.ToInt32 (Droid.GetDroidType ()).ToStringInvariant ());
                             if (Droid.TurretCount == 0)
                             {
                                 Text = "0";
@@ -2333,29 +2325,29 @@ namespace SharpFlame.Mapping
                                     }
                                 }
                             }
-                            File.AppendProperty ("weapons", Text);
-                            File.AppendProperty ("parts\\body", Droid.Body.Code);
-                            File.AppendProperty ("parts\\propulsion", Droid.Propulsion.Code);
-                            File.AppendProperty ("parts\\sensor", Droid.GetSensorCode ());
-                            File.AppendProperty ("parts\\construct", Droid.GetConstructCode ());
-                            File.AppendProperty ("parts\\repair", Droid.GetRepairCode ());
-                            File.AppendProperty ("parts\\brain", Droid.GetBrainCode ());
-                            File.AppendProperty ("parts\\ecm", Droid.GetECMCode ());
+                            File.AddProperty ("weapons", Text);
+                            File.AddProperty ("parts\\body", Droid.Body.Code);
+                            File.AddProperty ("parts\\propulsion", Droid.Propulsion.Code);
+                            File.AddProperty ("parts\\sensor", Droid.GetSensorCode ());
+                            File.AddProperty ("parts\\construct", Droid.GetConstructCode ());
+                            File.AddProperty ("parts\\repair", Droid.GetRepairCode ());
+                            File.AddProperty ("parts\\brain", Droid.GetBrainCode ());
+                            File.AddProperty ("parts\\ecm", Droid.GetECMCode ());
                             if (Droid.TurretCount >= 1)
                             {
                                 if (Droid.Turret1.TurretType == enumTurretType.Weapon)
                                 {
-                                    File.AppendProperty ("parts\\weapon\\1", Droid.Turret1.Code);
+                                    File.AddProperty ("parts\\weapon\\1", Droid.Turret1.Code);
                                     if (Droid.TurretCount >= 2)
                                     {
                                         if (Droid.Turret2.TurretType == enumTurretType.Weapon)
                                         {
-                                            File.AppendProperty ("parts\\weapon\\2", Droid.Turret2.Code);
+                                            File.AddProperty ("parts\\weapon\\2", Droid.Turret2.Code);
                                             if (Droid.TurretCount >= 3)
                                             {
                                                 if (Droid.Turret3.TurretType == enumTurretType.Weapon)
                                                 {
-                                                    File.AppendProperty ("parts\\weapon\\3", Droid.Turret3.Code);
+                                                    File.AddProperty ("parts\\weapon\\3", Droid.Turret3.Code);
                                                 }
                                             }
                                         }
@@ -2370,11 +2362,10 @@ namespace SharpFlame.Mapping
                                     {
                                         Text = Brain.Weapon.Code;
                                     }
-                                    File.AppendProperty ("parts\\weapon\\1", Text);
+                                    File.AddProperty ("parts\\weapon\\1", Text);
                                 }
                             }
                         }
-                        File.Gap_Append ();
                     }
                 }
             }
@@ -2412,16 +2403,15 @@ namespace SharpFlame.Mapping
                 }
                 if (Valid)
                 {
-                    File.AppendSectionName ("feature_" + Unit.ID.ToStringInvariant ());
-                    File.AppendProperty ("id", Unit.ID.ToStringInvariant ());
-                    File.AppendProperty ("position", Unit.GetINIPosition ());
-                    File.AppendProperty ("rotation", Unit.GetINIRotation ());
-                    File.AppendProperty ("name", featureTypeBase.Code);
+                    File.AddSection ("feature_" + Unit.ID.ToStringInvariant ());
+                    File.AddProperty ("id", Unit.ID.ToStringInvariant ());
+                    File.AddProperty ("position", Unit.GetINIPosition ());
+                    File.AddProperty ("rotation", Unit.GetINIRotation ());
+                    File.AddProperty ("name", featureTypeBase.Code);
                     if (Unit.Health < 1.0D)
                     {
-                        File.AppendProperty ("health", Unit.GetINIHealthPercent ());
+                        File.AddProperty ("health", Unit.GetINIHealthPercent ());
                     }
-                    File.Gap_Append ();
                 }
             }
 
@@ -2430,16 +2420,16 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_WZ_LabelsINI(IniWriter File, int PlayerCount)
         {
-            clsResult ReturnResult = new clsResult ("Serializing labels INI", false);
+            clsResult returnResult = new clsResult ("Serializing labels INI", false);
             logger.Info ("Serializing labels INI");
 
             try
             {
-                clsScriptPosition ScriptPosition = default(clsScriptPosition);
+                clsScriptPosition scriptPosition = default(clsScriptPosition);
                 foreach (clsScriptPosition tempLoopVar_ScriptPosition in ScriptPositions)
                 {
-                    ScriptPosition = tempLoopVar_ScriptPosition;
-                    ScriptPosition.WriteWZ (File);
+                    scriptPosition = tempLoopVar_ScriptPosition;
+                    scriptPosition.WriteWZ (File);
                 }
                 clsScriptArea ScriptArea = default(clsScriptArea);
                 foreach (clsScriptArea tempLoopVar_ScriptArea in ScriptAreas)
@@ -2458,16 +2448,80 @@ namespace SharpFlame.Mapping
                 }
             } catch (Exception ex)
             {
-                ReturnResult.WarningAdd (ex.Message);
+                returnResult.WarningAdd (ex.Message);
                 logger.ErrorException ("Got an exception", ex);
             }
 
-            return ReturnResult;
+            return returnResult;
+        }
+
+        public clsResult Serialize_WZ_LEV(Stream stream, int playercount, string authorname, string license, string mapName)
+        {
+            clsResult returnResult = new clsResult ("Serializing .lev", false);
+            logger.Info ("Serializing .lev");
+
+            StreamWriter fileLEV = new StreamWriter (stream, Encoding.UTF8);
+
+            var playersText = playercount.ToString();
+            var playersPrefix = playersText + "c-";
+            string fog = "";
+            string tilesetNum = "";
+            string endChar = "\n";
+
+            if (Tileset == App.Tileset_Arizona) {
+                fog = "fog1.wrf";
+                tilesetNum = "1";
+            } else if (Tileset == App.Tileset_Urban) {
+                fog = "fog2.wrf";
+                tilesetNum = "2";
+            } else if (Tileset == App.Tileset_Rockies) {
+                fog = "fog3.wrf";
+                tilesetNum = "3";
+            } else {
+                returnResult.ProblemAdd ("Map must have a tileset, or unknown tileset selected.");
+                return returnResult;
+            }
+
+            fileLEV.Write (string.Format ("// Made with {0} {1} {2}{3}", Constants.ProgramName, Constants.ProgramVersionNumber, Constants.ProgramPlatform, Convert.ToString (endChar)));
+            DateTime DateNow = DateTime.Now;
+            fileLEV.Write (string.Format ("// Date: {0}/{1}/{2} {3}:{4}:{5}{6}", DateNow.Year, 
+                                          App.MinDigits (DateNow.Month, 2), App.MinDigits (DateNow.Day, 2), 
+                                          App.MinDigits (DateNow.Hour, 2), App.MinDigits (DateNow.Minute, 2), 
+                                          App.MinDigits (DateNow.Second, 2), endChar));
+            fileLEV.Write (string.Format ("// Author: {0}{1}", authorname, endChar));
+            fileLEV.Write (string.Format ("// License: {0}{1}", license, endChar));
+            fileLEV.Write (endChar);
+            fileLEV.Write (string.Format ("level   {0}-T1{1}", mapName, endChar));
+            fileLEV.Write (string.Format ("players {0}{1}", playersText, endChar));
+            fileLEV.Write (string.Format ("type    14{0}", endChar));
+            fileLEV.Write (string.Format ("dataset MULTI_CAM_{0}{1}", tilesetNum, endChar));
+            fileLEV.Write (string.Format ("game    \"multiplay/maps/{0}{1}.gam\"{2}", playersPrefix, mapName, endChar));
+            fileLEV.Write (string.Format ("data    \"wrf/multi/skirmish{0}.wrf\"{1}", playersText, endChar));
+            fileLEV.Write (string.Format ("data    \"wrf/multi/{0}\"{1}", fog, endChar));
+            fileLEV.Write (endChar);
+            fileLEV.Write (string.Format ("level   {0}-T2{1}", mapName, endChar));
+            fileLEV.Write (string.Format ("players {0}{1}", playersText, endChar));
+            fileLEV.Write (string.Format ("type    18{0}", endChar));
+            fileLEV.Write (string.Format ("dataset MULTI_T2_C{0}{1}", tilesetNum, endChar));
+            fileLEV.Write (string.Format ("game    \"multiplay/maps/{0}{1}.gam\"{2}", playersPrefix, mapName, endChar));
+            fileLEV.Write (string.Format ("data    \"wrf/multi/t2-skirmish{0}.wrf\"{1}", playersText, endChar));
+            fileLEV.Write (string.Format ("data    \"wrf/multi/{0}\"{1}", fog, endChar));
+            fileLEV.Write (endChar);
+            fileLEV.Write (string.Format ("level   {0}-T3{1}", mapName, endChar));
+            fileLEV.Write (string.Format ("players {0}{1}", playersText, endChar));
+            fileLEV.Write (string.Format ("type    19{0}", endChar));
+            fileLEV.Write (string.Format ("dataset MULTI_T3_C{0}{1}", tilesetNum, endChar));
+            fileLEV.Write (string.Format ("game    \"multiplay/maps/{0}{1}.gam\"{2}", playersPrefix, mapName, endChar));
+            fileLEV.Write (string.Format ("data    \"wrf/multi/t3-skirmish{0}.wrf\"{1}", playersText, endChar));
+            fileLEV.Write (string.Format ("data    \"wrf/multi/{0}\"{1}", fog, endChar));
+            fileLEV.Flush ();
+
+            return returnResult;
         }
 
         public clsResult Write_WZ(sWrite_WZ_Args Args)
         {
-            clsResult ReturnResult =
+            clsResult returnResult =
                 new clsResult ("Compiling to \"{0}\"".Format2 (Args.Path), false);
             logger.Info ("Compiling to \"{0}\"".Format2 (Args.Path));
 
@@ -2478,196 +2532,93 @@ namespace SharpFlame.Mapping
                 case sWrite_WZ_Args.enumCompileType.Multiplayer:
                     if (Args.Multiplayer == null)
                     {
-                        ReturnResult.ProblemAdd ("Multiplayer arguments were not passed.");
-                        return ReturnResult;
+                        returnResult.ProblemAdd ("Multiplayer arguments were not passed.");
+                        return returnResult;
                     }
-                    if (Args.Multiplayer.PlayerCount < 2 | Args.Multiplayer.PlayerCount > 10)
+                    if (Args.Multiplayer.PlayerCount < 2 | Args.Multiplayer.PlayerCount > Constants.PlayerCountMax)
                     {
-                        ReturnResult.ProblemAdd ("Number of players was below 2 or above 10.");
-                        return ReturnResult;
+                        returnResult.ProblemAdd (string.Format("Number of players was below 2 or above {0}.", Constants.PlayerCountMax));
+                        return returnResult;
                     }
                     if (!Args.Multiplayer.IsBetaPlayerFormat)
                     {
                         if (!(Args.Multiplayer.PlayerCount == 2 | Args.Multiplayer.PlayerCount == 4 | Args.Multiplayer.PlayerCount == 8))
                         {
-                            ReturnResult.ProblemAdd ("Number of players was not 2, 4 or 8 in original format.");
-                            return ReturnResult;
+                            returnResult.ProblemAdd ("Number of players was not 2, 4 or 8 in original format.");
+                            return returnResult;
                         }
                     }
                     break;
                 case sWrite_WZ_Args.enumCompileType.Campaign:
                     if (Args.Campaign == null)
                     {
-                        ReturnResult.ProblemAdd ("Campaign arguments were not passed.");
-                        return ReturnResult;
+                        returnResult.ProblemAdd ("Campaign arguments were not passed.");
+                        return returnResult;
                     }
                     break;
                 default:
-                    ReturnResult.ProblemAdd ("Unknown compile method.");
-                    return ReturnResult;
+                    returnResult.ProblemAdd ("Unknown compile method.");
+                    return returnResult;
                 }
 
                 if (!Args.Overwrite)
                 {
                     if (File.Exists (Args.Path))
                     {
-                        ReturnResult.ProblemAdd ("The selected file already exists.");
-                        return ReturnResult;
+                        returnResult.ProblemAdd ("The selected file already exists.");
+                        return returnResult;
                     }
                 }
 
-                char Quote = '\"';
-                char EndChar = '\n';
-                string Text = "";
+                MemoryStream fileMAPMemory = new MemoryStream ();
+                BinaryWriter fileMAP = new BinaryWriter (fileMAPMemory, App.ASCIIEncoding);
+                MemoryStream fileGAMMemory = new MemoryStream ();
+                BinaryWriter fileGAM = new BinaryWriter (fileGAMMemory, App.ASCIIEncoding);
+                MemoryStream filefeatBJOMemory = new MemoryStream ();
+                BinaryWriter fileFeatBJO = new BinaryWriter (filefeatBJOMemory, App.ASCIIEncoding);
+                MemoryStream iniFeatureMemory = new MemoryStream ();
+                IniWriter iniFeature = new IniWriter(iniFeatureMemory);
+                MemoryStream fileTTPMemory = new MemoryStream ();
+                BinaryWriter fileTTP = new BinaryWriter (fileTTPMemory, App.ASCIIEncoding);
+                MemoryStream filestructBJOMemory = new MemoryStream ();
+                BinaryWriter fileStructBJO = new BinaryWriter (filestructBJOMemory, App.ASCIIEncoding);
+                MemoryStream iniStructMemory = new MemoryStream ();
+                IniWriter iniStruct = new IniWriter(iniStructMemory);
+                MemoryStream fileDroidBJOMemory = new MemoryStream ();
+                BinaryWriter fileDroidBJO = new BinaryWriter (fileDroidBJOMemory, App.ASCIIEncoding);
+                MemoryStream iniDroidMemory = new MemoryStream ();
+                IniWriter iniDroid = new IniWriter(iniDroidMemory);
+                MemoryStream iniLabelsMemory = new MemoryStream ();
+                IniWriter iniLabels = new IniWriter(iniLabelsMemory);
 
-                MemoryStream File_LEV_Memory = new MemoryStream ();
-                StreamWriter File_LEV = new StreamWriter (File_LEV_Memory, App.UTF8Encoding);
-                MemoryStream File_MAP_Memory = new MemoryStream ();
-                BinaryWriter File_MAP = new BinaryWriter (File_MAP_Memory, App.ASCIIEncoding);
-                MemoryStream File_GAM_Memory = new MemoryStream ();
-                BinaryWriter File_GAM = new BinaryWriter (File_GAM_Memory, App.ASCIIEncoding);
-                MemoryStream File_featBJO_Memory = new MemoryStream ();
-                BinaryWriter File_featBJO = new BinaryWriter (File_featBJO_Memory, App.ASCIIEncoding);
-                MemoryStream INI_feature_Memory = new MemoryStream ();
-                IniWriter INI_feature = IniWriter.CreateFile (INI_feature_Memory);
-                MemoryStream File_TTP_Memory = new MemoryStream ();
-                BinaryWriter File_TTP = new BinaryWriter (File_TTP_Memory, App.ASCIIEncoding);
-                MemoryStream File_structBJO_Memory = new MemoryStream ();
-                BinaryWriter File_structBJO = new BinaryWriter (File_structBJO_Memory, App.ASCIIEncoding);
-                MemoryStream INI_struct_Memory = new MemoryStream ();
-                IniWriter INI_struct = IniWriter.CreateFile (INI_struct_Memory);
-                MemoryStream File_droidBJO_Memory = new MemoryStream ();
-                BinaryWriter File_droidBJO = new BinaryWriter (File_droidBJO_Memory, App.ASCIIEncoding);
-                MemoryStream INI_droid_Memory = new MemoryStream ();
-                IniWriter INI_droid = IniWriter.CreateFile (INI_droid_Memory);
-                MemoryStream INI_Labels_Memory = new MemoryStream ();
-                IniWriter INI_Labels = IniWriter.CreateFile (INI_Labels_Memory);
 
-                string PlayersPrefix = "";
-                string PlayersText = "";
-
-                if (Args.CompileType == sWrite_WZ_Args.enumCompileType.Multiplayer)
-                {
-                    PlayersText = Args.Multiplayer.PlayerCount.ToStringInvariant ();
-                    PlayersPrefix = PlayersText + "c-";
-                    string fog = "";
-                    string TilesetNum = "";
-                    if (Tileset == null)
-                    {
-                        ReturnResult.ProblemAdd ("Map must have a tileset.");
-                        return ReturnResult;
-                    } else if (Tileset == App.Tileset_Arizona)
-                    {
-                        fog = "fog1.wrf";
-                        TilesetNum = "1";
-                    } else if (Tileset == App.Tileset_Urban)
-                    {
-                        fog = "fog2.wrf";
-                        TilesetNum = "2";
-                    } else if (Tileset == App.Tileset_Rockies)
-                    {
-                        fog = "fog3.wrf";
-                        TilesetNum = "3";
-                    } else
-                    {
-                        ReturnResult.ProblemAdd ("Unknown tileset selected.");
-                        return ReturnResult;
-                    }
-
-                    Text = "// Made with " + Constants.ProgramName + " " + Constants.ProgramVersionNumber + " " + Constants.ProgramPlatform +
-                        Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    DateTime DateNow = DateTime.Now;
-                    Text = "// Date: " + Convert.ToString (DateNow.Year) + "/" + App.MinDigits (DateNow.Month, 2) + "/" +
-                        App.MinDigits (DateNow.Day, 2) + " " + App.MinDigits (DateNow.Hour, 2) + ":" + App.MinDigits (DateNow.Minute, 2) + ":" +
-                        App.MinDigits (DateNow.Second, 2) + Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = "// Author: " + Args.Multiplayer.AuthorName + Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = "// License: " + Args.Multiplayer.License + Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = EndChar.ToString ();
-                    File_LEV.Write (Text);
-                    Text = "level   " + Args.MapName + "-T1" + Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = "players " + PlayersText + Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = "type    14" + Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = "dataset MULTI_CAM_" + TilesetNum + Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = "game    " + Convert.ToString (Quote) + "multiplay/maps/" + PlayersPrefix + Args.MapName + ".gam" + Convert.ToString (Quote) +
-                        Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = "data    " + Convert.ToString (Quote) + "wrf/multi/skirmish" + PlayersText + ".wrf" + Convert.ToString (Quote) +
-                        Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = "data    " + Convert.ToString (Quote) + "wrf/multi/" + fog + Convert.ToString (Quote) + Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = EndChar.ToString ();
-                    File_LEV.Write (Text);
-                    Text = "level   " + Args.MapName + "-T2" + Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = "players " + PlayersText + Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = "type    18" + Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = "dataset MULTI_T2_C" + TilesetNum + Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = "game    " + Convert.ToString (Quote) + "multiplay/maps/" + PlayersPrefix + Args.MapName + ".gam" + Convert.ToString (Quote) +
-                        Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = "data    " + Convert.ToString (Quote) + "wrf/multi/t2-skirmish" + PlayersText + ".wrf" + Convert.ToString (Quote) +
-                        Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = "data    " + Convert.ToString (Quote) + "wrf/multi/" + fog + Convert.ToString (Quote) + Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = EndChar.ToString ();
-                    File_LEV.Write (Text);
-                    Text = "level   " + Args.MapName + "-T3" + Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = "players " + PlayersText + Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = "type    19" + Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = "dataset MULTI_T3_C" + TilesetNum + Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = "game    " + Convert.ToString (Quote) + "multiplay/maps/" + PlayersPrefix + Args.MapName + ".gam" + Convert.ToString (Quote) +
-                        Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = "data    " + Convert.ToString (Quote) + "wrf/multi/t3-skirmish" + PlayersText + ".wrf" + Convert.ToString (Quote) +
-                        Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                    Text = "data    " + Convert.ToString (Quote) + "wrf/multi/" + fog + Convert.ToString (Quote) + Convert.ToString (EndChar);
-                    File_LEV.Write (Text);
-                }
 
                 byte[] GameZeroBytes = new byte[20];
 
-                IOUtil.WriteText (File_GAM, false, "game");
-                File_GAM.Write (8U);
-                File_GAM.Write (0U); //Time
+                IOUtil.WriteText (fileGAM, false, "game");
+                fileGAM.Write (8U);
+                fileGAM.Write (0U); //Time
                 if (Args.CompileType == sWrite_WZ_Args.enumCompileType.Multiplayer)
                 {
-                    File_GAM.Write (0U);
+                    fileGAM.Write (0U);
                 } else if (Args.CompileType == sWrite_WZ_Args.enumCompileType.Campaign)
                 {
-                    File_GAM.Write (Args.Campaign.GAMType);
+                    fileGAM.Write (Args.Campaign.GAMType);
                 }
-                File_GAM.Write (Args.ScrollMin.X);
-                File_GAM.Write (Args.ScrollMin.Y);
-                File_GAM.Write (Args.ScrollMax.X);
-                File_GAM.Write (Args.ScrollMax.Y);
-                File_GAM.Write (GameZeroBytes);
+                fileGAM.Write (Args.ScrollMin.X);
+                fileGAM.Write (Args.ScrollMin.Y);
+                fileGAM.Write (Args.ScrollMax.X);
+                fileGAM.Write (Args.ScrollMax.Y);
+                fileGAM.Write (GameZeroBytes);
 
                 int A = 0;
                 int X = 0;
                 int Y = 0;
 
-                IOUtil.WriteText (File_MAP, false, "map ");
-                File_MAP.Write (10U);
-                File_MAP.Write ((uint)Terrain.TileSize.X);
-                File_MAP.Write ((uint)Terrain.TileSize.Y);
+                IOUtil.WriteText (fileMAP, false, "map ");
+                fileMAP.Write (10U);
+                fileMAP.Write ((uint)Terrain.TileSize.X);
+                fileMAP.Write ((uint)Terrain.TileSize.Y);
                 byte Flip = 0;
                 byte Rotation = 0;
                 bool DoFlipX = default(bool);
@@ -2694,29 +2645,29 @@ namespace SharpFlame.Mapping
                             TextureNum = 0;
                             if (InvalidTileCount < 16)
                             {
-                                ReturnResult.WarningAdd ("Tile texture number " + Convert.ToString (Terrain.Tiles [X, Y].Texture.TextureNum) +
+                                returnResult.WarningAdd ("Tile texture number " + Convert.ToString (Terrain.Tiles [X, Y].Texture.TextureNum) +
                                     " is invalid on tile " + Convert.ToString (X) + ", " + Convert.ToString (Y) +
                                     " and was compiled as texture number " + Convert.ToString (TextureNum) + ".");
                             }
                             InvalidTileCount++;
                         }
-                        File_MAP.Write ((byte)TextureNum);
-                        File_MAP.Write (Flip);
-                        File_MAP.Write (Terrain.Vertices [X, Y].Height);
+                        fileMAP.Write ((byte)TextureNum);
+                        fileMAP.Write (Flip);
+                        fileMAP.Write (Terrain.Vertices [X, Y].Height);
                     }
                 }
                 if (InvalidTileCount > 0)
                 {
-                    ReturnResult.WarningAdd (InvalidTileCount + " tile texture numbers were invalid.");
+                    returnResult.WarningAdd (InvalidTileCount + " tile texture numbers were invalid.");
                 }
-                File_MAP.Write (1U); //gateway version
-                File_MAP.Write ((uint)Gateways.Count);
+                fileMAP.Write (1U); //gateway version
+                fileMAP.Write ((uint)Gateways.Count);
                 foreach (clsGateway gateway in Gateways)
                 {
-                    File_MAP.Write ((byte)(MathUtil.Clamp_int (gateway.PosA.X, 0, 255)));
-                    File_MAP.Write ((byte)(MathUtil.Clamp_int (gateway.PosA.Y, 0, 255)));
-                    File_MAP.Write ((byte)(MathUtil.Clamp_int (gateway.PosB.X, 0, 255)));
-                    File_MAP.Write ((byte)(MathUtil.Clamp_int (gateway.PosB.Y, 0, 255)));
+                    fileMAP.Write ((byte)(MathUtil.Clamp_int (gateway.PosA.X, 0, 255)));
+                    fileMAP.Write ((byte)(MathUtil.Clamp_int (gateway.PosA.Y, 0, 255)));
+                    fileMAP.Write ((byte)(MathUtil.Clamp_int (gateway.PosB.X, 0, 255)));
+                    fileMAP.Write ((byte)(MathUtil.Clamp_int (gateway.PosB.Y, 0, 255)));
                 }
 
                 FeatureTypeBase featureTypeBase;
@@ -2725,7 +2676,7 @@ namespace SharpFlame.Mapping
                 DroidTemplate DroidTemplate;
                 clsUnit Unit;
                 clsStructureWriteWZ StructureWrite = new clsStructureWriteWZ {
-                    File = File_structBJO, 
+                    File = fileStructBJO, 
                     CompileType = Args.CompileType
                 };
                 if (Args.CompileType == sWrite_WZ_Args.enumCompileType.Multiplayer)
@@ -2738,8 +2689,8 @@ namespace SharpFlame.Mapping
 
                 byte[] FeatZeroBytes = new byte[12];
 
-                IOUtil.WriteText (File_featBJO, false, "feat");
-                File_featBJO.Write (8U);
+                IOUtil.WriteText (fileFeatBJO, false, "feat");
+                fileFeatBJO.Write (8U);
                 clsObjectPriorityOrderList FeatureOrder = new clsObjectPriorityOrderList ();
                 foreach (clsUnit tempLoopVar_Unit in Units)
                 {
@@ -2750,42 +2701,42 @@ namespace SharpFlame.Mapping
                         FeatureOrder.ActionPerform ();
                     }
                 }
-                File_featBJO.Write ((uint)FeatureOrder.Result.Count);
+                fileFeatBJO.Write ((uint)FeatureOrder.Result.Count);
                 for (A = 0; A <= FeatureOrder.Result.Count - 1; A++)
                 {
                     Unit = FeatureOrder.Result [A];
                     featureTypeBase = (FeatureTypeBase)Unit.TypeBase;
-                    IOUtil.WriteTextOfLength (File_featBJO, 40, featureTypeBase.Code);
-                    File_featBJO.Write (Unit.ID);
-                    File_featBJO.Write ((uint)Unit.Pos.Horizontal.X);
-                    File_featBJO.Write ((uint)Unit.Pos.Horizontal.Y);
-                    File_featBJO.Write ((uint)Unit.Pos.Altitude);
-                    File_featBJO.Write ((uint)Unit.Rotation);
+                    IOUtil.WriteTextOfLength (fileFeatBJO, 40, featureTypeBase.Code);
+                    fileFeatBJO.Write (Unit.ID);
+                    fileFeatBJO.Write ((uint)Unit.Pos.Horizontal.X);
+                    fileFeatBJO.Write ((uint)Unit.Pos.Horizontal.Y);
+                    fileFeatBJO.Write ((uint)Unit.Pos.Altitude);
+                    fileFeatBJO.Write ((uint)Unit.Rotation);
                     switch (Args.CompileType)
                     {
                     case sWrite_WZ_Args.enumCompileType.Multiplayer:
-                        File_featBJO.Write (Unit.GetBJOMultiplayerPlayerNum (Args.Multiplayer.PlayerCount));
+                        fileFeatBJO.Write (Unit.GetBJOMultiplayerPlayerNum (Args.Multiplayer.PlayerCount));
                         break;
                     case sWrite_WZ_Args.enumCompileType.Campaign:
-                        File_featBJO.Write (Unit.GetBJOCampaignPlayerNum ());
+                        fileFeatBJO.Write (Unit.GetBJOCampaignPlayerNum ());
                         break;
                     default:
                         Debugger.Break ();
                         break;
                     }
-                    File_featBJO.Write (FeatZeroBytes);
+                    fileFeatBJO.Write (FeatZeroBytes);
                 }
 
-                IOUtil.WriteText (File_TTP, false, "ttyp");
-                File_TTP.Write (8U);
-                File_TTP.Write ((uint)Tileset.TileCount);
+                IOUtil.WriteText (fileTTP, false, "ttyp");
+                fileTTP.Write (8U);
+                fileTTP.Write ((uint)Tileset.TileCount);
                 for (A = 0; A <= Tileset.TileCount - 1; A++)
                 {
-                    File_TTP.Write ((ushort)Tile_TypeNum [A]);
+                    fileTTP.Write ((ushort)Tile_TypeNum [A]);
                 }
 
-                IOUtil.WriteText (File_structBJO, false, "stru");
-                File_structBJO.Write (8U);
+                IOUtil.WriteText (fileStructBJO, false, "stru");
+                fileStructBJO.Write (8U);
                 clsObjectPriorityOrderList NonModuleStructureOrder = new clsObjectPriorityOrderList ();
                 //non-module structures
                 foreach (clsUnit tempLoopVar_Unit in Units)
@@ -2816,14 +2767,14 @@ namespace SharpFlame.Mapping
                         }
                     }
                 }
-                File_structBJO.Write ((uint)(NonModuleStructureOrder.Result.Count + ModuleStructureOrder.Result.Count));
+                fileStructBJO.Write ((uint)(NonModuleStructureOrder.Result.Count + ModuleStructureOrder.Result.Count));
                 NonModuleStructureOrder.Result.PerformTool (StructureWrite);
                 ModuleStructureOrder.Result.PerformTool (StructureWrite);
 
                 byte[] DintZeroBytes = new byte[12];
 
-                IOUtil.WriteText (File_droidBJO, false, "dint");
-                File_droidBJO.Write (8U);
+                IOUtil.WriteText (fileDroidBJO, false, "dint");
+                fileDroidBJO.Write (8U);
                 clsObjectPriorityOrderList Droids = new clsObjectPriorityOrderList ();
                 foreach (clsUnit tempLoopVar_Unit in Units)
                 {
@@ -2838,56 +2789,55 @@ namespace SharpFlame.Mapping
                         }
                     }
                 }
-                File_droidBJO.Write ((uint)Droids.Result.Count);
+                fileDroidBJO.Write ((uint)Droids.Result.Count);
                 for (A = 0; A <= Droids.Result.Count - 1; A++)
                 {
                     Unit = Droids.Result [A];
                     DroidTemplate = (DroidTemplate)Unit.TypeBase;
-                    IOUtil.WriteTextOfLength (File_droidBJO, 40, DroidTemplate.Code);
-                    File_droidBJO.Write (Unit.ID);
-                    File_droidBJO.Write ((uint)Unit.Pos.Horizontal.X);
-                    File_droidBJO.Write ((uint)Unit.Pos.Horizontal.Y);
-                    File_droidBJO.Write ((uint)Unit.Pos.Altitude);
-                    File_droidBJO.Write ((uint)Unit.Rotation);
+                    IOUtil.WriteTextOfLength (fileDroidBJO, 40, DroidTemplate.Code);
+                    fileDroidBJO.Write (Unit.ID);
+                    fileDroidBJO.Write ((uint)Unit.Pos.Horizontal.X);
+                    fileDroidBJO.Write ((uint)Unit.Pos.Horizontal.Y);
+                    fileDroidBJO.Write ((uint)Unit.Pos.Altitude);
+                    fileDroidBJO.Write ((uint)Unit.Rotation);
                     switch (Args.CompileType)
                     {
                     case sWrite_WZ_Args.enumCompileType.Multiplayer:
-                        File_droidBJO.Write (Unit.GetBJOMultiplayerPlayerNum (Args.Multiplayer.PlayerCount));
+                        fileDroidBJO.Write (Unit.GetBJOMultiplayerPlayerNum (Args.Multiplayer.PlayerCount));
                         break;
                     case sWrite_WZ_Args.enumCompileType.Campaign:
-                        File_droidBJO.Write (Unit.GetBJOCampaignPlayerNum ());
+                        fileDroidBJO.Write (Unit.GetBJOCampaignPlayerNum ());
                         break;
                     default:
                         Debugger.Break ();
                         break;
                     }
-                    File_droidBJO.Write (DintZeroBytes);
+                    fileDroidBJO.Write (DintZeroBytes);
                 }
 
-                ReturnResult.Add (Serialize_WZ_FeaturesINI (INI_feature));
+                returnResult.Add (Serialize_WZ_FeaturesINI (iniFeature));
+                iniFeature.Flush();
                 if (Args.CompileType == sWrite_WZ_Args.enumCompileType.Multiplayer)
                 {
-                    ReturnResult.Add (Serialize_WZ_StructuresINI (INI_struct, Args.Multiplayer.PlayerCount));
-                    ReturnResult.Add (Serialize_WZ_DroidsINI (INI_droid, Args.Multiplayer.PlayerCount));
-                    ReturnResult.Add (Serialize_WZ_LabelsINI (INI_Labels, Args.Multiplayer.PlayerCount));
+                    returnResult.Add (Serialize_WZ_StructuresINI (iniStruct, Args.Multiplayer.PlayerCount));
+                    iniStruct.Flush();
+                    returnResult.Add (Serialize_WZ_DroidsINI (iniDroid, Args.Multiplayer.PlayerCount));
+                    iniDroid.Flush();
+                    returnResult.Add (Serialize_WZ_LabelsINI (iniLabels, Args.Multiplayer.PlayerCount));
+                    iniLabels.Flush();
                 } else if (Args.CompileType == sWrite_WZ_Args.enumCompileType.Campaign)
                 {
-                    ReturnResult.Add (Serialize_WZ_StructuresINI (INI_struct, -1));
-                    ReturnResult.Add (Serialize_WZ_DroidsINI (INI_droid, -1));
-                    ReturnResult.Add (Serialize_WZ_LabelsINI (INI_Labels, 0)); //interprets -1 players as an FMap
+                    returnResult.Add (Serialize_WZ_StructuresINI (iniStruct, -1));
+                    returnResult.Add (Serialize_WZ_DroidsINI (iniDroid, -1));
+                    returnResult.Add (Serialize_WZ_LabelsINI (iniLabels, 0)); //interprets -1 players as an FMap
                 }
 
-                File_LEV.Flush ();
-                File_MAP.Flush ();
-                File_GAM.Flush ();
-                File_featBJO.Flush ();
-                INI_feature.File.Flush ();
-                File_TTP.Flush ();
-                File_structBJO.Flush ();
-                INI_struct.File.Flush ();
-                File_droidBJO.Flush ();
-                INI_droid.File.Flush ();
-                INI_Labels.File.Flush ();
+                fileMAP.Flush ();
+                fileGAM.Flush ();
+                fileFeatBJO.Flush ();
+                fileTTP.Flush ();
+                fileStructBJO.Flush ();
+                fileDroidBJO.Flush ();
 
                 if (Args.CompileType == sWrite_WZ_Args.enumCompileType.Multiplayer)
                 {
@@ -2895,8 +2845,8 @@ namespace SharpFlame.Mapping
                     {
                         if (File.Exists (Args.Path))
                         {
-                            ReturnResult.ProblemAdd ("A file already exists at: " + Args.Path);
-                            return ReturnResult;
+                            returnResult.ProblemAdd ("A file already exists at: " + Args.Path);
+                            return returnResult;
                         }
                     }
    
@@ -2915,80 +2865,85 @@ namespace SharpFlame.Mapping
                             string zipPath = "";
                             if (Args.Multiplayer.IsBetaPlayerFormat)
                             {
-                                zipPath = PlayersPrefix + Args.MapName + ".xplayers.lev";
+                                zipPath = string.Format ("{0}c-{1}.xplayers.lev", Args.Multiplayer.PlayerCount, Args.MapName);
                             } else
                             {
-                                zipPath = PlayersPrefix + Args.MapName + ".addon.lev";
+                                zipPath = string.Format ("{0}c-{1}.addon.lev", Args.Multiplayer.PlayerCount, Args.MapName);
                             }
-                            zip.PutNextEntry (zipPath);
-                            File_LEV_Memory.WriteTo (zip);                       
-                            File_LEV_Memory.Flush ();
-
-                            zip.PutNextEntry ("multiplay/maps/" + PlayersPrefix + Args.MapName + ".gam");
-                            File_GAM_Memory.WriteTo (zip);
-                            File_GAM_Memory.Flush ();
-
-                            zip.PutNextEntry ("multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "dinit.bjo");
-                            File_droidBJO_Memory.WriteTo (zip);
-                            File_droidBJO_Memory.Flush ();
-
-                            zip.PutNextEntry ("multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "droid.ini");
-                            INI_droid_Memory.WriteTo (zip);
-                            INI_droid_Memory.Flush ();
-
-                            zip.PutNextEntry ("multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "feat.bjo");
-                            File_featBJO_Memory.WriteTo (zip);
-                            File_featBJO_Memory.Flush ();
-
-                            zip.PutNextEntry ("multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "feature.ini");
-                            INI_feature_Memory.WriteTo (zip);
-                            INI_feature_Memory.Flush ();
-
-                            zip.PutNextEntry ("multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "game.map");
-                            File_MAP_Memory.WriteTo (zip);
-                            File_MAP_Memory.Flush ();
-
-                            zip.PutNextEntry ("multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "struct.bjo");
-                            File_structBJO_Memory.WriteTo (zip);
-                            File_structBJO_Memory.Flush ();
-
-                            zip.PutNextEntry ("multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "struct.ini");
-                            INI_struct_Memory.WriteTo (zip);
-                            INI_struct_Memory.Flush ();
-
-                            zip.PutNextEntry ("multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "ttypes.ttp");
-                            File_TTP_Memory.WriteTo (zip);
-                            File_TTP_Memory.Flush ();
-
-                            if (INI_Labels_Memory.Length > 0)
+                            if (Args.CompileType == sWrite_WZ_Args.enumCompileType.Multiplayer)
                             {
-                                zip.PutNextEntry ("multiplay/maps/" + PlayersPrefix + Args.MapName + "/" + "labels.ini");
-                                INI_Labels_Memory.WriteTo (zip);
-                                INI_Labels_Memory.Flush ();
+                                zip.PutNextEntry (zipPath);
+                                returnResult.Add (Serialize_WZ_LEV(zip, Args.Multiplayer.PlayerCount, 
+                                                                   Args.Multiplayer.AuthorName, Args.Multiplayer.License, 
+                                                                   Args.MapName));
+                            }
+
+                            var path = string.Format ("multiplay/maps/{0}c-{1}", Args.Multiplayer.PlayerCount, Args.MapName);
+                            zip.PutNextEntry (string.Format ("{0}.gam", path));
+                            fileGAMMemory.WriteTo (zip);
+                            fileGAMMemory.Flush ();
+
+                            zip.PutNextEntry (string.Format ("{0}/dinit.bjo", path));
+                            fileDroidBJOMemory.WriteTo (zip);
+                            fileDroidBJOMemory.Flush ();
+
+                            zip.PutNextEntry (string.Format ("{0}/droid.ini", path));
+                            iniDroidMemory.WriteTo (zip);
+                            iniDroidMemory.Flush ();
+
+                            zip.PutNextEntry (string.Format ("{0}/feat.bjo", path));
+                            filefeatBJOMemory.WriteTo (zip);
+                            filefeatBJOMemory.Flush ();
+
+                            zip.PutNextEntry (string.Format ("{0}/feature.ini", path));
+                            iniFeatureMemory.WriteTo (zip);
+                            iniFeatureMemory.Flush ();
+
+                            zip.PutNextEntry (string.Format ("{0}/game.map", path));
+                            fileMAPMemory.WriteTo (zip);
+                            fileMAPMemory.Flush ();
+
+                            zip.PutNextEntry (string.Format ("{0}/struct.bjo", path));
+                            filestructBJOMemory.WriteTo (zip);
+                            filestructBJOMemory.Flush ();
+
+                            zip.PutNextEntry (string.Format ("{0}/struct.ini", path));
+                            iniStructMemory.WriteTo (zip);
+                            iniStructMemory.Flush ();
+
+                            zip.PutNextEntry (string.Format ("{0}/ttypes.ttp", path));
+                            fileTTPMemory.WriteTo (zip);
+                            fileTTPMemory.Flush ();
+
+                            if (iniLabelsMemory.Length > 0)
+                            {
+                                zip.PutNextEntry (string.Format ("{0}/labels.ini", path));
+                                iniLabelsMemory.WriteTo (zip);
+                                iniLabelsMemory.Flush ();
                             }
                         }                    
                     } catch (Exception ex)
                     {
-                        ReturnResult.ProblemAdd (ex.Message);
+                        returnResult.ProblemAdd (ex.Message);
                         logger.ErrorException ("Got an exception", ex);
-                        return ReturnResult;
+                        return returnResult;
                     }
 
-                    return ReturnResult;
+                    return returnResult;
                 } else if (Args.CompileType == sWrite_WZ_Args.enumCompileType.Campaign)
                 {
                     string CampDirectory = PathUtil.EndWithPathSeperator (Args.Path);
 
                     if (!Directory.Exists (CampDirectory))
                     {
-                        ReturnResult.ProblemAdd ("Directory " + CampDirectory + " does not exist.");
-                        return ReturnResult;
+                        returnResult.ProblemAdd ("Directory " + CampDirectory + " does not exist.");
+                        return returnResult;
                     }
 
                     string FilePath = "";
 
                     FilePath = CampDirectory + Args.MapName + ".gam";
-                    ReturnResult.Add (IOUtil.WriteMemoryToNewFile (File_GAM_Memory, CampDirectory + Args.MapName + ".gam"));
+                    returnResult.Add (IOUtil.WriteMemoryToNewFile (fileGAMMemory, CampDirectory + Args.MapName + ".gam"));
 
                     CampDirectory += Args.MapName + Convert.ToString (App.PlatformPathSeparator);
                     try
@@ -2996,47 +2951,47 @@ namespace SharpFlame.Mapping
                         Directory.CreateDirectory (CampDirectory);
                     } catch (Exception ex)
                     {
-                        ReturnResult.ProblemAdd ("Unable to create directory " + CampDirectory);
+                        returnResult.ProblemAdd ("Unable to create directory " + CampDirectory);
                         logger.ErrorException ("Got an exception", ex);
-                        return ReturnResult;
+                        return returnResult;
                     }
 
                     FilePath = CampDirectory + "dinit.bjo";
-                    ReturnResult.Add (IOUtil.WriteMemoryToNewFile (File_droidBJO_Memory, FilePath));
+                    returnResult.Add (IOUtil.WriteMemoryToNewFile (fileDroidBJOMemory, FilePath));
 
                     FilePath = CampDirectory + "droid.ini";
-                    ReturnResult.Add (IOUtil.WriteMemoryToNewFile (INI_droid_Memory, FilePath));
+                    returnResult.Add (IOUtil.WriteMemoryToNewFile (iniDroidMemory, FilePath));
 
                     FilePath = CampDirectory + "feat.bjo";
-                    ReturnResult.Add (IOUtil.WriteMemoryToNewFile (File_featBJO_Memory, FilePath));
+                    returnResult.Add (IOUtil.WriteMemoryToNewFile (filefeatBJOMemory, FilePath));
 
                     FilePath = CampDirectory + "feature.ini";
-                    ReturnResult.Add (IOUtil.WriteMemoryToNewFile (INI_feature_Memory, FilePath));
+                    returnResult.Add (IOUtil.WriteMemoryToNewFile (iniFeatureMemory, FilePath));
 
                     FilePath = CampDirectory + "game.map";
-                    ReturnResult.Add (IOUtil.WriteMemoryToNewFile (File_MAP_Memory, FilePath));
+                    returnResult.Add (IOUtil.WriteMemoryToNewFile (fileMAPMemory, FilePath));
 
                     FilePath = CampDirectory + "struct.bjo";
-                    ReturnResult.Add (IOUtil.WriteMemoryToNewFile (File_structBJO_Memory, FilePath));
+                    returnResult.Add (IOUtil.WriteMemoryToNewFile (filestructBJOMemory, FilePath));
 
                     FilePath = CampDirectory + "struct.ini";
-                    ReturnResult.Add (IOUtil.WriteMemoryToNewFile (INI_struct_Memory, FilePath));
+                    returnResult.Add (IOUtil.WriteMemoryToNewFile (iniStructMemory, FilePath));
 
                     FilePath = CampDirectory + "ttypes.ttp";
-                    ReturnResult.Add (IOUtil.WriteMemoryToNewFile (File_TTP_Memory, FilePath));
+                    returnResult.Add (IOUtil.WriteMemoryToNewFile (fileTTPMemory, FilePath));
 
                     FilePath = CampDirectory + "labels.ini";
-                    ReturnResult.Add (IOUtil.WriteMemoryToNewFile (INI_Labels_Memory, FilePath));
+                    returnResult.Add (IOUtil.WriteMemoryToNewFile (iniLabelsMemory, FilePath));
                 }
             } catch (Exception ex)
             {
                 Debugger.Break ();
-                ReturnResult.ProblemAdd (ex.Message);
+                returnResult.ProblemAdd (ex.Message);
                 logger.ErrorException ("Got an exception", ex);
-                return ReturnResult;
+                return returnResult;
             }
 
-            return ReturnResult;
+            return returnResult;
         }
 
         private sResult Read_TTP(BinaryReader File)
