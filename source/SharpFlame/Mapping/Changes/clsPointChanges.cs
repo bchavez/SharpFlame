@@ -57,8 +57,6 @@ namespace SharpFlame.Mapping.Changes
 
         public void PerformTool(clsAction Tool)
         {
-            XYInt Point = default(XYInt);
-
             foreach ( var tempLoopVar_Point in ChangedPoints )
             {
 				Tool.PosNum = tempLoopVar_Point;

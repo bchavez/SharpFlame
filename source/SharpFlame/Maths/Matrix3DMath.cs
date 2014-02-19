@@ -149,7 +149,6 @@ namespace SharpFlame.Maths
         {
             Matrix3D matrix = new Matrix3D();
             Matrix3D matrixd3 = new Matrix3D();
-            Matrix3D matrixd = new Matrix3D();
             MatrixSetToXAngle(matrix, AnglePY.Pitch);
             MatrixSetToYAngle(matrixd3, AnglePY.Yaw);
             MatrixRotationByMatrix(matrixd3, matrix, Matrix);

@@ -2460,7 +2460,7 @@ namespace SharpFlame.Mapping
             clsResult returnResult = new clsResult ("Serializing .lev", false);
             logger.Info ("Serializing .lev");
 
-            StreamWriter fileLEV = new StreamWriter (stream, Encoding.UTF8);
+            StreamWriter fileLEV = new StreamWriter (stream, App.UTF8Encoding);
 
             var playersText = playercount.ToString();
             var playersPrefix = playersText + "c-";
@@ -2576,22 +2576,12 @@ namespace SharpFlame.Mapping
                 BinaryWriter fileGAM = new BinaryWriter (fileGAMMemory, App.ASCIIEncoding);
                 MemoryStream filefeatBJOMemory = new MemoryStream ();
                 BinaryWriter fileFeatBJO = new BinaryWriter (filefeatBJOMemory, App.ASCIIEncoding);
-                MemoryStream iniFeatureMemory = new MemoryStream ();
-                IniWriter iniFeature = new IniWriter(iniFeatureMemory);
                 MemoryStream fileTTPMemory = new MemoryStream ();
                 BinaryWriter fileTTP = new BinaryWriter (fileTTPMemory, App.ASCIIEncoding);
                 MemoryStream filestructBJOMemory = new MemoryStream ();
                 BinaryWriter fileStructBJO = new BinaryWriter (filestructBJOMemory, App.ASCIIEncoding);
-                MemoryStream iniStructMemory = new MemoryStream ();
-                IniWriter iniStruct = new IniWriter(iniStructMemory);
                 MemoryStream fileDroidBJOMemory = new MemoryStream ();
                 BinaryWriter fileDroidBJO = new BinaryWriter (fileDroidBJOMemory, App.ASCIIEncoding);
-                MemoryStream iniDroidMemory = new MemoryStream ();
-                IniWriter iniDroid = new IniWriter(iniDroidMemory);
-                MemoryStream iniLabelsMemory = new MemoryStream ();
-                IniWriter iniLabels = new IniWriter(iniLabelsMemory);
-
-
 
                 byte[] GameZeroBytes = new byte[20];
 
@@ -2815,23 +2805,6 @@ namespace SharpFlame.Mapping
                     fileDroidBJO.Write (DintZeroBytes);
                 }
 
-                returnResult.Add (Serialize_WZ_FeaturesINI (iniFeature));
-                iniFeature.Flush();
-                if (Args.CompileType == sWrite_WZ_Args.enumCompileType.Multiplayer)
-                {
-                    returnResult.Add (Serialize_WZ_StructuresINI (iniStruct, Args.Multiplayer.PlayerCount));
-                    iniStruct.Flush();
-                    returnResult.Add (Serialize_WZ_DroidsINI (iniDroid, Args.Multiplayer.PlayerCount));
-                    iniDroid.Flush();
-                    returnResult.Add (Serialize_WZ_LabelsINI (iniLabels, Args.Multiplayer.PlayerCount));
-                    iniLabels.Flush();
-                } else if (Args.CompileType == sWrite_WZ_Args.enumCompileType.Campaign)
-                {
-                    returnResult.Add (Serialize_WZ_StructuresINI (iniStruct, -1));
-                    returnResult.Add (Serialize_WZ_DroidsINI (iniDroid, -1));
-                    returnResult.Add (Serialize_WZ_LabelsINI (iniLabels, 0)); //interprets -1 players as an FMap
-                }
-
                 fileMAP.Flush ();
                 fileGAM.Flush ();
                 fileFeatBJO.Flush ();
@@ -2883,21 +2856,35 @@ namespace SharpFlame.Mapping
                             fileGAMMemory.WriteTo (zip);
                             fileGAMMemory.Flush ();
 
+                            
+                            zip.PutNextEntry (string.Format ("{0}/struct.ini", path));
+                            IniWriter iniStruct = new IniWriter(zip);
+                            returnResult.Add (Serialize_WZ_StructuresINI (iniStruct, Args.Multiplayer.PlayerCount));
+                            iniStruct.Flush();
+
+                            zip.PutNextEntry (string.Format ("{0}/droid.ini", path));
+                            IniWriter iniDroid = new IniWriter(zip);
+                            returnResult.Add (Serialize_WZ_DroidsINI (iniDroid, Args.Multiplayer.PlayerCount));
+                            iniDroid.Flush();
+
+                            zip.PutNextEntry (string.Format ("{0}/labels.ini", path));
+                            IniWriter iniLabels = new IniWriter(zip);
+                            returnResult.Add (Serialize_WZ_LabelsINI (iniLabels, Args.Multiplayer.PlayerCount));
+                            iniLabels.Flush();
+
                             zip.PutNextEntry (string.Format ("{0}/dinit.bjo", path));
                             fileDroidBJOMemory.WriteTo (zip);
                             fileDroidBJOMemory.Flush ();
 
-                            zip.PutNextEntry (string.Format ("{0}/droid.ini", path));
-                            iniDroidMemory.WriteTo (zip);
-                            iniDroidMemory.Flush ();
-
+     
                             zip.PutNextEntry (string.Format ("{0}/feat.bjo", path));
                             filefeatBJOMemory.WriteTo (zip);
                             filefeatBJOMemory.Flush ();
 
                             zip.PutNextEntry (string.Format ("{0}/feature.ini", path));
-                            iniFeatureMemory.WriteTo (zip);
-                            iniFeatureMemory.Flush ();
+                            IniWriter iniFeature = new IniWriter(zip);
+                            returnResult.Add (Serialize_WZ_FeaturesINI (iniFeature));
+                            iniFeature.Flush();
 
                             zip.PutNextEntry (string.Format ("{0}/game.map", path));
                             fileMAPMemory.WriteTo (zip);
@@ -2907,20 +2894,9 @@ namespace SharpFlame.Mapping
                             filestructBJOMemory.WriteTo (zip);
                             filestructBJOMemory.Flush ();
 
-                            zip.PutNextEntry (string.Format ("{0}/struct.ini", path));
-                            iniStructMemory.WriteTo (zip);
-                            iniStructMemory.Flush ();
-
                             zip.PutNextEntry (string.Format ("{0}/ttypes.ttp", path));
                             fileTTPMemory.WriteTo (zip);
                             fileTTPMemory.Flush ();
-
-                            if (iniLabelsMemory.Length > 0)
-                            {
-                                zip.PutNextEntry (string.Format ("{0}/labels.ini", path));
-                                iniLabelsMemory.WriteTo (zip);
-                                iniLabelsMemory.Flush ();
-                            }
                         }                    
                     } catch (Exception ex)
                     {
@@ -2960,13 +2936,21 @@ namespace SharpFlame.Mapping
                     returnResult.Add (IOUtil.WriteMemoryToNewFile (fileDroidBJOMemory, FilePath));
 
                     FilePath = CampDirectory + "droid.ini";
-                    returnResult.Add (IOUtil.WriteMemoryToNewFile (iniDroidMemory, FilePath));
+                    using (var file = File.Open(FilePath, FileMode.Open | FileMode.CreateNew)) {
+                        IniWriter iniDroid = new IniWriter(file);
+                        returnResult.Add (Serialize_WZ_DroidsINI (iniDroid, -1));
+                        iniDroid.Flush();
+                    }
 
                     FilePath = CampDirectory + "feat.bjo";
                     returnResult.Add (IOUtil.WriteMemoryToNewFile (filefeatBJOMemory, FilePath));
 
                     FilePath = CampDirectory + "feature.ini";
-                    returnResult.Add (IOUtil.WriteMemoryToNewFile (iniFeatureMemory, FilePath));
+                    using (var file = File.Open(FilePath, FileMode.Open | FileMode.CreateNew)) {
+                        IniWriter iniFeatures = new IniWriter(file);
+                        returnResult.Add (Serialize_WZ_FeaturesINI (iniFeatures));
+                        iniFeatures.Flush();
+                    }
 
                     FilePath = CampDirectory + "game.map";
                     returnResult.Add (IOUtil.WriteMemoryToNewFile (fileMAPMemory, FilePath));
@@ -2975,13 +2959,22 @@ namespace SharpFlame.Mapping
                     returnResult.Add (IOUtil.WriteMemoryToNewFile (filestructBJOMemory, FilePath));
 
                     FilePath = CampDirectory + "struct.ini";
-                    returnResult.Add (IOUtil.WriteMemoryToNewFile (iniStructMemory, FilePath));
+                    using (var file = File.Open(FilePath, FileMode.Open | FileMode.CreateNew)) {
+                        IniWriter iniStruct = new IniWriter(file);
+                        returnResult.Add (Serialize_WZ_StructuresINI (iniStruct, -1));
+                        iniStruct.Flush();
+                    }
 
                     FilePath = CampDirectory + "ttypes.ttp";
                     returnResult.Add (IOUtil.WriteMemoryToNewFile (fileTTPMemory, FilePath));
 
                     FilePath = CampDirectory + "labels.ini";
-                    returnResult.Add (IOUtil.WriteMemoryToNewFile (iniLabelsMemory, FilePath));
+                    using (var file = File.Open(FilePath, FileMode.Open | FileMode.CreateNew)) {
+                        IniWriter iniLabels = new IniWriter(file);
+                        returnResult.Add (Serialize_WZ_LabelsINI (iniLabels, 0));
+                        iniLabels.Flush();
+                    }
+
                 }
             } catch (Exception ex)
             {
