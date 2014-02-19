@@ -356,89 +356,87 @@ namespace SharpFlame.Mapping
             return returnResult;
         }
 
-        public clsResult Load_Game(string Path)
+        public clsResult Load_Game(string path)
         {
             clsResult returnResult =
-                new clsResult ("Loading game file from \"{0}\"".Format2 (Path), false);
-            logger.Info ("Loading game file from \"{0}\"", Path);
-            sResult SubResult = new sResult ();
+                new clsResult ("Loading game file from \"{0}\"".Format2 (path), false);
+            logger.Info ("Loading game file from \"{0}\"", path);
+            sResult subResult = new sResult ();
 
             Tileset = null;
 
             TileType_Reset ();
             SetPainterToDefaults ();
 
-            sSplitPath GameSplitPath = new sSplitPath (Path);
-            string GameFilesPath = GameSplitPath.FilePath + GameSplitPath.FileTitleWithoutExtension + Convert.ToString (App.PlatformPathSeparator);
-            string MapDirectory = "";
-            FileStream File = null;
+            sSplitPath gameSplitPath = new sSplitPath (path);
+            string gameFilesPath = gameSplitPath.FilePath + gameSplitPath.FileTitleWithoutExtension + Convert.ToString (App.PlatformPathSeparator);
+            string mapDirectory = "";
+            FileStream file = null;
 
-            SubResult = IOUtil.TryOpenFileStream (Path, ref File);
-            if (!SubResult.Success)
-            {
-                returnResult.ProblemAdd ("Game file not found: " + SubResult.Problem);
+            subResult = IOUtil.TryOpenFileStream (path, ref file);
+            if (!subResult.Success) {
+                returnResult.ProblemAdd ("Game file not found: " + subResult.Problem);
                 return returnResult;
-            } else
-            {
-                BinaryReader Map_Reader = new BinaryReader (File);
-                SubResult = Read_WZ_gam (Map_Reader);
-                Map_Reader.Close ();
-
-                if (!SubResult.Success)
-                {
-                    returnResult.ProblemAdd (SubResult.Problem);
-                    return returnResult;
-                }
             }
 
-            SubResult = IOUtil.TryOpenFileStream (GameFilesPath + "game.map", ref File);
-            if (!SubResult.Success)
+            BinaryReader Map_Reader = new BinaryReader (file);
+            subResult = Read_WZ_gam (Map_Reader);
+            Map_Reader.Close ();
+
+            if (!subResult.Success)
+            {
+                returnResult.ProblemAdd (subResult.Problem);
+                return returnResult;
+            }
+
+            subResult = IOUtil.TryOpenFileStream (gameFilesPath + "game.map", ref file);
+            if (!subResult.Success)
             {
                 if (MessageBox.Show ("game.map file not found at \"{0}\"\n" +
-                    "Do you want to select another directory to load the underlying map from?".Format2 (GameFilesPath), 
+                    "Do you want to select another directory to load the underlying map from?".Format2 (gameFilesPath), 
                          "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.Cancel)
                 {
                     returnResult.ProblemAdd ("Aborted.");
                     return returnResult;
                 }
                 FolderBrowserDialog DirectorySelect = new FolderBrowserDialog ();
-                DirectorySelect.SelectedPath = GameFilesPath;
+                DirectorySelect.SelectedPath = gameFilesPath;
                 if (DirectorySelect.ShowDialog () != DialogResult.OK)
                 {
                     returnResult.ProblemAdd ("Aborted.");
                     return returnResult;
                 }
-                MapDirectory = DirectorySelect.SelectedPath + Convert.ToString (App.PlatformPathSeparator);
+                mapDirectory = DirectorySelect.SelectedPath + Convert.ToString (App.PlatformPathSeparator);
 
-                SubResult = IOUtil.TryOpenFileStream (MapDirectory + "game.map", ref File);
-                if (!SubResult.Success)
+                subResult = IOUtil.TryOpenFileStream (mapDirectory + "game.map", ref file);
+                if (!subResult.Success)
                 {
-                    returnResult.ProblemAdd ("game.map file not found: " + SubResult.Problem);
+                    returnResult.ProblemAdd ("game.map file not found: " + subResult.Problem);
                     return returnResult;
                 }
             } else
             {
-                MapDirectory = GameFilesPath;
+                mapDirectory = gameFilesPath;
             }
 
-            BinaryReader Map_ReaderB = new BinaryReader (File);
-            SubResult = Read_WZ_map (Map_ReaderB);
+            BinaryReader Map_ReaderB = new BinaryReader (file);
+            subResult = Read_WZ_map (Map_ReaderB);
             Map_ReaderB.Close ();
 
-            if (!SubResult.Success)
+            if (!subResult.Success)
             {
-                returnResult.ProblemAdd (SubResult.Problem);
+                returnResult.ProblemAdd (subResult.Problem);
                 return returnResult;
             }
 
             SimpleClassList<clsWZBJOUnit> BJOUnits = new SimpleClassList<clsWZBJOUnit> ();
 
             IniFeatures iniFeatures = null;
-            SubResult = IOUtil.TryOpenFileStream (GameFilesPath + "feature.ini", ref File);
-            if (SubResult.Success)
+            subResult = IOUtil.TryOpenFileStream (gameFilesPath + "feature.ini", ref file);
+            if (subResult.Success)
             {
                 iniFeatures = new IniFeatures ();			
-                using (var reader = new StreamReader(File))
+                using (var reader = new StreamReader(file))
                 {
                     var text = reader.ReadToEnd ();
                     returnResult.Add (read_INI_Features (text, ref iniFeatures));
@@ -449,18 +447,18 @@ namespace SharpFlame.Mapping
             {
                 clsResult Result = new clsResult ("feat.bjo", false);
                 logger.Info ("Loading feat.bjo");
-                SubResult = IOUtil.TryOpenFileStream (GameFilesPath + "feat.bjo", ref File);
-                if (!SubResult.Success)
+                subResult = IOUtil.TryOpenFileStream (gameFilesPath + "feat.bjo", ref file);
+                if (!subResult.Success)
                 {
                     Result.WarningAdd ("file not found");
                 } else
                 {
-                    BinaryReader Features_Reader = new BinaryReader (File);
-                    SubResult = Read_WZ_Features (Features_Reader, BJOUnits);
+                    BinaryReader Features_Reader = new BinaryReader (file);
+                    subResult = Read_WZ_Features (Features_Reader, BJOUnits);
                     Features_Reader.Close ();
-                    if (!SubResult.Success)
+                    if (!subResult.Success)
                     {
-                        Result.WarningAdd (SubResult.Problem);
+                        Result.WarningAdd (subResult.Problem);
                     }
                 }
                 returnResult.Add (Result);
@@ -470,29 +468,29 @@ namespace SharpFlame.Mapping
             {
                 clsResult Result = new clsResult ("ttypes.ttp", false);
                 logger.Info ("Loading ttypes.ttp");
-                SubResult = IOUtil.TryOpenFileStream (MapDirectory + "ttypes.ttp", ref File);
-                if (!SubResult.Success)
+                subResult = IOUtil.TryOpenFileStream (mapDirectory + "ttypes.ttp", ref file);
+                if (!subResult.Success)
                 {
                     Result.WarningAdd ("file not found");
                 } else
                 {
-                    BinaryReader TileTypes_Reader = new BinaryReader (File);
-                    SubResult = Read_WZ_TileTypes (TileTypes_Reader);
+                    BinaryReader TileTypes_Reader = new BinaryReader (file);
+                    subResult = Read_WZ_TileTypes (TileTypes_Reader);
                     TileTypes_Reader.Close ();
-                    if (!SubResult.Success)
+                    if (!subResult.Success)
                     {
-                        Result.WarningAdd (SubResult.Problem);
+                        Result.WarningAdd (subResult.Problem);
                     }
                 }
                 returnResult.Add (Result);
             }
 
             IniStructures iniStructures = null;
-            SubResult = IOUtil.TryOpenFileStream (GameFilesPath + "struct.ini", ref File);
-            if (SubResult.Success)
+            subResult = IOUtil.TryOpenFileStream (gameFilesPath + "struct.ini", ref file);
+            if (subResult.Success)
             {
                 iniStructures = new IniStructures ();
-                using (var reader = new StreamReader(File))
+                using (var reader = new StreamReader(file))
                 {
                     var text = reader.ReadToEnd ();
                     returnResult.Add (read_INI_Structures (text, ref iniStructures));
@@ -503,30 +501,29 @@ namespace SharpFlame.Mapping
             {
                 clsResult Result = new clsResult ("struct.bjo", false);
                 logger.Info ("Loading struct.bjo");
-                SubResult = IOUtil.TryOpenFileStream (GameFilesPath + "struct.bjo", ref File);
-                if (!SubResult.Success)
+                subResult = IOUtil.TryOpenFileStream (gameFilesPath + "struct.bjo", ref file);
+                if (!subResult.Success)
                 {
                     Result.WarningAdd ("struct.bjo file not found.");
                 } else
                 {
-                    BinaryReader Structures_Reader = new BinaryReader (File);
-                    SubResult = Read_WZ_Structures (Structures_Reader, BJOUnits);
+                    BinaryReader Structures_Reader = new BinaryReader (file);
+                    subResult = Read_WZ_Structures (Structures_Reader, BJOUnits);
                     Structures_Reader.Close ();
-                    if (!SubResult.Success)
+                    if (!subResult.Success)
                     {
-                        Result.WarningAdd (SubResult.Problem);
+                        Result.WarningAdd (subResult.Problem);
                     }
                 }
                 returnResult.Add (Result);
             }
 
             IniDroids iniDroids = null;
-
-            SubResult = IOUtil.TryOpenFileStream (GameFilesPath + "droid.ini", ref File);
-            if (SubResult.Success)
+            subResult = IOUtil.TryOpenFileStream (gameFilesPath + "droid.ini", ref file);
+            if (subResult.Success)
             {
                 iniDroids = new IniDroids ();
-                using (var reader = new StreamReader(File))
+                using (var reader = new StreamReader(file))
                 {
                     var text = reader.ReadToEnd ();
                     returnResult.Add (read_INI_Droids (text, ref iniDroids));
@@ -537,18 +534,18 @@ namespace SharpFlame.Mapping
             {
                 clsResult Result = new clsResult ("dinit.bjo", false);
                 logger.Info ("Loading dinit.bjo");
-                SubResult = IOUtil.TryOpenFileStream (GameFilesPath + "dinit.bjo", ref File);
-                if (!SubResult.Success)
+                subResult = IOUtil.TryOpenFileStream (gameFilesPath + "dinit.bjo", ref file);
+                if (!subResult.Success)
                 {
                     Result.WarningAdd ("dinit.bjo file not found.");
                 } else
                 {
-                    BinaryReader Droids_Reader = new BinaryReader (File);
-                    SubResult = Read_WZ_Droids (Droids_Reader, BJOUnits);
+                    BinaryReader Droids_Reader = new BinaryReader (file);
+                    subResult = Read_WZ_Droids (Droids_Reader, BJOUnits);
                     Droids_Reader.Close ();
-                    if (!SubResult.Success)
+                    if (!subResult.Success)
                     {
-                        Result.WarningAdd (SubResult.Problem);
+                        Result.WarningAdd (subResult.Problem);
                     }
                 }
                 returnResult.Add (Result);
@@ -562,10 +559,10 @@ namespace SharpFlame.Mapping
             returnResult.Add (CreateWZObjects (CreateObjectsArgs));
 
             //map objects are modified by this and must already exist
-            SubResult = IOUtil.TryOpenFileStream (GameFilesPath + "labels.ini", ref File);
-            if (SubResult.Success)
+            subResult = IOUtil.TryOpenFileStream (gameFilesPath + "labels.ini", ref file);
+            if (subResult.Success)
             {
-                using (var reader = new StreamReader(File))
+                using (var reader = new StreamReader(file))
                 {
                     var text = reader.ReadToEnd ();
                     returnResult.Add (Read_INI_Labels (text, false));
@@ -1675,115 +1672,115 @@ namespace SharpFlame.Mapping
 
         private sResult Read_WZ_map(BinaryReader File)
         {
-            sResult ReturnResult = new sResult ();
-            ReturnResult.Success = false;
-            ReturnResult.Problem = "";
+            sResult returnResult = new sResult ();
+            returnResult.Success = false;
+            returnResult.Problem = "";
 
             string strTemp = null;
-            UInt32 Version = 0;
-            UInt32 MapWidth = 0;
-            UInt32 MapHeight = 0;
+            UInt32 version = 0;
+            UInt32 mapWidth = 0;
+            UInt32 mapHeight = 0;
             UInt32 uintTemp = 0;
-            byte Flip = 0;
-            bool FlipX = default(bool);
-            bool FlipZ = default(bool);
-            byte Rotate = 0;
-            byte TextureNum = 0;
-            int A = 0;
-            int X = 0;
-            int Y = 0;
-            XYInt PosA = new XYInt ();
-            XYInt PosB = new XYInt ();
+            byte flip = 0;
+            bool flipX = default(bool);
+            bool flipZ = default(bool);
+            byte rotate = 0;
+            byte textureNum = 0;
+            int a = 0;
+            int x = 0;
+            int y = 0;
+            XYInt posA = new XYInt ();
+            XYInt posB = new XYInt ();
 
             try
             {
                 strTemp = IOUtil.ReadOldTextOfLength (File, 4);
                 if (strTemp != "map ")
                 {
-                    ReturnResult.Problem = "Unknown game.map identifier.";
-                    return ReturnResult;
+                    returnResult.Problem = "Unknown game.map identifier.";
+                    return returnResult;
                 }
 
-                Version = File.ReadUInt32 ();
-                if (Version != 10U)
+                version = File.ReadUInt32 ();
+                if (version != 10U)
                 {
                     if (MessageBox.Show ("game.map version is unknown. Continue?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
                     {
-                        ReturnResult.Problem = "Aborted.";
-                        return ReturnResult;
+                        returnResult.Problem = "Aborted.";
+                        return returnResult;
                     }
                 }
-                MapWidth = File.ReadUInt32 ();
-                MapHeight = File.ReadUInt32 ();
-                if (MapWidth < 1U || MapWidth > Constants.MapMaxSize || MapHeight < 1U || MapHeight > Constants.MapMaxSize)
+                mapWidth = File.ReadUInt32 ();
+                mapHeight = File.ReadUInt32 ();
+                if (mapWidth < 1U || mapWidth > Constants.MapMaxSize || mapHeight < 1U || mapHeight > Constants.MapMaxSize)
                 {
-                    ReturnResult.Problem = "Map size out of range.";
-                    return ReturnResult;
+                    returnResult.Problem = "Map size out of range.";
+                    return returnResult;
                 }
 
-                TerrainBlank (new XYInt (Convert.ToInt32 (MapWidth), Convert.ToInt32 (MapHeight)));
+                TerrainBlank (new XYInt (Convert.ToInt32 (mapWidth), Convert.ToInt32 (mapHeight)));
 
-                for (Y = 0; Y <= Terrain.TileSize.Y - 1; Y++)
+                for (y = 0; y <= Terrain.TileSize.Y - 1; y++)
                 {
-                    for (X = 0; X <= Terrain.TileSize.X - 1; X++)
+                    for (x = 0; x <= Terrain.TileSize.X - 1; x++)
                     {
-                        TextureNum = File.ReadByte ();
-                        Terrain.Tiles [X, Y].Texture.TextureNum = TextureNum;
-                        Flip = File.ReadByte ();
-                        Terrain.Vertices [X, Y].Height = File.ReadByte ();
+                        textureNum = File.ReadByte ();
+                        Terrain.Tiles [x, y].Texture.TextureNum = textureNum;
+                        flip = File.ReadByte ();
+                        Terrain.Vertices [x, y].Height = File.ReadByte ();
                         //get flipx
-                        A = (int)((Flip / 128.0D));
-                        Flip -= (byte)(A * 128);
-                        FlipX = A == 1;
+                        a = (int)((flip / 128.0D));
+                        flip -= (byte)(a * 128);
+                        flipX = a == 1;
                         //get flipy
-                        A = (int)((Flip / 64.0D));
-                        Flip -= (byte)(A * 64);
-                        FlipZ = A == 1;
+                        a = (int)((flip / 64.0D));
+                        flip -= (byte)(a * 64);
+                        flipZ = a == 1;
                         //get rotation
-                        A = (int)((Flip / 16.0D));
-                        Flip -= (byte)(A * 16);
-                        Rotate = (byte)A;
-                        TileUtil.OldOrientation_To_TileOrientation (Rotate, FlipX, FlipZ, ref Terrain.Tiles [X, Y].Texture.Orientation);
+                        a = (int)((flip / 16.0D));
+                        flip -= (byte)(a * 16);
+                        rotate = (byte)a;
+                        TileUtil.OldOrientation_To_TileOrientation (rotate, flipX, flipZ, ref Terrain.Tiles [x, y].Texture.Orientation);
                         //get tri direction
-                        A = (int)((Flip / 8.0D));
-                        Flip -= (byte)(A * 8);
-                        Terrain.Tiles [X, Y].Tri = A == 1;
+                        a = (int)((flip / 8.0D));
+                        flip -= (byte)(a * 8);
+                        Terrain.Tiles [x, y].Tri = a == 1;
                     }
                 }
 
-                if (Version != 2U)
+                if (version != 2U)
                 {
                     uintTemp = File.ReadUInt32 ();
                     if (uintTemp != 1)
                     {
-                        ReturnResult.Problem = "Bad gateway version number.";
-                        return ReturnResult;
+                        returnResult.Problem = "Bad gateway version number.";
+                        return returnResult;
                     }
 
                     uintTemp = File.ReadUInt32 ();
 
-                    for (A = 0; A <= (Convert.ToInt32(uintTemp)) - 1; A++)
+                    for (a = 0; a <= (Convert.ToInt32(uintTemp)) - 1; a++)
                     {
-                        PosA.X = File.ReadByte ();
-                        PosA.Y = File.ReadByte ();
-                        PosB.X = File.ReadByte ();
-                        PosB.Y = File.ReadByte ();
-                        if (GatewayCreate (PosA, PosB) == null)
+                        posA.X = File.ReadByte ();
+                        posA.Y = File.ReadByte ();
+                        posB.X = File.ReadByte ();
+                        posB.Y = File.ReadByte ();
+                        if (GatewayCreate (posA, posB) == null)
                         {
-                            ReturnResult.Problem = "Gateway placement error.";
-                            return ReturnResult;
+                            returnResult.Problem = "Gateway placement error.";
+                            return returnResult;
                         }
                     }
                 }
             } catch (Exception ex)
             {
-                ReturnResult.Problem = ex.Message;
+                returnResult.Problem = ex.Message;
                 logger.ErrorException ("Got an exception", ex);
-                return ReturnResult;
+                return returnResult;
             }
 
-            ReturnResult.Success = true;
-            return ReturnResult;
+            returnResult.Success = true;
+            return returnResult;
         }
 
         private sResult Read_WZ_Features(BinaryReader File, SimpleClassList<clsWZBJOUnit> WZUnits)
@@ -2019,6 +2016,54 @@ namespace SharpFlame.Mapping
             return ReturnResult;
         }
 
+        private sResult Read_WZ_TTP(BinaryReader File)
+        {
+            sResult ReturnResult = new sResult ();
+            ReturnResult.Success = false;
+            ReturnResult.Problem = "";
+
+            string strTemp = "";
+            UInt32 uintTemp = 0;
+            UInt16 ushortTemp = 0;
+            int A = 0;
+
+            try
+            {
+                strTemp = IOUtil.ReadOldTextOfLength (File, 4);
+                if (strTemp != "ttyp")
+                {
+                    ReturnResult.Problem = "Incorrect identifier.";
+                    return ReturnResult;
+                }
+
+                uintTemp = File.ReadUInt32 ();
+                if (uintTemp != 8U)
+                {
+                    ReturnResult.Problem = "Unknown version.";
+                    return ReturnResult;
+                }
+                uintTemp = File.ReadUInt32 ();
+                for (A = 0; A <= ((int)(Math.Min(uintTemp, (uint)Tileset.TileCount))) - 1; A++)
+                {
+                    ushortTemp = File.ReadUInt16 ();
+                    if (ushortTemp > 11)
+                    {
+                        ReturnResult.Problem = "Unknown tile type number.";
+                        return ReturnResult;
+                    }
+                    Tile_TypeNum [A] = (byte)ushortTemp;
+                }
+            } catch (Exception ex)
+            {
+                ReturnResult.Problem = ex.Message;
+                logger.ErrorException ("Got an exception", ex);
+                return ReturnResult;
+            }
+
+            ReturnResult.Success = true;
+            return ReturnResult;
+        }
+
         public clsResult Serialize_WZ_StructuresINI(IniWriter File, int PlayerCount)
         {
             clsResult ReturnResult = new clsResult ("Serializing structures INI", false);
@@ -2114,7 +2159,7 @@ namespace SharpFlame.Mapping
 
             if (badModuleCount > 0)
             {
-                ReturnResult.WarningAdd (badModuleCount + " modules had no underlying structure.");
+                ReturnResult.WarningAdd (string.Format ("{0} modules had no underlying structure.", badModuleCount));
             }
 
             int tooManyModulesWarningCount = 0;
@@ -2190,7 +2235,7 @@ namespace SharpFlame.Mapping
 
             if (tooManyModulesWarningCount > tooManyModulesWarningMaxCount)
             {
-                ReturnResult.WarningAdd (tooManyModulesWarningCount + " structures had too many modules.");
+                ReturnResult.WarningAdd (string.Format ("{0} structures had too many modules.", tooManyModulesWarningCount));
             }
 
             return ReturnResult;
@@ -2372,7 +2417,7 @@ namespace SharpFlame.Mapping
 
             if (InvalidPartCount > 0)
             {
-                ReturnResult.WarningAdd ("There were " + Convert.ToString (InvalidPartCount) + " droids with parts missing. They were not saved.");
+                ReturnResult.WarningAdd (string.Format ("There were {0} droids with parts missing. They were not saved.", InvalidPartCount));
             }
 
             return ReturnResult;
@@ -2539,9 +2584,8 @@ namespace SharpFlame.Mapping
                         textureNum = 0;
                         if (invalidTileCount < 16)
                         {
-                            returnResult.WarningAdd ("Tile texture number " + Convert.ToString (Terrain.Tiles [x, y].Texture.TextureNum) +
-                                                     " is invalid on tile " + Convert.ToString (x) + ", " + Convert.ToString (y) +
-                                                     " and was compiled as texture number " + Convert.ToString (textureNum) + ".");
+                            returnResult.WarningAdd (string.Format ("Tile texture number {0} is invalid on tile {1}, {2} and was compiled as texture number {3}.", 
+                                                                    Terrain.Tiles [x, y].Texture.TextureNum, x, y, textureNum));
                         }
                         invalidTileCount++;
                     }
@@ -2552,7 +2596,7 @@ namespace SharpFlame.Mapping
             }
             if (invalidTileCount > 0)
             {
-                returnResult.WarningAdd (invalidTileCount + " tile texture numbers were invalid.");
+                returnResult.WarningAdd (string.Format ("{0} tile texture numbers were invalid.", invalidTileCount));
             }
             fileMAP.Write (1U); //gateway version
             fileMAP.Write ((uint)Gateways.Count);
@@ -2681,7 +2725,7 @@ namespace SharpFlame.Mapping
                     {
                         if (File.Exists (Args.Path))
                         {
-                            returnResult.ProblemAdd ("A file already exists at: " + Args.Path);
+                            returnResult.ProblemAdd (string.Format ("A file already exists at: {0}", Args.Path));
                             return returnResult;
                         }
                     }
@@ -2754,7 +2798,7 @@ namespace SharpFlame.Mapping
 
                     if (!Directory.Exists (CampDirectory))
                     {
-                        returnResult.ProblemAdd ("Directory " + CampDirectory + " does not exist.");
+                        returnResult.ProblemAdd (string.Format ("Directory {0} does not exist.", CampDirectory));
                         return returnResult;
                     }
 
@@ -2770,7 +2814,7 @@ namespace SharpFlame.Mapping
                         Directory.CreateDirectory (CampDirectory);
                     } catch (Exception ex)
                     {
-                        returnResult.ProblemAdd ("Unable to create directory " + CampDirectory);
+                        returnResult.ProblemAdd (string.Format ("Unable to create directory {0}", CampDirectory));
                         logger.ErrorException ("Got an exception", ex);
                         return returnResult;
                     }
@@ -2823,54 +2867,6 @@ namespace SharpFlame.Mapping
             }
 
             return returnResult;
-        }
-
-        private sResult Read_TTP(BinaryReader File)
-        {
-            sResult ReturnResult = new sResult ();
-            ReturnResult.Success = false;
-            ReturnResult.Problem = "";
-
-            string strTemp = "";
-            UInt32 uintTemp = 0;
-            UInt16 ushortTemp = 0;
-            int A = 0;
-
-            try
-            {
-                strTemp = IOUtil.ReadOldTextOfLength (File, 4);
-                if (strTemp != "ttyp")
-                {
-                    ReturnResult.Problem = "Incorrect identifier.";
-                    return ReturnResult;
-                }
-
-                uintTemp = File.ReadUInt32 ();
-                if (uintTemp != 8U)
-                {
-                    ReturnResult.Problem = "Unknown version.";
-                    return ReturnResult;
-                }
-                uintTemp = File.ReadUInt32 ();
-                for (A = 0; A <= ((int)(Math.Min(uintTemp, (uint)Tileset.TileCount))) - 1; A++)
-                {
-                    ushortTemp = File.ReadUInt16 ();
-                    if (ushortTemp > 11)
-                    {
-                        ReturnResult.Problem = "Unknown tile type number.";
-                        return ReturnResult;
-                    }
-                    Tile_TypeNum [A] = (byte)ushortTemp;
-                }
-            } catch (Exception ex)
-            {
-                ReturnResult.Problem = ex.Message;
-                logger.ErrorException ("Got an exception", ex);
-                return ReturnResult;
-            }
-
-            ReturnResult.Success = true;
-            return ReturnResult;
-        }
+        }       
     }
 }

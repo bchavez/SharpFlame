@@ -1601,7 +1601,7 @@ namespace SharpFlame.Mapping
                 ReturnResult.Problem = ex.Message;
                 return ReturnResult;
             }
-            ReturnResult = Read_TTP(File);
+            ReturnResult = Read_WZ_TTP(File);
             File.Close();
 
             return ReturnResult;
