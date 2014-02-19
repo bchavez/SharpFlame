@@ -1479,7 +1479,12 @@ namespace SharpFlame.Mapping
                 var iniSections = SharpFlame.Core.Parsers.Ini.IniReader.ReadString (iniText);
                 foreach (var iniSection in iniSections)
                 {
-                    nameText = iniSection.Name.Substring (0, iniSection.Name.IndexOf ('_'));
+                    var idx = iniSection.Name.IndexOf ('_');
+                    if (idx > 0) {
+                        nameText = iniSection.Name.Substring (0, idx);
+                    } else {
+                        nameText = iniSection.Name;
+                    }
                     switch (nameText)
                     {
                     case "position":

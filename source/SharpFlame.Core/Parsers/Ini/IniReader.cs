@@ -56,7 +56,14 @@ namespace SharpFlame.Core.Parsers.Ini
 
         public static int ReadHealthPercent(string text) {
             var pos = text.IndexOf ('%');
-            return int.Parse(text.Substring(0, pos));
+            if (pos <= 0)
+            {
+                return int.Parse (text);
+            } 
+            else
+            {
+                return int.Parse (text.Substring (0, pos));
+            }
         }
     }
 }
