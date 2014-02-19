@@ -578,138 +578,139 @@ namespace SharpFlame.Mapping
         {
             clsResult ReturnResult = new clsResult ("Creating objects", false);
             logger.Info ("Creating objects");
-            clsUnit NewUnit = default(clsUnit);
-            UInt32 AvailableID = 0;
-            SimpleClassList<clsWZBJOUnit> BJOUnits = Args.BJOUnits;
-            IniStructures INIStructures = Args.INIStructures;
-            IniDroids INIDroids = Args.INIDroids;
-            IniFeatures INIFeatures = Args.INIFeatures;
-            clsUnitAdd UnitAdd = new clsUnitAdd ();
-            int A = 0;
-            int B = 0;
-            clsWZBJOUnit BJOUnit = default(clsWZBJOUnit);
 
-            UnitAdd.Map = this;
+            clsUnit newUnit = default(clsUnit);
+            UInt32 availableID = 0;
+            SimpleClassList<clsWZBJOUnit> bjoUnits = Args.BJOUnits;
+            IniStructures iniStructures = Args.INIStructures;
+            IniDroids iniDroids = Args.INIDroids;
+            IniFeatures iniFeatures = Args.INIFeatures;
+            clsUnitAdd unitAdd = new clsUnitAdd ();
+            int a = 0;
+            int b = 0;
+            clsWZBJOUnit bjoUnit = default(clsWZBJOUnit);
 
-            AvailableID = 1U;
-            foreach (clsWZBJOUnit tempLoopVar_BJOUnit in BJOUnits)
+            unitAdd.Map = this;
+
+            availableID = 1U;
+            foreach (clsWZBJOUnit tempLoopVar_BJOUnit in bjoUnits)
             {
-                BJOUnit = tempLoopVar_BJOUnit;
-                if (BJOUnit.ID >= AvailableID)
+                bjoUnit = tempLoopVar_BJOUnit;
+                if (bjoUnit.ID >= availableID)
                 {
-                    AvailableID = BJOUnit.ID + 1U;
+                    availableID = bjoUnit.ID + 1U;
                 }
             }
-            if (INIStructures != null)
+            if (iniStructures != null)
             {
-                var structMaxId = INIStructures.Structures.Max (w => w.ID) + 10;
-                if (structMaxId > AvailableID)
+                var structMaxId = iniStructures.Structures.Max (w => w.ID) + 10;
+                if (structMaxId > availableID)
                 {
-                    AvailableID = structMaxId;
+                    availableID = structMaxId;
                 }
             }
-            if (INIFeatures != null)
+            if (iniFeatures != null)
             {
-                var featuresMaxId = INIFeatures.Features.Max (w => w.ID) + 10;
-                if (featuresMaxId > AvailableID)
+                var featuresMaxId = iniFeatures.Features.Max (w => w.ID) + 10;
+                if (featuresMaxId > availableID)
                 {
-                    AvailableID = featuresMaxId;
+                    availableID = featuresMaxId;
                 }
             }
-            if (INIDroids != null)
+            if (iniDroids != null)
             {
-                var droidsMaxId = INIDroids.Droids.Max (w => w.ID) + 10;
-                if (droidsMaxId > AvailableID)
+                var droidsMaxId = iniDroids.Droids.Max (w => w.ID) + 10;
+                if (droidsMaxId > availableID)
                 {
-                    AvailableID += droidsMaxId;
+                    availableID += droidsMaxId;
                 }
             }
 
-            foreach (clsWZBJOUnit tempLoopVar_BJOUnit in BJOUnits)
+            foreach (clsWZBJOUnit tempLoopVar_BJOUnit in bjoUnits)
             {
-                BJOUnit = tempLoopVar_BJOUnit;
-                NewUnit = new clsUnit ();
-                NewUnit.ID = BJOUnit.ID;
-                NewUnit.TypeBase = App.ObjectData.FindOrCreateUnitType (BJOUnit.Code, BJOUnit.ObjectType, -1);
-                if (NewUnit.TypeBase == null)
+                bjoUnit = tempLoopVar_BJOUnit;
+                newUnit = new clsUnit ();
+                newUnit.ID = bjoUnit.ID;
+                newUnit.TypeBase = App.ObjectData.FindOrCreateUnitType (bjoUnit.Code, bjoUnit.ObjectType, -1);
+                if (newUnit.TypeBase == null)
                 {
                     ReturnResult.ProblemAdd ("Unable to create object type.");
                     return ReturnResult;
                 }
-                if (BJOUnit.Player >= Constants.PlayerCountMax)
+                if (bjoUnit.Player >= Constants.PlayerCountMax)
                 {
-                    NewUnit.UnitGroup = ScavengerUnitGroup;
+                    newUnit.UnitGroup = ScavengerUnitGroup;
                 } else
                 {
-                    NewUnit.UnitGroup = UnitGroups [Convert.ToInt32 (BJOUnit.Player)];
+                    newUnit.UnitGroup = UnitGroups [Convert.ToInt32 (bjoUnit.Player)];
                 }
-                NewUnit.Pos = BJOUnit.Pos;
-                NewUnit.Rotation = (int)(Math.Min (BJOUnit.Rotation, 359U));
-                if (BJOUnit.ID == 0U)
+                newUnit.Pos = bjoUnit.Pos;
+                newUnit.Rotation = (int)(Math.Min (bjoUnit.Rotation, 359U));
+                if (bjoUnit.ID == 0U)
                 {
-                    BJOUnit.ID = AvailableID;
-                    App.ZeroIDWarning (NewUnit, BJOUnit.ID, ReturnResult);
+                    bjoUnit.ID = availableID;
+                    App.ZeroIDWarning (newUnit, bjoUnit.ID, ReturnResult);
                 }
-                UnitAdd.NewUnit = NewUnit;
-                UnitAdd.ID = BJOUnit.ID;
-                UnitAdd.Perform ();
-                App.ErrorIDChange (BJOUnit.ID, NewUnit, "CreateWZObjects");
-                if (AvailableID == BJOUnit.ID)
+                unitAdd.NewUnit = newUnit;
+                unitAdd.ID = bjoUnit.ID;
+                unitAdd.Perform ();
+                App.ErrorIDChange (bjoUnit.ID, newUnit, "CreateWZObjects");
+                if (availableID == bjoUnit.ID)
                 {
-                    AvailableID = NewUnit.ID + 1U;
+                    availableID = newUnit.ID + 1U;
                 }
             }
 
             StructureTypeBase structureTypeBase = default(StructureTypeBase);
-            DroidDesign DroidType = default(DroidDesign);
+            DroidDesign droidType = default(DroidDesign);
             FeatureTypeBase featureTypeBase = default(FeatureTypeBase);
-            DroidDesign.sLoadPartsArgs LoadPartsArgs = new DroidDesign.sLoadPartsArgs ();
+            DroidDesign.sLoadPartsArgs loadPartsArgs = new DroidDesign.sLoadPartsArgs ();
             UnitTypeBase unitTypeBase = null;
-            int ErrorCount = 0;
-            int UnknownDroidComponentCount = 0;
-            int UnknownDroidTypeCount = 0;
-            int DroidBadPositionCount = 0;
-            int StructureBadPositionCount = 0;
-            int StructureBadModulesCount = 0;
-            int FeatureBadPositionCount = 0;
-            int ModuleLimit = 0;
-            XYInt ZeroPos = new XYInt (0, 0);
+            int errorCount = 0;
+            int unknownDroidComponentCount = 0;
+            int unknownDroidTypeCount = 0;
+            int droidBadPositionCount = 0;
+            int structureBadPositionCount = 0;
+            int structureBadModulesCount = 0;
+            int featureBadPositionCount = 0;
+            int moduleLimit = 0;
+            XYInt zeroPos = new XYInt (0, 0);
             StructureTypeBase moduleTypeBase = default(StructureTypeBase);
-            clsUnit NewModule = default(clsUnit);
+            clsUnit newModule = default(clsUnit);
 
-            StructureTypeBase FactoryModule = App.ObjectData.FindFirstStructureType (StructureTypeBase.enumStructureType.FactoryModule);
-            StructureTypeBase ResearchModule = App.ObjectData.FindFirstStructureType (StructureTypeBase.enumStructureType.ResearchModule);
-            StructureTypeBase PowerModule = App.ObjectData.FindFirstStructureType (StructureTypeBase.enumStructureType.PowerModule);
+            StructureTypeBase factoryModule = App.ObjectData.FindFirstStructureType (StructureTypeBase.enumStructureType.FactoryModule);
+            StructureTypeBase researchModule = App.ObjectData.FindFirstStructureType (StructureTypeBase.enumStructureType.ResearchModule);
+            StructureTypeBase powerModule = App.ObjectData.FindFirstStructureType (StructureTypeBase.enumStructureType.PowerModule);
 
-            if (FactoryModule == null)
+            if (factoryModule == null)
             {
                 ReturnResult.WarningAdd ("No factory module loaded.");
             }
-            if (ResearchModule == null)
+            if (researchModule == null)
             {
                 ReturnResult.WarningAdd ("No research module loaded.");
             }
-            if (PowerModule == null)
+            if (powerModule == null)
             {
                 ReturnResult.WarningAdd ("No power module loaded.");
             }
 
-            if (INIStructures != null)
+            if (iniStructures != null)
             {
-                for (A = 0; A <= INIStructures.StructureCount - 1; A++)
+                for (a = 0; a <= iniStructures.StructureCount - 1; a++)
                 {
-                    if (INIStructures.Structures [A].Pos == null)
+                    if (iniStructures.Structures [a].Pos == null)
                     {
-                        logger.Debug ("{0} pos was null", INIStructures.Structures [A].Code);
-                        StructureBadPositionCount++;
-                    } else if (!App.PosIsWithinTileArea (INIStructures.Structures [A].Pos, ZeroPos, Terrain.TileSize))
+                        logger.Debug ("{0} pos was null", iniStructures.Structures [a].Code);
+                        structureBadPositionCount++;
+                    } else if (!App.PosIsWithinTileArea (iniStructures.Structures [a].Pos, zeroPos, Terrain.TileSize))
                     {
-                        logger.Debug ("{0} structure pos x{1} y{2}, is wrong.", INIStructures.Structures [A].Code, INIStructures.Structures [A].Pos.X, INIStructures.Structures [A].Pos.Y);
-                        StructureBadPositionCount++;
+                        logger.Debug ("{0} structure pos x{1} y{2}, is wrong.", iniStructures.Structures [a].Code, iniStructures.Structures [a].Pos.X, iniStructures.Structures [a].Pos.Y);
+                        structureBadPositionCount++;
                     } else
                     {
-                        unitTypeBase = App.ObjectData.FindOrCreateUnitType (Convert.ToString (INIStructures.Structures [A].Code),
-                                                          UnitType.PlayerStructure, INIStructures.Structures [A].WallType);
+                        unitTypeBase = App.ObjectData.FindOrCreateUnitType (Convert.ToString (iniStructures.Structures [a].Code),
+                                                          UnitType.PlayerStructure, iniStructures.Structures [a].WallType);
                         if (unitTypeBase.Type == UnitType.PlayerStructure)
                         {
                             structureTypeBase = (StructureTypeBase)unitTypeBase;
@@ -719,114 +720,114 @@ namespace SharpFlame.Mapping
                         }
                         if (structureTypeBase == null)
                         {
-                            ErrorCount++;
+                            errorCount++;
                         } else
                         {
-                            NewUnit = new clsUnit ();
-                            NewUnit.TypeBase = structureTypeBase;
-                            if (INIStructures.Structures [A].UnitGroup == null)
+                            newUnit = new clsUnit ();
+                            newUnit.TypeBase = structureTypeBase;
+                            if (iniStructures.Structures [a].UnitGroup == null)
                             {
-                                NewUnit.UnitGroup = ScavengerUnitGroup;
+                                newUnit.UnitGroup = ScavengerUnitGroup;
                             } else
                             {
-                                NewUnit.UnitGroup = INIStructures.Structures [A].UnitGroup;
+                                newUnit.UnitGroup = iniStructures.Structures [a].UnitGroup;
                             }
-                            NewUnit.Pos = new WorldPos (INIStructures.Structures [A].Pos, INIStructures.Structures [A].Pos.Z);
-                            NewUnit.Rotation = Convert.ToInt32 (INIStructures.Structures [A].Rotation.Direction * 360.0D / Constants.INIRotationMax);
-                            if (NewUnit.Rotation == 360)
+                            newUnit.Pos = new WorldPos (iniStructures.Structures [a].Pos, iniStructures.Structures [a].Pos.Z);
+                            newUnit.Rotation = Convert.ToInt32 (iniStructures.Structures [a].Rotation.Direction * 360.0D / Constants.INIRotationMax);
+                            if (newUnit.Rotation == 360)
                             {
-                                NewUnit.Rotation = 0;
+                                newUnit.Rotation = 0;
                             }
-                            if (INIStructures.Structures [A].HealthPercent >= 0)
+                            if (iniStructures.Structures [a].HealthPercent >= 0)
                             {
-                                NewUnit.Health = MathUtil.Clamp_dbl (INIStructures.Structures [A].HealthPercent / 100.0D, 0.01D, 1.0D);
+                                newUnit.Health = MathUtil.Clamp_dbl (iniStructures.Structures [a].HealthPercent / 100.0D, 0.01D, 1.0D);
                             }
-                            if (INIStructures.Structures [A].ID == 0U)
+                            if (iniStructures.Structures [a].ID == 0U)
                             {
-                                INIStructures.Structures [A].ID = AvailableID;
-                                App.ZeroIDWarning (NewUnit, INIStructures.Structures [A].ID, ReturnResult);
+                                iniStructures.Structures [a].ID = availableID;
+                                App.ZeroIDWarning (newUnit, iniStructures.Structures [a].ID, ReturnResult);
                             }
-                            UnitAdd.NewUnit = NewUnit;
-                            UnitAdd.ID = INIStructures.Structures [A].ID;
-                            UnitAdd.Perform ();
-                            App.ErrorIDChange (INIStructures.Structures [A].ID, NewUnit, "Load_WZ->INIStructures");
-                            if (AvailableID == INIStructures.Structures [A].ID)
+                            unitAdd.NewUnit = newUnit;
+                            unitAdd.ID = iniStructures.Structures [a].ID;
+                            unitAdd.Perform ();
+                            App.ErrorIDChange (iniStructures.Structures [a].ID, newUnit, "Load_WZ->INIStructures");
+                            if (availableID == iniStructures.Structures [a].ID)
                             {
-                                AvailableID = NewUnit.ID + 1U;
+                                availableID = newUnit.ID + 1U;
                             }
                             //create modules
                             switch (structureTypeBase.StructureType)
                             {
                             case StructureTypeBase.enumStructureType.Factory:
-                                ModuleLimit = 2;
-                                moduleTypeBase = FactoryModule;
+                                moduleLimit = 2;
+                                moduleTypeBase = factoryModule;
                                 break;
                             case StructureTypeBase.enumStructureType.VTOLFactory:
-                                ModuleLimit = 2;
-                                moduleTypeBase = FactoryModule;
+                                moduleLimit = 2;
+                                moduleTypeBase = factoryModule;
                                 break;
                             case StructureTypeBase.enumStructureType.PowerGenerator:
-                                ModuleLimit = 1;
-                                moduleTypeBase = PowerModule;
+                                moduleLimit = 1;
+                                moduleTypeBase = powerModule;
                                 break;
                             case StructureTypeBase.enumStructureType.Research:
-                                ModuleLimit = 1;
-                                moduleTypeBase = ResearchModule;
+                                moduleLimit = 1;
+                                moduleTypeBase = researchModule;
                                 break;
                             default:
-                                ModuleLimit = 0;
+                                moduleLimit = 0;
                                 moduleTypeBase = null;
                                 break;
                             }
-                            if (INIStructures.Structures [A].ModuleCount > ModuleLimit)
+                            if (iniStructures.Structures [a].ModuleCount > moduleLimit)
                             {
-                                INIStructures.Structures [A].ModuleCount = ModuleLimit;
-                                StructureBadModulesCount++;
-                            } else if (INIStructures.Structures [A].ModuleCount < 0)
+                                iniStructures.Structures [a].ModuleCount = moduleLimit;
+                                structureBadModulesCount++;
+                            } else if (iniStructures.Structures [a].ModuleCount < 0)
                             {
-                                INIStructures.Structures [A].ModuleCount = 0;
-                                StructureBadModulesCount++;
+                                iniStructures.Structures [a].ModuleCount = 0;
+                                structureBadModulesCount++;
                             }
                             if (moduleTypeBase != null)
                             {
-                                for (B = 0; B <= INIStructures.Structures[A].ModuleCount - 1; B++)
+                                for (b = 0; b <= iniStructures.Structures[a].ModuleCount - 1; b++)
                                 {
-                                    NewModule = new clsUnit ();
-                                    NewModule.TypeBase = moduleTypeBase;
-                                    NewModule.UnitGroup = NewUnit.UnitGroup;
-                                    NewModule.Pos = NewUnit.Pos;
-                                    NewModule.Rotation = NewUnit.Rotation;
-                                    UnitAdd.NewUnit = NewModule;
-                                    UnitAdd.ID = AvailableID;
-                                    UnitAdd.Perform ();
-                                    AvailableID = NewModule.ID + 1U;
+                                    newModule = new clsUnit ();
+                                    newModule.TypeBase = moduleTypeBase;
+                                    newModule.UnitGroup = newUnit.UnitGroup;
+                                    newModule.Pos = newUnit.Pos;
+                                    newModule.Rotation = newUnit.Rotation;
+                                    unitAdd.NewUnit = newModule;
+                                    unitAdd.ID = availableID;
+                                    unitAdd.Perform ();
+                                    availableID = newModule.ID + 1U;
                                 }
                             }
                         }
                     }
                 }
-                if (StructureBadPositionCount > 0)
+                if (structureBadPositionCount > 0)
                 {
-                    ReturnResult.WarningAdd (StructureBadPositionCount + " structures had an invalid position and were removed.");
+                    ReturnResult.WarningAdd (structureBadPositionCount + " structures had an invalid position and were removed.");
                 }
-                if (StructureBadModulesCount > 0)
+                if (structureBadModulesCount > 0)
                 {
-                    ReturnResult.WarningAdd (StructureBadModulesCount + " structures had an invalid number of modules.");
+                    ReturnResult.WarningAdd (structureBadModulesCount + " structures had an invalid number of modules.");
                 }
             }
-            if (INIFeatures != null)
+            if (iniFeatures != null)
             {
-                for (A = 0; A <= INIFeatures.FeatureCount - 1; A++)
+                for (a = 0; a <= iniFeatures.FeatureCount - 1; a++)
                 {
-                    if (INIFeatures.Features [A].Pos == null)
+                    if (iniFeatures.Features [a].Pos == null)
                     {
-                        FeatureBadPositionCount++;
-                    } else if (!App.PosIsWithinTileArea (INIFeatures.Features [A].Pos, ZeroPos, Terrain.TileSize))
+                        featureBadPositionCount++;
+                    } else if (!App.PosIsWithinTileArea (iniFeatures.Features [a].Pos, zeroPos, Terrain.TileSize))
                     {
-                        FeatureBadPositionCount++;
+                        featureBadPositionCount++;
                     } else
                     {
-                        unitTypeBase = App.ObjectData.FindOrCreateUnitType (Convert.ToString (INIFeatures.Features [A].Code), UnitType.Feature, -1);
+                        unitTypeBase = App.ObjectData.FindOrCreateUnitType (Convert.ToString (iniFeatures.Features [a].Code), UnitType.Feature, -1);
                         if (unitTypeBase.Type == UnitType.Feature)
                         {
                             featureTypeBase = (FeatureTypeBase)unitTypeBase;
@@ -836,245 +837,245 @@ namespace SharpFlame.Mapping
                         }
                         if (featureTypeBase == null)
                         {
-                            ErrorCount++;
+                            errorCount++;
                         } else
                         {
-                            NewUnit = new clsUnit ();
-                            NewUnit.TypeBase = featureTypeBase;
-                            NewUnit.UnitGroup = ScavengerUnitGroup;
-                            NewUnit.Pos = new WorldPos ((XYInt)INIFeatures.Features [A].Pos, INIFeatures.Features [A].Pos.Z);
-                            NewUnit.Rotation = Convert.ToInt32 (INIFeatures.Features [A].Rotation.Direction * 360.0D / Constants.INIRotationMax);
-                            if (NewUnit.Rotation == 360)
+                            newUnit = new clsUnit ();
+                            newUnit.TypeBase = featureTypeBase;
+                            newUnit.UnitGroup = ScavengerUnitGroup;
+                            newUnit.Pos = new WorldPos ((XYInt)iniFeatures.Features [a].Pos, iniFeatures.Features [a].Pos.Z);
+                            newUnit.Rotation = Convert.ToInt32 (iniFeatures.Features [a].Rotation.Direction * 360.0D / Constants.INIRotationMax);
+                            if (newUnit.Rotation == 360)
                             {
-                                NewUnit.Rotation = 0;
+                                newUnit.Rotation = 0;
                             }
-                            if (INIFeatures.Features [A].HealthPercent >= 0)
+                            if (iniFeatures.Features [a].HealthPercent >= 0)
                             {
-                                NewUnit.Health = MathUtil.Clamp_dbl (INIFeatures.Features [A].HealthPercent / 100.0D, 0.01D, 1.0D);
+                                newUnit.Health = MathUtil.Clamp_dbl (iniFeatures.Features [a].HealthPercent / 100.0D, 0.01D, 1.0D);
                             }
-                            if (INIFeatures.Features [A].ID == 0U)
+                            if (iniFeatures.Features [a].ID == 0U)
                             {
-                                INIFeatures.Features [A].ID = AvailableID;
-                                App.ZeroIDWarning (NewUnit, INIFeatures.Features [A].ID, ReturnResult);
+                                iniFeatures.Features [a].ID = availableID;
+                                App.ZeroIDWarning (newUnit, iniFeatures.Features [a].ID, ReturnResult);
                             }
-                            UnitAdd.NewUnit = NewUnit;
-                            UnitAdd.ID = INIFeatures.Features [A].ID;
-                            UnitAdd.Perform ();
-                            App.ErrorIDChange (INIFeatures.Features [A].ID, NewUnit, "Load_WZ->INIFeatures");
-                            if (AvailableID == INIFeatures.Features [A].ID)
+                            unitAdd.NewUnit = newUnit;
+                            unitAdd.ID = iniFeatures.Features [a].ID;
+                            unitAdd.Perform ();
+                            App.ErrorIDChange (iniFeatures.Features [a].ID, newUnit, "Load_WZ->INIFeatures");
+                            if (availableID == iniFeatures.Features [a].ID)
                             {
-                                AvailableID = NewUnit.ID + 1U;
+                                availableID = newUnit.ID + 1U;
                             }
                         }
                     }
                 }
-                if (FeatureBadPositionCount > 0)
+                if (featureBadPositionCount > 0)
                 {
-                    ReturnResult.WarningAdd (FeatureBadPositionCount + " features had an invalid position and were removed.");
+                    ReturnResult.WarningAdd (featureBadPositionCount + " features had an invalid position and were removed.");
                 }
             }
-            if (INIDroids != null)
+            if (iniDroids != null)
             {
-                for (A = 0; A <= INIDroids.DroidCount - 1; A++)
+                for (a = 0; a <= iniDroids.DroidCount - 1; a++)
                 {
-                    if (INIDroids.Droids [A].Pos == null)
+                    if (iniDroids.Droids [a].Pos == null)
                     {
-                        DroidBadPositionCount++;
-                    } else if (!App.PosIsWithinTileArea (INIDroids.Droids [A].Pos, ZeroPos, Terrain.TileSize))
+                        droidBadPositionCount++;
+                    } else if (!App.PosIsWithinTileArea (iniDroids.Droids [a].Pos, zeroPos, Terrain.TileSize))
                     {
-                        DroidBadPositionCount++;
+                        droidBadPositionCount++;
                     } else
                     {
-                        if (INIDroids.Droids [A].Template == null || INIDroids.Droids [A].Template == "")
+                        if (iniDroids.Droids [a].Template == null || iniDroids.Droids [a].Template == "")
                         {
-                            DroidType = new DroidDesign ();
-                            if (!DroidType.SetDroidType ((enumDroidType)(INIDroids.Droids [A].DroidType)))
+                            droidType = new DroidDesign ();
+                            if (!droidType.SetDroidType ((enumDroidType)(iniDroids.Droids [a].DroidType)))
                             {
-                                UnknownDroidTypeCount++;
+                                unknownDroidTypeCount++;
                             }
-                            LoadPartsArgs.Body = App.ObjectData.FindOrCreateBody (INIDroids.Droids [A].Body);
-                            if (LoadPartsArgs.Body == null)
+                            loadPartsArgs.Body = App.ObjectData.FindOrCreateBody (iniDroids.Droids [a].Body);
+                            if (loadPartsArgs.Body == null)
                             {
-                                UnknownDroidComponentCount++;
+                                unknownDroidComponentCount++;
                             } else
                             {
-                                if (LoadPartsArgs.Body.IsUnknown)
+                                if (loadPartsArgs.Body.IsUnknown)
                                 {
-                                    UnknownDroidComponentCount++;
+                                    unknownDroidComponentCount++;
                                 }
                             }
-                            LoadPartsArgs.Propulsion = App.ObjectData.FindOrCreatePropulsion (Convert.ToString (INIDroids.Droids [A].Propulsion));
-                            if (LoadPartsArgs.Propulsion == null)
+                            loadPartsArgs.Propulsion = App.ObjectData.FindOrCreatePropulsion (Convert.ToString (iniDroids.Droids [a].Propulsion));
+                            if (loadPartsArgs.Propulsion == null)
                             {
-                                UnknownDroidComponentCount++;
+                                unknownDroidComponentCount++;
                             } else
                             {
-                                if (LoadPartsArgs.Propulsion.IsUnknown)
+                                if (loadPartsArgs.Propulsion.IsUnknown)
                                 {
-                                    UnknownDroidComponentCount++;
+                                    unknownDroidComponentCount++;
                                 }
                             }
-                            LoadPartsArgs.Construct = App.ObjectData.FindOrCreateConstruct (Convert.ToString (INIDroids.Droids [A].Construct));
-                            if (LoadPartsArgs.Construct == null)
+                            loadPartsArgs.Construct = App.ObjectData.FindOrCreateConstruct (Convert.ToString (iniDroids.Droids [a].Construct));
+                            if (loadPartsArgs.Construct == null)
                             {
-                                UnknownDroidComponentCount++;
+                                unknownDroidComponentCount++;
                             } else
                             {
-                                if (LoadPartsArgs.Construct.IsUnknown)
+                                if (loadPartsArgs.Construct.IsUnknown)
                                 {
-                                    UnknownDroidComponentCount++;
+                                    unknownDroidComponentCount++;
                                 }
                             }
-                            LoadPartsArgs.Repair = App.ObjectData.FindOrCreateRepair (INIDroids.Droids [A].Repair);
-                            if (LoadPartsArgs.Repair == null)
+                            loadPartsArgs.Repair = App.ObjectData.FindOrCreateRepair (iniDroids.Droids [a].Repair);
+                            if (loadPartsArgs.Repair == null)
                             {
-                                UnknownDroidComponentCount++;
+                                unknownDroidComponentCount++;
                             } else
                             {
-                                if (LoadPartsArgs.Repair.IsUnknown)
+                                if (loadPartsArgs.Repair.IsUnknown)
                                 {
-                                    UnknownDroidComponentCount++;
+                                    unknownDroidComponentCount++;
                                 }
                             }
-                            LoadPartsArgs.Sensor = App.ObjectData.FindOrCreateSensor (INIDroids.Droids [A].Sensor);
-                            if (LoadPartsArgs.Sensor == null)
+                            loadPartsArgs.Sensor = App.ObjectData.FindOrCreateSensor (iniDroids.Droids [a].Sensor);
+                            if (loadPartsArgs.Sensor == null)
                             {
-                                UnknownDroidComponentCount++;
+                                unknownDroidComponentCount++;
                             } else
                             {
-                                if (LoadPartsArgs.Sensor.IsUnknown)
+                                if (loadPartsArgs.Sensor.IsUnknown)
                                 {
-                                    UnknownDroidComponentCount++;
+                                    unknownDroidComponentCount++;
                                 }
                             }
-                            LoadPartsArgs.Brain = App.ObjectData.FindOrCreateBrain (INIDroids.Droids [A].Brain);
-                            if (LoadPartsArgs.Brain == null)
+                            loadPartsArgs.Brain = App.ObjectData.FindOrCreateBrain (iniDroids.Droids [a].Brain);
+                            if (loadPartsArgs.Brain == null)
                             {
-                                UnknownDroidComponentCount++;
+                                unknownDroidComponentCount++;
                             } else
                             {
-                                if (LoadPartsArgs.Brain.IsUnknown)
+                                if (loadPartsArgs.Brain.IsUnknown)
                                 {
-                                    UnknownDroidComponentCount++;
+                                    unknownDroidComponentCount++;
                                 }
                             }
-                            LoadPartsArgs.ECM = App.ObjectData.FindOrCreateECM (Convert.ToString (INIDroids.Droids [A].ECM));
-                            if (LoadPartsArgs.ECM == null)
+                            loadPartsArgs.ECM = App.ObjectData.FindOrCreateECM (Convert.ToString (iniDroids.Droids [a].ECM));
+                            if (loadPartsArgs.ECM == null)
                             {
-                                UnknownDroidComponentCount++;
+                                unknownDroidComponentCount++;
                             } else
                             {
-                                if (LoadPartsArgs.ECM.IsUnknown)
+                                if (loadPartsArgs.ECM.IsUnknown)
                                 {
-                                    UnknownDroidComponentCount++;
+                                    unknownDroidComponentCount++;
                                 }
                             }
-                            LoadPartsArgs.Weapon1 = App.ObjectData.FindOrCreateWeapon (Convert.ToString (INIDroids.Droids [A].Weapons [0]));
-                            if (LoadPartsArgs.Weapon1 == null)
+                            loadPartsArgs.Weapon1 = App.ObjectData.FindOrCreateWeapon (Convert.ToString (iniDroids.Droids [a].Weapons [0]));
+                            if (loadPartsArgs.Weapon1 == null)
                             {
-                                UnknownDroidComponentCount++;
+                                unknownDroidComponentCount++;
                             } else
                             {
-                                if (LoadPartsArgs.Weapon1.IsUnknown)
+                                if (loadPartsArgs.Weapon1.IsUnknown)
                                 {
-                                    UnknownDroidComponentCount++;
+                                    unknownDroidComponentCount++;
                                 }
                             }
-                            LoadPartsArgs.Weapon2 = App.ObjectData.FindOrCreateWeapon (Convert.ToString (INIDroids.Droids [A].Weapons [1]));
-                            if (LoadPartsArgs.Weapon2 == null)
+                            loadPartsArgs.Weapon2 = App.ObjectData.FindOrCreateWeapon (Convert.ToString (iniDroids.Droids [a].Weapons [1]));
+                            if (loadPartsArgs.Weapon2 == null)
                             {
-                                UnknownDroidComponentCount++;
+                                unknownDroidComponentCount++;
                             } else
                             {
-                                if (LoadPartsArgs.Weapon2.IsUnknown)
+                                if (loadPartsArgs.Weapon2.IsUnknown)
                                 {
-                                    UnknownDroidComponentCount++;
+                                    unknownDroidComponentCount++;
                                 }
                             }
-                            LoadPartsArgs.Weapon3 = App.ObjectData.FindOrCreateWeapon (Convert.ToString (INIDroids.Droids [A].Weapons [2]));
-                            if (LoadPartsArgs.Weapon3 == null)
+                            loadPartsArgs.Weapon3 = App.ObjectData.FindOrCreateWeapon (Convert.ToString (iniDroids.Droids [a].Weapons [2]));
+                            if (loadPartsArgs.Weapon3 == null)
                             {
-                                UnknownDroidComponentCount++;
+                                unknownDroidComponentCount++;
                             } else
                             {
-                                if (LoadPartsArgs.Weapon3.IsUnknown)
+                                if (loadPartsArgs.Weapon3.IsUnknown)
                                 {
-                                    UnknownDroidComponentCount++;
+                                    unknownDroidComponentCount++;
                                 }
                             }
-                            DroidType.LoadParts (LoadPartsArgs);
+                            droidType.LoadParts (loadPartsArgs);
                         } else
                         {
-                            unitTypeBase = App.ObjectData.FindOrCreateUnitType (INIDroids.Droids [A].Template, UnitType.PlayerDroid, -1);
+                            unitTypeBase = App.ObjectData.FindOrCreateUnitType (iniDroids.Droids [a].Template, UnitType.PlayerDroid, -1);
                             if (unitTypeBase == null)
                             {
-                                DroidType = null;
+                                droidType = null;
                             } else
                             {
                                 if (unitTypeBase.Type == UnitType.PlayerDroid)
                                 {
-                                    DroidType = (DroidDesign)unitTypeBase;
+                                    droidType = (DroidDesign)unitTypeBase;
                                 } else
                                 {
-                                    DroidType = null;
+                                    droidType = null;
                                 }
                             }
                         }
-                        if (DroidType == null)
+                        if (droidType == null)
                         {
-                            ErrorCount++;
+                            errorCount++;
                         } else
                         {
-                            NewUnit = new clsUnit ();
-                            NewUnit.TypeBase = DroidType;
-                            if (INIDroids.Droids [A].UnitGroup == null)
+                            newUnit = new clsUnit ();
+                            newUnit.TypeBase = droidType;
+                            if (iniDroids.Droids [a].UnitGroup == null)
                             {
-                                NewUnit.UnitGroup = ScavengerUnitGroup;
+                                newUnit.UnitGroup = ScavengerUnitGroup;
                             } else
                             {
-                                NewUnit.UnitGroup = INIDroids.Droids [A].UnitGroup;
+                                newUnit.UnitGroup = iniDroids.Droids [a].UnitGroup;
                             }
-                            NewUnit.Pos = new WorldPos (INIDroids.Droids [A].Pos, INIDroids.Droids [A].Pos.Z);
-                            NewUnit.Rotation = Convert.ToInt32 (INIDroids.Droids [A].Rotation.Direction * 360.0D / Constants.INIRotationMax);
-                            if (NewUnit.Rotation == 360)
+                            newUnit.Pos = new WorldPos (iniDroids.Droids [a].Pos, iniDroids.Droids [a].Pos.Z);
+                            newUnit.Rotation = Convert.ToInt32 (iniDroids.Droids [a].Rotation.Direction * 360.0D / Constants.INIRotationMax);
+                            if (newUnit.Rotation == 360)
                             {
-                                NewUnit.Rotation = 0;
+                                newUnit.Rotation = 0;
                             }
-                            if (INIDroids.Droids [A].HealthPercent >= 0)
+                            if (iniDroids.Droids [a].HealthPercent >= 0)
                             {
-                                NewUnit.Health = MathUtil.Clamp_dbl (INIDroids.Droids [A].HealthPercent / 100.0D, 0.01D, 1.0D);
+                                newUnit.Health = MathUtil.Clamp_dbl (iniDroids.Droids [a].HealthPercent / 100.0D, 0.01D, 1.0D);
                             }
-                            if (INIDroids.Droids [A].ID == 0U)
+                            if (iniDroids.Droids [a].ID == 0U)
                             {
-                                INIDroids.Droids [A].ID = AvailableID;
-                                App.ZeroIDWarning (NewUnit, INIDroids.Droids [A].ID, ReturnResult);
+                                iniDroids.Droids [a].ID = availableID;
+                                App.ZeroIDWarning (newUnit, iniDroids.Droids [a].ID, ReturnResult);
                             }
-                            UnitAdd.NewUnit = NewUnit;
-                            UnitAdd.ID = INIDroids.Droids [A].ID;
-                            UnitAdd.Perform ();
-                            App.ErrorIDChange (INIDroids.Droids [A].ID, NewUnit, "Load_WZ->INIDroids");
-                            if (AvailableID == INIDroids.Droids [A].ID)
+                            unitAdd.NewUnit = newUnit;
+                            unitAdd.ID = iniDroids.Droids [a].ID;
+                            unitAdd.Perform ();
+                            App.ErrorIDChange (iniDroids.Droids [a].ID, newUnit, "Load_WZ->INIDroids");
+                            if (availableID == iniDroids.Droids [a].ID)
                             {
-                                AvailableID = NewUnit.ID + 1U;
+                                availableID = newUnit.ID + 1U;
                             }
                         }
                     }
                 }
-                if (DroidBadPositionCount > 0)
+                if (droidBadPositionCount > 0)
                 {
-                    ReturnResult.WarningAdd (DroidBadPositionCount + " droids had an invalid position and were removed.");
+                    ReturnResult.WarningAdd (droidBadPositionCount + " droids had an invalid position and were removed.");
                 }
-                if (UnknownDroidTypeCount > 0)
+                if (unknownDroidTypeCount > 0)
                 {
-                    ReturnResult.WarningAdd (UnknownDroidTypeCount + " droid designs had an unrecognised droidType and were removed.");
+                    ReturnResult.WarningAdd (unknownDroidTypeCount + " droid designs had an unrecognised droidType and were removed.");
                 }
-                if (UnknownDroidComponentCount > 0)
+                if (unknownDroidComponentCount > 0)
                 {
-                    ReturnResult.WarningAdd (UnknownDroidComponentCount + " droid designs had components that are not loaded.");
+                    ReturnResult.WarningAdd (unknownDroidComponentCount + " droid designs had components that are not loaded.");
                 }
             }
 
-            if (ErrorCount > 0)
+            if (errorCount > 0)
             {
                 ReturnResult.WarningAdd ("Object Create Error.");
             }
@@ -1478,7 +1479,12 @@ namespace SharpFlame.Mapping
                 var iniSections = SharpFlame.Core.Parsers.Ini.IniReader.ReadString (iniText);
                 foreach (var iniSection in iniSections)
                 {
-                    nameText = iniSection.Name.Substring (0, iniSection.Name.IndexOf ('_'));
+                    var idx = iniSection.Name.IndexOf ('_');
+                    if (idx > 0) {
+                        nameText = iniSection.Name.Substring (0, idx);
+                    } else {
+                        nameText = iniSection.Name;
+                    }
                     switch (nameText)
                     {
                     case "position":
@@ -2061,6 +2067,7 @@ namespace SharpFlame.Mapping
                     underneathTypeCount = 0;
                     break;
                 }
+
                 if (underneathTypeCount == 0)
                 {
                     priorityOrder.SetItem (unit);

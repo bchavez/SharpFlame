@@ -78,7 +78,7 @@ namespace SharpFlame.Mapping
                     zip.PutNextEntry ("Objects.ini");
                     var objectsIniWriter = new IniWriter ();
                     objectsIniWriter.File = streamWriter;
-                    returnResult.Add(Serialize_FMap_Gateways(objectsIniWriter));
+                    returnResult.Add(Serialize_FMap_Objects(objectsIniWriter));
                     streamWriter.Flush ();
 
                     zip.PutNextEntry ("Gateways.ini");             
