@@ -133,7 +133,6 @@ namespace SharpFlame.Mapping.Tiles
             var blueTotal = 0;
             var tileNum = 0;
             var strTile = "";
-            var bmpTextureArgs = new BitmapGLTexture();
             var AverageColour = new float[4];
             var x = 0;
             var y = 0;
@@ -166,27 +165,24 @@ namespace SharpFlame.Mapping.Tiles
                     return returnResult;
                 }
 
-                bmpTextureArgs.Texture = bitmap;
-                bmpTextureArgs.MipMapLevel = 0;
-                bmpTextureArgs.MagFilter = TextureMagFilter.Nearest;
-                bmpTextureArgs.MinFilter = TextureMinFilter.Nearest;
-                bmpTextureArgs.TextureNum = 0;
-                bmpTextureArgs.Perform();
-                Tiles[tileNum].TextureViewGlTextureNum = bmpTextureArgs.TextureNum;
+//                Tiles[tileNum].TextureViewGlTextureNum = BitmapUtil.CreateGLTexture (bitmap, 0, 0,
+//                                                                             TextureMagFilter.Nearest, 
+//                                                                             TextureMinFilter.Nearest);
 
-                bmpTextureArgs.MagFilter = TextureMagFilter.Nearest;
                 if ( SettingsManager.Settings.Mipmaps )
                 {
-                    bmpTextureArgs.MinFilter = TextureMinFilter.LinearMipmapLinear;
+                    Tiles[tileNum].MapViewGlTextureNum = BitmapUtil.CreateGLTexture (bitmap, 0, 0,
+                                                         TextureMagFilter.Nearest, 
+                                                         TextureMinFilter.LinearMipmapLinear);
                 }
                 else
                 {
-                    bmpTextureArgs.MinFilter = TextureMinFilter.Nearest;
+                    Tiles[tileNum].MapViewGlTextureNum = BitmapUtil.CreateGLTexture (bitmap, 0, 0, 
+                                                         TextureMagFilter.Nearest, 
+                                                         TextureMinFilter.Nearest);
                 }
-                bmpTextureArgs.TextureNum = 0;
 
-                bmpTextureArgs.Perform();
-                Tiles[tileNum].MapViewGlTextureNum = bmpTextureArgs.TextureNum;
+                Tiles [tileNum].TextureViewGlTextureNum = Tiles [tileNum].MapViewGlTextureNum;
 
                 if ( SettingsManager.Settings.Mipmaps )
                 {
@@ -199,7 +195,8 @@ namespace SharpFlame.Mapping.Tiles
                     else
                     {
                         var MipmapResult = default(clsResult);
-                        MipmapResult = GenerateMipMaps(slashPath, strTile, bmpTextureArgs, tileNum);
+                        MipmapResult = GenerateMipMaps(slashPath, strTile, 
+                                                       Tiles[tileNum].MapViewGlTextureNum, tileNum);
                         returnResult.Add(MipmapResult);
                         if ( MipmapResult.HasProblems )
                         {
@@ -235,7 +232,7 @@ namespace SharpFlame.Mapping.Tiles
             return returnResult;
         }
 
-        public clsResult GenerateMipMaps(string SlashPath, string strTile, BitmapGLTexture BitmapTextureArgs, int TileNum)
+        public clsResult GenerateMipMaps(string SlashPath, string strTile, int textureNum, int TileNum)
         {
             var ReturnResult = new clsResult("Generating mipmaps", false);
             logger.Info("Generating mipmaps");
@@ -262,7 +259,7 @@ namespace SharpFlame.Mapping.Tiles
 
             //-------- 64 --------
 
-            GraphicPath = SlashPath + Name + "-64" + Convert.ToString(App.PlatformPathSeparator) + strTile;
+            GraphicPath = string.Format ("{0}{1}-64{2}{3}", SlashPath, Name, App.PlatformPathSeparator, strTile);
 
             Result = BitmapUtil.LoadBitmap(GraphicPath, ref Bitmap);
             if ( !Result.Success )
@@ -277,9 +274,7 @@ namespace SharpFlame.Mapping.Tiles
                 return ReturnResult;
             }
 
-            BitmapTextureArgs.Texture = Bitmap;
-            BitmapTextureArgs.MipMapLevel = 1;
-            BitmapTextureArgs.Perform();
+            BitmapUtil.CreateGLTexture (Bitmap, 1, textureNum);
 
             //-------- 32 --------
 
@@ -298,9 +293,7 @@ namespace SharpFlame.Mapping.Tiles
                 return ReturnResult;
             }
 
-            BitmapTextureArgs.Texture = Bitmap;
-            BitmapTextureArgs.MipMapLevel = 2;
-            BitmapTextureArgs.Perform();
+            BitmapUtil.CreateGLTexture (Bitmap, 2, textureNum);
 
             //-------- 16 --------
 
@@ -319,9 +312,7 @@ namespace SharpFlame.Mapping.Tiles
                 return ReturnResult;
             }
 
-            BitmapTextureArgs.Texture = Bitmap;
-            BitmapTextureArgs.MipMapLevel = 3;
-            BitmapTextureArgs.Perform();
+            BitmapUtil.CreateGLTexture (Bitmap, 3, textureNum);
 
             //-------- 8 --------
 
@@ -345,9 +336,7 @@ namespace SharpFlame.Mapping.Tiles
                 }
             }
 
-            BitmapTextureArgs.Texture = Bitmap8;
-            BitmapTextureArgs.MipMapLevel = 4;
-            BitmapTextureArgs.Perform();
+            BitmapUtil.CreateGLTexture (Bitmap8, 4, textureNum);
 
             //-------- 4 --------
 
@@ -372,9 +361,7 @@ namespace SharpFlame.Mapping.Tiles
                 }
             }
 
-            BitmapTextureArgs.Texture = Bitmap4;
-            BitmapTextureArgs.MipMapLevel = 5;
-            BitmapTextureArgs.Perform();
+            BitmapUtil.CreateGLTexture (Bitmap4, 5, textureNum);
 
             //-------- 2 --------
 
@@ -399,9 +386,7 @@ namespace SharpFlame.Mapping.Tiles
                 }
             }
 
-            BitmapTextureArgs.Texture = Bitmap2;
-            BitmapTextureArgs.MipMapLevel = 6;
-            BitmapTextureArgs.Perform();
+            BitmapUtil.CreateGLTexture (Bitmap2, 6, textureNum);
 
             //-------- 1 --------
 
@@ -422,9 +407,7 @@ namespace SharpFlame.Mapping.Tiles
             Blue = Convert.ToInt32(((PixelColorA.B) + PixelColorB.B + PixelColorC.B + PixelColorD.B) / 4.0F);
             Bitmap1.SetPixel(PixX, PixY, ColorTranslator.FromOle(ColorUtil.OSRGB(Red, Green, Blue)));
 
-            BitmapTextureArgs.Texture = Bitmap1;
-            BitmapTextureArgs.MipMapLevel = 7;
-            BitmapTextureArgs.Perform();
+            BitmapUtil.CreateGLTexture (Bitmap1, 7, textureNum);
 
             return ReturnResult;
         }

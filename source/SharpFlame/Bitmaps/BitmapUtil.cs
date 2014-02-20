@@ -2,8 +2,11 @@
 
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using NLog;
+using OpenTK.Graphics.OpenGL;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
 using SharpFlame.Util;
 
 #endregion
@@ -89,6 +92,39 @@ namespace SharpFlame.Bitmaps
             }
 
             return returnResult;
+        }
+
+        public static int CreateGLTexture(Bitmap texture, int mipMapLevel, int inTextureNum = 0,
+                                 TextureMagFilter magFilter = TextureMagFilter.Nearest, 
+                                 TextureMinFilter minFilter = TextureMinFilter.Nearest) 
+        {
+            var bitmapData = texture.LockBits(new Rectangle(0, 0, texture.Width, texture.Height),
+                                              ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            int textureNum;
+            if (mipMapLevel == 0)
+            {
+                GL.GenTextures (1, out textureNum);
+            } else
+            {
+                textureNum = inTextureNum;
+            }
+
+            GL.BindTexture(TextureTarget.Texture2D, textureNum);
+
+            GL.TexImage2D(TextureTarget.Texture2D, mipMapLevel, PixelInternalFormat.Rgba, bitmapData.Width, bitmapData.Height, 0,
+                          OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bitmapData.Scan0);
+
+            if ( mipMapLevel == 0 )
+            {
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)magFilter);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)minFilter);
+            }
+
+            texture.UnlockBits(bitmapData);
+
+            return textureNum;
         }
     }
 }

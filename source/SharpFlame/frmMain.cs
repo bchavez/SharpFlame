@@ -2045,22 +2045,13 @@ namespace SharpFlame
 
             Bitmap Bitmap = null;
 
-            var BitmapTextureArgs = new BitmapGLTexture();
-
-            BitmapTextureArgs.MagFilter = TextureMagFilter.Nearest;
-            BitmapTextureArgs.MinFilter = TextureMinFilter.Nearest;
-            BitmapTextureArgs.TextureNum = 0;
-            BitmapTextureArgs.MipMapLevel = 0;
-
             Bitmap = Resources.notile;
             {
                 var Result = new clsResult("Loading notile.png", false);
                 logger.Info("Loading notile.png");
                 Result.Take(BitmapUtil.BitmapIsGlCompatible(Bitmap));
-                ReturnResult.Add(Result);
-                BitmapTextureArgs.Texture = Bitmap;
-                BitmapTextureArgs.Perform();
-                App.GLTexture_NoTile = BitmapTextureArgs.TextureNum;
+                ReturnResult.Add (Result);
+                App.GLTexture_NoTile = BitmapUtil.CreateGLTexture (Bitmap, 0);
             }
 
             Bitmap = Resources.overflow;
@@ -2069,9 +2060,7 @@ namespace SharpFlame
                 logger.Info("Loading overflow.png");
                 Result.Take(BitmapUtil.BitmapIsGlCompatible(Bitmap));
                 ReturnResult.Add(Result);
-                BitmapTextureArgs.Texture = Bitmap;
-                BitmapTextureArgs.Perform();
-                App.GLTexture_OverflowTile = BitmapTextureArgs.TextureNum;
+                App.GLTexture_OverflowTile = BitmapUtil.CreateGLTexture (Bitmap, 0);
             }
 
             return ReturnResult;

@@ -228,7 +228,6 @@ namespace SharpFlame.Domain
             var Text = "";
             Bitmap Bitmap = null;
             var InstrPos2 = 0;
-            var BitmapTextureArgs = new BitmapGLTexture();
             var BitmapResult = new sResult();
 
             foreach ( var tempLoopVar_Text in TexFiles )
@@ -244,13 +243,7 @@ namespace SharpFlame.Domain
                         if ( BitmapResult.Success )
                         {
                             Result.Take(BitmapUtil.BitmapIsGlCompatible(Bitmap));
-                            BitmapTextureArgs.MagFilter = TextureMagFilter.Nearest;
-                            BitmapTextureArgs.MinFilter = TextureMinFilter.Nearest;
-                            BitmapTextureArgs.TextureNum = 0;
-                            BitmapTextureArgs.MipMapLevel = 0;
-                            BitmapTextureArgs.Texture = Bitmap;
-                            BitmapTextureArgs.Perform();
-                            NewPage.GLTexture_Num = BitmapTextureArgs.TextureNum;
+                            NewPage.GLTexture_Num = BitmapUtil.CreateGLTexture (Bitmap, 0);
                         }
                         else
                         {

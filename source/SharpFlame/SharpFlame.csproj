@@ -114,7 +114,6 @@
     <Compile Include="AppSettings\KeyboardProfileCreator.cs" />
     <Compile Include="AppSettings\OptionCreator.cs" />
     <Compile Include="AppSettings\OptionProfile.cs" />
-    <Compile Include="Bitmaps\BitmapGLTexture.cs" />
     <Compile Include="Collections\Specialized\BooleanMap.cs" />
     <Compile Include="Generators\clsBrush.cs" />
     <Compile Include="Domain\ComponentBase.cs" />
