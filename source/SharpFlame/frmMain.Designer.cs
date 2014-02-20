@@ -364,9 +364,6 @@ namespace SharpFlame
 			this.menuSaveFMapQuick = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuSaveFMapQuick.Click += this.menuSaveFMapQuick_Click;
 			this.ToolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
-			this.menuSaveFME = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuSaveFME.Click += this.menuSaveFME_Click;
-			this.ToolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 			this.MapLNDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.MapLNDToolStripMenuItem.Click += this.LNDToolStripMenuItem1_Click;
 			this.ToolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
@@ -3058,7 +3055,7 @@ namespace SharpFlame
 			//
 			//SaveToolStripMenuItem
 			//
-			this.SaveToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {this.menuSaveFMap, this.ToolStripSeparator7, this.menuSaveFMapQuick, this.ToolStripSeparator11, this.menuSaveFME, this.ToolStripSeparator5, this.MapLNDToolStripMenuItem, this.ToolStripSeparator6, this.menuExportMapTileTypes, this.ToolStripMenuItem1, this.MinimapBMPToolStripMenuItem, this.ToolStripMenuItem3});
+			this.SaveToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {this.menuSaveFMap, this.ToolStripSeparator7, this.menuSaveFMapQuick, this.ToolStripSeparator11, this.MapLNDToolStripMenuItem, this.ToolStripSeparator6, this.menuExportMapTileTypes, this.ToolStripMenuItem1, this.MinimapBMPToolStripMenuItem, this.ToolStripMenuItem3});
 			this.SaveToolStripMenuItem.Name = "SaveToolStripMenuItem";
 			this.SaveToolStripMenuItem.Size = new System.Drawing.Size(177, 24);
 			this.SaveToolStripMenuItem.Text = "Save";
@@ -3084,17 +3081,6 @@ namespace SharpFlame
 			//
 			this.ToolStripSeparator11.Name = "ToolStripSeparator11";
 			this.ToolStripSeparator11.Size = new System.Drawing.Size(281, 6);
-			//
-			//menuSaveFME
-			//
-			this.menuSaveFME.Name = "menuSaveFME";
-			this.menuSaveFME.Size = new System.Drawing.Size(284, 24);
-			this.menuSaveFME.Text = "Map fme (1.19 compatability)...";
-			//
-			//ToolStripSeparator5
-			//
-			this.ToolStripSeparator5.Name = "ToolStripSeparator5";
-			this.ToolStripSeparator5.Size = new System.Drawing.Size(281, 6);
 			//
 			//MapLNDToolStripMenuItem
 			//
@@ -3487,7 +3473,6 @@ namespace SharpFlame
 		public System.Windows.Forms.ToolStripButton tsbSelectionPaste;
 		public System.Windows.Forms.ToolStripButton tsbSelectionRotateCounterClockwise;
 		public System.Windows.Forms.ToolStripButton tsbSelectionRotateClockwise;
-		public System.Windows.Forms.ToolStripSeparator ToolStripSeparator5;
 		public System.Windows.Forms.ToolStrip tsMinimap;
 		public System.Windows.Forms.ToolStripDropDownButton menuMinimap;
 		public System.Windows.Forms.ToolStripMenuItem menuMiniShowTex;
@@ -3611,7 +3596,6 @@ namespace SharpFlame
 		public System.Windows.Forms.CheckBox cbxHeightChangeFade;
 		public System.Windows.Forms.Button btnPlayerSelectObjects;
 		public System.Windows.Forms.CheckBox cbxObjectRandomRotation;
-		public System.Windows.Forms.ToolStripMenuItem menuSaveFME;
 		public System.Windows.Forms.ToolStripSeparator ToolStripSeparator11;
 		public System.Windows.Forms.RadioButton rdoCliffTriBrush;
 		public System.Windows.Forms.Button btnTextureClockwise;

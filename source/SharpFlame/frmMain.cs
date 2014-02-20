@@ -1,6 +1,7 @@
 #region
 
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -17,7 +18,12 @@ using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Generators;
 using SharpFlame.Mapping;
-using SharpFlame.Mapping.Format.Wz;
+using SharpFlame.Mapping.IO.FMap;
+using SharpFlame.Mapping.IO.Heightmap;
+using SharpFlame.Mapping.IO.LND;
+using SharpFlame.Mapping.IO.Minimap;
+using SharpFlame.Mapping.IO.TTP;
+using SharpFlame.Mapping.IO.Wz;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tiles;
@@ -438,15 +444,12 @@ namespace SharpFlame
                 }
             }
 
-            var TilesetNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultTilesetsPathNum));
-            var TilesetsList = (SimpleList<string>)(SettingsManager.Settings.get_Value(SettingsManager.Setting_TilesetDirectories));
-            if ( TilesetNum >= 0 & TilesetNum < TilesetsList.Count )
-            {
-                var TilesetsPath = TilesetsList[TilesetNum];
-                if ( TilesetsPath != null && TilesetsPath != "" )
-                {
+            // var tilesetNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultTilesetsPathNum));
+            var tilesetsList = (List<string>)SettingsManager.Settings.get_Value(SettingsManager.Setting_TilesetDirectories);
+            foreach (var path in tilesetsList) {
+                if (path != null && path != "") {
                     InitializeStatus = "Loading tilesets";
-                    Program.InitializeResult.Add(App.LoadTilesets(PathUtil.EndWithPathSeperator(TilesetsPath)));
+                    Program.InitializeResult.Add(App.LoadTilesets(PathUtil.EndWithPathSeperator(path)));
                     InitializeStatus = "";
                 }
             }
@@ -459,15 +462,12 @@ namespace SharpFlame
             App.CreateTemplateDroidTypes(); //do before loading data
 
             App.ObjectData = new clsObjectData();
-            var ObjectDataNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultObjectDataPathNum));
-            var ObjectDataList = (SimpleList<string>)(SettingsManager.Settings.get_Value(SettingsManager.Setting_ObjectDataDirectories));
-            if ( ObjectDataNum >= 0 & ObjectDataNum < TilesetsList.Count )
-            {
-                var ObjectDataPath = ObjectDataList[ObjectDataNum];
-                if ( ObjectDataPath != null && ObjectDataPath != "" )
-                {
+            // var ObjectDataNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultObjectDataPathNum));
+            var objectDataList = (List<string>)(SettingsManager.Settings.get_Value(SettingsManager.Setting_ObjectDataDirectories));
+            foreach (var path in objectDataList) {
+                if (path != null && path != "") {
                     InitializeStatus = "Loading object data";
-                    Program.InitializeResult.Add(App.ObjectData.LoadDirectory(ObjectDataPath));
+                    Program.InitializeResult.Add(App.ObjectData.LoadDirectory(path));
                     InitializeStatus = "";
                 }
             }
@@ -609,7 +609,7 @@ namespace SharpFlame
 
             Dialog.InitialDirectory = SettingsManager.Settings.OpenPath;
             Dialog.FileName = "";
-            Dialog.Filter = "Warzone Map Files (*.fmap, *.fme, *.wz, *.gam, *.lnd)|*.fmap;*.fme;*.wz;*.gam;*.lnd|All Files (*.*)|*.*";
+            Dialog.Filter = "Warzone Map Files (*.fmap, *.wz, *.gam, *.lnd)|*.fmap;*.wz;*.gam;*.lnd|All Files (*.*)|*.*";
             Dialog.Multiselect = true;
             if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
@@ -712,14 +712,15 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
-            var Result = Map.Load_TTP(Dialog.FileName);
-            if ( Result.Success )
+            var ttpLoader = new TTPLoader (Map);
+            var result = ttpLoader.Load(Dialog.FileName);
+            if (!result.HasProblems && !result.HasWarnings)
             {
                 TextureViewControl.DrawViewLater();
             }
             else
             {
-                MessageBox.Show("Importing tile types failed: " + Result.Problem);
+                App.ShowWarnings(result);
             }
         }
 
@@ -1079,46 +1080,10 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-
-            var Result = Map.Write_LND(Dialog.FileName, true);
-
-            App.ShowWarnings(Result);
-        }
-
-        private void Save_FME_Prompt()
-        {
-            var Map = MainMap;
-
-            if ( Map == null )
-            {
-                return;
-            }
-
-            var Dialog = new SaveFileDialog();
-
-            Dialog.InitialDirectory = SettingsManager.Settings.SavePath;
-            Dialog.FileName = "";
-            Dialog.Filter = Constants.ProgramName + " FME Map Files (*.fme)|*.fme";
-            if ( Dialog.ShowDialog(this) != DialogResult.OK )
-            {
-                return;
-            }
-            SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            var strScavenger = "";
-            clsInputBox.Show("", "Enter the player number for scavenger units:", ref strScavenger);
-            byte ScavengerNum = 0;
-            if ( !IOUtil.InvariantParse(strScavenger, ref ScavengerNum) )
-            {
-                MessageBox.Show("Unable to save FME: entered scavenger number is not a number.");
-                return;
-            }
-            ScavengerNum = Math.Min(ScavengerNum, (byte)10);
-            var Result = new sResult();
-            Result = Map.Write_FME(Dialog.FileName, true, ScavengerNum);
-            if ( !Result.Success )
-            {
-                MessageBox.Show("Unable to save FME: " + Result.Problem);
-            }
+                 
+            var lndSaver = new LNDSaver (Map);
+            var result = lndSaver.Save(Dialog.FileName, true);
+            App.ShowWarnings(result);
         }
 
         public void Save_Minimap_Prompt()
@@ -1140,11 +1105,10 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            var Result = new sResult();
-            Result = Map.Write_MinimapFile(Dialog.FileName, true);
-            if ( !Result.Success )
-            {
-                MessageBox.Show("There was a problem saving the minimap bitmap: " + Result.Problem);
+            var minmapSaver = new MinimapSaver (Map);
+            var result = minmapSaver.Save(Dialog.FileName, true);
+            if (result.HasProblems || result.HasWarnings) {
+                App.ShowWarnings (result);
             }
         }
 
@@ -1167,11 +1131,10 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            var Result = new sResult();
-            Result = Map.Write_Heightmap(Dialog.FileName, true);
-            if ( !Result.Success )
-            {
-                MessageBox.Show("There was a problem saving the heightmap bitmap: " + Result.Problem);
+            var hmSaver = new HeightmapSaver (Map);
+            var result = hmSaver.Save(Dialog.FileName, true);
+            if (result.HasProblems || result.HasWarnings) {
+                App.ShowWarnings (result);
             }
         }
 
@@ -1194,11 +1157,10 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            var Result = new sResult();
-            Result = Map.Write_TTP(Dialog.FileName, true);
-            if ( !Result.Success )
-            {
-                MessageBox.Show("There was a problem saving the tile types: " + Result.Problem);
+            var ttpSaver = new TTPSaver (Map);
+            var result = ttpSaver.Save(Dialog.FileName, true);
+            if (result.HasProblems || result.HasWarnings) {
+                App.ShowWarnings (result);
             }
         }
 
@@ -2094,7 +2056,7 @@ namespace SharpFlame
             {
                 var Result = new clsResult("Loading notile.png", false);
                 logger.Info("Loading notile.png");
-                Result.Take(BitmapUtil.BitmapIsGLCompatible(Bitmap));
+                Result.Take(BitmapUtil.BitmapIsGlCompatible(Bitmap));
                 ReturnResult.Add(Result);
                 BitmapTextureArgs.Texture = Bitmap;
                 BitmapTextureArgs.Perform();
@@ -2105,7 +2067,7 @@ namespace SharpFlame
             {
                 var Result = new clsResult("Loading overflow.png", false);
                 logger.Info("Loading overflow.png");
-                Result.Take(BitmapUtil.BitmapIsGLCompatible(Bitmap));
+                Result.Take(BitmapUtil.BitmapIsGlCompatible(Bitmap));
                 ReturnResult.Add(Result);
                 BitmapTextureArgs.Texture = Bitmap;
                 BitmapTextureArgs.Perform();
@@ -3372,11 +3334,6 @@ namespace SharpFlame
             View_DrawViewLater();
         }
 
-        public void menuSaveFME_Click(Object sender, EventArgs e)
-        {
-            Save_FME_Prompt();
-        }
-
         public void menuOptions_Click(Object sender, EventArgs e)
         {
             if ( Program.frmOptionsInstance != null )
@@ -4103,31 +4060,29 @@ namespace SharpFlame
 
             switch ( SplitPath.FileExtension.ToLower() )
             {
-                case "fmap":
-                    ReturnResult.Add(resultMap.Load_FMap(Path));
-                    resultMap.PathInfo = new clsPathInfo(Path, true);
-                    break;
-                case "fme":
-                    ReturnResult.Add(resultMap.Load_FME(Path));
-                    resultMap.PathInfo = new clsPathInfo(Path, false);
-                    break;
-                case "wz":
-                    var wzFormat = new Wz(resultMap);
-                    ReturnResult.Add(wzFormat.Load(Path));
-                    resultMap.PathInfo = new clsPathInfo(Path, false);
-                    break;
-                case "gam":
-                    var gameFormat = new Game(resultMap);
-                    ReturnResult.Add(gameFormat.Load(Path));
-                    resultMap.PathInfo = new clsPathInfo(Path, false);
-                    break;
-                case "lnd":
-                    ReturnResult.Add(resultMap.Load_LND(Path));
-                    resultMap.PathInfo = new clsPathInfo(Path, false);
-                    break;
-                default:
-                    ReturnResult.ProblemAdd("File extension not recognised.");
-                    break;
+            case "fmap":
+                var fmap = new FMapLoader (resultMap);
+                ReturnResult.Add(fmap.Load(Path));
+                resultMap.PathInfo = new clsPathInfo(Path, true);
+                break;
+            case "wz":
+                var wzFormat = new WzLoader(resultMap);
+                ReturnResult.Add(wzFormat.Load(Path));
+                resultMap.PathInfo = new clsPathInfo(Path, false);
+                break;
+            case "gam":
+                var gameFormat = new Game(resultMap);
+                ReturnResult.Add(gameFormat.Load(Path));
+                resultMap.PathInfo = new clsPathInfo(Path, false);
+                break;
+            case "lnd":
+                var lndFormat = new LNDLoader (resultMap);
+                ReturnResult.Add(lndFormat.Load(Path));
+                resultMap.PathInfo = new clsPathInfo(Path, false);
+                break;
+            default:
+                ReturnResult.ProblemAdd("File extension not recognised.");
+                break;
             }
 
             if ( ReturnResult.HasProblems )
@@ -4248,36 +4203,6 @@ namespace SharpFlame
         public void rdoObjectLine_Click(Object sender, EventArgs e)
         {
             modTools.Tool = modTools.Tools.ObjectLines;
-        }
-
-        private void rdoObjectsSortNone_Click(Object sender, EventArgs e)
-        {
-            if ( !App.ProgramInitializeFinished )
-            {
-                return;
-            }
-
-            ObjectsUpdate();
-        }
-
-        private void rdoObjectsSortInternal_Click(Object sender, EventArgs e)
-        {
-            if ( !App.ProgramInitializeFinished )
-            {
-                return;
-            }
-
-            ObjectsUpdate();
-        }
-
-        private void rdoObjectsSortInGame_Click(Object sender, EventArgs e)
-        {
-            if ( !App.ProgramInitializeFinished )
-            {
-                return;
-            }
-
-            ObjectsUpdate();
         }
 
         private void ActivateObjectTool()

@@ -1,5 +1,6 @@
 #region
 
+using Newtonsoft.Json;
 using SharpFlame.Collections;
 
 #endregion
@@ -22,21 +23,25 @@ namespace SharpFlame.AppSettings
             _DefaultValue = defaultValue;
         }
 
+        [JsonIgnore]
         public override ConnectedListLink<OptionInterface, OptionGroup> GroupLink
         {
             get { return _GroupLink; }
         }
 
+        [JsonIgnore]
         public ValueType DefaultValue
         {
             get { return _DefaultValue; }
         }
 
+        [JsonIgnore]
         public override object DefaultValueObject
         {
             get { return _DefaultValue; }
         }
 
+        [JsonIgnore]
         public override string SaveKey
         {
             get { return _SaveKey; }

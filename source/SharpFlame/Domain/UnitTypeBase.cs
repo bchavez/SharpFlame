@@ -72,19 +72,19 @@ namespace SharpFlame.Domain
         public XYInt get_GetFootprintNew(int Rotation)
         {
             //get initial footprint
-            var Result = new XYInt();
+            XYInt result;
             switch ( Type )
             {
                 case UnitType.Feature:
-                    Result = ((FeatureTypeBase)this).Footprint;
+                    result = ((FeatureTypeBase)this).Footprint;
                     break;
                 case UnitType.PlayerStructure:
-                    Result = ((StructureTypeBase)this).Footprint;
+                    result = ((StructureTypeBase)this).Footprint;
                     break;
                 default:
                     //return droid footprint
-                    Result = new XYInt(1, 1);
-                    return Result;
+                    result = new XYInt(1, 1);
+                    return result;
             }
             //switch footprint axes if not a droid
             var Remainder = Convert.ToDouble((Rotation / 90.0D + 0.5D) % 2.0D);
@@ -94,11 +94,11 @@ namespace SharpFlame.Domain
             }
             if ( Remainder >= 1.0D )
             {
-                var X = Result.X;
-                Result.X = Result.Y;
-                Result.Y = X;
+                var X = result.X;
+                result.X = result.Y;
+                result.Y = X;
             }
-            return Result;
+            return result;
         }
 
         public XYInt get_GetFootprintSelected(int Rotation)
@@ -243,8 +243,8 @@ namespace SharpFlame.Domain
             Result.Pos_Offset = Other.Pos_Offset;
             Attachments.Add(Result);
             Matrix3DMath.MatrixCopy(Other.AngleOffsetMatrix, Result.AngleOffsetMatrix);
-            Result.Models.AddSimpleList(Other.Models);
-            Result.Attachments.AddSimpleList(Other.Attachments);
+            Result.Models.AddRange(Other.Models);
+            Result.Attachments.AddRange(Other.Attachments);
 
             return Result;
         }
@@ -256,7 +256,7 @@ namespace SharpFlame.Domain
 
             Attachments.Add(ResultAttachment);
             Matrix3DMath.MatrixCopy(AttachmentToCopy.AngleOffsetMatrix, ResultAttachment.AngleOffsetMatrix);
-            ResultAttachment.Models.AddSimpleList(AttachmentToCopy.Models);
+            ResultAttachment.Models.AddRange(AttachmentToCopy.Models);
             foreach ( var tempLoopVar_Attachment in AttachmentToCopy.Attachments )
             {
                 Attachment = tempLoopVar_Attachment;

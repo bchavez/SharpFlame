@@ -12,6 +12,7 @@ using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 using SharpFlame.Mapping.Changes;
+using SharpFlame.Mapping.IO.FMap;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Renderers;
 using SharpFlame.Mapping.Script;
@@ -489,7 +490,9 @@ namespace SharpFlame.Mapping
 
             while ( Units.Count > 0 )
             {
-                Units[0].Deallocate();
+                if (Units [0] != null) {
+                    Units [0].Deallocate ();
+                }
             }
             Units.Deallocate();
             Units = null;
@@ -819,7 +822,7 @@ namespace SharpFlame.Mapping
             GL.Vertex3(Vertex2.Horizontal.X, Vertex2.Altitude, Vertex2.Horizontal.Y);
         }
 
-        protected void MinimapTextureFill(clsMinimapTexture Texture)
+        public void MinimapTextureFill(clsMinimapTexture Texture)
         {
             var X = 0;
             var Y = 0;
@@ -1085,19 +1088,19 @@ namespace SharpFlame.Mapping
 
         private void MinimapMake()
         {
-            var NewTextureSize =
+            var newTextureSize =
                 (int)
                     (Math.Round(
                         Convert.ToDouble(Math.Pow(2.0D, Math.Ceiling(Math.Log(Math.Max(Terrain.TileSize.X, Terrain.TileSize.Y)) / Math.Log(2.0D))))));
 
-            if ( NewTextureSize != Minimap_Texture_Size )
+            if ( newTextureSize != Minimap_Texture_Size )
             {
-                Minimap_Texture_Size = NewTextureSize;
+                Minimap_Texture_Size = newTextureSize;
             }
 
-            var Texture = new clsMinimapTexture(new XYInt(Minimap_Texture_Size, Minimap_Texture_Size));
+            var texture = new clsMinimapTexture(new XYInt(Minimap_Texture_Size, Minimap_Texture_Size));
 
-            MinimapTextureFill(Texture);
+            MinimapTextureFill(texture);
 
             MinimapGLDelete();
 
@@ -1108,7 +1111,7 @@ namespace SharpFlame.Mapping
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Minimap_Texture_Size, Minimap_Texture_Size, 0, PixelFormat.Rgba,
-                PixelType.Float, Texture.InlinePixels);
+                PixelType.Float, texture.InlinePixels);
 
             Program.frmMainInstance.View_DrawViewLater();
         }
@@ -1236,7 +1239,8 @@ namespace SharpFlame.Mapping
 
             logger.Info(string.Format("Autosave to: \"{0}\"", path));
 
-            ReturnResult.Add(Write_FMap(path, false, SettingsManager.Settings.AutoSaveCompress));
+            var fmap = new FMapSaver (this);
+            ReturnResult.Add(fmap.Save(path, false, SettingsManager.Settings.AutoSaveCompress));
 
             return ReturnResult;
         }
@@ -1256,17 +1260,17 @@ namespace SharpFlame.Mapping
             }
             SectorTerrainUndoChanges.Clear();
 
-            NewUndo.UnitChanges.AddSimpleList(UnitChanges);
+            NewUndo.UnitChanges.AddRange(UnitChanges);
             UnitChanges.Clear();
 
-            NewUndo.GatewayChanges.AddSimpleList(GatewayChanges);
+            NewUndo.GatewayChanges.AddRange(GatewayChanges);
             GatewayChanges.Clear();
 
             if ( NewUndo.ChangedSectors.Count + NewUndo.UnitChanges.Count + NewUndo.GatewayChanges.Count > 0 )
             {
                 while ( Undos.Count > UndoPosition ) //a new line has been started so remove redos
                 {
-                    Undos.Remove(Undos.Count - 1);
+                    Undos.RemoveAt(Undos.Count - 1);
                 }
 
                 Undos.Add(NewUndo);
@@ -2401,7 +2405,7 @@ namespace SharpFlame.Mapping
                 var timeDiff = DateTime.Now - Convert.ToDateTime(Messages[A].CreatedDate);
                 if ( timeDiff.Seconds >= 6 )
                 {
-                    Messages.Remove(A);
+                    Messages.RemoveAt(A);
                     Changed = true;
                 }
                 else
@@ -2546,15 +2550,15 @@ namespace SharpFlame.Mapping
                 return false;
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            var Result = default(clsResult);
-            Result = Write_FMap(Dialog.FileName, true, true);
-            if ( !Result.HasProblems )
+            var fMap = new FMapSaver (this);
+            var result = fMap.Save(Dialog.FileName, true, true);
+            if ( !result.HasProblems )
             {
                 PathInfo = new clsPathInfo(Dialog.FileName, true);
                 ChangedSinceSave = false;
             }
-            App.ShowWarnings(Result);
-            return !Result.HasProblems;
+            App.ShowWarnings(result);
+            return !result.HasProblems;
         }
 
         public bool Save_FMap_Quick()
@@ -2565,13 +2569,14 @@ namespace SharpFlame.Mapping
             }
             if ( PathInfo.IsFMap )
             {
-                var Result = Write_FMap(PathInfo.Path, true, true);
-                if ( !Result.HasProblems )
+                var fMap = new FMapSaver (this);
+                var result = fMap.Save(PathInfo.Path, true, true);
+                if ( !result.HasProblems )
                 {
                     ChangedSinceSave = false;
                 }
-                App.ShowWarnings(Result);
-                return !Result.HasProblems;
+                App.ShowWarnings(result);
+                return !result.HasProblems;
             }
             return Save_FMap_Prompt();
         }

@@ -90,7 +90,7 @@ namespace SharpFlame.Collections
                 return;
             }
 
-            ConnectedList.Remove(Position);
+            ConnectedList.Remove(ConnectedList.Count - 1);
         }
 
         public void Deallocate()

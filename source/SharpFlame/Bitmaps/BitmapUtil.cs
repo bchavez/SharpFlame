@@ -14,82 +14,81 @@ namespace SharpFlame.Bitmaps
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public static sResult LoadBitmap(string Path, ref Bitmap ResultBitmap)
+        public static sResult LoadBitmap(string path, ref Bitmap resultBitmap)
         {
-            var ReturnResult = new sResult();
-            ReturnResult.Problem = "";
-            ReturnResult.Success = false;
+            var returnResult = new sResult();
+            returnResult.Problem = "";
+            returnResult.Success = false;
 
-            var Bitmap = default(Bitmap);
-
+            Bitmap bitmap;
             try
             {
-                Bitmap = new Bitmap(Path);
+                bitmap = new Bitmap(path);
             }
             catch ( Exception ex )
             {
-                ReturnResult.Problem = ex.Message;
-                ResultBitmap = null;
-                return ReturnResult;
+                returnResult.Problem = ex.Message;
+                resultBitmap = null;
+                return returnResult;
             }
 
-            ResultBitmap = new Bitmap(Bitmap); //copying the bitmap is needed so it doesn't lock access to the file
+            resultBitmap = new Bitmap(bitmap); //copying the bitmap is needed so it doesn't lock access to the file
 
-            ReturnResult.Success = true;
-            return ReturnResult;
+            returnResult.Success = true;
+            return returnResult;
         }
 
-        public static sResult SaveBitmap(string Path, bool Overwrite, Bitmap BitmapToSave)
+        public static sResult SaveBitmap(string path, bool overwrite, Bitmap bitmapToSave)
         {
-            var ReturnResult = new sResult();
-            ReturnResult.Problem = "";
-            ReturnResult.Success = false;
+            var returnResult = new sResult();
+            returnResult.Problem = "";
+            returnResult.Success = false;
 
             try
             {
-                if ( File.Exists(Path) )
+                if ( File.Exists(path) )
                 {
-                    if ( Overwrite )
+                    if ( overwrite )
                     {
-                        File.Delete(Path);
+                        File.Delete(path);
                     }
                     else
                     {
-                        ReturnResult.Problem = "File already exists.";
-                        return ReturnResult;
+                        returnResult.Problem = "File already exists.";
+                        return returnResult;
                     }
                 }
-                BitmapToSave.Save(Path);
+                bitmapToSave.Save(path);
             }
             catch ( Exception ex )
             {
-                ReturnResult.Problem = ex.Message;
-                return ReturnResult;
+                returnResult.Problem = ex.Message;
+                return returnResult;
             }
 
-            ReturnResult.Success = true;
-            return ReturnResult;
+            returnResult.Success = true;
+            return returnResult;
         }
 
-        public static clsResult BitmapIsGLCompatible(Bitmap BitmapToCheck)
+        public static clsResult BitmapIsGlCompatible(Bitmap bitmapToCheck)
         {
-            var ReturnResult = new clsResult("Compatability check", false);
+            var returnResult = new clsResult("Compatability check", false);
             logger.Debug("Compatability check");
 
-            if ( !App.SizeIsPowerOf2(BitmapToCheck.Width) )
+            if ( !App.SizeIsPowerOf2(bitmapToCheck.Width) )
             {
-                ReturnResult.WarningAdd("Image width is not a power of 2.");
+                returnResult.WarningAdd("Image width is not a power of 2.");
             }
-            if ( !App.SizeIsPowerOf2(BitmapToCheck.Height) )
+            if ( !App.SizeIsPowerOf2(bitmapToCheck.Height) )
             {
-                ReturnResult.WarningAdd("Image height is not a power of 2.");
+                returnResult.WarningAdd("Image height is not a power of 2.");
             }
-            if ( BitmapToCheck.Width != BitmapToCheck.Height )
+            if ( bitmapToCheck.Width != bitmapToCheck.Height )
             {
-                ReturnResult.WarningAdd("Image is not square.");
+                returnResult.WarningAdd("Image is not square.");
             }
 
-            return ReturnResult;
+            return returnResult;
         }
     }
 }

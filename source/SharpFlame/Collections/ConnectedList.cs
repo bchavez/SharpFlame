@@ -30,11 +30,6 @@ namespace SharpFlame.Collections
             set { List.MaintainOrder = value; }
         }
 
-        public bool IsBusy
-        {
-            get { return List.Busy; }
-        }
-
         public ItemType this[int Position]
         {
             get { return List[Position].Item; }
@@ -84,7 +79,7 @@ namespace SharpFlame.Collections
 
             RemoveItem = List[Position];
             RemoveItem.BeforeRemove();
-            List.Remove(Position);
+            List.RemoveAt(Position);
             RemoveItem.AfterRemove();
         }
 

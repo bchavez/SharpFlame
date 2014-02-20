@@ -76,29 +76,29 @@ namespace SharpFlame
             {
                 Bad = true;
             }
-            Items.AddSimpleList(ResultToMerge.Items);
+            Items.AddRange(ResultToMerge.Items);
         }
 
-        public void ProblemAdd(string Text, bool log = true)
+        public void ProblemAdd(string text, bool log = true)
         {
             if ( log )
             {
-                logger.Error(Text);
+                logger.Error(text);
             }
-            var Problem = new clsProblem();
-            Problem.Text = Text;
-            ItemAdd(Problem);
+            var problem = new clsProblem();
+            problem.Text = text;
+            ItemAdd(problem);
         }
 
-        public void WarningAdd(string Text, bool log = true)
+        public void WarningAdd(string text, bool log = true)
         {
             if ( log )
             {
-                logger.Warn(Text);
+                logger.Warn(text);
             }
-            var Warning = new clsWarning();
-            Warning.Text = Text;
-            ItemAdd(Warning);
+            var warning = new clsWarning();
+            warning.Text = text;
+            ItemAdd(warning);
         }
 
         public void ItemAdd(clsResultItemInterface item)
@@ -115,27 +115,26 @@ namespace SharpFlame
             var node = new TreeNode();
             node.Text = Text;
             owner.Add(node);
-            var item = default(clsResultItemInterface);
             for ( var i = 0; i <= Items.Count - 1; i++ )
             {
-                item = Items[i];
-                var ChildNode = new TreeNode();
-                ChildNode.Tag = item;
+                var item = Items[i];
+                var childNode = new TreeNode();
+                childNode.Tag = item;
                 if ( item is clsProblem )
                 {
-                    ChildNode.Text = item.GetText;
-                    node.Nodes.Add(ChildNode);
-                    ChildNode.StateImageKey = "problem";
+                    childNode.Text = item.GetText;
+                    node.Nodes.Add(childNode);
+                    childNode.StateImageKey = "problem";
                 }
                 else if ( item is clsWarning )
                 {
-                    ChildNode.Text = item.GetText;
-                    node.Nodes.Add(ChildNode);
-                    ChildNode.StateImageKey = "warning";
+                    childNode.Text = item.GetText;
+                    node.Nodes.Add(childNode);
+                    childNode.StateImageKey = "warning";
                 }
                 else if ( item is clsResult )
                 {
-                    ChildNode = ((clsResult)item).MakeNodes(node.Nodes);
+                    ((clsResult)item).MakeNodes(node.Nodes);
                 }
             }
             return node;

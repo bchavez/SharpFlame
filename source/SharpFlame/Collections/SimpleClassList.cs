@@ -10,7 +10,7 @@ namespace SharpFlame.Collections
     {
         public AddNullItemBehavior AddNullItemBehavior = AddNullItemBehavior.Allow;
 
-        public override void Add(ItemType NewItem)
+        public new void Add(ItemType NewItem)
         {
             switch ( AddNullItemBehavior )
             {
@@ -43,7 +43,7 @@ namespace SharpFlame.Collections
         {
             var Position = 0;
 
-            for ( Position = 0; Position <= Count - 1; Position++ )
+            for ( Position = 0; Position < Count ; Position++ )
             {
                 if ( this[Position] == ItemToFind )
                 {

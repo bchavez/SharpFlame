@@ -371,11 +371,7 @@ namespace SharpFlame.Controls
                 return;
             }
 
-            if ( Map == null )
-            {
-                App.SelectedTextureNum = -1;
-            }
-            else if ( Map.Tileset == null )
+            if ( Map.Tileset == null )
             {
                 App.SelectedTextureNum = -1;
             }
@@ -454,17 +450,9 @@ namespace SharpFlame.Controls
 
             if ( TextureCount.X > 0 & TextureCount.Y > 0 )
             {
-                if ( Map == null )
+                if ( Map.Tileset == null )
                 {
                     Flag = true;
-                }
-                else if ( Map.Tileset == null )
-                {
-                    Flag = true;
-                }
-                else
-                {
-                    Flag = false;
                 }
             }
             else

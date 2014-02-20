@@ -101,6 +101,9 @@
       <HintPath>..\packages\Sprache.1.10.0.35\lib\net40\Sprache.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -146,12 +149,6 @@
     <Compile Include="Mapping\Drawing\clsDrawTileOutline.cs" />
     <Compile Include="Mapping\Drawing\clsDrawVertexMarker.cs" />
     <Compile Include="Mapping\Drawing\clsDrawVertexTerrain.cs" />
-    <Compile Include="Mapping\FMap\FMapInfo.cs" />
-    <Compile Include="Mapping\FMap\FMapIniGateways.cs" />
-    <Compile Include="Mapping\FMap\FMapIniObjects.cs" />
-    <Compile Include="Mapping\IO\clsLNDObject.cs" />
-    <Compile Include="Mapping\IO\sFMEUnit.cs" />
-    <Compile Include="Mapping\IO\sLNDTile.cs" />
     <Compile Include="Mapping\Objects\clsUnit.cs" />
     <Compile Include="Mapping\Objects\clsUnitAdd.cs" />
     <Compile Include="Mapping\Objects\clsUnitCreate.cs" />
@@ -175,12 +172,6 @@
     <Compile Include="Colors\Definitions.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="FileIO\ExtensionsForIO.cs" />
-    <Compile Include="FileIO\Ini\Translator.cs" />
-    <Compile Include="FileIO\Ini\ErrorCount.cs" />
-    <Compile Include="FileIO\Ini\IniReader.cs" />
-    <Compile Include="FileIO\Ini\Section.cs" />
-    <Compile Include="FileIO\Ini\SectionTranslator.cs" />
-    <Compile Include="FileIO\Ini\TranslatorResult.cs" />
     <Compile Include="frmKeyboardControl.Designer.cs">
       <DependentUpon>frmKeyboardControl.cs</DependentUpon>
     </Compile>
@@ -191,9 +182,7 @@
     <Compile Include="Mapping\clsMap.cs" />
     <Compile Include="Mapping\Changes\clsMapChanges.cs" />
     <Compile Include="Mapping\Drawing\clsMapDraw.cs" />
-    <Compile Include="Mapping\FMap\clsMapFMap.cs" />
     <Compile Include="Mapping\Objects\clsMapObject.cs" />
-    <Compile Include="Mapping\IO\clsMapOtherIO.cs" />
     <Compile Include="Mapping\Script\clsMapScriptMarkers.cs" />
     <Compile Include="Mapping\Tools\clsAction.cs" />
     <Compile Include="Mapping\Tools\clsApplyAutoTri.cs" />
@@ -396,13 +385,27 @@
     <Compile Include="FileIO\ZipSplitPath.cs" />
     <Compile Include="Util\clsInputBox.cs" />
     <Compile Include="ExtensionsForString.cs" />
-    <Compile Include="Mapping\Format\Wz\Game.cs" />
-    <Compile Include="Mapping\Format\Wz\IniDroid.cs" />
-    <Compile Include="Mapping\Format\Wz\IniFeature.cs" />
-    <Compile Include="Mapping\Format\Wz\IniStructure.cs" />
-    <Compile Include="Mapping\Format\Wz\sWrite_WZ_Args.cs" />
-    <Compile Include="Mapping\Format\Wz\Wz.cs" />
-    <Compile Include="Mapping\Format\Wz\WZBJOUnit.cs" />
+    <Compile Include="Mapping\IO\FMap\FMapInfo.cs" />
+    <Compile Include="Mapping\IO\FMap\FMapIniGateways.cs" />
+    <Compile Include="Mapping\IO\LND\LNDObject.cs" />
+    <Compile Include="Mapping\IO\LND\LNDTile.cs" />
+    <Compile Include="Mapping\IO\Minimap\Minimap.cs" />
+    <Compile Include="Mapping\IO\Wz\Game.cs" />
+    <Compile Include="Mapping\IO\Wz\IniDroid.cs" />
+    <Compile Include="Mapping\IO\Wz\IniFeature.cs" />
+    <Compile Include="Mapping\IO\Wz\IniStructure.cs" />
+    <Compile Include="Mapping\IO\Wz\WZBJOUnit.cs" />
+    <Compile Include="Mapping\IO\FMap\INIObject.cs" />
+    <Compile Include="Mapping\IO\IOIOLoaderSaver.cs" />
+    <Compile Include="Mapping\IO\Wz\WzSaver.cs" />
+    <Compile Include="Mapping\IO\Wz\WzLoader.cs" />
+    <Compile Include="Mapping\IO\TTP\TTPLoader.cs" />
+    <Compile Include="Mapping\IO\TTP\TTPSaver.cs" />
+    <Compile Include="Mapping\IO\LND\LNDLoader.cs" />
+    <Compile Include="Mapping\IO\LND\LNDSaver.cs" />
+    <Compile Include="Mapping\IO\Heightmap\HeightmapSaver.cs" />
+    <Compile Include="Mapping\IO\FMap\FMapLoader.cs" />
+    <Compile Include="Mapping\IO\FMap\FMapSaver.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">
@@ -600,4 +603,7 @@
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Mapping\IO\" />
+  </ItemGroup>
 </Project>
