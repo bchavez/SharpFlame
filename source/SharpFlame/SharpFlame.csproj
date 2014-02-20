@@ -146,9 +146,6 @@
     <Compile Include="Mapping\Drawing\clsDrawTileOutline.cs" />
     <Compile Include="Mapping\Drawing\clsDrawVertexMarker.cs" />
     <Compile Include="Mapping\Drawing\clsDrawVertexTerrain.cs" />
-    <Compile Include="Mapping\FMap\FMapInfo.cs" />
-    <Compile Include="Mapping\FMap\FMapIniGateways.cs" />
-    <Compile Include="Mapping\FMap\FMapIniObjects.cs" />
     <Compile Include="Mapping\IO\clsLNDObject.cs" />
     <Compile Include="Mapping\IO\sFMEUnit.cs" />
     <Compile Include="Mapping\IO\sLNDTile.cs" />
@@ -191,7 +188,6 @@
     <Compile Include="Mapping\clsMap.cs" />
     <Compile Include="Mapping\Changes\clsMapChanges.cs" />
     <Compile Include="Mapping\Drawing\clsMapDraw.cs" />
-    <Compile Include="Mapping\FMap\clsMapFMap.cs" />
     <Compile Include="Mapping\Objects\clsMapObject.cs" />
     <Compile Include="Mapping\IO\clsMapOtherIO.cs" />
     <Compile Include="Mapping\Script\clsMapScriptMarkers.cs" />
@@ -403,6 +399,10 @@
     <Compile Include="Mapping\Format\Wz\sWrite_WZ_Args.cs" />
     <Compile Include="Mapping\Format\Wz\Wz.cs" />
     <Compile Include="Mapping\Format\Wz\WZBJOUnit.cs" />
+    <Compile Include="Mapping\Format\FMap\FMapInfo.cs" />
+    <Compile Include="Mapping\Format\FMap\FMapIniGateways.cs" />
+    <Compile Include="Mapping\Format\FMap\FMapIniObjects.cs" />
+    <Compile Include="Mapping\Format\FMap\FMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">
@@ -600,4 +600,7 @@
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Mapping\Format\FMap\" />
+  </ItemGroup>
 </Project>

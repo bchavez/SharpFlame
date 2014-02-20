@@ -11,6 +11,7 @@ using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
+using SharpFlame.Mapping.Format.FMap;
 using SharpFlame.Mapping.Changes;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Renderers;
@@ -1236,7 +1237,8 @@ namespace SharpFlame.Mapping
 
             logger.Info(string.Format("Autosave to: \"{0}\"", path));
 
-            ReturnResult.Add(Write_FMap(path, false, SettingsManager.Settings.AutoSaveCompress));
+            var fmap = new FMap (this);
+            ReturnResult.Add(fmap.Save(path, false, SettingsManager.Settings.AutoSaveCompress));
 
             return ReturnResult;
         }
@@ -2546,15 +2548,15 @@ namespace SharpFlame.Mapping
                 return false;
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            var Result = default(clsResult);
-            Result = Write_FMap(Dialog.FileName, true, true);
-            if ( !Result.HasProblems )
+            var fMap = new FMap (this);
+            var result = fMap.Save(Dialog.FileName, true, true);
+            if ( !result.HasProblems )
             {
                 PathInfo = new clsPathInfo(Dialog.FileName, true);
                 ChangedSinceSave = false;
             }
-            App.ShowWarnings(Result);
-            return !Result.HasProblems;
+            App.ShowWarnings(result);
+            return !result.HasProblems;
         }
 
         public bool Save_FMap_Quick()
@@ -2565,13 +2567,14 @@ namespace SharpFlame.Mapping
             }
             if ( PathInfo.IsFMap )
             {
-                var Result = Write_FMap(PathInfo.Path, true, true);
-                if ( !Result.HasProblems )
+                var fMap = new FMap (this);
+                var result = fMap.Save(PathInfo.Path, true, true);
+                if ( !result.HasProblems )
                 {
                     ChangedSinceSave = false;
                 }
-                App.ShowWarnings(Result);
-                return !Result.HasProblems;
+                App.ShowWarnings(result);
+                return !result.HasProblems;
             }
             return Save_FMap_Prompt();
         }

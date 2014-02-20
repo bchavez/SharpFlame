@@ -8,7 +8,7 @@ using SharpFlame.Mapping.Tiles;
 
 #endregion
 
-namespace SharpFlame.Mapping.FMap
+namespace SharpFlame.Mapping.Format.FMap
 {
     public class FMapInfo : Translator
     {
