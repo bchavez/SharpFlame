@@ -1,28 +1,32 @@
+#region
+
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Painters;
+
+#endregion
 
 namespace SharpFlame.Mapping.Tools
 {
     public class clsApplyVertexTerrainInterpret : clsAction
     {
-        private int[] TerrainCount;
-        private TileDirection VertexDirection;
-        private Painter Painter;
-        private Painters.Terrain PainterTerrainA;
-        private Painters.Terrain PainterTerrainB;
-        private clsTerrain.Tile.sTexture Texture;
-        private TileDirection ResultDirection;
-        private TileOrientationChance PainterTexture;
-        private TileDirection OppositeDirection;
-        private int BestNum;
         private int BestCount;
-        private clsTerrain.Tile Tile;
+        private int BestNum;
+        private TileDirection OppositeDirection;
+        private Painter Painter;
+        private Terrain PainterTerrainA;
+        private Terrain PainterTerrainB;
+        private TileOrientationChance PainterTexture;
+        private TileDirection ResultDirection;
         private clsTerrain Terrain;
+        private int[] TerrainCount;
+        private clsTerrain.Tile.sTexture Texture;
+        private clsTerrain.Tile Tile;
+        private TileDirection VertexDirection;
 
         private void ToolPerformTile()
         {
-            int PainterBrushNum = 0;
-            int A = 0;
+            var PainterBrushNum = 0;
+            var A = 0;
 
             for ( PainterBrushNum = 0; PainterBrushNum <= Painter.TerrainCount - 1; PainterBrushNum++ )
             {
@@ -198,7 +202,7 @@ namespace SharpFlame.Mapping.Tools
 
         public override void ActionPerform()
         {
-            int A = 0;
+            var A = 0;
 
             Terrain = Map.Terrain;
 

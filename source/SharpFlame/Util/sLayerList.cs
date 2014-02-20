@@ -1,4 +1,8 @@
+#region
+
 using System;
+
+#endregion
 
 namespace SharpFlame.Util
 {
@@ -17,17 +21,17 @@ namespace SharpFlame.Util
 
     public struct sLayerList
     {
-        public clsLayer[] Layers;
         public int LayerCount;
+        public clsLayer[] Layers;
 
-        public void Layer_Insert( int PositionNum, clsLayer NewLayer )
+        public void Layer_Insert(int PositionNum, clsLayer NewLayer)
         {
-            int A = 0;
-            int B = 0;
+            var A = 0;
+            var B = 0;
 
-            Array.Resize( ref Layers, LayerCount + 1 );
+            Array.Resize(ref Layers, LayerCount + 1);
             //shift the ones below down
-            for( A = LayerCount - 1; A >= PositionNum; A-- )
+            for ( A = LayerCount - 1; A >= PositionNum; A-- )
             {
                 Layers[A + 1] = Layers[A];
             }
@@ -35,14 +39,14 @@ namespace SharpFlame.Util
             Layers[PositionNum] = NewLayer;
             LayerCount++;
 
-            for( A = 0; A <= LayerCount - 1; A++ )
+            for ( A = 0; A <= LayerCount - 1; A++ )
             {
-                if( Layers[A].WithinLayer >= PositionNum )
+                if ( Layers[A].WithinLayer >= PositionNum )
                 {
                     Layers[A].WithinLayer = Layers[A].WithinLayer + 1;
                 }
-                Array.Resize( ref Layers[A].AvoidLayers, LayerCount );
-                for( B = LayerCount - 2; B >= PositionNum; B-- )
+                Array.Resize(ref Layers[A].AvoidLayers, LayerCount);
+                for ( B = LayerCount - 2; B >= PositionNum; B-- )
                 {
                     Layers[A].AvoidLayers[B + 1] = Layers[A].AvoidLayers[B];
                 }
@@ -50,93 +54,93 @@ namespace SharpFlame.Util
             }
         }
 
-        public void Layer_Remove( int Layer_Num )
+        public void Layer_Remove(int Layer_Num)
         {
-            int A = 0;
-            int B = 0;
+            var A = 0;
+            var B = 0;
 
             LayerCount--;
-            for( A = Layer_Num; A <= LayerCount - 1; A++ )
+            for ( A = Layer_Num; A <= LayerCount - 1; A++ )
             {
                 Layers[A] = Layers[A + 1];
             }
-            Array.Resize( ref Layers, LayerCount );
+            Array.Resize(ref Layers, LayerCount);
 
-            for( A = 0; A <= LayerCount - 1; A++ )
+            for ( A = 0; A <= LayerCount - 1; A++ )
             {
-                if( Layers[A].WithinLayer == Layer_Num )
+                if ( Layers[A].WithinLayer == Layer_Num )
                 {
                     Layers[A].WithinLayer = -1;
                 }
-                else if( Layers[A].WithinLayer > Layer_Num )
+                else if ( Layers[A].WithinLayer > Layer_Num )
                 {
                     Layers[A].WithinLayer = Layers[A].WithinLayer - 1;
                 }
-                for( B = Layer_Num; B <= LayerCount - 1; B++ )
+                for ( B = Layer_Num; B <= LayerCount - 1; B++ )
                 {
                     Layers[A].AvoidLayers[B] = Layers[A].AvoidLayers[B + 1];
                 }
-                Array.Resize( ref Layers[A].AvoidLayers, LayerCount );
+                Array.Resize(ref Layers[A].AvoidLayers, LayerCount);
             }
         }
 
-        public void Layer_Move( int Layer_Num, int Layer_Dest_Num )
+        public void Layer_Move(int Layer_Num, int Layer_Dest_Num)
         {
-            clsLayer Layer_Temp = default( clsLayer );
-            bool boolTemp = default( bool );
-            int A = 0;
-            int B = 0;
+            var Layer_Temp = default(clsLayer);
+            var boolTemp = default(bool);
+            var A = 0;
+            var B = 0;
 
-            if( Layer_Dest_Num < Layer_Num )
+            if ( Layer_Dest_Num < Layer_Num )
             {
                 //move the variables
                 Layer_Temp = Layers[Layer_Num];
-                for( A = Layer_Num - 1; A >= Layer_Dest_Num; A-- )
+                for ( A = Layer_Num - 1; A >= Layer_Dest_Num; A-- )
                 {
                     Layers[A + 1] = Layers[A];
                 }
                 Layers[Layer_Dest_Num] = Layer_Temp;
                 //update the layer nums
-                for( A = 0; A <= LayerCount - 1; A++ )
+                for ( A = 0; A <= LayerCount - 1; A++ )
                 {
-                    if( Layers[A].WithinLayer == Layer_Num )
+                    if ( Layers[A].WithinLayer == Layer_Num )
                     {
                         Layers[A].WithinLayer = Layer_Dest_Num;
                     }
-                    else if( Layers[A].WithinLayer >= Layer_Dest_Num && Layers[A].WithinLayer < Layer_Num )
+                    else if ( Layers[A].WithinLayer >= Layer_Dest_Num && Layers[A].WithinLayer < Layer_Num )
                     {
                         Layers[A].WithinLayer = Layers[A].WithinLayer + 1;
                     }
-                    boolTemp = Convert.ToBoolean( Layers[A].AvoidLayers[Layer_Num] );
-                    for( B = Layer_Num - 1; B >= Layer_Dest_Num; B-- )
+                    boolTemp = Convert.ToBoolean(Layers[A].AvoidLayers[Layer_Num]);
+                    for ( B = Layer_Num - 1; B >= Layer_Dest_Num; B-- )
                     {
                         Layers[A].AvoidLayers[B + 1] = Layers[A].AvoidLayers[B];
                     }
                     Layers[A].AvoidLayers[Layer_Dest_Num] = boolTemp;
                 }
             }
-            else if( Layer_Dest_Num > Layer_Num )
+            else if ( Layer_Dest_Num > Layer_Num )
             {
                 //move the variables
                 Layer_Temp = Layers[Layer_Num];
-                for( A = Layer_Num; A <= Layer_Dest_Num - 1; A++ )
+                for ( A = Layer_Num; A <= Layer_Dest_Num - 1; A++ )
                 {
                     Layers[A] = Layers[A + 1];
                 }
                 Layers[Layer_Dest_Num] = Layer_Temp;
                 //update the layer nums
-                for( A = 0; A <= LayerCount - 1; A++ )
+                for ( A = 0; A <= LayerCount - 1; A++ )
                 {
-                    if( Layers[A].WithinLayer == Layer_Num )
+                    if ( Layers[A].WithinLayer == Layer_Num )
                     {
                         Layers[A].WithinLayer = Layer_Dest_Num;
                     }
-                    else if( Layers[A].WithinLayer > Layer_Num && Layers[A].WithinLayer <= Layer_Dest_Num )
+                    else if ( Layers[A].WithinLayer > Layer_Num && Layers[A].WithinLayer <= Layer_Dest_Num )
                     {
                         Layers[A].WithinLayer = Layers[A].WithinLayer - 1;
                     }
-                    boolTemp = Convert.ToBoolean( Layers[A].AvoidLayers[Layer_Num] );
-                    for( B = Layer_Num; B <= Layer_Dest_Num - 1; B++ )
+                    boolTemp = Convert.ToBoolean(Layers[A].AvoidLayers[Layer_Num]);
+                    for ( B = Layer_Num; B <= Layer_Dest_Num - 1; B++ )
                     {
                         Layers[A].AvoidLayers[B] = Layers[A].AvoidLayers[B + 1];
                     }

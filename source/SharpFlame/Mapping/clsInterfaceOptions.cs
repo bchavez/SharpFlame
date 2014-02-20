@@ -1,20 +1,24 @@
-using SharpFlame.FileIO;
+#region
+
 using SharpFlame.Core.Domain;
+using SharpFlame.FileIO;
 using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame.Mapping
 {
     public class clsInterfaceOptions
     {
-        public string CompileName;
-        public string CompileMultiPlayers;
-        public bool CompileMultiXPlayers;
+        public bool AutoScrollLimits;
+        public int CampaignGameType;
         public string CompileMultiAuthor;
         public string CompileMultiLicense;
-        public bool AutoScrollLimits;
-        public XYInt ScrollMin;
+        public string CompileMultiPlayers;
+        public bool CompileMultiXPlayers;
+        public string CompileName;
         public sXY_uint ScrollMax;
-        public int CampaignGameType;
+        public XYInt ScrollMin;
 
         public clsInterfaceOptions()
         {
@@ -25,7 +29,7 @@ namespace SharpFlame.Mapping
             CompileMultiAuthor = "";
             CompileMultiLicense = "";
             AutoScrollLimits = true;
-			ScrollMin = new XYInt (0, 0);
+            ScrollMin = new XYInt(0, 0);
             ScrollMax.X = 0U;
             ScrollMax.Y = 0U;
             CampaignGameType = -1;

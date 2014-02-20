@@ -44,7 +44,7 @@
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <WarningLevel>4</WarningLevel>
     <Optimize>false</Optimize>
-    <DefineConstants>DEBUG</DefineConstants>
+    <DefineConstants>Trace;DEBUG;Mono;Portable</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -231,9 +231,7 @@
     <Compile Include="Mapping\Tools\clsObjectTurret.cs" />
     <Compile Include="Mapping\Tools\clsObjectTurretCount.cs" />
     <Compile Include="Mapping\Tools\clsObjectUnitGroup.cs" />
-    <Compile Include="Mapping\Tools\clsStructureWriteWZ.cs" />
     <Compile Include="Mapping\Tools\sGenerateMasterTerrainArgs.cs" />
-    <Compile Include="Mapping\Wz\clsMapWZ.cs" />
     <Compile Include="Domain\clsModel.cs" />
     <Compile Include="Domain\clsObjectData.cs" />
     <Compile Include="Mapping\Tiles\TileDirection.cs" />
@@ -241,12 +239,6 @@
     <Compile Include="AppSettings\OptionGroup.cs" />
     <Compile Include="AppSettings\OptionInterface.cs" />
     <Compile Include="AppSettings\OptionProfileCreator.cs" />
-    <Compile Include="Mapping\Wz\clsWZBJOUnit.cs" />
-    <Compile Include="Mapping\Wz\IniDroids.cs" />
-    <Compile Include="Mapping\Wz\IniFeatures.cs" />
-    <Compile Include="Mapping\Wz\IniStructures.cs" />
-    <Compile Include="Mapping\Wz\sCreateWZObjectsArgs.cs" />
-    <Compile Include="Mapping\Wz\sWrite_WZ_Args.cs" />
     <Compile Include="Maths\Angles.cs" />
     <Compile Include="Maths\Matrix3DMath.cs" />
     <Compile Include="Painters\CliffBrush.cs" />
@@ -376,7 +368,6 @@
     <Compile Include="Collections\ListUtil.cs" />
     <Compile Include="Bitmaps\BitmapUtil.cs" />
     <Compile Include="Generators\DefaultGenerator.cs" />
-    <Compile Include="FileIO\Ini\IniWriter.cs" />
     <Compile Include="FileIO\IOUtil.cs" />
     <Compile Include="Maths\MathUtil.cs" />
     <Compile Include="Painters\PainterFactory.cs" />
@@ -405,6 +396,13 @@
     <Compile Include="FileIO\ZipSplitPath.cs" />
     <Compile Include="Util\clsInputBox.cs" />
     <Compile Include="ExtensionsForString.cs" />
+    <Compile Include="Mapping\Format\Wz\Game.cs" />
+    <Compile Include="Mapping\Format\Wz\IniDroid.cs" />
+    <Compile Include="Mapping\Format\Wz\IniFeature.cs" />
+    <Compile Include="Mapping\Format\Wz\IniStructure.cs" />
+    <Compile Include="Mapping\Format\Wz\sWrite_WZ_Args.cs" />
+    <Compile Include="Mapping\Format\Wz\Wz.cs" />
+    <Compile Include="Mapping\Format\Wz\WZBJOUnit.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">
@@ -601,4 +599,5 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
+  <ItemGroup />
 </Project>

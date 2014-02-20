@@ -1,28 +1,32 @@
+#region
+
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Painters;
+
+#endregion
 
 namespace SharpFlame.Mapping.Tools
 {
     public abstract class clsApplySideTerrainInterpret : clsAction
     {
-        protected Painter Painter;
-        protected Painters.Terrain PainterTerrain;
-        protected Road PainterRoad;
-        protected clsTerrain.Tile.sTexture Texture;
-        protected TileDirection ResultDirection;
-        protected TileOrientationChance PainterTexture;
+        protected int BestCount;
+        protected int BestNum;
         protected TileDirection OppositeDirection;
-        protected clsTerrain.Tile Tile;
+        protected Painter Painter;
+        protected Road PainterRoad;
+        protected Terrain PainterTerrain;
+        protected TileOrientationChance PainterTexture;
+        protected TileDirection ResultDirection;
         protected int[] RoadCount;
         protected TileDirection SideDirection;
-        protected int BestNum;
-        protected int BestCount;
         protected clsTerrain Terrain;
+        protected clsTerrain.Tile.sTexture Texture;
+        protected clsTerrain.Tile Tile;
 
         protected void ToolPerformTile()
         {
-            int PainterBrushNum = 0;
-            int A = 0;
+            var PainterBrushNum = 0;
+            var A = 0;
 
             for ( PainterBrushNum = 0; PainterBrushNum <= Painter.RoadBrushCount - 1; PainterBrushNum++ )
             {

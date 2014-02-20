@@ -1,22 +1,15 @@
+#region
+
 using System;
+
+#endregion
 
 namespace SharpFlame
 {
     public partial class frmWZLoad
     {
-        public class clsOutput
-        {
-            public int Result;
-        }
-
-        public string[] lstMap_MapName;
-
         public clsOutput Output;
-
-        public struct sMapNameList
-        {
-            public string[] Names;
-        }
+        public string[] lstMap_MapName;
 
         public frmWZLoad(string[] MapNames, clsOutput NewOutput, string FormTitle)
         {
@@ -27,7 +20,7 @@ namespace SharpFlame
             Output = NewOutput;
             Output.Result = -1;
 
-            int A = 0;
+            var A = 0;
 
             lstMap.Items.Clear();
             lstMap_MapName = MapNames;
@@ -46,6 +39,16 @@ namespace SharpFlame
                 Output.Result = lstMap.SelectedIndex;
                 Close();
             }
+        }
+
+        public class clsOutput
+        {
+            public int Result;
+        }
+
+        public struct sMapNameList
+        {
+            public string[] Names;
         }
     }
 }

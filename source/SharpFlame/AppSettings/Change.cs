@@ -4,14 +4,14 @@ namespace SharpFlame.AppSettings
     {
         public ValueType Value;
 
-        public override object ValueObject
-        {
-            get { return Value; }
-        }
-
         public Change(ValueType value)
         {
             Value = value;
+        }
+
+        public override object ValueObject
+        {
+            get { return Value; }
         }
 
         public override ChangeInterface GetCopy()

@@ -1,19 +1,20 @@
-using NLog;
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Text.RegularExpressions;
-using SharpFlame.Collections;
+using NLog;
 using SharpFlame.Core.Domain;
-using SharpFlame.Maths;
 using SharpFlame.Util;
+
+#endregion
 
 namespace SharpFlame.FileIO
 {
     public static class IOUtil
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public static bool InvariantParse(string Text, ref bool Result)
         {
@@ -57,9 +58,9 @@ namespace SharpFlame.FileIO
 
         public static string ReadOldText(BinaryReader File)
         {
-            string Result = "";
-            int A = 0;
-            int Length = (int)(File.ReadUInt32());
+            var Result = "";
+            var A = 0;
+            var Length = (int)(File.ReadUInt32());
 
             for ( A = 0; A <= Length - 1; A++ )
             {
@@ -70,8 +71,8 @@ namespace SharpFlame.FileIO
 
         public static string ReadOldTextOfLength(BinaryReader File, int Length)
         {
-            string Result = "";
-            int A = 0;
+            var Result = "";
+            var A = 0;
 
             for ( A = 0; A <= Length - 1; A++ )
             {
@@ -86,7 +87,7 @@ namespace SharpFlame.FileIO
             {
                 File.Write((uint)Text.Length);
             }
-            int A = 0;
+            var A = 0;
             for ( A = 0; A <= Text.Length - 1; A++ )
             {
                 File.Write((byte)Text[A]);
@@ -95,7 +96,7 @@ namespace SharpFlame.FileIO
 
         public static void WriteTextOfLength(BinaryWriter File, int Length, string Text)
         {
-            int A = 0;
+            var A = 0;
 
             for ( A = 0; A <= Math.Min(Text.Length, Length) - 1; A++ )
             {
@@ -109,10 +110,10 @@ namespace SharpFlame.FileIO
 
         public static clsResult WriteMemoryToNewFile(MemoryStream Memory, string Path)
         {
-            clsResult ReturnResult = new clsResult("Writing to \"{0}".Format2(Path), false);
-            logger.Info ("Writing to \"{0}".Format2(Path));
+            var ReturnResult = new clsResult("Writing to \"{0}".Format2(Path), false);
+            logger.Info("Writing to \"{0}".Format2(Path));
 
-            FileStream NewFile = default(FileStream);
+            var NewFile = default(FileStream);
             try
             {
                 NewFile = new FileStream(Path, FileMode.CreateNew);
@@ -140,7 +141,7 @@ namespace SharpFlame.FileIO
 
         public static sResult TryOpenFileStream(string Path, ref FileStream Output)
         {
-            sResult ReturnResult = new sResult();
+            var ReturnResult = new sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -161,14 +162,14 @@ namespace SharpFlame.FileIO
 
         public static List<string> BytesToLinesRemoveComments(BinaryReader reader)
         {
-            char currentChar = (char)0;
-            bool currentCharExists = false;
-            bool inLineComment = false;
-            bool inCommentBlock = false;
-            char prevChar = (char)0;
-            bool prevCharExists = false;
-            string Line = "";
-            List<string> result = new List<string>();
+            var currentChar = (char)0;
+            var currentCharExists = false;
+            var inLineComment = false;
+            var inCommentBlock = false;
+            var prevChar = (char)0;
+            var prevCharExists = false;
+            var Line = "";
+            var result = new List<string>();
 
             do
             {
@@ -191,47 +192,48 @@ namespace SharpFlame.FileIO
                     {
                         case '\r':
                         case '\n':
-                        if (!inLineComment) {    
-                            if ( prevCharExists )
+                            if ( !inLineComment )
                             {
-                                Line += prevChar.ToString();
+                                if ( prevCharExists )
+                                {
+                                    Line += prevChar.ToString();
+                                }
+
+                                if ( Line.Length > 0 )
+                                {
+                                    result.Add(Line);
+                                    Line = "";
+                                }
                             }
 
-                            if ( Line.Length > 0 )
-                            {   
-                                result.Add(Line);
-                                Line = "";
-                            }
-                        }
-
-                        inLineComment = false;
-                        currentCharExists = false;
-                        continue;
-                        case '*':
-                        if ( prevCharExists && prevChar == '/' )
-                        {
-                            inCommentBlock = true;
+                            inLineComment = false;
                             currentCharExists = false;
                             continue;
-                        }
-                        break;
+                        case '*':
+                            if ( prevCharExists && prevChar == '/' )
+                            {
+                                inCommentBlock = true;
+                                currentCharExists = false;
+                                continue;
+                            }
+                            break;
                         case '/':
-                        if ( prevCharExists )
-                        {
-                            if ( prevChar == '/' )
+                            if ( prevCharExists )
                             {
-                                inLineComment = true;
-                                currentCharExists = false;
-                                continue;
+                                if ( prevChar == '/' )
+                                {
+                                    inLineComment = true;
+                                    currentCharExists = false;
+                                    continue;
+                                }
+                                if ( prevChar == '*' )
+                                {
+                                    inCommentBlock = false;
+                                    currentCharExists = false;
+                                    continue;
+                                }
                             }
-                            else if ( prevChar == '*' )
-                            {
-                                inCommentBlock = false;
-                                currentCharExists = false;
-                                continue;
-                            }
-                        }
-                        break;
+                            break;
                     }
                 }
                 else
@@ -258,7 +260,7 @@ namespace SharpFlame.FileIO
                 }
             } while ( true );
 
-            return result;  
+            return result;
         }
     }
 
@@ -268,8 +270,8 @@ namespace SharpFlame.FileIO
 
         public bool Translate(string Text)
         {
-            int A = 0;
-            SplitCommaText Positions = new SplitCommaText(Text);
+            var A = 0;
+            var Positions = new SplitCommaText(Text);
 
             if ( Positions.PartCount < 2 )
             {
@@ -297,12 +299,12 @@ namespace SharpFlame.FileIO
 
     public class SplitCommaText
     {
-        public string[] Parts;
         public int PartCount;
+        public string[] Parts;
 
         public SplitCommaText(string Text)
         {
-            int A = 0;
+            var A = 0;
 
             Parts = Text.Split(',');
             PartCount = Parts.GetUpperBound(0) + 1;

@@ -1,26 +1,28 @@
+#region
+
 using System;
 using System.Windows.Forms;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Objects;
 
+#endregion
+
 namespace SharpFlame.Controls
 {
     public partial class PlayerNumControl
     {
-        public ToolStripButton[] tsbNumber = new ToolStripButton[11];
-
-        private clsUnitGroupContainer _Target;
-
         public const int ScavButtonNum = 10;
+        private clsUnitGroupContainer _Target;
+        public ToolStripButton[] tsbNumber = new ToolStripButton[11];
 
         public PlayerNumControl()
         {
             InitializeComponent();
 
-            int A = 0;
-            int B = 0;
-            int ButtonsPerRow = 5;
+            var A = 0;
+            var B = 0;
+            var ButtonsPerRow = 5;
 
             for ( A = 0; A <= ButtonsPerRow - 1; A++ )
             {
@@ -53,19 +55,6 @@ namespace SharpFlame.Controls
             Height = 25 * 2;
         }
 
-        private void tsbNumber_Clicked(object sender, EventArgs e)
-        {
-            if ( _Target == null )
-            {
-                return;
-            }
-
-            ToolStripButton tsb = (ToolStripButton)sender;
-            clsUnitGroup UnitGroup = (clsUnitGroup)tsb.Tag;
-
-            _Target.Item = UnitGroup;
-        }
-
         public clsUnitGroupContainer Target
         {
             get { return _Target; }
@@ -88,10 +77,23 @@ namespace SharpFlame.Controls
             }
         }
 
+        private void tsbNumber_Clicked(object sender, EventArgs e)
+        {
+            if ( _Target == null )
+            {
+                return;
+            }
+
+            var tsb = (ToolStripButton)sender;
+            var UnitGroup = (clsUnitGroup)tsb.Tag;
+
+            _Target.Item = UnitGroup;
+        }
+
         private void SelectedChanged()
         {
-            int A = 0;
-            clsUnitGroup UnitGroup = default(clsUnitGroup);
+            var A = 0;
+            var UnitGroup = default(clsUnitGroup);
 
             if ( _Target == null )
             {
@@ -113,14 +115,14 @@ namespace SharpFlame.Controls
             {
                 for ( A = 0; A <= 10; A++ )
                 {
-                    tsbNumber[A].Checked = ((clsUnitGroup)(tsbNumber[A].Tag)) == UnitGroup;
+                    tsbNumber[A].Checked = tsbNumber[A].Tag == UnitGroup;
                 }
             }
         }
 
         public void SetMap(clsMap NewMap)
         {
-            int A = 0;
+            var A = 0;
 
             if ( NewMap == null )
             {

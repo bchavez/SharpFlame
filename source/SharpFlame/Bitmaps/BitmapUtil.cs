@@ -1,22 +1,26 @@
+#region
+
 using System;
 using System.Drawing;
 using System.IO;
 using NLog;
 using SharpFlame.Util;
 
+#endregion
+
 namespace SharpFlame.Bitmaps
 {
     public sealed class BitmapUtil
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();  
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public static sResult LoadBitmap(string Path, ref Bitmap ResultBitmap)
         {
-            sResult ReturnResult = new sResult();
+            var ReturnResult = new sResult();
             ReturnResult.Problem = "";
             ReturnResult.Success = false;
 
-            Bitmap Bitmap = default(Bitmap);
+            var Bitmap = default(Bitmap);
 
             try
             {
@@ -37,7 +41,7 @@ namespace SharpFlame.Bitmaps
 
         public static sResult SaveBitmap(string Path, bool Overwrite, Bitmap BitmapToSave)
         {
-            sResult ReturnResult = new sResult();
+            var ReturnResult = new sResult();
             ReturnResult.Problem = "";
             ReturnResult.Success = false;
 
@@ -69,8 +73,8 @@ namespace SharpFlame.Bitmaps
 
         public static clsResult BitmapIsGLCompatible(Bitmap BitmapToCheck)
         {
-            clsResult ReturnResult = new clsResult("Compatability check", false);
-            logger.Debug ("Compatability check");
+            var ReturnResult = new clsResult("Compatability check", false);
+            logger.Debug("Compatability check");
 
             if ( !App.SizeIsPowerOf2(BitmapToCheck.Width) )
             {

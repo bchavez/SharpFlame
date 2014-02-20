@@ -1,49 +1,31 @@
+#region
+
 using System;
 using System.IO;
 using NLog;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core.Domain;
-using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame.Domain
 {
     public class clsModel
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        public int ConnectorCount;
+        public XYZDouble[] Connectors = new XYZDouble[0];
 
         public int GLTextureNum;
 
-        public struct sTriangle
-        {
-            public XYZDouble PosA;
-            public XYZDouble PosB;
-            public XYZDouble PosC;
-            public XYDouble TexCoordA;
-            public XYDouble TexCoordB;
-            public XYDouble TexCoordC;
-        }
-
-        public sTriangle[] Triangles;
-        public int TriangleCount;
-
-        public struct sQuad
-        {
-            public XYZDouble PosA;
-            public XYZDouble PosB;
-            public XYZDouble PosC;
-            public XYZDouble PosD;
-            public XYDouble TexCoordA;
-            public XYDouble TexCoordB;
-            public XYDouble TexCoordC;
-            public XYDouble TexCoordD;
-        }
-
-        public sQuad[] Quads;
         public int QuadCount;
+        public sQuad[] Quads;
+        public int TriangleCount;
+        public sTriangle[] Triangles;
 
         public int GLList_Create()
         {
-            int Result = 0;
+            var Result = 0;
 
             Result = GL.GenLists(1);
             if ( Result == 0 )
@@ -60,7 +42,7 @@ namespace SharpFlame.Domain
 
         public void GLDraw()
         {
-            int A = 0;
+            var A = 0;
 
             GL.BindTexture(TextureTarget.Texture2D, GLTextureNum);
             GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Modulate);
@@ -70,7 +52,7 @@ namespace SharpFlame.Domain
             GL.Begin(BeginMode.Triangles);
             for ( A = 0; A <= TriangleCount - 1; A++ )
             {
-                sTriangle with_1 = Triangles[A];
+                var with_1 = Triangles[A];
                 GL.TexCoord2(with_1.TexCoordA.X, with_1.TexCoordA.Y);
                 GL.Vertex3(with_1.PosA.X, with_1.PosA.Y, Convert.ToDouble(- with_1.PosA.Z));
                 GL.TexCoord2(with_1.TexCoordB.X, with_1.TexCoordB.Y);
@@ -82,7 +64,7 @@ namespace SharpFlame.Domain
             GL.Begin(BeginMode.Quads);
             for ( A = 0; A <= QuadCount - 1; A++ )
             {
-                sQuad with_2 = Quads[A];
+                var with_2 = Quads[A];
                 GL.TexCoord2(with_2.TexCoordA.X, with_2.TexCoordA.Y);
                 GL.Vertex3(with_2.PosA.X, with_2.PosA.Y, Convert.ToDouble(- with_2.PosA.Z));
                 GL.TexCoord2(with_2.TexCoordB.X, with_2.TexCoordB.Y);
@@ -95,45 +77,27 @@ namespace SharpFlame.Domain
             GL.End();
         }
 
-        public XYZDouble[] Connectors = new XYZDouble[0];
-        public int ConnectorCount;
-
-        public struct sPIELevel
-        {
-            public struct sPolygon
-            {
-                public int[] PointNum;
-                public XYDouble[] TexCoord;
-                public int PointCount;
-            }
-
-            public sPolygon[] Polygon;
-            public int PolygonCount;
-            public XYZDouble[] Point;
-            public int PointCount;
-        }
-
         public clsResult ReadPIE(StreamReader File, clsObjectData Owner)
         {
-            clsResult ReturnResult = new clsResult("Reading PIE", false);
-            logger.Debug ("Reading PIE");
+            var ReturnResult = new clsResult("Reading PIE", false);
+            logger.Debug("Reading PIE");
 
-            int A = 0;
-            int B = 0;
-            string strTemp = "";
+            var A = 0;
+            var B = 0;
+            var strTemp = "";
             string[] SplitText = null;
-            int LevelCount = 0;
-            int NewQuadCount = 0;
-            int NewTriCount = 0;
-            int C = 0;
-            string TextureName = "";
+            var LevelCount = 0;
+            var NewQuadCount = 0;
+            var NewTriCount = 0;
+            var C = 0;
+            var TextureName = "";
             sPIELevel[] Levels = null;
-            int LevelNum = 0;
-            bool GotText = default(bool);
+            var LevelNum = 0;
+            var GotText = default(bool);
             string strTemp2;
-            int D = 0;
-            int PIEVersion = 0;
-            int Count = 0;
+            var D = 0;
+            var PIEVersion = 0;
+            var Count = 0;
 
             Levels = new sPIELevel[0];
             LevelNum = -1;
@@ -163,7 +127,7 @@ namespace SharpFlame.Domain
                     A = TextureName.LastIndexOf(" ");
                     if ( A > 0 )
                     {
-                        A = TextureName.LastIndexOf(" ", A-1)+1;
+                        A = TextureName.LastIndexOf(" ", A - 1) + 1;
                     }
                     else
                     {
@@ -335,7 +299,7 @@ namespace SharpFlame.Domain
                                 {
                                     goto Reeval;
                                 }
-                                else if ( SplitText.GetUpperBound(0) + 1 != (2 + Count * 3) )
+                                if ( SplitText.GetUpperBound(0) + 1 != (2 + Count * 3) )
                                 {
                                     ReturnResult.ProblemAdd("Wrong number of fields (" + Convert.ToString(SplitText.GetUpperBound(0) + 1) + ") for polygon " +
                                                             Convert.ToString(A));
@@ -485,9 +449,6 @@ namespace SharpFlame.Domain
                         }
                     } while ( true );
                 }
-                else
-                {
-                }
             } while ( true );
             FileFinished:
 
@@ -559,6 +520,43 @@ namespace SharpFlame.Domain
             }
 
             return ReturnResult;
+        }
+
+        public struct sPIELevel
+        {
+            public XYZDouble[] Point;
+            public int PointCount;
+            public sPolygon[] Polygon;
+            public int PolygonCount;
+
+            public struct sPolygon
+            {
+                public int PointCount;
+                public int[] PointNum;
+                public XYDouble[] TexCoord;
+            }
+        }
+
+        public struct sQuad
+        {
+            public XYZDouble PosA;
+            public XYZDouble PosB;
+            public XYZDouble PosC;
+            public XYZDouble PosD;
+            public XYDouble TexCoordA;
+            public XYDouble TexCoordB;
+            public XYDouble TexCoordC;
+            public XYDouble TexCoordD;
+        }
+
+        public struct sTriangle
+        {
+            public XYZDouble PosA;
+            public XYZDouble PosB;
+            public XYZDouble PosC;
+            public XYDouble TexCoordA;
+            public XYDouble TexCoordB;
+            public XYDouble TexCoordC;
         }
     }
 }

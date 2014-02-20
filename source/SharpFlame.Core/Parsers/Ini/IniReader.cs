@@ -40,7 +40,7 @@ namespace SharpFlame.Core.Parsers.Ini
                 }
             }
 
-            if (currentSection.Name == RootSectionName) {
+            if (currentSection.Name == RootSectionName && currentSection.Data.Count() > 0) {
                 result.Add(currentSection);
             }
 

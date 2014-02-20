@@ -1,13 +1,16 @@
+#region
+
 using System;
-using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
+
+#endregion
 
 namespace SharpFlame.Painters
 {
     public struct TileOrientationChance
     {
-        public int TextureNum;
-        public TileDirection Direction;
         public UInt32 Chance;
+        public TileDirection Direction;
+        public int TextureNum;
     }
 }

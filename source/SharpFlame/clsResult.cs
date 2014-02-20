@@ -1,10 +1,12 @@
-using NLog;
+#region
+
 using System.Windows.Forms;
+using NLog;
 using SharpFlame.Collections;
 using SharpFlame.Core.Domain;
-using SharpFlame.Mapping;
 using SharpFlame.Mapping.Objects;
-using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame
 {
@@ -16,45 +18,27 @@ namespace SharpFlame
 
     public class clsResult : clsResultItemInterface
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
+        private readonly SimpleList<clsResultItemInterface> Items = new SimpleList<clsResultItemInterface>();
+        private bool Bad;
         public string Text;
+
+        public clsResult(string Text, bool log = true)
+        {
+            if ( log )
+            {
+                logger.Debug(Text);
+            }
+            Items.MaintainOrder = true;
+
+            this.Text = Text;
+        }
 
         public override string GetText
         {
             get { return Text; }
         }
-
-        public class clsProblem : clsResultItemInterface
-        {
-            public string Text;
-
-            public override string GetText
-            {
-                get { return Text; }
-            }
-
-            public override void DoubleClicked()
-            {
-            }
-        }
-
-        public class clsWarning : clsResultItemInterface
-        {
-            public string Text;
-
-            public override string GetText
-            {
-                get { return Text; }
-            }
-
-            public override void DoubleClicked()
-            {
-            }
-        }
-
-        private SimpleList<clsResultItemInterface> Items = new SimpleList<clsResultItemInterface>();
-        private bool Bad = false;
 
         public bool HasWarnings
         {
@@ -97,20 +81,22 @@ namespace SharpFlame
 
         public void ProblemAdd(string Text, bool log = true)
         {
-            if (log) {
-                logger.Error (Text);
+            if ( log )
+            {
+                logger.Error(Text);
             }
-            clsProblem Problem = new clsProblem();
+            var Problem = new clsProblem();
             Problem.Text = Text;
             ItemAdd(Problem);
         }
 
         public void WarningAdd(string Text, bool log = true)
         {
-            if (log) {
-                logger.Warn (Text);
+            if ( log )
+            {
+                logger.Warn(Text);
             }
-            clsWarning Warning = new clsWarning();
+            var Warning = new clsWarning();
             Warning.Text = Text;
             ItemAdd(Warning);
         }
@@ -124,26 +110,16 @@ namespace SharpFlame
             Items.Add(item);
         }
 
-        public clsResult(string Text, bool log = true)
-        {
-            if (log) {
-                logger.Debug (Text);
-            }
-            Items.MaintainOrder = true;
-
-            this.Text = Text;
-        }
-
         public TreeNode MakeNodes(TreeNodeCollection owner)
         {
-            TreeNode node = new TreeNode();
+            var node = new TreeNode();
             node.Text = Text;
             owner.Add(node);
-            clsResultItemInterface item = default(clsResultItemInterface);
-            for ( int i = 0; i <= Items.Count - 1; i++ )
+            var item = default(clsResultItemInterface);
+            for ( var i = 0; i <= Items.Count - 1; i++ )
             {
                 item = Items[i];
-                TreeNode ChildNode = new TreeNode();
+                var ChildNode = new TreeNode();
                 ChildNode.Tag = item;
                 if ( item is clsProblem )
                 {
@@ -167,6 +143,34 @@ namespace SharpFlame
 
         public override void DoubleClicked()
         {
+        }
+
+        public class clsProblem : clsResultItemInterface
+        {
+            public string Text;
+
+            public override string GetText
+            {
+                get { return Text; }
+            }
+
+            public override void DoubleClicked()
+            {
+            }
+        }
+
+        public class clsWarning : clsResultItemInterface
+        {
+            public string Text;
+
+            public override string GetText
+            {
+                get { return Text; }
+            }
+
+            public override void DoubleClicked()
+            {
+            }
         }
     }
 
@@ -201,8 +205,8 @@ namespace SharpFlame
 
     public class clsResultItemTileGoto : clsResultItemGotoInterface
     {
-        public clsViewInfo View;
         public XYInt TileNum;
+        public clsViewInfo View;
 
         public override void Perform()
         {
@@ -212,8 +216,8 @@ namespace SharpFlame
 
     public class clsResultItemPosGoto : clsResultItemGotoInterface
     {
-        public clsViewInfo View;
         public XYInt Horizontal;
+        public clsViewInfo View;
 
         public override void Perform()
         {
@@ -225,10 +229,10 @@ namespace SharpFlame
     {
         public static clsResultProblemGoto<clsResultItemPosGoto> CreateResultProblemGotoForObject(clsUnit unit)
         {
-            clsResultItemPosGoto resultGoto = new clsResultItemPosGoto();
+            var resultGoto = new clsResultItemPosGoto();
             resultGoto.View = unit.MapLink.Source.ViewInfo;
             resultGoto.Horizontal = unit.Pos.Horizontal;
-            clsResultProblemGoto<clsResultItemPosGoto> resultProblem = new clsResultProblemGoto<clsResultItemPosGoto>();
+            var resultProblem = new clsResultProblemGoto<clsResultItemPosGoto>();
             resultProblem.MapGoto = resultGoto;
             return resultProblem;
         }

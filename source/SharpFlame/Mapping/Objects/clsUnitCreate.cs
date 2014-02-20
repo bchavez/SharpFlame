@@ -1,18 +1,21 @@
+#region
+
 using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
-using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame.Mapping.Objects
 {
     public class clsUnitCreate
     {
+        public bool AutoWalls = false;
+        public XYInt Horizontal;
         public clsMap Map;
         public UnitTypeBase ObjectTypeBase;
-        public XYInt Horizontal;
-        public clsUnitGroup UnitGroup;
-        public bool AutoWalls = false;
-        public int Rotation = 0;
         public bool RandomizeRotation = false;
+        public int Rotation = 0;
+        public clsUnitGroup UnitGroup;
 
         public clsUnit Perform()
         {
@@ -20,7 +23,7 @@ namespace SharpFlame.Mapping.Objects
             {
                 if ( ObjectTypeBase.Type == UnitType.PlayerStructure )
                 {
-                    StructureTypeBase structureTypeBase = (StructureTypeBase)ObjectTypeBase;
+                    var structureTypeBase = (StructureTypeBase)ObjectTypeBase;
                     if ( structureTypeBase.WallLink.IsConnected )
                     {
                         clsWallType AutoWallType = null;
@@ -30,7 +33,7 @@ namespace SharpFlame.Mapping.Objects
                     }
                 }
             }
-            clsUnit newUnit = new clsUnit();
+            var newUnit = new clsUnit();
             if ( RandomizeRotation )
             {
                 newUnit.Rotation = (int)(App.Random.Next() * 360.0D);
@@ -42,7 +45,7 @@ namespace SharpFlame.Mapping.Objects
             newUnit.UnitGroup = UnitGroup;
             newUnit.Pos = Map.TileAlignedPosFromMapPos(Horizontal, ObjectTypeBase.get_GetFootprintSelected(newUnit.Rotation));
             newUnit.TypeBase = ObjectTypeBase;
-            clsUnitAdd UnitAdd = new clsUnitAdd();
+            var UnitAdd = new clsUnitAdd();
             UnitAdd.Map = Map;
             UnitAdd.NewUnit = newUnit;
             UnitAdd.StoreChange = true;

@@ -1,11 +1,15 @@
+#region
+
 using System.Diagnostics;
+
+#endregion
 
 namespace SharpFlame.Collections
 {
     public class ConnectedListLink<ItemType, SourceType> : ConnectedListItem<ItemType, SourceType> where ItemType : class where SourceType : class
     {
-        private ItemType Owner;
         private ConnectedList<ItemType, SourceType> ConnectedList;
+        private ItemType Owner;
         private int Position = -1;
 
         public ConnectedListLink(ItemType Owner)
@@ -28,17 +32,6 @@ namespace SharpFlame.Collections
             get { return Position >= 0; }
         }
 
-        public override void AfterMove(int Position)
-        {
-            this.Position = Position;
-        }
-
-        public override void BeforeRemove()
-        {
-            ConnectedList = null;
-            Position = -1;
-        }
-
         public override ItemType Item
         {
             get { return Owner; }
@@ -52,11 +45,19 @@ namespace SharpFlame.Collections
                 {
                     return ConnectedList.Owner;
                 }
-                else
-                {
-                    return null;
-                }
+                return null;
             }
+        }
+
+        public override void AfterMove(int Position)
+        {
+            this.Position = Position;
+        }
+
+        public override void BeforeRemove()
+        {
+            ConnectedList = null;
+            Position = -1;
         }
 
         public void Connect(ConnectedList<ItemType, SourceType> List)

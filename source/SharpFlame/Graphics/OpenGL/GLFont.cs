@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -5,21 +7,15 @@ using System.Drawing.Imaging;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
-using SharpFlame.Maths;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
+
+#endregion
 
 namespace SharpFlame.Graphics.OpenGL
 {
     public class GLFont
     {
         public Font BaseFont;
-
-        public struct sCharacter
-        {
-            public int GLTexture;
-            public int TexSize;
-            public int Width;
-        }
 
         public sCharacter[] Character = new sCharacter[256];
         public int Height;
@@ -31,17 +27,17 @@ namespace SharpFlame.Graphics.OpenGL
 
         private void GLTextures_Generate(Font NewBaseFont)
         {
-            int A = 0;
-            int X = 0;
-            int Y = 0;
-            Bitmap TempBitmap = default(Bitmap);
-            System.Drawing.Graphics gfx = default(System.Drawing.Graphics);
-            BitmapData BitmapData = default(BitmapData);
-            int NewSizeX = 0;
-            int StartX = 0;
-            int FinishX = 0;
-            Bitmap TexBitmap = default(Bitmap);
-            string Text = "";
+            var A = 0;
+            var X = 0;
+            var Y = 0;
+            var TempBitmap = default(Bitmap);
+            var gfx = default(System.Drawing.Graphics);
+            var BitmapData = default(BitmapData);
+            var NewSizeX = 0;
+            var StartX = 0;
+            var FinishX = 0;
+            var TexBitmap = default(Bitmap);
+            var Text = "";
 
             BaseFont = NewBaseFont;
             Height = BaseFont.Height;
@@ -135,34 +131,41 @@ namespace SharpFlame.Graphics.OpenGL
 
         public void Deallocate()
         {
-            int A = 0;
+            var A = 0;
 
             for ( A = 0; A <= 255; A++ )
             {
                 GL.DeleteTexture(Convert.ToInt32(Character[A].GLTexture));
             }
         }
+
+        public struct sCharacter
+        {
+            public int GLTexture;
+            public int TexSize;
+            public int Width;
+        }
     }
 
     public class clsTextLabel
     {
-        public string Text;
-        public GLFont TextFont;
-        public float SizeY;
         public sRGBA_sng Colour;
         public XYInt Pos;
+        public float SizeY;
+        public string Text;
+        public GLFont TextFont;
 
         public float GetSizeX()
         {
             float SizeX = 0;
             float CharWidth = 0;
-            float CharSpacing = SizeY / 10.0F;
-            float CharSize = SizeY / TextFont.Height;
-            int A = 0;
+            var CharSpacing = SizeY / 10.0F;
+            var CharSize = SizeY / TextFont.Height;
+            var A = 0;
 
             for ( A = 0; A <= Text.Length - 1; A++ )
             {
-                CharWidth = TextFont.Character[(int)Text[A]].Width * CharSize;
+                CharWidth = TextFont.Character[Text[A]].Width * CharSize;
                 SizeX += CharWidth;
             }
             SizeX += CharSpacing * (Text.Length - 1);
@@ -185,15 +188,15 @@ namespace SharpFlame.Graphics.OpenGL
                 return;
             }
 
-            int CharCode = 0;
+            var CharCode = 0;
             float CharWidth = 0;
-            XYDouble TexRatio = new XYDouble();
+            var TexRatio = new XYDouble();
             float LetterPosA = 0;
             float LetterPosB = 0;
             float PosY1 = 0;
             float PosY2 = 0;
             float CharSpacing = 0;
-            int A = 0;
+            var A = 0;
 
             GL.Color4(Colour.Red, Colour.Green, Colour.Blue, Colour.Alpha);
             PosY1 = Pos.Y;
@@ -202,10 +205,10 @@ namespace SharpFlame.Graphics.OpenGL
             LetterPosA = Pos.X;
             for ( A = 0; A <= Text.Length - 1; A++ )
             {
-                CharCode = (int)Text[A];
+                CharCode = Text[A];
                 if ( CharCode >= 0 & CharCode <= 255 )
                 {
-                    CharWidth = (float)(SizeY * TextFont.Character[CharCode].Width / TextFont.Height);
+                    CharWidth = SizeY * TextFont.Character[CharCode].Width / TextFont.Height;
                     TexRatio.X = (float)((double)TextFont.Character[CharCode].Width / TextFont.Character[CharCode].TexSize);
                     TexRatio.Y = (float)((double)TextFont.Height / TextFont.Character[CharCode].TexSize);
                     LetterPosB = LetterPosA + CharWidth;
@@ -229,8 +232,8 @@ namespace SharpFlame.Graphics.OpenGL
 
     public class clsTextLabels
     {
-        public clsTextLabel[] Items;
         public int ItemCount = 0;
+        public clsTextLabel[] Items;
         public int MaxCount;
 
         public clsTextLabels(int MaxItemCount)
@@ -258,7 +261,7 @@ namespace SharpFlame.Graphics.OpenGL
 
         public void Draw()
         {
-            int A = 0;
+            var A = 0;
 
             for ( A = 0; A <= ItemCount - 1; A++ )
             {

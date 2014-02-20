@@ -1,23 +1,24 @@
+#region
+
 using System;
+
+#endregion
 
 namespace SharpFlame.Painters
 {
     public class Painter
     {
-        public Terrain[] Terrains;
-        public int TerrainCount;
-
-        public TransitionBrush[] TransitionBrushes;
-        public int TransitionBrushCount;
-
-        public CliffBrush[] CliffBrushes;
         public int CliffBrushCount;
+        public CliffBrush[] CliffBrushes;
 
-        public Road[] Roads;
-        public int RoadCount;
-
-        public RoadBrush[] RoadBrushes;
         public int RoadBrushCount;
+        public RoadBrush[] RoadBrushes;
+        public int RoadCount;
+        public Road[] Roads;
+        public int TerrainCount;
+        public Terrain[] Terrains;
+        public int TransitionBrushCount;
+        public TransitionBrush[] TransitionBrushes;
 
         public void AddBrush(TransitionBrush newBrush)
         {

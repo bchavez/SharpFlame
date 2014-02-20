@@ -1,5 +1,3 @@
-using SharpFlame.Maths;
-
 namespace SharpFlame.Mapping.Tools
 {
     public class clsObjectRotationOffset : clsObjectAction

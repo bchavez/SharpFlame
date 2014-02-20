@@ -1,8 +1,11 @@
+#region
+
 using System;
 using SharpFlame.Domain;
-using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Mapping.Tools;
+
+#endregion
 
 namespace SharpFlame.Generators
 {
@@ -66,9 +69,9 @@ namespace SharpFlame.Generators
 
         public static UnitTypeBase GetUnitTypeFromCode(string Code)
         {
-            UnitTypeBase unitTypeBase = default(UnitTypeBase);
+            var unitTypeBase = default(UnitTypeBase);
 
-            foreach ( UnitTypeBase tempLoopVar_UnitType in App.ObjectData.UnitTypes )
+            foreach ( var tempLoopVar_UnitType in App.ObjectData.UnitTypes )
             {
                 unitTypeBase = tempLoopVar_UnitType;
                 string UnitCode = null;
@@ -168,7 +171,7 @@ namespace SharpFlame.Generators
             Generator_TilesetRockies.ClusteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseLogCabin4, 1));
             Generator_TilesetRockies.ClusteredUnit_Add(new clsGeneratorTileset.sUnitChance(UnitTypeBaseLogCabin5, 3));
 
-            int Num = 0;
+            var Num = 0;
 
             //terrain arizona
 

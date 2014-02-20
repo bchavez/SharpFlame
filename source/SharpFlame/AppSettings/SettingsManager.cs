@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Drawing;
 using System.IO;
@@ -5,14 +7,16 @@ using NLog;
 using OpenTK;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
-using SharpFlame.FileIO;
-using SharpFlame.FileIO.Ini;
+using SharpFlame.Core.Parsers.Ini;
+using IniReader = SharpFlame.FileIO.Ini.IniReader;
+
+#endregion
 
 namespace SharpFlame.AppSettings
 {
     public sealed class SettingsManager
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public static OptionGroup Options_Settings = new OptionGroup();
         public static clsSettings InitializeSettings;
@@ -54,10 +58,10 @@ namespace SharpFlame.AppSettings
 
         private static Option<T> CreateSetting<T>(string saveKey, T defaultValue)
         {
-            OptionCreator<T> creator = new OptionCreator<T>();
+            var creator = new OptionCreator<T>();
             creator.SaveKey = saveKey;
             creator.DefaultValue = defaultValue;
-            Option<T> result = creator.Create();
+            var result = creator.Create();
             Options_Settings.Options.Add(result.GroupLink);
             return result;
         }
@@ -66,61 +70,61 @@ namespace SharpFlame.AppSettings
         {
             creator.SaveKey = saveKey;
             creator.DefaultValue = defaultValue;
-            Option<T> result = creator.Create();
+            var result = creator.Create();
             Options_Settings.Options.Add(result.GroupLink);
             return result;
         }
 
         public static void CreateSettingOptions()
         {
-            Setting_AutoSaveEnabled = CreateSetting<bool>("AutoSave", true);
-            Setting_AutoSaveCompress = CreateSetting<bool>("AutoSaveCompress", false);
-            Setting_AutoSaveMinInterval_s = CreateSetting<UInt32>("AutoSaveMinInterval", 180U);
-            Setting_AutoSaveMinChanges = CreateSetting<UInt32>("AutoSaveMinChanges", 20U);
-            Setting_UndoLimit = CreateSetting<UInt32>("UndoLimit", 256U);
-            Setting_DirectoriesPrompt = CreateSetting<bool>("DirectoriesPrompt", true);
-            Setting_DirectPointer = CreateSetting<bool>("DirectPointer", true);
-            Setting_FontFamily = CreateSetting<FontFamily>("FontFamily", FontFamily.GenericSerif);
-            Setting_FontBold = CreateSetting<bool>("FontBold", true);
-            Setting_FontItalic = CreateSetting<bool>("FontItalic", false);
-            Setting_FontSize = (OptionFontSize)(CreateSetting<Single>(new OptionCreatorFontSize(), "FontSize", 20.0F));
-            Setting_MinimapSize = (OptionMinimapSize)(CreateSetting<int>(new OptionCreatorMinimapSize(), "MinimapSize", 160));
-            Setting_MinimapTeamColours = CreateSetting<bool>("MinimapTeamColours", true);
-            Setting_MinimapTeamColoursExceptFeatures = CreateSetting<bool>("MinimapTeamColoursExceptFeatures", true);
-            Setting_MinimapCliffColour = CreateSetting<clsRGBA_sng>("MinimapCliffColour", new clsRGBA_sng(1.0F, 0.25F, 0.25F, 0.5F));
-            Setting_MinimapSelectedObjectsColour = CreateSetting<clsRGBA_sng>("MinimapSelectedObjectsColour", new clsRGBA_sng(1.0F, 1.0F, 1.0F, 0.75F));
-            Setting_FOVDefault = (OptionFovDefault)(CreateSetting<double>(new OptionCreatorFovDefault(), "FOVDefault", 30.0D / (50.0D * 900.0D)));
+            Setting_AutoSaveEnabled = CreateSetting("AutoSave", true);
+            Setting_AutoSaveCompress = CreateSetting("AutoSaveCompress", false);
+            Setting_AutoSaveMinInterval_s = CreateSetting("AutoSaveMinInterval", 180U);
+            Setting_AutoSaveMinChanges = CreateSetting("AutoSaveMinChanges", 20U);
+            Setting_UndoLimit = CreateSetting("UndoLimit", 256U);
+            Setting_DirectoriesPrompt = CreateSetting("DirectoriesPrompt", true);
+            Setting_DirectPointer = CreateSetting("DirectPointer", true);
+            Setting_FontFamily = CreateSetting("FontFamily", FontFamily.GenericSerif);
+            Setting_FontBold = CreateSetting("FontBold", true);
+            Setting_FontItalic = CreateSetting("FontItalic", false);
+            Setting_FontSize = (OptionFontSize)(CreateSetting(new OptionCreatorFontSize(), "FontSize", 20.0F));
+            Setting_MinimapSize = (OptionMinimapSize)(CreateSetting(new OptionCreatorMinimapSize(), "MinimapSize", 160));
+            Setting_MinimapTeamColours = CreateSetting("MinimapTeamColours", true);
+            Setting_MinimapTeamColoursExceptFeatures = CreateSetting("MinimapTeamColoursExceptFeatures", true);
+            Setting_MinimapCliffColour = CreateSetting("MinimapCliffColour", new clsRGBA_sng(1.0F, 0.25F, 0.25F, 0.5F));
+            Setting_MinimapSelectedObjectsColour = CreateSetting("MinimapSelectedObjectsColour", new clsRGBA_sng(1.0F, 1.0F, 1.0F, 0.75F));
+            Setting_FOVDefault = (OptionFovDefault)(CreateSetting(new OptionCreatorFovDefault(), "FOVDefault", 30.0D / (50.0D * 900.0D)));
             //screenVerticalSize/(screenDist*screenVerticalPixels)
-            Setting_Mipmaps = CreateSetting<bool>("Mipmaps", false);
-            Setting_MipmapsHardware = CreateSetting<bool>("MipmapsHardware", false);
+            Setting_Mipmaps = CreateSetting("Mipmaps", false);
+            Setting_MipmapsHardware = CreateSetting("MipmapsHardware", false);
             Setting_OpenPath = CreateSetting<string>("OpenPath", null);
             Setting_SavePath = CreateSetting<string>("SavePath", null);
-            Setting_MapViewBPP = CreateSetting<int>("MapViewBPP", DisplayDevice.Default.BitsPerPixel);
-            Setting_TextureViewBPP = CreateSetting<int>("TextureViewBPP", DisplayDevice.Default.BitsPerPixel);
-            Setting_MapViewDepth = CreateSetting<int>("MapViewDepth", 24);
-            Setting_TextureViewDepth = CreateSetting<int>("TextureViewDepth", 24);
-            Setting_TilesetDirectories = CreateSetting<SimpleList<string>>("TilesetsPath", new SimpleList<string>());
-            Setting_ObjectDataDirectories = CreateSetting<SimpleList<string>>("ObjectDataPath", new SimpleList<string>());
-            Setting_DefaultTilesetsPathNum = CreateSetting<int>("DefaultTilesetsPathNum", -1);
-            Setting_DefaultObjectDataPathNum = CreateSetting<int>("DefaultObjectDataPathNum", -1);
-            Setting_PickOrientation = CreateSetting<bool>("PickOrientation", true);
+            Setting_MapViewBPP = CreateSetting("MapViewBPP", DisplayDevice.Default.BitsPerPixel);
+            Setting_TextureViewBPP = CreateSetting("TextureViewBPP", DisplayDevice.Default.BitsPerPixel);
+            Setting_MapViewDepth = CreateSetting("MapViewDepth", 24);
+            Setting_TextureViewDepth = CreateSetting("TextureViewDepth", 24);
+            Setting_TilesetDirectories = CreateSetting("TilesetsPath", new SimpleList<string>());
+            Setting_ObjectDataDirectories = CreateSetting("ObjectDataPath", new SimpleList<string>());
+            Setting_DefaultTilesetsPathNum = CreateSetting("DefaultTilesetsPathNum", -1);
+            Setting_DefaultObjectDataPathNum = CreateSetting("DefaultObjectDataPathNum", -1);
+            Setting_PickOrientation = CreateSetting("PickOrientation", true);
         }
 
         public static clsResult Read_Settings(StreamReader File, ref clsSettings Result)
         {
-            clsResult ReturnResult = new clsResult("Reading settings", false);
-            logger.Info ("Reading settings");
+            var ReturnResult = new clsResult("Reading settings", false);
+            logger.Info("Reading settings");
 
-            IniReader INIReader = new IniReader();
+            var INIReader = new IniReader();
             ReturnResult.Take(INIReader.ReadFile(File));
             Result = new clsSettings();
             ReturnResult.Take(INIReader.RootSection.Translate(Result));
-            foreach ( Section section in INIReader.Sections )
+            foreach ( var section in INIReader.Sections )
             {
                 if ( section.Name.ToLower() == "keyboardcontrols" )
                 {
-                    clsResult keyResults = new clsResult("Keyboard controls", false);
-                    logger.Debug ("Reading keyboard controls");
+                    var keyResults = new clsResult("Keyboard controls", false);
+                    logger.Debug("Reading keyboard controls");
                     keyResults.Take(section.Translate(KeyboardManager.KeyboardProfile));
                     ReturnResult.Take(keyResults);
                 }
@@ -131,7 +135,7 @@ namespace SharpFlame.AppSettings
 
         public static void UpdateSettings(clsSettings NewSettings)
         {
-            bool FontChanged = default(bool);
+            var FontChanged = default(bool);
 
             if ( Settings == null )
             {
@@ -184,14 +188,17 @@ namespace SharpFlame.AppSettings
 
         public static clsResult Settings_Write()
         {
-            clsResult ReturnResult = new clsResult("Writing settings to \"{0}\"".Format2(App.SettingsPath), false);
-            logger.Info ("Writing settings to \"{0}\"".Format2 (App.SettingsPath));
-
-            IniWriter INI_Settings = default(IniWriter);
+            var ReturnResult = new clsResult("Writing settings to \"{0}\"".Format2(App.SettingsPath), false);
+            logger.Info("Writing settings to \"{0}\"".Format2(App.SettingsPath));
 
             try
             {
-                INI_Settings = IniWriter.CreateFile(File.Create(App.SettingsPath));
+                using ( var file = File.Create(App.SettingsPath) )
+                {
+                    var iniSettings = new IniWriter(file);
+                    ReturnResult.Take(Serialize_Settings(iniSettings));
+                    iniSettings.Flush();
+                }
             }
             catch ( Exception ex )
             {
@@ -199,33 +206,30 @@ namespace SharpFlame.AppSettings
                 return ReturnResult;
             }
 
-            ReturnResult.Take(Serialize_Settings(INI_Settings));
-            INI_Settings.File.Close();
-
             return ReturnResult;
         }
 
         private static clsResult Serialize_Settings(IniWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing settings", false);
-            logger.Info ("Serializing settings");
+            var returnResult = new clsResult("Serializing settings", false);
+            logger.Info("Serializing settings");
 
-            ReturnResult.Take(Settings.INIWrite(File));
+            returnResult.Take(Settings.INIWrite(File));
             if ( KeyboardManager.KeyboardProfile.IsAnythingChanged )
             {
-                File.AppendSectionName("KeyboardControls");
-                ReturnResult.Take(KeyboardManager.KeyboardProfile.INIWrite(File));
+                File.AddSection("KeyboardControls");
+                returnResult.Take(KeyboardManager.KeyboardProfile.INIWrite(File));
             }
 
-            return ReturnResult;
+            return returnResult;
         }
 
         public static clsResult Settings_Load(ref clsSettings Result)
         {
-            clsResult ReturnResult = new clsResult ("Loading settings from \"{0}\"".Format2 (App.SettingsPath), false);
-            logger.Info ("Loading settings from \"{0}\"".Format2 (App.SettingsPath));
+            var ReturnResult = new clsResult("Loading settings from \"{0}\"".Format2(App.SettingsPath), false);
+            logger.Info("Loading settings from \"{0}\"".Format2(App.SettingsPath));
 
-            StreamReader File_Settings = default(StreamReader);
+            var File_Settings = default(StreamReader);
             try
             {
                 File_Settings = new StreamReader(App.SettingsPath);
@@ -402,14 +406,14 @@ namespace SharpFlame.AppSettings
 
         public Font MakeFont()
         {
-            FontStyle style = FontStyle.Regular;
+            var style = FontStyle.Regular;
             if ( FontBold )
             {
-                style = (FontStyle)(style | FontStyle.Bold);
+                style = style | FontStyle.Bold;
             }
             if ( FontItalic )
             {
-                style = (FontStyle)(style | FontStyle.Italic);
+                style = style | FontStyle.Italic;
             }
             return new Font(FontFamily, FontSize, style, GraphicsUnit.Point);
         }
@@ -431,7 +435,7 @@ namespace SharpFlame.AppSettings
 
         public override bool IsValueValid(object value)
         {
-            double dblValue = Convert.ToDouble(value);
+            var dblValue = Convert.ToDouble(value);
             return dblValue >= 0.00005D & dblValue <= 0.005D;
         }
     }
@@ -452,7 +456,7 @@ namespace SharpFlame.AppSettings
 
         public override bool IsValueValid(object value)
         {
-            int intValue = Convert.ToInt32(value);
+            var intValue = Convert.ToInt32(value);
             return intValue >= 0 & intValue <= Constants.MinimapMaxSize;
         }
     }

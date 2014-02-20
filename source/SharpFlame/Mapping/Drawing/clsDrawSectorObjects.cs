@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
@@ -9,14 +11,15 @@ using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 
+#endregion
+
 namespace SharpFlame.Mapping.Drawing
 {
     public class clsDrawSectorObjects : clsAction
     {
-        public clsTextLabels UnitTextLabels;
-
-        private bool[] UnitDrawn;
         private bool Started;
+        private bool[] UnitDrawn;
+        public clsTextLabels UnitTextLabels;
 
         public void Start()
         {
@@ -33,18 +36,18 @@ namespace SharpFlame.Mapping.Drawing
                 return;
             }
 
-            clsUnit Unit = default(clsUnit);
-            clsSector Sector = Map.Sectors[PosNum.X, PosNum.Y];
-            bool DrawUnitLabel = default(bool);
-            clsViewInfo ViewInfo = Map.ViewInfo;
-            clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = ViewInfo.GetMouseOverTerrain();
-            clsTextLabel TextLabel = default(clsTextLabel);
-            XYZDouble XYZ_dbl = default(XYZDouble);
-            XYZDouble XYZ_dbl2 = default(XYZDouble);
-            XYInt ScreenPos = new XYInt();
-            clsUnitSectorConnection Connection = default(clsUnitSectorConnection);
+            var Unit = default(clsUnit);
+            var Sector = Map.Sectors[PosNum.X, PosNum.Y];
+            var DrawUnitLabel = default(bool);
+            var ViewInfo = Map.ViewInfo;
+            var MouseOverTerrain = ViewInfo.GetMouseOverTerrain();
+            var TextLabel = default(clsTextLabel);
+            var XYZ_dbl = default(XYZDouble);
+            var XYZ_dbl2 = default(XYZDouble);
+            var ScreenPos = new XYInt();
+            var Connection = default(clsUnitSectorConnection);
 
-            foreach ( clsUnitSectorConnection tempLoopVar_Connection in Sector.Units )
+            foreach ( var tempLoopVar_Connection in Sector.Units )
             {
                 Connection = tempLoopVar_Connection;
                 Unit = Connection.Unit;

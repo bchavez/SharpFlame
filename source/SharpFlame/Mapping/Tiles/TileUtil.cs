@@ -1,8 +1,11 @@
+#region
+
 using System;
 using System.Diagnostics;
 using SharpFlame.Core.Domain;
-using SharpFlame.Maths;
 using SharpFlame.Painters;
+
+#endregion
 
 namespace SharpFlame.Mapping.Tiles
 {
@@ -25,7 +28,7 @@ namespace SharpFlame.Mapping.Tiles
 
         public static clsTerrain.Tile.sTexture OrientateTile(ref TileOrientationChance tileChance, TileDirection newDirection)
         {
-            clsTerrain.Tile.sTexture ReturnResult = new clsTerrain.Tile.sTexture();
+            var ReturnResult = new clsTerrain.Tile.sTexture();
 
             //use random for empty tiles
             if ( tileChance.TextureNum < 0 )
@@ -60,7 +63,7 @@ namespace SharpFlame.Mapping.Tiles
                 return ReturnResult;
             }
 
-            bool IsDiagonal = default(bool);
+            var IsDiagonal = default(bool);
 
             IsDiagonal = newDirection.X != 1 & newDirection.Y != 1;
             if ( IsDiagonal )
@@ -173,7 +176,7 @@ namespace SharpFlame.Mapping.Tiles
 
         public static XYInt GetTileRotatedOffset(TileOrientation tileOrientation, XYInt pos)
         {
-            XYInt Result = new XYInt();
+            var Result = new XYInt();
 
             if ( tileOrientation.SwitchedAxes )
             {
@@ -219,7 +222,7 @@ namespace SharpFlame.Mapping.Tiles
 
         public static XYDouble GetTileRotatedPos_sng(TileOrientation tileOrientation, XYDouble pos)
         {
-            XYDouble ReturnResult = new XYDouble();
+            var ReturnResult = new XYDouble();
 
             if ( tileOrientation.SwitchedAxes )
             {
@@ -265,7 +268,7 @@ namespace SharpFlame.Mapping.Tiles
 
         public static XYDouble GetTileRotatedPos_dbl(TileOrientation tileOrientation, XYDouble pos)
         {
-            XYDouble ReturnResult = default(XYDouble);
+            var ReturnResult = default(XYDouble);
 
             if ( tileOrientation.SwitchedAxes )
             {
@@ -311,7 +314,7 @@ namespace SharpFlame.Mapping.Tiles
 
         public static XYInt GetRotatedPos(TileOrientation orientation, XYInt pos, XYInt limits)
         {
-            XYInt Result = new XYInt();
+            var Result = new XYInt();
 
             if ( orientation.SwitchedAxes )
             {
@@ -357,7 +360,7 @@ namespace SharpFlame.Mapping.Tiles
 
         public static double GetRotatedAngle(TileOrientation orientation, double angle)
         {
-            XYDouble XY_dbl = default(XYDouble);
+            var XY_dbl = default(XYDouble);
 
             XY_dbl = GetTileRotatedPos_dbl(orientation, new XYDouble((Math.Cos(angle) + 1.0D) / 2.0D, (Math.Sin(angle) + 1.0D) / 2.0D));
             XY_dbl.X = XY_dbl.X * 2.0D - 1.0D;
@@ -365,10 +368,10 @@ namespace SharpFlame.Mapping.Tiles
             return Math.Atan2(XY_dbl.Y, XY_dbl.X);
         }
 
-        public static void GetTileRotatedTexCoords(TileOrientation tileOrientation, ref XYDouble coordA, ref XYDouble coordB, 
+        public static void GetTileRotatedTexCoords(TileOrientation tileOrientation, ref XYDouble coordA, ref XYDouble coordB,
             ref XYDouble coordC, ref XYDouble coordD)
         {
-            TileOrientation reverseOrientation = new TileOrientation();
+            var reverseOrientation = new TileOrientation();
 
             reverseOrientation = tileOrientation;
             reverseOrientation.Reverse();
@@ -443,11 +446,11 @@ namespace SharpFlame.Mapping.Tiles
             {
                 if ( tileOrientation.ResultXFlip )
                 {
-                    OutputRotation = (byte)1;
+                    OutputRotation = 1;
                 }
                 else
                 {
-                    OutputRotation = (byte)3;
+                    OutputRotation = 3;
                 }
                 OutputFlipX = !(tileOrientation.ResultXFlip ^ tileOrientation.ResultYFlip);
             }
@@ -455,11 +458,11 @@ namespace SharpFlame.Mapping.Tiles
             {
                 if ( tileOrientation.ResultYFlip )
                 {
-                    OutputRotation = (byte)2;
+                    OutputRotation = 2;
                 }
                 else
                 {
-                    OutputRotation = (byte)0;
+                    OutputRotation = 0;
                 }
                 OutputFlipX = tileOrientation.ResultXFlip ^ tileOrientation.ResultYFlip;
             }

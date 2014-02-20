@@ -8,14 +8,14 @@ namespace SharpFlame.Mapping.Tiles
 
         public TileOrientation(bool resultXFlip, bool resultZFlip, bool switchedAxes)
         {
-            this.ResultXFlip = resultXFlip;
+            ResultXFlip = resultXFlip;
             ResultYFlip = resultZFlip;
-            this.SwitchedAxes = switchedAxes;
+            SwitchedAxes = switchedAxes;
         }
 
         public TileOrientation GetRotated(TileOrientation Orientation)
         {
-            TileOrientation ReturnResult = new TileOrientation();
+            var ReturnResult = new TileOrientation();
 
             ReturnResult.SwitchedAxes = SwitchedAxes ^ Orientation.SwitchedAxes;
 

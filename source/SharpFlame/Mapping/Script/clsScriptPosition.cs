@@ -1,50 +1,49 @@
+#region
+
 using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.FileIO;
-using SharpFlame.FileIO.Ini;
 using SharpFlame.Mapping.Drawing;
 using SharpFlame.Maths;
 using SharpFlame.Util;
+
+#endregion
 
 namespace SharpFlame.Mapping.Script
 {
     public class clsScriptPosition
     {
+        private readonly ConnectedListLink<clsScriptPosition, clsMap> parentMapLink;
+
+        private string label;
+
+        private XYInt pos;
+
         public clsScriptPosition()
         {
             parentMapLink = new ConnectedListLink<clsScriptPosition, clsMap>(this);
         }
 
-        private ConnectedListLink<clsScriptPosition, clsMap> parentMapLink;
+        public clsScriptPosition(clsMap map)
+        {
+            label = map.GetDefaultScriptLabel("Position");
+
+            parentMapLink.Connect(map.ScriptPositions);
+        }
 
         public ConnectedListLink<clsScriptPosition, clsMap> ParentMap
         {
             get { return parentMapLink; }
         }
 
-        private string label;
-
         public string Label
         {
             get { return label; }
         }
-        
-        public sResult SetLabel(string Text)
-        {
-            sResult Result = new sResult();
-
-            Result = parentMapLink.Source.ScriptLabelIsValid(Text);
-            if ( Result.Success )
-            {
-                label = Text;
-            }
-            return Result;
-        }
-
-        private XYInt pos;
 
         public int PosX
         {
@@ -66,15 +65,21 @@ namespace SharpFlame.Mapping.Script
             }
         }
 
-        public clsScriptPosition(clsMap map) {
-            label = map.GetDefaultScriptLabel("Position");
+        public sResult SetLabel(string Text)
+        {
+            var Result = new sResult();
 
-            parentMapLink.Connect(map.ScriptPositions);
+            Result = parentMapLink.Source.ScriptLabelIsValid(Text);
+            if ( Result.Success )
+            {
+                label = Text;
+            }
+            return Result;
         }
 
         public void GLDraw()
         {
-            clsDrawHorizontalPosOnTerrain Drawer = new clsDrawHorizontalPosOnTerrain();
+            var Drawer = new clsDrawHorizontalPosOnTerrain();
             Drawer.Map = parentMapLink.Source;
             Drawer.Horizontal = pos;
             if ( Program.frmMainInstance.SelectedScriptMarker == this )
@@ -98,10 +103,9 @@ namespace SharpFlame.Mapping.Script
 
         public void WriteWZ(IniWriter File)
         {
-            File.AppendSectionName("position_" + parentMapLink.ArrayPosition.ToStringInvariant());
-            File.AppendProperty("pos", pos.X.ToStringInvariant() + ", " + pos.Y.ToStringInvariant());
-            File.AppendProperty("label", label);
-            File.Gap_Append();
+            File.AddSection("position_" + parentMapLink.ArrayPosition.ToStringInvariant());
+            File.AddProperty("pos", pos.X.ToStringInvariant() + ", " + pos.Y.ToStringInvariant());
+            File.AddProperty("label", label);
         }
 
         public void Deallocate()

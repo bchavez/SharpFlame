@@ -1,29 +1,31 @@
+#region
+
 using System;
 using SharpFlame.Core.Domain;
 using SharpFlame.Mapping.Tiles;
-using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame.Mapping.Tools
 {
     public class clsApplyCliff : clsAction
     {
         public double Angle;
-        public bool SetTris;
-
-        private int RandomNum;
+        private bool CliffChanged;
         private double DifA;
         private double DifB;
         private double HeightA;
         private double HeightB;
-        private double TriTopLeftMaxSlope;
-        private double TriTopRightMaxSlope;
+        private bool NewVal;
+        private XYInt Pos;
+        private int RandomNum;
+        public bool SetTris;
+        private clsTerrain Terrain;
         private double TriBottomLeftMaxSlope;
         private double TriBottomRightMaxSlope;
-        private bool CliffChanged;
         private bool TriChanged;
-        private bool NewVal;
-        private clsTerrain Terrain;
-        private XYInt Pos;
+        private double TriTopLeftMaxSlope;
+        private double TriTopRightMaxSlope;
 
         public override void ActionPerform()
         {

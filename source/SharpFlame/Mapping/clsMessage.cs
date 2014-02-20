@@ -1,11 +1,15 @@
+#region
+
 using System;
+
+#endregion
 
 namespace SharpFlame.Mapping
 {
     public class clsMessage
     {
+        private readonly DateTime _CreatedDate = DateTime.Now;
         public string Text;
-        private DateTime _CreatedDate = DateTime.Now;
 
         public DateTime CreatedDate
         {

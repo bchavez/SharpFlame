@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Windows.Forms;
 using SharpFlame.Collections.Specialized;
@@ -8,21 +10,30 @@ using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
-using SharpFlame.Util;
+
+#endregion
 
 namespace SharpFlame
 {
     public partial class frmGenerator
     {
-        private frmMain _Owner;
+        private readonly clsGenerateMap Generator = new clsGenerateMap();
+        private readonly frmMain _Owner;
 
         private int PlayerCount = 4;
         private bool StopTrying;
 
+        public frmGenerator(frmMain Owner)
+        {
+            InitializeComponent();
+
+            _Owner = Owner;
+        }
+
         private int ValidateTextbox(TextBox TextBoxToValidate, double Min, double Max, double Multiplier)
         {
             double dblTemp = 0;
-            int Result = 0;
+            var Result = 0;
 
             if ( !IOUtil.InvariantParse(TextBoxToValidate.Text, ref dblTemp) )
             {
@@ -33,8 +44,6 @@ namespace SharpFlame
             return Result;
         }
 
-        private clsGenerateMap Generator = new clsGenerateMap();
-
         public void btnGenerateLayout_Click(Object sender, EventArgs e)
         {
             lstResult.Items.Clear();
@@ -44,7 +53,7 @@ namespace SharpFlame
 
             StopTrying = false;
 
-            int LoopCount = 0;
+            var LoopCount = 0;
 
             Generator.ClearLayout();
 
@@ -71,11 +80,11 @@ namespace SharpFlame
                     Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(Generator.SymmetryBlockCount - 1) + 1];
                     Generator.SymmetryBlocks[0].XYNum = new XYInt(0, 0);
                     Generator.SymmetryBlocks[0].Orientation = new TileOrientation(false, false, false);
-                    Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round(Generator.SymmetryBlockCount / 2.0)) - 1) + 1];
                     Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
                     Generator.SymmetryBlocks[1].XYNum = new XYInt(1, 0);
                     Generator.SymmetryBlocks[1].Orientation = new TileOrientation(true, true, false);
-                    Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round(Generator.SymmetryBlockCount / 2.0)) - 1) + 1];
                     Generator.SymmetryBlocks[1].ReflectToNum[0] = 0;
                     Generator.SymmetryIsRotational = true;
                     break;
@@ -86,11 +95,11 @@ namespace SharpFlame
                     Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(Generator.SymmetryBlockCount - 1) + 1];
                     Generator.SymmetryBlocks[0].XYNum = new XYInt(0, 0);
                     Generator.SymmetryBlocks[0].Orientation = new TileOrientation(false, false, false);
-                    Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round(Generator.SymmetryBlockCount / 2.0)) - 1) + 1];
                     Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
                     Generator.SymmetryBlocks[1].XYNum = new XYInt(0, 1);
                     Generator.SymmetryBlocks[1].Orientation = new TileOrientation(true, true, false);
-                    Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round(Generator.SymmetryBlockCount / 2.0)) - 1) + 1];
                     Generator.SymmetryBlocks[1].ReflectToNum[0] = 0;
                     Generator.SymmetryIsRotational = true;
                     break;
@@ -101,11 +110,11 @@ namespace SharpFlame
                     Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(Generator.SymmetryBlockCount - 1) + 1];
                     Generator.SymmetryBlocks[0].XYNum = new XYInt(0, 0);
                     Generator.SymmetryBlocks[0].Orientation = new TileOrientation(false, false, false);
-                    Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round(Generator.SymmetryBlockCount / 2.0)) - 1) + 1];
                     Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
                     Generator.SymmetryBlocks[1].XYNum = new XYInt(1, 0);
                     Generator.SymmetryBlocks[1].Orientation = new TileOrientation(true, false, false);
-                    Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round(Generator.SymmetryBlockCount / 2.0)) - 1) + 1];
                     Generator.SymmetryBlocks[1].ReflectToNum[0] = 0;
                     Generator.SymmetryIsRotational = false;
                     break;
@@ -116,11 +125,11 @@ namespace SharpFlame
                     Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(Generator.SymmetryBlockCount - 1) + 1];
                     Generator.SymmetryBlocks[0].XYNum = new XYInt(0, 0);
                     Generator.SymmetryBlocks[0].Orientation = new TileOrientation(false, false, false);
-                    Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round(Generator.SymmetryBlockCount / 2.0)) - 1) + 1];
                     Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
                     Generator.SymmetryBlocks[1].XYNum = new XYInt(0, 1);
                     Generator.SymmetryBlocks[1].Orientation = new TileOrientation(false, true, false);
-                    Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round(Generator.SymmetryBlockCount / 2.0)) - 1) + 1];
                     Generator.SymmetryBlocks[1].ReflectToNum[0] = 0;
                     Generator.SymmetryIsRotational = false;
                     Generator.SymmetryIsRotational = false;
@@ -132,22 +141,22 @@ namespace SharpFlame
                     Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(Generator.SymmetryBlockCount - 1) + 1];
                     Generator.SymmetryBlocks[0].XYNum = new XYInt(0, 0);
                     Generator.SymmetryBlocks[0].Orientation = new TileOrientation(false, false, false);
-                    Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round(Generator.SymmetryBlockCount / 2.0)) - 1) + 1];
                     Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
                     Generator.SymmetryBlocks[0].ReflectToNum[1] = 2;
                     Generator.SymmetryBlocks[1].XYNum = new XYInt(1, 0);
                     Generator.SymmetryBlocks[1].Orientation = new TileOrientation(true, false, true);
-                    Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round(Generator.SymmetryBlockCount / 2.0)) - 1) + 1];
                     Generator.SymmetryBlocks[1].ReflectToNum[0] = 3;
                     Generator.SymmetryBlocks[1].ReflectToNum[1] = 0;
                     Generator.SymmetryBlocks[2].XYNum = new XYInt(0, 1);
                     Generator.SymmetryBlocks[2].Orientation = new TileOrientation(false, true, true);
-                    Generator.SymmetryBlocks[2].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[2].ReflectToNum = new int[(((int)Math.Round(Generator.SymmetryBlockCount / 2.0)) - 1) + 1];
                     Generator.SymmetryBlocks[2].ReflectToNum[0] = 0;
                     Generator.SymmetryBlocks[2].ReflectToNum[1] = 3;
                     Generator.SymmetryBlocks[3].XYNum = new XYInt(1, 1);
                     Generator.SymmetryBlocks[3].Orientation = new TileOrientation(true, true, false);
-                    Generator.SymmetryBlocks[3].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[3].ReflectToNum = new int[(((int)Math.Round(Generator.SymmetryBlockCount / 2.0)) - 1) + 1];
                     Generator.SymmetryBlocks[3].ReflectToNum[0] = 2;
                     Generator.SymmetryBlocks[3].ReflectToNum[1] = 1;
                     Generator.SymmetryIsRotational = true;
@@ -159,22 +168,22 @@ namespace SharpFlame
                     Generator.SymmetryBlocks = new clsGenerateMap.sSymmetryBlock[(Generator.SymmetryBlockCount - 1) + 1];
                     Generator.SymmetryBlocks[0].XYNum = new XYInt(0, 0);
                     Generator.SymmetryBlocks[0].Orientation = new TileOrientation(false, false, false);
-                    Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[0].ReflectToNum = new int[(((int)Math.Round(Generator.SymmetryBlockCount / 2.0)) - 1) + 1];
                     Generator.SymmetryBlocks[0].ReflectToNum[0] = 1;
                     Generator.SymmetryBlocks[0].ReflectToNum[1] = 2;
                     Generator.SymmetryBlocks[1].XYNum = new XYInt(1, 0);
                     Generator.SymmetryBlocks[1].Orientation = new TileOrientation(true, false, false);
-                    Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[1].ReflectToNum = new int[(((int)Math.Round(Generator.SymmetryBlockCount / 2.0)) - 1) + 1];
                     Generator.SymmetryBlocks[1].ReflectToNum[0] = 0;
                     Generator.SymmetryBlocks[1].ReflectToNum[1] = 3;
                     Generator.SymmetryBlocks[2].XYNum = new XYInt(0, 1);
                     Generator.SymmetryBlocks[2].Orientation = new TileOrientation(false, true, false);
-                    Generator.SymmetryBlocks[2].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[2].ReflectToNum = new int[(((int)Math.Round(Generator.SymmetryBlockCount / 2.0)) - 1) + 1];
                     Generator.SymmetryBlocks[2].ReflectToNum[0] = 3;
                     Generator.SymmetryBlocks[2].ReflectToNum[1] = 0;
                     Generator.SymmetryBlocks[3].XYNum = new XYInt(1, 1);
                     Generator.SymmetryBlocks[3].Orientation = new TileOrientation(true, true, false);
-                    Generator.SymmetryBlocks[3].ReflectToNum = new int[(((int)Math.Round((double)(((double)Generator.SymmetryBlockCount) / 2.0))) - 1) + 1];
+                    Generator.SymmetryBlocks[3].ReflectToNum = new int[(((int)Math.Round(Generator.SymmetryBlockCount / 2.0)) - 1) + 1];
                     Generator.SymmetryBlocks[3].ReflectToNum[0] = 2;
                     Generator.SymmetryBlocks[3].ReflectToNum[1] = 1;
                     Generator.SymmetryIsRotational = false;
@@ -210,8 +219,8 @@ namespace SharpFlame
                 }
             }
             Generator.PlayerBasePos = new XYInt[Generator.TopLeftPlayerCount];
-            double BaseMin = 12.0D;
-            XYDouble BaseMax =
+            var BaseMin = 12.0D;
+            var BaseMax =
                 new XYDouble(Math.Min((double)Generator.TileSize.X / Generator.SymmetryBlockCountXY.X, Generator.TileSize.X - 12.0D),
                     Math.Min((double)Generator.TileSize.Y / Generator.SymmetryBlockCountXY.Y, Generator.TileSize.Y - 12.0D));
             Generator.PlayerBasePos[0] = new XYInt(ValidateTextbox(txt1x, BaseMin, BaseMax.X, Constants.TerrainGridSpacing),
@@ -277,14 +286,14 @@ namespace SharpFlame
 
             Application.DoEvents();
             LoopCount = 0;
-            clsResult Result = default(clsResult);
+            var Result = default(clsResult);
             do
             {
                 Result = new clsResult("", false);
                 Result = Generator.GenerateLayout();
                 if ( !Result.HasProblems )
                 {
-                    clsResult HeightsResult = FinishHeights();
+                    var HeightsResult = FinishHeights();
                     Result.Add(HeightsResult);
                     if ( !HeightsResult.HasProblems )
                     {
@@ -315,7 +324,7 @@ namespace SharpFlame
 
         private clsResult FinishHeights()
         {
-            clsResult ReturnResult = new clsResult("", false);
+            var ReturnResult = new clsResult("", false);
 
             ReturnResult.Take(Generator.GenerateLayoutTerrain());
             if ( ReturnResult.HasProblems )
@@ -335,7 +344,7 @@ namespace SharpFlame
 
         private clsResult FinishTextures()
         {
-            clsResult ReturnResult = new clsResult("", false);
+            var ReturnResult = new clsResult("", false);
 
             if ( cbxMasterTexture.Checked )
             {
@@ -393,29 +402,29 @@ namespace SharpFlame
                 }
                 Generator.Map.TileType_Reset();
                 Generator.Map.SetPainterToDefaults();
-                double CliffAngle = Math.Atan(255.0D * Generator.Map.HeightMultiplier / (2.0D * (Generator.LevelCount - 1.0D) * Constants.TerrainGridSpacing)) -
-                                    MathUtil.RadOf1Deg;
-                clsBrush tmpBrush = new clsBrush((Math.Max(Generator.Map.Terrain.TileSize.X, Generator.Map.Terrain.TileSize.Y)) * 1.1D, clsBrush.enumShape.Square);
-                clsApplyCliff ApplyCliff = new clsApplyCliff();
+                var CliffAngle = Math.Atan(255.0D * Generator.Map.HeightMultiplier / (2.0D * (Generator.LevelCount - 1.0D) * Constants.TerrainGridSpacing)) -
+                                 MathUtil.RadOf1Deg;
+                var tmpBrush = new clsBrush((Math.Max(Generator.Map.Terrain.TileSize.X, Generator.Map.Terrain.TileSize.Y)) * 1.1D, clsBrush.enumShape.Square);
+                var ApplyCliff = new clsApplyCliff();
                 ApplyCliff.Map = Generator.Map;
                 ApplyCliff.Angle = CliffAngle;
                 ApplyCliff.SetTris = true;
-                clsBrush.sPosNum Alignments = new clsBrush.sPosNum();
+                var Alignments = new clsBrush.sPosNum();
                 Alignments.Normal = new XYInt((int)(Generator.Map.Terrain.TileSize.X / 2.0D),
                     (int)(Generator.Map.Terrain.TileSize.Y / 2.0D));
                 Alignments.Alignment = Alignments.Normal;
                 tmpBrush.PerformActionMapTiles(ApplyCliff, Alignments);
                 bool[] RevertSlope = null;
                 bool[] RevertHeight = null;
-                BooleanMap WaterMap = new BooleanMap();
-                BooleanMap bmTemp = new BooleanMap();
-                int A = 0;
+                var WaterMap = new BooleanMap();
+                var bmTemp = new BooleanMap();
+                var A = 0;
                 WaterMap = Generator.GetWaterMap();
                 RevertSlope = new bool[Generator.GenerateTileset.OldTextureLayers.LayerCount];
                 RevertHeight = new bool[Generator.GenerateTileset.OldTextureLayers.LayerCount];
                 for ( A = 0; A <= Generator.GenerateTileset.OldTextureLayers.LayerCount - 1; A++ )
                 {
-                    clsLayer with_2 = Generator.GenerateTileset.OldTextureLayers.Layers[A];
+                    var with_2 = Generator.GenerateTileset.OldTextureLayers.Layers[A];
                     with_2.Terrainmap = Generator.Map.GenerateTerrainMap(with_2.Scale, with_2.Density);
                     if ( with_2.SlopeMax < 0.0F )
                     {
@@ -434,7 +443,7 @@ namespace SharpFlame
                 Generator.Map.MapTexturer(ref Generator.GenerateTileset.OldTextureLayers);
                 for ( A = 0; A <= Generator.GenerateTileset.OldTextureLayers.LayerCount - 1; A++ )
                 {
-                    clsLayer with_3 = Generator.GenerateTileset.OldTextureLayers.Layers[A];
+                    var with_3 = Generator.GenerateTileset.OldTextureLayers.Layers[A];
                     with_3.Terrainmap = null;
                     if ( RevertSlope[A] )
                     {
@@ -501,7 +510,7 @@ namespace SharpFlame
             Generator.GenerateGateways();
 
             lstResult_AddText("Generating objects.");
-            clsResult Result = new clsResult("", false);
+            var Result = new clsResult("", false);
             Result.Take(Generator.GenerateOil());
             Result.Take(Generator.GenerateUnits());
             lstResult_AddResult(Result);
@@ -529,7 +538,7 @@ namespace SharpFlame
             Generator.MaxDisconnectionDist = ValidateTextbox(txtRampDistance, 0.0D, 99999.0D, Constants.TerrainGridSpacing);
             Generator.RampBase = ValidateTextbox(txtRampBase, 10.0D, 1000.0D, 10.0D) / 1000.0D;
 
-            clsResult Result = new clsResult("", false);
+            var Result = new clsResult("", false);
 
             lstResult_AddText("Generating ramps.");
             Result = Generator.GenerateRamps();
@@ -541,12 +550,8 @@ namespace SharpFlame
             if ( Result.HasProblems )
             {
                 lstResult_AddText("Failed.");
-                return;
             }
-            else
-            {
-                lstResult_AddText("Done.");
-            }
+            lstResult_AddText("Done.");
         }
 
         public void btnGenerateTextures_Click(Object sender, EventArgs e)
@@ -749,13 +754,6 @@ namespace SharpFlame
                 rdoPlayer8.Checked = false;
                 rdoPlayer9.Checked = false;
             }
-        }
-
-        public frmGenerator(frmMain Owner)
-        {
-            InitializeComponent();
-
-            _Owner = Owner;
         }
 
         private void lstResult_AddResult(clsResult Result)

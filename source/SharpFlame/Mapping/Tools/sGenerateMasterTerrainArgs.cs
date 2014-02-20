@@ -1,28 +1,31 @@
+#region
+
 using SharpFlame.Collections.Specialized;
 using SharpFlame.Mapping.Tiles;
+
+#endregion
 
 namespace SharpFlame.Mapping.Tools
 {
     public struct sGenerateMasterTerrainArgs
     {
-        public clsGeneratorTileset Tileset;
+        public int LayerCount;
+        public clsLayer[] Layers;
         public int LevelCount;
+        public clsGeneratorTileset Tileset;
+        public BooleanMap Watermap;
 
         public class clsLayer
         {
-            public int WithinLayer;
             public bool[] AvoidLayers;
-            public int TileNum;
-            public BooleanMap Terrainmap;
-            public float TerrainmapScale;
-            public float TerrainmapDensity;
-            public float HeightMin;
             public float HeightMax;
+            public float HeightMin;
             public bool IsCliff;
+            public BooleanMap Terrainmap;
+            public float TerrainmapDensity;
+            public float TerrainmapScale;
+            public int TileNum;
+            public int WithinLayer;
         }
-
-        public clsLayer[] Layers;
-        public int LayerCount;
-        public BooleanMap Watermap;
     }
 }

@@ -1,17 +1,21 @@
+#region
+
 using SharpFlame.Collections;
+
+#endregion
 
 namespace SharpFlame.Domain
 {
     public abstract class ComponentBase
     {
-        public bool IsUnknown = false;
-
-        public string Name = "Unknown";
         public string Code;
 
         public ComponentType ComponentType = ComponentType.Unspecified;
 
         public bool Designable;
+        public bool IsUnknown = false;
+
+        public string Name = "Unknown";
     }
 
     public enum ComponentType
@@ -24,10 +28,9 @@ namespace SharpFlame.Domain
 
     public class Body : ComponentBase
     {
-        public ConnectedListLink<Body, clsObjectData> ObjectDataLink;
-
         public clsAttachment Attachment = new clsAttachment();
         public int Hitpoints;
+        public ConnectedListLink<Body, clsObjectData> ObjectDataLink;
 
         public Body()
         {
@@ -39,16 +42,9 @@ namespace SharpFlame.Domain
 
     public class Propulsion : ComponentBase
     {
-        public ConnectedListLink<Propulsion, clsObjectData> ObjectDataLink;
-
-        public struct sBody
-        {
-            public clsAttachment LeftAttachment;
-            public clsAttachment RightAttachment;
-        }
-
         public sBody[] Bodies = new sBody[0];
         public int HitPoints;
+        public ConnectedListLink<Propulsion, clsObjectData> ObjectDataLink;
 
         public Propulsion(int BodyCount)
         {
@@ -57,7 +53,7 @@ namespace SharpFlame.Domain
 
             ComponentType = ComponentType.Propulsion;
 
-            int A = 0;
+            var A = 0;
 
             Bodies = new sBody[BodyCount];
             for ( A = 0; A <= BodyCount - 1; A++ )
@@ -66,21 +62,26 @@ namespace SharpFlame.Domain
                 Bodies[A].RightAttachment = new clsAttachment();
             }
         }
+
+        public struct sBody
+        {
+            public clsAttachment LeftAttachment;
+            public clsAttachment RightAttachment;
+        }
     }
 
     public class Turret : ComponentBase
     {
+        public clsAttachment Attachment = new clsAttachment();
+        public int HitPoints;
+        public ConnectedListLink<Turret, clsObjectData> TurretObjectDataLink;
+
+        public enumTurretType TurretType = enumTurretType.Unknown;
+
         public Turret()
         {
             TurretObjectDataLink = new ConnectedListLink<Turret, clsObjectData>(this);
         }
-
-        public ConnectedListLink<Turret, clsObjectData> TurretObjectDataLink;
-
-        public clsAttachment Attachment = new clsAttachment();
-        public int HitPoints;
-
-        public enumTurretType TurretType = enumTurretType.Unknown;
 
         public bool GetTurretTypeName(ref string Result)
         {
@@ -163,8 +164,6 @@ namespace SharpFlame.Domain
 
     public class Sensor : Turret
     {
-        public ConnectedListLink<Sensor, clsObjectData> ObjectDataLink;
-
         public enum enumLocation
         {
             Unspecified,
@@ -173,6 +172,7 @@ namespace SharpFlame.Domain
         }
 
         public enumLocation Location = enumLocation.Unspecified;
+        public ConnectedListLink<Sensor, clsObjectData> ObjectDataLink;
 
         public Sensor()
         {

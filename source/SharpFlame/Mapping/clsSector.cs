@@ -1,22 +1,33 @@
+#region
+
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
-using SharpFlame.Mapping.Objects;
 using SharpFlame.Core.Domain;
-using SharpFlame.Maths;
+using SharpFlame.Mapping.Objects;
+
+#endregion
 
 namespace SharpFlame.Mapping
 {
     public class clsSector
     {
+        public int GLList_Textured;
+        public int GLList_Wireframe;
+        public XYInt Pos;
+        public ConnectedList<clsUnitSectorConnection, clsSector> Units;
+
         public clsSector()
         {
             Units = new ConnectedList<clsUnitSectorConnection, clsSector>(this);
         }
 
-        public XYInt Pos;
-        public int GLList_Textured;
-        public int GLList_Wireframe;
-        public ConnectedList<clsUnitSectorConnection, clsSector> Units;
+        public clsSector(XYInt NewPos)
+        {
+            Units = new ConnectedList<clsUnitSectorConnection, clsSector>(this);
+
+
+            Pos = NewPos;
+        }
 
         public void DeleteLists()
         {
@@ -35,14 +46,6 @@ namespace SharpFlame.Mapping
         public void Deallocate()
         {
             Units.Deallocate();
-        }
-
-        public clsSector(XYInt NewPos)
-        {
-            Units = new ConnectedList<clsUnitSectorConnection, clsSector>(this);
-
-
-            Pos = NewPos;
         }
     }
 }

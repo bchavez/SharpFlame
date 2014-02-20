@@ -1,10 +1,13 @@
+#region
+
 using System;
 using System.Globalization;
-using System.IO;
+
+#endregion
 
 namespace SharpFlame.FileIO
 {
-    static internal class ExtensionsForIO
+    internal static class ExtensionsForIO
     {
         public static string ToStringInvariant(this bool Value)
         {

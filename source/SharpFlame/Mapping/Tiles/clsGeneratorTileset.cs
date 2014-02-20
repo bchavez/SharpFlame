@@ -1,35 +1,25 @@
+#region
+
 using System;
 using SharpFlame.Domain;
 using SharpFlame.Util;
+
+#endregion
 
 namespace SharpFlame.Mapping.Tiles
 {
     public class clsGeneratorTileset
     {
-        public clsTileset Tileset;
-
-        public struct sUnitChance
-        {
-            public UnitTypeBase TypeBase;
-            public UInt32 Chance;
-
-            public sUnitChance(UnitTypeBase TypeBase, UInt32 Chance)
-            {
-                this.TypeBase = TypeBase;
-                this.Chance = Chance;
-            }
-        }
-
-        public sUnitChance[] ScatteredUnits = new sUnitChance[0];
-        public int ScatteredUnitCount;
-        public int ScatteredUnitChanceTotal;
-        public sUnitChance[] ClusteredUnits = new sUnitChance[0];
-        public int ClusteredUnitCount;
-        public int ClusteredUnitChanceTotal;
-
         public int BorderTextureNum = -1;
+        public int ClusteredUnitChanceTotal;
+        public int ClusteredUnitCount;
+        public sUnitChance[] ClusteredUnits = new sUnitChance[0];
 
         public sLayerList OldTextureLayers;
+        public int ScatteredUnitChanceTotal;
+        public int ScatteredUnitCount;
+        public sUnitChance[] ScatteredUnits = new sUnitChance[0];
+        public clsTileset Tileset;
 
         public void ScatteredUnit_Add(sUnitChance NewUnit)
         {
@@ -57,6 +47,18 @@ namespace SharpFlame.Mapping.Tiles
             Array.Resize(ref ClusteredUnits, ClusteredUnitCount + 1);
             ClusteredUnits[ClusteredUnitCount] = NewUnit;
             ClusteredUnitCount++;
+        }
+
+        public struct sUnitChance
+        {
+            public UInt32 Chance;
+            public UnitTypeBase TypeBase;
+
+            public sUnitChance(UnitTypeBase TypeBase, UInt32 Chance)
+            {
+                this.TypeBase = TypeBase;
+                this.Chance = Chance;
+            }
         }
     }
 }

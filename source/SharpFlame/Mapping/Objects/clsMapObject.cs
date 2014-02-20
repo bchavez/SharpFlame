@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Diagnostics;
 using SharpFlame.Collections;
@@ -5,10 +7,14 @@ using SharpFlame.Colors;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.Objects;
 
+#endregion
+
 namespace SharpFlame.Mapping
 {
     public partial class clsMap
     {
+        public clsUnitGroup ScavengerUnitGroup;
+        public ConnectedList<clsUnitGroup, clsMap> UnitGroups;
         public ConnectedList<clsUnit, clsMap> Units;
 
         private clsUnitGroupContainer _SelectedUnitGroup;
@@ -18,16 +24,13 @@ namespace SharpFlame.Mapping
             get { return _SelectedUnitGroup; }
         }
 
-        public ConnectedList<clsUnitGroup, clsMap> UnitGroups;
-        public clsUnitGroup ScavengerUnitGroup;
-
         public UInt32 GetAvailableID()
         {
-            clsUnit Unit = default(clsUnit);
+            var Unit = default(clsUnit);
             UInt32 ID = 0;
 
             ID = 1U;
-            foreach ( clsUnit tempLoopVar_Unit in Units )
+            foreach ( var tempLoopVar_Unit in Units )
             {
                 Unit = tempLoopVar_Unit;
                 if ( Unit.ID >= ID )
@@ -41,7 +44,7 @@ namespace SharpFlame.Mapping
 
         public void UnitRemoveStoreChange(int Num)
         {
-            clsUnitChange UnitChange = new clsUnitChange();
+            var UnitChange = new clsUnitChange();
             UnitChange.Type = clsUnitChange.enumType.Deleted;
             UnitChange.Unit = Units[Num];
             UnitChanges.Add(UnitChange);
@@ -51,7 +54,7 @@ namespace SharpFlame.Mapping
 
         public void UnitRemove(int Num)
         {
-            clsUnit Unit = default(clsUnit);
+            var Unit = default(clsUnit);
 
             Unit = Units[Num];
 
@@ -62,10 +65,10 @@ namespace SharpFlame.Mapping
 
             if ( ViewInfo != null )
             {
-                clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = ViewInfo.GetMouseOverTerrain();
+                var MouseOverTerrain = ViewInfo.GetMouseOverTerrain();
                 if ( MouseOverTerrain != null )
                 {
-                    int Pos = MouseOverTerrain.Units.FindFirstItemPosition(Unit);
+                    var Pos = MouseOverTerrain.Units.FindFirstItemPosition(Unit);
                     if ( Pos >= 0 )
                     {
                         MouseOverTerrain.Units.Remove(Pos);
@@ -85,7 +88,7 @@ namespace SharpFlame.Mapping
             }
 
             UnitRemoveStoreChange(OldUnit.MapLink.ArrayPosition);
-            clsUnitAdd UnitAdd = new clsUnitAdd();
+            var UnitAdd = new clsUnitAdd();
             UnitAdd.Map = this;
             UnitAdd.StoreChange = true;
             UnitAdd.ID = OldUnit.ID;
@@ -97,8 +100,8 @@ namespace SharpFlame.Mapping
 
         public void MakeDefaultUnitGroups()
         {
-            int A = 0;
-            clsUnitGroup NewGroup = default(clsUnitGroup);
+            var A = 0;
+            var NewGroup = default(clsUnitGroup);
 
             UnitGroups.Clear();
             for ( A = 0; A <= Constants.PlayerCountMax - 1; A++ )
@@ -118,10 +121,7 @@ namespace SharpFlame.Mapping
             {
                 return new sRGB_sng(1.0F, 1.0F, 1.0F);
             }
-            else
-            {
-                return App.PlayerColour[ColourUnitGroup.WZ_StartPos].Colour;
-            }
+            return App.PlayerColour[ColourUnitGroup.WZ_StartPos].Colour;
         }
 
         public sRGB_sng GetUnitGroupMinimapColour(clsUnitGroup ColourUnitGroup)
@@ -130,15 +130,12 @@ namespace SharpFlame.Mapping
             {
                 return new sRGB_sng(1.0F, 1.0F, 1.0F);
             }
-            else
-            {
-                return App.PlayerColour[ColourUnitGroup.WZ_StartPos].MinimapColour;
-            }
+            return App.PlayerColour[ColourUnitGroup.WZ_StartPos].MinimapColour;
         }
 
         public clsUnit IDUsage(UInt32 ID)
         {
-            foreach ( clsUnit Unit in Units )
+            foreach ( var Unit in Units )
             {
                 if ( Unit.ID == ID )
                 {
@@ -159,7 +156,7 @@ namespace SharpFlame.Mapping
             objectCreator.UnitGroup = SelectedUnitGroup.Item;
             try
             {
-                int Rotation = 0;
+                var Rotation = 0;
                 IOUtil.InvariantParse(Program.frmMainInstance.txtNewObjectRotation.Text, ref Rotation);
                 if ( Rotation < 0 | Rotation > 359 )
                 {

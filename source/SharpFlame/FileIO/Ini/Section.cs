@@ -1,6 +1,10 @@
+#region
+
 using System;
 using System.IO;
 using SharpFlame.Collections;
+
+#endregion
 
 namespace SharpFlame.FileIO.Ini
 {
@@ -11,7 +15,7 @@ namespace SharpFlame.FileIO.Ini
 #if !Mono
         public struct SectionProperty
 #else
-				public class SectionProperty
+        public class SectionProperty
 #endif
 
         {
@@ -24,7 +28,7 @@ namespace SharpFlame.FileIO.Ini
 
         public void CreateProperty(string Name, string Value)
         {
-            SectionProperty NewProperty = new SectionProperty();
+            var NewProperty = new SectionProperty();
 
             NewProperty.Name = Name;
             NewProperty.Value = Value;
@@ -33,11 +37,11 @@ namespace SharpFlame.FileIO.Ini
 
         public clsResult ReadFile(StreamReader File)
         {
-            clsResult ReturnResult = new clsResult("", false);
+            var ReturnResult = new clsResult("", false);
 
-            int InvalidLineCount = 0;
+            var InvalidLineCount = 0;
             string LineText = null;
-            int A = 0;
+            var A = 0;
 
             do
             {
@@ -82,28 +86,28 @@ namespace SharpFlame.FileIO.Ini
 
         public clsResult Translate(int SectionNum, SectionTranslator Translator, ErrorCount ErrorCount)
         {
-            clsResult ReturnResult = new clsResult("Section " + Name);
+            var ReturnResult = new clsResult("Section " + Name);
 
-            int A = 0;
-            TranslatorResult TranslatorResult = default(TranslatorResult);
+            var A = 0;
+            var TranslatorResult = default(TranslatorResult);
 
             for ( A = 0; A <= Properties.Count - 1; A++ )
             {
                 TranslatorResult = Translator.Translate(SectionNum, Properties[A]);
                 switch ( TranslatorResult )
                 {
-                    case Ini.TranslatorResult.NameUnknown:
+                    case TranslatorResult.NameUnknown:
                         if ( ErrorCount.NameErrorCount < 16 )
                         {
-                            ReturnResult.WarningAdd ("Property name \"{0}\" is unknown.".Format2(Properties [A].Name));
+                            ReturnResult.WarningAdd("Property name \"{0}\" is unknown.".Format2(Properties[A].Name));
                         }
                         ErrorCount.NameErrorCount++;
                         break;
-                    case Ini.TranslatorResult.ValueInvalid:
+                    case TranslatorResult.ValueInvalid:
                         if ( ErrorCount.ValueErrorCount < 16 )
                         {
-                            ReturnResult.WarningAdd ("Value \"{0}\" for property name \"{1}\" is not valid."
-                                                 .Format2(Properties[A].Value, Properties[A].Name));
+                            ReturnResult.WarningAdd("Value \"{0}\" for property name \"{1}\" is not valid."
+                                .Format2(Properties[A].Value, Properties[A].Name));
                         }
                         ErrorCount.ValueErrorCount++;
                         break;
@@ -115,11 +119,11 @@ namespace SharpFlame.FileIO.Ini
 
         public clsResult Translate(Translator Translator)
         {
-            clsResult ReturnResult = new clsResult("Section " + Name);
+            var ReturnResult = new clsResult("Section " + Name);
 
-            int A = 0;
-            TranslatorResult TranslatorResult = default(TranslatorResult);
-            ErrorCount ErrorCount = new ErrorCount();
+            var A = 0;
+            var TranslatorResult = default(TranslatorResult);
+            var ErrorCount = new ErrorCount();
 
             ErrorCount.NameWarningCountMax = 16;
             ErrorCount.ValueWarningCountMax = 16;
@@ -132,15 +136,15 @@ namespace SharpFlame.FileIO.Ini
                     case TranslatorResult.NameUnknown:
                         if ( ErrorCount.NameErrorCount < 16 )
                         {
-                            ReturnResult.WarningAdd ("Property name \"{0}\" is unknown.".Format2(Properties [A].Name));
+                            ReturnResult.WarningAdd("Property name \"{0}\" is unknown.".Format2(Properties[A].Name));
                         }
                         ErrorCount.NameErrorCount++;
                         break;
                     case TranslatorResult.ValueInvalid:
                         if ( ErrorCount.ValueErrorCount < 16 )
                         {
-                            ReturnResult.WarningAdd ("Value \"{0}\" for property name \"{1}\" is not valid."
-                                                 .Format2(Properties[A].Value, Properties[A].Name));
+                            ReturnResult.WarningAdd("Value \"{0}\" for property name \"{1}\" is not valid."
+                                .Format2(Properties[A].Value, Properties[A].Name));
                         }
                         ErrorCount.ValueErrorCount++;
                         break;
@@ -161,7 +165,7 @@ namespace SharpFlame.FileIO.Ini
 
         public string GetLastPropertyValue(string LCasePropertyName)
         {
-            int A = 0;
+            var A = 0;
 
             for ( A = Properties.Count - 1; A >= 0; A-- )
             {

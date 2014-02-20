@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Drawing;
 using System.IO;
@@ -9,11 +11,14 @@ using SharpFlame.Colors;
 using SharpFlame.FileIO;
 using SharpFlame.Util;
 
+#endregion
+
 namespace SharpFlame.Mapping.Tiles
 {
     public class clsTileset
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        public sRGB_sng BGColour = new sRGB_sng(0.5F, 0.5F, 0.5F);
 
         public bool IsOriginal { get; set; }
 
@@ -23,19 +28,9 @@ namespace SharpFlame.Mapping.Tiles
 
         public string Name { get; set; }
 
-        public struct sTile
-        {
-            public int MapViewGlTextureNum;
-            public int TextureViewGlTextureNum;
-            public sRGB_sng AverageColour;
-            public byte DefaultType;
-        }
-
-        public sRGB_sng BGColour = new sRGB_sng(0.5F, 0.5F, 0.5F);
-
         public sResult LoadTileType(string path)
         {
-            sResult returnResult = new sResult();
+            var returnResult = new sResult();
             BinaryReader file;
 
             try
@@ -54,14 +49,14 @@ namespace SharpFlame.Mapping.Tiles
 
         private sResult ReadTileType(BinaryReader file)
         {
-            sResult returnResult = new sResult();
+            var returnResult = new sResult();
             returnResult.Success = false;
             returnResult.Problem = "";
 
             UInt32 uintTemp = 0;
-            int i = 0;
+            var i = 0;
             UInt16 ushortTemp = 0;
-            string strTemp = "";
+            var strTemp = "";
 
             try
             {
@@ -106,13 +101,13 @@ namespace SharpFlame.Mapping.Tiles
 
         public clsResult LoadDirectory(string path)
         {
-            var returnResult = new clsResult( "Loading tileset from '{0}'".Format2( path ), false);
-            logger.Info ("Loading tileset from '{0}'".Format2 (path));
+            var returnResult = new clsResult("Loading tileset from '{0}'".Format2(path), false);
+            logger.Info("Loading tileset from '{0}'".Format2(path));
 
             Bitmap bitmap = null;
-            sSplitPath SplitPath = new sSplitPath(path);
-            string slashPath = PathUtil.EndWithPathSeperator(path);
-            sResult result = new sResult();
+            var SplitPath = new sSplitPath(path);
+            var slashPath = PathUtil.EndWithPathSeperator(path);
+            var result = new sResult();
 
             if ( SplitPath.FileTitle != "" )
             {
@@ -122,7 +117,7 @@ namespace SharpFlame.Mapping.Tiles
             {
                 Name = SplitPath.Parts[SplitPath.PartCount - 2];
             }
-            
+
             var ttpFileName = Path.ChangeExtension(Name, ".ttp");
 
             result = LoadTileType(Path.Combine(slashPath, ttpFileName));
@@ -133,18 +128,18 @@ namespace SharpFlame.Mapping.Tiles
                 return returnResult;
             }
 
-            int redTotal = 0;
-            int greenTotal = 0;
-            int blueTotal = 0;
-            int tileNum = 0;
-            string strTile = "";
-            BitmapGLTexture bmpTextureArgs = new BitmapGLTexture();
-            float[] AverageColour = new float[4];
-            int x = 0;
-            int y = 0;
-            Color Pixel = new Color();
+            var redTotal = 0;
+            var greenTotal = 0;
+            var blueTotal = 0;
+            var tileNum = 0;
+            var strTile = "";
+            var bmpTextureArgs = new BitmapGLTexture();
+            var AverageColour = new float[4];
+            var x = 0;
+            var y = 0;
+            var Pixel = new Color();
 
-            string graphicPath = "";
+            var graphicPath = "";
 
             //tile count has been set by the ttp file
 
@@ -154,8 +149,8 @@ namespace SharpFlame.Mapping.Tiles
 
                 //-------- 128 --------
 
-                var tileDir = System.IO.Path.Combine(Name + "-128", strTile);
-                graphicPath = System.IO.Path.Combine(slashPath, tileDir);
+                var tileDir = Path.Combine(Name + "-128", strTile);
+                graphicPath = Path.Combine(slashPath, tileDir);
 
 
                 result = BitmapUtil.LoadBitmap(graphicPath, ref bitmap);
@@ -203,7 +198,7 @@ namespace SharpFlame.Mapping.Tiles
                     }
                     else
                     {
-                        clsResult MipmapResult = default(clsResult);
+                        var MipmapResult = default(clsResult);
                         MipmapResult = GenerateMipMaps(slashPath, strTile, bmpTextureArgs, tileNum);
                         returnResult.Add(MipmapResult);
                         if ( MipmapResult.HasProblems )
@@ -211,7 +206,7 @@ namespace SharpFlame.Mapping.Tiles
                             return returnResult;
                         }
                     }
-                    GL.GetTexImage<Single>(TextureTarget.Texture2D, 7, PixelFormat.Rgba, PixelType.Float, AverageColour);
+                    GL.GetTexImage(TextureTarget.Texture2D, 7, PixelFormat.Rgba, PixelType.Float, AverageColour);
                     Tiles[tileNum].AverageColour.Red = AverageColour[0];
                     Tiles[tileNum].AverageColour.Green = AverageColour[1];
                     Tiles[tileNum].AverageColour.Blue = AverageColour[2];
@@ -242,28 +237,28 @@ namespace SharpFlame.Mapping.Tiles
 
         public clsResult GenerateMipMaps(string SlashPath, string strTile, BitmapGLTexture BitmapTextureArgs, int TileNum)
         {
-            clsResult ReturnResult = new clsResult("Generating mipmaps", false);
-            logger.Info ("Generating mipmaps");
-            string GraphicPath = "";
-            int PixX = 0;
-            int PixY = 0;
-            Color PixelColorA = new Color();
-            Color PixelColorB = new Color();
-            Color PixelColorC = new Color();
-            Color PixelColorD = new Color();
-            int X1 = 0;
-            int Y1 = 0;
-            int X2 = 0;
-            int Y2 = 0;
-            int Red = 0;
-            int Green = 0;
-            int Blue = 0;
-            Bitmap Bitmap8 = default(Bitmap);
-            Bitmap Bitmap4 = default(Bitmap);
-            Bitmap Bitmap2 = default(Bitmap);
-            Bitmap Bitmap1 = default(Bitmap);
+            var ReturnResult = new clsResult("Generating mipmaps", false);
+            logger.Info("Generating mipmaps");
+            var GraphicPath = "";
+            var PixX = 0;
+            var PixY = 0;
+            var PixelColorA = new Color();
+            var PixelColorB = new Color();
+            var PixelColorC = new Color();
+            var PixelColorD = new Color();
+            var X1 = 0;
+            var Y1 = 0;
+            var X2 = 0;
+            var Y2 = 0;
+            var Red = 0;
+            var Green = 0;
+            var Blue = 0;
+            var Bitmap8 = default(Bitmap);
+            var Bitmap4 = default(Bitmap);
+            var Bitmap2 = default(Bitmap);
+            var Bitmap1 = default(Bitmap);
             Bitmap Bitmap = null;
-            sResult Result = new sResult();
+            var Result = new sResult();
 
             //-------- 64 --------
 
@@ -432,6 +427,14 @@ namespace SharpFlame.Mapping.Tiles
             BitmapTextureArgs.Perform();
 
             return ReturnResult;
+        }
+
+        public struct sTile
+        {
+            public sRGB_sng AverageColour;
+            public byte DefaultType;
+            public int MapViewGlTextureNum;
+            public int TextureViewGlTextureNum;
         }
     }
 }

@@ -1,47 +1,54 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.AppSettings;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 using SharpFlame.Graphics.OpenGL;
-using SharpFlame.AppSettings;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 using SharpFlame.Util;
 
+#endregion
+
 namespace SharpFlame.Controls
 {
     public partial class MapViewControl
     {
-        private frmMain _Owner;
+        private readonly ContextMenuStrip ListSelect;
+        private readonly frmMain _Owner;
+        private readonly Timer tmrDraw;
+        private readonly Timer tmrDrawDelay;
 
         public bool DrawPending;
 
-        public XYInt GLSize;
         //public float GLSize_XPerY; //seems redundant, since OpenGLControl has a field called AspectRatio
 
         public bool DrawView_Enabled = false;
 
         private Timer GLInitializeDelayTimer;
+        public XYInt GLSize;
         public bool IsGLInitialized = false;
-
-        private Timer tmrDraw;
-        private Timer tmrDrawDelay;
+        private bool ListSelectIsPicker;
+        private ToolStripItem[] ListSelectItems = new ToolStripItem[0];
 
         public GLControl OpenGLControl;
+        public Timer UndoMessageTimer;
 
         public MapViewControl(frmMain Owner)
         {
             _Owner = Owner;
 
-			GLSize = new XYInt (0, 0);
+            GLSize = new XYInt(0, 0);
 
             InitializeComponent();
 
@@ -68,6 +75,11 @@ namespace SharpFlame.Controls
             tmrDrawDelay.Interval = 30;
 
             UndoMessageTimer.Interval = 4000;
+        }
+
+        private clsMap MainMap
+        {
+            get { return _Owner.MainMap; }
         }
 
         public void ResizeOpenGL()
@@ -156,9 +168,9 @@ namespace SharpFlame.Controls
             GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
             GL.Enable(EnableCap.DepthTest);
 
-            float[] ambient = new float[4];
-            float[] specular = new float[4];
-            float[] diffuse = new float[4];
+            var ambient = new float[4];
+            var specular = new float[4];
+            var diffuse = new float[4];
 
             ambient[0] = 0.333333343F;
             ambient[1] = 0.333333343F;
@@ -192,10 +204,10 @@ namespace SharpFlame.Controls
             GL.Light(LightName.Light1, LightParameter.Specular, specular);
             GL.Light(LightName.Light1, LightParameter.Ambient, ambient);
 
-            float[] mat_diffuse = new float[4];
-            float[] mat_specular = new float[4];
-            float[] mat_ambient = new float[4];
-            float[] mat_shininess = new float[1];
+            var mat_diffuse = new float[4];
+            var mat_specular = new float[4];
+            var mat_ambient = new float[4];
+            var mat_shininess = new float[1];
 
             mat_specular[0] = 0.0F;
             mat_specular[1] = 0.0F;
@@ -252,8 +264,8 @@ namespace SharpFlame.Controls
                 OpenGLControl.MakeCurrent();
             }
 
-            clsMap Map = MainMap;
-            sRGB_sng BGColour = new sRGB_sng();
+            var Map = MainMap;
+            var BGColour = new sRGB_sng();
 
             if ( Map == null )
             {
@@ -273,7 +285,7 @@ namespace SharpFlame.Controls
             }
 
             GL.ClearColor(BGColour.Red, BGColour.Green, BGColour.Blue, 1.0F);
-            GL.Clear((ClearBufferMask)(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             if ( Map != null )
             {
@@ -288,7 +300,7 @@ namespace SharpFlame.Controls
 
         public void OpenGL_MouseMove(object sender, MouseEventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -304,8 +316,8 @@ namespace SharpFlame.Controls
 
         public void Pos_Display_Update()
         {
-            clsMap Map = MainMap;
-            clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
+            var Map = MainMap;
+            var MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
 
             if ( MouseOverTerrain == null )
             {
@@ -331,7 +343,7 @@ namespace SharpFlame.Controls
 
         public void OpenGL_LostFocus(Object eventSender, EventArgs eventArgs)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -347,14 +359,10 @@ namespace SharpFlame.Controls
             App.ViewKeyDown_Clear();
         }
 
-        private ContextMenuStrip ListSelect;
-        private bool ListSelectIsPicker;
-        private ToolStripItem[] ListSelectItems = new ToolStripItem[0];
-
         private void ListSelect_Click(object Sender, ToolStripItemClickedEventArgs e)
         {
-            ToolStripItem Button = e.ClickedItem;
-            clsUnit Unit = (clsUnit)Button.Tag;
+            var Button = e.ClickedItem;
+            var Unit = (clsUnit)Button.Tag;
 
             if ( ListSelectIsPicker )
             {
@@ -377,7 +385,7 @@ namespace SharpFlame.Controls
 
         private void ListSelect_Close(object sender, ToolStripDropDownClosedEventArgs e)
         {
-            int A = 0;
+            var A = 0;
 
             for ( A = 0; A <= ListSelectItems.GetUpperBound(0); A++ )
             {
@@ -392,7 +400,7 @@ namespace SharpFlame.Controls
 
         private void OpenGL_MouseDown(object sender, MouseEventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -404,15 +412,15 @@ namespace SharpFlame.Controls
 
         private void OpenGL_KeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
                 return;
             }
 
-            Matrix3DMath.Matrix3D matrixA = new Matrix3DMath.Matrix3D();
-            clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
+            var matrixA = new Matrix3DMath.Matrix3D();
+            var MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
 
             App.IsViewKeyDown.Keys[(int)e.KeyCode] = true;
 
@@ -423,11 +431,11 @@ namespace SharpFlame.Controls
 
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Undo) )
             {
-                string Message = "";
+                var Message = "";
                 if ( Map.UndoPosition > 0 )
                 {
                     Message = "Undid: " + Map.Undos[Map.UndoPosition - 1].Name;
-                    clsMessage MapMessage = new clsMessage();
+                    var MapMessage = new clsMessage();
                     MapMessage.Text = Message;
                     Map.Messages.Add(MapMessage);
                     Map.UndoPerform();
@@ -441,11 +449,11 @@ namespace SharpFlame.Controls
             }
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Redo) )
             {
-                string Message = "";
+                var Message = "";
                 if ( Map.UndoPosition < Map.Undos.Count )
                 {
                     Message = "Redid: " + Map.Undos[Map.UndoPosition].Name;
-                    clsMessage MapMessage = new clsMessage();
+                    var MapMessage = new clsMessage();
                     MapMessage.Text = Message;
                     Map.Messages.Add(MapMessage);
                     Map.RedoPerform();
@@ -544,16 +552,16 @@ namespace SharpFlame.Controls
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewUnits) )
             {
                 App.Draw_Units = !App.Draw_Units;
-                int X = 0;
-                int Y = 0;
-                XYInt SectorNum = new XYInt();
-                clsUnit Unit = default(clsUnit);
-                clsUnitSectorConnection Connection = default(clsUnitSectorConnection);
+                var X = 0;
+                var Y = 0;
+                var SectorNum = new XYInt();
+                var Unit = default(clsUnit);
+                var Connection = default(clsUnitSectorConnection);
                 for ( Y = 0; Y <= Map.SectorCount.Y - 1; Y++ )
                 {
                     for ( X = 0; X <= Map.SectorCount.X - 1; X++ )
                     {
-                        foreach ( clsUnitSectorConnection tempLoopVar_Connection in Map.Sectors[X, Y].Units )
+                        foreach ( var tempLoopVar_Connection in Map.Sectors[X, Y].Units )
                         {
                             Connection = tempLoopVar_Connection;
                             Unit = Connection.Unit;
@@ -622,8 +630,8 @@ namespace SharpFlame.Controls
                 {
                     if ( Map.SelectedUnits.Count > 0 )
                     {
-                        clsUnit Unit = default(clsUnit);
-                        foreach ( clsUnit tempLoopVar_Unit in Map.SelectedUnits.GetItemsAsSimpleList() )
+                        var Unit = default(clsUnit);
+                        foreach ( var tempLoopVar_Unit in Map.SelectedUnits.GetItemsAsSimpleList() )
                         {
                             Unit = tempLoopVar_Unit;
                             Map.UnitRemoveStoreChange(Unit.MapLink.ArrayPosition);
@@ -641,13 +649,13 @@ namespace SharpFlame.Controls
                     {
                         if ( Map.SelectedUnits.Count > 0 )
                         {
-                            XYDouble Centre = App.CalcUnitsCentrePos(Map.SelectedUnits.GetItemsAsSimpleList());
-                            XYInt Offset = new XYInt();
+                            var Centre = App.CalcUnitsCentrePos(Map.SelectedUnits.GetItemsAsSimpleList());
+                            var Offset = new XYInt();
                             Offset.X = ((int)(Math.Round(Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.X - Centre.X) / Constants.TerrainGridSpacing)))) *
                                        Constants.TerrainGridSpacing;
                             Offset.Y = ((int)(Math.Round(Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.Y - Centre.Y) / Constants.TerrainGridSpacing)))) *
                                        Constants.TerrainGridSpacing;
-                            clsObjectPosOffset ObjectPosOffset = new clsObjectPosOffset();
+                            var ObjectPosOffset = new clsObjectPosOffset();
                             ObjectPosOffset.Map = Map;
                             ObjectPosOffset.Offset = Offset;
                             Map.SelectedUnitsAction(ObjectPosOffset);
@@ -662,7 +670,7 @@ namespace SharpFlame.Controls
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Clockwise) )
                 {
-                    clsObjectRotationOffset ObjectRotationOffset = new clsObjectRotationOffset();
+                    var ObjectRotationOffset = new clsObjectRotationOffset();
                     ObjectRotationOffset.Map = Map;
                     ObjectRotationOffset.Offset = -90;
                     Map.SelectedUnitsAction(ObjectRotationOffset);
@@ -673,7 +681,7 @@ namespace SharpFlame.Controls
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.CounterClockwise) )
                 {
-                    clsObjectRotationOffset ObjectRotationOffset = new clsObjectRotationOffset();
+                    var ObjectRotationOffset = new clsObjectRotationOffset();
                     ObjectRotationOffset.Map = Map;
                     ObjectRotationOffset.Offset = 90;
                     Map.SelectedUnitsAction(ObjectRotationOffset);
@@ -709,14 +717,14 @@ namespace SharpFlame.Controls
 
         private void OpenGL_MouseUp(object sender, MouseEventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
                 return;
             }
 
-            clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
+            var MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
 
             Map.SuppressMinimap = false;
 
@@ -799,16 +807,16 @@ namespace SharpFlame.Controls
 
         private void SelectUnits(XYInt VertexA, XYInt VertexB)
         {
-            clsMap Map = MainMap;
-            clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
-            XYInt SectorNum = new XYInt();
-            clsUnit Unit = default(clsUnit);
-            XYInt SectorStart = new XYInt();
-            XYInt SectorFinish = new XYInt();
-            XYInt StartPos = new XYInt();
-            XYInt FinishPos = new XYInt();
-            XYInt StartVertex = new XYInt();
-            XYInt FinishVertex = new XYInt();
+            var Map = MainMap;
+            var MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
+            var SectorNum = new XYInt();
+            var Unit = default(clsUnit);
+            var SectorStart = new XYInt();
+            var SectorFinish = new XYInt();
+            var StartPos = new XYInt();
+            var FinishPos = new XYInt();
+            var StartVertex = new XYInt();
+            var FinishVertex = new XYInt();
 
             if ( Math.Abs(VertexA.X - VertexB.X) <= 1 &&
                  Math.Abs(VertexA.Y - VertexB.Y) <= 1 &&
@@ -841,16 +849,16 @@ namespace SharpFlame.Controls
                 StartPos.Y = StartVertex.Y * Constants.TerrainGridSpacing;
                 FinishPos.X = FinishVertex.X * Constants.TerrainGridSpacing;
                 FinishPos.Y = FinishVertex.Y * Constants.TerrainGridSpacing;
-                SectorStart.X = Math.Min((int)(StartVertex.X / Constants.SectorTileSize), Map.SectorCount.X - 1);
-                SectorStart.Y = Math.Min((int)(StartVertex.Y / Constants.SectorTileSize), Map.SectorCount.Y - 1);
-                SectorFinish.X = Math.Min((int)(FinishVertex.X / Constants.SectorTileSize), Map.SectorCount.X - 1);
-                SectorFinish.Y = Math.Min((int)(FinishVertex.Y / Constants.SectorTileSize), Map.SectorCount.Y - 1);
+                SectorStart.X = Math.Min(StartVertex.X / Constants.SectorTileSize, Map.SectorCount.X - 1);
+                SectorStart.Y = Math.Min(StartVertex.Y / Constants.SectorTileSize, Map.SectorCount.Y - 1);
+                SectorFinish.X = Math.Min(FinishVertex.X / Constants.SectorTileSize, Map.SectorCount.X - 1);
+                SectorFinish.Y = Math.Min(FinishVertex.Y / Constants.SectorTileSize, Map.SectorCount.Y - 1);
                 for ( SectorNum.Y = SectorStart.Y; SectorNum.Y <= SectorFinish.Y; SectorNum.Y++ )
                 {
                     for ( SectorNum.X = SectorStart.X; SectorNum.X <= SectorFinish.X; SectorNum.X++ )
                     {
-                        clsUnitSectorConnection Connection = default(clsUnitSectorConnection);
-                        foreach ( clsUnitSectorConnection tempLoopVar_Connection in Map.Sectors[SectorNum.X, SectorNum.Y].Units )
+                        var Connection = default(clsUnitSectorConnection);
+                        foreach ( var tempLoopVar_Connection in Map.Sectors[SectorNum.X, SectorNum.Y].Units )
                         {
                             Connection = tempLoopVar_Connection;
                             Unit = Connection.Unit;
@@ -893,7 +901,7 @@ namespace SharpFlame.Controls
 
         public void OpenGL_Resize(Object eventSender, EventArgs eventArgs)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             GLSize.X = OpenGLControl.Width;
             GLSize.Y = OpenGLControl.Height;
@@ -902,7 +910,7 @@ namespace SharpFlame.Controls
             //    GLSize_XPerY = (float)(GLSize.X / GLSize.Y);
             //}
             Viewport_Resize();
-            if (Map != null)
+            if ( Map != null )
             {
                 Map.ViewInfo.FOV_Calc();
             }
@@ -919,16 +927,16 @@ namespace SharpFlame.Controls
 
         public void OpenGL_MouseWheel(object sender, MouseEventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
                 return;
             }
 
-            XYZInt Move = new XYZInt(0, 0, 0);
-            XYZDouble XYZ_dbl = default(XYZDouble);
-            int A = 0;
+            var Move = new XYZInt(0, 0, 0);
+            var XYZ_dbl = default(XYZDouble);
+            var A = 0;
 
             for ( A = 0; A <= (int)(Math.Abs(e.Delta / 120.0D)); A++ )
             {
@@ -943,8 +951,6 @@ namespace SharpFlame.Controls
         {
             return new GLFont(new Font(BaseFont.FontFamily, 24.0F, BaseFont.Style, GraphicsUnit.Pixel));
         }
-
-        public Timer UndoMessageTimer;
 
         public void RemoveUndoMessage(object sender, EventArgs e)
         {
@@ -961,7 +967,7 @@ namespace SharpFlame.Controls
 
         private void OpenGL_MouseLeave(object sender, EventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -973,8 +979,8 @@ namespace SharpFlame.Controls
 
         public void ListSelectBegin(bool isPicker)
         {
-            clsMap Map = MainMap;
-            clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
+            var Map = MainMap;
+            var MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
 
             if ( MouseOverTerrain == null )
             {
@@ -982,8 +988,8 @@ namespace SharpFlame.Controls
                 return;
             }
 
-            int A = 0;
-            clsUnit Unit = default(clsUnit);
+            var A = 0;
+            var Unit = default(clsUnit);
 
             ListSelect.Close();
             ListSelect.Items.Clear();
@@ -1012,14 +1018,14 @@ namespace SharpFlame.Controls
                 return;
             }
 
-            clsMap Map = (clsMap)tabMaps.SelectedTab.Tag;
+            var Map = (clsMap)tabMaps.SelectedTab.Tag;
 
             _Owner.SetMainMap(Map);
         }
 
         public void btnClose_Click(Object sender, EventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -1041,11 +1047,11 @@ namespace SharpFlame.Controls
 
         public void UpdateTabs()
         {
-            clsMap Map = default(clsMap);
+            var Map = default(clsMap);
 
             tabMaps.Enabled = false;
             tabMaps.TabPages.Clear();
-            foreach ( clsMap tempLoopVar_Map in _Owner.LoadedMaps )
+            foreach ( var tempLoopVar_Map in _Owner.LoadedMaps )
             {
                 Map = tempLoopVar_Map;
                 tabMaps.TabPages.Add(Map.MapView_TabPage);
@@ -1060,11 +1066,6 @@ namespace SharpFlame.Controls
                 tabMaps.SelectedIndex = -1;
             }
             tabMaps.Enabled = true;
-        }
-
-        private clsMap MainMap
-        {
-            get { return _Owner.MainMap; }
         }
     }
 }

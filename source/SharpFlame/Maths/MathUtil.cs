@@ -1,5 +1,9 @@
+#region
+
 using System;
 using SharpFlame.Core.Domain;
+
+#endregion
 
 namespace SharpFlame.Maths
 {
@@ -61,7 +65,7 @@ namespace SharpFlame.Maths
 
         public static int Clamp_int(int Amount, int Minimum, int Maximum)
         {
-            int ReturnResult = 0;
+            var ReturnResult = 0;
 
             ReturnResult = Amount;
             if ( ReturnResult < Minimum )
@@ -75,15 +79,9 @@ namespace SharpFlame.Maths
             return ReturnResult;
         }
 
-        public struct sIntersectPos
-        {
-            public bool Exists;
-            public XYInt Pos;
-        }
-
         public static sIntersectPos GetLinesIntersectBetween(XYInt A1, XYInt A2, XYInt B1, XYInt B2)
         {
-            sIntersectPos Result = new sIntersectPos();
+            var Result = new sIntersectPos();
 
             if ( (A1.X == A2.X & A1.Y == A2.Y) || (B1.X == B2.X & B1.Y == B2.Y) )
             {
@@ -144,26 +142,20 @@ namespace SharpFlame.Maths
             {
                 return LinePointA;
             }
-            else
+            double ar = 0;
+            ar = (x1dif * adifx + y1dif * adify) / m;
+            if ( ar <= 0.0D )
             {
-                double ar = 0;
-                ar = (x1dif * adifx + y1dif * adify) / m;
-                if ( ar <= 0.0D )
-                {
-                    return LinePointA;
-                }
-                else if ( ar >= 1.0D )
-                {
-                    return LinePointB;
-                }
-                else
-                {
-                    XYInt Result = new XYInt();
-                    Result.X = LinePointA.X + (int)(adifx * ar);
-                    Result.Y = LinePointA.Y + (int)(adify * ar);
-                    return Result;
-                }
+                return LinePointA;
             }
+            if ( ar >= 1.0D )
+            {
+                return LinePointB;
+            }
+            var Result = new XYInt();
+            Result.X = LinePointA.X + (int)(adifx * ar);
+            Result.Y = LinePointA.Y + (int)(adify * ar);
+            return Result;
         }
 
         public static void ReorderXY(XYInt A, XYInt B, ref XYInt Lesser, ref XYInt Greater)
@@ -189,6 +181,11 @@ namespace SharpFlame.Maths
                 Greater.Y = A.Y;
             }
         }
-    }
 
+        public struct sIntersectPos
+        {
+            public bool Exists;
+            public XYInt Pos;
+        }
+    }
 }

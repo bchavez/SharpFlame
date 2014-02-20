@@ -1,4 +1,8 @@
+#region
+
 using System.Diagnostics;
+
+#endregion
 
 namespace SharpFlame.Collections
 {
@@ -37,7 +41,7 @@ namespace SharpFlame.Collections
 
         public int FindFirstItemPosition(ItemType ItemToFind)
         {
-            int Position = 0;
+            var Position = 0;
 
             for ( Position = 0; Position <= Count - 1; Position++ )
             {

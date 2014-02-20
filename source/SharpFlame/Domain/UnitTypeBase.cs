@@ -1,9 +1,13 @@
+#region
+
 using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
 using SharpFlame.Core.Domain;
 using SharpFlame.Maths;
 using SharpFlame.Util;
+
+#endregion
 
 namespace SharpFlame.Domain
 {
@@ -21,6 +25,23 @@ namespace SharpFlame.Domain
         {
             UnitType_frmMainSelectedLink = new ConnectedListLink<UnitTypeBase, frmMain>(this);
             UnitType_ObjectDataLink = new ConnectedListLink<UnitTypeBase, clsObjectData>(this);
+        }
+
+        public XYInt GetFootprintOld
+        {
+            get
+            {
+                switch ( Type )
+                {
+                    case UnitType.Feature:
+                        return ((FeatureTypeBase)this).Footprint;
+                    case UnitType.PlayerStructure:
+                        return ((StructureTypeBase)this).Footprint;
+                    default:
+                        var XY_int = new XYInt(1, 1);
+                        return XY_int;
+                }
+            }
         }
 
         public void GLDraw(float RotationDegrees)
@@ -48,27 +69,10 @@ namespace SharpFlame.Domain
         {
         }
 
-        public XYInt GetFootprintOld
-        {
-            get
-            {
-                switch ( Type )
-                {
-                    case UnitType.Feature:
-                        return ((FeatureTypeBase)this).Footprint;
-                    case UnitType.PlayerStructure:
-                        return ((StructureTypeBase)this).Footprint;
-                    default:
-                        XYInt XY_int = new XYInt(1, 1);
-                        return XY_int;
-                }
-            }
-        }
-
         public XYInt get_GetFootprintNew(int Rotation)
         {
             //get initial footprint
-            XYInt Result = new XYInt();
+            var Result = new XYInt();
             switch ( Type )
             {
                 case UnitType.Feature:
@@ -83,14 +87,14 @@ namespace SharpFlame.Domain
                     return Result;
             }
             //switch footprint axes if not a droid
-            double Remainder = Convert.ToDouble((Rotation / 90.0D + 0.5D) % 2.0D);
+            var Remainder = Convert.ToDouble((Rotation / 90.0D + 0.5D) % 2.0D);
             if ( Remainder < 0.0D )
             {
                 Remainder += 2.0D;
             }
             if ( Remainder >= 1.0D )
             {
-                int X = Result.X;
+                var X = Result.X;
                 Result.X = Result.Y;
                 Result.Y = X;
             }
@@ -103,10 +107,7 @@ namespace SharpFlame.Domain
             {
                 return get_GetFootprintNew(Rotation);
             }
-            else
-            {
-                return GetFootprintOld;
-            }
+            return GetFootprintOld;
         }
 
         public bool GetCode(ref string Result)
@@ -120,17 +121,14 @@ namespace SharpFlame.Domain
                     Result = ((StructureTypeBase)this).Code;
                     return true;
                 case UnitType.PlayerDroid:
-                    DroidDesign Droid = (DroidDesign)this;
+                    var Droid = (DroidDesign)this;
                     if ( Droid.IsTemplate )
                     {
                         Result = ((DroidTemplate)this).Code;
                         return true;
                     }
-                    else
-                    {
-                        Result = null;
-                        return false;
-                    }
+                    Result = null;
+                    return false;
                 default:
                     Result = null;
                     return false;
@@ -142,22 +140,19 @@ namespace SharpFlame.Domain
             switch ( Type )
             {
                 case UnitType.Feature:
-                    FeatureTypeBase featureTypeBase = (FeatureTypeBase)this;
+                    var featureTypeBase = (FeatureTypeBase)this;
                     return featureTypeBase.Code + " (" + featureTypeBase.Name + ")";
                 case UnitType.PlayerStructure:
-                    StructureTypeBase structureTypeBase = (StructureTypeBase)this;
+                    var structureTypeBase = (StructureTypeBase)this;
                     return structureTypeBase.Code + " (" + structureTypeBase.Name + ")";
                 case UnitType.PlayerDroid:
-                    DroidDesign DroidType = (DroidDesign)this;
+                    var DroidType = (DroidDesign)this;
                     if ( DroidType.IsTemplate )
                     {
-                        DroidTemplate Template = (DroidTemplate)this;
+                        var Template = (DroidTemplate)this;
                         return Template.Code + " (" + Template.Name + ")";
                     }
-                    else
-                    {
-                        return "<droid> (" + DroidType.GenerateName() + ")";
-                    }
+                    return "<droid> (" + DroidType.GenerateName() + ")";
                 default:
                     return "";
             }
@@ -168,22 +163,19 @@ namespace SharpFlame.Domain
             switch ( Type )
             {
                 case UnitType.Feature:
-                    FeatureTypeBase featureTypeBase = (FeatureTypeBase)this;
+                    var featureTypeBase = (FeatureTypeBase)this;
                     return featureTypeBase.Name + " (" + featureTypeBase.Code + ")";
                 case UnitType.PlayerStructure:
-                    StructureTypeBase structureTypeBase = (StructureTypeBase)this;
+                    var structureTypeBase = (StructureTypeBase)this;
                     return structureTypeBase.Name + " (" + structureTypeBase.Code + ")";
                 case UnitType.PlayerDroid:
-                    DroidDesign DroidType = (DroidDesign)this;
+                    var DroidType = (DroidDesign)this;
                     if ( DroidType.IsTemplate )
                     {
-                        DroidTemplate Template = (DroidTemplate)this;
+                        var Template = (DroidTemplate)this;
                         return Template.Name + " (" + Template.Code + ")";
                     }
-                    else
-                    {
-                        return DroidType.GenerateName() + " (<droid>)";
-                    }
+                    return DroidType.GenerateName() + " (<droid>)";
                 default:
                     return "";
             }
@@ -197,10 +189,10 @@ namespace SharpFlame.Domain
 
     public class clsAttachment
     {
-        public XYZDouble Pos_Offset;
         public Matrix3DMath.Matrix3D AngleOffsetMatrix = new Matrix3DMath.Matrix3D();
-        public SimpleClassList<clsModel> Models = new SimpleClassList<clsModel>();
         public SimpleClassList<clsAttachment> Attachments = new SimpleClassList<clsAttachment>();
+        public SimpleClassList<clsModel> Models = new SimpleClassList<clsModel>();
+        public XYZDouble Pos_Offset;
 
         public clsAttachment()
         {
@@ -210,18 +202,18 @@ namespace SharpFlame.Domain
 
         public void GLDraw()
         {
-            Angles.AngleRPY AngleRPY = default(Angles.AngleRPY);
-            Matrix3DMath.Matrix3D matrixA = new Matrix3DMath.Matrix3D();
-            clsAttachment Attachment = default(clsAttachment);
-            clsModel Model = default(clsModel);
+            var AngleRPY = default(Angles.AngleRPY);
+            var matrixA = new Matrix3DMath.Matrix3D();
+            var Attachment = default(clsAttachment);
+            var Model = default(clsModel);
 
-            foreach ( clsModel tempLoopVar_Model in Models )
+            foreach ( var tempLoopVar_Model in Models )
             {
                 Model = tempLoopVar_Model;
                 Model.GLDraw();
             }
 
-            foreach ( clsAttachment tempLoopVar_Attachment in Attachments )
+            foreach ( var tempLoopVar_Attachment in Attachments )
             {
                 Attachment = tempLoopVar_Attachment;
                 GL.PushMatrix();
@@ -238,7 +230,7 @@ namespace SharpFlame.Domain
 
         public clsAttachment CreateAttachment()
         {
-            clsAttachment Result = new clsAttachment();
+            var Result = new clsAttachment();
 
             Attachments.Add(Result);
             return Result;
@@ -246,7 +238,7 @@ namespace SharpFlame.Domain
 
         public clsAttachment CopyAttachment(clsAttachment Other)
         {
-            clsAttachment Result = new clsAttachment();
+            var Result = new clsAttachment();
 
             Result.Pos_Offset = Other.Pos_Offset;
             Attachments.Add(Result);
@@ -259,13 +251,13 @@ namespace SharpFlame.Domain
 
         public clsAttachment AddCopyOfAttachment(clsAttachment AttachmentToCopy)
         {
-            clsAttachment ResultAttachment = new clsAttachment();
-            clsAttachment Attachment = default(clsAttachment);
+            var ResultAttachment = new clsAttachment();
+            var Attachment = default(clsAttachment);
 
             Attachments.Add(ResultAttachment);
             Matrix3DMath.MatrixCopy(AttachmentToCopy.AngleOffsetMatrix, ResultAttachment.AngleOffsetMatrix);
             ResultAttachment.Models.AddSimpleList(AttachmentToCopy.Models);
-            foreach ( clsAttachment tempLoopVar_Attachment in AttachmentToCopy.Attachments )
+            foreach ( var tempLoopVar_Attachment in AttachmentToCopy.Attachments )
             {
                 Attachment = tempLoopVar_Attachment;
                 ResultAttachment.AddCopyOfAttachment(Attachment);
@@ -285,25 +277,22 @@ namespace SharpFlame.Domain
 
     public class FeatureTypeBase : UnitTypeBase
     {
-        public ConnectedListLink<FeatureTypeBase, clsObjectData> FeatureType_ObjectDataLink;
-
-        public string Code = "";
-        public string Name = "Unknown";
-        public XYInt Footprint;
-
         public enum enumFeatureType
         {
             Unknown,
             OilResource
         }
 
-        public enumFeatureType FeatureType = enumFeatureType.Unknown;
-
         public clsAttachment BaseAttachment;
+        public string Code = "";
+        public enumFeatureType FeatureType = enumFeatureType.Unknown;
+        public ConnectedListLink<FeatureTypeBase, clsObjectData> FeatureType_ObjectDataLink;
+        public XYInt Footprint;
+        public string Name = "Unknown";
 
         public FeatureTypeBase()
         {
-			Footprint = new XYInt (0, 0);
+            Footprint = new XYInt(0, 0);
             FeatureType_ObjectDataLink = new ConnectedListLink<FeatureTypeBase, clsObjectData>(this);
 
 
@@ -326,12 +315,6 @@ namespace SharpFlame.Domain
 
     public class StructureTypeBase : UnitTypeBase
     {
-        public ConnectedListLink<StructureTypeBase, clsObjectData> StructureType_ObjectDataLink;
-
-        public string Code = "";
-        public string Name = "Unknown";
-        public XYInt Footprint;
-
         public enum enumStructureType
         {
             Unknown,
@@ -357,12 +340,17 @@ namespace SharpFlame.Domain
             ResourceExtractor
         }
 
+        public clsAttachment BaseAttachment = new clsAttachment();
+
+        public string Code = "";
+        public XYInt Footprint;
+        public string Name = "Unknown";
+        public clsModel StructureBasePlate;
+
         public enumStructureType StructureType = enumStructureType.Unknown;
+        public ConnectedListLink<StructureTypeBase, clsObjectData> StructureType_ObjectDataLink;
 
         public ConnectedListLink<StructureTypeBase, clsWallType> WallLink;
-
-        public clsAttachment BaseAttachment = new clsAttachment();
-        public clsModel StructureBasePlate;
 
         public StructureTypeBase()
         {
@@ -400,37 +388,19 @@ namespace SharpFlame.Domain
 
     public class DroidDesign : UnitTypeBase
     {
+        public bool AlwaysDrawTextLabel;
+        public clsAttachment BaseAttachment = new clsAttachment();
+        public Body Body;
         public bool IsTemplate;
 
         public string Name = "";
 
-        public class clsTemplateDroidType
-        {
-            public int Num = -1;
-
-            public string Name;
-
-            public string TemplateCode;
-
-            public clsTemplateDroidType(string NewName, string NewTemplateCode)
-            {
-                Name = NewName;
-                TemplateCode = NewTemplateCode;
-            }
-        }
-
-        public clsTemplateDroidType TemplateDroidType;
-
-        public Body Body;
         public Propulsion Propulsion;
-        public byte TurretCount;
+        public clsTemplateDroidType TemplateDroidType;
         public Turret Turret1;
         public Turret Turret2;
         public Turret Turret3;
-
-        public clsAttachment BaseAttachment = new clsAttachment();
-
-        public bool AlwaysDrawTextLabel;
+        public byte TurretCount;
 
         public DroidDesign()
         {
@@ -466,7 +436,7 @@ namespace SharpFlame.Domain
                 return;
             }
 
-            clsAttachment NewBody = BaseAttachment.AddCopyOfAttachment(Body.Attachment);
+            var NewBody = BaseAttachment.AddCopyOfAttachment(Body.Attachment);
 
             AlwaysDrawTextLabel = NewBody.Models.Count == 0;
 
@@ -489,7 +459,7 @@ namespace SharpFlame.Domain
                 return;
             }
 
-            XYZDouble TurretConnector = new XYZDouble();
+            var TurretConnector = new XYZDouble();
 
             TurretConnector = Body.Attachment.Models[0].Connectors[0];
 
@@ -497,7 +467,7 @@ namespace SharpFlame.Domain
             {
                 if ( Turret1 != null )
                 {
-                    clsAttachment NewTurret = NewBody.AddCopyOfAttachment(Turret1.Attachment);
+                    var NewTurret = NewBody.AddCopyOfAttachment(Turret1.Attachment);
                     NewTurret.Pos_Offset = TurretConnector;
                 }
             }
@@ -513,7 +483,7 @@ namespace SharpFlame.Domain
             {
                 if ( Turret2 != null )
                 {
-                    clsAttachment NewTurret = NewBody.AddCopyOfAttachment(Turret2.Attachment);
+                    var NewTurret = NewBody.AddCopyOfAttachment(Turret2.Attachment);
                     NewTurret.Pos_Offset = TurretConnector;
                 }
             }
@@ -521,7 +491,7 @@ namespace SharpFlame.Domain
 
         public int GetMaxHitPoints()
         {
-            int Result = 0;
+            var Result = 0;
 
             //this is inaccurate
 
@@ -561,23 +531,9 @@ namespace SharpFlame.Domain
             return Result;
         }
 
-        public struct sLoadPartsArgs
-        {
-            public Body Body;
-            public Propulsion Propulsion;
-            public Construct Construct;
-            public Sensor Sensor;
-            public Repair Repair;
-            public Brain Brain;
-            public Ecm ECM;
-            public Weapon Weapon1;
-            public Weapon Weapon2;
-            public Weapon Weapon3;
-        }
-
         public bool LoadParts(sLoadPartsArgs Args)
         {
-            bool TurretConflict = default(bool);
+            var TurretConflict = default(bool);
 
             Body = Args.Body;
             Propulsion = Args.Propulsion;
@@ -591,7 +547,7 @@ namespace SharpFlame.Domain
                     {
                         TurretConflict = true;
                     }
-                    TurretCount = (byte)1;
+                    TurretCount = 1;
                     Turret1 = Args.Construct;
                 }
             }
@@ -603,7 +559,7 @@ namespace SharpFlame.Domain
                     {
                         TurretConflict = true;
                     }
-                    TurretCount = (byte)1;
+                    TurretCount = 1;
                     Turret1 = Args.Repair;
                 }
             }
@@ -615,13 +571,13 @@ namespace SharpFlame.Domain
                     {
                         TurretConflict = true;
                     }
-                    TurretCount = (byte)1;
+                    TurretCount = 1;
                     Turret1 = Args.Brain;
                 }
             }
             if ( Args.Weapon1 != null )
             {
-                bool UseWeapon = default(bool);
+                var UseWeapon = default(bool);
                 if ( Turret1 != null )
                 {
                     if ( Turret1.TurretType == enumTurretType.Brain )
@@ -640,16 +596,16 @@ namespace SharpFlame.Domain
                 }
                 if ( UseWeapon )
                 {
-                    TurretCount = (byte)1;
+                    TurretCount = 1;
                     Turret1 = Args.Weapon1;
                     if ( Args.Weapon2 != null )
                     {
                         Turret2 = Args.Weapon2;
-                        TurretCount += (byte)1;
+                        TurretCount += 1;
                         if ( Args.Weapon3 != null )
                         {
                             Turret3 = Args.Weapon3;
-                            TurretCount += (byte)1;
+                            TurretCount += 1;
                         }
                     }
                 }
@@ -662,7 +618,7 @@ namespace SharpFlame.Domain
                     {
                         TurretConflict = true;
                     }
-                    TurretCount = (byte)1;
+                    TurretCount = 1;
                     Turret1 = Args.Sensor;
                 }
             }
@@ -673,7 +629,7 @@ namespace SharpFlame.Domain
 
         public string GenerateName()
         {
-            string Result = "";
+            var Result = "";
 
             if ( Propulsion != null )
             {
@@ -734,7 +690,7 @@ namespace SharpFlame.Domain
 
         public enumDroidType GetDroidType()
         {
-            enumDroidType Result = default(enumDroidType);
+            var Result = default(enumDroidType);
 
             if ( TemplateDroidType == App.TemplateDroidType_Null )
             {
@@ -851,7 +807,7 @@ namespace SharpFlame.Domain
 
         public string GetConstructCode()
         {
-            bool NotThis = default(bool);
+            var NotThis = default(bool);
 
             if ( TurretCount >= 1 )
             {
@@ -877,15 +833,12 @@ namespace SharpFlame.Domain
             {
                 return "ZNULLCONSTRUCT";
             }
-            else
-            {
-                return Turret1.Code;
-            }
+            return Turret1.Code;
         }
 
         public string GetRepairCode()
         {
-            bool NotThis = default(bool);
+            var NotThis = default(bool);
 
             if ( TurretCount >= 1 )
             {
@@ -911,15 +864,12 @@ namespace SharpFlame.Domain
             {
                 return "ZNULLREPAIR";
             }
-            else
-            {
-                return Turret1.Code;
-            }
+            return Turret1.Code;
         }
 
         public string GetSensorCode()
         {
-            bool NotThis = default(bool);
+            var NotThis = default(bool);
 
             if ( TurretCount >= 1 )
             {
@@ -945,15 +895,12 @@ namespace SharpFlame.Domain
             {
                 return "ZNULLSENSOR";
             }
-            else
-            {
-                return Turret1.Code;
-            }
+            return Turret1.Code;
         }
 
         public string GetBrainCode()
         {
-            bool NotThis = default(bool);
+            var NotThis = default(bool);
 
             if ( TurretCount >= 1 )
             {
@@ -979,15 +926,12 @@ namespace SharpFlame.Domain
             {
                 return "ZNULLBRAIN";
             }
-            else
-            {
-                return Turret1.Code;
-            }
+            return Turret1.Code;
         }
 
         public string GetECMCode()
         {
-            bool NotThis = default(bool);
+            var NotThis = default(bool);
 
             if ( TurretCount >= 1 )
             {
@@ -1013,23 +957,47 @@ namespace SharpFlame.Domain
             {
                 return "ZNULLECM";
             }
-            else
-            {
-                return Turret1.Code;
-            }
+            return Turret1.Code;
         }
 
         public override string GetName()
         {
             return Name;
         }
+
+        public class clsTemplateDroidType
+        {
+            public string Name;
+            public int Num = -1;
+
+            public string TemplateCode;
+
+            public clsTemplateDroidType(string NewName, string NewTemplateCode)
+            {
+                Name = NewName;
+                TemplateCode = NewTemplateCode;
+            }
+        }
+
+        public struct sLoadPartsArgs
+        {
+            public Body Body;
+            public Brain Brain;
+            public Construct Construct;
+            public Ecm ECM;
+            public Propulsion Propulsion;
+            public Repair Repair;
+            public Sensor Sensor;
+            public Weapon Weapon1;
+            public Weapon Weapon2;
+            public Weapon Weapon3;
+        }
     }
 
     public class DroidTemplate : DroidDesign
     {
-        public ConnectedListLink<DroidTemplate, clsObjectData> DroidTemplate_ObjectDataLink;
-
         public string Code = "";
+        public ConnectedListLink<DroidTemplate, clsObjectData> DroidTemplate_ObjectDataLink;
 
         public DroidTemplate()
         {
@@ -1043,19 +1011,17 @@ namespace SharpFlame.Domain
 
     public class clsWallType
     {
-        public ConnectedListLink<clsWallType, clsObjectData> WallType_ObjectDataLink;
-
-        public string Code = "";
-        public string Name = "Unknown";
-
-        public int[] TileWalls_Segment = new int[] {0, 0, 0, 0, 0, 3, 3, 2, 0, 3, 3, 2, 0, 2, 2, 1};
         private const int d0 = 0;
         private const int d1 = 90;
         private const int d2 = 180;
         private const int d3 = 270;
-        public int[] TileWalls_Direction = new int[] {d0, d0, d2, d0, d3, d0, d3, d0, d1, d1, d2, d2, d3, d1, d3, d0};
+        public string Code = "";
+        public string Name = "Unknown";
 
         public ConnectedList<StructureTypeBase, clsWallType> Segments;
+        public int[] TileWalls_Direction = {d0, d0, d2, d0, d3, d0, d3, d0, d1, d1, d2, d2, d3, d1, d3, d0};
+        public int[] TileWalls_Segment = {0, 0, 0, 0, 0, 3, 3, 2, 0, 3, 3, 2, 0, 2, 2, 1};
+        public ConnectedListLink<clsWallType, clsObjectData> WallType_ObjectDataLink;
 
         public clsWallType()
         {

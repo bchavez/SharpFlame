@@ -47,7 +47,6 @@ namespace SharpFlame
 			this.Label4 = new System.Windows.Forms.Label();
 			this.Label13 = new System.Windows.Forms.Label();
 			this.cboLicense = new System.Windows.Forms.ComboBox();
-			this.cbxLevFormat = new System.Windows.Forms.CheckBox();
 			this.Label7 = new System.Windows.Forms.Label();
 			this.Label8 = new System.Windows.Forms.Label();
 			this.cboCampType = new System.Windows.Forms.ComboBox();
@@ -230,17 +229,6 @@ namespace SharpFlame
 			this.cboLicense.Size = new System.Drawing.Size(172, 24);
 			this.cboLicense.TabIndex = 29;
 			//
-			//cbxLevFormat
-			//
-			this.cbxLevFormat.Location = new System.Drawing.Point(131, 15);
-			this.cbxLevFormat.Margin = new System.Windows.Forms.Padding(4);
-			this.cbxLevFormat.Name = "cbxLevFormat";
-			this.cbxLevFormat.Size = new System.Drawing.Size(272, 25);
-			this.cbxLevFormat.TabIndex = 30;
-			this.cbxLevFormat.Text = "3,5,6,7,9,10 player support (3.1+ only)";
-			this.cbxLevFormat.UseCompatibleTextRendering = true;
-			this.cbxLevFormat.UseVisualStyleBackColor = true;
-			//
 			//Label7
 			//
 			this.Label7.AutoSize = true;
@@ -293,7 +281,6 @@ namespace SharpFlame
 			this.TabPage1.Controls.Add(this.Label8);
 			this.TabPage1.Controls.Add(this.Label4);
 			this.TabPage1.Controls.Add(this.txtAuthor);
-			this.TabPage1.Controls.Add(this.cbxLevFormat);
 			this.TabPage1.Controls.Add(this.Label13);
 			this.TabPage1.Controls.Add(this.cboLicense);
 			this.TabPage1.Controls.Add(this.btnCompileMultiplayer);
@@ -399,7 +386,6 @@ namespace SharpFlame
 		public System.Windows.Forms.Label Label4;
 		public System.Windows.Forms.Label Label13;
 		public System.Windows.Forms.ComboBox cboLicense;
-		public System.Windows.Forms.CheckBox cbxLevFormat;
 		public System.Windows.Forms.Label Label7;
 		public System.Windows.Forms.Label Label8;
 		public System.Windows.Forms.ComboBox cboCampType;

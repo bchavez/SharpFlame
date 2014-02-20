@@ -1,23 +1,17 @@
+#region
+
 using SharpFlame.Collections;
+
+#endregion
 
 namespace SharpFlame.AppSettings
 {
     public class Option<ValueType> : OptionInterface
     {
-        private ConnectedListLink<OptionInterface, OptionGroup> _GroupLink;
+        private readonly ValueType _DefaultValue;
+        private readonly ConnectedListLink<OptionInterface, OptionGroup> _GroupLink;
 
-        public override ConnectedListLink<OptionInterface, OptionGroup> GroupLink
-        {
-            get { return _GroupLink; }
-        }
-
-        private string _SaveKey;
-        private ValueType _DefaultValue;
-
-        public ValueType DefaultValue
-        {
-            get { return _DefaultValue; }
-        }
+        private readonly string _SaveKey;
 
         public Option(string saveKey, ValueType defaultValue)
         {
@@ -26,6 +20,16 @@ namespace SharpFlame.AppSettings
 
             _SaveKey = saveKey;
             _DefaultValue = defaultValue;
+        }
+
+        public override ConnectedListLink<OptionInterface, OptionGroup> GroupLink
+        {
+            get { return _GroupLink; }
+        }
+
+        public ValueType DefaultValue
+        {
+            get { return _DefaultValue; }
         }
 
         public override object DefaultValueObject

@@ -1,18 +1,17 @@
+#region
+
 using SharpFlame.Core.Domain;
-using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame.Mapping.Changes
 {
     public class clsTerrainUpdate
     {
-        public clsPointChanges Vertices;
-        public clsPointChanges Tiles;
         public clsPointChanges SidesH;
         public clsPointChanges SidesV;
-
-        public void Deallocate()
-        {
-        }
+        public clsPointChanges Tiles;
+        public clsPointChanges Vertices;
 
         public clsTerrainUpdate(XYInt TileSize)
         {
@@ -20,6 +19,10 @@ namespace SharpFlame.Mapping.Changes
             Tiles = new clsPointChanges(new XYInt(TileSize.X, TileSize.Y));
             SidesH = new clsPointChanges(new XYInt(TileSize.X, TileSize.Y + 1));
             SidesV = new clsPointChanges(new XYInt(TileSize.X + 1, TileSize.Y));
+        }
+
+        public void Deallocate()
+        {
         }
 
         public void SetAllChanged()

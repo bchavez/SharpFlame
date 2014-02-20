@@ -1,20 +1,24 @@
+#region
+
 using SharpFlame.Collections.Specialized;
 using SharpFlame.Painters;
+
+#endregion
 
 namespace SharpFlame.Util
 {
     public class clsLayer
     {
-        public int WithinLayer;
         public bool[] AvoidLayers;
-        public Terrain Terrain;
-        public BooleanMap Terrainmap;
-        public float HeightMin;
+        public float Density;
         public float HeightMax;
-        public float SlopeMin;
-        public float SlopeMax;
+        public float HeightMin;
         //for generator only
         public float Scale;
-        public float Density;
+        public float SlopeMax;
+        public float SlopeMin;
+        public Terrain Terrain;
+        public BooleanMap Terrainmap;
+        public int WithinLayer;
     }
 }

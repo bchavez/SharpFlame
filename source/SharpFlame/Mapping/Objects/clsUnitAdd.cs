@@ -1,16 +1,20 @@
+#region
+
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 using SharpFlame.Maths;
 
+#endregion
+
 namespace SharpFlame.Mapping.Objects
 {
     public class clsUnitAdd
     {
-        public clsMap Map;
-        public clsUnit NewUnit;
         public UInt32 ID = 0U;
         public string Label = null;
+        public clsMap Map;
+        public clsUnit NewUnit;
         public bool StoreChange = false;
 
         public bool Perform()
@@ -45,7 +49,7 @@ namespace SharpFlame.Mapping.Objects
 
             if ( StoreChange )
             {
-                clsUnitChange UnitChange = new clsUnitChange();
+                var UnitChange = new clsUnitChange();
                 UnitChange.Type = clsUnitChange.enumType.Added;
                 UnitChange.Unit = NewUnit;
                 Map.UnitChanges.Add(UnitChange);

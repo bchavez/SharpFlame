@@ -1,28 +1,30 @@
+#region
+
 using System;
 using System.Diagnostics;
+
+#endregion
 
 namespace SharpFlame.Pathfinding
 {
     public class PathfinderNetwork
     {
-        public PathfinderLayer[] NodeLayers = new PathfinderLayer[0];
+        public int FindParentNodeCount;
+        public PathfinderNode[] FindParentNodes = new PathfinderNode[0];
 
-        public PathfinderLayer get_GetNodeLayer(int Num)
-        {
-            return NodeLayers[Num];
-        }
-
+        public LargeArrays NetworkLargeArrays = new LargeArrays();
         public int NodeLayerCount;
+        public PathfinderLayer[] NodeLayers = new PathfinderLayer[0];
 
         public int GetNodeLayerCount
         {
             get { return NodeLayerCount; }
         }
 
-        public PathfinderNode[] FindParentNodes = new PathfinderNode[0];
-        public int FindParentNodeCount;
-
-        public LargeArrays NetworkLargeArrays = new LargeArrays();
+        public PathfinderLayer get_GetNodeLayer(int Num)
+        {
+            return NodeLayers[Num];
+        }
 
         public void NodeLayer_Add(PathfinderLayer NewNodeLayer)
         {
@@ -72,7 +74,7 @@ namespace SharpFlame.Pathfinding
 
         public void Deallocate()
         {
-            int A = 0;
+            var A = 0;
 
             for ( A = 0; A <= NodeLayerCount - 1; A++ )
             {
@@ -83,43 +85,37 @@ namespace SharpFlame.Pathfinding
             FindParentNodes = null;
         }
 
-        public struct PathList
-        {
-            public Path[] Paths;
-            public int PathCount;
-        }
-
         public PathList[] GetPath(PathfinderNode[] StartNodes, PathfinderNode FinishNode, int Accuracy, int MinClearance)
         {
-            int StartNodeCount = StartNodes.GetUpperBound(0) + 1;
-            PathList[] Paths = new PathList[NodeLayerCount];
-            PathfinderNode[,] LayerStartNodes = new PathfinderNode[NodeLayerCount, StartNodeCount];
-            PathfinderNode[] LayerFinishNodes = new PathfinderNode[NodeLayerCount];
-            int LayerNum = 0;
-            PathfinderNode[] Destinations = new PathfinderNode[24];
-            int DestinationCount = 0;
-            bool FinishIsParent = default(bool);
-            int[] CalcNodeCount = new int[24];
-            sFloodRouteArgs FloodRouteArgs = new sFloodRouteArgs();
-            int FinalLayer = 0;
-            bool[] StartCanReach = new bool[StartNodeCount];
-            PathfinderNode tmpNodeA = default(PathfinderNode);
-            PathfinderNode tmpNodeB = default(PathfinderNode);
-            int CanReachCount = 0;
-            int FirstLayer = 0;
-            Path[] BestPaths = new Path[24];
-            float[] BestValues = new float[24];
-            int PathNum = 0;
-            bool StopMultiPathing = default(bool);
-            bool[] Visit = NetworkLargeArrays.Nodes_Booleans;
-            float[] NodeValues = NetworkLargeArrays.Nodes_ValuesA;
-            PathfinderNode[] Nodes_Nodes = NetworkLargeArrays.Nodes_Nodes;
-            Path StartPath = NetworkLargeArrays.Nodes_Path;
-            int A = 0;
-            int B = 0;
-            int C = 0;
-            int D = 0;
-            int E = 0;
+            var StartNodeCount = StartNodes.GetUpperBound(0) + 1;
+            var Paths = new PathList[NodeLayerCount];
+            var LayerStartNodes = new PathfinderNode[NodeLayerCount, StartNodeCount];
+            var LayerFinishNodes = new PathfinderNode[NodeLayerCount];
+            var LayerNum = 0;
+            var Destinations = new PathfinderNode[24];
+            var DestinationCount = 0;
+            var FinishIsParent = default(bool);
+            var CalcNodeCount = new int[24];
+            var FloodRouteArgs = new sFloodRouteArgs();
+            var FinalLayer = 0;
+            var StartCanReach = new bool[StartNodeCount];
+            var tmpNodeA = default(PathfinderNode);
+            var tmpNodeB = default(PathfinderNode);
+            var CanReachCount = 0;
+            var FirstLayer = 0;
+            var BestPaths = new Path[24];
+            var BestValues = new float[24];
+            var PathNum = 0;
+            var StopMultiPathing = default(bool);
+            var Visit = NetworkLargeArrays.Nodes_Booleans;
+            var NodeValues = NetworkLargeArrays.Nodes_ValuesA;
+            var Nodes_Nodes = NetworkLargeArrays.Nodes_Nodes;
+            var StartPath = NetworkLargeArrays.Nodes_Path;
+            var A = 0;
+            var B = 0;
+            var C = 0;
+            var D = 0;
+            var E = 0;
 
             FinalLayer = StartNodes[0].Layer.Network_LayerNum;
             LayerFinishNodes[FinalLayer] = FinishNode;
@@ -164,7 +160,7 @@ namespace SharpFlame.Pathfinding
             Paths[LayerNum].Paths[0].Nodes = new PathfinderNode[1];
             Paths[LayerNum].Paths[0].Nodes[0] = LayerFinishNodes[LayerNum];
             Paths[LayerNum].Paths[0].NodeCount = 1;
-            int LastLayer = 0;
+            var LastLayer = 0;
             do
             {
                 LastLayer = LayerNum;
@@ -173,7 +169,7 @@ namespace SharpFlame.Pathfinding
                 {
                     break;
                 }
-                else if ( StopMultiPathing )
+                if ( StopMultiPathing )
                 {
                     if ( Accuracy < 0 )
                     {
@@ -317,25 +313,25 @@ namespace SharpFlame.Pathfinding
 
         public Path[] GetAllPaths(PathfinderNode[] StartNodes, PathfinderNode FinishNode, int MinClearance)
         {
-            int StartNodeCount = StartNodes.GetUpperBound(0) + 1;
-            PathfinderNode[,] LayerStartNodes = new PathfinderNode[32, StartNodeCount];
-            PathfinderNode[] LayerFinishNodes = new PathfinderNode[32];
-            int LayerNum = 0;
-            sFloodRouteAllArgs FloodRouteDArgs = new sFloodRouteAllArgs();
-            int FinalLayer = 0;
-            bool[] StartCanReach = new bool[StartNodeCount];
-            PathfinderNode tmpNodeA = default(PathfinderNode);
-            int CanReachCount = 0;
-            int FirstLayer = 0;
-            Path[] SubPaths = new Path[32];
-            PathfinderNode[] Nodes_Nodes = NetworkLargeArrays.Nodes_Nodes;
-            bool[] Visit = NetworkLargeArrays.Nodes_Booleans;
-            float[] NodeValues = NetworkLargeArrays.Nodes_ValuesA;
-            float[] NodeValuesB = NetworkLargeArrays.Nodes_ValuesB;
-            int A = 0;
-            int B = 0;
-            int C = 0;
-            int D = 0;
+            var StartNodeCount = StartNodes.GetUpperBound(0) + 1;
+            var LayerStartNodes = new PathfinderNode[32, StartNodeCount];
+            var LayerFinishNodes = new PathfinderNode[32];
+            var LayerNum = 0;
+            var FloodRouteDArgs = new sFloodRouteAllArgs();
+            var FinalLayer = 0;
+            var StartCanReach = new bool[StartNodeCount];
+            var tmpNodeA = default(PathfinderNode);
+            var CanReachCount = 0;
+            var FirstLayer = 0;
+            var SubPaths = new Path[32];
+            var Nodes_Nodes = NetworkLargeArrays.Nodes_Nodes;
+            var Visit = NetworkLargeArrays.Nodes_Booleans;
+            var NodeValues = NetworkLargeArrays.Nodes_ValuesA;
+            var NodeValuesB = NetworkLargeArrays.Nodes_ValuesB;
+            var A = 0;
+            var B = 0;
+            var C = 0;
+            var D = 0;
 
             FinalLayer = StartNodes[0].Layer.Network_LayerNum;
             LayerFinishNodes[FinalLayer] = FinishNode;
@@ -377,7 +373,7 @@ namespace SharpFlame.Pathfinding
             SubPaths[LayerNum] = new Path();
             SubPaths[LayerNum].Nodes = new[] {LayerFinishNodes[LayerNum]};
             SubPaths[LayerNum].NodeCount = 1;
-            int LastLayer = 0;
+            var LastLayer = 0;
             do
             {
                 LastLayer = LayerNum;
@@ -442,49 +438,22 @@ namespace SharpFlame.Pathfinding
             return SubPaths;
         }
 
-        public struct sFloodRouteArgs
-        {
-            public Path CurrentPath;
-            public PathfinderNode[] FinishNodes;
-            public int FinishNodeCount;
-            public bool FinishIsParent;
-            public bool[] Visit;
-            public float[] NodeValues;
-            public PathfinderNode[] SourceNodes;
-            public Path[] BestPaths;
-            public int MinClearance;
-        }
-
-        public struct sFloodRouteAllArgs
-        {
-            public PathfinderNode[] StartNodes;
-            public int StartNodeCount;
-            public PathfinderNode FinishNode;
-            public bool[] Visit;
-            public float[] NodeValuesA;
-            public float[] NodeValuesB;
-            public PathfinderNode[] SourceNodes;
-            public float BestTolerance;
-            public int BestNodeCount;
-            public int MinClearance;
-        }
-
         public void FloodRoute(ref sFloodRouteArgs Args)
         {
-            PathfinderNode CurrentNode = default(PathfinderNode);
-            PathfinderNode ConnectedNode = default(PathfinderNode);
-            int A = 0;
-            int SourceNodeCount = 0;
-            int SourceNodeNum = 0;
-            PathfinderConnection tmpConnection = default(PathfinderConnection);
+            var CurrentNode = default(PathfinderNode);
+            var ConnectedNode = default(PathfinderNode);
+            var A = 0;
+            var SourceNodeCount = 0;
+            var SourceNodeNum = 0;
+            var tmpConnection = default(PathfinderConnection);
             float ResultValue = 0;
-            Path BestPath = default(Path);
-            PathfinderNode StartNode = default(PathfinderNode);
-            int B = 0;
+            var BestPath = default(Path);
+            var StartNode = default(PathfinderNode);
+            var B = 0;
             float BestDist = 0;
             float Dist = 0;
-            PathfinderNode BestNode = default(PathfinderNode);
-            int C = 0;
+            var BestNode = default(PathfinderNode);
+            var C = 0;
 
             StartNode = Args.CurrentPath.Nodes[0];
 
@@ -600,35 +569,22 @@ namespace SharpFlame.Pathfinding
             }
         }
 
-        public struct sFloodSpanArgs
-        {
-            public Path CurrentPath;
-            public PathfinderNode SourceParentNode;
-            public PathfinderNode[] FinishNodes;
-            public int FinishNodeCount;
-            public bool FinishIsParent;
-            public float[] NodeValues;
-            public PathfinderNode[] SourceNodes;
-            public Path[] BestPaths;
-            public int MinClearance;
-        }
-
         public void FloodSpan(ref sFloodSpanArgs Args)
         {
-            PathfinderNode CurrentNode = default(PathfinderNode);
-            PathfinderNode ConnectedNode = default(PathfinderNode);
-            int A = 0;
-            int SourceNodeCount = 0;
-            int SourceNodeNum = 0;
-            PathfinderConnection tmpConnection = default(PathfinderConnection);
+            var CurrentNode = default(PathfinderNode);
+            var ConnectedNode = default(PathfinderNode);
+            var A = 0;
+            var SourceNodeCount = 0;
+            var SourceNodeNum = 0;
+            var tmpConnection = default(PathfinderConnection);
             float ResultValue = 0;
-            Path BestPath = default(Path);
-            PathfinderNode StartNode = default(PathfinderNode);
-            int B = 0;
+            var BestPath = default(Path);
+            var StartNode = default(PathfinderNode);
+            var B = 0;
             float BestDist = 0;
             float Dist = 0;
-            PathfinderNode BestNode = default(PathfinderNode);
-            int C = 0;
+            var BestNode = default(PathfinderNode);
+            var C = 0;
 
             StartNode = Args.CurrentPath.Nodes[0];
 
@@ -736,36 +692,22 @@ namespace SharpFlame.Pathfinding
             }
         }
 
-        public struct sFloodForValuesArgs
-        {
-            public Path CurrentPath;
-            public PathfinderNode SourceParentNodeA;
-            public PathfinderNode SourceParentNodeB;
-            public PathfinderNode[] FinishNodes;
-            public int FinishNodeCount;
-            public bool FinishIsParent;
-            public float[] NodeValues;
-            public PathfinderNode[] SourceNodes;
-            public Path[] BestPaths;
-            public int MinClearance;
-        }
-
         public void FloodForValues(ref sFloodForValuesArgs Args)
         {
-            PathfinderNode CurrentNode = default(PathfinderNode);
-            PathfinderNode ConnectedNode = default(PathfinderNode);
-            int A = 0;
-            int SourceNodeCount = 0;
-            int SourceNodeNum = 0;
-            PathfinderConnection tmpConnection = default(PathfinderConnection);
+            var CurrentNode = default(PathfinderNode);
+            var ConnectedNode = default(PathfinderNode);
+            var A = 0;
+            var SourceNodeCount = 0;
+            var SourceNodeNum = 0;
+            var tmpConnection = default(PathfinderConnection);
             float ResultValue = 0;
-            Path BestPath = default(Path);
-            PathfinderNode StartNode = default(PathfinderNode);
-            int B = 0;
+            var BestPath = default(Path);
+            var StartNode = default(PathfinderNode);
+            var B = 0;
             float BestDist = 0;
             float Dist = 0;
-            PathfinderNode BestNode = default(PathfinderNode);
-            int C = 0;
+            var BestNode = default(PathfinderNode);
+            var C = 0;
 
             StartNode = Args.CurrentPath.Nodes[0];
 
@@ -875,14 +817,14 @@ namespace SharpFlame.Pathfinding
 
         public void FloodRouteAll(ref sFloodRouteAllArgs Args)
         {
-            PathfinderNode CurrentNode = default(PathfinderNode);
-            PathfinderNode ConnectedNode = default(PathfinderNode);
-            int SourceNodeCount = 0;
-            int SourceNodeNum = 0;
-            PathfinderConnection tmpConnection = default(PathfinderConnection);
+            var CurrentNode = default(PathfinderNode);
+            var ConnectedNode = default(PathfinderNode);
+            var SourceNodeCount = 0;
+            var SourceNodeNum = 0;
+            var tmpConnection = default(PathfinderConnection);
             float ResultValue = 0;
             float BestValue = 0;
-            int A = 0;
+            var A = 0;
 
             SourceNodeCount = Args.StartNodeCount;
             for ( A = 0; A <= SourceNodeCount - 1; A++ )
@@ -961,11 +903,11 @@ namespace SharpFlame.Pathfinding
         public void FindCalc()
         {
             PathfinderNode[] ShuffledNodes = null;
-            int ShuffledNodeCount = 0;
+            var ShuffledNodeCount = 0;
             int[] Positions = null;
-            int PositionCount = 0;
-            int RandNum = 0;
-            int A = 0;
+            var PositionCount = 0;
+            var RandNum = 0;
+            var A = 0;
 
             while ( FindParentNodeCount > 0 )
             {
@@ -980,7 +922,7 @@ namespace SharpFlame.Pathfinding
                 }
                 for ( A = 0; A <= FindParentNodeCount - 1; A++ )
                 {
-                    RandNum = (int)(App.Random.Next() * PositionCount);
+                    RandNum = App.Random.Next() * PositionCount;
                     ShuffledNodes[Positions[RandNum]] = FindParentNodes[A];
                     PositionCount--;
                     if ( RandNum < PositionCount )
@@ -1003,7 +945,7 @@ namespace SharpFlame.Pathfinding
             }
 
             //remove empty layers
-            int LayerNum = NodeLayerCount - 1;
+            var LayerNum = NodeLayerCount - 1;
             do
             {
                 if ( NodeLayers[LayerNum].NodeCount > 0 )
@@ -1030,23 +972,17 @@ namespace SharpFlame.Pathfinding
             NetworkLargeArrays.Resize(this);
         }
 
-        public struct sFloodProximityArgs
-        {
-            public PathfinderNode StartNode;
-            public float[] NodeValues;
-        }
-
         //maps lowest values from the start node to all other nodes
         public void FloodProximity(ref sFloodProximityArgs Args)
         {
-            PathfinderNode CurrentNode = default(PathfinderNode);
-            PathfinderNode ConnectedNode = default(PathfinderNode);
-            int A = 0;
-            int SourceNodeCount = 0;
-            int SourceNodeNum = 0;
-            PathfinderConnection tmpConnection = default(PathfinderConnection);
+            var CurrentNode = default(PathfinderNode);
+            var ConnectedNode = default(PathfinderNode);
+            var A = 0;
+            var SourceNodeCount = 0;
+            var SourceNodeNum = 0;
+            var tmpConnection = default(PathfinderConnection);
             float ResultValue = 0;
-            PathfinderNode StartNode = default(PathfinderNode);
+            var StartNode = default(PathfinderNode);
 
             StartNode = Args.StartNode;
 
@@ -1076,7 +1012,7 @@ namespace SharpFlame.Pathfinding
 
         public void ClearChangedNodes()
         {
-            int A = 0;
+            var A = 0;
 
             for ( A = 0; A <= NodeLayerCount - 1; A++ )
             {
@@ -1086,8 +1022,8 @@ namespace SharpFlame.Pathfinding
 
         public bool NodeCanReachNode(PathfinderNode StartNode, PathfinderNode FinishNode)
         {
-            PathfinderNode StartParent = StartNode;
-            PathfinderNode FinishParent = FinishNode;
+            var StartParent = StartNode;
+            var FinishParent = FinishNode;
 
             do
             {
@@ -1106,6 +1042,72 @@ namespace SharpFlame.Pathfinding
                     return false;
                 }
             } while ( true );
+        }
+
+        public struct PathList
+        {
+            public int PathCount;
+            public Path[] Paths;
+        }
+
+        public struct sFloodForValuesArgs
+        {
+            public Path[] BestPaths;
+            public Path CurrentPath;
+            public bool FinishIsParent;
+            public int FinishNodeCount;
+            public PathfinderNode[] FinishNodes;
+            public int MinClearance;
+            public float[] NodeValues;
+            public PathfinderNode[] SourceNodes;
+            public PathfinderNode SourceParentNodeA;
+            public PathfinderNode SourceParentNodeB;
+        }
+
+        public struct sFloodProximityArgs
+        {
+            public float[] NodeValues;
+            public PathfinderNode StartNode;
+        }
+
+        public struct sFloodRouteAllArgs
+        {
+            public int BestNodeCount;
+            public float BestTolerance;
+            public PathfinderNode FinishNode;
+            public int MinClearance;
+            public float[] NodeValuesA;
+            public float[] NodeValuesB;
+            public PathfinderNode[] SourceNodes;
+            public int StartNodeCount;
+            public PathfinderNode[] StartNodes;
+            public bool[] Visit;
+        }
+
+        public struct sFloodRouteArgs
+        {
+            public Path[] BestPaths;
+            public Path CurrentPath;
+            public bool FinishIsParent;
+            public int FinishNodeCount;
+            public PathfinderNode[] FinishNodes;
+            public int MinClearance;
+            public float[] NodeValues;
+            public PathfinderNode[] SourceNodes;
+            public bool[] Visit;
+        }
+
+        public struct sFloodSpanArgs
+        {
+            public Path[] BestPaths;
+            public Path CurrentPath;
+            public bool FinishIsParent;
+            public int FinishNodeCount;
+            public PathfinderNode[] FinishNodes;
+            public int MinClearance;
+            public float[] NodeValues;
+            public PathfinderNode[] SourceNodes;
+            public PathfinderNode SourceParentNode;
         }
     }
 }

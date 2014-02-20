@@ -1,12 +1,16 @@
+#region
+
 using System;
+
+#endregion
 
 namespace SharpFlame.Mapping.Tools
 {
     public class clsApplyAutoTri : clsAction
     {
+        private bool NewTri;
         private double difA;
         private double difB;
-        private bool NewTri;
 
         public override void ActionPerform()
         {

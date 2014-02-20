@@ -1,4 +1,8 @@
+#region
+
 using SharpFlame.Collections;
+
+#endregion
 
 namespace SharpFlame.AppSettings
 {

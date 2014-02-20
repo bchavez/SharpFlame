@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Windows.Forms;
 using OpenTK;
@@ -8,43 +10,39 @@ using SharpFlame.FileIO;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
-using SharpFlame.Maths;
 using SharpFlame.Util;
+
+#endregion
 
 namespace SharpFlame.Controls
 {
     public partial class TextureViewControl
     {
-        private frmMain _Owner;
+        private readonly frmMain _Owner;
+        private readonly Timer tmrDraw;
+        private readonly Timer tmrDrawDelay;
+        public bool DisplayTileNumbers = false;
+        public bool DisplayTileTypes = false;
 
         public bool DrawPending;
 
-        public XYInt GLSize;
-        public double GLSize_XPerY;
-
-        public XYInt View_Pos;
-
-        public XYInt TextureCount;
-        public int TextureYOffset;
-
         public bool DrawView_Enabled = false;
 
-        public bool DisplayTileTypes = false;
-        public bool DisplayTileNumbers = false;
-
         private Timer GLInitializeDelayTimer;
+        public XYInt GLSize;
+        public double GLSize_XPerY;
         public bool IsGLInitialized = false;
 
-        private Timer tmrDraw;
-        private Timer tmrDrawDelay;
-
         public GLControl OpenGLControl;
+        public XYInt TextureCount;
+        public int TextureYOffset;
+        public XYInt View_Pos;
 
         public TextureViewControl(frmMain Owner)
         {
             _Owner = Owner;
-			TextureCount = new XYInt (0, 0);
-			GLSize = new XYInt (0, 0);
+            TextureCount = new XYInt(0, 0);
+            GLSize = new XYInt(0, 0);
 
             InitializeComponent();
 
@@ -63,6 +61,11 @@ namespace SharpFlame.Controls
             tmrDrawDelay = new Timer();
             tmrDrawDelay.Tick += tmrDrawDelay_Tick;
             tmrDrawDelay.Interval = 30;
+        }
+
+        private clsMap MainMap
+        {
+            get { return _Owner.MainMap; }
         }
 
         public void OpenGL_Size_Calc()
@@ -181,7 +184,7 @@ namespace SharpFlame.Controls
 
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -191,22 +194,22 @@ namespace SharpFlame.Controls
                 return;
             }
 
-            int X = 0;
-            int Y = 0;
-            int Num = 0;
-            XYInt XY_int = new XYInt();
-            int A = 0;
-            XYDouble Vertex0 = new XYDouble();
-            XYDouble Vertex1 = new XYDouble();
-            XYDouble Vertex2 = new XYDouble();
-            XYDouble UnrotatedPos = new XYDouble();
-            XYDouble TexCoord0 = new XYDouble();
-            XYDouble TexCoord1 = new XYDouble();
-            XYDouble TexCoord2 = new XYDouble();
-            XYDouble TexCoord3 = new XYDouble();
+            var X = 0;
+            var Y = 0;
+            var Num = 0;
+            var XY_int = new XYInt();
+            var A = 0;
+            var Vertex0 = new XYDouble();
+            var Vertex1 = new XYDouble();
+            var Vertex2 = new XYDouble();
+            var UnrotatedPos = new XYDouble();
+            var TexCoord0 = new XYDouble();
+            var TexCoord1 = new XYDouble();
+            var TexCoord2 = new XYDouble();
+            var TexCoord3 = new XYDouble();
 
             GL.MatrixMode(MatrixMode.Projection);
-            Matrix4 temp_mat = Matrix4.CreateOrthographicOffCenter(0.0F, GLSize.X, GLSize.Y, 0.0F, -1.0F, 1.0F);
+            var temp_mat = Matrix4.CreateOrthographicOffCenter(0.0F, GLSize.X, GLSize.Y, 0.0F, -1.0F, 1.0F);
             GL.LoadMatrix(ref temp_mat);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
@@ -232,7 +235,7 @@ namespace SharpFlame.Controls
                         GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Decal);
                         GL.Begin(BeginMode.Quads);
                         GL.TexCoord2(TexCoord0.X, TexCoord0.Y);
-                        GL.Vertex2(X * 64, Y * 64);// Top Left
+                        GL.Vertex2(X * 64, Y * 64); // Top Left
                         GL.TexCoord2(TexCoord1.X, TexCoord1.Y);
                         GL.Vertex2(X * 64 + 64, Y * 64); // Bottom Left
                         GL.TexCoord2(TexCoord3.X, TexCoord3.Y);
@@ -310,7 +313,7 @@ namespace SharpFlame.Controls
 
                 if ( DisplayTileNumbers && App.UnitLabelFont != null ) //TextureViewFont IsNot Nothing Then
                 {
-                    clsTextLabel TextLabel = default(clsTextLabel);
+                    var TextLabel = default(clsTextLabel);
                     GL.Enable(EnableCap.Texture2D);
                     for ( Y = 0; Y <= TextureCount.Y - 1; Y++ )
                     {
@@ -341,8 +344,8 @@ namespace SharpFlame.Controls
                 if ( App.SelectedTextureNum >= 0 & TextureCount.X > 0 )
                 {
                     A = App.SelectedTextureNum - TextureYOffset * TextureCount.X;
-                    XY_int.X = A - (int)(A / TextureCount.X) * TextureCount.X;
-                    XY_int.Y = (int)A / TextureCount.X;
+                    XY_int.X = A - A / TextureCount.X * TextureCount.X;
+                    XY_int.Y = A / TextureCount.X;
                     GL.Begin(BeginMode.LineLoop);
                     GL.Color3(1.0F, 1.0F, 0.0F);
                     GL.Vertex2(XY_int.X * 64, XY_int.Y * 64);
@@ -361,7 +364,7 @@ namespace SharpFlame.Controls
 
         public void OpenGL_MouseDown(object sender, MouseEventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -440,14 +443,14 @@ namespace SharpFlame.Controls
 
         public void ScrollUpdate()
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
                 return;
             }
 
-            bool Flag = default(bool);
+            var Flag = default(bool);
 
             if ( TextureCount.X > 0 & TextureCount.Y > 0 )
             {
@@ -476,7 +479,7 @@ namespace SharpFlame.Controls
             }
             else
             {
-                TextureScroll.Maximum = (int)( Math.Ceiling( ( (double)Map.Tileset.TileCount / TextureCount.X ) ) );
+                TextureScroll.Maximum = (int)(Math.Ceiling(((double)Map.Tileset.TileCount / TextureCount.X)));
                 TextureScroll.LargeChange = TextureCount.Y;
                 TextureScroll.Enabled = true;
             }
@@ -498,11 +501,6 @@ namespace SharpFlame.Controls
             TextureYOffset = TextureScroll.Value;
 
             DrawViewLater();
-        }
-
-        private clsMap MainMap
-        {
-            get { return _Owner.MainMap; }
         }
     }
 }

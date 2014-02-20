@@ -1,11 +1,15 @@
+#region
+
 using SharpFlame.Domain;
+
+#endregion
 
 namespace SharpFlame.Mapping.Tools
 {
     public abstract class clsObjectComponent : clsObjectAction
     {
-        private DroidDesign OldDroidType;
         protected DroidDesign NewDroidType;
+        private DroidDesign OldDroidType;
 
         protected abstract void ChangeComponent();
 

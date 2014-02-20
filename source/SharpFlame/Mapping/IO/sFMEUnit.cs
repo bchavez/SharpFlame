@@ -1,4 +1,8 @@
+#region
+
 using System;
+
+#endregion
 
 namespace SharpFlame.Mapping.IO
 {
@@ -6,13 +10,13 @@ namespace SharpFlame.Mapping.IO
     {
         public string Code;
         public UInt32 ID;
-        public int SavePriority;
         public byte LNDType;
+        public string Name;
+        public byte Player;
+        public UInt16 Rotation;
+        public int SavePriority;
         public UInt32 X;
         public UInt32 Y;
         public UInt32 Z;
-        public UInt16 Rotation;
-        public string Name;
-        public byte Player;
     }
 }

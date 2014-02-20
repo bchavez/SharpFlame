@@ -1,36 +1,40 @@
+#region
+
 using SharpFlame.Collections;
 using SharpFlame.Mapping.Objects;
+
+#endregion
 
 namespace SharpFlame.Mapping.Tools
 {
     public class clsObjectPriorityOrderList : SimpleListTool<clsUnit>
     {
-        private SimpleClassList<clsUnit> _Result = new SimpleClassList<clsUnit>();
-
-        public SimpleClassList<clsUnit> Result
-        {
-            get { return _Result; }
-        }
+        private readonly SimpleClassList<clsUnit> result = new SimpleClassList<clsUnit>();
 
         private clsUnit Unit;
 
         public clsObjectPriorityOrderList()
         {
-            _Result.MaintainOrder = true;
+            result.MaintainOrder = true;
+        }
+
+        public SimpleClassList<clsUnit> Result
+        {
+            get { return result; }
         }
 
         public void ActionPerform()
         {
-            int A = 0;
+            var A = 0;
 
-            for ( A = 0; A <= _Result.Count - 1; A++ )
+            for ( A = 0; A <= result.Count - 1; A++ )
             {
-                if ( Unit.SavePriority > _Result[A].SavePriority )
+                if ( Unit.SavePriority > result[A].SavePriority )
                 {
                     break;
                 }
             }
-            _Result.Insert(Unit, A);
+            result.Insert(Unit, A);
         }
 
         public void SetItem(clsUnit Item)

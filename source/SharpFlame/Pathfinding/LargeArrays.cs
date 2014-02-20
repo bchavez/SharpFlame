@@ -3,10 +3,10 @@ namespace SharpFlame.Pathfinding
     public class LargeArrays
     {
         public bool[] Nodes_Booleans;
+        public PathfinderNode[] Nodes_Nodes;
+        public Path Nodes_Path = new Path();
         public float[] Nodes_ValuesA;
         public float[] Nodes_ValuesB;
-        public Path Nodes_Path = new Path();
-        public PathfinderNode[] Nodes_Nodes;
         public int Size;
 
         public float SizeEnlargementRatio = 2.0F;
@@ -14,7 +14,7 @@ namespace SharpFlame.Pathfinding
 
         public void Resize(PathfinderNetwork NetworkForSize)
         {
-            int NewSize = 0;
+            var NewSize = 0;
 
             if ( NetworkForSize.NodeLayerCount > 0 )
             {
@@ -26,7 +26,7 @@ namespace SharpFlame.Pathfinding
             }
             if ( Size < NewSize )
             {
-                int Num = 0;
+                var Num = 0;
                 Size = (int)(NewSize * SizeEnlargementRatio);
                 Num = Size - 1;
                 Nodes_Booleans = new bool[Num + 1];
@@ -40,7 +40,7 @@ namespace SharpFlame.Pathfinding
             {
                 if ( Size > NewSize * SizeReductionRatio )
                 {
-                    int Num = 0;
+                    var Num = 0;
                     Size = (int)(NewSize * SizeEnlargementRatio);
                     Num = Size - 1;
                     Nodes_Booleans = new bool[Num + 1];

@@ -1,56 +1,69 @@
+#region
+
 using System;
+
+#endregion
 
 namespace SharpFlame.Pathfinding
 {
     public class PathfinderLayer
     {
+        public int ChangedNodeCount;
+        public PathfinderNode[] ChangedNodes = new PathfinderNode[4];
+        public int ConnectionCount;
+        public PathfinderConnection[] Connections = new PathfinderConnection[0];
         public PathfinderNetwork Network;
+
+        public int Network_LayerNum = -1;
+        public int NodeCount;
+        public PathfinderNode[] Nodes = new PathfinderNode[0];
+
+        public PathfinderLayer ParentLayer;
+
+        public PathfinderLayer(PathfinderNetwork NewParentNetwork)
+        {
+            Network = NewParentNetwork;
+            Network.NodeLayer_Add(this);
+        }
 
         public PathfinderNetwork GetNetwork
         {
             get { return Network; }
         }
 
-        public int Network_LayerNum = -1;
-
         public int GetNetwork_LayerNum
         {
             get { return Network_LayerNum; }
         }
-
-        public PathfinderLayer ParentLayer;
 
         public PathfinderLayer GetParentLayer
         {
             get { return ParentLayer; }
         }
 
-        public PathfinderNode[] Nodes = new PathfinderNode[0];
+        public int GetNodeCount
+        {
+            get { return NodeCount; }
+        }
+
+        public int GetConnectionCount
+        {
+            get { return ConnectionCount; }
+        }
+
+        public int GetChangedNodeCount
+        {
+            get { return ChangedNodeCount; }
+        }
 
         public PathfinderNode get_GetNode(int Num)
         {
             return Nodes[Num];
         }
 
-        public int NodeCount;
-
-        public int GetNodeCount
-        {
-            get { return NodeCount; }
-        }
-
-        public PathfinderConnection[] Connections = new PathfinderConnection[0];
-
         public PathfinderConnection get_GetConnection(int Num)
         {
             return Connections[Num];
-        }
-
-        public int ConnectionCount;
-
-        public int GetConnectionCount
-        {
-            get { return ConnectionCount; }
         }
 
         public void Node_Add(PathfinderNode NewNode)
@@ -108,15 +121,9 @@ namespace SharpFlame.Pathfinding
             }
         }
 
-        public PathfinderLayer(PathfinderNetwork NewParentNetwork)
-        {
-            Network = NewParentNetwork;
-            Network.NodeLayer_Add(this);
-        }
-
         public void ForceDeallocate()
         {
-            int A = 0;
+            var A = 0;
 
             for ( A = 0; A <= NodeCount - 1; A++ )
             {
@@ -129,17 +136,9 @@ namespace SharpFlame.Pathfinding
             ParentLayer = null;
         }
 
-        public PathfinderNode[] ChangedNodes = new PathfinderNode[4];
-        public int ChangedNodeCount;
-
         public PathfinderNode get_GetChangedNode(int Num)
         {
             return ChangedNodes[Num];
-        }
-
-        public int GetChangedNodeCount
-        {
-            get { return ChangedNodeCount; }
         }
 
         public void ClearChangedNodes()

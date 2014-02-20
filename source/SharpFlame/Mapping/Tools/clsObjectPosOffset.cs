@@ -1,12 +1,15 @@
+#region
+
 using SharpFlame.Core.Domain;
+
+#endregion
 
 namespace SharpFlame.Mapping.Tools
 {
     public class clsObjectPosOffset : clsObjectAction
     {
-        public XYInt Offset;
-
         private XYInt NewPos;
+        public XYInt Offset;
 
         protected override void _ActionPerform()
         {

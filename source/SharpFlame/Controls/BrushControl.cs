@@ -1,11 +1,16 @@
+#region
+
 using System;
 using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame.Controls
 {
     public partial class BrushControl
     {
-        private clsBrush Brush;
+        private readonly clsBrush Brush;
+        private bool nudRadiusIsBusy;
 
         public BrushControl(clsBrush NewBrush)
         {
@@ -43,8 +48,6 @@ namespace SharpFlame.Controls
             tabShape.Enabled = true;
         }
 
-        private bool nudRadiusIsBusy = false;
-
         private void nudRadius_Changed(object sender, EventArgs e)
         {
             if ( nudRadiusIsBusy )
@@ -55,7 +58,7 @@ namespace SharpFlame.Controls
             nudRadiusIsBusy = true;
 
             double NewRadius = 0;
-            bool Converted = false;
+            var Converted = false;
             try
             {
                 NewRadius = (double)nudRadius.Value;

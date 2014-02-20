@@ -1,22 +1,26 @@
+#region
+
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Painters;
+
+#endregion
 
 namespace SharpFlame.Mapping.Tools
 {
     public class clsApplyTileTerrainInterpret : clsAction
     {
-        private Painter Painter;
-        private clsTerrain.Tile.sTexture Texture;
-        private TileDirection ResultDirection;
-        private TileOrientationChance PainterTexture;
         private TileDirection OppositeDirection;
-        private clsTerrain.Tile Tile;
+        private Painter Painter;
+        private TileOrientationChance PainterTexture;
+        private TileDirection ResultDirection;
         private clsTerrain Terrain;
+        private clsTerrain.Tile.sTexture Texture;
+        private clsTerrain.Tile Tile;
 
         public override void ActionPerform()
         {
-            int PainterBrushNum = 0;
-            int A = 0;
+            var PainterBrushNum = 0;
+            var A = 0;
 
             Terrain = Map.Terrain;
 

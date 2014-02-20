@@ -1,8 +1,11 @@
+#region
+
 using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
-using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame.Mapping.Drawing
 {
@@ -10,23 +13,23 @@ namespace SharpFlame.Mapping.Drawing
     {
         //does not inherit action
 
-        public clsMap Map;
+        private readonly XYZInt vertex0;
+        private readonly XYZInt vertex1;
         public sRGBA_sng Colour;
-        public XYInt StartXY;
         public XYInt FinishXY;
+        public clsMap Map;
+        public XYInt StartXY;
 
-        private XYZInt vertex0;
-        private XYZInt vertex1;
-
-		public clsDrawTileAreaOutline() {
-			vertex0 = new XYZInt (0, 0, 0);
-			vertex1 = new XYZInt (0, 0, 0);
-		}
+        public clsDrawTileAreaOutline()
+        {
+            vertex0 = new XYZInt(0, 0, 0);
+            vertex1 = new XYZInt(0, 0, 0);
+        }
 
         public void ActionPerform()
         {
-            int X = 0;
-            int Y = 0;
+            var X = 0;
+            var Y = 0;
 
             GL.Begin(BeginMode.Lines);
             GL.Color4(Colour.Red, Colour.Green, Colour.Blue, Colour.Alpha);

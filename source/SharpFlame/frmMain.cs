@@ -1,82 +1,46 @@
+#region
+
 using System;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Threading;
 using System.Windows.Forms;
 using NLog;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.AppSettings;
 using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
-using SharpFlame.Core.Domain;
 using SharpFlame.Controls;
+using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Generators;
 using SharpFlame.Mapping;
+using SharpFlame.Mapping.Format.Wz;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
-using SharpFlame.AppSettings;
 using SharpFlame.Util;
-using Timer = System.Windows.Forms.Timer;
+
+#endregion
 
 namespace SharpFlame
 {
     public partial class frmMain
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger ();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public class clsMaps : ConnectedList<clsMap, frmMain>
         {
             private clsMap _MainMap;
 
-            public override void Add(ConnectedListItem<clsMap, frmMain> NewItem)
+            public clsMaps(frmMain Owner) : base(Owner)
             {
-                clsMap NewMap = NewItem.Item;
-
-                if ( !NewMap.ReadyForUserInput )
-                {
-                    NewMap.InitializeUserInput();
-                }
-
-                NewMap.MapView_TabPage = new TabPage();
-                NewMap.MapView_TabPage.Tag = NewMap;
-
-                NewMap.SetTabText();
-
-                base.Add(NewItem);
-
-                Owner.MapViewControl.UpdateTabs();
-            }
-
-            public override void Remove(int Position)
-            {
-                clsMap Map = this[Position];
-
-                base.Remove(Position);
-
-                if ( Map == _MainMap )
-                {
-                    int NewNum = Math.Min(Convert.ToInt32(Owner.MapViewControl.tabMaps.SelectedIndex), Count - 1);
-                    if ( NewNum < 0 )
-                    {
-                        MainMap = null;
-                    }
-                    else
-                    {
-                        MainMap = this[NewNum];
-                    }
-                }
-
-                Map.MapView_TabPage.Tag = null;
-                Map.MapView_TabPage = null;
-
-                Owner.MapViewControl.UpdateTabs();
+                MaintainOrder = true;
             }
 
             public clsMap MainMap
@@ -88,7 +52,7 @@ namespace SharpFlame
                     {
                         return;
                     }
-                    frmMain MainForm = Owner;
+                    var MainForm = Owner;
                     MainForm.MainMapBeforeChanged();
                     if ( value == null )
                     {
@@ -110,13 +74,52 @@ namespace SharpFlame
                 }
             }
 
-            public clsMaps(frmMain Owner) : base(Owner)
+            public override void Add(ConnectedListItem<clsMap, frmMain> NewItem)
             {
-                MaintainOrder = true;
+                var NewMap = NewItem.Item;
+
+                if ( !NewMap.ReadyForUserInput )
+                {
+                    NewMap.InitializeUserInput();
+                }
+
+                NewMap.MapView_TabPage = new TabPage();
+                NewMap.MapView_TabPage.Tag = NewMap;
+
+                NewMap.SetTabText();
+
+                base.Add(NewItem);
+
+                Owner.MapViewControl.UpdateTabs();
+            }
+
+            public override void Remove(int Position)
+            {
+                var Map = this[Position];
+
+                base.Remove(Position);
+
+                if ( Map == _MainMap )
+                {
+                    var NewNum = Math.Min(Convert.ToInt32(Owner.MapViewControl.tabMaps.SelectedIndex), Count - 1);
+                    if ( NewNum < 0 )
+                    {
+                        MainMap = null;
+                    }
+                    else
+                    {
+                        MainMap = this[NewNum];
+                    }
+                }
+
+                Map.MapView_TabPage.Tag = null;
+                Map.MapView_TabPage = null;
+
+                Owner.MapViewControl.UpdateTabs();
             }
         }
 
-        private clsMaps _LoadedMaps;
+        private readonly clsMaps _LoadedMaps;
 
         public MapViewControl MapViewControl;
         public TextureViewControl TextureViewControl;
@@ -170,8 +173,8 @@ namespace SharpFlame
 
         private clsResult LoadInterfaceImages()
         {
-            clsResult ReturnResult = new clsResult("Loading interface images", false);
-            logger.Info ("Loading interface images");
+            var ReturnResult = new clsResult("Loading interface images", false);
+            logger.Info("Loading interface images");
 
             Bitmap InterfaceImage_DisplayAutoTexture = null;
             Bitmap InterfaceImage_DrawTileOrientation = null;
@@ -199,9 +202,9 @@ namespace SharpFlame
             InterfaceImage_SelectionRotateCounterClockwise = Resources.selectionrotateanticlockwise;
             InterfaceImage_Gateways = Resources.gateways;
 
-            Bitmap InterfaceImage_Problem = Resources.problem;
-            Bitmap InterfaceImage_Warning = Resources.warning;
-            
+            var InterfaceImage_Problem = Resources.problem;
+            var InterfaceImage_Warning = Resources.warning;
+
             modWarnings.WarningImages.ImageSize = new Size(16, 16);
             if ( InterfaceImage_Problem != null )
             {
@@ -233,10 +236,10 @@ namespace SharpFlame
 
         public void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            bool ChangedPrompt = false;
+            var ChangedPrompt = false;
 
-            clsMap Map = default(clsMap);
-            foreach ( clsMap tempLoopVar_Map in _LoadedMaps )
+            var Map = default(clsMap);
+            foreach ( var tempLoopVar_Map in _LoadedMaps )
             {
                 Map = tempLoopVar_Map;
                 if ( Map.ChangedSinceSave )
@@ -247,14 +250,14 @@ namespace SharpFlame
             }
             if ( ChangedPrompt )
             {
-                frmQuit QuitPrompt = new frmQuit();
-                DialogResult QuitResult = QuitPrompt.ShowDialog(Program.frmMainInstance);
+                var QuitPrompt = new frmQuit();
+                var QuitResult = QuitPrompt.ShowDialog(Program.frmMainInstance);
                 switch ( QuitResult )
                 {
                     case DialogResult.Yes:
                         while ( _LoadedMaps.Count > 0 )
                         {
-                            clsMap RemoveMap = _LoadedMaps[0];
+                            var RemoveMap = _LoadedMaps[0];
                             SetMainMap(RemoveMap);
                             if ( !RemoveMap.ClosePrompt() )
                             {
@@ -361,7 +364,7 @@ namespace SharpFlame
 
             CreateTileTypes();
 
-            for ( int i = 0; i <= 15; i++ )
+            for ( var i = 0; i <= 15; i++ )
             {
                 App.PlayerColour[i] = new clsPlayer();
             }
@@ -413,7 +416,7 @@ namespace SharpFlame
             App.PlayerColour[15].Colour.Red = 64.0F / 255.0F;
             App.PlayerColour[15].Colour.Green = 96.0F / 255.0F;
             App.PlayerColour[15].Colour.Blue = 0.0F;
-            for ( int i = 0; i <= 15; i++ )
+            for ( var i = 0; i <= 15; i++ )
             {
                 App.PlayerColour[i].CalcMinimapColour();
             }
@@ -435,11 +438,11 @@ namespace SharpFlame
                 }
             }
 
-            int TilesetNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultTilesetsPathNum));
-            SimpleList<string> TilesetsList = (SimpleList<string>)(SettingsManager.Settings.get_Value(SettingsManager.Setting_TilesetDirectories));
+            var TilesetNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultTilesetsPathNum));
+            var TilesetsList = (SimpleList<string>)(SettingsManager.Settings.get_Value(SettingsManager.Setting_TilesetDirectories));
             if ( TilesetNum >= 0 & TilesetNum < TilesetsList.Count )
             {
-                string TilesetsPath = TilesetsList[TilesetNum];
+                var TilesetsPath = TilesetsList[TilesetNum];
                 if ( TilesetsPath != null && TilesetsPath != "" )
                 {
                     InitializeStatus = "Loading tilesets";
@@ -456,11 +459,11 @@ namespace SharpFlame
             App.CreateTemplateDroidTypes(); //do before loading data
 
             App.ObjectData = new clsObjectData();
-            int ObjectDataNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultObjectDataPathNum));
-            SimpleList<string> ObjectDataList = (SimpleList<string>)(SettingsManager.Settings.get_Value(SettingsManager.Setting_ObjectDataDirectories));
+            var ObjectDataNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultObjectDataPathNum));
+            var ObjectDataList = (SimpleList<string>)(SettingsManager.Settings.get_Value(SettingsManager.Setting_ObjectDataDirectories));
             if ( ObjectDataNum >= 0 & ObjectDataNum < TilesetsList.Count )
             {
-                string ObjectDataPath = ObjectDataList[ObjectDataNum];
+                var ObjectDataPath = ObjectDataList[ObjectDataNum];
                 if ( ObjectDataPath != null && ObjectDataPath != "" )
                 {
                     InitializeStatus = "Loading object data";
@@ -482,15 +485,15 @@ namespace SharpFlame
             App.VisionRadius_2E = 10;
             App.VisionRadius_2E_Changed();
 
-            HeightSetPalette[0] = (byte)0;
-            HeightSetPalette[1] = (byte)85;
-            HeightSetPalette[2] = (byte)170;
-            HeightSetPalette[3] = (byte)255;
-            HeightSetPalette[4] = (byte)64;
-            HeightSetPalette[5] = (byte)128;
-            HeightSetPalette[6] = (byte)192;
-            HeightSetPalette[7] = (byte)255;
-            for ( int A = 0; A <= 7; A++ )
+            HeightSetPalette[0] = 0;
+            HeightSetPalette[1] = 85;
+            HeightSetPalette[2] = 170;
+            HeightSetPalette[3] = 255;
+            HeightSetPalette[4] = 64;
+            HeightSetPalette[5] = 128;
+            HeightSetPalette[6] = 192;
+            HeightSetPalette[7] = 255;
+            for ( var A = 0; A <= 7; A++ )
             {
                 tabHeightSetL.TabPages[A].Text = HeightSetPalette[A].ToStringInvariant();
                 tabHeightSetR.TabPages[A].Text = HeightSetPalette[A].ToStringInvariant();
@@ -502,10 +505,10 @@ namespace SharpFlame
 
             if ( App.CommandLinePaths.Count >= 1 )
             {
-                string Path = "";
-                clsResult LoadResult = new clsResult("Loading startup command-line maps", false);
-                logger.Info ("Loading startup command-line maps");
-                foreach ( string tempLoopVar_Path in App.CommandLinePaths )
+                var Path = "";
+                var LoadResult = new clsResult("Loading startup command-line maps", false);
+                logger.Info("Loading startup command-line maps");
+                foreach ( var tempLoopVar_Path in App.CommandLinePaths )
                 {
                     Path = tempLoopVar_Path;
                     LoadResult.Take(LoadMap(Path));
@@ -535,8 +538,8 @@ namespace SharpFlame
 
         public void Me_Activated(Object eventSender, EventArgs eventArgs)
         {
-            MapViewControl.DrawViewLater ();
-            TextureViewControl.DrawViewLater ();
+            MapViewControl.DrawViewLater();
+            TextureViewControl.DrawViewLater();
         }
 
         public void Me_LostFocus(Object eventSender, EventArgs eventArgs)
@@ -550,7 +553,7 @@ namespace SharpFlame
             {
                 return;
             }
-            clsMap Map = MainMap;
+            var Map = MainMap;
             if ( Map == null )
             {
                 return;
@@ -589,7 +592,8 @@ namespace SharpFlame
             Pan = 1.0D / 16.0D;
             OrbitRate = 1.0D / 32.0D;
 
-            if (Map != null) {
+            if ( Map != null )
+            {
                 Map.ViewInfo.TimedActions(Zoom, Move, Pan, Roll, OrbitRate);
 
                 if ( Map.CheckMessages() )
@@ -601,7 +605,7 @@ namespace SharpFlame
 
         public void Load_Map_Prompt()
         {
-            OpenFileDialog Dialog = new OpenFileDialog();
+            var Dialog = new OpenFileDialog();
 
             Dialog.InitialDirectory = SettingsManager.Settings.OpenPath;
             Dialog.FileName = "";
@@ -612,12 +616,12 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
-            string fileName = "";
-            clsResult Results = new clsResult("Loading maps", false);
-            foreach ( string tempLoopVar_FileName in Dialog.FileNames )
+            var fileName = "";
+            var Results = new clsResult("Loading maps", false);
+            foreach ( var tempLoopVar_FileName in Dialog.FileNames )
             {
                 fileName = tempLoopVar_FileName;
-                logger.Info ("Loading map '{0}'", fileName);
+                logger.Info("Loading map '{0}'", fileName);
                 Results.Take(LoadMap(fileName));
             }
             App.ShowWarnings(Results);
@@ -625,7 +629,7 @@ namespace SharpFlame
 
         public void Load_Heightmap_Prompt()
         {
-            OpenFileDialog Dialog = new OpenFileDialog();
+            var Dialog = new OpenFileDialog();
 
             Dialog.InitialDirectory = SettingsManager.Settings.OpenPath;
             Dialog.FileName = "";
@@ -637,14 +641,14 @@ namespace SharpFlame
             SettingsManager.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
 
             Bitmap HeightmapBitmap = null;
-            sResult Result = BitmapUtil.LoadBitmap(Dialog.FileName, ref HeightmapBitmap);
+            var Result = BitmapUtil.LoadBitmap(Dialog.FileName, ref HeightmapBitmap);
             if ( !Result.Success )
             {
                 MessageBox.Show("Failed to load image: " + Result.Problem);
                 return;
             }
 
-            clsMap Map = MainMap;
+            var Map = MainMap;
             clsMap ApplyToMap = null;
             if ( Map == null )
             {
@@ -658,9 +662,9 @@ namespace SharpFlame
                 ApplyToMap = new clsMap(new XYInt(HeightmapBitmap.Width - 1, HeightmapBitmap.Height - 1));
             }
 
-            int X = 0;
-            int Y = 0;
-            Color PixelColor = new Color();
+            var X = 0;
+            var Y = 0;
+            var PixelColor = new Color();
 
             for ( Y = 0; Y <= Math.Min(HeightmapBitmap.Height - 1, ApplyToMap.Terrain.TileSize.Y); Y++ )
             {
@@ -691,9 +695,9 @@ namespace SharpFlame
 
         public void Load_TTP_Prompt()
         {
-            OpenFileDialog Dialog = new OpenFileDialog();
+            var Dialog = new OpenFileDialog();
 
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -708,7 +712,7 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
-            sResult Result = Map.Load_TTP(Dialog.FileName);
+            var Result = Map.Load_TTP(Dialog.FileName);
             if ( Result.Success )
             {
                 TextureViewControl.DrawViewLater();
@@ -721,7 +725,7 @@ namespace SharpFlame
 
         public void cboTileset_Update(int NewSelectedIndex)
         {
-            int A = 0;
+            var A = 0;
 
             cboTileset.Items.Clear();
             for ( A = 0; A <= App.Tilesets.Count - 1; A++ )
@@ -733,8 +737,8 @@ namespace SharpFlame
 
         public void MainMapTilesetChanged()
         {
-            int A = 0;
-            clsMap Map = MainMap;
+            var A = 0;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -761,8 +765,8 @@ namespace SharpFlame
 
         public void cboTileset_SelectedIndexChanged(Object sender, EventArgs e)
         {
-            clsTileset NewTileset = default(clsTileset);
-            clsMap Map = MainMap;
+            var NewTileset = default(clsTileset);
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -803,13 +807,13 @@ namespace SharpFlame
             lstAutoTexture.Items.Clear();
             lstAutoRoad.Items.Clear();
 
-            clsMap Map = MainMap;
+            var Map = MainMap;
             if ( Map == null )
             {
                 return;
             }
 
-            int A = 0;
+            var A = 0;
             for ( A = 0; A <= Map.Painter.TerrainCount - 1; A++ )
             {
                 lstAutoTexture.Items.Add(Map.Painter.Terrains[A].Name);
@@ -945,7 +949,7 @@ namespace SharpFlame
                 return;
             }
 
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -957,8 +961,8 @@ namespace SharpFlame
 
         public void btnResize_Click(Object sender, EventArgs e)
         {
-            XYInt NewSize = new XYInt();
-            XYInt Offset = new XYInt();
+            var NewSize = new XYInt();
+            var Offset = new XYInt();
 
             if ( !IOUtil.InvariantParse(txtSizeX.Text, ref NewSize.X) )
             {
@@ -982,13 +986,13 @@ namespace SharpFlame
 
         public void Map_Resize(XYInt Offset, XYInt NewSize)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
                 return;
             }
-                      
+
             if ( MessageBox.Show("Resizing can\'t be undone. Continue?", "", MessageBoxButtons.OKCancel) != DialogResult.OK )
             {
                 return;
@@ -996,14 +1000,14 @@ namespace SharpFlame
 
             if ( NewSize.X < 1 | NewSize.Y < 1 )
             {
-                MessageBox.Show ("Map sizes must be at least 1.", "", MessageBoxButtons.OK);
+                MessageBox.Show("Map sizes must be at least 1.", "", MessageBoxButtons.OK);
                 return;
             }
             if ( NewSize.X > Constants.WzMapMaxSize | NewSize.Y > Constants.WzMapMaxSize )
             {
-                if (MessageBox.Show (
-                    "Warzone doesn\'t support map sizes above {0} Continue anyway?".Format2(Constants.WzMapMaxSize), 
-                    "", MessageBoxButtons.YesNo) != DialogResult.Yes)
+                if ( MessageBox.Show(
+                    "Warzone doesn\'t support map sizes above {0} Continue anyway?".Format2(Constants.WzMapMaxSize),
+                    "", MessageBoxButtons.YesNo) != DialogResult.Yes )
                 {
                     return;
                 }
@@ -1023,7 +1027,7 @@ namespace SharpFlame
 
         public void Resize_Update()
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -1058,14 +1062,14 @@ namespace SharpFlame
 
         public void Save_LND_Prompt()
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
                 return;
             }
 
-            SaveFileDialog Dialog = new SaveFileDialog();
+            var Dialog = new SaveFileDialog();
 
             Dialog.InitialDirectory = SettingsManager.Settings.SavePath;
             Dialog.FileName = "";
@@ -1076,21 +1080,21 @@ namespace SharpFlame
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
 
-            clsResult Result = Map.Write_LND(Dialog.FileName, true);
+            var Result = Map.Write_LND(Dialog.FileName, true);
 
             App.ShowWarnings(Result);
         }
 
         private void Save_FME_Prompt()
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
                 return;
             }
 
-            SaveFileDialog Dialog = new SaveFileDialog();
+            var Dialog = new SaveFileDialog();
 
             Dialog.InitialDirectory = SettingsManager.Settings.SavePath;
             Dialog.FileName = "";
@@ -1100,7 +1104,7 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            string strScavenger = "";
+            var strScavenger = "";
             clsInputBox.Show("", "Enter the player number for scavenger units:", ref strScavenger);
             byte ScavengerNum = 0;
             if ( !IOUtil.InvariantParse(strScavenger, ref ScavengerNum) )
@@ -1109,7 +1113,7 @@ namespace SharpFlame
                 return;
             }
             ScavengerNum = Math.Min(ScavengerNum, (byte)10);
-            sResult Result = new sResult();
+            var Result = new sResult();
             Result = Map.Write_FME(Dialog.FileName, true, ScavengerNum);
             if ( !Result.Success )
             {
@@ -1119,14 +1123,14 @@ namespace SharpFlame
 
         public void Save_Minimap_Prompt()
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
                 return;
             }
 
-            SaveFileDialog Dialog = new SaveFileDialog();
+            var Dialog = new SaveFileDialog();
 
             Dialog.InitialDirectory = SettingsManager.Settings.SavePath;
             Dialog.FileName = "";
@@ -1136,7 +1140,7 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            sResult Result = new sResult();
+            var Result = new sResult();
             Result = Map.Write_MinimapFile(Dialog.FileName, true);
             if ( !Result.Success )
             {
@@ -1146,14 +1150,14 @@ namespace SharpFlame
 
         public void Save_Heightmap_Prompt()
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
                 return;
             }
 
-            SaveFileDialog Dialog = new SaveFileDialog();
+            var Dialog = new SaveFileDialog();
 
             Dialog.InitialDirectory = SettingsManager.Settings.SavePath;
             Dialog.FileName = "";
@@ -1163,7 +1167,7 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            sResult Result = new sResult();
+            var Result = new sResult();
             Result = Map.Write_Heightmap(Dialog.FileName, true);
             if ( !Result.Success )
             {
@@ -1173,14 +1177,14 @@ namespace SharpFlame
 
         public void PromptSave_TTP()
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
                 return;
             }
 
-            SaveFileDialog Dialog = new SaveFileDialog();
+            var Dialog = new SaveFileDialog();
 
             Dialog.InitialDirectory = SettingsManager.Settings.SavePath;
             Dialog.FileName = "";
@@ -1190,7 +1194,7 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            sResult Result = new sResult();
+            var Result = new sResult();
             Result = Map.Write_TTP(Dialog.FileName, true);
             if ( !Result.Success )
             {
@@ -1205,7 +1209,7 @@ namespace SharpFlame
 
         public void NewMap()
         {
-            clsMap NewMap = new clsMap(new XYInt(64, 64));
+            var NewMap = new clsMap(new XYInt(64, 64));
             NewMainMap(NewMap);
 
             NewMap.RandomizeTileOrientations();
@@ -1230,7 +1234,7 @@ namespace SharpFlame
 
         public void FMapToolStripMenuItem_Click(Object sender, EventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -1251,7 +1255,7 @@ namespace SharpFlame
 
         public void MapWZToolStripMenuItem_Click(Object sender, EventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -1260,7 +1264,7 @@ namespace SharpFlame
 
             if ( Map.CompileScreen == null )
             {
-                frmCompile NewCompile = frmCompile.Create(Map);
+                var NewCompile = frmCompile.Create(Map);
                 NewCompile.Show();
             }
             else
@@ -1276,7 +1280,7 @@ namespace SharpFlame
 
         public void btnHeightOffsetSelection_Click(Object sender, EventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -1288,12 +1292,12 @@ namespace SharpFlame
                 return;
             }
 
-            int X = 0;
-            int Y = 0;
+            var X = 0;
+            var Y = 0;
             double Offset = 0;
-            XYInt StartXY = new XYInt();
-            XYInt FinishXY = new XYInt();
-            XYInt Pos = new XYInt();
+            var StartXY = new XYInt();
+            var FinishXY = new XYInt();
+            var Pos = new XYInt();
 
             if ( !IOUtil.InvariantParse(txtHeightOffset.Text, ref Offset) )
             {
@@ -1335,7 +1339,7 @@ namespace SharpFlame
         public void rdoAutoRoadLine_Click(Object sender, EventArgs e)
         {
             modTools.Tool = modTools.Tools.RoadLines;
-            clsMap Map = MainMap;
+            var Map = MainMap;
             if ( Map != null )
             {
                 Map.Selected_Tile_A = null;
@@ -1375,16 +1379,16 @@ namespace SharpFlame
                 return;
             }
 
-            Body Body = default(Body);
-            Propulsion Propulsion = default(Propulsion);
-            Turret Turret = default(Turret);
-            string Text = "";
-            string TypeName = "";
-            int ListPosition = 0;
+            var Body = default(Body);
+            var Propulsion = default(Propulsion);
+            var Turret = default(Turret);
+            var Text = "";
+            var TypeName = "";
+            var ListPosition = 0;
 
             cboDroidBody.Items.Clear();
             cboBody_Objects = new Body[App.ObjectData.Bodies.Count];
-            foreach ( Body tempLoopVar_Body in App.ObjectData.Bodies )
+            foreach ( var tempLoopVar_Body in App.ObjectData.Bodies )
             {
                 Body = tempLoopVar_Body;
                 if ( Body.Designable || (!cbxDesignableOnly.Checked) )
@@ -1397,7 +1401,7 @@ namespace SharpFlame
 
             cboDroidPropulsion.Items.Clear();
             cboPropulsion_Objects = new Propulsion[App.ObjectData.Propulsions.Count];
-            foreach ( Propulsion tempLoopVar_Propulsion in App.ObjectData.Propulsions )
+            foreach ( var tempLoopVar_Propulsion in App.ObjectData.Propulsions )
             {
                 Propulsion = tempLoopVar_Propulsion;
                 if ( Propulsion.Designable || (!cbxDesignableOnly.Checked) )
@@ -1412,7 +1416,7 @@ namespace SharpFlame
             cboDroidTurret2.Items.Clear();
             cboDroidTurret3.Items.Clear();
             cboTurret_Objects = new Turret[App.ObjectData.Turrets.Count];
-            foreach ( Turret tempLoopVar_Turret in App.ObjectData.Turrets )
+            foreach ( var tempLoopVar_Turret in App.ObjectData.Turrets )
             {
                 Turret = tempLoopVar_Turret;
                 if ( Turret.Designable || (!cbxDesignableOnly.Checked) )
@@ -1429,7 +1433,7 @@ namespace SharpFlame
             Array.Resize(ref cboTurret_Objects, cboDroidTurret1.Items.Count);
 
             cboDroidType.Items.Clear();
-            for ( int A = 0; A <= App.TemplateDroidTypeCount - 1; A++ )
+            for ( var A = 0; A <= App.TemplateDroidTypeCount - 1; A++ )
             {
                 cboDroidType.Items.Add(App.TemplateDroidTypes[A].Name);
             }
@@ -1437,9 +1441,9 @@ namespace SharpFlame
 
         private void ObjectListFill<ObjectType>(SimpleList<ObjectType> objects, DataGridView gridView) where ObjectType : UnitTypeBase
         {
-            SimpleList<ObjectType> filtered = default(SimpleList<ObjectType>);
-            string searchText = txtObjectFind.Text;
-            bool doSearch = default(bool);
+            var filtered = default(SimpleList<ObjectType>);
+            var searchText = txtObjectFind.Text;
+            var doSearch = default(bool);
             if ( searchText == null )
             {
                 doSearch = false;
@@ -1454,21 +1458,21 @@ namespace SharpFlame
             }
             if ( doSearch )
             {
-                filtered = ObjectFindText<ObjectType>(objects, searchText);
+                filtered = ObjectFindText(objects, searchText);
             }
             else
             {
                 filtered = objects;
             }
 
-            DataTable table = new DataTable();
+            var table = new DataTable();
             table.Columns.Add("Item", typeof(UnitTypeBase));
             table.Columns.Add("Internal Name", typeof(string));
             table.Columns.Add("In-Game Name", typeof(string));
             //table.Columns.Add("Type")
-            for ( int i = 0; i <= filtered.Count - 1; i++ )
+            for ( var i = 0; i <= filtered.Count - 1; i++ )
             {
-                ObjectType item = filtered[i];
+                var item = filtered[i];
                 string code = null;
                 item.GetCode(ref code);
                 table.Rows.Add(new object[] {item, code, item.GetName().Replace("*", "")});
@@ -1481,20 +1485,20 @@ namespace SharpFlame
 #if !Mono
             ObjectTypeSelectionUpdate(gridView);
 #else
-			gridView.ClearSelection(); //mono selects its rows too late
+            gridView.ClearSelection(); //mono selects its rows too late
 #endif
         }
 
         public SimpleList<ItemType> ObjectFindText<ItemType>(SimpleList<ItemType> list, string text) where ItemType : UnitTypeBase
         {
-            SimpleList<ItemType> result = new SimpleList<ItemType>();
+            var result = new SimpleList<ItemType>();
             result.MaintainOrder = true;
 
             text = text.ToLower();
 
-            for ( int i = 0; i <= list.Count - 1; i++ )
+            for ( var i = 0; i <= list.Count - 1; i++ )
             {
-                ItemType item = list[i];
+                var item = list[i];
                 string code = null;
                 if ( item.GetCode(ref code) )
                 {
@@ -1523,7 +1527,7 @@ namespace SharpFlame
                 return;
             }
 
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -1534,7 +1538,7 @@ namespace SharpFlame
                 return;
             }
 
-            int Angle = 0;
+            var Angle = 0;
             if ( !IOUtil.InvariantParse(txtObjectRotation.Text, ref Angle) )
             {
                 //MsgBox("Invalid rotation value.", (MsgBoxStyle.OkOnly or MsgBoxStyle.Information), "")
@@ -1547,15 +1551,15 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if ( MessageBox.Show("Change rotation of multiple objects?", "", MessageBoxButtons.OKCancel, 
-                                     MessageBoxIcon.None) != DialogResult.OK)
+                if ( MessageBox.Show("Change rotation of multiple objects?", "", MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.None) != DialogResult.OK )
                 {
                     //SelectedObject_Changed()
                     return;
                 }
             }
 
-            clsObjectRotation ObjectRotation = new clsObjectRotation();
+            var ObjectRotation = new clsObjectRotation();
             ObjectRotation.Map = Map;
             ObjectRotation.Angle = Angle;
             Map.SelectedUnitsAction(ObjectRotation);
@@ -1568,8 +1572,8 @@ namespace SharpFlame
 
         public void SelectedObject_Changed()
         {
-            bool ClearControls = default(bool);
-            clsMap Map = MainMap;
+            var ClearControls = default(bool);
+            var Map = MainMap;
 
             lblObjectType.Enabled = false;
             ObjectPlayerNumControl.Enabled = false;
@@ -1620,8 +1624,8 @@ namespace SharpFlame
             else if ( Map.SelectedUnits.Count > 1 )
             {
                 lblObjectType.Text = "Multiple objects";
-                int A = 0;
-                clsUnitGroup UnitGroup = Map.SelectedUnits[0].UnitGroup;
+                var A = 0;
+                var UnitGroup = Map.SelectedUnits[0].UnitGroup;
                 for ( A = 1; A <= Map.SelectedUnits.Count - 1; A++ )
                 {
                     if ( Map.SelectedUnits[A].UnitGroup != UnitGroup )
@@ -1648,8 +1652,8 @@ namespace SharpFlame
                 txtObjectHealth.Text = "";
                 txtObjectHealth.Enabled = true;
                 //design
-                clsUnit Unit = default(clsUnit);
-                foreach ( clsUnit tempLoopVar_Unit in Map.SelectedUnits )
+                var Unit = default(clsUnit);
+                foreach ( var tempLoopVar_Unit in Map.SelectedUnits )
                 {
                     Unit = tempLoopVar_Unit;
                     if ( Unit.TypeBase.Type == UnitType.PlayerDroid )
@@ -1665,7 +1669,7 @@ namespace SharpFlame
                     btnDroidToDesign.Enabled = true;
                 }
 
-                foreach ( clsUnit tempLoopVar_Unit in Map.SelectedUnits )
+                foreach ( var tempLoopVar_Unit in Map.SelectedUnits )
                 {
                     Unit = tempLoopVar_Unit;
                     if ( Unit.TypeBase.Type == UnitType.PlayerDroid )
@@ -1701,8 +1705,8 @@ namespace SharpFlame
             }
             else if ( Map.SelectedUnits.Count == 1 )
             {
-                int A = 0;
-                clsUnit with_1 = Map.SelectedUnits[0];
+                var A = 0;
+                var with_1 = Map.SelectedUnits[0];
                 lblObjectType.Text = Convert.ToString(with_1.TypeBase.GetDisplayTextCode());
                 ObjectPlayerNumControl.Target.Item = with_1.UnitGroup;
                 txtObjectRotation.Text = Convert.ToInt32(with_1.Rotation).ToStringInvariant();
@@ -1715,7 +1719,7 @@ namespace SharpFlame
                 //txtObjectID.Enabled = True 'no known need to change IDs
                 txtObjectPriority.Enabled = true;
                 txtObjectHealth.Enabled = true;
-                bool LabelEnabled = true;
+                var LabelEnabled = true;
                 if ( with_1.TypeBase.Type == UnitType.PlayerStructure )
                 {
                     if ( ((StructureTypeBase)with_1.TypeBase).IsModule() )
@@ -1732,10 +1736,10 @@ namespace SharpFlame
                 {
                     txtObjectLabel.Text = "";
                 }
-                bool ClearDesignControls = false;
+                var ClearDesignControls = false;
                 if ( with_1.TypeBase.Type == UnitType.PlayerDroid )
                 {
-                    DroidDesign DroidType = (DroidDesign)with_1.TypeBase;
+                    var DroidType = (DroidDesign)with_1.TypeBase;
                     if ( DroidType.IsTemplate )
                     {
                         btnDroidToDesign.Enabled = true;
@@ -1949,7 +1953,7 @@ namespace SharpFlame
 
         public void tsbSelectionCopy_Click(Object sender, EventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -1963,9 +1967,9 @@ namespace SharpFlame
             {
                 App.Copied_Map.Deallocate();
             }
-            XYInt Area = new XYInt();
-            XYInt Start = new XYInt();
-            XYInt Finish = new XYInt();
+            var Area = new XYInt();
+            var Start = new XYInt();
+            var Finish = new XYInt();
             MathUtil.ReorderXY(Map.Selected_Area_VertexA, Map.Selected_Area_VertexB, ref Start, ref Finish);
             Area.X = Finish.X - Start.X;
             Area.Y = Finish.Y - Start.Y;
@@ -1974,7 +1978,7 @@ namespace SharpFlame
 
         public void tsbSelectionPaste_Click(Object sender, EventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -1995,9 +1999,9 @@ namespace SharpFlame
             {
                 return;
             }
-            XYInt Area = new XYInt();
-            XYInt Start = new XYInt();
-            XYInt Finish = new XYInt();
+            var Area = new XYInt();
+            var Start = new XYInt();
+            var Finish = new XYInt();
             MathUtil.ReorderXY(Map.Selected_Area_VertexA, Map.Selected_Area_VertexB, ref Start, ref Finish);
             Area.X = Finish.X - Start.X;
             Area.Y = Finish.Y - Start.Y;
@@ -2012,7 +2016,7 @@ namespace SharpFlame
 
         public void btnSelResize_Click(Object sender, EventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -2021,14 +2025,14 @@ namespace SharpFlame
 
             if ( Map.Selected_Area_VertexA == null || Map.Selected_Area_VertexB == null )
             {
-                MessageBox.Show ("You haven\'t selected anything.");
+                MessageBox.Show("You haven\'t selected anything.");
                 return;
             }
 
-            XYInt Start = new XYInt();
-            XYInt Finish = new XYInt();
+            var Start = new XYInt();
+            var Finish = new XYInt();
             MathUtil.ReorderXY(Map.Selected_Area_VertexA, Map.Selected_Area_VertexB, ref Start, ref Finish);
-            XYInt Area = new XYInt();
+            var Area = new XYInt();
             Area.X = Finish.X - Start.X;
             Area.Y = Finish.Y - Start.Y;
 
@@ -2074,22 +2078,22 @@ namespace SharpFlame
 
         private clsResult NoTile_Texture_Load()
         {
-            clsResult ReturnResult = new clsResult("Loading error terrain textures", false);
-            logger.Info ("Loading error terrain textures");
+            var ReturnResult = new clsResult("Loading error terrain textures", false);
+            logger.Info("Loading error terrain textures");
 
             Bitmap Bitmap = null;
 
-            BitmapGLTexture BitmapTextureArgs = new BitmapGLTexture();
+            var BitmapTextureArgs = new BitmapGLTexture();
 
             BitmapTextureArgs.MagFilter = TextureMagFilter.Nearest;
             BitmapTextureArgs.MinFilter = TextureMinFilter.Nearest;
             BitmapTextureArgs.TextureNum = 0;
             BitmapTextureArgs.MipMapLevel = 0;
-            
+
             Bitmap = Resources.notile;
             {
-                clsResult Result = new clsResult("Loading notile.png", false);
-                logger.Info ("Loading notile.png");
+                var Result = new clsResult("Loading notile.png", false);
+                logger.Info("Loading notile.png");
                 Result.Take(BitmapUtil.BitmapIsGLCompatible(Bitmap));
                 ReturnResult.Add(Result);
                 BitmapTextureArgs.Texture = Bitmap;
@@ -2099,8 +2103,8 @@ namespace SharpFlame
 
             Bitmap = Resources.overflow;
             {
-                clsResult Result = new clsResult("Loading overflow.png", false);
-                logger.Info ("Loading overflow.png");
+                var Result = new clsResult("Loading overflow.png", false);
+                logger.Info("Loading overflow.png");
                 Result.Take(BitmapUtil.BitmapIsGLCompatible(Bitmap));
                 ReturnResult.Add(Result);
                 BitmapTextureArgs.Texture = Bitmap;
@@ -2125,7 +2129,7 @@ namespace SharpFlame
                 modTools.Tool = modTools.Tools.Gateways;
                 tsbGateways.Checked = true;
             }
-            clsMap Map = MainMap;
+            var Map = MainMap;
             if ( Map != null )
             {
                 Map.Selected_Tile_A = null;
@@ -2171,7 +2175,7 @@ namespace SharpFlame
 
         private void UpdateMinimap()
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -2188,7 +2192,7 @@ namespace SharpFlame
                 return;
             }
 
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -2223,8 +2227,8 @@ namespace SharpFlame
         private void cboTileType_Update()
         {
             cboTileType.Items.Clear();
-            clsTileType tileType = default(clsTileType);
-            foreach ( clsTileType tempLoopVar_tileType in App.TileTypes )
+            var tileType = default(clsTileType);
+            foreach ( var tempLoopVar_tileType in App.TileTypes )
             {
                 tileType = tempLoopVar_tileType;
                 cboTileType.Items.Add(tileType.Name);
@@ -2233,7 +2237,7 @@ namespace SharpFlame
 
         private void CreateTileTypes()
         {
-            clsTileType NewTileType = default(clsTileType);
+            var NewTileType = default(clsTileType);
 
             NewTileType = new clsTileType();
             NewTileType.Name = "Sand";
@@ -2342,7 +2346,7 @@ namespace SharpFlame
 
         private void QuickSave()
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -2358,8 +2362,8 @@ namespace SharpFlame
 
         public void TitleTextUpdate()
         {
-            clsMap Map = MainMap;
-            string MapFileTitle = "";
+            var Map = MainMap;
+            var MapFileTitle = "";
 
             menuSaveFMapQuick.Text = "Quick Save fmap";
             menuSaveFMapQuick.Enabled = false;
@@ -2377,12 +2381,12 @@ namespace SharpFlame
                 }
                 else
                 {
-                    sSplitPath SplitPath = new sSplitPath(Map.PathInfo.Path);
+                    var SplitPath = new sSplitPath(Map.PathInfo.Path);
                     if ( Map.PathInfo.IsFMap )
                     {
                         MapFileTitle = SplitPath.FileTitleWithoutExtension;
-                        string quickSavePath = Map.PathInfo.Path;
-						tsbSave.ToolTipText = "Quick save FMap to {0}".Format2(quickSavePath);
+                        var quickSavePath = Map.PathInfo.Path;
+                        tsbSave.ToolTipText = "Quick save FMap to {0}".Format2(quickSavePath);
                         menuSaveFMapQuick.Text = "Quick Save fmap to \"";
                         if ( quickSavePath.Length <= 32 )
                         {
@@ -2439,7 +2443,7 @@ namespace SharpFlame
                 return;
             }
 
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -2456,7 +2460,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if ( MessageBox.Show("Change player of multiple objects?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.None) != DialogResult.OK) 
+                if ( MessageBox.Show("Change player of multiple objects?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.None) != DialogResult.OK )
                 {
                     //SelectedObject_Changed()
                     //todo
@@ -2464,7 +2468,7 @@ namespace SharpFlame
                 }
             }
 
-            clsObjectUnitGroup ObjectUnitGroup = new clsObjectUnitGroup();
+            var ObjectUnitGroup = new clsObjectUnitGroup();
             ObjectUnitGroup.Map = Map;
             ObjectUnitGroup.UnitGroup = ObjectPlayerNumControl.Target.Item;
             Map.SelectedUnitsAction(ObjectUnitGroup);
@@ -2481,7 +2485,7 @@ namespace SharpFlame
         public void txtHeightSetL_LostFocus(object sender, EventArgs e)
         {
             byte Height = 0;
-            string Text = "";
+            var Text = "";
             double Height_dbl = 0;
 
             if ( !IOUtil.InvariantParse(txtHeightSetL.Text, ref Height_dbl) )
@@ -2502,7 +2506,7 @@ namespace SharpFlame
         public void txtHeightSetR_LostFocus(object sender, EventArgs e)
         {
             byte Height = 0;
-            string Text = "";
+            var Text = "";
             double Height_dbl = 0;
 
             if ( !IOUtil.InvariantParse(txtHeightSetL.Text, ref Height_dbl) )
@@ -2532,7 +2536,7 @@ namespace SharpFlame
 
         public void tsbSelectionObjects_Click(Object sender, EventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -2543,9 +2547,9 @@ namespace SharpFlame
             {
                 return;
             }
-            XYInt Start = new XYInt();
-            XYInt Finish = new XYInt();
-            int A = 0;
+            var Start = new XYInt();
+            var Finish = new XYInt();
+            var A = 0;
 
             MathUtil.ReorderXY(Map.Selected_Area_VertexA, Map.Selected_Area_VertexB, ref Start, ref Finish);
             for ( A = 0; A <= Map.Units.Count - 1; A++ )
@@ -2585,7 +2589,7 @@ namespace SharpFlame
 
         public void btnHeightsMultiplySelection_Click(Object sender, EventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -2597,12 +2601,12 @@ namespace SharpFlame
                 return;
             }
 
-            int X = 0;
-            int Y = 0;
+            var X = 0;
+            var Y = 0;
             double Multiplier = 0;
-            XYInt StartXY = new XYInt();
-            XYInt FinishXY = new XYInt();
-            XYInt Pos = new XYInt();
+            var StartXY = new XYInt();
+            var FinishXY = new XYInt();
+            var Pos = new XYInt();
             double dblTemp = 0;
 
             if ( !IOUtil.InvariantParse(txtHeightMultiply.Text, ref dblTemp) )
@@ -2662,7 +2666,7 @@ namespace SharpFlame
 
         public void lstAutoTexture_SelectedIndexChanged_1(Object sender, EventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -2686,7 +2690,7 @@ namespace SharpFlame
 
         public void lstAutoRoad_SelectedIndexChanged(Object sender, EventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -2714,7 +2718,7 @@ namespace SharpFlame
             {
                 return;
             }
-            clsMap Map = MainMap;
+            var Map = MainMap;
             if ( Map == null )
             {
                 return;
@@ -2723,7 +2727,7 @@ namespace SharpFlame
             {
                 return;
             }
-            int Priority = 0;
+            var Priority = 0;
             if ( !IOUtil.InvariantParse(txtObjectPriority.Text, ref Priority) )
             {
                 //MsgBox("Entered text is not a valid number.", (MsgBoxStyle.OkOnly or MsgBoxStyle.Information), "")
@@ -2734,7 +2738,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-                if ( MessageBox.Show("Change priority of multiple objects?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK)
+                if ( MessageBox.Show("Change priority of multiple objects?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     //SelectedObject_Changed()
                     //todo
@@ -2749,7 +2753,7 @@ namespace SharpFlame
                 }
             }
 
-            clsObjectPriority ObjectPriority = new clsObjectPriority();
+            var ObjectPriority = new clsObjectPriority();
             ObjectPriority.Map = Map;
             ObjectPriority.Priority = Priority;
             Map.SelectedUnitsAction(ObjectPriority);
@@ -2765,7 +2769,7 @@ namespace SharpFlame
             {
                 return;
             }
-            clsMap Map = MainMap;
+            var Map = MainMap;
             if ( Map == null )
             {
                 return;
@@ -2787,7 +2791,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-				if (MessageBox.Show("Change health of multiple objects?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK)
+                if ( MessageBox.Show("Change health of multiple objects?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     //SelectedObject_Changed()
                     //todo
@@ -2795,7 +2799,7 @@ namespace SharpFlame
                 }
             }
 
-            clsObjectHealth ObjectHealth = new clsObjectHealth();
+            var ObjectHealth = new clsObjectHealth();
             ObjectHealth.Map = Map;
             ObjectHealth.Health = Health;
             Map.SelectedUnitsAction(ObjectHealth);
@@ -2807,7 +2811,7 @@ namespace SharpFlame
 
         public void btnDroidToDesign_Click(Object sender, EventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -2820,20 +2824,20 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-				if (MessageBox.Show("Change design of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK)
+                if ( MessageBox.Show("Change design of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     return;
                 }
             }
             else
             {
-				if ( MessageBox.Show("Change design of a droid?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK) 
+                if ( MessageBox.Show("Change design of a droid?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     return;
                 }
             }
 
-            clsObjectTemplateToDesign ObjectTemplateToDesign = new clsObjectTemplateToDesign();
+            var ObjectTemplateToDesign = new clsObjectTemplateToDesign();
             ObjectTemplateToDesign.Map = Map;
             Map.SelectedUnitsAction(ObjectTemplateToDesign);
 
@@ -2881,7 +2885,7 @@ namespace SharpFlame
             {
                 return;
             }
-            clsMap Map = MainMap;
+            var Map = MainMap;
             if ( Map == null )
             {
                 return;
@@ -2893,13 +2897,13 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-				if ( MessageBox.Show("Change body of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
+                if ( MessageBox.Show("Change body of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     return;
                 }
             }
 
-            clsObjectBody ObjectBody = new clsObjectBody();
+            var ObjectBody = new clsObjectBody();
             ObjectBody.Map = Map;
             ObjectBody.Body = cboBody_Objects[cboDroidBody.SelectedIndex];
             Map.SelectedUnitsAction(ObjectBody);
@@ -2922,7 +2926,7 @@ namespace SharpFlame
             {
                 return;
             }
-            clsMap Map = MainMap;
+            var Map = MainMap;
             if ( Map == null )
             {
                 return;
@@ -2934,13 +2938,13 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-				if ( MessageBox.Show("Change propulsion of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK ) 
+                if ( MessageBox.Show("Change propulsion of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     return;
                 }
             }
 
-            clsObjectPropulsion ObjectPropulsion = new clsObjectPropulsion();
+            var ObjectPropulsion = new clsObjectPropulsion();
             ObjectPropulsion.Map = Map;
             ObjectPropulsion.Propulsion = cboPropulsion_Objects[cboDroidPropulsion.SelectedIndex];
             Map.SelectedUnitsAction(ObjectPropulsion);
@@ -2969,7 +2973,7 @@ namespace SharpFlame
             {
                 return;
             }
-            clsMap Map = MainMap;
+            var Map = MainMap;
             if ( Map == null )
             {
                 return;
@@ -2981,13 +2985,13 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-				if ( MessageBox.Show("Change turret of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
+                if ( MessageBox.Show("Change turret of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     return;
                 }
             }
 
-            clsObjectTurret ObjectTurret = new clsObjectTurret();
+            var ObjectTurret = new clsObjectTurret();
             ObjectTurret.Map = Map;
             ObjectTurret.Turret = cboTurret_Objects[cboDroidTurret1.SelectedIndex];
             ObjectTurret.TurretNum = 0;
@@ -3011,7 +3015,7 @@ namespace SharpFlame
             {
                 return;
             }
-            clsMap Map = MainMap;
+            var Map = MainMap;
             if ( Map == null )
             {
                 return;
@@ -3023,13 +3027,13 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-				if ( MessageBox.Show("Change turret of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
+                if ( MessageBox.Show("Change turret of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     return;
                 }
             }
 
-            clsObjectTurret ObjectTurret = new clsObjectTurret();
+            var ObjectTurret = new clsObjectTurret();
             ObjectTurret.Map = Map;
             ObjectTurret.Turret = cboTurret_Objects[cboDroidTurret2.SelectedIndex];
             ObjectTurret.TurretNum = 1;
@@ -3053,7 +3057,7 @@ namespace SharpFlame
             {
                 return;
             }
-            clsMap Map = MainMap;
+            var Map = MainMap;
             if ( Map == null )
             {
                 return;
@@ -3065,13 +3069,13 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-				if ( MessageBox.Show("Change turret of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
+                if ( MessageBox.Show("Change turret of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     return;
                 }
             }
 
-            clsObjectTurret ObjectTurret = new clsObjectTurret();
+            var ObjectTurret = new clsObjectTurret();
             ObjectTurret.Map = Map;
             ObjectTurret.Turret = cboTurret_Objects[cboDroidTurret3.SelectedIndex];
             ObjectTurret.TurretNum = 2;
@@ -3091,7 +3095,7 @@ namespace SharpFlame
             {
                 return;
             }
-            clsMap Map = MainMap;
+            var Map = MainMap;
             if ( Map == null )
             {
                 return;
@@ -3112,13 +3116,13 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-				if ( MessageBox.Show("Change number of turrets of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
+                if ( MessageBox.Show("Change number of turrets of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     return;
                 }
             }
 
-            SelectedObjects_SetTurretCount((byte)0);
+            SelectedObjects_SetTurretCount(0);
         }
 
         public void rdoDroidTurret1_CheckedChanged(Object sender, EventArgs e)
@@ -3127,7 +3131,7 @@ namespace SharpFlame
             {
                 return;
             }
-            clsMap Map = MainMap;
+            var Map = MainMap;
             if ( Map == null )
             {
                 return;
@@ -3148,13 +3152,13 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-				if ( MessageBox.Show("Change number of turrets of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
+                if ( MessageBox.Show("Change number of turrets of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     return;
                 }
             }
 
-            SelectedObjects_SetTurretCount((byte)1);
+            SelectedObjects_SetTurretCount(1);
         }
 
         public void rdoDroidTurret2_CheckedChanged(Object sender, EventArgs e)
@@ -3163,7 +3167,7 @@ namespace SharpFlame
             {
                 return;
             }
-            clsMap Map = MainMap;
+            var Map = MainMap;
             if ( Map == null )
             {
                 return;
@@ -3184,13 +3188,13 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-				if ( MessageBox.Show("Change number of turrets of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
+                if ( MessageBox.Show("Change number of turrets of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     return;
                 }
             }
 
-            SelectedObjects_SetTurretCount((byte)2);
+            SelectedObjects_SetTurretCount(2);
         }
 
         public void rdoDroidTurret3_CheckedChanged(Object sender, EventArgs e)
@@ -3199,7 +3203,7 @@ namespace SharpFlame
             {
                 return;
             }
-            clsMap Map = MainMap;
+            var Map = MainMap;
             if ( Map == null )
             {
                 return;
@@ -3220,25 +3224,25 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-				if ( MessageBox.Show("Change number of turrets of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
+                if ( MessageBox.Show("Change number of turrets of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     return;
                 }
             }
 
-            SelectedObjects_SetTurretCount((byte)3);
+            SelectedObjects_SetTurretCount(3);
         }
 
         private void SelectedObjects_SetTurretCount(byte Count)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
                 return;
             }
 
-            clsObjectTurretCount ObjectTurretCount = new clsObjectTurretCount();
+            var ObjectTurretCount = new clsObjectTurretCount();
             ObjectTurretCount.Map = Map;
             ObjectTurretCount.TurretCount = Count;
             Map.SelectedUnitsAction(ObjectTurretCount);
@@ -3253,14 +3257,14 @@ namespace SharpFlame
 
         private void SelectedObjects_SetDroidType(DroidDesign.clsTemplateDroidType NewType)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
                 return;
             }
 
-            clsObjectDroidType ObjectDroidType = new clsObjectDroidType();
+            var ObjectDroidType = new clsObjectDroidType();
             ObjectDroidType.Map = Map;
             ObjectDroidType.DroidType = NewType;
             Map.SelectedUnitsAction(ObjectDroidType);
@@ -3283,7 +3287,7 @@ namespace SharpFlame
             {
                 return;
             }
-            clsMap Map = MainMap;
+            var Map = MainMap;
             if ( Map == null )
             {
                 return;
@@ -3295,7 +3299,7 @@ namespace SharpFlame
 
             if ( Map.SelectedUnits.Count > 1 )
             {
-				if ( MessageBox.Show("Change type of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
+                if ( MessageBox.Show("Change type of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK )
                 {
                     return;
                 }
@@ -3336,7 +3340,7 @@ namespace SharpFlame
 
         public void btnPlayerSelectObjects_Click(Object sender, EventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -3348,9 +3352,9 @@ namespace SharpFlame
                 Map.SelectedUnits.Clear();
             }
 
-            clsUnitGroup UnitGroup = Map.SelectedUnitGroup.Item;
-            clsUnit Unit = default(clsUnit);
-            foreach ( clsUnit tempLoopVar_Unit in Map.Units )
+            var UnitGroup = Map.SelectedUnitGroup.Item;
+            var Unit = default(clsUnit);
+            foreach ( var tempLoopVar_Unit in Map.Units )
             {
                 Unit = tempLoopVar_Unit;
                 if ( Unit.UnitGroup == UnitGroup )
@@ -3392,7 +3396,7 @@ namespace SharpFlame
 
         public void MainMapAfterChanged()
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             MapViewControl.UpdateTabs();
 
@@ -3441,7 +3445,7 @@ namespace SharpFlame
 
         public void MainMapBeforeChanged()
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             MapViewControl.OpenGLControl.Focus(); //take focus from controls to trigger their lostfocuses
 
@@ -3475,7 +3479,7 @@ namespace SharpFlame
             }
             SelectedObjectTypes.Clear();
             SelectedObjectTypes.Add(unitTypeBase.UnitType_frmMainSelectedLink);
-            clsMap Map = MainMap;
+            var Map = MainMap;
             if ( Map != null )
             {
                 Map.MinimapMakeLater(); //for unit highlight
@@ -3485,17 +3489,17 @@ namespace SharpFlame
 
         public void TerrainPicker()
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
-            clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
+            var MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
 
             if ( MouseOverTerrain == null )
             {
                 return;
             }
 
-            XYInt Vertex = MouseOverTerrain.Vertex.Normal;
-            int A = 0;
+            var Vertex = MouseOverTerrain.Vertex.Normal;
+            var A = 0;
 
             lstAutoTexture.Enabled = false;
             for ( A = 0; A <= lstAutoTexture.Items.Count - 1; A++ )
@@ -3516,16 +3520,16 @@ namespace SharpFlame
 
         public void TexturePicker()
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
-            clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
+            var MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
 
             if ( MouseOverTerrain == null )
             {
                 return;
             }
 
-            XYInt Tile = MouseOverTerrain.Tile.Normal;
+            var Tile = MouseOverTerrain.Tile.Normal;
 
             if ( Map.Tileset != null )
             {
@@ -3545,9 +3549,9 @@ namespace SharpFlame
 
         public void HeightPickerL()
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
-            clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
+            var MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
 
             if ( MouseOverTerrain == null )
             {
@@ -3562,9 +3566,9 @@ namespace SharpFlame
 
         public void HeightPickerR()
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
-            clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
+            var MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
             if ( MouseOverTerrain == null )
             {
                 return;
@@ -3589,12 +3593,12 @@ namespace SharpFlame
 
         public void OpenGL_DragDrop(object sender, DragEventArgs e)
         {
-            string[] Paths = (string[])(e.Data.GetData(DataFormats.FileDrop));
-            clsResult Result = new clsResult("Loading drag-dropped maps", false);
-            logger.Info ("Loading drag-dropped maps");
-            string Path = "";
+            var Paths = (string[])(e.Data.GetData(DataFormats.FileDrop));
+            var Result = new clsResult("Loading drag-dropped maps", false);
+            logger.Info("Loading drag-dropped maps");
+            var Path = "";
 
-            foreach ( string tempLoopVar_Path in Paths )
+            foreach ( var tempLoopVar_Path in Paths )
             {
                 Path = tempLoopVar_Path;
                 Result.Take(LoadMap(Path));
@@ -3604,14 +3608,14 @@ namespace SharpFlame
 
         public void btnFlatSelected_Click(object sender, EventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
                 return;
             }
 
-            clsObjectFlattenTerrain FlattenTool = new clsObjectFlattenTerrain();
+            var FlattenTool = new clsObjectFlattenTerrain();
             Map.SelectedUnits.GetItemsAsSimpleClassList().PerformTool(FlattenTool);
 
             Map.Update();
@@ -3639,7 +3643,7 @@ namespace SharpFlame
             {
                 return;
             }
-            clsMap Map = MainMap;
+            var Map = MainMap;
             if ( Map == null )
             {
                 return;
@@ -3678,7 +3682,7 @@ namespace SharpFlame
 
         public void ScriptMarkerLists_Update()
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             lstScriptPositions.Enabled = false;
             lstScriptAreas.Enabled = false;
@@ -3692,15 +3696,15 @@ namespace SharpFlame
                 return;
             }
 
-            int ListPosition = 0;
-            clsScriptPosition ScriptPosition = default(clsScriptPosition);
-            clsScriptArea ScriptArea = default(clsScriptArea);
+            var ListPosition = 0;
+            var ScriptPosition = default(clsScriptPosition);
+            var ScriptArea = default(clsScriptArea);
             object NewSelectedScriptMarker = null;
 
             lstScriptPositions_Objects = new clsScriptPosition[Map.ScriptPositions.Count];
             lstScriptAreas_Objects = new clsScriptArea[Map.ScriptAreas.Count];
 
-            foreach ( clsScriptPosition tempLoopVar_ScriptPosition in Map.ScriptPositions )
+            foreach ( var tempLoopVar_ScriptPosition in Map.ScriptPositions )
             {
                 ScriptPosition = tempLoopVar_ScriptPosition;
                 ListPosition = lstScriptPositions.Items.Add(ScriptPosition.Label);
@@ -3712,7 +3716,7 @@ namespace SharpFlame
                 }
             }
 
-            foreach ( clsScriptArea tempLoopVar_ScriptArea in Map.ScriptAreas )
+            foreach ( var tempLoopVar_ScriptArea in Map.ScriptAreas )
             {
                 ScriptArea = tempLoopVar_ScriptArea;
                 ListPosition = lstScriptAreas.Items.Add(ScriptArea.Label);
@@ -3791,7 +3795,7 @@ namespace SharpFlame
             {
                 if ( _SelectedScriptMarker is clsScriptPosition )
                 {
-                    clsScriptPosition ScriptPosition = (clsScriptPosition)_SelectedScriptMarker;
+                    var ScriptPosition = (clsScriptPosition)_SelectedScriptMarker;
                     txtScriptMarkerLabel.Text = ScriptPosition.Label;
                     txtScriptMarkerX.Text = ScriptPosition.PosX.ToStringInvariant();
                     txtScriptMarkerY.Text = ScriptPosition.PosY.ToStringInvariant();
@@ -3801,7 +3805,7 @@ namespace SharpFlame
                 }
                 else if ( _SelectedScriptMarker is clsScriptArea )
                 {
-                    clsScriptArea ScriptArea = (clsScriptArea)_SelectedScriptMarker;
+                    var ScriptArea = (clsScriptArea)_SelectedScriptMarker;
                     txtScriptMarkerLabel.Text = ScriptArea.Label;
                     txtScriptMarkerX.Text = ScriptArea.PosAX.ToStringInvariant();
                     txtScriptMarkerY.Text = ScriptArea.PosAY.ToStringInvariant();
@@ -3823,16 +3827,16 @@ namespace SharpFlame
                 return;
             }
 
-            clsMap Map = MainMap;
+            var Map = MainMap;
             if ( Map == null )
             {
                 return;
             }
 
-            int Number = 0;
+            var Number = 0;
             if ( _SelectedScriptMarker is clsScriptPosition )
             {
-                clsScriptPosition ScripPosition = (clsScriptPosition)_SelectedScriptMarker;
+                var ScripPosition = (clsScriptPosition)_SelectedScriptMarker;
                 Number = ScripPosition.ParentMap.ArrayPosition;
                 ScripPosition.Deallocate();
                 if ( Map.ScriptPositions.Count > 0 )
@@ -3846,7 +3850,7 @@ namespace SharpFlame
             }
             else if ( _SelectedScriptMarker is clsScriptArea )
             {
-                clsScriptArea ScriptArea = (clsScriptArea)_SelectedScriptMarker;
+                var ScriptArea = (clsScriptArea)_SelectedScriptMarker;
                 Number = ScriptArea.ParentMap.ArrayPosition;
                 ScriptArea.Deallocate();
                 if ( Map.ScriptAreas.Count > 0 )
@@ -3875,10 +3879,10 @@ namespace SharpFlame
                 return;
             }
 
-            sResult Result = new sResult();
+            var Result = new sResult();
             if ( _SelectedScriptMarker is clsScriptPosition )
             {
-                clsScriptPosition ScriptPosition = (clsScriptPosition)_SelectedScriptMarker;
+                var ScriptPosition = (clsScriptPosition)_SelectedScriptMarker;
                 if ( ScriptPosition.Label == txtScriptMarkerLabel.Text )
                 {
                     return;
@@ -3887,7 +3891,7 @@ namespace SharpFlame
             }
             else if ( _SelectedScriptMarker is clsScriptArea )
             {
-                clsScriptArea ScriptArea = (clsScriptArea)_SelectedScriptMarker;
+                var ScriptArea = (clsScriptArea)_SelectedScriptMarker;
                 if ( ScriptArea.Label == txtScriptMarkerLabel.Text )
                 {
                     return;
@@ -3922,15 +3926,15 @@ namespace SharpFlame
 
             if ( _SelectedScriptMarker is clsScriptPosition )
             {
-                clsScriptPosition ScriptPosition = (clsScriptPosition)_SelectedScriptMarker;
-                int temp_Result = ScriptPosition.PosX;
+                var ScriptPosition = (clsScriptPosition)_SelectedScriptMarker;
+                var temp_Result = ScriptPosition.PosX;
                 IOUtil.InvariantParse(txtScriptMarkerX.Text, ref temp_Result);
                 ScriptPosition.PosX = temp_Result;
             }
             else if ( _SelectedScriptMarker is clsScriptArea )
             {
-                clsScriptArea ScriptArea = (clsScriptArea)_SelectedScriptMarker;
-                int temp_Result2 = ScriptArea.PosAX;
+                var ScriptArea = (clsScriptArea)_SelectedScriptMarker;
+                var temp_Result2 = ScriptArea.PosAX;
                 IOUtil.InvariantParse(txtScriptMarkerX.Text, ref temp_Result2);
                 ScriptArea.PosAX = temp_Result2;
             }
@@ -3956,15 +3960,15 @@ namespace SharpFlame
 
             if ( _SelectedScriptMarker is clsScriptPosition )
             {
-                clsScriptPosition ScriptPosition = (clsScriptPosition)_SelectedScriptMarker;
-                int temp_Result = ScriptPosition.PosY;
+                var ScriptPosition = (clsScriptPosition)_SelectedScriptMarker;
+                var temp_Result = ScriptPosition.PosY;
                 IOUtil.InvariantParse(txtScriptMarkerY.Text, ref temp_Result);
                 ScriptPosition.PosY = temp_Result;
             }
             else if ( _SelectedScriptMarker is clsScriptArea )
             {
-                clsScriptArea ScriptArea = (clsScriptArea)_SelectedScriptMarker;
-                int temp_Result2 = ScriptArea.PosAY;
+                var ScriptArea = (clsScriptArea)_SelectedScriptMarker;
+                var temp_Result2 = ScriptArea.PosAY;
                 IOUtil.InvariantParse(txtScriptMarkerY.Text, ref temp_Result2);
                 ScriptArea.PosAY = temp_Result2;
             }
@@ -3990,8 +3994,8 @@ namespace SharpFlame
 
             if ( _SelectedScriptMarker is clsScriptArea )
             {
-                clsScriptArea ScriptArea = (clsScriptArea)_SelectedScriptMarker;
-                int temp_Result = ScriptArea.PosBX;
+                var ScriptArea = (clsScriptArea)_SelectedScriptMarker;
+                var temp_Result = ScriptArea.PosBX;
                 IOUtil.InvariantParse(txtScriptMarkerX2.Text, ref temp_Result);
                 ScriptArea.PosBX = temp_Result;
             }
@@ -4017,8 +4021,8 @@ namespace SharpFlame
 
             if ( _SelectedScriptMarker is clsScriptArea )
             {
-                clsScriptArea ScriptArea = (clsScriptArea)_SelectedScriptMarker;
-                int temp_Result = ScriptArea.PosBY;
+                var ScriptArea = (clsScriptArea)_SelectedScriptMarker;
+                var temp_Result = ScriptArea.PosBY;
                 IOUtil.InvariantParse(txtScriptMarkerY2.Text, ref temp_Result);
                 ScriptArea.PosBY = temp_Result;
             }
@@ -4037,7 +4041,7 @@ namespace SharpFlame
             {
                 return;
             }
-            clsMap Map = MainMap;
+            var Map = MainMap;
             if ( Map == null )
             {
                 return;
@@ -4052,10 +4056,10 @@ namespace SharpFlame
                 return;
             }
 
-            clsUnit OldUnit = Map.SelectedUnits[0];
-            clsUnit ResultUnit = new clsUnit(OldUnit, Map);
+            var OldUnit = Map.SelectedUnits[0];
+            var ResultUnit = new clsUnit(OldUnit, Map);
             Map.UnitSwap(OldUnit, ResultUnit);
-            sResult Result = ResultUnit.SetLabel(txtObjectLabel.Text);
+            var Result = ResultUnit.SetLabel(txtObjectLabel.Text);
             if ( !Result.Success )
             {
                 MessageBox.Show("Unable to set label: " + Result.Problem);
@@ -4093,9 +4097,9 @@ namespace SharpFlame
 
         public clsResult LoadMap(string Path)
         {
-            clsResult ReturnResult = new clsResult("", false);
-            sSplitPath SplitPath = new sSplitPath(Path);
-            clsMap resultMap = new clsMap();
+            var ReturnResult = new clsResult("", false);
+            var SplitPath = new sSplitPath(Path);
+            var resultMap = new clsMap();
 
             switch ( SplitPath.FileExtension.ToLower() )
             {
@@ -4108,11 +4112,13 @@ namespace SharpFlame
                     resultMap.PathInfo = new clsPathInfo(Path, false);
                     break;
                 case "wz":
-                    ReturnResult.Add(resultMap.Load_WZ(Path));
+                    var wzFormat = new Wz(resultMap);
+                    ReturnResult.Add(wzFormat.Load(Path));
                     resultMap.PathInfo = new clsPathInfo(Path, false);
                     break;
                 case "gam":
-                    ReturnResult.Add(resultMap.Load_Game(Path));
+                    var gameFormat = new Game(resultMap);
+                    ReturnResult.Add(gameFormat.Load(Path));
                     resultMap.PathInfo = new clsPathInfo(Path, false);
                     break;
                 case "lnd":
@@ -4140,10 +4146,10 @@ namespace SharpFlame
         {
             if ( !Directory.Exists(App.AutoSavePath) )
             {
-				MessageBox.Show ("Autosave directory does not exist. There are no autosaves.", "", MessageBoxButtons.OK, MessageBoxIcon.None);
+                MessageBox.Show("Autosave directory does not exist. There are no autosaves.", "", MessageBoxButtons.OK, MessageBoxIcon.None);
                 return;
             }
-            OpenFileDialog Dialog = new OpenFileDialog();
+            var Dialog = new OpenFileDialog();
 
             Dialog.FileName = "";
             Dialog.Filter = Constants.ProgramName + " Files (*.fmap, *.fme)|*.fmap;*.fme|All Files (*.*)|*.*";
@@ -4153,21 +4159,21 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
-            clsResult Result = new clsResult("Loading map", false);
+            var Result = new clsResult("Loading map", false);
             Result.Take(LoadMap(Dialog.FileName));
             App.ShowWarnings(Result);
         }
 
         public void btnAlignObjects_Click(Object sender, EventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
                 return;
             }
 
-            clsObjectAlignment AlignTool = new clsObjectAlignment();
+            var AlignTool = new clsObjectAlignment();
             AlignTool.Map = Map;
             Map.SelectedUnits.GetItemsAsSimpleList().PerformTool(AlignTool);
 
@@ -4190,13 +4196,13 @@ namespace SharpFlame
             switch ( TabControl1.SelectedIndex )
             {
                 case 0:
-                    ObjectListFill<FeatureTypeBase>(App.ObjectData.FeatureTypes.GetItemsAsSimpleList(), dgvFeatures);
+                    ObjectListFill(App.ObjectData.FeatureTypes.GetItemsAsSimpleList(), dgvFeatures);
                     break;
                 case 1:
-                    ObjectListFill<StructureTypeBase>(App.ObjectData.StructureTypes.GetItemsAsSimpleList(), dgvStructures);
+                    ObjectListFill(App.ObjectData.StructureTypes.GetItemsAsSimpleList(), dgvStructures);
                     break;
                 case 2:
-                    ObjectListFill<DroidTemplate>(App.ObjectData.DroidTemplates.GetItemsAsSimpleList(), dgvDroids);
+                    ObjectListFill(App.ObjectData.DroidTemplates.GetItemsAsSimpleList(), dgvDroids);
                     break;
             }
         }
@@ -4300,7 +4306,7 @@ namespace SharpFlame
 
         public void ReinterpretTerrainToolStripMenuItem_Click(Object sender, EventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -4316,7 +4322,7 @@ namespace SharpFlame
 
         public void WaterTriangleCorrectionToolStripMenuItem_Click(Object sender, EventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -4334,7 +4340,7 @@ namespace SharpFlame
 
         public void ToolStripMenuItem5_Click(Object sender, EventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -4347,9 +4353,9 @@ namespace SharpFlame
                 return;
             }
 
-            SimpleClassList<clsUnit> OilList = new SimpleClassList<clsUnit>();
-            clsUnit Unit = default(clsUnit);
-            foreach ( clsUnit tempLoopVar_Unit in Map.Units )
+            var OilList = new SimpleClassList<clsUnit>();
+            var Unit = default(clsUnit);
+            foreach ( var tempLoopVar_Unit in Map.Units )
             {
                 Unit = tempLoopVar_Unit;
                 if ( Unit.TypeBase == DefaultGenerator.UnitTypeBaseOilResource )
@@ -4357,7 +4363,7 @@ namespace SharpFlame
                     OilList.Add(Unit);
                 }
             }
-            clsObjectFlattenTerrain FlattenTool = new clsObjectFlattenTerrain();
+            var FlattenTool = new clsObjectFlattenTerrain();
             OilList.PerformTool(FlattenTool);
 
             Map.Update();
@@ -4366,16 +4372,16 @@ namespace SharpFlame
 
         public void ToolStripMenuItem6_Click(Object sender, EventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
                 return;
             }
 
-            SimpleClassList<clsUnit> StructureList = new SimpleClassList<clsUnit>();
-            clsUnit Unit = default(clsUnit);
-            foreach ( clsUnit tempLoopVar_Unit in Map.Units )
+            var StructureList = new SimpleClassList<clsUnit>();
+            var Unit = default(clsUnit);
+            foreach ( var tempLoopVar_Unit in Map.Units )
             {
                 Unit = tempLoopVar_Unit;
                 if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
@@ -4383,7 +4389,7 @@ namespace SharpFlame
                     StructureList.Add(Unit);
                 }
             }
-            clsObjectFlattenTerrain FlattenTool = new clsObjectFlattenTerrain();
+            var FlattenTool = new clsObjectFlattenTerrain();
             StructureList.PerformTool(FlattenTool);
 
             Map.Update();
@@ -4392,7 +4398,7 @@ namespace SharpFlame
 
         public void btnObjectTypeSelect_Click(Object sender, EventArgs e)
         {
-            clsMap Map = MainMap;
+            var Map = MainMap;
 
             if ( Map == null )
             {
@@ -4403,7 +4409,7 @@ namespace SharpFlame
             {
                 Map.SelectedUnits.Clear();
             }
-            foreach ( clsUnit Unit in Map.Units )
+            foreach ( var Unit in Map.Units )
             {
                 if ( Unit.TypeBase.UnitType_frmMainSelectedLink.IsConnected )
                 {
@@ -4425,10 +4431,7 @@ namespace SharpFlame
                 {
                     return SelectedObjectTypes[0];
                 }
-                else
-                {
-                    return null;
-                }
+                return null;
             }
         }
 
@@ -4437,13 +4440,13 @@ namespace SharpFlame
             SelectedObjectTypes.Clear();
             foreach ( DataGridViewRow selection in dataView.SelectedRows )
             {
-                UnitTypeBase objectTypeBase = (UnitTypeBase)(selection.Cells[0].Value);
+                var objectTypeBase = (UnitTypeBase)(selection.Cells[0].Value);
                 if ( !objectTypeBase.UnitType_frmMainSelectedLink.IsConnected )
                 {
                     SelectedObjectTypes.Add(objectTypeBase.UnitType_frmMainSelectedLink);
                 }
             }
-            clsMap Map = MainMap;
+            var Map = MainMap;
             if ( Map != null )
             {
                 Map.MinimapMakeLater(); //for unit highlight

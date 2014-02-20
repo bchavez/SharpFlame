@@ -1,6 +1,10 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Runtime.InteropServices;
 using SharpFlame.Core.Domain;
+
+#endregion
 
 namespace SharpFlame.Maths
 {
@@ -13,12 +17,12 @@ namespace SharpFlame.Maths
 
         public static double AngleClamp(double Angle)
         {
-            double num = Angle;
-            if (num < -3.1415926535897931)
+            var num = Angle;
+            if ( num < -3.1415926535897931 )
             {
                 return (num + 6.2831853071795862);
             }
-            if (num >= 3.1415926535897931)
+            if ( num >= 3.1415926535897931 )
             {
                 num -= 6.2831853071795862;
             }
@@ -27,12 +31,12 @@ namespace SharpFlame.Maths
 
         public static double AngleClamp360(double Angle)
         {
-            double num = Angle;
-            if (num < 0.0)
+            var num = Angle;
+            if ( num < 0.0 )
             {
                 return (num + 6.2831853071795862);
             }
-            if (num >= 6.2831853071795862)
+            if ( num >= 6.2831853071795862 )
             {
                 num -= 6.2831853071795862;
             }
@@ -41,7 +45,7 @@ namespace SharpFlame.Maths
 
         internal static double AngleClampUnlimited(double Angle)
         {
-            int num2 = (int)Math.Round((Angle + 3.1415926535897931) / 6.2831853071795862);
+            var num2 = (int)Math.Round((Angle + 3.1415926535897931) / 6.2831853071795862);
             return (Angle - (num2 * 6.2831853071795862));
         }
 
@@ -55,9 +59,10 @@ namespace SharpFlame.Maths
         {
             public double Pitch;
             public double Yaw;
+
             public AnglePY(double Pitch, double Yaw)
             {
-                this = new Angles.AnglePY();
+                this = new AnglePY();
                 this.Pitch = Pitch;
                 this.Yaw = Yaw;
             }
@@ -69,21 +74,20 @@ namespace SharpFlame.Maths
             public double Roll;
             public double Pitch;
             public double Yaw;
-            public Angles.AnglePY PY
+
+            public AnglePY PY
             {
-                get
-                {
-                    return new Angles.AnglePY(this.Pitch, this.Yaw);
-                }
+                get { return new AnglePY(Pitch, Yaw); }
                 set
                 {
-                    this.Pitch = value.Pitch;
-                    this.Yaw = value.Yaw;
+                    Pitch = value.Pitch;
+                    Yaw = value.Yaw;
                 }
             }
+
             public AngleRPY(double Roll, double Pitch, double Yaw)
             {
-                this = new Angles.AngleRPY();
+                this = new AngleRPY();
                 this.Roll = Roll;
                 this.Pitch = Pitch;
                 this.Yaw = Yaw;
@@ -91,4 +95,3 @@ namespace SharpFlame.Maths
         }
     }
 }
-

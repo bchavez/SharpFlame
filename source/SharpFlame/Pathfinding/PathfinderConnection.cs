@@ -1,53 +1,29 @@
+#region
+
 using System.Diagnostics;
+
+#endregion
 
 namespace SharpFlame.Pathfinding
 {
     public class PathfinderConnection
     {
+        public int CalcValueNum = -1;
+        private PathfinderConnection DependantConnection; //the one above this that partially relies on this to exist
         public bool Destroyed;
 
         public int Layer_ConnectionNum = -1;
+        private int LinkCount;
 
         public PathfinderNode NodeA;
 
-        public PathfinderNode GetNodeA
-        {
-            get { return NodeA; }
-        }
-
         public int NodeA_ConnectionNum = -1;
-
-        public int GetNodeA_ConnectionNum
-        {
-            get { return NodeA_ConnectionNum; }
-        }
 
         public PathfinderNode NodeB;
 
-        public PathfinderNode GetNodeB
-        {
-            get { return NodeB; }
-        }
-
         public int NodeB_ConnectionNum = -1;
 
-        public int GetNodeB_ConnectionNum
-        {
-            get { return NodeB_ConnectionNum; }
-        }
-
-        private PathfinderConnection DependantConnection; //the one above this that partially relies on this to exist
-
-        private int LinkCount;
-
         public float Value = 1.0F;
-
-        public float GetValue
-        {
-            get { return Value; }
-        }
-
-        public int CalcValueNum = -1;
 
         public PathfinderConnection(PathfinderNode NewNodeA, PathfinderNode NewNodeB, float NewValue)
         {
@@ -82,6 +58,31 @@ namespace SharpFlame.Pathfinding
             ValueCalc();
         }
 
+        public PathfinderNode GetNodeA
+        {
+            get { return NodeA; }
+        }
+
+        public int GetNodeA_ConnectionNum
+        {
+            get { return NodeA_ConnectionNum; }
+        }
+
+        public PathfinderNode GetNodeB
+        {
+            get { return NodeB; }
+        }
+
+        public int GetNodeB_ConnectionNum
+        {
+            get { return NodeB_ConnectionNum; }
+        }
+
+        public float GetValue
+        {
+            get { return Value; }
+        }
+
         private void RemoveFromNodes()
         {
             NodeA.Connection_Remove(NodeA_ConnectionNum);
@@ -99,10 +100,7 @@ namespace SharpFlame.Pathfinding
             {
                 return NodeB;
             }
-            else
-            {
-                return NodeA;
-            }
+            return NodeA;
         }
 
         private void LinkIncrease()
@@ -125,7 +123,7 @@ namespace SharpFlame.Pathfinding
 
         public void RaiseDependant()
         {
-            PathfinderConnection tmpConnectionA = default(PathfinderConnection);
+            var tmpConnectionA = default(PathfinderConnection);
 
             if ( DependantConnection != null )
             {
@@ -160,10 +158,10 @@ namespace SharpFlame.Pathfinding
             }
             Destroyed = true;
 
-            PathfinderLayer Layer = NodeA.Layer;
+            var Layer = NodeA.Layer;
 
-            PathfinderNode tmpA = NodeA.ParentNode;
-            PathfinderNode tmpB = NodeB.ParentNode;
+            var tmpA = NodeA.ParentNode;
+            var tmpB = NodeB.ParentNode;
             RemoveFromNodes();
             if ( tmpA != null )
             {
@@ -188,7 +186,7 @@ namespace SharpFlame.Pathfinding
         {
             if ( DependantConnection != null )
             {
-                PathfinderConnection tmpConnection = DependantConnection;
+                var tmpConnection = DependantConnection;
                 DependantConnection = null;
                 tmpConnection.LinkDecrease();
             }
@@ -201,9 +199,9 @@ namespace SharpFlame.Pathfinding
                 Debugger.Break();
             }
 
-            PathfinderNetwork.sFloodForValuesArgs Args = new PathfinderNetwork.sFloodForValuesArgs();
-            int A = 0;
-            int NumA = 0;
+            var Args = new PathfinderNetwork.sFloodForValuesArgs();
+            var A = 0;
+            var NumA = 0;
             float TotalValue = 0;
             Args.NodeValues = NodeA.Layer.Network.NetworkLargeArrays.Nodes_ValuesA;
             Args.FinishIsParent = false;

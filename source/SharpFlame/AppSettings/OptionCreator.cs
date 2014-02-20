@@ -2,8 +2,8 @@ namespace SharpFlame.AppSettings
 {
     public class OptionCreator<ValueType>
     {
-        public string SaveKey;
         public ValueType DefaultValue;
+        public string SaveKey;
 
         public virtual Option<ValueType> Create()
         {

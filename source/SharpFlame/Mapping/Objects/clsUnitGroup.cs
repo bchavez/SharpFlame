@@ -1,19 +1,23 @@
+#region
+
 using System;
 using SharpFlame.Collections;
 using SharpFlame.FileIO;
+
+#endregion
 
 namespace SharpFlame.Mapping.Objects
 {
     public class clsUnitGroup
     {
+        public ConnectedListLink<clsUnitGroup, clsMap> MapLink;
+
+        public int WZ_StartPos = -1;
+
         public clsUnitGroup()
         {
             MapLink = new ConnectedListLink<clsUnitGroup, clsMap>(this);
         }
-
-        public ConnectedListLink<clsUnitGroup, clsMap> MapLink;
-
-        public int WZ_StartPos = -1;
 
         public string GetFMapINIPlayerText()
         {
@@ -21,10 +25,7 @@ namespace SharpFlame.Mapping.Objects
             {
                 return "scavenger";
             }
-            else
-            {
-                return WZ_StartPos.ToStringInvariant();
-            }
+            return WZ_StartPos.ToStringInvariant();
         }
 
         public string GetLNDPlayerText()
@@ -33,10 +34,7 @@ namespace SharpFlame.Mapping.Objects
             {
                 return 7.ToStringInvariant();
             }
-            else
-            {
-                return WZ_StartPos.ToStringInvariant();
-            }
+            return WZ_StartPos.ToStringInvariant();
         }
 
         public int GetPlayerNum(int PlayerCount)
@@ -45,10 +43,7 @@ namespace SharpFlame.Mapping.Objects
             {
                 return Math.Max(PlayerCount, 7);
             }
-            else
-            {
-                return WZ_StartPos;
-            }
+            return WZ_StartPos;
         }
     }
 }
