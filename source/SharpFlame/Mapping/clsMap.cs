@@ -820,7 +820,7 @@ namespace SharpFlame.Mapping
             GL.Vertex3(Vertex2.Horizontal.X, Vertex2.Altitude, Vertex2.Horizontal.Y);
         }
 
-        protected void MinimapTextureFill(clsMinimapTexture Texture)
+        public void MinimapTextureFill(clsMinimapTexture Texture)
         {
             var X = 0;
             var Y = 0;
@@ -1086,19 +1086,19 @@ namespace SharpFlame.Mapping
 
         private void MinimapMake()
         {
-            var NewTextureSize =
+            var newTextureSize =
                 (int)
                     (Math.Round(
                         Convert.ToDouble(Math.Pow(2.0D, Math.Ceiling(Math.Log(Math.Max(Terrain.TileSize.X, Terrain.TileSize.Y)) / Math.Log(2.0D))))));
 
-            if ( NewTextureSize != Minimap_Texture_Size )
+            if ( newTextureSize != Minimap_Texture_Size )
             {
-                Minimap_Texture_Size = NewTextureSize;
+                Minimap_Texture_Size = newTextureSize;
             }
 
-            var Texture = new clsMinimapTexture(new XYInt(Minimap_Texture_Size, Minimap_Texture_Size));
+            var texture = new clsMinimapTexture(new XYInt(Minimap_Texture_Size, Minimap_Texture_Size));
 
-            MinimapTextureFill(Texture);
+            MinimapTextureFill(texture);
 
             MinimapGLDelete();
 
@@ -1109,7 +1109,7 @@ namespace SharpFlame.Mapping
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Minimap_Texture_Size, Minimap_Texture_Size, 0, PixelFormat.Rgba,
-                PixelType.Float, Texture.InlinePixels);
+                PixelType.Float, texture.InlinePixels);
 
             Program.frmMainInstance.View_DrawViewLater();
         }

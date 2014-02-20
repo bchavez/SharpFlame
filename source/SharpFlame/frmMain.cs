@@ -17,7 +17,11 @@ using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Generators;
 using SharpFlame.Mapping;
+using SharpFlame.Mapping.Format.LND;
 using SharpFlame.Mapping.Format.FMap;
+using SharpFlame.Mapping.Format.Heightmap;
+using SharpFlame.Mapping.Format.Minimap;
+using SharpFlame.Mapping.Format.TTP;
 using SharpFlame.Mapping.Format.Wz;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
@@ -610,7 +614,7 @@ namespace SharpFlame
 
             Dialog.InitialDirectory = SettingsManager.Settings.OpenPath;
             Dialog.FileName = "";
-            Dialog.Filter = "Warzone Map Files (*.fmap, *.fme, *.wz, *.gam, *.lnd)|*.fmap;*.fme;*.wz;*.gam;*.lnd|All Files (*.*)|*.*";
+            Dialog.Filter = "Warzone Map Files (*.fmap, *.wz, *.gam, *.lnd)|*.fmap;*.wz;*.gam;*.lnd|All Files (*.*)|*.*";
             Dialog.Multiselect = true;
             if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
@@ -713,14 +717,15 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
-            var Result = Map.Load_TTP(Dialog.FileName);
-            if ( Result.Success )
+            var ttpLoader = new TTP (Map);
+            var result = ttpLoader.Load(Dialog.FileName);
+            if (!result.HasProblems && !result.HasWarnings)
             {
                 TextureViewControl.DrawViewLater();
             }
             else
             {
-                MessageBox.Show("Importing tile types failed: " + Result.Problem);
+                App.ShowWarnings(result);
             }
         }
 
@@ -1080,46 +1085,10 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-
-            var Result = Map.Write_LND(Dialog.FileName, true);
-
-            App.ShowWarnings(Result);
-        }
-
-        private void Save_FME_Prompt()
-        {
-            var Map = MainMap;
-
-            if ( Map == null )
-            {
-                return;
-            }
-
-            var Dialog = new SaveFileDialog();
-
-            Dialog.InitialDirectory = SettingsManager.Settings.SavePath;
-            Dialog.FileName = "";
-            Dialog.Filter = Constants.ProgramName + " FME Map Files (*.fme)|*.fme";
-            if ( Dialog.ShowDialog(this) != DialogResult.OK )
-            {
-                return;
-            }
-            SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            var strScavenger = "";
-            clsInputBox.Show("", "Enter the player number for scavenger units:", ref strScavenger);
-            byte ScavengerNum = 0;
-            if ( !IOUtil.InvariantParse(strScavenger, ref ScavengerNum) )
-            {
-                MessageBox.Show("Unable to save FME: entered scavenger number is not a number.");
-                return;
-            }
-            ScavengerNum = Math.Min(ScavengerNum, (byte)10);
-            var Result = new sResult();
-            Result = Map.Write_FME(Dialog.FileName, true, ScavengerNum);
-            if ( !Result.Success )
-            {
-                MessageBox.Show("Unable to save FME: " + Result.Problem);
-            }
+                 
+            var lndSaver = new LND (Map);
+            var result = lndSaver.Save(Dialog.FileName, true);
+            App.ShowWarnings(result);
         }
 
         public void Save_Minimap_Prompt()
@@ -1141,11 +1110,10 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            var Result = new sResult();
-            Result = Map.Write_MinimapFile(Dialog.FileName, true);
-            if ( !Result.Success )
-            {
-                MessageBox.Show("There was a problem saving the minimap bitmap: " + Result.Problem);
+            var minmapSaver = new Minimap (Map);
+            var result = minmapSaver.Save(Dialog.FileName, true);
+            if (result.HasProblems || result.HasWarnings) {
+                App.ShowWarnings (result);
             }
         }
 
@@ -1168,11 +1136,10 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            var Result = new sResult();
-            Result = Map.Write_Heightmap(Dialog.FileName, true);
-            if ( !Result.Success )
-            {
-                MessageBox.Show("There was a problem saving the heightmap bitmap: " + Result.Problem);
+            var hmSaver = new Heightmap (Map);
+            var result = hmSaver.Save(Dialog.FileName, true);
+            if (result.HasProblems || result.HasWarnings) {
+                App.ShowWarnings (result);
             }
         }
 
@@ -1195,11 +1162,10 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            var Result = new sResult();
-            Result = Map.Write_TTP(Dialog.FileName, true);
-            if ( !Result.Success )
-            {
-                MessageBox.Show("There was a problem saving the tile types: " + Result.Problem);
+            var ttpSaver = new TTP (Map);
+            var result = ttpSaver.Save(Dialog.FileName, true);
+            if (result.HasProblems || result.HasWarnings) {
+                App.ShowWarnings (result);
             }
         }
 
@@ -3373,11 +3339,6 @@ namespace SharpFlame
             View_DrawViewLater();
         }
 
-        public void menuSaveFME_Click(Object sender, EventArgs e)
-        {
-            Save_FME_Prompt();
-        }
-
         public void menuOptions_Click(Object sender, EventArgs e)
         {
             if ( Program.frmOptionsInstance != null )
@@ -4109,10 +4070,6 @@ namespace SharpFlame
                 ReturnResult.Add(fmap.Load(Path));
                 resultMap.PathInfo = new clsPathInfo(Path, true);
                 break;
-            case "fme":
-                ReturnResult.Add(resultMap.Load_FME(Path));
-                resultMap.PathInfo = new clsPathInfo(Path, false);
-                break;
             case "wz":
                 var wzFormat = new Wz(resultMap);
                 ReturnResult.Add(wzFormat.Load(Path));
@@ -4124,7 +4081,8 @@ namespace SharpFlame
                 resultMap.PathInfo = new clsPathInfo(Path, false);
                 break;
             case "lnd":
-                ReturnResult.Add(resultMap.Load_LND(Path));
+                var lndFormat = new LND (resultMap);
+                ReturnResult.Add(lndFormat.Load(Path));
                 resultMap.PathInfo = new clsPathInfo(Path, false);
                 break;
             default:

@@ -1,6 +1,6 @@
-namespace SharpFlame.Mapping.IO
+namespace SharpFlame.Mapping.Format.LND
 {
-    public struct sLNDTile
+    public struct LNDTile
     {
         public short F;
         public short TF;

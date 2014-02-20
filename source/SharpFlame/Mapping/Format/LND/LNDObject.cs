@@ -5,9 +5,9 @@ using SharpFlame.Core.Domain;
 
 #endregion
 
-namespace SharpFlame.Mapping.IO
+namespace SharpFlame.Mapping.Format.LND
 {
-    public class clsLNDObject
+    public class LNDObject
     {
         public string Code;
         public UInt32 ID;

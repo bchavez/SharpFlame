@@ -146,9 +146,6 @@
     <Compile Include="Mapping\Drawing\clsDrawTileOutline.cs" />
     <Compile Include="Mapping\Drawing\clsDrawVertexMarker.cs" />
     <Compile Include="Mapping\Drawing\clsDrawVertexTerrain.cs" />
-    <Compile Include="Mapping\IO\clsLNDObject.cs" />
-    <Compile Include="Mapping\IO\sFMEUnit.cs" />
-    <Compile Include="Mapping\IO\sLNDTile.cs" />
     <Compile Include="Mapping\Objects\clsUnit.cs" />
     <Compile Include="Mapping\Objects\clsUnitAdd.cs" />
     <Compile Include="Mapping\Objects\clsUnitCreate.cs" />
@@ -189,7 +186,6 @@
     <Compile Include="Mapping\Changes\clsMapChanges.cs" />
     <Compile Include="Mapping\Drawing\clsMapDraw.cs" />
     <Compile Include="Mapping\Objects\clsMapObject.cs" />
-    <Compile Include="Mapping\IO\clsMapOtherIO.cs" />
     <Compile Include="Mapping\Script\clsMapScriptMarkers.cs" />
     <Compile Include="Mapping\Tools\clsAction.cs" />
     <Compile Include="Mapping\Tools\clsApplyAutoTri.cs" />
@@ -403,6 +399,12 @@
     <Compile Include="Mapping\Format\FMap\FMapIniGateways.cs" />
     <Compile Include="Mapping\Format\FMap\FMapIniObjects.cs" />
     <Compile Include="Mapping\Format\FMap\FMap.cs" />
+    <Compile Include="Mapping\Format\TTP\TTP.cs" />
+    <Compile Include="Mapping\Format\Minimap\Minimap.cs" />
+    <Compile Include="Mapping\Format\Heightmap\Heightmap.cs" />
+    <Compile Include="Mapping\Format\LND\LND.cs" />
+    <Compile Include="Mapping\Format\LND\LNDObject.cs" />
+    <Compile Include="Mapping\Format\LND\LNDTile.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">
@@ -602,5 +604,9 @@
   <ItemGroup />
   <ItemGroup>
     <Folder Include="Mapping\Format\FMap\" />
+    <Folder Include="Mapping\Format\TTP\" />
+    <Folder Include="Mapping\Format\Minimap\" />
+    <Folder Include="Mapping\Format\Heightmap\" />
+    <Folder Include="Mapping\Format\LND\" />
   </ItemGroup>
 </Project>

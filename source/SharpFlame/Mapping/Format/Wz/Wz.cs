@@ -16,6 +16,7 @@ using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.Core.Parsers.Lev;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
+using SharpFlame.Mapping.Format.TTP;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tiles;
@@ -470,7 +471,8 @@ namespace SharpFlame.Mapping.Format.Wz
                             returnResult.Add(Serialize_WZ_Map(zip));
 
                             zip.PutNextEntry(string.Format("{0}/ttypes.ttp", path));
-                            returnResult.Add(Serialize_WZ_TTP(zip));
+                            var ttpSaver = new TTP.TTP(map);
+                            returnResult.Add(ttpSaver.Save(zip));
                         }
                     }
                     catch ( Exception ex )
@@ -543,10 +545,8 @@ namespace SharpFlame.Mapping.Format.Wz
                     }
 
                     filePath = CampDirectory + "ttypes.ttp";
-                    using ( var file = File.Open(filePath, FileMode.Open | FileMode.CreateNew) )
-                    {
-                        returnResult.Add(Serialize_WZ_TTP(file));
-                    }
+                    var ttpSaver = new TTP.TTP(map);
+                    returnResult.Add(ttpSaver.Save(filePath, false));
 
                     filePath = CampDirectory + "labels.ini";
                     using ( var file = File.Open(filePath, FileMode.Open | FileMode.CreateNew) )
@@ -2029,55 +2029,6 @@ namespace SharpFlame.Mapping.Format.Wz
             return ReturnResult;
         }
 
-        public sResult Read_WZ_TTP(BinaryReader File)
-        {
-            var ReturnResult = new sResult();
-            ReturnResult.Success = false;
-            ReturnResult.Problem = "";
-
-            var strTemp = "";
-            UInt32 uintTemp = 0;
-            UInt16 ushortTemp = 0;
-            var A = 0;
-
-            try
-            {
-                strTemp = IOUtil.ReadOldTextOfLength(File, 4);
-                if ( strTemp != "ttyp" )
-                {
-                    ReturnResult.Problem = "Incorrect identifier.";
-                    return ReturnResult;
-                }
-
-                uintTemp = File.ReadUInt32();
-                if ( uintTemp != 8U )
-                {
-                    ReturnResult.Problem = "Unknown version.";
-                    return ReturnResult;
-                }
-                uintTemp = File.ReadUInt32();
-                for ( A = 0; A <= ((int)(Math.Min(uintTemp, (uint)map.Tileset.TileCount))) - 1; A++ )
-                {
-                    ushortTemp = File.ReadUInt16();
-                    if ( ushortTemp > 11 )
-                    {
-                        ReturnResult.Problem = "Unknown tile type number.";
-                        return ReturnResult;
-                    }
-                    map.Tile_TypeNum[A] = (byte)ushortTemp;
-                }
-            }
-            catch ( Exception ex )
-            {
-                ReturnResult.Problem = ex.Message;
-                logger.ErrorException("Got an exception", ex);
-                return ReturnResult;
-            }
-
-            ReturnResult.Success = true;
-            return ReturnResult;
-        }
-
         private clsResult Serialize_WZ_StructuresINI(IniWriter File, int PlayerCount)
         {
             var ReturnResult = new clsResult("Serializing structures INI", false);
@@ -2558,26 +2509,6 @@ namespace SharpFlame.Mapping.Format.Wz
             fileGAM.Write(scrollMax.Y);
             fileGAM.Write(new byte[20]);
             fileGAM.Flush();
-
-            return returnResult;
-        }
-
-        private clsResult Serialize_WZ_TTP(Stream stream)
-        {
-            var returnResult = new clsResult("Serializing ttypes.ttp", false);
-            logger.Info("Serializing ttypes.ttp");
-
-            var fileTTP = new BinaryWriter(stream, App.ASCIIEncoding);
-
-            IOUtil.WriteText(fileTTP, false, "ttyp");
-            fileTTP.Write(8U);
-            fileTTP.Write((uint)map.Tileset.TileCount);
-            for ( var a = 0; a <= map.Tileset.TileCount - 1; a++ )
-            {
-                fileTTP.Write((ushort)map.Tile_TypeNum[a]);
-            }
-
-            fileTTP.Flush();
 
             return returnResult;
         }

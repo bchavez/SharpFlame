@@ -741,13 +741,13 @@ namespace SharpFlame.Mapping.Format.FMap
             var returnResult = new clsResult("Serializing objects", false);
             logger.Info("Serializing objects");
 
-            var a = 0;
             var droid = default(DroidDesign);
             var warningCount = 0;
             string text = null;
 
             try
             {
+                var a = 0;
                 foreach (var unit in map.Units) 
                 {
                     file.AddSection(a.ToStringInvariant());
@@ -826,6 +826,8 @@ namespace SharpFlame.Mapping.Format.FMap
                     {
                         file.AddProperty("ScriptLabel", unit.Label);
                     }
+
+                    a++;
                 }
             }
             catch ( Exception ex )
