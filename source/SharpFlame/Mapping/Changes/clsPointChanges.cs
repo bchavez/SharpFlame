@@ -16,7 +16,6 @@ namespace SharpFlame.Mapping.Changes
         public clsPointChanges(XYInt PointSize)
         {
             PointIsChanged = new bool[PointSize.X, PointSize.Y];
-            ChangedPoints.MinSize = PointSize.X * PointSize.Y;
             ChangedPoints.Clear();
         }
 

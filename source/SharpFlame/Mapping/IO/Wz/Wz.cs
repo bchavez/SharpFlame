@@ -588,7 +588,7 @@ namespace SharpFlame.Mapping.IO.Wz
                     availableID = bjoUnit.ID + 1U;
                 }
             }
-            if ( iniStructures != null )
+            if ( iniStructures.Count > 0)
             {
                 var structMaxId = iniStructures.Max(w => w.ID) + 10;
                 if ( structMaxId > availableID )
@@ -596,7 +596,7 @@ namespace SharpFlame.Mapping.IO.Wz
                     availableID = structMaxId;
                 }
             }
-            if ( iniFeatures != null )
+            if ( iniFeatures.Count > 0 )
             {
                 var featuresMaxId = iniFeatures.Max(w => w.ID) + 10;
                 if ( featuresMaxId > availableID )
@@ -604,7 +604,7 @@ namespace SharpFlame.Mapping.IO.Wz
                     availableID = featuresMaxId;
                 }
             }
-            if ( iniDroids != null )
+            if ( iniDroids.Count > 0 )
             {
                 var droidsMaxId = iniDroids.Max(w => w.ID) + 10;
                 if ( droidsMaxId > availableID )
