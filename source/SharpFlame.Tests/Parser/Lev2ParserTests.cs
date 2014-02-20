@@ -148,6 +148,44 @@ data    ""wrf/multi/fog1.wrf""
             result.Data[1].Should().Be( "wrf/multi/fog1.wrf" );
 
         }
+
+        [Test]
+        public void can_parse_tinny_war_lev_file()
+        {
+            var data = @"// Made with SharpFlame 0.20 Windows
+// Date: 2014/02/13 12:23:17
+// Author: Unknown
+// License: CC0
+
+level   Tinny-War-T1
+players 2
+type    14
+dataset MULTI_CAM_1
+game    ""multiplay/maps/2c-Tinny-War.gam""
+data    ""wrf/multi/skirmish2.wrf""
+data    ""wrf/multi/fog1.wrf""
+
+level   Tinny-War-T2
+players 2
+type    18
+dataset MULTI_T2_C1
+game    ""multiplay/maps/2c-Tinny-War.gam""
+data    ""wrf/multi/t2-skirmish2.wrf""
+data    ""wrf/multi/fog1.wrf""
+
+level   Tinny-War-T3
+players 2
+type    19
+dataset MULTI_T3_C1
+game    ""multiplay/maps/2c-Tinny-War.gam""
+data    ""wrf/multi/t3-skirmish2.wrf""
+data    ""wrf/multi/fog1.wrf""
+";
+            var result = Lev2Grammar.Lev.Parse(data);
+
+            result.Levels.Length.Should().Be(3);
+
+        }
     }
 
 }

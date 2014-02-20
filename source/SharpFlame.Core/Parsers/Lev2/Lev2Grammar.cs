@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Sprache;
@@ -92,9 +93,46 @@ namespace SharpFlame.Core.Parsers.Lev2
                            Data = data.IsDefined ? data.Get().ToArray() : null
                        };
 
+        //public static readonly Parser<Lev> Lev =
+        //    from ignore in Parse.AnyChar.AtLeastOnce().Text().Token()
+        //        .Where(x => Campaign.TryParse(x).WasSuccessful)
+        //        .Select(y => Campaign.Parse(y)).Optional().AtLeastOnce()
+        //    select new Lev
+        //        {
+        //            Campaigns = ignore.Where(x => x.IsDefined)
+        //                .Select(x => x.Get()).ToArray()
+        //        };
+
+        //public static readonly Parser<Lev> Lev =
+        //    from campaigns in Campaign.Optional().AtLeastOnce()
+        //    from levels in Level.Optional().AtLeastOnce()
+        //    select new Lev
+        //        {
+        //            Campaigns = campaigns.Where(c => c.IsDefined)
+        //                .Select(o => o.Get()).ToArray()
+        //        };
+
         public static readonly Parser<Lev> Lev =
-            from ignore in Parse.AnyChar.AtLeastOnce().x
-            from 
+            from loop in
+                (
+                    from ignore in Parse.AnyChar.Optional().Except(Campaign)
+                    from ignore2 in Parse.AnyChar.Optional().Except(Level)
+                    from campaigns in Campaign.Optional().AtLeastOnce()
+                    from levels in Level.Optional().AtLeastOnce()
+                    select new
+                        {
+                            Campaigns = campaigns.Where( c => c.IsDefined).Select(c => c.Get()),
+                            Levels = levels.Where( l => l.IsDefined).Select(l => l.Get()),
+
+                        }
+                    ).AtLeastOnce()
+            select new Lev
+                {
+                    Campaigns = loop
+                        .SelectMany(i => i.Campaigns).ToArray(),
+                    Levels = loop
+                        .SelectMany(i => i.Levels).ToArray()
+                };
     }
 
     public class Lev
