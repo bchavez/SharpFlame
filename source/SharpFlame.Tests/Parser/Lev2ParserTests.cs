@@ -1,6 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Core.Parsers.Lev2;
 using Sprache;
 
@@ -12,16 +16,43 @@ namespace SharpFlame.Tests.Parser
         [Test]
         public void test()
         {
-            var parser = Parse.CharExcept( "]" )
-                .AtLeastOnce()
-                .Text()
-                .Contained( Parse.Char( '[' ), Parse.Char( ']' ) );
+            var lineEnd = Parse.Return( "" ).End()
+                .XOr( Parse.String( "\r" ).Text() )
+                .Or( Parse.String( "\n" ).Text() )
+                .Or( Parse.String( "\r\n" ) );
 
+            var parser = Parse.String("//").Then(
+                _ => Parse.AnyChar.Until(lineEnd)).Text();
 
-            var result = parser.Parse("[ab]");
             
-            result.Should().Be("ab");
+
+            var result = parser.Parse("// foobar");
+            
+            result.Should().Be(" foobar");
         }
+
+        [Test]
+        public void can_parse_single_line_comment()
+        {
+            var data = @"// Made with SharpFlame 0.20 Windows";
+
+            var result = Lev2Grammar.SingleLineComment.Parse(data);
+
+            result.Should().Be(" Made with SharpFlame 0.20 Windows");
+        }
+
+
+        [Test]
+        public void can_parse_multi_line_comment()
+        {
+            var data = @"/** .foo. **/";
+
+            var result = Lev2Grammar.MultiLineComment.Parse( data );
+
+            result.Should().Be( "* .foo. *" );
+        }
+
+
         [Test]
         public void can_parse_campaign_directive()
         {
@@ -200,6 +231,47 @@ data    ""wrf/multi/fog1.wrf""
 
             result.Levels[1].Data.Count().Should().Be( 2 );
             result.Levels[1].Data[0].Should().Be( "wrf/multi/t2-skirmish2.wrf" );
+        }
+
+        [Test]
+        public void can_parse_addon_lev()
+        {
+            var file = "Data"
+                .CombinePathWith("Levels")
+                .CombinePathWith("addon.lev");
+
+            var txt = File.ReadAllText(file);
+
+            var levfile = Lev2Grammar.Lev.Parse(txt);
+
+            Console.WriteLine( "# of campaigns: {0}", levfile.Campaigns.Length );
+            Console.WriteLine( "# of levels: {0}", levfile.Levels.Length );
+
+            levfile.Campaigns.Length.Should().Be(9);
+            levfile.Levels.Length.Should().Be(114);
+        }
+
+        [Test]
+        [Explicit]
+        public void benchmark()
+        {
+            var file = "Data"
+             .CombinePathWith( "Levels" )
+             .CombinePathWith( "addon.lev" );
+
+            var txt = File.ReadAllText( file );
+            Console.WriteLine( "Parsing: {0}", file );
+            var s = new Stopwatch();
+
+            s.Start();
+            for( int i = 0; i < 1000; i++ )
+            {
+                Lev2Grammar.Lev.Parse( txt );
+            }
+            s.Stop();
+            Console.WriteLine( "Total Time: " + s.Elapsed );
+            //CPU: INTEL 3960X EE, 64GB RAM
+            //Total Time: 00:00:13.5444390
         }
     }
 

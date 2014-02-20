@@ -8,6 +8,18 @@ namespace SharpFlame.Core.Parsers.Lev2
 {
     public class Lev2Grammar
     {
+        public static readonly Parser<string> MultiLineComment =
+            Parse.AnyChar.Except(Parse.String("*/")).AtLeastOnce().Text()
+                .Contained(Parse.String("/*"), Parse.String("*/")).Token();
+
+        public static readonly Parser<string> LineEnd = Parse.Return("").End()
+            .XOr(Parse.String("\r").Text())
+            .Or(Parse.String("\n").Text())
+            .Or(Parse.String("\r\n")).Text();
+
+        public static readonly Parser<string> SingleLineComment =
+            Parse.String("//").Then(_ => Parse.AnyChar.Until(LineEnd)).Text().Token();
+       
         public static readonly Parser<string> QuotedText =
             Parse.CharExcept('"').AtLeastOnce().Text()
                 .Contained(Parse.Char('"'), Parse.Char('"'));
@@ -96,6 +108,9 @@ namespace SharpFlame.Core.Parsers.Lev2
         public static readonly Parser<Lev> Lev =
             from loop in
                 (
+                    from multi_comments in MultiLineComment.Optional().AtLeastOnce()
+                    from single_comments in SingleLineComment.Optional().AtLeastOnce()
+
                     from campaigns in Campaign.Optional().AtLeastOnce()
                     from levels in Level.Optional().AtLeastOnce()
 
@@ -107,14 +122,6 @@ namespace SharpFlame.Core.Parsers.Lev2
                     let levelsArray = levels
                         .Where(l => l.IsDefined)
                         .Select(l => l.Get()).ToArray()
-
-                    let directiveFound =
-                        campaignsArray.Any() || levelsArray.Any()
-
-                    //if there was a directive found immediately return and continue;
-                    //otherwise, if there was NO directive, parse any character
-                    //and ignore it.
-                    from ignore in directiveFound ? Parse.Return('*') : Parse.AnyChar
 
                     select new
                         {
