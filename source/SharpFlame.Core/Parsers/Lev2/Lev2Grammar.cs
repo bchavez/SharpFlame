@@ -112,26 +112,39 @@ namespace SharpFlame.Core.Parsers.Lev2
         //                .Select(o => o.Get()).ToArray()
         //        };
 
+
+
+
         public static readonly Parser<Lev> Lev =
             from loop in
                 (
-                    from ignore in Parse.AnyChar.Optional().Except(Campaign)
-                    from ignore2 in Parse.AnyChar.Optional().Except(Level)
-                    from campaigns in Campaign.Optional().AtLeastOnce()
+                    from campaigns in Parse.AnyChar.Many().Text()
+                    .Where(s => true ).Optional().AtLeastOnce()
+                    
                     from levels in Level.Optional().AtLeastOnce()
+
+                    let continue_ =
+                        campaigns.Any(x => x.IsDefined) ||
+                        levels.Any(x => x.IsDefined)
+
+                    from consume in Parse.AnyChar.Where(c => continue_)
+
+                    let c = 
+                    campaigns.Where(c => c.IsDefined).Select(c => c.Get())
+                    let l =
+                    levels.Where(l => l.IsDefined).Select(l => l.Get())
                     select new
                         {
-                            Campaigns = campaigns.Where( c => c.IsDefined).Select(c => c.Get()),
-                            Levels = levels.Where( l => l.IsDefined).Select(l => l.Get()),
-
+                            Campaigns = c,
+                            Levels = l
                         }
                     ).AtLeastOnce()
             select new Lev
                 {
-                    Campaigns = loop
-                        .SelectMany(i => i.Campaigns).ToArray(),
-                    Levels = loop
-                        .SelectMany(i => i.Levels).ToArray()
+                    //Campaigns = loop
+                    //    .Select(i => i.Campaigns).ToArray(),
+                    //Levels = loop
+                    //    .SelectMany(i => i.Levels).ToArray()
                 };
     }
 
