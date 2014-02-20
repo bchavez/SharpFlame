@@ -6,7 +6,7 @@ using SharpFlame.Domain;
 
 #endregion
 
-namespace SharpFlame.Mapping.Format.WZFormat
+namespace SharpFlame.Mapping.Format.Wz
 {
     public class clsWZBJOUnit
     {

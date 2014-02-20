@@ -26,15 +26,15 @@ using Sprache;
 
 #endregion
 
-namespace SharpFlame.Mapping.Format.WZFormat
+namespace SharpFlame.Mapping.Format.Wz
 {
-    public class WZFormat
+    public class Wz
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         protected readonly clsMap map;
 
-        public WZFormat(clsMap newMap)
+        public Wz(clsMap newMap)
         {
             map = newMap;
         }

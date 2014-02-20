@@ -396,13 +396,13 @@
     <Compile Include="FileIO\ZipSplitPath.cs" />
     <Compile Include="Util\clsInputBox.cs" />
     <Compile Include="ExtensionsForString.cs" />
-    <Compile Include="Mapping\Format\WZFormat\WZFormat.cs" />
-    <Compile Include="Mapping\Format\WZFormat\clsWZBJOUnit.cs" />
-    <Compile Include="Mapping\Format\WZFormat\sWrite_WZ_Args.cs" />
-    <Compile Include="Mapping\Format\WZFormat\GameFormat.cs" />
-    <Compile Include="Mapping\Format\WZFormat\IniDroid.cs" />
-    <Compile Include="Mapping\Format\WZFormat\IniFeature.cs" />
-    <Compile Include="Mapping\Format\WZFormat\IniStructure.cs" />
+    <Compile Include="Mapping\Format\Wz\clsWZBJOUnit.cs" />
+    <Compile Include="Mapping\Format\Wz\Game.cs" />
+    <Compile Include="Mapping\Format\Wz\IniDroid.cs" />
+    <Compile Include="Mapping\Format\Wz\IniFeature.cs" />
+    <Compile Include="Mapping\Format\Wz\IniStructure.cs" />
+    <Compile Include="Mapping\Format\Wz\sWrite_WZ_Args.cs" />
+    <Compile Include="Mapping\Format\Wz\Wz.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">
@@ -599,8 +599,5 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
-  <ItemGroup>
-    <Folder Include="Mapping\Format\" />
-    <Folder Include="Mapping\Format\WZFormat\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

@@ -17,7 +17,7 @@ using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Generators;
 using SharpFlame.Mapping;
-using SharpFlame.Mapping.Format.WZFormat;
+using SharpFlame.Mapping.Format.Wz;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tiles;
@@ -4112,12 +4112,12 @@ namespace SharpFlame
                     resultMap.PathInfo = new clsPathInfo(Path, false);
                     break;
                 case "wz":
-                    var wzFormat = new WZFormat(resultMap);
+                    var wzFormat = new Wz(resultMap);
                     ReturnResult.Add(wzFormat.Load(Path));
                     resultMap.PathInfo = new clsPathInfo(Path, false);
                     break;
                 case "gam":
-                    var gameFormat = new GameFormat(resultMap);
+                    var gameFormat = new Game(resultMap);
                     ReturnResult.Add(gameFormat.Load(Path));
                     resultMap.PathInfo = new clsPathInfo(Path, false);
                     break;

@@ -10,13 +10,13 @@ using SharpFlame.Util;
 
 #endregion
 
-namespace SharpFlame.Mapping.Format.WZFormat
+namespace SharpFlame.Mapping.Format.Wz
 {
-    public class GameFormat : WZFormat
+    public class Game : Wz
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public GameFormat(clsMap newMap) : base(newMap)
+        public Game(clsMap newMap) : base(newMap)
         {
         }
 
