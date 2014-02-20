@@ -20,7 +20,7 @@ namespace SharpFlame.Bitmaps
             returnResult.Problem = "";
             returnResult.Success = false;
 
-            var bitmap = default(Bitmap);
+            Bitmap bitmap;
             try
             {
                 bitmap = new Bitmap(path);

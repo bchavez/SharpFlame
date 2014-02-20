@@ -221,11 +221,9 @@ namespace SharpFlame
 
         public static int TemplateDroidType_Add(DroidDesign.clsTemplateDroidType NewDroidType)
         {
-            var returnResult = 0;
-
             Array.Resize(ref TemplateDroidTypes, TemplateDroidTypeCount + 1);
             TemplateDroidTypes[TemplateDroidTypeCount] = NewDroidType;
-            returnResult = TemplateDroidTypeCount;
+            var returnResult = TemplateDroidTypeCount;
             TemplateDroidTypeCount++;
 
             return returnResult;
@@ -383,26 +381,24 @@ namespace SharpFlame
             return returnResult;
         }
 
-        public static void View_Radius_Set(double Radius)
+        public static void View_Radius_Set(double radius)
         {
-            VisionSectors.Radius = Radius / (Constants.TerrainGridSpacing * Constants.SectorTileSize);
+            VisionSectors.Radius = radius / (Constants.TerrainGridSpacing * Constants.SectorTileSize);
         }
 
-        public static XYDouble CalcUnitsCentrePos(SimpleList<clsUnit> Units)
+        public static XYDouble CalcUnitsCentrePos(SimpleList<clsUnit> units)
         {
-            var Result = default(XYDouble);
+            var result = default(XYDouble);
 
-            Result.X = 0.0D;
-            Result.Y = 0.0D;
-            var Unit = default(clsUnit);
-            foreach ( var tempLoopVar_Unit in Units )
+            result.X = 0.0D;
+            result.Y = 0.0D;
+            foreach ( var unit in units )
             {
-                Unit = tempLoopVar_Unit;
-                Result += Unit.Pos.Horizontal.ToDoubles();
+                result += unit.Pos.Horizontal.ToDoubles();
             }
-            Result /= Units.Count;
+            result /= units.Count;
 
-            return Result;
+            return result;
         }
     }
 }

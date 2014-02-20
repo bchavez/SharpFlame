@@ -95,11 +95,7 @@ namespace SharpFlame.Controls
             var A = 0;
             var UnitGroup = default(clsUnitGroup);
 
-            if ( _Target == null )
-            {
-                UnitGroup = null;
-            }
-            else
+            if ( _Target != null )
             {
                 UnitGroup = _Target.Item;
             }

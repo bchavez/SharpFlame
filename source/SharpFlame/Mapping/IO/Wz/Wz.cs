@@ -575,7 +575,6 @@ namespace SharpFlame.Mapping.IO.Wz
             var newUnit = default(clsUnit);
             UInt32 availableID = 0;
             var unitAdd = new clsUnitAdd();
-            var a = 0;
             var b = 0;
 
             unitAdd.Map = map;
