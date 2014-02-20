@@ -6,7 +6,7 @@ using SharpFlame.Mapping.Objects;
 
 #endregion
 
-namespace SharpFlame.Mapping.Format.Wz
+namespace SharpFlame.Mapping.IO.Wz
 {
     public class IniDroid
     {

@@ -6,7 +6,7 @@ using SharpFlame.Maths;
 
 #endregion
 
-namespace SharpFlame.Mapping.Format.Wz
+namespace SharpFlame.Mapping.IO.Wz
 {
     public struct sWrite_WZ_Args
     {

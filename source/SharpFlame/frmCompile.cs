@@ -8,7 +8,7 @@ using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping;
-using SharpFlame.Mapping.Format.Wz;
+using SharpFlame.Mapping.IO.Wz;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Maths;
 

@@ -8,7 +8,7 @@ using SharpFlame.FileIO.Ini;
 
 #endregion
 
-namespace SharpFlame.Mapping.Format.FMap
+namespace SharpFlame.Mapping.IO.FMap
 {
     public class FMapIniObjects : SectionTranslator
     {

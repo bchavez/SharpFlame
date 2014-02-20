@@ -5,13 +5,11 @@ using SharpFlame.Collections;
 using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
-using SharpFlame.Mapping;
 using SharpFlame.Mapping.Objects;
-using SharpFlame.Maths;
 using SharpFlame.Mapping.Tiles;
+using SharpFlame.Maths;
 
-
-namespace SharpFlame.Mapping.Format.LND
+namespace SharpFlame.Mapping.IO.LND
 {
     public class LND
     {

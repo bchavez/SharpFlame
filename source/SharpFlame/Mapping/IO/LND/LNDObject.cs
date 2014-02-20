@@ -5,7 +5,7 @@ using SharpFlame.Core.Domain;
 
 #endregion
 
-namespace SharpFlame.Mapping.Format.LND
+namespace SharpFlame.Mapping.IO.LND
 {
     public class LNDObject
     {

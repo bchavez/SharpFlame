@@ -1,4 +1,4 @@
-namespace SharpFlame.Mapping.Format.LND
+namespace SharpFlame.Mapping.IO.LND
 {
     public struct LNDTile
     {

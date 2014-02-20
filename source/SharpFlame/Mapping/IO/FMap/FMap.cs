@@ -20,7 +20,7 @@ using Section = SharpFlame.FileIO.Ini.Section;
 
 #endregion
 
-namespace SharpFlame.Mapping.Format.FMap
+namespace SharpFlame.Mapping.IO.FMap
 {
     public class FMap
     {

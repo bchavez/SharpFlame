@@ -1,12 +1,10 @@
 using System;
 using System.Drawing;
 using NLog;
-using SharpFlame.Colors;
 using SharpFlame.Bitmaps;
-using SharpFlame.Maths;
-using SharpFlame.Mapping;
+using SharpFlame.Colors;
 
-namespace SharpFlame.Mapping.Format.Heightmap
+namespace SharpFlame.Mapping.IO.Heightmap
 {
     public class Heightmap
     {

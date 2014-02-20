@@ -388,23 +388,23 @@
     <Compile Include="FileIO\ZipSplitPath.cs" />
     <Compile Include="Util\clsInputBox.cs" />
     <Compile Include="ExtensionsForString.cs" />
-    <Compile Include="Mapping\Format\Wz\Game.cs" />
-    <Compile Include="Mapping\Format\Wz\IniDroid.cs" />
-    <Compile Include="Mapping\Format\Wz\IniFeature.cs" />
-    <Compile Include="Mapping\Format\Wz\IniStructure.cs" />
-    <Compile Include="Mapping\Format\Wz\sWrite_WZ_Args.cs" />
-    <Compile Include="Mapping\Format\Wz\Wz.cs" />
-    <Compile Include="Mapping\Format\Wz\WZBJOUnit.cs" />
-    <Compile Include="Mapping\Format\FMap\FMapInfo.cs" />
-    <Compile Include="Mapping\Format\FMap\FMapIniGateways.cs" />
-    <Compile Include="Mapping\Format\FMap\FMapIniObjects.cs" />
-    <Compile Include="Mapping\Format\FMap\FMap.cs" />
-    <Compile Include="Mapping\Format\TTP\TTP.cs" />
-    <Compile Include="Mapping\Format\Minimap\Minimap.cs" />
-    <Compile Include="Mapping\Format\Heightmap\Heightmap.cs" />
-    <Compile Include="Mapping\Format\LND\LND.cs" />
-    <Compile Include="Mapping\Format\LND\LNDObject.cs" />
-    <Compile Include="Mapping\Format\LND\LNDTile.cs" />
+    <Compile Include="Mapping\IO\FMap\FMap.cs" />
+    <Compile Include="Mapping\IO\FMap\FMapInfo.cs" />
+    <Compile Include="Mapping\IO\FMap\FMapIniGateways.cs" />
+    <Compile Include="Mapping\IO\FMap\FMapIniObjects.cs" />
+    <Compile Include="Mapping\IO\Heightmap\Heightmap.cs" />
+    <Compile Include="Mapping\IO\LND\LND.cs" />
+    <Compile Include="Mapping\IO\LND\LNDObject.cs" />
+    <Compile Include="Mapping\IO\LND\LNDTile.cs" />
+    <Compile Include="Mapping\IO\Minimap\Minimap.cs" />
+    <Compile Include="Mapping\IO\TTP\TTP.cs" />
+    <Compile Include="Mapping\IO\Wz\Game.cs" />
+    <Compile Include="Mapping\IO\Wz\IniDroid.cs" />
+    <Compile Include="Mapping\IO\Wz\IniFeature.cs" />
+    <Compile Include="Mapping\IO\Wz\IniStructure.cs" />
+    <Compile Include="Mapping\IO\Wz\WZBJOUnit.cs" />
+    <Compile Include="Mapping\IO\Wz\Wz.cs" />
+    <Compile Include="Mapping\IO\Wz\sWrite_WZ_Args.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">
@@ -603,10 +603,6 @@
   </ProjectExtensions>
   <ItemGroup />
   <ItemGroup>
-    <Folder Include="Mapping\Format\FMap\" />
-    <Folder Include="Mapping\Format\TTP\" />
-    <Folder Include="Mapping\Format\Minimap\" />
-    <Folder Include="Mapping\Format\Heightmap\" />
-    <Folder Include="Mapping\Format\LND\" />
+    <Folder Include="Mapping\IO\" />
   </ItemGroup>
 </Project>

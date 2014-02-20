@@ -10,7 +10,7 @@ using SharpFlame.Util;
 
 #endregion
 
-namespace SharpFlame.Mapping.Format.Wz
+namespace SharpFlame.Mapping.IO.Wz
 {
     public class Game : Wz
     {

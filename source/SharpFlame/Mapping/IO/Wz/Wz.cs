@@ -16,7 +16,6 @@ using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.Core.Parsers.Lev;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
-using SharpFlame.Mapping.Format.TTP;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tiles;
@@ -27,7 +26,7 @@ using Sprache;
 
 #endregion
 
-namespace SharpFlame.Mapping.Format.Wz
+namespace SharpFlame.Mapping.IO.Wz
 {
     public class Wz
     {

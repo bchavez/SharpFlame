@@ -4,7 +4,7 @@ using System.IO;
 using NLog;
 using SharpFlame.FileIO;
 
-namespace SharpFlame.Mapping.Format.TTP
+namespace SharpFlame.Mapping.IO.TTP
 {
     public class TTP
     {

@@ -4,10 +4,9 @@ using NLog;
 using SharpFlame.Bitmaps;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
-using SharpFlame.Mapping;
 using SharpFlame.Maths;
 
-namespace SharpFlame.Mapping.Format.Minimap
+namespace SharpFlame.Mapping.IO.Minimap
 {
     public class Minimap
     {
