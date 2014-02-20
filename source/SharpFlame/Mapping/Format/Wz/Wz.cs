@@ -212,7 +212,7 @@ namespace SharpFlame.Mapping.Format.Wz
                     }
                 }
 
-                var bjoUnits = new List<clsWZBJOUnit>();
+                var bjoUnits = new List<WZBJOUnit>();
 
                 var iniFeatures = new List<IniFeature>();
                 var featureIniZipEntry = zip[gameFilesPath + "feature.ini"];
@@ -568,7 +568,7 @@ namespace SharpFlame.Mapping.Format.Wz
             return returnResult;
         }
 
-        protected clsResult createWZObjects(List<clsWZBJOUnit> bjoUnits, List<IniStructure> iniStructures, List<IniDroid> iniDroids, List<IniFeature> iniFeatures)
+        protected clsResult createWZObjects(List<WZBJOUnit> bjoUnits, List<IniStructure> iniStructures, List<IniDroid> iniDroids, List<IniFeature> iniFeatures)
         {
             var ReturnResult = new clsResult("Creating objects", false);
             logger.Info("Creating objects");
@@ -1792,7 +1792,7 @@ namespace SharpFlame.Mapping.Format.Wz
             return returnResult;
         }
 
-        protected sResult read_WZ_Features(BinaryReader file, List<clsWZBJOUnit> wzUnits)
+        protected sResult read_WZ_Features(BinaryReader file, List<WZBJOUnit> wzUnits)
         {
             var returnResult = new sResult();
             returnResult.Success = false;
@@ -1802,7 +1802,7 @@ namespace SharpFlame.Mapping.Format.Wz
             UInt32 version = 0;
             UInt32 uintTemp = 0;
             var a = 0;
-            clsWZBJOUnit wzbJOUnit = null;
+            WZBJOUnit wzbJOUnit = null;
 
             try
             {
@@ -1826,7 +1826,7 @@ namespace SharpFlame.Mapping.Format.Wz
                 uintTemp = file.ReadUInt32();
                 for ( a = 0; a <= (Convert.ToInt32(uintTemp)) - 1; a++ )
                 {
-                    wzbJOUnit = new clsWZBJOUnit();
+                    wzbJOUnit = new WZBJOUnit();
                     wzbJOUnit.ObjectType = UnitType.Feature;
                     wzbJOUnit.Code = IOUtil.ReadOldTextOfLength(file, 40);
                     wzbJOUnit.Code = wzbJOUnit.Code.Substring(0, wzbJOUnit.Code.IndexOf('\0'));
@@ -1911,7 +1911,7 @@ namespace SharpFlame.Mapping.Format.Wz
             return ReturnResult;
         }
 
-        protected sResult read_WZ_Structures(BinaryReader File, List<clsWZBJOUnit> WZUnits)
+        protected sResult read_WZ_Structures(BinaryReader File, List<WZBJOUnit> WZUnits)
         {
             var returnResult = new sResult();
             returnResult.Success = false;
@@ -1921,7 +1921,7 @@ namespace SharpFlame.Mapping.Format.Wz
             UInt32 version = 0;
             UInt32 uintTemp = 0;
             var a = 0;
-            var wzBJOUnit = default(clsWZBJOUnit);
+            var wzBJOUnit = default(WZBJOUnit);
 
             try
             {
@@ -1945,7 +1945,7 @@ namespace SharpFlame.Mapping.Format.Wz
                 uintTemp = File.ReadUInt32();
                 for ( a = 0; a <= (Convert.ToInt32(uintTemp)) - 1; a++ )
                 {
-                    wzBJOUnit = new clsWZBJOUnit();
+                    wzBJOUnit = new WZBJOUnit();
                     wzBJOUnit.ObjectType = UnitType.PlayerStructure;
                     wzBJOUnit.Code = IOUtil.ReadOldTextOfLength(File, 40);
                     wzBJOUnit.Code = wzBJOUnit.Code.Substring(0, wzBJOUnit.Code.IndexOf('\0'));
@@ -1970,7 +1970,7 @@ namespace SharpFlame.Mapping.Format.Wz
             return returnResult;
         }
 
-        protected sResult read_WZ_Droids(BinaryReader File, List<clsWZBJOUnit> WZUnits)
+        protected sResult read_WZ_Droids(BinaryReader File, List<WZBJOUnit> WZUnits)
         {
             var ReturnResult = new sResult();
             ReturnResult.Success = false;
@@ -1980,7 +1980,7 @@ namespace SharpFlame.Mapping.Format.Wz
             UInt32 Version = 0;
             UInt32 uintTemp = 0;
             var A = 0;
-            var WZBJOUnit = default(clsWZBJOUnit);
+            var WZBJOUnit = default(WZBJOUnit);
 
             try
             {
@@ -2004,7 +2004,7 @@ namespace SharpFlame.Mapping.Format.Wz
                 uintTemp = File.ReadUInt32();
                 for ( A = 0; A <= (Convert.ToInt32(uintTemp)) - 1; A++ )
                 {
-                    WZBJOUnit = new clsWZBJOUnit();
+                    WZBJOUnit = new WZBJOUnit();
                     WZBJOUnit.ObjectType = UnitType.PlayerDroid;
                     WZBJOUnit.Code = IOUtil.ReadOldTextOfLength(File, 40);
                     WZBJOUnit.Code = WZBJOUnit.Code.Substring(0, WZBJOUnit.Code.IndexOf('\0'));
