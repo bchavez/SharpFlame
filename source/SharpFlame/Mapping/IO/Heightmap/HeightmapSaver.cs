@@ -6,13 +6,13 @@ using SharpFlame.Colors;
 
 namespace SharpFlame.Mapping.IO.Heightmap
 {
-    public class Heightmap
+    public class HeightmapSaver : IIOSaver
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         protected readonly clsMap map;
 
-        public Heightmap(clsMap newMap)
+		public HeightmapSaver(clsMap newMap)
         {
             map = newMap;
         }

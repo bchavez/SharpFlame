@@ -490,7 +490,9 @@ namespace SharpFlame.Mapping
 
             while ( Units.Count > 0 )
             {
-                Units[0].Deallocate();
+                if (Units [0] != null) {
+                    Units [0].Deallocate ();
+                }
             }
             Units.Deallocate();
             Units = null;
@@ -1237,7 +1239,7 @@ namespace SharpFlame.Mapping
 
             logger.Info(string.Format("Autosave to: \"{0}\"", path));
 
-            var fmap = new FMap (this);
+            var fmap = new FMapSaver (this);
             ReturnResult.Add(fmap.Save(path, false, SettingsManager.Settings.AutoSaveCompress));
 
             return ReturnResult;
@@ -2548,7 +2550,7 @@ namespace SharpFlame.Mapping
                 return false;
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            var fMap = new FMap (this);
+            var fMap = new FMapSaver (this);
             var result = fMap.Save(Dialog.FileName, true, true);
             if ( !result.HasProblems )
             {
@@ -2567,7 +2569,7 @@ namespace SharpFlame.Mapping
             }
             if ( PathInfo.IsFMap )
             {
-                var fMap = new FMap (this);
+                var fMap = new FMapSaver (this);
                 var result = fMap.Save(PathInfo.Path, true, true);
                 if ( !result.HasProblems )
                 {

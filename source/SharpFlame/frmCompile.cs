@@ -194,19 +194,15 @@ namespace SharpFlame
             {
                 return;
             }
-            var WriteWZArgs = new sWrite_WZ_Args();
-            WriteWZArgs.MapName = MapName;
-            WriteWZArgs.Path = CompileMultiDialog.FileName;
-            WriteWZArgs.Overwrite = true;
-            SetScrollLimits(ref WriteWZArgs.ScrollMin, ref WriteWZArgs.ScrollMax);
-            WriteWZArgs.Multiplayer = new sWrite_WZ_Args.clsMultiplayer();
-            WriteWZArgs.Multiplayer.AuthorName = txtAuthor.Text;
-            WriteWZArgs.Multiplayer.PlayerCount = PlayerCount;
-            WriteWZArgs.Multiplayer.License = License;
-            WriteWZArgs.CompileType = sWrite_WZ_Args.enumCompileType.Multiplayer;
 
-            var wzFormat = new Wz(Map);
-            ReturnResult.Add(wzFormat.Save(WriteWZArgs));
+            SetScrollLimits(ref Map.InterfaceOptions.ScrollMin, ref Map.InterfaceOptions.ScrollMax);           
+            Map.InterfaceOptions.CompileName = MapName;
+            Map.InterfaceOptions.CompileMultiAuthor = txtAuthor.Text;
+            Map.InterfaceOptions.CompileMultiPlayers = PlayerCount.ToString();
+            Map.InterfaceOptions.CompileMultiLicense = License;
+            Map.InterfaceOptions.CompileType = clsInterfaceOptions.EnumCompileType.Multiplayer;
+            var wzFormat = new WzSaver(Map);
+            ReturnResult.Add(wzFormat.Save(CompileMultiDialog.FileName, true, true));
             App.ShowWarnings(ReturnResult);
             if ( !ReturnResult.HasWarnings )
             {
@@ -636,17 +632,13 @@ namespace SharpFlame
             {
                 return;
             }
-            var WriteWZArgs = new sWrite_WZ_Args();
-            WriteWZArgs.MapName = MapName;
-            WriteWZArgs.Path = CompileCampDialog.SelectedPath;
-            WriteWZArgs.Overwrite = false;
-            SetScrollLimits(ref WriteWZArgs.ScrollMin, ref WriteWZArgs.ScrollMax);
-            WriteWZArgs.Campaign = new sWrite_WZ_Args.clsCampaign();
-            WriteWZArgs.Campaign.GAMType = (uint)TypeNum;
-            WriteWZArgs.CompileType = sWrite_WZ_Args.enumCompileType.Campaign;
+            SetScrollLimits(ref Map.InterfaceOptions.ScrollMin, ref Map.InterfaceOptions.ScrollMax);           
+            Map.InterfaceOptions.CompileName = MapName;
+            Map.InterfaceOptions.CompileType = clsInterfaceOptions.EnumCompileType.Campaign;
+            Map.InterfaceOptions.CampaignGameType = TypeNum;
 
-            var wzFormat = new Wz(Map);
-            ReturnResult.Add(wzFormat.Save(WriteWZArgs));
+            var wzFormat = new WzSaver(Map);
+            ReturnResult.Add(wzFormat.Save(CompileCampDialog.SelectedPath, false, true));
             App.ShowWarnings(ReturnResult);
             if ( !ReturnResult.HasWarnings )
             {

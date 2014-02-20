@@ -6,13 +6,14 @@ using System.IO;
 using System.Windows.Forms;
 using NLog;
 using SharpFlame.FileIO;
+using SharpFlame.Mapping.IO.TTP;
 using SharpFlame.Util;
 
 #endregion
 
 namespace SharpFlame.Mapping.IO.Wz
 {
-    public class Game : Wz
+    public class Game : WzLoader
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -130,25 +131,18 @@ namespace SharpFlame.Mapping.IO.Wz
                 returnResult.Add(Result);
             }
 
+            subResult = IOUtil.TryOpenFileStream(mapDirectory + "ttypes.ttp", ref file);
+            if ( !subResult.Success )
             {
-                var Result = new clsResult("ttypes.ttp", false);
-                logger.Info("Loading ttypes.ttp");
-                subResult = IOUtil.TryOpenFileStream(mapDirectory + "ttypes.ttp", ref file);
-                if ( !subResult.Success )
+                returnResult.WarningAdd("ttypes.ttp file not found!");
+            }
+            else
+            {
+                using ( var reader = new BinaryReader(file) )
                 {
-                    Result.WarningAdd("file not found");
+                    var ttpLoader = new TTPLoader (map);
+                    returnResult.Add(ttpLoader.Load(reader));
                 }
-                else
-                {
-                    var TileTypes_Reader = new BinaryReader(file);
-                    subResult = read_WZ_TileTypes(TileTypes_Reader);
-                    TileTypes_Reader.Close();
-                    if ( !subResult.Success )
-                    {
-                        Result.WarningAdd(subResult.Problem);
-                    }
-                }
-                returnResult.Add(Result);
             }
 
             var iniStructures = new List<IniStructure>();

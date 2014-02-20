@@ -8,13 +8,13 @@ using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping.IO.Minimap
 {
-    public class Minimap
+    public class MinimapSaver : IIOSaver
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         protected readonly clsMap map;
 
-        public Minimap(clsMap newMap)
+        public MinimapSaver(clsMap newMap)
         {
             map = newMap;
         }

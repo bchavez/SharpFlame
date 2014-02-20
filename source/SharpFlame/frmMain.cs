@@ -712,7 +712,7 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
-            var ttpLoader = new TTP (Map);
+            var ttpLoader = new TTPLoader (Map);
             var result = ttpLoader.Load(Dialog.FileName);
             if (!result.HasProblems && !result.HasWarnings)
             {
@@ -1081,7 +1081,7 @@ namespace SharpFlame
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
                  
-            var lndSaver = new LND (Map);
+            var lndSaver = new LNDSaver (Map);
             var result = lndSaver.Save(Dialog.FileName, true);
             App.ShowWarnings(result);
         }
@@ -1105,7 +1105,7 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            var minmapSaver = new Minimap (Map);
+            var minmapSaver = new MinimapSaver (Map);
             var result = minmapSaver.Save(Dialog.FileName, true);
             if (result.HasProblems || result.HasWarnings) {
                 App.ShowWarnings (result);
@@ -1131,7 +1131,7 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            var hmSaver = new Heightmap (Map);
+            var hmSaver = new HeightmapSaver (Map);
             var result = hmSaver.Save(Dialog.FileName, true);
             if (result.HasProblems || result.HasWarnings) {
                 App.ShowWarnings (result);
@@ -1157,7 +1157,7 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            var ttpSaver = new TTP (Map);
+            var ttpSaver = new TTPSaver (Map);
             var result = ttpSaver.Save(Dialog.FileName, true);
             if (result.HasProblems || result.HasWarnings) {
                 App.ShowWarnings (result);
@@ -4061,12 +4061,12 @@ namespace SharpFlame
             switch ( SplitPath.FileExtension.ToLower() )
             {
             case "fmap":
-                var fmap = new FMap (resultMap);
+                var fmap = new FMapLoader (resultMap);
                 ReturnResult.Add(fmap.Load(Path));
                 resultMap.PathInfo = new clsPathInfo(Path, true);
                 break;
             case "wz":
-                var wzFormat = new Wz(resultMap);
+                var wzFormat = new WzLoader(resultMap);
                 ReturnResult.Add(wzFormat.Load(Path));
                 resultMap.PathInfo = new clsPathInfo(Path, false);
                 break;
@@ -4076,7 +4076,7 @@ namespace SharpFlame
                 resultMap.PathInfo = new clsPathInfo(Path, false);
                 break;
             case "lnd":
-                var lndFormat = new LND (resultMap);
+                var lndFormat = new LNDLoader (resultMap);
                 ReturnResult.Add(lndFormat.Load(Path));
                 resultMap.PathInfo = new clsPathInfo(Path, false);
                 break;

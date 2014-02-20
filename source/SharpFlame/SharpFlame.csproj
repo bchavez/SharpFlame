@@ -385,23 +385,27 @@
     <Compile Include="FileIO\ZipSplitPath.cs" />
     <Compile Include="Util\clsInputBox.cs" />
     <Compile Include="ExtensionsForString.cs" />
-    <Compile Include="Mapping\IO\FMap\FMap.cs" />
     <Compile Include="Mapping\IO\FMap\FMapInfo.cs" />
     <Compile Include="Mapping\IO\FMap\FMapIniGateways.cs" />
-    <Compile Include="Mapping\IO\Heightmap\Heightmap.cs" />
-    <Compile Include="Mapping\IO\LND\LND.cs" />
     <Compile Include="Mapping\IO\LND\LNDObject.cs" />
     <Compile Include="Mapping\IO\LND\LNDTile.cs" />
     <Compile Include="Mapping\IO\Minimap\Minimap.cs" />
-    <Compile Include="Mapping\IO\TTP\TTP.cs" />
     <Compile Include="Mapping\IO\Wz\Game.cs" />
     <Compile Include="Mapping\IO\Wz\IniDroid.cs" />
     <Compile Include="Mapping\IO\Wz\IniFeature.cs" />
     <Compile Include="Mapping\IO\Wz\IniStructure.cs" />
     <Compile Include="Mapping\IO\Wz\WZBJOUnit.cs" />
-    <Compile Include="Mapping\IO\Wz\Wz.cs" />
-    <Compile Include="Mapping\IO\Wz\sWrite_WZ_Args.cs" />
     <Compile Include="Mapping\IO\FMap\INIObject.cs" />
+    <Compile Include="Mapping\IO\IOIOLoaderSaver.cs" />
+    <Compile Include="Mapping\IO\Wz\WzSaver.cs" />
+    <Compile Include="Mapping\IO\Wz\WzLoader.cs" />
+    <Compile Include="Mapping\IO\TTP\TTPLoader.cs" />
+    <Compile Include="Mapping\IO\TTP\TTPSaver.cs" />
+    <Compile Include="Mapping\IO\LND\LNDLoader.cs" />
+    <Compile Include="Mapping\IO\LND\LNDSaver.cs" />
+    <Compile Include="Mapping\IO\Heightmap\HeightmapSaver.cs" />
+    <Compile Include="Mapping\IO\FMap\FMapLoader.cs" />
+    <Compile Include="Mapping\IO\FMap\FMapSaver.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">
