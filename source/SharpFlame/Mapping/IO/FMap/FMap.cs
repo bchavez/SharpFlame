@@ -1,6 +1,7 @@
 #region
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -15,8 +16,6 @@ using SharpFlame.FileIO;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tiles;
-using IniReader = SharpFlame.FileIO.Ini.IniReader;
-using Section = SharpFlame.FileIO.Ini.Section;
 
 #endregion
 
@@ -51,36 +50,36 @@ namespace SharpFlame.Mapping.IO.FMap
                 }
 
                 FMapInfo resultInfo = null;
-                using ( Stream s = infoIniEntry.OpenReader() )
+                using (var reader = new StreamReader(infoIniEntry.OpenReader()))
                 {
-                    var reader = new StreamReader(s);
-                    returnResult.Add(read_FMap_Info(reader, ref resultInfo));
-                    reader.Close();
+                    var text = reader.ReadToEnd ();
+                    resultInfo = new FMapInfo ();
+                    returnResult.Add(read_FMap_Info(text, ref resultInfo));
+                    if (returnResult.HasProblems)
+                    {
+                        return returnResult;
+                    }
+
+                    var newTerrainSize = resultInfo.TerrainSize;
+                    map.Tileset = resultInfo.Tileset;
+
+                    if ( newTerrainSize.X <= 0 | newTerrainSize.X > Constants.MapMaxSize )
+                    {
+                        returnResult.ProblemAdd(string.Format("Map width of {0} is not valid.", newTerrainSize.X));
+                    }
+                    if ( newTerrainSize.Y <= 0 | newTerrainSize.Y > Constants.MapMaxSize )
+                    {
+                        returnResult.ProblemAdd(string.Format("Map height of {0} is not valid.", newTerrainSize.Y));
+                    }
                     if ( returnResult.HasProblems )
                     {
                         return returnResult;
                     }
-                }
 
-                var newTerrainSize = resultInfo.TerrainSize;
-                map.Tileset = resultInfo.Tileset;
-
-                if ( newTerrainSize.X <= 0 | newTerrainSize.X > Constants.MapMaxSize )
-                {
-                    returnResult.ProblemAdd(string.Format("Map width of {0} is not valid.", newTerrainSize.X));
-                }
-                if ( newTerrainSize.Y <= 0 | newTerrainSize.Y > Constants.MapMaxSize )
-                {
-                    returnResult.ProblemAdd(string.Format("Map height of {0} is not valid.", newTerrainSize.Y));
-                }
-                if ( returnResult.HasProblems )
-                {
-                    return returnResult;
-                }
-
-                map.SetPainterToDefaults(); //depends on tileset. must be called before loading the terrains.
-                map.TerrainBlank(newTerrainSize);
-                map.TileType_Reset();
+                    map.SetPainterToDefaults(); //depends on tileset. must be called before loading the terrains.
+                    map.TerrainBlank(newTerrainSize);
+                    map.TileType_Reset();
+                }              
 
                 // vertexheight.dat
                 var vhEntry = zip["vertexheight.dat"]; // Case insensetive.
@@ -186,11 +185,10 @@ namespace SharpFlame.Mapping.IO.FMap
                 }
                 else
                 {
-                    using ( Stream s = obEntry.OpenReader() )
+                    using ( var reader = new StreamReader(obEntry.OpenReader()) )
                     {
-                        var reader = new StreamReader(s);
-                        returnResult.Add(read_FMap_Objects(reader));
-                        reader.Close();
+                        var text = reader.ReadToEnd();
+                        returnResult.Add(read_FMap_Objects(text));
                     }
                 }
 
@@ -201,11 +199,10 @@ namespace SharpFlame.Mapping.IO.FMap
                     returnResult.ProblemAdd("Unable to find file \"gateways.ini\".");
                     return returnResult;
                 }
-                using ( Stream s = gaEntry.OpenReader() )
+                using ( var reader = new StreamReader(gaEntry.OpenReader()) )
                 {
-                    var reader = new StreamReader(s);
-                    returnResult.Add(read_FMap_Gateways(reader));
-                    reader.Close();
+                    var text = reader.ReadToEnd();
+                    returnResult.Add(read_FMap_Gateways(text));
                 }
 
                 // tiletypes.dat
@@ -399,7 +396,6 @@ namespace SharpFlame.Mapping.IO.FMap
 
                 file.AddProperty("Name", map.InterfaceOptions.CompileName);
                 file.AddProperty("Players", map.InterfaceOptions.CompileMultiPlayers);
-                file.AddProperty("XPlayerLev", map.InterfaceOptions.CompileMultiXPlayers.ToStringInvariant());
                 file.AddProperty("Author", map.InterfaceOptions.CompileMultiAuthor);
                 file.AddProperty("License", map.InterfaceOptions.CompileMultiLicense);
                 if ( map.InterfaceOptions.CampaignGameType >= 0 )
@@ -893,16 +889,97 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private clsResult read_FMap_Info(StreamReader file, ref FMapInfo resultInfo)
+        private clsResult read_FMap_Info(string text, ref FMapInfo resultInfo)
         {
             var returnResult = new clsResult("Read general map info", false);
             logger.Info("Read general map info");
 
-            var infoINI = new Section();
-            returnResult.Take(infoINI.ReadFile(file));
+            var infoIni = IniReader.ReadString (text);
 
-            resultInfo = new FMapInfo();
-            returnResult.Take(infoINI.Translate(resultInfo));
+            var invalid = true;
+            foreach (var iniSection in infoIni) {
+                invalid = false;
+
+                foreach (var iniToken in iniSection.Data) {
+                    if (invalid) {
+                        break;
+                    }
+
+                    try {
+                        switch (iniToken.Name.ToLower()) {
+                        case "tileset":
+                            switch (iniToken.Data.ToLower()) {
+                            case "arizona":
+                                resultInfo.Tileset = App.Tileset_Arizona;
+                                break;
+                            case "urban":
+                                resultInfo.Tileset = App.Tileset_Urban;
+                                break;
+                            case "rockies":
+                                resultInfo.Tileset = App.Tileset_Rockies;
+                                break;
+                            default:
+                                invalid = true;
+                                returnResult.WarningAdd (string.Format ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data));
+                                logger.Warn ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data);
+                                continue;
+                            }
+                            break;
+                        case "size":
+                            resultInfo.TerrainSize = XYInt.FromString(iniToken.Data);
+                            if (resultInfo.TerrainSize.X < 1 || resultInfo.TerrainSize.Y < 1 || resultInfo.TerrainSize.X > Constants.MapMaxSize || resultInfo.TerrainSize.Y > Constants.MapMaxSize) {
+                                invalid = true;
+                                returnResult.WarningAdd (string.Format ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data));
+                                logger.Warn ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data);
+                                continue;
+                            }
+                            break;
+                        case "autoscrolllimits":
+                            resultInfo.InterfaceOptions.AutoScrollLimits = bool.Parse(iniToken.Data);
+                            break;
+                        case "scrollminx":
+                            resultInfo.InterfaceOptions.ScrollMin.X = int.Parse(iniToken.Data);
+                            break;
+                        case "scrollminy":
+                            resultInfo.InterfaceOptions.ScrollMin.Y = int.Parse(iniToken.Data);
+                            break;
+                        case "scrollmaxx":
+                            resultInfo.InterfaceOptions.ScrollMax.X = uint.Parse(iniToken.Data);
+                            break;
+                        case "scrollmaxy":
+                            resultInfo.InterfaceOptions.ScrollMax.Y = uint.Parse(iniToken.Data);
+                            break;
+                        case "name":
+                            resultInfo.InterfaceOptions.CompileName = iniToken.Data;
+                            break;
+                        case "players":
+                            resultInfo.InterfaceOptions.CompileMultiAuthor = iniToken.Data;
+                            break;
+                        case "xplayerlev":
+                            // ignored.
+                            break;
+                        case "author":
+                            resultInfo.InterfaceOptions.CompileMultiAuthor = iniToken.Data;
+                            break;
+                        case "license":
+                            resultInfo.InterfaceOptions.CompileMultiLicense = iniToken.Data;
+                            break;
+                        case "camptime":
+                            // ignore
+                            break;
+                        case "camptype":
+                            resultInfo.InterfaceOptions.CampaignGameType = int.Parse(iniToken.Data);
+                            break;
+                        }
+                    }
+                    catch (Exception ex) {
+                        invalid = true;
+                        returnResult.WarningAdd(
+                            string.Format("#{0} invalid {2}: \"{3}\", got exception: {2}", iniSection.Name, iniToken.Name, iniToken.Data, ex.Message), false);
+                        logger.WarnException(string.Format("#{0} invalid {2} \"{1}\"", iniSection.Name, iniToken.Name, iniToken.Data), ex);
+                    }
+                }
+            }
 
             if ( resultInfo.TerrainSize.X < 0 | resultInfo.TerrainSize.Y < 0 )
             {
@@ -1296,18 +1373,12 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private clsResult read_FMap_Objects(StreamReader file)
+        private clsResult read_FMap_Objects(string text)
         {
             var returnResult = new clsResult("Reading objects", false);
             logger.Info("Reading objects");
 
-            var a = 0;
-
-            var objectsINI = new IniReader();
-            returnResult.Take(objectsINI.ReadFile(file));
-
-            var iniObjects = new FMapIniObjects(objectsINI.Sections.Count);
-            returnResult.Take(objectsINI.Translate(iniObjects));
+            var objectsINI = IniReader.ReadString(text);
 
             var droidComponentUnknownCount = 0;
             var objectTypeMissingCount = 0;
@@ -1328,33 +1399,205 @@ namespace SharpFlame.Mapping.IO.FMap
 
             unitAdd.Map = map;
 
-            availableID = 1U;
-            for ( a = 0; a <= iniObjects.ObjectCount - 1; a++ )
-            {
-                if ( iniObjects.Objects[a].ID >= availableID )
-                {
-                    availableID = iniObjects.Objects[a].ID + 1U;
+            INIObject iniObject = default(INIObject);
+            var invalid = true;
+            var iniObjects = new List<INIObject> ();
+           
+            foreach (var iniSection in objectsINI) {
+                iniObject = new INIObject ();
+                iniObject.Type = UnitType.Unspecified;
+                iniObject.Health = 1.0D;
+                iniObject.WallType = -1;
+                iniObject.TurretCodes = new string[Constants.MaxDroidWeapons];
+                iniObject.TurretTypes = new enumTurretType[Constants.MaxDroidWeapons];
+                for (var i = 0; i < Constants.MaxDroidWeapons; i++) {
+                    iniObject.TurretTypes [i] = enumTurretType.Unknown;
+                    iniObject.TurretCodes [i] = "";
+                }
+                invalid = false;
+                foreach (var iniToken in iniSection.Data) {
+                    if (invalid)
+                    {
+                        break;
+                    }
+
+                    try {
+                        switch (iniToken.Name.ToLower()) {
+                        case "type":
+                            var typeTokens = iniToken.Data.Split (new string[] { ", " }, StringSplitOptions.None);
+                            if (typeTokens.Length < 1) {
+                                invalid = true;
+                                returnResult.WarningAdd (string.Format ("#{0} type \"{1}\" is not valid.", iniSection.Name, iniToken.Data));
+                                logger.Warn ("#{0} type \"{1}\" is not valid.", iniSection.Name, iniToken.Data);
+                                continue;
+                            }
+                            switch (typeTokens [0].ToLower ()) {
+                            case "feature":
+                                iniObject.Type = UnitType.Feature;
+                                iniObject.Code = typeTokens [1];
+                                break;
+                            case "structure":
+                                iniObject.Type = UnitType.PlayerStructure;
+                                iniObject.Code = typeTokens [1];
+                                break;
+                            case "droidtemplate":
+                                iniObject.Type = UnitType.PlayerDroid;
+                                iniObject.IsTemplate = true;
+                                iniObject.Code = typeTokens [1];
+                                break;
+                            case "droiddesign":
+                                iniObject.Type = UnitType.PlayerDroid;
+                                break;
+                            default:
+                                invalid = true;
+                                returnResult.WarningAdd (string.Format ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data));
+                                logger.Warn ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data);
+                                continue;
+                            }
+                            break;
+                        case "droidtype":
+                            var droidType = App.GetTemplateDroidTypeFromTemplateCode (iniToken.Data);
+                            if (droidType == null) {
+                                invalid = true;
+                                returnResult.WarningAdd (string.Format ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data));
+                                logger.Warn ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data);
+                                continue;
+                            }
+                            break;
+                        case "body":
+                            iniObject.BodyCode = iniToken.Data;
+                            break;
+                        case "propulsion":
+                            iniObject.PropulsionCode = iniToken.Data;
+                            break;
+                        case "turrentcount":
+                            iniObject.TurretCount = int.Parse(iniToken.Data);
+                            if (iniObject.TurretCount < 0 || iniObject.TurretCount > Constants.MaxDroidWeapons) {
+                                invalid = true;
+                                returnResult.WarningAdd (string.Format ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data));
+                                logger.Warn ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data);
+                                continue;
+                            }
+                            break;
+                        case "turret1":
+                            var turret1Tokens = iniToken.Data.Split (new string[] { ", " }, StringSplitOptions.None);
+                            if (turret1Tokens.Length < 2) {
+                                invalid = true;
+                                returnResult.WarningAdd (string.Format ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data));
+                                logger.Warn ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data);
+                                continue;
+                            }
+                            iniObject.TurretTypes[0] = App.GetTurretTypeFromName(turret1Tokens[0]);
+                            iniObject.TurretCodes[1] = turret1Tokens[1];
+                            break;
+                        case "turret2":
+                            var turret2Tokens = iniToken.Data.Split (new string[] { ", " }, StringSplitOptions.None);
+                            if (turret2Tokens.Length < 2) {
+                                invalid = true;
+                                returnResult.WarningAdd (string.Format ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data));
+                                logger.Warn ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data);
+                                continue;
+                            }
+                            iniObject.TurretTypes[0] = App.GetTurretTypeFromName(turret2Tokens[0]);
+                            iniObject.TurretCodes[1] = turret2Tokens[1];
+                            break;
+                        case "turret3":
+                            var turret3Tokens = iniToken.Data.Split (new string[] { ", " }, StringSplitOptions.None);
+                            if (turret3Tokens.Length < 2) {
+                                invalid = true;
+                                returnResult.WarningAdd (string.Format ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data));
+                                logger.Warn ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data);
+                                continue;
+                            }
+                            iniObject.TurretTypes[0] = App.GetTurretTypeFromName(turret3Tokens[0]);
+                            iniObject.TurretCodes[1] = turret3Tokens[1];
+                            break;
+                        case "id":
+                            iniObject.ID = uint.Parse(iniToken.Data);
+                            break;
+                        case "priority":
+                            iniObject.Priority = int.Parse(iniToken.Data);
+                            break;
+                        case "pos":
+                            iniObject.Pos = XYInt.FromString(iniToken.Data);
+                            break;
+                        case "heading":
+                            if ( !IOUtil.InvariantParse(iniToken.Data, ref iniObject.Heading) )
+                            {
+                                invalid = true;
+                                returnResult.WarningAdd (string.Format ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data));
+                                logger.Warn ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data);
+                                continue;
+                            }
+                            break;
+                        case "unitgroup":
+                            iniObject.UnitGroup = iniToken.Data;
+                            break;
+                        case "health":
+                            if ( !IOUtil.InvariantParse(iniToken.Data, ref iniObject.Health) )
+                            {
+                                invalid = true;
+                                returnResult.WarningAdd (string.Format ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data));
+                                logger.Warn ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data);
+                                continue;
+                            }
+                            break;
+                        case "walltype":
+                            if ( !IOUtil.InvariantParse(iniToken.Data, ref iniObject.WallType) )
+                            {
+                                invalid = true;
+                                returnResult.WarningAdd (string.Format ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data));
+                                logger.Warn ("#{0} {1} \"{2}\" is not valid.", iniSection.Name, iniToken.Name, iniToken.Data);
+                                continue;
+                            }
+                            if (iniObject.WallType < 0 || iniObject.WallType > 3) {
+                                iniObject.WallType = -1;
+                            }
+                            break;
+                        case "scriptlabel":
+                            iniObject.Label = iniToken.Data;
+                            break;
+                        default:
+                            returnResult.WarningAdd(string.Format("Found an invalid key: {0} = {1}", iniToken.Name, iniToken.Data), false);
+                            logger.Warn("Found an invalid key: {0} = {1}", iniToken.Name, iniToken.Data);
+                            break;
+                        }
+                    }
+                    catch (Exception ex) {
+                        invalid = true;
+                        returnResult.WarningAdd(
+                            string.Format("#{0} invalid {2}: \"{3}\", got exception: {2}", iniSection.Name, iniToken.Name, iniToken.Data, ex.Message), false);
+                        logger.WarnException(string.Format("#{0} invalid {2} \"{1}\"", iniSection.Name, iniToken.Name, iniToken.Data), ex);
+                    }
+                }
+
+                if (!invalid) {
+                    iniObjects.Add (iniObject);
                 }
             }
-            for ( a = 0; a <= iniObjects.ObjectCount - 1; a++ )
-            {
-                if ( iniObjects.Objects[a].Pos == null )
+
+            try {
+                availableID = iniObjects.Max (w => w.ID) + 10;
+                foreach (var iniObject2 in iniObjects) 
                 {
-                    objectPosInvalidCount++;
-                }
-                else if ( !App.PosIsWithinTileArea(iniObjects.Objects[a].Pos, zeroPos, map.Terrain.TileSize) )
-                {
-                    objectPosInvalidCount++;
-                }
-                else
-                {
+                    if ( iniObject2.Pos == null )
+                    {
+                        objectPosInvalidCount++;
+                        continue;
+                    }
+                    else if ( !App.PosIsWithinTileArea(iniObject2.Pos, zeroPos, map.Terrain.TileSize) )
+                    {
+                        objectPosInvalidCount++;
+                        continue;
+                    }
+
                     unitTypeBase = null;
-                    if ( iniObjects.Objects[a].Type != UnitType.Unspecified )
+                    if ( iniObject2.Type != UnitType.Unspecified )
                     {
                         isDesign = false;
-                        if ( iniObjects.Objects[a].Type == UnitType.PlayerDroid )
+                        if ( iniObject2.Type == UnitType.PlayerDroid )
                         {
-                            if ( !iniObjects.Objects[a].IsTemplate )
+                            if ( !iniObject2.IsTemplate )
                             {
                                 isDesign = true;
                             }
@@ -1362,51 +1605,51 @@ namespace SharpFlame.Mapping.IO.FMap
                         if ( isDesign )
                         {
                             droidDesign = new DroidDesign();
-                            droidDesign.TemplateDroidType = iniObjects.Objects[a].TemplateDroidType;
+                            droidDesign.TemplateDroidType = iniObject2.TemplateDroidType;
                             if ( droidDesign.TemplateDroidType == null )
                             {
                                 droidDesign.TemplateDroidType = App.TemplateDroidType_Droid;
                                 designTypeUnspecifiedCount++;
                             }
-                            if ( iniObjects.Objects[a].BodyCode != "" )
+                            if ( iniObject2.BodyCode != null )
                             {
-                                droidDesign.Body = App.ObjectData.FindOrCreateBody(Convert.ToString(iniObjects.Objects[a].BodyCode));
+                                droidDesign.Body = App.ObjectData.FindOrCreateBody(Convert.ToString(iniObject2.BodyCode));
                                 if ( droidDesign.Body.IsUnknown )
                                 {
                                     droidComponentUnknownCount++;
                                 }
                             }
-                            if ( iniObjects.Objects[a].PropulsionCode != "" )
+                            if ( iniObject2.PropulsionCode != null )
                             {
-                                droidDesign.Propulsion = App.ObjectData.FindOrCreatePropulsion(iniObjects.Objects[a].PropulsionCode);
+                                droidDesign.Propulsion = App.ObjectData.FindOrCreatePropulsion(iniObject2.PropulsionCode);
                                 if ( droidDesign.Propulsion.IsUnknown )
                                 {
                                     droidComponentUnknownCount++;
                                 }
                             }
-                            droidDesign.TurretCount = (byte)(iniObjects.Objects[a].TurretCount);
-                            if ( iniObjects.Objects[a].TurretCodes[0] != "" )
+                            droidDesign.TurretCount = (byte)(iniObject2.TurretCount);
+                            if ( iniObject2.TurretCodes[0] != "" )
                             {
-                                droidDesign.Turret1 = App.ObjectData.FindOrCreateTurret(iniObjects.Objects[a].TurretTypes[0],
-                                    Convert.ToString(iniObjects.Objects[a].TurretCodes[0]));
+                                droidDesign.Turret1 = App.ObjectData.FindOrCreateTurret(iniObject2.TurretTypes[0],
+                                    Convert.ToString(iniObject2.TurretCodes[0]));
                                 if ( droidDesign.Turret1.IsUnknown )
                                 {
                                     droidComponentUnknownCount++;
                                 }
                             }
-                            if ( iniObjects.Objects[a].TurretCodes[1] != "" )
+                            if ( iniObject2.TurretCodes[1] != "" )
                             {
-                                droidDesign.Turret2 = App.ObjectData.FindOrCreateTurret(iniObjects.Objects[a].TurretTypes[1],
-                                    Convert.ToString(iniObjects.Objects[a].TurretCodes[1]));
+                                droidDesign.Turret2 = App.ObjectData.FindOrCreateTurret(iniObject2.TurretTypes[1],
+                                    Convert.ToString(iniObject2.TurretCodes[1]));
                                 if ( droidDesign.Turret2.IsUnknown )
                                 {
                                     droidComponentUnknownCount++;
                                 }
                             }
-                            if ( iniObjects.Objects[a].TurretCodes[2] != "" )
+                            if ( iniObject2.TurretCodes[2] != "" )
                             {
-                                droidDesign.Turret3 = App.ObjectData.FindOrCreateTurret(iniObjects.Objects[a].TurretTypes[2],
-                                    Convert.ToString(iniObjects.Objects[a].TurretCodes[2]));
+                                droidDesign.Turret3 = App.ObjectData.FindOrCreateTurret(iniObject2.TurretTypes[2],
+                                    Convert.ToString(iniObject2.TurretCodes[2]));
                                 if ( droidDesign.Turret3.IsUnknown )
                                 {
                                     droidComponentUnknownCount++;
@@ -1417,12 +1660,12 @@ namespace SharpFlame.Mapping.IO.FMap
                         }
                         else
                         {
-                            unitTypeBase = App.ObjectData.FindOrCreateUnitType(iniObjects.Objects[a].Code, iniObjects.Objects[a].Type, iniObjects.Objects[a].WallType);
+                            unitTypeBase = App.ObjectData.FindOrCreateUnitType(iniObject2.Code, iniObject2.Type, iniObject2.WallType);
                             if ( unitTypeBase.IsUnknown )
                             {
                                 if ( unknownUnitTypeCount < maxUnknownUnitTypeWarningCount )
                                 {
-                                    returnResult.WarningAdd("\"{0}\" is ont a loaded object.".Format2(iniObjects.Objects[a].Code));
+                                    returnResult.WarningAdd("\"{0}\" is ont a loaded object.".Format2(iniObject2.Code));
                                 }
                                 unknownUnitTypeCount++;
                             }
@@ -1431,135 +1674,176 @@ namespace SharpFlame.Mapping.IO.FMap
                     if ( unitTypeBase == null )
                     {
                         objectTypeMissingCount++;
+                        continue;
+                    }
+
+                    newObject = new clsUnit();
+                    newObject.TypeBase = unitTypeBase;
+                    newObject.Pos.Horizontal.X = iniObject2.Pos.X;
+                    newObject.Pos.Horizontal.Y = iniObject2.Pos.Y;
+                    newObject.Health = iniObject2.Health;
+                    newObject.SavePriority = iniObject2.Priority;
+                    newObject.Rotation = (int)(iniObject2.Heading);
+                    if ( newObject.Rotation >= 360 )
+                    {
+                        newObject.Rotation -= 360;
+                    }
+                    if ( iniObject2.UnitGroup == null || iniObject2.UnitGroup == "" )
+                    {
+                        if ( iniObject2.Type != UnitType.Feature )
+                        {
+                            objectPlayerNumInvalidCount++;
+                        }
+                        newObject.UnitGroup = map.ScavengerUnitGroup;
                     }
                     else
                     {
-                        newObject = new clsUnit();
-                        newObject.TypeBase = unitTypeBase;
-                        newObject.Pos.Horizontal.X = iniObjects.Objects[a].Pos.X;
-                        newObject.Pos.Horizontal.Y = iniObjects.Objects[a].Pos.Y;
-                        newObject.Health = iniObjects.Objects[a].Health;
-                        newObject.SavePriority = iniObjects.Objects[a].Priority;
-                        newObject.Rotation = (int)(iniObjects.Objects[a].Heading);
-                        if ( newObject.Rotation >= 360 )
+                        if ( iniObject2.UnitGroup.ToLower() == "scavenger" )
                         {
-                            newObject.Rotation -= 360;
-                        }
-                        if ( iniObjects.Objects[a].UnitGroup == null || iniObjects.Objects[a].UnitGroup == "" )
-                        {
-                            if ( iniObjects.Objects[a].Type != UnitType.Feature )
-                            {
-                                objectPlayerNumInvalidCount++;
-                            }
                             newObject.UnitGroup = map.ScavengerUnitGroup;
                         }
                         else
                         {
-                            if ( iniObjects.Objects[a].UnitGroup.ToLower() == "scavenger" )
+                            UInt32 PlayerNum = 0;
+                            try
                             {
-                                newObject.UnitGroup = map.ScavengerUnitGroup;
-                            }
-                            else
-                            {
-                                UInt32 PlayerNum = 0;
-                                try
+                                if ( !IOUtil.InvariantParse(iniObject2.UnitGroup, ref PlayerNum) )
                                 {
-                                    if ( !IOUtil.InvariantParse(iniObjects.Objects[a].UnitGroup, ref PlayerNum) )
-                                    {
-                                        throw (new Exception());
-                                    }
-                                    if ( PlayerNum < Constants.PlayerCountMax )
-                                    {
-                                        unitGroup = map.UnitGroups[Convert.ToInt32(PlayerNum)];
-                                    }
-                                    else
-                                    {
-                                        unitGroup = map.ScavengerUnitGroup;
-                                        objectPlayerNumInvalidCount++;
-                                    }
+                                    throw (new Exception());
                                 }
-                                catch ( Exception )
+                                if ( PlayerNum < Constants.PlayerCountMax )
                                 {
-                                    objectPlayerNumInvalidCount++;
+                                    unitGroup = map.UnitGroups[Convert.ToInt32(PlayerNum)];
+                                }
+                                else
+                                {
                                     unitGroup = map.ScavengerUnitGroup;
+                                    objectPlayerNumInvalidCount++;
                                 }
-                                newObject.UnitGroup = unitGroup;
                             }
-                        }
-                        if ( iniObjects.Objects[a].ID == 0U )
-                        {
-                            iniObjects.Objects[a].ID = availableID;
-                            App.ZeroIDWarning(newObject, iniObjects.Objects[a].ID, returnResult);
-                        }
-                        unitAdd.NewUnit = newObject;
-                        unitAdd.ID = iniObjects.Objects[a].ID;
-                        unitAdd.Label = iniObjects.Objects[a].Label;
-                        unitAdd.Perform();
-                        App.ErrorIDChange(iniObjects.Objects[a].ID, newObject, "Read_FMap_Objects");
-                        if ( availableID == iniObjects.Objects[a].ID )
-                        {
-                            availableID = newObject.ID + 1U;
+                            catch ( Exception )
+                            {
+                                objectPlayerNumInvalidCount++;
+                                unitGroup = map.ScavengerUnitGroup;
+                            }
+                            newObject.UnitGroup = unitGroup;
                         }
                     }
+                    if ( iniObject2.ID == 0U )
+                    {
+                        // iniObject2.ID = availableID;
+                        App.ZeroIDWarning(newObject, iniObject2.ID, returnResult);
+                    }
+                    unitAdd.NewUnit = newObject;
+                    unitAdd.ID = iniObject2.ID;
+                    unitAdd.Label = iniObject2.Label;
+                    unitAdd.Perform();
+                    App.ErrorIDChange(iniObject2.ID, newObject, "Read_FMap_Objects");
+                    if ( availableID == iniObject2.ID )
+                    {
+                        availableID = newObject.ID + 1U;
+                    }
+                }
+
+                if ( unknownUnitTypeCount > maxUnknownUnitTypeWarningCount )
+                {
+                    returnResult.WarningAdd (string.Format ("{0} objects were not in the loaded object data.", unknownUnitTypeCount));
+                }
+                if ( objectTypeMissingCount > 0 )
+                {
+                    returnResult.WarningAdd (string.Format ("{0} objects did not specify a type and were ignored.", objectTypeMissingCount));
+                }
+                if ( droidComponentUnknownCount > 0 )
+                {
+                    returnResult.WarningAdd (string.Format ("{0} components used by droids were loaded as unknowns.", droidComponentUnknownCount));
+                }
+                if ( objectPlayerNumInvalidCount > 0 )
+                {
+                    returnResult.WarningAdd (string.Format ("{0} objects had an invalid player number and were set to player 0.", objectPlayerNumInvalidCount));
+                }
+                if ( objectPosInvalidCount > 0 )
+                {
+                    returnResult.WarningAdd (string.Format ("{0} objects had a position that was off-map and were ignored.", objectPosInvalidCount));
+                }
+                if ( designTypeUnspecifiedCount > 0 )
+                {
+                    returnResult.WarningAdd (string.Format ("{0} designed droids did not specify a template droid type and were set to droid.", designTypeUnspecifiedCount));
                 }
             }
-
-            if ( unknownUnitTypeCount > maxUnknownUnitTypeWarningCount )
-            {
-                returnResult.WarningAdd(unknownUnitTypeCount + " objects were not in the loaded object data.");
-            }
-            if ( objectTypeMissingCount > 0 )
-            {
-                returnResult.WarningAdd(objectTypeMissingCount + " objects did not specify a type and were ignored.");
-            }
-            if ( droidComponentUnknownCount > 0 )
-            {
-                returnResult.WarningAdd(droidComponentUnknownCount + " components used by droids were loaded as unknowns.");
-            }
-            if ( objectPlayerNumInvalidCount > 0 )
-            {
-                returnResult.WarningAdd(objectPlayerNumInvalidCount + " objects had an invalid player number and were set to player 0.");
-            }
-            if ( objectPosInvalidCount > 0 )
-            {
-                returnResult.WarningAdd(objectPosInvalidCount + " objects had a position that was off-map and were ignored.");
-            }
-            if ( designTypeUnspecifiedCount > 0 )
-            {
-                returnResult.WarningAdd(designTypeUnspecifiedCount + " designed droids did not specify a template droid type and were set to droid.");
+            catch (Exception ex) {
+                Debugger.Break ();
+                returnResult.ProblemAdd (string.Format("Got a exeption: {0}", ex.Message));
+                logger.ErrorException ("Got exception", ex);
             }
 
             return returnResult;
         }
 
-        private clsResult read_FMap_Gateways(StreamReader file)
+        private clsResult read_FMap_Gateways(string text)
         {
-            var ReturnResult = new clsResult("Reading gateways", false);
+            var returnResult = new clsResult("Reading gateways", false);
             logger.Info("Reading gateways");
 
-            var GatewaysINI = new IniReader();
-            ReturnResult.Take(GatewaysINI.ReadFile(file));
+            var invalid = true;
+            var ini = IniReader.ReadString (text);
+            var iniGateway = default(INIGateway);
+            var iniGateways = new List<INIGateway> ();
+            foreach (var iniSection in ini) {
+                invalid = false;
+                iniGateway = new INIGateway ();           
+                foreach (var iniToken in iniSection.Data) {
+                    if (invalid) {
+                        break;
+                    }
 
-            var INIGateways = new FMapIniGateways(GatewaysINI.Sections.Count);
-            ReturnResult.Take(GatewaysINI.Translate(INIGateways));
+                    try {
+                        switch (iniToken.Name) {
+                        case "ax":
+                            iniGateway.PosA.X = int.Parse(iniToken.Data);
+                            break;
+                        case "ay":
+                            iniGateway.PosA.Y = int.Parse(iniToken.Data);
+                            break;
+                        case "by":
+                            iniGateway.PosB.Y = int.Parse(iniToken.Data);
+                            break;
+                        case "bx":
+                            iniGateway.PosB.X = int.Parse(iniToken.Data);
+                            break;
+                        default:
+                            returnResult.WarningAdd(string.Format("Found an invalid key: {0} = {1}", iniToken.Name, iniToken.Data), false);
+                            logger.Warn("Found an invalid key: {0} = {1}", iniToken.Name, iniToken.Data);
+                            break;
+                        }
+                    }
+                    catch (Exception ex) {
+                        invalid = true;
+                        returnResult.WarningAdd(
+                            string.Format("#{0} invalid {2}: \"{3}\", got exception: {2}", iniSection.Name, iniToken.Name, iniToken.Data, ex.Message), false);
+                        logger.WarnException(string.Format("#{0} invalid {2} \"{1}\"", iniSection.Name, iniToken.Name, iniToken.Data), ex);
+                    }
+                }
 
-            var A = 0;
-            var InvalidGatewayCount = 0;
-
-            for ( A = 0; A <= INIGateways.GatewayCount - 1; A++ )
-            {
-                if ( map.GatewayCreate(INIGateways.Gateways[A].PosA, INIGateways.Gateways[A].PosB) == null )
-                {
-                    InvalidGatewayCount++;
+                if (!invalid) {
+                    iniGateways.Add(iniGateway);
                 }
             }
 
-            if ( InvalidGatewayCount > 0 )
-            {
-                ReturnResult.WarningAdd(InvalidGatewayCount + " gateways were invalid.");
+
+            var invalidGatewayCount = 0;
+
+            foreach (var iniGateway2 in iniGateways) {
+                if ( map.GatewayCreate(iniGateway2.PosA, iniGateway2.PosB) == null ) {
+                    invalidGatewayCount++;
+                }
             }
 
-            return ReturnResult;
+            if ( invalidGatewayCount > 0 )
+            {
+                returnResult.WarningAdd(invalidGatewayCount + " gateways were invalid.");
+            }
+
+            return returnResult;
         }
 
         private clsResult read_FMap_TileTypes(BinaryReader file)

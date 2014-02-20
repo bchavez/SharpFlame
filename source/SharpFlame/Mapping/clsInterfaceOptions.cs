@@ -15,7 +15,6 @@ namespace SharpFlame.Mapping
         public string CompileMultiAuthor;
         public string CompileMultiLicense;
         public string CompileMultiPlayers;
-        public bool CompileMultiXPlayers;
         public string CompileName;
         public sXY_uint ScrollMax;
         public XYInt ScrollMin;
@@ -25,7 +24,6 @@ namespace SharpFlame.Mapping
             //set to default
             CompileName = "";
             CompileMultiPlayers = 2.ToStringInvariant();
-            CompileMultiXPlayers = false;
             CompileMultiAuthor = "";
             CompileMultiLicense = "";
             AutoScrollLimits = true;

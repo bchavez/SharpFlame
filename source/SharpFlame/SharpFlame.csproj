@@ -391,7 +391,6 @@
     <Compile Include="Mapping\IO\FMap\FMap.cs" />
     <Compile Include="Mapping\IO\FMap\FMapInfo.cs" />
     <Compile Include="Mapping\IO\FMap\FMapIniGateways.cs" />
-    <Compile Include="Mapping\IO\FMap\FMapIniObjects.cs" />
     <Compile Include="Mapping\IO\Heightmap\Heightmap.cs" />
     <Compile Include="Mapping\IO\LND\LND.cs" />
     <Compile Include="Mapping\IO\LND\LNDObject.cs" />
@@ -405,6 +404,7 @@
     <Compile Include="Mapping\IO\Wz\WZBJOUnit.cs" />
     <Compile Include="Mapping\IO\Wz\Wz.cs" />
     <Compile Include="Mapping\IO\Wz\sWrite_WZ_Args.cs" />
+    <Compile Include="Mapping\IO\FMap\INIObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">

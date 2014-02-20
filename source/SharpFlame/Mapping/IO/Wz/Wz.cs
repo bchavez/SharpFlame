@@ -2209,188 +2209,188 @@ namespace SharpFlame.Mapping.IO.Wz
             return ReturnResult;
         }
 
-        private clsResult Serialize_WZ_DroidsINI(IniWriter File, int PlayerCount)
+        private clsResult Serialize_WZ_DroidsINI(IniWriter ini, int playerCount)
         {
-            var ReturnResult = new clsResult("Serializing droids INI", false);
+            var returnResult = new clsResult("Serializing droids INI", false);
             logger.Info("Serializing droids INI");
 
-            var Droid = default(DroidDesign);
-            var Template = default(DroidTemplate);
-            var Text = "";
-            var Unit = default(clsUnit);
-            var AsPartsNotTemplate = default(bool);
-            var ValidDroid = default(bool);
-            var InvalidPartCount = 0;
-            var Brain = default(Brain);
+            var droid = default(DroidDesign);
+            var template = default(DroidTemplate);
+            var text = "";
+            var unit = default(clsUnit);
+            var asPartsNotTemplate = default(bool);
+            var validDroid = false;
+            var invalidPartCount = 0;
+            var brain = default(Brain);
 
             foreach ( var tempLoopVar_Unit in map.Units )
             {
-                Unit = tempLoopVar_Unit;
-                if ( Unit.TypeBase.Type == UnitType.PlayerDroid )
+                unit = tempLoopVar_Unit;
+                if ( unit.TypeBase.Type == UnitType.PlayerDroid )
                 {
-                    Droid = (DroidDesign)Unit.TypeBase;
-                    ValidDroid = true;
-                    if ( Unit.ID <= 0 )
+                    droid = (DroidDesign)unit.TypeBase;
+                    validDroid = true;
+                    if ( unit.ID <= 0 )
                     {
-                        ValidDroid = false;
-                        ReturnResult.WarningAdd("Error. A droid\'s ID was zero. It was NOT saved. Delete and replace it to allow save.");
+                        validDroid = false;
+                        returnResult.WarningAdd("Error. A droid\'s ID was zero. It was NOT saved. Delete and replace it to allow save.");
                     }
-                    if ( Droid.IsTemplate )
+                    if ( droid.IsTemplate )
                     {
-                        Template = (DroidTemplate)Droid;
-                        AsPartsNotTemplate = Unit.PreferPartsOutput;
+                        template = (DroidTemplate)droid;
+                        asPartsNotTemplate = unit.PreferPartsOutput;
                     }
                     else
                     {
-                        Template = null;
-                        AsPartsNotTemplate = true;
+                        template = null;
+                        asPartsNotTemplate = true;
                     }
-                    if ( AsPartsNotTemplate )
+                    if ( asPartsNotTemplate )
                     {
-                        if ( Droid.Body == null )
+                        if ( droid.Body == null )
                         {
-                            ValidDroid = false;
-                            InvalidPartCount++;
+                            validDroid = false;
+                            invalidPartCount++;
                         }
-                        else if ( Droid.Propulsion == null )
+                        else if ( droid.Propulsion == null )
                         {
-                            ValidDroid = false;
-                            InvalidPartCount++;
+                            validDroid = false;
+                            invalidPartCount++;
                         }
-                        else if ( Droid.TurretCount >= 1 )
+                        else if ( droid.TurretCount >= 1 )
                         {
-                            if ( Droid.Turret1 == null )
+                            if ( droid.Turret1 == null )
                             {
-                                ValidDroid = false;
-                                InvalidPartCount++;
+                                validDroid = false;
+                                invalidPartCount++;
                             }
                         }
-                        else if ( Droid.TurretCount >= 2 )
+                        else if ( droid.TurretCount >= 2 )
                         {
-                            if ( Droid.Turret2 == null )
+                            if ( droid.Turret2 == null )
                             {
-                                ValidDroid = false;
-                                InvalidPartCount++;
+                                validDroid = false;
+                                invalidPartCount++;
                             }
-                            else if ( Droid.Turret2.TurretType != enumTurretType.Weapon )
+                            else if ( droid.Turret2.TurretType != enumTurretType.Weapon )
                             {
-                                ValidDroid = false;
-                                InvalidPartCount++;
+                                validDroid = false;
+                                invalidPartCount++;
                             }
                         }
-                        else if ( Droid.TurretCount >= 3 && Droid.Turret3 == null )
+                        else if ( droid.TurretCount >= 3 && droid.Turret3 == null )
                         {
-                            if ( Droid.Turret3 == null )
+                            if ( droid.Turret3 == null )
                             {
-                                ValidDroid = false;
-                                InvalidPartCount++;
+                                validDroid = false;
+                                invalidPartCount++;
                             }
-                            else if ( Droid.Turret3.TurretType != enumTurretType.Weapon )
+                            else if ( droid.Turret3.TurretType != enumTurretType.Weapon )
                             {
-                                ValidDroid = false;
-                                InvalidPartCount++;
+                                validDroid = false;
+                                invalidPartCount++;
                             }
                         }
                     }
-                    if ( ValidDroid )
+                    if ( validDroid )
                     {
-                        File.AddSection("droid_" + Unit.ID.ToStringInvariant());
-                        File.AddProperty("id", Unit.ID.ToStringInvariant());
-                        if ( Unit.UnitGroup == map.ScavengerUnitGroup || (PlayerCount >= 0 & Unit.UnitGroup.WZ_StartPos >= PlayerCount) )
+                        ini.AddSection("droid_" + unit.ID.ToStringInvariant());
+                        ini.AddProperty("id", unit.ID.ToStringInvariant());
+                        if ( unit.UnitGroup == map.ScavengerUnitGroup || (playerCount >= 0 & unit.UnitGroup.WZ_StartPos >= playerCount) )
                         {
-                            File.AddProperty("player", "scavenger");
+                            ini.AddProperty("player", "scavenger");
                         }
                         else
                         {
-                            File.AddProperty("startpos", Unit.UnitGroup.WZ_StartPos.ToStringInvariant());
+                            ini.AddProperty("startpos", unit.UnitGroup.WZ_StartPos.ToStringInvariant());
                         }
-                        if ( AsPartsNotTemplate )
+                        if ( asPartsNotTemplate )
                         {
-                            File.AddProperty("name", Droid.GenerateName());
+                            ini.AddProperty("name", droid.GenerateName());
                         }
                         else
                         {
-                            Template = (DroidTemplate)Droid;
-                            File.AddProperty("template", Template.Code);
+                            template = (DroidTemplate)droid;
+                            ini.AddProperty("template", template.Code);
                         }
-                        File.AddProperty("position", Unit.GetINIPosition());
-                        File.AddProperty("rotation", Unit.GetINIRotation());
-                        if ( Unit.Health < 1.0D )
+                        ini.AddProperty("position", unit.GetINIPosition());
+                        ini.AddProperty("rotation", unit.GetINIRotation());
+                        if ( unit.Health < 1.0D )
                         {
-                            File.AddProperty("health", Unit.GetINIHealthPercent());
+                            ini.AddProperty("health", unit.GetINIHealthPercent());
                         }
-                        if ( AsPartsNotTemplate )
+                        if ( asPartsNotTemplate )
                         {
-                            File.AddProperty("droidType", Convert.ToInt32(Droid.GetDroidType()).ToStringInvariant());
-                            if ( Droid.TurretCount == 0 )
+                            ini.AddProperty("droidType", Convert.ToInt32(droid.GetDroidType()).ToStringInvariant());
+                            if ( droid.TurretCount == 0 )
                             {
-                                Text = "0";
+                                text = "0";
                             }
                             else
                             {
-                                if ( Droid.Turret1.TurretType == enumTurretType.Brain )
+                                if ( droid.Turret1.TurretType == enumTurretType.Brain )
                                 {
-                                    if ( ((Brain)Droid.Turret1).Weapon == null )
+                                    if ( ((Brain)droid.Turret1).Weapon == null )
                                     {
-                                        Text = "0";
+                                        text = "0";
                                     }
                                     else
                                     {
-                                        Text = "1";
+                                        text = "1";
                                     }
                                 }
                                 else
                                 {
-                                    if ( Droid.Turret1.TurretType == enumTurretType.Weapon )
+                                    if ( droid.Turret1.TurretType == enumTurretType.Weapon )
                                     {
-                                        Text = Droid.TurretCount.ToStringInvariant();
+                                        text = droid.TurretCount.ToStringInvariant();
                                     }
                                     else
                                     {
-                                        Text = "0";
+                                        text = "0";
                                     }
                                 }
                             }
-                            File.AddProperty("weapons", Text);
-                            File.AddProperty("parts\\body", Droid.Body.Code);
-                            File.AddProperty("parts\\propulsion", Droid.Propulsion.Code);
-                            File.AddProperty("parts\\sensor", Droid.GetSensorCode());
-                            File.AddProperty("parts\\construct", Droid.GetConstructCode());
-                            File.AddProperty("parts\\repair", Droid.GetRepairCode());
-                            File.AddProperty("parts\\brain", Droid.GetBrainCode());
-                            File.AddProperty("parts\\ecm", Droid.GetECMCode());
-                            if ( Droid.TurretCount >= 1 )
+                            ini.AddProperty("weapons", text);
+                            ini.AddProperty("parts\\body", droid.Body.Code);
+                            ini.AddProperty("parts\\propulsion", droid.Propulsion.Code);
+                            ini.AddProperty("parts\\sensor", droid.GetSensorCode());
+                            ini.AddProperty("parts\\construct", droid.GetConstructCode());
+                            ini.AddProperty("parts\\repair", droid.GetRepairCode());
+                            ini.AddProperty("parts\\brain", droid.GetBrainCode());
+                            ini.AddProperty("parts\\ecm", droid.GetECMCode());
+                            if ( droid.TurretCount >= 1 )
                             {
-                                if ( Droid.Turret1.TurretType == enumTurretType.Weapon )
+                                if ( droid.Turret1.TurretType == enumTurretType.Weapon )
                                 {
-                                    File.AddProperty("parts\\weapon\\1", Droid.Turret1.Code);
-                                    if ( Droid.TurretCount >= 2 )
+                                    ini.AddProperty("parts\\weapon\\1", droid.Turret1.Code);
+                                    if ( droid.TurretCount >= 2 )
                                     {
-                                        if ( Droid.Turret2.TurretType == enumTurretType.Weapon )
+                                        if ( droid.Turret2.TurretType == enumTurretType.Weapon )
                                         {
-                                            File.AddProperty("parts\\weapon\\2", Droid.Turret2.Code);
-                                            if ( Droid.TurretCount >= 3 )
+                                            ini.AddProperty("parts\\weapon\\2", droid.Turret2.Code);
+                                            if ( droid.TurretCount >= 3 )
                                             {
-                                                if ( Droid.Turret3.TurretType == enumTurretType.Weapon )
+                                                if ( droid.Turret3.TurretType == enumTurretType.Weapon )
                                                 {
-                                                    File.AddProperty("parts\\weapon\\3", Droid.Turret3.Code);
+                                                    ini.AddProperty("parts\\weapon\\3", droid.Turret3.Code);
                                                 }
                                             }
                                         }
                                     }
                                 }
-                                else if ( Droid.Turret1.TurretType == enumTurretType.Brain )
+                                else if ( droid.Turret1.TurretType == enumTurretType.Brain )
                                 {
-                                    Brain = (Brain)Droid.Turret1;
-                                    if ( Brain.Weapon == null )
+                                    brain = (Brain)droid.Turret1;
+                                    if ( brain.Weapon == null )
                                     {
-                                        Text = "ZNULLWEAPON";
+                                        text = "ZNULLWEAPON";
                                     }
                                     else
                                     {
-                                        Text = Brain.Weapon.Code;
+                                        text = brain.Weapon.Code;
                                     }
-                                    File.AddProperty("parts\\weapon\\1", Text);
+                                    ini.AddProperty("parts\\weapon\\1", text);
                                 }
                             }
                         }
@@ -2398,12 +2398,12 @@ namespace SharpFlame.Mapping.IO.Wz
                 }
             }
 
-            if ( InvalidPartCount > 0 )
+            if ( invalidPartCount > 0 )
             {
-                ReturnResult.WarningAdd(string.Format("There were {0} droids with parts missing. They were not saved.", InvalidPartCount));
+                returnResult.WarningAdd(string.Format("There were {0} droids with parts missing. They were not saved.", invalidPartCount));
             }
 
-            return ReturnResult;
+            return returnResult;
         }
 
         private clsResult Serialize_WZ_FeaturesINI(IniWriter File)
