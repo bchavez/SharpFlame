@@ -2056,7 +2056,7 @@ namespace SharpFlame
             {
                 var Result = new clsResult("Loading notile.png", false);
                 logger.Info("Loading notile.png");
-                Result.Take(BitmapUtil.BitmapIsGLCompatible(Bitmap));
+                Result.Take(BitmapUtil.BitmapIsGlCompatible(Bitmap));
                 ReturnResult.Add(Result);
                 BitmapTextureArgs.Texture = Bitmap;
                 BitmapTextureArgs.Perform();
@@ -2067,7 +2067,7 @@ namespace SharpFlame
             {
                 var Result = new clsResult("Loading overflow.png", false);
                 logger.Info("Loading overflow.png");
-                Result.Take(BitmapUtil.BitmapIsGLCompatible(Bitmap));
+                Result.Take(BitmapUtil.BitmapIsGlCompatible(Bitmap));
                 ReturnResult.Add(Result);
                 BitmapTextureArgs.Texture = Bitmap;
                 BitmapTextureArgs.Perform();
@@ -4203,36 +4203,6 @@ namespace SharpFlame
         public void rdoObjectLine_Click(Object sender, EventArgs e)
         {
             modTools.Tool = modTools.Tools.ObjectLines;
-        }
-
-        private void rdoObjectsSortNone_Click(Object sender, EventArgs e)
-        {
-            if ( !App.ProgramInitializeFinished )
-            {
-                return;
-            }
-
-            ObjectsUpdate();
-        }
-
-        private void rdoObjectsSortInternal_Click(Object sender, EventArgs e)
-        {
-            if ( !App.ProgramInitializeFinished )
-            {
-                return;
-            }
-
-            ObjectsUpdate();
-        }
-
-        private void rdoObjectsSortInGame_Click(Object sender, EventArgs e)
-        {
-            if ( !App.ProgramInitializeFinished )
-            {
-                return;
-            }
-
-            ObjectsUpdate();
         }
 
         private void ActivateObjectTool()

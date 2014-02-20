@@ -424,7 +424,6 @@ namespace SharpFlame
             var Player23TruckCount = new int[Constants.PlayerCountMax];
             var PlayerMasterTruckCount = new int[Constants.PlayerCountMax];
             var ScavPlayerNum = 0;
-            var ScavObjectCount = 0;
             var DroidType = default(DroidDesign);
             StructureTypeBase structureTypeBase;
             var UnusedPlayerUnitWarningCount = 0;
@@ -466,11 +465,7 @@ namespace SharpFlame
                 }
                 if ( Unit.TypeBase.Type != UnitType.Feature )
                 {
-                    if ( Unit.UnitGroup.WZ_StartPos == ScavPlayerNum || Unit.UnitGroup == Map.ScavengerUnitGroup )
-                    {
-                        ScavObjectCount++;
-                    }
-                    else if ( Unit.UnitGroup.WZ_StartPos >= PlayerCount )
+                    if ( Unit.UnitGroup.WZ_StartPos >= PlayerCount )
                     {
                         if ( UnusedPlayerUnitWarningCount < 32 )
                         {

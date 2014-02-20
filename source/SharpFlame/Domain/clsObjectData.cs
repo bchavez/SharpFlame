@@ -243,7 +243,7 @@ namespace SharpFlame.Domain
                         var NewPage = new clsTexturePage();
                         if ( BitmapResult.Success )
                         {
-                            Result.Take(BitmapUtil.BitmapIsGLCompatible(Bitmap));
+                            Result.Take(BitmapUtil.BitmapIsGlCompatible(Bitmap));
                             BitmapTextureArgs.MagFilter = TextureMagFilter.Nearest;
                             BitmapTextureArgs.MinFilter = TextureMinFilter.Nearest;
                             BitmapTextureArgs.TextureNum = 0;

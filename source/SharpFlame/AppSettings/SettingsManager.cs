@@ -8,7 +8,6 @@ using System.IO;
 using NLog;
 using OpenTK;
 using SharpFlame.Colors;
-using SharpFlame.Util;
 using Newtonsoft.Json;
 
 #endregion
@@ -107,48 +106,44 @@ namespace SharpFlame.AppSettings
             Setting_PickOrientation = CreateSetting("PickOrientation", true);
         }
 
-        public static void UpdateSettings(clsSettings NewSettings)
+        public static void UpdateSettings(clsSettings newSettings)
         {
-            var FontChanged = default(bool);
+            var fontChanged = false;
 
             if ( Settings == null )
             {
-                FontChanged = true;
+                fontChanged = true;
             }
             else
             {
                 if ( Settings.FontFamily == null )
                 {
-                    FontChanged = NewSettings.FontFamily != null;
+                    fontChanged = newSettings.FontFamily != null;
                 }
                 else
                 {
-                    if ( NewSettings.FontFamily == null )
+                    if ( newSettings.FontFamily == null )
                     {
-                        FontChanged = true;
+                        fontChanged = true;
                     }
                     else
                     {
-                        if ( Settings.FontFamily.Name == NewSettings.FontFamily.Name
-                             && Settings.FontBold == NewSettings.FontBold
-                             && Settings.FontItalic == NewSettings.FontItalic
-                             && Settings.FontSize == NewSettings.FontSize )
+                        if ( Settings.FontFamily.Name != newSettings.FontFamily.Name
+                             || Settings.FontBold != newSettings.FontBold
+                             || Settings.FontItalic != newSettings.FontItalic
+                             || Settings.FontSize != newSettings.FontSize )
                         {
-                            FontChanged = false;
-                        }
-                        else
-                        {
-                            FontChanged = true;
+                            fontChanged = true;
                         }
                     }
                 }
             }
-            if ( FontChanged )
+            if ( fontChanged )
             {
-                SetFont(NewSettings.MakeFont());
+                SetFont(newSettings.MakeFont());
             }
 
-            Settings = NewSettings;
+            Settings = newSettings;
         }
 
         private static void SetFont(Font newFont)
@@ -180,29 +175,25 @@ namespace SharpFlame.AppSettings
             return ReturnResult;
         }
 
-        public static clsResult Settings_Load(ref clsSettings Result)
+        public static clsResult Settings_Load(ref clsSettings result)
         {
-            var ReturnResult = new clsResult("Loading settings from \"{0}\"".Format2(App.SettingsPath), false);
+            var returnResult = new clsResult("Loading settings from \"{0}\"".Format2(App.SettingsPath), false);
             logger.Info("Loading settings from \"{0}\"".Format2(App.SettingsPath));
 
             try
             {
                 using (var file = new StreamReader(App.SettingsPath)) {
                     var text = file.ReadToEnd();
-                    Result = JsonConvert.DeserializeObject<clsSettings>(text);
+                    result = JsonConvert.DeserializeObject<clsSettings>(text);
                 }
             }
             catch
             {
-                Result = new clsSettings();
-                return ReturnResult;
+                result = new clsSettings();
+                return returnResult;
             }
 
-            // ReturnResult.Take(Read_Settings(File_Settings, ref Result));
-
-            // File_Settings.Close();
-
-            return ReturnResult;
+            return returnResult;
         }
     }
 

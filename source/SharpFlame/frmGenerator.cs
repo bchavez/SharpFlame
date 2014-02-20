@@ -756,18 +756,8 @@ namespace SharpFlame
             }
         }
 
-        private void lstResult_AddResult(clsResult Result)
+        private void lstResult_AddResult(clsResult result)
         {
-            //todo
-
-            //Dim A As Integer
-
-            //For A = 0 To Result.Problems.Count - 1
-            //    lstResult.Items.Add("Problem: " & Result.Problems.Item(A))
-            //Next
-            //For A = 0 To Result.Warnings.Count - 1
-            //    lstResult.Items.Add("Warning: " & Result.Warnings.Item(A))
-            //Next
             lstResult.SelectedIndex = lstResult.Items.Count - 1;
         }
 

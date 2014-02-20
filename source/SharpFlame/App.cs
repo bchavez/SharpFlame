@@ -205,16 +205,15 @@ namespace SharpFlame
             TemplateDroidType_Null.Num = TemplateDroidType_Add(TemplateDroidType_Null);
         }
 
-        public static DroidDesign.clsTemplateDroidType GetTemplateDroidTypeFromTemplateCode(string Code)
+        public static DroidDesign.clsTemplateDroidType GetTemplateDroidTypeFromTemplateCode(string code)
         {
-            var LCaseCode = Code.ToLower();
-            var A = 0;
+            var lCaseCode = code.ToLower();
 
-            for ( A = 0; A <= TemplateDroidTypeCount - 1; A++ )
+            for (var a = 0; a <= TemplateDroidTypeCount - 1; a++ )
             {
-                if ( TemplateDroidTypes[A].TemplateCode.ToLower() == LCaseCode )
+                if ( TemplateDroidTypes[a].TemplateCode.ToLower() == lCaseCode )
                 {
-                    return TemplateDroidTypes[A];
+                    return TemplateDroidTypes[a];
                 }
             }
             return null;
@@ -222,31 +221,31 @@ namespace SharpFlame
 
         public static int TemplateDroidType_Add(DroidDesign.clsTemplateDroidType NewDroidType)
         {
-            var ReturnResult = 0;
+            var returnResult = 0;
 
             Array.Resize(ref TemplateDroidTypes, TemplateDroidTypeCount + 1);
             TemplateDroidTypes[TemplateDroidTypeCount] = NewDroidType;
-            ReturnResult = TemplateDroidTypeCount;
+            returnResult = TemplateDroidTypeCount;
             TemplateDroidTypeCount++;
 
-            return ReturnResult;
+            return returnResult;
         }
 
-        public static void ShowWarnings(clsResult Result)
+        public static void ShowWarnings(clsResult result)
         {
-            if ( !Result.HasWarnings )
+            if ( !result.HasWarnings )
             {
                 return;
             }
 
-            var WarningsForm = new frmWarnings(Result, Result.Text);
-            WarningsForm.Show();
-            WarningsForm.Activate();
+            var warningsForm = new frmWarnings(result, result.Text);
+            warningsForm.Show();
+            warningsForm.Activate();
         }
 
-        public static enumTurretType GetTurretTypeFromName(string TurretTypeName)
+        public static enumTurretType GetTurretTypeFromName(string turretTypeName)
         {
-            switch ( TurretTypeName.ToLower() )
+            switch ( turretTypeName.ToLower() )
             {
                 case "weapon":
                     return enumTurretType.Weapon;
@@ -265,14 +264,14 @@ namespace SharpFlame
             }
         }
 
-        public static void ErrorIDChange(UInt32 IntendedID, clsUnit IDUnit, string NameOfErrorSource)
+        public static void ErrorIDChange(UInt32 intendedID, clsUnit idUnit, string nameOfErrorSource)
         {
             if ( !ShowIDErrorMessage )
             {
                 return;
             }
 
-            if ( IDUnit.ID == IntendedID )
+            if ( idUnit.ID == intendedID )
             {
                 return;
             }
@@ -280,8 +279,8 @@ namespace SharpFlame
             var messageText = "An object\'s ID has been changed unexpectedly. The error was in \"{0}\"\n\n" +
                               "The object is of type {1} and is at map position {2}. " +
                               "It\'s ID was {3}, but is now {4}.\n\n" +
-                              "Click Cancel to stop seeing this message. Otherwise, click OK.".Format2(NameOfErrorSource, IDUnit.TypeBase.GetDisplayTextCode(),
-                                  IDUnit.GetPosText(), IntendedID.ToStringInvariant(), IDUnit.ID.ToStringInvariant());
+                              "Click Cancel to stop seeing this message. Otherwise, click OK.".Format2(nameOfErrorSource, idUnit.TypeBase.GetDisplayTextCode(),
+                                  idUnit.GetPosText(), intendedID.ToStringInvariant(), idUnit.ID.ToStringInvariant());
             const string caption = "An object\'s ID has been changed unexpectedly.";
 
             var result = MessageBox.Show(messageText, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.None);
@@ -293,9 +292,7 @@ namespace SharpFlame
 
         public static void ZeroIDWarning(clsUnit IDUnit, UInt32 NewID, clsResult Output)
         {
-            var MessageText = "";
-
-            MessageText = "An object\'s ID has been changed from 0 to " + NewID.ToStringInvariant() + ". Zero is not a valid ID. The object is of type " +
+            var MessageText = "An object\'s ID has been changed from 0 to " + NewID.ToStringInvariant() + ". Zero is not a valid ID. The object is of type " +
                           IDUnit.TypeBase.GetDisplayTextCode() + " and is at map position " + IDUnit.GetPosText() + ".";
 
             //MsgBox(MessageText, MsgBoxStyle.OkOnly)
@@ -318,81 +315,72 @@ namespace SharpFlame
 
         public static clsResult LoadTilesets(string TilesetsPath)
         {
-            var ReturnResult = new clsResult("Loading tilesets", false);
+            var returnResult = new clsResult("Loading tilesets", false);
             logger.Info("Loading tilesets");
 
-            string[] TilesetDirs = null;
+            string[] tilesetDirs;
             try
             {
-                TilesetDirs = Directory.GetDirectories(TilesetsPath);
+                tilesetDirs = Directory.GetDirectories(TilesetsPath);
             }
             catch ( Exception ex )
             {
-                ReturnResult.ProblemAdd(ex.Message);
-                return ReturnResult;
+                returnResult.ProblemAdd(ex.Message);
+                return returnResult;
             }
 
-            if ( TilesetDirs == null )
-            {
-                return ReturnResult;
-            }
+            clsResult result;
 
-            var Result = default(clsResult);
-            var Path = "";
-            var Tileset = default(clsTileset);
-
-            foreach ( var tempLoopVar_Path in TilesetDirs )
+            foreach ( var path in tilesetDirs )
             {
-                Path = tempLoopVar_Path;
-                Tileset = new clsTileset();
-                Result = Tileset.LoadDirectory(Path);
-                ReturnResult.Add(Result);
-                if ( !Result.HasProblems )
+                var tileset = new clsTileset();
+                result = tileset.LoadDirectory(path);
+                returnResult.Add(result);
+                if ( !result.HasProblems )
                 {
-                    Tilesets.Add(Tileset);
+                    Tilesets.Add(tileset);
                 }
             }
 
-            foreach ( var tempLoopVar_Tileset in Tilesets )
+            foreach ( var tileset in Tilesets )
             {
-                Tileset = tempLoopVar_Tileset;
-                if ( Tileset.Name == "tertilesc1hw" )
+                if ( tileset.Name == "tertilesc1hw" )
                 {
-                    Tileset.Name = "Arizona";
-                    Tileset_Arizona = Tileset;
-                    Tileset.IsOriginal = true;
-                    Tileset.BGColour = new sRGB_sng(204.0f / 255.0f, 149.0f / 255.0f, 70.0f / 255.0f);
+                    tileset.Name = "Arizona";
+                    Tileset_Arizona = tileset;
+                    tileset.IsOriginal = true;
+                    tileset.BGColour = new sRGB_sng(204.0f / 255.0f, 149.0f / 255.0f, 70.0f / 255.0f);
                 }
-                else if ( Tileset.Name == "tertilesc2hw" )
+                else if ( tileset.Name == "tertilesc2hw" )
                 {
-                    Tileset.Name = "Urban";
-                    Tileset_Urban = Tileset;
-                    Tileset.IsOriginal = true;
-                    Tileset.BGColour = new sRGB_sng(118.0f / 255.0f, 165.0f / 255.0f, 203.0f / 255.0f);
+                    tileset.Name = "Urban";
+                    Tileset_Urban = tileset;
+                    tileset.IsOriginal = true;
+                    tileset.BGColour = new sRGB_sng(118.0f / 255.0f, 165.0f / 255.0f, 203.0f / 255.0f);
                 }
-                else if ( Tileset.Name == "tertilesc3hw" )
+                else if ( tileset.Name == "tertilesc3hw" )
                 {
-                    Tileset.Name = "Rocky Mountains";
-                    Tileset_Rockies = Tileset;
-                    Tileset.IsOriginal = true;
-                    Tileset.BGColour = new sRGB_sng(182.0f / 255.0f, 225.0f / 255.0f, 236.0f / 255.0f);
+                    tileset.Name = "Rocky Mountains";
+                    Tileset_Rockies = tileset;
+                    tileset.IsOriginal = true;
+                    tileset.BGColour = new sRGB_sng(182.0f / 255.0f, 225.0f / 255.0f, 236.0f / 255.0f);
                 }
             }
 
             if ( Tileset_Arizona == null )
             {
-                ReturnResult.WarningAdd("Arizona tileset is missing.");
+                returnResult.WarningAdd("Arizona tileset is missing.");
             }
             if ( Tileset_Urban == null )
             {
-                ReturnResult.WarningAdd("Urban tileset is missing.");
+                returnResult.WarningAdd("Urban tileset is missing.");
             }
             if ( Tileset_Rockies == null )
             {
-                ReturnResult.WarningAdd("Rocky Mountains tileset is missing.");
+                returnResult.WarningAdd("Rocky Mountains tileset is missing.");
             }
 
-            return ReturnResult;
+            return returnResult;
         }
 
         public static void View_Radius_Set(double Radius)

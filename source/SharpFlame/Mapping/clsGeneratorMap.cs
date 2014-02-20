@@ -789,37 +789,35 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        private bool TestNearest(clsTestNearestArgs Args)
+        private bool TestNearest(clsTestNearestArgs args)
         {
-            var XY_int = new XYInt();
-            var NearestA = default(clsNearest);
-            var Dist2 = 0;
-            var A = 0;
-            var B = 0;
-            var ReflectionNum = 0;
-            var ReflectionCount = 0;
+            var xyInt = new XYInt();
+            var nearestA = default(clsNearest);
+            var dist2 = 0;
+            var index0 = 0;
+            var index1 = 0;
 
-            if ( Args.PassageNodeA.MirrorNum != 0 )
+            if ( args.PassageNodeA.MirrorNum != 0 )
             {
                 Debugger.Break();
                 return false;
             }
 
-            XY_int.X = Args.PassageNodeB.Pos.X - Args.PassageNodeA.Pos.X;
-            XY_int.Y = Args.PassageNodeB.Pos.Y - Args.PassageNodeA.Pos.Y;
-            Dist2 = XY_int.X * XY_int.X + XY_int.Y * XY_int.Y;
-            if ( Dist2 > Args.MaxConDist2 )
+            xyInt.X = args.PassageNodeB.Pos.X - args.PassageNodeA.Pos.X;
+            xyInt.Y = args.PassageNodeB.Pos.Y - args.PassageNodeA.Pos.Y;
+            dist2 = xyInt.X * xyInt.X + xyInt.Y * xyInt.Y;
+            if ( dist2 > args.MaxConDist2 )
             {
                 return false;
             }
-            for ( A = 0; A <= PassageNodeCount - 1; A++ )
+            for ( index0 = 0; index0 <= PassageNodeCount - 1; index0++ )
             {
-                for ( B = 0; B <= SymmetryBlockCount - 1; B++ )
+                for ( index1 = 0; index1 <= SymmetryBlockCount - 1; index1++ )
                 {
-                    if ( PassageNodes[B, A] != Args.PassageNodeA && PassageNodes[B, A] != Args.PassageNodeB )
+                    if ( PassageNodes[index1, index0] != args.PassageNodeA && PassageNodes[index1, index0] != args.PassageNodeB )
                     {
-                        XY_int = MathUtil.PointGetClosestPosOnLine(Args.PassageNodeA.Pos, Args.PassageNodeB.Pos, PassageNodes[B, A].Pos);
-                        if ( (XY_int - PassageNodes[B, A].Pos).ToDoubles().GetMagnitude() < Args.MinConDist )
+                        xyInt = MathUtil.PointGetClosestPosOnLine(args.PassageNodeA.Pos, args.PassageNodeB.Pos, PassageNodes[index1, index0].Pos);
+                        if ( (xyInt - PassageNodes[index1, index0].Pos).ToDoubles().GetMagnitude() < args.MinConDist )
                         {
                             return false;
                         }
@@ -827,87 +825,89 @@ namespace SharpFlame
                 }
             }
 
-            NearestA = new clsNearest();
-            NearestA.Num = NearestCount;
-            NearestA.Dist2 = Dist2;
-            if ( Args.PassageNodeA.MirrorNum == Args.PassageNodeB.MirrorNum )
+            nearestA = new clsNearest();
+            nearestA.Num = NearestCount;
+            nearestA.Dist2 = dist2;
+            if ( args.PassageNodeA.MirrorNum == args.PassageNodeB.MirrorNum )
             {
-                NearestA.NodeA = new clsPassageNode[SymmetryBlockCount];
-                NearestA.NodeB = new clsPassageNode[SymmetryBlockCount];
-                for ( A = 0; A <= SymmetryBlockCount - 1; A++ )
+                nearestA.NodeA = new clsPassageNode[SymmetryBlockCount];
+                nearestA.NodeB = new clsPassageNode[SymmetryBlockCount];
+                for ( index0 = 0; index0 <= SymmetryBlockCount - 1; index0++ )
                 {
-                    NearestA.NodeA[A] = PassageNodes[A, Args.PassageNodeA.Num];
-                    NearestA.NodeB[A] = PassageNodes[A, Args.PassageNodeB.Num];
+                    nearestA.NodeA[index0] = PassageNodes[index0, args.PassageNodeA.Num];
+                    nearestA.NodeB[index0] = PassageNodes[index0, args.PassageNodeB.Num];
                 }
-                NearestA.NodeCount = SymmetryBlockCount;
+                nearestA.NodeCount = SymmetryBlockCount;
             }
             else
             {
                 if ( SymmetryIsRotational )
                 {
-                    NearestA.NodeA = new clsPassageNode[SymmetryBlockCount];
-                    NearestA.NodeB = new clsPassageNode[SymmetryBlockCount];
-                    ReflectionCount = (int)(SymmetryBlockCount / 2.0D);
-                    for ( ReflectionNum = 0; ReflectionNum <= ReflectionCount - 1; ReflectionNum++ )
+                    nearestA.NodeA = new clsPassageNode[SymmetryBlockCount];
+                    nearestA.NodeB = new clsPassageNode[SymmetryBlockCount];
+                    var reflectionCount = (int)(SymmetryBlockCount / 2.0D);
+                    var reflectionNum = 0;                  
+                    for ( reflectionNum = 0; reflectionNum <= reflectionCount - 1; reflectionNum++ )
                     {
-                        if ( SymmetryBlocks[0].ReflectToNum[ReflectionNum] == Args.PassageNodeB.MirrorNum )
+                        if ( SymmetryBlocks[0].ReflectToNum[reflectionNum] == args.PassageNodeB.MirrorNum )
                         {
                             break;
                         }
                     }
-                    if ( ReflectionNum == ReflectionCount )
+                    if ( reflectionNum == reflectionCount )
                     {
                         return false;
                     }
-                    for ( A = 0; A <= SymmetryBlockCount - 1; A++ )
+                    for ( index0 = 0; index0 <= SymmetryBlockCount - 1; index0++ )
                     {
-                        NearestA.NodeA[A] = PassageNodes[A, Args.PassageNodeA.Num];
-                        NearestA.NodeB[A] = PassageNodes[SymmetryBlocks[A].ReflectToNum[ReflectionNum], Args.PassageNodeB.Num];
+                        nearestA.NodeA[index0] = PassageNodes[index0, args.PassageNodeA.Num];
+                        nearestA.NodeB[index0] = PassageNodes[SymmetryBlocks[index0].ReflectToNum[reflectionNum], args.PassageNodeB.Num];
                     }
-                    NearestA.NodeCount = SymmetryBlockCount;
+                    nearestA.NodeCount = SymmetryBlockCount;
                 }
                 else
                 {
-                    if ( Args.PassageNodeA.Num != Args.PassageNodeB.Num )
+                    if ( args.PassageNodeA.Num != args.PassageNodeB.Num )
                     {
                         return false;
                     }
                     if ( SymmetryBlockCount == 4 )
                     {
-                        NearestA.NodeA = new clsPassageNode[2];
-                        NearestA.NodeB = new clsPassageNode[2];
-                        ReflectionCount = (int)(SymmetryBlockCount / 2.0D);
-                        for ( ReflectionNum = 0; ReflectionNum <= ReflectionCount - 1; ReflectionNum++ )
+                        nearestA.NodeA = new clsPassageNode[2];
+                        nearestA.NodeB = new clsPassageNode[2];
+                        var reflectionCount = (int)(SymmetryBlockCount / 2.0D);
+                        var reflectionNum = 0;
+                        for ( reflectionNum = 0; reflectionNum <= reflectionCount - 1; reflectionNum++ )
                         {
-                            if ( SymmetryBlocks[0].ReflectToNum[ReflectionNum] == Args.PassageNodeB.MirrorNum )
+                            if ( SymmetryBlocks[0].ReflectToNum[reflectionNum] == args.PassageNodeB.MirrorNum )
                             {
                                 break;
                             }
                         }
-                        if ( ReflectionNum == ReflectionCount )
+                        if ( reflectionNum == reflectionCount )
                         {
                             return false;
                         }
-                        NearestA.NodeA[0] = Args.PassageNodeA;
-                        NearestA.NodeB[0] = Args.PassageNodeB;
-                        B = Convert.ToInt32(SymmetryBlocks[0].ReflectToNum[1 - ReflectionNum]);
-                        NearestA.NodeA[1] = PassageNodes[B, Args.PassageNodeA.Num];
-                        NearestA.NodeB[1] = PassageNodes[SymmetryBlocks[B].ReflectToNum[ReflectionNum], Args.PassageNodeB.Num];
-                        NearestA.NodeCount = 2;
+                        nearestA.NodeA[0] = args.PassageNodeA;
+                        nearestA.NodeB[0] = args.PassageNodeB;
+                        index1 = Convert.ToInt32(SymmetryBlocks[0].ReflectToNum[1 - reflectionNum]);
+                        nearestA.NodeA[1] = PassageNodes[index1, args.PassageNodeA.Num];
+                        nearestA.NodeB[1] = PassageNodes[SymmetryBlocks[index1].ReflectToNum[reflectionNum], args.PassageNodeB.Num];
+                        nearestA.NodeCount = 2;
                     }
                     else
                     {
-                        NearestA.NodeA = new clsPassageNode[1];
-                        NearestA.NodeB = new clsPassageNode[1];
-                        NearestA.NodeA[0] = Args.PassageNodeA;
-                        NearestA.NodeB[0] = Args.PassageNodeB;
-                        NearestA.NodeCount = 1;
+                        nearestA.NodeA = new clsPassageNode[1];
+                        nearestA.NodeB = new clsPassageNode[1];
+                        nearestA.NodeA[0] = args.PassageNodeA;
+                        nearestA.NodeB[0] = args.PassageNodeB;
+                        nearestA.NodeCount = 1;
                     }
                 }
             }
 
-            NearestA.BlockedNearests = new clsNearest[512];
-            Nearests[NearestCount] = NearestA;
+            nearestA.BlockedNearests = new clsNearest[512];
+            Nearests[NearestCount] = nearestA;
             NearestCount++;
 
             return true;
