@@ -1,5 +1,8 @@
-using SharpFlame.Maths;
+#region
+
 using SharpFlame.Core.Domain;
+
+#endregion
 
 namespace SharpFlame.Mapping.Changes
 {

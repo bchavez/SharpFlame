@@ -1,91 +1,108 @@
+#region
+
 using System;
 using System.Diagnostics;
+
+#endregion
 
 namespace SharpFlame.Pathfinding
 {
     public class PathfinderNode
     {
+        public float ChildrenSpan;
+        public int Clearance = int.MaxValue;
+        public int ConnectionCount;
+        public PathfinderConnection[] Connections = new PathfinderConnection[2];
+        public PathfinderLayer Layer;
+
+        public int Layer_ChangedNodeNum = -1;
+        public int Layer_NodeNum = -1;
+        public int Network_FindParentNum = -1;
+        public int NodeCount;
+        public PathfinderNode[] Nodes = new PathfinderNode[4];
+
+        public PathfinderNode ParentNode;
+
+        public int ParentNode_NodeNum = -1;
+        public float SiblingSpan;
         public object Tag;
 
-        public int Network_FindParentNum = -1;
+        public PathfinderNode(PathfinderNetwork ParentNetwork)
+        {
+            var tmpLayer = default(PathfinderLayer);
 
-        public PathfinderLayer Layer;
+            if ( ParentNetwork.NodeLayerCount == 0 )
+            {
+                tmpLayer = new PathfinderLayer(ParentNetwork);
+            }
+            else
+            {
+                tmpLayer = ParentNetwork.NodeLayers[0];
+            }
+
+            Layer = tmpLayer;
+            tmpLayer.Node_Add(this);
+        }
+
+        public PathfinderNode(PathfinderLayer NewParentLayer)
+        {
+            Layer = NewParentLayer;
+            Layer.Node_Add(this);
+        }
 
         public PathfinderLayer GetLayer
         {
             get { return Layer; }
         }
 
-        public int Layer_NodeNum = -1;
-
         public int GetLayer_NodeNum
         {
             get { return Layer_NodeNum; }
         }
-
-        public int Layer_ChangedNodeNum = -1;
-
-        public PathfinderNode ParentNode;
 
         public PathfinderNode GetParentNode
         {
             get { return ParentNode; }
         }
 
-        public int ParentNode_NodeNum = -1;
-
         public int GetParentNode_NodeNum
         {
             get { return ParentNode_NodeNum; }
         }
-
-        public PathfinderNode[] Nodes = new PathfinderNode[4];
-
-        public PathfinderNode get_GetChildNode(int Num)
-        {
-            return Nodes[Num];
-        }
-
-        public int NodeCount;
 
         public int GetChildNodeCount
         {
             get { return NodeCount; }
         }
 
-        public PathfinderConnection[] Connections = new PathfinderConnection[2];
-
-        public PathfinderConnection get_GetConnection(int Num)
-        {
-            return Connections[Num];
-        }
-
-        public int ConnectionCount;
-
         public int GetConnectionCount
         {
             get { return ConnectionCount; }
         }
-
-        public float SiblingSpan;
 
         public float GetSiblingSpan
         {
             get { return SiblingSpan; }
         }
 
-        public float ChildrenSpan;
-
         public float GetChildrenSpan
         {
             get { return ChildrenSpan; }
         }
 
-        public int Clearance = int.MaxValue;
-
         public int GetClearance
         {
             get { return Clearance; }
+        }
+
+        public PathfinderNode get_GetChildNode(int Num)
+        {
+            return Nodes[Num];
+        }
+
+        public PathfinderConnection get_GetConnection(int Num)
+        {
+            return Connections[Num];
         }
 
         public void Node_Add(PathfinderNode NodeToAdd)
@@ -136,7 +153,7 @@ namespace SharpFlame.Pathfinding
 
         public void RaiseConnections()
         {
-            int A = 0;
+            var A = 0;
 
             for ( A = 0; A <= ConnectionCount - 1; A++ )
             {
@@ -146,8 +163,8 @@ namespace SharpFlame.Pathfinding
 
         public PathfinderConnection FindConnection(PathfinderNode NodeToFind)
         {
-            int A = 0;
-            PathfinderConnection tmpConnection = default(PathfinderConnection);
+            var A = 0;
+            var tmpConnection = default(PathfinderConnection);
 
             for ( A = 0; A <= ConnectionCount - 1; A++ )
             {
@@ -162,9 +179,9 @@ namespace SharpFlame.Pathfinding
 
         public void Node_Remove(int Num)
         {
-            PathfinderNode tmpNodeA = Nodes[Num];
-            PathfinderConnection tmpConnection = default(PathfinderConnection);
-            int A = 0;
+            var tmpNodeA = Nodes[Num];
+            var tmpConnection = default(PathfinderConnection);
+            var A = 0;
 
             if ( tmpNodeA.ParentNode_NodeNum != Num || tmpNodeA.ParentNode != this )
             {
@@ -202,16 +219,11 @@ namespace SharpFlame.Pathfinding
             ClearanceCalc();
         }
 
-        public struct sVisited
-        {
-            public bool[] Visited;
-        }
-
         public void FloodCheckInternal(PathfinderNode CurrentNode, ref sVisited Visited)
         {
-            int A = 0;
-            PathfinderNode tmpNode = default(PathfinderNode);
-            PathfinderConnection tmpConnection = default(PathfinderConnection);
+            var A = 0;
+            var tmpNode = default(PathfinderNode);
+            var tmpConnection = default(PathfinderConnection);
 
             Visited.Visited[CurrentNode.ParentNode_NodeNum] = true;
 
@@ -256,7 +268,7 @@ namespace SharpFlame.Pathfinding
 
         public void ForceDeallocate()
         {
-            int A = 0;
+            var A = 0;
 
             for ( A = 0; A <= ConnectionCount - 1; A++ )
             {
@@ -270,18 +282,18 @@ namespace SharpFlame.Pathfinding
 
         public void FindParent()
         {
-            PathfinderNode tmpNodeA = default(PathfinderNode);
+            var tmpNodeA = default(PathfinderNode);
             float BestScore = 0;
             PathfinderNode BestNode = null;
             float Score = 0;
-            int A = 0;
-            bool MakeNew = default(bool);
-            int B = 0;
-            int Count = 0;
-            int C = 0;
-            bool Allow = default(bool);
-            PathfinderConnection tmpConnection = default(PathfinderConnection);
-            PathfinderNode DestNode = default(PathfinderNode);
+            var A = 0;
+            var MakeNew = default(bool);
+            var B = 0;
+            var Count = 0;
+            var C = 0;
+            var Allow = default(bool);
+            var tmpConnection = default(PathfinderConnection);
+            var DestNode = default(PathfinderNode);
 
             if ( NodeCount == 0 & Layer.Network_LayerNum > 0 )
             {
@@ -358,7 +370,7 @@ namespace SharpFlame.Pathfinding
             {
                 if ( MakeNew )
                 {
-                    PathfinderLayer tmpLayer = default(PathfinderLayer);
+                    var tmpLayer = default(PathfinderLayer);
                     if ( Layer.ParentLayer == null )
                     {
                         tmpLayer = new PathfinderLayer(Layer.Network);
@@ -367,7 +379,7 @@ namespace SharpFlame.Pathfinding
                     {
                         tmpLayer = Layer.ParentLayer;
                     }
-                    PathfinderNode NewNode = new PathfinderNode(tmpLayer);
+                    var NewNode = new PathfinderNode(tmpLayer);
                     NewNode.Node_Add(this);
                     NewNode.Node_Add(BestNode);
                     NewNode.SpanCalc();
@@ -399,7 +411,7 @@ namespace SharpFlame.Pathfinding
             else if ( ConnectionCount > 0 )
             {
                 //it is part of a network but there is no suitable parent to join, so make a new isolated parent
-                PathfinderLayer tmpLayer = default(PathfinderLayer);
+                var tmpLayer = default(PathfinderLayer);
                 if ( Layer.ParentLayer == null )
                 {
                     tmpLayer = new PathfinderLayer(Layer.Network);
@@ -408,7 +420,7 @@ namespace SharpFlame.Pathfinding
                 {
                     tmpLayer = Layer.ParentLayer;
                 }
-                PathfinderNode NewNode = new PathfinderNode(tmpLayer);
+                var NewNode = new PathfinderNode(tmpLayer);
                 NewNode.Node_Add(this);
                 NewNode.SpanCalc();
                 RaiseConnections();
@@ -429,24 +441,24 @@ namespace SharpFlame.Pathfinding
             PathfinderNode BestNodeB = null;
             PathfinderNode BestNodeC = null;
             PathfinderNode BestNodeD = null;
-            int A = 0;
-            int B = 0;
-            PathfinderNode tmpNodeA = default(PathfinderNode);
-            PathfinderNode tmpNodeB = default(PathfinderNode);
-            PathfinderNode tmpNodeC = default(PathfinderNode);
-            PathfinderNode tmpNodeD = default(PathfinderNode);
+            var A = 0;
+            var B = 0;
+            var tmpNodeA = default(PathfinderNode);
+            var tmpNodeB = default(PathfinderNode);
+            var tmpNodeC = default(PathfinderNode);
+            var tmpNodeD = default(PathfinderNode);
             PathfinderConnection tmpConnectionA = null;
             PathfinderConnection tmpConnectionB = null;
-            int C = 0;
-            int D = 0;
+            var C = 0;
+            var D = 0;
 
-            PathfinderNode[] Children = new PathfinderNode[NodeCount];
+            var Children = new PathfinderNode[NodeCount];
             for ( A = 0; A <= NodeCount - 1; A++ )
             {
                 Children[A] = Nodes[A];
             }
-            int ChildCount = NodeCount;
-            PathfinderLayer ThisLayer = Layer;
+            var ChildCount = NodeCount;
+            var ThisLayer = Layer;
 
             Disband();
 
@@ -520,8 +532,8 @@ namespace SharpFlame.Pathfinding
                     tmpNodeA.CheckIntegrity();
                 }
 
-                PathfinderNode NewNodeA = new PathfinderNode(ThisLayer);
-                PathfinderNode NewNodeB = new PathfinderNode(ThisLayer);
+                var NewNodeA = new PathfinderNode(ThisLayer);
+                var NewNodeB = new PathfinderNode(ThisLayer);
 
                 NewNodeA.Node_Add(BestNodeA);
                 NewNodeA.Node_Add(BestNodeB);
@@ -553,9 +565,9 @@ namespace SharpFlame.Pathfinding
 
             if ( NodeCount >= 2 )
             {
-                sVisited Visited = new sVisited();
+                var Visited = new sVisited();
                 Visited.Visited = new bool[NodeCount];
-                int A = 0;
+                var A = 0;
                 FloodCheckInternal(Nodes[0], ref Visited);
                 for ( A = 0; A <= NodeCount - 1; A++ )
                 {
@@ -570,7 +582,7 @@ namespace SharpFlame.Pathfinding
             {
                 goto DisbandAndFind;
             }
-            else if ( NodeCount > 1 )
+            if ( NodeCount > 1 )
             {
                 SpanCalc();
             }
@@ -578,7 +590,7 @@ namespace SharpFlame.Pathfinding
             {
                 if ( ParentNode != null )
                 {
-                    PathfinderNode tmpNode = ParentNode;
+                    var tmpNode = ParentNode;
                     tmpNode.Node_Remove(ParentNode_NodeNum);
                     tmpNode.CheckIntegrity();
                 }
@@ -590,13 +602,13 @@ namespace SharpFlame.Pathfinding
 
             return;
             DisbandAndFind:
-            int B = 0;
-            PathfinderNode[] Children = new PathfinderNode[NodeCount];
+            var B = 0;
+            var Children = new PathfinderNode[NodeCount];
             for ( B = 0; B <= NodeCount - 1; B++ )
             {
                 Children[B] = Nodes[B];
             }
-            int ChildCount = NodeCount;
+            var ChildCount = NodeCount;
 
             Disband();
 
@@ -606,32 +618,9 @@ namespace SharpFlame.Pathfinding
             }
         }
 
-        public PathfinderNode(PathfinderNetwork ParentNetwork)
-        {
-            PathfinderLayer tmpLayer = default(PathfinderLayer);
-
-            if ( ParentNetwork.NodeLayerCount == 0 )
-            {
-                tmpLayer = new PathfinderLayer(ParentNetwork);
-            }
-            else
-            {
-                tmpLayer = ParentNetwork.NodeLayers[0];
-            }
-
-            Layer = tmpLayer;
-            tmpLayer.Node_Add(this);
-        }
-
-        public PathfinderNode(PathfinderLayer NewParentLayer)
-        {
-            Layer = NewParentLayer;
-            Layer.Node_Add(this);
-        }
-
         public void Disband()
         {
-            PathfinderNode tmpNode = default(PathfinderNode);
+            var tmpNode = default(PathfinderNode);
 
             tmpNode = ParentNode;
             if ( tmpNode != null )
@@ -650,7 +639,7 @@ namespace SharpFlame.Pathfinding
 
         public PathfinderConnection CreateConnection(PathfinderNode OtherNode, float Value)
         {
-            PathfinderConnection tmpConnection = default(PathfinderConnection);
+            var tmpConnection = default(PathfinderConnection);
 
             if ( OtherNode.Layer != Layer )
             {
@@ -667,7 +656,7 @@ namespace SharpFlame.Pathfinding
 
         public PathfinderConnection GetOrCreateConnection(PathfinderNode OtherNode, float Value)
         {
-            PathfinderConnection tmpConnection = default(PathfinderConnection);
+            var tmpConnection = default(PathfinderConnection);
 
             if ( OtherNode.Layer != Layer )
             {
@@ -748,7 +737,7 @@ namespace SharpFlame.Pathfinding
 
         public void ClearanceCalc()
         {
-            int A = 0;
+            var A = 0;
 
             if ( Layer.Network_LayerNum == 0 )
             {
@@ -779,9 +768,9 @@ namespace SharpFlame.Pathfinding
 
         public void SpanCalc()
         {
-            PathfinderNetwork.sFloodSpanArgs Args = new PathfinderNetwork.sFloodSpanArgs();
-            int A = 0;
-            int NumA = 0;
+            var Args = new PathfinderNetwork.sFloodSpanArgs();
+            var A = 0;
+            var NumA = 0;
 
             Args.NodeValues = Layer.Network.NetworkLargeArrays.Nodes_ValuesA;
             Args.FinishIsParent = false;
@@ -830,6 +819,11 @@ namespace SharpFlame.Pathfinding
                     }
                 }
             }
+        }
+
+        public struct sVisited
+        {
+            public bool[] Visited;
         }
     }
 }

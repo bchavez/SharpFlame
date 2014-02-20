@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Drawing;
 using System.IO;
@@ -15,17 +17,19 @@ using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 using SharpFlame.Util;
 
+#endregion
+
 namespace SharpFlame.Mapping
 {
     public partial class clsMap
     {
         public clsResult Load_FME(string Path)
         {
-            clsResult ReturnResult =
+            var ReturnResult =
                 new clsResult("Loading FME from \"{0}\"".Format2(Path), false);
-            logger.Info ("Loading FME from \"{0}\"".Format2(Path));
+            logger.Info("Loading FME from \"{0}\"".Format2(Path));
 
-            BinaryReader File = default(BinaryReader);
+            var File = default(BinaryReader);
 
             try
             {
@@ -44,14 +48,14 @@ namespace SharpFlame.Mapping
 
         private clsResult Read_FME(BinaryReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading FME", false);
-            logger.Info ("Reading FME");
+            var ReturnResult = new clsResult("Reading FME", false);
+            logger.Info("Reading FME");
 
             UInt32 Version = 0;
 
-            clsInterfaceOptions ResultInfo = new clsInterfaceOptions();
+            var ResultInfo = new clsInterfaceOptions();
 
-            clsUnitAdd UnitAdd = new clsUnitAdd();
+            var UnitAdd = new clsUnitAdd();
             UnitAdd.Map = this;
 
             try
@@ -63,7 +67,7 @@ namespace SharpFlame.Mapping
                     ReturnResult.ProblemAdd("Version " + Convert.ToString(Version) + " is not supported.");
                     return ReturnResult;
                 }
-                else if ( Version == 5U || Version == 6U || Version == 7U )
+                if ( Version == 5U || Version == 6U || Version == 7U )
                 {
                     byte byteTemp = 0;
 
@@ -108,11 +112,11 @@ namespace SharpFlame.Mapping
                     TerrainBlank(new XYInt(MapWidth, MapHeight));
                     TileType_Reset();
 
-                    int X = 0;
-                    int Y = 0;
-                    int A = 0;
-                    int intTemp = 0;
-                    int WarningCount = 0;
+                    var X = 0;
+                    var Y = 0;
+                    var A = 0;
+                    var intTemp = 0;
+                    var WarningCount = 0;
 
                     WarningCount = 0;
                     for ( Y = 0; Y <= Terrain.TileSize.Y; Y++ )
@@ -152,32 +156,32 @@ namespace SharpFlame.Mapping
                             byteTemp = File.ReadByte();
 
                             intTemp = 128;
-                            A = (int)((byteTemp / intTemp));
+                            A = byteTemp / intTemp;
                             byteTemp -= (byte)(A * intTemp);
                             Terrain.Tiles[X, Y].Terrain_IsCliff = A == 1;
 
                             intTemp = 64;
-                            A = (int)((byteTemp / intTemp));
+                            A = byteTemp / intTemp;
                             byteTemp -= (byte)(A * intTemp);
                             Terrain.Tiles[X, Y].Texture.Orientation.SwitchedAxes = A == 1;
 
                             intTemp = 32;
-                            A = (int)((byteTemp / intTemp));
+                            A = byteTemp / intTemp;
                             byteTemp -= (byte)(A * intTemp);
                             Terrain.Tiles[X, Y].Texture.Orientation.ResultXFlip = A == 1;
 
                             intTemp = 16;
-                            A = (int)((byteTemp / intTemp));
+                            A = byteTemp / intTemp;
                             byteTemp -= (byte)(A * intTemp);
                             Terrain.Tiles[X, Y].Texture.Orientation.ResultYFlip = A == 1;
 
                             intTemp = 4;
-                            A = (int)((byteTemp / intTemp));
+                            A = byteTemp / intTemp;
                             byteTemp -= (byte)(A * intTemp);
                             Terrain.Tiles[X, Y].Tri = A == 1;
 
                             intTemp = 2;
-                            A = (int)((byteTemp / intTemp));
+                            A = byteTemp / intTemp;
                             byteTemp -= (byte)(A * intTemp);
                             if ( Terrain.Tiles[X, Y].Tri )
                             {
@@ -189,7 +193,7 @@ namespace SharpFlame.Mapping
                             }
 
                             intTemp = 1;
-                            A = (int)((byteTemp / intTemp));
+                            A = byteTemp / intTemp;
                             byteTemp -= (byte)(A * intTemp);
                             if ( Terrain.Tiles[X, Y].Tri )
                             {
@@ -203,23 +207,23 @@ namespace SharpFlame.Mapping
                             //attributes2
                             byteTemp = File.ReadByte();
 
-                            if ( byteTemp == ((byte)0) )
+                            if ( byteTemp == 0 )
                             {
                                 Terrain.Tiles[X, Y].DownSide = TileUtil.None;
                             }
-                            else if ( byteTemp == ((byte)1) )
+                            else if ( byteTemp == 1 )
                             {
                                 Terrain.Tiles[X, Y].DownSide = TileUtil.Top;
                             }
-                            else if ( byteTemp == ((byte)2) )
+                            else if ( byteTemp == 2 )
                             {
                                 Terrain.Tiles[X, Y].DownSide = TileUtil.Left;
                             }
-                            else if ( byteTemp == ((byte)3) )
+                            else if ( byteTemp == 3 )
                             {
                                 Terrain.Tiles[X, Y].DownSide = TileUtil.Right;
                             }
-                            else if ( byteTemp == ((byte)4) )
+                            else if ( byteTemp == 4 )
                             {
                                 Terrain.Tiles[X, Y].DownSide = TileUtil.Bottom;
                             }
@@ -282,7 +286,7 @@ namespace SharpFlame.Mapping
                     }
                     UInt32 TempUnitCount = 0;
                     TempUnitCount = File.ReadUInt32();
-                    sFMEUnit[] TempUnit = new sFMEUnit[(Convert.ToInt32(TempUnitCount))];
+                    var TempUnit = new sFMEUnit[(Convert.ToInt32(TempUnitCount))];
                     for ( A = 0; A <= (Convert.ToInt32(TempUnitCount)) - 1; A++ )
                     {
                         TempUnit[A].Code = new string(File.ReadChars(40)).Trim('\0');
@@ -300,7 +304,7 @@ namespace SharpFlame.Mapping
                         TempUnit[A].Player = File.ReadByte();
                     }
 
-                    clsUnit NewUnit = default(clsUnit);
+                    var NewUnit = default(clsUnit);
                     UnitTypeBase unitTypeBase = null;
                     UInt32 AvailableID = 0;
 
@@ -315,15 +319,15 @@ namespace SharpFlame.Mapping
                     WarningCount = 0;
                     for ( A = 0; A <= (Convert.ToInt32(TempUnitCount)) - 1; A++ )
                     {
-                        if ( TempUnit[A].LNDType == ((byte)0) )
+                        if ( TempUnit[A].LNDType == 0 )
                         {
                             unitTypeBase = App.ObjectData.FindOrCreateUnitType(TempUnit[A].Code, UnitType.Feature, -1);
                         }
-                        else if ( TempUnit[A].LNDType == ((byte)1) )
+                        else if ( TempUnit[A].LNDType == 1 )
                         {
                             unitTypeBase = App.ObjectData.FindOrCreateUnitType(TempUnit[A].Code, UnitType.PlayerStructure, -1);
                         }
-                        else if ( TempUnit[A].LNDType == ((byte)2) )
+                        else if ( TempUnit[A].LNDType == 2 )
                         {
                             unitTypeBase = App.ObjectData.FindOrCreateUnitType(Convert.ToString(TempUnit[A].Code), UnitType.PlayerDroid, -1);
                         }
@@ -375,8 +379,8 @@ namespace SharpFlame.Mapping
                     }
 
                     UInt32 NewGatewayCount = 0;
-                    XYInt NewGateStart = new XYInt();
-                    XYInt NewGateFinish = new XYInt();
+                    var NewGateStart = new XYInt();
+                    var NewGateFinish = new XYInt();
 
                     NewGatewayCount = File.ReadUInt32();
                     WarningCount = 0;
@@ -415,29 +419,25 @@ namespace SharpFlame.Mapping
 
                     ResultInfo.CompileName = IOUtil.ReadOldText(File);
                     byteTemp = File.ReadByte();
-                    if ( byteTemp == ((byte)0) )
+                    if ( byteTemp == 0 )
                     {
                         //no compile type
                     }
-                    else if ( byteTemp == ((byte)1) )
+                    else if ( byteTemp == 1 )
                     {
                         //compile multi
                     }
-                    else if ( byteTemp == ((byte)2) )
+                    else if ( byteTemp == 2 )
                     {
                         //compile campaign
                     }
-                    else
-                    {
-                        //error
-                    }
                     ResultInfo.CompileMultiPlayers = IOUtil.ReadOldText(File);
                     byteTemp = File.ReadByte();
-                    if ( byteTemp == ((byte)0) )
+                    if ( byteTemp == 0 )
                     {
                         ResultInfo.CompileMultiXPlayers = false;
                     }
-                    else if ( byteTemp == ((byte)1) )
+                    else if ( byteTemp == 1 )
                     {
                         ResultInfo.CompileMultiXPlayers = true;
                     }
@@ -477,27 +477,27 @@ namespace SharpFlame.Mapping
 
         public clsResult Load_LND(string Path)
         {
-            clsResult ReturnResult =
+            var ReturnResult =
                 new clsResult("Loading LND from \"{0}\"".Format2(Path), false);
-            logger.Info ("Loading LND from \"{0}\"".Format2(Path));
+            logger.Info("Loading LND from \"{0}\"".Format2(Path));
             try
             {
-                string strTemp = "";
-                string strTemp2 = "";
-                int X = 0;
-                int Y = 0;
-                int A = 0;
-                int B = 0;
-                int Tile_Num = 0;
+                var strTemp = "";
+                var strTemp2 = "";
+                var X = 0;
+                var Y = 0;
+                var A = 0;
+                var B = 0;
+                var Tile_Num = 0;
                 // SimpleList<string> LineData = default(SimpleList<string>);
-                int Line_Num = 0;
+                var Line_Num = 0;
                 sLNDTile[] LNDTile = null;
-                SimpleList<clsLNDObject> LNDObjects = new SimpleList<clsLNDObject>();
-                clsUnitAdd UnitAdd = new clsUnitAdd();
+                var LNDObjects = new SimpleList<clsLNDObject>();
+                var UnitAdd = new clsUnitAdd();
 
                 UnitAdd.Map = this;
 
-                BinaryReader Reader = default(BinaryReader);
+                var Reader = default(BinaryReader);
                 try
                 {
                     Reader = new BinaryReader(new FileStream(Path, FileMode.Open), App.UTF8Encoding);
@@ -512,25 +512,25 @@ namespace SharpFlame.Mapping
 
                 Array.Resize(ref LNDTile, LineData.Count);
 
-                string strTemp3 = "";
-                bool GotTiles = default(bool);
-                bool GotObjects = default(bool);
-                bool GotGates = default(bool);
-                bool GotTileTypes = default(bool);
-                byte[] LNDTileType = new byte[0];
-                string[] ObjectText = new string[11];
-                string[] GateText = new string[4];
-                string[] TileTypeText = new string[256];
-                int LNDTileTypeCount = 0;
-                SimpleList<clsGateway> LNDGates = new SimpleList<clsGateway>();
-                clsGateway Gateway = default(clsGateway);
-                int C = 0;
-                int D = 0;
-                bool GotText = default(bool);
-                bool FlipX = default(bool);
-                bool FlipZ = default(bool);
+                var strTemp3 = "";
+                var GotTiles = default(bool);
+                var GotObjects = default(bool);
+                var GotGates = default(bool);
+                var GotTileTypes = default(bool);
+                var LNDTileType = new byte[0];
+                var ObjectText = new string[11];
+                var GateText = new string[4];
+                var TileTypeText = new string[256];
+                var LNDTileTypeCount = 0;
+                var LNDGates = new SimpleList<clsGateway>();
+                var Gateway = default(clsGateway);
+                var C = 0;
+                var D = 0;
+                var GotText = default(bool);
+                var FlipX = default(bool);
+                var FlipZ = default(bool);
                 byte Rotation = 0;
-                XYInt NewTileSize = new XYInt();
+                var NewTileSize = new XYInt();
                 double dblTemp = 0;
 
                 Line_Num = 0;
@@ -542,15 +542,9 @@ namespace SharpFlame.Mapping
                     if ( A == 0 )
                     {
                     }
-                    else
-                    {
-                    }
 
                     A = strTemp.IndexOf("TileHeight ") + 1;
                     if ( A == 0 )
-                    {
-                    }
-                    else
                     {
                     }
 
@@ -587,20 +581,14 @@ namespace SharpFlame.Mapping
                         if ( strTemp2.IndexOf("tertilesc1") + 1 > 0 )
                         {
                             Tileset = App.Tileset_Arizona;
-
-                            goto LineDone;
                         }
-                        else if ( strTemp2.IndexOf("tertilesc2") + 1 > 0 )
+                        if ( strTemp2.IndexOf("tertilesc2") + 1 > 0 )
                         {
                             Tileset = App.Tileset_Urban;
-
-                            goto LineDone;
                         }
-                        else if ( strTemp2.IndexOf("tertilesc3") + 1 > 0 )
+                        if ( strTemp2.IndexOf("tertilesc3") + 1 > 0 )
                         {
                             Tileset = App.Tileset_Rockies;
-
-                            goto LineDone;
                         }
 
                         goto LineDone;
@@ -626,17 +614,14 @@ namespace SharpFlame.Mapping
                                     ReturnResult.ProblemAdd("Tile ID missing");
                                     return ReturnResult;
                                 }
-                                else
+                                strTemp2 = strTemp.Substring(strTemp.Length - (strTemp.Length - A - 3), strTemp.Length - A - 3);
+                                A = strTemp2.IndexOf(" ") + 1;
+                                if ( A > 0 )
                                 {
-                                    strTemp2 = strTemp.Substring(strTemp.Length - (strTemp.Length - A - 3), strTemp.Length - A - 3);
-                                    A = strTemp2.IndexOf(" ") + 1;
-                                    if ( A > 0 )
-                                    {
-                                        strTemp2 = strTemp2.Substring(0, A - 1);
-                                    }
-                                    Int16 temp_Result = LNDTile[Tile_Num].TID;
-                                    IOUtil.InvariantParse(strTemp2, ref temp_Result);
+                                    strTemp2 = strTemp2.Substring(0, A - 1);
                                 }
+                                var temp_Result = LNDTile[Tile_Num].TID;
+                                IOUtil.InvariantParse(strTemp2, ref temp_Result);
 
                                 A = strTemp.IndexOf("VF ") + 1;
                                 if ( A == 0 )
@@ -644,17 +629,14 @@ namespace SharpFlame.Mapping
                                     ReturnResult.ProblemAdd("Tile VF missing");
                                     return ReturnResult;
                                 }
-                                else
+                                strTemp2 = strTemp.Substring(strTemp.Length - (strTemp.Length - A - 2), strTemp.Length - A - 2);
+                                A = strTemp2.IndexOf(" ") + 1;
+                                if ( A > 0 )
                                 {
-                                    strTemp2 = strTemp.Substring(strTemp.Length - (strTemp.Length - A - 2), strTemp.Length - A - 2);
-                                    A = strTemp2.IndexOf(" ") + 1;
-                                    if ( A > 0 )
-                                    {
-                                        strTemp2 = strTemp2.Substring(0, A - 1);
-                                    }
-                                    Int16 temp_Result2 = LNDTile[Tile_Num].VF;
-                                    IOUtil.InvariantParse(strTemp2, ref temp_Result2);
+                                    strTemp2 = strTemp2.Substring(0, A - 1);
                                 }
+                                var temp_Result2 = LNDTile[Tile_Num].VF;
+                                IOUtil.InvariantParse(strTemp2, ref temp_Result2);
 
                                 A = strTemp.IndexOf("TF ") + 1;
                                 if ( A == 0 )
@@ -662,17 +644,14 @@ namespace SharpFlame.Mapping
                                     ReturnResult.ProblemAdd("Tile TF missing");
                                     return ReturnResult;
                                 }
-                                else
+                                strTemp2 = strTemp.Substring(strTemp.Length - (strTemp.Length - A - 2), strTemp.Length - A - 2);
+                                A = strTemp2.IndexOf(" ") + 1;
+                                if ( A > 0 )
                                 {
-                                    strTemp2 = strTemp.Substring(strTemp.Length - (strTemp.Length - A - 2), strTemp.Length - A - 2);
-                                    A = strTemp2.IndexOf(" ") + 1;
-                                    if ( A > 0 )
-                                    {
-                                        strTemp2 = strTemp2.Substring(0, A - 1);
-                                    }
-                                    Int16 temp_Result3 = LNDTile[Tile_Num].TF;
-                                    IOUtil.InvariantParse(strTemp2, ref temp_Result3);
+                                    strTemp2 = strTemp2.Substring(0, A - 1);
                                 }
+                                var temp_Result3 = LNDTile[Tile_Num].TF;
+                                IOUtil.InvariantParse(strTemp2, ref temp_Result3);
 
                                 A = strTemp.IndexOf(" F ") + 1;
                                 if ( A == 0 )
@@ -680,17 +659,14 @@ namespace SharpFlame.Mapping
                                     ReturnResult.ProblemAdd("Tile flip missing");
                                     return ReturnResult;
                                 }
-                                else
+                                strTemp2 = strTemp.Substring(strTemp.Length - A - 2, strTemp.Length - A - 2);
+                                A = strTemp2.IndexOf(" ");
+                                if ( A > 0 )
                                 {
-                                    strTemp2 = strTemp.Substring(strTemp.Length - A - 2, strTemp.Length - A - 2);
-                                    A = strTemp2.IndexOf(" ");
-                                    if ( A > 0 )
-                                    {
-                                        strTemp2 = strTemp2.Substring(0, A);
-                                    }
-                                    short temp_Result4 = LNDTile[Tile_Num].F;
-                                    IOUtil.InvariantParse(strTemp2, ref temp_Result4);
+                                    strTemp2 = strTemp2.Substring(0, A);
                                 }
+                                var temp_Result4 = LNDTile[Tile_Num].F;
+                                IOUtil.InvariantParse(strTemp2, ref temp_Result4);
 
                                 A = strTemp.IndexOf(" VH ") + 1;
                                 if ( A == 0 )
@@ -698,39 +674,36 @@ namespace SharpFlame.Mapping
                                     ReturnResult.ProblemAdd("Tile height is missing");
                                     return ReturnResult;
                                 }
-                                else
+                                strTemp3 = strTemp.Substring(strTemp.Length - (strTemp.Length - A - 3), strTemp.Length - A - 3);
+                                for ( A = 0; A <= 2; A++ )
                                 {
-                                    strTemp3 = strTemp.Substring(strTemp.Length - (strTemp.Length - A - 3), strTemp.Length - A - 3);
-                                    for ( A = 0; A <= 2; A++ )
+                                    B = strTemp3.IndexOf(" ") + 1;
+                                    if ( B == 0 )
                                     {
-                                        B = strTemp3.IndexOf(" ") + 1;
-                                        if ( B == 0 )
-                                        {
-                                            ReturnResult.ProblemAdd("A tile height value is missing");
-                                            return ReturnResult;
-                                        }
-                                        strTemp2 = strTemp3.Substring(0, B - 1);
-                                        strTemp3 = strTemp3.Substring(strTemp3.Length - (strTemp3.Length - B), strTemp3.Length - B);
-
-                                        if ( A == 0 )
-                                        {
-                                            short temp_Result5 = LNDTile[Tile_Num].Vertex0Height;
-                                            IOUtil.InvariantParse(strTemp2, ref temp_Result5);
-                                        }
-                                        else if ( A == 1 )
-                                        {
-                                            short temp_Result6 = LNDTile[Tile_Num].Vertex1Height;
-                                            IOUtil.InvariantParse(strTemp2, ref temp_Result6);
-                                        }
-                                        else if ( A == 2 )
-                                        {
-                                            Int16 temp_Result7 = LNDTile[Tile_Num].Vertex2Height;
-                                            IOUtil.InvariantParse(strTemp2, ref temp_Result7);
-                                        }
+                                        ReturnResult.ProblemAdd("A tile height value is missing");
+                                        return ReturnResult;
                                     }
-                                    short temp_Result8 = LNDTile[Tile_Num].Vertex3Height;
-                                    IOUtil.InvariantParse(strTemp3, ref temp_Result8);
+                                    strTemp2 = strTemp3.Substring(0, B - 1);
+                                    strTemp3 = strTemp3.Substring(strTemp3.Length - (strTemp3.Length - B), strTemp3.Length - B);
+
+                                    if ( A == 0 )
+                                    {
+                                        var temp_Result5 = LNDTile[Tile_Num].Vertex0Height;
+                                        IOUtil.InvariantParse(strTemp2, ref temp_Result5);
+                                    }
+                                    else if ( A == 1 )
+                                    {
+                                        var temp_Result6 = LNDTile[Tile_Num].Vertex1Height;
+                                        IOUtil.InvariantParse(strTemp2, ref temp_Result6);
+                                    }
+                                    else if ( A == 2 )
+                                    {
+                                        var temp_Result7 = LNDTile[Tile_Num].Vertex2Height;
+                                        IOUtil.InvariantParse(strTemp2, ref temp_Result7);
+                                    }
                                 }
+                                var temp_Result8 = LNDTile[Tile_Num].Vertex3Height;
+                                IOUtil.InvariantParse(strTemp3, ref temp_Result8);
 
                                 Tile_Num++;
                             }
@@ -787,7 +760,7 @@ namespace SharpFlame.Mapping
                                     }
                                 }
 
-                                clsLNDObject NewObject = new clsLNDObject();
+                                var NewObject = new clsLNDObject();
                                 IOUtil.InvariantParse(ObjectText[0], ref NewObject.ID);
                                 IOUtil.InvariantParse(ObjectText[1], ref NewObject.TypeNum);
                                 NewObject.Code = ObjectText[2].Substring(1, ObjectText[2].Length - 2); //remove quotes
@@ -949,7 +922,6 @@ namespace SharpFlame.Mapping
                         }
 
                         GotTileTypes = true;
-                        goto LineDone;
                     }
 
                     LineDone:
@@ -1018,14 +990,14 @@ namespace SharpFlame.Mapping
                     }
                 }
 
-                clsUnit NewUnit = default(clsUnit);
-                XYZInt XYZ_int = new XYZInt(0, 0, 0);
-                UnitTypeBase newTypeBase = default(UnitTypeBase);
+                var NewUnit = default(clsUnit);
+                var XYZ_int = new XYZInt(0, 0, 0);
+                var newTypeBase = default(UnitTypeBase);
                 UInt32 AvailableID = 0;
-                clsLNDObject CurrentObject = default(clsLNDObject);
+                var CurrentObject = default(clsLNDObject);
 
                 AvailableID = 1U;
-                foreach ( clsLNDObject tempLoopVar_CurrentObject in LNDObjects )
+                foreach ( var tempLoopVar_CurrentObject in LNDObjects )
                 {
                     CurrentObject = tempLoopVar_CurrentObject;
                     if ( CurrentObject.ID >= AvailableID )
@@ -1033,7 +1005,7 @@ namespace SharpFlame.Mapping
                         AvailableID = CurrentObject.ID + 1U;
                     }
                 }
-                foreach ( clsLNDObject tempLoopVar_CurrentObject in LNDObjects )
+                foreach ( var tempLoopVar_CurrentObject in LNDObjects )
                 {
                     CurrentObject = tempLoopVar_CurrentObject;
                     switch ( CurrentObject.TypeNum )
@@ -1084,7 +1056,7 @@ namespace SharpFlame.Mapping
                     }
                 }
 
-                foreach ( clsGateway tempLoopVar_Gateway in LNDGates )
+                foreach ( var tempLoopVar_Gateway in LNDGates )
                 {
                     Gateway = tempLoopVar_Gateway;
                     GatewayCreate(Gateway.PosA, Gateway.PosB);
@@ -1110,13 +1082,13 @@ namespace SharpFlame.Mapping
         public XYZInt LNDPos_From_MapPos(XYInt Horizontal)
         {
             return new XYZInt(Horizontal.X - (int)(Terrain.TileSize.X * Constants.TerrainGridSpacing / 2.0D),
-            				  ((int)(Terrain.TileSize.Y * Constants.TerrainGridSpacing / 2.0D)) - Horizontal.Y,
-			                  (int)(GetTerrainHeight(Horizontal)));
+                ((int)(Terrain.TileSize.Y * Constants.TerrainGridSpacing / 2.0D)) - Horizontal.Y,
+                (int)(GetTerrainHeight(Horizontal)));
         }
 
         public WorldPos MapPos_From_LNDPos(XYZInt Pos)
         {
-            WorldPos Result = new WorldPos();
+            var Result = new WorldPos();
 
             Result.Horizontal.X = Pos.X + (int)(Terrain.TileSize.X * Constants.TerrainGridSpacing / 2.0D);
             Result.Horizontal.Y = ((int)(Terrain.TileSize.Y * Constants.TerrainGridSpacing / 2.0D)) - Pos.Z;
@@ -1127,10 +1099,10 @@ namespace SharpFlame.Mapping
 
         public clsResult Write_LND(string Path, bool Overwrite)
         {
-            clsResult ReturnResult =
+            var ReturnResult =
                 new clsResult("Writing LND to \"{0}\"".Format2(Path), false);
 
-            logger.Info ("Writing LND to \"{0}\"".Format2(Path));
+            logger.Info("Writing LND to \"{0}\"".Format2(Path));
 
             if ( System.IO.File.Exists(Path) )
             {
@@ -1149,19 +1121,19 @@ namespace SharpFlame.Mapping
 
             try
             {
-                string Text = "";
-                char EndChar = (char)0;
-                char Quote = (char)0;
-                int A = 0;
-                int X = 0;
-                int Y = 0;
+                var Text = "";
+                var EndChar = (char)0;
+                var Quote = (char)0;
+                var A = 0;
+                var X = 0;
+                var Y = 0;
                 byte Flip = 0;
-                int B = 0;
-                int VF = 0;
-                int TF = 0;
-                int C = 0;
+                var B = 0;
+                var VF = 0;
+                var TF = 0;
+                var C = 0;
                 byte Rotation = 0;
-                bool FlipX = default(bool);
+                var FlipX = default(bool);
 
                 Quote = '\"';
                 EndChar = '\n';
@@ -1249,14 +1221,14 @@ namespace SharpFlame.Mapping
                     for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
                     {
                         TileUtil.TileOrientation_To_OldOrientation(Terrain.Tiles[X, Y].Texture.Orientation, ref Rotation, ref FlipX);
-                        Flip = (byte)0;
+                        Flip = 0;
                         if ( Terrain.Tiles[X, Y].Tri )
                         {
-                            Flip += (byte)2;
+                            Flip += 2;
                         }
                         if ( FlipX )
                         {
-                            Flip += (byte)4;
+                            Flip += 4;
                         }
                         Flip += (byte)(Rotation * 16);
 
@@ -1314,11 +1286,11 @@ namespace SharpFlame.Mapping
                 File.Write(Text);
                 Text = "    Objects {" + Convert.ToString(EndChar);
                 File.Write(Text);
-                XYZInt XYZ_int = new XYZInt(0, 0, 0);
+                var XYZ_int = new XYZInt(0, 0, 0);
                 string Code = null;
-                int CustomDroidCount = 0;
-                clsUnit Unit = default(clsUnit);
-                foreach ( clsUnit tempLoopVar_Unit in Units )
+                var CustomDroidCount = 0;
+                var Unit = default(clsUnit);
+                foreach ( var tempLoopVar_Unit in Units )
                 {
                     Unit = tempLoopVar_Unit;
                     switch ( Unit.TypeBase.Type )
@@ -1393,8 +1365,8 @@ namespace SharpFlame.Mapping
                 File.Write(Text);
                 Text = "    Gates {" + Convert.ToString(EndChar);
                 File.Write(Text);
-                clsGateway Gateway = default(clsGateway);
-                foreach ( clsGateway tempLoopVar_Gateway in Gateways )
+                var Gateway = default(clsGateway);
+                foreach ( var tempLoopVar_Gateway in Gateways )
                 {
                     Gateway = tempLoopVar_Gateway;
                     Text = "        " + Gateway.PosA.X.ToStringInvariant() + " " + Gateway.PosA.Y.ToStringInvariant() + " " +
@@ -1485,13 +1457,13 @@ namespace SharpFlame.Mapping
 
         public sResult Write_MinimapFile(string Path, bool Overwrite)
         {
-            sResult ReturnResult = new sResult();
-            int X = 0;
-            int Y = 0;
+            var ReturnResult = new sResult();
+            var X = 0;
+            var Y = 0;
 
-            Bitmap MinimapBitmap = new Bitmap(Terrain.TileSize.X, Terrain.TileSize.Y);
+            var MinimapBitmap = new Bitmap(Terrain.TileSize.X, Terrain.TileSize.Y);
 
-            clsMinimapTexture Texture = new clsMinimapTexture(new XYInt(Terrain.TileSize.X, Terrain.TileSize.Y));
+            var Texture = new clsMinimapTexture(new XYInt(Terrain.TileSize.X, Terrain.TileSize.Y));
             MinimapTextureFill(Texture);
 
             for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
@@ -1513,10 +1485,10 @@ namespace SharpFlame.Mapping
 
         public sResult Write_Heightmap(string Path, bool Overwrite)
         {
-            sResult ReturnResult = new sResult();
-            Bitmap HeightmapBitmap = new Bitmap(Terrain.TileSize.X + 1, Terrain.TileSize.Y + 1);
-            int X = 0;
-            int Y = 0;
+            var ReturnResult = new sResult();
+            var HeightmapBitmap = new Bitmap(Terrain.TileSize.X + 1, Terrain.TileSize.Y + 1);
+            var X = 0;
+            var Y = 0;
 
             for ( Y = 0; Y <= Terrain.TileSize.Y; Y++ )
             {
@@ -1534,7 +1506,7 @@ namespace SharpFlame.Mapping
 
         public sResult Write_TTP(string Path, bool Overwrite)
         {
-            sResult ReturnResult = new sResult();
+            var ReturnResult = new sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -1563,7 +1535,7 @@ namespace SharpFlame.Mapping
                 return ReturnResult;
             }
 
-            int A = 0;
+            var A = 0;
 
             IOUtil.WriteText(File_TTP, false, "ttyp");
 
@@ -1588,10 +1560,10 @@ namespace SharpFlame.Mapping
 
         public sResult Load_TTP(string Path)
         {
-            sResult ReturnResult = new sResult();
+            var ReturnResult = new sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
-            BinaryReader File = default(BinaryReader);
+            var File = default(BinaryReader);
 
             try
             {
@@ -1603,9 +1575,10 @@ namespace SharpFlame.Mapping
                 return ReturnResult;
             }
 
-            using (File) {
-                var wzFormat = new WZFormat (this);
-                ReturnResult = wzFormat.Read_WZ_TTP (File);
+            using ( File )
+            {
+                var wzFormat = new WZFormat(this);
+                ReturnResult = wzFormat.Read_WZ_TTP(File);
             }
             File.Close();
 
@@ -1614,7 +1587,7 @@ namespace SharpFlame.Mapping
 
         public sResult Write_FME(string Path, bool Overwrite, byte ScavengerPlayerNum)
         {
-            sResult ReturnResult = new sResult();
+            var ReturnResult = new sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -1637,8 +1610,8 @@ namespace SharpFlame.Mapping
             {
                 File = new BinaryWriter(new FileStream(Path, FileMode.CreateNew));
 
-                int X = 0;
-                int Z = 0;
+                var X = 0;
+                var Z = 0;
 
                 File.Write(6U);
 
@@ -1691,67 +1664,67 @@ namespace SharpFlame.Mapping
                     {
                         File.Write(Convert.ToByte(Terrain.Tiles[X, Z].Texture.TextureNum + 1));
 
-                        TileAttributes = (byte)0;
+                        TileAttributes = 0;
                         if ( Terrain.Tiles[X, Z].Terrain_IsCliff )
                         {
-                            TileAttributes += (byte)128;
+                            TileAttributes += 128;
                         }
                         if ( Terrain.Tiles[X, Z].Texture.Orientation.SwitchedAxes )
                         {
-                            TileAttributes += (byte)64;
+                            TileAttributes += 64;
                         }
                         if ( Terrain.Tiles[X, Z].Texture.Orientation.ResultXFlip )
                         {
-                            TileAttributes += (byte)32;
+                            TileAttributes += 32;
                         }
                         if ( Terrain.Tiles[X, Z].Texture.Orientation.ResultYFlip )
                         {
-                            TileAttributes += (byte)16;
+                            TileAttributes += 16;
                         }
                         //8 is free
                         if ( Terrain.Tiles[X, Z].Tri )
                         {
-                            TileAttributes += (byte)4;
+                            TileAttributes += 4;
                             if ( Terrain.Tiles[X, Z].TriTopLeftIsCliff )
                             {
-                                TileAttributes += (byte)2;
+                                TileAttributes += 2;
                             }
                             if ( Terrain.Tiles[X, Z].TriBottomRightIsCliff )
                             {
-                                TileAttributes += (byte)1;
+                                TileAttributes += 1;
                             }
                         }
                         else
                         {
                             if ( Terrain.Tiles[X, Z].TriBottomLeftIsCliff )
                             {
-                                TileAttributes += (byte)2;
+                                TileAttributes += 2;
                             }
                             if ( Terrain.Tiles[X, Z].TriTopRightIsCliff )
                             {
-                                TileAttributes += (byte)1;
+                                TileAttributes += 1;
                             }
                         }
                         File.Write(TileAttributes);
                         if ( TileUtil.IdenticalTileDirections(Terrain.Tiles[X, Z].DownSide, TileUtil.Top) )
                         {
-                            DownSideData = (byte)1;
+                            DownSideData = 1;
                         }
                         else if ( TileUtil.IdenticalTileDirections(Terrain.Tiles[X, Z].DownSide, TileUtil.Left) )
                         {
-                            DownSideData = (byte)2;
+                            DownSideData = 2;
                         }
                         else if ( TileUtil.IdenticalTileDirections(Terrain.Tiles[X, Z].DownSide, TileUtil.Right) )
                         {
-                            DownSideData = (byte)3;
+                            DownSideData = 3;
                         }
                         else if ( TileUtil.IdenticalTileDirections(Terrain.Tiles[X, Z].DownSide, TileUtil.Bottom) )
                         {
-                            DownSideData = (byte)4;
+                            DownSideData = 4;
                         }
                         else
                         {
-                            DownSideData = (byte)0;
+                            DownSideData = 0;
                         }
                         File.Write(DownSideData);
                     }
@@ -1795,13 +1768,13 @@ namespace SharpFlame.Mapping
                     }
                 }
 
-                clsUnit[] OutputUnits = new clsUnit[Units.Count];
-                string[] OutputUnitCode = new string[Units.Count];
-                int OutputUnitCount = 0;
-                clsUnit Unit = default(clsUnit);
-                int A = 0;
+                var OutputUnits = new clsUnit[Units.Count];
+                var OutputUnitCode = new string[Units.Count];
+                var OutputUnitCount = 0;
+                var Unit = default(clsUnit);
+                var A = 0;
 
-                foreach ( clsUnit tempLoopVar_Unit in Units )
+                foreach ( var tempLoopVar_Unit in Units )
                 {
                     Unit = tempLoopVar_Unit;
                     if ( Unit.TypeBase.GetCode(ref OutputUnitCode[OutputUnitCount]) )
@@ -1848,7 +1821,7 @@ namespace SharpFlame.Mapping
 
                 File.Write((uint)Gateways.Count);
 
-                foreach ( clsGateway Gateway in Gateways )
+                foreach ( var Gateway in Gateways )
                 {
                     File.Write((ushort)Gateway.PosA.X);
                     File.Write((ushort)Gateway.PosA.Y);
@@ -1878,7 +1851,7 @@ namespace SharpFlame.Mapping
                 IOUtil.WriteText(File, true, InterfaceOptions.CompileMultiAuthor);
                 IOUtil.WriteText(File, true, InterfaceOptions.CompileMultiLicense);
                 IOUtil.WriteText(File, true, "0"); //game time
-                int intTemp = InterfaceOptions.CampaignGameType;
+                var intTemp = InterfaceOptions.CampaignGameType;
                 File.Write(intTemp);
             }
             catch ( Exception ex )

@@ -1,3 +1,5 @@
+#region
+
 using System.Windows.Forms;
 using SharpFlame.Collections;
 using SharpFlame.FileIO;
@@ -5,18 +7,20 @@ using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
 using SharpFlame.Util;
 
+#endregion
+
 namespace SharpFlame.Mapping
 {
     public partial class clsMap
     {
-        public ConnectedList<clsScriptPosition, clsMap> ScriptPositions;
         public ConnectedList<clsScriptArea, clsMap> ScriptAreas;
+        public ConnectedList<clsScriptPosition, clsMap> ScriptPositions;
 
         public string GetDefaultScriptLabel(string Prefix)
         {
-            int Number = 1;
-            sResult Valid = new sResult();
-            string Label = "";
+            var Number = 1;
+            var Valid = new sResult();
+            var Label = "";
 
             do
             {
@@ -37,7 +41,7 @@ namespace SharpFlame.Mapping
 
         public sResult ScriptLabelIsValid(string Text)
         {
-            sResult ReturnResult = new sResult();
+            var ReturnResult = new sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -47,7 +51,7 @@ namespace SharpFlame.Mapping
                 return ReturnResult;
             }
 
-            string LCaseText = Text.ToLower();
+            var LCaseText = Text.ToLower();
 
             if ( LCaseText.Length < 1 )
             {
@@ -55,11 +59,11 @@ namespace SharpFlame.Mapping
                 return ReturnResult;
             }
 
-            char CurrentChar = (char)0;
-            bool Invalid = default(bool);
+            var CurrentChar = (char)0;
+            var Invalid = default(bool);
 
             Invalid = false;
-            foreach ( char tempLoopVar_CurrentChar in LCaseText )
+            foreach ( var tempLoopVar_CurrentChar in LCaseText )
             {
                 CurrentChar = tempLoopVar_CurrentChar;
                 if ( !((CurrentChar >= 'a' && CurrentChar <= 'z') || (CurrentChar >= '0' && CurrentChar <= '9') || CurrentChar == '_') )
@@ -74,9 +78,9 @@ namespace SharpFlame.Mapping
                 return ReturnResult;
             }
 
-            clsUnit Unit = default(clsUnit);
+            var Unit = default(clsUnit);
 
-            foreach ( clsUnit tempLoopVar_Unit in Units )
+            foreach ( var tempLoopVar_Unit in Units )
             {
                 Unit = tempLoopVar_Unit;
                 if ( Unit.Label != null )
@@ -89,9 +93,9 @@ namespace SharpFlame.Mapping
                 }
             }
 
-            clsScriptPosition ScriptPosition = default(clsScriptPosition);
+            var ScriptPosition = default(clsScriptPosition);
 
-            foreach ( clsScriptPosition tempLoopVar_ScriptPosition in ScriptPositions )
+            foreach ( var tempLoopVar_ScriptPosition in ScriptPositions )
             {
                 ScriptPosition = tempLoopVar_ScriptPosition;
                 if ( LCaseText == ScriptPosition.Label.ToLower() )
@@ -101,9 +105,9 @@ namespace SharpFlame.Mapping
                 }
             }
 
-            clsScriptArea ScriptArea = default(clsScriptArea);
+            var ScriptArea = default(clsScriptArea);
 
-            foreach ( clsScriptArea tempLoopVar_ScriptArea in ScriptAreas )
+            foreach ( var tempLoopVar_ScriptArea in ScriptAreas )
             {
                 ScriptArea = tempLoopVar_ScriptArea;
                 if ( LCaseText == ScriptArea.Label.ToLower() )

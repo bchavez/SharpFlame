@@ -1,3 +1,5 @@
+#region
+
 using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
@@ -5,27 +7,28 @@ using SharpFlame.Core.Domain;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 
+#endregion
+
 namespace SharpFlame.Mapping.Drawing
 {
     public class clsDrawVertexTerrain : clsAction
     {
-        public Matrix3DMath.Matrix3D ViewAngleMatrix;
-
         private sRGB_sng RGB_sng;
         private sRGB_sng RGB_sng2;
-        private XYZDouble XYZ_dbl;
-        private XYZDouble XYZ_dbl2;
-        private XYZDouble XYZ_dbl3;
         private XYZDouble Vertex0;
         private XYZDouble Vertex1;
         private XYZDouble Vertex2;
         private XYZDouble Vertex3;
+        public Matrix3DMath.Matrix3D ViewAngleMatrix;
+        private XYZDouble XYZ_dbl;
+        private XYZDouble XYZ_dbl2;
+        private XYZDouble XYZ_dbl3;
 
         public override void ActionPerform()
         {
-            int X = 0;
-            int Y = 0;
-            int A = 0;
+            var X = 0;
+            var Y = 0;
+            var A = 0;
 
             for ( Y = PosNum.Y * Constants.SectorTileSize;
                 Y <= Math.Min(Convert.ToInt32((PosNum.Y + 1) * Constants.SectorTileSize - 1), Map.Terrain.TileSize.Y);

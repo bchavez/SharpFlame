@@ -1,18 +1,22 @@
+#region
+
 using SharpFlame.Core.Domain;
-using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame.Mapping.Tools
 {
     public abstract class clsAction
     {
+        public double Effect;
         public clsMap Map;
         public XYInt PosNum;
         public bool UseEffect;
-        public double Effect;
 
-		public clsAction() {
-			PosNum = new XYInt (0, 0);
-		}
+        public clsAction()
+        {
+            PosNum = new XYInt(0, 0);
+        }
 
         public abstract void ActionPerform();
     }

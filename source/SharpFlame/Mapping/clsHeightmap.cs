@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -5,26 +7,14 @@ using SharpFlame.Bitmaps;
 using SharpFlame.Maths;
 using SharpFlame.Util;
 
+#endregion
+
 namespace SharpFlame
 {
     public class clsHeightmap
     {
-        public double HeightScale = 0.0001D;
-
-        public struct sMinMax
-        {
-            public long Min;
-            public long Max;
-        }
-
-        public class clsHeightData
-        {
-            public int SizeX;
-            public int SizeY;
-            public long[,] Height;
-        }
-
         public clsHeightData HeightData = new clsHeightData();
+        public double HeightScale = 0.0001D;
 
         public void Blank(int SizeY, int SizeX)
         {
@@ -35,8 +25,8 @@ namespace SharpFlame
 
         public void Randomize(double HeightMultiplier)
         {
-            int X = 0;
-            int Y = 0;
+            var X = 0;
+            var Y = 0;
             long HeightMultiplierHalved = 0;
 
             HeightMultiplierHalved = (int)(HeightMultiplier / 2.0D);
@@ -51,7 +41,7 @@ namespace SharpFlame
 
         public void GenerateNew(int SizeY, int SizeX, int Inflations, double NoiseFactor, double HeightMultiplier)
         {
-            clsHeightmap Temp = new clsHeightmap();
+            var Temp = new clsHeightmap();
 
             Blank(SizeY, SizeX);
             Randomize(HeightMultiplier / HeightScale);
@@ -62,8 +52,8 @@ namespace SharpFlame
 
         public void Generate(clsHeightmap Source, int Inflations, double NoiseFactor, double HeightMultiplier)
         {
-            clsHeightmap Temp = new clsHeightmap();
-            int A = 0;
+            var Temp = new clsHeightmap();
+            var A = 0;
 
             if ( Inflations >= 1 )
             {
@@ -83,15 +73,14 @@ namespace SharpFlame
             }
             else
             {
-                return;
             }
         }
 
         public void Inflate(clsHeightmap Source, double NoiseFactor, double HeightMultiplier, int VariationReduction)
         {
-            int A = 0;
-            int Y = 0;
-            int X = 0;
+            var A = 0;
+            var Y = 0;
+            var X = 0;
 
             double Variation = 0;
             long VariationHalved = 0;
@@ -133,7 +122,7 @@ namespace SharpFlame
                     Mean =
                         Convert.ToInt32(
                             Convert.ToDouble(Convert.ToInt32(HeightData.Height[Y - 1, X - 1] + HeightData.Height[Y - 1, X + 1]) +
-                                                    HeightData.Height[Y + 1, X - 1] + HeightData.Height[Y + 1, X + 1]) / 4.0D);
+                                             HeightData.Height[Y + 1, X - 1] + HeightData.Height[Y + 1, X + 1]) / 4.0D);
                     HeightData.Height[Y, X] = Convert.ToInt64(Convert.ToInt32(Mean + ((int)(App.Random.Next() * Variation))) - VariationHalved);
                 }
             }
@@ -151,7 +140,7 @@ namespace SharpFlame
                     Mean =
                         Convert.ToInt32(
                             Convert.ToDouble(Convert.ToInt32(HeightData.Height[Y - 1, X] + HeightData.Height[Y, X - 1]) + HeightData.Height[Y, X + 1] +
-                                                    HeightData.Height[Y + 1, X]) / 4.0D);
+                                             HeightData.Height[Y + 1, X]) / 4.0D);
                     HeightData.Height[Y, X] = Convert.ToInt64(Convert.ToInt32(Mean + ((int)(App.Random.Next() * Variation))) - VariationHalved);
                 }
             }
@@ -202,8 +191,8 @@ namespace SharpFlame
             long HeightMin = 0;
             long HeightMax = 0;
             long lngTemp = 0;
-            int Y = 0;
-            int X = 0;
+            var Y = 0;
+            var X = 0;
 
             if ( !(HeightData.SizeY == 0 | HeightData.SizeX == 0) )
             {
@@ -231,8 +220,8 @@ namespace SharpFlame
 
         public void Copy(clsHeightmap Source)
         {
-            int Y = 0;
-            int X = 0;
+            var Y = 0;
+            var X = 0;
 
             HeightScale = Source.HeightScale;
             SizeCopy(Source);
@@ -252,8 +241,8 @@ namespace SharpFlame
 
         public void Multiply2(clsHeightmap SourceA, clsHeightmap SourceB)
         {
-            int Y = 0;
-            int X = 0;
+            var Y = 0;
+            var X = 0;
 
             if ( !SourceA.IsSizeSame(SourceB) )
             {
@@ -268,16 +257,16 @@ namespace SharpFlame
                         Convert.ToInt32(
                             Convert.ToInt32(
                                 Convert.ToDouble(Convert.ToDouble(SourceA.HeightData.Height[Y, X] * SourceA.HeightScale) *
-                                                        SourceB.HeightData.Height[Y, X]) * SourceB.HeightScale) / HeightScale);
+                                                 SourceB.HeightData.Height[Y, X]) * SourceB.HeightScale) / HeightScale);
                 }
             }
         }
 
         public void Multiply(clsHeightmap Source, double Multiplier)
         {
-            int Y = 0;
-            int X = 0;
-            double dblTemp = Source.HeightScale * Multiplier / HeightScale;
+            var Y = 0;
+            var X = 0;
+            var dblTemp = Source.HeightScale * Multiplier / HeightScale;
 
             SizeCopy(Source);
             for ( Y = 0; Y <= HeightData.SizeY - 1; Y++ )
@@ -291,9 +280,9 @@ namespace SharpFlame
 
         public void Divide2(clsHeightmap SourceA, clsHeightmap SourceB)
         {
-            int Y = 0;
-            int X = 0;
-            double dblTemp = SourceA.HeightScale / (SourceB.HeightScale * HeightScale);
+            var Y = 0;
+            var X = 0;
+            var dblTemp = SourceA.HeightScale / (SourceB.HeightScale * HeightScale);
 
             if ( !SourceA.IsSizeSame(SourceB) )
             {
@@ -312,9 +301,9 @@ namespace SharpFlame
 
         public void Divide(clsHeightmap Source, double Denominator)
         {
-            int Y = 0;
-            int X = 0;
-            double dblTemp = Source.HeightScale / (Denominator * HeightScale);
+            var Y = 0;
+            var X = 0;
+            var dblTemp = Source.HeightScale / (Denominator * HeightScale);
 
             SizeCopy(Source);
             for ( Y = 0; Y <= HeightData.SizeY - 1; Y++ )
@@ -328,10 +317,10 @@ namespace SharpFlame
 
         public void Intervalise(clsHeightmap Source, double Interval)
         {
-            int Y = 0;
-            int X = 0;
-            double dblTemp = Source.HeightScale / Interval;
-            double dblTemp2 = Interval / HeightScale;
+            var Y = 0;
+            var X = 0;
+            var dblTemp = Source.HeightScale / Interval;
+            var dblTemp2 = Interval / HeightScale;
 
             SizeCopy(Source);
             for ( Y = 0; Y <= HeightData.SizeY - 1; Y++ )
@@ -345,10 +334,10 @@ namespace SharpFlame
 
         public void Add2(clsHeightmap SourceA, clsHeightmap SourceB)
         {
-            int Y = 0;
-            int X = 0;
-            double dblTempA = SourceA.HeightScale / HeightScale;
-            double dblTempB = SourceB.HeightScale / HeightScale;
+            var Y = 0;
+            var X = 0;
+            var dblTempA = SourceA.HeightScale / HeightScale;
+            var dblTempB = SourceB.HeightScale / HeightScale;
 
             if ( !SourceA.IsSizeSame(SourceB) )
             {
@@ -361,15 +350,15 @@ namespace SharpFlame
                 {
                     HeightData.Height[Y, X] =
                         Convert.ToInt32(Convert.ToDouble(SourceA.HeightData.Height[Y, X] * dblTempA) +
-                                               Convert.ToDouble(SourceB.HeightData.Height[Y, X] * dblTempB));
+                                        Convert.ToDouble(SourceB.HeightData.Height[Y, X] * dblTempB));
                 }
             }
         }
 
         public void Add(clsHeightmap Source, double Amount)
         {
-            int Y = 0;
-            int X = 0;
+            var Y = 0;
+            var X = 0;
 
             SizeCopy(Source);
             for ( Y = 0; Y <= HeightData.SizeY - 1; Y++ )
@@ -378,17 +367,17 @@ namespace SharpFlame
                 {
                     HeightData.Height[Y, X] =
                         Convert.ToInt32(Convert.ToDouble(Convert.ToDouble(Source.HeightData.Height[Y, X] * Source.HeightScale) + Amount) /
-                                               HeightScale);
+                                        HeightScale);
                 }
             }
         }
 
         public void Subtract2(clsHeightmap SourceA, clsHeightmap SourceB)
         {
-            int Y = 0;
-            int X = 0;
-            double dblTempA = SourceA.HeightScale / HeightScale;
-            double dblTempB = SourceB.HeightScale / HeightScale;
+            var Y = 0;
+            var X = 0;
+            var dblTempA = SourceA.HeightScale / HeightScale;
+            var dblTempB = SourceB.HeightScale / HeightScale;
 
             if ( !SourceA.IsSizeSame(SourceB) )
             {
@@ -401,15 +390,15 @@ namespace SharpFlame
                 {
                     HeightData.Height[Y, X] =
                         Convert.ToInt32(Convert.ToDouble(SourceA.HeightData.Height[Y, X] * dblTempA) -
-                                               Convert.ToDouble(SourceB.HeightData.Height[Y, X] * dblTempB));
+                                        Convert.ToDouble(SourceB.HeightData.Height[Y, X] * dblTempB));
                 }
             }
         }
 
         public void Subtract(clsHeightmap Source, double Amount)
         {
-            int Y = 0;
-            int X = 0;
+            var Y = 0;
+            var X = 0;
 
             SizeCopy(Source);
             for ( Y = 0; Y <= HeightData.SizeY - 1; Y++ )
@@ -418,19 +407,19 @@ namespace SharpFlame
                 {
                     HeightData.Height[Y, X] =
                         Convert.ToInt32(Convert.ToDouble(Convert.ToDouble(Source.HeightData.Height[Y, X] * Source.HeightScale) - Amount) /
-                                               HeightScale);
+                                        HeightScale);
                 }
             }
         }
 
         public void Highest2(clsHeightmap SourceA, clsHeightmap SourceB)
         {
-            int Y = 0;
-            int X = 0;
+            var Y = 0;
+            var X = 0;
             double dblTempA = 0;
             double dblTempB = 0;
-            double dblTempC = SourceA.HeightScale / HeightScale;
-            double dblTempD = SourceB.HeightScale / HeightScale;
+            var dblTempC = SourceA.HeightScale / HeightScale;
+            var dblTempD = SourceB.HeightScale / HeightScale;
 
             if ( !SourceA.IsSizeSame(SourceB) )
             {
@@ -457,10 +446,10 @@ namespace SharpFlame
 
         public void Highest(clsHeightmap Source, double Value)
         {
-            int Y = 0;
-            int X = 0;
-            double dblTemp = Source.HeightScale / HeightScale;
-            double dblTemp2 = Value / HeightScale;
+            var Y = 0;
+            var X = 0;
+            var dblTemp = Source.HeightScale / HeightScale;
+            var dblTemp2 = Value / HeightScale;
             double dblTemp3 = 0;
 
             SizeCopy(Source);
@@ -483,12 +472,12 @@ namespace SharpFlame
 
         public void Lowest2(clsHeightmap SourceA, clsHeightmap SourceB)
         {
-            int Y = 0;
-            int X = 0;
+            var Y = 0;
+            var X = 0;
             double dblTempA = 0;
             double dblTempB = 0;
-            double dblTempC = SourceA.HeightScale / HeightScale;
-            double dblTempD = SourceB.HeightScale / HeightScale;
+            var dblTempC = SourceA.HeightScale / HeightScale;
+            var dblTempD = SourceB.HeightScale / HeightScale;
 
             if ( !SourceA.IsSizeSame(SourceB) )
             {
@@ -515,10 +504,10 @@ namespace SharpFlame
 
         public void Lowest(clsHeightmap Source, double Value)
         {
-            int Y = 0;
-            int X = 0;
-            double dblTemp = Source.HeightScale / HeightScale;
-            double dblTemp2 = Value / HeightScale;
+            var Y = 0;
+            var X = 0;
+            var dblTemp = Source.HeightScale / HeightScale;
+            var dblTemp2 = Value / HeightScale;
             double dblTemp3 = 0;
 
             SizeCopy(Source);
@@ -541,8 +530,8 @@ namespace SharpFlame
 
         public void Swap3(clsHeightmap SourceA, clsHeightmap SourceB, clsHeightmap Swapper)
         {
-            int Y = 0;
-            int X = 0;
+            var Y = 0;
+            var X = 0;
             double Ratio = 0;
 
             if ( !(Swapper.IsSizeSame(SourceA) && Swapper.IsSizeSame(SourceB)) )
@@ -558,15 +547,15 @@ namespace SharpFlame
                     HeightData.Height[Y, X] =
                         Convert.ToInt32(
                             Convert.ToDouble(Convert.ToDouble(SourceA.HeightData.Height[Y, X] * SourceA.HeightScale) * (1.0D - Ratio) +
-                                                    Convert.ToDouble(SourceB.HeightData.Height[Y, X] * Ratio * SourceB.HeightScale)) / HeightScale);
+                                             Convert.ToDouble(SourceB.HeightData.Height[Y, X] * Ratio * SourceB.HeightScale)) / HeightScale);
                 }
             }
         }
 
         public void Clamp(clsHeightmap Source, double HeightMin, double HeightMax)
         {
-            int Y = 0;
-            int X = 0;
+            var Y = 0;
+            var X = 0;
             double dblTemp = 0;
 
             SizeCopy(Source);
@@ -593,9 +582,9 @@ namespace SharpFlame
 
         public void Invert(clsHeightmap Source)
         {
-            int Y = 0;
-            int X = 0;
-            double dblTemp = - Source.HeightScale / HeightScale;
+            var Y = 0;
+            var X = 0;
+            var dblTemp = - Source.HeightScale / HeightScale;
 
             SizeCopy(Source);
             for ( Y = 0; Y <= HeightData.SizeY - 1; Y++ )
@@ -609,11 +598,11 @@ namespace SharpFlame
 
         public void WaveLow(clsHeightmap Source)
         {
-            int Y = 0;
-            int X = 0;
+            var Y = 0;
+            var X = 0;
             long HeightRange = 0;
             long HeightMin = 0;
-            sMinMax MinMax = new sMinMax();
+            var MinMax = new sMinMax();
 
             Source.MinMaxGet(ref MinMax);
             HeightRange = Convert.ToInt64(MinMax.Max - MinMax.Min);
@@ -639,11 +628,11 @@ namespace SharpFlame
 
         public void WaveHigh(clsHeightmap Source)
         {
-            int Y = 0;
-            int X = 0;
+            var Y = 0;
+            var X = 0;
             long HeightRange = 0;
             long HeightMin = 0;
-            sMinMax MinMax = new sMinMax();
+            var MinMax = new sMinMax();
 
             Source.MinMaxGet(ref MinMax);
             HeightRange = Convert.ToInt64(MinMax.Max - MinMax.Min);
@@ -663,16 +652,16 @@ namespace SharpFlame
                         (int)
                             ((Math.Sin(
                                 Convert.ToDouble(Convert.ToInt32(Convert.ToDouble(Source.HeightData.Height[Y, X] - HeightMin) / HeightRange) *
-                                                        MathUtil.RadOf90Deg)) * HeightRange + HeightMin) * Source.HeightScale / HeightScale);
+                                                 MathUtil.RadOf90Deg)) * HeightRange + HeightMin) * Source.HeightScale / HeightScale);
                 }
             }
         }
 
         public void Rescale(clsHeightmap Source, double HeightMin, double HeightMax)
         {
-            int Y = 0;
-            int X = 0;
-            sMinMax MinMax = new sMinMax();
+            var Y = 0;
+            var X = 0;
+            var MinMax = new sMinMax();
 
             Source.MinMaxGet(ref MinMax);
 
@@ -712,10 +701,10 @@ namespace SharpFlame
 
         public void ShiftToZero(clsHeightmap Source)
         {
-            int Y = 0;
-            int X = 0;
-            sMinMax MinMax = new sMinMax();
-            double dblTemp = Source.HeightScale / HeightScale;
+            var Y = 0;
+            var X = 0;
+            var MinMax = new sMinMax();
+            var dblTemp = Source.HeightScale / HeightScale;
 
             Source.MinMaxGet(ref MinMax);
 
@@ -733,12 +722,12 @@ namespace SharpFlame
 
         public void Resize(clsHeightmap Source, int OffsetY, int OffsetX, int SizeY, int SizeX)
         {
-            int StartY = 0;
-            int StartX = 0;
-            int EndY = 0;
-            int EndX = 0;
-            int Y = 0;
-            int X = 0;
+            var StartY = 0;
+            var StartX = 0;
+            var EndY = 0;
+            var EndX = 0;
+            var Y = 0;
+            var X = 0;
 
             Blank(SizeY, SizeX);
             StartX = Math.Max(0 - OffsetX, 0);
@@ -763,8 +752,8 @@ namespace SharpFlame
 
         public void Insert(clsHeightmap Source, int Y1, int X1)
         {
-            int Y = 0;
-            int X = 0;
+            var Y = 0;
+            var X = 0;
 
             for ( Y = 0; Y <= Source.HeightData.SizeY - 1; Y++ )
             {
@@ -777,12 +766,12 @@ namespace SharpFlame
 
         public sResult Load_Image(string Path)
         {
-            sResult ReturnResult = new sResult();
+            var ReturnResult = new sResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
             Bitmap HeightmapBitmap = null;
-            sResult Result = new sResult();
+            var Result = new sResult();
 
             Result = BitmapUtil.LoadBitmap(Path, ref HeightmapBitmap);
             if ( !Result.Success )
@@ -792,13 +781,13 @@ namespace SharpFlame
             }
 
             Blank(HeightmapBitmap.Height, HeightmapBitmap.Width);
-            int X = 0;
-            int Y = 0;
+            var X = 0;
+            var Y = 0;
             for ( Y = 0; Y <= HeightmapBitmap.Height - 1; Y++ )
             {
                 for ( X = 0; X <= HeightmapBitmap.Width - 1; X++ )
                 {
-                    Color with_1 = HeightmapBitmap.GetPixel(X, Y);
+                    var with_1 = HeightmapBitmap.GetPixel(X, Y);
                     HeightData.Height[Y, X] = Convert.ToInt32(((with_1.R) + with_1.G + with_1.B) / (3.0D * HeightScale));
                 }
             }
@@ -809,12 +798,12 @@ namespace SharpFlame
 
         public void GenerateNewOfSize(int Final_SizeY, int Final_SizeX, float Scale, double HeightMultiplier)
         {
-            int Inflations = 0;
-            int SizeY = 0;
-            int SizeX = 0;
+            var Inflations = 0;
+            var SizeY = 0;
+            var SizeX = 0;
             double Log2 = 0;
-            int intTemp = 0;
-            clsHeightmap hmTemp = new clsHeightmap();
+            var intTemp = 0;
+            var hmTemp = new clsHeightmap();
             double Ratio = 0;
 
             Log2 = Math.Log(2.0D);
@@ -858,8 +847,8 @@ namespace SharpFlame
 
         public void Stretch(clsHeightmap hmSource, int SizeX, int SizeY)
         {
-            int OldSizeX = 0;
-            int OldSizeY = 0;
+            var OldSizeX = 0;
+            var OldSizeY = 0;
             float New_Per_OldX = 0;
             float New_Per_OldY = 0;
             float OldPixStartX = 0;
@@ -867,13 +856,13 @@ namespace SharpFlame
             float OldPixEndX = 0;
             float OldPixEndY = 0;
             float Ratio = 0;
-            int NewPixelX = 0;
-            int NewPixelY = 0;
-            int OldPixelX = 0;
-            int OldPixelY = 0;
+            var NewPixelX = 0;
+            var NewPixelY = 0;
+            var OldPixelX = 0;
+            var OldPixelY = 0;
             float XTemp = 0;
             float YTemp = 0;
-            float Temp = (float)(hmSource.HeightScale / HeightScale);
+            var Temp = (float)(hmSource.HeightScale / HeightScale);
 
             OldSizeX = hmSource.HeightData.SizeX;
             OldSizeY = hmSource.HeightData.SizeY;
@@ -935,7 +924,7 @@ namespace SharpFlame
                                 //add the neccessary fraction of the original pixel's color into the new pixel
                                 HeightData.Height[NewPixelY, NewPixelX] =
                                     Convert.ToInt32(HeightData.Height[NewPixelY, NewPixelX] +
-                                                           Convert.ToInt32(hmSource.HeightData.Height[OldPixelY, OldPixelX] * Ratio * Temp));
+                                                    Convert.ToInt32(hmSource.HeightData.Height[OldPixelY, OldPixelX] * Ratio * Temp));
                             }
                         }
                     }
@@ -943,20 +932,15 @@ namespace SharpFlame
             }
         }
 
-        public struct sHeights
-        {
-            public float[] Heights;
-        }
-
         public void FadeMultiple(clsHeightmap hmSource, ref sHeightmaps AlterationMaps, ref sHeights AlterationHeights)
         {
-            int Level = 0;
-            int Y = 0;
-            int X = 0;
+            var Level = 0;
+            var Y = 0;
+            var X = 0;
             float srcHeight = 0;
             float Ratio = 0;
-            int AlterationHeight_Ubound = AlterationHeights.Heights.GetUpperBound(0);
-            int intTemp = 0;
+            var AlterationHeight_Ubound = AlterationHeights.Heights.GetUpperBound(0);
+            var intTemp = 0;
             float TempA = 0;
             float TempB = 0;
 
@@ -985,24 +969,42 @@ namespace SharpFlame
                         HeightData.Height[Y, X] =
                             Convert.ToInt32(
                                 Convert.ToDouble(AlterationMaps.Heightmaps[AlterationHeight_Ubound].HeightData.Height[Y, X] *
-                                                        AlterationMaps.Heightmaps[AlterationHeight_Ubound].HeightScale) / HeightScale);
+                                                 AlterationMaps.Heightmaps[AlterationHeight_Ubound].HeightScale) / HeightScale);
                     }
                     else
                     {
                         intTemp = Level - 1;
                         TempA = AlterationHeights.Heights[intTemp];
                         TempB = AlterationHeights.Heights[Level];
-                        Ratio = (float)((srcHeight - TempA) / (TempB - TempA));
+                        Ratio = (srcHeight - TempA) / (TempB - TempA);
                         HeightData.Height[Y, X] =
                             Convert.ToInt32(
                                 Convert.ToDouble(
                                     Convert.ToDouble(AlterationMaps.Heightmaps[intTemp].HeightData.Height[Y, X] * AlterationMaps.Heightmaps[intTemp].HeightScale *
-                                                            (1.0F - Ratio)) +
+                                                     (1.0F - Ratio)) +
                                     Convert.ToDouble(AlterationMaps.Heightmaps[Level].HeightData.Height[Y, X] * AlterationMaps.Heightmaps[Level].HeightScale *
-                                                            Ratio)) / HeightScale);
+                                                     Ratio)) / HeightScale);
                     }
                 }
             }
+        }
+
+        public class clsHeightData
+        {
+            public long[,] Height;
+            public int SizeX;
+            public int SizeY;
+        }
+
+        public struct sHeights
+        {
+            public float[] Heights;
+        }
+
+        public struct sMinMax
+        {
+            public long Max;
+            public long Min;
         }
     }
 

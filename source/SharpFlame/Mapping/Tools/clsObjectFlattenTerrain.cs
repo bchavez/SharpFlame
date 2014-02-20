@@ -1,8 +1,12 @@
+#region
+
 using System;
 using SharpFlame.Collections;
 using SharpFlame.Core.Domain;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame.Mapping.Tools
 {
@@ -12,16 +16,16 @@ namespace SharpFlame.Mapping.Tools
 
         public void ActionPerform()
         {
-            clsMap Map = Unit.MapLink.Source;
-            XYInt VertexPos = new XYInt();
-            int X = 0;
-            int Y = 0;
+            var Map = Unit.MapLink.Source;
+            var VertexPos = new XYInt();
+            var X = 0;
+            var Y = 0;
             double Total = 0;
             byte Average = 0;
-            XYInt Footprint = Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation);
-            XYInt Start = new XYInt();
-            XYInt Finish = new XYInt();
-            int Samples = 0;
+            var Footprint = Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation);
+            var Start = new XYInt();
+            var Finish = new XYInt();
+            var Samples = 0;
 
             Map.GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Footprint, ref Start, ref Finish);
 

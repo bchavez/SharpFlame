@@ -1,14 +1,17 @@
+#region
+
 using System;
-using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
+
+#endregion
 
 namespace SharpFlame.Painters
 {
     public class TileList
     {
-        public TileOrientationChance[] Tiles;
-        public int TileCount;
         public int TileChanceTotal;
+        public int TileCount;
+        public TileOrientationChance[] Tiles;
 
         public void Tile_Add(int TileNum, TileDirection TileOutwardOrientation, UInt32 Chance)
         {
@@ -35,13 +38,13 @@ namespace SharpFlame.Painters
 
         public TileOrientationChance GetRandom()
         {
-            TileOrientationChance ReturnResult = new TileOrientationChance();
-            int A = 0;
-            int intRandom = 0;
-            int Total = 0;
+            var ReturnResult = new TileOrientationChance();
+            var A = 0;
+            var intRandom = 0;
+            var Total = 0;
 
-            Random rnd = new Random ();
-            intRandom = rnd.Next () * TileChanceTotal;
+            var rnd = new Random();
+            intRandom = rnd.Next() * TileChanceTotal;
             for ( A = 0; A <= TileCount - 1; A++ )
             {
                 Total += Convert.ToInt32(Tiles[A].Chance);

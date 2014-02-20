@@ -1,18 +1,38 @@
+#region
+
 using System;
 using System.Drawing;
 using System.IO;
 using OpenTK.Graphics.OpenGL;
-using SharpFlame.Core.Domain;
 using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
+using SharpFlame.Core.Domain;
 using SharpFlame.FileIO;
-using SharpFlame.Maths;
 using SharpFlame.Util;
+
+#endregion
 
 namespace SharpFlame.Domain
 {
     public class clsObjectData
     {
+        public ConnectedList<Body, clsObjectData> Bodies;
+        public ConnectedList<Brain, clsObjectData> Brains;
+        public ConnectedList<Construct, clsObjectData> Constructors;
+        public ConnectedList<DroidTemplate, clsObjectData> DroidTemplates;
+        public ConnectedList<Ecm, clsObjectData> ECMs;
+        public ConnectedList<FeatureTypeBase, clsObjectData> FeatureTypes;
+        public ConnectedList<Propulsion, clsObjectData> Propulsions;
+        public ConnectedList<Repair, clsObjectData> Repairs;
+        public ConnectedList<Sensor, clsObjectData> Sensors;
+        public ConnectedList<StructureTypeBase, clsObjectData> StructureTypes;
+
+        public SimpleList<clsTexturePage> TexturePages = new SimpleList<clsTexturePage>();
+        public ConnectedList<Turret, clsObjectData> Turrets;
+        public ConnectedList<UnitTypeBase, clsObjectData> UnitTypes;
+        public ConnectedList<clsWallType, clsObjectData> WallTypes;
+        public ConnectedList<Weapon, clsObjectData> Weapons;
+
         public clsObjectData()
         {
             UnitTypes = new ConnectedList<UnitTypeBase, clsObjectData>(this);
@@ -31,321 +51,29 @@ namespace SharpFlame.Domain
             ECMs = new ConnectedList<Ecm, clsObjectData>(this);
         }
 
-        public ConnectedList<UnitTypeBase, clsObjectData> UnitTypes;
-
-        public ConnectedList<FeatureTypeBase, clsObjectData> FeatureTypes;
-        public ConnectedList<StructureTypeBase, clsObjectData> StructureTypes;
-        public ConnectedList<DroidTemplate, clsObjectData> DroidTemplates;
-
-        public ConnectedList<clsWallType, clsObjectData> WallTypes;
-
-        public ConnectedList<Body, clsObjectData> Bodies;
-        public ConnectedList<Propulsion, clsObjectData> Propulsions;
-        public ConnectedList<Turret, clsObjectData> Turrets;
-        public ConnectedList<Weapon, clsObjectData> Weapons;
-        public ConnectedList<Sensor, clsObjectData> Sensors;
-        public ConnectedList<Repair, clsObjectData> Repairs;
-        public ConnectedList<Construct, clsObjectData> Constructors;
-        public ConnectedList<Brain, clsObjectData> Brains;
-        public ConnectedList<Ecm, clsObjectData> ECMs;
-
-        public class clsTexturePage
-        {
-            public string FileTitle;
-            public int GLTexture_Num;
-        }
-
-        public SimpleList<clsTexturePage> TexturePages = new SimpleList<clsTexturePage>();
-
-        public class clsPIE
-        {
-            public string Path;
-            public string LCaseFileTitle;
-            public clsModel Model;
-        }
-
-        public class clsTextFile
-        {
-            public string SubDirectory;
-            public int FieldCount = 0;
-            public int UniqueField = 0;
-
-            public SimpleList<string[]> ResultData = new SimpleList<string[]>();
-
-            public bool CalcIsFieldCountValid()
-            {
-                string[] Text = null;
-                foreach ( string[] tempLoopVar_Text in ResultData )
-                {
-                    Text = tempLoopVar_Text;
-                    if ( Text.GetLength(0) != FieldCount )
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            public bool CalcUniqueField()
-            {
-                int A = 0;
-                int B = 0;
-                string Text;
-
-                if ( UniqueField >= 0 )
-                {
-                    for ( A = 0; A <= ResultData.Count - 1; A++ )
-                    {
-                        Text = Convert.ToString(ResultData[A][UniqueField]);
-                        for ( B = A + 1; B <= ResultData.Count - 1; B++ )
-                        {
-                            if ( Text == ResultData[B][UniqueField] )
-                            {
-                                return false;
-                            }
-                        }
-                    }
-                }
-
-                return true;
-            }
-
-            public clsResult LoadCommaFile(string Path)
-            {
-                clsResult Result = new clsResult(string.Format("Loading comma separated file \"{0}\"", SubDirectory));
-                StreamReader Reader = default(StreamReader);
-
-                try
-                {
-                    Reader = new StreamReader(Path + SubDirectory, App.UTF8Encoding);
-                }
-                catch ( Exception ex )
-                {
-                    Result.ProblemAdd(ex.Message);
-                    return Result;
-                }
-
-                string Line = "";
-                string[] LineFields = null;
-                int A = 0;
-
-                while ( !Reader.EndOfStream )
-                {
-                    Line = Reader.ReadLine();
-                    Line = Line.Trim();
-                    if ( Line.Length > 0 )
-                    {
-                        LineFields = Line.Split(',');
-                        for ( A = 0; A <= LineFields.GetUpperBound(0); A++ )
-                        {
-                            LineFields[A] = LineFields[A].Trim();
-                        }
-                        ResultData.Add(LineFields);
-                    }
-                }
-
-                Reader.Close();
-
-                return Result;
-            }
-
-            public clsResult LoadNamesFile(string Path)
-            {
-                clsResult Result = new clsResult(string.Format("Loading names file \"{0}\"", SubDirectory));                   
-                FileStream File = default(FileStream);
-                BinaryReader Reader = default(BinaryReader);
-
-                try
-                {
-                    File = new FileStream(Path + SubDirectory, FileMode.Open);
-                }
-                catch ( Exception ex )
-                {
-                    Result.ProblemAdd(ex.Message);
-                    return Result;
-                }
-
-                try
-                {
-                    Reader = new BinaryReader(File, App.UTF8Encoding);
-                }
-                catch ( Exception ex )
-                {
-                    File.Close();
-                    Result.ProblemAdd(ex.Message);
-                    return Result;
-                }
-
-                char CurrentChar = (char)0;
-                bool InLineComment = default(bool);
-                bool InCommentBlock = default(bool);
-                char PrevChar = (char)0;
-                string Line = "";
-                bool PrevCharExists = default(bool);
-                bool CurrentCharExists = false;
-
-                do
-                {
-                    MonoContinueDo:
-                    PrevChar = CurrentChar;
-                    PrevCharExists = CurrentCharExists;
-                    try
-                    {
-                        CurrentChar = Reader.ReadChar();
-                        CurrentCharExists = true;
-                    }
-                    catch ( Exception )
-                    {
-                        CurrentCharExists = false;
-                    }
-                    if ( CurrentCharExists )
-                    {
-                        switch ( CurrentChar )
-                        {
-                            case '\r':
-                            case '\n':
-                                InLineComment = false;
-                                if ( PrevCharExists )
-                                {
-                                    Line += PrevChar.ToString();
-                                }
-                                CurrentCharExists = false;
-
-                                if ( Line.Length > 0 )
-                                {
-                                    int EndCodeTab = Line.IndexOf('\t');
-                                    int EndCodeSpace = Line.IndexOf(' ');
-                                    int EndCode = EndCodeTab;
-                                    if ( EndCodeSpace >= 0 && (EndCodeSpace < EndCode | EndCode < 0) )
-                                    {
-                                        EndCode = EndCodeSpace;
-                                    }
-                                    if ( EndCode >= 0 )
-                                    {
-                                        int FirstQuote = Line.IndexOf('"', EndCode + 1, Line.Length - (EndCode + 1));
-                                        if ( FirstQuote >= 0 )
-                                        {
-                                        int SecondQuote = Line.IndexOf('"', FirstQuote + 1, Line.Length - (FirstQuote + 1));
-                                            if ( SecondQuote >= 0 )
-                                            {
-                                                string[] Value = new string[2];
-                                                Value[0] = Line.Substring(0, EndCode);
-                                                Value[1] = Line.Substring(FirstQuote + 1, SecondQuote - (FirstQuote + 1));
-                                                ResultData.Add(Value);
-                                            }
-                                        }
-                                    }
-                                    Line = "";
-                                }
-
-                                goto MonoContinueDo;
-                            case '*':
-                                if ( PrevCharExists && PrevChar == '/' )
-                                {
-                                    InCommentBlock = true;
-                                    CurrentCharExists = false;
-                                    goto MonoContinueDo;
-                                }
-                                break;
-                            case '/':
-                                if ( PrevCharExists )
-                                {
-                                    if ( PrevChar == '/' )
-                                    {
-                                        InLineComment = true;
-                                        CurrentCharExists = false;
-                                        goto MonoContinueDo;
-                                    }
-                                    else if ( PrevChar == '*' )
-                                    {
-                                        InCommentBlock = false;
-                                        CurrentCharExists = false;
-                                        goto MonoContinueDo;
-                                    }
-                                }
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        if ( PrevCharExists )
-                        {
-                            Line += PrevChar.ToString();
-                        }
-                        if ( Line.Length > 0 )
-                        {
-                            int EndCodeTab = Line.IndexOf('\t');
-                            int EndCodeSpace = Line.IndexOf(' ');
-                            int EndCode = EndCodeTab;
-                            if ( EndCodeSpace >= 0 && (EndCodeSpace < EndCode | EndCode < 0) )
-                            {
-                                EndCode = EndCodeSpace;
-                            }
-                            if ( EndCode >= 0 )
-                            {
-                                int FirstQuote = Line.IndexOf('"', EndCode + 1, Line.Length - (EndCode + 1));
-                                if ( FirstQuote >= 0 )
-                                {
-                                    int SecondQuote = Line.IndexOf('"', FirstQuote + 1, Line.Length - (FirstQuote + 1));
-                                    if ( SecondQuote >= 0 )
-                                    {
-                                        string[] Value = new string[2];
-                                        Value[0] = Line.Substring(0, EndCode);
-                                        Value[1] = Line.Substring(FirstQuote + 1, SecondQuote - (FirstQuote + 1));
-                                        ResultData.Add(Value);
-                                    }
-                                }
-                            }
-                            Line = "";
-                        }
-
-                        break;
-                    }
-                    if ( PrevCharExists )
-                    {
-                        if ( !(InCommentBlock || InLineComment) )
-                        {
-                            Line += PrevChar.ToString();
-                        }
-                    }
-                } while ( true );
-
-                Reader.Close();
-
-                return Result;
-            }
-        }
-
-        private struct BodyProp
-        {
-            public string LeftPIE;
-            public string RightPIE;
-        }
-
         public clsResult LoadDirectory(string Path)
         {
-            clsResult ReturnResult = new clsResult(string.Format("Loading object data from \"{0}\"", Path));
+            var ReturnResult = new clsResult(string.Format("Loading object data from \"{0}\"", Path));
 
             Path = PathUtil.EndWithPathSeperator(Path);
 
-            string SubDirNames = "";
-            string SubDirStructures = "";
-            string SubDirBrain = "";
-            string SubDirBody = "";
-            string SubDirPropulsion = "";
-            string SubDirBodyPropulsion = "";
-            string SubDirConstruction = "";
-            string SubDirSensor = "";
-            string SubDirRepair = "";
-            string SubDirTemplates = "";
-            string SubDirWeapons = "";
-            string SubDirECM = "";
-            string SubDirFeatures = "";
-            string SubDirTexpages = "";
-            string SubDirAssignWeapons = "";
-            string SubDirStructureWeapons = "";
-            string SubDirPIEs = "";
+            var SubDirNames = "";
+            var SubDirStructures = "";
+            var SubDirBrain = "";
+            var SubDirBody = "";
+            var SubDirPropulsion = "";
+            var SubDirBodyPropulsion = "";
+            var SubDirConstruction = "";
+            var SubDirSensor = "";
+            var SubDirRepair = "";
+            var SubDirTemplates = "";
+            var SubDirWeapons = "";
+            var SubDirECM = "";
+            var SubDirFeatures = "";
+            var SubDirTexpages = "";
+            var SubDirAssignWeapons = "";
+            var SubDirStructureWeapons = "";
+            var SubDirPIEs = "";
 
             SubDirNames = "messages" + Convert.ToString(App.PlatformPathSeparator) + "strings" +
                           Convert.ToString(App.PlatformPathSeparator) + "names.txt";
@@ -371,9 +99,9 @@ namespace SharpFlame.Domain
             //SubDirFeaturePIE = "features" & ospathseperator
             SubDirStructureWeapons = "stats" + Convert.ToString(App.PlatformPathSeparator) + "structureweapons.txt";
 
-            SimpleList<clsTextFile> CommaFiles = new SimpleList<clsTextFile>();
+            var CommaFiles = new SimpleList<clsTextFile>();
 
-            clsTextFile DataNames = new clsTextFile();
+            var DataNames = new clsTextFile();
             DataNames.SubDirectory = SubDirNames;
             DataNames.UniqueField = 0;
 
@@ -383,83 +111,83 @@ namespace SharpFlame.Domain
                 ReturnResult.ProblemAdd("There are two entries for the same code in " + SubDirNames + ".");
             }
 
-            clsTextFile DataStructures = new clsTextFile();
+            var DataStructures = new clsTextFile();
             DataStructures.SubDirectory = SubDirStructures;
             DataStructures.FieldCount = 25;
             CommaFiles.Add(DataStructures);
 
-            clsTextFile DataBrain = new clsTextFile();
+            var DataBrain = new clsTextFile();
             DataBrain.SubDirectory = SubDirBrain;
             DataBrain.FieldCount = 9;
             CommaFiles.Add(DataBrain);
 
-            clsTextFile DataBody = new clsTextFile();
+            var DataBody = new clsTextFile();
             DataBody.SubDirectory = SubDirBody;
             DataBody.FieldCount = 25;
             CommaFiles.Add(DataBody);
 
-            clsTextFile DataPropulsion = new clsTextFile();
+            var DataPropulsion = new clsTextFile();
             DataPropulsion.SubDirectory = SubDirPropulsion;
             DataPropulsion.FieldCount = 12;
             CommaFiles.Add(DataPropulsion);
 
-            clsTextFile DataBodyPropulsion = new clsTextFile();
+            var DataBodyPropulsion = new clsTextFile();
             DataBodyPropulsion.SubDirectory = SubDirBodyPropulsion;
             DataBodyPropulsion.FieldCount = 5;
             DataBodyPropulsion.UniqueField = -1; //no unique requirement
             CommaFiles.Add(DataBodyPropulsion);
 
-            clsTextFile DataConstruction = new clsTextFile();
+            var DataConstruction = new clsTextFile();
             DataConstruction.SubDirectory = SubDirConstruction;
             DataConstruction.FieldCount = 12;
             CommaFiles.Add(DataConstruction);
 
-            clsTextFile DataSensor = new clsTextFile();
+            var DataSensor = new clsTextFile();
             DataSensor.SubDirectory = SubDirSensor;
             DataSensor.FieldCount = 16;
             CommaFiles.Add(DataSensor);
 
-            clsTextFile DataRepair = new clsTextFile();
+            var DataRepair = new clsTextFile();
             DataRepair.SubDirectory = SubDirRepair;
             DataRepair.FieldCount = 14;
             CommaFiles.Add(DataRepair);
 
-            clsTextFile DataTemplates = new clsTextFile();
+            var DataTemplates = new clsTextFile();
             DataTemplates.SubDirectory = SubDirTemplates;
             DataTemplates.FieldCount = 12;
             CommaFiles.Add(DataTemplates);
 
-            clsTextFile DataECM = new clsTextFile();
+            var DataECM = new clsTextFile();
             DataECM.SubDirectory = SubDirECM;
             DataECM.FieldCount = 14;
             CommaFiles.Add(DataECM);
 
-            clsTextFile DataFeatures = new clsTextFile();
+            var DataFeatures = new clsTextFile();
             DataFeatures.SubDirectory = SubDirFeatures;
             DataFeatures.FieldCount = 11;
             CommaFiles.Add(DataFeatures);
 
-            clsTextFile DataAssignWeapons = new clsTextFile();
+            var DataAssignWeapons = new clsTextFile();
             DataAssignWeapons.SubDirectory = SubDirAssignWeapons;
             DataAssignWeapons.FieldCount = 5;
             CommaFiles.Add(DataAssignWeapons);
 
-            clsTextFile DataWeapons = new clsTextFile();
+            var DataWeapons = new clsTextFile();
             DataWeapons.SubDirectory = SubDirWeapons;
             DataWeapons.FieldCount = 53;
             CommaFiles.Add(DataWeapons);
 
-            clsTextFile DataStructureWeapons = new clsTextFile();
+            var DataStructureWeapons = new clsTextFile();
             DataStructureWeapons.SubDirectory = SubDirStructureWeapons;
             DataStructureWeapons.FieldCount = 6;
             CommaFiles.Add(DataStructureWeapons);
 
-            clsTextFile TextFile = default(clsTextFile);
+            var TextFile = default(clsTextFile);
 
-            foreach ( clsTextFile tempLoopVar_TextFile in CommaFiles )
+            foreach ( var tempLoopVar_TextFile in CommaFiles )
             {
                 TextFile = tempLoopVar_TextFile;
-                clsResult Result = TextFile.LoadCommaFile(Path);
+                var Result = TextFile.LoadCommaFile(Path);
                 ReturnResult.Add(Result);
                 if ( !Result.HasProblems )
                 {
@@ -497,22 +225,22 @@ namespace SharpFlame.Domain
                 TexFiles = new string[0];
             }
 
-            string Text = "";
+            var Text = "";
             Bitmap Bitmap = null;
-            int InstrPos2 = 0;
-            BitmapGLTexture BitmapTextureArgs = new BitmapGLTexture();
-            sResult BitmapResult = new sResult();
+            var InstrPos2 = 0;
+            var BitmapTextureArgs = new BitmapGLTexture();
+            var BitmapResult = new sResult();
 
-            foreach ( string tempLoopVar_Text in TexFiles )
+            foreach ( var tempLoopVar_Text in TexFiles )
             {
                 Text = tempLoopVar_Text;
                 if ( Text.Substring(Text.Length - 4, 4).ToLower() == ".png" )
                 {
-                    clsResult Result = new clsResult(string.Format("Loading texture page \"{0}\"", Text));
+                    var Result = new clsResult(string.Format("Loading texture page \"{0}\"", Text));
                     if ( File.Exists(Text) )
                     {
                         BitmapResult = BitmapUtil.LoadBitmap(Text, ref Bitmap);
-                        clsTexturePage NewPage = new clsTexturePage();
+                        var NewPage = new clsTexturePage();
                         if ( BitmapResult.Success )
                         {
                             Result.Take(BitmapUtil.BitmapIsGLCompatible(Bitmap));
@@ -528,8 +256,8 @@ namespace SharpFlame.Domain
                         {
                             Result.WarningAdd(BitmapResult.Problem);
                         }
-                        InstrPos2 = Text.LastIndexOf (System.IO.Path.DirectorySeparatorChar);
-                        NewPage.FileTitle = Text.Substring (InstrPos2 + 1, Text.Length - 5 - InstrPos2);
+                        InstrPos2 = Text.LastIndexOf(System.IO.Path.DirectorySeparatorChar);
+                        NewPage.FileTitle = Text.Substring(InstrPos2 + 1, Text.Length - 5 - InstrPos2);
 
                         TexturePages.Add(NewPage);
                     }
@@ -544,8 +272,8 @@ namespace SharpFlame.Domain
             //load PIEs
 
             string[] PIE_Files = null;
-            SimpleList<clsPIE> PIE_List = new SimpleList<clsPIE>();
-            clsPIE NewPIE = default(clsPIE);
+            var PIE_List = new SimpleList<clsPIE>();
+            var NewPIE = default(clsPIE);
 
             try
             {
@@ -557,9 +285,9 @@ namespace SharpFlame.Domain
                 PIE_Files = new string[0];
             }
 
-            sSplitPath SplitPath = new sSplitPath();
+            var SplitPath = new sSplitPath();
 
-            foreach ( string tempLoopVar_Text in PIE_Files )
+            foreach ( var tempLoopVar_Text in PIE_Files )
             {
                 Text = tempLoopVar_Text;
                 SplitPath = new sSplitPath(Text);
@@ -574,25 +302,25 @@ namespace SharpFlame.Domain
 
             //interpret stats
 
-            clsAttachment Attachment = default(clsAttachment);
-            clsAttachment BaseAttachment = default(clsAttachment);
-            XYZDouble Connector = new XYZDouble();
-            StructureTypeBase structureTypeBase = default(StructureTypeBase);
-            FeatureTypeBase featureTypeBase = default(FeatureTypeBase);
-            DroidTemplate Template = default(DroidTemplate);
-            Body Body = default(Body);
-            Propulsion Propulsion = default(Propulsion);
-            Construct Construct = default(Construct);
-            Weapon Weapon = default(Weapon);
-            Repair Repair = default(Repair);
-            Sensor Sensor = default(Sensor);
-            Brain Brain = default(Brain);
-            Ecm ECM = default(Ecm);
+            var Attachment = default(clsAttachment);
+            var BaseAttachment = default(clsAttachment);
+            var Connector = new XYZDouble();
+            var structureTypeBase = default(StructureTypeBase);
+            var featureTypeBase = default(FeatureTypeBase);
+            var Template = default(DroidTemplate);
+            var Body = default(Body);
+            var Propulsion = default(Propulsion);
+            var Construct = default(Construct);
+            var Weapon = default(Weapon);
+            var Repair = default(Repair);
+            var Sensor = default(Sensor);
+            var Brain = default(Brain);
+            var ECM = default(Ecm);
             string[] Fields = null;
 
             //interpret body
 
-            foreach ( string[] tempLoopVar_Fields in DataBody.ResultData )
+            foreach ( var tempLoopVar_Fields in DataBody.ResultData )
             {
                 Fields = tempLoopVar_Fields;
                 Body = new Body();
@@ -606,7 +334,7 @@ namespace SharpFlame.Domain
 
             //interpret propulsion
 
-            foreach ( string[] tempLoopVar_Fields in DataPropulsion.ResultData )
+            foreach ( var tempLoopVar_Fields in DataPropulsion.ResultData )
             {
                 Fields = tempLoopVar_Fields;
                 Propulsion = new Propulsion(Bodies.Count);
@@ -620,10 +348,10 @@ namespace SharpFlame.Domain
 
             //interpret body-propulsions
 
-            BodyProp[,] BodyPropulsionPIEs = new BodyProp[Bodies.Count, Propulsions.Count];
-            for ( int A = 0; A <= Bodies.Count - 1; A++ )
+            var BodyPropulsionPIEs = new BodyProp[Bodies.Count, Propulsions.Count];
+            for ( var A = 0; A <= Bodies.Count - 1; A++ )
             {
-                for ( int B = 0; B <= Propulsions.Count - 1; B++ )
+                for ( var B = 0; B <= Propulsions.Count - 1; B++ )
                 {
                     BodyPropulsionPIEs[A, B] = new BodyProp();
                     BodyPropulsionPIEs[A, B].LeftPIE = "0";
@@ -631,7 +359,7 @@ namespace SharpFlame.Domain
                 }
             }
 
-            foreach ( string[] tempLoopVar_Fields in DataBodyPropulsion.ResultData )
+            foreach ( var tempLoopVar_Fields in DataBodyPropulsion.ResultData )
             {
                 Fields = tempLoopVar_Fields;
                 Body = FindBodyCode(Fields[0]);
@@ -651,10 +379,10 @@ namespace SharpFlame.Domain
 
             //set propulsion-body PIEs
 
-            for ( int A = 0; A <= Propulsions.Count - 1; A++ )
+            for ( var A = 0; A <= Propulsions.Count - 1; A++ )
             {
                 Propulsion = Propulsions[A];
-                for ( int B = 0; B <= Bodies.Count - 1; B++ )
+                for ( var B = 0; B <= Bodies.Count - 1; B++ )
                 {
                     Body = Bodies[B];
                     Propulsion.Bodies[B].LeftAttachment = new clsAttachment();
@@ -666,7 +394,7 @@ namespace SharpFlame.Domain
 
             //interpret construction
 
-            foreach ( string[] tempLoopVar_Fields in DataConstruction.ResultData )
+            foreach ( var tempLoopVar_Fields in DataConstruction.ResultData )
             {
                 Fields = tempLoopVar_Fields;
                 Construct = new Construct();
@@ -680,7 +408,7 @@ namespace SharpFlame.Domain
 
             //interpret weapons
 
-            foreach ( string[] tempLoopVar_Fields in DataWeapons.ResultData )
+            foreach ( var tempLoopVar_Fields in DataWeapons.ResultData )
             {
                 Fields = tempLoopVar_Fields;
                 Weapon = new Weapon();
@@ -696,7 +424,7 @@ namespace SharpFlame.Domain
 
             //interpret sensor
 
-            foreach ( string[] tempLoopVar_Fields in DataSensor.ResultData )
+            foreach ( var tempLoopVar_Fields in DataSensor.ResultData )
             {
                 Fields = tempLoopVar_Fields;
                 Sensor = new Sensor();
@@ -724,7 +452,7 @@ namespace SharpFlame.Domain
 
             //interpret repair
 
-            foreach ( string[] tempLoopVar_Fields in DataRepair.ResultData )
+            foreach ( var tempLoopVar_Fields in DataRepair.ResultData )
             {
                 Fields = tempLoopVar_Fields;
                 Repair = new Repair();
@@ -739,7 +467,7 @@ namespace SharpFlame.Domain
 
             //interpret brain
 
-            foreach ( string[] tempLoopVar_Fields in DataBrain.ResultData )
+            foreach ( var tempLoopVar_Fields in DataBrain.ResultData )
             {
                 Fields = tempLoopVar_Fields;
                 Brain = new Brain();
@@ -758,7 +486,7 @@ namespace SharpFlame.Domain
 
             //interpret ecm
 
-            foreach ( string[] tempLoopVar_Fields in DataECM.ResultData )
+            foreach ( var tempLoopVar_Fields in DataECM.ResultData )
             {
                 Fields = tempLoopVar_Fields;
                 ECM = new Ecm();
@@ -773,7 +501,7 @@ namespace SharpFlame.Domain
 
             //interpret feature
 
-            foreach ( string[] tempLoopVar_Fields in DataFeatures.ResultData )
+            foreach ( var tempLoopVar_Fields in DataFeatures.ResultData )
             {
                 Fields = tempLoopVar_Fields;
                 featureTypeBase = new FeatureTypeBase();
@@ -802,14 +530,14 @@ namespace SharpFlame.Domain
 
             //interpret structure
 
-            foreach ( string[] tempLoopVar_Fields in DataStructures.ResultData )
+            foreach ( var tempLoopVar_Fields in DataStructures.ResultData )
             {
                 Fields = tempLoopVar_Fields;
-                string StructureCode = Fields[0];
-                string StructureTypeText = Fields[1];
-                string[] StructurePIEs = Fields[21].ToLower().Split('@');
-                XYInt StructureFootprint = new XYInt();
-                string StructureBasePIE = Fields[22].ToLower();
+                var StructureCode = Fields[0];
+                var StructureTypeText = Fields[1];
+                var StructurePIEs = Fields[21].ToLower().Split('@');
+                var StructureFootprint = new XYInt();
+                var StructureBasePIE = Fields[22].ToLower();
                 if ( !IOUtil.InvariantParse(Fields[5], ref StructureFootprint.X) )
                 {
                     ReturnResult.WarningAdd("Structure footprint-x was not an integer for " + StructureCode + ".");
@@ -905,7 +633,7 @@ namespace SharpFlame.Domain
                         if ( BaseAttachment.Models[0].ConnectorCount >= 1 )
                         {
                             Connector = BaseAttachment.Models[0].Connectors[0];
-                            SimpleList<string[]> StructureWeapons = default(SimpleList<string[]>);
+                            var StructureWeapons = default(SimpleList<string[]>);
                             StructureWeapons = GetRowsWithValue(DataStructureWeapons.ResultData, structureTypeBase.Code);
                             if ( StructureWeapons.Count > 0 )
                             {
@@ -947,14 +675,14 @@ namespace SharpFlame.Domain
                 else
                 {
                     //this is a generic wall
-                    clsWallType NewWall = new clsWallType();
+                    var NewWall = new clsWallType();
                     NewWall.WallType_ObjectDataLink.Connect(WallTypes);
                     NewWall.Code = StructureCode;
                     SetWallName(DataNames.ResultData, NewWall, ReturnResult);
-                    clsModel WallBasePlate = GetModelForPIE(PIE_List, StructureBasePIE, ReturnResult);
+                    var WallBasePlate = GetModelForPIE(PIE_List, StructureBasePIE, ReturnResult);
 
-                    int WallNum = 0;
-                    StructureTypeBase wallStructureTypeBase = default(StructureTypeBase);
+                    var WallNum = 0;
+                    var wallStructureTypeBase = default(StructureTypeBase);
                     for ( WallNum = 0; WallNum <= 3; WallNum++ )
                     {
                         wallStructureTypeBase = new StructureTypeBase();
@@ -993,8 +721,8 @@ namespace SharpFlame.Domain
 
             //interpret templates
 
-            int TurretConflictCount = 0;
-            foreach ( string[] tempLoopVar_Fields in DataTemplates.ResultData )
+            var TurretConflictCount = 0;
+            foreach ( var tempLoopVar_Fields in DataTemplates.ResultData )
             {
                 Fields = tempLoopVar_Fields;
                 Template = new DroidTemplate();
@@ -1033,7 +761,7 @@ namespace SharpFlame.Domain
                         ReturnResult.WarningAdd("Template " + Template.GetDisplayTextCode() + " had an unrecognised type.");
                         break;
                 }
-                DroidDesign.sLoadPartsArgs LoadPartsArgs = new DroidDesign.sLoadPartsArgs();
+                var LoadPartsArgs = new DroidDesign.sLoadPartsArgs();
                 LoadPartsArgs.Body = FindBodyCode(Fields[2]);
                 LoadPartsArgs.Brain = FindBrainCode(Fields[3]);
                 LoadPartsArgs.Construct = FindConstructorCode(Fields[4]);
@@ -1041,7 +769,7 @@ namespace SharpFlame.Domain
                 LoadPartsArgs.Propulsion = FindPropulsionCode(Fields[7]);
                 LoadPartsArgs.Repair = FindRepairCode(Fields[8]);
                 LoadPartsArgs.Sensor = FindSensorCode(Fields[10]);
-                SimpleList<string[]> TemplateWeapons = GetRowsWithValue(DataAssignWeapons.ResultData, Template.Code);
+                var TemplateWeapons = GetRowsWithValue(DataAssignWeapons.ResultData, Template.Code);
                 if ( TemplateWeapons.Count > 0 )
                 {
                     Text = Convert.ToString(TemplateWeapons[0][1]);
@@ -1079,10 +807,10 @@ namespace SharpFlame.Domain
 
         public SimpleList<string[]> GetRowsWithValue(SimpleList<string[]> TextLines, string Value)
         {
-            SimpleList<string[]> Result = new SimpleList<string[]>();
+            var Result = new SimpleList<string[]>();
 
             string[] Line = null;
-            foreach ( string[] tempLoopVar_Line in TextLines )
+            foreach ( var tempLoopVar_Line in TextLines )
             {
                 Line = tempLoopVar_Line;
                 if ( Line[0] == Value )
@@ -1094,94 +822,6 @@ namespace SharpFlame.Domain
             return Result;
         }
 
-        public struct sBytes
-        {
-            public byte[] Bytes;
-        }
-
-        public struct sLines
-        {
-            public string[] Lines;
-
-            public void RemoveComments()
-            {
-                int LineNum = 0;
-                int LineCount = Lines.GetUpperBound(0) + 1;
-                bool InCommentBlock = default(bool);
-                int CommentStart = 0;
-                int CharNum = 0;
-                int CommentLength = 0;
-
-                for ( LineNum = 0; LineNum <= LineCount - 1; LineNum++ )
-                {
-                    CharNum = 0;
-                    if ( InCommentBlock )
-                    {
-                        CommentStart = 0;
-                    }
-                    do
-                    {
-                        if ( CharNum >= Lines[LineNum].Length )
-                        {
-                            if ( InCommentBlock )
-                            {
-                                Lines[LineNum] = Lines[LineNum].Substring(0, CommentStart);
-                            }
-                            break;
-                        }
-                        else if ( InCommentBlock )
-                        {
-                            if ( Lines[LineNum][CharNum] == '*' )
-                            {
-                                CharNum++;
-                                if ( CharNum >= Lines[LineNum].Length )
-                                {
-                                }
-                                else if ( Lines[LineNum][CharNum] == '/' )
-                                {
-                                    CharNum++;
-                                    CommentLength = CharNum - CommentStart;
-                                    InCommentBlock = false;
-                                    Lines[LineNum] = Lines[LineNum].Substring(CommentStart, Lines[LineNum].Length - CommentStart)
-                                        .Substring(CommentStart + CommentLength, Lines[LineNum].Length - CommentStart - CommentLength);                                    CharNum -= CommentLength;
-                                }
-                            }
-                            else
-                            {
-                                CharNum++;
-                            }
-                        }
-                        else if ( Lines[LineNum][CharNum] == '/' )
-                        {
-                            CharNum++;
-                            if ( CharNum >= Lines[LineNum].Length )
-                            {
-                            }
-                            else if ( Lines[LineNum][CharNum] == '/' )
-                            {
-                                CommentStart = CharNum - 1;
-                                CharNum = Lines[LineNum].Length;
-                                CommentLength = CharNum - CommentStart;
-                                Lines[LineNum] = Lines[LineNum].Substring(CommentStart, Lines[LineNum].Length - CommentStart)
-                                    .Substring(CommentStart + CommentLength, Lines[LineNum].Length - CommentStart - CommentLength);                                    CharNum -= CommentLength;
-                                break;
-                            }
-                            else if ( Lines[LineNum][CharNum] == '*' )
-                            {
-                                CommentStart = CharNum - 1;
-                                CharNum++;
-                                InCommentBlock = true;
-                            }
-                        }
-                        else
-                        {
-                            CharNum++;
-                        }
-                    } while ( true );
-                }
-            }
-        }
-
         public clsModel GetModelForPIE(SimpleList<clsPIE> PIE_List, string PIE_LCaseFileTitle, clsResult ResultOutput)
         {
             if ( PIE_LCaseFileTitle == "0" )
@@ -1189,11 +829,11 @@ namespace SharpFlame.Domain
                 return null;
             }
 
-            int A = 0;
-            StreamReader PIEFile = default(StreamReader);
-            clsPIE PIE = default(clsPIE);
+            var A = 0;
+            var PIEFile = default(StreamReader);
+            var PIE = default(clsPIE);
 
-            clsResult Result = new clsResult("Loading PIE file " + PIE_LCaseFileTitle);
+            var Result = new clsResult("Loading PIE file " + PIE_LCaseFileTitle);
 
             for ( A = 0; A <= PIE_List.Count - 1; A++ )
             {
@@ -1239,7 +879,7 @@ namespace SharpFlame.Domain
 
         public void SetComponentName(SimpleList<string[]> Names, ComponentBase componentBase, clsResult Result)
         {
-            SimpleList<string[]> ValueSearchResults = default(SimpleList<string[]>);
+            var ValueSearchResults = default(SimpleList<string[]>);
 
             ValueSearchResults = GetRowsWithValue(Names, componentBase.Code);
             if ( ValueSearchResults.Count == 0 )
@@ -1254,7 +894,7 @@ namespace SharpFlame.Domain
 
         public void SetFeatureName(SimpleList<string[]> Names, FeatureTypeBase featureTypeBase, clsResult Result)
         {
-            SimpleList<string[]> ValueSearchResults = default(SimpleList<string[]>);
+            var ValueSearchResults = default(SimpleList<string[]>);
 
             ValueSearchResults = GetRowsWithValue(Names, featureTypeBase.Code);
             if ( ValueSearchResults.Count == 0 )
@@ -1269,7 +909,7 @@ namespace SharpFlame.Domain
 
         public void SetStructureName(SimpleList<string[]> Names, StructureTypeBase structureTypeBase, clsResult Result)
         {
-            SimpleList<string[]> ValueSearchResults = default(SimpleList<string[]>);
+            var ValueSearchResults = default(SimpleList<string[]>);
 
             ValueSearchResults = GetRowsWithValue(Names, structureTypeBase.Code);
             if ( ValueSearchResults.Count == 0 )
@@ -1284,7 +924,7 @@ namespace SharpFlame.Domain
 
         public void SetTemplateName(SimpleList<string[]> Names, DroidTemplate Template, clsResult Result)
         {
-            SimpleList<string[]> ValueSearchResults = default(SimpleList<string[]>);
+            var ValueSearchResults = default(SimpleList<string[]>);
 
             ValueSearchResults = GetRowsWithValue(Names, Template.Code);
             if ( ValueSearchResults.Count == 0 )
@@ -1299,7 +939,7 @@ namespace SharpFlame.Domain
 
         public void SetWallName(SimpleList<string[]> Names, clsWallType WallType, clsResult Result)
         {
-            SimpleList<string[]> ValueSearchResults = default(SimpleList<string[]>);
+            var ValueSearchResults = default(SimpleList<string[]>);
 
             ValueSearchResults = GetRowsWithValue(Names, WallType.Code);
             if ( ValueSearchResults.Count == 0 )
@@ -1314,9 +954,9 @@ namespace SharpFlame.Domain
 
         public Body FindBodyCode(string Code)
         {
-            Body Component = default(Body);
+            var Component = default(Body);
 
-            foreach ( Body tempLoopVar_Component in Bodies )
+            foreach ( var tempLoopVar_Component in Bodies )
             {
                 Component = tempLoopVar_Component;
                 if ( Component.Code == Code )
@@ -1330,9 +970,9 @@ namespace SharpFlame.Domain
 
         public Propulsion FindPropulsionCode(string Code)
         {
-            Propulsion Component = default(Propulsion);
+            var Component = default(Propulsion);
 
-            foreach ( Propulsion tempLoopVar_Component in Propulsions )
+            foreach ( var tempLoopVar_Component in Propulsions )
             {
                 Component = tempLoopVar_Component;
                 if ( Component.Code == Code )
@@ -1346,9 +986,9 @@ namespace SharpFlame.Domain
 
         public Construct FindConstructorCode(string Code)
         {
-            Construct Component = default(Construct);
+            var Component = default(Construct);
 
-            foreach ( Construct tempLoopVar_Component in Constructors )
+            foreach ( var tempLoopVar_Component in Constructors )
             {
                 Component = tempLoopVar_Component;
                 if ( Component.Code == Code )
@@ -1362,9 +1002,9 @@ namespace SharpFlame.Domain
 
         public Sensor FindSensorCode(string Code)
         {
-            Sensor Component = default(Sensor);
+            var Component = default(Sensor);
 
-            foreach ( Sensor tempLoopVar_Component in Sensors )
+            foreach ( var tempLoopVar_Component in Sensors )
             {
                 Component = tempLoopVar_Component;
                 if ( Component.Code == Code )
@@ -1378,9 +1018,9 @@ namespace SharpFlame.Domain
 
         public Repair FindRepairCode(string Code)
         {
-            Repair Component = default(Repair);
+            var Component = default(Repair);
 
-            foreach ( Repair tempLoopVar_Component in Repairs )
+            foreach ( var tempLoopVar_Component in Repairs )
             {
                 Component = tempLoopVar_Component;
                 if ( Component.Code == Code )
@@ -1394,9 +1034,9 @@ namespace SharpFlame.Domain
 
         public Ecm FindECMCode(string Code)
         {
-            Ecm Component = default(Ecm);
+            var Component = default(Ecm);
 
-            foreach ( Ecm tempLoopVar_Component in ECMs )
+            foreach ( var tempLoopVar_Component in ECMs )
             {
                 Component = tempLoopVar_Component;
                 if ( Component.Code == Code )
@@ -1410,9 +1050,9 @@ namespace SharpFlame.Domain
 
         public Brain FindBrainCode(string Code)
         {
-            Brain Component = default(Brain);
+            var Component = default(Brain);
 
-            foreach ( Brain tempLoopVar_Component in Brains )
+            foreach ( var tempLoopVar_Component in Brains )
             {
                 Component = tempLoopVar_Component;
                 if ( Component.Code == Code )
@@ -1426,9 +1066,9 @@ namespace SharpFlame.Domain
 
         public Weapon FindWeaponCode(string Code)
         {
-            Weapon Component = default(Weapon);
+            var Component = default(Weapon);
 
-            foreach ( Weapon tempLoopVar_Component in Weapons )
+            foreach ( var tempLoopVar_Component in Weapons )
             {
                 Component = tempLoopVar_Component;
                 if ( Component.Code == Code )
@@ -1442,10 +1082,10 @@ namespace SharpFlame.Domain
 
         public int Get_TexturePage_GLTexture(string FileTitle)
         {
-            string LCaseTitle = FileTitle.ToLower();
-            clsTexturePage TexPage = default(clsTexturePage);
+            var LCaseTitle = FileTitle.ToLower();
+            var TexPage = default(clsTexturePage);
 
-            foreach ( clsTexturePage tempLoopVar_TexPage in TexturePages )
+            foreach ( var tempLoopVar_TexPage in TexturePages )
             {
                 TexPage = tempLoopVar_TexPage;
                 if ( TexPage.FileTitle.ToLower() == LCaseTitle )
@@ -1458,7 +1098,7 @@ namespace SharpFlame.Domain
 
         public Weapon FindOrCreateWeapon(string Code)
         {
-            Weapon Result = default(Weapon);
+            var Result = default(Weapon);
 
             Result = FindWeaponCode(Code);
             if ( Result != null )
@@ -1473,7 +1113,7 @@ namespace SharpFlame.Domain
 
         public Construct FindOrCreateConstruct(string Code)
         {
-            Construct Result = default(Construct);
+            var Result = default(Construct);
 
             Result = FindConstructorCode(Code);
             if ( Result != null )
@@ -1488,7 +1128,7 @@ namespace SharpFlame.Domain
 
         public Repair FindOrCreateRepair(string Code)
         {
-            Repair Result = default(Repair);
+            var Result = default(Repair);
 
             Result = FindRepairCode(Code);
             if ( Result != null )
@@ -1503,7 +1143,7 @@ namespace SharpFlame.Domain
 
         public Sensor FindOrCreateSensor(string Code)
         {
-            Sensor Result = default(Sensor);
+            var Result = default(Sensor);
 
             Result = FindSensorCode(Code);
             if ( Result != null )
@@ -1518,7 +1158,7 @@ namespace SharpFlame.Domain
 
         public Brain FindOrCreateBrain(string Code)
         {
-            Brain Result = default(Brain);
+            var Result = default(Brain);
 
             Result = FindBrainCode(Code);
             if ( Result != null )
@@ -1533,7 +1173,7 @@ namespace SharpFlame.Domain
 
         public Ecm FindOrCreateECM(string Code)
         {
-            Ecm Result = default(Ecm);
+            var Result = default(Ecm);
 
             Result = FindECMCode(Code);
             if ( Result != null )
@@ -1569,7 +1209,7 @@ namespace SharpFlame.Domain
 
         public Body FindOrCreateBody(string Code)
         {
-            Body Result = default(Body);
+            var Result = default(Body);
 
             Result = FindBodyCode(Code);
             if ( Result != null )
@@ -1584,7 +1224,7 @@ namespace SharpFlame.Domain
 
         public Propulsion FindOrCreatePropulsion(string Code)
         {
-            Propulsion Result = default(Propulsion);
+            var Result = default(Propulsion);
 
             Result = FindPropulsionCode(Code);
             if ( Result != null )
@@ -1602,8 +1242,8 @@ namespace SharpFlame.Domain
             switch ( Type )
             {
                 case UnitType.Feature:
-                    FeatureTypeBase featureTypeBase = default(FeatureTypeBase);
-                    foreach ( FeatureTypeBase tempLoopVar_FeatureType in FeatureTypes )
+                    var featureTypeBase = default(FeatureTypeBase);
+                    foreach ( var tempLoopVar_FeatureType in FeatureTypes )
                     {
                         featureTypeBase = tempLoopVar_FeatureType;
                         if ( featureTypeBase.Code == Code )
@@ -1617,30 +1257,36 @@ namespace SharpFlame.Domain
                     featureTypeBase.Footprint.X = 1;
                     featureTypeBase.Footprint.Y = 1;
                     return featureTypeBase;
-            case UnitType.PlayerStructure:
-                StructureTypeBase structureTypeBase = default(StructureTypeBase);
-                foreach (StructureTypeBase tempLoopVar_StructureType in StructureTypes) {
-                    structureTypeBase = tempLoopVar_StructureType;
-                    if (structureTypeBase.Code == Code) {
-                        if (WallType < 0) {
-                            return structureTypeBase;
-                        } else if (structureTypeBase.WallLink.IsConnected) {
-                            if (structureTypeBase.WallLink.ArrayPosition == WallType) {
+                case UnitType.PlayerStructure:
+                    var structureTypeBase = default(StructureTypeBase);
+                    foreach ( var tempLoopVar_StructureType in StructureTypes )
+                    {
+                        structureTypeBase = tempLoopVar_StructureType;
+                        if ( structureTypeBase.Code == Code )
+                        {
+                            if ( WallType < 0 )
+                            {
                                 return structureTypeBase;
+                            }
+                            if ( structureTypeBase.WallLink.IsConnected )
+                            {
+                                if ( structureTypeBase.WallLink.ArrayPosition == WallType )
+                                {
+                                    return structureTypeBase;
+                                }
                             }
                         }
                     }
-                }
-                structureTypeBase = new StructureTypeBase ();
-                structureTypeBase.IsUnknown = true;
-                structureTypeBase.Code = Code;
-                structureTypeBase.Footprint.X = 1;
-                structureTypeBase.Footprint.Y = 1;
-                return structureTypeBase;
+                    structureTypeBase = new StructureTypeBase();
+                    structureTypeBase.IsUnknown = true;
+                    structureTypeBase.Code = Code;
+                    structureTypeBase.Footprint.X = 1;
+                    structureTypeBase.Footprint.Y = 1;
+                    return structureTypeBase;
 
-            case UnitType.PlayerDroid:
-                DroidTemplate DroidType = default(DroidTemplate);
-                    foreach ( DroidTemplate tempLoopVar_DroidType in DroidTemplates )
+                case UnitType.PlayerDroid:
+                    var DroidType = default(DroidTemplate);
+                    foreach ( var tempLoopVar_DroidType in DroidTemplates )
                     {
                         DroidType = tempLoopVar_DroidType;
                         if ( DroidType.IsTemplate )
@@ -1662,9 +1308,9 @@ namespace SharpFlame.Domain
 
         public StructureTypeBase FindFirstStructureType(StructureTypeBase.enumStructureType Type)
         {
-            StructureTypeBase structureTypeBase = default(StructureTypeBase);
+            var structureTypeBase = default(StructureTypeBase);
 
-            foreach ( StructureTypeBase tempLoopVar_StructureType in StructureTypes )
+            foreach ( var tempLoopVar_StructureType in StructureTypes )
             {
                 structureTypeBase = tempLoopVar_StructureType;
                 if ( structureTypeBase.StructureType == Type )
@@ -1674,6 +1320,368 @@ namespace SharpFlame.Domain
             }
 
             return null;
+        }
+
+        private struct BodyProp
+        {
+            public string LeftPIE;
+            public string RightPIE;
+        }
+
+        public class clsPIE
+        {
+            public string LCaseFileTitle;
+            public clsModel Model;
+            public string Path;
+        }
+
+        public class clsTextFile
+        {
+            public int FieldCount = 0;
+
+            public SimpleList<string[]> ResultData = new SimpleList<string[]>();
+            public string SubDirectory;
+            public int UniqueField = 0;
+
+            public bool CalcIsFieldCountValid()
+            {
+                string[] Text = null;
+                foreach ( var tempLoopVar_Text in ResultData )
+                {
+                    Text = tempLoopVar_Text;
+                    if ( Text.GetLength(0) != FieldCount )
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            public bool CalcUniqueField()
+            {
+                var A = 0;
+                var B = 0;
+                string Text;
+
+                if ( UniqueField >= 0 )
+                {
+                    for ( A = 0; A <= ResultData.Count - 1; A++ )
+                    {
+                        Text = Convert.ToString(ResultData[A][UniqueField]);
+                        for ( B = A + 1; B <= ResultData.Count - 1; B++ )
+                        {
+                            if ( Text == ResultData[B][UniqueField] )
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+
+                return true;
+            }
+
+            public clsResult LoadCommaFile(string Path)
+            {
+                var Result = new clsResult(string.Format("Loading comma separated file \"{0}\"", SubDirectory));
+                var Reader = default(StreamReader);
+
+                try
+                {
+                    Reader = new StreamReader(Path + SubDirectory, App.UTF8Encoding);
+                }
+                catch ( Exception ex )
+                {
+                    Result.ProblemAdd(ex.Message);
+                    return Result;
+                }
+
+                var Line = "";
+                string[] LineFields = null;
+                var A = 0;
+
+                while ( !Reader.EndOfStream )
+                {
+                    Line = Reader.ReadLine();
+                    Line = Line.Trim();
+                    if ( Line.Length > 0 )
+                    {
+                        LineFields = Line.Split(',');
+                        for ( A = 0; A <= LineFields.GetUpperBound(0); A++ )
+                        {
+                            LineFields[A] = LineFields[A].Trim();
+                        }
+                        ResultData.Add(LineFields);
+                    }
+                }
+
+                Reader.Close();
+
+                return Result;
+            }
+
+            public clsResult LoadNamesFile(string Path)
+            {
+                var Result = new clsResult(string.Format("Loading names file \"{0}\"", SubDirectory));
+                var File = default(FileStream);
+                var Reader = default(BinaryReader);
+
+                try
+                {
+                    File = new FileStream(Path + SubDirectory, FileMode.Open);
+                }
+                catch ( Exception ex )
+                {
+                    Result.ProblemAdd(ex.Message);
+                    return Result;
+                }
+
+                try
+                {
+                    Reader = new BinaryReader(File, App.UTF8Encoding);
+                }
+                catch ( Exception ex )
+                {
+                    File.Close();
+                    Result.ProblemAdd(ex.Message);
+                    return Result;
+                }
+
+                var CurrentChar = (char)0;
+                var InLineComment = default(bool);
+                var InCommentBlock = default(bool);
+                var PrevChar = (char)0;
+                var Line = "";
+                var PrevCharExists = default(bool);
+                var CurrentCharExists = false;
+
+                do
+                {
+                    MonoContinueDo:
+                    PrevChar = CurrentChar;
+                    PrevCharExists = CurrentCharExists;
+                    try
+                    {
+                        CurrentChar = Reader.ReadChar();
+                        CurrentCharExists = true;
+                    }
+                    catch ( Exception )
+                    {
+                        CurrentCharExists = false;
+                    }
+                    if ( CurrentCharExists )
+                    {
+                        switch ( CurrentChar )
+                        {
+                            case '\r':
+                            case '\n':
+                                InLineComment = false;
+                                if ( PrevCharExists )
+                                {
+                                    Line += PrevChar.ToString();
+                                }
+                                CurrentCharExists = false;
+
+                                if ( Line.Length > 0 )
+                                {
+                                    var EndCodeTab = Line.IndexOf('\t');
+                                    var EndCodeSpace = Line.IndexOf(' ');
+                                    var EndCode = EndCodeTab;
+                                    if ( EndCodeSpace >= 0 && (EndCodeSpace < EndCode | EndCode < 0) )
+                                    {
+                                        EndCode = EndCodeSpace;
+                                    }
+                                    if ( EndCode >= 0 )
+                                    {
+                                        var FirstQuote = Line.IndexOf('"', EndCode + 1, Line.Length - (EndCode + 1));
+                                        if ( FirstQuote >= 0 )
+                                        {
+                                            var SecondQuote = Line.IndexOf('"', FirstQuote + 1, Line.Length - (FirstQuote + 1));
+                                            if ( SecondQuote >= 0 )
+                                            {
+                                                var Value = new string[2];
+                                                Value[0] = Line.Substring(0, EndCode);
+                                                Value[1] = Line.Substring(FirstQuote + 1, SecondQuote - (FirstQuote + 1));
+                                                ResultData.Add(Value);
+                                            }
+                                        }
+                                    }
+                                    Line = "";
+                                }
+
+                                goto MonoContinueDo;
+                            case '*':
+                                if ( PrevCharExists && PrevChar == '/' )
+                                {
+                                    InCommentBlock = true;
+                                    CurrentCharExists = false;
+                                    goto MonoContinueDo;
+                                }
+                                break;
+                            case '/':
+                                if ( PrevCharExists )
+                                {
+                                    if ( PrevChar == '/' )
+                                    {
+                                        InLineComment = true;
+                                        CurrentCharExists = false;
+                                        goto MonoContinueDo;
+                                    }
+                                    if ( PrevChar == '*' )
+                                    {
+                                        InCommentBlock = false;
+                                        CurrentCharExists = false;
+                                        goto MonoContinueDo;
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        if ( PrevCharExists )
+                        {
+                            Line += PrevChar.ToString();
+                        }
+                        if ( Line.Length > 0 )
+                        {
+                            var EndCodeTab = Line.IndexOf('\t');
+                            var EndCodeSpace = Line.IndexOf(' ');
+                            var EndCode = EndCodeTab;
+                            if ( EndCodeSpace >= 0 && (EndCodeSpace < EndCode | EndCode < 0) )
+                            {
+                                EndCode = EndCodeSpace;
+                            }
+                            if ( EndCode >= 0 )
+                            {
+                                var FirstQuote = Line.IndexOf('"', EndCode + 1, Line.Length - (EndCode + 1));
+                                if ( FirstQuote >= 0 )
+                                {
+                                    var SecondQuote = Line.IndexOf('"', FirstQuote + 1, Line.Length - (FirstQuote + 1));
+                                    if ( SecondQuote >= 0 )
+                                    {
+                                        var Value = new string[2];
+                                        Value[0] = Line.Substring(0, EndCode);
+                                        Value[1] = Line.Substring(FirstQuote + 1, SecondQuote - (FirstQuote + 1));
+                                        ResultData.Add(Value);
+                                    }
+                                }
+                            }
+                            Line = "";
+                        }
+
+                        break;
+                    }
+                    if ( PrevCharExists )
+                    {
+                        if ( !(InCommentBlock || InLineComment) )
+                        {
+                            Line += PrevChar.ToString();
+                        }
+                    }
+                } while ( true );
+
+                Reader.Close();
+
+                return Result;
+            }
+        }
+
+        public class clsTexturePage
+        {
+            public string FileTitle;
+            public int GLTexture_Num;
+        }
+
+        public struct sBytes
+        {
+            public byte[] Bytes;
+        }
+
+        public struct sLines
+        {
+            public string[] Lines;
+
+            public void RemoveComments()
+            {
+                var LineNum = 0;
+                var LineCount = Lines.GetUpperBound(0) + 1;
+                var InCommentBlock = default(bool);
+                var CommentStart = 0;
+                var CharNum = 0;
+                var CommentLength = 0;
+
+                for ( LineNum = 0; LineNum <= LineCount - 1; LineNum++ )
+                {
+                    CharNum = 0;
+                    if ( InCommentBlock )
+                    {
+                        CommentStart = 0;
+                    }
+                    do
+                    {
+                        if ( CharNum >= Lines[LineNum].Length )
+                        {
+                            if ( InCommentBlock )
+                            {
+                                Lines[LineNum] = Lines[LineNum].Substring(0, CommentStart);
+                            }
+                            break;
+                        }
+                        if ( InCommentBlock )
+                        {
+                            if ( Lines[LineNum][CharNum] == '*' )
+                            {
+                                CharNum++;
+                                if ( CharNum >= Lines[LineNum].Length )
+                                {
+                                }
+                                else if ( Lines[LineNum][CharNum] == '/' )
+                                {
+                                    CharNum++;
+                                    CommentLength = CharNum - CommentStart;
+                                    InCommentBlock = false;
+                                    Lines[LineNum] = Lines[LineNum].Substring(CommentStart, Lines[LineNum].Length - CommentStart)
+                                        .Substring(CommentStart + CommentLength, Lines[LineNum].Length - CommentStart - CommentLength);
+                                    CharNum -= CommentLength;
+                                }
+                            }
+                            else
+                            {
+                                CharNum++;
+                            }
+                        }
+                        else if ( Lines[LineNum][CharNum] == '/' )
+                        {
+                            CharNum++;
+                            if ( CharNum >= Lines[LineNum].Length )
+                            {
+                            }
+                            else if ( Lines[LineNum][CharNum] == '/' )
+                            {
+                                CommentStart = CharNum - 1;
+                                CharNum = Lines[LineNum].Length;
+                                CommentLength = CharNum - CommentStart;
+                                Lines[LineNum] = Lines[LineNum].Substring(CommentStart, Lines[LineNum].Length - CommentStart)
+                                    .Substring(CommentStart + CommentLength, Lines[LineNum].Length - CommentStart - CommentLength);
+                                CharNum -= CommentLength;
+                                break;
+                            }
+                            else if ( Lines[LineNum][CharNum] == '*' )
+                            {
+                                CommentStart = CharNum - 1;
+                                CharNum++;
+                                InCommentBlock = true;
+                            }
+                        }
+                        else
+                        {
+                            CharNum++;
+                        }
+                    } while ( true );
+                }
+            }
         }
     }
 }

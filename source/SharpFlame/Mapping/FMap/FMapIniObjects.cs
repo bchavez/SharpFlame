@@ -1,43 +1,24 @@
+#region
+
 using System;
 using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
-using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame.Mapping.FMap
 {
     public class FMapIniObjects : SectionTranslator
     {
-        public struct sObject
-        {
-            public UInt32 ID;
-            public UnitType Type;
-            public bool IsTemplate;
-            public string Code;
-            public string UnitGroup;
-            public bool GotAltitude;
-            public XYInt Pos;
-            public double Heading;
-            public double Health;
-            public DroidDesign.clsTemplateDroidType TemplateDroidType;
-            public string BodyCode;
-            public string PropulsionCode;
-            public enumTurretType[] TurretTypes;
-            public string[] TurretCodes;
-            public int TurretCount;
-            public int Priority;
-            public string Label;
-            public int WallType;
-        }
-
-        public sObject[] Objects;
         public int ObjectCount;
+        public sObject[] Objects;
 
         public FMapIniObjects(int NewObjectCount)
         {
-            int A = 0;
-            int B = 0;
+            var A = 0;
+            var B = 0;
 
             ObjectCount = NewObjectCount;
             Objects = new sObject[ObjectCount];
@@ -57,11 +38,11 @@ namespace SharpFlame.Mapping.FMap
 
         public override TranslatorResult Translate(int INISectionNum, Section.SectionProperty INIProperty)
         {
-            if ( (string)INIProperty.Name == "type" )
+            if ( INIProperty.Name == "type" )
             {
                 string[] CommaText = null;
-                int CommaTextCount = 0;
-                int A = 0;
+                var CommaTextCount = 0;
+                var A = 0;
                 CommaText = INIProperty.Value.Split(',');
                 CommaTextCount = CommaText.GetUpperBound(0) + 1;
                 if ( CommaTextCount < 1 )
@@ -94,26 +75,26 @@ namespace SharpFlame.Mapping.FMap
                         return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "droidtype" )
+            else if ( INIProperty.Name == "droidtype" )
             {
-                DroidDesign.clsTemplateDroidType DroidType = App.GetTemplateDroidTypeFromTemplateCode(Convert.ToString(INIProperty.Value));
+                var DroidType = App.GetTemplateDroidTypeFromTemplateCode(Convert.ToString(INIProperty.Value));
                 if ( DroidType == null )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
                 Objects[INISectionNum].TemplateDroidType = DroidType;
             }
-            else if ( (string)INIProperty.Name == "body" )
+            else if ( INIProperty.Name == "body" )
             {
                 Objects[INISectionNum].BodyCode = Convert.ToString(INIProperty.Value);
             }
-            else if ( (string)INIProperty.Name == "propulsion" )
+            else if ( INIProperty.Name == "propulsion" )
             {
                 Objects[INISectionNum].PropulsionCode = Convert.ToString(INIProperty.Value);
             }
-            else if ( (string)INIProperty.Name == "turretcount" )
+            else if ( INIProperty.Name == "turretcount" )
             {
-                int NewTurretCount = 0;
+                var NewTurretCount = 0;
                 if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref NewTurretCount) )
                 {
                     return TranslatorResult.ValueInvalid;
@@ -124,11 +105,11 @@ namespace SharpFlame.Mapping.FMap
                 }
                 Objects[INISectionNum].TurretCount = NewTurretCount;
             }
-            else if ( (string)INIProperty.Name == "turret1" )
+            else if ( INIProperty.Name == "turret1" )
             {
                 string[] CommaText = null;
-                int CommaTextCount = 0;
-                int A = 0;
+                var CommaTextCount = 0;
+                var A = 0;
                 CommaText = INIProperty.Value.Split(',');
                 CommaTextCount = CommaText.GetUpperBound(0) + 1;
                 if ( CommaTextCount < 2 )
@@ -139,7 +120,7 @@ namespace SharpFlame.Mapping.FMap
                 {
                     CommaText[A] = Convert.ToString(CommaText[A].Trim());
                 }
-                enumTurretType TurretType = default(enumTurretType);
+                var TurretType = default(enumTurretType);
                 TurretType = App.GetTurretTypeFromName(CommaText[0]);
                 if ( TurretType != enumTurretType.Unknown )
                 {
@@ -147,11 +128,11 @@ namespace SharpFlame.Mapping.FMap
                     Objects[INISectionNum].TurretCodes[0] = CommaText[1];
                 }
             }
-            else if ( (string)INIProperty.Name == "turret2" )
+            else if ( INIProperty.Name == "turret2" )
             {
                 string[] CommaText = null;
-                int CommaTextCount = 0;
-                int A = 0;
+                var CommaTextCount = 0;
+                var A = 0;
                 CommaText = INIProperty.Value.Split(',');
                 CommaTextCount = CommaText.GetUpperBound(0) + 1;
                 if ( CommaTextCount < 2 )
@@ -162,7 +143,7 @@ namespace SharpFlame.Mapping.FMap
                 {
                     CommaText[A] = Convert.ToString(CommaText[A].Trim());
                 }
-                enumTurretType TurretType = default(enumTurretType);
+                var TurretType = default(enumTurretType);
                 TurretType = App.GetTurretTypeFromName(CommaText[0]);
                 if ( TurretType != enumTurretType.Unknown )
                 {
@@ -170,11 +151,11 @@ namespace SharpFlame.Mapping.FMap
                     Objects[INISectionNum].TurretCodes[1] = CommaText[1];
                 }
             }
-            else if ( (string)INIProperty.Name == "turret3" )
+            else if ( INIProperty.Name == "turret3" )
             {
                 string[] CommaText = null;
-                int CommaTextCount = 0;
-                int A = 0;
+                var CommaTextCount = 0;
+                var A = 0;
                 CommaText = INIProperty.Value.Split(',');
                 CommaTextCount = CommaText.GetUpperBound(0) + 1;
                 if ( CommaTextCount < 2 )
@@ -185,7 +166,7 @@ namespace SharpFlame.Mapping.FMap
                 {
                     CommaText[A] = Convert.ToString(CommaText[A].Trim());
                 }
-                enumTurretType TurretType = default(enumTurretType);
+                var TurretType = default(enumTurretType);
                 TurretType = App.GetTurretTypeFromName(CommaText[0]);
                 if ( TurretType != enumTurretType.Unknown )
                 {
@@ -193,26 +174,26 @@ namespace SharpFlame.Mapping.FMap
                     Objects[INISectionNum].TurretCodes[2] = CommaText[1];
                 }
             }
-            else if ( (string)INIProperty.Name == "id" )
+            else if ( INIProperty.Name == "id" )
             {
                 if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref Objects[INISectionNum].ID) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "priority" )
+            else if ( INIProperty.Name == "priority" )
             {
-                Int32 temp_Result = Objects[INISectionNum].Priority;
+                var temp_Result = Objects[INISectionNum].Priority;
                 if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref temp_Result) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "pos" )
+            else if ( INIProperty.Name == "pos" )
             {
                 string[] CommaText = null;
-                int CommaTextCount = 0;
-                int A = 0;
+                var CommaTextCount = 0;
+                var A = 0;
                 CommaText = INIProperty.Value.Split(',');
                 CommaTextCount = CommaText.GetUpperBound(0) + 1;
                 if ( CommaTextCount < 2 )
@@ -223,7 +204,7 @@ namespace SharpFlame.Mapping.FMap
                 {
                     CommaText[A] = Convert.ToString(CommaText[A].Trim());
                 }
-                XYInt Pos = new XYInt();
+                var Pos = new XYInt();
                 if ( !IOUtil.InvariantParse(CommaText[0], ref Pos.X) )
                 {
                     return TranslatorResult.ValueInvalid;
@@ -241,7 +222,7 @@ namespace SharpFlame.Mapping.FMap
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "heading" )
+            else if ( INIProperty.Name == "heading" )
             {
                 double dblTemp = 0;
                 if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref dblTemp) )
@@ -254,11 +235,11 @@ namespace SharpFlame.Mapping.FMap
                 }
                 Objects[INISectionNum].Heading = dblTemp;
             }
-            else if ( (string)INIProperty.Name == "unitgroup" )
+            else if ( INIProperty.Name == "unitgroup" )
             {
                 Objects[INISectionNum].UnitGroup = Convert.ToString(INIProperty.Value);
             }
-            else if ( (string)INIProperty.Name == "health" )
+            else if ( INIProperty.Name == "health" )
             {
                 double NewHealth = 0;
                 if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref NewHealth) )
@@ -271,9 +252,9 @@ namespace SharpFlame.Mapping.FMap
                 }
                 Objects[INISectionNum].Health = NewHealth;
             }
-            else if ( (string)INIProperty.Name == "walltype" )
+            else if ( INIProperty.Name == "walltype" )
             {
-                int WallType = -1;
+                var WallType = -1;
                 if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref WallType) )
                 {
                     return TranslatorResult.ValueInvalid;
@@ -283,7 +264,7 @@ namespace SharpFlame.Mapping.FMap
                     Objects[INISectionNum].WallType = WallType;
                 }
             }
-            else if ( (string)INIProperty.Name == "scriptlabel" )
+            else if ( INIProperty.Name == "scriptlabel" )
             {
                 Objects[INISectionNum].Label = Convert.ToString(INIProperty.Value);
             }
@@ -292,6 +273,28 @@ namespace SharpFlame.Mapping.FMap
                 return TranslatorResult.NameUnknown;
             }
             return TranslatorResult.Translated;
+        }
+
+        public struct sObject
+        {
+            public string BodyCode;
+            public string Code;
+            public bool GotAltitude;
+            public double Heading;
+            public double Health;
+            public UInt32 ID;
+            public bool IsTemplate;
+            public string Label;
+            public XYInt Pos;
+            public int Priority;
+            public string PropulsionCode;
+            public DroidDesign.clsTemplateDroidType TemplateDroidType;
+            public string[] TurretCodes;
+            public int TurretCount;
+            public enumTurretType[] TurretTypes;
+            public UnitType Type;
+            public string UnitGroup;
+            public int WallType;
         }
     }
 }

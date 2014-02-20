@@ -1,6 +1,9 @@
+#region
+
 using System;
-using SharpFlame.Maths;
 using SharpFlame.Core.Domain;
+
+#endregion
 
 namespace SharpFlame.Collections.Specialized
 {
@@ -24,8 +27,8 @@ namespace SharpFlame.Collections.Specialized
 
         public void Copy(BooleanMap Source)
         {
-            int X = 0;
-            int Y = 0;
+            var X = 0;
+            var Y = 0;
 
             SizeCopy(Source);
             for ( Y = 0; Y <= Source.ValueData.Size.Y - 1; Y++ )
@@ -39,8 +42,8 @@ namespace SharpFlame.Collections.Specialized
 
         public void Convert_Heightmap(clsHeightmap Source, long AtOrAboveThisHeightEqualsTrue)
         {
-            int X = 0;
-            int Y = 0;
+            var X = 0;
+            var Y = 0;
 
             ValueData.Size.X = Source.HeightData.SizeX;
             ValueData.Size.Y = Source.HeightData.SizeY;
@@ -56,11 +59,11 @@ namespace SharpFlame.Collections.Specialized
 
         public void Remove_Diagonals()
         {
-            int X = 0;
-            int Y = 0;
-            bool Flag = default(bool);
+            var X = 0;
+            var Y = 0;
+            var Flag = default(bool);
 
-			Random rnd = new Random ();
+            var rnd = new Random();
 
             while ( Y < ValueData.Size.Y - 1 )
             {
@@ -143,7 +146,7 @@ namespace SharpFlame.Collections.Specialized
                                 else if ( !ValueData.Value[Y + 1, X + 1] )
                                 {
                                     //o i i o
-									if ( rnd.Next() < 0.5F )
+                                    if ( rnd.Next() < 0.5F )
                                     {
                                         ValueData.Value[Y, X + 1] = false;
                                     }
@@ -201,10 +204,7 @@ namespace SharpFlame.Collections.Specialized
                         }
                         break;
                     }
-                    else
-                    {
-                        X++;
-                    }
+                    X++;
                 }
                 if ( Flag )
                 {
@@ -222,8 +222,8 @@ namespace SharpFlame.Collections.Specialized
 
         public void Expand_One_Tile(BooleanMap Source)
         {
-            int X = 0;
-            int Y = 0;
+            var X = 0;
+            var Y = 0;
 
             SizeCopy(Source);
             for ( Y = 0; Y <= ValueData.Size.Y - 1; Y++ )
@@ -273,8 +273,8 @@ namespace SharpFlame.Collections.Specialized
 
         public void Remove(BooleanMap Source, BooleanMap Remove)
         {
-            int X = 0;
-            int Y = 0;
+            var X = 0;
+            var Y = 0;
 
             SizeCopy(Source);
             for ( Y = 0; Y <= Source.ValueData.Size.Y - 1; Y++ )
@@ -295,8 +295,8 @@ namespace SharpFlame.Collections.Specialized
 
         public void Combine(BooleanMap Source, BooleanMap Insert)
         {
-            int X = 0;
-            int Y = 0;
+            var X = 0;
+            var Y = 0;
 
             SizeCopy(Source);
             for ( Y = 0; Y <= Source.ValueData.Size.Y - 1; Y++ )
@@ -317,9 +317,9 @@ namespace SharpFlame.Collections.Specialized
 
         public void Within(BooleanMap Interior, BooleanMap Exterior)
         {
-            int Y = 0;
-            int X = 0;
-            bool Flag = default(bool);
+            var Y = 0;
+            var X = 0;
+            var Flag = default(bool);
 
             SizeCopy(Interior);
             for ( Y = 0; Y <= Interior.ValueData.Size.Y - 1; Y++ )

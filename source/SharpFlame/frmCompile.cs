@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -10,13 +12,27 @@ using SharpFlame.Mapping.Format.WZFormat;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Maths;
 
+#endregion
+
 namespace SharpFlame
 {
     public partial class frmCompile
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private clsMap Map;
+
+        private frmCompile(clsMap Map)
+        {
+            InitializeComponent();
+
+            Icon = App.ProgramIcon;
+
+            this.Map = Map;
+            Map.CompileScreen = this;
+
+            UpdateControls();
+        }
 
         public static frmCompile Create(clsMap Map)
         {
@@ -33,18 +49,6 @@ namespace SharpFlame
             }
 
             return new frmCompile(Map);
-        }
-
-        private frmCompile(clsMap Map)
-        {
-            InitializeComponent();
-
-            Icon = App.ProgramIcon;
-
-            this.Map = Map;
-            Map.CompileScreen = this;
-
-            UpdateControls();
         }
 
         private void UpdateControls()
@@ -75,7 +79,7 @@ namespace SharpFlame
 
             Map.InterfaceOptions.CampaignGameType = cboCampType.SelectedIndex;
 
-            bool Invalid = false;
+            var Invalid = false;
 
             try
             {
@@ -122,28 +126,28 @@ namespace SharpFlame
 
         public void btnCompile_Click(Object sender, EventArgs e)
         {
-            clsResult ReturnResult = new clsResult("Compile multiplayer", false);
-            logger.Info ("Compile multiplayer");
-            int A = 0;
+            var ReturnResult = new clsResult("Compile multiplayer", false);
+            logger.Info("Compile multiplayer");
+            var A = 0;
 
             SaveToMap();
 
-            string MapName = "";
-            string License = cboLicense.Text;
-            int PlayerCount = 0;
+            var MapName = "";
+            var License = cboLicense.Text;
+            var PlayerCount = 0;
             if ( !IOUtil.InvariantParse(txtMultiPlayers.Text, ref PlayerCount) )
             {
                 PlayerCount = 0;
             }
             if ( PlayerCount < 2 | PlayerCount > Constants.PlayerCountMax )
             {
-                ReturnResult.ProblemAdd (string.Format ("The number of players must be from 2 to {0}", Constants.PlayerCountMax));
+                ReturnResult.ProblemAdd(string.Format("The number of players must be from 2 to {0}", Constants.PlayerCountMax));
             }
 
             A = ValidateMap_WaterTris();
             if ( A > 0 )
             {
-                ReturnResult.WarningAdd (string.Format ("{0} water tiles have an incorrect triangle direction. There might be in-game graphical glitches on those tiles.", A));
+                ReturnResult.WarningAdd(string.Format("{0} water tiles have an incorrect triangle direction. There might be in-game graphical glitches on those tiles.", A));
             }
 
             ReturnResult.Add(ValidateMap());
@@ -151,7 +155,7 @@ namespace SharpFlame
             ReturnResult.Add(ValidateMap_Multiplayer(PlayerCount));
 
             MapName = txtName.Text;
-            char CurrentChar = (char)0;
+            var CurrentChar = (char)0;
             for ( A = 0; A <= MapName.Length - 1; A++ )
             {
                 CurrentChar = MapName[A];
@@ -179,7 +183,7 @@ namespace SharpFlame
                 App.ShowWarnings(ReturnResult);
                 return;
             }
-            SaveFileDialog CompileMultiDialog = new SaveFileDialog();
+            var CompileMultiDialog = new SaveFileDialog();
             if ( Map.PathInfo != null )
             {
                 CompileMultiDialog.InitialDirectory = Map.PathInfo.Path;
@@ -190,7 +194,7 @@ namespace SharpFlame
             {
                 return;
             }
-            sWrite_WZ_Args WriteWZArgs = new sWrite_WZ_Args();
+            var WriteWZArgs = new sWrite_WZ_Args();
             WriteWZArgs.MapName = MapName;
             WriteWZArgs.Path = CompileMultiDialog.FileName;
             WriteWZArgs.Overwrite = true;
@@ -201,7 +205,7 @@ namespace SharpFlame
             WriteWZArgs.Multiplayer.License = License;
             WriteWZArgs.CompileType = sWrite_WZ_Args.enumCompileType.Multiplayer;
 
-            var wzFormat = new WZFormat (Map);
+            var wzFormat = new WZFormat(Map);
             ReturnResult.Add(wzFormat.Save(WriteWZArgs));
             App.ShowWarnings(ReturnResult);
             if ( !ReturnResult.HasWarnings )
@@ -223,8 +227,8 @@ namespace SharpFlame
 
         private clsResult ValidateMap_UnitPositions()
         {
-            clsResult Result = new clsResult("Validate unit positions", false);
-            logger.Info ("Validate unit positions");
+            var Result = new clsResult("Validate unit positions", false);
+            logger.Info("Validate unit positions");
 
             //check unit positions
 
@@ -233,13 +237,13 @@ namespace SharpFlame
             var tileFeatureTypeBase = new FeatureTypeBase[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
             var TileObjectGroup = new clsUnitGroup[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
 
-            XYInt StartPos = new XYInt();
-            XYInt FinishPos = new XYInt();
-            XYInt CentrePos = new XYInt();
+            var StartPos = new XYInt();
+            var FinishPos = new XYInt();
+            var CentrePos = new XYInt();
             StructureTypeBase.enumStructureType StructureTypeType;
             StructureTypeBase structureTypeBase;
-            XYInt Footprint = new XYInt();
-            bool[] UnitIsStructureModule = new bool[Map.Units.Count];
+            var Footprint = new XYInt();
+            var UnitIsStructureModule = new bool[Map.Units.Count];
             bool IsValid;
 
             foreach ( var unit in Map.Units )
@@ -262,19 +266,19 @@ namespace SharpFlame
                     if ( StartPos.X < 0 | FinishPos.X >= Map.Terrain.TileSize.X
                          | StartPos.Y < 0 | FinishPos.Y >= Map.Terrain.TileSize.Y )
                     {
-                        clsResultProblemGoto<clsResultItemPosGoto> resultItem = modResults.CreateResultProblemGotoForObject(unit);
+                        var resultItem = modResults.CreateResultProblemGotoForObject(unit);
                         resultItem.Text = string.Format("Unit off map at position {0}.", unit.GetPosText());
                         Result.ItemAdd(resultItem);
                     }
                     else
                     {
-                        for (int y = StartPos.Y; y <= FinishPos.Y; y++ )
+                        for ( var y = StartPos.Y; y <= FinishPos.Y; y++ )
                         {
-                            for (int x = StartPos.X; x <= FinishPos.X; x++ )
+                            for ( var x = StartPos.X; x <= FinishPos.X; x++ )
                             {
                                 if ( TileHasUnit[x, y] )
                                 {
-                                    clsResultProblemGoto<clsResultItemPosGoto> resultItem = modResults.CreateResultProblemGotoForObject(unit);
+                                    var resultItem = modResults.CreateResultProblemGotoForObject(unit);
                                     logger.Info("Bad overlap of {0} on tile {1}, {2}.", unit.TypeBase.GetDisplayTextName(), x, y);
                                     resultItem.Text = string.Format("Bad unit overlap of {0} on tile {1}, {2}.", unit.TypeBase.GetDisplayTextName(), x, y);
                                     Result.ItemAdd(resultItem);
@@ -306,11 +310,11 @@ namespace SharpFlame
                 {
                     StructureTypeType = ((StructureTypeBase)unit.TypeBase).StructureType;
                     CentrePos.X = (unit.Pos.Horizontal.X / Constants.TerrainGridSpacing);
-                    CentrePos.Y = (int)((unit.Pos.Horizontal.Y / Constants.TerrainGridSpacing));
+                    CentrePos.Y = unit.Pos.Horizontal.Y / Constants.TerrainGridSpacing;
                     if ( CentrePos.X < 0 | CentrePos.X >= Map.Terrain.TileSize.X
                          | CentrePos.Y < 0 | CentrePos.Y >= Map.Terrain.TileSize.Y )
                     {
-                        clsResultProblemGoto<clsResultItemPosGoto> resultItem = modResults.CreateResultProblemGotoForObject(unit);
+                        var resultItem = modResults.CreateResultProblemGotoForObject(unit);
                         resultItem.Text = "Module off map at position " + unit.GetPosText() + ".";
                         Result.ItemAdd(resultItem);
                     }
@@ -392,7 +396,7 @@ namespace SharpFlame
                         }
                         if ( !IsValid )
                         {
-                            clsResultProblemGoto<clsResultItemPosGoto> resultItem = modResults.CreateResultProblemGotoForObject(unit);
+                            var resultItem = modResults.CreateResultProblemGotoForObject(unit);
                             resultItem.Text = "Bad module on tile " + Convert.ToString(CentrePos.X) + ", " + Convert.ToString(CentrePos.Y) + ".";
                             Result.ItemAdd(resultItem);
                         }
@@ -405,8 +409,8 @@ namespace SharpFlame
 
         private clsResult ValidateMap_Multiplayer(int PlayerCount)
         {
-            clsResult Result = new clsResult("Validate for multiplayer", false);
-            logger.Info ("Validate for multiplayer");
+            var Result = new clsResult("Validate for multiplayer", false);
+            logger.Info("Validate for multiplayer");
 
             if ( PlayerCount < 2 | PlayerCount > Constants.PlayerCountMax )
             {
@@ -416,19 +420,19 @@ namespace SharpFlame
 
             //check HQs, Trucks and unit counts
 
-            int[] PlayerHQCount = new int[Constants.PlayerCountMax];
-            int[] Player23TruckCount = new int[Constants.PlayerCountMax];
-            int[] PlayerMasterTruckCount = new int[Constants.PlayerCountMax];
-            int ScavPlayerNum = 0;
-            int ScavObjectCount = 0;
-            DroidDesign DroidType = default(DroidDesign);
+            var PlayerHQCount = new int[Constants.PlayerCountMax];
+            var Player23TruckCount = new int[Constants.PlayerCountMax];
+            var PlayerMasterTruckCount = new int[Constants.PlayerCountMax];
+            var ScavPlayerNum = 0;
+            var ScavObjectCount = 0;
+            var DroidType = default(DroidDesign);
             StructureTypeBase structureTypeBase;
-            int UnusedPlayerUnitWarningCount = 0;
-            clsUnit Unit = default(clsUnit);
+            var UnusedPlayerUnitWarningCount = 0;
+            var Unit = default(clsUnit);
 
             ScavPlayerNum = Math.Max(PlayerCount, 7);
 
-            foreach ( clsUnit tempLoopVar_Unit in Map.Units )
+            foreach ( var tempLoopVar_Unit in Map.Units )
             {
                 Unit = tempLoopVar_Unit;
                 if ( Unit.UnitGroup == Map.ScavengerUnitGroup )
@@ -471,15 +475,15 @@ namespace SharpFlame
                         if ( UnusedPlayerUnitWarningCount < 32 )
                         {
                             UnusedPlayerUnitWarningCount++;
-                            clsResultProblemGoto<clsResultItemPosGoto> resultItem = modResults.CreateResultProblemGotoForObject(Unit);
-                            resultItem.Text = string.Format ("An unused player ({0}) has a unit at {1}.", Unit.UnitGroup.WZ_StartPos, Unit.GetPosText ());
+                            var resultItem = modResults.CreateResultProblemGotoForObject(Unit);
+                            resultItem.Text = string.Format("An unused player ({0}) has a unit at {1}.", Unit.UnitGroup.WZ_StartPos, Unit.GetPosText());
                             Result.ItemAdd(resultItem);
                         }
                     }
                 }
             }
 
-            for ( int A = 0; A <= PlayerCount - 1; A++ )
+            for ( var A = 0; A <= PlayerCount - 1; A++ )
             {
                 if ( PlayerHQCount[A] == 0 )
                 {
@@ -500,8 +504,8 @@ namespace SharpFlame
 
         private clsResult ValidateMap()
         {
-            clsResult ReturnResult = new clsResult("Validate map", false);
-            logger.Info ("Validate map");
+            var ReturnResult = new clsResult("Validate map", false);
+            logger.Info("Validate map");
 
             if ( Map.Terrain.TileSize.X > Constants.WzMapMaxSize )
             {
@@ -517,12 +521,12 @@ namespace SharpFlame
                 ReturnResult.ProblemAdd("No tileset selected.");
             }
 
-            int[,] PlayerStructureTypeCount = new int[Constants.PlayerCountMax, App.ObjectData.StructureTypes.Count];
-            int[] ScavStructureTypeCount = new int[App.ObjectData.StructureTypes.Count];
-            StructureTypeBase structureTypeBase = default(StructureTypeBase);
-            clsUnit Unit = default(clsUnit);
+            var PlayerStructureTypeCount = new int[Constants.PlayerCountMax, App.ObjectData.StructureTypes.Count];
+            var ScavStructureTypeCount = new int[App.ObjectData.StructureTypes.Count];
+            var structureTypeBase = default(StructureTypeBase);
+            var Unit = default(clsUnit);
 
-            foreach ( clsUnit tempLoopVar_Unit in Map.Units )
+            foreach ( var tempLoopVar_Unit in Map.Units )
             {
                 Unit = tempLoopVar_Unit;
                 if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
@@ -539,28 +543,28 @@ namespace SharpFlame
                 }
             }
 
-            foreach ( StructureTypeBase tempLoopVar_StructureType in App.ObjectData.StructureTypes )
+            foreach ( var tempLoopVar_StructureType in App.ObjectData.StructureTypes )
             {
                 structureTypeBase = tempLoopVar_StructureType;
-                int StructureTypeNum = structureTypeBase.StructureType_ObjectDataLink.ArrayPosition;
-                int PlayerNum = 0;
+                var StructureTypeNum = structureTypeBase.StructureType_ObjectDataLink.ArrayPosition;
+                var PlayerNum = 0;
                 for ( PlayerNum = 0; PlayerNum <= Constants.PlayerCountMax - 1; PlayerNum++ )
                 {
                     if ( PlayerStructureTypeCount[PlayerNum, StructureTypeNum] > 255 )
                     {
                         ReturnResult.ProblemAdd("Player {0} has to  many ({1}) of structure \"{2}\"" +
                                                 ". The limit is 255 of any one structure type.".Format2(
-                                                    PlayerNum, PlayerStructureTypeCount[PlayerNum, StructureTypeNum], 
+                                                    PlayerNum, PlayerStructureTypeCount[PlayerNum, StructureTypeNum],
                                                     structureTypeBase.Code)
-                                               );
+                            );
                     }
                 }
                 if ( ScavStructureTypeCount[StructureTypeNum] > 255 )
                 {
-                    ReturnResult.ProblemAdd ("Scavengers have to many ({0}) of structure \"{1}\"" +
-                                             ". The limit is 255 of any one structure type.".Format2 
-                                                (ScavStructureTypeCount [StructureTypeNum], structureTypeBase.Code)
-                                             );
+                    ReturnResult.ProblemAdd("Scavengers have to many ({0}) of structure \"{1}\"" +
+                                            ". The limit is 255 of any one structure type.".Format2
+                                                (ScavStructureTypeCount[StructureTypeNum], structureTypeBase.Code)
+                        );
                 }
             }
 
@@ -569,9 +573,9 @@ namespace SharpFlame
 
         private int ValidateMap_WaterTris()
         {
-            int X = 0;
-            int Y = 0;
-            int Count = 0;
+            var X = 0;
+            var Y = 0;
+            var Count = 0;
 
             if ( Map.Tileset == null )
             {
@@ -599,9 +603,9 @@ namespace SharpFlame
 
         public void btnCompileCampaign_Click(Object sender, EventArgs e)
         {
-            clsResult ReturnResult = new clsResult("Compile campaign", false);
-            logger.Info ("Compile campaign");
-            int A = 0;
+            var ReturnResult = new clsResult("Compile campaign", false);
+            logger.Info("Compile campaign");
+            var A = 0;
 
             SaveToMap();
 
@@ -614,8 +618,8 @@ namespace SharpFlame
             ReturnResult.Add(ValidateMap());
             ReturnResult.Add(ValidateMap_UnitPositions());
 
-            string MapName = "";
-            int TypeNum = 0;
+            var MapName = "";
+            var TypeNum = 0;
 
             MapName = txtName.Text;
             if ( MapName.Length < 1 )
@@ -632,12 +636,12 @@ namespace SharpFlame
                 App.ShowWarnings(ReturnResult);
                 return;
             }
-            FolderBrowserDialog CompileCampDialog = new FolderBrowserDialog();
+            var CompileCampDialog = new FolderBrowserDialog();
             if ( CompileCampDialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
-            sWrite_WZ_Args WriteWZArgs = new sWrite_WZ_Args();
+            var WriteWZArgs = new sWrite_WZ_Args();
             WriteWZArgs.MapName = MapName;
             WriteWZArgs.Path = CompileCampDialog.SelectedPath;
             WriteWZArgs.Overwrite = false;
@@ -646,7 +650,7 @@ namespace SharpFlame
             WriteWZArgs.Campaign.GAMType = (uint)TypeNum;
             WriteWZArgs.CompileType = sWrite_WZ_Args.enumCompileType.Campaign;
 
-            var wzFormat = new WZFormat (Map);
+            var wzFormat = new WZFormat(Map);
             ReturnResult.Add(wzFormat.Save(WriteWZArgs));
             App.ShowWarnings(ReturnResult);
             if ( !ReturnResult.HasWarnings )

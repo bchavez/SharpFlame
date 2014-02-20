@@ -1,5 +1,9 @@
+#region
+
 using SharpFlame.Collections;
 using SharpFlame.Mapping.Objects;
+
+#endregion
 
 namespace SharpFlame.Mapping.Tools
 {

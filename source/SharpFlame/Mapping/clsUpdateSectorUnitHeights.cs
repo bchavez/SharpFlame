@@ -1,17 +1,21 @@
+#region
+
 using System;
 using System.Diagnostics;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tools;
 
+#endregion
+
 namespace SharpFlame.Mapping
 {
     public class clsUpdateSectorUnitHeights : clsAction
     {
-        private clsUnit NewUnit;
         private UInt32 ID;
-        private clsUnit[] OldUnits;
-        private int OldUnitCount = 0;
         private int NewAltitude;
+        private clsUnit NewUnit;
+        private int OldUnitCount;
+        private clsUnit[] OldUnits;
         private bool Started;
 
         public void Start()
@@ -29,9 +33,9 @@ namespace SharpFlame.Mapping
                 return;
             }
 
-            int A = 0;
-            clsUnitAdd UnitAdd = new clsUnitAdd();
-            clsUnit Unit = default(clsUnit);
+            var A = 0;
+            var UnitAdd = new clsUnitAdd();
+            var Unit = default(clsUnit);
 
             UnitAdd.Map = Map;
             UnitAdd.StoreChange = true;
@@ -65,13 +69,13 @@ namespace SharpFlame.Mapping
                 return;
             }
 
-            clsUnitSectorConnection Connection = default(clsUnitSectorConnection);
-            clsUnit Unit = default(clsUnit);
-            clsSector Sector = default(clsSector);
-            int A = 0;
+            var Connection = default(clsUnitSectorConnection);
+            var Unit = default(clsUnit);
+            var Sector = default(clsSector);
+            var A = 0;
 
             Sector = Map.Sectors[PosNum.X, PosNum.Y];
-            foreach ( clsUnitSectorConnection tempLoopVar_Connection in Sector.Units )
+            foreach ( var tempLoopVar_Connection in Sector.Units )
             {
                 Connection = tempLoopVar_Connection;
                 Unit = Connection.Unit;

@@ -2,32 +2,30 @@ namespace SharpFlame.Util
 {
     public sealed class modTools
     {
-        public struct sEachTool
+        public static sEachTool Tools;
+
+        private static clsTool _Tool;
+
+        private static clsTool _PreviousTool;
+
+        public static clsTool Tool
         {
-            public clsTool ObjectSelect;
-            public clsTool TextureBrush;
-            public clsTool TerrainBrush;
-            public clsTool TerrainFill;
-            public clsTool RoadPlace;
-            public clsTool RoadLines;
-            public clsTool RoadRemove;
-            public clsTool CliffTriangle;
-            public clsTool CliffBrush;
-            public clsTool CliffRemove;
-            public clsTool HeightSetBrush;
-            public clsTool HeightChangeBrush;
-            public clsTool HeightSmoothBrush;
-            public clsTool ObjectPlace;
-            public clsTool ObjectLines;
-            public clsTool TerrainSelect;
-            public clsTool Gateways;
+            get { return _Tool; }
+            set
+            {
+                _PreviousTool = _Tool;
+                _Tool = value;
+            }
         }
 
-        public static sEachTool Tools;
+        public static clsTool PreviousTool
+        {
+            get { return _PreviousTool; }
+        }
 
         public static void CreateTools()
         {
-            clsTool newTool = default(clsTool);
+            var newTool = default(clsTool);
 
             newTool = new clsTool();
             Tools.ObjectSelect = newTool;
@@ -84,23 +82,25 @@ namespace SharpFlame.Util
             _PreviousTool = _Tool;
         }
 
-        private static clsTool _Tool;
-
-        public static clsTool Tool
+        public struct sEachTool
         {
-            get { return _Tool; }
-            set
-            {
-                _PreviousTool = _Tool;
-                _Tool = value;
-            }
-        }
-
-        private static clsTool _PreviousTool;
-
-        public static clsTool PreviousTool
-        {
-            get { return _PreviousTool; }
+            public clsTool CliffBrush;
+            public clsTool CliffRemove;
+            public clsTool CliffTriangle;
+            public clsTool Gateways;
+            public clsTool HeightChangeBrush;
+            public clsTool HeightSetBrush;
+            public clsTool HeightSmoothBrush;
+            public clsTool ObjectLines;
+            public clsTool ObjectPlace;
+            public clsTool ObjectSelect;
+            public clsTool RoadLines;
+            public clsTool RoadPlace;
+            public clsTool RoadRemove;
+            public clsTool TerrainBrush;
+            public clsTool TerrainFill;
+            public clsTool TerrainSelect;
+            public clsTool TextureBrush;
         }
     }
 

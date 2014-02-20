@@ -8,7 +8,7 @@ namespace SharpFlame.Mapping
             Deleted
         }
 
-        public enumType Type;
         public clsGateway Gateway;
+        public enumType Type;
     }
 }

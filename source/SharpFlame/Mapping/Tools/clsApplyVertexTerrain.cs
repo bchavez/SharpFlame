@@ -1,10 +1,15 @@
+#region
+
+using SharpFlame.Painters;
+
+#endregion
+
 namespace SharpFlame.Mapping.Tools
 {
     public class clsApplyVertexTerrain : clsAction
     {
-        public Painters.Terrain VertexTerrain;
-
         private clsTerrain Terrain;
+        public Terrain VertexTerrain;
 
         public override void ActionPerform()
         {

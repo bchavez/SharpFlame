@@ -1,8 +1,11 @@
+#region
+
 using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
-using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame.Mapping.Drawing
 {
@@ -10,14 +13,13 @@ namespace SharpFlame.Mapping.Drawing
     {
         //does not inherit action
 
+        private readonly XYZInt vertex0;
+        public sRGBA_sng Colour;
+        public XYInt Horizontal;
         public clsMap Map;
 
-        public XYInt Horizontal;
-        public sRGBA_sng Colour;
-
-        private XYZInt vertex0;
-
-        public clsDrawHorizontalPosOnTerrain() {
+        public clsDrawHorizontalPosOnTerrain()
+        {
             vertex0 = new XYZInt(0, 0, 0);
         }
 

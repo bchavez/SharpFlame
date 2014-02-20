@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -5,14 +7,16 @@ using System.Windows.Forms;
 using SharpFlame.Colors;
 using SharpFlame.Maths;
 
+#endregion
+
 namespace SharpFlame.Controls
 {
     public partial class ColourControl
     {
-        private clsRGB_sng Colour;
-        private Color ColourColor;
+        private readonly clsRGB_sng Colour;
 
-        private System.Drawing.Graphics ColourBoxGraphics;
+        private readonly System.Drawing.Graphics ColourBoxGraphics;
+        private Color ColourColor;
 
         public ColourControl(clsRGB_sng NewColour)
         {
@@ -26,9 +30,9 @@ namespace SharpFlame.Controls
             }
 
             Colour = NewColour;
-            int Red = (int)(MathUtil.Clamp_dbl(Colour.Red * 255.0D, 0.0D, 255.0D));
-            int Green = (int)(MathUtil.Clamp_dbl(Colour.Green * 255.0D, 0.0D, 255.0D));
-            int Blue = (int)(MathUtil.Clamp_dbl(Colour.Blue * 255.0D, 0.0D, 255.0D));
+            var Red = (int)(MathUtil.Clamp_dbl(Colour.Red * 255.0D, 0.0D, 255.0D));
+            var Green = (int)(MathUtil.Clamp_dbl(Colour.Green * 255.0D, 0.0D, 255.0D));
+            var Blue = (int)(MathUtil.Clamp_dbl(Colour.Blue * 255.0D, 0.0D, 255.0D));
             ColourColor = ColorTranslator.FromOle(ColorUtil.OSRGB(Red, Green, Blue));
 
             if ( Colour is clsRGBA_sng )
@@ -49,10 +53,10 @@ namespace SharpFlame.Controls
 
         public void SelectColour(Object sender, EventArgs e)
         {
-            ColorDialog ColourSelect = new ColorDialog();
+            var ColourSelect = new ColorDialog();
 
             ColourSelect.Color = ColourColor;
-            DialogResult Result = ColourSelect.ShowDialog();
+            var Result = ColourSelect.ShowDialog();
             if ( Result != DialogResult.OK )
             {
                 return;

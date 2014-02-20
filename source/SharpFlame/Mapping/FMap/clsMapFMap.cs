@@ -1,19 +1,24 @@
+#region
+
 using System;
 using System.Diagnostics;
-using System.Linq;
 using System.IO;
+using System.Linq;
+using System.Text;
 using Ionic.Zip;
+using Ionic.Zlib;
+using SharpFlame.Core.Domain;
 using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.Domain;
-using SharpFlame.Core.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.FMap;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tiles;
-using SharpFlame.Maths;
 using IniReader = SharpFlame.FileIO.Ini.IniReader;
 using Section = SharpFlame.FileIO.Ini.Section;
+
+#endregion
 
 namespace SharpFlame.Mapping
 {
@@ -21,8 +26,8 @@ namespace SharpFlame.Mapping
     {
         public clsResult Write_FMap(string path, bool overwrite, bool compress)
         {
-            clsResult returnResult = new clsResult(string.Format("Writing FMap to \"{0}\"", path), false);
-            logger.Info (string.Format("Writing FMap to \"{0}\"", path));
+            var returnResult = new clsResult(string.Format("Writing FMap to \"{0}\"", path), false);
+            logger.Info(string.Format("Writing FMap to \"{0}\"", path));
 
             if ( !overwrite )
             {
@@ -34,73 +39,75 @@ namespace SharpFlame.Mapping
             }
             try
             {
-                using (var zip = new ZipOutputStream(path)) 
+                using ( var zip = new ZipOutputStream(path) )
                 {
                     // Set encoding
-                    zip.AlternateEncoding = System.Text.Encoding.GetEncoding ("UTF-8");
+                    zip.AlternateEncoding = Encoding.GetEncoding("UTF-8");
                     zip.AlternateEncodingUsage = ZipOption.Always;
 
                     // Set compression
-                    if (compress) {
-                        zip.CompressionLevel = Ionic.Zlib.CompressionLevel.BestCompression;
-                    } else {
+                    if ( compress )
+                    {
+                        zip.CompressionLevel = CompressionLevel.BestCompression;
+                    }
+                    else
+                    {
                         zip.CompressionMethod = CompressionMethod.None;
                     }
 
-                    var binaryWriter = new BinaryWriter (zip, App.UTF8Encoding);
-                    var streamWriter = new StreamWriter (zip, App.UTF8Encoding);
+                    var binaryWriter = new BinaryWriter(zip, App.UTF8Encoding);
+                    var streamWriter = new StreamWriter(zip, App.UTF8Encoding);
 
-                    zip.PutNextEntry ("Info.ini");             
-                    var infoIniWriter = new IniWriter (streamWriter);
+                    zip.PutNextEntry("Info.ini");
+                    var infoIniWriter = new IniWriter(streamWriter);
                     returnResult.Add(Serialize_FMap_Info(infoIniWriter));
-                    streamWriter.Flush ();
+                    streamWriter.Flush();
 
-                    zip.PutNextEntry ("VertexHeight.dat");
+                    zip.PutNextEntry("VertexHeight.dat");
                     returnResult.Add(Serialize_FMap_VertexHeight(binaryWriter));
-                    binaryWriter.Flush ();
-                   
-                    zip.PutNextEntry ("VertexTerrain.dat");
+                    binaryWriter.Flush();
+
+                    zip.PutNextEntry("VertexTerrain.dat");
                     returnResult.Add(Serialize_FMap_VertexTerrain(binaryWriter));
-                    binaryWriter.Flush ();
+                    binaryWriter.Flush();
 
-                    zip.PutNextEntry ("TileTexture.dat");
+                    zip.PutNextEntry("TileTexture.dat");
                     returnResult.Add(Serialize_FMap_TileTexture(binaryWriter));
-                    binaryWriter.Flush ();
+                    binaryWriter.Flush();
 
-                    zip.PutNextEntry ("TileOrientation.dat");
+                    zip.PutNextEntry("TileOrientation.dat");
                     returnResult.Add(Serialize_FMap_TileOrientation(binaryWriter));
-                    binaryWriter.Flush ();
+                    binaryWriter.Flush();
 
-                    zip.PutNextEntry ("TileCliff.dat");
+                    zip.PutNextEntry("TileCliff.dat");
                     returnResult.Add(Serialize_FMap_TileCliff(binaryWriter));
-                    binaryWriter.Flush ();
+                    binaryWriter.Flush();
 
-                    zip.PutNextEntry ("Roads.dat");
+                    zip.PutNextEntry("Roads.dat");
                     returnResult.Add(Serialize_FMap_Roads(binaryWriter));
-                    binaryWriter.Flush ();
+                    binaryWriter.Flush();
 
-                    zip.PutNextEntry ("Objects.ini");
-                    var objectsIniWriter = new IniWriter (streamWriter);
+                    zip.PutNextEntry("Objects.ini");
+                    var objectsIniWriter = new IniWriter(streamWriter);
                     returnResult.Add(Serialize_FMap_Objects(objectsIniWriter));
-                    streamWriter.Flush ();
+                    streamWriter.Flush();
 
-                    zip.PutNextEntry ("Gateways.ini");             
-                    var gatewaysIniWriter = new IniWriter (streamWriter);
+                    zip.PutNextEntry("Gateways.ini");
+                    var gatewaysIniWriter = new IniWriter(streamWriter);
                     returnResult.Add(Serialize_FMap_Gateways(gatewaysIniWriter));
-                    streamWriter.Flush ();
+                    streamWriter.Flush();
 
-                    zip.PutNextEntry ("TileTypes.dat");
+                    zip.PutNextEntry("TileTypes.dat");
                     returnResult.Add(Serialize_FMap_TileTypes(binaryWriter));
-                    binaryWriter.Flush ();
+                    binaryWriter.Flush();
 
-                    zip.PutNextEntry ("ScriptLabels.ini");             
-                    var scriptLabelsIniWriter = new IniWriter (streamWriter);
+                    zip.PutNextEntry("ScriptLabels.ini");
+                    var scriptLabelsIniWriter = new IniWriter(streamWriter);
                     returnResult.Add(Serialize_WZ_LabelsINI(scriptLabelsIniWriter));
-                    streamWriter.Flush ();
+                    streamWriter.Flush();
 
-                    streamWriter.Close ();
-                    binaryWriter.Close ();
-
+                    streamWriter.Close();
+                    binaryWriter.Close();
                 }
             }
             catch ( Exception ex )
@@ -114,27 +121,28 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_WZ_LabelsINI(IniWriter File)
         {
-            clsResult returnResult = new clsResult ("Serializing labels INI", false);
-            logger.Info ("Serializing labels INI");
+            var returnResult = new clsResult("Serializing labels INI", false);
+            logger.Info("Serializing labels INI");
 
             try
             {
-                clsScriptPosition scriptPosition = default(clsScriptPosition);
-                foreach (clsScriptPosition tempLoopVar_ScriptPosition in ScriptPositions)
+                var scriptPosition = default(clsScriptPosition);
+                foreach ( var tempLoopVar_ScriptPosition in ScriptPositions )
                 {
                     scriptPosition = tempLoopVar_ScriptPosition;
-                    scriptPosition.WriteWZ (File);
+                    scriptPosition.WriteWZ(File);
                 }
-                clsScriptArea ScriptArea = default(clsScriptArea);
-                foreach (clsScriptArea tempLoopVar_ScriptArea in ScriptAreas)
+                var ScriptArea = default(clsScriptArea);
+                foreach ( var tempLoopVar_ScriptArea in ScriptAreas )
                 {
                     ScriptArea = tempLoopVar_ScriptArea;
-                    ScriptArea.WriteWZ (File);
+                    ScriptArea.WriteWZ(File);
                 }
-            } catch (Exception ex)
+            }
+            catch ( Exception ex )
             {
-                returnResult.WarningAdd (ex.Message);
-                logger.ErrorException ("Got an exception", ex);
+                returnResult.WarningAdd(ex.Message);
+                logger.ErrorException("Got an exception", ex);
             }
 
             return returnResult;
@@ -142,8 +150,8 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_FMap_Info(IniWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing general map info", false);
-            logger.Info ("Serializing general map info");
+            var ReturnResult = new clsResult("Serializing general map info", false);
+            logger.Info("Serializing general map info");
 
             try
             {
@@ -191,10 +199,10 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_FMap_VertexHeight(BinaryWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing vertex heights", false);
-            logger.Info ("Serializing vertex heights");
-            int X = 0;
-            int Y = 0;
+            var ReturnResult = new clsResult("Serializing vertex heights", false);
+            logger.Info("Serializing vertex heights");
+            var X = 0;
+            var Y = 0;
 
             try
             {
@@ -216,13 +224,13 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_FMap_VertexTerrain(BinaryWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing vertex terrain", false);
-            logger.Info ("Serializing vertex terrain");
+            var ReturnResult = new clsResult("Serializing vertex terrain", false);
+            logger.Info("Serializing vertex terrain");
 
-            int X = 0;
-            int Y = 0;
-            int ErrorCount = 0;
-            int Value = 0;
+            var X = 0;
+            var Y = 0;
+            var ErrorCount = 0;
+            var Value = 0;
 
             try
             {
@@ -267,13 +275,13 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_FMap_TileTexture(BinaryWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing tile textures", false);
-            logger.Info ("Serializing tile textures");
+            var ReturnResult = new clsResult("Serializing tile textures", false);
+            logger.Info("Serializing tile textures");
 
-            int X = 0;
-            int Y = 0;
-            int ErrorCount = 0;
-            int Value = 0;
+            var X = 0;
+            var Y = 0;
+            var ErrorCount = 0;
+            var Value = 0;
 
             try
             {
@@ -306,11 +314,11 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_FMap_TileOrientation(BinaryWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing tile orientations", false);
-            logger.Info ("Serializing tile orientations");
-            int X = 0;
-            int Y = 0;
-            int Value = 0;
+            var ReturnResult = new clsResult("Serializing tile orientations", false);
+            logger.Info("Serializing tile orientations");
+            var X = 0;
+            var Y = 0;
+            var Value = 0;
 
             try
             {
@@ -349,14 +357,14 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_FMap_TileCliff(BinaryWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing tile cliffs", false);
-            logger.Info ("Serializing tile cliffs");
+            var ReturnResult = new clsResult("Serializing tile cliffs", false);
+            logger.Info("Serializing tile cliffs");
 
-            int X = 0;
-            int Y = 0;
-            int Value = 0;
-            int DownSideValue = 0;
-            int ErrorCount = 0;
+            var X = 0;
+            var Y = 0;
+            var Value = 0;
+            var DownSideValue = 0;
+            var ErrorCount = 0;
 
             try
             {
@@ -436,13 +444,13 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_FMap_Roads(BinaryWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing roads", false);
-            logger.Info ("Serializing roads");
+            var ReturnResult = new clsResult("Serializing roads", false);
+            logger.Info("Serializing roads");
 
-            int X = 0;
-            int Y = 0;
-            int Value = 0;
-            int ErrorCount = 0;
+            var X = 0;
+            var Y = 0;
+            var Value = 0;
+            var ErrorCount = 0;
 
             try
             {
@@ -512,13 +520,13 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_FMap_Objects(IniWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing objects", false);
-            logger.Info ("Serializing objects");
+            var ReturnResult = new clsResult("Serializing objects", false);
+            logger.Info("Serializing objects");
 
-            int A = 0;
-            clsUnit Unit = default(clsUnit);
-            DroidDesign Droid = default(DroidDesign);
-            int WarningCount = 0;
+            var A = 0;
+            var Unit = default(clsUnit);
+            var Droid = default(DroidDesign);
+            var WarningCount = 0;
             string Text = null;
 
             try
@@ -533,7 +541,7 @@ namespace SharpFlame.Mapping
                             File.AddProperty("Type", "Feature, " + ((FeatureTypeBase)Unit.TypeBase).Code);
                             break;
                         case UnitType.PlayerStructure:
-                            StructureTypeBase structureTypeBase = (StructureTypeBase)Unit.TypeBase;
+                            var structureTypeBase = (StructureTypeBase)Unit.TypeBase;
                             File.AddProperty("Type", "Structure, " + structureTypeBase.Code);
                             if ( structureTypeBase.WallLink.IsConnected )
                             {
@@ -619,10 +627,10 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_FMap_Gateways(IniWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing gateways", false);
-            logger.Info ("Serializing gateways");
-            int A = 0;
-            clsGateway Gateway = default(clsGateway);
+            var ReturnResult = new clsResult("Serializing gateways", false);
+            logger.Info("Serializing gateways");
+            var A = 0;
+            var Gateway = default(clsGateway);
 
             try
             {
@@ -646,9 +654,9 @@ namespace SharpFlame.Mapping
 
         public clsResult Serialize_FMap_TileTypes(BinaryWriter File)
         {
-            clsResult ReturnResult = new clsResult("Serializing tile types", false);
-            logger.Info ("Serializing tile types");
-            int A = 0;
+            var ReturnResult = new clsResult("Serializing tile types", false);
+            logger.Info("Serializing tile types");
+            var A = 0;
 
             try
             {
@@ -670,181 +678,223 @@ namespace SharpFlame.Mapping
 
         public clsResult Load_FMap(string path)
         {
-            clsResult returnResult = new clsResult(string.Format("Loading FMap from \"{0}\"", path), false);
-            logger.Info (string.Format("Loading FMap from \"{0}\"", path));
+            var returnResult = new clsResult(string.Format("Loading FMap from \"{0}\"", path), false);
+            logger.Info(string.Format("Loading FMap from \"{0}\"", path));
 
-            using (var zip = ZipFile.Read(path)) {
+            using ( var zip = ZipFile.Read(path) )
+            {
                 /*
                  * Info.ini loading
                  */
-                ZipEntry infoIniEntry = zip ["info.ini"]; // Case insensetive.
-                if (infoIniEntry == null) {
-                    returnResult.ProblemAdd ("Unable to find file \"info.ini\".");
+                var infoIniEntry = zip["info.ini"]; // Case insensetive.
+                if ( infoIniEntry == null )
+                {
+                    returnResult.ProblemAdd("Unable to find file \"info.ini\".");
                     return returnResult;
                 }
 
                 FMapInfo resultInfo = null;
-                using (Stream s = infoIniEntry.OpenReader()) {
-                    StreamReader reader = new StreamReader (s);
-                    returnResult.Add (Read_FMap_Info (reader, ref resultInfo));
-                    reader.Close ();
-                    if (returnResult.HasProblems) {
+                using ( Stream s = infoIniEntry.OpenReader() )
+                {
+                    var reader = new StreamReader(s);
+                    returnResult.Add(Read_FMap_Info(reader, ref resultInfo));
+                    reader.Close();
+                    if ( returnResult.HasProblems )
+                    {
                         return returnResult;
                     }
                 }
 
-                XYInt newTerrainSize = resultInfo.TerrainSize;
+                var newTerrainSize = resultInfo.TerrainSize;
                 Tileset = resultInfo.Tileset;
 
-                if (newTerrainSize.X <= 0 | newTerrainSize.X > Constants.MapMaxSize) {
-                    returnResult.ProblemAdd (string.Format ("Map width of {0} is not valid.", newTerrainSize.X));
+                if ( newTerrainSize.X <= 0 | newTerrainSize.X > Constants.MapMaxSize )
+                {
+                    returnResult.ProblemAdd(string.Format("Map width of {0} is not valid.", newTerrainSize.X));
                 }
-                if (newTerrainSize.Y <= 0 | newTerrainSize.Y > Constants.MapMaxSize) {
-                    returnResult.ProblemAdd (string.Format ("Map height of {0} is not valid.", newTerrainSize.Y));
+                if ( newTerrainSize.Y <= 0 | newTerrainSize.Y > Constants.MapMaxSize )
+                {
+                    returnResult.ProblemAdd(string.Format("Map height of {0} is not valid.", newTerrainSize.Y));
                 }
-                if (returnResult.HasProblems) {
+                if ( returnResult.HasProblems )
+                {
                     return returnResult;
                 }
 
-                SetPainterToDefaults (); //depends on tileset. must be called before loading the terrains.
-                TerrainBlank (newTerrainSize);
-                TileType_Reset ();
+                SetPainterToDefaults(); //depends on tileset. must be called before loading the terrains.
+                TerrainBlank(newTerrainSize);
+                TileType_Reset();
 
                 // vertexheight.dat
-                ZipEntry vhEntry = zip ["vertexheight.dat"]; // Case insensetive.
-                if (vhEntry == null) {
-                    returnResult.ProblemAdd ("Unable to find file \"vertexheight.dat\".");
-                } else {
-                    using (Stream s = vhEntry.OpenReader()) {
-                        BinaryReader reader = new BinaryReader (s);
-                        returnResult.Add (Read_FMap_VertexHeight (reader));
-                        reader.Close ();
+                var vhEntry = zip["vertexheight.dat"]; // Case insensetive.
+                if ( vhEntry == null )
+                {
+                    returnResult.ProblemAdd("Unable to find file \"vertexheight.dat\".");
+                }
+                else
+                {
+                    using ( Stream s = vhEntry.OpenReader() )
+                    {
+                        var reader = new BinaryReader(s);
+                        returnResult.Add(Read_FMap_VertexHeight(reader));
+                        reader.Close();
                     }
                 }
 
                 // vertexterrain.dat
-                ZipEntry vtEntry = zip ["vertexterrain.dat"]; // Case insensetive.
-                if (vtEntry == null) {
-                    returnResult.ProblemAdd ("Unable to find file \"vertexterrain.dat\".");
-                } else {
-                    using (Stream s = vtEntry.OpenReader()) {
-                        BinaryReader reader = new BinaryReader (s);
-                        returnResult.Add (Read_FMap_VertexTerrain (reader));
-                        reader.Close ();
+                var vtEntry = zip["vertexterrain.dat"]; // Case insensetive.
+                if ( vtEntry == null )
+                {
+                    returnResult.ProblemAdd("Unable to find file \"vertexterrain.dat\".");
+                }
+                else
+                {
+                    using ( Stream s = vtEntry.OpenReader() )
+                    {
+                        var reader = new BinaryReader(s);
+                        returnResult.Add(Read_FMap_VertexTerrain(reader));
+                        reader.Close();
                     }
-                }            
+                }
 
                 // tiletexture.dat
-                ZipEntry ttEntry = zip ["tiletexture.dat"]; // Case insensetive.
-                if (vtEntry == null) {
-                    returnResult.ProblemAdd ("Unable to find file \"tiletexture.dat\".");
-                } else {
-                    using (Stream s = ttEntry.OpenReader()) {
-                        BinaryReader reader = new BinaryReader (s);
-                        returnResult.Add (Read_FMap_TileTexture (reader));
-                        reader.Close ();
+                var ttEntry = zip["tiletexture.dat"]; // Case insensetive.
+                if ( vtEntry == null )
+                {
+                    returnResult.ProblemAdd("Unable to find file \"tiletexture.dat\".");
+                }
+                else
+                {
+                    using ( Stream s = ttEntry.OpenReader() )
+                    {
+                        var reader = new BinaryReader(s);
+                        returnResult.Add(Read_FMap_TileTexture(reader));
+                        reader.Close();
                     }
                 }
 
                 // tileorientation.dat
-                ZipEntry toEntry = zip ["tileorientation.dat"]; // Case insensetive.
-                if (toEntry == null) {
-                    returnResult.ProblemAdd ("Unable to find file \"tileorientation.dat\".");
-                } else {
-                    using (Stream s = toEntry.OpenReader()) {
-                        BinaryReader reader = new BinaryReader (s);
-                        returnResult.Add (Read_FMap_TileOrientation (reader));
-                        reader.Close ();
+                var toEntry = zip["tileorientation.dat"]; // Case insensetive.
+                if ( toEntry == null )
+                {
+                    returnResult.ProblemAdd("Unable to find file \"tileorientation.dat\".");
+                }
+                else
+                {
+                    using ( Stream s = toEntry.OpenReader() )
+                    {
+                        var reader = new BinaryReader(s);
+                        returnResult.Add(Read_FMap_TileOrientation(reader));
+                        reader.Close();
                     }
                 }
 
                 // tilecliff.dat
-                ZipEntry tcEntry = zip ["tilecliff.dat"]; // Case insensetive.
-                if (tcEntry == null) {
-                    returnResult.ProblemAdd ("Unable to find file \"tilecliff.dat\".");
-                } else {
-                    using (Stream s = tcEntry.OpenReader()) {
-                        BinaryReader reader = new BinaryReader (s);
-                        returnResult.Add (Read_FMap_TileCliff (reader));
-                        reader.Close ();
+                var tcEntry = zip["tilecliff.dat"]; // Case insensetive.
+                if ( tcEntry == null )
+                {
+                    returnResult.ProblemAdd("Unable to find file \"tilecliff.dat\".");
+                }
+                else
+                {
+                    using ( Stream s = tcEntry.OpenReader() )
+                    {
+                        var reader = new BinaryReader(s);
+                        returnResult.Add(Read_FMap_TileCliff(reader));
+                        reader.Close();
                     }
                 }
 
                 // roads.dat
-                ZipEntry roEntry = zip ["roads.dat"]; // Case insensetive.
-                if (roEntry == null) {
-                    returnResult.ProblemAdd ("Unable to find file \"roads.dat\".");
-                } else {
-                    using (Stream s = roEntry.OpenReader()) {
-                        BinaryReader reader = new BinaryReader (s);
-                        returnResult.Add (Read_FMap_Roads (reader));
-                        reader.Close ();
+                var roEntry = zip["roads.dat"]; // Case insensetive.
+                if ( roEntry == null )
+                {
+                    returnResult.ProblemAdd("Unable to find file \"roads.dat\".");
+                }
+                else
+                {
+                    using ( Stream s = roEntry.OpenReader() )
+                    {
+                        var reader = new BinaryReader(s);
+                        returnResult.Add(Read_FMap_Roads(reader));
+                        reader.Close();
                     }
                 }
 
                 // objects.ini
-                ZipEntry obEntry = zip ["objects.ini"]; // Case insensetive.
-                if (obEntry == null) {
-                    returnResult.ProblemAdd ("Unable to find file \"objects.ini\".");
-                } else {
-                    using (Stream s = obEntry.OpenReader()) {
-                        StreamReader reader = new StreamReader (s);
-                        returnResult.Add (Read_FMap_Objects (reader));
-                        reader.Close ();
+                var obEntry = zip["objects.ini"]; // Case insensetive.
+                if ( obEntry == null )
+                {
+                    returnResult.ProblemAdd("Unable to find file \"objects.ini\".");
+                }
+                else
+                {
+                    using ( Stream s = obEntry.OpenReader() )
+                    {
+                        var reader = new StreamReader(s);
+                        returnResult.Add(Read_FMap_Objects(reader));
+                        reader.Close();
                     }
                 }
 
                 // gateways.ini
-                ZipEntry gaEntry = zip ["gateways.ini"]; // Case insensetive.
-                if (gaEntry == null) {
-                    returnResult.ProblemAdd ("Unable to find file \"gateways.ini\".");
+                var gaEntry = zip["gateways.ini"]; // Case insensetive.
+                if ( gaEntry == null )
+                {
+                    returnResult.ProblemAdd("Unable to find file \"gateways.ini\".");
                     return returnResult;
-                } else {
-                    using (Stream s = gaEntry.OpenReader()) {
-                        StreamReader reader = new StreamReader (s);
-                        returnResult.Add (Read_FMap_Gateways (reader));
-                        reader.Close ();
-                    }
+                }
+                using ( Stream s = gaEntry.OpenReader() )
+                {
+                    var reader = new StreamReader(s);
+                    returnResult.Add(Read_FMap_Gateways(reader));
+                    reader.Close();
                 }
 
                 // tiletypes.dat
-                ZipEntry tileTypesEntry = zip ["tiletypes.dat"]; // Case insensetive.
-                if (tileTypesEntry == null) {
-                    returnResult.ProblemAdd ("Unable to find file \"tiletypes.dat\".");
-                } else {
-                    using (Stream s = tileTypesEntry.OpenReader()) {
-                        BinaryReader reader = new BinaryReader (s);
-                        returnResult.Add (Read_FMap_TileTypes (reader));
-                        reader.Close ();
+                var tileTypesEntry = zip["tiletypes.dat"]; // Case insensetive.
+                if ( tileTypesEntry == null )
+                {
+                    returnResult.ProblemAdd("Unable to find file \"tiletypes.dat\".");
+                }
+                else
+                {
+                    using ( Stream s = tileTypesEntry.OpenReader() )
+                    {
+                        var reader = new BinaryReader(s);
+                        returnResult.Add(Read_FMap_TileTypes(reader));
+                        reader.Close();
                     }
                 }
 
                 // scriptlabels.ini
-                ZipEntry scriptLabelsEntry = zip ["scriptlabels.ini"]; // Case insensetive.
-                if (scriptLabelsEntry == null) {
-                    returnResult.ProblemAdd ("Unable to find file \"scriptlabels.ini\".");
+                var scriptLabelsEntry = zip["scriptlabels.ini"]; // Case insensetive.
+                if ( scriptLabelsEntry == null )
+                {
+                    returnResult.ProblemAdd("Unable to find file \"scriptlabels.ini\".");
                     return returnResult;
-                } else {
-					if (scriptLabelsEntry != null) {
-						using (var reader = new StreamReader(scriptLabelsEntry.OpenReader())) {
-							var text = reader.ReadToEnd ();
-							returnResult.Add (Read_INI_Labels (text));
-						}
-					}
+                }
+                if ( scriptLabelsEntry != null )
+                {
+                    using ( var reader = new StreamReader(scriptLabelsEntry.OpenReader()) )
+                    {
+                        var text = reader.ReadToEnd();
+                        returnResult.Add(Read_INI_Labels(text));
+                    }
                 }
 
                 InterfaceOptions = resultInfo.InterfaceOptions;
-            }           
+            }
 
             return returnResult;
         }
 
         private clsResult Read_FMap_Info(StreamReader File, ref FMapInfo ResultInfo)
         {
-            clsResult ReturnResult = new clsResult("Read general map info", false);
-            logger.Info ("Read general map info");
+            var ReturnResult = new clsResult("Read general map info", false);
+            logger.Info("Read general map info");
 
-            Section InfoINI = new Section();
+            var InfoINI = new Section();
             ReturnResult.Take(InfoINI.ReadFile(File));
 
             ResultInfo = new FMapInfo();
@@ -860,11 +910,11 @@ namespace SharpFlame.Mapping
 
         private clsResult Read_FMap_VertexHeight(BinaryReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading vertex heights", false);
-            logger.Info ("Reading vertex heights");
+            var ReturnResult = new clsResult("Reading vertex heights", false);
+            logger.Info("Reading vertex heights");
 
-            int X = 0;
-            int Y = 0;
+            var X = 0;
+            var Y = 0;
 
             try
             {
@@ -892,14 +942,14 @@ namespace SharpFlame.Mapping
 
         private clsResult Read_FMap_VertexTerrain(BinaryReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading vertex terrain", false);
-            logger.Info ("Reading vertex terrain");
+            var ReturnResult = new clsResult("Reading vertex terrain", false);
+            logger.Info("Reading vertex terrain");
 
-            int X = 0;
-            int Y = 0;
-            int Value = 0;
+            var X = 0;
+            var Y = 0;
+            var Value = 0;
             byte byteTemp = 0;
-            int WarningCount = 0;
+            var WarningCount = 0;
 
             try
             {
@@ -951,11 +1001,11 @@ namespace SharpFlame.Mapping
 
         public clsResult Read_FMap_TileTexture(BinaryReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading tile textures", false);
-            logger.Info ("Reading tile textures");
+            var ReturnResult = new clsResult("Reading tile textures", false);
+            logger.Info("Reading tile textures");
 
-            int X = 0;
-            int Y = 0;
+            var X = 0;
+            var Y = 0;
             byte byteTemp = 0;
 
             try
@@ -985,14 +1035,14 @@ namespace SharpFlame.Mapping
 
         public clsResult Read_FMap_TileOrientation(BinaryReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading tile orientations", false);
-            logger.Info ("Reading tile orientations");
+            var ReturnResult = new clsResult("Reading tile orientations", false);
+            logger.Info("Reading tile orientations");
 
-            int X = 0;
-            int Y = 0;
-            int Value = 0;
-            int PartValue = 0;
-            int WarningCount = 0;
+            var X = 0;
+            var Y = 0;
+            var Value = 0;
+            var PartValue = 0;
+            var WarningCount = 0;
 
             try
             {
@@ -1051,15 +1101,15 @@ namespace SharpFlame.Mapping
 
         public clsResult Read_FMap_TileCliff(BinaryReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading tile cliffs", false);
-            logger.Info ("Reading tile cliffs");
+            var ReturnResult = new clsResult("Reading tile cliffs", false);
+            logger.Info("Reading tile cliffs");
 
-            int X = 0;
-            int Y = 0;
-            int Value = 0;
-            int PartValue = 0;
-            int DownSideWarningCount = 0;
-            int WarningCount = 0;
+            var X = 0;
+            var Y = 0;
+            var Value = 0;
+            var PartValue = 0;
+            var DownSideWarningCount = 0;
+            var WarningCount = 0;
 
             try
             {
@@ -1162,13 +1212,13 @@ namespace SharpFlame.Mapping
 
         public clsResult Read_FMap_Roads(BinaryReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading roads", false);
-            logger.Info ("Reading roads");
+            var ReturnResult = new clsResult("Reading roads", false);
+            logger.Info("Reading roads");
 
-            int X = 0;
-            int Y = 0;
-            int Value = 0;
-            int WarningCount = 0;
+            var X = 0;
+            var Y = 0;
+            var Value = 0;
+            var WarningCount = 0;
 
             try
             {
@@ -1244,32 +1294,32 @@ namespace SharpFlame.Mapping
 
         private clsResult Read_FMap_Objects(StreamReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading objects", false);
-            logger.Info ("Reading objects");
+            var ReturnResult = new clsResult("Reading objects", false);
+            logger.Info("Reading objects");
 
-            int A = 0;
+            var A = 0;
 
-            IniReader ObjectsINI = new IniReader();
+            var ObjectsINI = new IniReader();
             ReturnResult.Take(ObjectsINI.ReadFile(File));
 
-            FMapIniObjects INIObjects = new FMapIniObjects(ObjectsINI.Sections.Count);
+            var INIObjects = new FMapIniObjects(ObjectsINI.Sections.Count);
             ReturnResult.Take(ObjectsINI.Translate(INIObjects));
 
-            int DroidComponentUnknownCount = 0;
-            int ObjectTypeMissingCount = 0;
-            int ObjectPlayerNumInvalidCount = 0;
-            int ObjectPosInvalidCount = 0;
-            int DesignTypeUnspecifiedCount = 0;
-            int UnknownUnitTypeCount = 0;
-            int MaxUnknownUnitTypeWarningCount = 16;
+            var DroidComponentUnknownCount = 0;
+            var ObjectTypeMissingCount = 0;
+            var ObjectPlayerNumInvalidCount = 0;
+            var ObjectPosInvalidCount = 0;
+            var DesignTypeUnspecifiedCount = 0;
+            var UnknownUnitTypeCount = 0;
+            var MaxUnknownUnitTypeWarningCount = 16;
 
-            DroidDesign DroidDesign = default(DroidDesign);
-            clsUnit NewObject = default(clsUnit);
-            clsUnitAdd UnitAdd = new clsUnitAdd();
-            UnitTypeBase unitTypeBase = default(UnitTypeBase);
-            bool IsDesign = default(bool);
-            clsUnitGroup UnitGroup = default(clsUnitGroup);
-            XYInt ZeroPos = new XYInt(0, 0);
+            var DroidDesign = default(DroidDesign);
+            var NewObject = default(clsUnit);
+            var UnitAdd = new clsUnitAdd();
+            var unitTypeBase = default(UnitTypeBase);
+            var IsDesign = default(bool);
+            var UnitGroup = default(clsUnitGroup);
+            var ZeroPos = new XYInt(0, 0);
             UInt32 AvailableID = 0;
 
             UnitAdd.Map = this;
@@ -1368,7 +1418,7 @@ namespace SharpFlame.Mapping
                             {
                                 if ( UnknownUnitTypeCount < MaxUnknownUnitTypeWarningCount )
                                 {
-                                    ReturnResult.WarningAdd ("\"{0}\" is ont a loaded object.".Format2 (INIObjects.Objects[A].Code));
+                                    ReturnResult.WarningAdd("\"{0}\" is ont a loaded object.".Format2(INIObjects.Objects[A].Code));
                                 }
                                 UnknownUnitTypeCount++;
                             }
@@ -1480,17 +1530,17 @@ namespace SharpFlame.Mapping
 
         public clsResult Read_FMap_Gateways(StreamReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading gateways", false);
-            logger.Info ("Reading gateways");
+            var ReturnResult = new clsResult("Reading gateways", false);
+            logger.Info("Reading gateways");
 
-            IniReader GatewaysINI = new IniReader();
+            var GatewaysINI = new IniReader();
             ReturnResult.Take(GatewaysINI.ReadFile(File));
 
-            FMapIniGateways INIGateways = new FMapIniGateways(GatewaysINI.Sections.Count);
+            var INIGateways = new FMapIniGateways(GatewaysINI.Sections.Count);
             ReturnResult.Take(GatewaysINI.Translate(INIGateways));
 
-            int A = 0;
-            int InvalidGatewayCount = 0;
+            var A = 0;
+            var InvalidGatewayCount = 0;
 
             for ( A = 0; A <= INIGateways.GatewayCount - 1; A++ )
             {
@@ -1510,12 +1560,12 @@ namespace SharpFlame.Mapping
 
         public clsResult Read_FMap_TileTypes(BinaryReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading tile types", false);
-            logger.Info ("Reading tile types");
+            var ReturnResult = new clsResult("Reading tile types", false);
+            logger.Info("Reading tile types");
 
-            int A = 0;
+            var A = 0;
             byte byteTemp = 0;
-            int InvalidTypeCount = 0;
+            var InvalidTypeCount = 0;
 
             try
             {
@@ -1556,162 +1606,166 @@ namespace SharpFlame.Mapping
 
         public clsResult Read_INI_Labels(string iniText)
         {
-            clsResult resultObject = new clsResult ("Reading labels", false);
-            logger.Info ("Reading labels.");
+            var resultObject = new clsResult("Reading labels", false);
+            logger.Info("Reading labels.");
 
-            int typeNum = 0;
-            clsScriptPosition NewPosition = default(clsScriptPosition);
-            clsScriptArea NewArea = default(clsScriptArea);
-            string nameText = "";
-            string strLabel = "";
-            string strPosA = "";
-            string strPosB = "";
-            string idText = "";
+            var typeNum = 0;
+            var NewPosition = default(clsScriptPosition);
+            var NewArea = default(clsScriptArea);
+            var nameText = "";
+            var strLabel = "";
+            var strPosA = "";
+            var strPosB = "";
+            var idText = "";
             UInt32 idNum = 0;
             XYInt xyIntA = null;
             XYInt xyIntB = null;
 
-            int failedCount = 0;
-            int modifiedCount = 0;
+            var failedCount = 0;
+            var modifiedCount = 0;
 
             try
             {
-                var iniSections = SharpFlame.Core.Parsers.Ini.IniReader.ReadString (iniText);
-                foreach (var iniSection in iniSections)
+                var iniSections = Core.Parsers.Ini.IniReader.ReadString(iniText);
+                foreach ( var iniSection in iniSections )
                 {
-                    var idx = iniSection.Name.IndexOf ('_');
-                    if (idx > 0) {
-                        nameText = iniSection.Name.Substring (0, idx);
-                    } else {
+                    var idx = iniSection.Name.IndexOf('_');
+                    if ( idx > 0 )
+                    {
+                        nameText = iniSection.Name.Substring(0, idx);
+                    }
+                    else
+                    {
                         nameText = iniSection.Name;
                     }
-                    switch (nameText)
+                    switch ( nameText )
                     {
-                    case "position":
-                        typeNum = 0;
-                        break;
-                    case "area":
-                        typeNum = 1;
-                        break;
-                    case "object":
-                        typeNum = int.MaxValue;
-                        failedCount++;
-                        continue;
-                    default:
-                        typeNum = int.MaxValue;
-                        failedCount++;
-                        continue;
+                        case "position":
+                            typeNum = 0;
+                            break;
+                        case "area":
+                            typeNum = 1;
+                            break;
+                        case "object":
+                            typeNum = int.MaxValue;
+                            failedCount++;
+                            continue;
+                        default:
+                            typeNum = int.MaxValue;
+                            failedCount++;
+                            continue;
                     }
 
                     // Raised an exception if nothing was found
                     try
                     {
-                        strLabel = iniSection.Data.Where (d => d.Name == "label").First ().Data;
-                    } catch (Exception ex)
+                        strLabel = iniSection.Data.Where(d => d.Name == "label").First().Data;
+                    }
+                    catch ( Exception ex )
                     {
-                        resultObject.WarningAdd (string.Format ("Failed to parse \"label\", error was: {0}", ex.Message));
-                        logger.WarnException ("Failed to parse \"label\", error was", ex);
+                        resultObject.WarningAdd(string.Format("Failed to parse \"label\", error was: {0}", ex.Message));
+                        logger.WarnException("Failed to parse \"label\", error was", ex);
                         failedCount++;
                         continue;
                     }
-                    strLabel = strLabel.Replace ("\"", "");
+                    strLabel = strLabel.Replace("\"", "");
 
-                    switch (typeNum)
+                    switch ( typeNum )
                     {
                         case 0: //position
-                        strPosA = iniSection.Data.Where (d => d.Name == "pos").First ().Data;
-                        if (strPosA == null)
-                        {
-                            failedCount++;
-                            continue;
-                        }
-                        try
-                        {
-                            xyIntA = XYInt.FromString (strPosA);
-                            NewPosition = new clsScriptPosition (this);
-                            NewPosition.PosX = xyIntA.X;
-                            NewPosition.PosY = xyIntA.Y;
-                            NewPosition.SetLabel (strLabel);
-                            if (NewPosition.Label != strLabel || 
-                                NewPosition.PosX != xyIntA.X || NewPosition.PosY != xyIntA.Y)
-                            {
-                                modifiedCount++;
-                            }
-                        } catch (Exception ex)
-                        {
-                            resultObject.WarningAdd (string.Format ("Failed to parse \"pos\", error was: {0}", ex.Message));
-                            logger.WarnException ("Failed to parse \"pos\", error was", ex);
-                            failedCount++;
-                            continue;
-                        }
-                        break;
-                        case 1: //area
-                        try
-                        {
-                            strPosA = iniSection.Data.Where (d => d.Name == "pos1").First ().Data;
-                            strPosB = iniSection.Data.Where (d => d.Name == "pos2").First ().Data;
-
-                            xyIntA = XYInt.FromString (strPosA);
-                            xyIntB = XYInt.FromString (strPosA);
-                            NewArea = new clsScriptArea (this);
-                            NewArea.SetPositions (xyIntA, xyIntB);
-                            NewArea.SetLabel (strLabel);
-                            if (NewArea.Label != strLabel || NewArea.PosAX != xyIntA.X | NewArea.PosAY != xyIntA.Y
-                                | NewArea.PosBX != xyIntB.X | NewArea.PosBY != xyIntB.Y)
-                            {
-                                modifiedCount++;
-                            }
-                        } catch (Exception ex)
-                        {
-                            Debugger.Break ();
-                            resultObject.WarningAdd (string.Format ("Failed to parse \"pos1\" or \"pos2\", error was: {0}", ex.Message));
-                            logger.WarnException ("Failed to parse \"pos1\" or \"pos2\".", ex);
-                            failedCount++;
-                            continue;
-                        }
-                        break;
-                        case 2: //object
-                        idText = iniSection.Data.Where (d => d.Name == "id").First ().Data;
-                        if (IOUtil.InvariantParse (idText, ref idNum))
-                        {
-                            clsUnit Unit = IDUsage (idNum);
-                            if (Unit != null)
-                            {
-                                if (!Unit.SetLabel (strLabel).Success)
-                                {
-                                    failedCount++;
-                                    continue;
-                                }
-                            } else
+                            strPosA = iniSection.Data.Where(d => d.Name == "pos").First().Data;
+                            if ( strPosA == null )
                             {
                                 failedCount++;
                                 continue;
                             }
-                        }
-                        break;
+                            try
+                            {
+                                xyIntA = XYInt.FromString(strPosA);
+                                NewPosition = new clsScriptPosition(this);
+                                NewPosition.PosX = xyIntA.X;
+                                NewPosition.PosY = xyIntA.Y;
+                                NewPosition.SetLabel(strLabel);
+                                if ( NewPosition.Label != strLabel ||
+                                     NewPosition.PosX != xyIntA.X || NewPosition.PosY != xyIntA.Y )
+                                {
+                                    modifiedCount++;
+                                }
+                            }
+                            catch ( Exception ex )
+                            {
+                                resultObject.WarningAdd(string.Format("Failed to parse \"pos\", error was: {0}", ex.Message));
+                                logger.WarnException("Failed to parse \"pos\", error was", ex);
+                                failedCount++;
+                            }
+                            break;
+                        case 1: //area
+                            try
+                            {
+                                strPosA = iniSection.Data.Where(d => d.Name == "pos1").First().Data;
+                                strPosB = iniSection.Data.Where(d => d.Name == "pos2").First().Data;
+
+                                xyIntA = XYInt.FromString(strPosA);
+                                xyIntB = XYInt.FromString(strPosA);
+                                NewArea = new clsScriptArea(this);
+                                NewArea.SetPositions(xyIntA, xyIntB);
+                                NewArea.SetLabel(strLabel);
+                                if ( NewArea.Label != strLabel || NewArea.PosAX != xyIntA.X | NewArea.PosAY != xyIntA.Y
+                                     | NewArea.PosBX != xyIntB.X | NewArea.PosBY != xyIntB.Y )
+                                {
+                                    modifiedCount++;
+                                }
+                            }
+                            catch ( Exception ex )
+                            {
+                                Debugger.Break();
+                                resultObject.WarningAdd(string.Format("Failed to parse \"pos1\" or \"pos2\", error was: {0}", ex.Message));
+                                logger.WarnException("Failed to parse \"pos1\" or \"pos2\".", ex);
+                                failedCount++;
+                            }
+                            break;
+                        case 2: //object
+                            idText = iniSection.Data.Where(d => d.Name == "id").First().Data;
+                            if ( IOUtil.InvariantParse(idText, ref idNum) )
+                            {
+                                var Unit = IDUsage(idNum);
+                                if ( Unit != null )
+                                {
+                                    if ( !Unit.SetLabel(strLabel).Success )
+                                    {
+                                        failedCount++;
+                                    }
+                                }
+                                else
+                                {
+                                    failedCount++;
+                                }
+                            }
+                            break;
                         default:
-                        resultObject.WarningAdd ("Error! Bad type number for script label.");
-                        break;
+                            resultObject.WarningAdd("Error! Bad type number for script label.");
+                            break;
                     }
                 }
-            } catch (Exception ex)
+            }
+            catch ( Exception ex )
             {
-                Debugger.Break ();
-                logger.ErrorException ("Got exception while reading labels.ini", ex);
-                resultObject.ProblemAdd (string.Format ("Got exception: {0}", ex.Message), false);
+                Debugger.Break();
+                logger.ErrorException("Got exception while reading labels.ini", ex);
+                resultObject.ProblemAdd(string.Format("Got exception: {0}", ex.Message), false);
                 return resultObject;
             }
 
-            if (failedCount > 0)
+            if ( failedCount > 0 )
             {
-                resultObject.WarningAdd (string.Format ("Unable to translate {0} script labels.", failedCount));
+                resultObject.WarningAdd(string.Format("Unable to translate {0} script labels.", failedCount));
             }
-            if (modifiedCount > 0)
+            if ( modifiedCount > 0 )
             {
-                resultObject.WarningAdd (string.Format ("{0} script labels had invalid values and were modified.", modifiedCount));
+                resultObject.WarningAdd(string.Format("{0} script labels had invalid values and were modified.", modifiedCount));
             }
 
             return resultObject;
         }
-    }   
+    }
 }

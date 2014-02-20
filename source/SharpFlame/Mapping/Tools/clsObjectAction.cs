@@ -1,25 +1,25 @@
+#region
+
 using System.Diagnostics;
 using SharpFlame.Collections;
 using SharpFlame.Mapping.Objects;
+
+#endregion
 
 namespace SharpFlame.Mapping.Tools
 {
     public abstract class clsObjectAction : SimpleListTool<clsUnit>
     {
-        public clsMap Map;
-        public clsUnit Unit;
-        private SimpleClassList<clsUnit> _ResultUnits = new SimpleClassList<clsUnit>();
+        private readonly SimpleClassList<clsUnit> _ResultUnits = new SimpleClassList<clsUnit>();
         public bool ActionPerformed;
+        public clsMap Map;
 
         protected clsUnit ResultUnit;
+        public clsUnit Unit;
 
         public SimpleClassList<clsUnit> ResultUnits
         {
             get { return _ResultUnits; }
-        }
-
-        protected virtual void ActionCondition()
-        {
         }
 
         public void ActionPerform()
@@ -50,11 +50,15 @@ namespace SharpFlame.Mapping.Tools
             }
         }
 
-        protected abstract void _ActionPerform();
-
         public void SetItem(clsUnit Item)
         {
             Unit = Item;
         }
+
+        protected virtual void ActionCondition()
+        {
+        }
+
+        protected abstract void _ActionPerform();
     }
 }

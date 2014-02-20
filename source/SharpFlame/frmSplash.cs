@@ -1,3 +1,9 @@
+#region
+
+using System;
+
+#endregion
+
 namespace SharpFlame
 {
     public partial class frmSplash
@@ -10,9 +16,8 @@ namespace SharpFlame
             lblVersion.Text = Constants.ProgramVersionNumber;
         }
 
-        private void pictureBox1_Click( object sender, System.EventArgs e )
+        private void pictureBox1_Click(object sender, EventArgs e)
         {
-
         }
     }
 }

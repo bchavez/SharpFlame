@@ -1,5 +1,9 @@
+#region
+
 using System.Windows.Forms;
 using SharpFlame.Util;
+
+#endregion
 
 namespace SharpFlame.AppSettings
 {
@@ -7,26 +11,7 @@ namespace SharpFlame.AppSettings
     {
         public Keys[] Keys;
         public Keys[] UnlessKeys;
-
-        private bool IsPressed(clsKeysActive KeysDown)
-        {
-            foreach ( Keys keys in Keys )
-            {
-                if ( !KeysDown.Keys[(int)keys] )
-                {
-                    return false;
-                }
-            }
-            foreach ( Keys keys in UnlessKeys )
-            {
-                if ( KeysDown.Keys[(int)keys] )
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
+        private bool _Active;
 
         public KeyboardControl(Keys[] Keys)
         {
@@ -40,11 +25,29 @@ namespace SharpFlame.AppSettings
             this.UnlessKeys = UnlessKeys;
         }
 
-        private bool _Active;
-
         public bool Active
         {
             get { return _Active; }
+        }
+
+        private bool IsPressed(clsKeysActive KeysDown)
+        {
+            foreach ( var keys in Keys )
+            {
+                if ( !KeysDown.Keys[(int)keys] )
+                {
+                    return false;
+                }
+            }
+            foreach ( var keys in UnlessKeys )
+            {
+                if ( KeysDown.Keys[(int)keys] )
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public void KeysChanged(clsKeysActive KeysDown)

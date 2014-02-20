@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Diagnostics;
 using SharpFlame.Collections;
@@ -5,31 +7,28 @@ using SharpFlame.Core.Domain;
 using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
-using SharpFlame.FileIO.Ini;
 using SharpFlame.Maths;
 using SharpFlame.Util;
+
+#endregion
 
 namespace SharpFlame.Mapping.Objects
 {
     public class clsUnit : IEquatable<clsUnit>
     {
+        public double Health = 1.0D;
+        public UInt32 ID;
         public ConnectedListLink<clsUnit, clsMap> MapLink;
         public ConnectedListLink<clsUnit, clsMap> MapSelectedUnitLink;
-        public ConnectedList<clsUnitSectorConnection, clsUnit> Sectors;
-
-        public UInt32 ID;
-        public UnitTypeBase TypeBase;
         public WorldPos Pos;
-        public int Rotation;
-        public clsUnitGroup UnitGroup;
-        public int SavePriority;
-        public double Health = 1.0D;
         public bool PreferPartsOutput = false;
+        public int Rotation;
+        public int SavePriority;
+        public ConnectedList<clsUnitSectorConnection, clsUnit> Sectors;
+        public UnitTypeBase TypeBase;
+        public clsUnitGroup UnitGroup;
 
         private string label;
-        public string Label {
-            get { return label; }
-        }
 
         public clsUnit()
         {
@@ -44,7 +43,7 @@ namespace SharpFlame.Mapping.Objects
             MapSelectedUnitLink = new ConnectedListLink<clsUnit, clsMap>(this);
             Sectors = new ConnectedList<clsUnitSectorConnection, clsUnit>(this);
 
-            bool IsDesign = default(bool);
+            var IsDesign = default(bool);
 
             if ( unitToCopy.TypeBase.Type == UnitType.PlayerDroid )
             {
@@ -56,7 +55,7 @@ namespace SharpFlame.Mapping.Objects
             }
             if ( IsDesign )
             {
-                DroidDesign DroidDesign = new DroidDesign();
+                var DroidDesign = new DroidDesign();
                 TypeBase = DroidDesign;
                 DroidDesign.CopyDesign((DroidDesign)unitToCopy.TypeBase);
                 DroidDesign.UpdateAttachments();
@@ -67,7 +66,7 @@ namespace SharpFlame.Mapping.Objects
             }
             Pos = unitToCopy.Pos;
             Rotation = unitToCopy.Rotation;
-            clsUnitGroup otherUnitGroup = default(clsUnitGroup);
+            var otherUnitGroup = default(clsUnitGroup);
             otherUnitGroup = unitToCopy.UnitGroup;
             if ( otherUnitGroup.WZ_StartPos < 0 )
             {
@@ -82,6 +81,18 @@ namespace SharpFlame.Mapping.Objects
             PreferPartsOutput = unitToCopy.PreferPartsOutput;
         }
 
+        public string Label
+        {
+            get { return label; }
+        }
+
+        public bool Equals(clsUnit other)
+        {
+            if ( other == null )
+                return false;
+            return (ID.Equals(other.ID));
+        }
+
         public string GetINIPosition()
         {
             return Pos.Horizontal.X.ToStringInvariant() + ", " + Pos.Horizontal.Y.ToStringInvariant() + ", 0";
@@ -89,7 +100,7 @@ namespace SharpFlame.Mapping.Objects
 
         public string GetINIRotation()
         {
-            int rotation16 = 0;
+            var rotation16 = 0;
 
             rotation16 = (int)(Rotation * Constants.INIRotationMax / 360.0D);
             if ( rotation16 >= Constants.INIRotationMax )
@@ -107,7 +118,7 @@ namespace SharpFlame.Mapping.Objects
 
         public string GetINIHealthPercent()
         {
-            return string.Format ("{0}%", (int)(MathUtil.Clamp_dbl (Health * 100.0D, 1.0D, 100.0D)));
+            return string.Format("{0}%", (int)(MathUtil.Clamp_dbl(Health * 100.0D, 1.0D, 100.0D)));
         }
 
         public string GetPosText()
@@ -117,12 +128,12 @@ namespace SharpFlame.Mapping.Objects
 
         public sResult SetLabel(string Text)
         {
-            sResult Result = new sResult();
+            var Result = new sResult();
 
             if ( TypeBase.Type == UnitType.PlayerStructure )
             {
-                StructureTypeBase structureTypeBase = (StructureTypeBase)TypeBase;
-                StructureTypeBase.enumStructureType StructureTypeType = structureTypeBase.StructureType;
+                var structureTypeBase = (StructureTypeBase)TypeBase;
+                var StructureTypeType = structureTypeBase.StructureType;
                 if ( StructureTypeType == StructureTypeBase.enumStructureType.FactoryModule
                      | StructureTypeType == StructureTypeBase.enumStructureType.PowerModule
                      | StructureTypeType == StructureTypeBase.enumStructureType.ResearchModule )
@@ -146,22 +157,19 @@ namespace SharpFlame.Mapping.Objects
                 Result.Problem = "";
                 return Result;
             }
-            else
+            Result = MapLink.Source.ScriptLabelIsValid(Text);
+            if ( Result.Success )
             {
-                Result = MapLink.Source.ScriptLabelIsValid(Text);
-                if ( Result.Success )
-                {
-                    label = Text;
-                }
-                return Result;
+                label = Text;
             }
+            return Result;
         }
 
         public void WriteWZLabel(IniWriter File, int PlayerCount)
         {
             if ( label != null )
             {
-                int TypeNum = 0;
+                var TypeNum = 0;
                 switch ( TypeBase.Type )
                 {
                     case UnitType.PlayerDroid:
@@ -189,7 +197,7 @@ namespace SharpFlame.Mapping.Objects
 
         public UInt32 GetBJOMultiplayerPlayerNum(int PlayerCount)
         {
-            int PlayerNum = 0;
+            var PlayerNum = 0;
 
             if ( UnitGroup == MapLink.Source.ScavengerUnitGroup || UnitGroup.WZ_StartPos < 0 )
             {
@@ -204,7 +212,7 @@ namespace SharpFlame.Mapping.Objects
 
         public UInt32 GetBJOCampaignPlayerNum()
         {
-            int PlayerNum = 0;
+            var PlayerNum = 0;
 
             if ( UnitGroup == MapLink.Source.ScavengerUnitGroup || UnitGroup.WZ_StartPos < 0 )
             {
@@ -261,26 +269,19 @@ namespace SharpFlame.Mapping.Objects
 
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            if ( obj == null )
                 return false;
 
-            clsUnit objAsUnit = obj as clsUnit;
-            if (objAsUnit == null)
+            var objAsUnit = obj as clsUnit;
+            if ( objAsUnit == null )
                 return false;
 
-            return Equals (objAsUnit);
+            return Equals(objAsUnit);
         }
 
         public override int GetHashCode()
         {
             return (int)ID;
-        }
-
-        public bool Equals(clsUnit other)
-        {
-            if (other == null)
-                return false;
-            return (this.ID.Equals (other.ID));
         }
     }
 }

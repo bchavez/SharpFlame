@@ -1,25 +1,22 @@
+#region
+
 using System;
 using SharpFlame.Core.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
-using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame.Mapping.FMap
 {
     public class FMapIniGateways : SectionTranslator
     {
-        public struct sGateway
-        {
-            public XYInt PosA;
-            public XYInt PosB;
-        }
-
-        public sGateway[] Gateways;
         public int GatewayCount;
+        public sGateway[] Gateways;
 
         public FMapIniGateways(int NewGatewayCount)
         {
-            int A = 0;
+            var A = 0;
 
             GatewayCount = NewGatewayCount;
             Gateways = new sGateway[GatewayCount];
@@ -34,33 +31,33 @@ namespace SharpFlame.Mapping.FMap
 
         public override TranslatorResult Translate(int INISectionNum, Section.SectionProperty INIProperty)
         {
-            if ( (string)INIProperty.Name == "ax" )
+            if ( INIProperty.Name == "ax" )
             {
-                int temp_Result = Gateways[INISectionNum].PosA.X;
+                var temp_Result = Gateways[INISectionNum].PosA.X;
                 if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref temp_Result) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "ay" )
+            else if ( INIProperty.Name == "ay" )
             {
-                Int32 temp_Result2 = Gateways[INISectionNum].PosA.Y;
+                var temp_Result2 = Gateways[INISectionNum].PosA.Y;
                 if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref temp_Result2) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "bx" )
+            else if ( INIProperty.Name == "bx" )
             {
-                Int32 temp_Result3 = Gateways[INISectionNum].PosB.X;
+                var temp_Result3 = Gateways[INISectionNum].PosB.X;
                 if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref temp_Result3) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "by" )
+            else if ( INIProperty.Name == "by" )
             {
-                int temp_Result4 = Gateways[INISectionNum].PosB.Y;
+                var temp_Result4 = Gateways[INISectionNum].PosB.Y;
                 if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref temp_Result4) )
                 {
                     return TranslatorResult.ValueInvalid;
@@ -71,6 +68,12 @@ namespace SharpFlame.Mapping.FMap
                 return TranslatorResult.NameUnknown;
             }
             return TranslatorResult.Translated;
+        }
+
+        public struct sGateway
+        {
+            public XYInt PosA;
+            public XYInt PosB;
         }
     }
 }

@@ -1,6 +1,9 @@
+#region
+
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
-using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame.Mapping
 {
@@ -8,6 +11,12 @@ namespace SharpFlame.Mapping
     {
         public sRGBA_sng[] InlinePixels;
         public XYInt Size;
+
+        public clsMinimapTexture(XYInt Size)
+        {
+            this.Size = Size;
+            InlinePixels = new sRGBA_sng[Size.X * Size.Y];
+        }
 
         public sRGBA_sng get_Pixels(int X, int Y)
         {
@@ -17,12 +26,6 @@ namespace SharpFlame.Mapping
         public void set_Pixels(int X, int Y, sRGBA_sng value)
         {
             InlinePixels[Y * Size.X + X] = value;
-        }
-
-        public clsMinimapTexture(XYInt Size)
-        {
-            this.Size = Size;
-            InlinePixels = new sRGBA_sng[Size.X * Size.Y];
         }
     }
 }

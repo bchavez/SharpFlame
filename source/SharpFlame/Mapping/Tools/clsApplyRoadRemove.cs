@@ -1,5 +1,8 @@
+#region
+
 using SharpFlame.Core.Domain;
-using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame.Mapping.Tools
 {

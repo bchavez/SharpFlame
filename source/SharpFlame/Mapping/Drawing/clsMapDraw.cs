@@ -1,11 +1,11 @@
+#region
+
 using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.AppSettings;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
-using SharpFlame.Controls;
-using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping.Drawing;
@@ -15,6 +15,8 @@ using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 using SharpFlame.Util;
 
+#endregion
+
 namespace SharpFlame.Mapping
 {
     public partial class clsMap
@@ -23,48 +25,48 @@ namespace SharpFlame.Mapping
 
         public void GLDraw()
         {
-            XYZDouble XYZ_dbl = default(XYZDouble);
-            int X = 0;
-            int Y = 0;
-            int X2 = 0;
-            int Y2 = 0;
-            int A = 0;
-            int B = 0;
-            int C = 0;
-            int D = 0;
-            sRGBA_sng ColourA = new sRGBA_sng();
-            sRGBA_sng ColourB = new sRGBA_sng();
-            bool ShowMinimapViewPosBox = default(bool);
-            XYDouble ViewCorner0 = default(XYDouble);
-            XYDouble ViewCorner1 = default(XYDouble);
-            XYDouble ViewCorner2 = default(XYDouble);
-            XYDouble ViewCorner3 = default(XYDouble);
+            var XYZ_dbl = default(XYZDouble);
+            var X = 0;
+            var Y = 0;
+            var X2 = 0;
+            var Y2 = 0;
+            var A = 0;
+            var B = 0;
+            var C = 0;
+            var D = 0;
+            var ColourA = new sRGBA_sng();
+            var ColourB = new sRGBA_sng();
+            var ShowMinimapViewPosBox = default(bool);
+            var ViewCorner0 = default(XYDouble);
+            var ViewCorner1 = default(XYDouble);
+            var ViewCorner2 = default(XYDouble);
+            var ViewCorner3 = default(XYDouble);
             double dblTemp = 0;
-            XYZDouble Vertex0 = default(XYZDouble);
-            XYZDouble Vertex1 = default(XYZDouble);
-            XYZDouble Vertex2 = default(XYZDouble);
-            XYZDouble Vertex3 = default(XYZDouble);
-            XYInt ScreenPos = new XYInt();
-            XYZDouble XYZ_dbl2 = default(XYZDouble);
-            WorldPos WorldPos = new WorldPos();
-            XYDouble PosA = default(XYDouble);
-            XYDouble PosB = default(XYDouble);
-            XYDouble PosC = default(XYDouble);
-            XYDouble PosD = default(XYDouble);
-            XYInt MinimapSizeXY = new XYInt();
-            clsUnit Unit = default(clsUnit);
-            XYInt StartXY = new XYInt();
-            XYInt FinishXY = new XYInt();
-            bool DrawIt = default(bool);
-            clsBrush.sPosNum DrawCentreSector = new clsBrush.sPosNum();
-            clsTextLabel SelectionLabel = new clsTextLabel();
-            float[] light_position = new float[4];
-            Matrix3DMath.Matrix3D matrixB = new Matrix3DMath.Matrix3D();
-            clsAction MapAction = default(clsAction);
+            var Vertex0 = default(XYZDouble);
+            var Vertex1 = default(XYZDouble);
+            var Vertex2 = default(XYZDouble);
+            var Vertex3 = default(XYZDouble);
+            var ScreenPos = new XYInt();
+            var XYZ_dbl2 = default(XYZDouble);
+            var WorldPos = new WorldPos();
+            var PosA = default(XYDouble);
+            var PosB = default(XYDouble);
+            var PosC = default(XYDouble);
+            var PosD = default(XYDouble);
+            var MinimapSizeXY = new XYInt();
+            var Unit = default(clsUnit);
+            var StartXY = new XYInt();
+            var FinishXY = new XYInt();
+            var DrawIt = default(bool);
+            var DrawCentreSector = new clsBrush.sPosNum();
+            var SelectionLabel = new clsTextLabel();
+            var light_position = new float[4];
+            var matrixB = new Matrix3DMath.Matrix3D();
+            var MapAction = default(clsAction);
             float ZNearFar = 0;
-            MapViewControl MapViewControl = ViewInfo.MapViewControl;
-            XYInt GLSize = ViewInfo.MapViewControl.GLSize;
-            XYDouble DrawCentre = default(XYDouble);
+            var MapViewControl = ViewInfo.MapViewControl;
+            var GLSize = ViewInfo.MapViewControl.GLSize;
+            var DrawCentre = default(XYDouble);
             double dblTemp2 = 0;
 
             dblTemp = SettingsManager.Settings.MinimapSize;
@@ -90,7 +92,7 @@ namespace SharpFlame.Mapping
                 GetPosSectorNum(new XYInt((int)(DrawCentre.X - Constants.SectorTileSize * Constants.TerrainGridSpacing / 2.0D),
                     (int)(DrawCentre.Y - Constants.SectorTileSize * Constants.TerrainGridSpacing / 2.0D)));
 
-            clsDrawSectorObjects DrawObjects = new clsDrawSectorObjects();
+            var DrawObjects = new clsDrawSectorObjects();
             DrawObjects.Map = this;
             DrawObjects.UnitTextLabels = new clsTextLabels(64);
             DrawObjects.Start();
@@ -102,7 +104,7 @@ namespace SharpFlame.Mapping
 
             GL.Enable(EnableCap.DepthTest);
             GL.MatrixMode(MatrixMode.Projection);
-            Matrix4 temp_mat = Matrix4.CreatePerspectiveFieldOfView(ViewInfo.FieldOfViewY, MapViewControl.OpenGLControl.AspectRatio, ZNearFar / 128.0F, ZNearFar * 128.0F);
+            var temp_mat = Matrix4.CreatePerspectiveFieldOfView(ViewInfo.FieldOfViewY, MapViewControl.OpenGLControl.AspectRatio, ZNearFar / 128.0F, ZNearFar * 128.0F);
             GL.LoadMatrix(ref temp_mat);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
@@ -176,7 +178,7 @@ namespace SharpFlame.Mapping
             {
                 GL.Color3(0.0F, 1.0F, 0.0F);
                 GL.LineWidth(1.0F);
-                clsDrawCallTerrainWireframe DrawCallTerrainWireframe = new clsDrawCallTerrainWireframe();
+                var DrawCallTerrainWireframe = new clsDrawCallTerrainWireframe();
                 DrawCallTerrainWireframe.Map = this;
                 App.VisionSectors.PerformActionMapSectors(DrawCallTerrainWireframe, DrawCentreSector);
 
@@ -203,14 +205,14 @@ namespace SharpFlame.Mapping
 
             //draw painted texture terrain type markers
 
-            sRGB_sng RGB_sng = new sRGB_sng();
+            var RGB_sng = new sRGB_sng();
 
-            clsViewInfo.clsMouseOver.clsOverTerrain MouseOverTerrain = ViewInfo.GetMouseOverTerrain();
+            var MouseOverTerrain = ViewInfo.GetMouseOverTerrain();
 
             if ( App.Draw_VertexTerrain )
             {
                 GL.LineWidth(1.0F);
-                clsDrawVertexTerrain DrawVertexTerran = new clsDrawVertexTerrain();
+                var DrawVertexTerran = new clsDrawVertexTerrain();
                 DrawVertexTerran.Map = this;
                 DrawVertexTerran.ViewAngleMatrix = ViewInfo.ViewAngleMatrix;
                 App.VisionSectors.PerformActionMapSectors(DrawVertexTerran, DrawCentreSector);
@@ -261,7 +263,7 @@ namespace SharpFlame.Mapping
                         }
                     }
                     GL.LineWidth(3.0F);
-                    clsDrawTileAreaOutline DrawSelection = new clsDrawTileAreaOutline();
+                    var DrawSelection = new clsDrawTileAreaOutline();
                     DrawSelection.Map = this;
                     DrawSelection.StartXY = StartXY;
                     DrawSelection.FinishXY = FinishXY;
@@ -293,12 +295,12 @@ namespace SharpFlame.Mapping
                 DebugGLError("Terrain selection vertex");
             }
 
-            clsGateway Gateway = default(clsGateway);
+            var Gateway = default(clsGateway);
 
             if ( App.Draw_Gateways )
             {
                 GL.LineWidth(2.0F);
-                foreach ( clsGateway tempLoopVar_Gateway in Gateways )
+                foreach ( var tempLoopVar_Gateway in Gateways )
                 {
                     Gateway = tempLoopVar_Gateway;
                     if ( Gateway.PosA.X == Gateway.PosB.X )
@@ -669,7 +671,7 @@ namespace SharpFlame.Mapping
 
                 //draw mouseover tiles
 
-                clsBrush ToolBrush = default(clsBrush);
+                var ToolBrush = default(clsBrush);
 
                 if ( modTools.Tool == modTools.Tools.TextureBrush )
                 {
@@ -695,7 +697,7 @@ namespace SharpFlame.Mapping
                 if ( ToolBrush != null )
                 {
                     GL.LineWidth(2.0F);
-                    clsDrawTileOutline DrawTileOutline = new clsDrawTileOutline();
+                    var DrawTileOutline = new clsDrawTileOutline();
                     DrawTileOutline.Map = this;
                     DrawTileOutline.Colour.Red = 0.0F;
                     DrawTileOutline.Colour.Green = 1.0F;
@@ -749,7 +751,7 @@ namespace SharpFlame.Mapping
                 if ( ToolBrush != null )
                 {
                     GL.LineWidth(2.0F);
-                    clsDrawVertexMarker DrawVertexMarker = new clsDrawVertexMarker();
+                    var DrawVertexMarker = new clsDrawVertexMarker();
                     DrawVertexMarker.Map = this;
                     DrawVertexMarker.Colour.Red = 0.0F;
                     DrawVertexMarker.Colour.Green = 1.0F;
@@ -789,10 +791,10 @@ namespace SharpFlame.Mapping
                 GL.Enable(EnableCap.Texture2D);
                 if ( modTools.Tool == modTools.Tools.ObjectPlace )
                 {
-                    UnitTypeBase placeObject = Program.frmMainInstance.SingleSelectedObjectTypeBase;
+                    var placeObject = Program.frmMainInstance.SingleSelectedObjectTypeBase;
                     if ( placeObject != null )
                     {
-                        int Rotation = 0;
+                        var Rotation = 0;
                         try
                         {
                             IOUtil.InvariantParse(Program.frmMainInstance.txtNewObjectRotation.Text, ref Rotation);
@@ -819,25 +821,25 @@ namespace SharpFlame.Mapping
 
             GL.Disable(EnableCap.DepthTest);
 
-            clsTextLabels ScriptMarkerTextLabels = new clsTextLabels(256);
-            clsTextLabel TextLabel = default(clsTextLabel);
+            var ScriptMarkerTextLabels = new clsTextLabels(256);
+            var TextLabel = default(clsTextLabel);
             if ( App.Draw_ScriptMarkers )
             {
-                clsScriptPosition ScriptPosition = default(clsScriptPosition);
-                clsScriptArea ScriptArea = default(clsScriptArea);
+                var ScriptPosition = default(clsScriptPosition);
+                var ScriptArea = default(clsScriptArea);
                 GL.PushMatrix();
                 GL.Translate(Convert.ToDouble(- ViewInfo.ViewPos.X), Convert.ToDouble(- ViewInfo.ViewPos.Y), ViewInfo.ViewPos.Z);
-                foreach ( clsScriptPosition tempLoopVar_ScriptPosition in ScriptPositions )
+                foreach ( var tempLoopVar_ScriptPosition in ScriptPositions )
                 {
                     ScriptPosition = tempLoopVar_ScriptPosition;
                     ScriptPosition.GLDraw();
                 }
-                foreach ( clsScriptArea tempLoopVar_ScriptArea in ScriptAreas )
+                foreach ( var tempLoopVar_ScriptArea in ScriptAreas )
                 {
                     ScriptArea = tempLoopVar_ScriptArea;
                     ScriptArea.GLDraw();
                 }
-                foreach ( clsScriptPosition tempLoopVar_ScriptPosition in ScriptPositions )
+                foreach ( var tempLoopVar_ScriptPosition in ScriptPositions )
                 {
                     ScriptPosition = tempLoopVar_ScriptPosition;
                     if ( ScriptMarkerTextLabels.AtMaxCount() )
@@ -866,7 +868,7 @@ namespace SharpFlame.Mapping
                     }
                 }
                 DebugGLError("Script positions");
-                foreach ( clsScriptArea tempLoopVar_ScriptArea in ScriptAreas )
+                foreach ( var tempLoopVar_ScriptArea in ScriptAreas )
                 {
                     ScriptArea = tempLoopVar_ScriptArea;
                     if ( ScriptMarkerTextLabels.AtMaxCount() )
@@ -899,7 +901,7 @@ namespace SharpFlame.Mapping
                 DebugGLError("Script areas");
             }
 
-            clsTextLabels MessageTextLabels = new clsTextLabels(24);
+            var MessageTextLabels = new clsTextLabels(24);
 
             B = 0;
             for ( A = Math.Max(Messages.Count - MessageTextLabels.MaxCount, 0); A <= Messages.Count - 1; A++ )
@@ -924,7 +926,7 @@ namespace SharpFlame.Mapping
             //draw unit selection
 
             GL.Begin(BeginMode.Quads);
-            foreach ( clsUnit tempLoopVar_Unit in SelectedUnits )
+            foreach ( var tempLoopVar_Unit in SelectedUnits )
             {
                 Unit = tempLoopVar_Unit;
                 RGB_sng = GetUnitGroupColour(Unit.UnitGroup);
@@ -934,7 +936,7 @@ namespace SharpFlame.Mapping
             }
             if ( MouseOverTerrain != null )
             {
-                foreach ( clsUnit tempLoopVar_Unit in MouseOverTerrain.Units )
+                foreach ( var tempLoopVar_Unit in MouseOverTerrain.Units )
                 {
                     Unit = tempLoopVar_Unit;
                     if ( Unit != null && modTools.Tool == modTools.Tools.ObjectSelect )
@@ -952,7 +954,7 @@ namespace SharpFlame.Mapping
             DebugGLError("Unit selection");
 
             GL.MatrixMode(MatrixMode.Projection);
-            Matrix4 temp_mat2 = Matrix4.CreateOrthographicOffCenter(0.0F, GLSize.X, GLSize.Y, 0.0F, -1.0F, 1.0F);
+            var temp_mat2 = Matrix4.CreateOrthographicOffCenter(0.0F, GLSize.X, GLSize.Y, 0.0F, -1.0F, 1.0F);
             GL.LoadMatrix(ref temp_mat2);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
@@ -975,7 +977,7 @@ namespace SharpFlame.Mapping
             //draw minimap
 
             GL.MatrixMode(MatrixMode.Projection);
-            Matrix4 temp_mat3 = Matrix4.CreateOrthographicOffCenter(0.0F, GLSize.X, 0.0F, GLSize.Y, -1.0F, 1.0F);
+            var temp_mat3 = Matrix4.CreateOrthographicOffCenter(0.0F, GLSize.X, 0.0F, GLSize.Y, -1.0F, 1.0F);
             GL.LoadMatrix(ref temp_mat3);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
@@ -1107,7 +1109,7 @@ namespace SharpFlame.Mapping
                 {
                     if ( GL.GetError() != ErrorCode.NoError )
                     {
-                        clsMessage NewMessage = new clsMessage();
+                        var NewMessage = new clsMessage();
                         NewMessage.Text = "OpenGL Error (" + Name + ")";
                         Messages.Add(NewMessage);
                     }
@@ -1117,10 +1119,10 @@ namespace SharpFlame.Mapping
 
         public void DrawUnitRectangle(clsUnit Unit, int BorderInsideThickness, sRGBA_sng InsideColour, sRGBA_sng OutsideColour)
         {
-            XYInt PosA = new XYInt();
-            XYInt PosB = new XYInt();
-            int A = 0;
-            int Altitude = Unit.Pos.Altitude - ViewInfo.ViewPos.Y;
+            var PosA = new XYInt();
+            var PosB = new XYInt();
+            var A = 0;
+            var Altitude = Unit.Pos.Altitude - ViewInfo.ViewPos.Y;
 
             GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation), ref PosA, ref PosB);
             A = PosA.Y;

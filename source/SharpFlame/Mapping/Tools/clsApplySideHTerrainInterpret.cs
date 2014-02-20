@@ -1,4 +1,8 @@
+#region
+
 using SharpFlame.Mapping.Tiles;
+
+#endregion
 
 namespace SharpFlame.Mapping.Tools
 {
@@ -8,7 +12,7 @@ namespace SharpFlame.Mapping.Tools
         {
             base.ActionPerform();
 
-            int A = 0;
+            var A = 0;
 
             if ( PosNum.Y > 0 )
             {

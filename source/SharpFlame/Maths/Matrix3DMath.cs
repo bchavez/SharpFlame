@@ -1,5 +1,9 @@
-﻿using System;
+﻿#region
+
+using System;
 using SharpFlame.Core.Domain;
+
+#endregion
 
 namespace SharpFlame.Maths
 {
@@ -7,51 +11,51 @@ namespace SharpFlame.Maths
     {
         public static double MatrixAngleToMatrix(Matrix3D MatrixA, Matrix3D MatrixB)
         {
-            Matrix3D matrixOut = new Matrix3D();
+            var matrixOut = new Matrix3D();
             MatrixInvert(MatrixA, matrixOut);
-            double y = ((matrixOut.Values[0] * MatrixB.Values[2]) + (matrixOut.Values[1] * MatrixB.Values[5])) + (matrixOut.Values[2] * MatrixB.Values[8]);
-            double x = ((matrixOut.Values[3] * MatrixB.Values[2]) + (matrixOut.Values[4] * MatrixB.Values[5])) + (matrixOut.Values[5] * MatrixB.Values[8]);
-            double num3 = ((matrixOut.Values[6] * MatrixB.Values[2]) + (matrixOut.Values[7] * MatrixB.Values[5])) + (matrixOut.Values[8] * MatrixB.Values[8]);
-            double a = Math.Atan2(y, x);
-            double num5 = (Math.Sin(a) * y) + (Math.Cos(a) * x);
+            var y = ((matrixOut.Values[0] * MatrixB.Values[2]) + (matrixOut.Values[1] * MatrixB.Values[5])) + (matrixOut.Values[2] * MatrixB.Values[8]);
+            var x = ((matrixOut.Values[3] * MatrixB.Values[2]) + (matrixOut.Values[4] * MatrixB.Values[5])) + (matrixOut.Values[5] * MatrixB.Values[8]);
+            var num3 = ((matrixOut.Values[6] * MatrixB.Values[2]) + (matrixOut.Values[7] * MatrixB.Values[5])) + (matrixOut.Values[8] * MatrixB.Values[8]);
+            var a = Math.Atan2(y, x);
+            var num5 = (Math.Sin(a) * y) + (Math.Cos(a) * x);
             return Math.Atan2(num5, num3);
         }
 
         public static void MatrixAngleToMatrix(Matrix3D MatrixA, Matrix3D MatrixB, ref double ResultArcAngle, ref double ResultDirectionAngle)
         {
-            Matrix3D matrixOut = new Matrix3D();
+            var matrixOut = new Matrix3D();
             MatrixInvert(MatrixA, matrixOut);
-            double x = ((matrixOut.Values[0] * MatrixB.Values[2]) + (matrixOut.Values[1] * MatrixB.Values[5])) + (matrixOut.Values[2] * MatrixB.Values[8]);
-            double y = ((matrixOut.Values[3] * MatrixB.Values[2]) + (matrixOut.Values[4] * MatrixB.Values[5])) + (matrixOut.Values[5] * MatrixB.Values[8]);
-            double num3 = ((matrixOut.Values[6] * MatrixB.Values[2]) + (matrixOut.Values[7] * MatrixB.Values[5])) + (matrixOut.Values[8] * MatrixB.Values[8]);
+            var x = ((matrixOut.Values[0] * MatrixB.Values[2]) + (matrixOut.Values[1] * MatrixB.Values[5])) + (matrixOut.Values[2] * MatrixB.Values[8]);
+            var y = ((matrixOut.Values[3] * MatrixB.Values[2]) + (matrixOut.Values[4] * MatrixB.Values[5])) + (matrixOut.Values[5] * MatrixB.Values[8]);
+            var num3 = ((matrixOut.Values[6] * MatrixB.Values[2]) + (matrixOut.Values[7] * MatrixB.Values[5])) + (matrixOut.Values[8] * MatrixB.Values[8]);
             ResultDirectionAngle = Math.Atan2(y, x);
-            double a = Math.Atan2(x, y);
-            double num4 = (Math.Sin(a) * x) + (Math.Cos(a) * y);
+            var a = Math.Atan2(x, y);
+            var num4 = (Math.Sin(a) * x) + (Math.Cos(a) * y);
             ResultArcAngle = Math.Atan2(num4, num3);
         }
 
         public static double MatrixAngleToVector(Matrix3D Matrix, XYZDouble Vector)
         {
-            Matrix3D matrixOut = new Matrix3D();
+            var matrixOut = new Matrix3D();
             MatrixInvert(Matrix, matrixOut);
-            double y = ((matrixOut.Values[0] * Vector.X) + (matrixOut.Values[1] * Vector.Y)) + (matrixOut.Values[2] * Vector.Z);
-            double x = ((matrixOut.Values[3] * Vector.X) + (matrixOut.Values[4] * Vector.Y)) + (matrixOut.Values[5] * Vector.Z);
-            double num3 = ((matrixOut.Values[6] * Vector.X) + (matrixOut.Values[7] * Vector.Y)) + (matrixOut.Values[8] * Vector.Z);
-            double a = Math.Atan2(y, x);
-            double num5 = (Math.Sin(a) * y) + (Math.Cos(a) * x);
+            var y = ((matrixOut.Values[0] * Vector.X) + (matrixOut.Values[1] * Vector.Y)) + (matrixOut.Values[2] * Vector.Z);
+            var x = ((matrixOut.Values[3] * Vector.X) + (matrixOut.Values[4] * Vector.Y)) + (matrixOut.Values[5] * Vector.Z);
+            var num3 = ((matrixOut.Values[6] * Vector.X) + (matrixOut.Values[7] * Vector.Y)) + (matrixOut.Values[8] * Vector.Z);
+            var a = Math.Atan2(y, x);
+            var num5 = (Math.Sin(a) * y) + (Math.Cos(a) * x);
             return Math.Atan2(num5, num3);
         }
 
         public static void MatrixAngleToVector(Matrix3D Matrix, XYZDouble Vector, ref double ResultArcAngle, ref double ResultDirectionAngle)
         {
-            Matrix3D matrixOut = new Matrix3D();
+            var matrixOut = new Matrix3D();
             MatrixInvert(Matrix, matrixOut);
-            double x = ((matrixOut.Values[0] * Vector.X) + (matrixOut.Values[1] * Vector.Y)) + (matrixOut.Values[2] * Vector.Z);
-            double y = ((matrixOut.Values[3] * Vector.X) + (matrixOut.Values[4] * Vector.Y)) + (matrixOut.Values[5] * Vector.Z);
-            double num3 = ((matrixOut.Values[6] * Vector.X) + (matrixOut.Values[7] * Vector.Y)) + (matrixOut.Values[8] * Vector.Z);
+            var x = ((matrixOut.Values[0] * Vector.X) + (matrixOut.Values[1] * Vector.Y)) + (matrixOut.Values[2] * Vector.Z);
+            var y = ((matrixOut.Values[3] * Vector.X) + (matrixOut.Values[4] * Vector.Y)) + (matrixOut.Values[5] * Vector.Z);
+            var num3 = ((matrixOut.Values[6] * Vector.X) + (matrixOut.Values[7] * Vector.Y)) + (matrixOut.Values[8] * Vector.Z);
             ResultDirectionAngle = Math.Atan2(y, x);
-            double a = Math.Atan2(x, y);
-            double num4 = (Math.Sin(a) * x) + (Math.Cos(a) * y);
+            var a = Math.Atan2(x, y);
+            var num4 = (Math.Sin(a) * x) + (Math.Cos(a) * y);
             ResultArcAngle = Math.Atan2(num4, num3);
         }
 
@@ -70,25 +74,25 @@ namespace SharpFlame.Maths
 
         public static void MatrixInvert(Matrix3D MatrixIn, Matrix3D MatrixOut)
         {
-            double num = MatrixIn.Values[0];
-            double num3 = MatrixIn.Values[1];
-            double num5 = MatrixIn.Values[2];
-            double num7 = MatrixIn.Values[3];
-            double num9 = MatrixIn.Values[4];
-            double num11 = MatrixIn.Values[5];
-            double num13 = MatrixIn.Values[6];
-            double num15 = MatrixIn.Values[7];
-            double num17 = MatrixIn.Values[8];
-            double num2 = (num9 * num17) - (num15 * num11);
-            double num4 = (num13 * num11) - (num7 * num17);
-            double num6 = (num7 * num15) - (num13 * num9);
-            double num8 = (num15 * num5) - (num3 * num17);
-            double num10 = (num * num17) - (num13 * num5);
-            double num12 = (num13 * num3) - (num * num15);
-            double num14 = (num3 * num11) - (num9 * num5);
-            double num16 = (num7 * num5) - (num * num11);
-            double num18 = (num * num9) - (num7 * num3);
-            double num19 = ((num * num2) + (num3 * num4)) + (num5 * num6);
+            var num = MatrixIn.Values[0];
+            var num3 = MatrixIn.Values[1];
+            var num5 = MatrixIn.Values[2];
+            var num7 = MatrixIn.Values[3];
+            var num9 = MatrixIn.Values[4];
+            var num11 = MatrixIn.Values[5];
+            var num13 = MatrixIn.Values[6];
+            var num15 = MatrixIn.Values[7];
+            var num17 = MatrixIn.Values[8];
+            var num2 = (num9 * num17) - (num15 * num11);
+            var num4 = (num13 * num11) - (num7 * num17);
+            var num6 = (num7 * num15) - (num13 * num9);
+            var num8 = (num15 * num5) - (num3 * num17);
+            var num10 = (num * num17) - (num13 * num5);
+            var num12 = (num13 * num3) - (num * num15);
+            var num14 = (num3 * num11) - (num9 * num5);
+            var num16 = (num7 * num5) - (num * num11);
+            var num18 = (num * num9) - (num7 * num3);
+            var num19 = ((num * num2) + (num3 * num4)) + (num5 * num6);
             MatrixOut.Values[0] = num2 / num19;
             MatrixOut.Values[1] = num8 / num19;
             MatrixOut.Values[2] = num14 / num19;
@@ -102,16 +106,16 @@ namespace SharpFlame.Maths
 
         public static void MatrixNormalize(Matrix3D Matrix)
         {
-            Angles.AngleRPY erpy = new Angles.AngleRPY();
+            var erpy = new Angles.AngleRPY();
             MatrixToRPY(Matrix, ref erpy);
             MatrixSetToRPY(Matrix, erpy);
         }
 
         public static void MatrixRotationAroundAxis(Matrix3D MatrixIn, Matrix3D MatrixAxis, double TurnAngle, Matrix3D ResultMatrix)
         {
-            Matrix3D matrixOut = new Matrix3D();
-            Matrix3D resultMatrix = new Matrix3D();
-            Matrix3D matrixd3 = new Matrix3D();
+            var matrixOut = new Matrix3D();
+            var resultMatrix = new Matrix3D();
+            var matrixd3 = new Matrix3D();
             MatrixInvert(MatrixAxis, matrixOut);
             MatrixRotationByMatrix(matrixOut, MatrixIn, resultMatrix);
             MatrixSetToZAngle(matrixOut, TurnAngle);
@@ -121,15 +125,24 @@ namespace SharpFlame.Maths
 
         public static void MatrixRotationByMatrix(Matrix3D ChangeMatrix, Matrix3D OriginMatrix, Matrix3D ResultMatrix)
         {
-            ResultMatrix.Values[0] = ((ChangeMatrix.Values[0] * OriginMatrix.Values[0]) + (ChangeMatrix.Values[1] * OriginMatrix.Values[3])) + (ChangeMatrix.Values[2] * OriginMatrix.Values[6]);
-            ResultMatrix.Values[1] = ((ChangeMatrix.Values[0] * OriginMatrix.Values[1]) + (ChangeMatrix.Values[1] * OriginMatrix.Values[4])) + (ChangeMatrix.Values[2] * OriginMatrix.Values[7]);
-            ResultMatrix.Values[2] = ((ChangeMatrix.Values[0] * OriginMatrix.Values[2]) + (ChangeMatrix.Values[1] * OriginMatrix.Values[5])) + (ChangeMatrix.Values[2] * OriginMatrix.Values[8]);
-            ResultMatrix.Values[3] = ((ChangeMatrix.Values[3] * OriginMatrix.Values[0]) + (ChangeMatrix.Values[4] * OriginMatrix.Values[3])) + (ChangeMatrix.Values[5] * OriginMatrix.Values[6]);
-            ResultMatrix.Values[4] = ((ChangeMatrix.Values[3] * OriginMatrix.Values[1]) + (ChangeMatrix.Values[4] * OriginMatrix.Values[4])) + (ChangeMatrix.Values[5] * OriginMatrix.Values[7]);
-            ResultMatrix.Values[5] = ((ChangeMatrix.Values[3] * OriginMatrix.Values[2]) + (ChangeMatrix.Values[4] * OriginMatrix.Values[5])) + (ChangeMatrix.Values[5] * OriginMatrix.Values[8]);
-            ResultMatrix.Values[6] = ((ChangeMatrix.Values[6] * OriginMatrix.Values[0]) + (ChangeMatrix.Values[7] * OriginMatrix.Values[3])) + (ChangeMatrix.Values[8] * OriginMatrix.Values[6]);
-            ResultMatrix.Values[7] = ((ChangeMatrix.Values[6] * OriginMatrix.Values[1]) + (ChangeMatrix.Values[7] * OriginMatrix.Values[4])) + (ChangeMatrix.Values[8] * OriginMatrix.Values[7]);
-            ResultMatrix.Values[8] = ((ChangeMatrix.Values[6] * OriginMatrix.Values[2]) + (ChangeMatrix.Values[7] * OriginMatrix.Values[5])) + (ChangeMatrix.Values[8] * OriginMatrix.Values[8]);
+            ResultMatrix.Values[0] = ((ChangeMatrix.Values[0] * OriginMatrix.Values[0]) + (ChangeMatrix.Values[1] * OriginMatrix.Values[3])) +
+                                     (ChangeMatrix.Values[2] * OriginMatrix.Values[6]);
+            ResultMatrix.Values[1] = ((ChangeMatrix.Values[0] * OriginMatrix.Values[1]) + (ChangeMatrix.Values[1] * OriginMatrix.Values[4])) +
+                                     (ChangeMatrix.Values[2] * OriginMatrix.Values[7]);
+            ResultMatrix.Values[2] = ((ChangeMatrix.Values[0] * OriginMatrix.Values[2]) + (ChangeMatrix.Values[1] * OriginMatrix.Values[5])) +
+                                     (ChangeMatrix.Values[2] * OriginMatrix.Values[8]);
+            ResultMatrix.Values[3] = ((ChangeMatrix.Values[3] * OriginMatrix.Values[0]) + (ChangeMatrix.Values[4] * OriginMatrix.Values[3])) +
+                                     (ChangeMatrix.Values[5] * OriginMatrix.Values[6]);
+            ResultMatrix.Values[4] = ((ChangeMatrix.Values[3] * OriginMatrix.Values[1]) + (ChangeMatrix.Values[4] * OriginMatrix.Values[4])) +
+                                     (ChangeMatrix.Values[5] * OriginMatrix.Values[7]);
+            ResultMatrix.Values[5] = ((ChangeMatrix.Values[3] * OriginMatrix.Values[2]) + (ChangeMatrix.Values[4] * OriginMatrix.Values[5])) +
+                                     (ChangeMatrix.Values[5] * OriginMatrix.Values[8]);
+            ResultMatrix.Values[6] = ((ChangeMatrix.Values[6] * OriginMatrix.Values[0]) + (ChangeMatrix.Values[7] * OriginMatrix.Values[3])) +
+                                     (ChangeMatrix.Values[8] * OriginMatrix.Values[6]);
+            ResultMatrix.Values[7] = ((ChangeMatrix.Values[6] * OriginMatrix.Values[1]) + (ChangeMatrix.Values[7] * OriginMatrix.Values[4])) +
+                                     (ChangeMatrix.Values[8] * OriginMatrix.Values[7]);
+            ResultMatrix.Values[8] = ((ChangeMatrix.Values[6] * OriginMatrix.Values[2]) + (ChangeMatrix.Values[7] * OriginMatrix.Values[5])) +
+                                     (ChangeMatrix.Values[8] * OriginMatrix.Values[8]);
         }
 
         public static void MatrixSetToIdentity(Matrix3D Matrix)
@@ -147,8 +160,8 @@ namespace SharpFlame.Maths
 
         public static void MatrixSetToPY(Matrix3D Matrix, Angles.AnglePY AnglePY)
         {
-            Matrix3D matrix = new Matrix3D();
-            Matrix3D matrixd3 = new Matrix3D();
+            var matrix = new Matrix3D();
+            var matrixd3 = new Matrix3D();
             MatrixSetToXAngle(matrix, AnglePY.Pitch);
             MatrixSetToYAngle(matrixd3, AnglePY.Yaw);
             MatrixRotationByMatrix(matrixd3, matrix, Matrix);
@@ -156,10 +169,10 @@ namespace SharpFlame.Maths
 
         public static void MatrixSetToRPY(Matrix3D Matrix, Angles.AngleRPY AngleRPY)
         {
-            Matrix3D matrix = new Matrix3D();
-            Matrix3D matrixd2 = new Matrix3D();
-            Matrix3D matrixd3 = new Matrix3D();
-            Matrix3D resultMatrix = new Matrix3D();
+            var matrix = new Matrix3D();
+            var matrixd2 = new Matrix3D();
+            var matrixd3 = new Matrix3D();
+            var resultMatrix = new Matrix3D();
             MatrixSetToZAngle(matrix, AngleRPY.Roll);
             MatrixSetToXAngle(matrixd2, AngleRPY.Pitch);
             MatrixSetToYAngle(matrixd3, AngleRPY.Yaw);
@@ -169,10 +182,10 @@ namespace SharpFlame.Maths
 
         public static void MatrixSetToRPY(Matrix3D Matrix, double Roll, double Pitch, double Yaw)
         {
-            Matrix3D matrix = new Matrix3D();
-            Matrix3D matrixd2 = new Matrix3D();
-            Matrix3D matrixd3 = new Matrix3D();
-            Matrix3D resultMatrix = new Matrix3D();
+            var matrix = new Matrix3D();
+            var matrixd2 = new Matrix3D();
+            var matrixd3 = new Matrix3D();
+            var resultMatrix = new Matrix3D();
             MatrixSetToZAngle(matrix, Roll);
             MatrixSetToXAngle(matrixd2, Pitch);
             MatrixSetToYAngle(matrixd3, Yaw);
@@ -221,18 +234,18 @@ namespace SharpFlame.Maths
 
         public static void MatrixToPY(Matrix3D Matrix, ref Angles.AnglePY ResultPY)
         {
-            XYZDouble _dbl = new XYZDouble();
+            var _dbl = new XYZDouble();
             VectorForwardsRotationByMatrix(Matrix, ref _dbl);
             VectorToPY(_dbl, ref ResultPY);
         }
 
         public static void MatrixToRPY(Matrix3D Matrix, ref Angles.AngleRPY ResultRPY)
         {
-            Angles.AnglePY epy = new Angles.AnglePY();
-            XYZDouble _dbl = new XYZDouble();
-            XYZDouble _dbl2 = new XYZDouble();
-            Matrix3D matrix = new Matrix3D();
-            Matrix3D matrixd = new Matrix3D();
+            var epy = new Angles.AnglePY();
+            var _dbl = new XYZDouble();
+            var _dbl2 = new XYZDouble();
+            var matrix = new Matrix3D();
+            var matrixd = new Matrix3D();
             VectorForwardsRotationByMatrix(Matrix, ref _dbl2);
             VectorToPY(_dbl2, ref epy);
             ResultRPY.PY = epy;
@@ -246,8 +259,8 @@ namespace SharpFlame.Maths
 
         public static double VectorAngleToVector(XYZDouble VectorA, XYZDouble VectorB)
         {
-            Angles.AnglePY epy = new Angles.AnglePY();
-            Matrix3D matrix = new Matrix3D();
+            var epy = new Angles.AnglePY();
+            var matrix = new Matrix3D();
             VectorToPY(VectorA, ref epy);
             MatrixSetToPY(matrix, epy);
             return MatrixAngleToVector(matrix, VectorB);
@@ -340,11 +353,11 @@ namespace SharpFlame.Maths
         public static void VectorToPY(XYZDouble Vector, ref Angles.AnglePY ResultPY)
         {
             ResultPY.Pitch = Math.Atan2(-Vector.Y, Math.Sqrt((Vector.X * Vector.X) + (Vector.Z * Vector.Z)));
-            if (ResultPY.Pitch > 1.5707963267948966)
+            if ( ResultPY.Pitch > 1.5707963267948966 )
             {
                 ResultPY.Pitch = 3.1415926535897931 - ResultPY.Pitch;
             }
-            else if (ResultPY.Pitch < -1.5707963267948966)
+            else if ( ResultPY.Pitch < -1.5707963267948966 )
             {
                 ResultPY.Pitch = -ResultPY.Pitch - 3.1415926535897931;
             }
@@ -371,4 +384,3 @@ namespace SharpFlame.Maths
         }
     }
 }
-

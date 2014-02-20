@@ -1,8 +1,12 @@
+#region
+
 using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
 using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame.Mapping.Drawing
 {
@@ -10,35 +14,34 @@ namespace SharpFlame.Mapping.Drawing
     {
         //does not inherit action
 
-        public clsMap Map;
+        private readonly XYZInt vertex;
         public sRGBA_sng Colour;
-        public XYInt StartXY;
-        public XYInt FinishXY;
-
-        private XYZInt vertex;
-        private XYInt StartTile;
         private XYInt FinishTile;
+        public XYInt FinishXY;
+        private XYInt Horizontal;
         private MathUtil.sIntersectPos IntersectX;
         private MathUtil.sIntersectPos IntersectY;
-        private XYInt TileEdgeStart;
-        private XYInt TileEdgeFinish;
         private int LastXTile;
-        private XYInt Horizontal;
+        public clsMap Map;
+        private XYInt StartTile;
+        public XYInt StartXY;
+        private XYInt TileEdgeFinish;
+        private XYInt TileEdgeStart;
 
-		public clsDrawTerrainLine()
-		{
-			vertex = new XYZInt (0, 0, 0);
-		}
+        public clsDrawTerrainLine()
+        {
+            vertex = new XYZInt(0, 0, 0);
+        }
 
         public void ActionPerform()
         {
-            int X = 0;
-            int Y = 0;
+            var X = 0;
+            var Y = 0;
 
             GL.Begin(BeginMode.LineStrip);
             GL.Color4(Colour.Red, Colour.Green, Colour.Blue, Colour.Alpha);
 
-            StartTile.Y = (int)(StartXY.Y / Constants.TerrainGridSpacing);
+            StartTile.Y = StartXY.Y / Constants.TerrainGridSpacing;
             FinishTile.Y = FinishXY.Y / Constants.TerrainGridSpacing;
             LastXTile = StartXY.X / Constants.TerrainGridSpacing;
 
@@ -60,7 +63,7 @@ namespace SharpFlame.Mapping.Drawing
                     if ( IntersectY.Exists )
                     {
                         StartTile.X = LastXTile;
-                        FinishTile.X = (int)(IntersectY.Pos.X / Constants.TerrainGridSpacing);
+                        FinishTile.X = IntersectY.Pos.X / Constants.TerrainGridSpacing;
 
                         for ( X = StartTile.X + 1; X <= FinishTile.X; X++ )
                         {

@@ -1,30 +1,34 @@
+#region
+
 using System;
 using System.Diagnostics;
 using SharpFlame.Core.Domain;
 using SharpFlame.Maths;
 
+#endregion
+
 namespace SharpFlame.Mapping.Tools
 {
     public class clsApplyHeightSmoothing : clsAction
     {
-        public double Ratio;
-        public XYInt Offset;
         public XYInt AreaTileSize;
-
-        private byte[,] NewHeight;
-        private bool Started;
-        private int TempHeight;
-        private int Samples;
         private int LimitX;
         private int LimitY;
-        private int XNum;
-        private XYInt VertexNum;
+
+        private byte[,] NewHeight;
+        public XYInt Offset;
+        public double Ratio;
+        private int Samples;
+        private bool Started;
+        private int TempHeight;
         private clsTerrain Terrain;
+        private XYInt VertexNum;
+        private int XNum;
 
         public void Start()
         {
-            int X = 0;
-            int Y = 0;
+            var X = 0;
+            var Y = 0;
 
             Terrain = Map.Terrain;
 
@@ -48,8 +52,8 @@ namespace SharpFlame.Mapping.Tools
                 return;
             }
 
-            int X = 0;
-            int Y = 0;
+            var X = 0;
+            var Y = 0;
 
             Terrain = Map.Terrain;
 
@@ -78,10 +82,10 @@ namespace SharpFlame.Mapping.Tools
                 return;
             }
 
-            int X = 0;
-            int Y = 0;
-            int X2 = 0;
-            int Y2 = 0;
+            var X = 0;
+            var Y = 0;
+            var X2 = 0;
+            var Y2 = 0;
 
             Terrain = Map.Terrain;
 

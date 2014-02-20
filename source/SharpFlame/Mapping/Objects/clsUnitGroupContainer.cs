@@ -1,9 +1,16 @@
+#region
+
 using System;
+
+#endregion
 
 namespace SharpFlame.Mapping.Objects
 {
     public class clsUnitGroupContainer
     {
+        public delegate void ChangedEventHandler();
+
+        private ChangedEventHandler ChangedEvent;
         private clsUnitGroup _Item;
 
         public clsUnitGroup Item
@@ -20,10 +27,6 @@ namespace SharpFlame.Mapping.Objects
                     ChangedEvent();
             }
         }
-
-        public delegate void ChangedEventHandler();
-
-        private ChangedEventHandler ChangedEvent;
 
         public event ChangedEventHandler Changed
         {

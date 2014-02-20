@@ -1,19 +1,22 @@
+#region
+
 using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
 using SharpFlame.Mapping.Tools;
-using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame.Mapping.Drawing
 {
     public class clsDrawVertexMarker : clsAction
     {
+        private readonly XYZInt vertex0;
         public sRGBA_sng Colour;
 
-        private XYZInt vertex0;
-
-        public clsDrawVertexMarker() {
+        public clsDrawVertexMarker()
+        {
             vertex0 = new XYZInt(0, 0, 0);
         }
 
@@ -30,5 +33,5 @@ namespace SharpFlame.Mapping.Drawing
             GL.Vertex3(vertex0.X, vertex0.Y, - vertex0.Z + 8);
             GL.End();
         }
-    } 
+    }
 }

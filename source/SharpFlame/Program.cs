@@ -1,12 +1,15 @@
-using System;
-using System.Drawing;
-using System.IO;
-using System.Windows.Forms;
+#region
 
+using System;
+using System.IO;
+using System.Threading;
+using System.Windows.Forms;
 using OpenTK;
 using OpenTK.Graphics;
 using SharpFlame.AppSettings;
+using Timer = System.Windows.Forms.Timer;
 
+#endregion
 
 namespace SharpFlame
 {
@@ -39,10 +42,9 @@ namespace SharpFlame
             }
             catch
             {
-
             }
 
-            clsResult SettingsLoadResult = SettingsManager.Settings_Load(ref SettingsManager.InitializeSettings);
+            var SettingsLoadResult = SettingsManager.Settings_Load(ref SettingsManager.InitializeSettings);
 
             InitializeResult.Add(SettingsLoadResult);
 
@@ -53,7 +55,7 @@ namespace SharpFlame
                 new GLControl(new GraphicsMode(new ColorFormat(SettingsManager.InitializeSettings.TextureViewBPP), SettingsManager.InitializeSettings.TextureViewDepth,
                     0));
 
-            App.Random = new Random ();             
+            App.Random = new Random();
 
             while ( OpenGL1.Context == null || OpenGL2.Context == null )
             {
@@ -83,7 +85,7 @@ namespace SharpFlame
 
             while ( !App.ProgramInitializeFinished )
             {
-                System.Threading.Thread.Sleep(50);
+                Thread.Sleep(50);
                 Application.DoEvents();
             }
 

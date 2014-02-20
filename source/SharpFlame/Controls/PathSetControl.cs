@@ -1,11 +1,22 @@
+#region
+
 using System;
 using System.Windows.Forms;
 using SharpFlame.Collections;
+
+#endregion
 
 namespace SharpFlame.Controls
 {
     public partial class PathSetControl
     {
+        public PathSetControl(string Title)
+        {
+            InitializeComponent();
+
+            gbxTitle.Text = Title;
+        }
+
         public int SelectedNum
         {
             get { return lstPaths.SelectedIndex; }
@@ -20,10 +31,7 @@ namespace SharpFlame.Controls
                 {
                     return null;
                 }
-                else
-                {
-                    return (lstPaths.Items[lstPaths.SelectedIndex]).ToString();
-                }
+                return (lstPaths.Items[lstPaths.SelectedIndex]).ToString();
             }
         }
 
@@ -31,8 +39,8 @@ namespace SharpFlame.Controls
         {
             get
             {
-                string[] Paths = new string[lstPaths.Items.Count];
-                int A = 0;
+                var Paths = new string[lstPaths.Items.Count];
+                var A = 0;
                 for ( A = 0; A <= lstPaths.Items.Count - 1; A++ )
                 {
                     Paths[A] = (lstPaths.Items[A]).ToString();
@@ -41,16 +49,9 @@ namespace SharpFlame.Controls
             }
         }
 
-        public PathSetControl(string Title)
-        {
-            InitializeComponent();
-
-            gbxTitle.Text = Title;
-        }
-
         public void SetPaths(SimpleList<string> NewPaths)
         {
-            int A = 0;
+            var A = 0;
 
             lstPaths.Items.Clear();
             for ( A = 0; A <= NewPaths.Count - 1; A++ )

@@ -6,7 +6,7 @@ namespace SharpFlame.Util
 
         public void Deactivate()
         {
-            for( int i = 0; i <= 255; i++ )
+            for ( var i = 0; i <= 255; i++ )
             {
                 Keys[i] = false;
             }

@@ -1,14 +1,17 @@
+#region
+
 using System;
 using SharpFlame.Mapping.Tiles;
+
+#endregion
 
 namespace SharpFlame.Mapping.Tools
 {
     public class clsApplyCliffTriangle : clsAction
     {
-        public bool Triangle;
-
-        private clsTerrain Terrain;
         private bool CliffChanged;
+        private clsTerrain Terrain;
+        public bool Triangle;
 
         public override void ActionPerform()
         {

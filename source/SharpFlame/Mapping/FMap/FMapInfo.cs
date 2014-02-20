@@ -1,16 +1,19 @@
+#region
+
 using System;
 using SharpFlame.Core.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
 using SharpFlame.Mapping.Tiles;
-using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame.Mapping.FMap
 {
     public class FMapInfo : Translator
     {
-        public XYInt TerrainSize = new XYInt(-1, -1);
         public clsInterfaceOptions InterfaceOptions = new clsInterfaceOptions();
+        public XYInt TerrainSize = new XYInt(-1, -1);
         public clsTileset Tileset;
 
         public override TranslatorResult Translate(Section.SectionProperty INIProperty)
@@ -34,19 +37,19 @@ namespace SharpFlame.Mapping.FMap
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "size" )
+            else if ( INIProperty.Name == "size" )
             {
-                string[] CommaText = INIProperty.Value.Split(',');
+                var CommaText = INIProperty.Value.Split(',');
                 if ( CommaText.GetUpperBound(0) + 1 < 2 )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
-                int A = 0;
+                var A = 0;
                 for ( A = 0; A <= CommaText.GetUpperBound(0); A++ )
                 {
                     CommaText[A] = CommaText[A].Trim();
                 }
-                XYInt NewSize = new XYInt();
+                var NewSize = new XYInt();
                 if ( !IOUtil.InvariantParse(CommaText[0], ref NewSize.X) )
                 {
                     return TranslatorResult.ValueInvalid;
@@ -61,69 +64,69 @@ namespace SharpFlame.Mapping.FMap
                 }
                 TerrainSize = NewSize;
             }
-            else if ( (string)INIProperty.Name == "autoscrolllimits" )
+            else if ( INIProperty.Name == "autoscrolllimits" )
             {
                 if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref InterfaceOptions.AutoScrollLimits) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "scrollminx" )
+            else if ( INIProperty.Name == "scrollminx" )
             {
                 if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref InterfaceOptions.ScrollMin.X) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "scrollminy" )
+            else if ( INIProperty.Name == "scrollminy" )
             {
                 if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref InterfaceOptions.ScrollMin.Y) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "scrollmaxx" )
+            else if ( INIProperty.Name == "scrollmaxx" )
             {
                 if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref InterfaceOptions.ScrollMax.X) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "scrollmaxy" )
+            else if ( INIProperty.Name == "scrollmaxy" )
             {
                 if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref InterfaceOptions.ScrollMax.Y) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "name" )
+            else if ( INIProperty.Name == "name" )
             {
                 InterfaceOptions.CompileName = Convert.ToString(INIProperty.Value);
             }
-            else if ( (string)INIProperty.Name == "players" )
+            else if ( INIProperty.Name == "players" )
             {
                 InterfaceOptions.CompileMultiPlayers = Convert.ToString(INIProperty.Value);
             }
-            else if ( (string)INIProperty.Name == "xplayerlev" )
+            else if ( INIProperty.Name == "xplayerlev" )
             {
                 if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref InterfaceOptions.CompileMultiXPlayers) )
                 {
                     return TranslatorResult.ValueInvalid;
                 }
             }
-            else if ( (string)INIProperty.Name == "author" )
+            else if ( INIProperty.Name == "author" )
             {
                 InterfaceOptions.CompileMultiAuthor = Convert.ToString(INIProperty.Value);
             }
-            else if ( (string)INIProperty.Name == "license" )
+            else if ( INIProperty.Name == "license" )
             {
                 InterfaceOptions.CompileMultiLicense = Convert.ToString(INIProperty.Value);
             }
-            else if ( (string)INIProperty.Name == "camptime" )
+            else if ( INIProperty.Name == "camptime" )
             {
                 //allow and ignore
             }
-            else if ( (string)INIProperty.Name == "camptype" )
+            else if ( INIProperty.Name == "camptype" )
             {
                 if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref InterfaceOptions.CampaignGameType) )
                 {

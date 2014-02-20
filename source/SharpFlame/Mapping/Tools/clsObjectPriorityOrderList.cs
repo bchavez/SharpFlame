@@ -1,16 +1,15 @@
+#region
+
 using SharpFlame.Collections;
 using SharpFlame.Mapping.Objects;
+
+#endregion
 
 namespace SharpFlame.Mapping.Tools
 {
     public class clsObjectPriorityOrderList : SimpleListTool<clsUnit>
     {
-        private SimpleClassList<clsUnit> result = new SimpleClassList<clsUnit>();
-
-        public SimpleClassList<clsUnit> Result
-        {
-            get { return result; }
-        }
+        private readonly SimpleClassList<clsUnit> result = new SimpleClassList<clsUnit>();
 
         private clsUnit Unit;
 
@@ -19,9 +18,14 @@ namespace SharpFlame.Mapping.Tools
             result.MaintainOrder = true;
         }
 
+        public SimpleClassList<clsUnit> Result
+        {
+            get { return result; }
+        }
+
         public void ActionPerform()
         {
-            int A = 0;
+            var A = 0;
 
             for ( A = 0; A <= result.Count - 1; A++ )
             {

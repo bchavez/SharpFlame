@@ -1,25 +1,29 @@
+#region
+
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Painters;
+
+#endregion
 
 namespace SharpFlame.Mapping
 {
     public class clsUpdateAutotexture : clsAction
     {
         public bool MakeInvalidTiles;
-
-        private Painters.Terrain Terrain_Inner;
-        private Painters.Terrain Terrain_Outer;
-        private Road Road;
-        private bool RoadTop;
-        private bool RoadLeft;
-        private bool RoadRight;
-        private bool RoadBottom;
         private Painter Painter;
-        private clsTerrain Terrain;
-        private TileList ResultTiles;
         private TileDirection ResultDirection;
         private TileOrientationChance ResultTexture;
+        private TileList ResultTiles;
+
+        private Road Road;
+        private bool RoadBottom;
+        private bool RoadLeft;
+        private bool RoadRight;
+        private bool RoadTop;
+        private clsTerrain Terrain;
+        private Terrain Terrain_Inner;
+        private Terrain Terrain_Outer;
 
         public override void ActionPerform()
         {
@@ -33,7 +37,7 @@ namespace SharpFlame.Mapping
             //apply centre brushes
             if ( !Terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff )
             {
-                for ( int BrushNum = 0; BrushNum <= Painter.TerrainCount - 1; BrushNum++ )
+                for ( var BrushNum = 0; BrushNum <= Painter.TerrainCount - 1; BrushNum++ )
                 {
                     Terrain_Inner = Painter.Terrains[BrushNum];
                     if ( Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Inner )
@@ -57,7 +61,7 @@ namespace SharpFlame.Mapping
             //apply transition brushes
             if ( !Terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff )
             {
-                for ( int BrushNum = 0; BrushNum <= Painter.TransitionBrushCount - 1; BrushNum++ )
+                for ( var BrushNum = 0; BrushNum <= Painter.TransitionBrushCount - 1; BrushNum++ )
                 {
                     Terrain_Inner = Painter.TransitionBrushes[BrushNum].Terrain_Inner;
                     Terrain_Outer = Painter.TransitionBrushes[BrushNum].Terrain_Outer;
@@ -73,7 +77,7 @@ namespace SharpFlame.Mapping
                                     //nothing to do here
                                     break;
                                 }
-                                else if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
+                                if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
                                 {
                                     //i i i o
                                     ResultTiles = Painter.TransitionBrushes[BrushNum].Tiles_Corner_In;
@@ -90,7 +94,7 @@ namespace SharpFlame.Mapping
                                     ResultDirection = TileUtil.BottomLeft;
                                     break;
                                 }
-                                else if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
+                                if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
                                 {
                                     //i i o o
                                     ResultTiles = Painter.TransitionBrushes[BrushNum].Tiles_Straight;
@@ -110,7 +114,7 @@ namespace SharpFlame.Mapping
                                     ResultDirection = TileUtil.TopRight;
                                     break;
                                 }
-                                else if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
+                                if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
                                 {
                                     //i o i o
                                     ResultTiles = Painter.TransitionBrushes[BrushNum].Tiles_Straight;
@@ -127,7 +131,7 @@ namespace SharpFlame.Mapping
                                     ResultDirection = TileUtil.None;
                                     break;
                                 }
-                                else if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
+                                if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
                                 {
                                     //i o o o
                                     ResultTiles = Painter.TransitionBrushes[BrushNum].Tiles_Corner_Out;
@@ -150,7 +154,7 @@ namespace SharpFlame.Mapping
                                     ResultDirection = TileUtil.TopLeft;
                                     break;
                                 }
-                                else if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
+                                if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
                                 {
                                     //o i i o
                                     ResultTiles = null;
@@ -167,7 +171,7 @@ namespace SharpFlame.Mapping
                                     ResultDirection = TileUtil.Left;
                                     break;
                                 }
-                                else if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
+                                if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
                                 {
                                     //o i o o
                                     ResultTiles = Painter.TransitionBrushes[BrushNum].Tiles_Corner_Out;
@@ -187,7 +191,7 @@ namespace SharpFlame.Mapping
                                     ResultDirection = TileUtil.Top;
                                     break;
                                 }
-                                else if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
+                                if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
                                 {
                                     //o o i o
                                     ResultTiles = Painter.TransitionBrushes[BrushNum].Tiles_Corner_Out;
@@ -204,7 +208,7 @@ namespace SharpFlame.Mapping
                                     ResultDirection = TileUtil.TopLeft;
                                     break;
                                 }
-                                else if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
+                                if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
                                 {
                                     //o o o o
                                     //nothing to do here
@@ -223,14 +227,14 @@ namespace SharpFlame.Mapping
                 {
                     if ( Terrain.Tiles[PosNum.X, PosNum.Y].TriBottomRightIsCliff )
                     {
-                        int BrushNum = 0;
+                        var BrushNum = 0;
                         for ( BrushNum = 0; BrushNum <= Painter.CliffBrushCount - 1; BrushNum++ )
                         {
                             Terrain_Inner = Painter.CliffBrushes[BrushNum].Terrain_Inner;
                             Terrain_Outer = Painter.CliffBrushes[BrushNum].Terrain_Outer;
                             if ( Terrain_Inner == Terrain_Outer )
                             {
-                                int A = 0;
+                                var A = 0;
                                 if ( Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Inner )
                                 {
                                     A++;
@@ -265,40 +269,40 @@ namespace SharpFlame.Mapping
                                 ResultDirection = TileUtil.Bottom;
                                 break;
                             }
-                            else if ( ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer &&
-                                        Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Outer) &&
-                                       (Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Inner ||
-                                        Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Inner)) ||
-                                      ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer ||
-                                        Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Outer) &&
-                                       (Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Inner &&
-                                        Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Inner)) )
+                            if ( ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer &&
+                                   Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Outer) &&
+                                  (Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Inner ||
+                                   Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Inner)) ||
+                                 ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer ||
+                                   Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Outer) &&
+                                  (Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Inner &&
+                                   Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Inner)) )
                             {
                                 ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Straight;
                                 ResultDirection = TileUtil.Left;
                                 break;
                             }
-                            else if ( ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer &&
-                                        Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Outer) &&
-                                       (Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Inner ||
-                                        Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Inner)) ||
-                                      ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer ||
-                                        Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Outer) &&
-                                       (Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Inner &&
-                                        Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Inner)) )
+                            if ( ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer &&
+                                   Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Outer) &&
+                                  (Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Inner ||
+                                   Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Inner)) ||
+                                 ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer ||
+                                   Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Outer) &&
+                                  (Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Inner &&
+                                   Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Inner)) )
                             {
                                 ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Straight;
                                 ResultDirection = TileUtil.Top;
                                 break;
                             }
-                            else if ( ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Inner &&
-                                        Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Inner) &&
-                                       (Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Outer ||
-                                        Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer)) ||
-                                      ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Inner ||
-                                        Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Inner) &&
-                                       (Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Outer &&
-                                        Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer)) )
+                            if ( ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Inner &&
+                                   Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Inner) &&
+                                  (Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Outer ||
+                                   Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer)) ||
+                                 ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Inner ||
+                                   Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Inner) &&
+                                  (Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Outer &&
+                                   Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer)) )
                             {
                                 ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Straight;
                                 ResultDirection = TileUtil.Right;
@@ -313,14 +317,14 @@ namespace SharpFlame.Mapping
                     }
                     else
                     {
-                        int BrushNum = 0;
+                        var BrushNum = 0;
                         for ( BrushNum = 0; BrushNum <= Painter.CliffBrushCount - 1; BrushNum++ )
                         {
                             Terrain_Inner = Painter.CliffBrushes[BrushNum].Terrain_Inner;
                             Terrain_Outer = Painter.CliffBrushes[BrushNum].Terrain_Outer;
                             if ( Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer )
                             {
-                                int A = 0;
+                                var A = 0;
                                 if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Inner )
                                 {
                                     A++;
@@ -342,7 +346,7 @@ namespace SharpFlame.Mapping
                             }
                             else if ( Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Inner )
                             {
-                                int A = 0;
+                                var A = 0;
                                 if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Outer )
                                 {
                                     A++;
@@ -372,14 +376,14 @@ namespace SharpFlame.Mapping
                 }
                 else if ( Terrain.Tiles[PosNum.X, PosNum.Y].TriBottomRightIsCliff )
                 {
-                    int BrushNum = 0;
+                    var BrushNum = 0;
                     for ( BrushNum = 0; BrushNum <= Painter.CliffBrushCount - 1; BrushNum++ )
                     {
                         Terrain_Inner = Painter.CliffBrushes[BrushNum].Terrain_Inner;
                         Terrain_Outer = Painter.CliffBrushes[BrushNum].Terrain_Outer;
                         if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer )
                         {
-                            int A = 0;
+                            var A = 0;
                             if ( Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Inner )
                             {
                                 A++;
@@ -401,7 +405,7 @@ namespace SharpFlame.Mapping
                         }
                         else if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Inner )
                         {
-                            int A = 0;
+                            var A = 0;
                             if ( Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer )
                             {
                                 A++;
@@ -428,10 +432,6 @@ namespace SharpFlame.Mapping
                         ResultDirection = TileUtil.None;
                     }
                 }
-                else
-                {
-                    //no cliff
-                }
             }
             else
             {
@@ -440,14 +440,14 @@ namespace SharpFlame.Mapping
                 {
                     if ( Terrain.Tiles[PosNum.X, PosNum.Y].TriBottomLeftIsCliff )
                     {
-                        int BrushNum = 0;
+                        var BrushNum = 0;
                         for ( BrushNum = 0; BrushNum <= Painter.CliffBrushCount - 1; BrushNum++ )
                         {
                             Terrain_Inner = Painter.CliffBrushes[BrushNum].Terrain_Inner;
                             Terrain_Outer = Painter.CliffBrushes[BrushNum].Terrain_Outer;
                             if ( Terrain_Inner == Terrain_Outer )
                             {
-                                int A = 0;
+                                var A = 0;
                                 if ( Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Inner )
                                 {
                                     A++;
@@ -482,40 +482,40 @@ namespace SharpFlame.Mapping
                                 ResultDirection = TileUtil.Bottom;
                                 break;
                             }
-                            else if ( ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer &&
-                                        Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Outer) &&
-                                       (Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Inner ||
-                                        Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Inner)) ||
-                                      ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer ||
-                                        Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Outer) &&
-                                       (Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Inner &&
-                                        Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Inner)) )
+                            if ( ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer &&
+                                   Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Outer) &&
+                                  (Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Inner ||
+                                   Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Inner)) ||
+                                 ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer ||
+                                   Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Outer) &&
+                                  (Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Inner &&
+                                   Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Inner)) )
                             {
                                 ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Straight;
                                 ResultDirection = TileUtil.Left;
                                 break;
                             }
-                            else if ( ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer &&
-                                        Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Outer) &&
-                                       (Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Inner ||
-                                        Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Inner)) ||
-                                      ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer ||
-                                        Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Outer) &&
-                                       (Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Inner &&
-                                        Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Inner)) )
+                            if ( ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer &&
+                                   Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Outer) &&
+                                  (Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Inner ||
+                                   Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Inner)) ||
+                                 ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer ||
+                                   Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Outer) &&
+                                  (Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Inner &&
+                                   Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Inner)) )
                             {
                                 ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Straight;
                                 ResultDirection = TileUtil.Top;
                                 break;
                             }
-                            else if ( ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Inner &&
-                                        Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Inner) &&
-                                       (Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Outer ||
-                                        Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer)) ||
-                                      ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Inner ||
-                                        Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Inner) &&
-                                       (Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Outer &&
-                                        Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer)) )
+                            if ( ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Inner &&
+                                   Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Inner) &&
+                                  (Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Outer ||
+                                   Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer)) ||
+                                 ((Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Inner ||
+                                   Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Inner) &&
+                                  (Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Outer &&
+                                   Terrain.Vertices[PosNum.X + 1, PosNum.Y + 1].Terrain == Terrain_Outer)) )
                             {
                                 ResultTiles = Painter.CliffBrushes[BrushNum].Tiles_Straight;
                                 ResultDirection = TileUtil.Right;
@@ -530,14 +530,14 @@ namespace SharpFlame.Mapping
                     }
                     else
                     {
-                        int BrushNum = 0;
+                        var BrushNum = 0;
                         for ( BrushNum = 0; BrushNum <= Painter.CliffBrushCount - 1; BrushNum++ )
                         {
                             Terrain_Inner = Painter.CliffBrushes[BrushNum].Terrain_Inner;
                             Terrain_Outer = Painter.CliffBrushes[BrushNum].Terrain_Outer;
                             if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Outer )
                             {
-                                int A = 0;
+                                var A = 0;
                                 if ( Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Inner )
                                 {
                                     A++;
@@ -559,7 +559,7 @@ namespace SharpFlame.Mapping
                             }
                             else if ( Terrain.Vertices[PosNum.X + 1, PosNum.Y].Terrain == Terrain_Inner )
                             {
-                                int A = 0;
+                                var A = 0;
                                 if ( Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer )
                                 {
                                     A++;
@@ -589,14 +589,14 @@ namespace SharpFlame.Mapping
                 }
                 else if ( Terrain.Tiles[PosNum.X, PosNum.Y].TriBottomLeftIsCliff )
                 {
-                    int BrushNum = 0;
+                    var BrushNum = 0;
                     for ( BrushNum = 0; BrushNum <= Painter.CliffBrushCount - 1; BrushNum++ )
                     {
                         Terrain_Inner = Painter.CliffBrushes[BrushNum].Terrain_Inner;
                         Terrain_Outer = Painter.CliffBrushes[BrushNum].Terrain_Outer;
                         if ( Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Outer )
                         {
-                            int A = 0;
+                            var A = 0;
                             if ( Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Inner )
                             {
                                 A++;
@@ -618,7 +618,7 @@ namespace SharpFlame.Mapping
                         }
                         else if ( Terrain.Vertices[PosNum.X, PosNum.Y + 1].Terrain == Terrain_Inner )
                         {
-                            int A = 0;
+                            var A = 0;
                             if ( Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer )
                             {
                                 A++;
@@ -645,10 +645,6 @@ namespace SharpFlame.Mapping
                         ResultDirection = TileUtil.None;
                     }
                 }
-                else
-                {
-                    //no cliff
-                }
             }
 
             //apply roads
@@ -671,13 +667,13 @@ namespace SharpFlame.Mapping
             }
             if ( Road != null )
             {
-                int BrushNum = 0;
+                var BrushNum = 0;
                 for ( BrushNum = 0; BrushNum <= Painter.RoadBrushCount - 1; BrushNum++ )
                 {
                     if ( Painter.RoadBrushes[BrushNum].Road == Road )
                     {
                         Terrain_Outer = Painter.RoadBrushes[BrushNum].Terrain;
-                        int A = 0;
+                        var A = 0;
                         if ( Terrain.Vertices[PosNum.X, PosNum.Y].Terrain == Terrain_Outer )
                         {
                             A++;

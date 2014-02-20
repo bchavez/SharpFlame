@@ -1,8 +1,11 @@
+#region
+
 using SharpFlame.Generators;
-using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 using SharpFlame.Util;
+
+#endregion
 
 namespace SharpFlame.Painters
 {
@@ -18,31 +21,31 @@ namespace SharpFlame.Painters
 
             //arizona
 
-            Terrain Terrain_Red = new Terrain();
+            var Terrain_Red = new Terrain();
             Terrain_Red.Name = "Red";
             App.Painter_Arizona.AddTerrain(Terrain_Red);
 
-            Terrain Terrain_Yellow = new Terrain();
+            var Terrain_Yellow = new Terrain();
             Terrain_Yellow.Name = "Yellow";
             App.Painter_Arizona.AddTerrain(Terrain_Yellow);
 
-            Terrain Terrain_Sand = new Terrain();
+            var Terrain_Sand = new Terrain();
             Terrain_Sand.Name = "Sand";
             App.Painter_Arizona.AddTerrain(Terrain_Sand);
 
-            Terrain Terrain_Brown = new Terrain();
+            var Terrain_Brown = new Terrain();
             Terrain_Brown.Name = "Brown";
             App.Painter_Arizona.AddTerrain(Terrain_Brown);
 
-            Terrain Terrain_Green = new Terrain();
+            var Terrain_Green = new Terrain();
             Terrain_Green.Name = "Green";
             App.Painter_Arizona.AddTerrain(Terrain_Green);
 
-            Terrain Terrain_Concrete = new Terrain();
+            var Terrain_Concrete = new Terrain();
             Terrain_Concrete.Name = "Concrete";
             App.Painter_Arizona.AddTerrain(Terrain_Concrete);
 
-            Terrain Terrain_Water = new Terrain();
+            var Terrain_Water = new Terrain();
             Terrain_Water.Name = "Water";
             App.Painter_Arizona.AddTerrain(Terrain_Water);
 
@@ -171,13 +174,13 @@ namespace SharpFlame.Painters
             App.Painter_Arizona.AddBrush(NewBrush);
 
 
-            Road Road_Road = new Road();
+            var Road_Road = new Road();
 
             Road_Road = new Road();
             Road_Road.Name = "Road";
             App.Painter_Arizona.AddRoad(Road_Road);
 
-            Road Road_Track = new Road();
+            var Road_Track = new Road();
 
             Road_Track = new Road();
             Road_Track.Name = "Track";
@@ -206,7 +209,7 @@ namespace SharpFlame.Painters
             DefaultGenerator.Generator_TilesetArizona.OldTextureLayers.Layers = new clsLayer[0];
             DefaultGenerator.Generator_TilesetArizona.OldTextureLayers.LayerCount = 0;
 
-            clsLayer NewLayer = default(clsLayer);
+            var NewLayer = default(clsLayer);
 
             NewLayer = new clsLayer();
             DefaultGenerator.Generator_TilesetArizona.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetArizona.OldTextureLayers.LayerCount, NewLayer);
@@ -275,35 +278,35 @@ namespace SharpFlame.Painters
 
         public static void CreatePainterUrban()
         {
-            CliffBrush NewBrushCliff = default(CliffBrush);
-            TransitionBrush NewBrush = default(TransitionBrush);
-            RoadBrush NewRoadBrush = default(RoadBrush);
+            var NewBrushCliff = default(CliffBrush);
+            var NewBrush = default(TransitionBrush);
+            var NewRoadBrush = default(RoadBrush);
 
             //urban
 
             App.Painter_Urban = new Painter();
 
-            Terrain Terrain_Green = new Terrain();
+            var Terrain_Green = new Terrain();
             Terrain_Green.Name = "Green";
             App.Painter_Urban.AddTerrain(Terrain_Green);
 
-            Terrain Terrain_Blue = new Terrain();
+            var Terrain_Blue = new Terrain();
             Terrain_Blue.Name = "Blue";
             App.Painter_Urban.AddTerrain(Terrain_Blue);
 
-            Terrain Terrain_Gray = new Terrain();
+            var Terrain_Gray = new Terrain();
             Terrain_Gray.Name = "Gray";
             App.Painter_Urban.AddTerrain(Terrain_Gray);
 
-            Terrain Terrain_Orange = new Terrain();
+            var Terrain_Orange = new Terrain();
             Terrain_Orange.Name = "Orange";
             App.Painter_Urban.AddTerrain(Terrain_Orange);
 
-            Terrain Terrain_Concrete = new Terrain();
+            var Terrain_Concrete = new Terrain();
             Terrain_Concrete.Name = "Concrete";
             App.Painter_Urban.AddTerrain(Terrain_Concrete);
 
-            Terrain Terrain_Water = new Terrain();
+            var Terrain_Water = new Terrain();
             Terrain_Water.Name = "Water";
             App.Painter_Urban.AddTerrain(Terrain_Water);
 
@@ -421,7 +424,7 @@ namespace SharpFlame.Painters
             App.Painter_Urban.AddBrush(NewBrush);
 
             //road
-            Road Road_Road = new Road();
+            var Road_Road = new Road();
             Road_Road.Name = "Road";
             App.Painter_Urban.AddRoad(Road_Road);
             //road green
@@ -472,7 +475,7 @@ namespace SharpFlame.Painters
             DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.Layers = new clsLayer[0];
             DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount = 0;
 
-            clsLayer NewLayer = default(clsLayer);
+            var NewLayer = default(clsLayer);
 
             NewLayer = new clsLayer();
             DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetUrban.OldTextureLayers.LayerCount, NewLayer);
@@ -563,41 +566,41 @@ namespace SharpFlame.Painters
 
         public static void CreatePainterRockies()
         {
-            CliffBrush NewBrushCliff = default(CliffBrush);
-            TransitionBrush NewBrush = default(TransitionBrush);
-            RoadBrush NewRoadBrush = default(RoadBrush);
+            var NewBrushCliff = default(CliffBrush);
+            var NewBrush = default(TransitionBrush);
+            var NewRoadBrush = default(RoadBrush);
 
             App.Painter_Rockies = new Painter();
 
-            Terrain Terrain_Grass = new Terrain();
+            var Terrain_Grass = new Terrain();
             Terrain_Grass.Name = "Grass";
             App.Painter_Rockies.AddTerrain(Terrain_Grass);
 
-            Terrain Terrain_Gravel = new Terrain();
+            var Terrain_Gravel = new Terrain();
             Terrain_Gravel.Name = "Gravel";
             App.Painter_Rockies.AddTerrain(Terrain_Gravel);
 
-            Terrain Terrain_Dirt = new Terrain();
+            var Terrain_Dirt = new Terrain();
             Terrain_Dirt.Name = "Dirt";
             App.Painter_Rockies.AddTerrain(Terrain_Dirt);
 
-            Terrain Terrain_GrassSnow = new Terrain();
+            var Terrain_GrassSnow = new Terrain();
             Terrain_GrassSnow.Name = "Grass Snow";
             App.Painter_Rockies.AddTerrain(Terrain_GrassSnow);
 
-            Terrain Terrain_GravelSnow = new Terrain();
+            var Terrain_GravelSnow = new Terrain();
             Terrain_GravelSnow.Name = "Gravel Snow";
             App.Painter_Rockies.AddTerrain(Terrain_GravelSnow);
 
-            Terrain Terrain_Snow = new Terrain();
+            var Terrain_Snow = new Terrain();
             Terrain_Snow.Name = "Snow";
             App.Painter_Rockies.AddTerrain(Terrain_Snow);
 
-            Terrain Terrain_Concrete = new Terrain();
+            var Terrain_Concrete = new Terrain();
             Terrain_Concrete.Name = "Concrete";
             App.Painter_Rockies.AddTerrain(Terrain_Concrete);
 
-            Terrain Terrain_Water = new Terrain();
+            var Terrain_Water = new Terrain();
             Terrain_Water.Name = "Water";
             App.Painter_Rockies.AddTerrain(Terrain_Water);
 
@@ -756,7 +759,7 @@ namespace SharpFlame.Painters
             NewBrush.Tiles_Corner_Out.Tile_Add(39, TileUtil.TopLeft, 1);
             App.Painter_Rockies.AddBrush(NewBrush);
             //road
-            Road Road_Road = new Road();
+            var Road_Road = new Road();
             Road_Road.Name = "Road";
             App.Painter_Rockies.AddRoad(Road_Road);
             //road brown
@@ -768,7 +771,7 @@ namespace SharpFlame.Painters
             NewRoadBrush.Tile_End.Tile_Add(60, TileUtil.Left, 1);
             App.Painter_Rockies.AddBrush(NewRoadBrush);
             //track
-            Road Road_Track = new Road();
+            var Road_Track = new Road();
             Road_Track.Name = "Track";
             App.Painter_Rockies.AddRoad(Road_Track);
             //track brown
@@ -785,7 +788,7 @@ namespace SharpFlame.Painters
             DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.Layers = new clsLayer[0];
             DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount = 0;
 
-            clsLayer NewLayer = default(clsLayer);
+            var NewLayer = default(clsLayer);
 
             NewLayer = new clsLayer();
             DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.Layer_Insert(DefaultGenerator.Generator_TilesetRockies.OldTextureLayers.LayerCount, NewLayer);

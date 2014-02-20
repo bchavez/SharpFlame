@@ -1,4 +1,8 @@
+#region
+
 using System.Windows.Forms;
+
+#endregion
 
 namespace SharpFlame.AppSettings
 {
@@ -59,21 +63,21 @@ namespace SharpFlame.AppSettings
 
         public static Option<KeyboardControl> KeyboardControlOptionCreate(string saveKey, Keys[] keys)
         {
-            Option<KeyboardControl> result = new Option<KeyboardControl>(saveKey, new KeyboardControl(keys, new Keys[] {}));
+            var result = new Option<KeyboardControl>(saveKey, new KeyboardControl(keys, new Keys[] {}));
             OptionsKeyboardControls.Options.Add(result.GroupLink);
             return result;
         }
 
         public static Option<KeyboardControl> KeyboardControlOptionCreate(string saveKey, Keys[] keys, Keys[] unlessKeys)
         {
-            Option<KeyboardControl> result = new Option<KeyboardControl>(saveKey, new KeyboardControl(keys, unlessKeys));
+            var result = new Option<KeyboardControl>(saveKey, new KeyboardControl(keys, unlessKeys));
             OptionsKeyboardControls.Options.Add(result.GroupLink);
             return result;
         }
 
         public static Option<KeyboardControl> KeyboardControlOptionCreate(string saveKey, KeyboardControl defaultValue)
         {
-            Option<KeyboardControl> result = new Option<KeyboardControl>(saveKey, defaultValue);
+            var result = new Option<KeyboardControl>(saveKey, defaultValue);
             OptionsKeyboardControls.Options.Add(result.GroupLink);
             return result;
         }
@@ -82,64 +86,64 @@ namespace SharpFlame.AppSettings
         {
             //interface controls
 
-            Deselect = KeyboardControlOptionCreate("ObjectSelectTool", new Keys[] {Keys.Escape});
-            PreviousTool = KeyboardControlOptionCreate("PreviousTool", new Keys[] {Keys.Oemtilde});
+            Deselect = KeyboardControlOptionCreate("ObjectSelectTool", new[] {Keys.Escape});
+            PreviousTool = KeyboardControlOptionCreate("PreviousTool", new[] {Keys.Oemtilde});
 
             //selected unit controls
 
-            UnitMove = KeyboardControlOptionCreate("MoveObjects", new Keys[] {Keys.M});
-            UnitDelete = KeyboardControlOptionCreate("DeleteObjects", new Keys[] {Keys.Delete});
-            UnitMultiselect = KeyboardControlOptionCreate("Multiselect", new Keys[] {Keys.ShiftKey});
+            UnitMove = KeyboardControlOptionCreate("MoveObjects", new[] {Keys.M});
+            UnitDelete = KeyboardControlOptionCreate("DeleteObjects", new[] {Keys.Delete});
+            UnitMultiselect = KeyboardControlOptionCreate("Multiselect", new[] {Keys.ShiftKey});
 
             //generalised controls
 
-            Slow = KeyboardControlOptionCreate("ViewSlow", new Keys[] {Keys.R});
-            Fast = KeyboardControlOptionCreate("ViewFast", new Keys[] {Keys.F});
+            Slow = KeyboardControlOptionCreate("ViewSlow", new[] {Keys.R});
+            Fast = KeyboardControlOptionCreate("ViewFast", new[] {Keys.F});
 
             //picker controls
 
-            Picker = KeyboardControlOptionCreate("Picker", new Keys[] {Keys.ControlKey});
+            Picker = KeyboardControlOptionCreate("Picker", new[] {Keys.ControlKey});
 
             //view controls
 
-            ViewTextures = KeyboardControlOptionCreate("ShowTextures", new Keys[] {Keys.F5});
-            ViewLighting = KeyboardControlOptionCreate("ShowLighting", new Keys[] {Keys.F8});
-            ViewWireframe = KeyboardControlOptionCreate("ShowWireframe", new Keys[] {Keys.F6});
-            ViewUnits = KeyboardControlOptionCreate("ShowObjects", new Keys[] {Keys.F7});
-            ViewScriptMarkers = KeyboardControlOptionCreate("ShowLabels", new Keys[] {Keys.F4});
-            ViewMoveType = KeyboardControlOptionCreate("ViewMoveMode", new Keys[] {Keys.F1});
-            ViewRotateType = KeyboardControlOptionCreate("ViewRotateMode", new Keys[] {Keys.F2});
-            ViewMoveLeft = KeyboardControlOptionCreate("ViewMoveLeft", new Keys[] {Keys.A});
-            ViewMoveRight = KeyboardControlOptionCreate("ViewMoveRight", new Keys[] {Keys.D});
-            ViewMoveForward = KeyboardControlOptionCreate("ViewMoveForwards", new Keys[] {Keys.W});
-            ViewMoveBackward = KeyboardControlOptionCreate("ViewMoveBackwards", new Keys[] {Keys.S});
-            ViewMoveUp = KeyboardControlOptionCreate("ViewMoveUp", new Keys[] {Keys.E});
-            ViewMoveDown = KeyboardControlOptionCreate("ViewMoveDown", new Keys[] {Keys.C});
-            ViewZoomIn = KeyboardControlOptionCreate("ViewZoomIn", new Keys[] {Keys.Home});
-            ViewZoomOut = KeyboardControlOptionCreate("ViewZoomOut", new Keys[] {Keys.End});
-            ViewLeft = KeyboardControlOptionCreate("ViewRotateLeft", new Keys[] {Keys.Left});
-            ViewRight = KeyboardControlOptionCreate("ViewRotateRight", new Keys[] {Keys.Right});
-            ViewForward = KeyboardControlOptionCreate("ViewRotateForwards", new Keys[] {Keys.Up});
-            ViewBackward = KeyboardControlOptionCreate("ViewRotateBackwards", new Keys[] {Keys.Down});
-            ViewUp = KeyboardControlOptionCreate("ViewRotateUp", new Keys[] {Keys.PageUp});
-            ViewDown = KeyboardControlOptionCreate("ViewRotateDown", new Keys[] {Keys.PageDown});
-            ViewRollLeft = KeyboardControlOptionCreate("ViewRollLeft", new Keys[] {Keys.OemOpenBrackets});
-            ViewRollRight = KeyboardControlOptionCreate("ViewRollRight", new Keys[] {Keys.OemCloseBrackets});
-            ViewReset = KeyboardControlOptionCreate("ViewReset", new Keys[] {Keys.Back});
+            ViewTextures = KeyboardControlOptionCreate("ShowTextures", new[] {Keys.F5});
+            ViewLighting = KeyboardControlOptionCreate("ShowLighting", new[] {Keys.F8});
+            ViewWireframe = KeyboardControlOptionCreate("ShowWireframe", new[] {Keys.F6});
+            ViewUnits = KeyboardControlOptionCreate("ShowObjects", new[] {Keys.F7});
+            ViewScriptMarkers = KeyboardControlOptionCreate("ShowLabels", new[] {Keys.F4});
+            ViewMoveType = KeyboardControlOptionCreate("ViewMoveMode", new[] {Keys.F1});
+            ViewRotateType = KeyboardControlOptionCreate("ViewRotateMode", new[] {Keys.F2});
+            ViewMoveLeft = KeyboardControlOptionCreate("ViewMoveLeft", new[] {Keys.A});
+            ViewMoveRight = KeyboardControlOptionCreate("ViewMoveRight", new[] {Keys.D});
+            ViewMoveForward = KeyboardControlOptionCreate("ViewMoveForwards", new[] {Keys.W});
+            ViewMoveBackward = KeyboardControlOptionCreate("ViewMoveBackwards", new[] {Keys.S});
+            ViewMoveUp = KeyboardControlOptionCreate("ViewMoveUp", new[] {Keys.E});
+            ViewMoveDown = KeyboardControlOptionCreate("ViewMoveDown", new[] {Keys.C});
+            ViewZoomIn = KeyboardControlOptionCreate("ViewZoomIn", new[] {Keys.Home});
+            ViewZoomOut = KeyboardControlOptionCreate("ViewZoomOut", new[] {Keys.End});
+            ViewLeft = KeyboardControlOptionCreate("ViewRotateLeft", new[] {Keys.Left});
+            ViewRight = KeyboardControlOptionCreate("ViewRotateRight", new[] {Keys.Right});
+            ViewForward = KeyboardControlOptionCreate("ViewRotateForwards", new[] {Keys.Up});
+            ViewBackward = KeyboardControlOptionCreate("ViewRotateBackwards", new[] {Keys.Down});
+            ViewUp = KeyboardControlOptionCreate("ViewRotateUp", new[] {Keys.PageUp});
+            ViewDown = KeyboardControlOptionCreate("ViewRotateDown", new[] {Keys.PageDown});
+            ViewRollLeft = KeyboardControlOptionCreate("ViewRollLeft", new[] {Keys.OemOpenBrackets});
+            ViewRollRight = KeyboardControlOptionCreate("ViewRollRight", new[] {Keys.OemCloseBrackets});
+            ViewReset = KeyboardControlOptionCreate("ViewReset", new[] {Keys.Back});
 
             //texture controls
 
-            CounterClockwise = KeyboardControlOptionCreate("CounterClockwise", new Keys[] {Keys.Oemcomma});
-            Clockwise = KeyboardControlOptionCreate("Clockwise", new Keys[] {Keys.OemPeriod});
-            TextureFlip = KeyboardControlOptionCreate("TextureFlip", new Keys[] {Keys.OemQuestion});
-            TriFlip = KeyboardControlOptionCreate("TriangleFlip", new Keys[] {Keys.OemPipe}); //\|
-            Gateway_Delete = KeyboardControlOptionCreate("GatewayDelete", new Keys[] {Keys.ShiftKey});
+            CounterClockwise = KeyboardControlOptionCreate("CounterClockwise", new[] {Keys.Oemcomma});
+            Clockwise = KeyboardControlOptionCreate("Clockwise", new[] {Keys.OemPeriod});
+            TextureFlip = KeyboardControlOptionCreate("TextureFlip", new[] {Keys.OemQuestion});
+            TriFlip = KeyboardControlOptionCreate("TriangleFlip", new[] {Keys.OemPipe}); //\|
+            Gateway_Delete = KeyboardControlOptionCreate("GatewayDelete", new[] {Keys.ShiftKey});
 
             //undo controls
 
-            Undo = KeyboardControlOptionCreate("Undo", new Keys[] {Keys.ControlKey, Keys.Z});
-            Redo = KeyboardControlOptionCreate("Redo", new Keys[] {Keys.ControlKey, Keys.Y});
-            ScriptPosition = KeyboardControlOptionCreate("PositionLabel", new Keys[] {Keys.P});
+            Undo = KeyboardControlOptionCreate("Undo", new[] {Keys.ControlKey, Keys.Z});
+            Redo = KeyboardControlOptionCreate("Redo", new[] {Keys.ControlKey, Keys.Y});
+            ScriptPosition = KeyboardControlOptionCreate("PositionLabel", new[] {Keys.P});
 
             KeyboardProfile = new KeyboardProfile(OptionsKeyboardControls);
         }

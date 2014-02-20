@@ -1,4 +1,8 @@
+#region
+
 using System.Windows.Forms;
+
+#endregion
 
 namespace SharpFlame
 {
@@ -30,7 +34,7 @@ namespace SharpFlame
             {
                 return;
             }
-            clsResultItemInterface item = (clsResultItemInterface)e.Node.Tag;
+            var item = (clsResultItemInterface)e.Node.Tag;
             if ( item == null )
             {
                 return;

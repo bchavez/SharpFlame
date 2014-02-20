@@ -1,31 +1,21 @@
+#region
+
 using SharpFlame.Collections;
+
+#endregion
 
 namespace SharpFlame.Mapping.Objects
 {
     public class clsUnitSectorConnection
     {
+        protected Link<clsSector> _SectorLink;
+        protected Link<clsUnit> _UnitLink;
+
         public clsUnitSectorConnection()
         {
             _UnitLink = new Link<clsUnit>(this);
             _SectorLink = new Link<clsSector>(this);
         }
-
-        protected class Link<SourceType> : ConnectedListLink<clsUnitSectorConnection, SourceType> where SourceType : class
-        {
-            public Link(clsUnitSectorConnection Owner) : base(Owner)
-            {
-            }
-
-            public override void AfterRemove()
-            {
-                base.AfterRemove();
-
-                Item.Deallocate();
-            }
-        }
-
-        protected Link<clsUnit> _UnitLink;
-        protected Link<clsSector> _SectorLink;
 
         public virtual clsUnit Unit
         {
@@ -64,7 +54,7 @@ namespace SharpFlame.Mapping.Objects
                 return null;
             }
 
-            clsUnitSectorConnection Result = new clsUnitSectorConnection();
+            var Result = new clsUnitSectorConnection();
             Result._UnitLink.Connect(Unit.Sectors);
             Result._SectorLink.Connect(Sector.Units);
             return Result;
@@ -74,6 +64,20 @@ namespace SharpFlame.Mapping.Objects
         {
             _UnitLink.Deallocate();
             _SectorLink.Deallocate();
+        }
+
+        protected class Link<SourceType> : ConnectedListLink<clsUnitSectorConnection, SourceType> where SourceType : class
+        {
+            public Link(clsUnitSectorConnection Owner) : base(Owner)
+            {
+            }
+
+            public override void AfterRemove()
+            {
+                base.AfterRemove();
+
+                Item.Deallocate();
+            }
         }
     }
 }

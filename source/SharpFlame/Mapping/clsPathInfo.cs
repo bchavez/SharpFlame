@@ -2,8 +2,14 @@ namespace SharpFlame.Mapping
 {
     public class clsPathInfo
     {
-        private string _Path;
-        private bool _IsFMap;
+        private readonly bool _IsFMap;
+        private readonly string _Path;
+
+        public clsPathInfo(string Path, bool IsFMap)
+        {
+            _Path = Path;
+            _IsFMap = IsFMap;
+        }
 
         public string Path
         {
@@ -13,12 +19,6 @@ namespace SharpFlame.Mapping
         public bool IsFMap
         {
             get { return _IsFMap; }
-        }
-
-        public clsPathInfo(string Path, bool IsFMap)
-        {
-            _Path = Path;
-            _IsFMap = IsFMap;
         }
     }
 }

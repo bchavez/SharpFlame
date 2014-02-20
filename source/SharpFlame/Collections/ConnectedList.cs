@@ -1,12 +1,16 @@
+#region
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
+
+#endregion
 
 namespace SharpFlame.Collections
 {
     public class ConnectedList<ItemType, SourceType> : IEnumerable<ItemType> where ItemType : class where SourceType : class
     {
-        private ConnectedListItemList<ItemType, SourceType> List = new ConnectedListItemList<ItemType, SourceType>();
+        private readonly ConnectedListItemList<ItemType, SourceType> List = new ConnectedListItemList<ItemType, SourceType>();
         private SourceType Source;
 
         public ConnectedList(SourceType Owner)
@@ -31,11 +35,6 @@ namespace SharpFlame.Collections
             get { return List.Busy; }
         }
 
-        public ConnectedListItem<ItemType, SourceType> get_ItemContainer(int Position)
-        {
-            return List[Position];
-        }
-
         public ItemType this[int Position]
         {
             get { return List[Position].Item; }
@@ -44,6 +43,21 @@ namespace SharpFlame.Collections
         public int Count
         {
             get { return List.Count; }
+        }
+
+        public IEnumerator<ItemType> GetEnumerator()
+        {
+            return GetEnumeratorType();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public ConnectedListItem<ItemType, SourceType> get_ItemContainer(int Position)
+        {
+            return List[Position];
         }
 
         public virtual void Add(ConnectedListItem<ItemType, SourceType> NewItem)
@@ -66,7 +80,7 @@ namespace SharpFlame.Collections
 
         public virtual void Remove(int Position)
         {
-            ConnectedListItem<ItemType, SourceType> RemoveItem = default(ConnectedListItem<ItemType, SourceType>);
+            var RemoveItem = default(ConnectedListItem<ItemType, SourceType>);
 
             RemoveItem = List[Position];
             RemoveItem.BeforeRemove();
@@ -76,7 +90,7 @@ namespace SharpFlame.Collections
 
         public ConnectedListItem<ItemType, SourceType> FindLinkTo(ItemType ItemToFind)
         {
-            foreach ( ConnectedListItem<ItemType, SourceType> Link in List )
+            foreach ( var Link in List )
             {
                 if ( Link.Item == ItemToFind )
                 {
@@ -94,10 +108,10 @@ namespace SharpFlame.Collections
 
         public SimpleList<ItemType> GetItemsAsSimpleList()
         {
-            SimpleList<ItemType> Result = new SimpleList<ItemType>();
+            var Result = new SimpleList<ItemType>();
 
-            ItemType ConnectedItem = default(ItemType);
-            foreach ( ItemType tempLoopVar_ConnectedItem in this )
+            var ConnectedItem = default(ItemType);
+            foreach ( var tempLoopVar_ConnectedItem in this )
             {
                 ConnectedItem = tempLoopVar_ConnectedItem;
                 Result.Add(ConnectedItem);
@@ -108,10 +122,10 @@ namespace SharpFlame.Collections
 
         public SimpleClassList<ItemType> GetItemsAsSimpleClassList()
         {
-            SimpleClassList<ItemType> Result = new SimpleClassList<ItemType>();
+            var Result = new SimpleClassList<ItemType>();
 
-            ItemType ConnectedItem = default(ItemType);
-            foreach ( ItemType tempLoopVar_ConnectedItem in this )
+            var ConnectedItem = default(ItemType);
+            foreach ( var tempLoopVar_ConnectedItem in this )
             {
                 ConnectedItem = tempLoopVar_ConnectedItem;
                 Result.Add(ConnectedItem);
@@ -126,11 +140,6 @@ namespace SharpFlame.Collections
             {
                 Remove(0);
             }
-        }
-
-        public IEnumerator<ItemType> GetEnumerator()
-        {
-            return GetEnumeratorType();
         }
 
         public IEnumerator<ItemType> GetEnumeratorType()
@@ -150,8 +159,8 @@ namespace SharpFlame.Collections
 
         public class Enumerator : IEnumerator
         {
-            private ConnectedList<ItemType, SourceType> list;
             private const int startPosition = -1;
+            private readonly ConnectedList<ItemType, SourceType> list;
             private int position = startPosition;
 
             public Enumerator(ConnectedList<ItemType, SourceType> list)
@@ -178,18 +187,13 @@ namespace SharpFlame.Collections
 
         public class EnumeratorType : IEnumerator<ItemType>
         {
-            private ConnectedList<ItemType, SourceType> list;
             private const int startPosition = -1;
+            private readonly ConnectedList<ItemType, SourceType> list;
             private int position = startPosition;
 
             public EnumeratorType(ConnectedList<ItemType, SourceType> list)
             {
                 this.list = list;
-            }
-
-            public ItemType Current
-            {
-                get { return list[position]; }
             }
 
             //public object Current
@@ -201,6 +205,11 @@ namespace SharpFlame.Collections
             //}
 
             public object Current1
+            {
+                get { return list[position]; }
+            }
+
+            public ItemType Current
             {
                 get { return list[position]; }
             }
@@ -226,20 +235,6 @@ namespace SharpFlame.Collections
             private bool disposedValue; // To detect redundant calls
 
             // IDisposable
-            protected virtual void Dispose(bool disposing)
-            {
-                if ( !disposedValue )
-                {
-                    if ( disposing )
-                    {
-                        // TODO: dispose managed state (managed objects).
-                    }
-
-                    // TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
-                    // TODO: set large fields to null.
-                }
-                disposedValue = true;
-            }
 
             // TODO: override Finalize() only if Dispose( disposing As Boolean) above has code to free unmanaged resources.
             //Protected Overrides Sub Finalize()
@@ -256,12 +251,22 @@ namespace SharpFlame.Collections
                 GC.SuppressFinalize(this);
             }
 
-            #endregion
-        }
+            protected virtual void Dispose(bool disposing)
+            {
+                if ( !disposedValue )
+                {
+                    if ( disposing )
+                    {
+                        // TODO: dispose managed state (managed objects).
+                    }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
+                    // TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
+                    // TODO: set large fields to null.
+                }
+                disposedValue = true;
+            }
+
+            #endregion
         }
     }
 }

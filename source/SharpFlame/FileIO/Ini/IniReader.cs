@@ -1,20 +1,24 @@
-using NLog;
+#region
+
 using System;
 using System.IO;
+using NLog;
 using SharpFlame.Collections;
+
+#endregion
 
 namespace SharpFlame.FileIO.Ini
 {
     public class IniReader
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public SimpleList<Section> Sections = new SimpleList<Section>();
         public Section RootSection;
+        public SimpleList<Section> Sections = new SimpleList<Section>();
 
         public void CreateSection(string Name)
         {
-            Section newSection = new Section();
+            var newSection = new Section();
             newSection.Name = Name;
 
             Sections.Add(newSection);
@@ -22,14 +26,14 @@ namespace SharpFlame.FileIO.Ini
 
         public clsResult ReadFile(StreamReader File)
         {
-            clsResult ReturnResult = new clsResult("Reading INI", false);
-            logger.Debug ("Reading INI.");
+            var ReturnResult = new clsResult("Reading INI", false);
+            logger.Debug("Reading INI.");
 
-            int InvalidLineCount = 0;
-            int CurrentEntryNum = -1;
+            var InvalidLineCount = 0;
+            var CurrentEntryNum = -1;
             string LineText = null;
-            int A = 0;
-            string SectionName = "";
+            var A = 0;
+            var SectionName = "";
 
             RootSection = new Section();
 
@@ -115,11 +119,11 @@ namespace SharpFlame.FileIO.Ini
 
         public clsResult Translate(SectionTranslator Translator)
         {
-            clsResult ReturnResult = new clsResult("Translating INI", false);
-            logger.Debug ("Translating INI");
+            var ReturnResult = new clsResult("Translating INI", false);
+            logger.Debug("Translating INI");
 
-            int A = 0;
-            ErrorCount ErrorCount = new ErrorCount();
+            var A = 0;
+            var ErrorCount = new ErrorCount();
 
             ErrorCount.NameWarningCountMax = 16;
             ErrorCount.ValueWarningCountMax = 16;

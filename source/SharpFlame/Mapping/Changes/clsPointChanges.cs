@@ -1,14 +1,17 @@
+#region
+
 using SharpFlame.Collections;
 using SharpFlame.Core.Domain;
 using SharpFlame.Mapping.Tools;
-using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame.Mapping.Changes
 {
     public class clsPointChanges
     {
-        public bool[,] PointIsChanged;
         public SimpleList<XYInt> ChangedPoints = new SimpleList<XYInt>();
+        public bool[,] PointIsChanged;
 
         public clsPointChanges(XYInt PointSize)
         {
@@ -28,9 +31,9 @@ namespace SharpFlame.Mapping.Changes
 
         public void SetAllChanged()
         {
-            int X = 0;
-            int Y = 0;
-            XYInt Num = new XYInt(0, 0);
+            var X = 0;
+            var Y = 0;
+            var Num = new XYInt(0, 0);
 
             for ( Y = 0; Y <= PointIsChanged.GetUpperBound(1); Y++ )
             {
@@ -45,9 +48,9 @@ namespace SharpFlame.Mapping.Changes
 
         public void Clear()
         {
-            XYInt Point = default(XYInt);
+            var Point = default(XYInt);
 
-            foreach ( XYInt tempLoopVar_Point in ChangedPoints )
+            foreach ( var tempLoopVar_Point in ChangedPoints )
             {
                 Point = tempLoopVar_Point;
                 PointIsChanged[Point.X, Point.Y] = false;
@@ -59,7 +62,7 @@ namespace SharpFlame.Mapping.Changes
         {
             foreach ( var tempLoopVar_Point in ChangedPoints )
             {
-				Tool.PosNum = tempLoopVar_Point;
+                Tool.PosNum = tempLoopVar_Point;
                 Tool.ActionPerform();
             }
         }

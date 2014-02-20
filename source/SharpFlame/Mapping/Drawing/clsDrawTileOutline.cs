@@ -1,27 +1,30 @@
+#region
+
 using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
 using SharpFlame.Mapping.Tools;
-using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame.Mapping.Drawing
 {
     public class clsDrawTileOutline : clsAction
     {
+        private readonly XYZInt vertex0;
+        private readonly XYZInt vertex1;
+        private readonly XYZInt vertex2;
+        private readonly XYZInt vertex3;
         public sRGBA_sng Colour;
 
-        private XYZInt vertex0;
-        private XYZInt vertex1;
-        private XYZInt vertex2;
-        private XYZInt vertex3;
-
-		public clsDrawTileOutline() {
-			vertex0 = new XYZInt (0, 0, 0);
-			vertex1 = new XYZInt (0, 0, 0);
-			vertex2 = new XYZInt (0, 0, 0);
-			vertex3 = new XYZInt (0, 0, 0);
-		}
+        public clsDrawTileOutline()
+        {
+            vertex0 = new XYZInt(0, 0, 0);
+            vertex1 = new XYZInt(0, 0, 0);
+            vertex2 = new XYZInt(0, 0, 0);
+            vertex3 = new XYZInt(0, 0, 0);
+        }
 
         public override void ActionPerform()
         {

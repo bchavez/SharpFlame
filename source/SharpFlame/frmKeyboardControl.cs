@@ -1,8 +1,11 @@
+#region
+
 using System;
 using System.Windows.Forms;
 using SharpFlame.Collections;
 using SharpFlame.FileIO;
-using SharpFlame.Util;
+
+#endregion
 
 namespace SharpFlame
 {
@@ -22,10 +25,10 @@ namespace SharpFlame
         private void UpdateLabel()
         {
             lblKeys.Text = "";
-            for ( int i = 0; i <= Results.Count - 1; i++ )
+            for ( var i = 0; i <= Results.Count - 1; i++ )
             {
-                Keys key = Keys.A;
-                string text = Enum.GetName(typeof(Keys), key);
+                var key = Keys.A;
+                var text = Enum.GetName(typeof(Keys), key);
                 if ( text == null )
                 {
                     lblKeys.Text += Convert.ToInt32(Results[i]).ToStringInvariant();

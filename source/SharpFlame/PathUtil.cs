@@ -1,6 +1,10 @@
+#region
+
 using System.IO;
 
-static internal class PathUtil
+#endregion
+
+internal static class PathUtil
 {
     public static string EndWithPathSeperator(string text)
     {

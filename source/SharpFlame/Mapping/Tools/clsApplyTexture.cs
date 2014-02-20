@@ -1,18 +1,22 @@
+#region
+
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Util;
+
+#endregion
 
 namespace SharpFlame.Mapping.Tools
 {
     public class clsApplyTexture : clsAction
     {
-        public int TextureNum;
-        public bool SetTexture;
         public TileOrientation Orientation;
-        public bool SetOrientation;
         public bool RandomOrientation;
-        public enumTextureTerrainAction TerrainAction;
+        public bool SetOrientation;
+        public bool SetTexture;
 
         private clsTerrain Terrain;
+        public enumTextureTerrainAction TerrainAction;
+        public int TextureNum;
 
         public override void ActionPerform()
         {

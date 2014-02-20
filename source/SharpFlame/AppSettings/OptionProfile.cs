@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -9,17 +11,28 @@ using SharpFlame.FileIO;
 using SharpFlame.FileIO.Ini;
 using Section = SharpFlame.FileIO.Ini.Section;
 
+#endregion
+
 namespace SharpFlame.AppSettings
 {
     public class OptionProfile : Translator
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly ChangeInterface[] _Changes;
+
+        private readonly OptionGroup _Options;
+
+        public OptionProfile(OptionGroup options)
+        {
+            _Options = options;
+            _Changes = new ChangeInterface[options.Options.Count];
+        }
 
         public bool IsAnythingChanged
         {
             get
             {
-                foreach ( OptionInterface item in _Options.Options )
+                foreach ( var item in _Options.Options )
                 {
                     if ( get_Changes(item) != null )
                     {
@@ -30,14 +43,10 @@ namespace SharpFlame.AppSettings
             }
         }
 
-        private OptionGroup _Options;
-
         public OptionGroup Options
         {
             get { return _Options; }
         }
-
-        private ChangeInterface[] _Changes;
 
         public ChangeInterface get_Changes(OptionInterface optionItem)
         {
@@ -51,30 +60,21 @@ namespace SharpFlame.AppSettings
 
         public object get_Value(OptionInterface optionItem)
         {
-            int index = optionItem.GroupLink.ArrayPosition;
-            ChangeInterface change = _Changes[index];
+            var index = optionItem.GroupLink.ArrayPosition;
+            var change = _Changes[index];
             if ( change == null )
             {
                 return optionItem.DefaultValueObject;
             }
-            else
-            {
-                return change.ValueObject;
-            }
-        }
-
-        public OptionProfile(OptionGroup options)
-        {
-            _Options = options;
-            _Changes = new ChangeInterface[options.Options.Count];
+            return change.ValueObject;
         }
 
         public virtual OptionProfile GetCopy(OptionProfileCreator creator)
         {
             creator.Options = _Options;
-            OptionProfile result = creator.Create();
+            var result = creator.Create();
 
-            for ( int i = 0; i <= _Options.Options.Count - 1; i++ )
+            for ( var i = 0; i <= _Options.Options.Count - 1; i++ )
             {
                 if ( _Changes[i] != null )
                 {
@@ -87,24 +87,24 @@ namespace SharpFlame.AppSettings
 
         public clsResult INIWrite(IniWriter file)
         {
-            clsResult returnResult = new clsResult("Writing options to INI", false);
-            logger.Info ("Writing options to INI");
+            var returnResult = new clsResult("Writing options to INI", false);
+            logger.Info("Writing options to INI");
 
-            foreach ( OptionInterface item in _Options.Options )
+            foreach ( var item in _Options.Options )
             {
                 if ( get_Changes(item) == null )
                 {
                     continue;
                 }
-                object optionValue = get_Value(item);
+                var optionValue = get_Value(item);
                 string valueText = null;
                 if ( item is Option<KeyboardControl> )
                 {
-                    KeyboardControl control = (KeyboardControl)optionValue;
+                    var control = (KeyboardControl)optionValue;
                     valueText = "";
-                    for ( int i = 0; i <= control.Keys.GetUpperBound(0); i++ )
+                    for ( var i = 0; i <= control.Keys.GetUpperBound(0); i++ )
                     {
-                        Keys key = Keys.A;
+                        var key = Keys.A;
                         valueText += ((Int32)key).ToStringInvariant();
                         if ( i < control.Keys.GetUpperBound(0) )
                         {
@@ -114,9 +114,9 @@ namespace SharpFlame.AppSettings
                     if ( control.UnlessKeys.GetUpperBound(0) >= 0 )
                     {
                         valueText += "unless ";
-                        for ( int i = 0; i <= control.UnlessKeys.GetUpperBound(0); i++ )
+                        for ( var i = 0; i <= control.UnlessKeys.GetUpperBound(0); i++ )
                         {
-                            Keys key = Keys.A;
+                            var key = Keys.A;
                             valueText += ((Int32)key).ToStringInvariant();
                             if ( i < control.UnlessKeys.GetUpperBound(0) )
                             {
@@ -127,8 +127,8 @@ namespace SharpFlame.AppSettings
                 }
                 else if ( item is Option<SimpleList<string>> )
                 {
-                    SimpleList<string> list = (SimpleList<string>)optionValue;
-                    for ( int i = 0; i <= list.Count - 1; i++ )
+                    var list = (SimpleList<string>)optionValue;
+                    for ( var i = 0; i <= list.Count - 1; i++ )
                     {
                         file.AddProperty(item.SaveKey, list[i]);
                     }
@@ -195,7 +195,7 @@ namespace SharpFlame.AppSettings
 
         public override TranslatorResult Translate(Section.SectionProperty INIProperty)
         {
-            foreach ( OptionInterface item in _Options.Options )
+            foreach ( var item in _Options.Options )
             {
                 if ( item.SaveKey.ToLower() != INIProperty.Name )
                 {
@@ -203,7 +203,7 @@ namespace SharpFlame.AppSettings
                 }
                 if ( item is Option<KeyboardControl> )
                 {
-                    int unlessIndex = Convert.ToInt32(INIProperty.Value.ToLower().IndexOf("unless"));
+                    var unlessIndex = Convert.ToInt32(INIProperty.Value.ToLower().IndexOf("unless"));
                     string[] keysText = null;
                     string[] unlessKeysText = null;
                     if ( unlessIndex < 0 )
@@ -217,12 +217,12 @@ namespace SharpFlame.AppSettings
                         unlessKeysText = INIProperty.Value.Substring(unlessIndex + 6, INIProperty.Value.Length - (unlessIndex + 6)).Split(',');
                     }
 
-                    Keys[] keys = new Keys[keysText.GetUpperBound(0) + 1];
+                    var keys = new Keys[keysText.GetUpperBound(0) + 1];
 
-                    bool valid = true;
-                    for ( int j = 0; j <= keysText.GetUpperBound(0); j++ )
+                    var valid = true;
+                    for ( var j = 0; j <= keysText.GetUpperBound(0); j++ )
                     {
-                        int number = 0;
+                        var number = 0;
                         if ( IOUtil.InvariantParse(keysText[j], ref number) )
                         {
                             keys[j] = (Keys)number;
@@ -232,10 +232,10 @@ namespace SharpFlame.AppSettings
                             valid = false;
                         }
                     }
-                    Keys[] unlessKeys = new Keys[unlessKeysText.GetUpperBound(0) + 1];
-                    for ( int j = 0; j <= unlessKeysText.GetUpperBound(0); j++ )
+                    var unlessKeys = new Keys[unlessKeysText.GetUpperBound(0) + 1];
+                    for ( var j = 0; j <= unlessKeysText.GetUpperBound(0); j++ )
                     {
-                        int number = 0;
+                        var number = 0;
                         if ( IOUtil.InvariantParse(unlessKeysText[j], ref number) )
                         {
                             unlessKeys[j] = (Keys)number;
@@ -249,7 +249,7 @@ namespace SharpFlame.AppSettings
                     {
                         return TranslatorResult.ValueInvalid;
                     }
-                    KeyboardControl control = new KeyboardControl(keys, unlessKeys);
+                    var control = new KeyboardControl(keys, unlessKeys);
                     if ( !item.IsValueValid(control) )
                     {
                         return TranslatorResult.ValueInvalid;
@@ -257,9 +257,9 @@ namespace SharpFlame.AppSettings
                     set_Changes(item, new Change<KeyboardControl>(control));
                     return TranslatorResult.Translated;
                 }
-                else if ( item is Option<SimpleList<string>> )
+                if ( item is Option<SimpleList<string>> )
                 {
-                    SimpleList<string> list = default(SimpleList<string>);
+                    var list = default(SimpleList<string>);
                     if ( get_Changes(item) == null )
                     {
                         list = new SimpleList<string>();
@@ -272,9 +272,9 @@ namespace SharpFlame.AppSettings
                     list.Add(INIProperty.Value);
                     return TranslatorResult.Translated;
                 }
-                else if ( item is Option<FontFamily> )
+                if ( item is Option<FontFamily> )
                 {
-                    FontFamily fontFamily = default(FontFamily);
+                    var fontFamily = default(FontFamily);
                     try
                     {
                         fontFamily = new FontFamily(Convert.ToString(INIProperty.Value));
@@ -290,9 +290,9 @@ namespace SharpFlame.AppSettings
                     set_Changes(item, new Change<FontFamily>(fontFamily));
                     return TranslatorResult.Translated;
                 }
-                else if ( item is Option<clsRGB_sng> )
+                if ( item is Option<clsRGB_sng> )
                 {
-                    clsRGB_sng value = new clsRGB_sng(0.0F, 0.0F, 0.0F);
+                    var value = new clsRGB_sng(0.0F, 0.0F, 0.0F);
                     if ( !value.ReadINIText(new SplitCommaText(Convert.ToString(INIProperty.Value))) )
                     {
                         return TranslatorResult.ValueInvalid;
@@ -304,9 +304,9 @@ namespace SharpFlame.AppSettings
                     set_Changes(item, new Change<clsRGB_sng>(value));
                     return TranslatorResult.Translated;
                 }
-                else if ( item is Option<clsRGBA_sng> )
+                if ( item is Option<clsRGBA_sng> )
                 {
-                    clsRGBA_sng value = new clsRGBA_sng(0.0F, 0.0F, 0.0F, 0.0F);
+                    var value = new clsRGBA_sng(0.0F, 0.0F, 0.0F, 0.0F);
                     if ( !value.ReadINIText(new SplitCommaText(Convert.ToString(INIProperty.Value))) )
                     {
                         return TranslatorResult.ValueInvalid;
@@ -318,9 +318,9 @@ namespace SharpFlame.AppSettings
                     set_Changes(item, new Change<clsRGBA_sng>(value));
                     return TranslatorResult.Translated;
                 }
-                else if ( item is Option<bool> )
+                if ( item is Option<bool> )
                 {
-                    bool value = default(bool);
+                    var value = default(bool);
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref value) )
                     {
                         return TranslatorResult.ValueInvalid;
@@ -332,7 +332,7 @@ namespace SharpFlame.AppSettings
                     set_Changes(item, new Change<bool>(value));
                     return TranslatorResult.Translated;
                 }
-                else if ( item is Option<byte> )
+                if ( item is Option<byte> )
                 {
                     byte value = 0;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref value) )
@@ -346,7 +346,7 @@ namespace SharpFlame.AppSettings
                     set_Changes(item, new Change<byte>(value));
                     return TranslatorResult.Translated;
                 }
-                else if ( item is Option<short> )
+                if ( item is Option<short> )
                 {
                     short value = 0;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref value) )
@@ -360,9 +360,9 @@ namespace SharpFlame.AppSettings
                     set_Changes(item, new Change<short>(value));
                     return TranslatorResult.Translated;
                 }
-                else if ( item is Option<int> )
+                if ( item is Option<int> )
                 {
-                    int value = 0;
+                    var value = 0;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref value) )
                     {
                         return TranslatorResult.ValueInvalid;
@@ -374,7 +374,7 @@ namespace SharpFlame.AppSettings
                     set_Changes(item, new Change<int>(value));
                     return TranslatorResult.Translated;
                 }
-                else if ( item is Option<UInt32> )
+                if ( item is Option<UInt32> )
                 {
                     UInt32 value = 0;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref value) )
@@ -388,7 +388,7 @@ namespace SharpFlame.AppSettings
                     set_Changes(item, new Change<UInt32>(value));
                     return TranslatorResult.Translated;
                 }
-                else if ( item is Option<Single> )
+                if ( item is Option<Single> )
                 {
                     float value = 0;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref value) )
@@ -402,7 +402,7 @@ namespace SharpFlame.AppSettings
                     set_Changes(item, new Change<Single>(value));
                     return TranslatorResult.Translated;
                 }
-                else if ( item is Option<double> )
+                if ( item is Option<double> )
                 {
                     double value = 0;
                     if ( !IOUtil.InvariantParse(Convert.ToString(INIProperty.Value), ref value) )
@@ -416,9 +416,9 @@ namespace SharpFlame.AppSettings
                     set_Changes(item, new Change<double>(value));
                     return TranslatorResult.Translated;
                 }
-                else if ( item is Option<string> )
+                if ( item is Option<string> )
                 {
-                    string value = Convert.ToString(INIProperty.Value);
+                    var value = Convert.ToString(INIProperty.Value);
                     if ( !item.IsValueValid(value) )
                     {
                         return TranslatorResult.ValueInvalid;
@@ -426,10 +426,7 @@ namespace SharpFlame.AppSettings
                     set_Changes(item, new Change<string>(value));
                     return TranslatorResult.Translated;
                 }
-                else
-                {
-                    return TranslatorResult.ValueInvalid;
-                }
+                return TranslatorResult.ValueInvalid;
             }
 
             return TranslatorResult.ValueInvalid;

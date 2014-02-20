@@ -1,38 +1,40 @@
+#region
+
 using System;
 using System.Diagnostics;
 using SharpFlame.Core.Domain;
-using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame
 {
     public class clsBrush
     {
-        public struct sPosNum
-        {
-            public XYInt Normal;
-            public XYInt Alignment;
-        }
-
-        private double _Radius;
-
         public enum enumShape
         {
             Circle,
             Square
         }
 
+        public sBrushTiles Tiles;
+
+        private bool _Alignment;
+        private double _Radius;
         private enumShape _Shape = enumShape.Circle;
 
-        public sBrushTiles Tiles;
+        public clsBrush(double InitialRadius, enumShape InitialShape)
+        {
+            _Radius = InitialRadius;
+            _Shape = InitialShape;
+            CreateTiles();
+        }
 
         public bool Alignment
         {
             get { return _Alignment; }
         }
-
-        private bool _Alignment;
 
         public double Radius
         {
@@ -64,7 +66,7 @@ namespace SharpFlame
 
         private void CreateTiles()
         {
-            double AlignmentOffset = _Radius - (int)_Radius;
+            var AlignmentOffset = _Radius - (int)_Radius;
             double RadiusB = (int)(_Radius + 0.25D);
 
             _Alignment = AlignmentOffset >= 0.25D & AlignmentOffset < 0.75D;
@@ -77,13 +79,6 @@ namespace SharpFlame
                     Tiles.CreateSquare(RadiusB, 1.0D, _Alignment);
                     break;
             }
-        }
-
-        public clsBrush(double InitialRadius, enumShape InitialShape)
-        {
-            _Radius = InitialRadius;
-            _Shape = InitialShape;
-            CreateTiles();
         }
 
         public void PerformActionMapTiles(clsAction Tool, sPosNum Centre)
@@ -107,18 +102,15 @@ namespace SharpFlame
             {
                 return PosNum.Alignment;
             }
-            else
-            {
-                return PosNum.Normal;
-            }
+            return PosNum.Normal;
         }
 
         private void PerformAction(clsAction Action, sPosNum PosNum, XYInt LastValidNum)
         {
-            int XNum = 0;
-            int X = 0;
-            int Y = 0;
-            XYInt Centre = new XYInt(0, 0);
+            var XNum = 0;
+            var X = 0;
+            var Y = 0;
+            var Centre = new XYInt(0, 0);
 
             if ( Action.Map == null )
             {
@@ -151,9 +143,9 @@ namespace SharpFlame
                                     {
                                         Action.Effect =
                                             Convert.ToDouble(1.0D -
-                                                                    (new XYDouble(Action.PosNum.X, Action.PosNum.Y) -
-                                                                     new XYDouble(Centre.X - 0.5D, Centre.Y - 0.5D)).GetMagnitude() /
-                                                                    (Tiles.ResultRadius + 0.5D));
+                                                             (new XYDouble(Action.PosNum.X, Action.PosNum.Y) -
+                                                              new XYDouble(Centre.X - 0.5D, Centre.Y - 0.5D)).GetMagnitude() /
+                                                             (Tiles.ResultRadius + 0.5D));
                                     }
                                     else
                                     {
@@ -181,26 +173,32 @@ namespace SharpFlame
                 }
             }
         }
+
+        public struct sPosNum
+        {
+            public XYInt Alignment;
+            public XYInt Normal;
+        }
     }
 
     public struct sBrushTiles
     {
-        public int[] XMin;
-        public int[] XMax;
-        public int YMin;
-        public int YMax;
         public double ResultRadius;
+        public int[] XMax;
+        public int[] XMin;
+        public int YMax;
+        public int YMin;
 
         public void CreateCircle(double Radius, double TileSize, bool Alignment)
         {
-            int X = 0;
-            int Y = 0;
+            var X = 0;
+            var Y = 0;
             double dblX = 0;
             double dblY = 0;
             double RadiusB = 0;
             double RadiusC = 0;
-            int A = 0;
-            int B = 0;
+            var A = 0;
+            var B = 0;
 
             RadiusB = Radius / TileSize;
             if ( Alignment )
@@ -249,9 +247,9 @@ namespace SharpFlame
 
         public void CreateSquare(double Radius, double TileSize, bool Alignment)
         {
-            int Y = 0;
-            int A = 0;
-            int B = 0;
+            var Y = 0;
+            var A = 0;
+            var B = 0;
             double RadiusB = 0;
 
             RadiusB = Radius / TileSize + 0.5D;

@@ -1,23 +1,26 @@
+#region
+
 using SharpFlame.Collections;
 using SharpFlame.Core.Domain;
-using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame.Mapping
 {
     public class clsGateway
     {
+        public ConnectedListLink<clsGateway, clsMap> MapLink;
+        public XYInt PosA;
+        public XYInt PosB;
+
         public clsGateway()
         {
             MapLink = new ConnectedListLink<clsGateway, clsMap>(this);
         }
 
-        public ConnectedListLink<clsGateway, clsMap> MapLink;
-        public XYInt PosA;
-        public XYInt PosB;
-
         public bool IsOffMap()
         {
-            XYInt TerrainSize = MapLink.Source.Terrain.TileSize;
+            var TerrainSize = MapLink.Source.Terrain.TileSize;
 
             return PosA.X < 0
                    | PosA.X >= TerrainSize.X

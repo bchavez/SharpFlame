@@ -2,10 +2,9 @@ namespace SharpFlame.Mapping.Tools
 {
     public class clsApplyCliffTriangleRemove : clsAction
     {
-        public bool Triangle;
-
-        private clsTerrain Terrain;
         private bool CliffChanged;
+        private clsTerrain Terrain;
+        public bool Triangle;
 
         public override void ActionPerform()
         {

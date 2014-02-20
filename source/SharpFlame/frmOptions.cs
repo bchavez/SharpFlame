@@ -1,30 +1,32 @@
+#region
+
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using SharpFlame.AppSettings;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.Controls;
 using SharpFlame.FileIO;
-using SharpFlame.AppSettings;
-using SharpFlame.Mapping;
 using SharpFlame.Maths;
+
+#endregion
 
 namespace SharpFlame
 {
     public partial class frmOptions
     {
+        private readonly KeyboardProfile ChangedKeyControls;
+        private readonly clsRGBA_sng MinimapCliffColour;
+        private readonly clsRGBA_sng MinimapSelectedObjectColour;
+        private readonly PathSetControl objectDataPathSetControl = new PathSetControl("Object Data Directories");
+        private readonly PathSetControl tilesetsPathSetControl = new PathSetControl("Tilesets Directories");
+        private bool AllowClose;
         private Font DisplayFont;
-
-        private clsRGBA_sng MinimapCliffColour;
         private ColourControl clrMinimapCliffs;
-        private clsRGBA_sng MinimapSelectedObjectColour;
         private ColourControl clrMinimapSelectedObjects;
-        private PathSetControl objectDataPathSetControl = new PathSetControl("Object Data Directories");
-        private PathSetControl tilesetsPathSetControl = new PathSetControl("Tilesets Directories");
 
-        private KeyboardProfile ChangedKeyControls;
-
-        private Option<KeyboardControl>[] lstKeyboardControls_Items = new Option<KeyboardControl>[] {};
+        private Option<KeyboardControl>[] lstKeyboardControls_Items = {};
 
         public frmOptions()
         {
@@ -66,10 +68,12 @@ namespace SharpFlame
 
             tilesetsPathSetControl.SetPaths(SettingsManager.Settings.TilesetDirectories);
             objectDataPathSetControl.SetPaths(SettingsManager.Settings.ObjectDataDirectories);
-            tilesetsPathSetControl.SelectedNum = MathUtil.Clamp_int(Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultTilesetsPathNum)), -1,
+            tilesetsPathSetControl.SelectedNum = MathUtil.Clamp_int(Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultTilesetsPathNum)),
+                -1,
                 SettingsManager.Settings.TilesetDirectories.Count - 1);
-            objectDataPathSetControl.SelectedNum = MathUtil.Clamp_int(Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultObjectDataPathNum)),
-                -1, SettingsManager.Settings.ObjectDataDirectories.Count - 1);
+            objectDataPathSetControl.SelectedNum =
+                MathUtil.Clamp_int(Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultObjectDataPathNum)),
+                    -1, SettingsManager.Settings.ObjectDataDirectories.Count - 1);
 
             txtMapBPP.Text = SettingsManager.Settings.MapViewBPP.ToStringInvariant();
             txtMapDepth.Text = SettingsManager.Settings.MapViewDepth.ToStringInvariant();
@@ -83,9 +87,9 @@ namespace SharpFlame
 
         public void btnSave_Click(Object sender, EventArgs e)
         {
-            clsSettings NewSettings = (clsSettings)(SettingsManager.Settings.GetCopy(new SettingsCreator()));
+            var NewSettings = (clsSettings)(SettingsManager.Settings.GetCopy(new SettingsCreator()));
             double dblTemp = 0;
-            int intTemp = 0;
+            var intTemp = 0;
 
             if ( IOUtil.InvariantParse(txtAutosaveChanges.Text, ref dblTemp) )
             {
@@ -120,15 +124,15 @@ namespace SharpFlame
             {
                 NewSettings.set_Changes(SettingsManager.Setting_UndoLimit, new Change<int>(intTemp));
             }
-            SimpleList<string> tilesetPaths = new SimpleList<string>();
-            SimpleList<string> objectsPaths = new SimpleList<string>();
-            string[] controlTilesetPaths = tilesetsPathSetControl.GetPaths;
-            string[] controlobjectsPaths = objectDataPathSetControl.GetPaths;
-            for ( int i = 0; i <= controlTilesetPaths.GetUpperBound(0); i++ )
+            var tilesetPaths = new SimpleList<string>();
+            var objectsPaths = new SimpleList<string>();
+            var controlTilesetPaths = tilesetsPathSetControl.GetPaths;
+            var controlobjectsPaths = objectDataPathSetControl.GetPaths;
+            for ( var i = 0; i <= controlTilesetPaths.GetUpperBound(0); i++ )
             {
                 tilesetPaths.Add(controlTilesetPaths[i]);
             }
-            for ( int i = 0; i <= controlobjectsPaths.GetUpperBound(0); i++ )
+            for ( var i = 0; i <= controlobjectsPaths.GetUpperBound(0); i++ )
             {
                 objectsPaths.Add(controlobjectsPaths[i]);
             }
@@ -156,7 +160,7 @@ namespace SharpFlame
 
             SettingsManager.UpdateSettings(NewSettings);
 
-            clsMap Map = Program.frmMainInstance.MainMap;
+            var Map = Program.frmMainInstance.MainMap;
             if ( Map != null )
             {
                 Map.MinimapMakeLater();
@@ -172,8 +176,6 @@ namespace SharpFlame
         {
             Finish(DialogResult.Cancel);
         }
-
-        private bool AllowClose = false;
 
         public void frmOptions_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -201,9 +203,9 @@ namespace SharpFlame
 
         public void btnFont_Click(Object sender, EventArgs e)
         {
-            FontDialog FontDialog = new FontDialog();
+            var FontDialog = new FontDialog();
 
-            DialogResult Result = default(DialogResult);
+            var Result = default(DialogResult);
             try //mono 267 has crashed here
             {
                 FontDialog.Font = DisplayFont;
@@ -249,10 +251,10 @@ namespace SharpFlame
             lstKeyboardControls.Hide();
             lstKeyboardControls.Items.Clear();
             lstKeyboardControls_Items = new Option<KeyboardControl>[KeyboardManager.OptionsKeyboardControls.Options.Count];
-            for ( int i = 0; i <= KeyboardManager.OptionsKeyboardControls.Options.Count - 1; i++ )
+            for ( var i = 0; i <= KeyboardManager.OptionsKeyboardControls.Options.Count - 1; i++ )
             {
-                Option<KeyboardControl> item = (Option<KeyboardControl>)(KeyboardManager.OptionsKeyboardControls.Options[i]);
-                string text = GetKeyControlText(item);
+                var item = (Option<KeyboardControl>)(KeyboardManager.OptionsKeyboardControls.Options[i]);
+                var text = GetKeyControlText(item);
                 lstKeyboardControls_Items[lstKeyboardControls.Items.Add(text)] = item;
             }
             lstKeyboardControls.SelectedIndex = selectedIndex;
@@ -261,12 +263,12 @@ namespace SharpFlame
 
         private string GetKeyControlText(Option<KeyboardControl> item)
         {
-            string text = item.SaveKey + " = ";
-            KeyboardControl control = (KeyboardControl)(ChangedKeyControls.get_Value(item));
-            for ( int j = 0; j <= control.Keys.GetUpperBound(0); j++ )
+            var text = item.SaveKey + " = ";
+            var control = (KeyboardControl)(ChangedKeyControls.get_Value(item));
+            for ( var j = 0; j <= control.Keys.GetUpperBound(0); j++ )
             {
-                Keys key = Keys.A;
-                string keyText = Enum.GetName(typeof(Keys), key);
+                var key = Keys.A;
+                var keyText = Enum.GetName(typeof(Keys), key);
                 if ( keyText == null )
                 {
                     text += ((Int32)key).ToStringInvariant();
@@ -283,10 +285,10 @@ namespace SharpFlame
             if ( control.UnlessKeys.GetUpperBound(0) >= 0 )
             {
                 text += " unless ";
-                for ( int j = 0; j <= control.UnlessKeys.GetUpperBound(0); j++ )
+                for ( var j = 0; j <= control.UnlessKeys.GetUpperBound(0); j++ )
                 {
-                    Keys key = Keys.A;
-                    string keyText = Enum.GetName(typeof(Keys), key);
+                    var key = Keys.A;
+                    var keyText = Enum.GetName(typeof(Keys), key);
                     if ( keyText == null )
                     {
                         text += ((Int32)key).ToStringInvariant();
@@ -316,7 +318,7 @@ namespace SharpFlame
                 return;
             }
 
-            frmKeyboardControl capture = new frmKeyboardControl();
+            var capture = new frmKeyboardControl();
             if ( capture.ShowDialog() != DialogResult.OK )
             {
                 return;
@@ -325,15 +327,15 @@ namespace SharpFlame
             {
                 return;
             }
-            Option<KeyboardControl> keyOption = lstKeyboardControls_Items[lstKeyboardControls.SelectedIndex];
-            KeyboardControl previous = (KeyboardControl)(ChangedKeyControls.get_Value(keyOption));
+            var keyOption = lstKeyboardControls_Items[lstKeyboardControls.SelectedIndex];
+            var previous = (KeyboardControl)(ChangedKeyControls.get_Value(keyOption));
 
-            Keys[] keys = new Keys[capture.Results.Count];
-            for ( int i = 0; i <= capture.Results.Count - 1; i++ )
+            var keys = new Keys[capture.Results.Count];
+            for ( var i = 0; i <= capture.Results.Count - 1; i++ )
             {
                 keys[i] = capture.Results[i];
             }
-            KeyboardControl copy = new KeyboardControl(keys, previous.UnlessKeys);
+            var copy = new KeyboardControl(keys, previous.UnlessKeys);
             ChangedKeyControls.set_Changes(keyOption, new Change<KeyboardControl>(copy));
             UpdateKeyboardControl(keyOption.GroupLink.ArrayPosition);
         }
@@ -345,7 +347,7 @@ namespace SharpFlame
                 return;
             }
 
-            frmKeyboardControl capture = new frmKeyboardControl();
+            var capture = new frmKeyboardControl();
             if ( capture.ShowDialog() != DialogResult.OK )
             {
                 return;
@@ -354,15 +356,15 @@ namespace SharpFlame
             {
                 return;
             }
-            Option<KeyboardControl> keyOption = lstKeyboardControls_Items[lstKeyboardControls.SelectedIndex];
-            KeyboardControl previous = (KeyboardControl)(ChangedKeyControls.get_Value(keyOption));
+            var keyOption = lstKeyboardControls_Items[lstKeyboardControls.SelectedIndex];
+            var previous = (KeyboardControl)(ChangedKeyControls.get_Value(keyOption));
 
-            Keys[] unlessKeys = new Keys[capture.Results.Count];
-            for ( int i = 0; i <= capture.Results.Count - 1; i++ )
+            var unlessKeys = new Keys[capture.Results.Count];
+            for ( var i = 0; i <= capture.Results.Count - 1; i++ )
             {
                 unlessKeys[i] = capture.Results[i];
             }
-            KeyboardControl copy = new KeyboardControl(previous.Keys, unlessKeys);
+            var copy = new KeyboardControl(previous.Keys, unlessKeys);
             ChangedKeyControls.set_Changes(keyOption, new Change<KeyboardControl>(copy));
             UpdateKeyboardControl(keyOption.GroupLink.ArrayPosition);
         }
@@ -374,7 +376,7 @@ namespace SharpFlame
                 return;
             }
 
-            Option<KeyboardControl> keyOption = lstKeyboardControls_Items[lstKeyboardControls.SelectedIndex];
+            var keyOption = lstKeyboardControls_Items[lstKeyboardControls.SelectedIndex];
             ChangedKeyControls.set_Changes(keyOption, null);
             UpdateKeyboardControl(keyOption.GroupLink.ArrayPosition);
         }
