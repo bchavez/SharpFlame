@@ -95,7 +95,7 @@ namespace SharpFlame.Mapping.Format.Wz
                 return returnResult;
             }
 
-            var bjoUnits = new List<clsWZBJOUnit>();
+            var bjoUnits = new List<WZBJOUnit>();
 
             var iniFeatures = new List<IniFeature>();
             subResult = IOUtil.TryOpenFileStream(gameFilesPath + "feature.ini", ref file);

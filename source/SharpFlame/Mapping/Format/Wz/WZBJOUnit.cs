@@ -8,7 +8,7 @@ using SharpFlame.Domain;
 
 namespace SharpFlame.Mapping.Format.Wz
 {
-    public class clsWZBJOUnit
+    public class WZBJOUnit
     {
         public string Code;
         public UInt32 ID;
