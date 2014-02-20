@@ -8,6 +8,7 @@ using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
+using SharpFlame.Mapping.Format.WZFormat;
 using SharpFlame.Mapping.IO;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tiles;
@@ -1601,7 +1602,11 @@ namespace SharpFlame.Mapping
                 ReturnResult.Problem = ex.Message;
                 return ReturnResult;
             }
-            ReturnResult = Read_WZ_TTP(File);
+
+            using (File) {
+                var wzFormat = new WZFormat (this);
+                ReturnResult = wzFormat.Read_WZ_TTP (File);
+            }
             File.Close();
 
             return ReturnResult;

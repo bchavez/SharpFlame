@@ -226,7 +226,7 @@ namespace SharpFlame.Mapping
             }
         }
 
-        protected void TerrainBlank(XYInt TileSize)
+        public void TerrainBlank(XYInt TileSize)
         {
             int X = 0;
             int Y = 0;

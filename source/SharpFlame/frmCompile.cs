@@ -6,8 +6,8 @@ using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping;
+using SharpFlame.Mapping.Format.WZFormat;
 using SharpFlame.Mapping.Objects;
-using SharpFlame.Mapping.Wz;
 using SharpFlame.Maths;
 
 namespace SharpFlame
@@ -200,7 +200,9 @@ namespace SharpFlame
             WriteWZArgs.Multiplayer.PlayerCount = PlayerCount;
             WriteWZArgs.Multiplayer.License = License;
             WriteWZArgs.CompileType = sWrite_WZ_Args.enumCompileType.Multiplayer;
-            ReturnResult.Add(Map.Write_WZ(WriteWZArgs));
+
+            var wzFormat = new WZFormat (Map);
+            ReturnResult.Add(wzFormat.Save(WriteWZArgs));
             App.ShowWarnings(ReturnResult);
             if ( !ReturnResult.HasWarnings )
             {
@@ -643,7 +645,9 @@ namespace SharpFlame
             WriteWZArgs.Campaign = new sWrite_WZ_Args.clsCampaign();
             WriteWZArgs.Campaign.GAMType = (uint)TypeNum;
             WriteWZArgs.CompileType = sWrite_WZ_Args.enumCompileType.Campaign;
-            ReturnResult.Add(Map.Write_WZ(WriteWZArgs));
+
+            var wzFormat = new WZFormat (Map);
+            ReturnResult.Add(wzFormat.Save(WriteWZArgs));
             App.ShowWarnings(ReturnResult);
             if ( !ReturnResult.HasWarnings )
             {

@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics;
+using System.Linq;
 using System.IO;
 using Ionic.Zip;
 using SharpFlame.Core.Parsers.Ini;
@@ -7,6 +9,7 @@ using SharpFlame.Core.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.FMap;
 using SharpFlame.Mapping.Objects;
+using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 using IniReader = SharpFlame.FileIO.Ini.IniReader;
@@ -92,7 +95,7 @@ namespace SharpFlame.Mapping
 
                     zip.PutNextEntry ("ScriptLabels.ini");             
                     var scriptLabelsIniWriter = new IniWriter (streamWriter);
-                    returnResult.Add(Serialize_WZ_LabelsINI(scriptLabelsIniWriter, -1));
+                    returnResult.Add(Serialize_WZ_LabelsINI(scriptLabelsIniWriter));
                     streamWriter.Flush ();
 
                     streamWriter.Close ();
@@ -104,6 +107,34 @@ namespace SharpFlame.Mapping
             {
                 returnResult.ProblemAdd(ex.Message);
                 return returnResult;
+            }
+
+            return returnResult;
+        }
+
+        public clsResult Serialize_WZ_LabelsINI(IniWriter File)
+        {
+            clsResult returnResult = new clsResult ("Serializing labels INI", false);
+            logger.Info ("Serializing labels INI");
+
+            try
+            {
+                clsScriptPosition scriptPosition = default(clsScriptPosition);
+                foreach (clsScriptPosition tempLoopVar_ScriptPosition in ScriptPositions)
+                {
+                    scriptPosition = tempLoopVar_ScriptPosition;
+                    scriptPosition.WriteWZ (File);
+                }
+                clsScriptArea ScriptArea = default(clsScriptArea);
+                foreach (clsScriptArea tempLoopVar_ScriptArea in ScriptAreas)
+                {
+                    ScriptArea = tempLoopVar_ScriptArea;
+                    ScriptArea.WriteWZ (File);
+                }
+            } catch (Exception ex)
+            {
+                returnResult.WarningAdd (ex.Message);
+                logger.ErrorException ("Got an exception", ex);
             }
 
             return returnResult;
@@ -797,7 +828,7 @@ namespace SharpFlame.Mapping
 					if (scriptLabelsEntry != null) {
 						using (var reader = new StreamReader(scriptLabelsEntry.OpenReader())) {
 							var text = reader.ReadToEnd ();
-							returnResult.Add (Read_INI_Labels (text, true));
+							returnResult.Add (Read_INI_Labels (text));
 						}
 					}
                 }
@@ -1522,5 +1553,165 @@ namespace SharpFlame.Mapping
 
             return ReturnResult;
         }
-    }
+
+        public clsResult Read_INI_Labels(string iniText)
+        {
+            clsResult resultObject = new clsResult ("Reading labels", false);
+            logger.Info ("Reading labels.");
+
+            int typeNum = 0;
+            clsScriptPosition NewPosition = default(clsScriptPosition);
+            clsScriptArea NewArea = default(clsScriptArea);
+            string nameText = "";
+            string strLabel = "";
+            string strPosA = "";
+            string strPosB = "";
+            string idText = "";
+            UInt32 idNum = 0;
+            XYInt xyIntA = null;
+            XYInt xyIntB = null;
+
+            int failedCount = 0;
+            int modifiedCount = 0;
+
+            try
+            {
+                var iniSections = SharpFlame.Core.Parsers.Ini.IniReader.ReadString (iniText);
+                foreach (var iniSection in iniSections)
+                {
+                    var idx = iniSection.Name.IndexOf ('_');
+                    if (idx > 0) {
+                        nameText = iniSection.Name.Substring (0, idx);
+                    } else {
+                        nameText = iniSection.Name;
+                    }
+                    switch (nameText)
+                    {
+                    case "position":
+                        typeNum = 0;
+                        break;
+                    case "area":
+                        typeNum = 1;
+                        break;
+                    case "object":
+                        typeNum = int.MaxValue;
+                        failedCount++;
+                        continue;
+                    default:
+                        typeNum = int.MaxValue;
+                        failedCount++;
+                        continue;
+                    }
+
+                    // Raised an exception if nothing was found
+                    try
+                    {
+                        strLabel = iniSection.Data.Where (d => d.Name == "label").First ().Data;
+                    } catch (Exception ex)
+                    {
+                        resultObject.WarningAdd (string.Format ("Failed to parse \"label\", error was: {0}", ex.Message));
+                        logger.WarnException ("Failed to parse \"label\", error was", ex);
+                        failedCount++;
+                        continue;
+                    }
+                    strLabel = strLabel.Replace ("\"", "");
+
+                    switch (typeNum)
+                    {
+                        case 0: //position
+                        strPosA = iniSection.Data.Where (d => d.Name == "pos").First ().Data;
+                        if (strPosA == null)
+                        {
+                            failedCount++;
+                            continue;
+                        }
+                        try
+                        {
+                            xyIntA = XYInt.FromString (strPosA);
+                            NewPosition = new clsScriptPosition (this);
+                            NewPosition.PosX = xyIntA.X;
+                            NewPosition.PosY = xyIntA.Y;
+                            NewPosition.SetLabel (strLabel);
+                            if (NewPosition.Label != strLabel || 
+                                NewPosition.PosX != xyIntA.X || NewPosition.PosY != xyIntA.Y)
+                            {
+                                modifiedCount++;
+                            }
+                        } catch (Exception ex)
+                        {
+                            resultObject.WarningAdd (string.Format ("Failed to parse \"pos\", error was: {0}", ex.Message));
+                            logger.WarnException ("Failed to parse \"pos\", error was", ex);
+                            failedCount++;
+                            continue;
+                        }
+                        break;
+                        case 1: //area
+                        try
+                        {
+                            strPosA = iniSection.Data.Where (d => d.Name == "pos1").First ().Data;
+                            strPosB = iniSection.Data.Where (d => d.Name == "pos2").First ().Data;
+
+                            xyIntA = XYInt.FromString (strPosA);
+                            xyIntB = XYInt.FromString (strPosA);
+                            NewArea = new clsScriptArea (this);
+                            NewArea.SetPositions (xyIntA, xyIntB);
+                            NewArea.SetLabel (strLabel);
+                            if (NewArea.Label != strLabel || NewArea.PosAX != xyIntA.X | NewArea.PosAY != xyIntA.Y
+                                | NewArea.PosBX != xyIntB.X | NewArea.PosBY != xyIntB.Y)
+                            {
+                                modifiedCount++;
+                            }
+                        } catch (Exception ex)
+                        {
+                            Debugger.Break ();
+                            resultObject.WarningAdd (string.Format ("Failed to parse \"pos1\" or \"pos2\", error was: {0}", ex.Message));
+                            logger.WarnException ("Failed to parse \"pos1\" or \"pos2\".", ex);
+                            failedCount++;
+                            continue;
+                        }
+                        break;
+                        case 2: //object
+                        idText = iniSection.Data.Where (d => d.Name == "id").First ().Data;
+                        if (IOUtil.InvariantParse (idText, ref idNum))
+                        {
+                            clsUnit Unit = IDUsage (idNum);
+                            if (Unit != null)
+                            {
+                                if (!Unit.SetLabel (strLabel).Success)
+                                {
+                                    failedCount++;
+                                    continue;
+                                }
+                            } else
+                            {
+                                failedCount++;
+                                continue;
+                            }
+                        }
+                        break;
+                        default:
+                        resultObject.WarningAdd ("Error! Bad type number for script label.");
+                        break;
+                    }
+                }
+            } catch (Exception ex)
+            {
+                Debugger.Break ();
+                logger.ErrorException ("Got exception while reading labels.ini", ex);
+                resultObject.ProblemAdd (string.Format ("Got exception: {0}", ex.Message), false);
+                return resultObject;
+            }
+
+            if (failedCount > 0)
+            {
+                resultObject.WarningAdd (string.Format ("Unable to translate {0} script labels.", failedCount));
+            }
+            if (modifiedCount > 0)
+            {
+                resultObject.WarningAdd (string.Format ("{0} script labels had invalid values and were modified.", modifiedCount));
+            }
+
+            return resultObject;
+        }
+    }   
 }

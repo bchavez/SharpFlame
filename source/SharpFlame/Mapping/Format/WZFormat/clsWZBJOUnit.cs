@@ -1,17 +1,20 @@
+#region
+
 using System;
 using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
-using SharpFlame.Util;
 
-namespace SharpFlame.Mapping.Wz
+#endregion
+
+namespace SharpFlame.Mapping.Format.WZFormat
 {
     public class clsWZBJOUnit
-    {    
-        public UInt32 ID;
+    {
         public string Code;
+        public UInt32 ID;
+        public UnitType ObjectType;
+        public UInt32 Player;
         public WorldPos Pos;
         public UInt32 Rotation;
-        public UInt32 Player;
-        public UnitType ObjectType;       
     }
 }

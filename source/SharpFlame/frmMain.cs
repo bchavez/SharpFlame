@@ -15,6 +15,7 @@ using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Generators;
 using SharpFlame.Mapping;
+using SharpFlame.Mapping.Format.WZFormat;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tiles;
@@ -4099,29 +4100,31 @@ namespace SharpFlame
 
             switch ( SplitPath.FileExtension.ToLower() )
             {
-                case "fmap":
-                    ReturnResult.Add(resultMap.Load_FMap(Path));
-                    resultMap.PathInfo = new clsPathInfo(Path, true);
-                    break;
-                case "fme":
-                    ReturnResult.Add(resultMap.Load_FME(Path));
-                    resultMap.PathInfo = new clsPathInfo(Path, false);
-                    break;
-                case "wz":
-                    ReturnResult.Add(resultMap.Load_WZ(Path));
-                    resultMap.PathInfo = new clsPathInfo(Path, false);
-                    break;
-                case "gam":
-                    ReturnResult.Add(resultMap.Load_Game(Path));
-                    resultMap.PathInfo = new clsPathInfo(Path, false);
-                    break;
-                case "lnd":
-                    ReturnResult.Add(resultMap.Load_LND(Path));
-                    resultMap.PathInfo = new clsPathInfo(Path, false);
-                    break;
-                default:
-                    ReturnResult.ProblemAdd("File extension not recognised.");
-                    break;
+            case "fmap":
+                ReturnResult.Add(resultMap.Load_FMap(Path));
+                resultMap.PathInfo = new clsPathInfo(Path, true);
+                break;
+            case "fme":
+                ReturnResult.Add(resultMap.Load_FME(Path));
+                resultMap.PathInfo = new clsPathInfo(Path, false);
+                break;
+            case "wz":
+                var wzFormat = new WZFormat (resultMap);
+                ReturnResult.Add(wzFormat.Load(Path));
+                resultMap.PathInfo = new clsPathInfo(Path, false);
+                break;
+            case "gam":
+                var gameFormat = new GameFormat (resultMap);
+                ReturnResult.Add(gameFormat.Load(Path));
+                resultMap.PathInfo = new clsPathInfo(Path, false);
+                break;
+            case "lnd":
+                ReturnResult.Add(resultMap.Load_LND(Path));
+                resultMap.PathInfo = new clsPathInfo(Path, false);
+                break;
+            default:
+                ReturnResult.ProblemAdd("File extension not recognised.");
+                break;
             }
 
             if ( ReturnResult.HasProblems )
