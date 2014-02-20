@@ -71,7 +71,7 @@ namespace SharpFlame.Mapping
                     var Pos = MouseOverTerrain.Units.FindFirstItemPosition(Unit);
                     if ( Pos >= 0 )
                     {
-                        MouseOverTerrain.Units.Remove(Pos);
+                        MouseOverTerrain.Units.RemoveAt(Pos);
                     }
                 }
             }

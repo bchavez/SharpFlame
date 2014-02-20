@@ -13,23 +13,9 @@ namespace SharpFlame.Collections
     {
         public bool MaintainOrder = false;
 
-        public virtual void AddList(IList<ItemType> newItems)
-        {
-            base.AddRange (newItems);
-        }
-
-        public virtual void AddSimpleList(SimpleList<ItemType> newItems)
-        {
-            base.AddRange (newItems);        }
-
         public void Insert(ItemType newItem, int position)
         {
             base.Insert (position, newItem);
-        }
-
-        public void Remove(int position)
-        {
-            base.RemoveAt (position);
         }
 
         public void Deallocate()

@@ -1258,17 +1258,17 @@ namespace SharpFlame.Mapping
             }
             SectorTerrainUndoChanges.Clear();
 
-            NewUndo.UnitChanges.AddSimpleList(UnitChanges);
+            NewUndo.UnitChanges.AddRange(UnitChanges);
             UnitChanges.Clear();
 
-            NewUndo.GatewayChanges.AddSimpleList(GatewayChanges);
+            NewUndo.GatewayChanges.AddRange(GatewayChanges);
             GatewayChanges.Clear();
 
             if ( NewUndo.ChangedSectors.Count + NewUndo.UnitChanges.Count + NewUndo.GatewayChanges.Count > 0 )
             {
                 while ( Undos.Count > UndoPosition ) //a new line has been started so remove redos
                 {
-                    Undos.Remove(Undos.Count - 1);
+                    Undos.RemoveAt(Undos.Count - 1);
                 }
 
                 Undos.Add(NewUndo);
@@ -2403,7 +2403,7 @@ namespace SharpFlame.Mapping
                 var timeDiff = DateTime.Now - Convert.ToDateTime(Messages[A].CreatedDate);
                 if ( timeDiff.Seconds >= 6 )
                 {
-                    Messages.Remove(A);
+                    Messages.RemoveAt(A);
                     Changed = true;
                 }
                 else

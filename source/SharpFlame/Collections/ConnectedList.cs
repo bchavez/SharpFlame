@@ -80,7 +80,7 @@ namespace SharpFlame.Collections
 
             RemoveItem = List[Position];
             RemoveItem.BeforeRemove();
-            List.Remove(Position);
+            List.RemoveAt(Position);
             RemoveItem.AfterRemove();
         }
 

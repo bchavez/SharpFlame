@@ -76,7 +76,7 @@ namespace SharpFlame
             {
                 Bad = true;
             }
-            Items.AddSimpleList(ResultToMerge.Items);
+            Items.AddRange(ResultToMerge.Items);
         }
 
         public void ProblemAdd(string Text, bool log = true)

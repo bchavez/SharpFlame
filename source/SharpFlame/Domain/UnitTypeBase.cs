@@ -243,8 +243,8 @@ namespace SharpFlame.Domain
             Result.Pos_Offset = Other.Pos_Offset;
             Attachments.Add(Result);
             Matrix3DMath.MatrixCopy(Other.AngleOffsetMatrix, Result.AngleOffsetMatrix);
-            Result.Models.AddSimpleList(Other.Models);
-            Result.Attachments.AddSimpleList(Other.Attachments);
+            Result.Models.AddRange(Other.Models);
+            Result.Attachments.AddRange(Other.Attachments);
 
             return Result;
         }
@@ -256,7 +256,7 @@ namespace SharpFlame.Domain
 
             Attachments.Add(ResultAttachment);
             Matrix3DMath.MatrixCopy(AttachmentToCopy.AngleOffsetMatrix, ResultAttachment.AngleOffsetMatrix);
-            ResultAttachment.Models.AddSimpleList(AttachmentToCopy.Models);
+            ResultAttachment.Models.AddRange(AttachmentToCopy.Models);
             foreach ( var tempLoopVar_Attachment in AttachmentToCopy.Attachments )
             {
                 Attachment = tempLoopVar_Attachment;
