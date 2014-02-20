@@ -14,6 +14,7 @@ using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
 using SharpFlame.Controls;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Generators;

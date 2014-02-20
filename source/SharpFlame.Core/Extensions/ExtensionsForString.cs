@@ -5,7 +5,7 @@ using System.IO;
 
 #endregion
 
-namespace SharpFlame
+namespace SharpFlame.Core.Extensions
 {
     public static class ExtensionsForString
     {

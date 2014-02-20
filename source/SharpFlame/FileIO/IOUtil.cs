@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using NLog;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Util;
 
 #endregion

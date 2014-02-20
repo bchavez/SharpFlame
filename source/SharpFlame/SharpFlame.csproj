@@ -384,7 +384,6 @@
     <Compile Include="Mapping\Tiles\TileUtil.cs" />
     <Compile Include="FileIO\ZipSplitPath.cs" />
     <Compile Include="Util\clsInputBox.cs" />
-    <Compile Include="ExtensionsForString.cs" />
     <Compile Include="Mapping\IO\FMap\FMapInfo.cs" />
     <Compile Include="Mapping\IO\FMap\FMapIniGateways.cs" />
     <Compile Include="Mapping\IO\LND\LNDObject.cs" />
@@ -603,7 +602,5 @@
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="Mapping\IO\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

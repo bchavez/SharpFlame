@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using FluentAssertions;
 using NUnit.Framework;
 using SharpFlame.Core.Parsers.Lev2;
 using Sprache;
@@ -184,7 +185,21 @@ data    ""wrf/multi/fog1.wrf""
             var result = Lev2Grammar.Lev.Parse(data);
 
             result.Levels.Length.Should().Be(3);
+            result.Levels[1].Players.Should().Be(2);
+            result.Levels[0].Type.Should().Be( 14 );
+            result.Levels[1].Type.Should().Be( 18 );
+            result.Levels[2].Type.Should().Be( 19 );
 
+            result.Levels[0].Dataset.Should().Be( "MULTI_CAM_1" );
+            result.Levels[1].Dataset.Should().Be( "MULTI_T2_C1" );
+            result.Levels[2].Dataset.Should().Be( "MULTI_T3_C1" );
+
+            result.Levels[0].Name.Should().Be( "Tinny-War-T1" );
+            result.Levels[1].Name.Should().Be( "Tinny-War-T2" );
+            result.Levels[2].Name.Should().Be( "Tinny-War-T3" );
+
+            result.Levels[1].Data.Count().Should().Be( 2 );
+            result.Levels[1].Data[0].Should().Be( "wrf/multi/t2-skirmish2.wrf" );
         }
     }
 

@@ -10,6 +10,7 @@ using SharpFlame.AppSettings;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Graphics.OpenGL;

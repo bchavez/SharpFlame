@@ -11,6 +11,7 @@ using Ionic.Zip;
 using Ionic.Zlib;
 using NLog;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Core.Parsers;
 using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.Core.Parsers.Lev;

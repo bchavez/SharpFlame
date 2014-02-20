@@ -9,6 +9,7 @@ using NLog;
 using OpenTK;
 using SharpFlame.Colors;
 using Newtonsoft.Json;
+using SharpFlame.Core.Extensions;
 
 #endregion
 

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using NLog;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping;

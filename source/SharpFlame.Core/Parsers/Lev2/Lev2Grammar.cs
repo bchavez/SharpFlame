@@ -52,12 +52,12 @@ namespace SharpFlame.Core.Parsers.Lev2
             from directive in Parse.String("players").Token()
             from numberStr in Parse.Number
             select int.Parse(numberStr);
-        
+
         //type		18
         public static readonly Parser<int> TypeDirective =
-            from directive in Parse.String( "type" ).Token()
+            from directive in Parse.String("type").Token()
             from numberStr in Parse.Number
-            select int.Parse( numberStr );
+            select int.Parse(numberStr);
 
         //dataset		MULTI_T2_C1
         public static readonly Parser<string> DatasetDirective =
@@ -84,67 +84,48 @@ namespace SharpFlame.Core.Parsers.Lev2
             from game in GameDirective
             from data in DataDirective.AtLeastOnce().Optional()
             select new Level
-                       {
-                           Name = level,
-                           Players = players,
-                           Type = type,
-                           Dataset = dataset,
-                           Game = game,
-                           Data = data.IsDefined ? data.Get().ToArray() : null
-                       };
-
-        //public static readonly Parser<Lev> Lev =
-        //    from ignore in Parse.AnyChar.AtLeastOnce().Text().Token()
-        //        .Where(x => Campaign.TryParse(x).WasSuccessful)
-        //        .Select(y => Campaign.Parse(y)).Optional().AtLeastOnce()
-        //    select new Lev
-        //        {
-        //            Campaigns = ignore.Where(x => x.IsDefined)
-        //                .Select(x => x.Get()).ToArray()
-        //        };
-
-        //public static readonly Parser<Lev> Lev =
-        //    from campaigns in Campaign.Optional().AtLeastOnce()
-        //    from levels in Level.Optional().AtLeastOnce()
-        //    select new Lev
-        //        {
-        //            Campaigns = campaigns.Where(c => c.IsDefined)
-        //                .Select(o => o.Get()).ToArray()
-        //        };
-
-
-
+                {
+                    Name = level,
+                    Players = players,
+                    Type = type,
+                    Dataset = dataset,
+                    Game = game,
+                    Data = data.IsDefined ? data.Get().ToArray() : null
+                };
 
         public static readonly Parser<Lev> Lev =
             from loop in
                 (
-                    from campaigns in Parse.AnyChar.Many().Text()
-                    .Where(s => true ).Optional().AtLeastOnce()
-                    
+                    from campaigns in Campaign.Optional().AtLeastOnce()
                     from levels in Level.Optional().AtLeastOnce()
 
-                    let continue_ =
-                        campaigns.Any(x => x.IsDefined) ||
-                        levels.Any(x => x.IsDefined)
+                    //convert optionals to data array
+                    let campaignsArray = campaigns
+                        .Where(c => c.IsDefined)
+                        .Select(c => c.Get()).ToArray()
 
-                    from consume in Parse.AnyChar.Where(c => continue_)
+                    let levelsArray = levels
+                        .Where(l => l.IsDefined)
+                        .Select(l => l.Get()).ToArray()
 
-                    let c = 
-                    campaigns.Where(c => c.IsDefined).Select(c => c.Get())
-                    let l =
-                    levels.Where(l => l.IsDefined).Select(l => l.Get())
+                    let directiveFound =
+                        campaignsArray.Any() || levelsArray.Any()
+
+                    //if there was a directive found immediately return and continue;
+                    //otherwise, if there was NO directive, parse any character
+                    //and ignore it.
+                    from ignore in directiveFound ? Parse.Return('*') : Parse.AnyChar
+
                     select new
                         {
-                            Campaigns = c,
-                            Levels = l
+                            Campaigns = campaignsArray,
+                            Levels = levelsArray
                         }
-                    ).AtLeastOnce()
+                    ).AtLeastOnce() // loop
             select new Lev
                 {
-                    //Campaigns = loop
-                    //    .Select(i => i.Campaigns).ToArray(),
-                    //Levels = loop
-                    //    .SelectMany(i => i.Levels).ToArray()
+                    Campaigns = loop.SelectMany(c => c.Campaigns).ToArray(),
+                    Levels = loop.SelectMany(l => l.Levels).ToArray()
                 };
     }
 

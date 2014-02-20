@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using NLog;
+using SharpFlame.Core.Extensions;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.IO.TTP;
 using SharpFlame.Util;

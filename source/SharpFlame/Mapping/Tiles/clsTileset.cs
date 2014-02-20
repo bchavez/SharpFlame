@@ -8,6 +8,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.AppSettings;
 using SharpFlame.Bitmaps;
 using SharpFlame.Colors;
+using SharpFlame.Core.Extensions;
 using SharpFlame.FileIO;
 using SharpFlame.Util;
 
