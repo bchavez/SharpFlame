@@ -12,9 +12,9 @@ namespace SharpFlame.Mapping.Changes
         {
         }
 
-        public override void TileChanged(XYInt Num)
+        public override void TileChanged(XYInt num)
         {
-            var SectorNum = Map.GetTileSectorNum(Num);
+            var SectorNum = Map.GetTileSectorNum(num);
             Changed(SectorNum);
         }
     }

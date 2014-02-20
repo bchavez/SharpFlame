@@ -11,10 +11,10 @@ namespace SharpFlame.Mapping.Changes
         public clsMap Map;
         public clsTerrain Terrain;
 
-        public clsMapTileChanges(clsMap Map, XYInt PointSize) : base(PointSize)
+        public clsMapTileChanges(clsMap map, XYInt pointsize) : base(pointsize)
         {
-            this.Map = Map;
-            Terrain = Map.Terrain;
+            Map = map;
+            Terrain = map.Terrain;
         }
 
         public void Deallocate()
@@ -22,119 +22,119 @@ namespace SharpFlame.Mapping.Changes
             Map = null;
         }
 
-        public abstract void TileChanged(XYInt Num);
+        public abstract void TileChanged(XYInt num);
 
-        public void VertexChanged(XYInt Num)
+        public void VertexChanged(XYInt num)
         {
-            if ( Num.X > 0 )
+            if ( num.X > 0 )
             {
-                if ( Num.Y > 0 )
+                if ( num.Y > 0 )
                 {
-                    TileChanged(new XYInt(Num.X - 1, Num.Y - 1));
+                    TileChanged(new XYInt(num.X - 1, num.Y - 1));
                 }
-                if ( Num.Y < Terrain.TileSize.Y )
+                if ( num.Y < Terrain.TileSize.Y )
                 {
-                    TileChanged(new XYInt(Num.X - 1, Num.Y));
+                    TileChanged(new XYInt(num.X - 1, num.Y));
                 }
             }
-            if ( Num.X < Terrain.TileSize.X )
+            if ( num.X < Terrain.TileSize.X )
             {
-                if ( Num.Y > 0 )
+                if ( num.Y > 0 )
                 {
-                    TileChanged(new XYInt(Num.X, Num.Y - 1));
+                    TileChanged(new XYInt(num.X, num.Y - 1));
                 }
-                if ( Num.Y < Terrain.TileSize.Y )
+                if ( num.Y < Terrain.TileSize.Y )
                 {
-                    TileChanged(Num);
+                    TileChanged(num);
                 }
             }
         }
 
-        public void VertexAndNormalsChanged(XYInt Num)
+        public void VertexAndNormalsChanged(XYInt num)
         {
-            if ( Num.X > 1 )
+            if ( num.X > 1 )
             {
-                if ( Num.Y > 0 )
+                if ( num.Y > 0 )
                 {
-                    TileChanged(new XYInt(Num.X - 2, Num.Y - 1));
+                    TileChanged(new XYInt(num.X - 2, num.Y - 1));
                 }
-                if ( Num.Y < Terrain.TileSize.Y )
+                if ( num.Y < Terrain.TileSize.Y )
                 {
-                    TileChanged(new XYInt(Num.X - 2, Num.Y));
+                    TileChanged(new XYInt(num.X - 2, num.Y));
                 }
             }
-            if ( Num.X > 0 )
+            if ( num.X > 0 )
             {
-                if ( Num.Y > 1 )
+                if ( num.Y > 1 )
                 {
-                    TileChanged(new XYInt(Num.X - 1, Num.Y - 2));
+                    TileChanged(new XYInt(num.X - 1, num.Y - 2));
                 }
-                if ( Num.Y > 0 )
+                if ( num.Y > 0 )
                 {
-                    TileChanged(new XYInt(Num.X - 1, Num.Y - 1));
+                    TileChanged(new XYInt(num.X - 1, num.Y - 1));
                 }
-                if ( Num.Y < Terrain.TileSize.Y )
+                if ( num.Y < Terrain.TileSize.Y )
                 {
-                    TileChanged(new XYInt(Num.X - 1, Num.Y));
+                    TileChanged(new XYInt(num.X - 1, num.Y));
                 }
-                if ( Num.Y < Terrain.TileSize.Y - 1 )
+                if ( num.Y < Terrain.TileSize.Y - 1 )
                 {
-                    TileChanged(new XYInt(Num.X - 1, Num.Y + 1));
+                    TileChanged(new XYInt(num.X - 1, num.Y + 1));
                 }
             }
-            if ( Num.X < Terrain.TileSize.X )
+            if ( num.X < Terrain.TileSize.X )
             {
-                if ( Num.Y > 1 )
+                if ( num.Y > 1 )
                 {
-                    TileChanged(new XYInt(Num.X, Num.Y - 2));
+                    TileChanged(new XYInt(num.X, num.Y - 2));
                 }
-                if ( Num.Y > 0 )
+                if ( num.Y > 0 )
                 {
-                    TileChanged(new XYInt(Num.X, Num.Y - 1));
+                    TileChanged(new XYInt(num.X, num.Y - 1));
                 }
-                if ( Num.Y < Terrain.TileSize.Y )
+                if ( num.Y < Terrain.TileSize.Y )
                 {
-                    TileChanged(Num);
+                    TileChanged(num);
                 }
-                if ( Num.Y < Terrain.TileSize.Y - 1 )
+                if ( num.Y < Terrain.TileSize.Y - 1 )
                 {
-                    TileChanged(new XYInt(Num.X, Num.Y + 1));
+                    TileChanged(new XYInt(num.X, num.Y + 1));
                 }
             }
-            if ( Num.X < Terrain.TileSize.X - 1 )
+            if ( num.X < Terrain.TileSize.X - 1 )
             {
-                if ( Num.Y > 0 )
+                if ( num.Y > 0 )
                 {
-                    TileChanged(new XYInt(Num.X + 1, Num.Y - 1));
+                    TileChanged(new XYInt(num.X + 1, num.Y - 1));
                 }
-                if ( Num.Y < Terrain.TileSize.Y )
+                if ( num.Y < Terrain.TileSize.Y )
                 {
-                    TileChanged(new XYInt(Num.X + 1, Num.Y));
+                    TileChanged(new XYInt(num.X + 1, num.Y));
                 }
             }
         }
 
-        public void SideHChanged(XYInt Num)
+        public void SideHChanged(XYInt num)
         {
-            if ( Num.Y > 0 )
+            if ( num.Y > 0 )
             {
-                TileChanged(new XYInt(Num.X, Num.Y - 1));
+                TileChanged(new XYInt(num.X, num.Y - 1));
             }
-            if ( Num.Y < Map.Terrain.TileSize.Y )
+            if ( num.Y < Map.Terrain.TileSize.Y )
             {
-                TileChanged(Num);
+                TileChanged(num);
             }
         }
 
-        public void SideVChanged(XYInt Num)
+        public void SideVChanged(XYInt num)
         {
-            if ( Num.X > 0 )
+            if ( num.X > 0 )
             {
-                TileChanged(new XYInt(Num.X - 1, Num.Y));
+                TileChanged(new XYInt(num.X - 1, num.Y));
             }
-            if ( Num.X < Map.Terrain.TileSize.X )
+            if ( num.X < Map.Terrain.TileSize.X )
             {
-                TileChanged(Num);
+                TileChanged(num);
             }
         }
     }

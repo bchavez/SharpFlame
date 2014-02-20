@@ -23,6 +23,10 @@ namespace SharpFlame.Mapping.Changes
 
         public void Deallocate()
         {
+            Vertices = null;
+            Tiles = null;
+            SidesH = null;
+            SidesV = null;
         }
 
         public void SetAllChanged()
