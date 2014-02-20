@@ -37,19 +37,11 @@ namespace SharpFlame.Mapping.Objects
             {
                 return null;
             }
-            if ( Unit.Sectors.IsBusy )
-            {
-                return null;
-            }
             if ( Sector == null )
             {
                 return null;
             }
             if ( Sector.Units == null )
-            {
-                return null;
-            }
-            if ( Sector.Units.IsBusy )
             {
                 return null;
             }
@@ -73,10 +65,12 @@ namespace SharpFlame.Mapping.Objects
             }
 
             public override void AfterRemove()
-            {
+            {              
                 base.AfterRemove();
 
-                Item.Deallocate();
+                if (Item != null) {
+                    Item.Deallocate ();
+                }
             }
         }
     }

@@ -1,6 +1,7 @@
 #region
 
 using System;
+using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -28,11 +29,6 @@ namespace SharpFlame.Collections
         {
             get { return List.MaintainOrder; }
             set { List.MaintainOrder = value; }
-        }
-
-        public bool IsBusy
-        {
-            get { return List.Busy; }
         }
 
         public ItemType this[int Position]
