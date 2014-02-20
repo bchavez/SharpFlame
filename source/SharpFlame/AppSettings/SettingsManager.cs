@@ -1,14 +1,15 @@
 #region
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using NLog;
 using OpenTK;
-using SharpFlame.Collections;
 using SharpFlame.Colors;
-using SharpFlame.Core.Parsers.Ini;
-using IniReader = SharpFlame.FileIO.Ini.IniReader;
+using SharpFlame.Util;
+using Newtonsoft.Json;
 
 #endregion
 
@@ -50,10 +51,8 @@ namespace SharpFlame.AppSettings
         public static Option<int> Setting_TextureViewBPP;
         public static Option<int> Setting_MapViewDepth;
         public static Option<int> Setting_TextureViewDepth;
-        public static Option<SimpleList<string>> Setting_TilesetDirectories;
-        public static Option<SimpleList<string>> Setting_ObjectDataDirectories;
-        public static Option<int> Setting_DefaultTilesetsPathNum;
-        public static Option<int> Setting_DefaultObjectDataPathNum;
+        public static Option<List<string>> Setting_TilesetDirectories;
+        public static Option<List<string>> Setting_ObjectDataDirectories;
         public static Option<bool> Setting_PickOrientation;
 
         private static Option<T> CreateSetting<T>(string saveKey, T defaultValue)
@@ -103,34 +102,9 @@ namespace SharpFlame.AppSettings
             Setting_TextureViewBPP = CreateSetting("TextureViewBPP", DisplayDevice.Default.BitsPerPixel);
             Setting_MapViewDepth = CreateSetting("MapViewDepth", 24);
             Setting_TextureViewDepth = CreateSetting("TextureViewDepth", 24);
-            Setting_TilesetDirectories = CreateSetting("TilesetsPath", new SimpleList<string>());
-            Setting_ObjectDataDirectories = CreateSetting("ObjectDataPath", new SimpleList<string>());
-            Setting_DefaultTilesetsPathNum = CreateSetting("DefaultTilesetsPathNum", -1);
-            Setting_DefaultObjectDataPathNum = CreateSetting("DefaultObjectDataPathNum", -1);
+            Setting_TilesetDirectories = CreateSetting("TilesetsPath", new List<string>());
+            Setting_ObjectDataDirectories = CreateSetting("ObjectDataPath", new List<string>());
             Setting_PickOrientation = CreateSetting("PickOrientation", true);
-        }
-
-        public static clsResult Read_Settings(StreamReader File, ref clsSettings Result)
-        {
-            var ReturnResult = new clsResult("Reading settings", false);
-            logger.Info("Reading settings");
-
-            var INIReader = new IniReader();
-            ReturnResult.Take(INIReader.ReadFile(File));
-            Result = new clsSettings();
-            ReturnResult.Take(INIReader.RootSection.Translate(Result));
-            foreach ( var section in INIReader.Sections )
-            {
-                if ( section.Name.ToLower() == "keyboardcontrols" )
-                {
-                    var keyResults = new clsResult("Keyboard controls", false);
-                    logger.Debug("Reading keyboard controls");
-                    keyResults.Take(section.Translate(KeyboardManager.KeyboardProfile));
-                    ReturnResult.Take(keyResults);
-                }
-            }
-
-            return ReturnResult;
         }
 
         public static void UpdateSettings(clsSettings NewSettings)
@@ -191,37 +165,19 @@ namespace SharpFlame.AppSettings
             var ReturnResult = new clsResult("Writing settings to \"{0}\"".Format2(App.SettingsPath), false);
             logger.Info("Writing settings to \"{0}\"".Format2(App.SettingsPath));
 
-            try
-            {
-                using ( var file = File.Create(App.SettingsPath) )
-                {
-                    var iniSettings = new IniWriter(file);
-                    ReturnResult.Take(Serialize_Settings(iniSettings));
-                    iniSettings.Flush();
+            try {
+                var json = JsonConvert.SerializeObject (Settings, Formatting.Indented);
+                using (var file = new StreamWriter(App.SettingsPath)) {
+                    file.Write (json);
                 }
             }
-            catch ( Exception ex )
-            {
-                ReturnResult.ProblemAdd(ex.Message);
-                return ReturnResult;
-            }
+            catch (Exception ex) {
+                Debugger.Break ();
+                ReturnResult.ProblemAdd (string.Format("Got an exception while saving settings: {0}.", ex.Message));
+                logger.ErrorException ("Got an exception while saving the settings.", ex);
+            }           
 
             return ReturnResult;
-        }
-
-        private static clsResult Serialize_Settings(IniWriter File)
-        {
-            var returnResult = new clsResult("Serializing settings", false);
-            logger.Info("Serializing settings");
-
-            returnResult.Take(Settings.INIWrite(File));
-            if ( KeyboardManager.KeyboardProfile.IsAnythingChanged )
-            {
-                File.AddSection("KeyboardControls");
-                returnResult.Take(KeyboardManager.KeyboardProfile.INIWrite(File));
-            }
-
-            return returnResult;
         }
 
         public static clsResult Settings_Load(ref clsSettings Result)
@@ -229,10 +185,12 @@ namespace SharpFlame.AppSettings
             var ReturnResult = new clsResult("Loading settings from \"{0}\"".Format2(App.SettingsPath), false);
             logger.Info("Loading settings from \"{0}\"".Format2(App.SettingsPath));
 
-            var File_Settings = default(StreamReader);
             try
             {
-                File_Settings = new StreamReader(App.SettingsPath);
+                using (var file = new StreamReader(App.SettingsPath)) {
+                    var text = file.ReadToEnd();
+                    Result = JsonConvert.DeserializeObject<clsSettings>(text);
+                }
             }
             catch
             {
@@ -240,9 +198,9 @@ namespace SharpFlame.AppSettings
                 return ReturnResult;
             }
 
-            ReturnResult.Take(Read_Settings(File_Settings, ref Result));
+            // ReturnResult.Take(Read_Settings(File_Settings, ref Result));
 
-            File_Settings.Close();
+            // File_Settings.Close();
 
             return ReturnResult;
         }
@@ -258,6 +216,8 @@ namespace SharpFlame.AppSettings
 
     public class clsSettings : OptionProfile
     {
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
         public clsSettings() : base(SettingsManager.Options_Settings)
         {
         }
@@ -265,96 +225,115 @@ namespace SharpFlame.AppSettings
         public bool AutoSaveEnabled
         {
             get { return Convert.ToBoolean(get_Value(SettingsManager.Setting_AutoSaveEnabled)); }
+            set { set_Changes (SettingsManager.Setting_AutoSaveEnabled, new Change<bool>(value)); }
         }
 
         public bool AutoSaveCompress
         {
             get { return Convert.ToBoolean(get_Value(SettingsManager.Setting_AutoSaveCompress)); }
+            set { set_Changes (SettingsManager.Setting_AutoSaveCompress, new Change<bool>(value)); }
         }
 
         public UInt32 AutoSaveMinInterval_s
         {
             get { return Convert.ToUInt32(get_Value(SettingsManager.Setting_AutoSaveMinInterval_s)); }
+            set { set_Changes (SettingsManager.Setting_AutoSaveMinInterval_s, new Change<UInt32> (value)); }
         }
 
         public UInt32 AutoSaveMinChanges
         {
             get { return Convert.ToUInt32(get_Value(SettingsManager.Setting_AutoSaveMinChanges)); }
+            set { set_Changes (SettingsManager.Setting_AutoSaveMinChanges, new Change<UInt32>(value)); }
         }
 
         public UInt32 UndoLimit
         {
             get { return Convert.ToUInt32(get_Value(SettingsManager.Setting_UndoLimit)); }
+            set { set_Changes (SettingsManager.Setting_UndoLimit, new Change<UInt32>(value)); }
         }
 
         public bool DirectoriesPrompt
         {
             get { return Convert.ToBoolean(get_Value(SettingsManager.Setting_DirectoriesPrompt)); }
+            set { set_Changes (SettingsManager.Setting_DirectoriesPrompt, new Change<bool>(value)); }
         }
 
         public bool DirectPointer
         {
             get { return Convert.ToBoolean(get_Value(SettingsManager.Setting_DirectPointer)); }
+            set { set_Changes (SettingsManager.Setting_DirectPointer, new Change<bool>(value)); }
         }
 
         public FontFamily FontFamily
         {
             get { return ((FontFamily)(get_Value(SettingsManager.Setting_FontFamily))); }
+            set { set_Changes (SettingsManager.Setting_FontFamily, new Change<FontFamily>(value)); }
         }
 
         public bool FontBold
         {
             get { return Convert.ToBoolean(get_Value(SettingsManager.Setting_FontBold)); }
+            set { set_Changes (SettingsManager.Setting_FontBold, new Change<bool>(value)); }
         }
 
         public bool FontItalic
         {
             get { return Convert.ToBoolean(get_Value(SettingsManager.Setting_FontItalic)); }
+            set { set_Changes (SettingsManager.Setting_FontItalic, new Change<bool>(value)); }
         }
 
         public float FontSize
         {
             get { return Convert.ToSingle(Convert.ToSingle(get_Value(SettingsManager.Setting_FontSize))); }
+            set { set_Changes (SettingsManager.Setting_FontSize, new Change<float>(value)); }
         }
 
         public int MinimapSize
         {
             get { return Convert.ToInt32(get_Value(SettingsManager.Setting_MinimapSize)); }
+            set { set_Changes (SettingsManager.Setting_MinimapSize, new Change<int>(value)); }
         }
 
         public bool MinimapTeamColours
         {
             get { return Convert.ToBoolean(get_Value(SettingsManager.Setting_MinimapTeamColours)); }
+            set { set_Changes (SettingsManager.Setting_MinimapTeamColours, new Change<bool>(value)); }
         }
 
         public bool MinimapTeamColoursExceptFeatures
         {
             get { return Convert.ToBoolean(get_Value(SettingsManager.Setting_MinimapTeamColoursExceptFeatures)); }
+            set { set_Changes (SettingsManager.Setting_MinimapTeamColoursExceptFeatures, new Change<bool>(value)); }
         }
 
         public clsRGBA_sng MinimapCliffColour
         {
             get { return ((clsRGBA_sng)(get_Value(SettingsManager.Setting_MinimapCliffColour))); }
+            set { set_Changes (SettingsManager.Setting_MinimapCliffColour, new Change<clsRGBA_sng>(value)); }
         }
 
         public clsRGBA_sng MinimapSelectedObjectsColour
         {
             get { return ((clsRGBA_sng)(get_Value(SettingsManager.Setting_MinimapSelectedObjectsColour))); }
+            set { set_Changes (SettingsManager.Setting_MinimapSelectedObjectsColour, new Change<clsRGBA_sng>(value)); }
         }
 
         public double FOVDefault
         {
             get { return Convert.ToDouble(get_Value(SettingsManager.Setting_FOVDefault)); }
+            set { set_Changes (SettingsManager.Setting_FOVDefault, new Change<double>(value)); }
         }
 
         public bool Mipmaps
         {
             get { return Convert.ToBoolean(get_Value(SettingsManager.Setting_Mipmaps)); }
+            set { set_Changes (SettingsManager.Setting_Mipmaps, new Change<bool>(value)); }
         }
 
         public bool MipmapsHardware
         {
             get { return Convert.ToBoolean(get_Value(SettingsManager.Setting_MipmapsHardware)); }
+            set { set_Changes (SettingsManager.Setting_MipmapsHardware, new Change<bool>(value)); }
         }
 
         public string OpenPath
@@ -372,36 +351,46 @@ namespace SharpFlame.AppSettings
         public int MapViewBPP
         {
             get { return Convert.ToInt32(get_Value(SettingsManager.Setting_MapViewBPP)); }
+            set { set_Changes (SettingsManager.Setting_MapViewBPP, new Change<int>(value)); }
         }
 
         public int TextureViewBPP
         {
             get { return Convert.ToInt32(get_Value(SettingsManager.Setting_TextureViewBPP)); }
+            set { set_Changes (SettingsManager.Setting_TextureViewBPP, new Change<int>(value)); }
         }
 
         public int MapViewDepth
         {
             get { return Convert.ToInt32(get_Value(SettingsManager.Setting_MapViewDepth)); }
+            set { set_Changes (SettingsManager.Setting_MapViewDepth, new Change<int>(value)); }
         }
 
         public int TextureViewDepth
         {
             get { return Convert.ToInt32(get_Value(SettingsManager.Setting_TextureViewDepth)); }
+            set { set_Changes (SettingsManager.Setting_TextureViewDepth, new Change<int>(value)); }
         }
 
-        public SimpleList<string> TilesetDirectories
+        public List<string> TilesetDirectories
         {
-            get { return ((SimpleList<string>)(get_Value(SettingsManager.Setting_TilesetDirectories))); }
+            get { return ((List<string>)(get_Value(SettingsManager.Setting_TilesetDirectories))); }
+            set { 
+                logger.Info("Test");
+                set_Changes (SettingsManager.Setting_TilesetDirectories, new Change<List<string>>(value)); 
+            }
         }
 
-        public SimpleList<string> ObjectDataDirectories
+        public List<string> ObjectDataDirectories
         {
-            get { return ((SimpleList<string>)(get_Value(SettingsManager.Setting_ObjectDataDirectories))); }
+            get { return ((List<string>)(get_Value(SettingsManager.Setting_ObjectDataDirectories))); }
+            set { set_Changes (SettingsManager.Setting_ObjectDataDirectories, new Change<List<string>>(value)); }
         }
 
         public bool PickOrientation
         {
             get { return Convert.ToBoolean(get_Value(SettingsManager.Setting_PickOrientation)); }
+            set { set_Changes (SettingsManager.Setting_PickOrientation, new Change<bool>(value)); }
         }
 
         public Font MakeFont()

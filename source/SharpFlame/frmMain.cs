@@ -1,6 +1,7 @@
 #region
 
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -443,15 +444,12 @@ namespace SharpFlame
                 }
             }
 
-            var TilesetNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultTilesetsPathNum));
-            var TilesetsList = (SimpleList<string>)(SettingsManager.Settings.get_Value(SettingsManager.Setting_TilesetDirectories));
-            if ( TilesetNum >= 0 & TilesetNum < TilesetsList.Count )
-            {
-                var TilesetsPath = TilesetsList[TilesetNum];
-                if ( TilesetsPath != null && TilesetsPath != "" )
-                {
+            // var tilesetNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultTilesetsPathNum));
+            var tilesetsList = (List<string>)SettingsManager.Settings.get_Value(SettingsManager.Setting_TilesetDirectories);
+            foreach (var path in tilesetsList) {
+                if (path != null && path != "") {
                     InitializeStatus = "Loading tilesets";
-                    Program.InitializeResult.Add(App.LoadTilesets(PathUtil.EndWithPathSeperator(TilesetsPath)));
+                    Program.InitializeResult.Add(App.LoadTilesets(PathUtil.EndWithPathSeperator(path)));
                     InitializeStatus = "";
                 }
             }
@@ -464,15 +462,12 @@ namespace SharpFlame
             App.CreateTemplateDroidTypes(); //do before loading data
 
             App.ObjectData = new clsObjectData();
-            var ObjectDataNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultObjectDataPathNum));
-            var ObjectDataList = (SimpleList<string>)(SettingsManager.Settings.get_Value(SettingsManager.Setting_ObjectDataDirectories));
-            if ( ObjectDataNum >= 0 & ObjectDataNum < TilesetsList.Count )
-            {
-                var ObjectDataPath = ObjectDataList[ObjectDataNum];
-                if ( ObjectDataPath != null && ObjectDataPath != "" )
-                {
+            // var ObjectDataNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultObjectDataPathNum));
+            var objectDataList = (List<string>)(SettingsManager.Settings.get_Value(SettingsManager.Setting_ObjectDataDirectories));
+            foreach (var path in objectDataList) {
+                if (path != null && path != "") {
                     InitializeStatus = "Loading object data";
-                    Program.InitializeResult.Add(App.ObjectData.LoadDirectory(ObjectDataPath));
+                    Program.InitializeResult.Add(App.ObjectData.LoadDirectory(path));
                     InitializeStatus = "";
                 }
             }

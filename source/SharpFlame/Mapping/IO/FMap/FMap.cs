@@ -1665,7 +1665,7 @@ namespace SharpFlame.Mapping.IO.FMap
                             {
                                 if ( unknownUnitTypeCount < maxUnknownUnitTypeWarningCount )
                                 {
-                                    returnResult.WarningAdd("\"{0}\" is ont a loaded object.".Format2(iniObject2.Code));
+                                    returnResult.WarningAdd("\"{0}\" is not a loaded object.".Format2(iniObject2.Code));
                                 }
                                 unknownUnitTypeCount++;
                             }

@@ -128,11 +128,11 @@ namespace SharpFlame
         {
 #if !Portable
             var myDocumentsProgramPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments).CombinePathWith(".flaME", true);
-            SettingsPath = myDocumentsProgramPath.CombinePathWith("settings.ini");
+            SettingsPath = myDocumentsProgramPath.CombinePathWith("settings.json");
             AutoSavePath = myDocumentsProgramPath.CombinePathWith("autosave", true);
 
 #else
-            SettingsPath = AppDomain.CurrentDomain.BaseDirectory.CombinePathWith("settings.ini");
+            SettingsPath = AppDomain.CurrentDomain.BaseDirectory.CombinePathWith("settings.json");
             AutoSavePath = AppDomain.CurrentDomain.BaseDirectory.CombinePathWith("autosave", true);
 #endif
             // Create the directories.

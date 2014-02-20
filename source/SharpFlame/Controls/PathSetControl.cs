@@ -1,8 +1,8 @@
 #region
 
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
-using SharpFlame.Collections;
 
 #endregion
 
@@ -49,7 +49,7 @@ namespace SharpFlame.Controls
             }
         }
 
-        public void SetPaths(SimpleList<string> NewPaths)
+        public void SetPaths(List<string> NewPaths)
         {
             var A = 0;
 

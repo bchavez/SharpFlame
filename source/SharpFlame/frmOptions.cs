@@ -1,6 +1,7 @@
 #region
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using SharpFlame.AppSettings;
@@ -68,12 +69,6 @@ namespace SharpFlame
 
             tilesetsPathSetControl.SetPaths(SettingsManager.Settings.TilesetDirectories);
             objectDataPathSetControl.SetPaths(SettingsManager.Settings.ObjectDataDirectories);
-            tilesetsPathSetControl.SelectedNum = MathUtil.Clamp_int(Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultTilesetsPathNum)),
-                -1,
-                SettingsManager.Settings.TilesetDirectories.Count - 1);
-            objectDataPathSetControl.SelectedNum =
-                MathUtil.Clamp_int(Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultObjectDataPathNum)),
-                    -1, SettingsManager.Settings.ObjectDataDirectories.Count - 1);
 
             txtMapBPP.Text = SettingsManager.Settings.MapViewBPP.ToStringInvariant();
             txtMapDepth.Text = SettingsManager.Settings.MapViewDepth.ToStringInvariant();
@@ -124,8 +119,8 @@ namespace SharpFlame
             {
                 NewSettings.set_Changes(SettingsManager.Setting_UndoLimit, new Change<int>(intTemp));
             }
-            var tilesetPaths = new SimpleList<string>();
-            var objectsPaths = new SimpleList<string>();
+            var tilesetPaths = new List<string>();
+            var objectsPaths = new List<string>();
             var controlTilesetPaths = tilesetsPathSetControl.GetPaths;
             var controlobjectsPaths = objectDataPathSetControl.GetPaths;
             for ( var i = 0; i <= controlTilesetPaths.GetUpperBound(0); i++ )
@@ -136,10 +131,8 @@ namespace SharpFlame
             {
                 objectsPaths.Add(controlobjectsPaths[i]);
             }
-            NewSettings.set_Changes(SettingsManager.Setting_TilesetDirectories, new Change<SimpleList<string>>(tilesetPaths));
-            NewSettings.set_Changes(SettingsManager.Setting_ObjectDataDirectories, new Change<SimpleList<string>>(objectsPaths));
-            NewSettings.set_Changes(SettingsManager.Setting_DefaultTilesetsPathNum, new Change<int>(tilesetsPathSetControl.SelectedNum));
-            NewSettings.set_Changes(SettingsManager.Setting_DefaultObjectDataPathNum, new Change<int>(objectDataPathSetControl.SelectedNum));
+            NewSettings.set_Changes(SettingsManager.Setting_TilesetDirectories, new Change<List<string>>(tilesetPaths));
+            NewSettings.set_Changes(SettingsManager.Setting_ObjectDataDirectories, new Change<List<string>>(objectsPaths));
             if ( IOUtil.InvariantParse(txtMapBPP.Text, ref intTemp) )
             {
                 NewSettings.set_Changes(SettingsManager.Setting_MapViewBPP, new Change<int>(intTemp));

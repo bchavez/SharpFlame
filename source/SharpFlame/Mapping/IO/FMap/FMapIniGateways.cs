@@ -3,7 +3,6 @@
 using System;
 using SharpFlame.Core.Domain;
 using SharpFlame.FileIO;
-using SharpFlame.FileIO.Ini;
 
 #endregion
 

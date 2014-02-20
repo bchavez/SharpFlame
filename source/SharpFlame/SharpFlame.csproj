@@ -101,6 +101,9 @@
       <HintPath>..\packages\Sprache.1.10.0.35\lib\net40\Sprache.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -169,12 +172,6 @@
     <Compile Include="Colors\Definitions.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="FileIO\ExtensionsForIO.cs" />
-    <Compile Include="FileIO\Ini\Translator.cs" />
-    <Compile Include="FileIO\Ini\ErrorCount.cs" />
-    <Compile Include="FileIO\Ini\IniReader.cs" />
-    <Compile Include="FileIO\Ini\Section.cs" />
-    <Compile Include="FileIO\Ini\SectionTranslator.cs" />
-    <Compile Include="FileIO\Ini\TranslatorResult.cs" />
     <Compile Include="frmKeyboardControl.Designer.cs">
       <DependentUpon>frmKeyboardControl.cs</DependentUpon>
     </Compile>
