@@ -13,12 +13,12 @@ namespace SharpFlame.Mapping.IO.FMap
     {
         public clsInterfaceOptions InterfaceOptions = new clsInterfaceOptions();
         public XYInt TerrainSize = new XYInt(-1, -1);
-        public clsTileset Tileset;
+        public Tileset Tileset;
 
         public FMapInfo() 
         {
             TerrainSize = new XYInt (-1, -1);
-            Tileset = new clsTileset ();
+            Tileset = new Tileset ();
         }
     }
 }

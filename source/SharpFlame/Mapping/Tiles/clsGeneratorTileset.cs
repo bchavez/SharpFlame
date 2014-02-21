@@ -1,6 +1,7 @@
 #region
 
 using System;
+using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 using SharpFlame.Util;
 
@@ -19,7 +20,7 @@ namespace SharpFlame.Mapping.Tiles
         public int ScatteredUnitChanceTotal;
         public int ScatteredUnitCount;
         public sUnitChance[] ScatteredUnits = new sUnitChance[0];
-        public clsTileset Tileset;
+        public Tileset Tileset;
 
         public void ScatteredUnit_Add(sUnitChance NewUnit)
         {

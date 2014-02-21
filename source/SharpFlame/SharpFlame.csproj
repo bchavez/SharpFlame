@@ -232,7 +232,6 @@
     <Compile Include="Painters\CliffBrush.cs" />
     <Compile Include="Painters\Painter.cs" />
     <Compile Include="clsResult.cs" />
-    <Compile Include="Mapping\Tiles\clsTileset.cs" />
     <Compile Include="Maths\Definitions.cs" />
     <Compile Include="AppSettings\Options.cs" />
     <Compile Include="Painters\Road.cs" />
@@ -402,6 +401,7 @@
     <Compile Include="Mapping\IO\Heightmap\HeightmapSaver.cs" />
     <Compile Include="Mapping\IO\FMap\FMapLoader.cs" />
     <Compile Include="Mapping\IO\FMap\FMapSaver.cs" />
+    <Compile Include="FileIO\TilesetLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">

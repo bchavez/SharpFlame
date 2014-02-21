@@ -64,7 +64,7 @@ namespace SharpFlame.Mapping
         public clsTerrain Terrain;
 
         public byte[] Tile_TypeNum = new byte[0];
-        public clsTileset Tileset;
+        public Tileset Tileset;
         public int UndoPosition;
         public SimpleClassList<clsUndo> Undos;
         public SimpleClassList<clsUnitChange> UnitChanges;
