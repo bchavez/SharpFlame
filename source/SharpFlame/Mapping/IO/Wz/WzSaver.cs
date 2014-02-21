@@ -775,10 +775,10 @@ namespace SharpFlame.Mapping.IO.Wz
             fileMAP.Write((uint)map.Gateways.Count);
             foreach ( var gateway in map.Gateways )
             {
-                fileMAP.Write((byte)(MathUtil.Clamp_int(gateway.PosA.X, 0, 255)));
-                fileMAP.Write((byte)(MathUtil.Clamp_int(gateway.PosA.Y, 0, 255)));
-                fileMAP.Write((byte)(MathUtil.Clamp_int(gateway.PosB.X, 0, 255)));
-                fileMAP.Write((byte)(MathUtil.Clamp_int(gateway.PosB.Y, 0, 255)));
+                fileMAP.Write((byte)(MathUtil.ClampInt(gateway.PosA.X, 0, 255)));
+                fileMAP.Write((byte)(MathUtil.ClampInt(gateway.PosA.Y, 0, 255)));
+                fileMAP.Write((byte)(MathUtil.ClampInt(gateway.PosB.X, 0, 255)));
+                fileMAP.Write((byte)(MathUtil.ClampInt(gateway.PosB.Y, 0, 255)));
             }
             fileMAP.Flush();
 

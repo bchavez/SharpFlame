@@ -1273,7 +1273,7 @@ namespace SharpFlame
                 for ( X = StartXY.X; X <= FinishXY.X; X++ )
                 {
                     Map.Terrain.Vertices[X, Y].Height =
-                        (byte)(Math.Round(MathUtil.Clamp_dbl(Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height + Offset), byte.MinValue, byte.MaxValue)));
+                        (byte)(Math.Round(MathUtil.ClampDbl(Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height + Offset), byte.MinValue, byte.MaxValue)));
                     Pos.X = X;
                     Pos.Y = Y;
                     Map.SectorGraphicsChanges.VertexAndNormalsChanged(Pos);
@@ -1510,7 +1510,7 @@ namespace SharpFlame
                 return;
             }
 
-            Angle = MathUtil.Clamp_int(Angle, 0, 359);
+            Angle = MathUtil.ClampInt(Angle, 0, 359);
 
             if ( Map.SelectedUnits.Count > 1 )
             {
@@ -2444,7 +2444,7 @@ namespace SharpFlame
             {
                 return;
             }
-            Height = (byte)(MathUtil.Clamp_dbl(Height_dbl, byte.MinValue, byte.MaxValue));
+            Height = (byte)(MathUtil.ClampDbl(Height_dbl, byte.MinValue, byte.MaxValue));
             HeightSetPalette[tabHeightSetL.SelectedIndex] = Height;
             if ( tabHeightSetL.SelectedIndex == tabHeightSetL.SelectedIndex )
             {
@@ -2465,7 +2465,7 @@ namespace SharpFlame
             {
                 return;
             }
-            Height = (byte)(MathUtil.Clamp_dbl(Height_dbl, byte.MinValue, byte.MaxValue));
+            Height = (byte)(MathUtil.ClampDbl(Height_dbl, byte.MinValue, byte.MaxValue));
             HeightSetPalette[tabHeightSetR.SelectedIndex] = Height;
             if ( tabHeightSetL.SelectedIndex == tabHeightSetR.SelectedIndex )
             {
@@ -2565,14 +2565,14 @@ namespace SharpFlame
             {
                 return;
             }
-            Multiplier = MathUtil.Clamp_dbl(dblTemp, 0.0D, 255.0D);
+            Multiplier = MathUtil.ClampDbl(dblTemp, 0.0D, 255.0D);
             MathUtil.ReorderXY(Map.Selected_Area_VertexA, Map.Selected_Area_VertexB, ref StartXY, ref FinishXY);
             for ( Y = StartXY.Y; Y <= FinishXY.Y; Y++ )
             {
                 for ( X = StartXY.X; X <= FinishXY.X; X++ )
                 {
                     Map.Terrain.Vertices[X, Y].Height =
-                        (byte)(Math.Round(MathUtil.Clamp_dbl(Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height * Multiplier), byte.MinValue, byte.MaxValue)));
+                        (byte)(Math.Round(MathUtil.ClampDbl(Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height * Multiplier), byte.MinValue, byte.MaxValue)));
                     Pos.X = X;
                     Pos.Y = Y;
                     Map.SectorGraphicsChanges.VertexAndNormalsChanged(Pos);
@@ -2739,7 +2739,7 @@ namespace SharpFlame
                 return;
             }
 
-            Health = MathUtil.Clamp_dbl(Health, 1.0D, 100.0D) / 100.0D;
+            Health = MathUtil.ClampDbl(Health, 1.0D, 100.0D) / 100.0D;
 
             if ( Map.SelectedUnits.Count > 1 )
             {
@@ -3360,7 +3360,7 @@ namespace SharpFlame
             if ( Map != null )
             {
                 Map.CheckMessages();
-                Map.ViewInfo.FOV_Calc();
+                Map.ViewInfo.FovCalc();
                 Map.SectorGraphicsChanges.SetAllChanged();
                 Map.Update();
                 Map.MinimapMakeLater();
@@ -3788,7 +3788,7 @@ namespace SharpFlame
                 ScripPosition.Deallocate();
                 if ( Map.ScriptPositions.Count > 0 )
                 {
-                    _SelectedScriptMarker = Map.ScriptPositions[MathUtil.Clamp_int(Number, 0, Map.ScriptPositions.Count - 1)];
+                    _SelectedScriptMarker = Map.ScriptPositions[MathUtil.ClampInt(Number, 0, Map.ScriptPositions.Count - 1)];
                 }
                 else
                 {
@@ -3802,7 +3802,7 @@ namespace SharpFlame
                 ScriptArea.Deallocate();
                 if ( Map.ScriptAreas.Count > 0 )
                 {
-                    _SelectedScriptMarker = Map.ScriptAreas[MathUtil.Clamp_int(Number, 0, Map.ScriptAreas.Count - 1)];
+                    _SelectedScriptMarker = Map.ScriptAreas[MathUtil.ClampInt(Number, 0, Map.ScriptAreas.Count - 1)];
                 }
                 else
                 {

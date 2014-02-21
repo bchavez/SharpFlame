@@ -118,7 +118,7 @@ namespace SharpFlame.Mapping.Objects
 
         public string GetINIHealthPercent()
         {
-            return string.Format("{0}%", (int)(MathUtil.Clamp_dbl(Health * 100.0D, 1.0D, 100.0D)));
+            return string.Format("{0}%", (int)(MathUtil.ClampDbl(Health * 100.0D, 1.0D, 100.0D)));
         }
 
         public string GetPosText()

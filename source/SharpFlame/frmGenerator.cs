@@ -39,7 +39,7 @@ namespace SharpFlame
             {
                 return 0;
             }
-            Result = (int)(MathUtil.Clamp_dbl(dblTemp, Min, Max) * Multiplier);
+            Result = (int)(MathUtil.ClampDbl(dblTemp, Min, Max) * Multiplier);
             TextBoxToValidate.Text = ((float)(Result / Multiplier)).ToStringInvariant();
             return Result;
         }

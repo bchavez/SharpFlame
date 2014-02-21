@@ -89,12 +89,12 @@ namespace SharpFlame
             if ( IOUtil.InvariantParse(txtAutosaveChanges.Text, ref dblTemp) )
             {
                 NewSettings.SetChanges(SettingsManager.Setting_AutoSaveMinChanges,
-                    new Change<UInt32>((uint)(MathUtil.Clamp_dbl(dblTemp, 1.0D, (Convert.ToDouble(UInt32.MaxValue)) - 1.0D))));
+                    new Change<UInt32>((uint)(MathUtil.ClampDbl(dblTemp, 1.0D, (Convert.ToDouble(UInt32.MaxValue)) - 1.0D))));
             }
             if ( IOUtil.InvariantParse(txtAutosaveInterval.Text, ref dblTemp) )
             {
                 NewSettings.SetChanges(SettingsManager.Setting_AutoSaveMinInterval_s,
-                    new Change<UInt32>((uint)(MathUtil.Clamp_dbl(dblTemp, 1.0D, (Convert.ToDouble(UInt32.MaxValue)) - 1.0D))));
+                    new Change<UInt32>((uint)(MathUtil.ClampDbl(dblTemp, 1.0D, (Convert.ToDouble(UInt32.MaxValue)) - 1.0D))));
             }
             NewSettings.SetChanges(SettingsManager.Setting_AutoSaveCompress, new Change<bool>(cbxAutosaveCompression.Checked));
             NewSettings.SetChanges(SettingsManager.Setting_AutoSaveEnabled, new Change<bool>(cbxAutosaveEnabled.Checked));

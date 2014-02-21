@@ -31,7 +31,7 @@ namespace SharpFlame.Maths
             return ReturnResult;
         }
 
-        public static double Clamp_dbl(double Amount, double Minimum, double Maximum)
+        public static double ClampDbl(double Amount, double Minimum, double Maximum)
         {
             double ReturnResult = 0;
 
@@ -47,7 +47,7 @@ namespace SharpFlame.Maths
             return ReturnResult;
         }
 
-        public static float Clamp_sng(float Amount, float Minimum, float Maximum)
+        public static float ClampSng(float Amount, float Minimum, float Maximum)
         {
             float ReturnResult = 0;
 
@@ -63,7 +63,7 @@ namespace SharpFlame.Maths
             return ReturnResult;
         }
 
-        public static int Clamp_int(int Amount, int Minimum, int Maximum)
+        public static int ClampInt(int Amount, int Minimum, int Maximum)
         {
             var ReturnResult = 0;
 

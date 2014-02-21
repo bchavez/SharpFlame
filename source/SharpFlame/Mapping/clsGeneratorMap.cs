@@ -1584,7 +1584,7 @@ namespace SharpFlame
                 var ConnectionLength = Convert.ToSingle((Args.Connection.PassageNodeA.Pos - Args.Connection.PassageNodeB.Pos).ToDoubles().GetMagnitude());
                 var Extra = ConnectionLength - Args.RampLength;
                 var ConnectionPos = Convert.ToSingle((XY_int - Args.Connection.PassageNodeA.Pos).ToDoubles().GetMagnitude());
-                var RampPos = MathUtil.Clamp_sng((ConnectionPos - Extra / 2.0F) / Args.RampLength, 0.0F, 1.0F);
+                var RampPos = MathUtil.ClampSng((ConnectionPos - Extra / 2.0F) / Args.RampLength, 0.0F, 1.0F);
                 var Layer_NodeNum = Node.GetLayer_NodeNum;
                 RampPos = (float)(1.0D - (Math.Cos(RampPos * Math.PI) + 1.0D) / 2.0D);
                 if ( RampPos > 0.0F & RampPos < 1.0F )

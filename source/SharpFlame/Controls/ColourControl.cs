@@ -30,9 +30,9 @@ namespace SharpFlame.Controls
             }
 
             Colour = NewColour;
-            var Red = (int)(MathUtil.Clamp_dbl(Colour.Red * 255.0D, 0.0D, 255.0D));
-            var Green = (int)(MathUtil.Clamp_dbl(Colour.Green * 255.0D, 0.0D, 255.0D));
-            var Blue = (int)(MathUtil.Clamp_dbl(Colour.Blue * 255.0D, 0.0D, 255.0D));
+            var Red = (int)(MathUtil.ClampDbl(Colour.Red * 255.0D, 0.0D, 255.0D));
+            var Green = (int)(MathUtil.ClampDbl(Colour.Green * 255.0D, 0.0D, 255.0D));
+            var Blue = (int)(MathUtil.ClampDbl(Colour.Blue * 255.0D, 0.0D, 255.0D));
             ColourColor = ColorTranslator.FromOle(ColorUtil.OSRGB(Red, Green, Blue));
 
             if ( Colour is clsRGBA_sng )

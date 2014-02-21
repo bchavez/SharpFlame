@@ -521,7 +521,7 @@ namespace SharpFlame.Mapping.IO.Wz
                         }
                         if ( iniStructure.HealthPercent >= 0 )
                         {
-                            newUnit.Health = MathUtil.Clamp_dbl(iniStructure.HealthPercent / 100.0D, 0.01D, 1.0D);
+                            newUnit.Health = MathUtil.ClampDbl(iniStructure.HealthPercent / 100.0D, 0.01D, 1.0D);
                         }
                         if ( iniStructure.ID == 0U )
                         {
@@ -635,7 +635,7 @@ namespace SharpFlame.Mapping.IO.Wz
                         }
                         if ( iniFeature.HealthPercent >= 0 )
                         {
-                            newUnit.Health = MathUtil.Clamp_dbl(iniFeature.HealthPercent / 100.0D, 0.01D, 1.0D);
+                            newUnit.Health = MathUtil.ClampDbl(iniFeature.HealthPercent / 100.0D, 0.01D, 1.0D);
                         }
                         if ( iniFeature.ID == 0U )
                         {
@@ -842,7 +842,7 @@ namespace SharpFlame.Mapping.IO.Wz
                         }
                         if ( iniDroid.HealthPercent >= 0 )
                         {
-                            newUnit.Health = MathUtil.Clamp_dbl(iniDroid.HealthPercent / 100.0D, 0.01D, 1.0D);
+                            newUnit.Health = MathUtil.ClampDbl(iniDroid.HealthPercent / 100.0D, 0.01D, 1.0D);
                         }
                         if ( iniDroid.ID == 0U )
                         {

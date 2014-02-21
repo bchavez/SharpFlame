@@ -70,23 +70,23 @@ namespace SharpFlame.Mapping
             double dblTemp2 = 0;
 
             dblTemp = SettingsManager.Settings.MinimapSize;
-            ViewInfo.Tiles_Per_Minimap_Pixel = Math.Sqrt(Terrain.TileSize.X * Terrain.TileSize.X + Terrain.TileSize.Y * Terrain.TileSize.Y) /
+            ViewInfo.TilesPerMinimapPixel = Math.Sqrt(Terrain.TileSize.X * Terrain.TileSize.X + Terrain.TileSize.Y * Terrain.TileSize.Y) /
                                                (MathUtil.RootTwo * dblTemp);
-            if ( Minimap_Texture_Size > 0 & ViewInfo.Tiles_Per_Minimap_Pixel > 0.0D )
+            if ( Minimap_Texture_Size > 0 & ViewInfo.TilesPerMinimapPixel > 0.0D )
             {
-                MinimapSizeXY.X = (int)(Terrain.TileSize.X / ViewInfo.Tiles_Per_Minimap_Pixel);
-                MinimapSizeXY.Y = (int)(Terrain.TileSize.Y / ViewInfo.Tiles_Per_Minimap_Pixel);
+                MinimapSizeXY.X = (int)(Terrain.TileSize.X / ViewInfo.TilesPerMinimapPixel);
+                MinimapSizeXY.Y = (int)(Terrain.TileSize.Y / ViewInfo.TilesPerMinimapPixel);
             }
 
-            if ( !ViewInfo.ScreenXY_Get_ViewPlanePos(new XYInt((int)(GLSize.X / 2.0D), (int)(GLSize.Y / 2.0D)), dblTemp, ref DrawCentre) )
+            if ( !ViewInfo.ScreenXYGetViewPlanePos(new XYInt((int)(GLSize.X / 2.0D), (int)(GLSize.Y / 2.0D)), dblTemp, ref DrawCentre) )
             {
                 Matrix3DMath.VectorForwardsRotationByMatrix(ViewInfo.ViewAngleMatrix, ref XYZ_dbl);
                 dblTemp2 = App.VisionRadius * 2.0D / Math.Sqrt(XYZ_dbl.X * XYZ_dbl.X + XYZ_dbl.Z * XYZ_dbl.Z);
                 DrawCentre.X = ViewInfo.ViewPos.X + XYZ_dbl.X * dblTemp2;
                 DrawCentre.Y = ViewInfo.ViewPos.Z + XYZ_dbl.Z * dblTemp2;
             }
-            DrawCentre.X = MathUtil.Clamp_dbl(DrawCentre.X, 0.0D, Terrain.TileSize.X * Constants.TerrainGridSpacing - 1.0D);
-            DrawCentre.Y = MathUtil.Clamp_dbl(Convert.ToDouble(- DrawCentre.Y), 0.0D, Terrain.TileSize.Y * Constants.TerrainGridSpacing - 1.0D);
+            DrawCentre.X = MathUtil.ClampDbl(DrawCentre.X, 0.0D, Terrain.TileSize.X * Constants.TerrainGridSpacing - 1.0D);
+            DrawCentre.Y = MathUtil.ClampDbl(Convert.ToDouble(- DrawCentre.Y), 0.0D, Terrain.TileSize.Y * Constants.TerrainGridSpacing - 1.0D);
             DrawCentreSector.Normal = GetPosSectorNum(new XYInt((int)DrawCentre.X, (int)DrawCentre.Y));
             DrawCentreSector.Alignment =
                 GetPosSectorNum(new XYInt((int)(DrawCentre.X - Constants.SectorTileSize * Constants.TerrainGridSpacing / 2.0D),
@@ -109,7 +109,7 @@ namespace SharpFlame.Mapping
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
-            Matrix3DMath.MatrixRotationByMatrix(ViewInfo.ViewAngleMatrix_Inverted, App.SunAngleMatrix, matrixB);
+            Matrix3DMath.MatrixRotationByMatrix(ViewInfo.ViewAngleMatrixInverted, App.SunAngleMatrix, matrixB);
             Matrix3DMath.VectorForwardsRotationByMatrix(matrixB, ref XYZ_dbl);
             light_position[0] = (float)XYZ_dbl.X;
             light_position[1] = (float)XYZ_dbl.Y;
@@ -138,10 +138,10 @@ namespace SharpFlame.Mapping
             }
 
             dblTemp = 127.5D * HeightMultiplier;
-            if ( ViewInfo.ScreenXY_Get_ViewPlanePos_ForwardDownOnly(0, 0, dblTemp, ref ViewCorner0)
-                 && ViewInfo.ScreenXY_Get_ViewPlanePos_ForwardDownOnly(GLSize.X, 0, dblTemp, ref ViewCorner1)
-                 && ViewInfo.ScreenXY_Get_ViewPlanePos_ForwardDownOnly(GLSize.X, GLSize.Y, dblTemp, ref ViewCorner2)
-                 && ViewInfo.ScreenXY_Get_ViewPlanePos_ForwardDownOnly(0, GLSize.Y, dblTemp, ref ViewCorner3) )
+            if ( ViewInfo.ScreenXYGetViewPlanePosForwardDownOnly(0, 0, dblTemp, ref ViewCorner0)
+                 && ViewInfo.ScreenXYGetViewPlanePosForwardDownOnly(GLSize.X, 0, dblTemp, ref ViewCorner1)
+                 && ViewInfo.ScreenXYGetViewPlanePosForwardDownOnly(GLSize.X, GLSize.Y, dblTemp, ref ViewCorner2)
+                 && ViewInfo.ScreenXYGetViewPlanePosForwardDownOnly(0, GLSize.Y, dblTemp, ref ViewCorner3) )
             {
                 ShowMinimapViewPosBox = true;
             }
@@ -247,8 +247,8 @@ namespace SharpFlame.Mapping
                 }
                 if ( DrawIt )
                 {
-                    Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrix_Inverted, XYZ_dbl, ref XYZ_dbl2);
-                    if ( ViewInfo.Pos_Get_Screen_XY(XYZ_dbl2, ref ScreenPos) )
+                    Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrixInverted, XYZ_dbl, ref XYZ_dbl2);
+                    if ( ViewInfo.PosGetScreenXY(XYZ_dbl2, ref ScreenPos) )
                     {
                         if ( ScreenPos.X >= 0 & ScreenPos.X <= GLSize.X & ScreenPos.Y >= 0 & ScreenPos.Y <= GLSize.Y )
                         {
@@ -849,8 +849,8 @@ namespace SharpFlame.Mapping
                     XYZ_dbl.X = ScriptPosition.PosX - ViewInfo.ViewPos.X;
                     XYZ_dbl.Z = - ScriptPosition.PosY - ViewInfo.ViewPos.Z;
                     XYZ_dbl.Y = GetTerrainHeight(new XYInt(ScriptPosition.PosX, ScriptPosition.PosY)) - ViewInfo.ViewPos.Y;
-                    Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrix_Inverted, XYZ_dbl, ref XYZ_dbl2);
-                    if ( ViewInfo.Pos_Get_Screen_XY(XYZ_dbl2, ref ScreenPos) )
+                    Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrixInverted, XYZ_dbl, ref XYZ_dbl2);
+                    if ( ViewInfo.PosGetScreenXY(XYZ_dbl2, ref ScreenPos) )
                     {
                         if ( ScreenPos.X >= 0 & ScreenPos.X <= GLSize.X & ScreenPos.Y >= 0 & ScreenPos.Y <= GLSize.Y )
                         {
@@ -878,8 +878,8 @@ namespace SharpFlame.Mapping
                     XYZ_dbl.X = ScriptArea.PosAX - ViewInfo.ViewPos.X;
                     XYZ_dbl.Z = - ScriptArea.PosAY - ViewInfo.ViewPos.Z;
                     XYZ_dbl.Y = GetTerrainHeight(new XYInt(ScriptArea.PosAX, ScriptArea.PosAY)) - ViewInfo.ViewPos.Y;
-                    Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrix_Inverted, XYZ_dbl, ref XYZ_dbl2);
-                    if ( ViewInfo.Pos_Get_Screen_XY(XYZ_dbl2, ref ScreenPos) )
+                    Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrixInverted, XYZ_dbl, ref XYZ_dbl2);
+                    if ( ViewInfo.PosGetScreenXY(XYZ_dbl2, ref ScreenPos) )
                     {
                         if ( ScreenPos.X >= 0 & ScreenPos.X <= GLSize.X & ScreenPos.Y >= 0 & ScreenPos.Y <= GLSize.Y )
                         {
@@ -984,7 +984,7 @@ namespace SharpFlame.Mapping
 
             DebugGLError("Minimap matrix modes");
 
-            if ( Minimap_Texture_Size > 0 & ViewInfo.Tiles_Per_Minimap_Pixel > 0.0D )
+            if ( Minimap_Texture_Size > 0 & ViewInfo.TilesPerMinimapPixel > 0.0D )
             {
                 GL.Translate(0.0F, GLSize.Y - MinimapSizeXY.Y, 0.0F);
 
@@ -1035,7 +1035,7 @@ namespace SharpFlame.Mapping
 
                 if ( ShowMinimapViewPosBox )
                 {
-                    dblTemp = Constants.TerrainGridSpacing * ViewInfo.Tiles_Per_Minimap_Pixel;
+                    dblTemp = Constants.TerrainGridSpacing * ViewInfo.TilesPerMinimapPixel;
 
                     PosA.X = ViewCorner0.X / dblTemp;
                     PosA.Y = MinimapSizeXY.Y + ViewCorner0.Y / dblTemp;
@@ -1079,14 +1079,14 @@ namespace SharpFlame.Mapping
                     if ( DrawIt )
                     {
                         GL.LineWidth(1.0F);
-                        PosA.X = StartXY.X / ViewInfo.Tiles_Per_Minimap_Pixel;
-                        PosA.Y = MinimapSizeXY.Y - StartXY.Y / ViewInfo.Tiles_Per_Minimap_Pixel;
-                        PosB.X = FinishXY.X / ViewInfo.Tiles_Per_Minimap_Pixel;
-                        PosB.Y = MinimapSizeXY.Y - StartXY.Y / ViewInfo.Tiles_Per_Minimap_Pixel;
-                        PosC.X = FinishXY.X / ViewInfo.Tiles_Per_Minimap_Pixel;
-                        PosC.Y = MinimapSizeXY.Y - FinishXY.Y / ViewInfo.Tiles_Per_Minimap_Pixel;
-                        PosD.X = StartXY.X / ViewInfo.Tiles_Per_Minimap_Pixel;
-                        PosD.Y = MinimapSizeXY.Y - FinishXY.Y / ViewInfo.Tiles_Per_Minimap_Pixel;
+                        PosA.X = StartXY.X / ViewInfo.TilesPerMinimapPixel;
+                        PosA.Y = MinimapSizeXY.Y - StartXY.Y / ViewInfo.TilesPerMinimapPixel;
+                        PosB.X = FinishXY.X / ViewInfo.TilesPerMinimapPixel;
+                        PosB.Y = MinimapSizeXY.Y - StartXY.Y / ViewInfo.TilesPerMinimapPixel;
+                        PosC.X = FinishXY.X / ViewInfo.TilesPerMinimapPixel;
+                        PosC.Y = MinimapSizeXY.Y - FinishXY.Y / ViewInfo.TilesPerMinimapPixel;
+                        PosD.X = StartXY.X / ViewInfo.TilesPerMinimapPixel;
+                        PosD.Y = MinimapSizeXY.Y - FinishXY.Y / ViewInfo.TilesPerMinimapPixel;
                         GL.Begin(BeginMode.LineLoop);
                         GL.Color3(1.0F, 1.0F, 1.0F);
                         GL.Vertex2(PosA.X, PosA.Y);

@@ -34,7 +34,7 @@ namespace SharpFlame.Controls
                 return;
             }
 
-            nudRadius.Value = (decimal)(MathUtil.Clamp_dbl(Brush.Radius, (double)nudRadius.Minimum, (double)nudRadius.Maximum));
+            nudRadius.Value = (decimal)(MathUtil.ClampDbl(Brush.Radius, (double)nudRadius.Minimum, (double)nudRadius.Maximum));
             switch ( Brush.Shape )
             {
                 case clsBrush.enumShape.Circle:

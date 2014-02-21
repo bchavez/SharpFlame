@@ -93,14 +93,14 @@ namespace SharpFlame.Mapping.Tools
             LimitY = Terrain.TileSize.Y;
             TempHeight = 0;
             Samples = 0;
-            for ( Y = MathUtil.Clamp_int(App.SmoothRadius.Tiles.YMin + PosNum.Y, 0, LimitY) - PosNum.Y;
-                Y <= MathUtil.Clamp_int(App.SmoothRadius.Tiles.YMax + PosNum.Y, 0, LimitY) - PosNum.Y;
+            for ( Y = MathUtil.ClampInt(App.SmoothRadius.Tiles.YMin + PosNum.Y, 0, LimitY) - PosNum.Y;
+                Y <= MathUtil.ClampInt(App.SmoothRadius.Tiles.YMax + PosNum.Y, 0, LimitY) - PosNum.Y;
                 Y++ )
             {
                 Y2 = PosNum.Y + Y;
                 XNum = Y - App.SmoothRadius.Tiles.YMin;
-                for ( X = MathUtil.Clamp_int(Convert.ToInt32(App.SmoothRadius.Tiles.XMin[XNum] + PosNum.X), 0, LimitX) - PosNum.X;
-                    X <= MathUtil.Clamp_int(Convert.ToInt32(App.SmoothRadius.Tiles.XMax[XNum] + PosNum.X), 0, LimitX) - PosNum.X;
+                for ( X = MathUtil.ClampInt(Convert.ToInt32(App.SmoothRadius.Tiles.XMin[XNum] + PosNum.X), 0, LimitX) - PosNum.X;
+                    X <= MathUtil.ClampInt(Convert.ToInt32(App.SmoothRadius.Tiles.XMax[XNum] + PosNum.X), 0, LimitX) - PosNum.X;
                     X++ )
                 {
                     X2 = PosNum.X + X;

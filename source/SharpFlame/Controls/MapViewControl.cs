@@ -311,7 +311,7 @@ namespace SharpFlame.Controls
             Map.ViewInfo.MouseOver.ScreenPos.X = e.X;
             Map.ViewInfo.MouseOver.ScreenPos.Y = e.Y;
 
-            Map.ViewInfo.MouseOver_Pos_Calc();
+            Map.ViewInfo.MouseOverPosCalc();
         }
 
         public void Pos_Display_Update()
@@ -527,16 +527,16 @@ namespace SharpFlame.Controls
             }
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewReset) )
             {
-                Map.ViewInfo.FOV_Multiplier_Set(SettingsManager.Settings.FOVDefault);
+                Map.ViewInfo.FovMultiplierSet(SettingsManager.Settings.FOVDefault);
                 if ( App.ViewMoveType == enumView_Move_Type.Free )
                 {
                     Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
-                    Map.ViewInfo.ViewAngleSet_Rotate(matrixA);
+                    Map.ViewInfo.ViewAngleSetRotate(matrixA);
                 }
                 else if ( App.ViewMoveType == enumView_Move_Type.RTS )
                 {
                     Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
-                    Map.ViewInfo.ViewAngleSet_Rotate(matrixA);
+                    Map.ViewInfo.ViewAngleSetRotate(matrixA);
                 }
             }
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewTextures) )
@@ -608,19 +608,19 @@ namespace SharpFlame.Controls
                 {
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Clockwise) )
                     {
-                        Map.ViewInfo.Apply_Texture_Clockwise();
+                        Map.ViewInfo.ApplyTextureClockwise();
                     }
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.CounterClockwise) )
                     {
-                        Map.ViewInfo.Apply_Texture_CounterClockwise();
+                        Map.ViewInfo.ApplyTextureCounterClockwise();
                     }
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.TextureFlip) )
                     {
-                        Map.ViewInfo.Apply_Texture_FlipX();
+                        Map.ViewInfo.ApplyTextureFlipX();
                     }
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.TriFlip) )
                     {
-                        Map.ViewInfo.Apply_Tri_Flip();
+                        Map.ViewInfo.ApplyTriFlip();
                     }
                 }
             }
@@ -912,7 +912,7 @@ namespace SharpFlame.Controls
             Viewport_Resize();
             if ( Map != null )
             {
-                Map.ViewInfo.FOV_Calc();
+                Map.ViewInfo.FovCalc();
             }
             DrawViewLater();
         }
