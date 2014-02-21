@@ -353,7 +353,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Graphics\OpenGL\GLFont.cs" />
-    <Compile Include="Collections\ListUtil.cs" />
     <Compile Include="Bitmaps\BitmapUtil.cs" />
     <Compile Include="Generators\DefaultGenerator.cs" />
     <Compile Include="FileIO\IOUtil.cs" />

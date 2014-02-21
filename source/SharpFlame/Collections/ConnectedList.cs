@@ -59,7 +59,7 @@ namespace SharpFlame.Collections
         {
             if ( NewItem.CanAdd() )
             {
-                NewItem.BeforeAdd(ListUtil.MonoWorkaroundConnectedList<ItemType, SourceType>(this), List.Count);
+                NewItem.BeforeAdd(this, List.Count);
                 List.Add(NewItem);
             }
         }
@@ -68,7 +68,7 @@ namespace SharpFlame.Collections
         {
             if ( NewItem.CanAdd() )
             {
-                NewItem.BeforeAdd(ListUtil.MonoWorkaroundConnectedList<ItemType, SourceType>(this), Position);
+                NewItem.BeforeAdd(this, Position);
                 List.Insert(NewItem, Position);
             }
         }
