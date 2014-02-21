@@ -115,8 +115,9 @@
     <Compile Include="AppSettings\OptionCreator.cs" />
     <Compile Include="AppSettings\OptionProfile.cs" />
     <Compile Include="Collections\Specialized\BooleanMap.cs" />
-    <Compile Include="Domain\clsTextFile.cs" />
+    <Compile Include="Domain\ObjData\clsTextFile.cs" />
     <Compile Include="Domain\Definitions.cs" />
+    <Compile Include="Domain\ObjData\Definitions.cs" />
     <Compile Include="Generators\clsBrush.cs" />
     <Compile Include="Domain\ComponentBase.cs" />
     <Compile Include="Mapping\Changes\clsAutoTextureChanges.cs" />
@@ -222,7 +223,7 @@
     <Compile Include="Mapping\Tools\clsObjectUnitGroup.cs" />
     <Compile Include="Mapping\Tools\sGenerateMasterTerrainArgs.cs" />
     <Compile Include="Domain\clsModel.cs" />
-    <Compile Include="Domain\clsObjectData.cs" />
+    <Compile Include="Domain\ObjData\clsObjectData.cs" />
     <Compile Include="Mapping\Tiles\TileDirection.cs" />
     <Compile Include="Mapping\Tiles\TileOrientation.cs" />
     <Compile Include="AppSettings\OptionGroup.cs" />

@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using SharpFlame.Collections;
 
-namespace SharpFlame.Domain
+namespace SharpFlame.Domain.ObjData
 {
     public class clsTextFile
     {
@@ -118,8 +118,8 @@ namespace SharpFlame.Domain
             }
 
             var currentChar = (char)0;
-            var inLineComment = default(bool);
-            var inCommentBlock = default(bool);
+            var inLineComment = false;
+            var inCommentBlock = false;
             var line = "";
             var currentCharExists = false;
 

@@ -4,6 +4,7 @@ using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
 using SharpFlame.Core.Domain;
+using SharpFlame.Domain.ObjData;
 using SharpFlame.Maths;
 using SharpFlame.Util;
 

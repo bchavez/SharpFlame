@@ -1,6 +1,7 @@
 #region
 
 using SharpFlame.Collections;
+using SharpFlame.Domain.ObjData;
 
 #endregion
 

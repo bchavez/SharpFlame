@@ -13,6 +13,7 @@ using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
+using SharpFlame.Domain.ObjData;
 using SharpFlame.FileIO;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping;

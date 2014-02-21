@@ -16,6 +16,7 @@ using SharpFlame.Controls;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
+using SharpFlame.Domain.ObjData;
 using SharpFlame.FileIO;
 using SharpFlame.Generators;
 using SharpFlame.Mapping;

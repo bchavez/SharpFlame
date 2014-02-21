@@ -3,7 +3,6 @@
 using System;
 using System.Drawing;
 using System.IO;
-using OpenTK.Graphics.OpenGL;
 using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
 using SharpFlame.Core.Domain;
@@ -13,7 +12,7 @@ using SharpFlame.Util;
 
 #endregion
 
-namespace SharpFlame.Domain
+namespace SharpFlame.Domain.ObjData
 {
     public class clsObjectData
     {
@@ -705,34 +704,34 @@ namespace SharpFlame.Domain
                         returnResult.WarningAdd("Template " + template.GetDisplayTextCode() + " had an unrecognised type.");
                         break;
                 }
-                var LoadPartsArgs = new DroidDesign.sLoadPartsArgs();
-                LoadPartsArgs.Body = FindBodyCode(fields[2]);
-                LoadPartsArgs.Brain = FindBrainCode(fields[3]);
-                LoadPartsArgs.Construct = FindConstructorCode(fields[4]);
-                LoadPartsArgs.ECM = FindECMCode(fields[5]);
-                LoadPartsArgs.Propulsion = FindPropulsionCode(fields[7]);
-                LoadPartsArgs.Repair = FindRepairCode(fields[8]);
-                LoadPartsArgs.Sensor = FindSensorCode(fields[10]);
+                var loadPartsArgs = new DroidDesign.sLoadPartsArgs();
+                loadPartsArgs.Body = FindBodyCode(fields[2]);
+                loadPartsArgs.Brain = FindBrainCode(fields[3]);
+                loadPartsArgs.Construct = FindConstructorCode(fields[4]);
+                loadPartsArgs.ECM = FindECMCode(fields[5]);
+                loadPartsArgs.Propulsion = FindPropulsionCode(fields[7]);
+                loadPartsArgs.Repair = FindRepairCode(fields[8]);
+                loadPartsArgs.Sensor = FindSensorCode(fields[10]);
                 var TemplateWeapons = GetRowsWithValue(dataAssignWeapons.ResultData, template.Code);
                 if ( TemplateWeapons.Count > 0 )
                 {
                     text = Convert.ToString(TemplateWeapons[0][1]);
                     if ( text != "NULL" )
                     {
-                        LoadPartsArgs.Weapon1 = FindWeaponCode(text);
+                        loadPartsArgs.Weapon1 = FindWeaponCode(text);
                     }
                     text = Convert.ToString(TemplateWeapons[0][2]);
                     if ( text != "NULL" )
                     {
-                        LoadPartsArgs.Weapon2 = FindWeaponCode(text);
+                        loadPartsArgs.Weapon2 = FindWeaponCode(text);
                     }
                     text = Convert.ToString(TemplateWeapons[0][3]);
                     if ( text != "NULL" )
                     {
-                        LoadPartsArgs.Weapon3 = FindWeaponCode(text);
+                        loadPartsArgs.Weapon3 = FindWeaponCode(text);
                     }
                 }
-                if ( !template.LoadParts(LoadPartsArgs) )
+                if ( !template.LoadParts(loadPartsArgs) )
                 {
                     if ( TurretConflictCount < 16 )
                     {
@@ -1264,115 +1263,6 @@ namespace SharpFlame.Domain
             }
 
             return null;
-        }
-
-        private struct BodyProp
-        {
-            public string LeftPIE;
-            public string RightPIE;
-        }
-
-        public class clsPIE
-        {
-            public string LCaseFileTitle;
-            public clsModel Model;
-            public string Path;
-        }
-
-        public class clsTexturePage
-        {
-            public string FileTitle;
-            public int GLTexture_Num;
-        }
-
-        public struct sBytes
-        {
-            public byte[] Bytes;
-        }
-
-        public struct sLines
-        {
-            public string[] Lines;
-
-            public void RemoveComments()
-            {
-                var LineNum = 0;
-                var LineCount = Lines.GetUpperBound(0) + 1;
-                var InCommentBlock = default(bool);
-                var CommentStart = 0;
-                var CharNum = 0;
-                var CommentLength = 0;
-
-                for ( LineNum = 0; LineNum <= LineCount - 1; LineNum++ )
-                {
-                    CharNum = 0;
-                    if ( InCommentBlock )
-                    {
-                        CommentStart = 0;
-                    }
-                    do
-                    {
-                        if ( CharNum >= Lines[LineNum].Length )
-                        {
-                            if ( InCommentBlock )
-                            {
-                                Lines[LineNum] = Lines[LineNum].Substring(0, CommentStart);
-                            }
-                            break;
-                        }
-                        if ( InCommentBlock )
-                        {
-                            if ( Lines[LineNum][CharNum] == '*' )
-                            {
-                                CharNum++;
-                                if ( CharNum >= Lines[LineNum].Length )
-                                {
-                                }
-                                else if ( Lines[LineNum][CharNum] == '/' )
-                                {
-                                    CharNum++;
-                                    CommentLength = CharNum - CommentStart;
-                                    InCommentBlock = false;
-                                    Lines[LineNum] = Lines[LineNum].Substring(CommentStart, Lines[LineNum].Length - CommentStart)
-                                        .Substring(CommentStart + CommentLength, Lines[LineNum].Length - CommentStart - CommentLength);
-                                    CharNum -= CommentLength;
-                                }
-                            }
-                            else
-                            {
-                                CharNum++;
-                            }
-                        }
-                        else if ( Lines[LineNum][CharNum] == '/' )
-                        {
-                            CharNum++;
-                            if ( CharNum >= Lines[LineNum].Length )
-                            {
-                            }
-                            else if ( Lines[LineNum][CharNum] == '/' )
-                            {
-                                CommentStart = CharNum - 1;
-                                CharNum = Lines[LineNum].Length;
-                                CommentLength = CharNum - CommentStart;
-                                Lines[LineNum] = Lines[LineNum].Substring(CommentStart, Lines[LineNum].Length - CommentStart)
-                                    .Substring(CommentStart + CommentLength, Lines[LineNum].Length - CommentStart - CommentLength);
-                                CharNum -= CommentLength;
-                                break;
-                            }
-                            else if ( Lines[LineNum][CharNum] == '*' )
-                            {
-                                CommentStart = CharNum - 1;
-                                CharNum++;
-                                InCommentBlock = true;
-                            }
-                        }
-                        else
-                        {
-                            CharNum++;
-                        }
-                    } while ( true );
-                }
-            }
         }
     }
 }
