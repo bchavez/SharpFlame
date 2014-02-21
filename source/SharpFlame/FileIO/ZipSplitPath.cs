@@ -12,9 +12,9 @@ namespace SharpFlame.FileIO
         public ZipSplitPath(string path)
         {
             int a;
-            var PathilhFixed = path.ToLower().Replace('\\', '/');
+            var pathFixed = path.ToLower().Replace('\\', '/');
 
-            Parts = PathFixed.Split('/');
+            Parts = pathFixed.Split('/');
             PartCount = Parts.Length;
 
             FilePath = "";
