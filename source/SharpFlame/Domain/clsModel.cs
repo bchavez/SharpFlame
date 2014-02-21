@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using NLog;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Extensions;
 
@@ -78,9 +79,9 @@ namespace SharpFlame.Domain
             GL.End();
         }
 
-        public clsResult ReadPIE(StreamReader file, clsObjectData owner)
+        public Result ReadPIE(StreamReader file, clsObjectData owner)
         {
-            var returnResult = new clsResult("Reading PIE", false);
+            var returnResult = new Result("Reading PIE", false);
             logger.Debug("Reading PIE");
 
             var a = 0;

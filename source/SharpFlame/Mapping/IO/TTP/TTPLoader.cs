@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using NLog;
+using SharpFlame.Core;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.IO;
 
@@ -18,7 +19,7 @@ namespace SharpFlame.Mapping.IO.TTP
             map = newMap;
         }
 
-        public clsResult Load(string path)
+        public Result Load(string path)
         {
             try {
                 using (var file = new BinaryReader(new FileStream(path, FileMode.Open))) {
@@ -27,16 +28,16 @@ namespace SharpFlame.Mapping.IO.TTP
             }
             catch (Exception ex) {
                 Debugger.Break ();
-                var returnResult = new clsResult ("Loading .ttp", false);
+                var returnResult = new Result ("Loading .ttp", false);
                 returnResult.ProblemAdd (string.Format ("Failed to open .ttp, failure was: {0}", ex.Message));
                 logger.ErrorException ("Failed to open .ttp", ex);
                 return returnResult;
             }
         }
 
-        public clsResult Load(BinaryReader file)
+        public Result Load(BinaryReader file)
         {
-            var returnResult = new clsResult ("Loading .ttp", false);
+            var returnResult = new Result ("Loading .ttp", false);
             logger.Info ("Loading .ttp");
 
             var strTemp = "";

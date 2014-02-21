@@ -3,6 +3,7 @@ using System.Drawing;
 using NLog;
 using SharpFlame.Bitmaps;
 using SharpFlame.Colors;
+using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Maths;
 
@@ -19,9 +20,9 @@ namespace SharpFlame.Mapping.IO.Minimap
             map = newMap;
         }
 
-        public clsResult Save(string path, bool overwrite, bool compress = false) // compress is ignored.
+        public Result Save(string path, bool overwrite, bool compress = false) // compress is ignored.
         {
-            var returnResult = new clsResult(string.Format("Saving minimap to \"{0}\".", path), false);
+            var returnResult = new Result(string.Format("Saving minimap to \"{0}\".", path), false);
             logger.Info ("Saving minimap to \"{0}\"", path);
 
             var minimapBitmap = new Bitmap(map.Terrain.TileSize.X, map.Terrain.TileSize.Y);

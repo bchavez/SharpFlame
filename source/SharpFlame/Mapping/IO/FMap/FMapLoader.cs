@@ -9,6 +9,7 @@ using System.Text;
 using Ionic.Zip;
 using Ionic.Zlib;
 using NLog;
+using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Core.Parsers.Ini;
@@ -33,9 +34,9 @@ namespace SharpFlame.Mapping.IO.FMap
             map = newMap;
         }
 
-        public clsResult Load(string path)
+        public Result Load(string path)
         {
-            var returnResult = new clsResult(string.Format("Loading FMap from \"{0}\"", path), false);
+            var returnResult = new Result(string.Format("Loading FMap from \"{0}\"", path), false);
             logger.Info(string.Format("Loading FMap from \"{0}\"", path));
 
             using ( var zip = ZipFile.Read(path) )
@@ -244,9 +245,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }      
 
-        private clsResult read_FMap_Info(string text, ref FMapInfo resultInfo)
+        private Result read_FMap_Info(string text, ref FMapInfo resultInfo)
         {
-            var returnResult = new clsResult("Read general map info", false);
+            var returnResult = new Result("Read general map info", false);
             logger.Info("Read general map info");
 
             var infoIni = IniReader.ReadString (text);
@@ -344,9 +345,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private clsResult read_FMap_VertexHeight(BinaryReader file)
+        private Result read_FMap_VertexHeight(BinaryReader file)
         {
-            var returnResult = new clsResult("Reading vertex heights", false);
+            var returnResult = new Result("Reading vertex heights", false);
             logger.Info("Reading vertex heights");
 
             var x = 0;
@@ -376,9 +377,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private clsResult read_FMap_VertexTerrain(BinaryReader file)
+        private Result read_FMap_VertexTerrain(BinaryReader file)
         {
-            var returnResult = new clsResult("Reading vertex terrain", false);
+            var returnResult = new Result("Reading vertex terrain", false);
             logger.Info("Reading vertex terrain");
 
             var x = 0;
@@ -435,9 +436,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private clsResult read_FMap_TileTexture(BinaryReader file)
+        private Result read_FMap_TileTexture(BinaryReader file)
         {
-            var returnResult = new clsResult("Reading tile textures", false);
+            var returnResult = new Result("Reading tile textures", false);
             logger.Info("Reading tile textures");
 
             var x = 0;
@@ -469,9 +470,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private clsResult read_FMap_TileOrientation(BinaryReader file)
+        private Result read_FMap_TileOrientation(BinaryReader file)
         {
-            var returnResult = new clsResult("Reading tile orientations", false);
+            var returnResult = new Result("Reading tile orientations", false);
             logger.Info("Reading tile orientations");
 
             var x = 0;
@@ -535,9 +536,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private clsResult read_FMap_TileCliff(BinaryReader file)
+        private Result read_FMap_TileCliff(BinaryReader file)
         {
-            var returnResult = new clsResult("Reading tile cliffs", false);
+            var returnResult = new Result("Reading tile cliffs", false);
             logger.Info("Reading tile cliffs");
 
             var x = 0;
@@ -646,9 +647,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private clsResult read_FMap_Roads(BinaryReader file)
+        private Result read_FMap_Roads(BinaryReader file)
         {
-            var returnResult = new clsResult("Reading roads", false);
+            var returnResult = new Result("Reading roads", false);
             logger.Info("Reading roads");
 
             var x = 0;
@@ -728,9 +729,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private clsResult read_FMap_Objects(string text)
+        private Result read_FMap_Objects(string text)
         {
-            var returnResult = new clsResult("Reading objects", false);
+            var returnResult = new Result("Reading objects", false);
             logger.Info("Reading objects");
 
             var objectsINI = IniReader.ReadString(text);
@@ -1134,9 +1135,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private clsResult read_FMap_Gateways(string text)
+        private Result read_FMap_Gateways(string text)
         {
-            var returnResult = new clsResult("Reading gateways", false);
+            var returnResult = new Result("Reading gateways", false);
             logger.Info("Reading gateways");
 
             var invalid = true;
@@ -1201,9 +1202,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private clsResult read_FMap_TileTypes(BinaryReader file)
+        private Result read_FMap_TileTypes(BinaryReader file)
         {
-            var returnResult = new clsResult("Reading tile types", false);
+            var returnResult = new Result("Reading tile types", false);
             logger.Info("Reading tile types");
 
             var a = 0;
@@ -1247,9 +1248,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private clsResult read_INI_Labels(string iniText)
+        private Result read_INI_Labels(string iniText)
         {
-            var resultObject = new clsResult("Reading labels", false);
+            var resultObject = new Result("Reading labels", false);
             logger.Info("Reading labels.");
 
             var typeNum = 0;

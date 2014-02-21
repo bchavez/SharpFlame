@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using NLog;
+using SharpFlame.Core;
 using SharpFlame.Core.Extensions;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.IO.TTP;
@@ -22,10 +23,10 @@ namespace SharpFlame.Mapping.IO.Wz
         {
         }
 
-        public override clsResult Load(string path)
+        public override Result Load(string path)
         {
             var returnResult =
-                new clsResult("Loading game file from \"{0}\"".Format2(path), false);
+                new Result("Loading game file from \"{0}\"".Format2(path), false);
             logger.Info("Loading game file from \"{0}\"", path);
             var subResult = new sResult();
 
@@ -112,7 +113,7 @@ namespace SharpFlame.Mapping.IO.Wz
 
             if ( iniFeatures.Count == 0 ) // no feature.ini
             {
-                var Result = new clsResult("feat.bjo", false);
+                var Result = new Result("feat.bjo", false);
                 logger.Info("Loading feat.bjo");
                 subResult = IOUtil.TryOpenFileStream(gameFilesPath + "feat.bjo", ref file);
                 if ( !subResult.Success )
@@ -159,7 +160,7 @@ namespace SharpFlame.Mapping.IO.Wz
 
             if ( iniStructures.Count == 0 ) // no struct.ini
             {
-                var Result = new clsResult("struct.bjo", false);
+                var Result = new Result("struct.bjo", false);
                 logger.Info("Loading struct.bjo");
                 subResult = IOUtil.TryOpenFileStream(gameFilesPath + "struct.bjo", ref file);
                 if ( !subResult.Success )
@@ -192,7 +193,7 @@ namespace SharpFlame.Mapping.IO.Wz
 
             if ( iniDroids.Count == 0 ) // no droid.ini
             {
-                var Result = new clsResult("dinit.bjo", false);
+                var Result = new Result("dinit.bjo", false);
                 logger.Info("Loading dinit.bjo");
                 subResult = IOUtil.TryOpenFileStream(gameFilesPath + "dinit.bjo", ref file);
                 if ( !subResult.Success )

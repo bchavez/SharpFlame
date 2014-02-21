@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using NLog;
+using SharpFlame.Core;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.IO;
 
@@ -18,9 +19,9 @@ namespace SharpFlame.Mapping.IO.TTP
             map = newMap;
         }
 
-        public clsResult Save(string path, bool overwrite, bool compress = false) // compress is ignored.
+        public Result Save(string path, bool overwrite, bool compress = false) // compress is ignored.
         {
-            var returnResult = new clsResult(string.Format("Writing .ttp to \"{0}\"", path), false);
+            var returnResult = new Result(string.Format("Writing .ttp to \"{0}\"", path), false);
             logger.Info(string.Format("Writing .ttp to \"{0}\"", path));           
 
             try {
@@ -51,9 +52,9 @@ namespace SharpFlame.Mapping.IO.TTP
             return returnResult;
         }
 
-        public clsResult Save(Stream stream)
+        public Result Save(Stream stream)
         {            
-            var returnResult = new clsResult("Serializing ttypes.ttp", false);
+            var returnResult = new Result("Serializing ttypes.ttp", false);
             logger.Info("Serializing ttypes.ttp");
 
             var fileTTP = new BinaryWriter(stream, App.ASCIIEncoding);

@@ -9,6 +9,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.AppSettings;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
+using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Domain;
@@ -1227,9 +1228,9 @@ namespace SharpFlame.Mapping
             App.ShowWarnings(AutoSavePerform());
         }
 
-        public clsResult AutoSavePerform()
+        public Result AutoSavePerform()
         {
-            var ReturnResult = new clsResult("Autosave", false);
+            var ReturnResult = new Result("Autosave", false);
 
             var DateNow = DateTime.Now;
             var path = string.Format("{0}autosaved-{1}-{2}-{3}-{4}-{5}-{6}-{7}.fmap",

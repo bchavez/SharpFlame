@@ -9,6 +9,7 @@ using NLog;
 using SharpFlame.AppSettings;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
+using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Core.Extensions;
@@ -231,7 +232,7 @@ namespace SharpFlame
             return returnResult;
         }
 
-        public static void ShowWarnings(clsResult result)
+        public static void ShowWarnings(Result result)
         {
             if ( !result.HasWarnings )
             {
@@ -290,7 +291,7 @@ namespace SharpFlame
             }
         }
 
-        public static void ZeroIDWarning(clsUnit IDUnit, UInt32 NewID, clsResult Output)
+        public static void ZeroIDWarning(clsUnit IDUnit, UInt32 NewID, Result Output)
         {
             var MessageText = "An object\'s ID has been changed from 0 to " + NewID.ToStringInvariant() + ". Zero is not a valid ID. The object is of type " +
                           IDUnit.TypeBase.GetDisplayTextCode() + " and is at map position " + IDUnit.GetPosText() + ".";
@@ -313,9 +314,9 @@ namespace SharpFlame
             return Power == (int)Power;
         }
 
-        public static clsResult LoadTilesets(string TilesetsPath)
+        public static Result LoadTilesets(string TilesetsPath)
         {
-            var returnResult = new clsResult("Loading tilesets", false);
+            var returnResult = new Result("Loading tilesets", false);
             logger.Info("Loading tilesets");
 
             string[] tilesetDirs;
@@ -329,7 +330,7 @@ namespace SharpFlame
                 return returnResult;
             }
 
-            clsResult result;
+            Result result;
 
             foreach ( var path in tilesetDirs )
             {

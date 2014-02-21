@@ -6,6 +6,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.AppSettings;
 using SharpFlame.Bitmaps;
 using SharpFlame.Colors;
+using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Core.Extensions;
@@ -25,9 +26,9 @@ namespace SharpFlame.FileIO
             tileset = tilesetToLoad;
         }
 
-        public clsResult Load(string path)
+        public Result Load(string path)
         {
-            var returnResult = new clsResult("Loading tileset from '{0}'".Format2(path), false);
+            var returnResult = new Result("Loading tileset from '{0}'".Format2(path), false);
             logger.Info("Loading tileset from '{0}'".Format2(path));
 
             Bitmap bitmap = null;
@@ -114,7 +115,7 @@ namespace SharpFlame.FileIO
                     }
                     else
                     {
-                        var MipmapResult = default(clsResult);
+                        var MipmapResult = default(Result);
                         MipmapResult = generateMipMaps(slashPath, strTile, 
                                                        tileset.Tiles[tileNum].GlTextureNum, tileNum);
                         returnResult.Add(MipmapResult);
@@ -222,9 +223,9 @@ namespace SharpFlame.FileIO
             return returnResult;
         }
 
-        private clsResult generateMipMaps(string slashPath, string strTile, int textureNum, int tileNum)
+        private Result generateMipMaps(string slashPath, string strTile, int textureNum, int tileNum)
         {
-            var returnResult = new clsResult("Generating mipmaps", false);
+            var returnResult = new Result("Generating mipmaps", false);
             logger.Info("Generating mipmaps");
             var graphicPath = "";
             var pixX = 0;

@@ -1,6 +1,9 @@
 #region
 
 using System.Windows.Forms;
+using SharpFlame.Core;
+using Sprache;
+using Result = SharpFlame.Core.Result;
 
 #endregion
 
@@ -13,7 +16,7 @@ namespace SharpFlame
 
     public partial class frmWarnings
     {
-        public frmWarnings(clsResult result, string windowTitle)
+        public frmWarnings(Result result, string windowTitle)
         {
             InitializeComponent();
 
@@ -22,10 +25,38 @@ namespace SharpFlame
             Text = windowTitle;
 
             tvwWarnings.StateImageList = modWarnings.WarningImages;
-            result.MakeNodes(tvwWarnings.Nodes);
+            makeNodes(tvwWarnings.Nodes, result);
             tvwWarnings.ExpandAll();
 
             tvwWarnings.NodeMouseDoubleClick += NodeDoubleClicked;
+        }
+
+        private TreeNode makeNodes(TreeNodeCollection owner, Result result)
+        {
+            var node = new TreeNode();
+            node.Text = Text;
+            owner.Add(node);
+            foreach (var item in result.Items) {
+                var childNode = new TreeNode();
+                childNode.Tag = item;
+                if (item is Result.Problem)
+                {
+                    childNode.Text = item.GetText;
+                    node.Nodes.Add(childNode);
+                    childNode.StateImageKey = "problem";
+                }
+                else if (item is Result.Warning)
+                {
+                    childNode.Text = item.GetText;
+                    node.Nodes.Add(childNode);
+                    childNode.StateImageKey = "warning";
+                }
+                else if (item is Result)
+                {
+                    makeNodes(node.Nodes, (Result)item);
+                }
+            }
+            return node;
         }
 
         private void NodeDoubleClicked(object sender, TreeNodeMouseClickEventArgs e)
@@ -34,7 +65,7 @@ namespace SharpFlame
             {
                 return;
             }
-            var item = (clsResultItemInterface)e.Node.Tag;
+            var item = (IResultItem)e.Node.Tag;
             if ( item == null )
             {
                 return;

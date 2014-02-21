@@ -9,6 +9,7 @@ using System.Text;
 using Ionic.Zip;
 using Ionic.Zlib;
 using NLog;
+using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.Domain;
@@ -32,9 +33,9 @@ namespace SharpFlame.Mapping.IO.FMap
             map = newMap;
         }
 
-        public clsResult Save(string path, bool overwrite, bool compress)
+        public Result Save(string path, bool overwrite, bool compress)
         {
-            var returnResult = new clsResult(string.Format("Writing FMap to \"{0}\"", path), false);
+            var returnResult = new Result(string.Format("Writing FMap to \"{0}\"", path), false);
             logger.Info(string.Format("Writing FMap to \"{0}\"", path));
 
             if ( !overwrite )
@@ -127,9 +128,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private clsResult serialize_WZ_LabelsINI(IniWriter file)
+        private Result serialize_WZ_LabelsINI(IniWriter file)
         {
-            var returnResult = new clsResult("Serializing labels INI", false);
+            var returnResult = new Result("Serializing labels INI", false);
             logger.Info("Serializing labels INI");
 
             try
@@ -152,9 +153,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private clsResult serialize_FMap_Info(IniWriter file)
+        private Result serialize_FMap_Info(IniWriter file)
         {
-            var ReturnResult = new clsResult("Serializing general map info", false);
+            var ReturnResult = new Result("Serializing general map info", false);
             logger.Info("Serializing general map info");
 
             try
@@ -200,9 +201,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return ReturnResult;
         }
 
-        private clsResult serialize_FMap_VertexHeight(BinaryWriter file)
+        private Result serialize_FMap_VertexHeight(BinaryWriter file)
         {
-            var ReturnResult = new clsResult("Serializing vertex heights", false);
+            var ReturnResult = new Result("Serializing vertex heights", false);
             logger.Info("Serializing vertex heights");
             var X = 0;
             var Y = 0;
@@ -225,9 +226,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return ReturnResult;
         }
 
-        private clsResult serialize_FMap_VertexTerrain(BinaryWriter file)
+        private Result serialize_FMap_VertexTerrain(BinaryWriter file)
         {
-            var ReturnResult = new clsResult("Serializing vertex terrain", false);
+            var ReturnResult = new Result("Serializing vertex terrain", false);
             logger.Info("Serializing vertex terrain");
 
             var X = 0;
@@ -276,9 +277,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return ReturnResult;
         }
 
-        private clsResult serialize_FMap_TileTexture(BinaryWriter file)
+        private Result serialize_FMap_TileTexture(BinaryWriter file)
         {
-            var ReturnResult = new clsResult("Serializing tile textures", false);
+            var ReturnResult = new Result("Serializing tile textures", false);
             logger.Info("Serializing tile textures");
 
             var X = 0;
@@ -315,9 +316,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return ReturnResult;
         }
 
-        private clsResult serialize_FMap_TileOrientation(BinaryWriter file)
+        private Result serialize_FMap_TileOrientation(BinaryWriter file)
         {
-            var returnResult = new clsResult("Serializing tile orientations", false);
+            var returnResult = new Result("Serializing tile orientations", false);
             logger.Info("Serializing tile orientations");
             var x = 0;
             var y = 0;
@@ -358,9 +359,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private clsResult serialize_FMap_TileCliff(BinaryWriter file)
+        private Result serialize_FMap_TileCliff(BinaryWriter file)
         {
-            var returnResult = new clsResult("Serializing tile cliffs", false);
+            var returnResult = new Result("Serializing tile cliffs", false);
             logger.Info("Serializing tile cliffs");
 
             var x = 0;
@@ -445,9 +446,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private clsResult serialize_FMap_Roads(BinaryWriter file)
+        private Result serialize_FMap_Roads(BinaryWriter file)
         {
-            var returnResult = new clsResult("Serializing roads", false);
+            var returnResult = new Result("Serializing roads", false);
             logger.Info("Serializing roads");
 
             var x = 0;
@@ -521,9 +522,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private clsResult serialize_FMap_Objects(IniWriter file)
+        private Result serialize_FMap_Objects(IniWriter file)
         {
-            var returnResult = new clsResult("Serializing objects", false);
+            var returnResult = new Result("Serializing objects", false);
             logger.Info("Serializing objects");
 
             var droid = default(DroidDesign);
@@ -628,9 +629,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private clsResult serialize_FMap_Gateways(IniWriter File)
+        private Result serialize_FMap_Gateways(IniWriter File)
         {
-            var returnResult = new clsResult("Serializing gateways", false);
+            var returnResult = new Result("Serializing gateways", false);
             logger.Info("Serializing gateways");
 
             try
@@ -654,9 +655,9 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private clsResult serialize_FMap_TileTypes(BinaryWriter file)
+        private Result serialize_FMap_TileTypes(BinaryWriter file)
         {
-            var returnResult = new clsResult("Serializing tile types", false);
+            var returnResult = new Result("Serializing tile types", false);
             logger.Info("Serializing tile types");
             var a = 0;
 

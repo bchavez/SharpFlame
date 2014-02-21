@@ -3,6 +3,7 @@
 using System;
 using System.Windows.Forms;
 using SharpFlame.Collections.Specialized;
+using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Generators;
@@ -286,10 +287,10 @@ namespace SharpFlame
 
             Application.DoEvents();
             LoopCount = 0;
-            var Result = default(clsResult);
+            var Result = default(Result);
             do
             {
-                Result = new clsResult("", false);
+                Result = new Result("", false);
                 Result = Generator.GenerateLayout();
                 if ( !Result.HasProblems )
                 {
@@ -322,9 +323,9 @@ namespace SharpFlame
             lstResult_AddResult(Result);
         }
 
-        private clsResult FinishHeights()
+        private Result FinishHeights()
         {
-            var ReturnResult = new clsResult("", false);
+            var ReturnResult = new Result("", false);
 
             ReturnResult.Take(Generator.GenerateLayoutTerrain());
             if ( ReturnResult.HasProblems )
@@ -342,9 +343,9 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        private clsResult FinishTextures()
+        private Result FinishTextures()
         {
-            var ReturnResult = new clsResult("", false);
+            var ReturnResult = new Result("", false);
 
             if ( cbxMasterTexture.Checked )
             {
@@ -510,7 +511,7 @@ namespace SharpFlame
             Generator.GenerateGateways();
 
             lstResult_AddText("Generating objects.");
-            var Result = new clsResult("", false);
+            var Result = new Result("", false);
             Result.Take(Generator.GenerateOil());
             Result.Take(Generator.GenerateUnits());
             lstResult_AddResult(Result);
@@ -538,7 +539,7 @@ namespace SharpFlame
             Generator.MaxDisconnectionDist = ValidateTextbox(txtRampDistance, 0.0D, 99999.0D, Constants.TerrainGridSpacing);
             Generator.RampBase = ValidateTextbox(txtRampBase, 10.0D, 1000.0D, 10.0D) / 1000.0D;
 
-            var Result = new clsResult("", false);
+            var Result = new Result("", false);
 
             lstResult_AddText("Generating ramps.");
             Result = Generator.GenerateRamps();
@@ -756,7 +757,7 @@ namespace SharpFlame
             }
         }
 
-        private void lstResult_AddResult(clsResult result)
+        private void lstResult_AddResult(Result result)
         {
             lstResult.SelectedIndex = lstResult.Items.Count - 1;
         }

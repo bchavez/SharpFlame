@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using NLog;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Core;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 using SharpFlame.Util;
 
@@ -73,9 +74,9 @@ namespace SharpFlame.Bitmaps
             return returnResult;
         }
 
-        public static clsResult BitmapIsGlCompatible(Bitmap bitmapToCheck)
+        public static Result BitmapIsGlCompatible(Bitmap bitmapToCheck)
         {
-            var returnResult = new clsResult("Compatability check", false);
+            var returnResult = new Result("Compatability check", false);
             logger.Debug("Compatability check");
 
             if ( !App.SizeIsPowerOf2(bitmapToCheck.Width) )

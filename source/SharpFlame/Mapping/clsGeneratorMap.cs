@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using NLog;
 using SharpFlame.Collections.Specialized;
+using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 using SharpFlame.Generators;
@@ -80,9 +81,9 @@ namespace SharpFlame
             get { return totalPlayerCount; }
         }
 
-        public clsResult GenerateLayout()
+        public Result GenerateLayout()
         {
-            var returnResult = new clsResult("Layout", false);
+            var returnResult = new Result("Layout", false);
             logger.Info("Generating Layouts");
 
             var x = 0;
@@ -937,9 +938,9 @@ namespace SharpFlame
             }
         }
 
-        public clsResult GenerateLayoutTerrain()
+        public Result GenerateLayoutTerrain()
         {
-            var ReturnResult = new clsResult("Terrain heights", false);
+            var ReturnResult = new Result("Terrain heights", false);
             logger.Info("Generating Terrain heights");
 
             var NodeTag = default(clsNodeTag);
@@ -2011,9 +2012,9 @@ namespace SharpFlame
             TilePathMap.FindCalc();
         }
 
-        public clsResult GenerateUnits()
+        public Result GenerateUnits()
         {
-            var ReturnResult = new clsResult("Objects", false);
+            var ReturnResult = new Result("Objects", false);
             logger.Info("Generating Objects");
 
             var A = 0;
@@ -2952,9 +2953,9 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult GenerateRamps()
+        public Result GenerateRamps()
         {
-            var ReturnResult = new clsResult("Ramps", false);
+            var ReturnResult = new Result("Ramps", false);
             logger.Info("Generating Ramps");
 
             var A = 0;
@@ -3216,9 +3217,9 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public clsResult GenerateOil()
+        public Result GenerateOil()
         {
-            var ReturnResult = new clsResult("Oil", false);
+            var ReturnResult = new Result("Oil", false);
             logger.Info("Generating Oil");
 
             var A = 0;

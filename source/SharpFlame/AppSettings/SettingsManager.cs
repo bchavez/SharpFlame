@@ -9,6 +9,7 @@ using NLog;
 using OpenTK;
 using SharpFlame.Colors;
 using Newtonsoft.Json;
+using SharpFlame.Core;
 using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Core.Extensions;
 
@@ -157,9 +158,9 @@ namespace SharpFlame.AppSettings
             App.UnitLabelFont = Program.frmMainInstance.MapViewControl.CreateGLFont(newFont);
         }
 
-        public static clsResult SettingsWrite()
+        public static Result SettingsWrite()
         {
-            var ReturnResult = new clsResult("Writing settings to \"{0}\"".Format2(App.SettingsPath), false);
+            var ReturnResult = new Result("Writing settings to \"{0}\"".Format2(App.SettingsPath), false);
             logger.Info("Writing settings to \"{0}\"".Format2(App.SettingsPath));
 
             try {
@@ -177,9 +178,9 @@ namespace SharpFlame.AppSettings
             return ReturnResult;
         }
 
-        public static clsResult SettingsLoad(ref clsSettings result)
+        public static Result SettingsLoad(ref clsSettings result)
         {
-            var returnResult = new clsResult("Loading settings from \"{0}\"".Format2(App.SettingsPath), false);
+            var returnResult = new Result("Loading settings from \"{0}\"".Format2(App.SettingsPath), false);
             logger.Info("Loading settings from \"{0}\"".Format2(App.SettingsPath));
 
             try

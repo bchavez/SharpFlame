@@ -13,6 +13,7 @@ using SharpFlame.AppSettings;
 using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
 using SharpFlame.Controls;
+using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
@@ -178,9 +179,9 @@ namespace SharpFlame
             ObjectPlayerNumControl = new PlayerNumControl();
         }
 
-        private clsResult LoadInterfaceImages()
+        private Result LoadInterfaceImages()
         {
-            var ReturnResult = new clsResult("Loading interface images", false);
+            var ReturnResult = new Result("Loading interface images", false);
             logger.Info("Loading interface images");
 
             Bitmap InterfaceImage_DisplayAutoTexture = null;
@@ -507,7 +508,7 @@ namespace SharpFlame
             if ( App.CommandLinePaths.Count >= 1 )
             {
                 var Path = "";
-                var LoadResult = new clsResult("Loading startup command-line maps", false);
+                var LoadResult = new Result("Loading startup command-line maps", false);
                 logger.Info("Loading startup command-line maps");
                 foreach ( var tempLoopVar_Path in App.CommandLinePaths )
                 {
@@ -618,7 +619,7 @@ namespace SharpFlame
             }
             SettingsManager.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
             var fileName = "";
-            var Results = new clsResult("Loading maps", false);
+            var Results = new Result("Loading maps", false);
             foreach ( var tempLoopVar_FileName in Dialog.FileNames )
             {
                 fileName = tempLoopVar_FileName;
@@ -2039,16 +2040,16 @@ namespace SharpFlame
             UpdateMinimap();
         }
 
-        private clsResult NoTile_Texture_Load()
+        private Result NoTile_Texture_Load()
         {
-            var ReturnResult = new clsResult("Loading error terrain textures", false);
+            var ReturnResult = new Result("Loading error terrain textures", false);
             logger.Info("Loading error terrain textures");
 
             Bitmap Bitmap = null;
 
             Bitmap = Resources.notile;
             {
-                var Result = new clsResult("Loading notile.png", false);
+                var Result = new Result("Loading notile.png", false);
                 logger.Info("Loading notile.png");
                 Result.Take(BitmapUtil.BitmapIsGlCompatible(Bitmap));
                 ReturnResult.Add (Result);
@@ -2057,7 +2058,7 @@ namespace SharpFlame
 
             Bitmap = Resources.overflow;
             {
-                var Result = new clsResult("Loading overflow.png", false);
+                var Result = new Result("Loading overflow.png", false);
                 logger.Info("Loading overflow.png");
                 Result.Take(BitmapUtil.BitmapIsGlCompatible(Bitmap));
                 ReturnResult.Add(Result);
@@ -3541,7 +3542,7 @@ namespace SharpFlame
         public void OpenGL_DragDrop(object sender, DragEventArgs e)
         {
             var Paths = (string[])(e.Data.GetData(DataFormats.FileDrop));
-            var Result = new clsResult("Loading drag-dropped maps", false);
+            var Result = new Result("Loading drag-dropped maps", false);
             logger.Info("Loading drag-dropped maps");
             var Path = "";
 
@@ -4042,9 +4043,9 @@ namespace SharpFlame
             _LoadedMaps.MainMap = Map;
         }
 
-        public clsResult LoadMap(string Path)
+        public Result LoadMap(string Path)
         {
-            var ReturnResult = new clsResult("", false);
+            var ReturnResult = new Result("", false);
             var SplitPath = new sSplitPath(Path);
             var resultMap = new clsMap();
 
@@ -4104,7 +4105,7 @@ namespace SharpFlame
                 return;
             }
             SettingsManager.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
-            var Result = new clsResult("Loading map", false);
+            var Result = new Result("Loading map", false);
             Result.Take(LoadMap(Dialog.FileName));
             App.ShowWarnings(Result);
         }

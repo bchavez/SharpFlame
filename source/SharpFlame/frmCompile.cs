@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 using NLog;
+using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
@@ -127,7 +128,7 @@ namespace SharpFlame
 
         public void btnCompile_Click(Object sender, EventArgs e)
         {
-            var ReturnResult = new clsResult("Compile multiplayer", false);
+            var ReturnResult = new Result("Compile multiplayer", false);
             logger.Info("Compile multiplayer");
             var A = 0;
 
@@ -222,9 +223,9 @@ namespace SharpFlame
             SaveToMap();
         }
 
-        private clsResult ValidateMap_UnitPositions()
+        private Result ValidateMap_UnitPositions()
         {
-            var Result = new clsResult("Validate unit positions", false);
+            var Result = new Result("Validate unit positions", false);
             logger.Info("Validate unit positions");
 
             //check unit positions
@@ -404,9 +405,9 @@ namespace SharpFlame
             return Result;
         }
 
-        private clsResult ValidateMap_Multiplayer(int PlayerCount)
+        private Result ValidateMap_Multiplayer(int PlayerCount)
         {
-            var Result = new clsResult("Validate for multiplayer", false);
+            var Result = new Result("Validate for multiplayer", false);
             logger.Info("Validate for multiplayer");
 
             if ( PlayerCount < 2 | PlayerCount > Constants.PlayerCountMax )
@@ -491,9 +492,9 @@ namespace SharpFlame
             return Result;
         }
 
-        private clsResult ValidateMap()
+        private Result ValidateMap()
         {
-            var ReturnResult = new clsResult("Validate map", false);
+            var ReturnResult = new Result("Validate map", false);
             logger.Info("Validate map");
 
             if ( Map.Terrain.TileSize.X > Constants.WzMapMaxSize )
@@ -592,7 +593,7 @@ namespace SharpFlame
 
         public void btnCompileCampaign_Click(Object sender, EventArgs e)
         {
-            var ReturnResult = new clsResult("Compile campaign", false);
+            var ReturnResult = new Result("Compile campaign", false);
             logger.Info("Compile campaign");
             var A = 0;
 

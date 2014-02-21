@@ -24,6 +24,7 @@ using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 using SharpFlame.Util;
 using Sprache;
+using Result = SharpFlame.Core.Result;
 
 #endregion
 
@@ -40,9 +41,9 @@ namespace SharpFlame.Mapping.IO.Wz
             map = newMap;
         }
 
-        public virtual clsResult Load(string path)
+        public virtual Result Load(string path)
         {
-            var returnResult = new clsResult(string.Format("Loading WZ from '{0}'.", path), false);
+            var returnResult = new Result(string.Format("Loading WZ from '{0}'.", path), false);
             logger.Info("Loading WZ from '{0}'.", path);
             var subResult = new sResult();
 
@@ -75,7 +76,7 @@ namespace SharpFlame.Mapping.IO.Wz
 
                     using ( var s = e.OpenReader() )
                     {
-                        var myresult = new clsResult(string.Format("Parsing file \"{0}\"", e.FileName), false);
+                        var myresult = new Result(string.Format("Parsing file \"{0}\"", e.FileName), false);
                         logger.Info("Parsing file \"{0}\"", e.FileName);
 
                         try
@@ -228,7 +229,7 @@ namespace SharpFlame.Mapping.IO.Wz
 
                 if ( iniFeatures.Count() == 0 ) // no feature.ini
                 {
-                    var Result = new clsResult("feat.bjo", false);
+                    var Result = new Result("feat.bjo", false);
                     logger.Info("Loading feat.bjo");
 
                     var featBJOZipEntry = zip[gameFilesPath + "feat.bjo"];
@@ -279,7 +280,7 @@ namespace SharpFlame.Mapping.IO.Wz
 
                 if ( iniStructures.Count() == 0 )
                 {
-                    var Result = new clsResult("struct.bjo", false);
+                    var Result = new Result("struct.bjo", false);
                     logger.Info("Loading struct.bjo");
                     var structBjoEntry = zip[gameFilesPath + "struct.bjo"];
                     if ( structBjoEntry == null )
@@ -318,7 +319,7 @@ namespace SharpFlame.Mapping.IO.Wz
 
                 if ( iniDroids.Count() == 0 ) // No droid.ini
                 {
-                    var Result = new clsResult("dinit.bjo", false);
+                    var Result = new Result("dinit.bjo", false);
                     logger.Info("Loading dinit.bjo");
                     var diniBjoEntry = zip[gameFilesPath + "dinit.bjo"];
                     if ( diniBjoEntry == null )
@@ -358,9 +359,9 @@ namespace SharpFlame.Mapping.IO.Wz
             return returnResult;
         }
 
-        protected clsResult createWZObjects(List<WZBJOUnit> bjoUnits, List<IniStructure> iniStructures, List<IniDroid> iniDroids, List<IniFeature> iniFeatures)
+        protected Result createWZObjects(List<WZBJOUnit> bjoUnits, List<IniStructure> iniStructures, List<IniDroid> iniDroids, List<IniFeature> iniFeatures)
         {
-            var ReturnResult = new clsResult("Creating objects", false);
+            var ReturnResult = new Result("Creating objects", false);
             logger.Info("Creating objects");
 
             var newUnit = default(clsUnit);
@@ -881,9 +882,9 @@ namespace SharpFlame.Mapping.IO.Wz
             return ReturnResult;
         }
 
-        protected clsResult read_INI_Features(string iniText, List<IniFeature> resultData)
+        protected Result read_INI_Features(string iniText, List<IniFeature> resultData)
         {
-            var resultObject = new clsResult("Reading feature.ini.", false);
+            var resultObject = new Result("Reading feature.ini.", false);
             logger.Info("Reading feature.ini");
 
             try
@@ -959,9 +960,9 @@ namespace SharpFlame.Mapping.IO.Wz
             return resultObject;
         }
 
-        protected clsResult read_INI_Droids(string iniText, List<IniDroid> resultData)
+        protected Result read_INI_Droids(string iniText, List<IniDroid> resultData)
         {
-            var resultObject = new clsResult("Reading droids.ini.", false);
+            var resultObject = new Result("Reading droids.ini.", false);
 
             try
             {
@@ -1131,9 +1132,9 @@ namespace SharpFlame.Mapping.IO.Wz
             return resultObject;
         }
 
-        protected clsResult read_INI_Structures(string iniText, List<IniStructure> resultData)
+        protected Result read_INI_Structures(string iniText, List<IniStructure> resultData)
         {
-            var resultObject = new clsResult("Reading struct.ini.", false);
+            var resultObject = new Result("Reading struct.ini.", false);
             logger.Info("Reading struct.ini");
 
             try
@@ -1252,9 +1253,9 @@ namespace SharpFlame.Mapping.IO.Wz
             return resultObject;
         }
 
-        protected clsResult read_INI_Labels(string iniText)
+        protected Result read_INI_Labels(string iniText)
         {
-            var resultObject = new clsResult("Reading labels", false);
+            var resultObject = new Result("Reading labels", false);
             logger.Info("Reading labels.");
 
             var typeNum = 0;

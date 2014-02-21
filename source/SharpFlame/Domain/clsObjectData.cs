@@ -6,6 +6,7 @@ using System.IO;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
+using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Extensions;
 using SharpFlame.FileIO;
@@ -52,9 +53,9 @@ namespace SharpFlame.Domain
             ECMs = new ConnectedList<Ecm, clsObjectData>(this);
         }
 
-        public clsResult LoadDirectory(string path)
+        public Result LoadDirectory(string path)
         {
-            var returnResult = new clsResult(string.Format("Loading object data from \"{0}\"", path));
+            var returnResult = new Result(string.Format("Loading object data from \"{0}\"", path));
 
             path = PathUtil.EndWithPathSeperator(path);
 
@@ -238,7 +239,7 @@ namespace SharpFlame.Domain
                 Text = tempLoopVar_Text;
                 if ( Text.Substring(Text.Length - 4, 4).ToLower() == ".png" )
                 {
-                    var Result = new clsResult(string.Format("Loading texture page \"{0}\"", Text));
+                    var Result = new Result(string.Format("Loading texture page \"{0}\"", Text));
                     if ( File.Exists(Text) )
                     {
                         BitmapResult = BitmapUtil.LoadBitmap(Text, ref Bitmap);
@@ -818,7 +819,7 @@ namespace SharpFlame.Domain
             return Result;
         }
 
-        public clsModel GetModelForPIE(SimpleList<clsPIE> PIE_List, string PIE_LCaseFileTitle, clsResult ResultOutput)
+        public clsModel GetModelForPIE(SimpleList<clsPIE> PIE_List, string PIE_LCaseFileTitle, Result ResultOutput)
         {
             if ( PIE_LCaseFileTitle == "0" )
             {
@@ -829,7 +830,7 @@ namespace SharpFlame.Domain
             var PIEFile = default(StreamReader);
             var PIE = default(clsPIE);
 
-            var Result = new clsResult("Loading PIE file " + PIE_LCaseFileTitle);
+            var Result = new Result("Loading PIE file " + PIE_LCaseFileTitle);
 
             for ( A = 0; A <= PIE_List.Count - 1; A++ )
             {
@@ -873,7 +874,7 @@ namespace SharpFlame.Domain
             return null;
         }
 
-        public void SetComponentName(SimpleList<string[]> Names, ComponentBase componentBase, clsResult Result)
+        public void SetComponentName(SimpleList<string[]> Names, ComponentBase componentBase, Result Result)
         {
             var ValueSearchResults = default(SimpleList<string[]>);
 
@@ -888,7 +889,7 @@ namespace SharpFlame.Domain
             }
         }
 
-        public void SetFeatureName(SimpleList<string[]> Names, FeatureTypeBase featureTypeBase, clsResult Result)
+        public void SetFeatureName(SimpleList<string[]> Names, FeatureTypeBase featureTypeBase, Result Result)
         {
             var ValueSearchResults = default(SimpleList<string[]>);
 
@@ -903,7 +904,7 @@ namespace SharpFlame.Domain
             }
         }
 
-        public void SetStructureName(SimpleList<string[]> Names, StructureTypeBase structureTypeBase, clsResult Result)
+        public void SetStructureName(SimpleList<string[]> Names, StructureTypeBase structureTypeBase, Result Result)
         {
             var ValueSearchResults = default(SimpleList<string[]>);
 
@@ -918,7 +919,7 @@ namespace SharpFlame.Domain
             }
         }
 
-        public void SetTemplateName(SimpleList<string[]> Names, DroidTemplate Template, clsResult Result)
+        public void SetTemplateName(SimpleList<string[]> Names, DroidTemplate Template, Result Result)
         {
             var ValueSearchResults = default(SimpleList<string[]>);
 
@@ -933,7 +934,7 @@ namespace SharpFlame.Domain
             }
         }
 
-        public void SetWallName(SimpleList<string[]> Names, clsWallType WallType, clsResult Result)
+        public void SetWallName(SimpleList<string[]> Names, clsWallType WallType, Result Result)
         {
             var ValueSearchResults = default(SimpleList<string[]>);
 
@@ -1378,9 +1379,9 @@ namespace SharpFlame.Domain
                 return true;
             }
 
-            public clsResult LoadCommaFile(string Path)
+            public Result LoadCommaFile(string Path)
             {
-                var Result = new clsResult(string.Format("Loading comma separated file \"{0}\"", SubDirectory));
+                var Result = new Result(string.Format("Loading comma separated file \"{0}\"", SubDirectory));
                 var Reader = default(StreamReader);
 
                 try
@@ -1417,9 +1418,9 @@ namespace SharpFlame.Domain
                 return Result;
             }
 
-            public clsResult LoadNamesFile(string Path)
+            public Result LoadNamesFile(string Path)
             {
-                var Result = new clsResult(string.Format("Loading names file \"{0}\"", SubDirectory));
+                var Result = new Result(string.Format("Loading names file \"{0}\"", SubDirectory));
                 var File = default(FileStream);
                 var Reader = default(BinaryReader);
 

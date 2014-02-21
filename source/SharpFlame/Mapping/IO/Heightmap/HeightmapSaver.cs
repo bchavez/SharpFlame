@@ -3,6 +3,7 @@ using System.Drawing;
 using NLog;
 using SharpFlame.Bitmaps;
 using SharpFlame.Colors;
+using SharpFlame.Core;
 
 namespace SharpFlame.Mapping.IO.Heightmap
 {
@@ -17,9 +18,9 @@ namespace SharpFlame.Mapping.IO.Heightmap
             map = newMap;
         }
 
-        public clsResult Save(string path, bool overwrite, bool compress = false) // compress is ignored.
+        public Result Save(string path, bool overwrite, bool compress = false) // compress is ignored.
         {
-            var returnResult = new clsResult(string.Format("Saving heightmap to \"{0}\".", path), false);
+            var returnResult = new Result(string.Format("Saving heightmap to \"{0}\".", path), false);
             logger.Info ("Saving heightmap to \"{0}\"", path);
 
             var heightmapBitmap = new Bitmap(map.Terrain.TileSize.X + 1, map.Terrain.TileSize.Y + 1);

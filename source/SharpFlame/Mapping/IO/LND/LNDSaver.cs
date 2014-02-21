@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using NLog;
 using SharpFlame.Collections;
+using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
@@ -23,10 +24,10 @@ namespace SharpFlame.Mapping.IO.LND
             map = newMap;
         }
 
-        public clsResult Save(string path, bool overwrite, bool compress = false) // Compress is ignored.
+        public Result Save(string path, bool overwrite, bool compress = false) // Compress is ignored.
         {
             var returnResult =
-                new clsResult("Writing LND to \"{0}\"".Format2(path), false);
+                new Result("Writing LND to \"{0}\"".Format2(path), false);
 
             logger.Info("Writing LND to \"{0}\"".Format2(path));
 

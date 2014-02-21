@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using NLog;
+using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Util;
@@ -109,9 +110,9 @@ namespace SharpFlame.FileIO
             }
         }
 
-        public static clsResult WriteMemoryToNewFile(MemoryStream Memory, string Path)
+        public static Result WriteMemoryToNewFile(MemoryStream Memory, string Path)
         {
-            var ReturnResult = new clsResult("Writing to \"{0}".Format2(Path), false);
+            var ReturnResult = new Result("Writing to \"{0}".Format2(Path), false);
             logger.Info("Writing to \"{0}".Format2(Path));
 
             var NewFile = default(FileStream);

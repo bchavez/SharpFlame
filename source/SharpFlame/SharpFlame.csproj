@@ -243,6 +243,7 @@
     <Compile Include="Pathfinding\LargeArrays.cs" />
     <Compile Include="Pathfinding\Path.cs" />
     <Compile Include="PathUtil.cs" />
+    <Compile Include="Result.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Util\clsKeysActive.cs" />
     <Compile Include="Util\clsLayer.cs" />
@@ -391,7 +392,6 @@
     <Compile Include="Mapping\IO\Wz\IniStructure.cs" />
     <Compile Include="Mapping\IO\Wz\WZBJOUnit.cs" />
     <Compile Include="Mapping\IO\FMap\INIObject.cs" />
-    <Compile Include="Mapping\IO\IOIOLoaderSaver.cs" />
     <Compile Include="Mapping\IO\Wz\WzSaver.cs" />
     <Compile Include="Mapping\IO\Wz\WzLoader.cs" />
     <Compile Include="Mapping\IO\TTP\TTPLoader.cs" />
@@ -402,6 +402,7 @@
     <Compile Include="Mapping\IO\FMap\FMapLoader.cs" />
     <Compile Include="Mapping\IO\FMap\FMapSaver.cs" />
     <Compile Include="FileIO\TilesetLoader.cs" />
+    <Compile Include="Mapping\IO\IIOLoaderSaver.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">

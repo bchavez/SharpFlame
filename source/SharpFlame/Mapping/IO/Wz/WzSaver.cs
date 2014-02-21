@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Ionic.Zip;
 using Ionic.Zlib;
 using NLog;
+using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Core.Parsers;
@@ -42,10 +43,10 @@ namespace SharpFlame.Mapping.IO.Wz
             map = newMap;
         }
 
-        public clsResult Save(string path, bool overwrite, bool compress) // compress is not implemented.
+        public Result Save(string path, bool overwrite, bool compress) // compress is not implemented.
         {
             var returnResult =
-                new clsResult("Compiling to \"{0}\"".Format2(path), false);
+                new Result("Compiling to \"{0}\"".Format2(path), false);
             logger.Info("Compiling to \"{0}\"".Format2(path));
 
             try
@@ -233,9 +234,9 @@ namespace SharpFlame.Mapping.IO.Wz
             return returnResult;
         }
 
-        private clsResult Serialize_WZ_StructuresINI(IniWriter File, int PlayerCount)
+        private Result Serialize_WZ_StructuresINI(IniWriter File, int PlayerCount)
         {
-            var ReturnResult = new clsResult("Serializing structures INI", false);
+            var ReturnResult = new Result("Serializing structures INI", false);
             logger.Info("Serializing structures INI");
 
             var structureTypeBase = default(StructureTypeBase);
@@ -414,9 +415,9 @@ namespace SharpFlame.Mapping.IO.Wz
             return ReturnResult;
         }
 
-        private clsResult Serialize_WZ_DroidsINI(IniWriter ini, int playerCount)
+        private Result Serialize_WZ_DroidsINI(IniWriter ini, int playerCount)
         {
-            var returnResult = new clsResult("Serializing droids INI", false);
+            var returnResult = new Result("Serializing droids INI", false);
             logger.Info("Serializing droids INI");
 
             var droid = default(DroidDesign);
@@ -611,9 +612,9 @@ namespace SharpFlame.Mapping.IO.Wz
             return returnResult;
         }
 
-        private clsResult Serialize_WZ_FeaturesINI(IniWriter File)
+        private Result Serialize_WZ_FeaturesINI(IniWriter File)
         {
-            var ReturnResult = new clsResult("Serializing features INI", false);
+            var ReturnResult = new Result("Serializing features INI", false);
             logger.Info("Serializing features INI");
             var featureTypeBase = default(FeatureTypeBase);
             var Unit = default(clsUnit);
@@ -651,9 +652,9 @@ namespace SharpFlame.Mapping.IO.Wz
             return ReturnResult;
         }
 
-        private clsResult Serialize_WZ_LabelsINI(IniWriter File, int PlayerCount)
+        private Result Serialize_WZ_LabelsINI(IniWriter File, int PlayerCount)
         {
-            var returnResult = new clsResult("Serializing labels INI", false);
+            var returnResult = new Result("Serializing labels INI", false);
             logger.Info("Serializing labels INI");
 
             try
@@ -689,9 +690,9 @@ namespace SharpFlame.Mapping.IO.Wz
             return returnResult;
         }
 
-        private clsResult Serialize_WZ_Gam(Stream stream, UInt32 gamType, clsInterfaceOptions.EnumCompileType compileType, XYInt scrollMin, sXY_uint scrollMax)
+        private Result Serialize_WZ_Gam(Stream stream, UInt32 gamType, clsInterfaceOptions.EnumCompileType compileType, XYInt scrollMin, sXY_uint scrollMax)
         {
-            var returnResult = new clsResult("Serializing .gam", false);
+            var returnResult = new Result("Serializing .gam", false);
             logger.Info("Serializing .gam");
 
             var fileGAM = new BinaryWriter(stream, App.ASCIIEncoding);
@@ -717,9 +718,9 @@ namespace SharpFlame.Mapping.IO.Wz
             return returnResult;
         }
 
-        private clsResult Serialize_WZ_Map(Stream stream)
+        private Result Serialize_WZ_Map(Stream stream)
         {
-            var returnResult = new clsResult("Serializing game.map", false);
+            var returnResult = new Result("Serializing game.map", false);
             logger.Info("Serializing game.map");
 
             var fileMAP = new BinaryWriter(stream, App.ASCIIEncoding);
@@ -785,9 +786,9 @@ namespace SharpFlame.Mapping.IO.Wz
             return returnResult;
         }
 
-        private clsResult Serialize_WZ_LEV(Stream stream)
+        private Result Serialize_WZ_LEV(Stream stream)
         {
-            var returnResult = new clsResult("Serializing .lev", false);
+            var returnResult = new Result("Serializing .lev", false);
             logger.Info("Serializing .lev");
 
             var playercount = map.InterfaceOptions.CompileMultiPlayers;
