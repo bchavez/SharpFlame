@@ -13,7 +13,7 @@ namespace SharpFlame.Mapping.Tools
         public XYInt PosNum;
         public bool UseEffect;
 
-        public clsAction()
+        protected clsAction()
         {
             PosNum = new XYInt(0, 0);
         }
