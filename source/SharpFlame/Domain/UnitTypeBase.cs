@@ -48,13 +48,13 @@ namespace SharpFlame.Domain
         {
             switch ( App.Draw_Lighting )
             {
-                case enumDrawLighting.Off:
+                case DrawLighting.Off:
                     GL.Color3(1.0F, 1.0F, 1.0F);
                     break;
-                case enumDrawLighting.Half:
+                case DrawLighting.Half:
                     GL.Color3(0.875F, 0.875F, 0.875F);
                     break;
-                case enumDrawLighting.Normal:
+                case DrawLighting.Normal:
                     GL.Color3(0.75F, 0.75F, 0.75F);
                     break;
             }

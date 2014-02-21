@@ -160,7 +160,7 @@ namespace SharpFlame
             XYZDouble xyzDbl = default(XYZDouble);
             XYDouble xyDbl = default(XYDouble);
 
-            if ( App.ViewMoveType == enumView_Move_Type.RTS & App.RTSOrbit )
+            if ( App.ViewMoveType == ViewMoveType.RTS & App.RTSOrbit )
             {
                 if ( ScreenXYGetViewPlanePosForwardDownOnly((int)((MapViewControl.GLSize.X / 2.0D)), (int)((MapViewControl.GLSize.Y / 2.0D)), 127.5D,
                     ref xyDbl) )
@@ -1733,14 +1733,14 @@ namespace SharpFlame
 
         public void TimedActions(double Zoom, double Move, double Pan, double Roll, double OrbitRate)
         {
-            var XYZ_dbl = new XYZDouble();
-            var PanRate = Pan * FieldOfViewY;
-            var AnglePY = default(Angles.AnglePY);
+            var xyzDbl = new XYZDouble();
+            var panRate = Pan * FieldOfViewY;
+            var anglePY = default(Angles.AnglePY);
             var matrixA = new Matrix3DMath.Matrix3D();
             var matrixB = new Matrix3DMath.Matrix3D();
-            var ViewAngleChange = default(XYZDouble);
-            var ViewPosChangeXYZ = new XYZInt(0, 0, 0);
-            var AngleChanged = default(bool);
+            var viewAngleChange = default(XYZDouble);
+            var viewPosChangeXyz = new XYZInt(0, 0, 0);
+            var angleChanged = default(bool);
 
             Move *= FOVMultiplier * (MapViewControl.GLSize.X + MapViewControl.GLSize.Y) * Math.Max(Math.Abs(ViewPos.Y), 512.0D);
 
@@ -1753,172 +1753,172 @@ namespace SharpFlame
                 FovScale_2EChange(Zoom);
             }
 
-            if ( App.ViewMoveType == enumView_Move_Type.Free )
+            if ( App.ViewMoveType == ViewMoveType.Free )
             {
-                ViewPosChangeXYZ.X = 0;
-                ViewPosChangeXYZ.Y = 0;
-                ViewPosChangeXYZ.Z = 0;
+                viewPosChangeXyz.X = 0;
+                viewPosChangeXyz.Y = 0;
+                viewPosChangeXyz.Z = 0;
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveForward) )
                 {
-                    Matrix3DMath.VectorForwardsRotationByMatrix(ViewAngleMatrix, Move, ref XYZ_dbl);
-                    ViewPosChangeXYZ.Add_dbl(XYZ_dbl);
+                    Matrix3DMath.VectorForwardsRotationByMatrix(ViewAngleMatrix, Move, ref xyzDbl);
+                    viewPosChangeXyz.AddDbl(xyzDbl);
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveBackward) )
                 {
-                    Matrix3DMath.VectorBackwardsRotationByMatrix(ViewAngleMatrix, Move, ref XYZ_dbl);
-                    ViewPosChangeXYZ.Add_dbl(XYZ_dbl);
+                    Matrix3DMath.VectorBackwardsRotationByMatrix(ViewAngleMatrix, Move, ref xyzDbl);
+                    viewPosChangeXyz.AddDbl(xyzDbl);
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveLeft) )
                 {
-                    Matrix3DMath.VectorLeftRotationByMatrix(ViewAngleMatrix, Move, ref XYZ_dbl);
-                    ViewPosChangeXYZ.Add_dbl(XYZ_dbl);
+                    Matrix3DMath.VectorLeftRotationByMatrix(ViewAngleMatrix, Move, ref xyzDbl);
+                    viewPosChangeXyz.AddDbl(xyzDbl);
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveRight) )
                 {
-                    Matrix3DMath.VectorRightRotationByMatrix(ViewAngleMatrix, Move, ref XYZ_dbl);
-                    ViewPosChangeXYZ.Add_dbl(XYZ_dbl);
+                    Matrix3DMath.VectorRightRotationByMatrix(ViewAngleMatrix, Move, ref xyzDbl);
+                    viewPosChangeXyz.AddDbl(xyzDbl);
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveUp) )
                 {
-                    Matrix3DMath.VectorUpRotationByMatrix(ViewAngleMatrix, Move, ref XYZ_dbl);
-                    ViewPosChangeXYZ.Add_dbl(XYZ_dbl);
+                    Matrix3DMath.VectorUpRotationByMatrix(ViewAngleMatrix, Move, ref xyzDbl);
+                    viewPosChangeXyz.AddDbl(xyzDbl);
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveDown) )
                 {
-                    Matrix3DMath.VectorDownRotationByMatrix(ViewAngleMatrix, Move, ref XYZ_dbl);
-                    ViewPosChangeXYZ.Add_dbl(XYZ_dbl);
+                    Matrix3DMath.VectorDownRotationByMatrix(ViewAngleMatrix, Move, ref xyzDbl);
+                    viewPosChangeXyz.AddDbl(xyzDbl);
                 }
 
-                ViewAngleChange.X = 0.0D;
-                ViewAngleChange.Y = 0.0D;
-                ViewAngleChange.Z = 0.0D;
+                viewAngleChange.X = 0.0D;
+                viewAngleChange.Y = 0.0D;
+                viewAngleChange.Z = 0.0D;
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewLeft) )
                 {
-                    Matrix3DMath.VectorForwardsRotationByMatrix(ViewAngleMatrix, Roll, ref XYZ_dbl);
-                    ViewAngleChange += XYZ_dbl;
+                    Matrix3DMath.VectorForwardsRotationByMatrix(ViewAngleMatrix, Roll, ref xyzDbl);
+                    viewAngleChange += xyzDbl;
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRight) )
                 {
-                    Matrix3DMath.VectorBackwardsRotationByMatrix(ViewAngleMatrix, Roll, ref XYZ_dbl);
-                    ViewAngleChange += XYZ_dbl;
+                    Matrix3DMath.VectorBackwardsRotationByMatrix(ViewAngleMatrix, Roll, ref xyzDbl);
+                    viewAngleChange += xyzDbl;
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewBackward) )
                 {
-                    Matrix3DMath.VectorLeftRotationByMatrix(ViewAngleMatrix, PanRate, ref XYZ_dbl);
-                    ViewAngleChange += XYZ_dbl;
+                    Matrix3DMath.VectorLeftRotationByMatrix(ViewAngleMatrix, panRate, ref xyzDbl);
+                    viewAngleChange += xyzDbl;
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewForward) )
                 {
-                    Matrix3DMath.VectorRightRotationByMatrix(ViewAngleMatrix, PanRate, ref XYZ_dbl);
-                    ViewAngleChange += XYZ_dbl;
+                    Matrix3DMath.VectorRightRotationByMatrix(ViewAngleMatrix, panRate, ref xyzDbl);
+                    viewAngleChange += xyzDbl;
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRollLeft) )
                 {
-                    Matrix3DMath.VectorDownRotationByMatrix(ViewAngleMatrix, PanRate, ref XYZ_dbl);
-                    ViewAngleChange += XYZ_dbl;
+                    Matrix3DMath.VectorDownRotationByMatrix(ViewAngleMatrix, panRate, ref xyzDbl);
+                    viewAngleChange += xyzDbl;
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRollRight) )
                 {
-                    Matrix3DMath.VectorUpRotationByMatrix(ViewAngleMatrix, PanRate, ref XYZ_dbl);
-                    ViewAngleChange += XYZ_dbl;
+                    Matrix3DMath.VectorUpRotationByMatrix(ViewAngleMatrix, panRate, ref xyzDbl);
+                    viewAngleChange += xyzDbl;
                 }
 
-                if ( ViewPosChangeXYZ.X != 0.0D | ViewPosChangeXYZ.Y != 0.0D | ViewPosChangeXYZ.Z != 0.0D )
+                if ( viewPosChangeXyz.X != 0.0D | viewPosChangeXyz.Y != 0.0D | viewPosChangeXyz.Z != 0.0D )
                 {
-                    ViewPosChange(ViewPosChangeXYZ);
+                    ViewPosChange(viewPosChangeXyz);
                 }
                 //do rotation
-                if ( ViewAngleChange.X != 0.0D | ViewAngleChange.Y != 0.0D | ViewAngleChange.Z != 0.0D )
+                if ( viewAngleChange.X != 0.0D | viewAngleChange.Y != 0.0D | viewAngleChange.Z != 0.0D )
                 {
-                    Matrix3DMath.VectorToPY(ViewAngleChange, ref AnglePY);
-                    Matrix3DMath.MatrixSetToPY(matrixA, AnglePY);
-                    Matrix3DMath.MatrixRotationAroundAxis(ViewAngleMatrix, matrixA, ViewAngleChange.GetMagnitude(), matrixB);
+                    Matrix3DMath.VectorToPY(viewAngleChange, ref anglePY);
+                    Matrix3DMath.MatrixSetToPY(matrixA, anglePY);
+                    Matrix3DMath.MatrixRotationAroundAxis(ViewAngleMatrix, matrixA, viewAngleChange.GetMagnitude(), matrixB);
                     ViewAngleSetRotate(matrixB);
                 }
             }
-            else if ( App.ViewMoveType == enumView_Move_Type.RTS )
+            else if ( App.ViewMoveType == ViewMoveType.RTS )
             {
-                ViewPosChangeXYZ = new XYZInt(0, 0, 0);
+                viewPosChangeXyz = new XYZInt(0, 0, 0);
 
-                Matrix3DMath.MatrixToPY(ViewAngleMatrix, ref AnglePY);
-                Matrix3DMath.MatrixSetToYAngle(matrixA, AnglePY.Yaw);
+                Matrix3DMath.MatrixToPY(ViewAngleMatrix, ref anglePY);
+                Matrix3DMath.MatrixSetToYAngle(matrixA, anglePY.Yaw);
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveForward) )
                 {
-                    Matrix3DMath.VectorForwardsRotationByMatrix(matrixA, Move, ref XYZ_dbl);
-                    ViewPosChangeXYZ.Add_dbl(XYZ_dbl);
+                    Matrix3DMath.VectorForwardsRotationByMatrix(matrixA, Move, ref xyzDbl);
+                    viewPosChangeXyz.AddDbl(xyzDbl);
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveBackward) )
                 {
-                    Matrix3DMath.VectorBackwardsRotationByMatrix(matrixA, Move, ref XYZ_dbl);
-                    ViewPosChangeXYZ.Add_dbl(XYZ_dbl);
+                    Matrix3DMath.VectorBackwardsRotationByMatrix(matrixA, Move, ref xyzDbl);
+                    viewPosChangeXyz.AddDbl(xyzDbl);
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveLeft) )
                 {
-                    Matrix3DMath.VectorLeftRotationByMatrix(matrixA, Move, ref XYZ_dbl);
-                    ViewPosChangeXYZ.Add_dbl(XYZ_dbl);
+                    Matrix3DMath.VectorLeftRotationByMatrix(matrixA, Move, ref xyzDbl);
+                    viewPosChangeXyz.AddDbl(xyzDbl);
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveRight) )
                 {
-                    Matrix3DMath.VectorRightRotationByMatrix(matrixA, Move, ref XYZ_dbl);
-                    ViewPosChangeXYZ.Add_dbl(XYZ_dbl);
+                    Matrix3DMath.VectorRightRotationByMatrix(matrixA, Move, ref xyzDbl);
+                    viewPosChangeXyz.AddDbl(xyzDbl);
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveUp) )
                 {
-                    ViewPosChangeXYZ.Y += (int)Move;
+                    viewPosChangeXyz.Y += (int)Move;
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveDown) )
                 {
-                    ViewPosChangeXYZ.Y -= (int)Move;
+                    viewPosChangeXyz.Y -= (int)Move;
                 }
 
                 if ( App.RTSOrbit )
                 {
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewForward) )
                     {
-                        AnglePY.Pitch = MathUtil.ClampDbl(AnglePY.Pitch + OrbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
+                        anglePY.Pitch = MathUtil.ClampDbl(anglePY.Pitch + OrbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
                             MathUtil.RadOf90Deg - 0.03125D * MathUtil.RadOf1Deg);
-                        AngleChanged = true;
+                        angleChanged = true;
                     }
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewBackward) )
                     {
-                        AnglePY.Pitch = MathUtil.ClampDbl(AnglePY.Pitch - OrbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
+                        anglePY.Pitch = MathUtil.ClampDbl(anglePY.Pitch - OrbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
                             MathUtil.RadOf90Deg - 0.03125D * MathUtil.RadOf1Deg);
-                        AngleChanged = true;
+                        angleChanged = true;
                     }
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewLeft) )
                     {
-                        AnglePY.Yaw = MathUtil.AngleClamp(AnglePY.Yaw + OrbitRate);
-                        AngleChanged = true;
+                        anglePY.Yaw = MathUtil.AngleClamp(anglePY.Yaw + OrbitRate);
+                        angleChanged = true;
                     }
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRight) )
                     {
-                        AnglePY.Yaw = MathUtil.AngleClamp(AnglePY.Yaw - OrbitRate);
-                        AngleChanged = true;
+                        anglePY.Yaw = MathUtil.AngleClamp(anglePY.Yaw - OrbitRate);
+                        angleChanged = true;
                     }
                 }
                 else
                 {
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewForward) )
                     {
-                        AnglePY.Pitch = MathUtil.ClampDbl(AnglePY.Pitch - OrbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
+                        anglePY.Pitch = MathUtil.ClampDbl(anglePY.Pitch - OrbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
                             MathUtil.RadOf90Deg - 0.03125D * MathUtil.RadOf1Deg);
-                        AngleChanged = true;
+                        angleChanged = true;
                     }
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewBackward) )
                     {
-                        AnglePY.Pitch = MathUtil.ClampDbl(AnglePY.Pitch + OrbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
+                        anglePY.Pitch = MathUtil.ClampDbl(anglePY.Pitch + OrbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
                             MathUtil.RadOf90Deg - 0.03125D * MathUtil.RadOf1Deg);
-                        AngleChanged = true;
+                        angleChanged = true;
                     }
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewLeft) )
                     {
-                        AnglePY.Yaw = MathUtil.AngleClamp(AnglePY.Yaw - OrbitRate);
-                        AngleChanged = true;
+                        anglePY.Yaw = MathUtil.AngleClamp(anglePY.Yaw - OrbitRate);
+                        angleChanged = true;
                     }
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRight) )
                     {
-                        AnglePY.Yaw = MathUtil.AngleClamp(AnglePY.Yaw + OrbitRate);
-                        AngleChanged = true;
+                        anglePY.Yaw = MathUtil.AngleClamp(anglePY.Yaw + OrbitRate);
+                        angleChanged = true;
                     }
                 }
 
@@ -1927,13 +1927,13 @@ namespace SharpFlame
 
                 //ViewPosChange.Y = ViewPosChange.Y + HeightChange
 
-                if ( ViewPosChangeXYZ.X != 0.0D | ViewPosChangeXYZ.Y != 0.0D | ViewPosChangeXYZ.Z != 0.0D )
+                if ( viewPosChangeXyz.X != 0.0D | viewPosChangeXyz.Y != 0.0D | viewPosChangeXyz.Z != 0.0D )
                 {
-                    ViewPosChange(ViewPosChangeXYZ);
+                    ViewPosChange(viewPosChangeXyz);
                 }
-                if ( AngleChanged )
+                if ( angleChanged )
                 {
-                    Matrix3DMath.MatrixSetToPY(matrixA, AnglePY);
+                    Matrix3DMath.MatrixSetToPY(matrixA, anglePY);
                     ViewAngleSetRotate(matrixA);
                 }
             }

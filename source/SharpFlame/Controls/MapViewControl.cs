@@ -512,13 +512,13 @@ namespace SharpFlame.Controls
 
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveType) )
             {
-                if ( App.ViewMoveType == enumView_Move_Type.Free )
+                if ( App.ViewMoveType == ViewMoveType.Free )
                 {
-                    App.ViewMoveType = enumView_Move_Type.RTS;
+                    App.ViewMoveType = ViewMoveType.RTS;
                 }
-                else if ( App.ViewMoveType == enumView_Move_Type.RTS )
+                else if ( App.ViewMoveType == ViewMoveType.RTS )
                 {
-                    App.ViewMoveType = enumView_Move_Type.Free;
+                    App.ViewMoveType = ViewMoveType.Free;
                 }
             }
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRotateType) )
@@ -528,12 +528,12 @@ namespace SharpFlame.Controls
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewReset) )
             {
                 Map.ViewInfo.FovMultiplierSet(SettingsManager.Settings.FOVDefault);
-                if ( App.ViewMoveType == enumView_Move_Type.Free )
+                if ( App.ViewMoveType == ViewMoveType.Free )
                 {
                     Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
                     Map.ViewInfo.ViewAngleSetRotate(matrixA);
                 }
-                else if ( App.ViewMoveType == enumView_Move_Type.RTS )
+                else if ( App.ViewMoveType == ViewMoveType.RTS )
                 {
                     Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
                     Map.ViewInfo.ViewAngleSetRotate(matrixA);
@@ -588,17 +588,17 @@ namespace SharpFlame.Controls
             }
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewLighting) )
             {
-                if ( App.Draw_Lighting == enumDrawLighting.Off )
+                if ( App.Draw_Lighting == DrawLighting.Off )
                 {
-                    App.Draw_Lighting = enumDrawLighting.Half;
+                    App.Draw_Lighting = DrawLighting.Half;
                 }
-                else if ( App.Draw_Lighting == enumDrawLighting.Half )
+                else if ( App.Draw_Lighting == DrawLighting.Half )
                 {
-                    App.Draw_Lighting = enumDrawLighting.Normal;
+                    App.Draw_Lighting = DrawLighting.Normal;
                 }
-                else if ( App.Draw_Lighting == enumDrawLighting.Normal )
+                else if ( App.Draw_Lighting == DrawLighting.Normal )
                 {
-                    App.Draw_Lighting = enumDrawLighting.Off;
+                    App.Draw_Lighting = DrawLighting.Off;
                 }
                 DrawViewLater();
             }
@@ -942,7 +942,7 @@ namespace SharpFlame.Controls
             {
                 Matrix3DMath.VectorForwardsRotationByMatrix(Map.ViewInfo.ViewAngleMatrix,
                     Convert.ToDouble(Math.Sign(e.Delta) * Math.Max(Map.ViewInfo.ViewPos.Y, 512.0D) / 24.0D), ref XYZ_dbl);
-                Move.Set_dbl(XYZ_dbl);
+                Move.SetDbl(XYZ_dbl);
                 Map.ViewInfo.ViewPosChange(Move);
             }
         }

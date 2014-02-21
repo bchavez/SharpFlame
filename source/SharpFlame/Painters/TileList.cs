@@ -13,18 +13,18 @@ namespace SharpFlame.Painters
         public int TileCount;
         public TileOrientationChance[] Tiles;
 
-        public void Tile_Add(int TileNum, TileDirection TileOutwardOrientation, UInt32 Chance)
+        public void TileAdd(int tileNum, TileDirection tileOutwardOrientation, UInt32 chance)
         {
             Array.Resize(ref Tiles, TileCount + 1);
-            Tiles[TileCount].TextureNum = TileNum;
-            Tiles[TileCount].Direction = TileOutwardOrientation;
-            Tiles[TileCount].Chance = Chance;
+            Tiles[TileCount].TextureNum = tileNum;
+            Tiles[TileCount].Direction = tileOutwardOrientation;
+            Tiles[TileCount].Chance = chance;
             TileCount++;
 
-            TileChanceTotal += Convert.ToInt32(Chance);
+            TileChanceTotal += Convert.ToInt32(chance);
         }
 
-        public void Tile_Remove(int Num)
+        public void TileRemove(int Num)
         {
             TileChanceTotal -= Convert.ToInt32(Tiles[Num].Chance);
 
@@ -38,31 +38,31 @@ namespace SharpFlame.Painters
 
         public TileOrientationChance GetRandom()
         {
-            var ReturnResult = new TileOrientationChance();
-            var A = 0;
+            var returnResult = new TileOrientationChance();
+            var a = 0;
             var intRandom = 0;
-            var Total = 0;
+            var total = 0;
 
             var rnd = new Random();
             intRandom = rnd.Next() * TileChanceTotal;
-            for ( A = 0; A <= TileCount - 1; A++ )
+            for ( a = 0; a <= TileCount - 1; a++ )
             {
-                Total += Convert.ToInt32(Tiles[A].Chance);
-                if ( intRandom < Total )
+                total += Convert.ToInt32(Tiles[a].Chance);
+                if ( intRandom < total )
                 {
                     break;
                 }
             }
-            if ( A == TileCount )
+            if ( a == TileCount )
             {
-                ReturnResult.TextureNum = -1;
-                ReturnResult.Direction = TileUtil.None;
+                returnResult.TextureNum = -1;
+                returnResult.Direction = TileUtil.None;
             }
             else
             {
-                ReturnResult = Tiles[A];
+                returnResult = Tiles[a];
             }
-            return ReturnResult;
+            return returnResult;
         }
     }
 }

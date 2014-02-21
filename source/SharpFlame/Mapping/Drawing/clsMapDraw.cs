@@ -120,13 +120,13 @@ namespace SharpFlame.Mapping
 
             GL.Disable(EnableCap.Light0);
             GL.Disable(EnableCap.Light1);
-            if ( App.Draw_Lighting != enumDrawLighting.Off )
+            if ( App.Draw_Lighting != DrawLighting.Off )
             {
-                if ( App.Draw_Lighting == enumDrawLighting.Half )
+                if ( App.Draw_Lighting == DrawLighting.Half )
                 {
                     GL.Enable(EnableCap.Light0);
                 }
-                else if ( App.Draw_Lighting == enumDrawLighting.Normal )
+                else if ( App.Draw_Lighting == DrawLighting.Normal )
                 {
                     GL.Enable(EnableCap.Light1);
                 }

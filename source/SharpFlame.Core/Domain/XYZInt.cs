@@ -34,18 +34,18 @@ namespace SharpFlame.Core.Domain
             return string.Format ("{0}, {1}, {2}", X, Y, Z);
         }
 
-        public void Add_dbl( XYZDouble XYZ )
+        public void AddDbl( XYZDouble xyz )
         {
-            X += (int)XYZ.X;
-            Y += (int)XYZ.Y;
-            Z += (int)XYZ.Z;
+            X += (int)xyz.X;
+            Y += (int)xyz.Y;
+            Z += (int)xyz.Z;
         }
 
-        public void Set_dbl( XYZDouble XYZ )
+        public void SetDbl( XYZDouble xyz )
         {
-            X = (int)XYZ.X;
-            Y = (int)XYZ.Y;
-            Z = (int)XYZ.Z;
+            X = (int)xyz.X;
+            Y = (int)xyz.Y;
+            Z = (int)xyz.Z;
         }
     }
 }
