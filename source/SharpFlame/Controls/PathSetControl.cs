@@ -10,11 +10,11 @@ namespace SharpFlame.Controls
 {
     public partial class PathSetControl
     {
-        public PathSetControl(string Title)
+        public PathSetControl(string title)
         {
             InitializeComponent();
 
-            gbxTitle.Text = Title;
+            gbxTitle.Text = title;
         }
 
         public int SelectedNum
@@ -39,24 +39,21 @@ namespace SharpFlame.Controls
         {
             get
             {
-                var Paths = new string[lstPaths.Items.Count];
-                var A = 0;
-                for ( A = 0; A <= lstPaths.Items.Count - 1; A++ )
+                var paths = new string[lstPaths.Items.Count];
+                for (var a = 0; a <= lstPaths.Items.Count - 1; a++ )
                 {
-                    Paths[A] = (lstPaths.Items[A]).ToString();
+                    paths[a] = (lstPaths.Items[a]).ToString();
                 }
-                return Paths;
+                return paths;
             }
         }
 
-        public void SetPaths(List<string> NewPaths)
+        public void SetPaths(List<string> newPaths)
         {
-            var A = 0;
-
             lstPaths.Items.Clear();
-            for ( A = 0; A <= NewPaths.Count - 1; A++ )
+            for (var a = 0; a <= newPaths.Count - 1; a++ )
             {
-                lstPaths.Items.Add(NewPaths[A]);
+                lstPaths.Items.Add(newPaths[a]);
             }
         }
 
