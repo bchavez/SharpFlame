@@ -9,10 +9,10 @@ namespace SharpFlame.Core.Domain.Colors
 
         public SRgba( float red, float green, float blue, float alpha )
         {
-            this.Red = red;
-            this.Green = green;
-            this.Blue = blue;
-            this.Alpha = alpha;
+            Red = red;
+            Green = green;
+            Blue = blue;
+            Alpha = alpha;
         }
     }
 }

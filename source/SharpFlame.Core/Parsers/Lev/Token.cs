@@ -1,5 +1,3 @@
-using System;
-
 namespace SharpFlame.Core.Parsers.Lev
 {
     internal class Token

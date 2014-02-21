@@ -3,23 +3,27 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 #endregion
 
-namespace SharpFlame.Collections
+namespace SharpFlame.Core.Collections
 {
-    public class ConnectedList<ItemType, SourceType> : IEnumerable<ItemType> where ItemType : class where SourceType : class
+    public class ConnectedList<TItemType, TSourceType> : IEnumerable<TItemType> where TItemType : class
+        where TSourceType : class
     {
-        private readonly ConnectedListItemList<ItemType, SourceType> list = new ConnectedListItemList<ItemType, SourceType>();
-        private SourceType source;
+        private readonly ConnectedListItemList<TItemType, TSourceType> list =
+            new ConnectedListItemList<TItemType, TSourceType>();
 
-        public ConnectedList(SourceType owner)
+        private TSourceType source;
+
+        public ConnectedList(TSourceType owner)
         {
             source = owner;
             list.AddNullItemBehavior = AddNullItemBehavior.DisallowError;
         }
 
-        public SourceType Owner
+        public TSourceType Owner
         {
             get { return source; }
         }
@@ -30,7 +34,7 @@ namespace SharpFlame.Collections
             set { list.MaintainOrder = value; }
         }
 
-        public ItemType this[int position]
+        public TItemType this[int position]
         {
             get { return list[position].Item; }
         }
@@ -40,7 +44,7 @@ namespace SharpFlame.Collections
             get { return list.Count; }
         }
 
-        public IEnumerator<ItemType> GetEnumerator()
+        public IEnumerator<TItemType> GetEnumerator()
         {
             return GetEnumeratorType();
         }
@@ -50,23 +54,23 @@ namespace SharpFlame.Collections
             return GetEnumerator();
         }
 
-        public ConnectedListItem<ItemType, SourceType> get_ItemContainer(int position)
+        public ConnectedListItem<TItemType, TSourceType> get_ItemContainer(int position)
         {
             return list[position];
         }
 
-        public virtual void Add(ConnectedListItem<ItemType, SourceType> newItem)
+        public virtual void Add(ConnectedListItem<TItemType, TSourceType> newItem)
         {
-            if ( newItem.CanAdd() )
+            if (newItem.CanAdd())
             {
                 newItem.BeforeAdd(this, list.Count);
                 list.Add(newItem);
             }
         }
 
-        public virtual void Insert(ConnectedListItem<ItemType, SourceType> newItem, int position)
+        public virtual void Insert(ConnectedListItem<TItemType, TSourceType> newItem, int position)
         {
-            if ( newItem.CanAdd() )
+            if (newItem.CanAdd())
             {
                 newItem.BeforeAdd(this, position);
                 list.Insert(newItem, position);
@@ -75,24 +79,15 @@ namespace SharpFlame.Collections
 
         public virtual void Remove(int position)
         {
-            var removeItem = default(ConnectedListItem<ItemType, SourceType>);
-
-            removeItem = list[position];
+            var removeItem = list[position];
             removeItem.BeforeRemove();
             list.RemoveAt(position);
             removeItem.AfterRemove();
         }
 
-        public ConnectedListItem<ItemType, SourceType> FindLinkTo(ItemType itemToFind)
+        public ConnectedListItem<TItemType, TSourceType> FindLinkTo(TItemType itemToFind)
         {
-            foreach ( var link in list )
-            {
-                if ( link.Item == itemToFind )
-                {
-                    return link;
-                }
-            }
-            return default(ConnectedListItem<ItemType, SourceType>);
+            return list.FirstOrDefault(link => link.Item == itemToFind);
         }
 
         public void Deallocate()
@@ -101,23 +96,18 @@ namespace SharpFlame.Collections
             source = null;
         }
 
-        public SimpleList<ItemType> GetItemsAsSimpleList()
+        public SimpleList<TItemType> GetItemsAsSimpleList()
         {
-            var result = new SimpleList<ItemType>();
-
-            foreach ( var connectedItem in this )
-            {
-                result.Add(connectedItem);
-            }
-
+            var result = new SimpleList<TItemType>();
+            result.AddRange(this);
             return result;
         }
 
-        public SimpleClassList<ItemType> GetItemsAsSimpleClassList()
+        public SimpleClassList<TItemType> GetItemsAsSimpleClassList()
         {
-            var result = new SimpleClassList<ItemType>();
+            var result = new SimpleClassList<TItemType>();
 
-            foreach ( var connectedItem in this )
+            foreach (var connectedItem in this)
             {
                 result.Add(connectedItem);
             }
@@ -127,13 +117,13 @@ namespace SharpFlame.Collections
 
         public void Clear()
         {
-            while ( list.Count > 0 )
+            while (list.Count > 0)
             {
                 Remove(0);
             }
         }
 
-        public IEnumerator<ItemType> GetEnumeratorType()
+        public IEnumerator<TItemType> GetEnumeratorType()
         {
             return new EnumeratorType(this);
         }
@@ -151,10 +141,10 @@ namespace SharpFlame.Collections
         public class Enumerator : IEnumerator
         {
             private const int StartPosition = -1;
-            private readonly ConnectedList<ItemType, SourceType> list;
+            private readonly ConnectedList<TItemType, TSourceType> list;
             private int position = StartPosition;
 
-            public Enumerator(ConnectedList<ItemType, SourceType> list)
+            public Enumerator(ConnectedList<TItemType, TSourceType> list)
             {
                 this.list = list;
             }
@@ -176,13 +166,13 @@ namespace SharpFlame.Collections
             }
         }
 
-        public class EnumeratorType : IEnumerator<ItemType>
+        public class EnumeratorType : IEnumerator<TItemType>
         {
             private const int StartPosition = -1;
-            private readonly ConnectedList<ItemType, SourceType> list;
+            private readonly ConnectedList<TItemType, TSourceType> list;
             private int position = StartPosition;
 
-            public EnumeratorType(ConnectedList<ItemType, SourceType> list)
+            public EnumeratorType(ConnectedList<TItemType, TSourceType> list)
             {
                 this.list = list;
             }
@@ -200,7 +190,7 @@ namespace SharpFlame.Collections
                 get { return list[position]; }
             }
 
-            public ItemType Current
+            public TItemType Current
             {
                 get { return list[position]; }
             }
@@ -244,9 +234,9 @@ namespace SharpFlame.Collections
 
             protected virtual void Dispose(bool disposing)
             {
-                if ( !disposedValue )
+                if (!disposedValue)
                 {
-                    if ( disposing )
+                    if (disposing)
                     {
                         // TODO: dispose managed state (managed objects).
                     }

@@ -2,6 +2,7 @@
 
 using System.Diagnostics;
 using SharpFlame.Collections;
+using SharpFlame.Core.Collections;
 using SharpFlame.Mapping.Objects;
 
 #endregion

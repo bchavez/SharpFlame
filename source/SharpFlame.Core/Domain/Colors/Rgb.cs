@@ -8,9 +8,9 @@ namespace SharpFlame.Core.Domain.Colors
 
         public Rgb( float red, float green, float blue )
         {
-            this.Red = red;
-            this.Green = green;
-            this.Blue = blue;
+            Red = red;
+            Green = green;
+            Blue = blue;
         }
     }
 }

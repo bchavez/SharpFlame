@@ -4,20 +4,21 @@ using System.Diagnostics;
 
 #endregion
 
-namespace SharpFlame.Collections
+namespace SharpFlame.Core.Collections
 {
-    public class ConnectedListLink<ItemType, SourceType> : ConnectedListItem<ItemType, SourceType> where ItemType : class where SourceType : class
+    public class ConnectedListLink<TItemType, TSourceType> : ConnectedListItem<TItemType, TSourceType>
+        where TItemType : class where TSourceType : class
     {
-        private ConnectedList<ItemType, SourceType> connectedList;
-        private ItemType owner;
+        private ConnectedList<TItemType, TSourceType> connectedList;
+        private TItemType owner;
         private int position = -1;
 
-        public ConnectedListLink(ItemType owner)
+        public ConnectedListLink(TItemType owner)
         {
             this.owner = owner;
         }
 
-        public ConnectedList<ItemType, SourceType> ParentList
+        public ConnectedList<TItemType, TSourceType> ParentList
         {
             get { return connectedList; }
         }
@@ -32,16 +33,16 @@ namespace SharpFlame.Collections
             get { return position >= 0; }
         }
 
-        public override ItemType Item
+        public override TItemType Item
         {
             get { return owner; }
         }
 
-        public override SourceType Source
+        public override TSourceType Source
         {
             get
             {
-                if ( IsConnected )
+                if (IsConnected)
                 {
                     return connectedList.Owner;
                 }
@@ -51,7 +52,7 @@ namespace SharpFlame.Collections
 
         public override void AfterMove(int newPosition)
         {
-            this.position = newPosition;
+            position = newPosition;
         }
 
         public override void BeforeRemove()
@@ -60,31 +61,31 @@ namespace SharpFlame.Collections
             position = -1;
         }
 
-        public void Connect(ConnectedList<ItemType, SourceType> List)
+        public void Connect(ConnectedList<TItemType, TSourceType> list)
         {
-            if ( IsConnected )
+            if (IsConnected)
             {
                 Debugger.Break();
                 return;
             }
 
-            List.Add(this);
+            list.Add(this);
         }
 
-        public void ConnectInsert(ConnectedList<ItemType, SourceType> list, int position)
+        public void ConnectInsert(ConnectedList<TItemType, TSourceType> list, int pos)
         {
-            if ( IsConnected )
+            if (IsConnected)
             {
                 Debugger.Break();
                 return;
             }
 
-            list.Insert(this, position);
+            list.Insert(this, pos);
         }
 
         public override void Disconnect()
         {
-            if ( connectedList == null )
+            if (connectedList == null)
             {
                 Debugger.Break();
                 return;
@@ -95,7 +96,7 @@ namespace SharpFlame.Collections
 
         public void Deallocate()
         {
-            if ( IsConnected )
+            if (IsConnected)
             {
                 Disconnect();
             }
@@ -111,7 +112,7 @@ namespace SharpFlame.Collections
             return !IsConnected;
         }
 
-        public override void BeforeAdd(ConnectedList<ItemType, SourceType> newList, int newPosition)
+        public override void BeforeAdd(ConnectedList<TItemType, TSourceType> newList, int newPosition)
         {
             connectedList = newList;
             position = newPosition;

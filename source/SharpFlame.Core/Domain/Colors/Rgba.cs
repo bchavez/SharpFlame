@@ -11,7 +11,7 @@ namespace SharpFlame.Core.Domain.Colors
         public Rgba( float red, float green, float blue, float alpha )
             : base( red, green, blue )
         {
-            this.Alpha = alpha;
+            Alpha = alpha;
         }
 
         public Rgba( Rgba copyItem )

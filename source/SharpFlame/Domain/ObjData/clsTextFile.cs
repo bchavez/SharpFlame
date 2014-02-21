@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using SharpFlame.Collections;
 using SharpFlame.Core;
+using SharpFlame.Core.Collections;
 
 namespace SharpFlame.Domain.ObjData
 {

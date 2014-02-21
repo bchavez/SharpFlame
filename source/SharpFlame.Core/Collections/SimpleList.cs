@@ -4,22 +4,20 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace SharpFlame.Collections
+namespace SharpFlame.Core.Collections
 {
-    public class SimpleList<ItemType> : List<ItemType>
+    public class SimpleList<TItemType> : List<TItemType>
     {
         public bool MaintainOrder = false;
 
-        public void Insert(ItemType newItem, int position)
+        public void Insert(TItemType newItem, int position)
         {
-            Insert (position, newItem);
+            Insert(position, newItem);
         }
 
-        public void PerformTool(ISimpleListTool<ItemType> tool)
+        public void PerformTool(ISimpleListTool<TItemType> tool)
         {
-            var a = 0;
-
-            for ( a = 0; a < Count; a++ )
+            for (var a = 0; a < Count; a++)
             {
                 tool.SetItem(base[a]);
                 tool.ActionPerform();
@@ -29,5 +27,5 @@ namespace SharpFlame.Collections
         protected virtual void AfterMoveAction(int position)
         {
         }
-   }
+    }
 }

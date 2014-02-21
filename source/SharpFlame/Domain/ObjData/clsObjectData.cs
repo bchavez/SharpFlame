@@ -7,6 +7,7 @@ using System.Linq;
 using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
 using SharpFlame.Core;
+using SharpFlame.Core.Collections;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Extensions;
 using SharpFlame.FileIO;

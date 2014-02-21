@@ -4,33 +4,33 @@ using System.Diagnostics;
 
 #endregion
 
-namespace SharpFlame.Collections
+namespace SharpFlame.Core.Collections
 {
-    public class SimpleClassList<ItemType> : SimpleList<ItemType> where ItemType : class
+    public class SimpleClassList<TItemType> : SimpleList<TItemType> where TItemType : class
     {
         public AddNullItemBehavior AddNullItemBehavior = AddNullItemBehavior.Allow;
 
-        public new void Add(ItemType NewItem)
+        public new void Add(TItemType newItem)
         {
-            switch ( AddNullItemBehavior )
+            switch (AddNullItemBehavior)
             {
                 case AddNullItemBehavior.Allow:
-                    base.Add(NewItem);
+                    base.Add(newItem);
                     break;
                 case AddNullItemBehavior.DisallowIgnore:
-                    if ( NewItem != null )
+                    if (newItem != null)
                     {
-                        base.Add(NewItem);
+                        base.Add(newItem);
                     }
                     break;
                 case AddNullItemBehavior.DisallowError:
-                    if ( NewItem == null )
+                    if (newItem == null)
                     {
                         Debugger.Break();
                     }
                     else
                     {
-                        base.Add(NewItem);
+                        base.Add(newItem);
                     }
                     break;
                 default:
@@ -39,18 +39,9 @@ namespace SharpFlame.Collections
             }
         }
 
-        public int FindFirstItemPosition(ItemType itemToFind)
+        public int FindFirstItemPosition(TItemType itemToFind)
         {
-            var position = 0;
-
-            for ( position = 0; position < Count ; position++ )
-            {
-                if ( this[position] == itemToFind )
-                {
-                    return position;
-                }
-            }
-            return -1;
+            return IndexOf(itemToFind);
         }
     }
 }

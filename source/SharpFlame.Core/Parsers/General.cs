@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Sprache;
 
 namespace SharpFlame.Core.Parsers
@@ -30,8 +28,8 @@ namespace SharpFlame.Core.Parsers
 
         internal static readonly Parser<string> SingleLineComment =
             from ignore in Parse.String ("//")
-                from comment in Parse.AnyChar.Except(General.EndOfLineOrFile).Many().Text()
-                from nl in General.EndOfLineOrFile.Text()
+                from comment in Parse.AnyChar.Except(EndOfLineOrFile).Many().Text()
+                from nl in EndOfLineOrFile.Text()
                 select comment;
 
         private static Parser<T> endOfComment<T> (Parser<T> following)

@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using SharpFlame.Core.Domain;
 
 namespace SharpFlame.Core.Parsers.Ini
 {
@@ -27,12 +25,12 @@ namespace SharpFlame.Core.Parsers.Ini
 
                 if (line.StartsWith("[") && line.EndsWith("]"))
                 {
-                    currentSection = new Section (line.Substring(1, line.LastIndexOf("]") - 1).Trim());
+                    currentSection = new Section (line.Substring(1, line.LastIndexOf("]", StringComparison.InvariantCulture) - 1).Trim());
                     result.Add(currentSection);
                     continue;
                 }
 
-                var idx = line.IndexOf("=");
+                var idx = line.IndexOf("=", 0, StringComparison.InvariantCulture);
                 if (idx == -1) {
                     currentSection.Data.Add (new Token { Name = line.Substring(0, idx).Trim(), Data = "" });
                 } else {
@@ -60,10 +58,8 @@ namespace SharpFlame.Core.Parsers.Ini
             {
                 return int.Parse (text);
             } 
-            else
-            {
-                return int.Parse (text.Substring (0, pos));
-            }
+  
+            return int.Parse (text.Substring (0, pos));
         }
     }
 }

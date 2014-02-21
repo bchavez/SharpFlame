@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Sprache;
 
 namespace SharpFlame.Core.Parsers.Lev
@@ -34,17 +32,17 @@ namespace SharpFlame.Core.Parsers.Lev
             from tokens in Token.AtLeastOnce()       
             select new Campaign {
                 Name = name,
-                Data = tokens.Where(d => d.Name == "data").Select(d => d.Data).ToList<string>()
+                Data = tokens.Where(d => d.Name == "data").Select(d => d.Data).ToList()
             };
 
         internal static Parser<Level> Level = 
             from directive in Parse.String ("level")
             from name in Parse.CharExcept ('\r').Except (Parse.Char ('\n')).AtLeastOnce ().Text ().Token ()
             from tokens in Token.Many ()
-            let players = tokens.Where (p => p.Name == "players").FirstOrDefault()
-            let type = tokens.Where (p => p.Name == "type").FirstOrDefault()
-            let dataset = tokens.Where (p => p.Name == "dataset").FirstOrDefault()
-            let game = tokens.Where (p => p.Name == "game").FirstOrDefault()
+            let players = tokens.FirstOrDefault(p => p.Name == "players")
+            let type = tokens.FirstOrDefault(p => p.Name == "type")
+            let dataset = tokens.FirstOrDefault(p => p.Name == "dataset")
+            let game = tokens.FirstOrDefault(p => p.Name == "game")
             let data = tokens.Where (p => p.Name == "data")
 
             select new Level
@@ -54,7 +52,7 @@ namespace SharpFlame.Core.Parsers.Lev
                     Type = type != null ? int.Parse(type.Data) : 0,
                     Dataset = dataset != null ? dataset.Data : "",
                     Game = game != null ? game.Data : "",
-                    Data = data.Select(p => p.Data).ToList<string>()
+                    Data = data.Select(p => p.Data).ToList()
                 };
 
         public static Parser<LevelsFile> Lev =
@@ -75,14 +73,14 @@ namespace SharpFlame.Core.Parsers.Lev
 
                 select new LevelsFile
                 {
-                    Campaigns = campaingArray.Where(option => option != null).ToList<Campaign>(),
-                    Levels = levelArray.Where(option => option != null).ToList<Level>(),
+                    Campaigns = campaingArray.Where(option => option != null).ToList(),
+                    Levels = levelArray.Where(option => option != null).ToList(),
                 }).Many ()
                 from nl in General.EndOfLineOrFile.AtLeastOnce().End()
 
             select new LevelsFile {
-                Campaigns = lf.SelectMany(l => l.Campaigns).ToList<Campaign>(),
-                Levels = lf.SelectMany(l => l.Levels).ToList<Level>()
+                Campaigns = lf.SelectMany(l => l.Campaigns).ToList(),
+                Levels = lf.SelectMany(l => l.Levels).ToList()
             };      
     }
 }

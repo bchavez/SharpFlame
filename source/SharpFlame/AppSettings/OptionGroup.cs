@@ -2,6 +2,7 @@
 
 using Newtonsoft.Json;
 using SharpFlame.Collections;
+using SharpFlame.Core.Collections;
 
 #endregion
 

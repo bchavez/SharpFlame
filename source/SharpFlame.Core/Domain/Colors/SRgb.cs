@@ -1,5 +1,3 @@
-using System.Runtime.InteropServices;
-
 namespace SharpFlame.Core.Domain.Colors
 {
     public struct SRgb
@@ -10,9 +8,9 @@ namespace SharpFlame.Core.Domain.Colors
 
         public SRgb(float red, float green, float blue)
         {
-            this.Red = red;
-            this.Green = green;
-            this.Blue = blue;
+            Red = red;
+            Green = green;
+            Blue = blue;
         }
     }
 }

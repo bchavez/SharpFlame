@@ -163,14 +163,6 @@
     <Compile Include="Mapping\Script\clsScriptPosition.cs" />
     <Compile Include="Mapping\Tiles\clsGeneratorTileset.cs" />
     <Compile Include="Mapping\clsHeightmap.cs" />
-    <Compile Include="Collections\ConnectedList.cs" />
-    <Compile Include="Collections\ConnectedListItem.cs" />
-    <Compile Include="Collections\ConnectedListItemList.cs" />
-    <Compile Include="Collections\ConnectedListLink.cs" />
-    <Compile Include="Collections\SimpleClassList.cs" />
-    <Compile Include="Collections\AddNullItemBehavior.cs" />
-    <Compile Include="Collections\SimpleList.cs" />
-    <Compile Include="Collections\ISimpleListTool.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="FileIO\ExtensionsForIO.cs" />
     <Compile Include="frmKeyboardControl.Designer.cs">
