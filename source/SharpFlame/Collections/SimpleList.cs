@@ -15,7 +15,7 @@ namespace SharpFlame.Collections
             Insert (position, newItem);
         }
 
-        public void PerformTool(SimpleListTool<ItemType> tool)
+        public void PerformTool(ISimpleListTool<ItemType> tool)
         {
             var a = 0;
 

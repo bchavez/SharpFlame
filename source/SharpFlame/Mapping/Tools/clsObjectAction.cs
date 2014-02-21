@@ -8,7 +8,7 @@ using SharpFlame.Mapping.Objects;
 
 namespace SharpFlame.Mapping.Tools
 {
-    public abstract class clsObjectAction : SimpleListTool<clsUnit>
+    public abstract class clsObjectAction : ISimpleListTool<clsUnit>
     {
         private readonly SimpleClassList<clsUnit> _ResultUnits = new SimpleClassList<clsUnit>();
         public bool ActionPerformed;

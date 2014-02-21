@@ -7,7 +7,7 @@ using SharpFlame.Mapping.Objects;
 
 namespace SharpFlame.Mapping.Tools
 {
-    public class clsObjectPriorityOrderList : SimpleListTool<clsUnit>
+    public class clsObjectPriorityOrderList : ISimpleListTool<clsUnit>
     {
         private readonly SimpleClassList<clsUnit> result = new SimpleClassList<clsUnit>();
 

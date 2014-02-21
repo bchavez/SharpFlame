@@ -10,51 +10,50 @@ using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping.Tools
 {
-    public class clsObjectFlattenTerrain : SimpleListTool<clsUnit>
+    public class clsObjectFlattenTerrain : ISimpleListTool<clsUnit>
     {
         private clsUnit Unit;
 
         public void ActionPerform()
         {
-            var Map = Unit.MapLink.Source;
-            var VertexPos = new XYInt();
-            var X = 0;
-            var Y = 0;
-            double Total = 0;
-            byte Average = 0;
-            var Footprint = Unit.TypeBase.GetGetFootprintSelected(Unit.Rotation);
-            var Start = new XYInt();
-            var Finish = new XYInt();
-            var Samples = 0;
+            var map = Unit.MapLink.Source;
+            var vertexPos = new XYInt();
+            var x = 0;
+            var y = 0;
+            double total = 0;
+            var footprint = Unit.TypeBase.GetGetFootprintSelected(Unit.Rotation);
+            var start = new XYInt();
+            var finish = new XYInt();
+            var samples = 0;
 
-            Map.GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Footprint, ref Start, ref Finish);
+            map.GetFootprintTileRangeClamped(Unit.Pos.Horizontal, footprint, ref start, ref finish);
 
-            for ( Y = Start.Y; Y <= Finish.Y + 1; Y++ )
+            for ( y = start.Y; y <= finish.Y + 1; y++ )
             {
-                VertexPos.Y = Y;
-                for ( X = Start.X; X <= Finish.X + 1; X++ )
+                vertexPos.Y = y;
+                for ( x = start.X; x <= finish.X + 1; x++ )
                 {
-                    VertexPos.X = X;
+                    vertexPos.X = x;
 
-                    Total += Map.Terrain.Vertices[VertexPos.X, VertexPos.Y].Height;
-                    Samples++;
+                    total += map.Terrain.Vertices[vertexPos.X, vertexPos.Y].Height;
+                    samples++;
                 }
             }
 
-            if ( Samples >= 1 )
+            if ( samples >= 1 )
             {
-                Average = (byte)(MathUtil.ClampInt((int)(Total / Samples), Byte.MinValue, Byte.MaxValue));
-                for ( Y = Start.Y; Y <= Finish.Y + 1; Y++ )
+                var average = (byte)(MathUtil.ClampInt((int)(total / samples), Byte.MinValue, Byte.MaxValue));
+                for ( y = start.Y; y <= finish.Y + 1; y++ )
                 {
-                    VertexPos.Y = Y;
-                    for ( X = Start.X; X <= Finish.X + 1; X++ )
+                    vertexPos.Y = y;
+                    for ( x = start.X; x <= finish.X + 1; x++ )
                     {
-                        VertexPos.X = X;
+                        vertexPos.X = x;
 
-                        Map.Terrain.Vertices[VertexPos.X, VertexPos.Y].Height = Average;
-                        Map.SectorGraphicsChanges.VertexAndNormalsChanged(VertexPos);
-                        Map.SectorUnitHeightsChanges.VertexChanged(VertexPos);
-                        Map.SectorTerrainUndoChanges.VertexChanged(VertexPos);
+                        map.Terrain.Vertices[vertexPos.X, vertexPos.Y].Height = average;
+                        map.SectorGraphicsChanges.VertexAndNormalsChanged(vertexPos);
+                        map.SectorUnitHeightsChanges.VertexChanged(vertexPos);
+                        map.SectorTerrainUndoChanges.VertexChanged(vertexPos);
                     }
                 }
             }

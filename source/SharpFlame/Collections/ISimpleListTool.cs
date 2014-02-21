@@ -1,6 +1,6 @@
 namespace SharpFlame.Collections
 {
-    public interface SimpleListTool<ItemType>
+    public interface ISimpleListTool<ItemType>
     {
         void SetItem(ItemType Item);
         void ActionPerform();
