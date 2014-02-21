@@ -84,25 +84,20 @@ namespace SharpFlame.Domain
             logger.Debug("Reading PIE");
 
             var a = 0;
-            var strTemp = "";
-            var LevelCount = 0;
-            var NewQuadCount = 0;
-            var NewTriCount = 0;
-            var C = 0;
-            var TextureName = "";
-            sPIELevel[] Levels = null;
-            var LevelNum = 0;
-            var GotText = default(bool);
-            string strTemp2;
+            var levelCount = 0;
+            var newQuadCount = 0;
+            var newTriCount = 0;
+            var textureName = "";
+            sPIELevel[] levels = null;
+            var levelNum = 0;
             var D = 0;
-            var PIEVersion = 0;
-            var Count = 0;
+            var pieVersion = 0;
 
-            Levels = new sPIELevel[0];
-            LevelNum = -1;
+            levels = new sPIELevel[0];
+            levelNum = -1;
             do
             {
-                strTemp = file.ReadLine();
+                var strTemp = file.ReadLine();
                 if ( strTemp == null )
                 {
                     goto FileFinished;
@@ -110,8 +105,8 @@ namespace SharpFlame.Domain
                 Reeval:
                 if ( strTemp.Substring(0, 3) == "PIE" )
                 {
-                    PIEVersion = int.Parse(strTemp.Substring(strTemp.Length - (strTemp.Length - 4), strTemp.Length - 4));
-                    if ( PIEVersion != 2 & PIEVersion != 3 )
+                    pieVersion = int.Parse(strTemp.Substring(strTemp.Length - (strTemp.Length - 4), strTemp.Length - 4));
+                    if ( pieVersion != 2 & pieVersion != 3 )
                     {
                         returnResult.ProblemAdd("Version is unknown.");
                         return returnResult;
@@ -122,11 +117,11 @@ namespace SharpFlame.Domain
                 }
                 else if ( strTemp.Substring(0, 7) == "TEXTURE" )
                 {
-                    TextureName = strTemp.Substring(strTemp.Length - (strTemp.Length - 10), strTemp.Length - 10);
-                    a = TextureName.LastIndexOf(" ");
+                    textureName = strTemp.Substring(strTemp.Length - (strTemp.Length - 10), strTemp.Length - 10);
+                    a = textureName.LastIndexOf(" ");
                     if ( a > 0 )
                     {
-                        a = TextureName.LastIndexOf(" ", a - 1) + 1;
+                        a = textureName.LastIndexOf(" ", a - 1) + 1;
                     }
                     else
                     {
@@ -136,7 +131,7 @@ namespace SharpFlame.Domain
 
                     if ( a > 0 )
                     {
-                        TextureName = TextureName.Substring(0, a - 1);
+                        textureName = textureName.Substring(0, a - 1);
                     }
                     else
                     {
@@ -146,13 +141,13 @@ namespace SharpFlame.Domain
                 }
                 else if ( strTemp.Substring(0, 6) == "LEVELS" )
                 {
-                    LevelCount = int.Parse(strTemp.Substring(strTemp.Length - (strTemp.Length - 7), strTemp.Length - 7));
-                    Levels = new sPIELevel[LevelCount];
+                    levelCount = int.Parse(strTemp.Substring(strTemp.Length - (strTemp.Length - 7), strTemp.Length - 7));
+                    levels = new sPIELevel[levelCount];
                 }
                 else if ( strTemp.Substring(0, 6) == "LEVEL " )
                 {
-                    LevelNum = (int.Parse(strTemp.Substring(strTemp.Length - (strTemp.Length - 6), strTemp.Length - 6))) - 1;
-                    if ( LevelNum >= LevelCount )
+                    levelNum = (int.Parse(strTemp.Substring(strTemp.Length - (strTemp.Length - 6), strTemp.Length - 6))) - 1;
+                    if ( levelNum >= levelCount )
                     {
                         returnResult.ProblemAdd("Level number >= number of levels.");
                         return returnResult;
@@ -162,10 +157,13 @@ namespace SharpFlame.Domain
                 {
                     var b = 0;
                     string[] splitText = null;
+                    var c = 0;
+                    var gotText = default(bool);
+                    string strTemp2;
                     if ( strTemp.Substring(0, 6) == "POINTS" )
                     {
-                        Levels[LevelNum].PointCount = int.Parse(strTemp.Substring(strTemp.Length - (strTemp.Length - 7), strTemp.Length - 7));
-                        Levels[LevelNum].Point = new XYZDouble[Levels[LevelNum].PointCount];
+                        levels[levelNum].PointCount = int.Parse(strTemp.Substring(strTemp.Length - (strTemp.Length - 7), strTemp.Length - 7));
+                        levels[levelNum].Point = new XYZDouble[levels[levelNum].PointCount];
                         a = 0;
                         do
                         {
@@ -179,36 +177,36 @@ namespace SharpFlame.Domain
                             if ( char.Parse(strTemp2) == '\t' || strTemp2 == " " )
                             {
                                 splitText = new string[3];
-                                C = 0;
+                                c = 0;
                                 splitText[0] = "";
-                                GotText = false;
+                                gotText = false;
                                 for ( b = 0; b <= strTemp.Length - 1; b++ )
                                 {
                                     if ( strTemp[b] != ' ' && strTemp[b] != '\t' )
                                     {
-                                        GotText = true;
-                                        splitText[C] += strTemp[b].ToString();
+                                        gotText = true;
+                                        splitText[c] += strTemp[b].ToString();
                                     }
                                     else
                                     {
-                                        if ( GotText )
+                                        if ( gotText )
                                         {
-                                            C++;
-                                            if ( C == 3 )
+                                            c++;
+                                            if ( c == 3 )
                                             {
                                                 break;
                                             }
-                                            splitText[C] = "";
-                                            GotText = false;
+                                            splitText[c] = "";
+                                            gotText = false;
                                         }
                                     }
                                 }
 
                                 try
                                 {
-                                    Levels[LevelNum].Point[a].X = float.Parse(splitText[0]);
-                                    Levels[LevelNum].Point[a].Y = float.Parse(splitText[1]);
-                                    Levels[LevelNum].Point[a].Z = float.Parse(splitText[2]);
+                                    levels[levelNum].Point[a].X = float.Parse(splitText[0]);
+                                    levels[levelNum].Point[a].Y = float.Parse(splitText[1]);
+                                    levels[levelNum].Point[a].Z = float.Parse(splitText[2]);
                                 }
                                 catch ( Exception )
                                 {
@@ -228,8 +226,8 @@ namespace SharpFlame.Domain
                     }
                     else if ( strTemp.Substring(0, 8) == "POLYGONS" )
                     {
-                        Levels[LevelNum].PolygonCount = int.Parse(strTemp.Substring(strTemp.Length - (strTemp.Length - 9), strTemp.Length - 9));
-                        Levels[LevelNum].Polygon = new sPIELevel.sPolygon[Levels[LevelNum].PolygonCount];
+                        levels[levelNum].PolygonCount = int.Parse(strTemp.Substring(strTemp.Length - (strTemp.Length - 9), strTemp.Length - 9));
+                        levels[levelNum].Polygon = new sPIELevel.sPolygon[levels[levelNum].PolygonCount];
                         a = 0;
                         do
                         {
@@ -242,77 +240,78 @@ namespace SharpFlame.Domain
                             strTemp2 = strTemp.Left(1);
                             if ( char.Parse(strTemp2) == '\t' || strTemp2 == " " )
                             {
-                                C = 0;
-                                splitText = new string[C + 1];
-                                splitText[C] = "";
+                                c = 0;
+                                splitText = new string[c + 1];
+                                splitText[c] = "";
                                 for ( b = 0; b <= strTemp.Length - 1; b++ )
                                 {
                                     if ( strTemp[b] == ' ' || strTemp[b] == '\t' )
                                     {
-                                        if ( splitText[C].Length > 0 )
+                                        if ( splitText[c].Length > 0 )
                                         {
-                                            C++;
-                                            Array.Resize(ref splitText, C + 1);
-                                            splitText[C] = "";
+                                            c++;
+                                            Array.Resize(ref splitText, c + 1);
+                                            splitText[c] = "";
                                         }
                                     }
                                     else
                                     {
-                                        splitText[C] += strTemp[b].ToString();
+                                        splitText[c] += strTemp[b].ToString();
                                     }
                                 }
-                                if ( splitText[C].Length == 0 )
+                                if ( splitText[c].Length == 0 )
                                 {
-                                    Array.Resize(ref splitText, C);
+                                    Array.Resize(ref splitText, c);
                                 }
                                 else
                                 {
-                                    C++;
+                                    c++;
                                 }
 
-                                if ( PIEVersion == 3 )
+                                if ( pieVersion == 3 )
                                 {
                                     //200, pointcount, points, texcoords
-                                    if ( C < 2 )
+                                    if ( c < 2 )
                                     {
                                         returnResult.ProblemAdd("Too few fields for polygon " + Convert.ToString(a));
                                         return returnResult;
                                     }
+                                    var count = 0;
                                     try
                                     {
-                                        Count = int.Parse(splitText[1]);
+                                        count = int.Parse(splitText[1]);
                                     }
                                     catch ( Exception ex )
                                     {
                                         returnResult.ProblemAdd("Bad polygon point count: " + ex.Message);
                                         return returnResult;
                                     }
-                                    Levels[LevelNum].Polygon[a].PointCount = Count;
-                                    Levels[LevelNum].Polygon[a].PointNum = new int[Count];
-                                    Levels[LevelNum].Polygon[a].TexCoord = new XYDouble[Count];
-                                    if ( Count == 3 )
+                                    levels[levelNum].Polygon[a].PointCount = count;
+                                    levels[levelNum].Polygon[a].PointNum = new int[count];
+                                    levels[levelNum].Polygon[a].TexCoord = new XYDouble[count];
+                                    if ( count == 3 )
                                     {
-                                        NewTriCount++;
+                                        newTriCount++;
                                     }
-                                    else if ( Count == 4 )
+                                    else if ( count == 4 )
                                     {
-                                        NewQuadCount++;
+                                        newQuadCount++;
                                     }
                                     if ( splitText.GetUpperBound(0) + 1 == 0 )
                                     {
                                         goto Reeval;
                                     }
-                                    if ( splitText.GetUpperBound(0) + 1 != (2 + Count * 3) )
+                                    if ( splitText.GetUpperBound(0) + 1 != (2 + count * 3) )
                                     {
                                         returnResult.ProblemAdd("Wrong number of fields (" + Convert.ToString(splitText.GetUpperBound(0) + 1) + ") for polygon " +
                                                                 Convert.ToString(a));
                                         return returnResult;
                                     }
-                                    for ( b = 0; b <= Count - 1; b++ )
+                                    for ( b = 0; b <= count - 1; b++ )
                                     {
                                         try
                                         {
-                                            Levels[LevelNum].Polygon[a].PointNum[b] = int.Parse(splitText[2 + b]);
+                                            levels[levelNum].Polygon[a].PointNum[b] = int.Parse(splitText[2 + b]);
                                         }
                                         catch ( Exception ex )
                                         {
@@ -322,7 +321,7 @@ namespace SharpFlame.Domain
 
                                         try
                                         {
-                                            Levels[LevelNum].Polygon[a].TexCoord[b].X = float.Parse(splitText[2 + Count + 2 * b]);
+                                            levels[levelNum].Polygon[a].TexCoord[b].X = float.Parse(splitText[2 + count + 2 * b]);
                                         }
                                         catch ( Exception ex )
                                         {
@@ -331,7 +330,7 @@ namespace SharpFlame.Domain
                                         }
                                         try
                                         {
-                                            Levels[LevelNum].Polygon[a].TexCoord[b].Y = float.Parse(splitText[2 + Count + 2 * b + 1]);
+                                            levels[levelNum].Polygon[a].TexCoord[b].Y = float.Parse(splitText[2 + count + 2 * b + 1]);
                                         }
                                         catch ( Exception ex )
                                         {
@@ -341,40 +340,40 @@ namespace SharpFlame.Domain
                                     }
                                     a++;
                                 }
-                                else if ( PIEVersion == 2 )
+                                else if ( pieVersion == 2 )
                                 {
                                     D = 0;
                                     do
                                     {
                                         //flag, numpoints, points[], x4 ignore if animated, texcoord[]xy
-                                        Levels[LevelNum].Polygon[a].PointCount = int.Parse(splitText[D + 1]);
-                                        Levels[LevelNum].Polygon[a].PointNum = new int[Levels[LevelNum].Polygon[a].PointCount];
-                                        Levels[LevelNum].Polygon[a].TexCoord = new XYDouble[Levels[LevelNum].Polygon[a].PointCount];
-                                        if ( Levels[LevelNum].Polygon[a].PointCount == 3 )
+                                        levels[levelNum].Polygon[a].PointCount = int.Parse(splitText[D + 1]);
+                                        levels[levelNum].Polygon[a].PointNum = new int[levels[levelNum].Polygon[a].PointCount];
+                                        levels[levelNum].Polygon[a].TexCoord = new XYDouble[levels[levelNum].Polygon[a].PointCount];
+                                        if ( levels[levelNum].Polygon[a].PointCount == 3 )
                                         {
-                                            NewTriCount++;
+                                            newTriCount++;
                                         }
-                                        else if ( Levels[LevelNum].Polygon[a].PointCount == 4 )
+                                        else if ( levels[levelNum].Polygon[a].PointCount == 4 )
                                         {
-                                            NewQuadCount++;
+                                            newQuadCount++;
                                         }
-                                        for ( b = 0; b <= Levels[LevelNum].Polygon[a].PointCount - 1; b++ )
+                                        for ( b = 0; b <= levels[levelNum].Polygon[a].PointCount - 1; b++ )
                                         {
-                                            Levels[LevelNum].Polygon[a].PointNum[b] = int.Parse(splitText[D + 2 + b]);
+                                            levels[levelNum].Polygon[a].PointNum[b] = int.Parse(splitText[D + 2 + b]);
                                         }
-                                        C = D + 2 + Levels[LevelNum].Polygon[a].PointCount;
+                                        c = D + 2 + levels[levelNum].Polygon[a].PointCount;
                                         if ( splitText[D] == "4200" || splitText[D] == "4000" || splitText[D] == "6a00" || splitText[D] == "4a00" || splitText[D] == "6200" ||
                                              splitText[D] == "14200" || splitText[D] == "14a00" || splitText[D] == "16a00" )
                                         {
-                                            C += 4;
+                                            c += 4;
                                         }
-                                        for ( b = 0; b <= Levels[LevelNum].Polygon[a].PointCount - 1; b++ )
+                                        for ( b = 0; b <= levels[levelNum].Polygon[a].PointCount - 1; b++ )
                                         {
-                                            Levels[LevelNum].Polygon[a].TexCoord[b].X = float.Parse(splitText[C]);
-                                            Levels[LevelNum].Polygon[a].TexCoord[b].Y = float.Parse(splitText[C + 1]);
-                                            C += 2;
+                                            levels[levelNum].Polygon[a].TexCoord[b].X = float.Parse(splitText[c]);
+                                            levels[levelNum].Polygon[a].TexCoord[b].Y = float.Parse(splitText[c + 1]);
+                                            c += 2;
                                         }
-                                        D = C;
+                                        D = c;
                                         a++;
                                     } while ( D < splitText.GetUpperBound(0) );
                                 }
@@ -405,27 +404,27 @@ namespace SharpFlame.Domain
                             if ( char.Parse(strTemp2) == '\t' || strTemp2 == " " )
                             {
                                 splitText = new string[3];
-                                C = 0;
+                                c = 0;
                                 splitText[0] = "";
-                                GotText = false;
+                                gotText = false;
                                 for ( b = 0; b <= strTemp.Length - 1; b++ )
                                 {
                                     if ( strTemp[b] != ' ' && strTemp[b] != '\t' )
                                     {
-                                        GotText = true;
-                                        splitText[C] += strTemp[b].ToString();
+                                        gotText = true;
+                                        splitText[c] += strTemp[b].ToString();
                                     }
                                     else
                                     {
-                                        if ( GotText )
+                                        if ( gotText )
                                         {
-                                            C++;
-                                            if ( C == 3 )
+                                            c++;
+                                            if ( c == 3 )
                                             {
                                                 break;
                                             }
-                                            splitText[C] = "";
-                                            GotText = false;
+                                            splitText[c] = "";
+                                            gotText = false;
                                         }
                                     }
                                 }
@@ -456,69 +455,69 @@ namespace SharpFlame.Domain
             } while ( true );
             FileFinished:
 
-            GLTextureNum = owner.Get_TexturePage_GLTexture(TextureName.Substring(0, TextureName.Length - 4));
+            GLTextureNum = owner.Get_TexturePage_GLTexture(textureName.Substring(0, textureName.Length - 4));
             if ( GLTextureNum == 0 )
             {
-                returnResult.WarningAdd("Texture \"{0}\" was not loaded".Format2(TextureName));
+                returnResult.WarningAdd("Texture \"{0}\" was not loaded".Format2(textureName));
             }
 
-            TriangleCount = NewTriCount;
-            QuadCount = NewQuadCount;
+            TriangleCount = newTriCount;
+            QuadCount = newQuadCount;
             Triangles = new sTriangle[TriangleCount];
             Quads = new sQuad[QuadCount];
-            NewTriCount = 0;
-            NewQuadCount = 0;
-            for ( LevelNum = 0; LevelNum <= LevelCount - 1; LevelNum++ )
+            newTriCount = 0;
+            newQuadCount = 0;
+            for ( levelNum = 0; levelNum <= levelCount - 1; levelNum++ )
             {
-                for ( a = 0; a <= Levels[LevelNum].PolygonCount - 1; a++ )
+                for ( a = 0; a <= levels[levelNum].PolygonCount - 1; a++ )
                 {
-                    if ( Levels[LevelNum].Polygon[a].PointCount == 3 )
+                    if ( levels[levelNum].Polygon[a].PointCount == 3 )
                     {
-                        Triangles[NewTriCount].PosA = Levels[LevelNum].Point[Levels[LevelNum].Polygon[a].PointNum[0]];
-                        Triangles[NewTriCount].PosB = Levels[LevelNum].Point[Levels[LevelNum].Polygon[a].PointNum[1]];
-                        Triangles[NewTriCount].PosC = Levels[LevelNum].Point[Levels[LevelNum].Polygon[a].PointNum[2]];
-                        if ( PIEVersion == 2 )
+                        Triangles[newTriCount].PosA = levels[levelNum].Point[levels[levelNum].Polygon[a].PointNum[0]];
+                        Triangles[newTriCount].PosB = levels[levelNum].Point[levels[levelNum].Polygon[a].PointNum[1]];
+                        Triangles[newTriCount].PosC = levels[levelNum].Point[levels[levelNum].Polygon[a].PointNum[2]];
+                        if ( pieVersion == 2 )
                         {
-                            Triangles[NewTriCount].TexCoordA.X = (float)(Levels[LevelNum].Polygon[a].TexCoord[0].X / 255.0D);
-                            Triangles[NewTriCount].TexCoordA.Y = (float)(Levels[LevelNum].Polygon[a].TexCoord[0].Y / 255.0D);
-                            Triangles[NewTriCount].TexCoordB.X = (float)(Levels[LevelNum].Polygon[a].TexCoord[1].X / 255.0D);
-                            Triangles[NewTriCount].TexCoordB.Y = (float)(Levels[LevelNum].Polygon[a].TexCoord[1].Y / 255.0D);
-                            Triangles[NewTriCount].TexCoordC.X = (float)(Levels[LevelNum].Polygon[a].TexCoord[2].X / 255.0D);
-                            Triangles[NewTriCount].TexCoordC.Y = (float)(Levels[LevelNum].Polygon[a].TexCoord[2].Y / 255.0D);
+                            Triangles[newTriCount].TexCoordA.X = (float)(levels[levelNum].Polygon[a].TexCoord[0].X / 255.0D);
+                            Triangles[newTriCount].TexCoordA.Y = (float)(levels[levelNum].Polygon[a].TexCoord[0].Y / 255.0D);
+                            Triangles[newTriCount].TexCoordB.X = (float)(levels[levelNum].Polygon[a].TexCoord[1].X / 255.0D);
+                            Triangles[newTriCount].TexCoordB.Y = (float)(levels[levelNum].Polygon[a].TexCoord[1].Y / 255.0D);
+                            Triangles[newTriCount].TexCoordC.X = (float)(levels[levelNum].Polygon[a].TexCoord[2].X / 255.0D);
+                            Triangles[newTriCount].TexCoordC.Y = (float)(levels[levelNum].Polygon[a].TexCoord[2].Y / 255.0D);
                         }
-                        else if ( PIEVersion == 3 )
+                        else if ( pieVersion == 3 )
                         {
-                            Triangles[NewTriCount].TexCoordA = Levels[LevelNum].Polygon[a].TexCoord[0];
-                            Triangles[NewTriCount].TexCoordB = Levels[LevelNum].Polygon[a].TexCoord[1];
-                            Triangles[NewTriCount].TexCoordC = Levels[LevelNum].Polygon[a].TexCoord[2];
+                            Triangles[newTriCount].TexCoordA = levels[levelNum].Polygon[a].TexCoord[0];
+                            Triangles[newTriCount].TexCoordB = levels[levelNum].Polygon[a].TexCoord[1];
+                            Triangles[newTriCount].TexCoordC = levels[levelNum].Polygon[a].TexCoord[2];
                         }
-                        NewTriCount++;
+                        newTriCount++;
                     }
-                    else if ( Levels[LevelNum].Polygon[a].PointCount == 4 )
+                    else if ( levels[levelNum].Polygon[a].PointCount == 4 )
                     {
-                        Quads[NewQuadCount].PosA = Levels[LevelNum].Point[Levels[LevelNum].Polygon[a].PointNum[0]];
-                        Quads[NewQuadCount].PosB = Levels[LevelNum].Point[Levels[LevelNum].Polygon[a].PointNum[1]];
-                        Quads[NewQuadCount].PosC = Levels[LevelNum].Point[Levels[LevelNum].Polygon[a].PointNum[2]];
-                        Quads[NewQuadCount].PosD = Levels[LevelNum].Point[Levels[LevelNum].Polygon[a].PointNum[3]];
-                        if ( PIEVersion == 2 )
+                        Quads[newQuadCount].PosA = levels[levelNum].Point[levels[levelNum].Polygon[a].PointNum[0]];
+                        Quads[newQuadCount].PosB = levels[levelNum].Point[levels[levelNum].Polygon[a].PointNum[1]];
+                        Quads[newQuadCount].PosC = levels[levelNum].Point[levels[levelNum].Polygon[a].PointNum[2]];
+                        Quads[newQuadCount].PosD = levels[levelNum].Point[levels[levelNum].Polygon[a].PointNum[3]];
+                        if ( pieVersion == 2 )
                         {
-                            Quads[NewQuadCount].TexCoordA.X = (float)(Levels[LevelNum].Polygon[a].TexCoord[0].X / 255.0D);
-                            Quads[NewQuadCount].TexCoordA.Y = (float)(Levels[LevelNum].Polygon[a].TexCoord[0].Y / 255.0D);
-                            Quads[NewQuadCount].TexCoordB.X = (float)(Levels[LevelNum].Polygon[a].TexCoord[1].X / 255.0D);
-                            Quads[NewQuadCount].TexCoordB.Y = (float)(Levels[LevelNum].Polygon[a].TexCoord[1].Y / 255.0D);
-                            Quads[NewQuadCount].TexCoordC.X = (float)(Levels[LevelNum].Polygon[a].TexCoord[2].X / 255.0D);
-                            Quads[NewQuadCount].TexCoordC.Y = (float)(Levels[LevelNum].Polygon[a].TexCoord[2].Y / 255.0D);
-                            Quads[NewQuadCount].TexCoordD.X = (float)(Levels[LevelNum].Polygon[a].TexCoord[3].X / 255.0D);
-                            Quads[NewQuadCount].TexCoordD.Y = (float)(Levels[LevelNum].Polygon[a].TexCoord[3].Y / 255.0D);
+                            Quads[newQuadCount].TexCoordA.X = (float)(levels[levelNum].Polygon[a].TexCoord[0].X / 255.0D);
+                            Quads[newQuadCount].TexCoordA.Y = (float)(levels[levelNum].Polygon[a].TexCoord[0].Y / 255.0D);
+                            Quads[newQuadCount].TexCoordB.X = (float)(levels[levelNum].Polygon[a].TexCoord[1].X / 255.0D);
+                            Quads[newQuadCount].TexCoordB.Y = (float)(levels[levelNum].Polygon[a].TexCoord[1].Y / 255.0D);
+                            Quads[newQuadCount].TexCoordC.X = (float)(levels[levelNum].Polygon[a].TexCoord[2].X / 255.0D);
+                            Quads[newQuadCount].TexCoordC.Y = (float)(levels[levelNum].Polygon[a].TexCoord[2].Y / 255.0D);
+                            Quads[newQuadCount].TexCoordD.X = (float)(levels[levelNum].Polygon[a].TexCoord[3].X / 255.0D);
+                            Quads[newQuadCount].TexCoordD.Y = (float)(levels[levelNum].Polygon[a].TexCoord[3].Y / 255.0D);
                         }
-                        else if ( PIEVersion == 3 )
+                        else if ( pieVersion == 3 )
                         {
-                            Quads[NewQuadCount].TexCoordA = Levels[LevelNum].Polygon[a].TexCoord[0];
-                            Quads[NewQuadCount].TexCoordB = Levels[LevelNum].Polygon[a].TexCoord[1];
-                            Quads[NewQuadCount].TexCoordC = Levels[LevelNum].Polygon[a].TexCoord[2];
-                            Quads[NewQuadCount].TexCoordD = Levels[LevelNum].Polygon[a].TexCoord[3];
+                            Quads[newQuadCount].TexCoordA = levels[levelNum].Polygon[a].TexCoord[0];
+                            Quads[newQuadCount].TexCoordB = levels[levelNum].Polygon[a].TexCoord[1];
+                            Quads[newQuadCount].TexCoordC = levels[levelNum].Polygon[a].TexCoord[2];
+                            Quads[newQuadCount].TexCoordD = levels[levelNum].Polygon[a].TexCoord[3];
                         }
-                        NewQuadCount++;
+                        newQuadCount++;
                     }
                 }
             }
