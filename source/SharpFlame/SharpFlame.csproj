@@ -402,7 +402,6 @@
     <Compile Include="Mapping\IO\FMap\FMapLoader.cs" />
     <Compile Include="Mapping\IO\FMap\FMapSaver.cs" />
     <Compile Include="FileIO\TilesetLoader.cs" />
-    <Compile Include="Mapping\Tiles\Tileset.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">
