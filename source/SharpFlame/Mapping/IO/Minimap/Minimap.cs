@@ -35,7 +35,7 @@ namespace SharpFlame.Mapping.IO.Minimap
                 {
                     minimapBitmap.SetPixel(x, y,
                                            ColorTranslator.FromOle(
-                        ColorUtil.OSRGB((int)(MathUtil.ClampSng(Convert.ToSingle(texture.get_Pixels(x, y).Red * 255.0F), 0.0F, 255.0F)),
+                        ColorUtil.OsRgb((int)(MathUtil.ClampSng(Convert.ToSingle(texture.get_Pixels(x, y).Red * 255.0F), 0.0F, 255.0F)),
                                     (int)(MathUtil.ClampSng(Convert.ToSingle(texture.get_Pixels(x, y).Green * 255.0F), 0.0F, 255.0F)),
                                     (int)(MathUtil.ClampSng(Convert.ToSingle(texture.get_Pixels(x, y).Blue * 255.0F), 0.0F, 255.0F)))));
                 }

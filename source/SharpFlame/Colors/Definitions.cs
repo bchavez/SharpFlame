@@ -8,11 +8,11 @@ namespace SharpFlame.Colors
         public float Green;
         public float Blue;
 
-        public sRGB_sng(float Red, float Green, float Blue)
+        public sRGB_sng(float red, float green, float blue)
         {
-            this.Red = Red;
-            this.Green = Green;
-            this.Blue = Blue;
+            this.Red = red;
+            this.Green = green;
+            this.Blue = blue;
         }
     }
 

@@ -333,7 +333,7 @@ namespace SharpFlame.Mapping.Tiles
                     Red = Convert.ToInt32(((PixelColorA.R) + PixelColorB.R + PixelColorC.R + PixelColorD.R) / 4.0F);
                     Green = Convert.ToInt32(((PixelColorA.G) + PixelColorB.G + PixelColorC.G + PixelColorD.G) / 4.0F);
                     Blue = Convert.ToInt32(((PixelColorA.B) + PixelColorB.B + PixelColorC.B + PixelColorD.B) / 4.0F);
-                    Bitmap8.SetPixel(PixX, PixY, ColorTranslator.FromOle(ColorUtil.OSRGB(Red, Green, Blue)));
+                    Bitmap8.SetPixel(PixX, PixY, ColorTranslator.FromOle(ColorUtil.OsRgb(Red, Green, Blue)));
                 }
             }
 
@@ -358,7 +358,7 @@ namespace SharpFlame.Mapping.Tiles
                     Red = Convert.ToInt32(((PixelColorA.R) + PixelColorB.R + PixelColorC.R + PixelColorD.R) / 4.0F);
                     Green = Convert.ToInt32(((PixelColorA.G) + PixelColorB.G + PixelColorC.G + PixelColorD.G) / 4.0F);
                     Blue = Convert.ToInt32(((PixelColorA.B) + PixelColorB.B + PixelColorC.B + PixelColorD.B) / 4.0F);
-                    Bitmap4.SetPixel(PixX, PixY, ColorTranslator.FromOle(ColorUtil.OSRGB(Red, Green, Blue)));
+                    Bitmap4.SetPixel(PixX, PixY, ColorTranslator.FromOle(ColorUtil.OsRgb(Red, Green, Blue)));
                 }
             }
 
@@ -383,7 +383,7 @@ namespace SharpFlame.Mapping.Tiles
                     Red = Convert.ToInt32(((PixelColorA.R) + PixelColorB.R + PixelColorC.R + PixelColorD.R) / 4.0F);
                     Green = Convert.ToInt32(((PixelColorA.G) + PixelColorB.G + PixelColorC.G + PixelColorD.G) / 4.0F);
                     Blue = Convert.ToInt32(((PixelColorA.B) + PixelColorB.B + PixelColorC.B + PixelColorD.B) / 4.0F);
-                    Bitmap2.SetPixel(PixX, PixY, ColorTranslator.FromOle(ColorUtil.OSRGB(Red, Green, Blue)));
+                    Bitmap2.SetPixel(PixX, PixY, ColorTranslator.FromOle(ColorUtil.OsRgb(Red, Green, Blue)));
                 }
             }
 
@@ -406,7 +406,7 @@ namespace SharpFlame.Mapping.Tiles
             Red = Convert.ToInt32(((PixelColorA.R) + PixelColorB.R + PixelColorC.R + PixelColorD.R) / 4.0F);
             Green = Convert.ToInt32(((PixelColorA.G) + PixelColorB.G + PixelColorC.G + PixelColorD.G) / 4.0F);
             Blue = Convert.ToInt32(((PixelColorA.B) + PixelColorB.B + PixelColorC.B + PixelColorD.B) / 4.0F);
-            Bitmap1.SetPixel(PixX, PixY, ColorTranslator.FromOle(ColorUtil.OSRGB(Red, Green, Blue)));
+            Bitmap1.SetPixel(PixX, PixY, ColorTranslator.FromOle(ColorUtil.OsRgb(Red, Green, Blue)));
 
             BitmapUtil.CreateGLTexture (Bitmap1, 7, textureNum);
 

@@ -11,184 +11,183 @@ namespace SharpFlame.Collections.Specialized
     {
         public BooleanMapDataValue ValueData = new BooleanMapDataValue();
 
-        public void Blank(int SizeX, int SizeY)
+        public void Blank(int sizeX, int sizeY)
         {
-            ValueData.Size.X = SizeX;
-            ValueData.Size.Y = SizeY;
-            ValueData.Value = new bool[SizeY, SizeX];
+            ValueData.Size.X = sizeX;
+            ValueData.Size.Y = sizeY;
+            ValueData.Value = new bool[sizeY, sizeX];
         }
 
-        public void SizeCopy(BooleanMap Source)
+        public void SizeCopy(BooleanMap source)
         {
-            ValueData.Size.X = Source.ValueData.Size.X;
-            ValueData.Size.Y = Source.ValueData.Size.Y;
+            ValueData.Size.X = source.ValueData.Size.X;
+            ValueData.Size.Y = source.ValueData.Size.Y;
             ValueData.Value = new bool[ValueData.Size.Y, ValueData.Size.X];
         }
 
-        public void Copy(BooleanMap Source)
+        public void Copy(BooleanMap source)
         {
-            var X = 0;
-            var Y = 0;
+            var y = 0;
 
-            SizeCopy(Source);
-            for ( Y = 0; Y <= Source.ValueData.Size.Y - 1; Y++ )
+            SizeCopy(source);
+            for ( y = 0; y <= source.ValueData.Size.Y - 1; y++ )
             {
-                for ( X = 0; X <= Source.ValueData.Size.X - 1; X++ )
+                var x = 0;
+                for ( x = 0; x <= source.ValueData.Size.X - 1; x++ )
                 {
-                    ValueData.Value[Y, X] = Source.ValueData.Value[Y, X];
+                    ValueData.Value[y, x] = source.ValueData.Value[y, x];
                 }
             }
         }
 
-        public void Convert_Heightmap(clsHeightmap Source, long AtOrAboveThisHeightEqualsTrue)
+        public void Convert_Heightmap(clsHeightmap source, long atOrAboveThisHeightEqualsTrue)
         {
-            var X = 0;
-            var Y = 0;
+            var y = 0;
 
-            ValueData.Size.X = Source.HeightData.SizeX;
-            ValueData.Size.Y = Source.HeightData.SizeY;
+            ValueData.Size.X = source.HeightData.SizeX;
+            ValueData.Size.Y = source.HeightData.SizeY;
             ValueData.Value = new bool[ValueData.Size.Y, ValueData.Size.X];
-            for ( Y = 0; Y <= Source.HeightData.SizeY - 1; Y++ )
+            for ( y = 0; y <= source.HeightData.SizeY - 1; y++ )
             {
-                for ( X = 0; X <= Source.HeightData.SizeX - 1; X++ )
+                var x = 0;
+                for ( x = 0; x <= source.HeightData.SizeX - 1; x++ )
                 {
-                    ValueData.Value[Y, X] = Source.HeightData.Height[Y, X] >= AtOrAboveThisHeightEqualsTrue;
+                    ValueData.Value[y, x] = source.HeightData.Height[y, x] >= atOrAboveThisHeightEqualsTrue;
                 }
             }
         }
 
-        public void Remove_Diagonals()
+        public void RemoveDiagonals()
         {
-            var X = 0;
-            var Y = 0;
-            var Flag = default(bool);
+            var y = 0;
+            var flag = default(bool);
 
             var rnd = new Random();
 
-            while ( Y < ValueData.Size.Y - 1 )
+            while ( y < ValueData.Size.Y - 1 )
             {
-                X = 0;
-                while ( X < ValueData.Size.X - 1 )
+                var x = 0;
+                while ( x < ValueData.Size.X - 1 )
                 {
-                    Flag = false;
-                    if ( ValueData.Value[Y, X] )
+                    flag = false;
+                    if ( ValueData.Value[y, x] )
                     {
-                        if ( ValueData.Value[Y, X + 1] )
+                        if ( ValueData.Value[y, x + 1] )
                         {
-                            if ( ValueData.Value[Y + 1, X] )
+                            if ( ValueData.Value[y + 1, x] )
                             {
-                                if ( ValueData.Value[Y + 1, X + 1] )
+                                if ( ValueData.Value[y + 1, x + 1] )
                                 {
                                     //i i i i
                                 }
-                                else if ( !ValueData.Value[Y + 1, X + 1] )
+                                else if ( !ValueData.Value[y + 1, x + 1] )
                                 {
                                     //i i i o
                                 }
                             }
-                            else if ( !ValueData.Value[Y + 1, X] )
+                            else if ( !ValueData.Value[y + 1, x] )
                             {
-                                if ( ValueData.Value[Y + 1, X + 1] )
+                                if ( ValueData.Value[y + 1, x + 1] )
                                 {
                                     //i i o i
                                 }
-                                else if ( !ValueData.Value[Y + 1, X + 1] )
+                                else if ( !ValueData.Value[y + 1, x + 1] )
                                 {
                                     //i i o o
                                 }
                             }
                         }
-                        else if ( !ValueData.Value[Y, X + 1] )
+                        else if ( !ValueData.Value[y, x + 1] )
                         {
-                            if ( ValueData.Value[Y + 1, X] )
+                            if ( ValueData.Value[y + 1, x] )
                             {
-                                if ( ValueData.Value[Y + 1, X + 1] )
+                                if ( ValueData.Value[y + 1, x + 1] )
                                 {
                                     //i o i i
                                 }
-                                else if ( !ValueData.Value[Y + 1, X + 1] )
+                                else if ( !ValueData.Value[y + 1, x + 1] )
                                 {
                                     //i o i o
                                 }
                             }
-                            else if ( !ValueData.Value[Y + 1, X] )
+                            else if ( !ValueData.Value[y + 1, x] )
                             {
-                                if ( ValueData.Value[Y + 1, X + 1] )
+                                if ( ValueData.Value[y + 1, x + 1] )
                                 {
                                     //i o o i
                                     if ( rnd.Next() < 0.5F )
                                     {
-                                        ValueData.Value[Y, X] = false;
+                                        ValueData.Value[y, x] = false;
                                     }
                                     else
                                     {
-                                        ValueData.Value[Y + 1, X + 1] = false;
+                                        ValueData.Value[y + 1, x + 1] = false;
                                     }
-                                    Flag = true;
+                                    flag = true;
                                 }
-                                else if ( !ValueData.Value[Y + 1, X + 1] )
+                                else if ( !ValueData.Value[y + 1, x + 1] )
                                 {
                                     //i o o o
                                 }
                             }
                         }
                     }
-                    else if ( !ValueData.Value[Y, X] )
+                    else if ( !ValueData.Value[y, x] )
                     {
-                        if ( ValueData.Value[Y, X + 1] )
+                        if ( ValueData.Value[y, x + 1] )
                         {
-                            if ( ValueData.Value[Y + 1, X] )
+                            if ( ValueData.Value[y + 1, x] )
                             {
-                                if ( ValueData.Value[Y + 1, X + 1] )
+                                if ( ValueData.Value[y + 1, x + 1] )
                                 {
                                     //o i i i
                                 }
-                                else if ( !ValueData.Value[Y + 1, X + 1] )
+                                else if ( !ValueData.Value[y + 1, x + 1] )
                                 {
                                     //o i i o
                                     if ( rnd.Next() < 0.5F )
                                     {
-                                        ValueData.Value[Y, X + 1] = false;
+                                        ValueData.Value[y, x + 1] = false;
                                     }
                                     else
                                     {
-                                        ValueData.Value[Y + 1, X] = false;
+                                        ValueData.Value[y + 1, x] = false;
                                     }
-                                    Flag = true;
+                                    flag = true;
                                 }
                             }
-                            else if ( !ValueData.Value[Y + 1, X] )
+                            else if ( !ValueData.Value[y + 1, x] )
                             {
-                                if ( ValueData.Value[Y + 1, X + 1] )
+                                if ( ValueData.Value[y + 1, x + 1] )
                                 {
                                     //o i o i
                                 }
-                                else if ( !ValueData.Value[Y + 1, X + 1] )
+                                else if ( !ValueData.Value[y + 1, x + 1] )
                                 {
                                     //o i o o
                                 }
                             }
                         }
-                        else if ( !ValueData.Value[Y, X + 1] )
+                        else if ( !ValueData.Value[y, x + 1] )
                         {
-                            if ( ValueData.Value[Y + 1, X] )
+                            if ( ValueData.Value[y + 1, x] )
                             {
-                                if ( ValueData.Value[Y + 1, X + 1] )
+                                if ( ValueData.Value[y + 1, x + 1] )
                                 {
                                     //o o i i
                                 }
-                                else if ( !ValueData.Value[Y + 1, X + 1] )
+                                else if ( !ValueData.Value[y + 1, x + 1] )
                                 {
                                     //o o i o
                                 }
                             }
-                            else if ( !ValueData.Value[Y + 1, X] )
+                            else if ( !ValueData.Value[y + 1, x] )
                             {
-                                if ( ValueData.Value[Y + 1, X + 1] )
+                                if ( ValueData.Value[y + 1, x + 1] )
                                 {
                                     //o o o i
                                 }
-                                else if ( !ValueData.Value[Y + 1, X + 1] )
+                                else if ( !ValueData.Value[y + 1, x + 1] )
                                 {
                                     //o o o o
                                 }
@@ -196,74 +195,74 @@ namespace SharpFlame.Collections.Specialized
                         }
                     }
                     //when flag, go back one in each direction, incase a new diagonal was created
-                    if ( Flag )
+                    if ( flag )
                     {
-                        if ( X > 0 )
+                        if ( x > 0 )
                         {
-                            X--;
+                            x--;
                         }
                         break;
                     }
-                    X++;
+                    x++;
                 }
-                if ( Flag )
+                if ( flag )
                 {
-                    if ( Y > 0 )
+                    if ( y > 0 )
                     {
-                        Y--;
+                        y--;
                     }
                 }
                 else
                 {
-                    Y++;
+                    y++;
                 }
             }
         }
 
-        public void Expand_One_Tile(BooleanMap Source)
+        public void ExpandOneTile(BooleanMap source)
         {
-            var X = 0;
-            var Y = 0;
+            var y = 0;
 
-            SizeCopy(Source);
-            for ( Y = 0; Y <= ValueData.Size.Y - 1; Y++ )
+            SizeCopy(source);
+            for ( y = 0; y <= ValueData.Size.Y - 1; y++ )
             {
-                for ( X = 0; X <= Source.ValueData.Size.X - 1; X++ )
+                var x = 0;
+                for ( x = 0; x <= source.ValueData.Size.X - 1; x++ )
                 {
-                    if ( Source.ValueData.Value[Y, X] )
+                    if ( source.ValueData.Value[y, x] )
                     {
-                        ValueData.Value[Y, X] = true;
-                        if ( Y > 0 )
+                        ValueData.Value[y, x] = true;
+                        if ( y > 0 )
                         {
-                            if ( X > 0 )
+                            if ( x > 0 )
                             {
-                                ValueData.Value[Y - 1, X - 1] = true;
+                                ValueData.Value[y - 1, x - 1] = true;
                             }
-                            ValueData.Value[Y - 1, X] = true;
-                            if ( X < Source.ValueData.Size.X - 1 )
+                            ValueData.Value[y - 1, x] = true;
+                            if ( x < source.ValueData.Size.X - 1 )
                             {
-                                ValueData.Value[Y - 1, X + 1] = true;
+                                ValueData.Value[y - 1, x + 1] = true;
                             }
                         }
-                        if ( X > 0 )
+                        if ( x > 0 )
                         {
-                            ValueData.Value[Y, X - 1] = true;
+                            ValueData.Value[y, x - 1] = true;
                         }
-                        ValueData.Value[Y, X] = true;
-                        if ( X < ValueData.Size.X - 1 )
+                        ValueData.Value[y, x] = true;
+                        if ( x < ValueData.Size.X - 1 )
                         {
-                            ValueData.Value[Y, X + 1] = true;
+                            ValueData.Value[y, x + 1] = true;
                         }
-                        if ( Y < ValueData.Size.Y - 1 )
+                        if ( y < ValueData.Size.Y - 1 )
                         {
-                            if ( X > 0 )
+                            if ( x > 0 )
                             {
-                                ValueData.Value[Y + 1, X - 1] = true;
+                                ValueData.Value[y + 1, x - 1] = true;
                             }
-                            ValueData.Value[Y + 1, X] = true;
-                            if ( X < ValueData.Size.X - 1 )
+                            ValueData.Value[y + 1, x] = true;
+                            if ( x < ValueData.Size.X - 1 )
                             {
-                                ValueData.Value[Y + 1, X + 1] = true;
+                                ValueData.Value[y + 1, x + 1] = true;
                             }
                         }
                     }
@@ -271,45 +270,45 @@ namespace SharpFlame.Collections.Specialized
             }
         }
 
-        public void Remove(BooleanMap Source, BooleanMap Remove)
+        public void Remove(BooleanMap source, BooleanMap remove)
         {
-            var X = 0;
-            var Y = 0;
+            var y = 0;
 
-            SizeCopy(Source);
-            for ( Y = 0; Y <= Source.ValueData.Size.Y - 1; Y++ )
+            SizeCopy(source);
+            for ( y = 0; y <= source.ValueData.Size.Y - 1; y++ )
             {
-                for ( X = 0; X <= Source.ValueData.Size.X - 1; X++ )
+                var X = 0;
+                for ( X = 0; X <= source.ValueData.Size.X - 1; X++ )
                 {
-                    if ( Remove.ValueData.Value[Y, X] )
+                    if ( remove.ValueData.Value[y, X] )
                     {
-                        ValueData.Value[Y, X] = false;
+                        ValueData.Value[y, X] = false;
                     }
                     else
                     {
-                        ValueData.Value[Y, X] = Source.ValueData.Value[Y, X];
+                        ValueData.Value[y, X] = source.ValueData.Value[y, X];
                     }
                 }
             }
         }
 
-        public void Combine(BooleanMap Source, BooleanMap Insert)
+        public void Combine(BooleanMap source, BooleanMap insert)
         {
-            var X = 0;
-            var Y = 0;
+            var y = 0;
 
-            SizeCopy(Source);
-            for ( Y = 0; Y <= Source.ValueData.Size.Y - 1; Y++ )
+            SizeCopy(source);
+            for ( y = 0; y <= source.ValueData.Size.Y - 1; y++ )
             {
-                for ( X = 0; X <= Source.ValueData.Size.X - 1; X++ )
+                var x = 0;
+                for ( x = 0; x <= source.ValueData.Size.X - 1; x++ )
                 {
-                    if ( Insert.ValueData.Value[Y, X] )
+                    if ( insert.ValueData.Value[y, x] )
                     {
-                        ValueData.Value[Y, X] = true;
+                        ValueData.Value[y, x] = true;
                     }
                     else
                     {
-                        ValueData.Value[Y, X] = Source.ValueData.Value[Y, X];
+                        ValueData.Value[y, x] = source.ValueData.Value[y, x];
                     }
                 }
             }
@@ -317,79 +316,78 @@ namespace SharpFlame.Collections.Specialized
 
         public void Within(BooleanMap Interior, BooleanMap Exterior)
         {
-            var Y = 0;
-            var X = 0;
-            var Flag = default(bool);
+            var y = 0;
 
             SizeCopy(Interior);
-            for ( Y = 0; Y <= Interior.ValueData.Size.Y - 1; Y++ )
+            for ( y = 0; y <= Interior.ValueData.Size.Y - 1; y++ )
             {
-                for ( X = 0; X <= Interior.ValueData.Size.X - 1; X++ )
+                var x = 0;
+                for ( x = 0; x <= Interior.ValueData.Size.X - 1; x++ )
                 {
-                    if ( Interior.ValueData.Value[Y, X] )
+                    if ( Interior.ValueData.Value[y, x] )
                     {
-                        Flag = false;
-                        if ( Y > 0 )
+                        var flag = false;
+                        if ( y > 0 )
                         {
-                            if ( X > 0 )
+                            if ( x > 0 )
                             {
-                                if ( !Exterior.ValueData.Value[Y - 1, X - 1] )
+                                if ( !Exterior.ValueData.Value[y - 1, x - 1] )
                                 {
-                                    Flag = true;
+                                    flag = true;
                                 }
                             }
-                            if ( !Exterior.ValueData.Value[Y - 1, X] )
+                            if ( !Exterior.ValueData.Value[y - 1, x] )
                             {
-                                Flag = true;
+                                flag = true;
                             }
-                            if ( X < Interior.ValueData.Size.X - 1 )
+                            if ( x < Interior.ValueData.Size.X - 1 )
                             {
-                                if ( !Exterior.ValueData.Value[Y - 1, X + 1] )
+                                if ( !Exterior.ValueData.Value[y - 1, x + 1] )
                                 {
-                                    Flag = true;
-                                }
-                            }
-                        }
-                        if ( X > 0 )
-                        {
-                            if ( !Exterior.ValueData.Value[Y, X - 1] )
-                            {
-                                Flag = true;
-                            }
-                        }
-                        if ( !Exterior.ValueData.Value[Y, X] )
-                        {
-                            Flag = true;
-                        }
-                        if ( X < Interior.ValueData.Size.X - 1 )
-                        {
-                            if ( !Exterior.ValueData.Value[Y, X + 1] )
-                            {
-                                Flag = true;
-                            }
-                        }
-                        if ( Y < Interior.ValueData.Size.Y - 1 )
-                        {
-                            if ( X > 0 )
-                            {
-                                if ( !Exterior.ValueData.Value[Y + 1, X - 1] )
-                                {
-                                    Flag = true;
-                                }
-                            }
-                            if ( !Exterior.ValueData.Value[Y + 1, X] )
-                            {
-                                Flag = true;
-                            }
-                            if ( X < Interior.ValueData.Size.X - 1 )
-                            {
-                                if ( !Exterior.ValueData.Value[Y + 1, X + 1] )
-                                {
-                                    Flag = true;
+                                    flag = true;
                                 }
                             }
                         }
-                        ValueData.Value[Y, X] = !Flag;
+                        if ( x > 0 )
+                        {
+                            if ( !Exterior.ValueData.Value[y, x - 1] )
+                            {
+                                flag = true;
+                            }
+                        }
+                        if ( !Exterior.ValueData.Value[y, x] )
+                        {
+                            flag = true;
+                        }
+                        if ( x < Interior.ValueData.Size.X - 1 )
+                        {
+                            if ( !Exterior.ValueData.Value[y, x + 1] )
+                            {
+                                flag = true;
+                            }
+                        }
+                        if ( y < Interior.ValueData.Size.Y - 1 )
+                        {
+                            if ( x > 0 )
+                            {
+                                if ( !Exterior.ValueData.Value[y + 1, x - 1] )
+                                {
+                                    flag = true;
+                                }
+                            }
+                            if ( !Exterior.ValueData.Value[y + 1, x] )
+                            {
+                                flag = true;
+                            }
+                            if ( x < Interior.ValueData.Size.X - 1 )
+                            {
+                                if ( !Exterior.ValueData.Value[y + 1, x + 1] )
+                                {
+                                    flag = true;
+                                }
+                            }
+                        }
+                        ValueData.Value[y, x] = !flag;
                     }
                 }
             }

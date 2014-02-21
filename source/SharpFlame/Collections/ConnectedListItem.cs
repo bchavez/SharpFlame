@@ -5,10 +5,10 @@ namespace SharpFlame.Collections
         public abstract ItemType Item { get; }
         public abstract SourceType Source { get; }
         public abstract bool CanAdd();
-        public abstract void BeforeAdd(ConnectedList<ItemType, SourceType> NewList, int NewPosition);
+        public abstract void BeforeAdd(ConnectedList<ItemType, SourceType> newList, int newPosition);
         public abstract void BeforeRemove();
         public abstract void AfterRemove();
-        public abstract void AfterMove(int NewPosition);
+        public abstract void AfterMove(int newPosition);
         public abstract void Disconnect();
     }
 }

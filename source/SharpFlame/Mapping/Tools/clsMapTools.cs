@@ -457,7 +457,7 @@ namespace SharpFlame.Mapping
                     {
                         if ( Args.Layers[Layer_Num].AvoidLayers[A] )
                         {
-                            bmA.Expand_One_Tile(LayerResult[A]);
+                            bmA.ExpandOneTile(LayerResult[A]);
                             bmB.Remove(LayerResult[Layer_Num], bmA);
                             LayerResult[Layer_Num].ValueData = bmB.ValueData;
                             bmB.ValueData = new BooleanMapDataValue();
@@ -649,7 +649,7 @@ namespace SharpFlame.Mapping
                     {
                         if ( LayerList.Layers[LayerNum].AvoidLayers[A] )
                         {
-                            bmA.Expand_One_Tile(LayerResult[A]);
+                            bmA.ExpandOneTile(LayerResult[A]);
                             bmB.Remove(LayerResult[LayerNum], bmA);
                             LayerResult[LayerNum].ValueData = bmB.ValueData;
                             bmB.ValueData = new BooleanMapDataValue();
@@ -717,7 +717,7 @@ namespace SharpFlame.Mapping
                         }
                     }
 
-                    LayerResult[LayerNum].Remove_Diagonals();
+                    LayerResult[LayerNum].RemoveDiagonals();
 
                     for ( Y = 0; Y <= Terrain.TileSize.Y; Y++ )
                     {

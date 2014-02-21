@@ -4,7 +4,7 @@ namespace SharpFlame.Colors
 {
     public sealed class ColorUtil
     {
-        public static int OSRGB(int red, int green, int blue)
+        public static int OsRgb(int red, int green, int blue)
         {		
 #if !Mono
             Color c = Color.FromArgb(red, green, blue);

@@ -17,11 +17,11 @@ namespace SharpFlame.Collections
 
         public void PerformTool(SimpleListTool<ItemType> tool)
         {
-            var A = 0;
+            var a = 0;
 
-            for ( A = 0; A < Count; A++ )
+            for ( a = 0; a < Count; a++ )
             {
-                tool.SetItem(base[A]);
+                tool.SetItem(base[a]);
                 tool.ActionPerform();
             }
         }

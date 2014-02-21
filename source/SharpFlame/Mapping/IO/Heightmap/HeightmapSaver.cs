@@ -28,7 +28,7 @@ namespace SharpFlame.Mapping.IO.Heightmap
                 for ( var X = 0; X <= map.Terrain.TileSize.X; X++ )
                 {
                     heightmapBitmap.SetPixel(X, Y,
-                                             ColorTranslator.FromOle(ColorUtil.OSRGB(Convert.ToInt32(map.Terrain.Vertices[X, Y].Height), map.Terrain.Vertices[X, Y].Height,
+                                             ColorTranslator.FromOle(ColorUtil.OsRgb(Convert.ToInt32(map.Terrain.Vertices[X, Y].Height), map.Terrain.Vertices[X, Y].Height,
                                                             map.Terrain.Vertices[X, Y].Height)));
                 }
             }

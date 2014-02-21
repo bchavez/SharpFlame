@@ -8,33 +8,33 @@ namespace SharpFlame.Collections
 {
     public class ConnectedListLink<ItemType, SourceType> : ConnectedListItem<ItemType, SourceType> where ItemType : class where SourceType : class
     {
-        private ConnectedList<ItemType, SourceType> ConnectedList;
-        private ItemType Owner;
-        private int Position = -1;
+        private ConnectedList<ItemType, SourceType> connectedList;
+        private ItemType owner;
+        private int position = -1;
 
-        public ConnectedListLink(ItemType Owner)
+        public ConnectedListLink(ItemType owner)
         {
-            this.Owner = Owner;
+            this.owner = owner;
         }
 
         public ConnectedList<ItemType, SourceType> ParentList
         {
-            get { return ConnectedList; }
+            get { return connectedList; }
         }
 
         public int ArrayPosition
         {
-            get { return Position; }
+            get { return position; }
         }
 
         public bool IsConnected
         {
-            get { return Position >= 0; }
+            get { return position >= 0; }
         }
 
         public override ItemType Item
         {
-            get { return Owner; }
+            get { return owner; }
         }
 
         public override SourceType Source
@@ -43,21 +43,21 @@ namespace SharpFlame.Collections
             {
                 if ( IsConnected )
                 {
-                    return ConnectedList.Owner;
+                    return connectedList.Owner;
                 }
                 return null;
             }
         }
 
-        public override void AfterMove(int Position)
+        public override void AfterMove(int newPosition)
         {
-            this.Position = Position;
+            this.position = newPosition;
         }
 
         public override void BeforeRemove()
         {
-            ConnectedList = null;
-            Position = -1;
+            connectedList = null;
+            position = -1;
         }
 
         public void Connect(ConnectedList<ItemType, SourceType> List)
@@ -71,7 +71,7 @@ namespace SharpFlame.Collections
             List.Add(this);
         }
 
-        public void ConnectInsert(ConnectedList<ItemType, SourceType> List, int Position)
+        public void ConnectInsert(ConnectedList<ItemType, SourceType> list, int position)
         {
             if ( IsConnected )
             {
@@ -79,18 +79,18 @@ namespace SharpFlame.Collections
                 return;
             }
 
-            List.Insert(this, Position);
+            list.Insert(this, position);
         }
 
         public override void Disconnect()
         {
-            if ( ConnectedList == null )
+            if ( connectedList == null )
             {
                 Debugger.Break();
                 return;
             }
 
-            ConnectedList.Remove(ConnectedList.Count - 1);
+            connectedList.Remove(connectedList.Count - 1);
         }
 
         public void Deallocate()
@@ -99,7 +99,7 @@ namespace SharpFlame.Collections
             {
                 Disconnect();
             }
-            Owner = null;
+            owner = null;
         }
 
         public override void AfterRemove()
@@ -111,10 +111,10 @@ namespace SharpFlame.Collections
             return !IsConnected;
         }
 
-        public override void BeforeAdd(ConnectedList<ItemType, SourceType> NewList, int NewPosition)
+        public override void BeforeAdd(ConnectedList<ItemType, SourceType> newList, int newPosition)
         {
-            ConnectedList = NewList;
-            Position = NewPosition;
+            connectedList = newList;
+            position = newPosition;
         }
     }
 }
