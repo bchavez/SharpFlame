@@ -1400,12 +1400,12 @@ namespace SharpFlame.Mapping
             for ( var A = ThisUndo.UnitChanges.Count - 1; A >= 0; A-- ) //must do in reverse order, otherwise may try to delete units that havent been added yet
             {
                 Unit = ThisUndo.UnitChanges[A].Unit;
-                if ( ThisUndo.UnitChanges[A].Type == clsUnitChange.enumType.Added )
+                if ( ThisUndo.UnitChanges[A].Type == UnitChangeType.Added )
                 {
                     //remove the unit from the map
                     UnitRemove(Unit.MapLink.ArrayPosition);
                 }
-                else if ( ThisUndo.UnitChanges[A].Type == clsUnitChange.enumType.Deleted )
+                else if ( ThisUndo.UnitChanges[A].Type == UnitChangeType.Deleted )
                 {
                     //add the unit back on to the map
                     ID = Unit.ID;
@@ -1426,11 +1426,11 @@ namespace SharpFlame.Mapping
                 GatewayChange = ThisUndo.GatewayChanges[A];
                 switch ( GatewayChange.Type )
                 {
-                    case clsGatewayChange.enumType.Added:
+                    case GatewayChangeType.Added:
                         //remove the unit from the map
                         GatewayChange.Gateway.MapLink.Disconnect();
                         break;
-                    case clsGatewayChange.enumType.Deleted:
+                    case GatewayChangeType.Deleted:
                         //add the unit back on to the map
                         GatewayChange.Gateway.MapLink.Connect(Gateways);
                         break;
@@ -1481,7 +1481,7 @@ namespace SharpFlame.Mapping
             for ( var A = 0; A <= ThisUndo.UnitChanges.Count - 1; A++ ) //forward order is important
             {
                 Unit = ThisUndo.UnitChanges[A].Unit;
-                if ( ThisUndo.UnitChanges[A].Type == clsUnitChange.enumType.Added )
+                if ( ThisUndo.UnitChanges[A].Type == UnitChangeType.Added )
                 {
                     //add the unit back on to the map
                     ID = Unit.ID;
@@ -1490,7 +1490,7 @@ namespace SharpFlame.Mapping
                     UnitAdd.Perform();
                     App.ErrorIDChange(ID, Unit, "Redo_Perform");
                 }
-                else if ( ThisUndo.UnitChanges[A].Type == clsUnitChange.enumType.Deleted )
+                else if ( ThisUndo.UnitChanges[A].Type == UnitChangeType.Deleted )
                 {
                     //remove the unit from the map
                     UnitRemove(Unit.MapLink.ArrayPosition);
@@ -1507,11 +1507,11 @@ namespace SharpFlame.Mapping
                 GatewayChange = ThisUndo.GatewayChanges[A];
                 switch ( GatewayChange.Type )
                 {
-                    case clsGatewayChange.enumType.Added:
+                    case GatewayChangeType.Added:
                         //add the unit back on to the map
                         GatewayChange.Gateway.MapLink.Connect(Gateways);
                         break;
-                    case clsGatewayChange.enumType.Deleted:
+                    case GatewayChangeType.Deleted:
                         //remove the unit from the map
                         GatewayChange.Gateway.MapLink.Disconnect();
                         break;
@@ -1794,7 +1794,7 @@ namespace SharpFlame.Mapping
             Gateway = GatewayCreate(PosA, PosB);
 
             var GatewayChange = new clsGatewayChange();
-            GatewayChange.Type = clsGatewayChange.enumType.Added;
+            GatewayChange.Type = GatewayChangeType.Added;
             GatewayChange.Gateway = Gateway;
             GatewayChanges.Add(GatewayChange);
 
@@ -1804,7 +1804,7 @@ namespace SharpFlame.Mapping
         public void GatewayRemoveStoreChange(int Num)
         {
             var GatewayChange = new clsGatewayChange();
-            GatewayChange.Type = clsGatewayChange.enumType.Deleted;
+            GatewayChange.Type = GatewayChangeType.Deleted;
             GatewayChange.Gateway = Gateways[Num];
             GatewayChanges.Add(GatewayChange);
 
@@ -2178,17 +2178,17 @@ namespace SharpFlame.Mapping
             TerrainInterpretChanges.SidesV.Changed(new XYInt(Pos.X + 1, Pos.Y));
         }
 
-        public void TileTextureChangeTerrainAction(XYInt Pos, enumTextureTerrainAction Action)
+        public void TileTextureChangeTerrainAction(XYInt Pos, TextureTerrainAction Action)
         {
             switch ( Action )
             {
-                case enumTextureTerrainAction.Ignore:
+                case TextureTerrainAction.Ignore:
                     break;
 
-                case enumTextureTerrainAction.Reinterpret:
+                case TextureTerrainAction.Reinterpret:
                     TileNeedsInterpreting(Pos);
                     break;
-                case enumTextureTerrainAction.Remove:
+                case TextureTerrainAction.Remove:
                     Terrain.Vertices[Pos.X, Pos.Y].Terrain = null;
                     Terrain.Vertices[Pos.X + 1, Pos.Y].Terrain = null;
                     Terrain.Vertices[Pos.X, Pos.Y + 1].Terrain = null;

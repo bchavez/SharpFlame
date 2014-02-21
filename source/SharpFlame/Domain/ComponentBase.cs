@@ -1,6 +1,7 @@
 #region
 
 using SharpFlame.Collections;
+using SharpFlame.Domain.ObjData;
 
 #endregion
 
@@ -76,7 +77,7 @@ namespace SharpFlame.Domain
         public int HitPoints;
         public ConnectedListLink<Turret, clsObjectData> TurretObjectDataLink;
 
-        public enumTurretType TurretType = enumTurretType.Unknown;
+        public TurretType TurretType = TurretType.Unknown;
 
         public Turret()
         {
@@ -87,22 +88,22 @@ namespace SharpFlame.Domain
         {
             switch ( TurretType )
             {
-                case enumTurretType.Weapon:
+                case TurretType.Weapon:
                     Result = "Weapon";
                     return true;
-                case enumTurretType.Construct:
+                case TurretType.Construct:
                     Result = "Construct";
                     return true;
-                case enumTurretType.Repair:
+                case TurretType.Repair:
                     Result = "Repair";
                     return true;
-                case enumTurretType.Sensor:
+                case TurretType.Sensor:
                     Result = "Sensor";
                     return true;
-                case enumTurretType.Brain:
+                case TurretType.Brain:
                     Result = "Brain";
                     return true;
-                case enumTurretType.ECM:
+                case TurretType.ECM:
                     Result = "ECM";
                     return true;
                 default:
@@ -112,7 +113,7 @@ namespace SharpFlame.Domain
         }
     }
 
-    public enum enumTurretType
+    public enum TurretType
     {
         Unknown,
         Weapon,
@@ -132,7 +133,7 @@ namespace SharpFlame.Domain
             ObjectDataLink = new ConnectedListLink<Weapon, clsObjectData>(this);
 
 
-            TurretType = enumTurretType.Weapon;
+            TurretType = TurretType.Weapon;
         }
     }
 
@@ -145,7 +146,7 @@ namespace SharpFlame.Domain
             ObjectDataLink = new ConnectedListLink<Construct, clsObjectData>(this);
 
 
-            TurretType = enumTurretType.Construct;
+            TurretType = TurretType.Construct;
         }
     }
 
@@ -158,20 +159,13 @@ namespace SharpFlame.Domain
             ObjectDataLink = new ConnectedListLink<Repair, clsObjectData>(this);
 
 
-            TurretType = enumTurretType.Repair;
+            TurretType = TurretType.Repair;
         }
     }
 
     public class Sensor : Turret
     {
-        public enum enumLocation
-        {
-            Unspecified,
-            Turret,
-            Invisible
-        }
-
-        public enumLocation Location = enumLocation.Unspecified;
+        public SensorLocationType Location = SensorLocationType.Unspecified;
         public ConnectedListLink<Sensor, clsObjectData> ObjectDataLink;
 
         public Sensor()
@@ -179,8 +173,15 @@ namespace SharpFlame.Domain
             ObjectDataLink = new ConnectedListLink<Sensor, clsObjectData>(this);
 
 
-            TurretType = enumTurretType.Sensor;
+            TurretType = TurretType.Sensor;
         }
+    }
+
+    public enum SensorLocationType
+    {
+        Unspecified,
+        Turret,
+        Invisible
     }
 
     public class Brain : Turret
@@ -194,7 +195,7 @@ namespace SharpFlame.Domain
             ObjectDataLink = new ConnectedListLink<Brain, clsObjectData>(this);
 
 
-            TurretType = enumTurretType.Brain;
+            TurretType = TurretType.Brain;
         }
     }
 
@@ -207,7 +208,7 @@ namespace SharpFlame.Domain
             ObjectDataLink = new ConnectedListLink<Ecm, clsObjectData>(this);
 
 
-            TurretType = enumTurretType.ECM;
+            TurretType = TurretType.ECM;
         }
     }
 }

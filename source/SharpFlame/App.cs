@@ -14,6 +14,7 @@ using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
+using SharpFlame.Domain.ObjData;
 using SharpFlame.FileIO;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping;
@@ -54,12 +55,12 @@ namespace SharpFlame
 
         public static clsKeysActive IsViewKeyDown = new clsKeysActive();
 
-        public static clsBrush TextureBrush = new clsBrush(0.0D, clsBrush.enumShape.Circle);
-        public static clsBrush TerrainBrush = new clsBrush(2.0D, clsBrush.enumShape.Circle);
-        public static clsBrush HeightBrush = new clsBrush(2.0D, clsBrush.enumShape.Circle);
-        public static clsBrush CliffBrush = new clsBrush(2.0D, clsBrush.enumShape.Circle);
+        public static clsBrush TextureBrush = new clsBrush(0.0D, ShapeType.Circle);
+        public static clsBrush TerrainBrush = new clsBrush(2.0D, ShapeType.Circle);
+        public static clsBrush HeightBrush = new clsBrush(2.0D, ShapeType.Circle);
+        public static clsBrush CliffBrush = new clsBrush(2.0D, ShapeType.Circle);
 
-        public static clsBrush SmoothRadius = new clsBrush(1.0D, clsBrush.enumShape.Square);
+        public static clsBrush SmoothRadius = new clsBrush(1.0D, ShapeType.Square);
 
         public static bool DisplayTileOrientation;
 
@@ -123,7 +124,7 @@ namespace SharpFlame
         public static bool RTSOrbit = true;
 
         public static Matrix3DMath.Matrix3D SunAngleMatrix = new Matrix3DMath.Matrix3D();
-        public static clsBrush VisionSectors = new clsBrush(0.0D, clsBrush.enumShape.Circle);
+        public static clsBrush VisionSectors = new clsBrush(0.0D, ShapeType.Circle);
 
         public static sLayerList LayerList;
 
@@ -244,24 +245,24 @@ namespace SharpFlame
             warningsForm.Activate();
         }
 
-        public static enumTurretType GetTurretTypeFromName(string turretTypeName)
+        public static TurretType GetTurretTypeFromName(string turretTypeName)
         {
             switch ( turretTypeName.ToLower() )
             {
                 case "weapon":
-                    return enumTurretType.Weapon;
+                    return TurretType.Weapon;
                 case "construct":
-                    return enumTurretType.Construct;
+                    return TurretType.Construct;
                 case "repair":
-                    return enumTurretType.Repair;
+                    return TurretType.Repair;
                 case "sensor":
-                    return enumTurretType.Sensor;
+                    return TurretType.Sensor;
                 case "brain":
-                    return enumTurretType.Brain;
+                    return TurretType.Brain;
                 case "ecm":
-                    return enumTurretType.ECM;
+                    return TurretType.ECM;
                 default:
-                    return enumTurretType.Unknown;
+                    return TurretType.Unknown;
             }
         }
 

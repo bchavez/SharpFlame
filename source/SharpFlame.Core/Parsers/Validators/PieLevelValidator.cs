@@ -3,9 +3,9 @@ using SharpFlame.Core.Parsers.Pie;
 
 namespace SharpFlame.Core.Parsers.Validators
 {
-    public class LevelValidator : AbstractValidator<Level>
+    public class PieLevelValidator : AbstractValidator<Level>
     {
-        public LevelValidator()
+        public PieLevelValidator()
         {
             RuleFor(l => l.PointsCount)
                 .Equal(l => l.Points.Length);

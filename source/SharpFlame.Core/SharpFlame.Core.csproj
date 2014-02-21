@@ -65,7 +65,7 @@
     <Compile Include="Parsers\Pie\PolygonFlags.cs" />
     <Compile Include="Parsers\Pie\TexCoord.cs" />
     <Compile Include="Parsers\Pie\Texture.cs" />
-    <Compile Include="Parsers\Validators\LevelValidator.cs" />
+    <Compile Include="Parsers\Validators\PieLevelValidator.cs" />
     <Compile Include="Parsers\Numerics.cs" />
     <Compile Include="Parsers\Pie\PieGrammar.cs" />
     <Compile Include="Parsers\Validators\PieValidator.cs" />
@@ -88,6 +88,7 @@
     <Compile Include="Domain\XYZDouble.cs" />
     <Compile Include="Domain\WorldPos.cs" />
     <Compile Include="Parsers\Ini\IniWriter.cs" />
+    <Compile Include="Result.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -100,7 +101,9 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Parsers\Names\" />
+  </ItemGroup>
   <ItemGroup />
   <ItemGroup />
 </Project>

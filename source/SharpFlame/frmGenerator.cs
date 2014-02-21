@@ -405,7 +405,7 @@ namespace SharpFlame
                 Generator.Map.SetPainterToDefaults();
                 var CliffAngle = Math.Atan(255.0D * Generator.Map.HeightMultiplier / (2.0D * (Generator.LevelCount - 1.0D) * Constants.TerrainGridSpacing)) -
                                  MathUtil.RadOf1Deg;
-                var tmpBrush = new clsBrush((Math.Max(Generator.Map.Terrain.TileSize.X, Generator.Map.Terrain.TileSize.Y)) * 1.1D, clsBrush.enumShape.Square);
+                var tmpBrush = new clsBrush((Math.Max(Generator.Map.Terrain.TileSize.X, Generator.Map.Terrain.TileSize.Y)) * 1.1D, ShapeType.Square);
                 var ApplyCliff = new clsApplyCliff();
                 ApplyCliff.Map = Generator.Map;
                 ApplyCliff.Angle = CliffAngle;

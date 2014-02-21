@@ -53,7 +53,7 @@ namespace SharpFlame.Mapping.IO.Wz
             {
                 switch ( map.InterfaceOptions.CompileType )
                 {
-                    case clsInterfaceOptions.EnumCompileType.Multiplayer:
+                    case CompileType.Multiplayer:
                     if ( int.Parse(map.InterfaceOptions.CompileMultiPlayers) < 2 | 
                         int.Parse(map.InterfaceOptions.CompileMultiPlayers) > Constants.PlayerCountMax )
                     {
@@ -61,7 +61,7 @@ namespace SharpFlame.Mapping.IO.Wz
                         return returnResult;
                     }
                     break;
-                    case clsInterfaceOptions.EnumCompileType.Campaign:
+                    case CompileType.Campaign:
                     break;
                     default:
                     returnResult.ProblemAdd("Unknown compile method.");
@@ -77,7 +77,7 @@ namespace SharpFlame.Mapping.IO.Wz
                     }
                 }
 
-                if ( map.InterfaceOptions.CompileType == clsInterfaceOptions.EnumCompileType.Multiplayer )
+                if ( map.InterfaceOptions.CompileType == CompileType.Multiplayer )
                 {
                     if ( !overwrite )
                     {
@@ -101,7 +101,7 @@ namespace SharpFlame.Mapping.IO.Wz
 
                             // .xplayers.lev
                             var zipPath = string.Format("{0}c-{1}.xplayers.lev", map.InterfaceOptions.CompileMultiPlayers, map.InterfaceOptions.CompileName);
-                            if ( map.InterfaceOptions.CompileType == clsInterfaceOptions.EnumCompileType.Multiplayer )
+                            if ( map.InterfaceOptions.CompileType == CompileType.Multiplayer )
                             {
                                 zip.PutNextEntry(zipPath);
                                 returnResult.Add(Serialize_WZ_LEV(zip));
@@ -151,7 +151,7 @@ namespace SharpFlame.Mapping.IO.Wz
 
                     return returnResult;
                 }
-                if ( map.InterfaceOptions.CompileType == clsInterfaceOptions.EnumCompileType.Campaign )
+                if ( map.InterfaceOptions.CompileType == CompileType.Campaign )
                 {
                     var CampDirectory = PathUtil.EndWithPathSeperator(path);
 
@@ -478,7 +478,7 @@ namespace SharpFlame.Mapping.IO.Wz
                                 validDroid = false;
                                 invalidPartCount++;
                             }
-                            else if ( droid.Turret2.TurretType != enumTurretType.Weapon )
+                            else if ( droid.Turret2.TurretType != TurretType.Weapon )
                             {
                                 validDroid = false;
                                 invalidPartCount++;
@@ -491,7 +491,7 @@ namespace SharpFlame.Mapping.IO.Wz
                                 validDroid = false;
                                 invalidPartCount++;
                             }
-                            else if ( droid.Turret3.TurretType != enumTurretType.Weapon )
+                            else if ( droid.Turret3.TurretType != TurretType.Weapon )
                             {
                                 validDroid = false;
                                 invalidPartCount++;
@@ -534,7 +534,7 @@ namespace SharpFlame.Mapping.IO.Wz
                             }
                             else
                             {
-                                if ( droid.Turret1.TurretType == enumTurretType.Brain )
+                                if ( droid.Turret1.TurretType == TurretType.Brain )
                                 {
                                     if ( ((Brain)droid.Turret1).Weapon == null )
                                     {
@@ -547,7 +547,7 @@ namespace SharpFlame.Mapping.IO.Wz
                                 }
                                 else
                                 {
-                                    if ( droid.Turret1.TurretType == enumTurretType.Weapon )
+                                    if ( droid.Turret1.TurretType == TurretType.Weapon )
                                     {
                                         text = droid.TurretCount.ToStringInvariant();
                                     }
@@ -567,17 +567,17 @@ namespace SharpFlame.Mapping.IO.Wz
                             ini.AddProperty("parts\\ecm", droid.GetECMCode());
                             if ( droid.TurretCount >= 1 )
                             {
-                                if ( droid.Turret1.TurretType == enumTurretType.Weapon )
+                                if ( droid.Turret1.TurretType == TurretType.Weapon )
                                 {
                                     ini.AddProperty("parts\\weapon\\1", droid.Turret1.Code);
                                     if ( droid.TurretCount >= 2 )
                                     {
-                                        if ( droid.Turret2.TurretType == enumTurretType.Weapon )
+                                        if ( droid.Turret2.TurretType == TurretType.Weapon )
                                         {
                                             ini.AddProperty("parts\\weapon\\2", droid.Turret2.Code);
                                             if ( droid.TurretCount >= 3 )
                                             {
-                                                if ( droid.Turret3.TurretType == enumTurretType.Weapon )
+                                                if ( droid.Turret3.TurretType == TurretType.Weapon )
                                                 {
                                                     ini.AddProperty("parts\\weapon\\3", droid.Turret3.Code);
                                                 }
@@ -585,7 +585,7 @@ namespace SharpFlame.Mapping.IO.Wz
                                         }
                                     }
                                 }
-                                else if ( droid.Turret1.TurretType == enumTurretType.Brain )
+                                else if ( droid.Turret1.TurretType == TurretType.Brain )
                                 {
                                     brain = (Brain)droid.Turret1;
                                     if ( brain.Weapon == null )
@@ -690,7 +690,7 @@ namespace SharpFlame.Mapping.IO.Wz
             return returnResult;
         }
 
-        private Result Serialize_WZ_Gam(Stream stream, UInt32 gamType, clsInterfaceOptions.EnumCompileType compileType, XYInt scrollMin, sXY_uint scrollMax)
+        private Result Serialize_WZ_Gam(Stream stream, UInt32 gamType, CompileType compileType, XYInt scrollMin, sXY_uint scrollMax)
         {
             var returnResult = new Result("Serializing .gam", false);
             logger.Info("Serializing .gam");
@@ -700,11 +700,11 @@ namespace SharpFlame.Mapping.IO.Wz
             IOUtil.WriteText(fileGAM, false, "game");
             fileGAM.Write(8U);
             fileGAM.Write(0U); //Time
-            if ( compileType == clsInterfaceOptions.EnumCompileType.Multiplayer )
+            if ( compileType == CompileType.Multiplayer )
             {
                 fileGAM.Write(0U);
             }
-            else if ( compileType == clsInterfaceOptions.EnumCompileType.Campaign )
+            else if ( compileType == CompileType.Campaign )
             {
                 fileGAM.Write(gamType);
             }

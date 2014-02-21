@@ -7,6 +7,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Extensions;
+using SharpFlame.Domain.ObjData;
 
 #endregion
 

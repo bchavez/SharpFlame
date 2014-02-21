@@ -12,71 +12,65 @@ namespace SharpFlame
 {
     public class clsBrush
     {
-        public enum enumShape
-        {
-            Circle,
-            Square
-        }
-
         public sBrushTiles Tiles;
 
-        private bool _Alignment;
-        private double _Radius;
-        private enumShape _Shape = enumShape.Circle;
+        private bool alignment;
+        private double radius;
+        private ShapeType shape = ShapeType.Circle;
 
-        public clsBrush(double InitialRadius, enumShape InitialShape)
+        public clsBrush(double initialRadius, ShapeType initialShape)
         {
-            _Radius = InitialRadius;
-            _Shape = InitialShape;
+            radius = initialRadius;
+            shape = initialShape;
             CreateTiles();
         }
 
         public bool Alignment
         {
-            get { return _Alignment; }
+            get { return alignment; }
         }
 
         public double Radius
         {
-            get { return _Radius; }
+            get { return radius; }
             set
             {
-                if ( _Radius == value )
+                if ( radius == value )
                 {
                     return;
                 }
-                _Radius = value;
+                radius = value;
                 CreateTiles();
             }
         }
 
-        public enumShape Shape
+        public ShapeType Shape
         {
-            get { return _Shape; }
+            get { return shape; }
             set
             {
-                if ( _Shape == value )
+                if ( shape == value )
                 {
                     return;
                 }
-                _Shape = value;
+                shape = value;
                 CreateTiles();
             }
         }
 
         private void CreateTiles()
         {
-            var AlignmentOffset = _Radius - (int)_Radius;
-            double RadiusB = (int)(_Radius + 0.25D);
+            var AlignmentOffset = radius - (int)radius;
+            double RadiusB = (int)(radius + 0.25D);
 
-            _Alignment = AlignmentOffset >= 0.25D & AlignmentOffset < 0.75D;
-            switch ( _Shape )
+            alignment = AlignmentOffset >= 0.25D & AlignmentOffset < 0.75D;
+            switch ( shape )
             {
-                case enumShape.Circle:
-                    Tiles.CreateCircle(RadiusB, 1.0D, _Alignment);
+                case ShapeType.Circle:
+                    Tiles.CreateCircle(RadiusB, 1.0D, alignment);
                     break;
-                case enumShape.Square:
-                    Tiles.CreateSquare(RadiusB, 1.0D, _Alignment);
+                case ShapeType.Square:
+                    Tiles.CreateSquare(RadiusB, 1.0D, alignment);
                     break;
             }
         }
@@ -98,7 +92,7 @@ namespace SharpFlame
 
         public XYInt GetPosNum(sPosNum PosNum)
         {
-            if ( _Alignment )
+            if ( alignment )
             {
                 return PosNum.Alignment;
             }
@@ -136,10 +130,10 @@ namespace SharpFlame
                     {
                         if ( Tiles.ResultRadius > 0.0D )
                         {
-                            switch ( _Shape )
+                            switch ( shape )
                             {
-                                case enumShape.Circle:
-                                    if ( _Alignment )
+                                case ShapeType.Circle:
+                                    if ( alignment )
                                     {
                                         Action.Effect =
                                             Convert.ToDouble(1.0D -
@@ -152,8 +146,8 @@ namespace SharpFlame
                                         Action.Effect = Convert.ToDouble(1.0D - (Centre - Action.PosNum).ToDoubles().GetMagnitude() / (Tiles.ResultRadius + 0.5D));
                                     }
                                     break;
-                                case enumShape.Square:
-                                    if ( _Alignment )
+                                case ShapeType.Square:
+                                    if ( alignment )
                                     {
                                         Action.Effect = 1.0D -
                                                         Math.Max(Math.Abs(Action.PosNum.X - (Centre.X - 0.5D)), Math.Abs(Action.PosNum.Y - (Centre.Y - 0.5D))) /
@@ -179,6 +173,12 @@ namespace SharpFlame
             public XYInt Alignment;
             public XYInt Normal;
         }
+    }
+
+    public enum ShapeType
+    {
+        Circle,
+        Square
     }
 
     public struct sBrushTiles

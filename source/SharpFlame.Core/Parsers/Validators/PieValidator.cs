@@ -10,7 +10,7 @@ namespace SharpFlame.Core.Parsers.Validators
                 .Equal(p => p.Levels.Length);
 
             RuleFor(p => p.Levels)
-                .SetCollectionValidator(new LevelValidator());
+                .SetCollectionValidator(new PieLevelValidator());
         }
     }
 }

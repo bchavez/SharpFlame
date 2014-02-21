@@ -4,6 +4,7 @@ using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
 using SharpFlame.Core.Domain;
+using SharpFlame.Domain.ObjData;
 using SharpFlame.Maths;
 using SharpFlame.Util;
 
@@ -275,15 +276,9 @@ namespace SharpFlame.Domain
 
     public class FeatureTypeBase : UnitTypeBase
     {
-        public enum enumFeatureType
-        {
-            Unknown,
-            OilResource
-        }
-
         public clsAttachment BaseAttachment;
         public string Code = "";
-        public enumFeatureType FeatureType = enumFeatureType.Unknown;
+        public FeatureType FeatureType = FeatureType.Unknown;
         public ConnectedListLink<FeatureTypeBase, clsObjectData> FeatureType_ObjectDataLink;
         public XYInt Footprint;
         public string Name = "Unknown";
@@ -309,6 +304,12 @@ namespace SharpFlame.Domain
         {
             return Name;
         }
+    }
+
+    public enum FeatureType
+    {
+        Unknown,
+        OilResource
     }
 
     public class StructureTypeBase : UnitTypeBase
@@ -485,7 +486,7 @@ namespace SharpFlame.Domain
             {
                 return result;
             }
-            if ( Turret2.TurretType != enumTurretType.Weapon )
+            if ( Turret2.TurretType != TurretType.Weapon )
             {
                 return result;
             }
@@ -494,7 +495,7 @@ namespace SharpFlame.Domain
             {
                 return result;
             }
-            if ( Turret3.TurretType != enumTurretType.Weapon )
+            if ( Turret3.TurretType != TurretType.Weapon )
             {
                 return result;
             }
@@ -551,7 +552,7 @@ namespace SharpFlame.Domain
                 var UseWeapon = default(bool);
                 if ( Turret1 != null )
                 {
-                    if ( Turret1.TurretType == enumTurretType.Brain )
+                    if ( Turret1.TurretType == TurretType.Brain )
                     {
                         UseWeapon = false;
                     }
@@ -583,7 +584,7 @@ namespace SharpFlame.Domain
             }
             if ( Args.Sensor != null )
             {
-                if ( Args.Sensor.Location == Sensor.enumLocation.Turret )
+                if ( Args.Sensor.Location == SensorLocationType.Turret )
                 {
                     if ( Turret1 != null )
                     {
@@ -695,27 +696,27 @@ namespace SharpFlame.Domain
             {
                 Result = DroidType.Default;
             }
-            else if ( Turret1.TurretType == enumTurretType.Brain )
+            else if ( Turret1.TurretType == TurretType.Brain )
             {
                 Result = DroidType.Command;
             }
-            else if ( Turret1.TurretType == enumTurretType.Sensor )
+            else if ( Turret1.TurretType == TurretType.Sensor )
             {
                 Result = DroidType.Sensor;
             }
-            else if ( Turret1.TurretType == enumTurretType.ECM )
+            else if ( Turret1.TurretType == TurretType.ECM )
             {
                 Result = DroidType.ECM;
             }
-            else if ( Turret1.TurretType == enumTurretType.Construct )
+            else if ( Turret1.TurretType == TurretType.Construct )
             {
                 Result = DroidType.Construct;
             }
-            else if ( Turret1.TurretType == enumTurretType.Repair )
+            else if ( Turret1.TurretType == TurretType.Repair )
             {
                 Result = DroidType.Repair;
             }
-            else if ( Turret1.TurretType == enumTurretType.Weapon )
+            else if ( Turret1.TurretType == TurretType.Weapon )
             {
                 Result = DroidType.Weapon;
             }
@@ -786,7 +787,7 @@ namespace SharpFlame.Domain
                 {
                     NotThis = true;
                 }
-                else if ( Turret1.TurretType != enumTurretType.Construct )
+                else if ( Turret1.TurretType != TurretType.Construct )
                 {
                     NotThis = true;
                 }
@@ -817,7 +818,7 @@ namespace SharpFlame.Domain
                 {
                     NotThis = true;
                 }
-                else if ( Turret1.TurretType != enumTurretType.Repair )
+                else if ( Turret1.TurretType != TurretType.Repair )
                 {
                     NotThis = true;
                 }
@@ -848,7 +849,7 @@ namespace SharpFlame.Domain
                 {
                     NotThis = true;
                 }
-                else if ( Turret1.TurretType != enumTurretType.Sensor )
+                else if ( Turret1.TurretType != TurretType.Sensor )
                 {
                     NotThis = true;
                 }
@@ -879,7 +880,7 @@ namespace SharpFlame.Domain
                 {
                     NotThis = true;
                 }
-                else if ( Turret1.TurretType != enumTurretType.Brain )
+                else if ( Turret1.TurretType != TurretType.Brain )
                 {
                     NotThis = true;
                 }
@@ -910,7 +911,7 @@ namespace SharpFlame.Domain
                 {
                     NotThis = true;
                 }
-                else if ( Turret1.TurretType != enumTurretType.ECM )
+                else if ( Turret1.TurretType != TurretType.ECM )
                 {
                     NotThis = true;
                 }

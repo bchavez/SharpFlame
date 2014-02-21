@@ -19,14 +19,7 @@ namespace SharpFlame.Mapping
         public sXY_uint ScrollMax;
         public XYInt ScrollMin;
 
-        public enum EnumCompileType
-        {
-            Unspecified,
-            Multiplayer,
-            Campaign
-        }
-
-        public EnumCompileType CompileType;
+        public CompileType CompileType;
 
         public clsInterfaceOptions()
         {
@@ -40,7 +33,14 @@ namespace SharpFlame.Mapping
             ScrollMax.X = 0U;
             ScrollMax.Y = 0U;
             CampaignGameType = -1;
-            CompileType = EnumCompileType.Unspecified;
+            CompileType = CompileType.Unspecified;
         }
+    }
+
+    public enum CompileType
+    {
+        Unspecified,
+        Multiplayer,
+        Campaign
     }
 }

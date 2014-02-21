@@ -156,7 +156,7 @@ namespace SharpFlame
 
         public void ViewAngleSetRotate(Matrix3DMath.Matrix3D newMatrix)
         {
-            var flag = default(bool);
+            var flag = false;
             XYZDouble xyzDbl = default(XYZDouble);
             XYDouble xyDbl = default(XYDouble);
 

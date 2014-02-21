@@ -8,13 +8,13 @@ namespace SharpFlame.Mapping
 {
     public class clsUnitChange
     {
-        public enum enumType
-        {
-            Added,
-            Deleted
-        }
-
-        public enumType Type;
+        public UnitChangeType Type;
         public clsUnit Unit;
+    }
+
+    public enum UnitChangeType
+    {
+        Added,
+        Deleted
     }
 }

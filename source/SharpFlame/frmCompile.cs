@@ -202,7 +202,7 @@ namespace SharpFlame
             Map.InterfaceOptions.CompileMultiAuthor = txtAuthor.Text;
             Map.InterfaceOptions.CompileMultiPlayers = PlayerCount.ToString();
             Map.InterfaceOptions.CompileMultiLicense = License;
-            Map.InterfaceOptions.CompileType = clsInterfaceOptions.EnumCompileType.Multiplayer;
+            Map.InterfaceOptions.CompileType = CompileType.Multiplayer;
             var wzFormat = new WzSaver(Map);
             ReturnResult.Add(wzFormat.Save(CompileMultiDialog.FileName, true, true));
             App.ShowWarnings(ReturnResult);
@@ -370,7 +370,7 @@ namespace SharpFlame
                         {
                             if ( StructureTypeType == StructureType.ResourceExtractor )
                             {
-                                if ( tileFeatureTypeBase[CentrePos.X, CentrePos.Y].FeatureType == FeatureTypeBase.enumFeatureType.OilResource )
+                                if ( tileFeatureTypeBase[CentrePos.X, CentrePos.Y].FeatureType == FeatureType.OilResource )
                                 {
                                     IsValid = true;
                                 }
@@ -439,7 +439,7 @@ namespace SharpFlame
                         DroidType = (DroidDesign)Unit.TypeBase;
                         if ( DroidType.Body != null && DroidType.Propulsion != null && DroidType.Turret1 != null && DroidType.TurretCount == 1 )
                         {
-                            if ( DroidType.Turret1.TurretType == enumTurretType.Construct )
+                            if ( DroidType.Turret1.TurretType == TurretType.Construct )
                             {
                                 PlayerMasterTruckCount[Unit.UnitGroup.WZ_StartPos]++;
                                 if ( DroidType.IsTemplate )
@@ -633,7 +633,7 @@ namespace SharpFlame
             }
             SetScrollLimits(ref Map.InterfaceOptions.ScrollMin, ref Map.InterfaceOptions.ScrollMax);           
             Map.InterfaceOptions.CompileName = MapName;
-            Map.InterfaceOptions.CompileType = clsInterfaceOptions.EnumCompileType.Campaign;
+            Map.InterfaceOptions.CompileType = CompileType.Campaign;
             Map.InterfaceOptions.CampaignGameType = TypeNum;
 
             var wzFormat = new WzSaver(Map);
