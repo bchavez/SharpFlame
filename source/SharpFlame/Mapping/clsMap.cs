@@ -10,6 +10,7 @@ using SharpFlame.AppSettings;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Domain;
 using SharpFlame.Mapping.Changes;
 using SharpFlame.Mapping.IO.FMap;
@@ -834,7 +835,7 @@ namespace SharpFlame.Mapping
             var sngTexture = new float[Texture.Size.Y, Texture.Size.X, 3];
             float Alpha = 0;
             float AntiAlpha = 0;
-            var RGB_sng = new sRGB_sng();
+            var RGB_sng = new SRgb();
 
             if ( Program.frmMainInstance.menuMiniShowTex.Checked )
             {
@@ -1037,7 +1038,7 @@ namespace SharpFlame.Mapping
             {
                 for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
                 {
-                    Texture.set_Pixels(X, Y, new sRGBA_sng(
+                    Texture.set_Pixels(X, Y, new SRgba(
                         sngTexture[Y, X, 0],
                         sngTexture[Y, X, 1],
                         sngTexture[Y, X, 2],

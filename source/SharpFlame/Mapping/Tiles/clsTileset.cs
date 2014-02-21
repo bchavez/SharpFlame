@@ -8,6 +8,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.AppSettings;
 using SharpFlame.Bitmaps;
 using SharpFlame.Colors;
+using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Core.Extensions;
 using SharpFlame.FileIO;
 using SharpFlame.Util;
@@ -19,13 +20,13 @@ namespace SharpFlame.Mapping.Tiles
     public class clsTileset
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-        public sRGB_sng BGColour = new sRGB_sng(0.5F, 0.5F, 0.5F);
+        public SRgb BGColour = new SRgb(0.5F, 0.5F, 0.5F);
 
         public bool IsOriginal { get; set; }
 
         public struct Tile
         {
-            public sRGB_sng AverageColour;
+            public SRgb AverageColour;
             public byte DefaultType;
             public int GlTextureNum;
         }

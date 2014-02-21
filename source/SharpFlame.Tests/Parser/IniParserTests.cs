@@ -5,6 +5,7 @@ using System.IO;
 using FluentAssertions;
 using NUnit.Framework;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Core.Parsers;
 using SharpFlame.Core.Parsers.Ini;
 using Sprache;
@@ -50,11 +51,11 @@ namespace SharpFlame.Tests.Parser
                         Convert.ToInt32 (d.Data).Should ().Be (20);
                         break;
                     case "MinimapCliffColour":
-                        var color = RGBA.FromString (d.Data);
-                        color.R.Should ().Be (1D);
-                        color.G.Should ().Be (0.25D);
-                        color.B.Should ().Be (0.25D);
-                        color.A.Should ().Be (0.5D);
+                        var color = Rgba.FromString (d.Data);
+                        color.Red.Should ().Be (1F);
+                        color.Green.Should ().Be (0.25F);
+                        color.Blue.Should ().Be (0.25F);
+                        color.Alpha.Should ().Be (0.5F);
                         break;
                     case "FOVDefault":
                         Convert.ToDouble (d.Data, CultureInfo.InvariantCulture).Should ().Be (0.000666666666666667D);

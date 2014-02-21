@@ -10,6 +10,7 @@ using SharpFlame.AppSettings;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
@@ -29,7 +30,7 @@ namespace SharpFlame
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public static sRGB_sng MinimapFeatureColour;
+        public static SRgb MinimapFeatureColour;
 
         public static char PlatformPathSeparator;
 
@@ -348,21 +349,21 @@ namespace SharpFlame
                     tileset.Name = "Arizona";
                     Tileset_Arizona = tileset;
                     tileset.IsOriginal = true;
-                    tileset.BGColour = new sRGB_sng(204.0f / 255.0f, 149.0f / 255.0f, 70.0f / 255.0f);
+                    tileset.BGColour = new SRgb(204.0f / 255.0f, 149.0f / 255.0f, 70.0f / 255.0f);
                 }
                 else if ( tileset.Name == "tertilesc2hw" )
                 {
                     tileset.Name = "Urban";
                     Tileset_Urban = tileset;
                     tileset.IsOriginal = true;
-                    tileset.BGColour = new sRGB_sng(118.0f / 255.0f, 165.0f / 255.0f, 203.0f / 255.0f);
+                    tileset.BGColour = new SRgb(118.0f / 255.0f, 165.0f / 255.0f, 203.0f / 255.0f);
                 }
                 else if ( tileset.Name == "tertilesc3hw" )
                 {
                     tileset.Name = "Rocky Mountains";
                     Tileset_Rockies = tileset;
                     tileset.IsOriginal = true;
-                    tileset.BGColour = new sRGB_sng(182.0f / 255.0f, 225.0f / 255.0f, 236.0f / 255.0f);
+                    tileset.BGColour = new SRgb(182.0f / 255.0f, 225.0f / 255.0f, 236.0f / 255.0f);
                 }
             }
 

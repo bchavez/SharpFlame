@@ -4,6 +4,7 @@ using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Domain.Colors;
 
 #endregion
 
@@ -15,7 +16,7 @@ namespace SharpFlame.Mapping.Drawing
 
         private readonly XYZInt vertex0;
         private readonly XYZInt vertex1;
-        public sRGBA_sng Colour;
+        public SRgba Colour;
         public XYInt FinishXY;
         public clsMap Map;
         public XYInt StartXY;

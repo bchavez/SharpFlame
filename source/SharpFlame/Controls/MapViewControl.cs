@@ -10,6 +10,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.AppSettings;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Domain;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping;
@@ -265,7 +266,7 @@ namespace SharpFlame.Controls
             }
 
             var map = MainMap;
-            var bgColour = new sRGB_sng();
+            var bgColour = new SRgb();
 
             if ( map == null )
             {

@@ -9,6 +9,7 @@ using NLog;
 using OpenTK;
 using SharpFlame.Colors;
 using Newtonsoft.Json;
+using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Core.Extensions;
 
 #endregion
@@ -39,8 +40,8 @@ namespace SharpFlame.AppSettings
         public static OptionMinimapSize Setting_MinimapSize;
         public static Option<bool> Setting_MinimapTeamColours;
         public static Option<bool> Setting_MinimapTeamColoursExceptFeatures;
-        public static Option<clsRGBA_sng> Setting_MinimapCliffColour;
-        public static Option<clsRGBA_sng> Setting_MinimapSelectedObjectsColour;
+        public static Option<Rgba> Setting_MinimapCliffColour;
+        public static Option<Rgba> Setting_MinimapSelectedObjectsColour;
 
         public static OptionFovDefault Setting_FOVDefault;
         public static Option<bool> Setting_Mipmaps;
@@ -90,8 +91,8 @@ namespace SharpFlame.AppSettings
             Setting_MinimapSize = (OptionMinimapSize)(CreateSetting(new OptionCreatorMinimapSize(), "MinimapSize", 160));
             Setting_MinimapTeamColours = CreateSetting("MinimapTeamColours", true);
             Setting_MinimapTeamColoursExceptFeatures = CreateSetting("MinimapTeamColoursExceptFeatures", true);
-            Setting_MinimapCliffColour = CreateSetting("MinimapCliffColour", new clsRGBA_sng(1.0F, 0.25F, 0.25F, 0.5F));
-            Setting_MinimapSelectedObjectsColour = CreateSetting("MinimapSelectedObjectsColour", new clsRGBA_sng(1.0F, 1.0F, 1.0F, 0.75F));
+            Setting_MinimapCliffColour = CreateSetting("MinimapCliffColour", new Rgba(1.0F, 0.25F, 0.25F, 0.5F));
+            Setting_MinimapSelectedObjectsColour = CreateSetting("MinimapSelectedObjectsColour", new Rgba(1.0F, 1.0F, 1.0F, 0.75F));
             Setting_FOVDefault = (OptionFovDefault)(CreateSetting(new OptionCreatorFovDefault(), "FOVDefault", 30.0D / (50.0D * 900.0D)));
             //screenVerticalSize/(screenDist*screenVerticalPixels)
             Setting_Mipmaps = CreateSetting("Mipmaps", false);
@@ -298,16 +299,16 @@ namespace SharpFlame.AppSettings
             set { SetChanges (SettingsManager.Setting_MinimapTeamColoursExceptFeatures, new Change<bool>(value)); }
         }
 
-        public clsRGBA_sng MinimapCliffColour
+        public Rgba MinimapCliffColour
         {
-            get { return ((clsRGBA_sng)(GetValue(SettingsManager.Setting_MinimapCliffColour))); }
-            set { SetChanges (SettingsManager.Setting_MinimapCliffColour, new Change<clsRGBA_sng>(value)); }
+            get { return ((Rgba)(GetValue(SettingsManager.Setting_MinimapCliffColour))); }
+            set { SetChanges (SettingsManager.Setting_MinimapCliffColour, new Change<Rgba>(value)); }
         }
 
-        public clsRGBA_sng MinimapSelectedObjectsColour
+        public Rgba MinimapSelectedObjectsColour
         {
-            get { return ((clsRGBA_sng)(GetValue(SettingsManager.Setting_MinimapSelectedObjectsColour))); }
-            set { SetChanges (SettingsManager.Setting_MinimapSelectedObjectsColour, new Change<clsRGBA_sng>(value)); }
+            get { return ((Rgba)(GetValue(SettingsManager.Setting_MinimapSelectedObjectsColour))); }
+            set { SetChanges (SettingsManager.Setting_MinimapSelectedObjectsColour, new Change<Rgba>(value)); }
         }
 
         public double FOVDefault

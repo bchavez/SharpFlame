@@ -4,6 +4,7 @@ using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Mapping.Tools;
 
 #endregion
@@ -16,7 +17,7 @@ namespace SharpFlame.Mapping.Drawing
         private readonly XYZInt vertex1;
         private readonly XYZInt vertex2;
         private readonly XYZInt vertex3;
-        public sRGBA_sng Colour;
+        public SRgba Colour;
 
         public clsDrawTileOutline()
         {

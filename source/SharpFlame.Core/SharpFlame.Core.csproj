@@ -48,6 +48,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\Colors\SRgb.cs" />
+    <Compile Include="Domain\Colors\Rgb.cs" />
+    <Compile Include="Domain\Colors\Rgba.cs" />
+    <Compile Include="Domain\Colors\SRgba.cs" />
     <Compile Include="Extensions\ExtensionsForEnum.cs" />
     <Compile Include="Extensions\ExtensionsForString.cs" />
     <Compile Include="Parsers\Lev2\Lev2Grammar.cs" />
@@ -76,7 +80,6 @@
     <Compile Include="Parsers\Ini\Section.cs" />
     <Compile Include="Parsers\General.cs" />
     <Compile Include="Parsers\Ini\IniReader.cs" />
-    <Compile Include="Domain\RGBA.cs" />
     <Compile Include="Domain\Rotation.cs" />
     <Compile Include="Domain\XYZInt.cs" />
     <Compile Include="Domain\XYInt.cs" />

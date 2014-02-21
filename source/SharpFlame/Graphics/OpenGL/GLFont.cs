@@ -7,6 +7,7 @@ using System.Drawing.Imaging;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Domain.Colors;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 #endregion
@@ -149,7 +150,7 @@ namespace SharpFlame.Graphics.OpenGL
 
     public class clsTextLabel
     {
-        public sRGBA_sng Colour;
+        public SRgba Colour;
         public XYInt Pos;
         public float SizeY;
         public string Text;

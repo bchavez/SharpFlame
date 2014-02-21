@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
+using SharpFlame.Core.Domain.Colors;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.Objects;
 
@@ -115,20 +116,20 @@ namespace SharpFlame.Mapping
             ScavengerUnitGroup.WZ_StartPos = -1;
         }
 
-        public sRGB_sng GetUnitGroupColour(clsUnitGroup ColourUnitGroup)
+        public SRgb GetUnitGroupColour(clsUnitGroup ColourUnitGroup)
         {
             if ( ColourUnitGroup.WZ_StartPos < 0 )
             {
-                return new sRGB_sng(1.0F, 1.0F, 1.0F);
+                return new SRgb(1.0F, 1.0F, 1.0F);
             }
             return App.PlayerColour[ColourUnitGroup.WZ_StartPos].Colour;
         }
 
-        public sRGB_sng GetUnitGroupMinimapColour(clsUnitGroup ColourUnitGroup)
+        public SRgb GetUnitGroupMinimapColour(clsUnitGroup ColourUnitGroup)
         {
             if ( ColourUnitGroup.WZ_StartPos < 0 )
             {
-                return new sRGB_sng(1.0F, 1.0F, 1.0F);
+                return new SRgb(1.0F, 1.0F, 1.0F);
             }
             return App.PlayerColour[ColourUnitGroup.WZ_StartPos].MinimapColour;
         }

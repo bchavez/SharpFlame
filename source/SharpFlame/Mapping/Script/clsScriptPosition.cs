@@ -5,6 +5,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.Drawing;
@@ -85,12 +86,12 @@ namespace SharpFlame.Mapping.Script
             if ( Program.frmMainInstance.SelectedScriptMarker == this )
             {
                 GL.LineWidth(4.5F);
-                Drawer.Colour = new sRGBA_sng(1.0F, 1.0F, 0.5F, 1.0F);
+                Drawer.Colour = new SRgba(1.0F, 1.0F, 0.5F, 1.0F);
             }
             else
             {
                 GL.LineWidth(3.0F);
-                Drawer.Colour = new sRGBA_sng(1.0F, 1.0F, 0.0F, 0.75F);
+                Drawer.Colour = new SRgba(1.0F, 1.0F, 0.0F, 0.75F);
             }
             Drawer.ActionPerform();
         }

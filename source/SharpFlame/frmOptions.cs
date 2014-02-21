@@ -8,6 +8,7 @@ using SharpFlame.AppSettings;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.Controls;
+using SharpFlame.Core.Domain.Colors;
 using SharpFlame.FileIO;
 using SharpFlame.Maths;
 
@@ -18,8 +19,8 @@ namespace SharpFlame
     public partial class frmOptions
     {
         private readonly KeyboardProfile ChangedKeyControls;
-        private readonly clsRGBA_sng MinimapCliffColour;
-        private readonly clsRGBA_sng MinimapSelectedObjectColour;
+        private readonly Rgba MinimapCliffColour;
+        private readonly Rgba MinimapSelectedObjectColour;
         private readonly PathSetControl objectDataPathSetControl = new PathSetControl("Object Data Directories");
         private readonly PathSetControl tilesetsPathSetControl = new PathSetControl("Tilesets Directories");
         private bool AllowClose;
@@ -52,11 +53,11 @@ namespace SharpFlame
             UpdateDisplayFontLabel();
             txtFOV.Text = SettingsManager.Settings.FOVDefault.ToStringInvariant();
 
-            MinimapCliffColour = new clsRGBA_sng(SettingsManager.Settings.MinimapCliffColour);
+            MinimapCliffColour = new Rgba(SettingsManager.Settings.MinimapCliffColour);
             clrMinimapCliffs = new ColourControl(MinimapCliffColour);
             pnlMinimapCliffColour.Controls.Add(clrMinimapCliffs);
 
-            MinimapSelectedObjectColour = new clsRGBA_sng(SettingsManager.Settings.MinimapSelectedObjectsColour);
+            MinimapSelectedObjectColour = new Rgba(SettingsManager.Settings.MinimapSelectedObjectsColour);
             clrMinimapSelectedObjects = new ColourControl(MinimapSelectedObjectColour);
             pnlMinimapSelectedObjectColour.Controls.Add(clrMinimapSelectedObjects);
 
@@ -105,8 +106,8 @@ namespace SharpFlame
             {
                 NewSettings.SetChanges(SettingsManager.Setting_FOVDefault, new Change<double>(dblTemp));
             }
-            NewSettings.SetChanges(SettingsManager.Setting_MinimapCliffColour, new Change<clsRGBA_sng>(MinimapCliffColour));
-            NewSettings.SetChanges(SettingsManager.Setting_MinimapSelectedObjectsColour, new Change<clsRGBA_sng>(MinimapSelectedObjectColour));
+            NewSettings.SetChanges(SettingsManager.Setting_MinimapCliffColour, new Change<Rgba>(MinimapCliffColour));
+            NewSettings.SetChanges(SettingsManager.Setting_MinimapSelectedObjectsColour, new Change<Rgba>(MinimapSelectedObjectColour));
             if ( IOUtil.InvariantParse(txtMinimapSize.Text, ref intTemp) )
             {
                 NewSettings.SetChanges(SettingsManager.Setting_MinimapSize, new Change<int>(intTemp));

@@ -4,6 +4,7 @@ using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 
@@ -13,8 +14,8 @@ namespace SharpFlame.Mapping.Drawing
 {
     public class clsDrawVertexTerrain : clsAction
     {
-        private sRGB_sng RGB_sng;
-        private sRGB_sng RGB_sng2;
+        private SRgb _rgb;
+        private SRgb RGB_sng2;
         private XYZDouble Vertex0;
         private XYZDouble Vertex1;
         private XYZDouble Vertex2;
@@ -43,18 +44,18 @@ namespace SharpFlame.Mapping.Drawing
                         {
                             if ( Map.Painter.Terrains[A].Tiles.TileCount >= 1 )
                             {
-                                RGB_sng = Map.Tileset.Tiles[Map.Painter.Terrains[A].Tiles.Tiles[0].TextureNum].AverageColour;
-                                if ( RGB_sng.Red + RGB_sng.Green + RGB_sng.Blue < 1.5F )
+                                _rgb = Map.Tileset.Tiles[Map.Painter.Terrains[A].Tiles.Tiles[0].TextureNum].AverageColour;
+                                if ( _rgb.Red + _rgb.Green + _rgb.Blue < 1.5F )
                                 {
-                                    RGB_sng2.Red = (RGB_sng.Red + 1.0F) / 2.0F;
-                                    RGB_sng2.Green = (RGB_sng.Green + 1.0F) / 2.0F;
-                                    RGB_sng2.Blue = (RGB_sng.Blue + 1.0F) / 2.0F;
+                                    RGB_sng2.Red = (_rgb.Red + 1.0F) / 2.0F;
+                                    RGB_sng2.Green = (_rgb.Green + 1.0F) / 2.0F;
+                                    RGB_sng2.Blue = (_rgb.Blue + 1.0F) / 2.0F;
                                 }
                                 else
                                 {
-                                    RGB_sng2.Red = RGB_sng.Red / 2.0F;
-                                    RGB_sng2.Green = RGB_sng.Green / 2.0F;
-                                    RGB_sng2.Blue = RGB_sng.Blue / 2.0F;
+                                    RGB_sng2.Red = _rgb.Red / 2.0F;
+                                    RGB_sng2.Green = _rgb.Green / 2.0F;
+                                    RGB_sng2.Blue = _rgb.Blue / 2.0F;
                                 }
                                 XYZ_dbl.X = X * Constants.TerrainGridSpacing;
                                 XYZ_dbl.Y = Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height * Map.HeightMultiplier);
@@ -88,7 +89,7 @@ namespace SharpFlame.Mapping.Drawing
                                 Vertex3.Y = XYZ_dbl.Y + XYZ_dbl3.Y;
                                 Vertex3.Z = XYZ_dbl.Z + XYZ_dbl3.Z;
                                 GL.Begin(BeginMode.Quads);
-                                GL.Color3(RGB_sng.Red, RGB_sng.Green, RGB_sng.Blue);
+                                GL.Color3(_rgb.Red, _rgb.Green, _rgb.Blue);
                                 GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
                                 GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
                                 GL.Vertex3(Vertex2.X, Vertex2.Y, Convert.ToDouble(- Vertex2.Z));

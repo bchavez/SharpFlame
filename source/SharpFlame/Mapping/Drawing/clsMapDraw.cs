@@ -6,6 +6,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.AppSettings;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Domain.Colors;
 using SharpFlame.FileIO;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping.Drawing;
@@ -31,8 +32,8 @@ namespace SharpFlame.Mapping
             var a = 0;
             var b = 0;
             var D = 0;
-            sRGBA_sng colourA;
-            sRGBA_sng colourB;
+            SRgba colourA;
+            SRgba colourB;
             bool showMinimapViewPosBox;
             var viewCorner0 = default(XYDouble);
             var viewCorner1 = default(XYDouble);
@@ -200,7 +201,7 @@ namespace SharpFlame.Mapping
 
             //draw painted texture terrain type markers
 
-            sRGB_sng rgbSng;
+            SRgb rgb;
 
             var mouseOverTerrain = ViewInfo.GetMouseOverTerrain();
 
@@ -263,7 +264,7 @@ namespace SharpFlame.Mapping
                             Map = this, 
                             StartXY = startXy,
                             FinishXY = finishXy,
-                            Colour = new sRGBA_sng(1.0F, 1.0F, 1.0F, 1.0F)
+                            Colour = new SRgba(1.0F, 1.0F, 1.0F, 1.0F)
                         };
                     drawSelection.ActionPerform();
                 }
@@ -924,9 +925,9 @@ namespace SharpFlame.Mapping
             foreach ( var tempLoopVar_Unit in SelectedUnits )
             {
                 unit = tempLoopVar_Unit;
-                rgbSng = GetUnitGroupColour(unit.UnitGroup);
-                colourA = new sRGBA_sng((1.0F + rgbSng.Red) / 2.0F, (1.0F + rgbSng.Green) / 2.0F, (1.0F + rgbSng.Blue) / 2.0F, 0.75F);
-                colourB = new sRGBA_sng(rgbSng.Red, rgbSng.Green, rgbSng.Blue, 0.75F);
+                rgb = GetUnitGroupColour(unit.UnitGroup);
+                colourA = new SRgba((1.0F + rgb.Red) / 2.0F, (1.0F + rgb.Green) / 2.0F, (1.0F + rgb.Blue) / 2.0F, 0.75F);
+                colourB = new SRgba(rgb.Red, rgb.Green, rgb.Blue, 0.75F);
                 DrawUnitRectangle(unit, 8, colourA, colourB);
             }
             if ( mouseOverTerrain != null )
@@ -936,10 +937,10 @@ namespace SharpFlame.Mapping
                     unit = tempLoopVar_Unit;
                     if ( unit != null && modTools.Tool == modTools.Tools.ObjectSelect )
                     {
-                        rgbSng = GetUnitGroupColour(unit.UnitGroup);
-                        GL.Color4((0.5F + rgbSng.Red) / 1.5F, (0.5F + rgbSng.Green) / 1.5F, (0.5F + rgbSng.Blue) / 1.5F, 0.75F);
-                        colourA = new sRGBA_sng((1.0F + rgbSng.Red) / 2.0F, (1.0F + rgbSng.Green) / 2.0F, (1.0F + rgbSng.Blue) / 2.0F, 0.75F);
-                        colourB = new sRGBA_sng(rgbSng.Red, rgbSng.Green, rgbSng.Blue, 0.875F);
+                        rgb = GetUnitGroupColour(unit.UnitGroup);
+                        GL.Color4((0.5F + rgb.Red) / 1.5F, (0.5F + rgb.Green) / 1.5F, (0.5F + rgb.Blue) / 1.5F, 0.75F);
+                        colourA = new SRgba((1.0F + rgb.Red) / 2.0F, (1.0F + rgb.Green) / 2.0F, (1.0F + rgb.Blue) / 2.0F, 0.75F);
+                        colourB = new SRgba(rgb.Red, rgb.Green, rgb.Blue, 0.875F);
                         DrawUnitRectangle(unit, 16, colourA, colourB);
                     }
                 }
@@ -1112,7 +1113,7 @@ namespace SharpFlame.Mapping
             }
         }
 
-        public void DrawUnitRectangle(clsUnit Unit, int BorderInsideThickness, sRGBA_sng InsideColour, sRGBA_sng OutsideColour)
+        public void DrawUnitRectangle(clsUnit Unit, int BorderInsideThickness, SRgba InsideColour, SRgba OutsideColour)
         {
             var posA = new XYInt();
             var posB = new XYInt();

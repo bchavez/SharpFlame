@@ -2,6 +2,7 @@
 
 using System;
 using SharpFlame.Colors;
+using SharpFlame.Core.Domain.Colors;
 
 #endregion
 
@@ -9,8 +10,8 @@ namespace SharpFlame.Util
 {
     public class clsPlayer
     {
-        public sRGB_sng Colour;
-        public sRGB_sng MinimapColour;
+        public SRgb Colour;
+        public SRgb MinimapColour;
 
         public void CalcMinimapColour()
         {
