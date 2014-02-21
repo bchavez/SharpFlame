@@ -2,13 +2,13 @@ namespace SharpFlame.Mapping
 {
     public class clsGatewayChange
     {
-        public enum enumType
-        {
-            Added,
-            Deleted
-        }
-
         public clsGateway Gateway;
-        public enumType Type;
+        public GatewayChangeType Type;
+    }
+
+    public enum GatewayChangeType
+    {
+        Added,
+        Deleted
     }
 }

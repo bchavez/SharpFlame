@@ -37,10 +37,10 @@ namespace SharpFlame.Controls
             nudRadius.Value = (decimal)(MathUtil.ClampDbl(brush.Radius, (double)nudRadius.Minimum, (double)nudRadius.Maximum));
             switch ( brush.Shape )
             {
-                case clsBrush.enumShape.Circle:
+                case ShapeType.Circle:
                     tabShape.SelectedIndex = 0;
                     break;
-                case clsBrush.enumShape.Square:
+                case ShapeType.Square:
                     tabShape.SelectedIndex = 1;
                     break;
             }
@@ -85,10 +85,10 @@ namespace SharpFlame.Controls
             switch ( tabShape.SelectedIndex )
             {
                 case 0:
-                    brush.Shape = clsBrush.enumShape.Circle;
+                    brush.Shape = ShapeType.Circle;
                     break;
                 case 1:
-                    brush.Shape = clsBrush.enumShape.Square;
+                    brush.Shape = ShapeType.Square;
                     break;
             }
         }

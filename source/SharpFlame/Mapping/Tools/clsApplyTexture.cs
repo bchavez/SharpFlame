@@ -15,7 +15,7 @@ namespace SharpFlame.Mapping.Tools
         public bool SetTexture;
 
         private clsTerrain Terrain;
-        public enumTextureTerrainAction TerrainAction;
+        public TextureTerrainAction TerrainAction;
         public int TextureNum;
 
         public override void ActionPerform()

@@ -1,6 +1,6 @@
 namespace SharpFlame.Util
 {
-    public enum enumTextureTerrainAction
+    public enum TextureTerrainAction
     {
         Ignore,
         Reinterpret,

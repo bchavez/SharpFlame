@@ -252,7 +252,7 @@
     <Compile Include="Util\clsTileType.cs" />
     <Compile Include="Util\FillCliffAction.cs" />
     <Compile Include="Util\ObjectRotateMode.cs" />
-    <Compile Include="Util\enumTextureTerrainAction.cs" />
+    <Compile Include="Util\TextureTerrainAction.cs" />
     <Compile Include="Util\TileWalls.cs" />
     <Compile Include="Util\sLayerList.cs" />
     <Compile Include="Util\sResult.cs" />

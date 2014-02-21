@@ -54,12 +54,12 @@ namespace SharpFlame
 
         public static clsKeysActive IsViewKeyDown = new clsKeysActive();
 
-        public static clsBrush TextureBrush = new clsBrush(0.0D, clsBrush.enumShape.Circle);
-        public static clsBrush TerrainBrush = new clsBrush(2.0D, clsBrush.enumShape.Circle);
-        public static clsBrush HeightBrush = new clsBrush(2.0D, clsBrush.enumShape.Circle);
-        public static clsBrush CliffBrush = new clsBrush(2.0D, clsBrush.enumShape.Circle);
+        public static clsBrush TextureBrush = new clsBrush(0.0D, ShapeType.Circle);
+        public static clsBrush TerrainBrush = new clsBrush(2.0D, ShapeType.Circle);
+        public static clsBrush HeightBrush = new clsBrush(2.0D, ShapeType.Circle);
+        public static clsBrush CliffBrush = new clsBrush(2.0D, ShapeType.Circle);
 
-        public static clsBrush SmoothRadius = new clsBrush(1.0D, clsBrush.enumShape.Square);
+        public static clsBrush SmoothRadius = new clsBrush(1.0D, ShapeType.Square);
 
         public static bool DisplayTileOrientation;
 
@@ -123,7 +123,7 @@ namespace SharpFlame
         public static bool RTSOrbit = true;
 
         public static Matrix3DMath.Matrix3D SunAngleMatrix = new Matrix3DMath.Matrix3D();
-        public static clsBrush VisionSectors = new clsBrush(0.0D, clsBrush.enumShape.Circle);
+        public static clsBrush VisionSectors = new clsBrush(0.0D, ShapeType.Circle);
 
         public static sLayerList LayerList;
 

@@ -380,13 +380,13 @@ namespace SharpFlame.Domain.ObjData
                 switch ( fields[11].ToLower() )
                 {
                     case "turret":
-                        sensor.Location = Sensor.enumLocation.Turret;
+                        sensor.Location = SensorLocationType.Turret;
                         break;
                     case "default":
-                        sensor.Location = Sensor.enumLocation.Invisible;
+                        sensor.Location = SensorLocationType.Invisible;
                         break;
                     default:
-                        sensor.Location = Sensor.enumLocation.Invisible;
+                        sensor.Location = SensorLocationType.Invisible;
                         break;
                 }
                 sensor.Attachment.Models.Add(GetModelForPIE(pieList, fields[8].ToLower(), returnResult));
@@ -453,7 +453,7 @@ namespace SharpFlame.Domain.ObjData
                 featureTypeBase.Code = fields[0];
                 if ( fields[7] == "OIL RESOURCE" ) //type
                 {
-                    featureTypeBase.FeatureType = FeatureTypeBase.enumFeatureType.OilResource;
+                    featureTypeBase.FeatureType = FeatureType.OilResource;
                 }
                 SetFeatureName(dataNames.ResultData, featureTypeBase, returnResult);
                 if ( !IOUtil.InvariantParse(fields[1], ref featureTypeBase.Footprint.X) )

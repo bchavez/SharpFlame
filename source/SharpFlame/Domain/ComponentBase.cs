@@ -165,14 +165,7 @@ namespace SharpFlame.Domain
 
     public class Sensor : Turret
     {
-        public enum enumLocation
-        {
-            Unspecified,
-            Turret,
-            Invisible
-        }
-
-        public enumLocation Location = enumLocation.Unspecified;
+        public SensorLocationType Location = SensorLocationType.Unspecified;
         public ConnectedListLink<Sensor, clsObjectData> ObjectDataLink;
 
         public Sensor()
@@ -182,6 +175,13 @@ namespace SharpFlame.Domain
 
             TurretType = TurretType.Sensor;
         }
+    }
+
+    public enum SensorLocationType
+    {
+        Unspecified,
+        Turret,
+        Invisible
     }
 
     public class Brain : Turret

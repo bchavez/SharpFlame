@@ -52,7 +52,7 @@ namespace SharpFlame.Mapping.IO.Wz
             {
                 switch ( map.InterfaceOptions.CompileType )
                 {
-                    case clsInterfaceOptions.EnumCompileType.Multiplayer:
+                    case CompileType.Multiplayer:
                     if ( int.Parse(map.InterfaceOptions.CompileMultiPlayers) < 2 | 
                         int.Parse(map.InterfaceOptions.CompileMultiPlayers) > Constants.PlayerCountMax )
                     {
@@ -60,7 +60,7 @@ namespace SharpFlame.Mapping.IO.Wz
                         return returnResult;
                     }
                     break;
-                    case clsInterfaceOptions.EnumCompileType.Campaign:
+                    case CompileType.Campaign:
                     break;
                     default:
                     returnResult.ProblemAdd("Unknown compile method.");
@@ -76,7 +76,7 @@ namespace SharpFlame.Mapping.IO.Wz
                     }
                 }
 
-                if ( map.InterfaceOptions.CompileType == clsInterfaceOptions.EnumCompileType.Multiplayer )
+                if ( map.InterfaceOptions.CompileType == CompileType.Multiplayer )
                 {
                     if ( !overwrite )
                     {
@@ -100,7 +100,7 @@ namespace SharpFlame.Mapping.IO.Wz
 
                             // .xplayers.lev
                             var zipPath = string.Format("{0}c-{1}.xplayers.lev", map.InterfaceOptions.CompileMultiPlayers, map.InterfaceOptions.CompileName);
-                            if ( map.InterfaceOptions.CompileType == clsInterfaceOptions.EnumCompileType.Multiplayer )
+                            if ( map.InterfaceOptions.CompileType == CompileType.Multiplayer )
                             {
                                 zip.PutNextEntry(zipPath);
                                 returnResult.Add(Serialize_WZ_LEV(zip));
@@ -150,7 +150,7 @@ namespace SharpFlame.Mapping.IO.Wz
 
                     return returnResult;
                 }
-                if ( map.InterfaceOptions.CompileType == clsInterfaceOptions.EnumCompileType.Campaign )
+                if ( map.InterfaceOptions.CompileType == CompileType.Campaign )
                 {
                     var CampDirectory = PathUtil.EndWithPathSeperator(path);
 
@@ -689,7 +689,7 @@ namespace SharpFlame.Mapping.IO.Wz
             return returnResult;
         }
 
-        private clsResult Serialize_WZ_Gam(Stream stream, UInt32 gamType, clsInterfaceOptions.EnumCompileType compileType, XYInt scrollMin, sXY_uint scrollMax)
+        private clsResult Serialize_WZ_Gam(Stream stream, UInt32 gamType, CompileType compileType, XYInt scrollMin, sXY_uint scrollMax)
         {
             var returnResult = new clsResult("Serializing .gam", false);
             logger.Info("Serializing .gam");
@@ -699,11 +699,11 @@ namespace SharpFlame.Mapping.IO.Wz
             IOUtil.WriteText(fileGAM, false, "game");
             fileGAM.Write(8U);
             fileGAM.Write(0U); //Time
-            if ( compileType == clsInterfaceOptions.EnumCompileType.Multiplayer )
+            if ( compileType == CompileType.Multiplayer )
             {
                 fileGAM.Write(0U);
             }
-            else if ( compileType == clsInterfaceOptions.EnumCompileType.Campaign )
+            else if ( compileType == CompileType.Campaign )
             {
                 fileGAM.Write(gamType);
             }

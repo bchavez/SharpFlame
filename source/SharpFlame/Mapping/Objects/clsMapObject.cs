@@ -46,7 +46,7 @@ namespace SharpFlame.Mapping
         public void UnitRemoveStoreChange(int Num)
         {
             var UnitChange = new clsUnitChange();
-            UnitChange.Type = clsUnitChange.enumType.Deleted;
+            UnitChange.Type = UnitChangeType.Deleted;
             UnitChange.Unit = Units[Num];
             UnitChanges.Add(UnitChange);
 

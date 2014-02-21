@@ -276,15 +276,9 @@ namespace SharpFlame.Domain
 
     public class FeatureTypeBase : UnitTypeBase
     {
-        public enum enumFeatureType
-        {
-            Unknown,
-            OilResource
-        }
-
         public clsAttachment BaseAttachment;
         public string Code = "";
-        public enumFeatureType FeatureType = enumFeatureType.Unknown;
+        public FeatureType FeatureType = FeatureType.Unknown;
         public ConnectedListLink<FeatureTypeBase, clsObjectData> FeatureType_ObjectDataLink;
         public XYInt Footprint;
         public string Name = "Unknown";
@@ -310,6 +304,12 @@ namespace SharpFlame.Domain
         {
             return Name;
         }
+    }
+
+    public enum FeatureType
+    {
+        Unknown,
+        OilResource
     }
 
     public class StructureTypeBase : UnitTypeBase
@@ -584,7 +584,7 @@ namespace SharpFlame.Domain
             }
             if ( Args.Sensor != null )
             {
-                if ( Args.Sensor.Location == Sensor.enumLocation.Turret )
+                if ( Args.Sensor.Location == SensorLocationType.Turret )
                 {
                     if ( Turret1 != null )
                     {

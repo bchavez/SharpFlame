@@ -140,7 +140,7 @@ namespace SharpFlame
 
         public ConnectedList<UnitTypeBase, frmMain> SelectedObjectTypes;
 
-        public enumTextureTerrainAction TextureTerrainAction = enumTextureTerrainAction.Reinterpret;
+        public TextureTerrainAction TextureTerrainAction = TextureTerrainAction.Reinterpret;
 
         public FillCliffAction FillCliffAction = FillCliffAction.Ignore;
 
@@ -3265,7 +3265,7 @@ namespace SharpFlame
         {
             if ( rdoTextureIgnoreTerrain.Checked )
             {
-                TextureTerrainAction = enumTextureTerrainAction.Ignore;
+                TextureTerrainAction = TextureTerrainAction.Ignore;
                 rdoTextureReinterpretTerrain.Checked = false;
                 rdoTextureRemoveTerrain.Checked = false;
             }
@@ -3275,7 +3275,7 @@ namespace SharpFlame
         {
             if ( rdoTextureReinterpretTerrain.Checked )
             {
-                TextureTerrainAction = enumTextureTerrainAction.Reinterpret;
+                TextureTerrainAction = TextureTerrainAction.Reinterpret;
                 rdoTextureIgnoreTerrain.Checked = false;
                 rdoTextureRemoveTerrain.Checked = false;
             }
@@ -3285,7 +3285,7 @@ namespace SharpFlame
         {
             if ( rdoTextureRemoveTerrain.Checked )
             {
-                TextureTerrainAction = enumTextureTerrainAction.Remove;
+                TextureTerrainAction = TextureTerrainAction.Remove;
                 rdoTextureIgnoreTerrain.Checked = false;
                 rdoTextureReinterpretTerrain.Checked = false;
             }
