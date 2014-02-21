@@ -54,11 +54,6 @@ namespace SharpFlame.Core.Domain
 
         public static bool operator ==( XYInt a, XYInt b )
         {
-            if (object.ReferenceEquals(a, null))
-            {
-                return object.ReferenceEquals(b, null);
-            }
-
             return a.Equals(b);
         }
 

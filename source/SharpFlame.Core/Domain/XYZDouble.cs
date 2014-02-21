@@ -47,7 +47,7 @@ namespace SharpFlame.Core.Domain
 
         public static XYZDouble operator *(double ValueA, XYZDouble ValueB)
         {
-            return (XYZDouble) (ValueB * ValueA);
+            return ValueB * ValueA;
         }
 
         public static XYZDouble operator /(XYZDouble ValueA, XYZDouble ValueB)
@@ -77,17 +77,16 @@ namespace SharpFlame.Core.Domain
             return _dbl;
         }
 
-        public XYZDouble(double X, double Y, double Z)
+        public XYZDouble(double x, double y, double z)
         {
-            this = new XYZDouble();
-            this.X = X;
-            this.Y = Y;
-            this.Z = Z;
+            X = x;
+            Y = y;
+            Z = z;
         }
 
         public double GetMagnitude()
         {
-            return Math.Sqrt(((this.X * this.X) + (this.Y * this.Y)) + (this.Z * this.Z));
+            return Math.Sqrt(((X * X) + (Y * Y)) + (Z * Z));
         }
     }
 }

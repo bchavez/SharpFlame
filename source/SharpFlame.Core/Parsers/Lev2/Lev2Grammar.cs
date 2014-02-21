@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.Linq;
 using Sprache;
 
 namespace SharpFlame.Core.Parsers.Lev2

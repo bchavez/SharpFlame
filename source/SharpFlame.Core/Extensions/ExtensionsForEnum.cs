@@ -19,7 +19,7 @@ namespace SharpFlame.Core.Extensions
 
             //determine the values
             object result = value;
-            _Value parsed = new _Value( append, type );
+            var parsed = new _Value( append, type );
             if( parsed.Signed is long )
             {
                 result = Convert.ToInt64( value ) | (long)parsed.Signed;
@@ -42,7 +42,7 @@ namespace SharpFlame.Core.Extensions
 
             //determine the values
             object result = value;
-            _Value parsed = new _Value( remove, type );
+            var parsed = new _Value( remove, type );
             if( parsed.Signed is long )
             {
                 result = Convert.ToInt64( value ) & ~(long)parsed.Signed;
@@ -64,7 +64,7 @@ namespace SharpFlame.Core.Extensions
             Type type = value.GetType();
 
             //determine the values
-            _Value parsed = new _Value(check, type);
+            var parsed = new _Value(check, type);
             if ( parsed.Signed is long )
             {
                 return (Convert.ToInt64(value) &
@@ -86,7 +86,7 @@ namespace SharpFlame.Core.Extensions
         /// </summary>
         public static bool Missing<T>( this Enum obj, T value )
         {
-            return !ExtensionsForEnum.Has<T>( obj, value );
+            return !Has( obj, value );
         }
 
         #endregion
@@ -100,11 +100,11 @@ namespace SharpFlame.Core.Extensions
         {
 
             //cached comparisons for tye to use
-            private static Type _UInt64 = typeof( ulong );
-            private static Type _UInt32 = typeof( long );
+            private static readonly Type _UInt64 = typeof( ulong );
+            private static readonly Type _UInt32 = typeof( long );
 
-            public long? Signed;
-            public ulong? Unsigned;
+            public readonly long? Signed;
+            public readonly ulong? Unsigned;
 
             public _Value( object value, Type type )
             {
@@ -123,12 +123,12 @@ namespace SharpFlame.Core.Extensions
                 //value that can hold it would be a ulong
                 if( compare.Equals( _Value._UInt32 ) || compare.Equals( _Value._UInt64 ) )
                 {
-                    this.Unsigned = Convert.ToUInt64( value );
+                    Unsigned = Convert.ToUInt64( value );
                 }
                     //otherwise, a long should cover anything else
                 else
                 {
-                    this.Signed = Convert.ToInt64( value );
+                    Signed = Convert.ToInt64( value );
                 }
 
             }

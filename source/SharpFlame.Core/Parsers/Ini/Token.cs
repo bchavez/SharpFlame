@@ -1,5 +1,3 @@
-using System;
-
 namespace SharpFlame.Core.Parsers.Ini
 {
     public class Token

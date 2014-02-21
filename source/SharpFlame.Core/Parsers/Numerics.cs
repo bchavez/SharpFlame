@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using Sprache;
 
 namespace SharpFlame.Core.Parsers

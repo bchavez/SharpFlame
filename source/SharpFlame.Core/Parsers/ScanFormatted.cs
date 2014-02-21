@@ -88,9 +88,9 @@ namespace SharpFlame.Core.Parsers
         /// <param name="format">Specifies rules for parsing input</param>
         public int Parse( string input, string format )
         {
-            TextParser inp = new TextParser( input );
-            TextParser fmt = new TextParser( format );
-            FormatSpecifier spec = new FormatSpecifier();
+            var inp = new TextParser( input );
+            var fmt = new TextParser( format );
+            var spec = new FormatSpecifier();
             int count = 0;
 
             // Clear any previous results

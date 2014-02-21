@@ -34,7 +34,7 @@ namespace SharpFlame.Core.Domain
 
         public static XYDouble operator *(double ValueA, XYDouble ValueB)
         {
-            return (XYDouble) (ValueB * ValueA);
+            return ValueB * ValueA;
         }
 
         public static XYDouble operator /(XYDouble ValueA, double ValueB)
@@ -53,21 +53,20 @@ namespace SharpFlame.Core.Domain
             return _dbl;
         }
 
-        public XYDouble(double X, double Y)
+        public XYDouble(double x, double y)
         {
-            this = new XYDouble();
-            this.X = X;
-            this.Y = Y;
+            X = x;
+            Y = y;
         }
 
         public double GetMagnitude()
         {
-            return Math.Sqrt((this.X * this.X) + (this.Y * this.Y));
+            return Math.Sqrt((X * X) + (Y * Y));
         }
 
         public double GetAngle()
         {
-            return Math.Atan2(this.Y, this.X);
+            return Math.Atan2(Y, X);
         }
     }
 }

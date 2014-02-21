@@ -9,8 +9,7 @@ namespace SharpFlame.Core.Parsers.Ini
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        private StreamWriter file;
-		private bool disposed;
+        private readonly StreamWriter file;
 
         public string EqualsChar = "=";
         public string LineEndChar = "\n";
@@ -24,7 +23,6 @@ namespace SharpFlame.Core.Parsers.Ini
 
             logger.Debug("Writing INI.");
 			file = new StreamWriter(stream, Encoding.UTF8);
-			disposed = false;
         }
 
 		public IniWriter(StreamWriter output)

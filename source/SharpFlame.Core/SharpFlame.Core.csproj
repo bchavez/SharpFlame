@@ -48,6 +48,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\AddNullItemBehavior.cs" />
+    <Compile Include="Collections\ConnectedList.cs" />
+    <Compile Include="Collections\ConnectedListItem.cs" />
+    <Compile Include="Collections\ConnectedListItemList.cs" />
+    <Compile Include="Collections\ConnectedListLink.cs" />
+    <Compile Include="Collections\ISimpleListTool.cs" />
+    <Compile Include="Collections\SimpleClassList.cs" />
+    <Compile Include="Collections\SimpleList.cs" />
     <Compile Include="Interfaces\IResultItem.cs" />
     <Compile Include="Domain\Colors\SRgb.cs" />
     <Compile Include="Domain\Colors\Rgb.cs" />

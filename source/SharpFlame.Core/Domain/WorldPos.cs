@@ -1,5 +1,3 @@
-using System;
-
 namespace SharpFlame.Core.Domain
 {
     public struct WorldPos
