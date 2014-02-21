@@ -230,7 +230,7 @@ namespace SharpFlame.Controls
                         {
                             goto EndOfTextures1;
                         }
-                        A = Map.Tileset.Tiles[Num].TextureViewGlTextureNum;
+                        A = Map.Tileset.Tiles[Num].GlTextureNum;
                         GL.BindTexture(TextureTarget.Texture2D, A);
                         GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Decal);
                         GL.Begin(BeginMode.Quads);

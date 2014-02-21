@@ -30,7 +30,7 @@ namespace SharpFlame.Mapping.Renderers
             }
             else if ( terrain.Tiles[TileX, TileY].Texture.TextureNum < tileset.TileCount )
             {
-                var viewGlTextureNum = tileset.Tiles[terrain.Tiles[TileX, TileY].Texture.TextureNum].MapViewGlTextureNum;
+                var viewGlTextureNum = tileset.Tiles[terrain.Tiles[TileX, TileY].Texture.TextureNum].GlTextureNum;
                 if ( viewGlTextureNum == 0 )
                 {
                     GL.BindTexture(TextureTarget.Texture2D, App.GLTexture_OverflowTile);

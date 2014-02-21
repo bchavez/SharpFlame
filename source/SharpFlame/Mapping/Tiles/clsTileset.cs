@@ -171,18 +171,16 @@ namespace SharpFlame.Mapping.Tiles
 
                 if ( SettingsManager.Settings.Mipmaps )
                 {
-                    Tiles[tileNum].MapViewGlTextureNum = BitmapUtil.CreateGLTexture (bitmap, 0, 0,
+                    Tiles[tileNum].GlTextureNum = BitmapUtil.CreateGLTexture (bitmap, 0, 0,
                                                          TextureMagFilter.Nearest, 
                                                          TextureMinFilter.LinearMipmapLinear);
                 }
                 else
                 {
-                    Tiles[tileNum].MapViewGlTextureNum = BitmapUtil.CreateGLTexture (bitmap, 0, 0, 
+                    Tiles[tileNum].GlTextureNum = BitmapUtil.CreateGLTexture (bitmap, 0, 0, 
                                                          TextureMagFilter.Nearest, 
                                                          TextureMinFilter.Nearest);
                 }
-
-                Tiles [tileNum].TextureViewGlTextureNum = Tiles [tileNum].MapViewGlTextureNum;
 
                 if ( SettingsManager.Settings.Mipmaps )
                 {
@@ -195,8 +193,8 @@ namespace SharpFlame.Mapping.Tiles
                     else
                     {
                         var MipmapResult = default(clsResult);
-                        MipmapResult = GenerateMipMaps(slashPath, strTile, 
-                                                       Tiles[tileNum].MapViewGlTextureNum, tileNum);
+                        MipmapResult = generateMipMaps(slashPath, strTile, 
+                                                       Tiles[tileNum].GlTextureNum, tileNum);
                         returnResult.Add(MipmapResult);
                         if ( MipmapResult.HasProblems )
                         {
@@ -232,182 +230,182 @@ namespace SharpFlame.Mapping.Tiles
             return returnResult;
         }
 
-        public clsResult GenerateMipMaps(string SlashPath, string strTile, int textureNum, int TileNum)
+        private clsResult generateMipMaps(string slashPath, string strTile, int textureNum, int tileNum)
         {
             var ReturnResult = new clsResult("Generating mipmaps", false);
             logger.Info("Generating mipmaps");
-            var GraphicPath = "";
-            var PixX = 0;
-            var PixY = 0;
-            var PixelColorA = new Color();
-            var PixelColorB = new Color();
-            var PixelColorC = new Color();
-            var PixelColorD = new Color();
-            var X1 = 0;
-            var Y1 = 0;
-            var X2 = 0;
-            var Y2 = 0;
-            var Red = 0;
-            var Green = 0;
-            var Blue = 0;
-            var Bitmap8 = default(Bitmap);
-            var Bitmap4 = default(Bitmap);
-            var Bitmap2 = default(Bitmap);
-            var Bitmap1 = default(Bitmap);
-            Bitmap Bitmap = null;
-            var Result = new sResult();
+            var graphicPath = "";
+            var pixX = 0;
+            var pixY = 0;
+            var pixelColorA = new Color();
+            var pixelColorB = new Color();
+            var pixelColorC = new Color();
+            var pixelColorD = new Color();
+            var x1 = 0;
+            var y1 = 0;
+            var x2 = 0;
+            var y2 = 0;
+            var red = 0;
+            var green = 0;
+            var blue = 0;
+            var bitmap8 = default(Bitmap);
+            var bitmap4 = default(Bitmap);
+            var bitmap2 = default(Bitmap);
+            var bitmap1 = default(Bitmap);
+            Bitmap bitmap = null;
+            var result = new sResult();
 
             //-------- 64 --------
 
-            GraphicPath = string.Format ("{0}{1}-64{2}{3}", SlashPath, Name, App.PlatformPathSeparator, strTile);
+            graphicPath = string.Format ("{0}{1}-64{2}{3}", slashPath, Name, App.PlatformPathSeparator, strTile);
 
-            Result = BitmapUtil.LoadBitmap(GraphicPath, ref Bitmap);
-            if ( !Result.Success )
+            result = BitmapUtil.LoadBitmap(graphicPath, ref bitmap);
+            if ( !result.Success )
             {
-                ReturnResult.WarningAdd("Unable to load tile graphic: " + Result.Problem);
+                ReturnResult.WarningAdd("Unable to load tile graphic: " + result.Problem);
                 return ReturnResult;
             }
 
-            if ( Bitmap.Width != 64 | Bitmap.Height != 64 )
+            if ( bitmap.Width != 64 | bitmap.Height != 64 )
             {
-                ReturnResult.WarningAdd("Tile graphic " + GraphicPath + " from tileset " + Name + " is not 64x64.");
+                ReturnResult.WarningAdd("Tile graphic " + graphicPath + " from tileset " + Name + " is not 64x64.");
                 return ReturnResult;
             }
 
-            BitmapUtil.CreateGLTexture (Bitmap, 1, textureNum);
+            BitmapUtil.CreateGLTexture (bitmap, 1, textureNum);
 
             //-------- 32 --------
 
-            GraphicPath = SlashPath + Name + "-32" + Convert.ToString(App.PlatformPathSeparator) + strTile;
+            graphicPath = slashPath + Name + "-32" + Convert.ToString(App.PlatformPathSeparator) + strTile;
 
-            Result = BitmapUtil.LoadBitmap(GraphicPath, ref Bitmap);
-            if ( !Result.Success )
+            result = BitmapUtil.LoadBitmap(graphicPath, ref bitmap);
+            if ( !result.Success )
             {
-                ReturnResult.WarningAdd("Unable to load tile graphic: " + Result.Problem);
+                ReturnResult.WarningAdd("Unable to load tile graphic: " + result.Problem);
                 return ReturnResult;
             }
 
-            if ( Bitmap.Width != 32 | Bitmap.Height != 32 )
+            if ( bitmap.Width != 32 | bitmap.Height != 32 )
             {
-                ReturnResult.WarningAdd("Tile graphic " + GraphicPath + " from tileset " + Name + " is not 32x32.");
+                ReturnResult.WarningAdd("Tile graphic " + graphicPath + " from tileset " + Name + " is not 32x32.");
                 return ReturnResult;
             }
 
-            BitmapUtil.CreateGLTexture (Bitmap, 2, textureNum);
+            BitmapUtil.CreateGLTexture (bitmap, 2, textureNum);
 
             //-------- 16 --------
 
-            GraphicPath = SlashPath + Name + "-16" + Convert.ToString(App.PlatformPathSeparator) + strTile;
+            graphicPath = slashPath + Name + "-16" + Convert.ToString(App.PlatformPathSeparator) + strTile;
 
-            Result = BitmapUtil.LoadBitmap(GraphicPath, ref Bitmap);
-            if ( !Result.Success )
+            result = BitmapUtil.LoadBitmap(graphicPath, ref bitmap);
+            if ( !result.Success )
             {
-                ReturnResult.WarningAdd("Unable to load tile graphic: " + Result.Problem);
+                ReturnResult.WarningAdd("Unable to load tile graphic: " + result.Problem);
                 return ReturnResult;
             }
 
-            if ( Bitmap.Width != 16 | Bitmap.Height != 16 )
+            if ( bitmap.Width != 16 | bitmap.Height != 16 )
             {
-                ReturnResult.WarningAdd("Tile graphic " + GraphicPath + " from tileset " + Name + " is not 16x16.");
+                ReturnResult.WarningAdd("Tile graphic " + graphicPath + " from tileset " + Name + " is not 16x16.");
                 return ReturnResult;
             }
 
-            BitmapUtil.CreateGLTexture (Bitmap, 3, textureNum);
+            BitmapUtil.CreateGLTexture (bitmap, 3, textureNum);
 
             //-------- 8 --------
 
-            Bitmap8 = new Bitmap(8, 8, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            for ( PixY = 0; PixY <= 7; PixY++ )
+            bitmap8 = new Bitmap(8, 8, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            for ( pixY = 0; pixY <= 7; pixY++ )
             {
-                Y1 = PixY * 2;
-                Y2 = Y1 + 1;
-                for ( PixX = 0; PixX <= 7; PixX++ )
+                y1 = pixY * 2;
+                y2 = y1 + 1;
+                for ( pixX = 0; pixX <= 7; pixX++ )
                 {
-                    X1 = PixX * 2;
-                    X2 = X1 + 1;
-                    PixelColorA = Bitmap.GetPixel(X1, Y1);
-                    PixelColorB = Bitmap.GetPixel(X2, Y1);
-                    PixelColorC = Bitmap.GetPixel(X1, Y2);
-                    PixelColorD = Bitmap.GetPixel(X2, Y2);
-                    Red = Convert.ToInt32(((PixelColorA.R) + PixelColorB.R + PixelColorC.R + PixelColorD.R) / 4.0F);
-                    Green = Convert.ToInt32(((PixelColorA.G) + PixelColorB.G + PixelColorC.G + PixelColorD.G) / 4.0F);
-                    Blue = Convert.ToInt32(((PixelColorA.B) + PixelColorB.B + PixelColorC.B + PixelColorD.B) / 4.0F);
-                    Bitmap8.SetPixel(PixX, PixY, ColorTranslator.FromOle(ColorUtil.OSRGB(Red, Green, Blue)));
+                    x1 = pixX * 2;
+                    x2 = x1 + 1;
+                    pixelColorA = bitmap.GetPixel(x1, y1);
+                    pixelColorB = bitmap.GetPixel(x2, y1);
+                    pixelColorC = bitmap.GetPixel(x1, y2);
+                    pixelColorD = bitmap.GetPixel(x2, y2);
+                    red = Convert.ToInt32(((pixelColorA.R) + pixelColorB.R + pixelColorC.R + pixelColorD.R) / 4.0F);
+                    green = Convert.ToInt32(((pixelColorA.G) + pixelColorB.G + pixelColorC.G + pixelColorD.G) / 4.0F);
+                    blue = Convert.ToInt32(((pixelColorA.B) + pixelColorB.B + pixelColorC.B + pixelColorD.B) / 4.0F);
+                    bitmap8.SetPixel(pixX, pixY, ColorTranslator.FromOle(ColorUtil.OSRGB(red, green, blue)));
                 }
             }
 
-            BitmapUtil.CreateGLTexture (Bitmap8, 4, textureNum);
+            BitmapUtil.CreateGLTexture (bitmap8, 4, textureNum);
 
             //-------- 4 --------
 
-            Bitmap = Bitmap8;
-            Bitmap4 = new Bitmap(4, 4, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            for ( PixY = 0; PixY <= 3; PixY++ )
+            bitmap = bitmap8;
+            bitmap4 = new Bitmap(4, 4, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            for ( pixY = 0; pixY <= 3; pixY++ )
             {
-                Y1 = PixY * 2;
-                Y2 = Y1 + 1;
-                for ( PixX = 0; PixX <= 3; PixX++ )
+                y1 = pixY * 2;
+                y2 = y1 + 1;
+                for ( pixX = 0; pixX <= 3; pixX++ )
                 {
-                    X1 = PixX * 2;
-                    X2 = X1 + 1;
-                    PixelColorA = Bitmap.GetPixel(X1, Y1);
-                    PixelColorB = Bitmap.GetPixel(X2, Y1);
-                    PixelColorC = Bitmap.GetPixel(X1, Y2);
-                    PixelColorD = Bitmap.GetPixel(X2, Y2);
-                    Red = Convert.ToInt32(((PixelColorA.R) + PixelColorB.R + PixelColorC.R + PixelColorD.R) / 4.0F);
-                    Green = Convert.ToInt32(((PixelColorA.G) + PixelColorB.G + PixelColorC.G + PixelColorD.G) / 4.0F);
-                    Blue = Convert.ToInt32(((PixelColorA.B) + PixelColorB.B + PixelColorC.B + PixelColorD.B) / 4.0F);
-                    Bitmap4.SetPixel(PixX, PixY, ColorTranslator.FromOle(ColorUtil.OSRGB(Red, Green, Blue)));
+                    x1 = pixX * 2;
+                    x2 = x1 + 1;
+                    pixelColorA = bitmap.GetPixel(x1, y1);
+                    pixelColorB = bitmap.GetPixel(x2, y1);
+                    pixelColorC = bitmap.GetPixel(x1, y2);
+                    pixelColorD = bitmap.GetPixel(x2, y2);
+                    red = Convert.ToInt32(((pixelColorA.R) + pixelColorB.R + pixelColorC.R + pixelColorD.R) / 4.0F);
+                    green = Convert.ToInt32(((pixelColorA.G) + pixelColorB.G + pixelColorC.G + pixelColorD.G) / 4.0F);
+                    blue = Convert.ToInt32(((pixelColorA.B) + pixelColorB.B + pixelColorC.B + pixelColorD.B) / 4.0F);
+                    bitmap4.SetPixel(pixX, pixY, ColorTranslator.FromOle(ColorUtil.OSRGB(red, green, blue)));
                 }
             }
 
-            BitmapUtil.CreateGLTexture (Bitmap4, 5, textureNum);
+            BitmapUtil.CreateGLTexture (bitmap4, 5, textureNum);
 
             //-------- 2 --------
 
-            Bitmap = Bitmap4;
-            Bitmap2 = new Bitmap(2, 2, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            for ( PixY = 0; PixY <= 1; PixY++ )
+            bitmap = bitmap4;
+            bitmap2 = new Bitmap(2, 2, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            for ( pixY = 0; pixY <= 1; pixY++ )
             {
-                Y1 = PixY * 2;
-                Y2 = Y1 + 1;
-                for ( PixX = 0; PixX <= 1; PixX++ )
+                y1 = pixY * 2;
+                y2 = y1 + 1;
+                for ( pixX = 0; pixX <= 1; pixX++ )
                 {
-                    X1 = PixX * 2;
-                    X2 = X1 + 1;
-                    PixelColorA = Bitmap.GetPixel(X1, Y1);
-                    PixelColorB = Bitmap.GetPixel(X2, Y1);
-                    PixelColorC = Bitmap.GetPixel(X1, Y2);
-                    PixelColorD = Bitmap.GetPixel(X2, Y2);
-                    Red = Convert.ToInt32(((PixelColorA.R) + PixelColorB.R + PixelColorC.R + PixelColorD.R) / 4.0F);
-                    Green = Convert.ToInt32(((PixelColorA.G) + PixelColorB.G + PixelColorC.G + PixelColorD.G) / 4.0F);
-                    Blue = Convert.ToInt32(((PixelColorA.B) + PixelColorB.B + PixelColorC.B + PixelColorD.B) / 4.0F);
-                    Bitmap2.SetPixel(PixX, PixY, ColorTranslator.FromOle(ColorUtil.OSRGB(Red, Green, Blue)));
+                    x1 = pixX * 2;
+                    x2 = x1 + 1;
+                    pixelColorA = bitmap.GetPixel(x1, y1);
+                    pixelColorB = bitmap.GetPixel(x2, y1);
+                    pixelColorC = bitmap.GetPixel(x1, y2);
+                    pixelColorD = bitmap.GetPixel(x2, y2);
+                    red = Convert.ToInt32(((pixelColorA.R) + pixelColorB.R + pixelColorC.R + pixelColorD.R) / 4.0F);
+                    green = Convert.ToInt32(((pixelColorA.G) + pixelColorB.G + pixelColorC.G + pixelColorD.G) / 4.0F);
+                    blue = Convert.ToInt32(((pixelColorA.B) + pixelColorB.B + pixelColorC.B + pixelColorD.B) / 4.0F);
+                    bitmap2.SetPixel(pixX, pixY, ColorTranslator.FromOle(ColorUtil.OSRGB(red, green, blue)));
                 }
             }
 
-            BitmapUtil.CreateGLTexture (Bitmap2, 6, textureNum);
+            BitmapUtil.CreateGLTexture (bitmap2, 6, textureNum);
 
             //-------- 1 --------
 
-            Bitmap = Bitmap2;
-            Bitmap1 = new Bitmap(1, 1, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            PixX = 0;
-            PixY = 0;
-            Y1 = PixY * 2;
-            Y2 = Y1 + 1;
-            X1 = PixX * 2;
-            X2 = X1 + 1;
-            PixelColorA = Bitmap.GetPixel(X1, Y1);
-            PixelColorB = Bitmap.GetPixel(X2, Y1);
-            PixelColorC = Bitmap.GetPixel(X1, Y2);
-            PixelColorD = Bitmap.GetPixel(X2, Y2);
-            Red = Convert.ToInt32(((PixelColorA.R) + PixelColorB.R + PixelColorC.R + PixelColorD.R) / 4.0F);
-            Green = Convert.ToInt32(((PixelColorA.G) + PixelColorB.G + PixelColorC.G + PixelColorD.G) / 4.0F);
-            Blue = Convert.ToInt32(((PixelColorA.B) + PixelColorB.B + PixelColorC.B + PixelColorD.B) / 4.0F);
-            Bitmap1.SetPixel(PixX, PixY, ColorTranslator.FromOle(ColorUtil.OSRGB(Red, Green, Blue)));
+            bitmap = bitmap2;
+            bitmap1 = new Bitmap(1, 1, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            pixX = 0;
+            pixY = 0;
+            y1 = pixY * 2;
+            y2 = y1 + 1;
+            x1 = pixX * 2;
+            x2 = x1 + 1;
+            pixelColorA = bitmap.GetPixel(x1, y1);
+            pixelColorB = bitmap.GetPixel(x2, y1);
+            pixelColorC = bitmap.GetPixel(x1, y2);
+            pixelColorD = bitmap.GetPixel(x2, y2);
+            red = Convert.ToInt32(((pixelColorA.R) + pixelColorB.R + pixelColorC.R + pixelColorD.R) / 4.0F);
+            green = Convert.ToInt32(((pixelColorA.G) + pixelColorB.G + pixelColorC.G + pixelColorD.G) / 4.0F);
+            blue = Convert.ToInt32(((pixelColorA.B) + pixelColorB.B + pixelColorC.B + pixelColorD.B) / 4.0F);
+            bitmap1.SetPixel(pixX, pixY, ColorTranslator.FromOle(ColorUtil.OSRGB(red, green, blue)));
 
-            BitmapUtil.CreateGLTexture (Bitmap1, 7, textureNum);
+            BitmapUtil.CreateGLTexture (bitmap1, 7, textureNum);
 
             return ReturnResult;
         }
@@ -416,8 +414,7 @@ namespace SharpFlame.Mapping.Tiles
         {
             public sRGB_sng AverageColour;
             public byte DefaultType;
-            public int MapViewGlTextureNum;
-            public int TextureViewGlTextureNum;
+            public int GlTextureNum;
         }
     }
 }
