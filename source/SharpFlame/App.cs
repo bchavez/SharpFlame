@@ -83,11 +83,11 @@ namespace SharpFlame
 
         public static clsMap Copied_Map;
 
-        public static SimpleList<clsTileset> Tilesets = new SimpleList<clsTileset>();
+        public static SimpleList<Tileset> Tilesets = new SimpleList<Tileset>();
 
-        public static clsTileset Tileset_Arizona;
-        public static clsTileset Tileset_Urban;
-        public static clsTileset Tileset_Rockies;
+        public static Tileset Tileset_Arizona;
+        public static Tileset Tileset_Urban;
+        public static Tileset Tileset_Rockies;
 
         public static Painter Painter_Arizona;
         public static Painter Painter_Urban;
@@ -333,8 +333,9 @@ namespace SharpFlame
 
             foreach ( var path in tilesetDirs )
             {
-                var tileset = new clsTileset();
-                result = tileset.LoadDirectory(path);
+                var tileset = new Tileset();
+                var loader = new TilesetLoader (ref tileset);
+                result = loader.Load (path);
                 returnResult.Add(result);
                 if ( !result.HasProblems )
                 {

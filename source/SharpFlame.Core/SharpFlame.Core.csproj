@@ -52,6 +52,7 @@
     <Compile Include="Domain\Colors\Rgb.cs" />
     <Compile Include="Domain\Colors\Rgba.cs" />
     <Compile Include="Domain\Colors\SRgba.cs" />
+    <Compile Include="Domain\Tileset.cs" />
     <Compile Include="Extensions\ExtensionsForEnum.cs" />
     <Compile Include="Extensions\ExtensionsForString.cs" />
     <Compile Include="Parsers\Lev2\Lev2Grammar.cs" />

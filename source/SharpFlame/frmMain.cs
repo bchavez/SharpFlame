@@ -767,7 +767,7 @@ namespace SharpFlame
 
         public void cboTileset_SelectedIndexChanged(Object sender, EventArgs e)
         {
-            var NewTileset = default(clsTileset);
+            var NewTileset = default(Tileset);
             var Map = MainMap;
 
             if ( Map == null )
