@@ -64,7 +64,7 @@
     <Compile Include="Parsers\Pie\PolygonFlags.cs" />
     <Compile Include="Parsers\Pie\TexCoord.cs" />
     <Compile Include="Parsers\Pie\Texture.cs" />
-    <Compile Include="Parsers\Validators\LevelValidator.cs" />
+    <Compile Include="Parsers\Validators\PieLevelValidator.cs" />
     <Compile Include="Parsers\Numerics.cs" />
     <Compile Include="Parsers\Pie\PieGrammar.cs" />
     <Compile Include="Parsers\Validators\PieValidator.cs" />

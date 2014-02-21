@@ -243,24 +243,24 @@ namespace SharpFlame
             warningsForm.Activate();
         }
 
-        public static enumTurretType GetTurretTypeFromName(string turretTypeName)
+        public static TurretType GetTurretTypeFromName(string turretTypeName)
         {
             switch ( turretTypeName.ToLower() )
             {
                 case "weapon":
-                    return enumTurretType.Weapon;
+                    return TurretType.Weapon;
                 case "construct":
-                    return enumTurretType.Construct;
+                    return TurretType.Construct;
                 case "repair":
-                    return enumTurretType.Repair;
+                    return TurretType.Repair;
                 case "sensor":
-                    return enumTurretType.Sensor;
+                    return TurretType.Sensor;
                 case "brain":
-                    return enumTurretType.Brain;
+                    return TurretType.Brain;
                 case "ecm":
-                    return enumTurretType.ECM;
+                    return TurretType.ECM;
                 default:
-                    return enumTurretType.Unknown;
+                    return TurretType.Unknown;
             }
         }
 

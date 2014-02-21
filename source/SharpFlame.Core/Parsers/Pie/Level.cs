@@ -3,7 +3,7 @@ using SharpFlame.Core.Parsers.Validators;
 
 namespace SharpFlame.Core.Parsers.Pie
 {
-    [Validator(typeof(LevelValidator))]
+    [Validator(typeof(PieLevelValidator))]
     public class Level
     {
         public int LevelNumber { get; set; }

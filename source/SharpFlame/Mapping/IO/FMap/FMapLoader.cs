@@ -764,9 +764,9 @@ namespace SharpFlame.Mapping.IO.FMap
                 iniObject.Health = 1.0D;
                 iniObject.WallType = -1;
                 iniObject.TurretCodes = new string[Constants.MaxDroidWeapons];
-                iniObject.TurretTypes = new enumTurretType[Constants.MaxDroidWeapons];
+                iniObject.TurretTypes = new TurretType[Constants.MaxDroidWeapons];
                 for (var i = 0; i < Constants.MaxDroidWeapons; i++) {
-                    iniObject.TurretTypes [i] = enumTurretType.Unknown;
+                    iniObject.TurretTypes [i] = TurretType.Unknown;
                     iniObject.TurretCodes [i] = "";
                 }
                 invalid = false;

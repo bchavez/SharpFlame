@@ -24,7 +24,7 @@ namespace SharpFlame.Mapping.IO.FMap
         public DroidDesign.clsTemplateDroidType TemplateDroidType;
         public string[] TurretCodes;
         public int TurretCount;
-        public enumTurretType[] TurretTypes;
+        public TurretType[] TurretTypes;
         public UnitType Type;
         public string UnitGroup;
         public int WallType;

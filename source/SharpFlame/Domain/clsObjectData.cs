@@ -113,98 +113,65 @@ namespace SharpFlame.Domain
                 returnResult.ProblemAdd("There are two entries for the same code in " + subDirNames + ".");
             }
 
-            var dataStructures = new clsTextFile
-                {
-                    SubDirectory = subDirStructures, FieldCount = 25
-                };
+            var dataStructures = new clsTextFile{SubDirectory = subDirStructures, FieldCount = 25};
             commaFiles.Add(dataStructures);
 
-            var DataBrain = new clsTextFile();
-            DataBrain.SubDirectory = subDirBrain;
-            DataBrain.FieldCount = 9;
-            commaFiles.Add(DataBrain);
+            var dataBrain = new clsTextFile{SubDirectory = subDirBrain, FieldCount = 9};
+            commaFiles.Add(dataBrain);
 
-            var DataBody = new clsTextFile();
-            DataBody.SubDirectory = subDirBody;
-            DataBody.FieldCount = 25;
-            commaFiles.Add(DataBody);
+            var dataBody = new clsTextFile{SubDirectory = subDirBody, FieldCount = 25};
+            commaFiles.Add(dataBody);
 
-            var DataPropulsion = new clsTextFile();
-            DataPropulsion.SubDirectory = subDirPropulsion;
-            DataPropulsion.FieldCount = 12;
-            commaFiles.Add(DataPropulsion);
+            var dataPropulsion = new clsTextFile{SubDirectory = subDirPropulsion, FieldCount = 12};
+            commaFiles.Add(dataPropulsion);
 
-            var DataBodyPropulsion = new clsTextFile();
-            DataBodyPropulsion.SubDirectory = subDirBodyPropulsion;
-            DataBodyPropulsion.FieldCount = 5;
-            DataBodyPropulsion.UniqueField = -1; //no unique requirement
-            commaFiles.Add(DataBodyPropulsion);
+            var dataBodyPropulsion = new clsTextFile{SubDirectory = subDirBodyPropulsion, FieldCount = 5, UniqueField = -1};
+            commaFiles.Add(dataBodyPropulsion);
 
-            var DataConstruction = new clsTextFile();
-            DataConstruction.SubDirectory = subDirConstruction;
-            DataConstruction.FieldCount = 12;
-            commaFiles.Add(DataConstruction);
+            var dataConstruction = new clsTextFile{SubDirectory = subDirConstruction, FieldCount = 12};
+            commaFiles.Add(dataConstruction);
 
-            var DataSensor = new clsTextFile();
-            DataSensor.SubDirectory = subDirSensor;
-            DataSensor.FieldCount = 16;
-            commaFiles.Add(DataSensor);
+            var dataSensor = new clsTextFile{SubDirectory = subDirSensor, FieldCount = 16};
+            commaFiles.Add(dataSensor);
 
-            var DataRepair = new clsTextFile();
-            DataRepair.SubDirectory = subDirRepair;
-            DataRepair.FieldCount = 14;
-            commaFiles.Add(DataRepair);
+            var dataRepair = new clsTextFile {SubDirectory = subDirRepair, FieldCount = 14};
+            commaFiles.Add(dataRepair);
 
-            var DataTemplates = new clsTextFile();
-            DataTemplates.SubDirectory = subDirTemplates;
-            DataTemplates.FieldCount = 12;
-            commaFiles.Add(DataTemplates);
+            var dataTemplates = new clsTextFile {SubDirectory = subDirTemplates, FieldCount = 12};
+            commaFiles.Add(dataTemplates);
 
-            var DataECM = new clsTextFile();
-            DataECM.SubDirectory = subDirEcm;
-            DataECM.FieldCount = 14;
-            commaFiles.Add(DataECM);
+            var dataEcm = new clsTextFile {SubDirectory = subDirEcm, FieldCount = 14};
+            commaFiles.Add(dataEcm);
 
-            var DataFeatures = new clsTextFile();
-            DataFeatures.SubDirectory = subDirFeatures;
-            DataFeatures.FieldCount = 11;
-            commaFiles.Add(DataFeatures);
+            var dataFeatures = new clsTextFile {SubDirectory = subDirFeatures, FieldCount = 11};
+            commaFiles.Add(dataFeatures);
 
-            var DataAssignWeapons = new clsTextFile();
-            DataAssignWeapons.SubDirectory = subDirAssignWeapons;
-            DataAssignWeapons.FieldCount = 5;
-            commaFiles.Add(DataAssignWeapons);
+            var dataAssignWeapons = new clsTextFile {SubDirectory = subDirAssignWeapons, FieldCount = 5};
+            commaFiles.Add(dataAssignWeapons);
 
-            var DataWeapons = new clsTextFile();
-            DataWeapons.SubDirectory = subDirWeapons;
-            DataWeapons.FieldCount = 53;
-            commaFiles.Add(DataWeapons);
+            var dataWeapons = new clsTextFile {SubDirectory = subDirWeapons, FieldCount = 53};
+            commaFiles.Add(dataWeapons);
 
-            var DataStructureWeapons = new clsTextFile();
-            DataStructureWeapons.SubDirectory = subDirStructureWeapons;
-            DataStructureWeapons.FieldCount = 6;
-            commaFiles.Add(DataStructureWeapons);
+            var dataStructureWeapons = new clsTextFile {SubDirectory = subDirStructureWeapons, FieldCount = 6};
+            commaFiles.Add(dataStructureWeapons);
 
-            var TextFile = default(clsTextFile);
-
-            foreach ( var tempLoopVar_TextFile in commaFiles )
+            foreach ( var textFile in commaFiles )
             {
-                TextFile = tempLoopVar_TextFile;
-                var Result = TextFile.LoadCommaFile(path);
-                returnResult.Add(Result);
-                if ( !Result.HasProblems )
+                var result = textFile.LoadCommaFile(path);
+                returnResult.Add(result);
+                if ( !result.HasProblems )
                 {
-                    if ( TextFile.CalcIsFieldCountValid() )
+                    if ( textFile.CalcIsFieldCountValid() )
                     {
-                        if ( !TextFile.CalcUniqueField() )
+                        if ( !textFile.CalcUniqueField() )
                         {
-                            returnResult.ProblemAdd("An entry in field " + Convert.ToString(TextFile.UniqueField) + " was not unique for file " +
-                                                    TextFile.SubDirectory + ".");
+                            returnResult.ProblemAdd("An entry in field " + Convert.ToString(textFile.UniqueField) + " was not unique for file " +
+                                                    textFile.SubDirectory + ".");
                         }
                     }
                     else
                     {
-                        returnResult.ProblemAdd("There were entries with the wrong number of fields for file " + TextFile.SubDirectory + ".");
+                        returnResult.ProblemAdd("There were entries with the wrong number of fields for file " + textFile.SubDirectory + ".");
                     }
                 }
             }
@@ -216,52 +183,50 @@ namespace SharpFlame.Domain
 
             //load texpages
 
-            string[] TexFiles = null;
+            string[] texFiles = null;
 
             try
             {
-                TexFiles = Directory.GetFiles(path + subDirTexpages);
+                texFiles = Directory.GetFiles(path + subDirTexpages);
             }
             catch ( Exception )
             {
                 returnResult.WarningAdd("Unable to access texture pages.");
-                TexFiles = new string[0];
+                texFiles = new string[0];
             }
 
-            var Text = "";
-            Bitmap Bitmap = null;
-            var InstrPos2 = 0;
-            var BitmapResult = new sResult();
+            var text = "";
+            Bitmap bitmap = null;
 
-            foreach ( var tempLoopVar_Text in TexFiles )
+            foreach ( var texFile in texFiles )
             {
-                Text = tempLoopVar_Text;
-                if ( Text.Substring(Text.Length - 4, 4).ToLower() == ".png" )
+                text = texFile;
+                if ( text.Substring(text.Length - 4, 4).ToLower() == ".png" )
                 {
-                    var Result = new clsResult(string.Format("Loading texture page \"{0}\"", Text));
-                    if ( File.Exists(Text) )
+                    var result = new clsResult(string.Format("Loading texture page \"{0}\"", text));
+                    if ( File.Exists(text) )
                     {
-                        BitmapResult = BitmapUtil.LoadBitmap(Text, ref Bitmap);
-                        var NewPage = new clsTexturePage();
-                        if ( BitmapResult.Success )
+                        sResult bitmapResult = BitmapUtil.LoadBitmap(text, ref bitmap);
+                        var newPage = new clsTexturePage();
+                        if ( bitmapResult.Success )
                         {
-                            Result.Take(BitmapUtil.BitmapIsGlCompatible(Bitmap));
-                            NewPage.GLTexture_Num = BitmapUtil.CreateGLTexture (Bitmap, 0);
+                            result.Take(BitmapUtil.BitmapIsGlCompatible(bitmap));
+                            newPage.GLTexture_Num = BitmapUtil.CreateGLTexture (bitmap, 0);
                         }
                         else
                         {
-                            Result.WarningAdd(BitmapResult.Problem);
+                            result.WarningAdd(bitmapResult.Problem);
                         }
-                        InstrPos2 = Text.LastIndexOf(System.IO.Path.DirectorySeparatorChar);
-                        NewPage.FileTitle = Text.Substring(InstrPos2 + 1, Text.Length - 5 - InstrPos2);
+                        var instrPos2 = text.LastIndexOf(Path.DirectorySeparatorChar);
+                        newPage.FileTitle = text.Substring(instrPos2 + 1, text.Length - 5 - instrPos2);
 
-                        TexturePages.Add(NewPage);
+                        TexturePages.Add(newPage);
                     }
                     else
                     {
-                        Result.WarningAdd("Texture page missing (" + Text + ").");
+                        result.WarningAdd("Texture page missing (" + text + ").");
                     }
-                    returnResult.Add(Result);
+                    returnResult.Add(result);
                 }
             }
 
@@ -269,7 +234,6 @@ namespace SharpFlame.Domain
 
             string[] pieFiles = null;
             var pieList = new SimpleList<clsPIE>();
-            var NewPIE = default(clsPIE);
 
             try
             {
@@ -281,271 +245,260 @@ namespace SharpFlame.Domain
                 pieFiles = new string[0];
             }
 
-            var SplitPath = new sSplitPath();
-
             foreach ( var tempLoopVar_Text in pieFiles )
             {
-                Text = tempLoopVar_Text;
-                SplitPath = new sSplitPath(Text);
-                if ( SplitPath.FileExtension.ToLower() == "pie" )
+                text = tempLoopVar_Text;
+                var splitPath = new sSplitPath(text);
+                if ( splitPath.FileExtension.ToLower() == "pie" )
                 {
-                    NewPIE = new clsPIE();
-                    NewPIE.Path = Text;
-                    NewPIE.LCaseFileTitle = SplitPath.FileTitle.ToLower();
-                    pieList.Add(NewPIE);
+                    var newPie = new clsPIE {Path = text, LCaseFileTitle = splitPath.FileTitle.ToLower()};
+                    pieList.Add(newPie);
                 }
             }
 
             //interpret stats
 
-            var Attachment = default(clsAttachment);
-            var BaseAttachment = default(clsAttachment);
-            var Connector = new XYZDouble();
-            var structureTypeBase = default(StructureTypeBase);
-            var featureTypeBase = default(FeatureTypeBase);
-            var Template = default(DroidTemplate);
-            var Body = default(Body);
-            var Propulsion = default(Propulsion);
-            var Construct = default(Construct);
-            var Weapon = default(Weapon);
-            var Repair = default(Repair);
-            var Sensor = default(Sensor);
-            var Brain = default(Brain);
-            var ECM = default(Ecm);
-            string[] Fields = null;
+            clsAttachment attachment;
+            clsAttachment baseAttachment;
+            Body body;
+            Propulsion propulsion;
+            Weapon weapon;
+            Sensor sensor;
+            Ecm ecm;
+            string[] fields = null;
 
             //interpret body
 
-            foreach ( var tempLoopVar_Fields in DataBody.ResultData )
+            foreach ( var tempLoopVar_Fields in dataBody.ResultData )
             {
-                Fields = tempLoopVar_Fields;
-                Body = new Body();
-                Body.ObjectDataLink.Connect(Bodies);
-                Body.Code = Fields[0];
-                SetComponentName(dataNames.ResultData, Body, returnResult);
-                IOUtil.InvariantParse(Fields[6], ref Body.Hitpoints);
-                Body.Designable = Fields[24] != "0";
-                Body.Attachment.Models.Add(GetModelForPIE(pieList, Fields[7].ToLower(), returnResult));
+                fields = tempLoopVar_Fields;
+                body = new Body();
+                body.ObjectDataLink.Connect(Bodies);
+                body.Code = fields[0];
+                SetComponentName(dataNames.ResultData, body, returnResult);
+                IOUtil.InvariantParse(fields[6], ref body.Hitpoints);
+                body.Designable = fields[24] != "0";
+                body.Attachment.Models.Add(GetModelForPIE(pieList, fields[7].ToLower(), returnResult));
             }
 
             //interpret propulsion
 
-            foreach ( var tempLoopVar_Fields in DataPropulsion.ResultData )
+            foreach ( var tempLoopVar_Fields in dataPropulsion.ResultData )
             {
-                Fields = tempLoopVar_Fields;
-                Propulsion = new Propulsion(Bodies.Count);
-                Propulsion.ObjectDataLink.Connect(Propulsions);
-                Propulsion.Code = Fields[0];
-                SetComponentName(dataNames.ResultData, Propulsion, returnResult);
-                IOUtil.InvariantParse(Fields[7], ref Propulsion.HitPoints);
+                fields = tempLoopVar_Fields;
+                propulsion = new Propulsion(Bodies.Count);
+                propulsion.ObjectDataLink.Connect(Propulsions);
+                propulsion.Code = fields[0];
+                SetComponentName(dataNames.ResultData, propulsion, returnResult);
+                IOUtil.InvariantParse(fields[7], ref propulsion.HitPoints);
                 //.Propulsions(Propulsion_Num).PIE = LCase(DataPropulsion.Entries(Propulsion_Num).FieldValues(8))
-                Propulsion.Designable = Fields[11] != "0";
+                propulsion.Designable = fields[11] != "0";
             }
 
             //interpret body-propulsions
 
-            var BodyPropulsionPIEs = new BodyProp[Bodies.Count, Propulsions.Count];
+            var bodyPropulsionPIEs = new BodyProp[Bodies.Count, Propulsions.Count];
             for ( var A = 0; A <= Bodies.Count - 1; A++ )
             {
                 for ( var B = 0; B <= Propulsions.Count - 1; B++ )
                 {
-                    BodyPropulsionPIEs[A, B] = new BodyProp();
-                    BodyPropulsionPIEs[A, B].LeftPIE = "0";
-                    BodyPropulsionPIEs[A, B].RightPIE = "0";
+                    bodyPropulsionPIEs[A, B] = new BodyProp();
+                    bodyPropulsionPIEs[A, B].LeftPIE = "0";
+                    bodyPropulsionPIEs[A, B].RightPIE = "0";
                 }
             }
 
-            foreach ( var tempLoopVar_Fields in DataBodyPropulsion.ResultData )
+            foreach ( var tempLoopVar_Fields in dataBodyPropulsion.ResultData )
             {
-                Fields = tempLoopVar_Fields;
-                Body = FindBodyCode(Fields[0]);
-                Propulsion = FindPropulsionCode(Fields[1]);
-                if ( Body != null && Propulsion != null )
+                fields = tempLoopVar_Fields;
+                body = FindBodyCode(fields[0]);
+                propulsion = FindPropulsionCode(fields[1]);
+                if ( body != null && propulsion != null )
                 {
-                    if ( Fields[2] != "0" )
+                    if ( fields[2] != "0" )
                     {
-                        BodyPropulsionPIEs[Body.ObjectDataLink.ArrayPosition, Propulsion.ObjectDataLink.ArrayPosition].LeftPIE = Fields[2].ToLower();
+                        bodyPropulsionPIEs[body.ObjectDataLink.ArrayPosition, propulsion.ObjectDataLink.ArrayPosition].LeftPIE = fields[2].ToLower();
                     }
-                    if ( Fields[3] != "0" )
+                    if ( fields[3] != "0" )
                     {
-                        BodyPropulsionPIEs[Body.ObjectDataLink.ArrayPosition, Propulsion.ObjectDataLink.ArrayPosition].RightPIE = Fields[3].ToLower();
+                        bodyPropulsionPIEs[body.ObjectDataLink.ArrayPosition, propulsion.ObjectDataLink.ArrayPosition].RightPIE = fields[3].ToLower();
                     }
                 }
             }
 
             //set propulsion-body PIEs
 
-            for ( var A = 0; A <= Propulsions.Count - 1; A++ )
+            for ( var a = 0; a <= Propulsions.Count - 1; a++ )
             {
-                Propulsion = Propulsions[A];
+                propulsion = Propulsions[a];
                 for ( var B = 0; B <= Bodies.Count - 1; B++ )
                 {
-                    Body = Bodies[B];
-                    Propulsion.Bodies[B].LeftAttachment = new clsAttachment();
-                    Propulsion.Bodies[B].LeftAttachment.Models.Add(GetModelForPIE(pieList, BodyPropulsionPIEs[B, A].LeftPIE, returnResult));
-                    Propulsion.Bodies[B].RightAttachment = new clsAttachment();
-                    Propulsion.Bodies[B].RightAttachment.Models.Add(GetModelForPIE(pieList, BodyPropulsionPIEs[B, A].RightPIE, returnResult));
+                    body = Bodies[B];
+                    propulsion.Bodies[B].LeftAttachment = new clsAttachment();
+                    propulsion.Bodies[B].LeftAttachment.Models.Add(GetModelForPIE(pieList, bodyPropulsionPIEs[B, a].LeftPIE, returnResult));
+                    propulsion.Bodies[B].RightAttachment = new clsAttachment();
+                    propulsion.Bodies[B].RightAttachment.Models.Add(GetModelForPIE(pieList, bodyPropulsionPIEs[B, a].RightPIE, returnResult));
                 }
             }
 
             //interpret construction
 
-            foreach ( var tempLoopVar_Fields in DataConstruction.ResultData )
+            foreach ( var tempLoopVar_Fields in dataConstruction.ResultData )
             {
-                Fields = tempLoopVar_Fields;
-                Construct = new Construct();
+                fields = tempLoopVar_Fields;
+                Construct Construct = new Construct();
                 Construct.ObjectDataLink.Connect(Constructors);
                 Construct.TurretObjectDataLink.Connect(Turrets);
-                Construct.Code = Fields[0];
+                Construct.Code = fields[0];
                 SetComponentName(dataNames.ResultData, Construct, returnResult);
-                Construct.Designable = Fields[11] != "0";
-                Construct.Attachment.Models.Add(GetModelForPIE(pieList, Fields[8].ToLower(), returnResult));
+                Construct.Designable = fields[11] != "0";
+                Construct.Attachment.Models.Add(GetModelForPIE(pieList, fields[8].ToLower(), returnResult));
             }
 
             //interpret weapons
 
-            foreach ( var tempLoopVar_Fields in DataWeapons.ResultData )
+            foreach ( var tempLoopVar_Fields in dataWeapons.ResultData )
             {
-                Fields = tempLoopVar_Fields;
-                Weapon = new Weapon();
-                Weapon.ObjectDataLink.Connect(Weapons);
-                Weapon.TurretObjectDataLink.Connect(Turrets);
-                Weapon.Code = Fields[0];
-                SetComponentName(dataNames.ResultData, Weapon, returnResult);
-                IOUtil.InvariantParse(Fields[7], ref Weapon.HitPoints);
-                Weapon.Designable = Fields[51] != "0";
-                Weapon.Attachment.Models.Add(GetModelForPIE(pieList, Convert.ToString(Fields[8].ToLower()), returnResult));
-                Weapon.Attachment.Models.Add(GetModelForPIE(pieList, Fields[9].ToLower(), returnResult));
+                fields = tempLoopVar_Fields;
+                weapon = new Weapon();
+                weapon.ObjectDataLink.Connect(Weapons);
+                weapon.TurretObjectDataLink.Connect(Turrets);
+                weapon.Code = fields[0];
+                SetComponentName(dataNames.ResultData, weapon, returnResult);
+                IOUtil.InvariantParse(fields[7], ref weapon.HitPoints);
+                weapon.Designable = fields[51] != "0";
+                weapon.Attachment.Models.Add(GetModelForPIE(pieList, Convert.ToString(fields[8].ToLower()), returnResult));
+                weapon.Attachment.Models.Add(GetModelForPIE(pieList, fields[9].ToLower(), returnResult));
             }
 
             //interpret sensor
 
-            foreach ( var tempLoopVar_Fields in DataSensor.ResultData )
+            foreach ( var tempLoopVar_Fields in dataSensor.ResultData )
             {
-                Fields = tempLoopVar_Fields;
-                Sensor = new Sensor();
-                Sensor.ObjectDataLink.Connect(Sensors);
-                Sensor.TurretObjectDataLink.Connect(Turrets);
-                Sensor.Code = Fields[0];
-                SetComponentName(dataNames.ResultData, Sensor, returnResult);
-                IOUtil.InvariantParse(Fields[7], ref Sensor.HitPoints);
-                Sensor.Designable = Fields[15] != "0";
-                switch ( Fields[11].ToLower() )
+                fields = tempLoopVar_Fields;
+                sensor = new Sensor();
+                sensor.ObjectDataLink.Connect(Sensors);
+                sensor.TurretObjectDataLink.Connect(Turrets);
+                sensor.Code = fields[0];
+                SetComponentName(dataNames.ResultData, sensor, returnResult);
+                IOUtil.InvariantParse(fields[7], ref sensor.HitPoints);
+                sensor.Designable = fields[15] != "0";
+                switch ( fields[11].ToLower() )
                 {
                     case "turret":
-                        Sensor.Location = Sensor.enumLocation.Turret;
+                        sensor.Location = Sensor.enumLocation.Turret;
                         break;
                     case "default":
-                        Sensor.Location = Sensor.enumLocation.Invisible;
+                        sensor.Location = Sensor.enumLocation.Invisible;
                         break;
                     default:
-                        Sensor.Location = Sensor.enumLocation.Invisible;
+                        sensor.Location = Sensor.enumLocation.Invisible;
                         break;
                 }
-                Sensor.Attachment.Models.Add(GetModelForPIE(pieList, Fields[8].ToLower(), returnResult));
-                Sensor.Attachment.Models.Add(GetModelForPIE(pieList, Fields[9].ToLower(), returnResult));
+                sensor.Attachment.Models.Add(GetModelForPIE(pieList, fields[8].ToLower(), returnResult));
+                sensor.Attachment.Models.Add(GetModelForPIE(pieList, fields[9].ToLower(), returnResult));
             }
 
             //interpret repair
 
-            foreach ( var tempLoopVar_Fields in DataRepair.ResultData )
+            foreach ( var tempLoopVar_Fields in dataRepair.ResultData )
             {
-                Fields = tempLoopVar_Fields;
-                Repair = new Repair();
+                fields = tempLoopVar_Fields;
+                Repair Repair = new Repair();
                 Repair.ObjectDataLink.Connect(Repairs);
                 Repair.TurretObjectDataLink.Connect(Turrets);
-                Repair.Code = Fields[0];
+                Repair.Code = fields[0];
                 SetComponentName(dataNames.ResultData, Repair, returnResult);
-                Repair.Designable = Fields[13] != "0";
-                Repair.Attachment.Models.Add(GetModelForPIE(pieList, Fields[9].ToLower(), returnResult));
-                Repair.Attachment.Models.Add(GetModelForPIE(pieList, Fields[10].ToLower(), returnResult));
+                Repair.Designable = fields[13] != "0";
+                Repair.Attachment.Models.Add(GetModelForPIE(pieList, fields[9].ToLower(), returnResult));
+                Repair.Attachment.Models.Add(GetModelForPIE(pieList, fields[10].ToLower(), returnResult));
             }
 
             //interpret brain
 
-            foreach ( var tempLoopVar_Fields in DataBrain.ResultData )
+            foreach ( var tempLoopVar_Fields in dataBrain.ResultData )
             {
-                Fields = tempLoopVar_Fields;
-                Brain = new Brain();
+                fields = tempLoopVar_Fields;
+                Brain Brain = new Brain();
                 Brain.ObjectDataLink.Connect(Brains);
                 Brain.TurretObjectDataLink.Connect(Turrets);
-                Brain.Code = Fields[0];
+                Brain.Code = fields[0];
                 SetComponentName(dataNames.ResultData, Brain, returnResult);
                 Brain.Designable = true;
-                Weapon = FindWeaponCode(Fields[7]);
-                if ( Weapon != null )
+                weapon = FindWeaponCode(fields[7]);
+                if ( weapon != null )
                 {
-                    Brain.Weapon = Weapon;
-                    Brain.Attachment = Weapon.Attachment;
+                    Brain.Weapon = weapon;
+                    Brain.Attachment = weapon.Attachment;
                 }
             }
 
             //interpret ecm
 
-            foreach ( var tempLoopVar_Fields in DataECM.ResultData )
+            foreach ( var tempLoopVar_Fields in dataEcm.ResultData )
             {
-                Fields = tempLoopVar_Fields;
-                ECM = new Ecm();
-                ECM.ObjectDataLink.Connect(ECMs);
-                ECM.TurretObjectDataLink.Connect(Turrets);
-                ECM.Code = Fields[0];
-                SetComponentName(dataNames.ResultData, ECM, returnResult);
-                IOUtil.InvariantParse(Fields[7], ref ECM.HitPoints);
-                ECM.Designable = false;
-                ECM.Attachment.Models.Add(GetModelForPIE(pieList, Fields[8].ToLower(), returnResult));
+                fields = tempLoopVar_Fields;
+                ecm = new Ecm();
+                ecm.ObjectDataLink.Connect(ECMs);
+                ecm.TurretObjectDataLink.Connect(Turrets);
+                ecm.Code = fields[0];
+                SetComponentName(dataNames.ResultData, ecm, returnResult);
+                IOUtil.InvariantParse(fields[7], ref ecm.HitPoints);
+                ecm.Designable = false;
+                ecm.Attachment.Models.Add(GetModelForPIE(pieList, fields[8].ToLower(), returnResult));
             }
 
             //interpret feature
 
-            foreach ( var tempLoopVar_Fields in DataFeatures.ResultData )
+            foreach ( var tempLoopVar_Fields in dataFeatures.ResultData )
             {
-                Fields = tempLoopVar_Fields;
-                featureTypeBase = new FeatureTypeBase();
+                fields = tempLoopVar_Fields;
+                FeatureTypeBase featureTypeBase = new FeatureTypeBase();
                 featureTypeBase.UnitType_ObjectDataLink.Connect(UnitTypes);
                 featureTypeBase.FeatureType_ObjectDataLink.Connect(FeatureTypes);
-                featureTypeBase.Code = Fields[0];
-                if ( Fields[7] == "OIL RESOURCE" ) //type
+                featureTypeBase.Code = fields[0];
+                if ( fields[7] == "OIL RESOURCE" ) //type
                 {
                     featureTypeBase.FeatureType = FeatureTypeBase.enumFeatureType.OilResource;
                 }
                 SetFeatureName(dataNames.ResultData, featureTypeBase, returnResult);
-                if ( !IOUtil.InvariantParse(Fields[1], ref featureTypeBase.Footprint.X) )
+                if ( !IOUtil.InvariantParse(fields[1], ref featureTypeBase.Footprint.X) )
                 {
                     returnResult.WarningAdd("Feature footprint-x was not an integer for " + featureTypeBase.Code + ".");
                 }
-                if ( !IOUtil.InvariantParse(Fields[2], ref featureTypeBase.Footprint.Y) )
+                if ( !IOUtil.InvariantParse(fields[2], ref featureTypeBase.Footprint.Y) )
                 {
                     returnResult.WarningAdd("Feature footprint-y was not an integer for " + featureTypeBase.Code + ".");
                 }
                 featureTypeBase.BaseAttachment = new clsAttachment();
-                BaseAttachment = featureTypeBase.BaseAttachment;
-                Text = Fields[6].ToLower();
-                Attachment = BaseAttachment.CreateAttachment();
-                Attachment.Models.Add(GetModelForPIE(pieList, Text, returnResult));
+                baseAttachment = featureTypeBase.BaseAttachment;
+                text = fields[6].ToLower();
+                attachment = baseAttachment.CreateAttachment();
+                attachment.Models.Add(GetModelForPIE(pieList, text, returnResult));
             }
 
             //interpret structure
 
             foreach ( var tempLoopVar_Fields in dataStructures.ResultData )
             {
-                Fields = tempLoopVar_Fields;
-                var StructureCode = Fields[0];
-                var StructureTypeText = Fields[1];
-                var StructurePIEs = Fields[21].ToLower().Split('@');
+                fields = tempLoopVar_Fields;
+                var StructureCode = fields[0];
+                var StructureTypeText = fields[1];
+                var StructurePIEs = fields[21].ToLower().Split('@');
                 var StructureFootprint = new XYInt();
-                var StructureBasePIE = Fields[22].ToLower();
-                if ( !IOUtil.InvariantParse(Fields[5], ref StructureFootprint.X) )
+                var StructureBasePIE = fields[22].ToLower();
+                if ( !IOUtil.InvariantParse(fields[5], ref StructureFootprint.X) )
                 {
                     returnResult.WarningAdd("Structure footprint-x was not an integer for " + StructureCode + ".");
                 }
-                if ( !IOUtil.InvariantParse(Fields[6], ref StructureFootprint.Y) )
+                if ( !IOUtil.InvariantParse(fields[6], ref StructureFootprint.Y) )
                 {
                     returnResult.WarningAdd("Structure footprint-y was not an integer for " + StructureCode + ".");
                 }
                 if ( StructureTypeText != "WALL" || StructurePIEs.GetLength(0) != 4 )
                 {
                     //this is NOT a generic wall
-                    structureTypeBase = new StructureTypeBase();
+                    StructureTypeBase structureTypeBase = new StructureTypeBase();
                     structureTypeBase.UnitType_ObjectDataLink.Connect(UnitTypes);
                     structureTypeBase.StructureType_ObjectDataLink.Connect(StructureTypes);
                     structureTypeBase.Code = StructureCode;
@@ -618,51 +571,51 @@ namespace SharpFlame.Domain
                             break;
                     }
 
-                    BaseAttachment = structureTypeBase.BaseAttachment;
+                    baseAttachment = structureTypeBase.BaseAttachment;
                     if ( StructurePIEs.GetLength(0) > 0 )
                     {
-                        BaseAttachment.Models.Add(GetModelForPIE(pieList, StructurePIEs[0], returnResult));
+                        baseAttachment.Models.Add(GetModelForPIE(pieList, StructurePIEs[0], returnResult));
                     }
                     structureTypeBase.StructureBasePlate = GetModelForPIE(pieList, StructureBasePIE, returnResult);
-                    if ( BaseAttachment.Models.Count == 1 )
+                    if ( baseAttachment.Models.Count == 1 )
                     {
-                        if ( BaseAttachment.Models[0].ConnectorCount >= 1 )
+                        if ( baseAttachment.Models[0].ConnectorCount >= 1 )
                         {
-                            Connector = BaseAttachment.Models[0].Connectors[0];
+                            XYZDouble connector = baseAttachment.Models[0].Connectors[0];
                             var StructureWeapons = default(SimpleList<string[]>);
-                            StructureWeapons = GetRowsWithValue(DataStructureWeapons.ResultData, structureTypeBase.Code);
+                            StructureWeapons = GetRowsWithValue(dataStructureWeapons.ResultData, structureTypeBase.Code);
                             if ( StructureWeapons.Count > 0 )
                             {
-                                Weapon = FindWeaponCode(Convert.ToString(StructureWeapons[0][1]));
+                                weapon = FindWeaponCode(Convert.ToString(StructureWeapons[0][1]));
                             }
                             else
                             {
-                                Weapon = null;
+                                weapon = null;
                             }
-                            ECM = FindECMCode(Fields[18]);
-                            Sensor = FindSensorCode(Fields[19]);
-                            if ( Weapon != null )
+                            ecm = FindECMCode(fields[18]);
+                            sensor = FindSensorCode(fields[19]);
+                            if ( weapon != null )
                             {
-                                if ( Weapon.Code != "ZNULLWEAPON" )
+                                if ( weapon.Code != "ZNULLWEAPON" )
                                 {
-                                    Attachment = BaseAttachment.CopyAttachment(Weapon.Attachment);
-                                    Attachment.PosOffset = Connector;
+                                    attachment = baseAttachment.CopyAttachment(weapon.Attachment);
+                                    attachment.PosOffset = connector;
                                 }
                             }
-                            if ( ECM != null )
+                            if ( ecm != null )
                             {
-                                if ( ECM.Code != "ZNULLECM" )
+                                if ( ecm.Code != "ZNULLECM" )
                                 {
-                                    Attachment = BaseAttachment.CopyAttachment(ECM.Attachment);
-                                    Attachment.PosOffset = Connector;
+                                    attachment = baseAttachment.CopyAttachment(ecm.Attachment);
+                                    attachment.PosOffset = connector;
                                 }
                             }
-                            if ( Sensor != null )
+                            if ( sensor != null )
                             {
-                                if ( Sensor.Code != "ZNULLSENSOR" )
+                                if ( sensor.Code != "ZNULLSENSOR" )
                                 {
-                                    Attachment = BaseAttachment.CopyAttachment(Sensor.Attachment);
-                                    Attachment.PosOffset = Connector;
+                                    attachment = baseAttachment.CopyAttachment(sensor.Attachment);
+                                    attachment.PosOffset = connector;
                                 }
                             }
                         }
@@ -686,30 +639,30 @@ namespace SharpFlame.Domain
                         wallStructureTypeBase.StructureType_ObjectDataLink.Connect(StructureTypes);
                         wallStructureTypeBase.WallLink.Connect(NewWall.Segments);
                         wallStructureTypeBase.Code = StructureCode;
-                        Text = NewWall.Name;
+                        text = NewWall.Name;
                         switch ( WallNum )
                         {
                             case 0:
-                                Text += " - ";
+                                text += " - ";
                                 break;
                             case 1:
-                                Text += " + ";
+                                text += " + ";
                                 break;
                             case 2:
-                                Text += " T ";
+                                text += " T ";
                                 break;
                             case 3:
-                                Text += " L ";
+                                text += " L ";
                                 break;
                         }
-                        wallStructureTypeBase.Name = Text;
+                        wallStructureTypeBase.Name = text;
                         wallStructureTypeBase.Footprint = StructureFootprint;
                         wallStructureTypeBase.StructureType = StructureType.Wall;
 
-                        BaseAttachment = wallStructureTypeBase.BaseAttachment;
+                        baseAttachment = wallStructureTypeBase.BaseAttachment;
 
-                        Text = StructurePIEs[WallNum];
-                        BaseAttachment.Models.Add(GetModelForPIE(pieList, Text, returnResult));
+                        text = StructurePIEs[WallNum];
+                        baseAttachment.Models.Add(GetModelForPIE(pieList, text, returnResult));
                         wallStructureTypeBase.StructureBasePlate = WallBasePlate;
                     }
                 }
@@ -718,77 +671,77 @@ namespace SharpFlame.Domain
             //interpret templates
 
             var TurretConflictCount = 0;
-            foreach ( var tempLoopVar_Fields in DataTemplates.ResultData )
+            foreach ( var tempLoopVar_Fields in dataTemplates.ResultData )
             {
-                Fields = tempLoopVar_Fields;
-                Template = new DroidTemplate();
-                Template.UnitType_ObjectDataLink.Connect(UnitTypes);
-                Template.DroidTemplate_ObjectDataLink.Connect(DroidTemplates);
-                Template.Code = Fields[0];
-                SetTemplateName(dataNames.ResultData, Template, returnResult);
-                switch ( Fields[9] ) //type
+                fields = tempLoopVar_Fields;
+                DroidTemplate template = new DroidTemplate();
+                template.UnitType_ObjectDataLink.Connect(UnitTypes);
+                template.DroidTemplate_ObjectDataLink.Connect(DroidTemplates);
+                template.Code = fields[0];
+                SetTemplateName(dataNames.ResultData, template, returnResult);
+                switch ( fields[9] ) //type
                 {
                     case "ZNULLDROID":
-                        Template.TemplateDroidType = App.TemplateDroidType_Null;
+                        template.TemplateDroidType = App.TemplateDroidType_Null;
                         break;
                     case "DROID":
-                        Template.TemplateDroidType = App.TemplateDroidType_Droid;
+                        template.TemplateDroidType = App.TemplateDroidType_Droid;
                         break;
                     case "CYBORG":
-                        Template.TemplateDroidType = App.TemplateDroidType_Cyborg;
+                        template.TemplateDroidType = App.TemplateDroidType_Cyborg;
                         break;
                     case "CYBORG_CONSTRUCT":
-                        Template.TemplateDroidType = App.TemplateDroidType_CyborgConstruct;
+                        template.TemplateDroidType = App.TemplateDroidType_CyborgConstruct;
                         break;
                     case "CYBORG_REPAIR":
-                        Template.TemplateDroidType = App.TemplateDroidType_CyborgRepair;
+                        template.TemplateDroidType = App.TemplateDroidType_CyborgRepair;
                         break;
                     case "CYBORG_SUPER":
-                        Template.TemplateDroidType = App.TemplateDroidType_CyborgSuper;
+                        template.TemplateDroidType = App.TemplateDroidType_CyborgSuper;
                         break;
                     case "TRANSPORTER":
-                        Template.TemplateDroidType = App.TemplateDroidType_Transporter;
+                        template.TemplateDroidType = App.TemplateDroidType_Transporter;
                         break;
                     case "PERSON":
-                        Template.TemplateDroidType = App.TemplateDroidType_Person;
+                        template.TemplateDroidType = App.TemplateDroidType_Person;
                         break;
                     default:
-                        Template.TemplateDroidType = null;
-                        returnResult.WarningAdd("Template " + Template.GetDisplayTextCode() + " had an unrecognised type.");
+                        template.TemplateDroidType = null;
+                        returnResult.WarningAdd("Template " + template.GetDisplayTextCode() + " had an unrecognised type.");
                         break;
                 }
                 var LoadPartsArgs = new DroidDesign.sLoadPartsArgs();
-                LoadPartsArgs.Body = FindBodyCode(Fields[2]);
-                LoadPartsArgs.Brain = FindBrainCode(Fields[3]);
-                LoadPartsArgs.Construct = FindConstructorCode(Fields[4]);
-                LoadPartsArgs.ECM = FindECMCode(Fields[5]);
-                LoadPartsArgs.Propulsion = FindPropulsionCode(Fields[7]);
-                LoadPartsArgs.Repair = FindRepairCode(Fields[8]);
-                LoadPartsArgs.Sensor = FindSensorCode(Fields[10]);
-                var TemplateWeapons = GetRowsWithValue(DataAssignWeapons.ResultData, Template.Code);
+                LoadPartsArgs.Body = FindBodyCode(fields[2]);
+                LoadPartsArgs.Brain = FindBrainCode(fields[3]);
+                LoadPartsArgs.Construct = FindConstructorCode(fields[4]);
+                LoadPartsArgs.ECM = FindECMCode(fields[5]);
+                LoadPartsArgs.Propulsion = FindPropulsionCode(fields[7]);
+                LoadPartsArgs.Repair = FindRepairCode(fields[8]);
+                LoadPartsArgs.Sensor = FindSensorCode(fields[10]);
+                var TemplateWeapons = GetRowsWithValue(dataAssignWeapons.ResultData, template.Code);
                 if ( TemplateWeapons.Count > 0 )
                 {
-                    Text = Convert.ToString(TemplateWeapons[0][1]);
-                    if ( Text != "NULL" )
+                    text = Convert.ToString(TemplateWeapons[0][1]);
+                    if ( text != "NULL" )
                     {
-                        LoadPartsArgs.Weapon1 = FindWeaponCode(Text);
+                        LoadPartsArgs.Weapon1 = FindWeaponCode(text);
                     }
-                    Text = Convert.ToString(TemplateWeapons[0][2]);
-                    if ( Text != "NULL" )
+                    text = Convert.ToString(TemplateWeapons[0][2]);
+                    if ( text != "NULL" )
                     {
-                        LoadPartsArgs.Weapon2 = FindWeaponCode(Text);
+                        LoadPartsArgs.Weapon2 = FindWeaponCode(text);
                     }
-                    Text = Convert.ToString(TemplateWeapons[0][3]);
-                    if ( Text != "NULL" )
+                    text = Convert.ToString(TemplateWeapons[0][3]);
+                    if ( text != "NULL" )
                     {
-                        LoadPartsArgs.Weapon3 = FindWeaponCode(Text);
+                        LoadPartsArgs.Weapon3 = FindWeaponCode(text);
                     }
                 }
-                if ( !Template.LoadParts(LoadPartsArgs) )
+                if ( !template.LoadParts(LoadPartsArgs) )
                 {
                     if ( TurretConflictCount < 16 )
                     {
-                        returnResult.WarningAdd("Template " + Template.GetDisplayTextCode() + " had multiple conflicting turrets.");
+                        returnResult.WarningAdd("Template " + template.GetDisplayTextCode() + " had multiple conflicting turrets.");
                     }
                     TurretConflictCount++;
                 }
@@ -1182,21 +1135,21 @@ namespace SharpFlame.Domain
             return Result;
         }
 
-        public Turret FindOrCreateTurret(enumTurretType TurretType, string TurretCode)
+        public Turret FindOrCreateTurret(TurretType TurretType, string TurretCode)
         {
             switch ( TurretType )
             {
-                case enumTurretType.Weapon:
+                case TurretType.Weapon:
                     return FindOrCreateWeapon(TurretCode);
-                case enumTurretType.Construct:
+                case TurretType.Construct:
                     return FindOrCreateConstruct(TurretCode);
-                case enumTurretType.Repair:
+                case TurretType.Repair:
                     return FindOrCreateRepair(TurretCode);
-                case enumTurretType.Sensor:
+                case TurretType.Sensor:
                     return FindOrCreateSensor(TurretCode);
-                case enumTurretType.Brain:
+                case TurretType.Brain:
                     return FindOrCreateBrain(TurretCode);
-                case enumTurretType.ECM:
+                case TurretType.ECM:
                     return FindOrCreateECM(TurretCode);
                 default:
                     return null;

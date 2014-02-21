@@ -477,7 +477,7 @@ namespace SharpFlame.Mapping.IO.Wz
                                 validDroid = false;
                                 invalidPartCount++;
                             }
-                            else if ( droid.Turret2.TurretType != enumTurretType.Weapon )
+                            else if ( droid.Turret2.TurretType != TurretType.Weapon )
                             {
                                 validDroid = false;
                                 invalidPartCount++;
@@ -490,7 +490,7 @@ namespace SharpFlame.Mapping.IO.Wz
                                 validDroid = false;
                                 invalidPartCount++;
                             }
-                            else if ( droid.Turret3.TurretType != enumTurretType.Weapon )
+                            else if ( droid.Turret3.TurretType != TurretType.Weapon )
                             {
                                 validDroid = false;
                                 invalidPartCount++;
@@ -533,7 +533,7 @@ namespace SharpFlame.Mapping.IO.Wz
                             }
                             else
                             {
-                                if ( droid.Turret1.TurretType == enumTurretType.Brain )
+                                if ( droid.Turret1.TurretType == TurretType.Brain )
                                 {
                                     if ( ((Brain)droid.Turret1).Weapon == null )
                                     {
@@ -546,7 +546,7 @@ namespace SharpFlame.Mapping.IO.Wz
                                 }
                                 else
                                 {
-                                    if ( droid.Turret1.TurretType == enumTurretType.Weapon )
+                                    if ( droid.Turret1.TurretType == TurretType.Weapon )
                                     {
                                         text = droid.TurretCount.ToStringInvariant();
                                     }
@@ -566,17 +566,17 @@ namespace SharpFlame.Mapping.IO.Wz
                             ini.AddProperty("parts\\ecm", droid.GetECMCode());
                             if ( droid.TurretCount >= 1 )
                             {
-                                if ( droid.Turret1.TurretType == enumTurretType.Weapon )
+                                if ( droid.Turret1.TurretType == TurretType.Weapon )
                                 {
                                     ini.AddProperty("parts\\weapon\\1", droid.Turret1.Code);
                                     if ( droid.TurretCount >= 2 )
                                     {
-                                        if ( droid.Turret2.TurretType == enumTurretType.Weapon )
+                                        if ( droid.Turret2.TurretType == TurretType.Weapon )
                                         {
                                             ini.AddProperty("parts\\weapon\\2", droid.Turret2.Code);
                                             if ( droid.TurretCount >= 3 )
                                             {
-                                                if ( droid.Turret3.TurretType == enumTurretType.Weapon )
+                                                if ( droid.Turret3.TurretType == TurretType.Weapon )
                                                 {
                                                     ini.AddProperty("parts\\weapon\\3", droid.Turret3.Code);
                                                 }
@@ -584,7 +584,7 @@ namespace SharpFlame.Mapping.IO.Wz
                                         }
                                     }
                                 }
-                                else if ( droid.Turret1.TurretType == enumTurretType.Brain )
+                                else if ( droid.Turret1.TurretType == TurretType.Brain )
                                 {
                                     brain = (Brain)droid.Turret1;
                                     if ( brain.Weapon == null )

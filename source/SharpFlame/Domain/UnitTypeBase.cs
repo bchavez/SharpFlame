@@ -485,7 +485,7 @@ namespace SharpFlame.Domain
             {
                 return result;
             }
-            if ( Turret2.TurretType != enumTurretType.Weapon )
+            if ( Turret2.TurretType != TurretType.Weapon )
             {
                 return result;
             }
@@ -494,7 +494,7 @@ namespace SharpFlame.Domain
             {
                 return result;
             }
-            if ( Turret3.TurretType != enumTurretType.Weapon )
+            if ( Turret3.TurretType != TurretType.Weapon )
             {
                 return result;
             }
@@ -551,7 +551,7 @@ namespace SharpFlame.Domain
                 var UseWeapon = default(bool);
                 if ( Turret1 != null )
                 {
-                    if ( Turret1.TurretType == enumTurretType.Brain )
+                    if ( Turret1.TurretType == TurretType.Brain )
                     {
                         UseWeapon = false;
                     }
@@ -695,27 +695,27 @@ namespace SharpFlame.Domain
             {
                 Result = DroidType.Default;
             }
-            else if ( Turret1.TurretType == enumTurretType.Brain )
+            else if ( Turret1.TurretType == TurretType.Brain )
             {
                 Result = DroidType.Command;
             }
-            else if ( Turret1.TurretType == enumTurretType.Sensor )
+            else if ( Turret1.TurretType == TurretType.Sensor )
             {
                 Result = DroidType.Sensor;
             }
-            else if ( Turret1.TurretType == enumTurretType.ECM )
+            else if ( Turret1.TurretType == TurretType.ECM )
             {
                 Result = DroidType.ECM;
             }
-            else if ( Turret1.TurretType == enumTurretType.Construct )
+            else if ( Turret1.TurretType == TurretType.Construct )
             {
                 Result = DroidType.Construct;
             }
-            else if ( Turret1.TurretType == enumTurretType.Repair )
+            else if ( Turret1.TurretType == TurretType.Repair )
             {
                 Result = DroidType.Repair;
             }
-            else if ( Turret1.TurretType == enumTurretType.Weapon )
+            else if ( Turret1.TurretType == TurretType.Weapon )
             {
                 Result = DroidType.Weapon;
             }
@@ -786,7 +786,7 @@ namespace SharpFlame.Domain
                 {
                     NotThis = true;
                 }
-                else if ( Turret1.TurretType != enumTurretType.Construct )
+                else if ( Turret1.TurretType != TurretType.Construct )
                 {
                     NotThis = true;
                 }
@@ -817,7 +817,7 @@ namespace SharpFlame.Domain
                 {
                     NotThis = true;
                 }
-                else if ( Turret1.TurretType != enumTurretType.Repair )
+                else if ( Turret1.TurretType != TurretType.Repair )
                 {
                     NotThis = true;
                 }
@@ -848,7 +848,7 @@ namespace SharpFlame.Domain
                 {
                     NotThis = true;
                 }
-                else if ( Turret1.TurretType != enumTurretType.Sensor )
+                else if ( Turret1.TurretType != TurretType.Sensor )
                 {
                     NotThis = true;
                 }
@@ -879,7 +879,7 @@ namespace SharpFlame.Domain
                 {
                     NotThis = true;
                 }
-                else if ( Turret1.TurretType != enumTurretType.Brain )
+                else if ( Turret1.TurretType != TurretType.Brain )
                 {
                     NotThis = true;
                 }
@@ -910,7 +910,7 @@ namespace SharpFlame.Domain
                 {
                     NotThis = true;
                 }
-                else if ( Turret1.TurretType != enumTurretType.ECM )
+                else if ( Turret1.TurretType != TurretType.ECM )
                 {
                     NotThis = true;
                 }
