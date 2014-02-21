@@ -1180,19 +1180,23 @@ namespace SharpFlame
 
             if ( remove )
             {
-                var ApplyCliffTriangleRemove = new clsApplyCliffTriangleRemove();
-                ApplyCliffTriangleRemove.Map = Map;
-                ApplyCliffTriangleRemove.PosNum = mouseOverTerrain.Tile.Normal;
-                ApplyCliffTriangleRemove.Triangle = mouseOverTerrain.Triangle;
-                ApplyCliffTriangleRemove.ActionPerform();
+                var applyCliffTriangleRemove = new clsApplyCliffTriangleRemove
+                    {
+                        Map = Map, 
+                        PosNum = mouseOverTerrain.Tile.Normal,
+                        Triangle = mouseOverTerrain.Triangle
+                    };
+                applyCliffTriangleRemove.ActionPerform();
             }
             else
             {
-                var ApplyCliffTriangle = new clsApplyCliffTriangle();
-                ApplyCliffTriangle.Map = Map;
-                ApplyCliffTriangle.PosNum = mouseOverTerrain.Tile.Normal;
-                ApplyCliffTriangle.Triangle = mouseOverTerrain.Triangle;
-                ApplyCliffTriangle.ActionPerform();
+                var applyCliffTriangle = new clsApplyCliffTriangle
+                    {
+                        Map = Map, 
+                        PosNum = mouseOverTerrain.Tile.Normal,
+                        Triangle = mouseOverTerrain.Triangle
+                    };
+                applyCliffTriangle.ActionPerform();
             }
 
             Map.Update();
@@ -1234,8 +1238,7 @@ namespace SharpFlame
                 return;
             }
 
-            var applyCliffRemove = new clsApplyCliffRemove();
-            applyCliffRemove.Map = Map;
+            var applyCliffRemove = new clsApplyCliffRemove {Map = Map};
             App.CliffBrush.PerformActionMapTiles(applyCliffRemove, mouseOverTerrain.Tile);
 
             Map.Update();
@@ -1252,8 +1255,7 @@ namespace SharpFlame
                 return;
             }
 
-            var applyRoadRemove = new clsApplyRoadRemove();
-            applyRoadRemove.Map = Map;
+            var applyRoadRemove = new clsApplyRoadRemove {Map = Map};
             App.CliffBrush.PerformActionMapTiles(applyRoadRemove, mouseOverTerrain.Tile);
 
             Map.Update();
@@ -1270,13 +1272,13 @@ namespace SharpFlame
                 return;
             }
 
-            var Tile = mouseOverTerrain.Tile.Normal;
+            var tile = mouseOverTerrain.Tile.Normal;
 
-            Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation.RotateClockwise();
-            Map.TileTextureChangeTerrainAction(Tile, Program.frmMainInstance.TextureTerrainAction);
+            Map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.RotateClockwise();
+            Map.TileTextureChangeTerrainAction(tile, Program.frmMainInstance.TextureTerrainAction);
 
-            Map.SectorGraphicsChanges.TileChanged(Tile);
-            Map.SectorTerrainUndoChanges.TileChanged(Tile);
+            Map.SectorGraphicsChanges.TileChanged(tile);
+            Map.SectorTerrainUndoChanges.TileChanged(tile);
 
             Map.Update();
 
@@ -1372,9 +1374,11 @@ namespace SharpFlame
             var posNum = App.HeightBrush.GetPosNum(mouseOverTerrain.Vertex);
             applyHeightSmoothing.Offset.X = MathUtil.ClampInt(posNum.X - radius, 0, Map.Terrain.TileSize.X);
             applyHeightSmoothing.Offset.Y = MathUtil.ClampInt(posNum.Y - radius, 0, Map.Terrain.TileSize.Y);
-            var posEnd = new XYInt();
-            posEnd.X = MathUtil.ClampInt(posNum.X + radius, 0, Map.Terrain.TileSize.X);
-            posEnd.Y = MathUtil.ClampInt(posNum.Y + radius, 0, Map.Terrain.TileSize.Y);
+            var posEnd = new XYInt
+                {
+                    X = MathUtil.ClampInt(posNum.X + radius, 0, Map.Terrain.TileSize.X),
+                    Y = MathUtil.ClampInt(posNum.Y + radius, 0, Map.Terrain.TileSize.Y)
+                };
             applyHeightSmoothing.AreaTileSize.X = posEnd.X - applyHeightSmoothing.Offset.X;
             applyHeightSmoothing.AreaTileSize.Y = posEnd.Y - applyHeightSmoothing.Offset.Y;
             applyHeightSmoothing.Start();
@@ -1415,9 +1419,11 @@ namespace SharpFlame
                 return;
             }
 
-            var applyHeightSet = new clsApplyHeightSet();
-            applyHeightSet.Map = Map;
-            applyHeightSet.Height = height;
+            var applyHeightSet = new clsApplyHeightSet
+                {
+                    Map = Map,
+                    Height = height
+                };
             brush.PerformActionMapVertices(applyHeightSet, mouseOverTerrain.Vertex);
 
             Map.Update();
@@ -1689,11 +1695,11 @@ namespace SharpFlame
                 }
                 else
                 {
-                    var MouseOverTerrain = GetMouseOverTerrain();
-                    if ( MouseOverTerrain != null )
+                    var mouseOverTerrain = GetMouseOverTerrain();
+                    if ( mouseOverTerrain != null )
                     {
                         MouseRightDown.OverTerrain = new clsMouseDown.clsOverTerrain();
-                        MouseRightDown.OverTerrain.DownPos = MouseOverTerrain.Pos;
+                        MouseRightDown.OverTerrain.DownPos = mouseOverTerrain.Pos;
                     }
                 }
                 if ( modTools.Tool == modTools.Tools.RoadLines || modTools.Tool == modTools.Tools.ObjectLines )
