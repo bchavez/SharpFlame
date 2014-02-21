@@ -11,7 +11,7 @@ using Sprache;
 namespace SharpFlame.Tests.Parser
 {
     [TestFixture]
-    public class TestFixture
+    public class Lev2ParserTests
     {
         [Test]
         public void test()
