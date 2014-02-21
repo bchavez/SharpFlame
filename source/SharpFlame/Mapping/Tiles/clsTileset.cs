@@ -23,13 +23,20 @@ namespace SharpFlame.Mapping.Tiles
 
         public bool IsOriginal { get; set; }
 
-        public sTile[] Tiles { get; set; }
+        public struct Tile
+        {
+            public sRGB_sng AverageColour;
+            public byte DefaultType;
+            public int GlTextureNum;
+        }
+
+        public Tile[] Tiles { get; set; }
 
         public int TileCount { get; set; }
 
         public string Name { get; set; }
 
-        public sResult LoadTileType(string path)
+        private sResult loadTileType(string path)
         {
             var returnResult = new sResult();
             BinaryReader file;
@@ -43,12 +50,12 @@ namespace SharpFlame.Mapping.Tiles
                 returnResult.Problem = ex.Message;
                 return returnResult;
             }
-            returnResult = ReadTileType(file);
+            returnResult = readTileType(file);
             file.Close();
             return returnResult;
         }
 
-        private sResult ReadTileType(BinaryReader file)
+        private sResult readTileType(BinaryReader file)
         {
             var returnResult = new sResult();
             returnResult.Success = false;
@@ -77,9 +84,9 @@ namespace SharpFlame.Mapping.Tiles
 
                 uintTemp = file.ReadUInt32();
                 TileCount = Convert.ToInt32(uintTemp);
-                Tiles = new sTile[TileCount];
+                Tiles = new Tile[TileCount];
 
-                for ( i = 0; i <= Math.Min(Convert.ToInt32(uintTemp), TileCount) - 1; i++ )
+                for ( i = 0; i < Math.Min((Int32)uintTemp, TileCount); i++ )
                 {
                     ushortTemp = file.ReadUInt16();
                     if ( ushortTemp > App.TileTypes.Count )
@@ -121,7 +128,7 @@ namespace SharpFlame.Mapping.Tiles
 
             var ttpFileName = Path.ChangeExtension(Name, ".ttp");
 
-            result = LoadTileType(Path.Combine(slashPath, ttpFileName));
+            result = loadTileType(Path.Combine(slashPath, ttpFileName));
 
             if ( !result.Success )
             {
@@ -405,13 +412,6 @@ namespace SharpFlame.Mapping.Tiles
             BitmapUtil.CreateGLTexture (bitmap1, 7, textureNum);
 
             return ReturnResult;
-        }
-
-        public struct sTile
-        {
-            public sRGB_sng AverageColour;
-            public byte DefaultType;
-            public int GlTextureNum;
-        }
+        }       
     }
 }

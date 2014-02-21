@@ -420,13 +420,10 @@ namespace SharpFlame
             var PlayerHQCount = new int[Constants.PlayerCountMax];
             var Player23TruckCount = new int[Constants.PlayerCountMax];
             var PlayerMasterTruckCount = new int[Constants.PlayerCountMax];
-            var ScavPlayerNum = 0;
             var DroidType = default(DroidDesign);
             StructureTypeBase structureTypeBase;
             var UnusedPlayerUnitWarningCount = 0;
             var Unit = default(clsUnit);
-
-            ScavPlayerNum = Math.Max(PlayerCount, 7);
 
             foreach ( var tempLoopVar_Unit in Map.Units )
             {
