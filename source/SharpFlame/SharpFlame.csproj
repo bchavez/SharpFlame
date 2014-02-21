@@ -115,6 +115,7 @@
     <Compile Include="AppSettings\OptionCreator.cs" />
     <Compile Include="AppSettings\OptionProfile.cs" />
     <Compile Include="Collections\Specialized\BooleanMap.cs" />
+    <Compile Include="Domain\Definitions.cs" />
     <Compile Include="Generators\clsBrush.cs" />
     <Compile Include="Domain\ComponentBase.cs" />
     <Compile Include="Mapping\Changes\clsAutoTextureChanges.cs" />
@@ -249,7 +250,6 @@
     <Compile Include="Util\clsLayer.cs" />
     <Compile Include="Util\clsPlayer.cs" />
     <Compile Include="Util\clsTileType.cs" />
-    <Compile Include="Util\enumDroidType.cs" />
     <Compile Include="Util\enumFillCliffAction.cs" />
     <Compile Include="Util\enumObjectRotateMode.cs" />
     <Compile Include="Util\enumTextureTerrainAction.cs" />

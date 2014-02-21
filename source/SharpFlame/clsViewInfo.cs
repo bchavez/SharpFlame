@@ -588,7 +588,7 @@ namespace SharpFlame
                         unit = connection.Unit;
                         xYDbl.X = unit.Pos.Horizontal.X - mouseOverTerrain.Pos.Horizontal.X;
                         xYDbl.Y = unit.Pos.Horizontal.Y - mouseOverTerrain.Pos.Horizontal.Y;
-                        footprint = unit.TypeBase.get_GetFootprintSelected(unit.Rotation);
+                        footprint = unit.TypeBase.GetGetFootprintSelected(unit.Rotation);
                         if ( Math.Abs(xYDbl.X) <= Math.Max(footprint.X / 2.0D, 0.5D) * Constants.TerrainGridSpacing
                              && Math.Abs(xYDbl.Y) <= Math.Max(footprint.Y / 2.0D, 0.5D) * Constants.TerrainGridSpacing )
                         {

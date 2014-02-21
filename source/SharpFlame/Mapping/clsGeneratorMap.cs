@@ -1822,7 +1822,7 @@ namespace SharpFlame
 
                     FinalTilePos.X = NodeTag.Pos.X / Constants.TerrainGridSpacing;
                     FinalTilePos.Y = (NodeTag.Pos.Y / Constants.TerrainGridSpacing);
-                    Footprint = TypeBase.get_GetFootprintSelected(Rotation);
+                    Footprint = TypeBase.GetGetFootprintSelected(Rotation);
                     Remainder = Footprint.X % 2;
                     if ( Remainder > 0 )
                     {
@@ -1900,7 +1900,7 @@ namespace SharpFlame
             FinalTilePos.X = Pos.Horizontal.X / Constants.TerrainGridSpacing;
             FinalTilePos.Y = Pos.Horizontal.Y / Constants.TerrainGridSpacing;
 
-            Footprint = TypeBase.get_GetFootprintSelected(Rotation);
+            Footprint = TypeBase.GetGetFootprintSelected(Rotation);
 
             NewUnit.Pos = Pos;
             TilePosA.X = (int)(((double)NewUnit.Pos.Horizontal.X / Constants.TerrainGridSpacing - Footprint.X / 2.0D + 0.5D));
@@ -2195,7 +2195,7 @@ namespace SharpFlame
                                     }
                                 }
                                 Rotation = 0;
-                                Footprint = GenerateTileset.ClusteredUnits[C].TypeBase.get_GetFootprintSelected(Rotation);
+                                Footprint = GenerateTileset.ClusteredUnits[C].TypeBase.GetGetFootprintSelected(Rotation);
                                 E = ((int)(Math.Ceiling((decimal)(Math.Max(Footprint.X, Footprint.Y) / 2.0F)))) + 1;
                                 tmpUnit = PlaceUnitNear(GenerateTileset.ClusteredUnits[C].TypeBase, passageNodes[D, A].Pos, Map.ScavengerUnitGroup, E, Rotation,
                                     FeaturePlaceRange);
@@ -2235,7 +2235,7 @@ namespace SharpFlame
                         }
                     }
                     Rotation = 0;
-                    Footprint = GenerateTileset.ScatteredUnits[C].TypeBase.get_GetFootprintSelected(Rotation);
+                    Footprint = GenerateTileset.ScatteredUnits[C].TypeBase.GetGetFootprintSelected(Rotation);
                     B = FeatureScatterGap + (int)(Math.Ceiling((decimal)(Math.Max(Footprint.X, Footprint.Y) / 2.0F)));
                     tmpNode = GetRandomChildNode(TilePathMap.get_GetNodeLayer(TilePathMap.GetNodeLayerCount - 1).get_GetNode(0), B);
                     if ( tmpNode == null )

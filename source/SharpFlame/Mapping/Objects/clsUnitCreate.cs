@@ -43,7 +43,7 @@ namespace SharpFlame.Mapping.Objects
                 newUnit.Rotation = Rotation;
             }
             newUnit.UnitGroup = UnitGroup;
-            newUnit.Pos = Map.TileAlignedPosFromMapPos(Horizontal, ObjectTypeBase.get_GetFootprintSelected(newUnit.Rotation));
+            newUnit.Pos = Map.TileAlignedPosFromMapPos(Horizontal, ObjectTypeBase.GetGetFootprintSelected(newUnit.Rotation));
             newUnit.TypeBase = ObjectTypeBase;
             var UnitAdd = new clsUnitAdd();
             UnitAdd.Map = Map;

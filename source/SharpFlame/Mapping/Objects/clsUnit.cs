@@ -134,9 +134,9 @@ namespace SharpFlame.Mapping.Objects
             {
                 var structureTypeBase = (StructureTypeBase)TypeBase;
                 var StructureTypeType = structureTypeBase.StructureType;
-                if ( StructureTypeType == StructureTypeBase.enumStructureType.FactoryModule
-                     | StructureTypeType == StructureTypeBase.enumStructureType.PowerModule
-                     | StructureTypeType == StructureTypeBase.enumStructureType.ResearchModule )
+                if ( StructureTypeType == StructureType.FactoryModule
+                     | StructureTypeType == StructureType.PowerModule
+                     | StructureTypeType == StructureType.ResearchModule )
                 {
                     Result.Problem = "Error: Trying to assign label to structure module.";
                     return Result;

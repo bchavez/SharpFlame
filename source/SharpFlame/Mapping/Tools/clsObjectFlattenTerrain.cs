@@ -22,7 +22,7 @@ namespace SharpFlame.Mapping.Tools
             var Y = 0;
             double Total = 0;
             byte Average = 0;
-            var Footprint = Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation);
+            var Footprint = Unit.TypeBase.GetGetFootprintSelected(Unit.Rotation);
             var Start = new XYInt();
             var Finish = new XYInt();
             var Samples = 0;

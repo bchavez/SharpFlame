@@ -807,7 +807,7 @@ namespace SharpFlame.Mapping
                         {
                             Rotation = 0;
                         }
-                        WorldPos = TileAlignedPosFromMapPos(MouseOverTerrain.Pos.Horizontal, placeObject.get_GetFootprintSelected(Rotation));
+                        WorldPos = TileAlignedPosFromMapPos(MouseOverTerrain.Pos.Horizontal, placeObject.GetGetFootprintSelected(Rotation));
                         GL.PushMatrix();
                         GL.Translate(WorldPos.Horizontal.X - ViewInfo.ViewPos.X, WorldPos.Altitude - ViewInfo.ViewPos.Y + 2.0D,
                             ViewInfo.ViewPos.Z + WorldPos.Horizontal.Y);
@@ -1124,7 +1124,7 @@ namespace SharpFlame.Mapping
             var A = 0;
             var Altitude = Unit.Pos.Altitude - ViewInfo.ViewPos.Y;
 
-            GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation), ref PosA, ref PosB);
+            GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.TypeBase.GetGetFootprintSelected(Unit.Rotation), ref PosA, ref PosB);
             A = PosA.Y;
             PosA.X = (int)((PosA.X + 0.125D) * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X);
             PosA.Y = (int)((PosB.Y + 0.875D) * - Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z);

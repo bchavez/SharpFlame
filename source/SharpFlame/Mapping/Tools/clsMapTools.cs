@@ -169,7 +169,7 @@ namespace SharpFlame.Mapping
                 {
                     if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
                     {
-                        if ( ((StructureTypeBase)Unit.TypeBase).StructureType == StructureTypeBase.enumStructureType.Wall )
+                        if ( ((StructureTypeBase)Unit.TypeBase).StructureType == StructureType.Wall )
                         {
                             Unit.Rotation =
                                 (int)

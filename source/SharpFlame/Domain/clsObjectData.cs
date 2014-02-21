@@ -551,67 +551,67 @@ namespace SharpFlame.Domain
                     switch ( StructureTypeText )
                     {
                         case "DEMOLISH":
-                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.Demolish;
+                            structureTypeBase.StructureType = StructureType.Demolish;
                             break;
                         case "WALL":
-                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.Wall;
+                            structureTypeBase.StructureType = StructureType.Wall;
                             break;
                         case "CORNER WALL":
-                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.CornerWall;
+                            structureTypeBase.StructureType = StructureType.CornerWall;
                             break;
                         case "FACTORY":
-                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.Factory;
+                            structureTypeBase.StructureType = StructureType.Factory;
                             break;
                         case "CYBORG FACTORY":
-                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.CyborgFactory;
+                            structureTypeBase.StructureType = StructureType.CyborgFactory;
                             break;
                         case "VTOL FACTORY":
-                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.VTOLFactory;
+                            structureTypeBase.StructureType = StructureType.VTOLFactory;
                             break;
                         case "COMMAND":
-                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.Command;
+                            structureTypeBase.StructureType = StructureType.Command;
                             break;
                         case "HQ":
-                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.HQ;
+                            structureTypeBase.StructureType = StructureType.HQ;
                             break;
                         case "DEFENSE":
-                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.Defense;
+                            structureTypeBase.StructureType = StructureType.Defense;
                             break;
                         case "POWER GENERATOR":
-                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.PowerGenerator;
+                            structureTypeBase.StructureType = StructureType.PowerGenerator;
                             break;
                         case "POWER MODULE":
-                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.PowerModule;
+                            structureTypeBase.StructureType = StructureType.PowerModule;
                             break;
                         case "RESEARCH":
-                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.Research;
+                            structureTypeBase.StructureType = StructureType.Research;
                             break;
                         case "RESEARCH MODULE":
-                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.ResearchModule;
+                            structureTypeBase.StructureType = StructureType.ResearchModule;
                             break;
                         case "FACTORY MODULE":
-                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.FactoryModule;
+                            structureTypeBase.StructureType = StructureType.FactoryModule;
                             break;
                         case "DOOR":
-                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.DOOR;
+                            structureTypeBase.StructureType = StructureType.DOOR;
                             break;
                         case "REPAIR FACILITY":
-                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.RepairFacility;
+                            structureTypeBase.StructureType = StructureType.RepairFacility;
                             break;
                         case "SAT UPLINK":
-                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.DOOR;
+                            structureTypeBase.StructureType = StructureType.DOOR;
                             break;
                         case "REARM PAD":
-                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.RearmPad;
+                            structureTypeBase.StructureType = StructureType.RearmPad;
                             break;
                         case "MISSILE SILO":
-                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.MissileSilo;
+                            structureTypeBase.StructureType = StructureType.MissileSilo;
                             break;
                         case "RESOURCE EXTRACTOR":
-                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.ResourceExtractor;
+                            structureTypeBase.StructureType = StructureType.ResourceExtractor;
                             break;
                         default:
-                            structureTypeBase.StructureType = StructureTypeBase.enumStructureType.Unknown;
+                            structureTypeBase.StructureType = StructureType.Unknown;
                             break;
                     }
 
@@ -643,7 +643,7 @@ namespace SharpFlame.Domain
                                 if ( Weapon.Code != "ZNULLWEAPON" )
                                 {
                                     Attachment = BaseAttachment.CopyAttachment(Weapon.Attachment);
-                                    Attachment.Pos_Offset = Connector;
+                                    Attachment.PosOffset = Connector;
                                 }
                             }
                             if ( ECM != null )
@@ -651,7 +651,7 @@ namespace SharpFlame.Domain
                                 if ( ECM.Code != "ZNULLECM" )
                                 {
                                     Attachment = BaseAttachment.CopyAttachment(ECM.Attachment);
-                                    Attachment.Pos_Offset = Connector;
+                                    Attachment.PosOffset = Connector;
                                 }
                             }
                             if ( Sensor != null )
@@ -659,7 +659,7 @@ namespace SharpFlame.Domain
                                 if ( Sensor.Code != "ZNULLSENSOR" )
                                 {
                                     Attachment = BaseAttachment.CopyAttachment(Sensor.Attachment);
-                                    Attachment.Pos_Offset = Connector;
+                                    Attachment.PosOffset = Connector;
                                 }
                             }
                         }
@@ -701,7 +701,7 @@ namespace SharpFlame.Domain
                         }
                         wallStructureTypeBase.Name = Text;
                         wallStructureTypeBase.Footprint = StructureFootprint;
-                        wallStructureTypeBase.StructureType = StructureTypeBase.enumStructureType.Wall;
+                        wallStructureTypeBase.StructureType = StructureType.Wall;
 
                         BaseAttachment = wallStructureTypeBase.BaseAttachment;
 
@@ -1299,7 +1299,7 @@ namespace SharpFlame.Domain
             }
         }
 
-        public StructureTypeBase FindFirstStructureType(StructureTypeBase.enumStructureType Type)
+        public StructureTypeBase FindFirstStructureType(StructureType Type)
         {
             var structureTypeBase = default(StructureTypeBase);
 

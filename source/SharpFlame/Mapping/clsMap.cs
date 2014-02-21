@@ -678,7 +678,7 @@ namespace SharpFlame.Mapping
                         structureTypeBase = (StructureTypeBase)Unit.TypeBase;
                         if ( structureTypeBase.StructureBasePlate != null )
                         {
-                            Footprint = structureTypeBase.get_GetFootprintSelected(Unit.Rotation);
+                            Footprint = structureTypeBase.GetGetFootprintSelected(Unit.Rotation);
                             GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Footprint, ref FootprintStart, ref FootprintFinish);
                             for ( TileY = Math.Max(FootprintStart.Y, StartY); TileY <= Math.Min(FootprintFinish.Y, FinishY); TileY++ )
                             {
@@ -953,7 +953,7 @@ namespace SharpFlame.Mapping
                     }
                     else
                     {
-                        Footprint = Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation);
+                        Footprint = Unit.TypeBase.GetGetFootprintSelected(Unit.Rotation);
                     }
                     if ( Flag )
                     {
@@ -1010,7 +1010,7 @@ namespace SharpFlame.Mapping
                     if ( Unit.TypeBase.UnitType_frmMainSelectedLink.IsConnected )
                     {
                         Flag = true;
-                        Footprint = Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation);
+                        Footprint = Unit.TypeBase.GetGetFootprintSelected(Unit.Rotation);
                         Footprint.X += 2;
                         Footprint.Y += 2;
                     }
@@ -1184,7 +1184,7 @@ namespace SharpFlame.Mapping
             var X = 0;
             var Y = 0;
 
-            GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation), ref TileStart, ref TileFinish);
+            GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.TypeBase.GetGetFootprintSelected(Unit.Rotation), ref TileStart, ref TileFinish);
             Start = GetTileSectorNum(TileStart);
             Finish = GetTileSectorNum(TileFinish);
             Start.X = MathUtil.ClampInt(Start.X, 0, SectorCount.X - 1);

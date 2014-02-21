@@ -455,9 +455,9 @@ namespace SharpFlame.Mapping.IO.Wz
             var moduleTypeBase = default(StructureTypeBase);
             var newModule = default(clsUnit);
 
-            var factoryModule = App.ObjectData.FindFirstStructureType(StructureTypeBase.enumStructureType.FactoryModule);
-            var researchModule = App.ObjectData.FindFirstStructureType(StructureTypeBase.enumStructureType.ResearchModule);
-            var powerModule = App.ObjectData.FindFirstStructureType(StructureTypeBase.enumStructureType.PowerModule);
+            var factoryModule = App.ObjectData.FindFirstStructureType(StructureType.FactoryModule);
+            var researchModule = App.ObjectData.FindFirstStructureType(StructureType.ResearchModule);
+            var powerModule = App.ObjectData.FindFirstStructureType(StructureType.PowerModule);
 
             if ( factoryModule == null )
             {
@@ -539,19 +539,19 @@ namespace SharpFlame.Mapping.IO.Wz
                         //create modules
                         switch ( structureTypeBase.StructureType )
                         {
-                            case StructureTypeBase.enumStructureType.Factory:
+                            case StructureType.Factory:
                                 moduleLimit = 2;
                                 moduleTypeBase = factoryModule;
                                 break;
-                            case StructureTypeBase.enumStructureType.VTOLFactory:
+                            case StructureType.VTOLFactory:
                                 moduleLimit = 2;
                                 moduleTypeBase = factoryModule;
                                 break;
-                            case StructureTypeBase.enumStructureType.PowerGenerator:
+                            case StructureType.PowerGenerator:
                                 moduleLimit = 1;
                                 moduleTypeBase = powerModule;
                                 break;
-                            case StructureTypeBase.enumStructureType.Research:
+                            case StructureType.Research:
                                 moduleLimit = 1;
                                 moduleTypeBase = researchModule;
                                 break;
@@ -673,7 +673,7 @@ namespace SharpFlame.Mapping.IO.Wz
                     if ( iniDroid.Template == null || iniDroid.Template == "" )
                     {
                         droidType = new DroidDesign();
-                        if ( !droidType.SetDroidType((enumDroidType)(iniDroid.DroidType)) )
+                        if ( !droidType.SetDroidType((DroidType)(iniDroid.DroidType)) )
                         {
                             unknownDroidTypeCount++;
                         }
