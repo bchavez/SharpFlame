@@ -2,6 +2,7 @@
 
 using System;
 using SharpFlame.Collections;
+using SharpFlame.Core.Collections;
 using SharpFlame.FileIO;
 
 #endregion

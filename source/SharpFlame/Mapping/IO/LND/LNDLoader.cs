@@ -3,6 +3,7 @@ using System.IO;
 using NLog;
 using SharpFlame.Collections;
 using SharpFlame.Core;
+using SharpFlame.Core.Collections;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Core.Interfaces.Mapping.IO;

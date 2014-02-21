@@ -1,4 +1,4 @@
-namespace SharpFlame.Collections
+namespace SharpFlame.Core.Collections
 {
     public interface ISimpleListTool<ItemType>
     {

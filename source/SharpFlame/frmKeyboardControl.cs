@@ -3,6 +3,7 @@
 using System;
 using System.Windows.Forms;
 using SharpFlame.Collections;
+using SharpFlame.Core.Collections;
 using SharpFlame.FileIO;
 
 #endregion
