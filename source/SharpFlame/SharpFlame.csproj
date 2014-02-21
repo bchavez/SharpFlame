@@ -250,8 +250,8 @@
     <Compile Include="Util\clsLayer.cs" />
     <Compile Include="Util\clsPlayer.cs" />
     <Compile Include="Util\clsTileType.cs" />
-    <Compile Include="Util\enumFillCliffAction.cs" />
-    <Compile Include="Util\enumObjectRotateMode.cs" />
+    <Compile Include="Util\FillCliffAction.cs" />
+    <Compile Include="Util\ObjectRotateMode.cs" />
     <Compile Include="Util\enumTextureTerrainAction.cs" />
     <Compile Include="Util\enumTileWalls.cs" />
     <Compile Include="Util\sLayerList.cs" />

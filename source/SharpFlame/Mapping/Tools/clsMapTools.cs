@@ -17,7 +17,7 @@ namespace SharpFlame.Mapping
 {
     public partial class clsMap
     {
-        public void Rotate(TileOrientation Orientation, enumObjectRotateMode ObjectRotateMode)
+        public void Rotate(TileOrientation Orientation, ObjectRotateMode ObjectRotateMode)
         {
             var X = 0;
             var Y = 0;
@@ -153,7 +153,7 @@ namespace SharpFlame.Mapping
             {
                 Unit = tempLoopVar_Unit;
                 Unit.Sectors.Clear();
-                if ( ObjectRotateMode == enumObjectRotateMode.All )
+                if ( ObjectRotateMode == ObjectRotateMode.All )
                 {
                     Unit.Rotation =
                         (int)
@@ -165,7 +165,7 @@ namespace SharpFlame.Mapping
                         Unit.Rotation += 360;
                     }
                 }
-                else if ( ObjectRotateMode == enumObjectRotateMode.Walls )
+                else if ( ObjectRotateMode == ObjectRotateMode.Walls )
                 {
                     if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
                     {

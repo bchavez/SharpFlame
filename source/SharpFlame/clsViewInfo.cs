@@ -883,7 +883,7 @@ namespace SharpFlame
             }
         }
 
-        public void ApplyTerrainFill(enumFillCliffAction CliffAction, bool Inside)
+        public void ApplyTerrainFill(FillCliffAction CliffAction, bool Inside)
         {
             var mouseOverTerrain = GetMouseOverTerrain();
 
@@ -922,7 +922,7 @@ namespace SharpFlame
             {
                 currentSource = sourceOfFill[sourceOfFillNum];
 
-                if ( CliffAction == enumFillCliffAction.StopBefore )
+                if ( CliffAction == FillCliffAction.StopBefore )
                 {
                     stopForCliff = Map.VertexIsCliffEdge(currentSource);
                 }
@@ -1013,7 +1013,7 @@ namespace SharpFlame
                         if ( nextSource.X >= 0 & nextSource.X <= Map.Terrain.TileSize.X
                              & nextSource.Y >= 0 & nextSource.Y <= Map.Terrain.TileSize.Y )
                         {
-                            if ( CliffAction == enumFillCliffAction.StopAfter )
+                            if ( CliffAction == FillCliffAction.StopAfter )
                             {
                                 stopForCliff = Map.SideHIsCliffOnBothSides(new XYInt(currentSource.X, currentSource.Y));
                             }
@@ -1040,7 +1040,7 @@ namespace SharpFlame
                         if ( nextSource.X >= 0 & nextSource.X <= Map.Terrain.TileSize.X
                              & nextSource.Y >= 0 & nextSource.Y <= Map.Terrain.TileSize.Y )
                         {
-                            if ( CliffAction == enumFillCliffAction.StopAfter )
+                            if ( CliffAction == FillCliffAction.StopAfter )
                             {
                                 stopForCliff = Map.SideHIsCliffOnBothSides(new XYInt(currentSource.X - 1, currentSource.Y));
                             }
@@ -1067,7 +1067,7 @@ namespace SharpFlame
                         if ( nextSource.X >= 0 & nextSource.X <= Map.Terrain.TileSize.X
                              & nextSource.Y >= 0 & nextSource.Y <= Map.Terrain.TileSize.Y )
                         {
-                            if ( CliffAction == enumFillCliffAction.StopAfter )
+                            if ( CliffAction == FillCliffAction.StopAfter )
                             {
                                 stopForCliff = Map.SideVIsCliffOnBothSides(new XYInt(currentSource.X, currentSource.Y));
                             }
@@ -1094,7 +1094,7 @@ namespace SharpFlame
                         if ( nextSource.X >= 0 & nextSource.X <= Map.Terrain.TileSize.X
                              & nextSource.Y >= 0 & nextSource.Y <= Map.Terrain.TileSize.Y )
                         {
-                            if ( CliffAction == enumFillCliffAction.StopAfter )
+                            if ( CliffAction == FillCliffAction.StopAfter )
                             {
                                 stopForCliff = Map.SideVIsCliffOnBothSides(new XYInt(currentSource.X, currentSource.Y - 1));
                             }

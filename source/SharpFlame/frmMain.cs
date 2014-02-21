@@ -141,7 +141,7 @@ namespace SharpFlame
 
         public enumTextureTerrainAction TextureTerrainAction = enumTextureTerrainAction.Reinterpret;
 
-        public enumFillCliffAction FillCliffAction = enumFillCliffAction.Ignore;
+        public FillCliffAction FillCliffAction = FillCliffAction.Ignore;
 
         public Timer tmrKey;
         public Timer tmrTool;
@@ -2801,11 +2801,11 @@ namespace SharpFlame
             }
         }
 
-        public enumObjectRotateMode PasteRotateObjects = enumObjectRotateMode.Walls;
+        public ObjectRotateMode PasteRotateObjects = ObjectRotateMode.Walls;
 
         public void menuRotateUnits_Click(Object sender, EventArgs e)
         {
-            PasteRotateObjects = enumObjectRotateMode.All;
+            PasteRotateObjects = ObjectRotateMode.All;
             menuRotateUnits.Checked = true;
             menuRotateWalls.Checked = false;
             menuRotateNothing.Checked = false;
@@ -2813,7 +2813,7 @@ namespace SharpFlame
 
         public void menuRotateWalls_Click(Object sender, EventArgs e)
         {
-            PasteRotateObjects = enumObjectRotateMode.Walls;
+            PasteRotateObjects = ObjectRotateMode.Walls;
             menuRotateUnits.Checked = false;
             menuRotateWalls.Checked = true;
             menuRotateNothing.Checked = false;
@@ -2821,7 +2821,7 @@ namespace SharpFlame
 
         public void menuRotateNothing_Click(Object sender, EventArgs e)
         {
-            PasteRotateObjects = enumObjectRotateMode.None;
+            PasteRotateObjects = ObjectRotateMode.None;
             menuRotateUnits.Checked = false;
             menuRotateWalls.Checked = false;
             menuRotateNothing.Checked = true;
@@ -3571,17 +3571,17 @@ namespace SharpFlame
 
         public void rdoFillCliffIgnore_CheckedChanged(Object sender, EventArgs e)
         {
-            FillCliffAction = enumFillCliffAction.Ignore;
+            FillCliffAction = FillCliffAction.Ignore;
         }
 
         public void rdoFillCliffStopBefore_CheckedChanged(Object sender, EventArgs e)
         {
-            FillCliffAction = enumFillCliffAction.StopBefore;
+            FillCliffAction = FillCliffAction.StopBefore;
         }
 
         public void rdoFillCliffStopAfter_CheckedChanged(Object sender, EventArgs e)
         {
-            FillCliffAction = enumFillCliffAction.StopAfter;
+            FillCliffAction = FillCliffAction.StopAfter;
         }
 
         public void btnScriptAreaCreate_Click(Object sender, EventArgs e)
