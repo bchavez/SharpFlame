@@ -14,11 +14,9 @@ namespace SharpFlame.Domain.ObjData
 
         public bool CalcIsFieldCountValid()
         {
-            string[] Text = null;
-            foreach ( var tempLoopVar_Text in ResultData )
+            foreach ( var text in ResultData )
             {
-                Text = tempLoopVar_Text;
-                if ( Text.GetLength(0) != FieldCount )
+                if ( text.GetLength(0) != FieldCount )
                 {
                     return false;
                 }
@@ -29,18 +27,14 @@ namespace SharpFlame.Domain.ObjData
 
         public bool CalcUniqueField()
         {
-            var A = 0;
-            var B = 0;
-            string Text;
-
             if ( UniqueField >= 0 )
             {
-                for ( A = 0; A <= ResultData.Count - 1; A++ )
+                for ( var a = 0; a <= ResultData.Count - 1; a++ )
                 {
-                    Text = Convert.ToString(ResultData[A][UniqueField]);
-                    for ( B = A + 1; B <= ResultData.Count - 1; B++ )
+                    var text = Convert.ToString(ResultData[a][UniqueField]);
+                    for ( var b = a + 1; b <= ResultData.Count - 1; b++ )
                     {
-                        if ( Text == ResultData[B][UniqueField] )
+                        if ( text == ResultData[b][UniqueField] )
                         {
                             return false;
                         }
@@ -53,41 +47,37 @@ namespace SharpFlame.Domain.ObjData
 
         public clsResult LoadCommaFile(string Path)
         {
-            var Result = new clsResult(String.Format("Loading comma separated file \"{0}\"", SubDirectory));
-            var Reader = default(StreamReader);
+            var result = new clsResult(String.Format("Loading comma separated file \"{0}\"", SubDirectory));
+            var reader = default(StreamReader);
 
             try
             {
-                Reader = new StreamReader(Path + SubDirectory, App.UTF8Encoding);
+                reader = new StreamReader(Path + SubDirectory, App.UTF8Encoding);
             }
             catch ( Exception ex )
             {
-                Result.ProblemAdd(ex.Message);
-                return Result;
+                result.ProblemAdd(ex.Message);
+                return result;
             }
 
-            var Line = "";
-            string[] LineFields = null;
-            var A = 0;
-
-            while ( !Reader.EndOfStream )
+            while ( !reader.EndOfStream )
             {
-                Line = Reader.ReadLine();
-                Line = Line.Trim();
-                if ( Line.Length > 0 )
+                var line = reader.ReadLine();
+                line = line.Trim();
+                if ( line.Length > 0 )
                 {
-                    LineFields = Line.Split(',');
-                    for ( A = 0; A <= LineFields.GetUpperBound(0); A++ )
+                    string[] lineFields = line.Split(',');
+                    for ( var a = 0; a <= lineFields.GetUpperBound(0); a++ )
                     {
-                        LineFields[A] = LineFields[A].Trim();
+                        lineFields[a] = lineFields[a].Trim();
                     }
-                    ResultData.Add(LineFields);
+                    ResultData.Add(lineFields);
                 }
             }
 
-            Reader.Close();
+            reader.Close();
 
-            return Result;
+            return result;
         }
 
         public clsResult LoadNamesFile(string path)
@@ -126,8 +116,8 @@ namespace SharpFlame.Domain.ObjData
             do
             {
                 MonoContinueDo:
-                var PrevChar = currentChar;
-                var PrevCharExists = currentCharExists;
+                var prevChar = currentChar;
+                var prevCharExists = currentCharExists;
                 try
                 {
                     currentChar = reader.ReadChar();
@@ -144,9 +134,9 @@ namespace SharpFlame.Domain.ObjData
                         case '\r':
                         case '\n':
                             inLineComment = false;
-                            if ( PrevCharExists )
+                            if ( prevCharExists )
                             {
-                                line += PrevChar.ToString();
+                                line += prevChar.ToString();
                             }
                             currentCharExists = false;
 
@@ -179,7 +169,7 @@ namespace SharpFlame.Domain.ObjData
 
                             goto MonoContinueDo;
                         case '*':
-                            if ( PrevCharExists && PrevChar == '/' )
+                            if ( prevCharExists && prevChar == '/' )
                             {
                                 inCommentBlock = true;
                                 currentCharExists = false;
@@ -187,15 +177,15 @@ namespace SharpFlame.Domain.ObjData
                             }
                             break;
                         case '/':
-                            if ( PrevCharExists )
+                            if ( prevCharExists )
                             {
-                                if ( PrevChar == '/' )
+                                if ( prevChar == '/' )
                                 {
                                     inLineComment = true;
                                     currentCharExists = false;
                                     goto MonoContinueDo;
                                 }
-                                if ( PrevChar == '*' )
+                                if ( prevChar == '*' )
                                 {
                                     inCommentBlock = false;
                                     currentCharExists = false;
@@ -207,31 +197,31 @@ namespace SharpFlame.Domain.ObjData
                 }
                 else
                 {
-                    if ( PrevCharExists )
+                    if ( prevCharExists )
                     {
-                        line += PrevChar.ToString();
+                        line += prevChar.ToString();
                     }
                     if ( line.Length > 0 )
                     {
-                        var EndCodeTab = line.IndexOf('\t');
-                        var EndCodeSpace = line.IndexOf(' ');
-                        var EndCode = EndCodeTab;
-                        if ( EndCodeSpace >= 0 && (EndCodeSpace < EndCode | EndCode < 0) )
+                        var endCodeTab = line.IndexOf('\t');
+                        var endCodeSpace = line.IndexOf(' ');
+                        var endCode = endCodeTab;
+                        if ( endCodeSpace >= 0 && (endCodeSpace < endCode | endCode < 0) )
                         {
-                            EndCode = EndCodeSpace;
+                            endCode = endCodeSpace;
                         }
-                        if ( EndCode >= 0 )
+                        if ( endCode >= 0 )
                         {
-                            var FirstQuote = line.IndexOf('"', EndCode + 1, line.Length - (EndCode + 1));
-                            if ( FirstQuote >= 0 )
+                            var firstQuote = line.IndexOf('"', endCode + 1, line.Length - (endCode + 1));
+                            if ( firstQuote >= 0 )
                             {
-                                var SecondQuote = line.IndexOf('"', FirstQuote + 1, line.Length - (FirstQuote + 1));
-                                if ( SecondQuote >= 0 )
+                                var secondQuote = line.IndexOf('"', firstQuote + 1, line.Length - (firstQuote + 1));
+                                if ( secondQuote >= 0 )
                                 {
-                                    var Value = new string[2];
-                                    Value[0] = line.Substring(0, EndCode);
-                                    Value[1] = line.Substring(FirstQuote + 1, SecondQuote - (FirstQuote + 1));
-                                    ResultData.Add(Value);
+                                    var value = new string[2];
+                                    value[0] = line.Substring(0, endCode);
+                                    value[1] = line.Substring(firstQuote + 1, secondQuote - (firstQuote + 1));
+                                    ResultData.Add(value);
                                 }
                             }
                         }
@@ -240,11 +230,11 @@ namespace SharpFlame.Domain.ObjData
 
                     break;
                 }
-                if ( PrevCharExists )
+                if ( prevCharExists )
                 {
                     if ( !(inCommentBlock || inLineComment) )
                     {
-                        line += PrevChar.ToString();
+                        line += prevChar.ToString();
                     }
                 }
             } while ( true );
