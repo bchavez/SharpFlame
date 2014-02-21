@@ -1490,27 +1490,29 @@ namespace SharpFlame
                 {
                     MouseLeftDown.OverMinimap = new clsMouseDown.clsOverMinimap();
                     MouseLeftDown.OverMinimap.DownPos = screenPos;
-                    var Pos = new XYInt((int)((screenPos.X * TilesPerMinimapPixel)),
+                    var pos = new XYInt((int)((screenPos.X * TilesPerMinimapPixel)),
                         (int)(screenPos.Y * TilesPerMinimapPixel));
-                    Map.TileNumClampToMap(Pos);
-                    LookAtTile(Pos);
+                    Map.TileNumClampToMap(pos);
+                    LookAtTile(pos);
                 }
                 else
                 {
-                    var MouseOverTerrain = GetMouseOverTerrain();
-                    if ( MouseOverTerrain != null )
+                    var mouseOverTerrain = GetMouseOverTerrain();
+                    if ( mouseOverTerrain != null )
                     {
-                        MouseLeftDown.OverTerrain = new clsMouseDown.clsOverTerrain();
-                        MouseLeftDown.OverTerrain.DownPos = MouseOverTerrain.Pos;
+                        MouseLeftDown.OverTerrain = new clsMouseDown.clsOverTerrain
+                            {
+                                DownPos = mouseOverTerrain.Pos
+                            };
                         if ( modTools.Tool == modTools.Tools.ObjectSelect )
                         {
                             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Picker) )
                             {
-                                if ( MouseOverTerrain.Units.Count > 0 )
+                                if ( mouseOverTerrain.Units.Count > 0 )
                                 {
-                                    if ( MouseOverTerrain.Units.Count == 1 )
+                                    if ( mouseOverTerrain.Units.Count == 1 )
                                     {
-                                        Program.frmMainInstance.ObjectPicker(MouseOverTerrain.Units[0].TypeBase);
+                                        Program.frmMainInstance.ObjectPicker(mouseOverTerrain.Units[0].TypeBase);
                                     }
                                     else
                                     {
@@ -1520,9 +1522,11 @@ namespace SharpFlame
                             }
                             else if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ScriptPosition) )
                             {
-                                var NewPosition = new clsScriptPosition(Map);
-                                NewPosition.PosX = MouseLeftDown.OverTerrain.DownPos.Horizontal.X;
-                                NewPosition.PosY = MouseLeftDown.OverTerrain.DownPos.Horizontal.Y;
+                                var newPosition = new clsScriptPosition(Map)
+                                    {
+                                        PosX = MouseLeftDown.OverTerrain.DownPos.Horizontal.X,
+                                        PosY = MouseLeftDown.OverTerrain.DownPos.Horizontal.Y
+                                    };
                                 Program.frmMainInstance.ScriptMarkerLists_Update();
                             }
                             else
@@ -1532,7 +1536,7 @@ namespace SharpFlame
                                     Map.SelectedUnits.Clear();
                                 }
                                 Program.frmMainInstance.SelectedObject_Changed();
-                                Map.Unit_Selected_Area_VertexA = MouseOverTerrain.Vertex.Normal;
+                                Map.Unit_Selected_Area_VertexA = mouseOverTerrain.Vertex.Normal;
                                 MapViewControl.DrawViewLater();
                             }
                         }
@@ -1631,7 +1635,7 @@ namespace SharpFlame
                             {
                                 var objectCreator = new clsUnitCreate();
                                 Map.SetObjectCreatorDefaults(objectCreator);
-                                objectCreator.Horizontal = MouseOverTerrain.Pos.Horizontal;
+                                objectCreator.Horizontal = mouseOverTerrain.Pos.Horizontal;
                                 objectCreator.Perform();
                                 Map.UndoStepCreate("Place Object");
                                 Map.Update();
@@ -1647,12 +1651,12 @@ namespace SharpFlame
                         {
                             if ( Map.Selected_Area_VertexA == null )
                             {
-                                Map.Selected_Area_VertexA = MouseOverTerrain.Vertex.Normal;
+                                Map.Selected_Area_VertexA = mouseOverTerrain.Vertex.Normal;
                                 MapViewControl.DrawViewLater();
                             }
                             else if ( Map.Selected_Area_VertexB == null )
                             {
-                                Map.Selected_Area_VertexB = MouseOverTerrain.Vertex.Normal;
+                                Map.Selected_Area_VertexB = mouseOverTerrain.Vertex.Normal;
                                 MapViewControl.DrawViewLater();
                             }
                             else
@@ -1726,10 +1730,10 @@ namespace SharpFlame
             }
         }
 
-        public void TimedActions(double Zoom, double Move, double Pan, double Roll, double OrbitRate)
+        public void TimedActions(double zoom, double move, double pan, double roll, double orbitRate)
         {
             var xyzDbl = new XYZDouble();
-            var panRate = Pan * FieldOfViewY;
+            var panRate = pan * FieldOfViewY;
             var anglePY = default(Angles.AnglePY);
             var matrixA = new Matrix3DMath.Matrix3D();
             var matrixB = new Matrix3DMath.Matrix3D();
@@ -1737,15 +1741,15 @@ namespace SharpFlame
             var viewPosChangeXyz = new XYZInt(0, 0, 0);
             var angleChanged = default(bool);
 
-            Move *= FOVMultiplier * (MapViewControl.GLSize.X + MapViewControl.GLSize.Y) * Math.Max(Math.Abs(ViewPos.Y), 512.0D);
+            move *= FOVMultiplier * (MapViewControl.GLSize.X + MapViewControl.GLSize.Y) * Math.Max(Math.Abs(ViewPos.Y), 512.0D);
 
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewZoomIn) )
             {
-                FovScale_2EChange(Convert.ToDouble(- Zoom));
+                FovScale_2EChange(Convert.ToDouble(- zoom));
             }
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewZoomOut) )
             {
-                FovScale_2EChange(Zoom);
+                FovScale_2EChange(zoom);
             }
 
             if ( App.ViewMoveType == ViewMoveType.Free )
@@ -1755,32 +1759,32 @@ namespace SharpFlame
                 viewPosChangeXyz.Z = 0;
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveForward) )
                 {
-                    Matrix3DMath.VectorForwardsRotationByMatrix(ViewAngleMatrix, Move, ref xyzDbl);
+                    Matrix3DMath.VectorForwardsRotationByMatrix(ViewAngleMatrix, move, ref xyzDbl);
                     viewPosChangeXyz.AddDbl(xyzDbl);
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveBackward) )
                 {
-                    Matrix3DMath.VectorBackwardsRotationByMatrix(ViewAngleMatrix, Move, ref xyzDbl);
+                    Matrix3DMath.VectorBackwardsRotationByMatrix(ViewAngleMatrix, move, ref xyzDbl);
                     viewPosChangeXyz.AddDbl(xyzDbl);
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveLeft) )
                 {
-                    Matrix3DMath.VectorLeftRotationByMatrix(ViewAngleMatrix, Move, ref xyzDbl);
+                    Matrix3DMath.VectorLeftRotationByMatrix(ViewAngleMatrix, move, ref xyzDbl);
                     viewPosChangeXyz.AddDbl(xyzDbl);
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveRight) )
                 {
-                    Matrix3DMath.VectorRightRotationByMatrix(ViewAngleMatrix, Move, ref xyzDbl);
+                    Matrix3DMath.VectorRightRotationByMatrix(ViewAngleMatrix, move, ref xyzDbl);
                     viewPosChangeXyz.AddDbl(xyzDbl);
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveUp) )
                 {
-                    Matrix3DMath.VectorUpRotationByMatrix(ViewAngleMatrix, Move, ref xyzDbl);
+                    Matrix3DMath.VectorUpRotationByMatrix(ViewAngleMatrix, move, ref xyzDbl);
                     viewPosChangeXyz.AddDbl(xyzDbl);
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveDown) )
                 {
-                    Matrix3DMath.VectorDownRotationByMatrix(ViewAngleMatrix, Move, ref xyzDbl);
+                    Matrix3DMath.VectorDownRotationByMatrix(ViewAngleMatrix, move, ref xyzDbl);
                     viewPosChangeXyz.AddDbl(xyzDbl);
                 }
 
@@ -1789,12 +1793,12 @@ namespace SharpFlame
                 viewAngleChange.Z = 0.0D;
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewLeft) )
                 {
-                    Matrix3DMath.VectorForwardsRotationByMatrix(ViewAngleMatrix, Roll, ref xyzDbl);
+                    Matrix3DMath.VectorForwardsRotationByMatrix(ViewAngleMatrix, roll, ref xyzDbl);
                     viewAngleChange += xyzDbl;
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRight) )
                 {
-                    Matrix3DMath.VectorBackwardsRotationByMatrix(ViewAngleMatrix, Roll, ref xyzDbl);
+                    Matrix3DMath.VectorBackwardsRotationByMatrix(ViewAngleMatrix, roll, ref xyzDbl);
                     viewAngleChange += xyzDbl;
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewBackward) )
@@ -1839,55 +1843,55 @@ namespace SharpFlame
                 Matrix3DMath.MatrixSetToYAngle(matrixA, anglePY.Yaw);
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveForward) )
                 {
-                    Matrix3DMath.VectorForwardsRotationByMatrix(matrixA, Move, ref xyzDbl);
+                    Matrix3DMath.VectorForwardsRotationByMatrix(matrixA, move, ref xyzDbl);
                     viewPosChangeXyz.AddDbl(xyzDbl);
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveBackward) )
                 {
-                    Matrix3DMath.VectorBackwardsRotationByMatrix(matrixA, Move, ref xyzDbl);
+                    Matrix3DMath.VectorBackwardsRotationByMatrix(matrixA, move, ref xyzDbl);
                     viewPosChangeXyz.AddDbl(xyzDbl);
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveLeft) )
                 {
-                    Matrix3DMath.VectorLeftRotationByMatrix(matrixA, Move, ref xyzDbl);
+                    Matrix3DMath.VectorLeftRotationByMatrix(matrixA, move, ref xyzDbl);
                     viewPosChangeXyz.AddDbl(xyzDbl);
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveRight) )
                 {
-                    Matrix3DMath.VectorRightRotationByMatrix(matrixA, Move, ref xyzDbl);
+                    Matrix3DMath.VectorRightRotationByMatrix(matrixA, move, ref xyzDbl);
                     viewPosChangeXyz.AddDbl(xyzDbl);
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveUp) )
                 {
-                    viewPosChangeXyz.Y += (int)Move;
+                    viewPosChangeXyz.Y += (int)move;
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveDown) )
                 {
-                    viewPosChangeXyz.Y -= (int)Move;
+                    viewPosChangeXyz.Y -= (int)move;
                 }
 
                 if ( App.RTSOrbit )
                 {
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewForward) )
                     {
-                        anglePY.Pitch = MathUtil.ClampDbl(anglePY.Pitch + OrbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
+                        anglePY.Pitch = MathUtil.ClampDbl(anglePY.Pitch + orbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
                             MathUtil.RadOf90Deg - 0.03125D * MathUtil.RadOf1Deg);
                         angleChanged = true;
                     }
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewBackward) )
                     {
-                        anglePY.Pitch = MathUtil.ClampDbl(anglePY.Pitch - OrbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
+                        anglePY.Pitch = MathUtil.ClampDbl(anglePY.Pitch - orbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
                             MathUtil.RadOf90Deg - 0.03125D * MathUtil.RadOf1Deg);
                         angleChanged = true;
                     }
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewLeft) )
                     {
-                        anglePY.Yaw = MathUtil.AngleClamp(anglePY.Yaw + OrbitRate);
+                        anglePY.Yaw = MathUtil.AngleClamp(anglePY.Yaw + orbitRate);
                         angleChanged = true;
                     }
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRight) )
                     {
-                        anglePY.Yaw = MathUtil.AngleClamp(anglePY.Yaw - OrbitRate);
+                        anglePY.Yaw = MathUtil.AngleClamp(anglePY.Yaw - orbitRate);
                         angleChanged = true;
                     }
                 }
@@ -1895,24 +1899,24 @@ namespace SharpFlame
                 {
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewForward) )
                     {
-                        anglePY.Pitch = MathUtil.ClampDbl(anglePY.Pitch - OrbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
+                        anglePY.Pitch = MathUtil.ClampDbl(anglePY.Pitch - orbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
                             MathUtil.RadOf90Deg - 0.03125D * MathUtil.RadOf1Deg);
                         angleChanged = true;
                     }
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewBackward) )
                     {
-                        anglePY.Pitch = MathUtil.ClampDbl(anglePY.Pitch + OrbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
+                        anglePY.Pitch = MathUtil.ClampDbl(anglePY.Pitch + orbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
                             MathUtil.RadOf90Deg - 0.03125D * MathUtil.RadOf1Deg);
                         angleChanged = true;
                     }
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewLeft) )
                     {
-                        anglePY.Yaw = MathUtil.AngleClamp(anglePY.Yaw - OrbitRate);
+                        anglePY.Yaw = MathUtil.AngleClamp(anglePY.Yaw - orbitRate);
                         angleChanged = true;
                     }
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRight) )
                     {
-                        anglePY.Yaw = MathUtil.AngleClamp(anglePY.Yaw + OrbitRate);
+                        anglePY.Yaw = MathUtil.AngleClamp(anglePY.Yaw + orbitRate);
                         angleChanged = true;
                     }
                 }
