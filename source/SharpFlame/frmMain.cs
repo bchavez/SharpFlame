@@ -81,9 +81,9 @@ namespace SharpFlame
                 }
             }
 
-            public override void Add(ConnectedListItem<clsMap, frmMain> NewItem)
+            public override void Add(ConnectedListItem<clsMap, frmMain> newItem)
             {
-                var NewMap = NewItem.Item;
+                var NewMap = newItem.Item;
 
                 if ( !NewMap.ReadyForUserInput )
                 {
@@ -95,16 +95,16 @@ namespace SharpFlame
 
                 NewMap.SetTabText();
 
-                base.Add(NewItem);
+                base.Add(newItem);
 
                 Owner.MapViewControl.UpdateTabs();
             }
 
-            public override void Remove(int Position)
+            public override void Remove(int position)
             {
-                var Map = this[Position];
+                var Map = this[position];
 
-                base.Remove(Position);
+                base.Remove(position);
 
                 if ( Map == _MainMap )
                 {

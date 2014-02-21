@@ -10,34 +10,34 @@ namespace SharpFlame.Collections
 {
     public class ConnectedList<ItemType, SourceType> : IEnumerable<ItemType> where ItemType : class where SourceType : class
     {
-        private readonly ConnectedListItemList<ItemType, SourceType> List = new ConnectedListItemList<ItemType, SourceType>();
-        private SourceType Source;
+        private readonly ConnectedListItemList<ItemType, SourceType> list = new ConnectedListItemList<ItemType, SourceType>();
+        private SourceType source;
 
-        public ConnectedList(SourceType Owner)
+        public ConnectedList(SourceType owner)
         {
-            Source = Owner;
-            List.AddNullItemBehavior = AddNullItemBehavior.DisallowError;
+            source = owner;
+            list.AddNullItemBehavior = AddNullItemBehavior.DisallowError;
         }
 
         public SourceType Owner
         {
-            get { return Source; }
+            get { return source; }
         }
 
         public bool MaintainOrder
         {
-            get { return List.MaintainOrder; }
-            set { List.MaintainOrder = value; }
+            get { return list.MaintainOrder; }
+            set { list.MaintainOrder = value; }
         }
 
         public ItemType this[int Position]
         {
-            get { return List[Position].Item; }
+            get { return list[Position].Item; }
         }
 
         public int Count
         {
-            get { return List.Count; }
+            get { return list.Count; }
         }
 
         public IEnumerator<ItemType> GetEnumerator()
@@ -50,46 +50,46 @@ namespace SharpFlame.Collections
             return GetEnumerator();
         }
 
-        public ConnectedListItem<ItemType, SourceType> get_ItemContainer(int Position)
+        public ConnectedListItem<ItemType, SourceType> get_ItemContainer(int position)
         {
-            return List[Position];
+            return list[position];
         }
 
-        public virtual void Add(ConnectedListItem<ItemType, SourceType> NewItem)
+        public virtual void Add(ConnectedListItem<ItemType, SourceType> newItem)
         {
-            if ( NewItem.CanAdd() )
+            if ( newItem.CanAdd() )
             {
-                NewItem.BeforeAdd(this, List.Count);
-                List.Add(NewItem);
+                newItem.BeforeAdd(this, list.Count);
+                list.Add(newItem);
             }
         }
 
-        public virtual void Insert(ConnectedListItem<ItemType, SourceType> NewItem, int Position)
+        public virtual void Insert(ConnectedListItem<ItemType, SourceType> newItem, int position)
         {
-            if ( NewItem.CanAdd() )
+            if ( newItem.CanAdd() )
             {
-                NewItem.BeforeAdd(this, Position);
-                List.Insert(NewItem, Position);
+                newItem.BeforeAdd(this, position);
+                list.Insert(newItem, position);
             }
         }
 
-        public virtual void Remove(int Position)
+        public virtual void Remove(int position)
         {
-            var RemoveItem = default(ConnectedListItem<ItemType, SourceType>);
+            var removeItem = default(ConnectedListItem<ItemType, SourceType>);
 
-            RemoveItem = List[Position];
-            RemoveItem.BeforeRemove();
-            List.RemoveAt(Position);
-            RemoveItem.AfterRemove();
+            removeItem = list[position];
+            removeItem.BeforeRemove();
+            list.RemoveAt(position);
+            removeItem.AfterRemove();
         }
 
-        public ConnectedListItem<ItemType, SourceType> FindLinkTo(ItemType ItemToFind)
+        public ConnectedListItem<ItemType, SourceType> FindLinkTo(ItemType itemToFind)
         {
-            foreach ( var Link in List )
+            foreach ( var link in list )
             {
-                if ( Link.Item == ItemToFind )
+                if ( link.Item == itemToFind )
                 {
-                    return Link;
+                    return link;
                 }
             }
             return default(ConnectedListItem<ItemType, SourceType>);
@@ -98,40 +98,36 @@ namespace SharpFlame.Collections
         public void Deallocate()
         {
             Clear();
-            Source = null;
+            source = null;
         }
 
         public SimpleList<ItemType> GetItemsAsSimpleList()
         {
-            var Result = new SimpleList<ItemType>();
+            var result = new SimpleList<ItemType>();
 
-            var ConnectedItem = default(ItemType);
-            foreach ( var tempLoopVar_ConnectedItem in this )
+            foreach ( var connectedItem in this )
             {
-                ConnectedItem = tempLoopVar_ConnectedItem;
-                Result.Add(ConnectedItem);
+                result.Add(connectedItem);
             }
 
-            return Result;
+            return result;
         }
 
         public SimpleClassList<ItemType> GetItemsAsSimpleClassList()
         {
-            var Result = new SimpleClassList<ItemType>();
+            var result = new SimpleClassList<ItemType>();
 
-            var ConnectedItem = default(ItemType);
-            foreach ( var tempLoopVar_ConnectedItem in this )
+            foreach ( var connectedItem in this )
             {
-                ConnectedItem = tempLoopVar_ConnectedItem;
-                Result.Add(ConnectedItem);
+                result.Add(connectedItem);
             }
 
-            return Result;
+            return result;
         }
 
         public void Clear()
         {
-            while ( List.Count > 0 )
+            while ( list.Count > 0 )
             {
                 Remove(0);
             }
@@ -154,9 +150,9 @@ namespace SharpFlame.Collections
 
         public class Enumerator : IEnumerator
         {
-            private const int startPosition = -1;
+            private const int StartPosition = -1;
             private readonly ConnectedList<ItemType, SourceType> list;
-            private int position = startPosition;
+            private int position = StartPosition;
 
             public Enumerator(ConnectedList<ItemType, SourceType> list)
             {
@@ -176,15 +172,15 @@ namespace SharpFlame.Collections
 
             public void Reset()
             {
-                position = startPosition;
+                position = StartPosition;
             }
         }
 
         public class EnumeratorType : IEnumerator<ItemType>
         {
-            private const int startPosition = -1;
+            private const int StartPosition = -1;
             private readonly ConnectedList<ItemType, SourceType> list;
-            private int position = startPosition;
+            private int position = StartPosition;
 
             public EnumeratorType(ConnectedList<ItemType, SourceType> list)
             {
@@ -217,7 +213,7 @@ namespace SharpFlame.Collections
 
             public void Reset()
             {
-                position = startPosition;
+                position = StartPosition;
             }
 
             object IEnumerator.Current
