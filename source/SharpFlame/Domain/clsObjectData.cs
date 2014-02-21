@@ -7,6 +7,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Extensions;
 using SharpFlame.FileIO;
 using SharpFlame.Util;
 
@@ -51,164 +52,166 @@ namespace SharpFlame.Domain
             ECMs = new ConnectedList<Ecm, clsObjectData>(this);
         }
 
-        public clsResult LoadDirectory(string Path)
+        public clsResult LoadDirectory(string path)
         {
-            var ReturnResult = new clsResult(string.Format("Loading object data from \"{0}\"", Path));
+            var returnResult = new clsResult(string.Format("Loading object data from \"{0}\"", path));
 
-            Path = PathUtil.EndWithPathSeperator(Path);
+            path = PathUtil.EndWithPathSeperator(path);
 
-            var SubDirNames = "";
-            var SubDirStructures = "";
-            var SubDirBrain = "";
-            var SubDirBody = "";
-            var SubDirPropulsion = "";
-            var SubDirBodyPropulsion = "";
-            var SubDirConstruction = "";
-            var SubDirSensor = "";
-            var SubDirRepair = "";
-            var SubDirTemplates = "";
-            var SubDirWeapons = "";
-            var SubDirECM = "";
-            var SubDirFeatures = "";
-            var SubDirTexpages = "";
-            var SubDirAssignWeapons = "";
-            var SubDirStructureWeapons = "";
-            var SubDirPIEs = "";
+            var subDirNames = "";
+            var subDirStructures = "";
+            var subDirBrain = "";
+            var subDirBody = "";
+            var subDirPropulsion = "";
+            var subDirBodyPropulsion = "";
+            var subDirConstruction = "";
+            var subDirSensor = "";
+            var subDirRepair = "";
+            var subDirTemplates = "";
+            var subDirWeapons = "";
+            var subDirEcm = "";
+            var subDirFeatures = "";
+            var subDirTexpages = "";
+            var subDirAssignWeapons = "";
+            var subDirStructureWeapons = "";
+            var subDirPiEs = "";
 
-            SubDirNames = "messages" + Convert.ToString(App.PlatformPathSeparator) + "strings" +
-                          Convert.ToString(App.PlatformPathSeparator) + "names.txt";
-            SubDirStructures = "stats" + Convert.ToString(App.PlatformPathSeparator) + "structures.txt";
-            SubDirBrain = "stats" + Convert.ToString(App.PlatformPathSeparator) + "brain.txt";
-            SubDirBody = "stats" + Convert.ToString(App.PlatformPathSeparator) + "body.txt";
-            SubDirPropulsion = "stats" + Convert.ToString(App.PlatformPathSeparator) + "propulsion.txt";
-            SubDirBodyPropulsion = "stats" + Convert.ToString(App.PlatformPathSeparator) + "bodypropulsionimd.txt";
-            SubDirConstruction = "stats" + Convert.ToString(App.PlatformPathSeparator) + "construction.txt";
-            SubDirSensor = "stats" + Convert.ToString(App.PlatformPathSeparator) + "sensor.txt";
-            SubDirRepair = "stats" + Convert.ToString(App.PlatformPathSeparator) + "repair.txt";
-            SubDirTemplates = "stats" + Convert.ToString(App.PlatformPathSeparator) + "templates.txt";
-            SubDirWeapons = "stats" + Convert.ToString(App.PlatformPathSeparator) + "weapons.txt";
-            SubDirECM = "stats" + Convert.ToString(App.PlatformPathSeparator) + "ecm.txt";
-            SubDirFeatures = "stats" + Convert.ToString(App.PlatformPathSeparator) + "features.txt";
-            SubDirPIEs = "pies" + Convert.ToString(App.PlatformPathSeparator);
+            subDirNames = "messages".CombinePathWith("strings").CombinePathWith("names.txt");
+            subDirStructures = "stats".CombinePathWith("structures.txt");
+            subDirBrain = "stats".CombinePathWith("brain.txt");
+            subDirBody = "stats".CombinePathWith("body.txt");
+            subDirPropulsion = "stats".CombinePathWith("propulsion.txt");
+            subDirBodyPropulsion = "stats".CombinePathWith("bodypropulsionimd.txt");
+            subDirConstruction = "stats".CombinePathWith("construction.txt");
+            subDirSensor = "stats".CombinePathWith("sensor.txt");
+            subDirRepair = "stats".CombinePathWith("repair.txt");
+            subDirTemplates = "stats".CombinePathWith("templates.txt");
+            subDirWeapons = "stats".CombinePathWith("weapons.txt");
+            subDirEcm = "stats".CombinePathWith("ecm.txt");
+            subDirFeatures = "stats".CombinePathWith("features.txt");
+            subDirPiEs = "pies".CombinePathWith("", endWithPathSeparator: true);
             //SubDirStructurePIE = "structs" & ospathseperator
             //SubDirBodiesPIE = "components" & ospathseperator & "bodies" & ospathseperator
             //SubDirPropPIE = "components" & ospathseperator & "prop" & ospathseperator
             //SubDirWeaponsPIE = "components" & ospathseperator & "weapons" & ospathseperator
-            SubDirTexpages = "texpages" + Convert.ToString(App.PlatformPathSeparator);
-            SubDirAssignWeapons = "stats" + Convert.ToString(App.PlatformPathSeparator) + "assignweapons.txt";
+            subDirTexpages = "texpages".CombinePathWith("", endWithPathSeparator: true);
+            subDirAssignWeapons = "stats".CombinePathWith("assignweapons.txt");
             //SubDirFeaturePIE = "features" & ospathseperator
-            SubDirStructureWeapons = "stats" + Convert.ToString(App.PlatformPathSeparator) + "structureweapons.txt";
+            subDirStructureWeapons = "stats".CombinePathWith("structureweapons.txt");
 
-            var CommaFiles = new SimpleList<clsTextFile>();
+            var commaFiles = new SimpleList<clsTextFile>();
 
-            var DataNames = new clsTextFile();
-            DataNames.SubDirectory = SubDirNames;
-            DataNames.UniqueField = 0;
+            var dataNames = new clsTextFile
+                {
+                    SubDirectory = subDirNames,
+                    UniqueField = 0
+                };
 
-            ReturnResult.Add(DataNames.LoadNamesFile(Path));
-            if ( !DataNames.CalcUniqueField() )
+            returnResult.Add(dataNames.LoadNamesFile(path));
+            if ( !dataNames.CalcUniqueField() )
             {
-                ReturnResult.ProblemAdd("There are two entries for the same code in " + SubDirNames + ".");
+                returnResult.ProblemAdd("There are two entries for the same code in " + subDirNames + ".");
             }
 
-            var DataStructures = new clsTextFile();
-            DataStructures.SubDirectory = SubDirStructures;
-            DataStructures.FieldCount = 25;
-            CommaFiles.Add(DataStructures);
+            var dataStructures = new clsTextFile
+                {
+                    SubDirectory = subDirStructures, FieldCount = 25
+                };
+            commaFiles.Add(dataStructures);
 
             var DataBrain = new clsTextFile();
-            DataBrain.SubDirectory = SubDirBrain;
+            DataBrain.SubDirectory = subDirBrain;
             DataBrain.FieldCount = 9;
-            CommaFiles.Add(DataBrain);
+            commaFiles.Add(DataBrain);
 
             var DataBody = new clsTextFile();
-            DataBody.SubDirectory = SubDirBody;
+            DataBody.SubDirectory = subDirBody;
             DataBody.FieldCount = 25;
-            CommaFiles.Add(DataBody);
+            commaFiles.Add(DataBody);
 
             var DataPropulsion = new clsTextFile();
-            DataPropulsion.SubDirectory = SubDirPropulsion;
+            DataPropulsion.SubDirectory = subDirPropulsion;
             DataPropulsion.FieldCount = 12;
-            CommaFiles.Add(DataPropulsion);
+            commaFiles.Add(DataPropulsion);
 
             var DataBodyPropulsion = new clsTextFile();
-            DataBodyPropulsion.SubDirectory = SubDirBodyPropulsion;
+            DataBodyPropulsion.SubDirectory = subDirBodyPropulsion;
             DataBodyPropulsion.FieldCount = 5;
             DataBodyPropulsion.UniqueField = -1; //no unique requirement
-            CommaFiles.Add(DataBodyPropulsion);
+            commaFiles.Add(DataBodyPropulsion);
 
             var DataConstruction = new clsTextFile();
-            DataConstruction.SubDirectory = SubDirConstruction;
+            DataConstruction.SubDirectory = subDirConstruction;
             DataConstruction.FieldCount = 12;
-            CommaFiles.Add(DataConstruction);
+            commaFiles.Add(DataConstruction);
 
             var DataSensor = new clsTextFile();
-            DataSensor.SubDirectory = SubDirSensor;
+            DataSensor.SubDirectory = subDirSensor;
             DataSensor.FieldCount = 16;
-            CommaFiles.Add(DataSensor);
+            commaFiles.Add(DataSensor);
 
             var DataRepair = new clsTextFile();
-            DataRepair.SubDirectory = SubDirRepair;
+            DataRepair.SubDirectory = subDirRepair;
             DataRepair.FieldCount = 14;
-            CommaFiles.Add(DataRepair);
+            commaFiles.Add(DataRepair);
 
             var DataTemplates = new clsTextFile();
-            DataTemplates.SubDirectory = SubDirTemplates;
+            DataTemplates.SubDirectory = subDirTemplates;
             DataTemplates.FieldCount = 12;
-            CommaFiles.Add(DataTemplates);
+            commaFiles.Add(DataTemplates);
 
             var DataECM = new clsTextFile();
-            DataECM.SubDirectory = SubDirECM;
+            DataECM.SubDirectory = subDirEcm;
             DataECM.FieldCount = 14;
-            CommaFiles.Add(DataECM);
+            commaFiles.Add(DataECM);
 
             var DataFeatures = new clsTextFile();
-            DataFeatures.SubDirectory = SubDirFeatures;
+            DataFeatures.SubDirectory = subDirFeatures;
             DataFeatures.FieldCount = 11;
-            CommaFiles.Add(DataFeatures);
+            commaFiles.Add(DataFeatures);
 
             var DataAssignWeapons = new clsTextFile();
-            DataAssignWeapons.SubDirectory = SubDirAssignWeapons;
+            DataAssignWeapons.SubDirectory = subDirAssignWeapons;
             DataAssignWeapons.FieldCount = 5;
-            CommaFiles.Add(DataAssignWeapons);
+            commaFiles.Add(DataAssignWeapons);
 
             var DataWeapons = new clsTextFile();
-            DataWeapons.SubDirectory = SubDirWeapons;
+            DataWeapons.SubDirectory = subDirWeapons;
             DataWeapons.FieldCount = 53;
-            CommaFiles.Add(DataWeapons);
+            commaFiles.Add(DataWeapons);
 
             var DataStructureWeapons = new clsTextFile();
-            DataStructureWeapons.SubDirectory = SubDirStructureWeapons;
+            DataStructureWeapons.SubDirectory = subDirStructureWeapons;
             DataStructureWeapons.FieldCount = 6;
-            CommaFiles.Add(DataStructureWeapons);
+            commaFiles.Add(DataStructureWeapons);
 
             var TextFile = default(clsTextFile);
 
-            foreach ( var tempLoopVar_TextFile in CommaFiles )
+            foreach ( var tempLoopVar_TextFile in commaFiles )
             {
                 TextFile = tempLoopVar_TextFile;
-                var Result = TextFile.LoadCommaFile(Path);
-                ReturnResult.Add(Result);
+                var Result = TextFile.LoadCommaFile(path);
+                returnResult.Add(Result);
                 if ( !Result.HasProblems )
                 {
                     if ( TextFile.CalcIsFieldCountValid() )
                     {
                         if ( !TextFile.CalcUniqueField() )
                         {
-                            ReturnResult.ProblemAdd("An entry in field " + Convert.ToString(TextFile.UniqueField) + " was not unique for file " +
+                            returnResult.ProblemAdd("An entry in field " + Convert.ToString(TextFile.UniqueField) + " was not unique for file " +
                                                     TextFile.SubDirectory + ".");
                         }
                     }
                     else
                     {
-                        ReturnResult.ProblemAdd("There were entries with the wrong number of fields for file " + TextFile.SubDirectory + ".");
+                        returnResult.ProblemAdd("There were entries with the wrong number of fields for file " + TextFile.SubDirectory + ".");
                     }
                 }
             }
 
-            if ( ReturnResult.HasProblems )
+            if ( returnResult.HasProblems )
             {
-                return ReturnResult;
+                return returnResult;
             }
 
             //load texpages
@@ -217,11 +220,11 @@ namespace SharpFlame.Domain
 
             try
             {
-                TexFiles = Directory.GetFiles(Path + SubDirTexpages);
+                TexFiles = Directory.GetFiles(path + subDirTexpages);
             }
             catch ( Exception )
             {
-                ReturnResult.WarningAdd("Unable to access texture pages.");
+                returnResult.WarningAdd("Unable to access texture pages.");
                 TexFiles = new string[0];
             }
 
@@ -258,29 +261,29 @@ namespace SharpFlame.Domain
                     {
                         Result.WarningAdd("Texture page missing (" + Text + ").");
                     }
-                    ReturnResult.Add(Result);
+                    returnResult.Add(Result);
                 }
             }
 
             //load PIEs
 
-            string[] PIE_Files = null;
-            var PIE_List = new SimpleList<clsPIE>();
+            string[] pieFiles = null;
+            var pieList = new SimpleList<clsPIE>();
             var NewPIE = default(clsPIE);
 
             try
             {
-                PIE_Files = Directory.GetFiles(Path + SubDirPIEs);
+                pieFiles = Directory.GetFiles(path + subDirPiEs);
             }
             catch ( Exception )
             {
-                ReturnResult.WarningAdd("Unable to access PIE files.");
-                PIE_Files = new string[0];
+                returnResult.WarningAdd("Unable to access PIE files.");
+                pieFiles = new string[0];
             }
 
             var SplitPath = new sSplitPath();
 
-            foreach ( var tempLoopVar_Text in PIE_Files )
+            foreach ( var tempLoopVar_Text in pieFiles )
             {
                 Text = tempLoopVar_Text;
                 SplitPath = new sSplitPath(Text);
@@ -289,7 +292,7 @@ namespace SharpFlame.Domain
                     NewPIE = new clsPIE();
                     NewPIE.Path = Text;
                     NewPIE.LCaseFileTitle = SplitPath.FileTitle.ToLower();
-                    PIE_List.Add(NewPIE);
+                    pieList.Add(NewPIE);
                 }
             }
 
@@ -319,10 +322,10 @@ namespace SharpFlame.Domain
                 Body = new Body();
                 Body.ObjectDataLink.Connect(Bodies);
                 Body.Code = Fields[0];
-                SetComponentName(DataNames.ResultData, Body, ReturnResult);
+                SetComponentName(dataNames.ResultData, Body, returnResult);
                 IOUtil.InvariantParse(Fields[6], ref Body.Hitpoints);
                 Body.Designable = Fields[24] != "0";
-                Body.Attachment.Models.Add(GetModelForPIE(PIE_List, Fields[7].ToLower(), ReturnResult));
+                Body.Attachment.Models.Add(GetModelForPIE(pieList, Fields[7].ToLower(), returnResult));
             }
 
             //interpret propulsion
@@ -333,7 +336,7 @@ namespace SharpFlame.Domain
                 Propulsion = new Propulsion(Bodies.Count);
                 Propulsion.ObjectDataLink.Connect(Propulsions);
                 Propulsion.Code = Fields[0];
-                SetComponentName(DataNames.ResultData, Propulsion, ReturnResult);
+                SetComponentName(dataNames.ResultData, Propulsion, returnResult);
                 IOUtil.InvariantParse(Fields[7], ref Propulsion.HitPoints);
                 //.Propulsions(Propulsion_Num).PIE = LCase(DataPropulsion.Entries(Propulsion_Num).FieldValues(8))
                 Propulsion.Designable = Fields[11] != "0";
@@ -379,9 +382,9 @@ namespace SharpFlame.Domain
                 {
                     Body = Bodies[B];
                     Propulsion.Bodies[B].LeftAttachment = new clsAttachment();
-                    Propulsion.Bodies[B].LeftAttachment.Models.Add(GetModelForPIE(PIE_List, BodyPropulsionPIEs[B, A].LeftPIE, ReturnResult));
+                    Propulsion.Bodies[B].LeftAttachment.Models.Add(GetModelForPIE(pieList, BodyPropulsionPIEs[B, A].LeftPIE, returnResult));
                     Propulsion.Bodies[B].RightAttachment = new clsAttachment();
-                    Propulsion.Bodies[B].RightAttachment.Models.Add(GetModelForPIE(PIE_List, BodyPropulsionPIEs[B, A].RightPIE, ReturnResult));
+                    Propulsion.Bodies[B].RightAttachment.Models.Add(GetModelForPIE(pieList, BodyPropulsionPIEs[B, A].RightPIE, returnResult));
                 }
             }
 
@@ -394,9 +397,9 @@ namespace SharpFlame.Domain
                 Construct.ObjectDataLink.Connect(Constructors);
                 Construct.TurretObjectDataLink.Connect(Turrets);
                 Construct.Code = Fields[0];
-                SetComponentName(DataNames.ResultData, Construct, ReturnResult);
+                SetComponentName(dataNames.ResultData, Construct, returnResult);
                 Construct.Designable = Fields[11] != "0";
-                Construct.Attachment.Models.Add(GetModelForPIE(PIE_List, Fields[8].ToLower(), ReturnResult));
+                Construct.Attachment.Models.Add(GetModelForPIE(pieList, Fields[8].ToLower(), returnResult));
             }
 
             //interpret weapons
@@ -408,11 +411,11 @@ namespace SharpFlame.Domain
                 Weapon.ObjectDataLink.Connect(Weapons);
                 Weapon.TurretObjectDataLink.Connect(Turrets);
                 Weapon.Code = Fields[0];
-                SetComponentName(DataNames.ResultData, Weapon, ReturnResult);
+                SetComponentName(dataNames.ResultData, Weapon, returnResult);
                 IOUtil.InvariantParse(Fields[7], ref Weapon.HitPoints);
                 Weapon.Designable = Fields[51] != "0";
-                Weapon.Attachment.Models.Add(GetModelForPIE(PIE_List, Convert.ToString(Fields[8].ToLower()), ReturnResult));
-                Weapon.Attachment.Models.Add(GetModelForPIE(PIE_List, Fields[9].ToLower(), ReturnResult));
+                Weapon.Attachment.Models.Add(GetModelForPIE(pieList, Convert.ToString(Fields[8].ToLower()), returnResult));
+                Weapon.Attachment.Models.Add(GetModelForPIE(pieList, Fields[9].ToLower(), returnResult));
             }
 
             //interpret sensor
@@ -424,7 +427,7 @@ namespace SharpFlame.Domain
                 Sensor.ObjectDataLink.Connect(Sensors);
                 Sensor.TurretObjectDataLink.Connect(Turrets);
                 Sensor.Code = Fields[0];
-                SetComponentName(DataNames.ResultData, Sensor, ReturnResult);
+                SetComponentName(dataNames.ResultData, Sensor, returnResult);
                 IOUtil.InvariantParse(Fields[7], ref Sensor.HitPoints);
                 Sensor.Designable = Fields[15] != "0";
                 switch ( Fields[11].ToLower() )
@@ -439,8 +442,8 @@ namespace SharpFlame.Domain
                         Sensor.Location = Sensor.enumLocation.Invisible;
                         break;
                 }
-                Sensor.Attachment.Models.Add(GetModelForPIE(PIE_List, Fields[8].ToLower(), ReturnResult));
-                Sensor.Attachment.Models.Add(GetModelForPIE(PIE_List, Fields[9].ToLower(), ReturnResult));
+                Sensor.Attachment.Models.Add(GetModelForPIE(pieList, Fields[8].ToLower(), returnResult));
+                Sensor.Attachment.Models.Add(GetModelForPIE(pieList, Fields[9].ToLower(), returnResult));
             }
 
             //interpret repair
@@ -452,10 +455,10 @@ namespace SharpFlame.Domain
                 Repair.ObjectDataLink.Connect(Repairs);
                 Repair.TurretObjectDataLink.Connect(Turrets);
                 Repair.Code = Fields[0];
-                SetComponentName(DataNames.ResultData, Repair, ReturnResult);
+                SetComponentName(dataNames.ResultData, Repair, returnResult);
                 Repair.Designable = Fields[13] != "0";
-                Repair.Attachment.Models.Add(GetModelForPIE(PIE_List, Fields[9].ToLower(), ReturnResult));
-                Repair.Attachment.Models.Add(GetModelForPIE(PIE_List, Fields[10].ToLower(), ReturnResult));
+                Repair.Attachment.Models.Add(GetModelForPIE(pieList, Fields[9].ToLower(), returnResult));
+                Repair.Attachment.Models.Add(GetModelForPIE(pieList, Fields[10].ToLower(), returnResult));
             }
 
             //interpret brain
@@ -467,7 +470,7 @@ namespace SharpFlame.Domain
                 Brain.ObjectDataLink.Connect(Brains);
                 Brain.TurretObjectDataLink.Connect(Turrets);
                 Brain.Code = Fields[0];
-                SetComponentName(DataNames.ResultData, Brain, ReturnResult);
+                SetComponentName(dataNames.ResultData, Brain, returnResult);
                 Brain.Designable = true;
                 Weapon = FindWeaponCode(Fields[7]);
                 if ( Weapon != null )
@@ -486,10 +489,10 @@ namespace SharpFlame.Domain
                 ECM.ObjectDataLink.Connect(ECMs);
                 ECM.TurretObjectDataLink.Connect(Turrets);
                 ECM.Code = Fields[0];
-                SetComponentName(DataNames.ResultData, ECM, ReturnResult);
+                SetComponentName(dataNames.ResultData, ECM, returnResult);
                 IOUtil.InvariantParse(Fields[7], ref ECM.HitPoints);
                 ECM.Designable = false;
-                ECM.Attachment.Models.Add(GetModelForPIE(PIE_List, Fields[8].ToLower(), ReturnResult));
+                ECM.Attachment.Models.Add(GetModelForPIE(pieList, Fields[8].ToLower(), returnResult));
             }
 
             //interpret feature
@@ -505,25 +508,25 @@ namespace SharpFlame.Domain
                 {
                     featureTypeBase.FeatureType = FeatureTypeBase.enumFeatureType.OilResource;
                 }
-                SetFeatureName(DataNames.ResultData, featureTypeBase, ReturnResult);
+                SetFeatureName(dataNames.ResultData, featureTypeBase, returnResult);
                 if ( !IOUtil.InvariantParse(Fields[1], ref featureTypeBase.Footprint.X) )
                 {
-                    ReturnResult.WarningAdd("Feature footprint-x was not an integer for " + featureTypeBase.Code + ".");
+                    returnResult.WarningAdd("Feature footprint-x was not an integer for " + featureTypeBase.Code + ".");
                 }
                 if ( !IOUtil.InvariantParse(Fields[2], ref featureTypeBase.Footprint.Y) )
                 {
-                    ReturnResult.WarningAdd("Feature footprint-y was not an integer for " + featureTypeBase.Code + ".");
+                    returnResult.WarningAdd("Feature footprint-y was not an integer for " + featureTypeBase.Code + ".");
                 }
                 featureTypeBase.BaseAttachment = new clsAttachment();
                 BaseAttachment = featureTypeBase.BaseAttachment;
                 Text = Fields[6].ToLower();
                 Attachment = BaseAttachment.CreateAttachment();
-                Attachment.Models.Add(GetModelForPIE(PIE_List, Text, ReturnResult));
+                Attachment.Models.Add(GetModelForPIE(pieList, Text, returnResult));
             }
 
             //interpret structure
 
-            foreach ( var tempLoopVar_Fields in DataStructures.ResultData )
+            foreach ( var tempLoopVar_Fields in dataStructures.ResultData )
             {
                 Fields = tempLoopVar_Fields;
                 var StructureCode = Fields[0];
@@ -533,11 +536,11 @@ namespace SharpFlame.Domain
                 var StructureBasePIE = Fields[22].ToLower();
                 if ( !IOUtil.InvariantParse(Fields[5], ref StructureFootprint.X) )
                 {
-                    ReturnResult.WarningAdd("Structure footprint-x was not an integer for " + StructureCode + ".");
+                    returnResult.WarningAdd("Structure footprint-x was not an integer for " + StructureCode + ".");
                 }
                 if ( !IOUtil.InvariantParse(Fields[6], ref StructureFootprint.Y) )
                 {
-                    ReturnResult.WarningAdd("Structure footprint-y was not an integer for " + StructureCode + ".");
+                    returnResult.WarningAdd("Structure footprint-y was not an integer for " + StructureCode + ".");
                 }
                 if ( StructureTypeText != "WALL" || StructurePIEs.GetLength(0) != 4 )
                 {
@@ -546,7 +549,7 @@ namespace SharpFlame.Domain
                     structureTypeBase.UnitType_ObjectDataLink.Connect(UnitTypes);
                     structureTypeBase.StructureType_ObjectDataLink.Connect(StructureTypes);
                     structureTypeBase.Code = StructureCode;
-                    SetStructureName(DataNames.ResultData, structureTypeBase, ReturnResult);
+                    SetStructureName(dataNames.ResultData, structureTypeBase, returnResult);
                     structureTypeBase.Footprint = StructureFootprint;
                     switch ( StructureTypeText )
                     {
@@ -618,9 +621,9 @@ namespace SharpFlame.Domain
                     BaseAttachment = structureTypeBase.BaseAttachment;
                     if ( StructurePIEs.GetLength(0) > 0 )
                     {
-                        BaseAttachment.Models.Add(GetModelForPIE(PIE_List, StructurePIEs[0], ReturnResult));
+                        BaseAttachment.Models.Add(GetModelForPIE(pieList, StructurePIEs[0], returnResult));
                     }
-                    structureTypeBase.StructureBasePlate = GetModelForPIE(PIE_List, StructureBasePIE, ReturnResult);
+                    structureTypeBase.StructureBasePlate = GetModelForPIE(pieList, StructureBasePIE, returnResult);
                     if ( BaseAttachment.Models.Count == 1 )
                     {
                         if ( BaseAttachment.Models[0].ConnectorCount >= 1 )
@@ -671,8 +674,8 @@ namespace SharpFlame.Domain
                     var NewWall = new clsWallType();
                     NewWall.WallType_ObjectDataLink.Connect(WallTypes);
                     NewWall.Code = StructureCode;
-                    SetWallName(DataNames.ResultData, NewWall, ReturnResult);
-                    var WallBasePlate = GetModelForPIE(PIE_List, StructureBasePIE, ReturnResult);
+                    SetWallName(dataNames.ResultData, NewWall, returnResult);
+                    var WallBasePlate = GetModelForPIE(pieList, StructureBasePIE, returnResult);
 
                     var WallNum = 0;
                     var wallStructureTypeBase = default(StructureTypeBase);
@@ -706,7 +709,7 @@ namespace SharpFlame.Domain
                         BaseAttachment = wallStructureTypeBase.BaseAttachment;
 
                         Text = StructurePIEs[WallNum];
-                        BaseAttachment.Models.Add(GetModelForPIE(PIE_List, Text, ReturnResult));
+                        BaseAttachment.Models.Add(GetModelForPIE(pieList, Text, returnResult));
                         wallStructureTypeBase.StructureBasePlate = WallBasePlate;
                     }
                 }
@@ -722,7 +725,7 @@ namespace SharpFlame.Domain
                 Template.UnitType_ObjectDataLink.Connect(UnitTypes);
                 Template.DroidTemplate_ObjectDataLink.Connect(DroidTemplates);
                 Template.Code = Fields[0];
-                SetTemplateName(DataNames.ResultData, Template, ReturnResult);
+                SetTemplateName(dataNames.ResultData, Template, returnResult);
                 switch ( Fields[9] ) //type
                 {
                     case "ZNULLDROID":
@@ -751,7 +754,7 @@ namespace SharpFlame.Domain
                         break;
                     default:
                         Template.TemplateDroidType = null;
-                        ReturnResult.WarningAdd("Template " + Template.GetDisplayTextCode() + " had an unrecognised type.");
+                        returnResult.WarningAdd("Template " + Template.GetDisplayTextCode() + " had an unrecognised type.");
                         break;
                 }
                 var LoadPartsArgs = new DroidDesign.sLoadPartsArgs();
@@ -785,17 +788,17 @@ namespace SharpFlame.Domain
                 {
                     if ( TurretConflictCount < 16 )
                     {
-                        ReturnResult.WarningAdd("Template " + Template.GetDisplayTextCode() + " had multiple conflicting turrets.");
+                        returnResult.WarningAdd("Template " + Template.GetDisplayTextCode() + " had multiple conflicting turrets.");
                     }
                     TurretConflictCount++;
                 }
             }
             if ( TurretConflictCount > 0 )
             {
-                ReturnResult.WarningAdd(TurretConflictCount + " templates had multiple conflicting turrets.");
+                returnResult.WarningAdd(TurretConflictCount + " templates had multiple conflicting turrets.");
             }
 
-            return ReturnResult;
+            return returnResult;
         }
 
         public SimpleList<string[]> GetRowsWithValue(SimpleList<string[]> TextLines, string Value)

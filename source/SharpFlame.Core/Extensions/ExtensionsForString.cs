@@ -36,9 +36,9 @@ namespace SharpFlame.Core.Extensions
             return string.Format(format, args);
         }
 
-        public static string CombinePathWith(this string path1, string path2, bool endWithPathSeporator = false)
+        public static string CombinePathWith(this string path1, string path2, bool endWithPathSeparator = false)
         {
-            if ( endWithPathSeporator )
+            if ( endWithPathSeparator )
                 return Path.Combine(path1, path2) + Path.DirectorySeparatorChar;
 
             return Path.Combine(path1, path2);

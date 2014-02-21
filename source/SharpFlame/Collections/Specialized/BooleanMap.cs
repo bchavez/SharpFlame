@@ -277,16 +277,16 @@ namespace SharpFlame.Collections.Specialized
             SizeCopy(source);
             for ( y = 0; y <= source.ValueData.Size.Y - 1; y++ )
             {
-                var X = 0;
-                for ( X = 0; X <= source.ValueData.Size.X - 1; X++ )
+                var x = 0;
+                for ( x = 0; x <= source.ValueData.Size.X - 1; x++ )
                 {
-                    if ( remove.ValueData.Value[y, X] )
+                    if ( remove.ValueData.Value[y, x] )
                     {
-                        ValueData.Value[y, X] = false;
+                        ValueData.Value[y, x] = false;
                     }
                     else
                     {
-                        ValueData.Value[y, X] = source.ValueData.Value[y, X];
+                        ValueData.Value[y, x] = source.ValueData.Value[y, x];
                     }
                 }
             }

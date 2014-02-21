@@ -30,9 +30,9 @@ namespace SharpFlame.Collections
             set { list.MaintainOrder = value; }
         }
 
-        public ItemType this[int Position]
+        public ItemType this[int position]
         {
-            get { return list[Position].Item; }
+            get { return list[position].Item; }
         }
 
         public int Count
