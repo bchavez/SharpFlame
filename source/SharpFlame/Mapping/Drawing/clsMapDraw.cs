@@ -510,23 +510,23 @@ namespace SharpFlame.Mapping
                 {
                     GL.LineWidth(2.0F);
 
-                    if ( mouseOverTerrain.Side_IsV )
+                    if ( mouseOverTerrain.SideIsV )
                     {
-                        vertex0.X = mouseOverTerrain.Side_Num.X * Constants.TerrainGridSpacing;
-                        vertex0.Y = Convert.ToDouble(Terrain.Vertices[mouseOverTerrain.Side_Num.X, mouseOverTerrain.Side_Num.Y].Height * HeightMultiplier);
-                        vertex0.Z = - mouseOverTerrain.Side_Num.Y * Constants.TerrainGridSpacing;
-                        vertex1.X = mouseOverTerrain.Side_Num.X * Constants.TerrainGridSpacing;
-                        vertex1.Y = Convert.ToDouble(Terrain.Vertices[mouseOverTerrain.Side_Num.X, mouseOverTerrain.Side_Num.Y + 1].Height * HeightMultiplier);
-                        vertex1.Z = - (mouseOverTerrain.Side_Num.Y + 1) * Constants.TerrainGridSpacing;
+                        vertex0.X = mouseOverTerrain.SideNum.X * Constants.TerrainGridSpacing;
+                        vertex0.Y = Convert.ToDouble(Terrain.Vertices[mouseOverTerrain.SideNum.X, mouseOverTerrain.SideNum.Y].Height * HeightMultiplier);
+                        vertex0.Z = - mouseOverTerrain.SideNum.Y * Constants.TerrainGridSpacing;
+                        vertex1.X = mouseOverTerrain.SideNum.X * Constants.TerrainGridSpacing;
+                        vertex1.Y = Convert.ToDouble(Terrain.Vertices[mouseOverTerrain.SideNum.X, mouseOverTerrain.SideNum.Y + 1].Height * HeightMultiplier);
+                        vertex1.Z = - (mouseOverTerrain.SideNum.Y + 1) * Constants.TerrainGridSpacing;
                     }
                     else
                     {
-                        vertex0.X = mouseOverTerrain.Side_Num.X * Constants.TerrainGridSpacing;
-                        vertex0.Y = Convert.ToDouble(Terrain.Vertices[mouseOverTerrain.Side_Num.X, mouseOverTerrain.Side_Num.Y].Height * HeightMultiplier);
-                        vertex0.Z = - mouseOverTerrain.Side_Num.Y * Constants.TerrainGridSpacing;
-                        vertex1.X = (mouseOverTerrain.Side_Num.X + 1) * Constants.TerrainGridSpacing;
-                        vertex1.Y = Convert.ToDouble(Terrain.Vertices[mouseOverTerrain.Side_Num.X + 1, mouseOverTerrain.Side_Num.Y].Height * HeightMultiplier);
-                        vertex1.Z = - mouseOverTerrain.Side_Num.Y * Constants.TerrainGridSpacing;
+                        vertex0.X = mouseOverTerrain.SideNum.X * Constants.TerrainGridSpacing;
+                        vertex0.Y = Convert.ToDouble(Terrain.Vertices[mouseOverTerrain.SideNum.X, mouseOverTerrain.SideNum.Y].Height * HeightMultiplier);
+                        vertex0.Z = - mouseOverTerrain.SideNum.Y * Constants.TerrainGridSpacing;
+                        vertex1.X = (mouseOverTerrain.SideNum.X + 1) * Constants.TerrainGridSpacing;
+                        vertex1.Y = Convert.ToDouble(Terrain.Vertices[mouseOverTerrain.SideNum.X + 1, mouseOverTerrain.SideNum.Y].Height * HeightMultiplier);
+                        vertex1.Z = - mouseOverTerrain.SideNum.Y * Constants.TerrainGridSpacing;
                     }
 
                     GL.Begin(BeginMode.Lines);
