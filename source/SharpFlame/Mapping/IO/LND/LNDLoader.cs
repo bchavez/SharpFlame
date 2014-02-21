@@ -5,6 +5,7 @@ using SharpFlame.Collections;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Extensions;
+using SharpFlame.Core.Interfaces.Mapping.IO;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.Objects;

@@ -48,6 +48,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IResultItem.cs" />
     <Compile Include="Domain\Colors\SRgb.cs" />
     <Compile Include="Domain\Colors\Rgb.cs" />
     <Compile Include="Domain\Colors\Rgba.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Domain\Tileset.cs" />
     <Compile Include="Extensions\ExtensionsForEnum.cs" />
     <Compile Include="Extensions\ExtensionsForString.cs" />
+    <Compile Include="Interfaces\Mapping\IO\IIOLoaderSaver.cs" />
     <Compile Include="Parsers\Lev2\Lev2Grammar.cs" />
     <Compile Include="Parsers\Lev\LevGrammar.cs" />
     <Compile Include="Parsers\Pie\Connector.cs" />

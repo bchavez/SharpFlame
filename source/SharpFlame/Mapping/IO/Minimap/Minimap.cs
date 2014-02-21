@@ -5,6 +5,7 @@ using SharpFlame.Bitmaps;
 using SharpFlame.Colors;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Interfaces.Mapping.IO;
 using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping.IO.Minimap

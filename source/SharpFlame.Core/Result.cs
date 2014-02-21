@@ -2,17 +2,12 @@
 
 using System.Collections.Generic;
 using NLog;
+using SharpFlame.Core.Interfaces;
 
 #endregion
 
 namespace SharpFlame.Core
 {
-    public abstract class IResultItem
-    {
-        public abstract string GetText { get; }
-        public abstract void DoubleClicked();
-    }
-
     public class Result : IResultItem
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();

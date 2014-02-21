@@ -4,6 +4,7 @@ using NLog;
 using SharpFlame.Bitmaps;
 using SharpFlame.Colors;
 using SharpFlame.Core;
+using SharpFlame.Core.Interfaces.Mapping.IO;
 
 namespace SharpFlame.Mapping.IO.Heightmap
 {

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using NLog;
 using SharpFlame.Core;
+using SharpFlame.Core.Interfaces.Mapping.IO;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.IO;
 

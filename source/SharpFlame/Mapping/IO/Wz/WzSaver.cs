@@ -13,6 +13,7 @@ using NLog;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Extensions;
+using SharpFlame.Core.Interfaces.Mapping.IO;
 using SharpFlame.Core.Parsers;
 using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.Core.Parsers.Lev;

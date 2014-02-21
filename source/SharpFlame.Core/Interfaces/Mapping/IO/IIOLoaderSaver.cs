@@ -1,6 +1,4 @@
-using SharpFlame.Core;
-
-namespace SharpFlame.Mapping.IO
+namespace SharpFlame.Core.Interfaces.Mapping.IO
 {
     public interface IIOLoader
     {
