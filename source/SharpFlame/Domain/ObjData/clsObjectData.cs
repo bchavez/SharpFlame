@@ -477,29 +477,29 @@ namespace SharpFlame.Domain.ObjData
             foreach ( var tempLoopVar_Fields in dataStructures.ResultData )
             {
                 fields = tempLoopVar_Fields;
-                var StructureCode = fields[0];
-                var StructureTypeText = fields[1];
-                var StructurePIEs = fields[21].ToLower().Split('@');
-                var StructureFootprint = new XYInt();
-                var StructureBasePIE = fields[22].ToLower();
-                if ( !IOUtil.InvariantParse(fields[5], ref StructureFootprint.X) )
+                var structureCode = fields[0];
+                var structureTypeText = fields[1];
+                var structurePiEs = fields[21].ToLower().Split('@');
+                var structureFootprint = new XYInt();
+                var structureBasePie = fields[22].ToLower();
+                if ( !IOUtil.InvariantParse(fields[5], ref structureFootprint.X) )
                 {
-                    returnResult.WarningAdd("Structure footprint-x was not an integer for " + StructureCode + ".");
+                    returnResult.WarningAdd("Structure footprint-x was not an integer for " + structureCode + ".");
                 }
-                if ( !IOUtil.InvariantParse(fields[6], ref StructureFootprint.Y) )
+                if ( !IOUtil.InvariantParse(fields[6], ref structureFootprint.Y) )
                 {
-                    returnResult.WarningAdd("Structure footprint-y was not an integer for " + StructureCode + ".");
+                    returnResult.WarningAdd("Structure footprint-y was not an integer for " + structureCode + ".");
                 }
-                if ( StructureTypeText != "WALL" || StructurePIEs.GetLength(0) != 4 )
+                if ( structureTypeText != "WALL" || structurePiEs.GetLength(0) != 4 )
                 {
                     //this is NOT a generic wall
                     StructureTypeBase structureTypeBase = new StructureTypeBase();
                     structureTypeBase.UnitType_ObjectDataLink.Connect(UnitTypes);
                     structureTypeBase.StructureType_ObjectDataLink.Connect(StructureTypes);
-                    structureTypeBase.Code = StructureCode;
+                    structureTypeBase.Code = structureCode;
                     SetStructureName(dataNames.ResultData, structureTypeBase, returnResult);
-                    structureTypeBase.Footprint = StructureFootprint;
-                    switch ( StructureTypeText )
+                    structureTypeBase.Footprint = structureFootprint;
+                    switch ( structureTypeText )
                     {
                         case "DEMOLISH":
                             structureTypeBase.StructureType = StructureType.Demolish;
@@ -567,11 +567,11 @@ namespace SharpFlame.Domain.ObjData
                     }
 
                     baseAttachment = structureTypeBase.BaseAttachment;
-                    if ( StructurePIEs.GetLength(0) > 0 )
+                    if ( structurePiEs.GetLength(0) > 0 )
                     {
-                        baseAttachment.Models.Add(GetModelForPIE(pieList, StructurePIEs[0], returnResult));
+                        baseAttachment.Models.Add(GetModelForPIE(pieList, structurePiEs[0], returnResult));
                     }
-                    structureTypeBase.StructureBasePlate = GetModelForPIE(pieList, StructureBasePIE, returnResult);
+                    structureTypeBase.StructureBasePlate = GetModelForPIE(pieList, structureBasePie, returnResult);
                     if ( baseAttachment.Models.Count == 1 )
                     {
                         if ( baseAttachment.Models[0].ConnectorCount >= 1 )
@@ -619,23 +619,22 @@ namespace SharpFlame.Domain.ObjData
                 else
                 {
                     //this is a generic wall
-                    var NewWall = new clsWallType();
-                    NewWall.WallType_ObjectDataLink.Connect(WallTypes);
-                    NewWall.Code = StructureCode;
-                    SetWallName(dataNames.ResultData, NewWall, returnResult);
-                    var WallBasePlate = GetModelForPIE(pieList, StructureBasePIE, returnResult);
+                    var newWall = new clsWallType();
+                    newWall.WallType_ObjectDataLink.Connect(WallTypes);
+                    newWall.Code = structureCode;
+                    SetWallName(dataNames.ResultData, newWall, returnResult);
+                    var wallBasePlate = GetModelForPIE(pieList, structureBasePie, returnResult);
 
-                    var WallNum = 0;
-                    var wallStructureTypeBase = default(StructureTypeBase);
-                    for ( WallNum = 0; WallNum <= 3; WallNum++ )
+                    var wallNum = 0;
+                    for ( wallNum = 0; wallNum <= 3; wallNum++ )
                     {
-                        wallStructureTypeBase = new StructureTypeBase();
+                        var wallStructureTypeBase = new StructureTypeBase();
                         wallStructureTypeBase.UnitType_ObjectDataLink.Connect(UnitTypes);
                         wallStructureTypeBase.StructureType_ObjectDataLink.Connect(StructureTypes);
-                        wallStructureTypeBase.WallLink.Connect(NewWall.Segments);
-                        wallStructureTypeBase.Code = StructureCode;
-                        text = NewWall.Name;
-                        switch ( WallNum )
+                        wallStructureTypeBase.WallLink.Connect(newWall.Segments);
+                        wallStructureTypeBase.Code = structureCode;
+                        text = newWall.Name;
+                        switch ( wallNum )
                         {
                             case 0:
                                 text += " - ";
@@ -651,25 +650,25 @@ namespace SharpFlame.Domain.ObjData
                                 break;
                         }
                         wallStructureTypeBase.Name = text;
-                        wallStructureTypeBase.Footprint = StructureFootprint;
+                        wallStructureTypeBase.Footprint = structureFootprint;
                         wallStructureTypeBase.StructureType = StructureType.Wall;
 
                         baseAttachment = wallStructureTypeBase.BaseAttachment;
 
-                        text = StructurePIEs[WallNum];
+                        text = structurePiEs[wallNum];
                         baseAttachment.Models.Add(GetModelForPIE(pieList, text, returnResult));
-                        wallStructureTypeBase.StructureBasePlate = WallBasePlate;
+                        wallStructureTypeBase.StructureBasePlate = wallBasePlate;
                     }
                 }
             }
 
             //interpret templates
 
-            var TurretConflictCount = 0;
+            var turretConflictCount = 0;
             foreach ( var tempLoopVar_Fields in dataTemplates.ResultData )
             {
                 fields = tempLoopVar_Fields;
-                DroidTemplate template = new DroidTemplate();
+                var template = new DroidTemplate();
                 template.UnitType_ObjectDataLink.Connect(UnitTypes);
                 template.DroidTemplate_ObjectDataLink.Connect(DroidTemplates);
                 template.Code = fields[0];
@@ -713,20 +712,20 @@ namespace SharpFlame.Domain.ObjData
                 loadPartsArgs.Propulsion = FindPropulsionCode(fields[7]);
                 loadPartsArgs.Repair = FindRepairCode(fields[8]);
                 loadPartsArgs.Sensor = FindSensorCode(fields[10]);
-                var TemplateWeapons = GetRowsWithValue(dataAssignWeapons.ResultData, template.Code);
-                if ( TemplateWeapons.Count > 0 )
+                var templateWeapons = GetRowsWithValue(dataAssignWeapons.ResultData, template.Code);
+                if ( templateWeapons.Count > 0 )
                 {
-                    text = Convert.ToString(TemplateWeapons[0][1]);
+                    text = Convert.ToString(templateWeapons[0][1]);
                     if ( text != "NULL" )
                     {
                         loadPartsArgs.Weapon1 = FindWeaponCode(text);
                     }
-                    text = Convert.ToString(TemplateWeapons[0][2]);
+                    text = Convert.ToString(templateWeapons[0][2]);
                     if ( text != "NULL" )
                     {
                         loadPartsArgs.Weapon2 = FindWeaponCode(text);
                     }
-                    text = Convert.ToString(TemplateWeapons[0][3]);
+                    text = Convert.ToString(templateWeapons[0][3]);
                     if ( text != "NULL" )
                     {
                         loadPartsArgs.Weapon3 = FindWeaponCode(text);
@@ -734,165 +733,143 @@ namespace SharpFlame.Domain.ObjData
                 }
                 if ( !template.LoadParts(loadPartsArgs) )
                 {
-                    if ( TurretConflictCount < 16 )
+                    if ( turretConflictCount < 16 )
                     {
                         returnResult.WarningAdd("Template " + template.GetDisplayTextCode() + " had multiple conflicting turrets.");
                     }
-                    TurretConflictCount++;
+                    turretConflictCount++;
                 }
             }
-            if ( TurretConflictCount > 0 )
+            if ( turretConflictCount > 0 )
             {
-                returnResult.WarningAdd(TurretConflictCount + " templates had multiple conflicting turrets.");
+                returnResult.WarningAdd(turretConflictCount + " templates had multiple conflicting turrets.");
             }
 
             return returnResult;
         }
 
-        public SimpleList<string[]> GetRowsWithValue(SimpleList<string[]> TextLines, string Value)
+        public SimpleList<string[]> GetRowsWithValue(SimpleList<string[]> textLines, string value)
         {
-            var Result = new SimpleList<string[]>();
-
-            string[] Line = null;
-            foreach ( var tempLoopVar_Line in TextLines )
-            {
-                Line = tempLoopVar_Line;
-                if ( Line[0] == Value )
-                {
-                    Result.Add(Line);
-                }
-            }
-
-            return Result;
+            var result = new SimpleList<string[]>();
+            result.AddRange(textLines.Where(line => line[0] == value));
+            return result;
         }
 
-        public clsModel GetModelForPIE(SimpleList<clsPIE> PIE_List, string PIE_LCaseFileTitle, clsResult ResultOutput)
+        public clsModel GetModelForPIE(SimpleList<clsPIE> pieList, string pieLCaseFileTitle, clsResult resultOutput)
         {
-            if ( PIE_LCaseFileTitle == "0" )
+            if ( pieLCaseFileTitle == "0" )
             {
                 return null;
             }
 
-            var A = 0;
-            var PIEFile = default(StreamReader);
-            var PIE = default(clsPIE);
+            var a = 0;
 
-            var Result = new clsResult("Loading PIE file " + PIE_LCaseFileTitle);
+            var result = new clsResult("Loading PIE file " + pieLCaseFileTitle);
 
-            for ( A = 0; A <= PIE_List.Count - 1; A++ )
+            for ( a = 0; a <= pieList.Count - 1; a++ )
             {
-                PIE = PIE_List[A];
-                if ( PIE.LCaseFileTitle == PIE_LCaseFileTitle )
+                var pie = pieList[a];
+                if ( pie.LCaseFileTitle == pieLCaseFileTitle )
                 {
-                    if ( PIE.Model == null )
+                    if ( pie.Model == null )
                     {
-                        PIE.Model = new clsModel();
+                        pie.Model = new clsModel();
                         try
                         {
-                            PIEFile = new StreamReader(PIE.Path);
+                            var pieFile = new StreamReader(pie.Path);
                             try
                             {
-                                Result.Take(PIE.Model.ReadPIE(PIEFile, this));
+                                result.Take(pie.Model.ReadPIE(pieFile, this));
                             }
                             catch ( Exception ex )
                             {
-                                PIEFile.Close();
-                                Result.WarningAdd(ex.Message);
-                                ResultOutput.Add(Result);
-                                return PIE.Model;
+                                pieFile.Close();
+                                result.WarningAdd(ex.Message);
+                                resultOutput.Add(result);
+                                return pie.Model;
                             }
                         }
                         catch ( Exception ex )
                         {
-                            Result.WarningAdd(ex.Message);
+                            result.WarningAdd(ex.Message);
                         }
                     }
-                    ResultOutput.Add(Result);
-                    return PIE.Model;
+                    resultOutput.Add(result);
+                    return pie.Model;
                 }
             }
 
-            if ( !Result.HasWarnings )
+            if ( !result.HasWarnings )
             {
-                Result.WarningAdd("file is missing");
+                result.WarningAdd("file is missing");
             }
-            ResultOutput.Add(Result);
+            resultOutput.Add(result);
 
             return null;
         }
 
-        public void SetComponentName(SimpleList<string[]> Names, ComponentBase componentBase, clsResult Result)
+        public void SetComponentName(SimpleList<string[]> names, ComponentBase componentBase, clsResult result)
         {
-            var ValueSearchResults = default(SimpleList<string[]>);
-
-            ValueSearchResults = GetRowsWithValue(Names, componentBase.Code);
-            if ( ValueSearchResults.Count == 0 )
+            var valueSearchResults = GetRowsWithValue(names, componentBase.Code);
+            if ( valueSearchResults.Count == 0 )
             {
-                Result.WarningAdd("No name for component " + componentBase.Code + ".");
+                result.WarningAdd("No name for component " + componentBase.Code + ".");
             }
             else
             {
-                componentBase.Name = Convert.ToString(ValueSearchResults[0][1]);
+                componentBase.Name = Convert.ToString(valueSearchResults[0][1]);
             }
         }
 
-        public void SetFeatureName(SimpleList<string[]> Names, FeatureTypeBase featureTypeBase, clsResult Result)
+        public void SetFeatureName(SimpleList<string[]> names, FeatureTypeBase featureTypeBase, clsResult result)
         {
-            var ValueSearchResults = default(SimpleList<string[]>);
-
-            ValueSearchResults = GetRowsWithValue(Names, featureTypeBase.Code);
-            if ( ValueSearchResults.Count == 0 )
+            var valueSearchResults = GetRowsWithValue(names, featureTypeBase.Code);
+            if ( valueSearchResults.Count == 0 )
             {
-                Result.WarningAdd("No name for feature type " + featureTypeBase.Code + ".");
+                result.WarningAdd("No name for feature type " + featureTypeBase.Code + ".");
             }
             else
             {
-                featureTypeBase.Name = Convert.ToString(ValueSearchResults[0][1]);
+                featureTypeBase.Name = Convert.ToString(valueSearchResults[0][1]);
             }
         }
 
-        public void SetStructureName(SimpleList<string[]> Names, StructureTypeBase structureTypeBase, clsResult Result)
+        public void SetStructureName(SimpleList<string[]> names, StructureTypeBase structureTypeBase, clsResult result)
         {
-            var ValueSearchResults = default(SimpleList<string[]>);
-
-            ValueSearchResults = GetRowsWithValue(Names, structureTypeBase.Code);
-            if ( ValueSearchResults.Count == 0 )
+            var valueSearchResults = GetRowsWithValue(names, structureTypeBase.Code);
+            if ( valueSearchResults.Count == 0 )
             {
-                Result.WarningAdd("No name for structure type " + structureTypeBase.Code + ".");
+                result.WarningAdd("No name for structure type " + structureTypeBase.Code + ".");
             }
             else
             {
-                structureTypeBase.Name = Convert.ToString(ValueSearchResults[0][1]);
+                structureTypeBase.Name = Convert.ToString(valueSearchResults[0][1]);
             }
         }
 
-        public void SetTemplateName(SimpleList<string[]> Names, DroidTemplate Template, clsResult Result)
+        public void SetTemplateName(SimpleList<string[]> names, DroidTemplate template, clsResult result)
         {
-            var ValueSearchResults = default(SimpleList<string[]>);
-
-            ValueSearchResults = GetRowsWithValue(Names, Template.Code);
-            if ( ValueSearchResults.Count == 0 )
+            var valueSearchResults = GetRowsWithValue(names, template.Code);
+            if ( valueSearchResults.Count == 0 )
             {
-                Result.WarningAdd("No name for droid template " + Template.Code + ".");
+                result.WarningAdd("No name for droid template " + template.Code + ".");
             }
             else
             {
-                Template.Name = Convert.ToString(ValueSearchResults[0][1]);
+                template.Name = Convert.ToString(valueSearchResults[0][1]);
             }
         }
 
-        public void SetWallName(SimpleList<string[]> Names, clsWallType WallType, clsResult Result)
+        public void SetWallName(SimpleList<string[]> names, clsWallType wallType, clsResult result)
         {
-            var ValueSearchResults = default(SimpleList<string[]>);
-
-            ValueSearchResults = GetRowsWithValue(Names, WallType.Code);
-            if ( ValueSearchResults.Count == 0 )
+            var valueSearchResults = GetRowsWithValue(names, wallType.Code);
+            if ( valueSearchResults.Count == 0 )
             {
-                Result.WarningAdd("No name for structure type " + WallType.Code + ".");
+                result.WarningAdd("No name for structure type " + wallType.Code + ".");
             }
             else
             {
-                WallType.Name = Convert.ToString(ValueSearchResults[0][1]);
+                wallType.Name = Convert.ToString(valueSearchResults[0][1]);
             }
         }
 
@@ -939,16 +916,8 @@ namespace SharpFlame.Domain.ObjData
         public int Get_TexturePage_GLTexture(string fileTitle)
         {
             var lCaseTitle = fileTitle.ToLower();
-
-            foreach ( var tempLoopVar_TexPage in TexturePages )
-            {
-                var texPage = tempLoopVar_TexPage;
-                if ( texPage.FileTitle.ToLower() == lCaseTitle )
-                {
-                    return texPage.GLTexture_Num;
-                }
-            }
-            return 0;
+            var texPage = TexturePages.FirstOrDefault(t => t.FileTitle.ToLower() == lCaseTitle);
+            return texPage != null ? texPage.GLTexture_Num : 0;
         }
 
         public Weapon FindOrCreateWeapon(string code)
@@ -1012,80 +981,52 @@ namespace SharpFlame.Domain.ObjData
             return FindPropulsionCode(code) ?? new Propulsion(Bodies.Count) {IsUnknown = true, Code = code};
         }
 
-        public UnitTypeBase FindOrCreateUnitType(string Code, UnitType Type, int WallType)
+        public UnitTypeBase FindOrCreateUnitType(string code, UnitType type, int wallType)
         {
-            switch ( Type )
+            switch ( type )
             {
                 case UnitType.Feature:
-                    FeatureTypeBase featureTypeBase;
-                    foreach ( var tempLoopVar_FeatureType in FeatureTypes )
-                    {
-                        featureTypeBase = tempLoopVar_FeatureType;
-                        if ( featureTypeBase.Code == Code )
-                        {
-                            return featureTypeBase;
-                        }
-                    }
-                    featureTypeBase = new FeatureTypeBase
-                        {
-                            IsUnknown = true, Code = Code, Footprint = {X = 1, Y = 1}
-                        };
-                    return featureTypeBase;
+                    return FeatureTypes.FirstOrDefault(ft => ft.Code == code)
+                           ?? new FeatureTypeBase
+                               {
+                                   IsUnknown = true,
+                                   Code = code,
+                                   Footprint = {X = 1, Y = 1}
+                               };
                 case UnitType.PlayerStructure:
-                    StructureTypeBase structureTypeBase;
-                    foreach ( var tempLoopVar_StructureType in StructureTypes )
+                    foreach ( var structure in StructureTypes.Where(s => s.Code == code) )
                     {
-                        structureTypeBase = tempLoopVar_StructureType;
-                        if ( structureTypeBase.Code == Code )
+                        if ( wallType < 0 )
                         {
-                            if ( WallType < 0 )
+                            return structure;
+                        }
+                        if ( structure.WallLink.IsConnected )
+                        {
+                            if ( structure.WallLink.ArrayPosition == wallType )
                             {
-                                return structureTypeBase;
-                            }
-                            if ( structureTypeBase.WallLink.IsConnected )
-                            {
-                                if ( structureTypeBase.WallLink.ArrayPosition == WallType )
-                                {
-                                    return structureTypeBase;
-                                }
+                                return structure;
                             }
                         }
                     }
-                    structureTypeBase = new StructureTypeBase {IsUnknown = true, Code = Code, Footprint = {X = 1, Y = 1}};
-                    return structureTypeBase;
+                    return new StructureTypeBase {IsUnknown = true, Code = code, Footprint = {X = 1, Y = 1}};
 
                 case UnitType.PlayerDroid:
-                    DroidTemplate droidType;
-                    foreach ( var tempLoopVar_DroidType in DroidTemplates )
-                    {
-                        droidType = tempLoopVar_DroidType;
-                        if ( droidType.IsTemplate )
-                        {
-                            if ( droidType.Code == Code )
-                            {
-                                return droidType;
-                            }
-                        }
-                    }
-                    droidType = new DroidTemplate {IsUnknown = true, Code = Code};
-                    return droidType;
+                    return DroidTemplates
+                        .Where(dt => dt.IsTemplate)
+                        .FirstOrDefault(dt => dt.Code == code)
+                           ?? new DroidTemplate
+                               {
+                                   IsUnknown = true,
+                                   Code = code
+                               };
                 default:
                     return null;
             }
         }
 
-        public StructureTypeBase FindFirstStructureType(StructureType Type)
+        public StructureTypeBase FindFirstStructureType(StructureType type)
         {
-            foreach ( var tempLoopVar_StructureType in StructureTypes )
-            {
-                StructureTypeBase structureTypeBase = tempLoopVar_StructureType;
-                if ( structureTypeBase.StructureType == Type )
-                {
-                    return structureTypeBase;
-                }
-            }
-
-            return null;
+            return StructureTypes.FirstOrDefault(s => s.StructureType == type);
         }
     }
 }
