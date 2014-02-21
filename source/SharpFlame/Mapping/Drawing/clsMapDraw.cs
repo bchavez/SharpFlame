@@ -33,7 +33,7 @@ namespace SharpFlame.Mapping
             var D = 0;
             sRGBA_sng colourA;
             sRGBA_sng colourB;
-            var showMinimapViewPosBox = default(bool);
+            bool showMinimapViewPosBox;
             var viewCorner0 = default(XYDouble);
             var viewCorner1 = default(XYDouble);
             var viewCorner2 = default(XYDouble);
@@ -58,7 +58,7 @@ namespace SharpFlame.Mapping
             var selectionLabel = new clsTextLabel();
             var lightPosition = new float[4];
             var matrixB = new Matrix3DMath.Matrix3D();
-            var mapAction = default(clsAction);
+            clsAction mapAction;
             float zNearFar = 0;
             var mapViewControl = ViewInfo.MapViewControl;
             var glSize = ViewInfo.MapViewControl.GLSize;
@@ -87,10 +87,10 @@ namespace SharpFlame.Mapping
                 GetPosSectorNum(new XYInt((int)(drawCentre.X - Constants.SectorTileSize * Constants.TerrainGridSpacing / 2.0D),
                     (int)(drawCentre.Y - Constants.SectorTileSize * Constants.TerrainGridSpacing / 2.0D)));
 
-            var DrawObjects = new clsDrawSectorObjects();
-            DrawObjects.Map = this;
-            DrawObjects.UnitTextLabels = new clsTextLabels(64);
-            DrawObjects.Start();
+            var drawObjects = new clsDrawSectorObjects();
+            drawObjects.Map = this;
+            drawObjects.UnitTextLabels = new clsTextLabels(64);
+            drawObjects.Start();
 
             xyzDbl.X = drawCentre.X - ViewInfo.ViewPos.X;
             xyzDbl.Y = 128 - ViewInfo.ViewPos.Y;
@@ -200,9 +200,9 @@ namespace SharpFlame.Mapping
 
             //draw painted texture terrain type markers
 
-            var RGB_sng = new sRGB_sng();
+            sRGB_sng rgbSng;
 
-            var MouseOverTerrain = ViewInfo.GetMouseOverTerrain();
+            var mouseOverTerrain = ViewInfo.GetMouseOverTerrain();
 
             if ( App.Draw_VertexTerrain )
             {
@@ -230,13 +230,13 @@ namespace SharpFlame.Mapping
                 }
                 else if ( modTools.Tool == modTools.Tools.TerrainSelect )
                 {
-                    if ( MouseOverTerrain != null )
+                    if ( mouseOverTerrain != null )
                     {
                         //selection is changing under pointer
-                        MathUtil.ReorderXY(Selected_Area_VertexA, MouseOverTerrain.Vertex.Normal, ref startXy, ref finishXy);
-                        xyzDbl.X = MouseOverTerrain.Vertex.Normal.X * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X;
-                        xyzDbl.Z = - MouseOverTerrain.Vertex.Normal.Y * Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z;
-                        xyzDbl.Y = GetVertexAltitude(MouseOverTerrain.Vertex.Normal) - ViewInfo.ViewPos.Y;
+                        MathUtil.ReorderXY(Selected_Area_VertexA, mouseOverTerrain.Vertex.Normal, ref startXy, ref finishXy);
+                        xyzDbl.X = mouseOverTerrain.Vertex.Normal.X * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X;
+                        xyzDbl.Z = - mouseOverTerrain.Vertex.Normal.Y * Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z;
+                        xyzDbl.Y = GetVertexAltitude(mouseOverTerrain.Vertex.Normal) - ViewInfo.ViewPos.Y;
                         drawIt = true;
                     }
                 }
@@ -258,12 +258,14 @@ namespace SharpFlame.Mapping
                         }
                     }
                     GL.LineWidth(3.0F);
-                    var DrawSelection = new clsDrawTileAreaOutline();
-                    DrawSelection.Map = this;
-                    DrawSelection.StartXY = startXy;
-                    DrawSelection.FinishXY = finishXy;
-                    DrawSelection.Colour = new sRGBA_sng(1.0F, 1.0F, 1.0F, 1.0F);
-                    DrawSelection.ActionPerform();
+                    var drawSelection = new clsDrawTileAreaOutline
+                        {
+                            Map = this, 
+                            StartXY = startXy,
+                            FinishXY = finishXy,
+                            Colour = new sRGBA_sng(1.0F, 1.0F, 1.0F, 1.0F)
+                        };
+                    drawSelection.ActionPerform();
                 }
 
                 DebugGLError("Terrain selection box");
@@ -271,14 +273,14 @@ namespace SharpFlame.Mapping
 
             if ( modTools.Tool == modTools.Tools.TerrainSelect )
             {
-                if ( MouseOverTerrain != null )
+                if ( mouseOverTerrain != null )
                 {
                     //draw mouseover vertex
                     GL.LineWidth(3.0F);
 
-                    vertex0.X = MouseOverTerrain.Vertex.Normal.X * Constants.TerrainGridSpacing;
-                    vertex0.Y = Convert.ToDouble(Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height * HeightMultiplier);
-                    vertex0.Z = - MouseOverTerrain.Vertex.Normal.Y * Constants.TerrainGridSpacing;
+                    vertex0.X = mouseOverTerrain.Vertex.Normal.X * Constants.TerrainGridSpacing;
+                    vertex0.Y = Convert.ToDouble(Terrain.Vertices[mouseOverTerrain.Vertex.Normal.X, mouseOverTerrain.Vertex.Normal.Y].Height * HeightMultiplier);
+                    vertex0.Z = - mouseOverTerrain.Vertex.Normal.Y * Constants.TerrainGridSpacing;
                     GL.Begin(BeginMode.Lines);
                     GL.Color3(1.0F, 1.0F, 1.0F);
                     GL.Vertex3(vertex0.X - 8.0D, vertex0.Y, Convert.ToDouble(- vertex0.Z));
@@ -421,14 +423,14 @@ namespace SharpFlame.Mapping
                 DebugGLError("Gateways");
             }
 
-            if ( MouseOverTerrain != null )
+            if ( mouseOverTerrain != null )
             {
                 if ( modTools.Tool == modTools.Tools.ObjectSelect )
                 {
                     if ( Unit_Selected_Area_VertexA != null )
                     {
                         //selection is changing under pointer
-                        MathUtil.ReorderXY(Unit_Selected_Area_VertexA, MouseOverTerrain.Vertex.Normal, ref startXy, ref finishXy);
+                        MathUtil.ReorderXY(Unit_Selected_Area_VertexA, mouseOverTerrain.Vertex.Normal, ref startXy, ref finishXy);
                         GL.LineWidth(2.0F);
                         GL.Color3(0.0F, 1.0F, 1.0F);
                         var x = 0;
@@ -493,10 +495,10 @@ namespace SharpFlame.Mapping
                         GL.LineWidth(2.0F);
                         GL.Color3(0.0F, 1.0F, 1.0F);
                         GL.Begin(BeginMode.Lines);
-                        GL.Vertex3(MouseOverTerrain.Pos.Horizontal.X - 16.0D, MouseOverTerrain.Pos.Altitude, MouseOverTerrain.Pos.Horizontal.Y - 16.0D);
-                        GL.Vertex3(MouseOverTerrain.Pos.Horizontal.X + 16.0D, MouseOverTerrain.Pos.Altitude, MouseOverTerrain.Pos.Horizontal.Y + 16.0D);
-                        GL.Vertex3(MouseOverTerrain.Pos.Horizontal.X + 16.0D, MouseOverTerrain.Pos.Altitude, MouseOverTerrain.Pos.Horizontal.Y - 16.0D);
-                        GL.Vertex3(MouseOverTerrain.Pos.Horizontal.X - 16.0D, MouseOverTerrain.Pos.Altitude, MouseOverTerrain.Pos.Horizontal.Y + 16.0D);
+                        GL.Vertex3(mouseOverTerrain.Pos.Horizontal.X - 16.0D, mouseOverTerrain.Pos.Altitude, mouseOverTerrain.Pos.Horizontal.Y - 16.0D);
+                        GL.Vertex3(mouseOverTerrain.Pos.Horizontal.X + 16.0D, mouseOverTerrain.Pos.Altitude, mouseOverTerrain.Pos.Horizontal.Y + 16.0D);
+                        GL.Vertex3(mouseOverTerrain.Pos.Horizontal.X + 16.0D, mouseOverTerrain.Pos.Altitude, mouseOverTerrain.Pos.Horizontal.Y - 16.0D);
+                        GL.Vertex3(mouseOverTerrain.Pos.Horizontal.X - 16.0D, mouseOverTerrain.Pos.Altitude, mouseOverTerrain.Pos.Horizontal.Y + 16.0D);
                         GL.End();
 
                         DebugGLError("Mouse over position");
@@ -507,23 +509,23 @@ namespace SharpFlame.Mapping
                 {
                     GL.LineWidth(2.0F);
 
-                    if ( MouseOverTerrain.Side_IsV )
+                    if ( mouseOverTerrain.Side_IsV )
                     {
-                        vertex0.X = MouseOverTerrain.Side_Num.X * Constants.TerrainGridSpacing;
-                        vertex0.Y = Convert.ToDouble(Terrain.Vertices[MouseOverTerrain.Side_Num.X, MouseOverTerrain.Side_Num.Y].Height * HeightMultiplier);
-                        vertex0.Z = - MouseOverTerrain.Side_Num.Y * Constants.TerrainGridSpacing;
-                        vertex1.X = MouseOverTerrain.Side_Num.X * Constants.TerrainGridSpacing;
-                        vertex1.Y = Convert.ToDouble(Terrain.Vertices[MouseOverTerrain.Side_Num.X, MouseOverTerrain.Side_Num.Y + 1].Height * HeightMultiplier);
-                        vertex1.Z = - (MouseOverTerrain.Side_Num.Y + 1) * Constants.TerrainGridSpacing;
+                        vertex0.X = mouseOverTerrain.Side_Num.X * Constants.TerrainGridSpacing;
+                        vertex0.Y = Convert.ToDouble(Terrain.Vertices[mouseOverTerrain.Side_Num.X, mouseOverTerrain.Side_Num.Y].Height * HeightMultiplier);
+                        vertex0.Z = - mouseOverTerrain.Side_Num.Y * Constants.TerrainGridSpacing;
+                        vertex1.X = mouseOverTerrain.Side_Num.X * Constants.TerrainGridSpacing;
+                        vertex1.Y = Convert.ToDouble(Terrain.Vertices[mouseOverTerrain.Side_Num.X, mouseOverTerrain.Side_Num.Y + 1].Height * HeightMultiplier);
+                        vertex1.Z = - (mouseOverTerrain.Side_Num.Y + 1) * Constants.TerrainGridSpacing;
                     }
                     else
                     {
-                        vertex0.X = MouseOverTerrain.Side_Num.X * Constants.TerrainGridSpacing;
-                        vertex0.Y = Convert.ToDouble(Terrain.Vertices[MouseOverTerrain.Side_Num.X, MouseOverTerrain.Side_Num.Y].Height * HeightMultiplier);
-                        vertex0.Z = - MouseOverTerrain.Side_Num.Y * Constants.TerrainGridSpacing;
-                        vertex1.X = (MouseOverTerrain.Side_Num.X + 1) * Constants.TerrainGridSpacing;
-                        vertex1.Y = Convert.ToDouble(Terrain.Vertices[MouseOverTerrain.Side_Num.X + 1, MouseOverTerrain.Side_Num.Y].Height * HeightMultiplier);
-                        vertex1.Z = - MouseOverTerrain.Side_Num.Y * Constants.TerrainGridSpacing;
+                        vertex0.X = mouseOverTerrain.Side_Num.X * Constants.TerrainGridSpacing;
+                        vertex0.Y = Convert.ToDouble(Terrain.Vertices[mouseOverTerrain.Side_Num.X, mouseOverTerrain.Side_Num.Y].Height * HeightMultiplier);
+                        vertex0.Z = - mouseOverTerrain.Side_Num.Y * Constants.TerrainGridSpacing;
+                        vertex1.X = (mouseOverTerrain.Side_Num.X + 1) * Constants.TerrainGridSpacing;
+                        vertex1.Y = Convert.ToDouble(Terrain.Vertices[mouseOverTerrain.Side_Num.X + 1, mouseOverTerrain.Side_Num.Y].Height * HeightMultiplier);
+                        vertex1.Z = - mouseOverTerrain.Side_Num.Y * Constants.TerrainGridSpacing;
                     }
 
                     GL.Begin(BeginMode.Lines);
@@ -563,17 +565,17 @@ namespace SharpFlame.Mapping
                         GL.Vertex3(vertex2.X, vertex2.Y, Convert.ToDouble(- vertex2.Z));
                         GL.End();
 
-                        if ( MouseOverTerrain.Tile.Normal.X == Selected_Tile_A.X )
+                        if ( mouseOverTerrain.Tile.Normal.X == Selected_Tile_A.X )
                         {
-                            if ( MouseOverTerrain.Tile.Normal.Y <= Selected_Tile_A.Y )
+                            if ( mouseOverTerrain.Tile.Normal.Y <= Selected_Tile_A.Y )
                             {
-                                a = MouseOverTerrain.Tile.Normal.Y;
+                                a = mouseOverTerrain.Tile.Normal.Y;
                                 b = Selected_Tile_A.Y;
                             }
                             else
                             {
                                 a = Selected_Tile_A.Y;
-                                b = MouseOverTerrain.Tile.Normal.Y;
+                                b = mouseOverTerrain.Tile.Normal.Y;
                             }
                             x2 = Selected_Tile_A.X;
                             for ( y2 = a; y2 <= b; y2++ )
@@ -599,17 +601,17 @@ namespace SharpFlame.Mapping
                                 GL.End();
                             }
                         }
-                        else if ( MouseOverTerrain.Tile.Normal.Y == Selected_Tile_A.Y )
+                        else if ( mouseOverTerrain.Tile.Normal.Y == Selected_Tile_A.Y )
                         {
-                            if ( MouseOverTerrain.Tile.Normal.X <= Selected_Tile_A.X )
+                            if ( mouseOverTerrain.Tile.Normal.X <= Selected_Tile_A.X )
                             {
-                                a = MouseOverTerrain.Tile.Normal.X;
+                                a = mouseOverTerrain.Tile.Normal.X;
                                 b = Selected_Tile_A.X;
                             }
                             else
                             {
                                 a = Selected_Tile_A.X;
-                                b = MouseOverTerrain.Tile.Normal.X;
+                                b = mouseOverTerrain.Tile.Normal.X;
                             }
                             y2 = Selected_Tile_A.Y;
                             for ( x2 = a; x2 <= b; x2++ )
@@ -638,8 +640,8 @@ namespace SharpFlame.Mapping
                     }
                     else
                     {
-                        x2 = MouseOverTerrain.Tile.Normal.X;
-                        y2 = MouseOverTerrain.Tile.Normal.Y;
+                        x2 = mouseOverTerrain.Tile.Normal.X;
+                        y2 = mouseOverTerrain.Tile.Normal.Y;
 
                         vertex0.X = x2 * Constants.TerrainGridSpacing;
                         vertex0.Y = Convert.ToDouble(Terrain.Vertices[x2, y2].Height * HeightMultiplier);
@@ -666,39 +668,38 @@ namespace SharpFlame.Mapping
 
                 //draw mouseover tiles
 
-                var ToolBrush = default(clsBrush);
+                var toolBrush = default(clsBrush);
 
                 if ( modTools.Tool == modTools.Tools.TextureBrush )
                 {
-                    ToolBrush = App.TextureBrush;
+                    toolBrush = App.TextureBrush;
                 }
                 else if ( modTools.Tool == modTools.Tools.CliffBrush )
                 {
-                    ToolBrush = App.CliffBrush;
+                    toolBrush = App.CliffBrush;
                 }
                 else if ( modTools.Tool == modTools.Tools.CliffRemove )
                 {
-                    ToolBrush = App.CliffBrush;
+                    toolBrush = App.CliffBrush;
                 }
                 else if ( modTools.Tool == modTools.Tools.RoadRemove )
                 {
-                    ToolBrush = App.CliffBrush;
+                    toolBrush = App.CliffBrush;
                 }
                 else
                 {
-                    ToolBrush = null;
+                    toolBrush = null;
                 }
 
-                if ( ToolBrush != null )
+                if ( toolBrush != null )
                 {
                     GL.LineWidth(2.0F);
-                    var DrawTileOutline = new clsDrawTileOutline();
-                    DrawTileOutline.Map = this;
-                    DrawTileOutline.Colour.Red = 0.0F;
-                    DrawTileOutline.Colour.Green = 1.0F;
-                    DrawTileOutline.Colour.Blue = 1.0F;
-                    DrawTileOutline.Colour.Alpha = 1.0F;
-                    ToolBrush.PerformActionMapTiles(DrawTileOutline, MouseOverTerrain.Tile);
+                    var drawTileOutline = new clsDrawTileOutline
+                        {
+                            Map = this, 
+                            Colour = {Red = 0.0F, Green = 1.0F, Blue = 1.0F, Alpha = 1.0F}
+                        };
+                    toolBrush.PerformActionMapTiles(drawTileOutline, mouseOverTerrain.Tile);
 
                     DebugGLError("Brush tiles");
                 }
@@ -708,9 +709,9 @@ namespace SharpFlame.Mapping
                 {
                     GL.LineWidth(2.0F);
 
-                    vertex0.X = MouseOverTerrain.Vertex.Normal.X * Constants.TerrainGridSpacing;
-                    vertex0.Y = Convert.ToDouble(Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height * HeightMultiplier);
-                    vertex0.Z = - MouseOverTerrain.Vertex.Normal.Y * Constants.TerrainGridSpacing;
+                    vertex0.X = mouseOverTerrain.Vertex.Normal.X * Constants.TerrainGridSpacing;
+                    vertex0.Y = Convert.ToDouble(Terrain.Vertices[mouseOverTerrain.Vertex.Normal.X, mouseOverTerrain.Vertex.Normal.Y].Height * HeightMultiplier);
+                    vertex0.Z = - mouseOverTerrain.Vertex.Normal.Y * Constants.TerrainGridSpacing;
                     GL.Begin(BeginMode.Lines);
                     GL.Color3(0.0F, 1.0F, 1.0F);
                     GL.Vertex3(vertex0.X - 8.0D, vertex0.Y, Convert.ToDouble(- vertex0.Z));
@@ -724,35 +725,34 @@ namespace SharpFlame.Mapping
 
                 if ( modTools.Tool == modTools.Tools.TerrainBrush )
                 {
-                    ToolBrush = App.TerrainBrush;
+                    toolBrush = App.TerrainBrush;
                 }
                 else if ( modTools.Tool == modTools.Tools.HeightSetBrush )
                 {
-                    ToolBrush = App.HeightBrush;
+                    toolBrush = App.HeightBrush;
                 }
                 else if ( modTools.Tool == modTools.Tools.HeightChangeBrush )
                 {
-                    ToolBrush = App.HeightBrush;
+                    toolBrush = App.HeightBrush;
                 }
                 else if ( modTools.Tool == modTools.Tools.HeightSmoothBrush )
                 {
-                    ToolBrush = App.HeightBrush;
+                    toolBrush = App.HeightBrush;
                 }
                 else
                 {
-                    ToolBrush = null;
+                    toolBrush = null;
                 }
 
-                if ( ToolBrush != null )
+                if ( toolBrush != null )
                 {
                     GL.LineWidth(2.0F);
-                    var DrawVertexMarker = new clsDrawVertexMarker();
-                    DrawVertexMarker.Map = this;
-                    DrawVertexMarker.Colour.Red = 0.0F;
-                    DrawVertexMarker.Colour.Green = 1.0F;
-                    DrawVertexMarker.Colour.Blue = 1.0F;
-                    DrawVertexMarker.Colour.Alpha = 1.0F;
-                    ToolBrush.PerformActionMapVertices(DrawVertexMarker, MouseOverTerrain.Vertex);
+                    var drawVertexMarker = new clsDrawVertexMarker
+                        {
+                            Map = this, 
+                            Colour = {Red = 0.0F, Green = 1.0F, Blue = 1.0F, Alpha = 1.0F}
+                        };
+                    toolBrush.PerformActionMapVertices(drawVertexMarker, mouseOverTerrain.Vertex);
 
                     DebugGLError("Brush vertices");
                 }
@@ -776,12 +776,12 @@ namespace SharpFlame.Mapping
             {
                 GL.Color3(1.0F, 1.0F, 1.0F);
                 GL.Enable(EnableCap.Texture2D);
-                App.VisionSectors.PerformActionMapSectors(DrawObjects, drawCentreSector);
+                App.VisionSectors.PerformActionMapSectors(drawObjects, drawCentreSector);
                 GL.Disable(EnableCap.Texture2D);
                 DebugGLError("Objects");
             }
 
-            if ( MouseOverTerrain != null )
+            if ( mouseOverTerrain != null )
             {
                 GL.Enable(EnableCap.Texture2D);
                 if ( modTools.Tool == modTools.Tools.ObjectPlace )
@@ -802,7 +802,7 @@ namespace SharpFlame.Mapping
                         {
                             rotation = 0;
                         }
-                        WorldPos worldPos = TileAlignedPosFromMapPos(MouseOverTerrain.Pos.Horizontal, placeObject.GetGetFootprintSelected(rotation));
+                        WorldPos worldPos = TileAlignedPosFromMapPos(mouseOverTerrain.Pos.Horizontal, placeObject.GetGetFootprintSelected(rotation));
                         GL.PushMatrix();
                         GL.Translate(worldPos.Horizontal.X - ViewInfo.ViewPos.X, worldPos.Altitude - ViewInfo.ViewPos.Y + 2.0D,
                             ViewInfo.ViewPos.Z + worldPos.Horizontal.Y);
@@ -816,78 +816,78 @@ namespace SharpFlame.Mapping
 
             GL.Disable(EnableCap.DepthTest);
 
-            var ScriptMarkerTextLabels = new clsTextLabels(256);
-            var TextLabel = default(clsTextLabel);
+            var scriptMarkerTextLabels = new clsTextLabels(256);
+            clsTextLabel textLabel;
             if ( App.Draw_ScriptMarkers )
             {
-                var ScriptPosition = default(clsScriptPosition);
-                var ScriptArea = default(clsScriptArea);
+                clsScriptPosition scriptPosition;
+                clsScriptArea scriptArea;
                 GL.PushMatrix();
                 GL.Translate(Convert.ToDouble(- ViewInfo.ViewPos.X), Convert.ToDouble(- ViewInfo.ViewPos.Y), ViewInfo.ViewPos.Z);
                 foreach ( var tempLoopVar_ScriptPosition in ScriptPositions )
                 {
-                    ScriptPosition = tempLoopVar_ScriptPosition;
-                    ScriptPosition.GLDraw();
+                    scriptPosition = tempLoopVar_ScriptPosition;
+                    scriptPosition.GLDraw();
                 }
                 foreach ( var tempLoopVar_ScriptArea in ScriptAreas )
                 {
-                    ScriptArea = tempLoopVar_ScriptArea;
-                    ScriptArea.GLDraw();
+                    scriptArea = tempLoopVar_ScriptArea;
+                    scriptArea.GLDraw();
                 }
                 foreach ( var tempLoopVar_ScriptPosition in ScriptPositions )
                 {
-                    ScriptPosition = tempLoopVar_ScriptPosition;
-                    if ( ScriptMarkerTextLabels.AtMaxCount() )
+                    scriptPosition = tempLoopVar_ScriptPosition;
+                    if ( scriptMarkerTextLabels.AtMaxCount() )
                     {
                         break;
                     }
-                    xyzDbl.X = ScriptPosition.PosX - ViewInfo.ViewPos.X;
-                    xyzDbl.Z = - ScriptPosition.PosY - ViewInfo.ViewPos.Z;
-                    xyzDbl.Y = GetTerrainHeight(new XYInt(ScriptPosition.PosX, ScriptPosition.PosY)) - ViewInfo.ViewPos.Y;
+                    xyzDbl.X = scriptPosition.PosX - ViewInfo.ViewPos.X;
+                    xyzDbl.Z = - scriptPosition.PosY - ViewInfo.ViewPos.Z;
+                    xyzDbl.Y = GetTerrainHeight(new XYInt(scriptPosition.PosX, scriptPosition.PosY)) - ViewInfo.ViewPos.Y;
                     Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrixInverted, xyzDbl, ref xyzDbl2);
                     if ( ViewInfo.PosGetScreenXY(xyzDbl2, ref screenPos) )
                     {
                         if ( screenPos.X >= 0 & screenPos.X <= glSize.X & screenPos.Y >= 0 & screenPos.Y <= glSize.Y )
                         {
-                            TextLabel = new clsTextLabel();
-                            TextLabel.Colour.Red = 1.0F;
-                            TextLabel.Colour.Green = 1.0F;
-                            TextLabel.Colour.Blue = 0.5F;
-                            TextLabel.Colour.Alpha = 0.75F;
-                            TextLabel.TextFont = App.UnitLabelFont;
-                            TextLabel.SizeY = SettingsManager.Settings.FontSize;
-                            TextLabel.Pos = screenPos;
-                            TextLabel.Text = ScriptPosition.Label;
-                            ScriptMarkerTextLabels.Add(TextLabel);
+                            textLabel = new clsTextLabel();
+                            textLabel.Colour.Red = 1.0F;
+                            textLabel.Colour.Green = 1.0F;
+                            textLabel.Colour.Blue = 0.5F;
+                            textLabel.Colour.Alpha = 0.75F;
+                            textLabel.TextFont = App.UnitLabelFont;
+                            textLabel.SizeY = SettingsManager.Settings.FontSize;
+                            textLabel.Pos = screenPos;
+                            textLabel.Text = scriptPosition.Label;
+                            scriptMarkerTextLabels.Add(textLabel);
                         }
                     }
                 }
                 DebugGLError("Script positions");
                 foreach ( var tempLoopVar_ScriptArea in ScriptAreas )
                 {
-                    ScriptArea = tempLoopVar_ScriptArea;
-                    if ( ScriptMarkerTextLabels.AtMaxCount() )
+                    scriptArea = tempLoopVar_ScriptArea;
+                    if ( scriptMarkerTextLabels.AtMaxCount() )
                     {
                         break;
                     }
-                    xyzDbl.X = ScriptArea.PosAX - ViewInfo.ViewPos.X;
-                    xyzDbl.Z = - ScriptArea.PosAY - ViewInfo.ViewPos.Z;
-                    xyzDbl.Y = GetTerrainHeight(new XYInt(ScriptArea.PosAX, ScriptArea.PosAY)) - ViewInfo.ViewPos.Y;
+                    xyzDbl.X = scriptArea.PosAX - ViewInfo.ViewPos.X;
+                    xyzDbl.Z = - scriptArea.PosAY - ViewInfo.ViewPos.Z;
+                    xyzDbl.Y = GetTerrainHeight(new XYInt(scriptArea.PosAX, scriptArea.PosAY)) - ViewInfo.ViewPos.Y;
                     Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrixInverted, xyzDbl, ref xyzDbl2);
                     if ( ViewInfo.PosGetScreenXY(xyzDbl2, ref screenPos) )
                     {
                         if ( screenPos.X >= 0 & screenPos.X <= glSize.X & screenPos.Y >= 0 & screenPos.Y <= glSize.Y )
                         {
-                            TextLabel = new clsTextLabel();
-                            TextLabel.Colour.Red = 1.0F;
-                            TextLabel.Colour.Green = 1.0F;
-                            TextLabel.Colour.Blue = 0.5F;
-                            TextLabel.Colour.Alpha = 0.75F;
-                            TextLabel.TextFont = App.UnitLabelFont;
-                            TextLabel.SizeY = SettingsManager.Settings.FontSize;
-                            TextLabel.Pos = screenPos;
-                            TextLabel.Text = ScriptArea.Label;
-                            ScriptMarkerTextLabels.Add(TextLabel);
+                            textLabel = new clsTextLabel();
+                            textLabel.Colour.Red = 1.0F;
+                            textLabel.Colour.Green = 1.0F;
+                            textLabel.Colour.Blue = 0.5F;
+                            textLabel.Colour.Alpha = 0.75F;
+                            textLabel.TextFont = App.UnitLabelFont;
+                            textLabel.SizeY = SettingsManager.Settings.FontSize;
+                            textLabel.Pos = screenPos;
+                            textLabel.Text = scriptArea.Label;
+                            scriptMarkerTextLabels.Add(textLabel);
                         }
                     }
                 }
@@ -896,24 +896,24 @@ namespace SharpFlame.Mapping
                 DebugGLError("Script areas");
             }
 
-            var MessageTextLabels = new clsTextLabels(24);
+            var messageTextLabels = new clsTextLabels(24);
 
             b = 0;
-            for ( a = Math.Max(Messages.Count - MessageTextLabels.MaxCount, 0); a <= Messages.Count - 1; a++ )
+            for ( a = Math.Max(Messages.Count - messageTextLabels.MaxCount, 0); a <= Messages.Count - 1; a++ )
             {
-                if ( !MessageTextLabels.AtMaxCount() )
+                if ( !messageTextLabels.AtMaxCount() )
                 {
-                    TextLabel = new clsTextLabel();
-                    TextLabel.Colour.Red = 0.875F;
-                    TextLabel.Colour.Green = 0.875F;
-                    TextLabel.Colour.Blue = 1.0F;
-                    TextLabel.Colour.Alpha = 1.0F;
-                    TextLabel.TextFont = App.UnitLabelFont;
-                    TextLabel.SizeY = SettingsManager.Settings.FontSize;
-                    TextLabel.Pos.X = 32 + minimapSizeXy.X;
-                    TextLabel.Pos.Y = 32 + (int)(Math.Ceiling((decimal)(b * TextLabel.SizeY)));
-                    TextLabel.Text = Convert.ToString(Messages[a].Text);
-                    MessageTextLabels.Add(TextLabel);
+                    textLabel = new clsTextLabel();
+                    textLabel.Colour.Red = 0.875F;
+                    textLabel.Colour.Green = 0.875F;
+                    textLabel.Colour.Blue = 1.0F;
+                    textLabel.Colour.Alpha = 1.0F;
+                    textLabel.TextFont = App.UnitLabelFont;
+                    textLabel.SizeY = SettingsManager.Settings.FontSize;
+                    textLabel.Pos.X = 32 + minimapSizeXy.X;
+                    textLabel.Pos.Y = 32 + (int)(Math.Ceiling((decimal)(b * textLabel.SizeY)));
+                    textLabel.Text = Convert.ToString(Messages[a].Text);
+                    messageTextLabels.Add(textLabel);
                     b++;
                 }
             }
@@ -924,22 +924,22 @@ namespace SharpFlame.Mapping
             foreach ( var tempLoopVar_Unit in SelectedUnits )
             {
                 unit = tempLoopVar_Unit;
-                RGB_sng = GetUnitGroupColour(unit.UnitGroup);
-                colourA = new sRGBA_sng((1.0F + RGB_sng.Red) / 2.0F, (1.0F + RGB_sng.Green) / 2.0F, (1.0F + RGB_sng.Blue) / 2.0F, 0.75F);
-                colourB = new sRGBA_sng(RGB_sng.Red, RGB_sng.Green, RGB_sng.Blue, 0.75F);
+                rgbSng = GetUnitGroupColour(unit.UnitGroup);
+                colourA = new sRGBA_sng((1.0F + rgbSng.Red) / 2.0F, (1.0F + rgbSng.Green) / 2.0F, (1.0F + rgbSng.Blue) / 2.0F, 0.75F);
+                colourB = new sRGBA_sng(rgbSng.Red, rgbSng.Green, rgbSng.Blue, 0.75F);
                 DrawUnitRectangle(unit, 8, colourA, colourB);
             }
-            if ( MouseOverTerrain != null )
+            if ( mouseOverTerrain != null )
             {
-                foreach ( var tempLoopVar_Unit in MouseOverTerrain.Units )
+                foreach ( var tempLoopVar_Unit in mouseOverTerrain.Units )
                 {
                     unit = tempLoopVar_Unit;
                     if ( unit != null && modTools.Tool == modTools.Tools.ObjectSelect )
                     {
-                        RGB_sng = GetUnitGroupColour(unit.UnitGroup);
-                        GL.Color4((0.5F + RGB_sng.Red) / 1.5F, (0.5F + RGB_sng.Green) / 1.5F, (0.5F + RGB_sng.Blue) / 1.5F, 0.75F);
-                        colourA = new sRGBA_sng((1.0F + RGB_sng.Red) / 2.0F, (1.0F + RGB_sng.Green) / 2.0F, (1.0F + RGB_sng.Blue) / 2.0F, 0.75F);
-                        colourB = new sRGBA_sng(RGB_sng.Red, RGB_sng.Green, RGB_sng.Blue, 0.875F);
+                        rgbSng = GetUnitGroupColour(unit.UnitGroup);
+                        GL.Color4((0.5F + rgbSng.Red) / 1.5F, (0.5F + rgbSng.Green) / 1.5F, (0.5F + rgbSng.Blue) / 1.5F, 0.75F);
+                        colourA = new sRGBA_sng((1.0F + rgbSng.Red) / 2.0F, (1.0F + rgbSng.Green) / 2.0F, (1.0F + rgbSng.Blue) / 2.0F, 0.75F);
+                        colourB = new sRGBA_sng(rgbSng.Red, rgbSng.Green, rgbSng.Blue, 0.875F);
                         DrawUnitRectangle(unit, 16, colourA, colourB);
                     }
                 }
@@ -949,8 +949,8 @@ namespace SharpFlame.Mapping
             DebugGLError("Unit selection");
 
             GL.MatrixMode(MatrixMode.Projection);
-            var temp_mat2 = Matrix4.CreateOrthographicOffCenter(0.0F, glSize.X, glSize.Y, 0.0F, -1.0F, 1.0F);
-            GL.LoadMatrix(ref temp_mat2);
+            var tempMat2 = Matrix4.CreateOrthographicOffCenter(0.0F, glSize.X, glSize.Y, 0.0F, -1.0F, 1.0F);
+            GL.LoadMatrix(ref tempMat2);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
@@ -958,10 +958,10 @@ namespace SharpFlame.Mapping
 
             GL.Enable(EnableCap.Texture2D);
 
-            ScriptMarkerTextLabels.Draw();
-            DrawObjects.UnitTextLabels.Draw();
+            scriptMarkerTextLabels.Draw();
+            drawObjects.UnitTextLabels.Draw();
             selectionLabel.Draw();
-            MessageTextLabels.Draw();
+            messageTextLabels.Draw();
 
             DebugGLError("Text labels");
 
@@ -972,8 +972,8 @@ namespace SharpFlame.Mapping
             //draw minimap
 
             GL.MatrixMode(MatrixMode.Projection);
-            var temp_mat3 = Matrix4.CreateOrthographicOffCenter(0.0F, glSize.X, 0.0F, glSize.Y, -1.0F, 1.0F);
-            GL.LoadMatrix(ref temp_mat3);
+            var tempMat3 = Matrix4.CreateOrthographicOffCenter(0.0F, glSize.X, 0.0F, glSize.Y, -1.0F, 1.0F);
+            GL.LoadMatrix(ref tempMat3);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
@@ -1064,10 +1064,10 @@ namespace SharpFlame.Mapping
                     }
                     else if ( modTools.Tool == modTools.Tools.TerrainSelect )
                     {
-                        if ( MouseOverTerrain != null )
+                        if ( mouseOverTerrain != null )
                         {
                             //selection is changing under mouse
-                            MathUtil.ReorderXY(Selected_Area_VertexA, MouseOverTerrain.Vertex.Normal, ref startXy, ref finishXy);
+                            MathUtil.ReorderXY(Selected_Area_VertexA, mouseOverTerrain.Vertex.Normal, ref startXy, ref finishXy);
                             drawIt = true;
                         }
                     }
@@ -1114,45 +1114,45 @@ namespace SharpFlame.Mapping
 
         public void DrawUnitRectangle(clsUnit Unit, int BorderInsideThickness, sRGBA_sng InsideColour, sRGBA_sng OutsideColour)
         {
-            var PosA = new XYInt();
-            var PosB = new XYInt();
-            var A = 0;
-            var Altitude = Unit.Pos.Altitude - ViewInfo.ViewPos.Y;
+            var posA = new XYInt();
+            var posB = new XYInt();
+            var a = 0;
+            var altitude = Unit.Pos.Altitude - ViewInfo.ViewPos.Y;
 
-            GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.TypeBase.GetGetFootprintSelected(Unit.Rotation), ref PosA, ref PosB);
-            A = PosA.Y;
-            PosA.X = (int)((PosA.X + 0.125D) * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X);
-            PosA.Y = (int)((PosB.Y + 0.875D) * - Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z);
-            PosB.X = (int)((PosB.X + 0.875D) * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X);
-            PosB.Y = (int)((A + 0.125D) * - Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z);
-
-            GL.Color4(OutsideColour.Red, OutsideColour.Green, OutsideColour.Blue, OutsideColour.Alpha);
-            GL.Vertex3(PosB.X, Altitude, Convert.ToInt32(- PosA.Y));
-            GL.Vertex3(PosA.X, Altitude, Convert.ToInt32(- PosA.Y));
-            GL.Color4(InsideColour.Red, InsideColour.Green, InsideColour.Blue, InsideColour.Alpha);
-            GL.Vertex3(PosA.X + BorderInsideThickness, Altitude, Convert.ToInt32(- (PosA.Y + BorderInsideThickness)));
-            GL.Vertex3(PosB.X - BorderInsideThickness, Altitude, Convert.ToInt32(- (PosA.Y + BorderInsideThickness)));
+            GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.TypeBase.GetGetFootprintSelected(Unit.Rotation), ref posA, ref posB);
+            a = posA.Y;
+            posA.X = (int)((posA.X + 0.125D) * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X);
+            posA.Y = (int)((posB.Y + 0.875D) * - Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z);
+            posB.X = (int)((posB.X + 0.875D) * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X);
+            posB.Y = (int)((a + 0.125D) * - Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z);
 
             GL.Color4(OutsideColour.Red, OutsideColour.Green, OutsideColour.Blue, OutsideColour.Alpha);
-            GL.Vertex3(PosA.X, Altitude, Convert.ToInt32(- PosA.Y));
-            GL.Vertex3(PosA.X, Altitude, Convert.ToInt32(- PosB.Y));
+            GL.Vertex3(posB.X, altitude, Convert.ToInt32(- posA.Y));
+            GL.Vertex3(posA.X, altitude, Convert.ToInt32(- posA.Y));
             GL.Color4(InsideColour.Red, InsideColour.Green, InsideColour.Blue, InsideColour.Alpha);
-            GL.Vertex3(PosA.X + BorderInsideThickness, Altitude, Convert.ToInt32(- (PosB.Y - BorderInsideThickness)));
-            GL.Vertex3(PosA.X + BorderInsideThickness, Altitude, Convert.ToInt32(- (PosA.Y + BorderInsideThickness)));
+            GL.Vertex3(posA.X + BorderInsideThickness, altitude, Convert.ToInt32(- (posA.Y + BorderInsideThickness)));
+            GL.Vertex3(posB.X - BorderInsideThickness, altitude, Convert.ToInt32(- (posA.Y + BorderInsideThickness)));
 
             GL.Color4(OutsideColour.Red, OutsideColour.Green, OutsideColour.Blue, OutsideColour.Alpha);
-            GL.Vertex3(PosB.X, Altitude, Convert.ToInt32(- PosB.Y));
-            GL.Vertex3(PosB.X, Altitude, Convert.ToInt32(- PosA.Y));
+            GL.Vertex3(posA.X, altitude, Convert.ToInt32(- posA.Y));
+            GL.Vertex3(posA.X, altitude, Convert.ToInt32(- posB.Y));
             GL.Color4(InsideColour.Red, InsideColour.Green, InsideColour.Blue, InsideColour.Alpha);
-            GL.Vertex3(PosB.X - BorderInsideThickness, Altitude, - (PosA.Y + BorderInsideThickness));
-            GL.Vertex3(PosB.X - BorderInsideThickness, Altitude, - (PosB.Y - BorderInsideThickness));
+            GL.Vertex3(posA.X + BorderInsideThickness, altitude, Convert.ToInt32(- (posB.Y - BorderInsideThickness)));
+            GL.Vertex3(posA.X + BorderInsideThickness, altitude, Convert.ToInt32(- (posA.Y + BorderInsideThickness)));
 
             GL.Color4(OutsideColour.Red, OutsideColour.Green, OutsideColour.Blue, OutsideColour.Alpha);
-            GL.Vertex3(PosA.X, Altitude, Convert.ToInt32(- PosB.Y));
-            GL.Vertex3(PosB.X, Altitude, Convert.ToInt32(- PosB.Y));
+            GL.Vertex3(posB.X, altitude, Convert.ToInt32(- posB.Y));
+            GL.Vertex3(posB.X, altitude, Convert.ToInt32(- posA.Y));
             GL.Color4(InsideColour.Red, InsideColour.Green, InsideColour.Blue, InsideColour.Alpha);
-            GL.Vertex3(PosB.X - BorderInsideThickness, Altitude, - (PosB.Y - BorderInsideThickness));
-            GL.Vertex3(PosA.X + BorderInsideThickness, Altitude, Convert.ToInt32(- (PosB.Y - BorderInsideThickness)));
+            GL.Vertex3(posB.X - BorderInsideThickness, altitude, - (posA.Y + BorderInsideThickness));
+            GL.Vertex3(posB.X - BorderInsideThickness, altitude, - (posB.Y - BorderInsideThickness));
+
+            GL.Color4(OutsideColour.Red, OutsideColour.Green, OutsideColour.Blue, OutsideColour.Alpha);
+            GL.Vertex3(posA.X, altitude, Convert.ToInt32(- posB.Y));
+            GL.Vertex3(posB.X, altitude, Convert.ToInt32(- posB.Y));
+            GL.Color4(InsideColour.Red, InsideColour.Green, InsideColour.Blue, InsideColour.Alpha);
+            GL.Vertex3(posB.X - BorderInsideThickness, altitude, - (posB.Y - BorderInsideThickness));
+            GL.Vertex3(posA.X + BorderInsideThickness, altitude, Convert.ToInt32(- (posB.Y - BorderInsideThickness)));
         }
     }
 }
