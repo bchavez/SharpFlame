@@ -8,16 +8,16 @@ using SharpFlame.Mapping.Objects;
 
 namespace SharpFlame.Mapping.Tools
 {
-    public class clsObjectSelect : ISimpleListTool<clsUnit>
+    public class clsObjectSelect : ISimpleListTool<Unit>
     {
-        private clsUnit Unit;
+        private Unit Unit;
 
         public void ActionPerform()
         {
             Unit.MapSelect();
         }
 
-        public void SetItem(clsUnit item)
+        public void SetItem(Unit item)
         {
             Unit = item;
         }

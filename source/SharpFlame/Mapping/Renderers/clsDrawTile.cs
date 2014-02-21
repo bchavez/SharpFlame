@@ -2,7 +2,7 @@ namespace SharpFlame.Mapping.Renderers
 {
     public abstract class clsDrawTile
     {
-        public clsMap Map;
+        public Map Map;
         public int TileX;
         public int TileY;
 

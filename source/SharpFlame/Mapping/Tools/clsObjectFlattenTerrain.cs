@@ -11,9 +11,9 @@ using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping.Tools
 {
-    public class clsObjectFlattenTerrain : ISimpleListTool<clsUnit>
+    public class clsObjectFlattenTerrain : ISimpleListTool<Unit>
     {
-        private clsUnit Unit;
+        private Unit Unit;
 
         public void ActionPerform()
         {
@@ -60,7 +60,7 @@ namespace SharpFlame.Mapping.Tools
             }
         }
 
-        public void SetItem(clsUnit item)
+        public void SetItem(Unit item)
         {
             Unit = item;
         }

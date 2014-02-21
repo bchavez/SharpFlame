@@ -14,9 +14,9 @@ namespace SharpFlame.Mapping.IO.Minimap
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        protected readonly clsMap map;
+        protected readonly Map map;
 
-        public MinimapSaver(clsMap newMap)
+        public MinimapSaver(Map newMap)
         {
             map = newMap;
         }

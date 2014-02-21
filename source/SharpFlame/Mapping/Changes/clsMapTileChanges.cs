@@ -8,10 +8,10 @@ namespace SharpFlame.Mapping.Changes
 {
     public abstract class clsMapTileChanges : clsPointChanges
     {
-        public clsMap Map;
+        public Map Map;
         public clsTerrain Terrain;
 
-        public clsMapTileChanges(clsMap map, XYInt pointsize) : base(pointsize)
+        public clsMapTileChanges(Map map, XYInt pointsize) : base(pointsize)
         {
             Map = map;
             Terrain = map.Terrain;

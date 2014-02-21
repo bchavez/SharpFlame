@@ -6,7 +6,7 @@ using SharpFlame.Mapping.Changes;
 
 namespace SharpFlame.Mapping
 {
-    public partial class clsMap
+    public partial class Map
     {
         public clsAutoTextureChanges AutoTextureChanges;
         public clsSectorChanges SectorGraphicsChanges;

@@ -8,7 +8,7 @@ namespace SharpFlame.Mapping.Changes
 {
     public class clsSectorChanges : clsMapTileChanges
     {
-        public clsSectorChanges(clsMap Map) : base(Map, Map.SectorCount)
+        public clsSectorChanges(Map Map) : base(Map, Map.SectorCount)
         {
         }
 

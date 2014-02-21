@@ -19,19 +19,19 @@ namespace SharpFlame.Mapping.Script
 {
     public class clsScriptArea
     {
-        private readonly ConnectedListLink<clsScriptArea, clsMap> _ParentMapLink;
+        private readonly ConnectedListLink<clsScriptArea, Map> _ParentMapLink;
 
         private XYInt _PosA;
         private XYInt _PosB;
 
-        public clsScriptArea(clsMap map)
+        public clsScriptArea(Map map)
         {
-            _ParentMapLink = new ConnectedListLink<clsScriptArea, clsMap>(this);
+            _ParentMapLink = new ConnectedListLink<clsScriptArea, Map>(this);
             Label = map.GetDefaultScriptLabel("Area");
             _ParentMapLink.Connect(map.ScriptAreas);
         }
 
-        public ConnectedListLink<clsScriptArea, clsMap> ParentMap
+        public ConnectedListLink<clsScriptArea, Map> ParentMap
         {
             get { return _ParentMapLink; }
         }

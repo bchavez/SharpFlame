@@ -8,7 +8,7 @@ using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping
 {
-    public class clsInterfaceOptions
+    public class InterfaceOptions
     {
         public bool AutoScrollLimits;
         public int CampaignGameType;
@@ -21,7 +21,7 @@ namespace SharpFlame.Mapping
 
         public CompileType CompileType;
 
-        public clsInterfaceOptions()
+        public InterfaceOptions()
         {
             //set to default
             CompileName = "";

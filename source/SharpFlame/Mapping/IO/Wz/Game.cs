@@ -19,7 +19,7 @@ namespace SharpFlame.Mapping.IO.Wz
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public Game(clsMap newMap) : base(newMap)
+        public Game(Map newMap) : base(newMap)
         {
         }
 

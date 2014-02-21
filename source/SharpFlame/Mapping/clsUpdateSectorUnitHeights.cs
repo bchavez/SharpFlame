@@ -13,14 +13,14 @@ namespace SharpFlame.Mapping
     {
         private UInt32 ID;
         private int NewAltitude;
-        private clsUnit NewUnit;
+        private Unit NewUnit;
         private int OldUnitCount;
-        private clsUnit[] OldUnits;
+        private Unit[] OldUnits;
         private bool Started;
 
         public void Start()
         {
-            OldUnits = new clsUnit[Map.Units.Count];
+            OldUnits = new Unit[Map.Units.Count];
 
             Started = true;
         }
@@ -35,7 +35,7 @@ namespace SharpFlame.Mapping
 
             var A = 0;
             var UnitAdd = new clsUnitAdd();
-            var Unit = default(clsUnit);
+            var Unit = default(Unit);
 
             UnitAdd.Map = Map;
             UnitAdd.StoreChange = true;
@@ -46,7 +46,7 @@ namespace SharpFlame.Mapping
                 NewAltitude = (int)(Map.GetTerrainHeight(Unit.Pos.Horizontal));
                 if ( NewAltitude != Unit.Pos.Altitude )
                 {
-                    NewUnit = new clsUnit(Unit, Map);
+                    NewUnit = new Unit(Unit, Map);
                     ID = Unit.ID;
                     //NewUnit.Pos.Altitude = NewAltitude
                     //these create changed sectors and must be done before drawing the new sectors
@@ -70,8 +70,8 @@ namespace SharpFlame.Mapping
             }
 
             var Connection = default(clsUnitSectorConnection);
-            var Unit = default(clsUnit);
-            var Sector = default(clsSector);
+            var Unit = default(Unit);
+            var Sector = default(Sector);
             var A = 0;
 
             Sector = Map.Sectors[PosNum.X, PosNum.Y];

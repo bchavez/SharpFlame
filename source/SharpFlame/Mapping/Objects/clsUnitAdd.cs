@@ -13,8 +13,8 @@ namespace SharpFlame.Mapping.Objects
     {
         public UInt32 ID = 0U;
         public string Label = null;
-        public clsMap Map;
-        public clsUnit NewUnit;
+        public Map Map;
+        public Unit NewUnit;
         public bool StoreChange = false;
 
         public bool Perform()
@@ -49,7 +49,7 @@ namespace SharpFlame.Mapping.Objects
 
             if ( StoreChange )
             {
-                var UnitChange = new clsUnitChange();
+                var UnitChange = new UnitChange();
                 UnitChange.Type = UnitChangeType.Added;
                 UnitChange.Unit = NewUnit;
                 Map.UnitChanges.Add(UnitChange);

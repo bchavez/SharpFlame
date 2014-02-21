@@ -9,16 +9,16 @@ using SharpFlame.Mapping.Objects;
 
 namespace SharpFlame.Mapping.Tools
 {
-    public abstract class clsObjectAction : ISimpleListTool<clsUnit>
+    public abstract class clsObjectAction : ISimpleListTool<Unit>
     {
-        private readonly SimpleClassList<clsUnit> _ResultUnits = new SimpleClassList<clsUnit>();
+        private readonly SimpleClassList<Unit> _ResultUnits = new SimpleClassList<Unit>();
         public bool ActionPerformed;
-        public clsMap Map;
+        public Map Map;
 
-        protected clsUnit ResultUnit;
-        public clsUnit Unit;
+        protected Unit ResultUnit;
+        public Unit Unit;
 
-        public SimpleClassList<clsUnit> ResultUnits
+        public SimpleClassList<Unit> ResultUnits
         {
             get { return _ResultUnits; }
         }
@@ -38,7 +38,7 @@ namespace SharpFlame.Mapping.Tools
             {
                 return;
             }
-            ResultUnit = new clsUnit(Unit, Map);
+            ResultUnit = new Unit(Unit, Map);
             _ActionPerform();
             if ( ResultUnit == null )
             {
@@ -51,7 +51,7 @@ namespace SharpFlame.Mapping.Tools
             }
         }
 
-        public void SetItem(clsUnit item)
+        public void SetItem(Unit item)
         {
             Unit = item;
         }

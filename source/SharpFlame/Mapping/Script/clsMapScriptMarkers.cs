@@ -12,10 +12,10 @@ using SharpFlame.Util;
 
 namespace SharpFlame.Mapping
 {
-    public partial class clsMap
+    public partial class Map
     {
-        public ConnectedList<clsScriptArea, clsMap> ScriptAreas;
-        public ConnectedList<clsScriptPosition, clsMap> ScriptPositions;
+        public ConnectedList<clsScriptArea, Map> ScriptAreas;
+        public ConnectedList<clsScriptPosition, Map> ScriptPositions;
 
         public string GetDefaultScriptLabel(string Prefix)
         {
@@ -79,7 +79,7 @@ namespace SharpFlame.Mapping
                 return ReturnResult;
             }
 
-            var Unit = default(clsUnit);
+            var Unit = default(Unit);
 
             foreach ( var tempLoopVar_Unit in Units )
             {

@@ -28,9 +28,9 @@ namespace SharpFlame.Mapping.IO.FMap
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        protected readonly clsMap map;
+        protected readonly Map map;
 
-        public FMapLoader(clsMap newMap)
+        public FMapLoader(Map newMap)
         {
             map = newMap;
         }
@@ -746,7 +746,7 @@ namespace SharpFlame.Mapping.IO.FMap
             var maxUnknownUnitTypeWarningCount = 16;
 
             var droidDesign = default(DroidDesign);
-            var newObject = default(clsUnit);
+            var newObject = default(Unit);
             var unitAdd = new clsUnitAdd();
             var unitTypeBase = default(UnitTypeBase);
             var isDesign = default(bool);
@@ -1034,7 +1034,7 @@ namespace SharpFlame.Mapping.IO.FMap
                         continue;
                     }
 
-                    newObject = new clsUnit();
+                    newObject = new Unit();
                     newObject.TypeBase = unitTypeBase;
                     newObject.Pos.Horizontal.X = iniObject2.Pos.X;
                     newObject.Pos.Horizontal.Y = iniObject2.Pos.Y;
@@ -1225,7 +1225,7 @@ namespace SharpFlame.Mapping.IO.FMap
                         }
                         else
                         {
-                            map.Tile_TypeNum[a] = byteTemp;
+                            map.TileTypeNum[a] = byteTemp;
                         }
                     }
                 }

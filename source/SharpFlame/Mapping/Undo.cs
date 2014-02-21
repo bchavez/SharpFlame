@@ -7,10 +7,10 @@ using SharpFlame.Core.Collections;
 
 namespace SharpFlame.Mapping
 {
-    public class clsUndo
+    public class Undo
     {
         public SimpleList<clsShadowSector> ChangedSectors = new SimpleList<clsShadowSector>();
-        public SimpleList<clsGatewayChange> GatewayChanges = new SimpleList<clsGatewayChange>();
+        public SimpleList<GatewayChange> GatewayChanges = new SimpleList<GatewayChange>();
         public string Name;
         public SimpleList<clsUnitChange> UnitChanges = new SimpleList<clsUnitChange>();
     }

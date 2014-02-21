@@ -35,9 +35,9 @@ namespace SharpFlame.Mapping.IO.Wz
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        protected readonly clsMap map;
+        protected readonly Map map;
 
-        public WzLoader(clsMap newMap)
+        public WzLoader(Map newMap)
         {
             map = newMap;
         }
@@ -365,7 +365,7 @@ namespace SharpFlame.Mapping.IO.Wz
             var ReturnResult = new Result("Creating objects", false);
             logger.Info("Creating objects");
 
-            var newUnit = default(clsUnit);
+            var newUnit = default(Unit);
             UInt32 availableID = 0;
             var unitAdd = new clsUnitAdd();
             var b = 0;
@@ -407,7 +407,7 @@ namespace SharpFlame.Mapping.IO.Wz
 
             foreach ( var bjoUnit in bjoUnits )
             {
-                newUnit = new clsUnit();
+                newUnit = new Unit();
                 newUnit.ID = bjoUnit.ID;
                 newUnit.TypeBase = App.ObjectData.FindOrCreateUnitType(bjoUnit.Code, bjoUnit.ObjectType, -1);
                 if ( newUnit.TypeBase == null )
@@ -455,7 +455,7 @@ namespace SharpFlame.Mapping.IO.Wz
             var moduleLimit = 0;
             var zeroPos = new XYInt(0, 0);
             var moduleTypeBase = default(StructureTypeBase);
-            var newModule = default(clsUnit);
+            var newModule = default(Unit);
 
             var factoryModule = App.ObjectData.FindFirstStructureType(StructureType.FactoryModule);
             var researchModule = App.ObjectData.FindFirstStructureType(StructureType.ResearchModule);
@@ -505,7 +505,7 @@ namespace SharpFlame.Mapping.IO.Wz
                     }
                     else
                     {
-                        newUnit = new clsUnit();
+                        newUnit = new Unit();
                         newUnit.TypeBase = structureTypeBase;
                         if ( iniStructure.UnitGroup == null )
                         {
@@ -576,7 +576,7 @@ namespace SharpFlame.Mapping.IO.Wz
                         {
                             for ( b = 0; b <= iniStructure.ModuleCount - 1; b++ )
                             {
-                                newModule = new clsUnit();
+                                newModule = new Unit();
                                 newModule.TypeBase = moduleTypeBase;
                                 newModule.UnitGroup = newUnit.UnitGroup;
                                 newModule.Pos = newUnit.Pos;
@@ -626,7 +626,7 @@ namespace SharpFlame.Mapping.IO.Wz
                     }
                     else
                     {
-                        newUnit = new clsUnit();
+                        newUnit = new Unit();
                         newUnit.TypeBase = featureTypeBase;
                         newUnit.UnitGroup = map.ScavengerUnitGroup;
                         newUnit.Pos = new WorldPos(iniFeature.Pos, iniFeature.Pos.Z);
@@ -826,7 +826,7 @@ namespace SharpFlame.Mapping.IO.Wz
                     }
                     else
                     {
-                        newUnit = new clsUnit();
+                        newUnit = new Unit();
                         newUnit.TypeBase = droidType;
                         if ( iniDroid.UnitGroup == null )
                         {
@@ -1447,7 +1447,7 @@ namespace SharpFlame.Mapping.IO.Wz
 
                 if ( map.InterfaceOptions == null )
                 {
-                    map.InterfaceOptions = new clsInterfaceOptions();
+                    map.InterfaceOptions = new InterfaceOptions();
                 }
 
                 File.ReadInt32(); //game time

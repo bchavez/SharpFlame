@@ -117,7 +117,7 @@ namespace SharpFlame.Controls
             }
         }
 
-        public void SetMap(clsMap newMap)
+        public void SetMap(Map newMap)
         {
             var a = 0;
 

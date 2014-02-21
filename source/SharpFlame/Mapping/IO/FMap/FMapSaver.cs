@@ -27,9 +27,9 @@ namespace SharpFlame.Mapping.IO.FMap
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        protected readonly clsMap map;
+        protected readonly Map map;
 
-        public FMapSaver(clsMap newMap)
+        public FMapSaver(Map newMap)
         {
             map = newMap;
         }
@@ -668,7 +668,7 @@ namespace SharpFlame.Mapping.IO.FMap
                 {
                     for ( a = 0; a <= map.Tileset.TileCount - 1; a++ )
                     {
-                        file.Write(map.Tile_TypeNum[a]);
+                        file.Write(map.TileTypeNum[a]);
                     }
                 }
             }

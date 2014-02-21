@@ -84,7 +84,7 @@ namespace SharpFlame
         public static int VisionRadius_2E;
         public static double VisionRadius;
 
-        public static clsMap Copied_Map;
+        public static Map Copied_Map;
 
         public static SimpleList<Tileset> Tilesets = new SimpleList<Tileset>();
 
@@ -267,7 +267,7 @@ namespace SharpFlame
             }
         }
 
-        public static void ErrorIDChange(UInt32 intendedID, clsUnit idUnit, string nameOfErrorSource)
+        public static void ErrorIDChange(UInt32 intendedID, Unit idUnit, string nameOfErrorSource)
         {
             if ( !ShowIDErrorMessage )
             {
@@ -293,7 +293,7 @@ namespace SharpFlame
             }
         }
 
-        public static void ZeroIDWarning(clsUnit IDUnit, UInt32 NewID, Result Output)
+        public static void ZeroIDWarning(Unit IDUnit, UInt32 NewID, Result Output)
         {
             var MessageText = "An object\'s ID has been changed from 0 to " + NewID.ToStringInvariant() + ". Zero is not a valid ID. The object is of type " +
                           IDUnit.TypeBase.GetDisplayTextCode() + " and is at map position " + IDUnit.GetPosText() + ".";
@@ -392,7 +392,7 @@ namespace SharpFlame
             VisionSectors.Radius = radius / (Constants.TerrainGridSpacing * Constants.SectorTileSize);
         }
 
-        public static XYDouble CalcUnitsCentrePos(SimpleList<clsUnit> units)
+        public static XYDouble CalcUnitsCentrePos(SimpleList<Unit> units)
         {
             var result = default(XYDouble);
 

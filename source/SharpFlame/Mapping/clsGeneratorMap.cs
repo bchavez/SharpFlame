@@ -45,7 +45,7 @@ namespace SharpFlame
         public int JitterScale;
         public int LevelCount;
         public float LevelHeight;
-        public clsMap Map;
+        public Map Map;
         public float MaxDisconnectionDist;
         public int MaxLevelTransition;
         private int nearestCount;
@@ -957,7 +957,7 @@ namespace SharpFlame
             double BestDist = 0;
             var Flag = default(bool);
 
-            Map = new clsMap(TileSize);
+            Map = new Map(TileSize);
             GenerateTerrainTiles = new GenerateTerrainTile[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
             GenerateTerrainVertices = new GenerateTerrainVertex[Map.Terrain.TileSize.X + 1, Map.Terrain.TileSize.Y + 1];
 
@@ -1795,7 +1795,7 @@ namespace SharpFlame
             return BestNode;
         }
 
-        public clsUnit PlaceUnitNear(UnitTypeBase TypeBase, XYInt Pos, clsUnitGroup UnitGroup, int Clearance, int Rotation, int MaxDistFromPos)
+        public Unit PlaceUnitNear(UnitTypeBase TypeBase, XYInt Pos, clsUnitGroup UnitGroup, int Clearance, int Rotation, int MaxDistFromPos)
         {
             var PosNode = default(PathfinderNode);
             var NodeTag = default(clsNodeTag);
@@ -1816,7 +1816,7 @@ namespace SharpFlame
                     var NewUnitAdd = new clsUnitAdd();
                     NewUnitAdd.Map = Map;
                     NewUnitAdd.StoreChange = true;
-                    var NewUnit = new clsUnit();
+                    var NewUnit = new Unit();
                     NewUnitAdd.NewUnit = NewUnit;
                     NewUnit.TypeBase = TypeBase;
                     NewUnit.UnitGroup = UnitGroup;
@@ -1881,7 +1881,7 @@ namespace SharpFlame
             return null;
         }
 
-        public clsUnit PlaceUnit(UnitTypeBase TypeBase, WorldPos Pos, clsUnitGroup UnitGroup, int Rotation)
+        public Unit PlaceUnit(UnitTypeBase TypeBase, WorldPos Pos, clsUnitGroup UnitGroup, int Rotation)
         {
             var TilePosA = new XYInt();
             var TilePosB = new XYInt();
@@ -1893,7 +1893,7 @@ namespace SharpFlame
             var NewUnitAdd = new clsUnitAdd();
             NewUnitAdd.Map = Map;
             NewUnitAdd.StoreChange = true;
-            var NewUnit = new clsUnit();
+            var NewUnit = new Unit();
             NewUnitAdd.NewUnit = NewUnit;
             NewUnit.TypeBase = TypeBase;
             NewUnit.UnitGroup = UnitGroup;
@@ -2021,7 +2021,7 @@ namespace SharpFlame
             var B = 0;
             var C = 0;
             var D = 0;
-            var tmpUnit = default(clsUnit);
+            var tmpUnit = default(Unit);
             var Count = 0;
             var FeaturePlaceRange = 6 * 128;
             var BasePlaceRange = 16 * 128;

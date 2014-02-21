@@ -20,7 +20,7 @@ using SharpFlame.Util;
 
 namespace SharpFlame.Mapping
 {
-    public partial class clsMap
+    public partial class Map
     {
         public clsViewInfo ViewInfo;
 
@@ -51,7 +51,7 @@ namespace SharpFlame.Mapping
             var posC = default(XYDouble);
             var posD = default(XYDouble);
             var minimapSizeXy = new XYInt();
-            clsUnit unit;
+            Unit unit;
             var startXy = new XYInt();
             var finishXy = new XYInt();
             bool drawIt;
@@ -68,7 +68,7 @@ namespace SharpFlame.Mapping
             dblTemp = SettingsManager.Settings.MinimapSize;
             ViewInfo.TilesPerMinimapPixel = Math.Sqrt(Terrain.TileSize.X * Terrain.TileSize.X + Terrain.TileSize.Y * Terrain.TileSize.Y) /
                                                (MathUtil.RootTwo * dblTemp);
-            if ( Minimap_Texture_Size > 0 & ViewInfo.TilesPerMinimapPixel > 0.0D )
+            if ( MinimapTextureSize > 0 & ViewInfo.TilesPerMinimapPixel > 0.0D )
             {
                 minimapSizeXy.X = (int)(Terrain.TileSize.X / ViewInfo.TilesPerMinimapPixel);
                 minimapSizeXy.Y = (int)(Terrain.TileSize.Y / ViewInfo.TilesPerMinimapPixel);
@@ -217,16 +217,16 @@ namespace SharpFlame.Mapping
 
             selectionLabel.Text = "";
 
-            if ( Selected_Area_VertexA != null )
+            if ( SelectedAreaVertexA != null )
             {
                 drawIt = false;
-                if ( Selected_Area_VertexB != null )
+                if ( SelectedAreaVertexB != null )
                 {
                     //area is selected
-                    MathUtil.ReorderXY(Selected_Area_VertexA, Selected_Area_VertexB, ref startXy, ref finishXy);
-                    xyzDbl.X = Selected_Area_VertexB.X * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X;
-                    xyzDbl.Z = - Selected_Area_VertexB.Y * Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z;
-                    xyzDbl.Y = GetVertexAltitude(Selected_Area_VertexB) - ViewInfo.ViewPos.Y;
+                    MathUtil.ReorderXY(SelectedAreaVertexA, SelectedAreaVertexB, ref startXy, ref finishXy);
+                    xyzDbl.X = SelectedAreaVertexB.X * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X;
+                    xyzDbl.Z = - SelectedAreaVertexB.Y * Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z;
+                    xyzDbl.Y = GetVertexAltitude(SelectedAreaVertexB) - ViewInfo.ViewPos.Y;
                     drawIt = true;
                 }
                 else if ( modTools.Tool == modTools.Tools.TerrainSelect )
@@ -234,7 +234,7 @@ namespace SharpFlame.Mapping
                     if ( mouseOverTerrain != null )
                     {
                         //selection is changing under pointer
-                        MathUtil.ReorderXY(Selected_Area_VertexA, mouseOverTerrain.Vertex.Normal, ref startXy, ref finishXy);
+                        MathUtil.ReorderXY(SelectedAreaVertexA, mouseOverTerrain.Vertex.Normal, ref startXy, ref finishXy);
                         xyzDbl.X = mouseOverTerrain.Vertex.Normal.X * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X;
                         xyzDbl.Z = - mouseOverTerrain.Vertex.Normal.Y * Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z;
                         xyzDbl.Y = GetVertexAltitude(mouseOverTerrain.Vertex.Normal) - ViewInfo.ViewPos.Y;
@@ -428,10 +428,10 @@ namespace SharpFlame.Mapping
             {
                 if ( modTools.Tool == modTools.Tools.ObjectSelect )
                 {
-                    if ( Unit_Selected_Area_VertexA != null )
+                    if ( UnitSelectedAreaVertexA != null )
                     {
                         //selection is changing under pointer
-                        MathUtil.ReorderXY(Unit_Selected_Area_VertexA, mouseOverTerrain.Vertex.Normal, ref startXy, ref finishXy);
+                        MathUtil.ReorderXY(UnitSelectedAreaVertexA, mouseOverTerrain.Vertex.Normal, ref startXy, ref finishXy);
                         GL.LineWidth(2.0F);
                         GL.Color3(0.0F, 1.0F, 1.0F);
                         var x = 0;
@@ -541,10 +541,10 @@ namespace SharpFlame.Mapping
                 {
                     GL.LineWidth(2.0F);
 
-                    if ( Selected_Tile_A != null )
+                    if ( SelectedTileA != null )
                     {
-                        x2 = Selected_Tile_A.X;
-                        y2 = Selected_Tile_A.Y;
+                        x2 = SelectedTileA.X;
+                        y2 = SelectedTileA.Y;
 
                         vertex0.X = x2 * Constants.TerrainGridSpacing;
                         vertex0.Y = Convert.ToDouble(Terrain.Vertices[x2, y2].Height * HeightMultiplier);
@@ -566,19 +566,19 @@ namespace SharpFlame.Mapping
                         GL.Vertex3(vertex2.X, vertex2.Y, Convert.ToDouble(- vertex2.Z));
                         GL.End();
 
-                        if ( mouseOverTerrain.Tile.Normal.X == Selected_Tile_A.X )
+                        if ( mouseOverTerrain.Tile.Normal.X == SelectedTileA.X )
                         {
-                            if ( mouseOverTerrain.Tile.Normal.Y <= Selected_Tile_A.Y )
+                            if ( mouseOverTerrain.Tile.Normal.Y <= SelectedTileA.Y )
                             {
                                 a = mouseOverTerrain.Tile.Normal.Y;
-                                b = Selected_Tile_A.Y;
+                                b = SelectedTileA.Y;
                             }
                             else
                             {
-                                a = Selected_Tile_A.Y;
+                                a = SelectedTileA.Y;
                                 b = mouseOverTerrain.Tile.Normal.Y;
                             }
-                            x2 = Selected_Tile_A.X;
+                            x2 = SelectedTileA.X;
                             for ( y2 = a; y2 <= b; y2++ )
                             {
                                 vertex0.X = x2 * Constants.TerrainGridSpacing;
@@ -602,19 +602,19 @@ namespace SharpFlame.Mapping
                                 GL.End();
                             }
                         }
-                        else if ( mouseOverTerrain.Tile.Normal.Y == Selected_Tile_A.Y )
+                        else if ( mouseOverTerrain.Tile.Normal.Y == SelectedTileA.Y )
                         {
-                            if ( mouseOverTerrain.Tile.Normal.X <= Selected_Tile_A.X )
+                            if ( mouseOverTerrain.Tile.Normal.X <= SelectedTileA.X )
                             {
                                 a = mouseOverTerrain.Tile.Normal.X;
-                                b = Selected_Tile_A.X;
+                                b = SelectedTileA.X;
                             }
                             else
                             {
-                                a = Selected_Tile_A.X;
+                                a = SelectedTileA.X;
                                 b = mouseOverTerrain.Tile.Normal.X;
                             }
-                            y2 = Selected_Tile_A.Y;
+                            y2 = SelectedTileA.Y;
                             for ( x2 = a; x2 <= b; x2++ )
                             {
                                 vertex0.X = x2 * Constants.TerrainGridSpacing;
@@ -980,17 +980,17 @@ namespace SharpFlame.Mapping
 
             DebugGLError("Minimap matrix modes");
 
-            if ( Minimap_Texture_Size > 0 & ViewInfo.TilesPerMinimapPixel > 0.0D )
+            if ( MinimapTextureSize > 0 & ViewInfo.TilesPerMinimapPixel > 0.0D )
             {
                 GL.Translate(0.0F, glSize.Y - minimapSizeXy.Y, 0.0F);
 
-                xyzDbl.X = (double)Terrain.TileSize.X / Minimap_Texture_Size;
-                xyzDbl.Z = (double)Terrain.TileSize.Y / Minimap_Texture_Size;
+                xyzDbl.X = (double)Terrain.TileSize.X / MinimapTextureSize;
+                xyzDbl.Z = (double)Terrain.TileSize.Y / MinimapTextureSize;
 
-                if ( Minimap_GLTexture > 0 )
+                if ( MinimapGlTexture > 0 )
                 {
                     GL.Enable(EnableCap.Texture2D);
-                    GL.BindTexture(TextureTarget.Texture2D, Minimap_GLTexture);
+                    GL.BindTexture(TextureTarget.Texture2D, MinimapGlTexture);
                     GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Decal);
 
                     GL.Begin(BeginMode.Quads);
@@ -1054,13 +1054,13 @@ namespace SharpFlame.Mapping
                     DebugGLError("Minimap view position polygon");
                 }
 
-                if ( Selected_Area_VertexA != null )
+                if ( SelectedAreaVertexA != null )
                 {
                     drawIt = false;
-                    if ( Selected_Area_VertexB != null )
+                    if ( SelectedAreaVertexB != null )
                     {
                         //area is selected
-                        MathUtil.ReorderXY(Selected_Area_VertexA, Selected_Area_VertexB, ref startXy, ref finishXy);
+                        MathUtil.ReorderXY(SelectedAreaVertexA, SelectedAreaVertexB, ref startXy, ref finishXy);
                         drawIt = true;
                     }
                     else if ( modTools.Tool == modTools.Tools.TerrainSelect )
@@ -1068,7 +1068,7 @@ namespace SharpFlame.Mapping
                         if ( mouseOverTerrain != null )
                         {
                             //selection is changing under mouse
-                            MathUtil.ReorderXY(Selected_Area_VertexA, mouseOverTerrain.Vertex.Normal, ref startXy, ref finishXy);
+                            MathUtil.ReorderXY(SelectedAreaVertexA, mouseOverTerrain.Vertex.Normal, ref startXy, ref finishXy);
                             drawIt = true;
                         }
                     }
@@ -1105,7 +1105,7 @@ namespace SharpFlame.Mapping
                 {
                     if ( GL.GetError() != ErrorCode.NoError )
                     {
-                        var NewMessage = new clsMessage();
+                        var NewMessage = new Message();
                         NewMessage.Text = "OpenGL Error (" + Name + ")";
                         Messages.Add(NewMessage);
                     }
@@ -1113,7 +1113,7 @@ namespace SharpFlame.Mapping
             }
         }
 
-        public void DrawUnitRectangle(clsUnit Unit, int BorderInsideThickness, SRgba InsideColour, SRgba OutsideColour)
+        public void DrawUnitRectangle(Unit Unit, int BorderInsideThickness, SRgba InsideColour, SRgba OutsideColour)
         {
             var posA = new XYInt();
             var posB = new XYInt();

@@ -13,9 +13,9 @@ namespace SharpFlame.Mapping.IO.TTP
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        protected readonly clsMap map;
+        protected readonly Map map;
 
-        public TTPLoader(clsMap newMap)
+        public TTPLoader(Map newMap)
         {
             map = newMap;
         }
@@ -75,7 +75,7 @@ namespace SharpFlame.Mapping.IO.TTP
                         returnResult.ProblemAdd("Unknown tile type number.");
                         return returnResult;
                     }
-                    map.Tile_TypeNum[A] = (byte)ushortTemp;
+                    map.TileTypeNum[A] = (byte)ushortTemp;
                 }
             }
             catch ( Exception ex )

@@ -44,16 +44,16 @@ namespace SharpFlame
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public class clsMaps : ConnectedList<clsMap, frmMain>
+        public class clsMaps : ConnectedList<Map, frmMain>
         {
-            private clsMap _MainMap;
+            private Map _MainMap;
 
             public clsMaps(frmMain Owner) : base(Owner)
             {
                 MaintainOrder = true;
             }
 
-            public clsMap MainMap
+            public Map MainMap
             {
                 get { return _MainMap; }
                 set
@@ -70,7 +70,7 @@ namespace SharpFlame
                     }
                     else
                     {
-                        if ( value.frmMainLink.Source != Owner )
+                        if ( value.FrmMainLink.Source != Owner )
                         {
                             MessageBox.Show("Error: Assigning map to wrong main form.");
                             _MainMap = null;
@@ -84,7 +84,7 @@ namespace SharpFlame
                 }
             }
 
-            public override void Add(ConnectedListItem<clsMap, frmMain> newItem)
+            public override void Add(ConnectedListItem<Map, frmMain> newItem)
             {
                 var NewMap = newItem.Item;
 
@@ -93,8 +93,8 @@ namespace SharpFlame
                     NewMap.InitializeUserInput();
                 }
 
-                NewMap.MapView_TabPage = new TabPage();
-                NewMap.MapView_TabPage.Tag = NewMap;
+                NewMap.MapViewTabPage = new TabPage();
+                NewMap.MapViewTabPage.Tag = NewMap;
 
                 NewMap.SetTabText();
 
@@ -122,8 +122,8 @@ namespace SharpFlame
                     }
                 }
 
-                Map.MapView_TabPage.Tag = null;
-                Map.MapView_TabPage = null;
+                Map.MapViewTabPage.Tag = null;
+                Map.MapViewTabPage = null;
 
                 Owner.MapViewControl.UpdateTabs();
             }
@@ -248,7 +248,7 @@ namespace SharpFlame
         {
             var ChangedPrompt = false;
 
-            var Map = default(clsMap);
+            var Map = default(Map);
             foreach ( var tempLoopVar_Map in _LoadedMaps )
             {
                 Map = tempLoopVar_Map;
@@ -653,7 +653,7 @@ namespace SharpFlame
             }
 
             var Map = MainMap;
-            clsMap ApplyToMap = null;
+            Map ApplyToMap = null;
             if ( Map == null )
             {
             }
@@ -663,7 +663,7 @@ namespace SharpFlame
             }
             if ( ApplyToMap == null )
             {
-                ApplyToMap = new clsMap(new XYInt(HeightmapBitmap.Width - 1, HeightmapBitmap.Height - 1));
+                ApplyToMap = new Map(new XYInt(HeightmapBitmap.Width - 1, HeightmapBitmap.Height - 1));
             }
 
             var X = 0;
@@ -1175,7 +1175,7 @@ namespace SharpFlame
 
         public void NewMap()
         {
-            var NewMap = new clsMap(new XYInt(64, 64));
+            var NewMap = new Map(new XYInt(64, 64));
             NewMainMap(NewMap);
 
             NewMap.RandomizeTileOrientations();
@@ -1253,7 +1253,7 @@ namespace SharpFlame
                 return;
             }
 
-            if ( Map.Selected_Area_VertexA == null || Map.Selected_Area_VertexB == null )
+            if ( Map.SelectedAreaVertexA == null || Map.SelectedAreaVertexB == null )
             {
                 return;
             }
@@ -1270,7 +1270,7 @@ namespace SharpFlame
                 return;
             }
 
-            MathUtil.ReorderXY(Map.Selected_Area_VertexA, Map.Selected_Area_VertexB, ref StartXY, ref FinishXY);
+            MathUtil.ReorderXY(Map.SelectedAreaVertexA, Map.SelectedAreaVertexB, ref StartXY, ref FinishXY);
             for ( Y = StartXY.Y; Y <= FinishXY.Y; Y++ )
             {
                 for ( X = StartXY.X; X <= FinishXY.X; X++ )
@@ -1308,8 +1308,8 @@ namespace SharpFlame
             var Map = MainMap;
             if ( Map != null )
             {
-                Map.Selected_Tile_A = null;
-                Map.Selected_Tile_B = null;
+                Map.SelectedTileA = null;
+                Map.SelectedTileB = null;
             }
         }
 
@@ -1618,7 +1618,7 @@ namespace SharpFlame
                 txtObjectHealth.Text = "";
                 txtObjectHealth.Enabled = true;
                 //design
-                var Unit = default(clsUnit);
+                var Unit = default(Unit);
                 foreach ( var tempLoopVar_Unit in Map.SelectedUnits )
                 {
                     Unit = tempLoopVar_Unit;
@@ -1925,7 +1925,7 @@ namespace SharpFlame
             {
                 return;
             }
-            if ( Map.Selected_Area_VertexA == null || Map.Selected_Area_VertexB == null )
+            if ( Map.SelectedAreaVertexA == null || Map.SelectedAreaVertexB == null )
             {
                 return;
             }
@@ -1936,10 +1936,10 @@ namespace SharpFlame
             var Area = new XYInt();
             var Start = new XYInt();
             var Finish = new XYInt();
-            MathUtil.ReorderXY(Map.Selected_Area_VertexA, Map.Selected_Area_VertexB, ref Start, ref Finish);
+            MathUtil.ReorderXY(Map.SelectedAreaVertexA, Map.SelectedAreaVertexB, ref Start, ref Finish);
             Area.X = Finish.X - Start.X;
             Area.Y = Finish.Y - Start.Y;
-            App.Copied_Map = new clsMap(Map, Start, Area);
+            App.Copied_Map = new Map(Map, Start, Area);
         }
 
         public void tsbSelectionPaste_Click(Object sender, EventArgs e)
@@ -1950,7 +1950,7 @@ namespace SharpFlame
             {
                 return;
             }
-            if ( Map.Selected_Area_VertexA == null || Map.Selected_Area_VertexB == null )
+            if ( Map.SelectedAreaVertexA == null || Map.SelectedAreaVertexB == null )
             {
                 return;
             }
@@ -1968,7 +1968,7 @@ namespace SharpFlame
             var Area = new XYInt();
             var Start = new XYInt();
             var Finish = new XYInt();
-            MathUtil.ReorderXY(Map.Selected_Area_VertexA, Map.Selected_Area_VertexB, ref Start, ref Finish);
+            MathUtil.ReorderXY(Map.SelectedAreaVertexA, Map.SelectedAreaVertexB, ref Start, ref Finish);
             Area.X = Finish.X - Start.X;
             Area.Y = Finish.Y - Start.Y;
             Map.MapInsert(App.Copied_Map, Start, Area, menuSelPasteHeights.Checked, menuSelPasteTextures.Checked, menuSelPasteUnits.Checked,
@@ -1989,7 +1989,7 @@ namespace SharpFlame
                 return;
             }
 
-            if ( Map.Selected_Area_VertexA == null || Map.Selected_Area_VertexB == null )
+            if ( Map.SelectedAreaVertexA == null || Map.SelectedAreaVertexB == null )
             {
                 MessageBox.Show("You haven\'t selected anything.");
                 return;
@@ -1997,7 +1997,7 @@ namespace SharpFlame
 
             var Start = new XYInt();
             var Finish = new XYInt();
-            MathUtil.ReorderXY(Map.Selected_Area_VertexA, Map.Selected_Area_VertexB, ref Start, ref Finish);
+            MathUtil.ReorderXY(Map.SelectedAreaVertexA, Map.SelectedAreaVertexB, ref Start, ref Finish);
             var Area = new XYInt();
             Area.X = Finish.X - Start.X;
             Area.Y = Finish.Y - Start.Y;
@@ -2087,8 +2087,8 @@ namespace SharpFlame
             var Map = MainMap;
             if ( Map != null )
             {
-                Map.Selected_Tile_A = null;
-                Map.Selected_Tile_B = null;
+                Map.SelectedTileA = null;
+                Map.SelectedTileB = null;
                 View_DrawViewLater();
             }
         }
@@ -2162,7 +2162,7 @@ namespace SharpFlame
                 return;
             }
 
-            Map.Tile_TypeNum[App.SelectedTextureNum] = (byte)cboTileType.SelectedIndex;
+            Map.TileTypeNum[App.SelectedTextureNum] = (byte)cboTileType.SelectedIndex;
 
             TextureViewControl.DrawViewLater();
         }
@@ -2498,7 +2498,7 @@ namespace SharpFlame
                 return;
             }
 
-            if ( Map.Selected_Area_VertexA == null || Map.Selected_Area_VertexB == null )
+            if ( Map.SelectedAreaVertexA == null || Map.SelectedAreaVertexB == null )
             {
                 return;
             }
@@ -2506,7 +2506,7 @@ namespace SharpFlame
             var Finish = new XYInt();
             var A = 0;
 
-            MathUtil.ReorderXY(Map.Selected_Area_VertexA, Map.Selected_Area_VertexB, ref Start, ref Finish);
+            MathUtil.ReorderXY(Map.SelectedAreaVertexA, Map.SelectedAreaVertexB, ref Start, ref Finish);
             for ( A = 0; A <= Map.Units.Count - 1; A++ )
             {
                 if ( App.PosIsWithinTileArea(Map.Units[A].Pos.Horizontal, Start, Finish) )
@@ -2551,7 +2551,7 @@ namespace SharpFlame
                 return;
             }
 
-            if ( Map.Selected_Area_VertexA == null || Map.Selected_Area_VertexB == null )
+            if ( Map.SelectedAreaVertexA == null || Map.SelectedAreaVertexB == null )
             {
                 return;
             }
@@ -2569,7 +2569,7 @@ namespace SharpFlame
                 return;
             }
             Multiplier = MathUtil.ClampDbl(dblTemp, 0.0D, 255.0D);
-            MathUtil.ReorderXY(Map.Selected_Area_VertexA, Map.Selected_Area_VertexB, ref StartXY, ref FinishXY);
+            MathUtil.ReorderXY(Map.SelectedAreaVertexA, Map.SelectedAreaVertexB, ref StartXY, ref FinishXY);
             for ( Y = StartXY.Y; Y <= FinishXY.Y; Y++ )
             {
                 for ( X = StartXY.X; X <= FinishXY.X; X++ )
@@ -3308,7 +3308,7 @@ namespace SharpFlame
             }
 
             var UnitGroup = Map.SelectedUnitGroup.Item;
-            var Unit = default(clsUnit);
+            var Unit = default(Unit);
             foreach ( var tempLoopVar_Unit in Map.Units )
             {
                 Unit = tempLoopVar_Unit;
@@ -3599,12 +3599,12 @@ namespace SharpFlame
                 return;
             }
 
-            if ( Map.Selected_Area_VertexA == null )
+            if ( Map.SelectedAreaVertexA == null )
             {
                 MessageBox.Show("Select something first.");
                 return;
             }
-            if ( Map.Selected_Area_VertexB == null )
+            if ( Map.SelectedAreaVertexB == null )
             {
                 MessageBox.Show("Select something first.");
                 return;
@@ -3618,8 +3618,8 @@ namespace SharpFlame
             }
 
             NewArea.SetPositions(
-                new XYInt(Map.Selected_Area_VertexA.X * Constants.TerrainGridSpacing, Map.Selected_Area_VertexA.Y * Constants.TerrainGridSpacing),
-                new XYInt(Map.Selected_Area_VertexB.X * Constants.TerrainGridSpacing, Map.Selected_Area_VertexB.Y * Constants.TerrainGridSpacing));
+                new XYInt(Map.SelectedAreaVertexA.X * Constants.TerrainGridSpacing, Map.SelectedAreaVertexA.Y * Constants.TerrainGridSpacing),
+                new XYInt(Map.SelectedAreaVertexB.X * Constants.TerrainGridSpacing, Map.SelectedAreaVertexB.Y * Constants.TerrainGridSpacing));
 
             ScriptMarkerLists_Update();
 
@@ -4007,7 +4007,7 @@ namespace SharpFlame
             }
 
             var OldUnit = Map.SelectedUnits[0];
-            var ResultUnit = new clsUnit(OldUnit, Map);
+            var ResultUnit = new Unit(OldUnit, Map);
             Map.UnitSwap(OldUnit, ResultUnit);
             var Result = ResultUnit.SetLabel(txtObjectLabel.Text);
             if ( !Result.Success )
@@ -4024,13 +4024,13 @@ namespace SharpFlame
             View_DrawViewLater();
         }
 
-        public void NewMainMap(clsMap NewMap)
+        public void NewMainMap(Map NewMap)
         {
-            NewMap.frmMainLink.Connect(_LoadedMaps);
+            NewMap.FrmMainLink.Connect(_LoadedMaps);
             SetMainMap(NewMap);
         }
 
-        public clsMap MainMap
+        public Map MainMap
         {
             get { return _LoadedMaps.MainMap; }
         }
@@ -4040,7 +4040,7 @@ namespace SharpFlame
             get { return _LoadedMaps; }
         }
 
-        public void SetMainMap(clsMap Map)
+        public void SetMainMap(Map Map)
         {
             _LoadedMaps.MainMap = Map;
         }
@@ -4049,29 +4049,29 @@ namespace SharpFlame
         {
             var ReturnResult = new Result("", false);
             var SplitPath = new sSplitPath(Path);
-            var resultMap = new clsMap();
+            var resultMap = new Map();
 
             switch ( SplitPath.FileExtension.ToLower() )
             {
             case "fmap":
                 var fmap = new FMapLoader (resultMap);
                 ReturnResult.Add(fmap.Load(Path));
-                resultMap.PathInfo = new clsPathInfo(Path, true);
+                resultMap.PathInfo = new PathInfo(Path, true);
                 break;
             case "wz":
                 var wzFormat = new WzLoader(resultMap);
                 ReturnResult.Add(wzFormat.Load(Path));
-                resultMap.PathInfo = new clsPathInfo(Path, false);
+                resultMap.PathInfo = new PathInfo(Path, false);
                 break;
             case "gam":
                 var gameFormat = new Game(resultMap);
                 ReturnResult.Add(gameFormat.Load(Path));
-                resultMap.PathInfo = new clsPathInfo(Path, false);
+                resultMap.PathInfo = new PathInfo(Path, false);
                 break;
             case "lnd":
                 var lndFormat = new LNDLoader (resultMap);
                 ReturnResult.Add(lndFormat.Load(Path));
-                resultMap.PathInfo = new clsPathInfo(Path, false);
+                resultMap.PathInfo = new PathInfo(Path, false);
                 break;
             default:
                 ReturnResult.ProblemAdd("File extension not recognised.");
@@ -4271,8 +4271,8 @@ namespace SharpFlame
                 return;
             }
 
-            var OilList = new SimpleClassList<clsUnit>();
-            var Unit = default(clsUnit);
+            var OilList = new SimpleClassList<Unit>();
+            var Unit = default(Unit);
             foreach ( var tempLoopVar_Unit in Map.Units )
             {
                 Unit = tempLoopVar_Unit;
@@ -4297,8 +4297,8 @@ namespace SharpFlame
                 return;
             }
 
-            var StructureList = new SimpleClassList<clsUnit>();
-            var Unit = default(clsUnit);
+            var StructureList = new SimpleClassList<Unit>();
+            var Unit = default(Unit);
             foreach ( var tempLoopVar_Unit in Map.Units )
             {
                 Unit = tempLoopVar_Unit;

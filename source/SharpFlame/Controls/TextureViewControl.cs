@@ -63,7 +63,7 @@ namespace SharpFlame.Controls
             tmrDrawDelay.Interval = 30;
         }
 
-        private clsMap MainMap
+        private Map MainMap
         {
             get { return owner.MainMap; }
         }
@@ -260,7 +260,7 @@ namespace SharpFlame.Controls
                             {
                                 goto EndOfTextures2;
                             }
-                            a = map.Tile_TypeNum[num];
+                            a = map.TileTypeNum[num];
                             GL.Color3(App.TileTypes[a].DisplayColour.Red, App.TileTypes[a].DisplayColour.Green, App.TileTypes[a].DisplayColour.Blue);
                             GL.Vertex2(x * 64 + 24, y * 64 + 24);
                             GL.Vertex2(x * 64 + 24, y * 64 + 40);
@@ -391,7 +391,7 @@ namespace SharpFlame.Controls
             if ( App.SelectedTextureNum >= 0 )
             {
                 Program.frmMainInstance.cboTileType.Enabled = false;
-                Program.frmMainInstance.cboTileType.SelectedIndex = map.Tile_TypeNum[App.SelectedTextureNum];
+                Program.frmMainInstance.cboTileType.SelectedIndex = map.TileTypeNum[App.SelectedTextureNum];
                 Program.frmMainInstance.cboTileType.Enabled = true;
             }
             else

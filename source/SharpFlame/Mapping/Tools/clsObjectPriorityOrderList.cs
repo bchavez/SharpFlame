@@ -8,18 +8,18 @@ using SharpFlame.Mapping.Objects;
 
 namespace SharpFlame.Mapping.Tools
 {
-    public class clsObjectPriorityOrderList : ISimpleListTool<clsUnit>
+    public class clsObjectPriorityOrderList : ISimpleListTool<Unit>
     {
-        private readonly SimpleClassList<clsUnit> result = new SimpleClassList<clsUnit>();
+        private readonly SimpleClassList<Unit> result = new SimpleClassList<Unit>();
 
-        private clsUnit Unit;
+        private Unit Unit;
 
         public clsObjectPriorityOrderList()
         {
             result.MaintainOrder = true;
         }
 
-        public SimpleClassList<clsUnit> Result
+        public SimpleClassList<Unit> Result
         {
             get { return result; }
         }
@@ -38,7 +38,7 @@ namespace SharpFlame.Mapping.Tools
             result.Insert(Unit, A);
         }
 
-        public void SetItem(clsUnit item)
+        public void SetItem(Unit item)
         {
             Unit = item;
         }

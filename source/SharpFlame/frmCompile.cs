@@ -22,9 +22,9 @@ namespace SharpFlame
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        private clsMap Map;
+        private Map Map;
 
-        private frmCompile(clsMap Map)
+        private frmCompile(Map Map)
         {
             InitializeComponent();
 
@@ -36,7 +36,7 @@ namespace SharpFlame
             UpdateControls();
         }
 
-        public static frmCompile Create(clsMap Map)
+        public static frmCompile Create(Map Map)
         {
             if ( Map == null )
             {
@@ -424,7 +424,7 @@ namespace SharpFlame
             var DroidType = default(DroidDesign);
             StructureTypeBase structureTypeBase;
             var UnusedPlayerUnitWarningCount = 0;
-            var Unit = default(clsUnit);
+            var Unit = default(Unit);
 
             foreach ( var tempLoopVar_Unit in Map.Units )
             {
@@ -514,7 +514,7 @@ namespace SharpFlame
             var PlayerStructureTypeCount = new int[Constants.PlayerCountMax, App.ObjectData.StructureTypes.Count];
             var ScavStructureTypeCount = new int[App.ObjectData.StructureTypes.Count];
             var structureTypeBase = default(StructureTypeBase);
-            var Unit = default(clsUnit);
+            var Unit = default(Unit);
 
             foreach ( var tempLoopVar_Unit in Map.Units )
             {

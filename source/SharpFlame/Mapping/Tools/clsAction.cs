@@ -9,7 +9,7 @@ namespace SharpFlame.Mapping.Tools
     public abstract class clsAction
     {
         public double Effect;
-        public clsMap Map;
+        public Map Map;
         public XYInt PosNum;
         public bool UseEffect;
 

@@ -15,34 +15,34 @@ using SharpFlame.Util;
 
 namespace SharpFlame.Mapping.Objects
 {
-    public class clsUnit : IEquatable<clsUnit>
+    public class Unit : IEquatable<Unit>
     {
         public double Health = 1.0D;
         public UInt32 ID;
-        public ConnectedListLink<clsUnit, clsMap> MapLink;
-        public ConnectedListLink<clsUnit, clsMap> MapSelectedUnitLink;
+        public ConnectedListLink<Unit, Map> MapLink;
+        public ConnectedListLink<Unit, Map> MapSelectedUnitLink;
         public WorldPos Pos;
         public bool PreferPartsOutput = false;
         public int Rotation;
         public int SavePriority;
-        public ConnectedList<clsUnitSectorConnection, clsUnit> Sectors;
+        public ConnectedList<clsUnitSectorConnection, Unit> Sectors;
         public UnitTypeBase TypeBase;
         public clsUnitGroup UnitGroup;
 
         private string label;
 
-        public clsUnit()
+        public Unit()
         {
-            MapLink = new ConnectedListLink<clsUnit, clsMap>(this);
-            MapSelectedUnitLink = new ConnectedListLink<clsUnit, clsMap>(this);
-            Sectors = new ConnectedList<clsUnitSectorConnection, clsUnit>(this);
+            MapLink = new ConnectedListLink<Unit, Map>(this);
+            MapSelectedUnitLink = new ConnectedListLink<Unit, Map>(this);
+            Sectors = new ConnectedList<clsUnitSectorConnection, Unit>(this);
         }
 
-        public clsUnit(clsUnit unitToCopy, clsMap targetMap)
+        public Unit(Unit unitToCopy, Map targetMap)
         {
-            MapLink = new ConnectedListLink<clsUnit, clsMap>(this);
-            MapSelectedUnitLink = new ConnectedListLink<clsUnit, clsMap>(this);
-            Sectors = new ConnectedList<clsUnitSectorConnection, clsUnit>(this);
+            MapLink = new ConnectedListLink<Unit, Map>(this);
+            MapSelectedUnitLink = new ConnectedListLink<Unit, Map>(this);
+            Sectors = new ConnectedList<clsUnitSectorConnection, Unit>(this);
 
             var IsDesign = default(bool);
 
@@ -87,7 +87,7 @@ namespace SharpFlame.Mapping.Objects
             get { return label; }
         }
 
-        public bool Equals(clsUnit other)
+        public bool Equals(Unit other)
         {
             if ( other == null )
                 return false;
@@ -273,7 +273,7 @@ namespace SharpFlame.Mapping.Objects
             if ( obj == null )
                 return false;
 
-            var objAsUnit = obj as clsUnit;
+            var objAsUnit = obj as Unit;
             if ( objAsUnit == null )
                 return false;
 

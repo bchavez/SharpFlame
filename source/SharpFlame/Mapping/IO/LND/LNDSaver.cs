@@ -18,9 +18,9 @@ namespace SharpFlame.Mapping.IO.LND
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        protected readonly clsMap map;
+        protected readonly Map map;
 
-        public LNDSaver(clsMap newMap)
+        public LNDSaver(Map newMap)
         {
             map = newMap;
         }
@@ -317,7 +317,7 @@ namespace SharpFlame.Mapping.IO.LND
                         }
                         else
                         {
-                            text = text + map.Tile_TypeNum[c + b].ToStringInvariant() + " ";
+                            text = text + map.TileTypeNum[c + b].ToStringInvariant() + " ";
                         }
                     }
                     text = text + Convert.ToString(endChar);

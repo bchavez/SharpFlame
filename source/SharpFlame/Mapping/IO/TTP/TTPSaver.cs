@@ -13,9 +13,9 @@ namespace SharpFlame.Mapping.IO.TTP
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        protected readonly clsMap map;
+        protected readonly Map map;
 
-        public TTPSaver(clsMap newMap)
+        public TTPSaver(Map newMap)
         {
             map = newMap;
         }
@@ -65,7 +65,7 @@ namespace SharpFlame.Mapping.IO.TTP
             fileTTP.Write((uint)map.Tileset.TileCount);
             for ( var a = 0; a <= map.Tileset.TileCount - 1; a++ )
             {
-                fileTTP.Write((ushort)map.Tile_TypeNum[a]);
+                fileTTP.Write((ushort)map.TileTypeNum[a]);
             }
 
             fileTTP.Flush();

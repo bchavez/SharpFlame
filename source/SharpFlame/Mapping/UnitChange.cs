@@ -6,10 +6,10 @@ using SharpFlame.Mapping.Objects;
 
 namespace SharpFlame.Mapping
 {
-    public class clsUnitChange
+    public class UnitChange
     {
         public UnitChangeType Type;
-        public clsUnit Unit;
+        public Unit Unit;
     }
 
     public enum UnitChangeType

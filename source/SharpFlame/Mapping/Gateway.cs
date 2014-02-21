@@ -8,15 +8,15 @@ using SharpFlame.Core.Domain;
 
 namespace SharpFlame.Mapping
 {
-    public class clsGateway
+    public class Gateway
     {
-        public ConnectedListLink<clsGateway, clsMap> MapLink;
+        public ConnectedListLink<Gateway, Map> MapLink;
         public XYInt PosA;
         public XYInt PosB;
 
-        public clsGateway()
+        public Gateway()
         {
-            MapLink = new ConnectedListLink<clsGateway, clsMap>(this);
+            MapLink = new ConnectedListLink<Gateway, Map>(this);
         }
 
         public bool IsOffMap()

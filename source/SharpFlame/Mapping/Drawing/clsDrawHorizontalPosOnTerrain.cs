@@ -17,7 +17,7 @@ namespace SharpFlame.Mapping.Drawing
         private readonly XYZInt vertex0;
         public SRgba Colour;
         public XYInt Horizontal;
-        public clsMap Map;
+        public Map Map;
 
         public clsDrawHorizontalPosOnTerrain()
         {
