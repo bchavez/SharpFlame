@@ -468,87 +468,87 @@ namespace SharpFlame.Mapping.Tiles
             }
         }
 
-        public static void OldOrientation_To_TileOrientation(byte OldRotation, bool OldFlipX, bool OldFlipZ, ref TileOrientation Result)
+        public static void OldOrientation_To_TileOrientation(byte oldRotation, bool oldFlipX, bool oldFlipZ, ref TileOrientation result)
         {
-            if ( OldRotation == 0 )
+            if ( oldRotation == 0 )
             {
-                Result.SwitchedAxes = false;
-                Result.ResultXFlip = false;
-                Result.ResultYFlip = false;
+                result.SwitchedAxes = false;
+                result.ResultXFlip = false;
+                result.ResultYFlip = false;
             }
-            else if ( OldRotation == 1 )
+            else if ( oldRotation == 1 )
             {
-                Result.SwitchedAxes = true;
-                Result.ResultXFlip = true;
-                Result.ResultYFlip = false;
+                result.SwitchedAxes = true;
+                result.ResultXFlip = true;
+                result.ResultYFlip = false;
             }
-            else if ( OldRotation == 2 )
+            else if ( oldRotation == 2 )
             {
-                Result.SwitchedAxes = false;
-                Result.ResultXFlip = true;
-                Result.ResultYFlip = true;
+                result.SwitchedAxes = false;
+                result.ResultXFlip = true;
+                result.ResultYFlip = true;
             }
-            else if ( OldRotation == 3 )
+            else if ( oldRotation == 3 )
             {
-                Result.SwitchedAxes = true;
-                Result.ResultXFlip = false;
-                Result.ResultYFlip = true;
+                result.SwitchedAxes = true;
+                result.ResultXFlip = false;
+                result.ResultYFlip = true;
             }
-            if ( OldFlipX )
+            if ( oldFlipX )
             {
-                if ( Result.SwitchedAxes )
+                if ( result.SwitchedAxes )
                 {
-                    Result.ResultYFlip = !Result.ResultYFlip;
+                    result.ResultYFlip = !result.ResultYFlip;
                 }
                 else
                 {
-                    Result.ResultXFlip = !Result.ResultXFlip;
+                    result.ResultXFlip = !result.ResultXFlip;
                 }
             }
-            if ( OldFlipZ )
+            if ( oldFlipZ )
             {
-                if ( Result.SwitchedAxes )
+                if ( result.SwitchedAxes )
                 {
-                    Result.ResultXFlip = !Result.ResultXFlip;
+                    result.ResultXFlip = !result.ResultXFlip;
                 }
                 else
                 {
-                    Result.ResultYFlip = !Result.ResultYFlip;
+                    result.ResultYFlip = !result.ResultYFlip;
                 }
             }
         }
 
-        public static bool IdenticalTileDirections(TileDirection TileOrientationA, TileDirection TileOrientationB)
+        public static bool IdenticalTileDirections(TileDirection tileOrientationA, TileDirection tileOrientationB)
         {
-            return TileOrientationA.X == TileOrientationB.X & TileOrientationA.Y == TileOrientationB.Y;
+            return tileOrientationA.X == tileOrientationB.X & tileOrientationA.Y == tileOrientationB.Y;
         }
 
-        public static bool DirectionsOnSameSide(TileDirection DirectionA, TileDirection DirectionB)
+        public static bool DirectionsOnSameSide(TileDirection directionA, TileDirection directionB)
         {
-            if ( DirectionA.X == 0 )
+            if ( directionA.X == 0 )
             {
-                if ( DirectionB.X == 0 )
+                if ( directionB.X == 0 )
                 {
                     return true;
                 }
             }
-            if ( DirectionA.X == 2 )
+            if ( directionA.X == 2 )
             {
-                if ( DirectionB.X == 2 )
+                if ( directionB.X == 2 )
                 {
                     return true;
                 }
             }
-            if ( DirectionA.Y == 0 )
+            if ( directionA.Y == 0 )
             {
-                if ( DirectionB.Y == 0 )
+                if ( directionB.Y == 0 )
                 {
                     return true;
                 }
             }
-            if ( DirectionA.Y == 2 )
+            if ( directionA.Y == 2 )
             {
-                if ( DirectionB.Y == 2 )
+                if ( directionB.Y == 2 )
                 {
                     return true;
                 }
@@ -556,13 +556,13 @@ namespace SharpFlame.Mapping.Tiles
             return false;
         }
 
-        public static bool DirectionsAreInLine(TileDirection DirectionA, TileDirection DirectionB)
+        public static bool DirectionsAreInLine(TileDirection directionA, TileDirection directionB)
         {
-            if ( DirectionA.X == DirectionB.X )
+            if ( directionA.X == directionB.X )
             {
                 return true;
             }
-            if ( DirectionA.Y == DirectionB.Y )
+            if ( directionA.Y == directionB.Y )
             {
                 return true;
             }
