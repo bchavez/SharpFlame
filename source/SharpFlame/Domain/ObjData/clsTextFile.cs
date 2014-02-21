@@ -48,7 +48,7 @@ namespace SharpFlame.Domain.ObjData
         public clsResult LoadCommaFile(string Path)
         {
             var result = new clsResult(String.Format("Loading comma separated file \"{0}\"", SubDirectory));
-            var reader = default(StreamReader);
+            StreamReader reader;
 
             try
             {

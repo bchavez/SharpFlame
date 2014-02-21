@@ -3,6 +3,7 @@
 using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
 using SharpFlame.Core.Domain;
@@ -895,289 +896,120 @@ namespace SharpFlame.Domain.ObjData
             }
         }
 
-        public Body FindBodyCode(string Code)
+        public Body FindBodyCode(string code)
         {
-            var Component = default(Body);
-
-            foreach ( var tempLoopVar_Component in Bodies )
-            {
-                Component = tempLoopVar_Component;
-                if ( Component.Code == Code )
-                {
-                    return Component;
-                }
-            }
-
-            return null;
+            return Bodies.FirstOrDefault(b => b.Code == code);
         }
 
-        public Propulsion FindPropulsionCode(string Code)
+        public Propulsion FindPropulsionCode(string code)
         {
-            var Component = default(Propulsion);
-
-            foreach ( var tempLoopVar_Component in Propulsions )
-            {
-                Component = tempLoopVar_Component;
-                if ( Component.Code == Code )
-                {
-                    return Component;
-                }
-            }
-
-            return null;
+            return Propulsions.FirstOrDefault(p => p.Code == code);
         }
 
-        public Construct FindConstructorCode(string Code)
+        public Construct FindConstructorCode(string code)
         {
-            var Component = default(Construct);
-
-            foreach ( var tempLoopVar_Component in Constructors )
-            {
-                Component = tempLoopVar_Component;
-                if ( Component.Code == Code )
-                {
-                    return Component;
-                }
-            }
-
-            return null;
+            return Constructors.FirstOrDefault(c => c.Code == code);
         }
 
-        public Sensor FindSensorCode(string Code)
+        public Sensor FindSensorCode(string code)
         {
-            var Component = default(Sensor);
-
-            foreach ( var tempLoopVar_Component in Sensors )
-            {
-                Component = tempLoopVar_Component;
-                if ( Component.Code == Code )
-                {
-                    return Component;
-                }
-            }
-
-            return null;
+            return Sensors.FirstOrDefault(s => s.Code == code);
         }
 
-        public Repair FindRepairCode(string Code)
+        public Repair FindRepairCode(string code)
         {
-            var Component = default(Repair);
-
-            foreach ( var tempLoopVar_Component in Repairs )
-            {
-                Component = tempLoopVar_Component;
-                if ( Component.Code == Code )
-                {
-                    return Component;
-                }
-            }
-
-            return null;
+            return Repairs.FirstOrDefault(r => r.Code == code);
         }
 
-        public Ecm FindECMCode(string Code)
+        public Ecm FindECMCode(string code)
         {
-            var Component = default(Ecm);
-
-            foreach ( var tempLoopVar_Component in ECMs )
-            {
-                Component = tempLoopVar_Component;
-                if ( Component.Code == Code )
-                {
-                    return Component;
-                }
-            }
-
-            return null;
+            return ECMs.FirstOrDefault(e => e.Code == code);
         }
 
-        public Brain FindBrainCode(string Code)
+        public Brain FindBrainCode(string code)
         {
-            var Component = default(Brain);
-
-            foreach ( var tempLoopVar_Component in Brains )
-            {
-                Component = tempLoopVar_Component;
-                if ( Component.Code == Code )
-                {
-                    return Component;
-                }
-            }
-
-            return null;
+            return Brains.FirstOrDefault(b => b.Code == code);
         }
 
-        public Weapon FindWeaponCode(string Code)
+        public Weapon FindWeaponCode(string code)
         {
-            var Component = default(Weapon);
-
-            foreach ( var tempLoopVar_Component in Weapons )
-            {
-                Component = tempLoopVar_Component;
-                if ( Component.Code == Code )
-                {
-                    return Component;
-                }
-            }
-
-            return null;
+            return Weapons.FirstOrDefault(w => w.Code == code);
         }
 
-        public int Get_TexturePage_GLTexture(string FileTitle)
+        public int Get_TexturePage_GLTexture(string fileTitle)
         {
-            var LCaseTitle = FileTitle.ToLower();
-            var TexPage = default(clsTexturePage);
+            var lCaseTitle = fileTitle.ToLower();
 
             foreach ( var tempLoopVar_TexPage in TexturePages )
             {
-                TexPage = tempLoopVar_TexPage;
-                if ( TexPage.FileTitle.ToLower() == LCaseTitle )
+                var texPage = tempLoopVar_TexPage;
+                if ( texPage.FileTitle.ToLower() == lCaseTitle )
                 {
-                    return TexPage.GLTexture_Num;
+                    return texPage.GLTexture_Num;
                 }
             }
             return 0;
         }
 
-        public Weapon FindOrCreateWeapon(string Code)
+        public Weapon FindOrCreateWeapon(string code)
         {
-            var Result = default(Weapon);
-
-            Result = FindWeaponCode(Code);
-            if ( Result != null )
-            {
-                return Result;
-            }
-            Result = new Weapon();
-            Result.IsUnknown = true;
-            Result.Code = Code;
-            return Result;
+            return FindWeaponCode(code) ?? new Weapon {IsUnknown = true, Code = code};
         }
 
-        public Construct FindOrCreateConstruct(string Code)
+        public Construct FindOrCreateConstruct(string code)
         {
-            var Result = default(Construct);
-
-            Result = FindConstructorCode(Code);
-            if ( Result != null )
-            {
-                return Result;
-            }
-            Result = new Construct();
-            Result.IsUnknown = true;
-            Result.Code = Code;
-            return Result;
+            return  FindConstructorCode(code) ?? new Construct {IsUnknown = true, Code = code};
         }
 
-        public Repair FindOrCreateRepair(string Code)
+        public Repair FindOrCreateRepair(string code)
         {
-            var Result = default(Repair);
-
-            Result = FindRepairCode(Code);
-            if ( Result != null )
-            {
-                return Result;
-            }
-            Result = new Repair();
-            Result.IsUnknown = true;
-            Result.Code = Code;
-            return Result;
+            return FindRepairCode(code) ?? new Repair {IsUnknown = true, Code = code};
         }
 
-        public Sensor FindOrCreateSensor(string Code)
+        public Sensor FindOrCreateSensor(string code)
         {
-            var Result = default(Sensor);
-
-            Result = FindSensorCode(Code);
-            if ( Result != null )
-            {
-                return Result;
-            }
-            Result = new Sensor();
-            Result.IsUnknown = true;
-            Result.Code = Code;
-            return Result;
+            return FindSensorCode(code) ?? new Sensor {IsUnknown = true, Code = code};
         }
 
-        public Brain FindOrCreateBrain(string Code)
+        public Brain FindOrCreateBrain(string code)
         {
-            var Result = default(Brain);
-
-            Result = FindBrainCode(Code);
-            if ( Result != null )
-            {
-                return Result;
-            }
-            Result = new Brain();
-            Result.IsUnknown = true;
-            Result.Code = Code;
-            return Result;
+            return FindBrainCode(code) ?? new Brain {IsUnknown = true, Code = code};
         }
 
-        public Ecm FindOrCreateECM(string Code)
+        public Ecm FindOrCreateECM(string code)
         {
-            var Result = default(Ecm);
-
-            Result = FindECMCode(Code);
-            if ( Result != null )
-            {
-                return Result;
-            }
-            Result = new Ecm();
-            Result.IsUnknown = true;
-            Result.Code = Code;
-            return Result;
+            return FindECMCode(code) ?? new Ecm {IsUnknown = true, Code = code};
         }
 
-        public Turret FindOrCreateTurret(TurretType TurretType, string TurretCode)
+        public Turret FindOrCreateTurret(TurretType turretType, string turretCode)
         {
-            switch ( TurretType )
+            switch ( turretType )
             {
                 case TurretType.Weapon:
-                    return FindOrCreateWeapon(TurretCode);
+                    return FindOrCreateWeapon(turretCode);
                 case TurretType.Construct:
-                    return FindOrCreateConstruct(TurretCode);
+                    return FindOrCreateConstruct(turretCode);
                 case TurretType.Repair:
-                    return FindOrCreateRepair(TurretCode);
+                    return FindOrCreateRepair(turretCode);
                 case TurretType.Sensor:
-                    return FindOrCreateSensor(TurretCode);
+                    return FindOrCreateSensor(turretCode);
                 case TurretType.Brain:
-                    return FindOrCreateBrain(TurretCode);
+                    return FindOrCreateBrain(turretCode);
                 case TurretType.ECM:
-                    return FindOrCreateECM(TurretCode);
+                    return FindOrCreateECM(turretCode);
                 default:
                     return null;
             }
         }
 
-        public Body FindOrCreateBody(string Code)
+        public Body FindOrCreateBody(string code)
         {
-            var Result = default(Body);
-
-            Result = FindBodyCode(Code);
-            if ( Result != null )
-            {
-                return Result;
-            }
-            Result = new Body();
-            Result.IsUnknown = true;
-            Result.Code = Code;
-            return Result;
+            return FindBodyCode(code) ?? new Body {IsUnknown = true, Code = code};
         }
 
-        public Propulsion FindOrCreatePropulsion(string Code)
+        public Propulsion FindOrCreatePropulsion(string code)
         {
-            var Result = default(Propulsion);
-
-            Result = FindPropulsionCode(Code);
-            if ( Result != null )
-            {
-                return Result;
-            }
-            Result = new Propulsion(Bodies.Count);
-            Result.IsUnknown = true;
-            Result.Code = Code;
-            return Result;
+            return FindPropulsionCode(code) ?? new Propulsion(Bodies.Count) {IsUnknown = true, Code = code};
         }
 
         public UnitTypeBase FindOrCreateUnitType(string Code, UnitType Type, int WallType)
@@ -1185,7 +1017,7 @@ namespace SharpFlame.Domain.ObjData
             switch ( Type )
             {
                 case UnitType.Feature:
-                    var featureTypeBase = default(FeatureTypeBase);
+                    FeatureTypeBase featureTypeBase;
                     foreach ( var tempLoopVar_FeatureType in FeatureTypes )
                     {
                         featureTypeBase = tempLoopVar_FeatureType;
@@ -1194,14 +1026,13 @@ namespace SharpFlame.Domain.ObjData
                             return featureTypeBase;
                         }
                     }
-                    featureTypeBase = new FeatureTypeBase();
-                    featureTypeBase.IsUnknown = true;
-                    featureTypeBase.Code = Code;
-                    featureTypeBase.Footprint.X = 1;
-                    featureTypeBase.Footprint.Y = 1;
+                    featureTypeBase = new FeatureTypeBase
+                        {
+                            IsUnknown = true, Code = Code, Footprint = {X = 1, Y = 1}
+                        };
                     return featureTypeBase;
                 case UnitType.PlayerStructure:
-                    var structureTypeBase = default(StructureTypeBase);
+                    StructureTypeBase structureTypeBase;
                     foreach ( var tempLoopVar_StructureType in StructureTypes )
                     {
                         structureTypeBase = tempLoopVar_StructureType;
@@ -1220,30 +1051,24 @@ namespace SharpFlame.Domain.ObjData
                             }
                         }
                     }
-                    structureTypeBase = new StructureTypeBase();
-                    structureTypeBase.IsUnknown = true;
-                    structureTypeBase.Code = Code;
-                    structureTypeBase.Footprint.X = 1;
-                    structureTypeBase.Footprint.Y = 1;
+                    structureTypeBase = new StructureTypeBase {IsUnknown = true, Code = Code, Footprint = {X = 1, Y = 1}};
                     return structureTypeBase;
 
                 case UnitType.PlayerDroid:
-                    var DroidType = default(DroidTemplate);
+                    DroidTemplate droidType;
                     foreach ( var tempLoopVar_DroidType in DroidTemplates )
                     {
-                        DroidType = tempLoopVar_DroidType;
-                        if ( DroidType.IsTemplate )
+                        droidType = tempLoopVar_DroidType;
+                        if ( droidType.IsTemplate )
                         {
-                            if ( DroidType.Code == Code )
+                            if ( droidType.Code == Code )
                             {
-                                return DroidType;
+                                return droidType;
                             }
                         }
                     }
-                    DroidType = new DroidTemplate();
-                    DroidType.IsUnknown = true;
-                    DroidType.Code = Code;
-                    return DroidType;
+                    droidType = new DroidTemplate {IsUnknown = true, Code = Code};
+                    return droidType;
                 default:
                     return null;
             }
@@ -1251,11 +1076,9 @@ namespace SharpFlame.Domain.ObjData
 
         public StructureTypeBase FindFirstStructureType(StructureType Type)
         {
-            var structureTypeBase = default(StructureTypeBase);
-
             foreach ( var tempLoopVar_StructureType in StructureTypes )
             {
-                structureTypeBase = tempLoopVar_StructureType;
+                StructureTypeBase structureTypeBase = tempLoopVar_StructureType;
                 if ( structureTypeBase.StructureType == Type )
                 {
                     return structureTypeBase;
