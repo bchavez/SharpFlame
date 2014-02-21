@@ -514,7 +514,7 @@ namespace SharpFlame.Mapping.IO.Wz
                             newUnit.UnitGroup = iniStructure.UnitGroup;
                         }
                         newUnit.Pos = new WorldPos(iniStructure.Pos, iniStructure.Pos.Z);
-                        newUnit.Rotation = Convert.ToInt32(iniStructure.Rotation.Direction * 360.0D / Constants.INIRotationMax);
+                        newUnit.Rotation = Convert.ToInt32(iniStructure.Rotation.Direction * 360.0D / Constants.IniRotationMax);
                         if ( newUnit.Rotation == 360 )
                         {
                             newUnit.Rotation = 0;
@@ -628,7 +628,7 @@ namespace SharpFlame.Mapping.IO.Wz
                         newUnit.TypeBase = featureTypeBase;
                         newUnit.UnitGroup = map.ScavengerUnitGroup;
                         newUnit.Pos = new WorldPos(iniFeature.Pos, iniFeature.Pos.Z);
-                        newUnit.Rotation = Convert.ToInt32(iniFeature.Rotation.Direction * 360.0D / Constants.INIRotationMax);
+                        newUnit.Rotation = Convert.ToInt32(iniFeature.Rotation.Direction * 360.0D / Constants.IniRotationMax);
                         if ( newUnit.Rotation == 360 )
                         {
                             newUnit.Rotation = 0;
@@ -835,7 +835,7 @@ namespace SharpFlame.Mapping.IO.Wz
                             newUnit.UnitGroup = iniDroid.UnitGroup;
                         }
                         newUnit.Pos = new WorldPos(iniDroid.Pos, iniDroid.Pos.Z);
-                        newUnit.Rotation = Convert.ToInt32(iniDroid.Rotation.Direction * 360.0D / Constants.INIRotationMax);
+                        newUnit.Rotation = Convert.ToInt32(iniDroid.Rotation.Direction * 360.0D / Constants.IniRotationMax);
                         if ( newUnit.Rotation == 360 )
                         {
                             newUnit.Rotation = 0;

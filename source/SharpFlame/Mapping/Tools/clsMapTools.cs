@@ -296,7 +296,7 @@ namespace SharpFlame.Mapping
                     TextureNum = Terrain.Tiles[X, Y].Texture.TextureNum;
                     if ( TextureNum >= 0 & TextureNum < Tileset.TileCount )
                     {
-                        if ( Tileset.Tiles[TextureNum].DefaultType == Constants.TileTypeNum_Water )
+                        if ( Tileset.Tiles[TextureNum].DefaultType == Constants.TileTypeNumWater )
                         {
                             Terrain.Vertices[X, Y].Height = 0;
                             Terrain.Vertices[X + 1, Y].Height = 0;
@@ -781,7 +781,7 @@ namespace SharpFlame.Mapping
                     {
                         if ( Terrain.Tiles[X, Y].Texture.TextureNum >= 0 )
                         {
-                            if ( Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNum_Water )
+                            if ( Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNumWater )
                             {
                                 Terrain.Tiles[X, Y].Tri = false;
                                 SectorGraphicsChanges.TileChanged(TileNum);

@@ -4,23 +4,23 @@ namespace SharpFlame.Util
     {
         public static sEachTool Tools;
 
-        private static clsTool _Tool;
+        private static clsTool tool;
 
-        private static clsTool _PreviousTool;
+        private static clsTool previousTool;
 
         public static clsTool Tool
         {
-            get { return _Tool; }
+            get { return tool; }
             set
             {
-                _PreviousTool = _Tool;
-                _Tool = value;
+                previousTool = tool;
+                tool = value;
             }
         }
 
         public static clsTool PreviousTool
         {
-            get { return _PreviousTool; }
+            get { return previousTool; }
         }
 
         public static void CreateTools()
@@ -78,8 +78,8 @@ namespace SharpFlame.Util
             newTool = new clsTool();
             Tools.Gateways = newTool;
 
-            _Tool = Tools.TextureBrush;
-            _PreviousTool = _Tool;
+            tool = Tools.TextureBrush;
+            previousTool = tool;
         }
 
         public struct sEachTool

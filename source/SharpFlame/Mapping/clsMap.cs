@@ -910,7 +910,7 @@ namespace SharpFlame.Mapping
                         {
                             if ( Terrain.Tiles[X, Y].Texture.TextureNum >= 0 && Terrain.Tiles[X, Y].Texture.TextureNum < Tileset.TileCount )
                             {
-                                if ( Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNum_Cliff )
+                                if ( Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNumCliff )
                                 {
                                     sngTexture[Y, X, 0] = sngTexture[Y, X, 0] * AntiAlpha + SettingsManager.Settings.MinimapCliffColour.Red * Alpha;
                                     sngTexture[Y, X, 1] = sngTexture[Y, X, 1] * AntiAlpha + SettingsManager.Settings.MinimapCliffColour.Green * Alpha;
@@ -2422,7 +2422,7 @@ namespace SharpFlame.Mapping
             var Unit = default(clsUnit);
             var UnitTile = new XYInt();
             var Difference = new XYInt();
-            var TileWalls = enumTileWalls.None;
+            var TileWalls = Util.TileWalls.None;
             var Walls = new SimpleList<clsUnit>();
             var Removals = new SimpleList<clsUnit>();
             var unitTypeBase = default(UnitTypeBase);
@@ -2462,7 +2462,7 @@ namespace SharpFlame.Mapping
                                 {
                                     if ( Difference.X == 0 )
                                     {
-                                        TileWalls = TileWalls | enumTileWalls.Bottom;
+                                        TileWalls = TileWalls | TileWalls.Bottom;
                                         Walls.Add(Unit);
                                     }
                                 }
@@ -2474,12 +2474,12 @@ namespace SharpFlame.Mapping
                                     }
                                     else if ( Difference.X == -1 )
                                     {
-                                        TileWalls = TileWalls | enumTileWalls.Left;
+                                        TileWalls = TileWalls | TileWalls.Left;
                                         Walls.Add(Unit);
                                     }
                                     else if ( Difference.X == 1 )
                                     {
-                                        TileWalls = TileWalls | enumTileWalls.Right;
+                                        TileWalls = TileWalls | TileWalls.Right;
                                         Walls.Add(Unit);
                                     }
                                 }
@@ -2487,7 +2487,7 @@ namespace SharpFlame.Mapping
                                 {
                                     if ( Difference.X == 0 )
                                     {
-                                        TileWalls = TileWalls | enumTileWalls.Top;
+                                        TileWalls = TileWalls | TileWalls.Top;
                                         Walls.Add(Unit);
                                     }
                                 }

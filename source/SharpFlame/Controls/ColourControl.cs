@@ -13,31 +13,31 @@ namespace SharpFlame.Controls
 {
     public partial class ColourControl
     {
-        private readonly clsRGB_sng Colour;
+        private readonly clsRGB_sng colour;
 
-        private readonly System.Drawing.Graphics ColourBoxGraphics;
-        private Color ColourColor;
+        private readonly System.Drawing.Graphics colourBoxGraphics;
+        private Color colourColor;
 
-        public ColourControl(clsRGB_sng NewColour)
+        public ColourControl(clsRGB_sng newColour)
         {
             InitializeComponent();
 
-            if ( NewColour == null )
+            if ( newColour == null )
             {
                 Debugger.Break();
                 Hide();
                 return;
             }
 
-            Colour = NewColour;
-            var Red = (int)(MathUtil.ClampDbl(Colour.Red * 255.0D, 0.0D, 255.0D));
-            var Green = (int)(MathUtil.ClampDbl(Colour.Green * 255.0D, 0.0D, 255.0D));
-            var Blue = (int)(MathUtil.ClampDbl(Colour.Blue * 255.0D, 0.0D, 255.0D));
-            ColourColor = ColorTranslator.FromOle(ColorUtil.OsRgb(Red, Green, Blue));
+            colour = newColour;
+            var red = (int)(MathUtil.ClampDbl(colour.Red * 255.0D, 0.0D, 255.0D));
+            var green = (int)(MathUtil.ClampDbl(colour.Green * 255.0D, 0.0D, 255.0D));
+            var blue = (int)(MathUtil.ClampDbl(colour.Blue * 255.0D, 0.0D, 255.0D));
+            colourColor = ColorTranslator.FromOle(ColorUtil.OsRgb(red, green, blue));
 
-            if ( Colour is clsRGBA_sng )
+            if ( colour is clsRGBA_sng )
             {
-                nudAlpha.Value = (decimal)(((clsRGBA_sng)Colour).Alpha);
+                nudAlpha.Value = (decimal)(((clsRGBA_sng)colour).Alpha);
                 nudAlpha.ValueChanged += nudAlpha_Changed;
                 nudAlpha.Leave += nudAlpha_Changed;
             }
@@ -46,31 +46,33 @@ namespace SharpFlame.Controls
                 nudAlpha.Hide();
             }
 
-            ColourBoxGraphics = pnlColour.CreateGraphics();
+            colourBoxGraphics = pnlColour.CreateGraphics();
 
             ColourBoxRedraw();
         }
 
         public void SelectColour(Object sender, EventArgs e)
         {
-            var ColourSelect = new ColorDialog();
+            var colourSelect = new ColorDialog
+                {
+                    Color = colourColor
+                };
 
-            ColourSelect.Color = ColourColor;
-            var Result = ColourSelect.ShowDialog();
-            if ( Result != DialogResult.OK )
+            var result = colourSelect.ShowDialog();
+            if ( result != DialogResult.OK )
             {
                 return;
             }
-            ColourColor = ColourSelect.Color;
-            Colour.Red = (float)(ColourColor.R / 255.0D);
-            Colour.Green = (float)(ColourColor.G / 255.0D);
-            Colour.Blue = (float)(ColourColor.B / 255.0D);
+            colourColor = colourSelect.Color;
+            colour.Red = (float)(colourColor.R / 255.0D);
+            colour.Green = (float)(colourColor.G / 255.0D);
+            colour.Blue = (float)(colourColor.B / 255.0D);
             ColourBoxRedraw();
         }
 
         private void nudAlpha_Changed(object sender, EventArgs e)
         {
-            ((clsRGBA_sng)Colour).Alpha = (float)nudAlpha.Value;
+            ((clsRGBA_sng)colour).Alpha = (float)nudAlpha.Value;
         }
 
         public void pnlColour_Paint(object sender, PaintEventArgs e)
@@ -80,7 +82,7 @@ namespace SharpFlame.Controls
 
         private void ColourBoxRedraw()
         {
-            ColourBoxGraphics.Clear(ColourColor);
+            colourBoxGraphics.Clear(colourColor);
         }
     }
 }

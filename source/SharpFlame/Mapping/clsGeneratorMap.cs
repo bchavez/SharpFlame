@@ -1625,8 +1625,8 @@ namespace SharpFlame
                 {
                     if ( Map.Terrain.Tiles[X, Y].Texture.TextureNum >= 0 )
                     {
-                        if ( GenerateTileset.Tileset.Tiles[Map.Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNum_Cliff ||
-                             GenerateTileset.Tileset.Tiles[Map.Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNum_Water )
+                        if ( GenerateTileset.Tileset.Tiles[Map.Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNumCliff ||
+                             GenerateTileset.Tileset.Tiles[Map.Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNumWater )
                         {
                             TileNodeBlock(X, Y);
                         }

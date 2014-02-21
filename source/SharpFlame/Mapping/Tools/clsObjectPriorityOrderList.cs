@@ -37,9 +37,9 @@ namespace SharpFlame.Mapping.Tools
             result.Insert(Unit, A);
         }
 
-        public void SetItem(clsUnit Item)
+        public void SetItem(clsUnit item)
         {
-            Unit = Item;
+            Unit = item;
         }
     }
 }

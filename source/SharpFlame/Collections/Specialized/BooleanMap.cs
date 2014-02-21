@@ -314,35 +314,35 @@ namespace SharpFlame.Collections.Specialized
             }
         }
 
-        public void Within(BooleanMap Interior, BooleanMap Exterior)
+        public void Within(BooleanMap interior, BooleanMap exterior)
         {
             var y = 0;
 
-            SizeCopy(Interior);
-            for ( y = 0; y <= Interior.ValueData.Size.Y - 1; y++ )
+            SizeCopy(interior);
+            for ( y = 0; y <= interior.ValueData.Size.Y - 1; y++ )
             {
                 var x = 0;
-                for ( x = 0; x <= Interior.ValueData.Size.X - 1; x++ )
+                for ( x = 0; x <= interior.ValueData.Size.X - 1; x++ )
                 {
-                    if ( Interior.ValueData.Value[y, x] )
+                    if ( interior.ValueData.Value[y, x] )
                     {
                         var flag = false;
                         if ( y > 0 )
                         {
                             if ( x > 0 )
                             {
-                                if ( !Exterior.ValueData.Value[y - 1, x - 1] )
+                                if ( !exterior.ValueData.Value[y - 1, x - 1] )
                                 {
                                     flag = true;
                                 }
                             }
-                            if ( !Exterior.ValueData.Value[y - 1, x] )
+                            if ( !exterior.ValueData.Value[y - 1, x] )
                             {
                                 flag = true;
                             }
-                            if ( x < Interior.ValueData.Size.X - 1 )
+                            if ( x < interior.ValueData.Size.X - 1 )
                             {
-                                if ( !Exterior.ValueData.Value[y - 1, x + 1] )
+                                if ( !exterior.ValueData.Value[y - 1, x + 1] )
                                 {
                                     flag = true;
                                 }
@@ -350,38 +350,38 @@ namespace SharpFlame.Collections.Specialized
                         }
                         if ( x > 0 )
                         {
-                            if ( !Exterior.ValueData.Value[y, x - 1] )
+                            if ( !exterior.ValueData.Value[y, x - 1] )
                             {
                                 flag = true;
                             }
                         }
-                        if ( !Exterior.ValueData.Value[y, x] )
+                        if ( !exterior.ValueData.Value[y, x] )
                         {
                             flag = true;
                         }
-                        if ( x < Interior.ValueData.Size.X - 1 )
+                        if ( x < interior.ValueData.Size.X - 1 )
                         {
-                            if ( !Exterior.ValueData.Value[y, x + 1] )
+                            if ( !exterior.ValueData.Value[y, x + 1] )
                             {
                                 flag = true;
                             }
                         }
-                        if ( y < Interior.ValueData.Size.Y - 1 )
+                        if ( y < interior.ValueData.Size.Y - 1 )
                         {
                             if ( x > 0 )
                             {
-                                if ( !Exterior.ValueData.Value[y + 1, x - 1] )
+                                if ( !exterior.ValueData.Value[y + 1, x - 1] )
                                 {
                                     flag = true;
                                 }
                             }
-                            if ( !Exterior.ValueData.Value[y + 1, x] )
+                            if ( !exterior.ValueData.Value[y + 1, x] )
                             {
                                 flag = true;
                             }
-                            if ( x < Interior.ValueData.Size.X - 1 )
+                            if ( x < interior.ValueData.Size.X - 1 )
                             {
-                                if ( !Exterior.ValueData.Value[y + 1, x + 1] )
+                                if ( !exterior.ValueData.Value[y + 1, x + 1] )
                                 {
                                     flag = true;
                                 }

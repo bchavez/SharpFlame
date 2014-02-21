@@ -15,23 +15,23 @@ namespace SharpFlame.Util
         public int PartCount;
         public string[] Parts;
 
-        public sSplitPath(string Path)
+        public sSplitPath(string path)
         {
-            var A = 0;
+            var a = 0;
 
-            Parts = Path.Split(App.PlatformPathSeparator);
+            Parts = path.Split(App.PlatformPathSeparator);
             PartCount = Parts.GetUpperBound(0) + 1;
             FilePath = "";
-            for ( A = 0; A <= PartCount - 2; A++ )
+            for ( a = 0; a <= PartCount - 2; a++ )
             {
-                FilePath += Parts[A] + Convert.ToString(App.PlatformPathSeparator);
+                FilePath += Parts[a] + Convert.ToString(App.PlatformPathSeparator);
             }
-            FileTitle = Parts[A];
-            A = FileTitle.LastIndexOf('.');
-            if ( A > 0 )
+            FileTitle = Parts[a];
+            a = FileTitle.LastIndexOf('.');
+            if ( a > 0 )
             {
-                FileTitleWithoutExtension = FileTitle.Substring(0, A);
-                FileExtension = FileTitle.Substring(A + 1, FileTitle.Length - A - 1);
+                FileTitleWithoutExtension = FileTitle.Substring(0, a);
+                FileExtension = FileTitle.Substring(a + 1, FileTitle.Length - a - 1);
             }
             else
             {

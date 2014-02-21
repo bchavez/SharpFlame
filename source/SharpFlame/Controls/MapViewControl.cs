@@ -24,8 +24,8 @@ namespace SharpFlame.Controls
 {
     public partial class MapViewControl
     {
-        private readonly ContextMenuStrip ListSelect;
-        private readonly frmMain _Owner;
+        private readonly ContextMenuStrip listSelect;
+        private readonly frmMain owner;
         private readonly Timer tmrDraw;
         private readonly Timer tmrDrawDelay;
 
@@ -33,28 +33,28 @@ namespace SharpFlame.Controls
 
         //public float GLSize_XPerY; //seems redundant, since OpenGLControl has a field called AspectRatio
 
-        public bool DrawView_Enabled = false;
+        public bool DrawViewEnabled = false;
 
         private Timer GLInitializeDelayTimer;
         public XYInt GLSize;
         public bool IsGLInitialized = false;
-        private bool ListSelectIsPicker;
-        private ToolStripItem[] ListSelectItems = new ToolStripItem[0];
+        private bool listSelectIsPicker;
+        private ToolStripItem[] listSelectItems = new ToolStripItem[0];
 
         public GLControl OpenGLControl;
         public Timer UndoMessageTimer;
 
         public MapViewControl(frmMain Owner)
         {
-            _Owner = Owner;
+            owner = Owner;
 
             GLSize = new XYInt(0, 0);
 
             InitializeComponent();
 
-            ListSelect = new ContextMenuStrip();
-            ListSelect.ItemClicked += ListSelect_Click;
-            ListSelect.Closed += ListSelect_Close;
+            listSelect = new ContextMenuStrip();
+            listSelect.ItemClicked += ListSelect_Click;
+            listSelect.Closed += ListSelect_Close;
             UndoMessageTimer = new Timer();
             UndoMessageTimer.Tick += RemoveUndoMessage;
 
@@ -79,7 +79,7 @@ namespace SharpFlame.Controls
 
         private clsMap MainMap
         {
-            get { return _Owner.MainMap; }
+            get { return owner.MainMap; }
         }
 
         public void ResizeOpenGL()
@@ -93,20 +93,20 @@ namespace SharpFlame.Controls
             OpenGLControl.Height = pnlDraw.Height;
         }
 
-        public void DrawView_SetEnabled(bool Value)
+        public void DrawViewSetEnabled(bool value)
         {
-            if ( Value )
+            if ( value )
             {
-                if ( !DrawView_Enabled )
+                if ( !DrawViewEnabled )
                 {
-                    DrawView_Enabled = true;
+                    DrawViewEnabled = true;
                     DrawViewLater();
                 }
             }
             else
             {
                 tmrDraw.Enabled = false;
-                DrawView_Enabled = false;
+                DrawViewEnabled = false;
             }
         }
 
@@ -254,7 +254,7 @@ namespace SharpFlame.Controls
 
         private void DrawView()
         {
-            if ( !(DrawView_Enabled && IsGLInitialized) )
+            if ( !(DrawViewEnabled && IsGLInitialized) )
             {
                 return;
             }
@@ -264,32 +264,32 @@ namespace SharpFlame.Controls
                 OpenGLControl.MakeCurrent();
             }
 
-            var Map = MainMap;
-            var BGColour = new sRGB_sng();
+            var map = MainMap;
+            var bgColour = new sRGB_sng();
 
-            if ( Map == null )
+            if ( map == null )
             {
-                BGColour.Red = 0.5F;
-                BGColour.Green = 0.5F;
-                BGColour.Blue = 0.5F;
+                bgColour.Red = 0.5F;
+                bgColour.Green = 0.5F;
+                bgColour.Blue = 0.5F;
             }
-            else if ( Map.Tileset == null )
+            else if ( map.Tileset == null )
             {
-                BGColour.Red = 0.5F;
-                BGColour.Green = 0.5F;
-                BGColour.Blue = 0.5F;
+                bgColour.Red = 0.5F;
+                bgColour.Green = 0.5F;
+                bgColour.Blue = 0.5F;
             }
             else
             {
-                BGColour = Map.Tileset.BGColour;
+                bgColour = map.Tileset.BGColour;
             }
 
-            GL.ClearColor(BGColour.Red, BGColour.Green, BGColour.Blue, 1.0F);
+            GL.ClearColor(bgColour.Red, bgColour.Green, bgColour.Blue, 1.0F);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            if ( Map != null )
+            if ( map != null )
             {
-                Map.GLDraw();
+                map.GLDraw();
             }
 
             GL.Flush();
@@ -300,26 +300,26 @@ namespace SharpFlame.Controls
 
         public void OpenGL_MouseMove(object sender, MouseEventArgs e)
         {
-            var Map = MainMap;
+            var map = MainMap;
 
-            if ( Map == null )
+            if ( map == null )
             {
                 return;
             }
 
-            Map.ViewInfo.Map.ViewInfo.MouseOver = new clsViewInfo.clsMouseOver();
-            Map.ViewInfo.MouseOver.ScreenPos.X = e.X;
-            Map.ViewInfo.MouseOver.ScreenPos.Y = e.Y;
+            map.ViewInfo.Map.ViewInfo.MouseOver = new clsViewInfo.clsMouseOver();
+            map.ViewInfo.MouseOver.ScreenPos.X = e.X;
+            map.ViewInfo.MouseOver.ScreenPos.Y = e.Y;
 
-            Map.ViewInfo.MouseOverPosCalc();
+            map.ViewInfo.MouseOverPosCalc();
         }
 
         public void Pos_Display_Update()
         {
-            var Map = MainMap;
-            var MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
+            var map = MainMap;
+            var mouseOverTerrain = map.ViewInfo.GetMouseOverTerrain();
 
-            if ( MouseOverTerrain == null )
+            if ( mouseOverTerrain == null )
             {
                 lblTile.Text = "";
                 lblVertex.Text = "";
@@ -327,56 +327,56 @@ namespace SharpFlame.Controls
             }
             else
             {
-                lblTile.Text = "Tile x:" + Convert.ToString(MouseOverTerrain.Tile.Normal.X) + ", y:" + Convert.ToString(MouseOverTerrain.Tile.Normal.Y);
-                lblVertex.Text = "Vertex  x:" + Convert.ToString(MouseOverTerrain.Vertex.Normal.X) + ", y:" +
-                                 Convert.ToString(MouseOverTerrain.Vertex.Normal.Y) + ", alt:" +
-                                 Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height * Map.HeightMultiplier + " (" +
-                                 Convert.ToString(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height) + "x" +
-                                 Convert.ToString(Map.HeightMultiplier) + ")";
-                lblPos.Text = "Pos x:" + Convert.ToString(MouseOverTerrain.Pos.Horizontal.X) + ", y:" +
-                              Convert.ToString(MouseOverTerrain.Pos.Horizontal.Y) + ", alt:" + Convert.ToString(MouseOverTerrain.Pos.Altitude) +
+                lblTile.Text = "Tile x:" + Convert.ToString(mouseOverTerrain.Tile.Normal.X) + ", y:" + Convert.ToString(mouseOverTerrain.Tile.Normal.Y);
+                lblVertex.Text = "Vertex  x:" + Convert.ToString(mouseOverTerrain.Vertex.Normal.X) + ", y:" +
+                                 Convert.ToString(mouseOverTerrain.Vertex.Normal.Y) + ", alt:" +
+                                 map.Terrain.Vertices[mouseOverTerrain.Vertex.Normal.X, mouseOverTerrain.Vertex.Normal.Y].Height * map.HeightMultiplier + " (" +
+                                 Convert.ToString(map.Terrain.Vertices[mouseOverTerrain.Vertex.Normal.X, mouseOverTerrain.Vertex.Normal.Y].Height) + "x" +
+                                 Convert.ToString(map.HeightMultiplier) + ")";
+                lblPos.Text = "Pos x:" + Convert.ToString(mouseOverTerrain.Pos.Horizontal.X) + ", y:" +
+                              Convert.ToString(mouseOverTerrain.Pos.Horizontal.Y) + ", alt:" + Convert.ToString(mouseOverTerrain.Pos.Altitude) +
                               ", slope: " +
-                              Convert.ToString(Math.Round(Map.GetTerrainSlopeAngle(MouseOverTerrain.Pos.Horizontal) / MathUtil.RadOf1Deg * 10.0D) / 10.0D) +
+                              Convert.ToString(Math.Round(map.GetTerrainSlopeAngle(mouseOverTerrain.Pos.Horizontal) / MathUtil.RadOf1Deg * 10.0D) / 10.0D) +
                               "°";
             }
         }
 
         public void OpenGL_LostFocus(Object eventSender, EventArgs eventArgs)
         {
-            var Map = MainMap;
+            var map = MainMap;
 
-            if ( Map == null )
+            if ( map == null )
             {
                 return;
             }
 
-            Map.SuppressMinimap = false;
+            map.SuppressMinimap = false;
 
-            Map.ViewInfo.MouseOver = null;
-            Map.ViewInfo.MouseLeftDown = null;
-            Map.ViewInfo.MouseRightDown = null;
+            map.ViewInfo.MouseOver = null;
+            map.ViewInfo.MouseLeftDown = null;
+            map.ViewInfo.MouseRightDown = null;
 
             App.ViewKeyDown_Clear();
         }
 
         private void ListSelect_Click(object Sender, ToolStripItemClickedEventArgs e)
         {
-            var Button = e.ClickedItem;
-            var Unit = (clsUnit)Button.Tag;
+            var button = e.ClickedItem;
+            var unit = (clsUnit)button.Tag;
 
-            if ( ListSelectIsPicker )
+            if ( listSelectIsPicker )
             {
-                Program.frmMainInstance.ObjectPicker(Unit.TypeBase);
+                Program.frmMainInstance.ObjectPicker(unit.TypeBase);
             }
             else
             {
-                if ( Unit.MapSelectedUnitLink.IsConnected )
+                if ( unit.MapSelectedUnitLink.IsConnected )
                 {
-                    Unit.MapDeselect();
+                    unit.MapDeselect();
                 }
                 else
                 {
-                    Unit.MapSelect();
+                    unit.MapSelect();
                 }
                 Program.frmMainInstance.SelectedObject_Changed();
                 DrawViewLater();
@@ -385,42 +385,42 @@ namespace SharpFlame.Controls
 
         private void ListSelect_Close(object sender, ToolStripDropDownClosedEventArgs e)
         {
-            var A = 0;
+            var a = 0;
 
-            for ( A = 0; A <= ListSelectItems.GetUpperBound(0); A++ )
+            for ( a = 0; a <= listSelectItems.GetUpperBound(0); a++ )
             {
-                ListSelectItems[A].Tag = null;
-                ListSelectItems[A].Dispose();
+                listSelectItems[a].Tag = null;
+                listSelectItems[a].Dispose();
             }
-            ListSelect.Items.Clear();
-            ListSelectItems = new ToolStripItem[0];
+            listSelect.Items.Clear();
+            listSelectItems = new ToolStripItem[0];
 
             App.ViewKeyDown_Clear();
         }
 
         private void OpenGL_MouseDown(object sender, MouseEventArgs e)
         {
-            var Map = MainMap;
+            var map = MainMap;
 
-            if ( Map == null )
+            if ( map == null )
             {
                 return;
             }
 
-            Map.ViewInfo.MouseDown(e);
+            map.ViewInfo.MouseDown(e);
         }
 
         private void OpenGL_KeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            var Map = MainMap;
+            var map = MainMap;
 
-            if ( Map == null )
+            if ( map == null )
             {
                 return;
             }
 
             var matrixA = new Matrix3DMath.Matrix3D();
-            var MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
+            var mouseOverTerrain = map.ViewInfo.GetMouseOverTerrain();
 
             App.IsViewKeyDown.Keys[(int)e.KeyCode] = true;
 
@@ -431,39 +431,39 @@ namespace SharpFlame.Controls
 
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Undo) )
             {
-                var Message = "";
-                if ( Map.UndoPosition > 0 )
+                var message = "";
+                if ( map.UndoPosition > 0 )
                 {
-                    Message = "Undid: " + Map.Undos[Map.UndoPosition - 1].Name;
-                    var MapMessage = new clsMessage();
-                    MapMessage.Text = Message;
-                    Map.Messages.Add(MapMessage);
-                    Map.UndoPerform();
+                    message = "Undid: " + map.Undos[map.UndoPosition - 1].Name;
+                    var mapMessage = new clsMessage();
+                    mapMessage.Text = message;
+                    map.Messages.Add(mapMessage);
+                    map.UndoPerform();
                     DrawViewLater();
                 }
                 else
                 {
-                    Message = "Nothing to undo";
+                    message = "Nothing to undo";
                 }
-                DisplayUndoMessage(Message);
+                DisplayUndoMessage(message);
             }
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Redo) )
             {
-                var Message = "";
-                if ( Map.UndoPosition < Map.Undos.Count )
+                var message = "";
+                if ( map.UndoPosition < map.Undos.Count )
                 {
-                    Message = "Redid: " + Map.Undos[Map.UndoPosition].Name;
-                    var MapMessage = new clsMessage();
-                    MapMessage.Text = Message;
-                    Map.Messages.Add(MapMessage);
-                    Map.RedoPerform();
+                    message = "Redid: " + map.Undos[map.UndoPosition].Name;
+                    var mapMessage = new clsMessage();
+                    mapMessage.Text = message;
+                    map.Messages.Add(mapMessage);
+                    map.RedoPerform();
                     DrawViewLater();
                 }
                 else
                 {
-                    Message = "Nothing to redo";
+                    message = "Nothing to redo";
                 }
-                DisplayUndoMessage(Message);
+                DisplayUndoMessage(message);
             }
             if ( App.IsViewKeyDown.Keys[(int)Keys.ControlKey] )
             {
@@ -527,16 +527,16 @@ namespace SharpFlame.Controls
             }
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewReset) )
             {
-                Map.ViewInfo.FovMultiplierSet(SettingsManager.Settings.FOVDefault);
+                map.ViewInfo.FovMultiplierSet(SettingsManager.Settings.FOVDefault);
                 if ( App.ViewMoveType == ViewMoveType.Free )
                 {
                     Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
-                    Map.ViewInfo.ViewAngleSetRotate(matrixA);
+                    map.ViewInfo.ViewAngleSetRotate(matrixA);
                 }
                 else if ( App.ViewMoveType == ViewMoveType.RTS )
                 {
                     Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
-                    Map.ViewInfo.ViewAngleSetRotate(matrixA);
+                    map.ViewInfo.ViewAngleSetRotate(matrixA);
                 }
             }
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewTextures) )
@@ -552,33 +552,29 @@ namespace SharpFlame.Controls
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewUnits) )
             {
                 App.Draw_Units = !App.Draw_Units;
-                var X = 0;
-                var Y = 0;
-                var SectorNum = new XYInt();
-                var Unit = default(clsUnit);
-                var Connection = default(clsUnitSectorConnection);
-                for ( Y = 0; Y <= Map.SectorCount.Y - 1; Y++ )
+                
+                var sectorNum = new XYInt();
+                for (var y = 0; y <= map.SectorCount.Y - 1; y++ )
                 {
-                    for ( X = 0; X <= Map.SectorCount.X - 1; X++ )
+                    for (var  x = 0; x <= map.SectorCount.X - 1; x++ )
                     {
-                        foreach ( var tempLoopVar_Connection in Map.Sectors[X, Y].Units )
-                        {
-                            Connection = tempLoopVar_Connection;
-                            Unit = Connection.Unit;
+                        foreach ( var connection in map.Sectors[x, y].Units )
+                        {    
+                            var Unit = connection.Unit;
                             if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
                             {
                                 if ( ((StructureTypeBase)Unit.TypeBase).StructureBasePlate != null )
                                 {
-                                    SectorNum.X = X;
-                                    SectorNum.Y = Y;
-                                    Map.SectorGraphicsChanges.Changed(SectorNum);
+                                    sectorNum.X = x;
+                                    sectorNum.Y = y;
+                                    map.SectorGraphicsChanges.Changed(sectorNum);
                                     break;
                                 }
                             }
                         }
                     }
                 }
-                Map.Update();
+                map.Update();
                 DrawViewLater();
             }
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewScriptMarkers) )
@@ -604,23 +600,23 @@ namespace SharpFlame.Controls
             }
             if ( modTools.Tool == modTools.Tools.TextureBrush )
             {
-                if ( MouseOverTerrain != null )
+                if ( mouseOverTerrain != null )
                 {
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Clockwise) )
                     {
-                        Map.ViewInfo.ApplyTextureClockwise();
+                        map.ViewInfo.ApplyTextureClockwise();
                     }
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.CounterClockwise) )
                     {
-                        Map.ViewInfo.ApplyTextureCounterClockwise();
+                        map.ViewInfo.ApplyTextureCounterClockwise();
                     }
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.TextureFlip) )
                     {
-                        Map.ViewInfo.ApplyTextureFlipX();
+                        map.ViewInfo.ApplyTextureFlipX();
                     }
                     if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.TriFlip) )
                     {
-                        Map.ViewInfo.ApplyTriFlip();
+                        map.ViewInfo.ApplyTriFlip();
                     }
                 }
             }
@@ -628,41 +624,42 @@ namespace SharpFlame.Controls
             {
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.UnitDelete) )
                 {
-                    if ( Map.SelectedUnits.Count > 0 )
+                    if ( map.SelectedUnits.Count > 0 )
                     {
-                        var Unit = default(clsUnit);
-                        foreach ( var tempLoopVar_Unit in Map.SelectedUnits.GetItemsAsSimpleList() )
+                        foreach ( var unit in map.SelectedUnits.GetItemsAsSimpleList() )
                         {
-                            Unit = tempLoopVar_Unit;
-                            Map.UnitRemoveStoreChange(Unit.MapLink.ArrayPosition);
+                            
+                            map.UnitRemoveStoreChange(unit.MapLink.ArrayPosition);
                         }
                         Program.frmMainInstance.SelectedObject_Changed();
-                        Map.UndoStepCreate("Object Deleted");
-                        Map.Update();
-                        Map.MinimapMakeLater();
+                        map.UndoStepCreate("Object Deleted");
+                        map.Update();
+                        map.MinimapMakeLater();
                         DrawViewLater();
                     }
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.UnitMove) )
                 {
-                    if ( MouseOverTerrain != null )
+                    if ( mouseOverTerrain != null )
                     {
-                        if ( Map.SelectedUnits.Count > 0 )
+                        if ( map.SelectedUnits.Count > 0 )
                         {
-                            var Centre = App.CalcUnitsCentrePos(Map.SelectedUnits.GetItemsAsSimpleList());
-                            var Offset = new XYInt();
-                            Offset.X = ((int)(Math.Round(Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.X - Centre.X) / Constants.TerrainGridSpacing)))) *
+                            var centre = App.CalcUnitsCentrePos(map.SelectedUnits.GetItemsAsSimpleList());
+                            var offset = new XYInt();
+                            offset.X = ((int)(Math.Round(Convert.ToDouble((mouseOverTerrain.Pos.Horizontal.X - centre.X) / Constants.TerrainGridSpacing)))) *
                                        Constants.TerrainGridSpacing;
-                            Offset.Y = ((int)(Math.Round(Convert.ToDouble((MouseOverTerrain.Pos.Horizontal.Y - Centre.Y) / Constants.TerrainGridSpacing)))) *
+                            offset.Y = ((int)(Math.Round(Convert.ToDouble((mouseOverTerrain.Pos.Horizontal.Y - centre.Y) / Constants.TerrainGridSpacing)))) *
                                        Constants.TerrainGridSpacing;
-                            var ObjectPosOffset = new clsObjectPosOffset();
-                            ObjectPosOffset.Map = Map;
-                            ObjectPosOffset.Offset = Offset;
-                            Map.SelectedUnitsAction(ObjectPosOffset);
+                            var objectPosOffset = new clsObjectPosOffset
+                                {
+                                    Map = map,
+                                    Offset = offset
+                                };
+                            map.SelectedUnitsAction(objectPosOffset);
 
-                            Map.UndoStepCreate("Objects Moved");
-                            Map.Update();
-                            Map.MinimapMakeLater();
+                            map.UndoStepCreate("Objects Moved");
+                            map.Update();
+                            map.MinimapMakeLater();
                             Program.frmMainInstance.SelectedObject_Changed();
                             DrawViewLater();
                         }
@@ -670,24 +667,28 @@ namespace SharpFlame.Controls
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Clockwise) )
                 {
-                    var ObjectRotationOffset = new clsObjectRotationOffset();
-                    ObjectRotationOffset.Map = Map;
-                    ObjectRotationOffset.Offset = -90;
-                    Map.SelectedUnitsAction(ObjectRotationOffset);
-                    Map.Update();
+                    var objectRotationOffset = new clsObjectRotationOffset
+                        {
+                            Map = map,
+                            Offset = -90
+                        };
+                    map.SelectedUnitsAction(objectRotationOffset);
+                    map.Update();
                     Program.frmMainInstance.SelectedObject_Changed();
-                    Map.UndoStepCreate("Object Rotated");
+                    map.UndoStepCreate("Object Rotated");
                     DrawViewLater();
                 }
                 if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.CounterClockwise) )
                 {
-                    var ObjectRotationOffset = new clsObjectRotationOffset();
-                    ObjectRotationOffset.Map = Map;
-                    ObjectRotationOffset.Offset = 90;
-                    Map.SelectedUnitsAction(ObjectRotationOffset);
-                    Map.Update();
+                    var objectRotationOffset = new clsObjectRotationOffset
+                        {
+                            Map = map,
+                            Offset = 90
+                        };
+                    map.SelectedUnitsAction(objectRotationOffset);
+                    map.Update();
                     Program.frmMainInstance.SelectedObject_Changed();
-                    Map.UndoStepCreate("Object Rotated");
+                    map.UndoStepCreate("Object Rotated");
                     DrawViewLater();
                 }
             }
@@ -717,123 +718,123 @@ namespace SharpFlame.Controls
 
         private void OpenGL_MouseUp(object sender, MouseEventArgs e)
         {
-            var Map = MainMap;
+            var map = MainMap;
 
-            if ( Map == null )
+            if ( map == null )
             {
                 return;
             }
 
-            var MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
+            var mouseOverTerrain = map.ViewInfo.GetMouseOverTerrain();
 
-            Map.SuppressMinimap = false;
+            map.SuppressMinimap = false;
 
             if ( e.Button == MouseButtons.Left )
             {
-                if ( Map.ViewInfo.GetMouseLeftDownOverMinimap() != null )
+                if ( map.ViewInfo.GetMouseLeftDownOverMinimap() != null )
                 {
                 }
                 else
                 {
                     if ( modTools.Tool == modTools.Tools.TerrainBrush )
                     {
-                        Map.UndoStepCreate("Ground Painted");
+                        map.UndoStepCreate("Ground Painted");
                     }
                     else if ( modTools.Tool == modTools.Tools.CliffTriangle )
                     {
-                        Map.UndoStepCreate("Cliff Triangles");
+                        map.UndoStepCreate("Cliff Triangles");
                     }
                     else if ( modTools.Tool == modTools.Tools.CliffBrush )
                     {
-                        Map.UndoStepCreate("Cliff Brush");
+                        map.UndoStepCreate("Cliff Brush");
                     }
                     else if ( modTools.Tool == modTools.Tools.CliffRemove )
                     {
-                        Map.UndoStepCreate("Cliff Remove Brush");
+                        map.UndoStepCreate("Cliff Remove Brush");
                     }
                     else if ( modTools.Tool == modTools.Tools.HeightChangeBrush )
                     {
-                        Map.UndoStepCreate("Height Change");
+                        map.UndoStepCreate("Height Change");
                     }
                     else if ( modTools.Tool == modTools.Tools.HeightSetBrush )
                     {
-                        Map.UndoStepCreate("Height Set");
+                        map.UndoStepCreate("Height Set");
                     }
                     else if ( modTools.Tool == modTools.Tools.HeightSmoothBrush )
                     {
-                        Map.UndoStepCreate("Height Smooth");
+                        map.UndoStepCreate("Height Smooth");
                     }
                     else if ( modTools.Tool == modTools.Tools.TextureBrush )
                     {
-                        Map.UndoStepCreate("Texture");
+                        map.UndoStepCreate("Texture");
                     }
                     else if ( modTools.Tool == modTools.Tools.RoadRemove )
                     {
-                        Map.UndoStepCreate("Road Remove");
+                        map.UndoStepCreate("Road Remove");
                     }
                     else if ( modTools.Tool == modTools.Tools.ObjectSelect )
                     {
-                        if ( Map.Unit_Selected_Area_VertexA != null )
+                        if ( map.Unit_Selected_Area_VertexA != null )
                         {
-                            if ( MouseOverTerrain != null )
+                            if ( mouseOverTerrain != null )
                             {
-                                SelectUnits(Map.Unit_Selected_Area_VertexA, MouseOverTerrain.Vertex.Normal);
+                                SelectUnits(map.Unit_Selected_Area_VertexA, mouseOverTerrain.Vertex.Normal);
                             }
-                            Map.Unit_Selected_Area_VertexA = null;
+                            map.Unit_Selected_Area_VertexA = null;
                         }
                     }
                 }
-                Map.ViewInfo.MouseLeftDown = null;
+                map.ViewInfo.MouseLeftDown = null;
             }
             else if ( e.Button == MouseButtons.Right )
             {
-                if ( Map.ViewInfo.GetMouseRightDownOverMinimap() != null )
+                if ( map.ViewInfo.GetMouseRightDownOverMinimap() != null )
                 {
                 }
                 else
                 {
                     if ( modTools.Tool == modTools.Tools.HeightChangeBrush )
                     {
-                        Map.UndoStepCreate("Height Change");
+                        map.UndoStepCreate("Height Change");
                     }
                     else if ( modTools.Tool == modTools.Tools.HeightSetBrush )
                     {
-                        Map.UndoStepCreate("Height Set");
+                        map.UndoStepCreate("Height Set");
                     }
                 }
-                Map.ViewInfo.MouseRightDown = null;
+                map.ViewInfo.MouseRightDown = null;
             }
         }
 
-        private void SelectUnits(XYInt VertexA, XYInt VertexB)
+        private void SelectUnits(XYInt vertexA, XYInt vertexB)
         {
-            var Map = MainMap;
-            var MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
-            var SectorNum = new XYInt();
-            var Unit = default(clsUnit);
-            var SectorStart = new XYInt();
-            var SectorFinish = new XYInt();
-            var StartPos = new XYInt();
-            var FinishPos = new XYInt();
-            var StartVertex = new XYInt();
-            var FinishVertex = new XYInt();
+            var map = MainMap;
+            var mouseOverTerrain = map.ViewInfo.GetMouseOverTerrain();
+            var sectorNum = new XYInt();
+            clsUnit unit;
+            var sectorStart = new XYInt();
+            var sectorFinish = new XYInt();
+            var startPos = new XYInt();
+            var finishPos = new XYInt();
+            var startVertex = new XYInt();
+            var finishVertex = new XYInt();
 
-            if ( Math.Abs(VertexA.X - VertexB.X) <= 1 &&
-                 Math.Abs(VertexA.Y - VertexB.Y) <= 1 &&
-                 MouseOverTerrain != null )
+            if ( Math.Abs(vertexA.X - vertexB.X) <= 1 &&
+                 Math.Abs(vertexA.Y - vertexB.Y) <= 1 &&
+                 mouseOverTerrain != null )
             {
-                if ( MouseOverTerrain.Units.Count > 0 )
+                if ( mouseOverTerrain.Units.Count > 0 )
                 {
-                    if ( MouseOverTerrain.Units.Count == 1 )
+                    if ( mouseOverTerrain.Units.Count == 1 )
                     {
-                        Unit = MouseOverTerrain.Units[0];
-                        if ( Unit.MapSelectedUnitLink.IsConnected )
+                        unit = mouseOverTerrain.Units[0];
+                        if ( unit.MapSelectedUnitLink.IsConnected )
                         {
-                            Unit.MapDeselect();
+                            unit.MapDeselect();
                         }
                         else
                         {
-                            Unit.MapSelect();
+                            unit.MapSelect();
                         }
                     }
                     else
@@ -844,30 +845,28 @@ namespace SharpFlame.Controls
             }
             else
             {
-                MathUtil.ReorderXY(VertexA, VertexB, ref StartVertex, ref FinishVertex);
-                StartPos.X = StartVertex.X * Constants.TerrainGridSpacing;
-                StartPos.Y = StartVertex.Y * Constants.TerrainGridSpacing;
-                FinishPos.X = FinishVertex.X * Constants.TerrainGridSpacing;
-                FinishPos.Y = FinishVertex.Y * Constants.TerrainGridSpacing;
-                SectorStart.X = Math.Min(StartVertex.X / Constants.SectorTileSize, Map.SectorCount.X - 1);
-                SectorStart.Y = Math.Min(StartVertex.Y / Constants.SectorTileSize, Map.SectorCount.Y - 1);
-                SectorFinish.X = Math.Min(FinishVertex.X / Constants.SectorTileSize, Map.SectorCount.X - 1);
-                SectorFinish.Y = Math.Min(FinishVertex.Y / Constants.SectorTileSize, Map.SectorCount.Y - 1);
-                for ( SectorNum.Y = SectorStart.Y; SectorNum.Y <= SectorFinish.Y; SectorNum.Y++ )
+                MathUtil.ReorderXY(vertexA, vertexB, ref startVertex, ref finishVertex);
+                startPos.X = startVertex.X * Constants.TerrainGridSpacing;
+                startPos.Y = startVertex.Y * Constants.TerrainGridSpacing;
+                finishPos.X = finishVertex.X * Constants.TerrainGridSpacing;
+                finishPos.Y = finishVertex.Y * Constants.TerrainGridSpacing;
+                sectorStart.X = Math.Min(startVertex.X / Constants.SectorTileSize, map.SectorCount.X - 1);
+                sectorStart.Y = Math.Min(startVertex.Y / Constants.SectorTileSize, map.SectorCount.Y - 1);
+                sectorFinish.X = Math.Min(finishVertex.X / Constants.SectorTileSize, map.SectorCount.X - 1);
+                sectorFinish.Y = Math.Min(finishVertex.Y / Constants.SectorTileSize, map.SectorCount.Y - 1);
+                for ( sectorNum.Y = sectorStart.Y; sectorNum.Y <= sectorFinish.Y; sectorNum.Y++ )
                 {
-                    for ( SectorNum.X = SectorStart.X; SectorNum.X <= SectorFinish.X; SectorNum.X++ )
+                    for ( sectorNum.X = sectorStart.X; sectorNum.X <= sectorFinish.X; sectorNum.X++ )
                     {
-                        var Connection = default(clsUnitSectorConnection);
-                        foreach ( var tempLoopVar_Connection in Map.Sectors[SectorNum.X, SectorNum.Y].Units )
+                        foreach ( var connection in map.Sectors[sectorNum.X, sectorNum.Y].Units )
                         {
-                            Connection = tempLoopVar_Connection;
-                            Unit = Connection.Unit;
-                            if ( Unit.Pos.Horizontal.X >= StartPos.X & Unit.Pos.Horizontal.Y >= StartPos.Y &
-                                 Unit.Pos.Horizontal.X <= FinishPos.X & Unit.Pos.Horizontal.Y <= FinishPos.Y )
+                            unit = connection.Unit;
+                            if ( unit.Pos.Horizontal.X >= startPos.X & unit.Pos.Horizontal.Y >= startPos.Y &
+                                 unit.Pos.Horizontal.X <= finishPos.X & unit.Pos.Horizontal.Y <= finishPos.Y )
                             {
-                                if ( !Unit.MapSelectedUnitLink.IsConnected )
+                                if ( !unit.MapSelectedUnitLink.IsConnected )
                                 {
-                                    Unit.MapSelect();
+                                    unit.MapSelect();
                                 }
                             }
                         }
@@ -901,7 +900,7 @@ namespace SharpFlame.Controls
 
         public void OpenGL_Resize(Object eventSender, EventArgs eventArgs)
         {
-            var Map = MainMap;
+            var map = MainMap;
 
             GLSize.X = OpenGLControl.Width;
             GLSize.Y = OpenGLControl.Height;
@@ -910,9 +909,9 @@ namespace SharpFlame.Controls
             //    GLSize_XPerY = (float)(GLSize.X / GLSize.Y);
             //}
             Viewport_Resize();
-            if ( Map != null )
+            if ( map != null )
             {
-                Map.ViewInfo.FovCalc();
+                map.ViewInfo.FovCalc();
             }
             DrawViewLater();
         }
@@ -927,29 +926,29 @@ namespace SharpFlame.Controls
 
         public void OpenGL_MouseWheel(object sender, MouseEventArgs e)
         {
-            var Map = MainMap;
+            var map = MainMap;
 
-            if ( Map == null )
+            if ( map == null )
             {
                 return;
             }
 
-            var Move = new XYZInt(0, 0, 0);
-            var XYZ_dbl = default(XYZDouble);
-            var A = 0;
+            var move = new XYZInt(0, 0, 0);
+            var xyzDbl = default(XYZDouble);
+            var a = 0;
 
-            for ( A = 0; A <= (int)(Math.Abs(e.Delta / 120.0D)); A++ )
+            for ( a = 0; a <= (int)(Math.Abs(e.Delta / 120.0D)); a++ )
             {
-                Matrix3DMath.VectorForwardsRotationByMatrix(Map.ViewInfo.ViewAngleMatrix,
-                    Convert.ToDouble(Math.Sign(e.Delta) * Math.Max(Map.ViewInfo.ViewPos.Y, 512.0D) / 24.0D), ref XYZ_dbl);
-                Move.SetDbl(XYZ_dbl);
-                Map.ViewInfo.ViewPosChange(Move);
+                Matrix3DMath.VectorForwardsRotationByMatrix(map.ViewInfo.ViewAngleMatrix,
+                    Convert.ToDouble(Math.Sign(e.Delta) * Math.Max(map.ViewInfo.ViewPos.Y, 512.0D) / 24.0D), ref xyzDbl);
+                move.SetDbl(xyzDbl);
+                map.ViewInfo.ViewPosChange(move);
             }
         }
 
-        public GLFont CreateGLFont(Font BaseFont)
+        public GLFont CreateGLFont(Font baseFont)
         {
-            return new GLFont(new Font(BaseFont.FontFamily, 24.0F, BaseFont.Style, GraphicsUnit.Pixel));
+            return new GLFont(new Font(baseFont.FontFamily, 24.0F, baseFont.Style, GraphicsUnit.Pixel));
         }
 
         public void RemoveUndoMessage(object sender, EventArgs e)
@@ -958,9 +957,9 @@ namespace SharpFlame.Controls
             lblUndo.Text = "";
         }
 
-        public void DisplayUndoMessage(string Text)
+        public void DisplayUndoMessage(string text)
         {
-            lblUndo.Text = Text;
+            lblUndo.Text = text;
             UndoMessageTimer.Enabled = false;
             UndoMessageTimer.Enabled = true;
         }
@@ -988,21 +987,20 @@ namespace SharpFlame.Controls
                 return;
             }
 
-            var A = 0;
-            var Unit = default(clsUnit);
+            var a = 0;
 
-            ListSelect.Close();
-            ListSelect.Items.Clear();
-            ListSelectItems = new ToolStripItem[MouseOverTerrain.Units.Count];
-            for ( A = 0; A <= MouseOverTerrain.Units.Count - 1; A++ )
+            listSelect.Close();
+            listSelect.Items.Clear();
+            listSelectItems = new ToolStripItem[MouseOverTerrain.Units.Count];
+            for ( a = 0; a <= MouseOverTerrain.Units.Count - 1; a++ )
             {
-                Unit = MouseOverTerrain.Units[A];
-                ListSelectItems[A] = new ToolStripButton(Unit.TypeBase.GetDisplayTextCode());
-                ListSelectItems[A].Tag = Unit;
-                ListSelect.Items.Add(ListSelectItems[A]);
+                var unit = MouseOverTerrain.Units[a];
+                listSelectItems[a] = new ToolStripButton(unit.TypeBase.GetDisplayTextCode());
+                listSelectItems[a].Tag = unit;
+                listSelect.Items.Add(listSelectItems[a]);
             }
-            ListSelectIsPicker = isPicker;
-            ListSelect.Show(this, new Point(Map.ViewInfo.MouseOver.ScreenPos.X, Map.ViewInfo.MouseOver.ScreenPos.Y));
+            listSelectIsPicker = isPicker;
+            listSelect.Show(this, new Point(Map.ViewInfo.MouseOver.ScreenPos.X, Map.ViewInfo.MouseOver.ScreenPos.Y));
         }
 
         public void tabMaps_SelectedIndexChanged(Object sender, EventArgs e)
@@ -1014,52 +1012,52 @@ namespace SharpFlame.Controls
 
             if ( tabMaps.SelectedTab == null )
             {
-                _Owner.SetMainMap(null);
+                owner.SetMainMap(null);
                 return;
             }
 
-            var Map = (clsMap)tabMaps.SelectedTab.Tag;
+            var map = (clsMap)tabMaps.SelectedTab.Tag;
 
-            _Owner.SetMainMap(Map);
+            owner.SetMainMap(map);
         }
 
         public void btnClose_Click(Object sender, EventArgs e)
         {
-            var Map = MainMap;
+            var map = MainMap;
 
-            if ( Map == null )
+            if ( map == null )
             {
                 return;
             }
-            if ( !Map.frmMainLink.IsConnected )
+            if ( !map.frmMainLink.IsConnected )
             {
                 MessageBox.Show("Error: Map should be closed already.");
                 return;
             }
 
-            if ( !Map.ClosePrompt() )
+            if ( !map.ClosePrompt() )
             {
                 return;
             }
 
-            Map.Deallocate();
+            map.Deallocate();
         }
 
         public void UpdateTabs()
         {
-            var Map = default(clsMap);
+            clsMap map;
 
             tabMaps.Enabled = false;
             tabMaps.TabPages.Clear();
-            foreach ( var tempLoopVar_Map in _Owner.LoadedMaps )
+            foreach ( var tempMap in owner.LoadedMaps )
             {
-                Map = tempLoopVar_Map;
-                tabMaps.TabPages.Add(Map.MapView_TabPage);
+                map = tempMap;
+                tabMaps.TabPages.Add(map.MapView_TabPage);
             }
-            Map = MainMap;
-            if ( Map != null )
+            map = MainMap;
+            if ( map != null )
             {
-                tabMaps.SelectedIndex = Map.frmMainLink.ArrayPosition;
+                tabMaps.SelectedIndex = map.frmMainLink.ArrayPosition;
             }
             else
             {

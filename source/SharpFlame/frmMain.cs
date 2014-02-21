@@ -522,7 +522,7 @@ namespace SharpFlame
 
             MainMapAfterChanged();
 
-            MapViewControl.DrawView_SetEnabled(true);
+            MapViewControl.DrawViewSetEnabled(true);
             TextureViewControl.DrawView_SetEnabled(true);
 
             WindowState = FormWindowState.Maximized;

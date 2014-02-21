@@ -50,9 +50,9 @@ namespace SharpFlame.Mapping.Tools
             }
         }
 
-        public void SetItem(clsUnit Item)
+        public void SetItem(clsUnit item)
         {
-            Unit = Item;
+            Unit = item;
         }
 
         protected virtual void ActionCondition()

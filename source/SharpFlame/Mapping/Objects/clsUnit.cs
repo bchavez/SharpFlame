@@ -102,15 +102,15 @@ namespace SharpFlame.Mapping.Objects
         {
             var rotation16 = 0;
 
-            rotation16 = (int)(Rotation * Constants.INIRotationMax / 360.0D);
-            if ( rotation16 >= Constants.INIRotationMax )
+            rotation16 = (int)(Rotation * Constants.IniRotationMax / 360.0D);
+            if ( rotation16 >= Constants.IniRotationMax )
             {
-                rotation16 -= Constants.INIRotationMax;
+                rotation16 -= Constants.IniRotationMax;
             }
             else if ( rotation16 < 0 )
             {
                 Debugger.Break();
-                rotation16 += Constants.INIRotationMax;
+                rotation16 += Constants.IniRotationMax;
             }
 
             return string.Format("{0}, 0, 0", rotation16);

@@ -16,9 +16,9 @@ namespace SharpFlame.Mapping.Tools
             Unit.MapSelect();
         }
 
-        public void SetItem(clsUnit Item)
+        public void SetItem(clsUnit item)
         {
-            Unit = Item;
+            Unit = item;
         }
     }
 }

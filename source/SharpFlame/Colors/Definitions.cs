@@ -45,7 +45,7 @@ namespace SharpFlame.Colors
             this.Blue = blue;
         }
 
-        public virtual string GetINIOutput()
+        public virtual string GetIniOutput()
         {
             return Red.ToStringInvariant() + ", " + Green.ToStringInvariant() + ", " + Blue.ToStringInvariant();
         }
@@ -57,7 +57,7 @@ namespace SharpFlame.Colors
                 return false;
             }
 
-            sRGB_sng colour = new sRGB_sng();
+            var colour = new sRGB_sng();
 
             if( !IOUtil.InvariantParse( splitText.Parts[0], ref colour.Red ) )
             {
@@ -96,9 +96,9 @@ namespace SharpFlame.Colors
             Alpha = copyItem.Alpha;
         }
 
-        public override string GetINIOutput()
+        public override string GetIniOutput()
         {
-            return base.GetINIOutput() + ", " + Alpha.ToStringInvariant();
+            return base.GetIniOutput() + ", " + Alpha.ToStringInvariant();
         }
 
         public override bool ReadINIText( SplitCommaText splitText )

@@ -9,14 +9,14 @@ namespace SharpFlame.Controls
 {
     public partial class BrushControl
     {
-        private readonly clsBrush Brush;
+        private readonly clsBrush brush;
         private bool nudRadiusIsBusy;
 
-        public BrushControl(clsBrush NewBrush)
+        public BrushControl(clsBrush newBrush)
         {
             InitializeComponent();
 
-            Brush = NewBrush;
+            brush = newBrush;
 
             UpdateControlValues();
 
@@ -29,13 +29,13 @@ namespace SharpFlame.Controls
             nudRadius.Enabled = false;
             tabShape.Enabled = false;
 
-            if ( Brush == null )
+            if ( brush == null )
             {
                 return;
             }
 
-            nudRadius.Value = (decimal)(MathUtil.ClampDbl(Brush.Radius, (double)nudRadius.Minimum, (double)nudRadius.Maximum));
-            switch ( Brush.Shape )
+            nudRadius.Value = (decimal)(MathUtil.ClampDbl(brush.Radius, (double)nudRadius.Minimum, (double)nudRadius.Maximum));
+            switch ( brush.Shape )
             {
                 case clsBrush.enumShape.Circle:
                     tabShape.SelectedIndex = 0;
@@ -57,19 +57,19 @@ namespace SharpFlame.Controls
 
             nudRadiusIsBusy = true;
 
-            double NewRadius = 0;
-            var Converted = false;
+            double newRadius = 0;
+            var converted = false;
             try
             {
-                NewRadius = (double)nudRadius.Value;
-                Converted = true;
+                newRadius = (double)nudRadius.Value;
+                converted = true;
             }
             catch
             {
             }
-            if ( Converted )
+            if ( converted )
             {
-                Brush.Radius = NewRadius;
+                brush.Radius = newRadius;
             }
 
             nudRadiusIsBusy = false;
@@ -85,10 +85,10 @@ namespace SharpFlame.Controls
             switch ( tabShape.SelectedIndex )
             {
                 case 0:
-                    Brush.Shape = clsBrush.enumShape.Circle;
+                    brush.Shape = clsBrush.enumShape.Circle;
                     break;
                 case 1:
-                    Brush.Shape = clsBrush.enumShape.Square;
+                    brush.Shape = clsBrush.enumShape.Square;
                     break;
             }
         }
