@@ -17,8 +17,8 @@ internal static class Constants
     public const int MapMaxSize = 512;
     public const int MinimapMaxSize = 512;
 
-    public const int INIRotationMax = 65536;
-    public const int TileTypeNum_Water = 7;
-    public const int TileTypeNum_Cliff = 8;
+    public const int IniRotationMax = 65536;
+    public const int TileTypeNumWater = 7;
+    public const int TileTypeNumCliff = 8;
     public const int TerrainGridSpacing = 128;
 }

@@ -25,108 +25,103 @@ namespace SharpFlame.Mapping
 
         public void GLDraw()
         {
-            var XYZ_dbl = default(XYZDouble);
-            var X = 0;
-            var Y = 0;
-            var X2 = 0;
-            var Y2 = 0;
-            var A = 0;
-            var B = 0;
-            var C = 0;
+            var xyzDbl = default(XYZDouble);
+            var x2 = 0;
+            var y2 = 0;
+            var a = 0;
+            var b = 0;
             var D = 0;
-            var ColourA = new sRGBA_sng();
-            var ColourB = new sRGBA_sng();
-            var ShowMinimapViewPosBox = default(bool);
-            var ViewCorner0 = default(XYDouble);
-            var ViewCorner1 = default(XYDouble);
-            var ViewCorner2 = default(XYDouble);
-            var ViewCorner3 = default(XYDouble);
+            sRGBA_sng colourA;
+            sRGBA_sng colourB;
+            bool showMinimapViewPosBox;
+            var viewCorner0 = default(XYDouble);
+            var viewCorner1 = default(XYDouble);
+            var viewCorner2 = default(XYDouble);
+            var viewCorner3 = default(XYDouble);
             double dblTemp = 0;
-            var Vertex0 = default(XYZDouble);
-            var Vertex1 = default(XYZDouble);
-            var Vertex2 = default(XYZDouble);
-            var Vertex3 = default(XYZDouble);
-            var ScreenPos = new XYInt();
-            var XYZ_dbl2 = default(XYZDouble);
-            var WorldPos = new WorldPos();
-            var PosA = default(XYDouble);
-            var PosB = default(XYDouble);
-            var PosC = default(XYDouble);
-            var PosD = default(XYDouble);
-            var MinimapSizeXY = new XYInt();
-            var Unit = default(clsUnit);
-            var StartXY = new XYInt();
-            var FinishXY = new XYInt();
-            var DrawIt = default(bool);
-            var DrawCentreSector = new clsBrush.sPosNum();
-            var SelectionLabel = new clsTextLabel();
-            var light_position = new float[4];
+            var vertex0 = default(XYZDouble);
+            var vertex1 = default(XYZDouble);
+            var vertex2 = default(XYZDouble);
+            var vertex3 = default(XYZDouble);
+            var screenPos = new XYInt();
+            var xyzDbl2 = default(XYZDouble);
+            var posA = default(XYDouble);
+            var posB = default(XYDouble);
+            var posC = default(XYDouble);
+            var posD = default(XYDouble);
+            var minimapSizeXy = new XYInt();
+            clsUnit unit;
+            var startXy = new XYInt();
+            var finishXy = new XYInt();
+            bool drawIt;
+            var drawCentreSector = new clsBrush.sPosNum();
+            var selectionLabel = new clsTextLabel();
+            var lightPosition = new float[4];
             var matrixB = new Matrix3DMath.Matrix3D();
-            var MapAction = default(clsAction);
-            float ZNearFar = 0;
-            var MapViewControl = ViewInfo.MapViewControl;
-            var GLSize = ViewInfo.MapViewControl.GLSize;
-            var DrawCentre = default(XYDouble);
-            double dblTemp2 = 0;
+            clsAction mapAction;
+            float zNearFar = 0;
+            var mapViewControl = ViewInfo.MapViewControl;
+            var glSize = ViewInfo.MapViewControl.GLSize;
+            var drawCentre = default(XYDouble);
 
             dblTemp = SettingsManager.Settings.MinimapSize;
-            ViewInfo.Tiles_Per_Minimap_Pixel = Math.Sqrt(Terrain.TileSize.X * Terrain.TileSize.X + Terrain.TileSize.Y * Terrain.TileSize.Y) /
+            ViewInfo.TilesPerMinimapPixel = Math.Sqrt(Terrain.TileSize.X * Terrain.TileSize.X + Terrain.TileSize.Y * Terrain.TileSize.Y) /
                                                (MathUtil.RootTwo * dblTemp);
-            if ( Minimap_Texture_Size > 0 & ViewInfo.Tiles_Per_Minimap_Pixel > 0.0D )
+            if ( Minimap_Texture_Size > 0 & ViewInfo.TilesPerMinimapPixel > 0.0D )
             {
-                MinimapSizeXY.X = (int)(Terrain.TileSize.X / ViewInfo.Tiles_Per_Minimap_Pixel);
-                MinimapSizeXY.Y = (int)(Terrain.TileSize.Y / ViewInfo.Tiles_Per_Minimap_Pixel);
+                minimapSizeXy.X = (int)(Terrain.TileSize.X / ViewInfo.TilesPerMinimapPixel);
+                minimapSizeXy.Y = (int)(Terrain.TileSize.Y / ViewInfo.TilesPerMinimapPixel);
             }
 
-            if ( !ViewInfo.ScreenXY_Get_ViewPlanePos(new XYInt((int)(GLSize.X / 2.0D), (int)(GLSize.Y / 2.0D)), dblTemp, ref DrawCentre) )
+            if ( !ViewInfo.ScreenXYGetViewPlanePos(new XYInt((int)(glSize.X / 2.0D), (int)(glSize.Y / 2.0D)), dblTemp, ref drawCentre) )
             {
-                Matrix3DMath.VectorForwardsRotationByMatrix(ViewInfo.ViewAngleMatrix, ref XYZ_dbl);
-                dblTemp2 = App.VisionRadius * 2.0D / Math.Sqrt(XYZ_dbl.X * XYZ_dbl.X + XYZ_dbl.Z * XYZ_dbl.Z);
-                DrawCentre.X = ViewInfo.ViewPos.X + XYZ_dbl.X * dblTemp2;
-                DrawCentre.Y = ViewInfo.ViewPos.Z + XYZ_dbl.Z * dblTemp2;
+                Matrix3DMath.VectorForwardsRotationByMatrix(ViewInfo.ViewAngleMatrix, ref xyzDbl);
+                var dblTemp2 = App.VisionRadius * 2.0D / Math.Sqrt(xyzDbl.X * xyzDbl.X + xyzDbl.Z * xyzDbl.Z);
+                drawCentre.X = ViewInfo.ViewPos.X + xyzDbl.X * dblTemp2;
+                drawCentre.Y = ViewInfo.ViewPos.Z + xyzDbl.Z * dblTemp2;
             }
-            DrawCentre.X = MathUtil.Clamp_dbl(DrawCentre.X, 0.0D, Terrain.TileSize.X * Constants.TerrainGridSpacing - 1.0D);
-            DrawCentre.Y = MathUtil.Clamp_dbl(Convert.ToDouble(- DrawCentre.Y), 0.0D, Terrain.TileSize.Y * Constants.TerrainGridSpacing - 1.0D);
-            DrawCentreSector.Normal = GetPosSectorNum(new XYInt((int)DrawCentre.X, (int)DrawCentre.Y));
-            DrawCentreSector.Alignment =
-                GetPosSectorNum(new XYInt((int)(DrawCentre.X - Constants.SectorTileSize * Constants.TerrainGridSpacing / 2.0D),
-                    (int)(DrawCentre.Y - Constants.SectorTileSize * Constants.TerrainGridSpacing / 2.0D)));
+            drawCentre.X = MathUtil.ClampDbl(drawCentre.X, 0.0D, Terrain.TileSize.X * Constants.TerrainGridSpacing - 1.0D);
+            drawCentre.Y = MathUtil.ClampDbl(Convert.ToDouble(- drawCentre.Y), 0.0D, Terrain.TileSize.Y * Constants.TerrainGridSpacing - 1.0D);
+            drawCentreSector.Normal = GetPosSectorNum(new XYInt((int)drawCentre.X, (int)drawCentre.Y));
+            drawCentreSector.Alignment =
+                GetPosSectorNum(new XYInt((int)(drawCentre.X - Constants.SectorTileSize * Constants.TerrainGridSpacing / 2.0D),
+                    (int)(drawCentre.Y - Constants.SectorTileSize * Constants.TerrainGridSpacing / 2.0D)));
 
-            var DrawObjects = new clsDrawSectorObjects();
-            DrawObjects.Map = this;
-            DrawObjects.UnitTextLabels = new clsTextLabels(64);
-            DrawObjects.Start();
+            var drawObjects = new clsDrawSectorObjects();
+            drawObjects.Map = this;
+            drawObjects.UnitTextLabels = new clsTextLabels(64);
+            drawObjects.Start();
 
-            XYZ_dbl.X = DrawCentre.X - ViewInfo.ViewPos.X;
-            XYZ_dbl.Y = 128 - ViewInfo.ViewPos.Y;
-            XYZ_dbl.Z = - DrawCentre.Y - ViewInfo.ViewPos.Z;
-            ZNearFar = (float)(XYZ_dbl.GetMagnitude());
+            xyzDbl.X = drawCentre.X - ViewInfo.ViewPos.X;
+            xyzDbl.Y = 128 - ViewInfo.ViewPos.Y;
+            xyzDbl.Z = - drawCentre.Y - ViewInfo.ViewPos.Z;
+            zNearFar = (float)(xyzDbl.GetMagnitude());
 
             GL.Enable(EnableCap.DepthTest);
             GL.MatrixMode(MatrixMode.Projection);
-            var temp_mat = Matrix4.CreatePerspectiveFieldOfView(ViewInfo.FieldOfViewY, MapViewControl.OpenGLControl.AspectRatio, ZNearFar / 128.0F, ZNearFar * 128.0F);
+            var temp_mat = Matrix4.CreatePerspectiveFieldOfView(ViewInfo.FieldOfViewY, mapViewControl.OpenGLControl.AspectRatio, zNearFar / 128.0F, zNearFar * 128.0F);
             GL.LoadMatrix(ref temp_mat);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
-            Matrix3DMath.MatrixRotationByMatrix(ViewInfo.ViewAngleMatrix_Inverted, App.SunAngleMatrix, matrixB);
-            Matrix3DMath.VectorForwardsRotationByMatrix(matrixB, ref XYZ_dbl);
-            light_position[0] = (float)XYZ_dbl.X;
-            light_position[1] = (float)XYZ_dbl.Y;
-            light_position[2] = Convert.ToSingle(- XYZ_dbl.Z);
-            light_position[3] = 0.0F;
-            GL.Light(LightName.Light0, LightParameter.Position, light_position);
-            GL.Light(LightName.Light1, LightParameter.Position, light_position);
+            Matrix3DMath.MatrixRotationByMatrix(ViewInfo.ViewAngleMatrixInverted, App.SunAngleMatrix, matrixB);
+            Matrix3DMath.VectorForwardsRotationByMatrix(matrixB, ref xyzDbl);
+            lightPosition[0] = (float)xyzDbl.X;
+            lightPosition[1] = (float)xyzDbl.Y;
+            lightPosition[2] = Convert.ToSingle(- xyzDbl.Z);
+            lightPosition[3] = 0.0F;
+            GL.Light(LightName.Light0, LightParameter.Position, lightPosition);
+            GL.Light(LightName.Light1, LightParameter.Position, lightPosition);
 
             GL.Disable(EnableCap.Light0);
             GL.Disable(EnableCap.Light1);
-            if ( App.Draw_Lighting != enumDrawLighting.Off )
+            if ( App.Draw_Lighting != DrawLighting.Off )
             {
-                if ( App.Draw_Lighting == enumDrawLighting.Half )
+                if ( App.Draw_Lighting == DrawLighting.Half )
                 {
                     GL.Enable(EnableCap.Light0);
                 }
-                else if ( App.Draw_Lighting == enumDrawLighting.Normal )
+                else if ( App.Draw_Lighting == DrawLighting.Normal )
                 {
                     GL.Enable(EnableCap.Light1);
                 }
@@ -138,16 +133,16 @@ namespace SharpFlame.Mapping
             }
 
             dblTemp = 127.5D * HeightMultiplier;
-            if ( ViewInfo.ScreenXY_Get_ViewPlanePos_ForwardDownOnly(0, 0, dblTemp, ref ViewCorner0)
-                 && ViewInfo.ScreenXY_Get_ViewPlanePos_ForwardDownOnly(GLSize.X, 0, dblTemp, ref ViewCorner1)
-                 && ViewInfo.ScreenXY_Get_ViewPlanePos_ForwardDownOnly(GLSize.X, GLSize.Y, dblTemp, ref ViewCorner2)
-                 && ViewInfo.ScreenXY_Get_ViewPlanePos_ForwardDownOnly(0, GLSize.Y, dblTemp, ref ViewCorner3) )
+            if ( ViewInfo.ScreenXYGetViewPlanePosForwardDownOnly(0, 0, dblTemp, ref viewCorner0)
+                 && ViewInfo.ScreenXYGetViewPlanePosForwardDownOnly(glSize.X, 0, dblTemp, ref viewCorner1)
+                 && ViewInfo.ScreenXYGetViewPlanePosForwardDownOnly(glSize.X, glSize.Y, dblTemp, ref viewCorner2)
+                 && ViewInfo.ScreenXYGetViewPlanePosForwardDownOnly(0, glSize.Y, dblTemp, ref viewCorner3) )
             {
-                ShowMinimapViewPosBox = true;
+                showMinimapViewPosBox = true;
             }
             else
             {
-                ShowMinimapViewPosBox = false;
+                showMinimapViewPosBox = false;
             }
 
             GL.Rotate((float)(ViewInfo.ViewAngleRPY.Roll / MathUtil.RadOf1Deg), 0.0F, 0.0F, -1.0F);
@@ -163,9 +158,9 @@ namespace SharpFlame.Mapping
             {
                 GL.Color3(1.0F, 1.0F, 1.0F);
                 GL.Enable(EnableCap.Texture2D);
-                MapAction = new clsDrawCallTerrain();
-                MapAction.Map = this;
-                App.VisionSectors.PerformActionMapSectors(MapAction, DrawCentreSector);
+                mapAction = new clsDrawCallTerrain();
+                mapAction.Map = this;
+                App.VisionSectors.PerformActionMapSectors(mapAction, drawCentreSector);
                 GL.Disable(EnableCap.Texture2D);
 
                 DebugGLError("Tile textures");
@@ -180,7 +175,7 @@ namespace SharpFlame.Mapping
                 GL.LineWidth(1.0F);
                 var DrawCallTerrainWireframe = new clsDrawCallTerrainWireframe();
                 DrawCallTerrainWireframe.Map = this;
-                App.VisionSectors.PerformActionMapSectors(DrawCallTerrainWireframe, DrawCentreSector);
+                App.VisionSectors.PerformActionMapSectors(DrawCallTerrainWireframe, drawCentreSector);
 
                 DebugGLError("Wireframe");
             }
@@ -193,9 +188,9 @@ namespace SharpFlame.Mapping
 
                 GL.Begin(BeginMode.Triangles);
                 GL.Color3(1.0F, 1.0F, 0.0F);
-                MapAction = new clsDrawTileOrientation();
-                MapAction.Map = this;
-                App.VisionSectors.PerformActionMapSectors(MapAction, DrawCentreSector);
+                mapAction = new clsDrawTileOrientation();
+                mapAction.Map = this;
+                App.VisionSectors.PerformActionMapSectors(mapAction, drawCentreSector);
                 GL.End();
 
                 GL.Enable(EnableCap.CullFace);
@@ -205,9 +200,9 @@ namespace SharpFlame.Mapping
 
             //draw painted texture terrain type markers
 
-            var RGB_sng = new sRGB_sng();
+            sRGB_sng rgbSng;
 
-            var MouseOverTerrain = ViewInfo.GetMouseOverTerrain();
+            var mouseOverTerrain = ViewInfo.GetMouseOverTerrain();
 
             if ( App.Draw_VertexTerrain )
             {
@@ -215,60 +210,62 @@ namespace SharpFlame.Mapping
                 var DrawVertexTerran = new clsDrawVertexTerrain();
                 DrawVertexTerran.Map = this;
                 DrawVertexTerran.ViewAngleMatrix = ViewInfo.ViewAngleMatrix;
-                App.VisionSectors.PerformActionMapSectors(DrawVertexTerran, DrawCentreSector);
+                App.VisionSectors.PerformActionMapSectors(DrawVertexTerran, drawCentreSector);
                 DebugGLError("Terrain type markers");
             }
 
-            SelectionLabel.Text = "";
+            selectionLabel.Text = "";
 
             if ( Selected_Area_VertexA != null )
             {
-                DrawIt = false;
+                drawIt = false;
                 if ( Selected_Area_VertexB != null )
                 {
                     //area is selected
-                    MathUtil.ReorderXY(Selected_Area_VertexA, Selected_Area_VertexB, ref StartXY, ref FinishXY);
-                    XYZ_dbl.X = Selected_Area_VertexB.X * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X;
-                    XYZ_dbl.Z = - Selected_Area_VertexB.Y * Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z;
-                    XYZ_dbl.Y = GetVertexAltitude(Selected_Area_VertexB) - ViewInfo.ViewPos.Y;
-                    DrawIt = true;
+                    MathUtil.ReorderXY(Selected_Area_VertexA, Selected_Area_VertexB, ref startXy, ref finishXy);
+                    xyzDbl.X = Selected_Area_VertexB.X * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X;
+                    xyzDbl.Z = - Selected_Area_VertexB.Y * Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z;
+                    xyzDbl.Y = GetVertexAltitude(Selected_Area_VertexB) - ViewInfo.ViewPos.Y;
+                    drawIt = true;
                 }
                 else if ( modTools.Tool == modTools.Tools.TerrainSelect )
                 {
-                    if ( MouseOverTerrain != null )
+                    if ( mouseOverTerrain != null )
                     {
                         //selection is changing under pointer
-                        MathUtil.ReorderXY(Selected_Area_VertexA, MouseOverTerrain.Vertex.Normal, ref StartXY, ref FinishXY);
-                        XYZ_dbl.X = MouseOverTerrain.Vertex.Normal.X * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X;
-                        XYZ_dbl.Z = - MouseOverTerrain.Vertex.Normal.Y * Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z;
-                        XYZ_dbl.Y = GetVertexAltitude(MouseOverTerrain.Vertex.Normal) - ViewInfo.ViewPos.Y;
-                        DrawIt = true;
+                        MathUtil.ReorderXY(Selected_Area_VertexA, mouseOverTerrain.Vertex.Normal, ref startXy, ref finishXy);
+                        xyzDbl.X = mouseOverTerrain.Vertex.Normal.X * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X;
+                        xyzDbl.Z = - mouseOverTerrain.Vertex.Normal.Y * Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z;
+                        xyzDbl.Y = GetVertexAltitude(mouseOverTerrain.Vertex.Normal) - ViewInfo.ViewPos.Y;
+                        drawIt = true;
                     }
                 }
-                if ( DrawIt )
+                if ( drawIt )
                 {
-                    Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrix_Inverted, XYZ_dbl, ref XYZ_dbl2);
-                    if ( ViewInfo.Pos_Get_Screen_XY(XYZ_dbl2, ref ScreenPos) )
+                    Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrixInverted, xyzDbl, ref xyzDbl2);
+                    if ( ViewInfo.PosGetScreenXY(xyzDbl2, ref screenPos) )
                     {
-                        if ( ScreenPos.X >= 0 & ScreenPos.X <= GLSize.X & ScreenPos.Y >= 0 & ScreenPos.Y <= GLSize.Y )
+                        if ( screenPos.X >= 0 & screenPos.X <= glSize.X & screenPos.Y >= 0 & screenPos.Y <= glSize.Y )
                         {
-                            SelectionLabel.Colour.Red = 1.0F;
-                            SelectionLabel.Colour.Green = 1.0F;
-                            SelectionLabel.Colour.Blue = 1.0F;
-                            SelectionLabel.Colour.Alpha = 1.0F;
-                            SelectionLabel.TextFont = App.UnitLabelFont;
-                            SelectionLabel.SizeY = SettingsManager.Settings.FontSize;
-                            SelectionLabel.Pos = ScreenPos;
-                            SelectionLabel.Text = FinishXY.X - StartXY.X + "x" + Convert.ToString(FinishXY.Y - StartXY.Y);
+                            selectionLabel.Colour.Red = 1.0F;
+                            selectionLabel.Colour.Green = 1.0F;
+                            selectionLabel.Colour.Blue = 1.0F;
+                            selectionLabel.Colour.Alpha = 1.0F;
+                            selectionLabel.TextFont = App.UnitLabelFont;
+                            selectionLabel.SizeY = SettingsManager.Settings.FontSize;
+                            selectionLabel.Pos = screenPos;
+                            selectionLabel.Text = finishXy.X - startXy.X + "x" + Convert.ToString(finishXy.Y - startXy.Y);
                         }
                     }
                     GL.LineWidth(3.0F);
-                    var DrawSelection = new clsDrawTileAreaOutline();
-                    DrawSelection.Map = this;
-                    DrawSelection.StartXY = StartXY;
-                    DrawSelection.FinishXY = FinishXY;
-                    DrawSelection.Colour = new sRGBA_sng(1.0F, 1.0F, 1.0F, 1.0F);
-                    DrawSelection.ActionPerform();
+                    var drawSelection = new clsDrawTileAreaOutline
+                        {
+                            Map = this, 
+                            StartXY = startXy,
+                            FinishXY = finishXy,
+                            Colour = new sRGBA_sng(1.0F, 1.0F, 1.0F, 1.0F)
+                        };
+                    drawSelection.ActionPerform();
                 }
 
                 DebugGLError("Terrain selection box");
@@ -276,218 +273,218 @@ namespace SharpFlame.Mapping
 
             if ( modTools.Tool == modTools.Tools.TerrainSelect )
             {
-                if ( MouseOverTerrain != null )
+                if ( mouseOverTerrain != null )
                 {
                     //draw mouseover vertex
                     GL.LineWidth(3.0F);
 
-                    Vertex0.X = MouseOverTerrain.Vertex.Normal.X * Constants.TerrainGridSpacing;
-                    Vertex0.Y = Convert.ToDouble(Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height * HeightMultiplier);
-                    Vertex0.Z = - MouseOverTerrain.Vertex.Normal.Y * Constants.TerrainGridSpacing;
+                    vertex0.X = mouseOverTerrain.Vertex.Normal.X * Constants.TerrainGridSpacing;
+                    vertex0.Y = Convert.ToDouble(Terrain.Vertices[mouseOverTerrain.Vertex.Normal.X, mouseOverTerrain.Vertex.Normal.Y].Height * HeightMultiplier);
+                    vertex0.Z = - mouseOverTerrain.Vertex.Normal.Y * Constants.TerrainGridSpacing;
                     GL.Begin(BeginMode.Lines);
                     GL.Color3(1.0F, 1.0F, 1.0F);
-                    GL.Vertex3(Vertex0.X - 8.0D, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
-                    GL.Vertex3(Vertex0.X + 8.0D, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
-                    GL.Vertex3(Vertex0.X, Vertex0.Y, - Vertex0.Z - 8.0D);
-                    GL.Vertex3(Vertex0.X, Vertex0.Y, - Vertex0.Z + 8.0D);
+                    GL.Vertex3(vertex0.X - 8.0D, vertex0.Y, Convert.ToDouble(- vertex0.Z));
+                    GL.Vertex3(vertex0.X + 8.0D, vertex0.Y, Convert.ToDouble(- vertex0.Z));
+                    GL.Vertex3(vertex0.X, vertex0.Y, - vertex0.Z - 8.0D);
+                    GL.Vertex3(vertex0.X, vertex0.Y, - vertex0.Z + 8.0D);
                     GL.End();
                 }
                 DebugGLError("Terrain selection vertex");
             }
 
-            var Gateway = default(clsGateway);
-
             if ( App.Draw_Gateways )
             {
                 GL.LineWidth(2.0F);
-                foreach ( var tempLoopVar_Gateway in Gateways )
+                foreach ( var gateway in Gateways )
                 {
-                    Gateway = tempLoopVar_Gateway;
-                    if ( Gateway.PosA.X == Gateway.PosB.X )
+                    var c = 0;
+                    if ( gateway.PosA.X == gateway.PosB.X )
                     {
-                        if ( Gateway.PosA.Y <= Gateway.PosB.Y )
+                        if ( gateway.PosA.Y <= gateway.PosB.Y )
                         {
-                            C = Gateway.PosA.Y;
-                            D = Gateway.PosB.Y;
+                            c = gateway.PosA.Y;
+                            D = gateway.PosB.Y;
                         }
                         else
                         {
-                            C = Gateway.PosB.Y;
-                            D = Gateway.PosA.Y;
+                            c = gateway.PosB.Y;
+                            D = gateway.PosA.Y;
                         }
-                        X2 = Gateway.PosA.X;
-                        for ( Y2 = C; Y2 <= D; Y2++ )
+                        x2 = gateway.PosA.X;
+                        for ( y2 = c; y2 <= D; y2++ )
                         {
-                            Vertex0.X = X2 * Constants.TerrainGridSpacing;
-                            Vertex0.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2].Height * HeightMultiplier);
-                            Vertex0.Z = - Y2 * Constants.TerrainGridSpacing;
-                            Vertex1.X = (X2 + 1) * Constants.TerrainGridSpacing;
-                            Vertex1.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2].Height * HeightMultiplier);
-                            Vertex1.Z = - Y2 * Constants.TerrainGridSpacing;
-                            Vertex2.X = X2 * Constants.TerrainGridSpacing;
-                            Vertex2.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2 + 1].Height * HeightMultiplier);
-                            Vertex2.Z = - (Y2 + 1) * Constants.TerrainGridSpacing;
-                            Vertex3.X = (X2 + 1) * Constants.TerrainGridSpacing;
-                            Vertex3.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2 + 1].Height * HeightMultiplier);
-                            Vertex3.Z = - (Y2 + 1) * Constants.TerrainGridSpacing;
+                            vertex0.X = x2 * Constants.TerrainGridSpacing;
+                            vertex0.Y = Convert.ToDouble(Terrain.Vertices[x2, y2].Height * HeightMultiplier);
+                            vertex0.Z = - y2 * Constants.TerrainGridSpacing;
+                            vertex1.X = (x2 + 1) * Constants.TerrainGridSpacing;
+                            vertex1.Y = Convert.ToDouble(Terrain.Vertices[x2 + 1, y2].Height * HeightMultiplier);
+                            vertex1.Z = - y2 * Constants.TerrainGridSpacing;
+                            vertex2.X = x2 * Constants.TerrainGridSpacing;
+                            vertex2.Y = Convert.ToDouble(Terrain.Vertices[x2, y2 + 1].Height * HeightMultiplier);
+                            vertex2.Z = - (y2 + 1) * Constants.TerrainGridSpacing;
+                            vertex3.X = (x2 + 1) * Constants.TerrainGridSpacing;
+                            vertex3.Y = Convert.ToDouble(Terrain.Vertices[x2 + 1, y2 + 1].Height * HeightMultiplier);
+                            vertex3.Z = - (y2 + 1) * Constants.TerrainGridSpacing;
                             GL.Begin(BeginMode.LineLoop);
                             GL.Color3(0.75F, 1.0F, 0.0F);
-                            GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
-                            GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
-                            GL.Vertex3(Vertex3.X, Vertex3.Y, Convert.ToDouble(- Vertex3.Z));
-                            GL.Vertex3(Vertex2.X, Vertex2.Y, Convert.ToDouble(- Vertex2.Z));
+                            GL.Vertex3(vertex0.X, vertex0.Y, Convert.ToDouble(- vertex0.Z));
+                            GL.Vertex3(vertex1.X, vertex1.Y, Convert.ToDouble(- vertex1.Z));
+                            GL.Vertex3(vertex3.X, vertex3.Y, Convert.ToDouble(- vertex3.Z));
+                            GL.Vertex3(vertex2.X, vertex2.Y, Convert.ToDouble(- vertex2.Z));
                             GL.End();
                         }
                     }
-                    else if ( Gateway.PosA.Y == Gateway.PosB.Y )
+                    else if ( gateway.PosA.Y == gateway.PosB.Y )
                     {
-                        if ( Gateway.PosA.X <= Gateway.PosB.X )
+                        if ( gateway.PosA.X <= gateway.PosB.X )
                         {
-                            C = Gateway.PosA.X;
-                            D = Gateway.PosB.X;
+                            c = gateway.PosA.X;
+                            D = gateway.PosB.X;
                         }
                         else
                         {
-                            C = Gateway.PosB.X;
-                            D = Gateway.PosA.X;
+                            c = gateway.PosB.X;
+                            D = gateway.PosA.X;
                         }
-                        Y2 = Gateway.PosA.Y;
-                        for ( X2 = C; X2 <= D; X2++ )
+                        y2 = gateway.PosA.Y;
+                        for ( x2 = c; x2 <= D; x2++ )
                         {
-                            Vertex0.X = X2 * Constants.TerrainGridSpacing;
-                            Vertex0.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2].Height * HeightMultiplier);
-                            Vertex0.Z = - Y2 * Constants.TerrainGridSpacing;
-                            Vertex1.X = (X2 + 1) * Constants.TerrainGridSpacing;
-                            Vertex1.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2].Height * HeightMultiplier);
-                            Vertex1.Z = - Y2 * Constants.TerrainGridSpacing;
-                            Vertex2.X = X2 * Constants.TerrainGridSpacing;
-                            Vertex2.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2 + 1].Height * HeightMultiplier);
-                            Vertex2.Z = - (Y2 + 1) * Constants.TerrainGridSpacing;
-                            Vertex3.X = (X2 + 1) * Constants.TerrainGridSpacing;
-                            Vertex3.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2 + 1].Height * HeightMultiplier);
-                            Vertex3.Z = - (Y2 + 1) * Constants.TerrainGridSpacing;
+                            vertex0.X = x2 * Constants.TerrainGridSpacing;
+                            vertex0.Y = Convert.ToDouble(Terrain.Vertices[x2, y2].Height * HeightMultiplier);
+                            vertex0.Z = - y2 * Constants.TerrainGridSpacing;
+                            vertex1.X = (x2 + 1) * Constants.TerrainGridSpacing;
+                            vertex1.Y = Convert.ToDouble(Terrain.Vertices[x2 + 1, y2].Height * HeightMultiplier);
+                            vertex1.Z = - y2 * Constants.TerrainGridSpacing;
+                            vertex2.X = x2 * Constants.TerrainGridSpacing;
+                            vertex2.Y = Convert.ToDouble(Terrain.Vertices[x2, y2 + 1].Height * HeightMultiplier);
+                            vertex2.Z = - (y2 + 1) * Constants.TerrainGridSpacing;
+                            vertex3.X = (x2 + 1) * Constants.TerrainGridSpacing;
+                            vertex3.Y = Convert.ToDouble(Terrain.Vertices[x2 + 1, y2 + 1].Height * HeightMultiplier);
+                            vertex3.Z = - (y2 + 1) * Constants.TerrainGridSpacing;
                             GL.Begin(BeginMode.LineLoop);
                             GL.Color3(0.75F, 1.0F, 0.0F);
-                            GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
-                            GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
-                            GL.Vertex3(Vertex3.X, Vertex3.Y, Convert.ToDouble(- Vertex3.Z));
-                            GL.Vertex3(Vertex2.X, Vertex2.Y, Convert.ToDouble(- Vertex2.Z));
+                            GL.Vertex3(vertex0.X, vertex0.Y, Convert.ToDouble(- vertex0.Z));
+                            GL.Vertex3(vertex1.X, vertex1.Y, Convert.ToDouble(- vertex1.Z));
+                            GL.Vertex3(vertex3.X, vertex3.Y, Convert.ToDouble(- vertex3.Z));
+                            GL.Vertex3(vertex2.X, vertex2.Y, Convert.ToDouble(- vertex2.Z));
                             GL.End();
                         }
                     }
                     else
                     {
                         //draw invalid gateways as red tile borders
-                        X2 = Gateway.PosA.X;
-                        Y2 = Gateway.PosA.Y;
+                        x2 = gateway.PosA.X;
+                        y2 = gateway.PosA.Y;
 
-                        Vertex0.X = X2 * Constants.TerrainGridSpacing;
-                        Vertex0.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2].Height * HeightMultiplier);
-                        Vertex0.Z = - Y2 * Constants.TerrainGridSpacing;
-                        Vertex1.X = (X2 + 1) * Constants.TerrainGridSpacing;
-                        Vertex1.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2].Height * HeightMultiplier);
-                        Vertex1.Z = - Y2 * Constants.TerrainGridSpacing;
-                        Vertex2.X = X2 * Constants.TerrainGridSpacing;
-                        Vertex2.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2 + 1].Height * HeightMultiplier);
-                        Vertex2.Z = - (Y2 + 1) * Constants.TerrainGridSpacing;
-                        Vertex3.X = (X2 + 1) * Constants.TerrainGridSpacing;
-                        Vertex3.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2 + 1].Height * HeightMultiplier);
-                        Vertex3.Z = - (Y2 + 1) * Constants.TerrainGridSpacing;
+                        vertex0.X = x2 * Constants.TerrainGridSpacing;
+                        vertex0.Y = Convert.ToDouble(Terrain.Vertices[x2, y2].Height * HeightMultiplier);
+                        vertex0.Z = - y2 * Constants.TerrainGridSpacing;
+                        vertex1.X = (x2 + 1) * Constants.TerrainGridSpacing;
+                        vertex1.Y = Convert.ToDouble(Terrain.Vertices[x2 + 1, y2].Height * HeightMultiplier);
+                        vertex1.Z = - y2 * Constants.TerrainGridSpacing;
+                        vertex2.X = x2 * Constants.TerrainGridSpacing;
+                        vertex2.Y = Convert.ToDouble(Terrain.Vertices[x2, y2 + 1].Height * HeightMultiplier);
+                        vertex2.Z = - (y2 + 1) * Constants.TerrainGridSpacing;
+                        vertex3.X = (x2 + 1) * Constants.TerrainGridSpacing;
+                        vertex3.Y = Convert.ToDouble(Terrain.Vertices[x2 + 1, y2 + 1].Height * HeightMultiplier);
+                        vertex3.Z = - (y2 + 1) * Constants.TerrainGridSpacing;
                         GL.Begin(BeginMode.LineLoop);
                         GL.Color3(1.0F, 0.0F, 0.0F);
-                        GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
-                        GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
-                        GL.Vertex3(Vertex3.X, Vertex3.Y, Convert.ToDouble(- Vertex3.Z));
-                        GL.Vertex3(Vertex2.X, Vertex2.Y, Convert.ToDouble(- Vertex2.Z));
+                        GL.Vertex3(vertex0.X, vertex0.Y, Convert.ToDouble(- vertex0.Z));
+                        GL.Vertex3(vertex1.X, vertex1.Y, Convert.ToDouble(- vertex1.Z));
+                        GL.Vertex3(vertex3.X, vertex3.Y, Convert.ToDouble(- vertex3.Z));
+                        GL.Vertex3(vertex2.X, vertex2.Y, Convert.ToDouble(- vertex2.Z));
                         GL.End();
 
-                        X2 = Gateway.PosB.X;
-                        Y2 = Gateway.PosB.Y;
+                        x2 = gateway.PosB.X;
+                        y2 = gateway.PosB.Y;
 
-                        Vertex0.X = X2 * Constants.TerrainGridSpacing;
-                        Vertex0.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2].Height * HeightMultiplier);
-                        Vertex0.Z = - Y2 * Constants.TerrainGridSpacing;
-                        Vertex1.X = (X2 + 1) * Constants.TerrainGridSpacing;
-                        Vertex1.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2].Height * HeightMultiplier);
-                        Vertex1.Z = - Y2 * Constants.TerrainGridSpacing;
-                        Vertex2.X = X2 * Constants.TerrainGridSpacing;
-                        Vertex2.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2 + 1].Height * HeightMultiplier);
-                        Vertex2.Z = - (Y2 + 1) * Constants.TerrainGridSpacing;
-                        Vertex3.X = (X2 + 1) * Constants.TerrainGridSpacing;
-                        Vertex3.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2 + 1].Height * HeightMultiplier);
-                        Vertex3.Z = - (Y2 + 1) * Constants.TerrainGridSpacing;
+                        vertex0.X = x2 * Constants.TerrainGridSpacing;
+                        vertex0.Y = Convert.ToDouble(Terrain.Vertices[x2, y2].Height * HeightMultiplier);
+                        vertex0.Z = - y2 * Constants.TerrainGridSpacing;
+                        vertex1.X = (x2 + 1) * Constants.TerrainGridSpacing;
+                        vertex1.Y = Convert.ToDouble(Terrain.Vertices[x2 + 1, y2].Height * HeightMultiplier);
+                        vertex1.Z = - y2 * Constants.TerrainGridSpacing;
+                        vertex2.X = x2 * Constants.TerrainGridSpacing;
+                        vertex2.Y = Convert.ToDouble(Terrain.Vertices[x2, y2 + 1].Height * HeightMultiplier);
+                        vertex2.Z = - (y2 + 1) * Constants.TerrainGridSpacing;
+                        vertex3.X = (x2 + 1) * Constants.TerrainGridSpacing;
+                        vertex3.Y = Convert.ToDouble(Terrain.Vertices[x2 + 1, y2 + 1].Height * HeightMultiplier);
+                        vertex3.Z = - (y2 + 1) * Constants.TerrainGridSpacing;
                         GL.Begin(BeginMode.LineLoop);
                         GL.Color3(1.0F, 0.0F, 0.0F);
-                        GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
-                        GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
-                        GL.Vertex3(Vertex3.X, Vertex3.Y, Convert.ToDouble(- Vertex3.Z));
-                        GL.Vertex3(Vertex2.X, Vertex2.Y, Convert.ToDouble(- Vertex2.Z));
+                        GL.Vertex3(vertex0.X, vertex0.Y, Convert.ToDouble(- vertex0.Z));
+                        GL.Vertex3(vertex1.X, vertex1.Y, Convert.ToDouble(- vertex1.Z));
+                        GL.Vertex3(vertex3.X, vertex3.Y, Convert.ToDouble(- vertex3.Z));
+                        GL.Vertex3(vertex2.X, vertex2.Y, Convert.ToDouble(- vertex2.Z));
                         GL.End();
                     }
                 }
                 DebugGLError("Gateways");
             }
 
-            if ( MouseOverTerrain != null )
+            if ( mouseOverTerrain != null )
             {
                 if ( modTools.Tool == modTools.Tools.ObjectSelect )
                 {
                     if ( Unit_Selected_Area_VertexA != null )
                     {
                         //selection is changing under pointer
-                        MathUtil.ReorderXY(Unit_Selected_Area_VertexA, MouseOverTerrain.Vertex.Normal, ref StartXY, ref FinishXY);
+                        MathUtil.ReorderXY(Unit_Selected_Area_VertexA, mouseOverTerrain.Vertex.Normal, ref startXy, ref finishXy);
                         GL.LineWidth(2.0F);
                         GL.Color3(0.0F, 1.0F, 1.0F);
-                        for ( X = StartXY.X; X <= FinishXY.X - 1; X++ )
+                        var x = 0;
+                        for ( x = startXy.X; x <= finishXy.X - 1; x++ )
                         {
-                            Vertex0.X = X * Constants.TerrainGridSpacing;
-                            Vertex0.Y = Convert.ToDouble(Terrain.Vertices[X, StartXY.Y].Height * HeightMultiplier);
-                            Vertex0.Z = - StartXY.Y * Constants.TerrainGridSpacing;
-                            Vertex1.X = (X + 1) * Constants.TerrainGridSpacing;
-                            Vertex1.Y = Convert.ToDouble(Terrain.Vertices[X + 1, StartXY.Y].Height * HeightMultiplier);
-                            Vertex1.Z = - StartXY.Y * Constants.TerrainGridSpacing;
+                            vertex0.X = x * Constants.TerrainGridSpacing;
+                            vertex0.Y = Convert.ToDouble(Terrain.Vertices[x, startXy.Y].Height * HeightMultiplier);
+                            vertex0.Z = - startXy.Y * Constants.TerrainGridSpacing;
+                            vertex1.X = (x + 1) * Constants.TerrainGridSpacing;
+                            vertex1.Y = Convert.ToDouble(Terrain.Vertices[x + 1, startXy.Y].Height * HeightMultiplier);
+                            vertex1.Z = - startXy.Y * Constants.TerrainGridSpacing;
                             GL.Begin(BeginMode.Lines);
-                            GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
-                            GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
+                            GL.Vertex3(vertex0.X, vertex0.Y, Convert.ToDouble(- vertex0.Z));
+                            GL.Vertex3(vertex1.X, vertex1.Y, Convert.ToDouble(- vertex1.Z));
                             GL.End();
                         }
-                        for ( X = StartXY.X; X <= FinishXY.X - 1; X++ )
+                        for ( x = startXy.X; x <= finishXy.X - 1; x++ )
                         {
-                            Vertex0.X = X * Constants.TerrainGridSpacing;
-                            Vertex0.Y = Convert.ToDouble(Terrain.Vertices[X, FinishXY.Y].Height * HeightMultiplier);
-                            Vertex0.Z = - FinishXY.Y * Constants.TerrainGridSpacing;
-                            Vertex1.X = (X + 1) * Constants.TerrainGridSpacing;
-                            Vertex1.Y = Convert.ToDouble(Terrain.Vertices[X + 1, FinishXY.Y].Height * HeightMultiplier);
-                            Vertex1.Z = - FinishXY.Y * Constants.TerrainGridSpacing;
+                            vertex0.X = x * Constants.TerrainGridSpacing;
+                            vertex0.Y = Convert.ToDouble(Terrain.Vertices[x, finishXy.Y].Height * HeightMultiplier);
+                            vertex0.Z = - finishXy.Y * Constants.TerrainGridSpacing;
+                            vertex1.X = (x + 1) * Constants.TerrainGridSpacing;
+                            vertex1.Y = Convert.ToDouble(Terrain.Vertices[x + 1, finishXy.Y].Height * HeightMultiplier);
+                            vertex1.Z = - finishXy.Y * Constants.TerrainGridSpacing;
                             GL.Begin(BeginMode.Lines);
-                            GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
-                            GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
+                            GL.Vertex3(vertex0.X, vertex0.Y, Convert.ToDouble(- vertex0.Z));
+                            GL.Vertex3(vertex1.X, vertex1.Y, Convert.ToDouble(- vertex1.Z));
                             GL.End();
                         }
-                        for ( Y = StartXY.Y; Y <= FinishXY.Y - 1; Y++ )
+                        var y = 0;
+                        for ( y = startXy.Y; y <= finishXy.Y - 1; y++ )
                         {
-                            Vertex0.X = StartXY.X * Constants.TerrainGridSpacing;
-                            Vertex0.Y = Convert.ToDouble(Terrain.Vertices[StartXY.X, Y].Height * HeightMultiplier);
-                            Vertex0.Z = - Y * Constants.TerrainGridSpacing;
-                            Vertex1.X = StartXY.X * Constants.TerrainGridSpacing;
-                            Vertex1.Y = Convert.ToDouble(Terrain.Vertices[StartXY.X, Y + 1].Height * HeightMultiplier);
-                            Vertex1.Z = - (Y + 1) * Constants.TerrainGridSpacing;
+                            vertex0.X = startXy.X * Constants.TerrainGridSpacing;
+                            vertex0.Y = Convert.ToDouble(Terrain.Vertices[startXy.X, y].Height * HeightMultiplier);
+                            vertex0.Z = - y * Constants.TerrainGridSpacing;
+                            vertex1.X = startXy.X * Constants.TerrainGridSpacing;
+                            vertex1.Y = Convert.ToDouble(Terrain.Vertices[startXy.X, y + 1].Height * HeightMultiplier);
+                            vertex1.Z = - (y + 1) * Constants.TerrainGridSpacing;
                             GL.Begin(BeginMode.Lines);
-                            GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
-                            GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
+                            GL.Vertex3(vertex0.X, vertex0.Y, Convert.ToDouble(- vertex0.Z));
+                            GL.Vertex3(vertex1.X, vertex1.Y, Convert.ToDouble(- vertex1.Z));
                             GL.End();
                         }
-                        for ( Y = StartXY.Y; Y <= FinishXY.Y - 1; Y++ )
+                        for ( y = startXy.Y; y <= finishXy.Y - 1; y++ )
                         {
-                            Vertex0.X = FinishXY.X * Constants.TerrainGridSpacing;
-                            Vertex0.Y = Convert.ToDouble(Terrain.Vertices[FinishXY.X, Y].Height * HeightMultiplier);
-                            Vertex0.Z = - Y * Constants.TerrainGridSpacing;
-                            Vertex1.X = FinishXY.X * Constants.TerrainGridSpacing;
-                            Vertex1.Y = Convert.ToDouble(Terrain.Vertices[FinishXY.X, Y + 1].Height * HeightMultiplier);
-                            Vertex1.Z = - (Y + 1) * Constants.TerrainGridSpacing;
+                            vertex0.X = finishXy.X * Constants.TerrainGridSpacing;
+                            vertex0.Y = Convert.ToDouble(Terrain.Vertices[finishXy.X, y].Height * HeightMultiplier);
+                            vertex0.Z = - y * Constants.TerrainGridSpacing;
+                            vertex1.X = finishXy.X * Constants.TerrainGridSpacing;
+                            vertex1.Y = Convert.ToDouble(Terrain.Vertices[finishXy.X, y + 1].Height * HeightMultiplier);
+                            vertex1.Z = - (y + 1) * Constants.TerrainGridSpacing;
                             GL.Begin(BeginMode.Lines);
-                            GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
-                            GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
+                            GL.Vertex3(vertex0.X, vertex0.Y, Convert.ToDouble(- vertex0.Z));
+                            GL.Vertex3(vertex1.X, vertex1.Y, Convert.ToDouble(- vertex1.Z));
                             GL.End();
                         }
 
@@ -498,10 +495,10 @@ namespace SharpFlame.Mapping
                         GL.LineWidth(2.0F);
                         GL.Color3(0.0F, 1.0F, 1.0F);
                         GL.Begin(BeginMode.Lines);
-                        GL.Vertex3(MouseOverTerrain.Pos.Horizontal.X - 16.0D, MouseOverTerrain.Pos.Altitude, MouseOverTerrain.Pos.Horizontal.Y - 16.0D);
-                        GL.Vertex3(MouseOverTerrain.Pos.Horizontal.X + 16.0D, MouseOverTerrain.Pos.Altitude, MouseOverTerrain.Pos.Horizontal.Y + 16.0D);
-                        GL.Vertex3(MouseOverTerrain.Pos.Horizontal.X + 16.0D, MouseOverTerrain.Pos.Altitude, MouseOverTerrain.Pos.Horizontal.Y - 16.0D);
-                        GL.Vertex3(MouseOverTerrain.Pos.Horizontal.X - 16.0D, MouseOverTerrain.Pos.Altitude, MouseOverTerrain.Pos.Horizontal.Y + 16.0D);
+                        GL.Vertex3(mouseOverTerrain.Pos.Horizontal.X - 16.0D, mouseOverTerrain.Pos.Altitude, mouseOverTerrain.Pos.Horizontal.Y - 16.0D);
+                        GL.Vertex3(mouseOverTerrain.Pos.Horizontal.X + 16.0D, mouseOverTerrain.Pos.Altitude, mouseOverTerrain.Pos.Horizontal.Y + 16.0D);
+                        GL.Vertex3(mouseOverTerrain.Pos.Horizontal.X + 16.0D, mouseOverTerrain.Pos.Altitude, mouseOverTerrain.Pos.Horizontal.Y - 16.0D);
+                        GL.Vertex3(mouseOverTerrain.Pos.Horizontal.X - 16.0D, mouseOverTerrain.Pos.Altitude, mouseOverTerrain.Pos.Horizontal.Y + 16.0D);
                         GL.End();
 
                         DebugGLError("Mouse over position");
@@ -512,29 +509,29 @@ namespace SharpFlame.Mapping
                 {
                     GL.LineWidth(2.0F);
 
-                    if ( MouseOverTerrain.Side_IsV )
+                    if ( mouseOverTerrain.Side_IsV )
                     {
-                        Vertex0.X = MouseOverTerrain.Side_Num.X * Constants.TerrainGridSpacing;
-                        Vertex0.Y = Convert.ToDouble(Terrain.Vertices[MouseOverTerrain.Side_Num.X, MouseOverTerrain.Side_Num.Y].Height * HeightMultiplier);
-                        Vertex0.Z = - MouseOverTerrain.Side_Num.Y * Constants.TerrainGridSpacing;
-                        Vertex1.X = MouseOverTerrain.Side_Num.X * Constants.TerrainGridSpacing;
-                        Vertex1.Y = Convert.ToDouble(Terrain.Vertices[MouseOverTerrain.Side_Num.X, MouseOverTerrain.Side_Num.Y + 1].Height * HeightMultiplier);
-                        Vertex1.Z = - (MouseOverTerrain.Side_Num.Y + 1) * Constants.TerrainGridSpacing;
+                        vertex0.X = mouseOverTerrain.Side_Num.X * Constants.TerrainGridSpacing;
+                        vertex0.Y = Convert.ToDouble(Terrain.Vertices[mouseOverTerrain.Side_Num.X, mouseOverTerrain.Side_Num.Y].Height * HeightMultiplier);
+                        vertex0.Z = - mouseOverTerrain.Side_Num.Y * Constants.TerrainGridSpacing;
+                        vertex1.X = mouseOverTerrain.Side_Num.X * Constants.TerrainGridSpacing;
+                        vertex1.Y = Convert.ToDouble(Terrain.Vertices[mouseOverTerrain.Side_Num.X, mouseOverTerrain.Side_Num.Y + 1].Height * HeightMultiplier);
+                        vertex1.Z = - (mouseOverTerrain.Side_Num.Y + 1) * Constants.TerrainGridSpacing;
                     }
                     else
                     {
-                        Vertex0.X = MouseOverTerrain.Side_Num.X * Constants.TerrainGridSpacing;
-                        Vertex0.Y = Convert.ToDouble(Terrain.Vertices[MouseOverTerrain.Side_Num.X, MouseOverTerrain.Side_Num.Y].Height * HeightMultiplier);
-                        Vertex0.Z = - MouseOverTerrain.Side_Num.Y * Constants.TerrainGridSpacing;
-                        Vertex1.X = (MouseOverTerrain.Side_Num.X + 1) * Constants.TerrainGridSpacing;
-                        Vertex1.Y = Convert.ToDouble(Terrain.Vertices[MouseOverTerrain.Side_Num.X + 1, MouseOverTerrain.Side_Num.Y].Height * HeightMultiplier);
-                        Vertex1.Z = - MouseOverTerrain.Side_Num.Y * Constants.TerrainGridSpacing;
+                        vertex0.X = mouseOverTerrain.Side_Num.X * Constants.TerrainGridSpacing;
+                        vertex0.Y = Convert.ToDouble(Terrain.Vertices[mouseOverTerrain.Side_Num.X, mouseOverTerrain.Side_Num.Y].Height * HeightMultiplier);
+                        vertex0.Z = - mouseOverTerrain.Side_Num.Y * Constants.TerrainGridSpacing;
+                        vertex1.X = (mouseOverTerrain.Side_Num.X + 1) * Constants.TerrainGridSpacing;
+                        vertex1.Y = Convert.ToDouble(Terrain.Vertices[mouseOverTerrain.Side_Num.X + 1, mouseOverTerrain.Side_Num.Y].Height * HeightMultiplier);
+                        vertex1.Z = - mouseOverTerrain.Side_Num.Y * Constants.TerrainGridSpacing;
                     }
 
                     GL.Begin(BeginMode.Lines);
                     GL.Color3(0.0F, 1.0F, 1.0F);
-                    GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
-                    GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
+                    GL.Vertex3(vertex0.X, vertex0.Y, Convert.ToDouble(- vertex0.Z));
+                    GL.Vertex3(vertex1.X, vertex1.Y, Convert.ToDouble(- vertex1.Z));
                     GL.End();
 
                     DebugGLError("Road place brush");
@@ -545,125 +542,125 @@ namespace SharpFlame.Mapping
 
                     if ( Selected_Tile_A != null )
                     {
-                        X2 = Selected_Tile_A.X;
-                        Y2 = Selected_Tile_A.Y;
+                        x2 = Selected_Tile_A.X;
+                        y2 = Selected_Tile_A.Y;
 
-                        Vertex0.X = X2 * Constants.TerrainGridSpacing;
-                        Vertex0.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2].Height * HeightMultiplier);
-                        Vertex0.Z = - Y2 * Constants.TerrainGridSpacing;
-                        Vertex1.X = (X2 + 1) * Constants.TerrainGridSpacing;
-                        Vertex1.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2].Height * HeightMultiplier);
-                        Vertex1.Z = - Y2 * Constants.TerrainGridSpacing;
-                        Vertex2.X = X2 * Constants.TerrainGridSpacing;
-                        Vertex2.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2 + 1].Height * HeightMultiplier);
-                        Vertex2.Z = - (Y2 + 1) * Constants.TerrainGridSpacing;
-                        Vertex3.X = (X2 + 1) * Constants.TerrainGridSpacing;
-                        Vertex3.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2 + 1].Height * HeightMultiplier);
-                        Vertex3.Z = - (Y2 + 1) * Constants.TerrainGridSpacing;
+                        vertex0.X = x2 * Constants.TerrainGridSpacing;
+                        vertex0.Y = Convert.ToDouble(Terrain.Vertices[x2, y2].Height * HeightMultiplier);
+                        vertex0.Z = - y2 * Constants.TerrainGridSpacing;
+                        vertex1.X = (x2 + 1) * Constants.TerrainGridSpacing;
+                        vertex1.Y = Convert.ToDouble(Terrain.Vertices[x2 + 1, y2].Height * HeightMultiplier);
+                        vertex1.Z = - y2 * Constants.TerrainGridSpacing;
+                        vertex2.X = x2 * Constants.TerrainGridSpacing;
+                        vertex2.Y = Convert.ToDouble(Terrain.Vertices[x2, y2 + 1].Height * HeightMultiplier);
+                        vertex2.Z = - (y2 + 1) * Constants.TerrainGridSpacing;
+                        vertex3.X = (x2 + 1) * Constants.TerrainGridSpacing;
+                        vertex3.Y = Convert.ToDouble(Terrain.Vertices[x2 + 1, y2 + 1].Height * HeightMultiplier);
+                        vertex3.Z = - (y2 + 1) * Constants.TerrainGridSpacing;
                         GL.Begin(BeginMode.LineLoop);
                         GL.Color3(0.0F, 1.0F, 1.0F);
-                        GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
-                        GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
-                        GL.Vertex3(Vertex3.X, Vertex3.Y, Convert.ToDouble(- Vertex3.Z));
-                        GL.Vertex3(Vertex2.X, Vertex2.Y, Convert.ToDouble(- Vertex2.Z));
+                        GL.Vertex3(vertex0.X, vertex0.Y, Convert.ToDouble(- vertex0.Z));
+                        GL.Vertex3(vertex1.X, vertex1.Y, Convert.ToDouble(- vertex1.Z));
+                        GL.Vertex3(vertex3.X, vertex3.Y, Convert.ToDouble(- vertex3.Z));
+                        GL.Vertex3(vertex2.X, vertex2.Y, Convert.ToDouble(- vertex2.Z));
                         GL.End();
 
-                        if ( MouseOverTerrain.Tile.Normal.X == Selected_Tile_A.X )
+                        if ( mouseOverTerrain.Tile.Normal.X == Selected_Tile_A.X )
                         {
-                            if ( MouseOverTerrain.Tile.Normal.Y <= Selected_Tile_A.Y )
+                            if ( mouseOverTerrain.Tile.Normal.Y <= Selected_Tile_A.Y )
                             {
-                                A = MouseOverTerrain.Tile.Normal.Y;
-                                B = Selected_Tile_A.Y;
+                                a = mouseOverTerrain.Tile.Normal.Y;
+                                b = Selected_Tile_A.Y;
                             }
                             else
                             {
-                                A = Selected_Tile_A.Y;
-                                B = MouseOverTerrain.Tile.Normal.Y;
+                                a = Selected_Tile_A.Y;
+                                b = mouseOverTerrain.Tile.Normal.Y;
                             }
-                            X2 = Selected_Tile_A.X;
-                            for ( Y2 = A; Y2 <= B; Y2++ )
+                            x2 = Selected_Tile_A.X;
+                            for ( y2 = a; y2 <= b; y2++ )
                             {
-                                Vertex0.X = X2 * Constants.TerrainGridSpacing;
-                                Vertex0.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2].Height * HeightMultiplier);
-                                Vertex0.Z = - Y2 * Constants.TerrainGridSpacing;
-                                Vertex1.X = (X2 + 1) * Constants.TerrainGridSpacing;
-                                Vertex1.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2].Height * HeightMultiplier);
-                                Vertex1.Z = - Y2 * Constants.TerrainGridSpacing;
-                                Vertex2.X = X2 * Constants.TerrainGridSpacing;
-                                Vertex2.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2 + 1].Height * HeightMultiplier);
-                                Vertex2.Z = - (Y2 + 1) * Constants.TerrainGridSpacing;
-                                Vertex3.X = (X2 + 1) * Constants.TerrainGridSpacing;
-                                Vertex3.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2 + 1].Height * HeightMultiplier);
-                                Vertex3.Z = - (Y2 + 1) * Constants.TerrainGridSpacing;
+                                vertex0.X = x2 * Constants.TerrainGridSpacing;
+                                vertex0.Y = Convert.ToDouble(Terrain.Vertices[x2, y2].Height * HeightMultiplier);
+                                vertex0.Z = - y2 * Constants.TerrainGridSpacing;
+                                vertex1.X = (x2 + 1) * Constants.TerrainGridSpacing;
+                                vertex1.Y = Convert.ToDouble(Terrain.Vertices[x2 + 1, y2].Height * HeightMultiplier);
+                                vertex1.Z = - y2 * Constants.TerrainGridSpacing;
+                                vertex2.X = x2 * Constants.TerrainGridSpacing;
+                                vertex2.Y = Convert.ToDouble(Terrain.Vertices[x2, y2 + 1].Height * HeightMultiplier);
+                                vertex2.Z = - (y2 + 1) * Constants.TerrainGridSpacing;
+                                vertex3.X = (x2 + 1) * Constants.TerrainGridSpacing;
+                                vertex3.Y = Convert.ToDouble(Terrain.Vertices[x2 + 1, y2 + 1].Height * HeightMultiplier);
+                                vertex3.Z = - (y2 + 1) * Constants.TerrainGridSpacing;
                                 GL.Begin(BeginMode.LineLoop);
                                 GL.Color3(0.0F, 1.0F, 1.0F);
-                                GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
-                                GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
-                                GL.Vertex3(Vertex3.X, Vertex3.Y, Convert.ToDouble(- Vertex3.Z));
-                                GL.Vertex3(Vertex2.X, Vertex2.Y, Convert.ToDouble(- Vertex2.Z));
+                                GL.Vertex3(vertex0.X, vertex0.Y, Convert.ToDouble(- vertex0.Z));
+                                GL.Vertex3(vertex1.X, vertex1.Y, Convert.ToDouble(- vertex1.Z));
+                                GL.Vertex3(vertex3.X, vertex3.Y, Convert.ToDouble(- vertex3.Z));
+                                GL.Vertex3(vertex2.X, vertex2.Y, Convert.ToDouble(- vertex2.Z));
                                 GL.End();
                             }
                         }
-                        else if ( MouseOverTerrain.Tile.Normal.Y == Selected_Tile_A.Y )
+                        else if ( mouseOverTerrain.Tile.Normal.Y == Selected_Tile_A.Y )
                         {
-                            if ( MouseOverTerrain.Tile.Normal.X <= Selected_Tile_A.X )
+                            if ( mouseOverTerrain.Tile.Normal.X <= Selected_Tile_A.X )
                             {
-                                A = MouseOverTerrain.Tile.Normal.X;
-                                B = Selected_Tile_A.X;
+                                a = mouseOverTerrain.Tile.Normal.X;
+                                b = Selected_Tile_A.X;
                             }
                             else
                             {
-                                A = Selected_Tile_A.X;
-                                B = MouseOverTerrain.Tile.Normal.X;
+                                a = Selected_Tile_A.X;
+                                b = mouseOverTerrain.Tile.Normal.X;
                             }
-                            Y2 = Selected_Tile_A.Y;
-                            for ( X2 = A; X2 <= B; X2++ )
+                            y2 = Selected_Tile_A.Y;
+                            for ( x2 = a; x2 <= b; x2++ )
                             {
-                                Vertex0.X = X2 * Constants.TerrainGridSpacing;
-                                Vertex0.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2].Height * HeightMultiplier);
-                                Vertex0.Z = - Y2 * Constants.TerrainGridSpacing;
-                                Vertex1.X = (X2 + 1) * Constants.TerrainGridSpacing;
-                                Vertex1.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2].Height * HeightMultiplier);
-                                Vertex1.Z = - Y2 * Constants.TerrainGridSpacing;
-                                Vertex2.X = X2 * Constants.TerrainGridSpacing;
-                                Vertex2.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2 + 1].Height * HeightMultiplier);
-                                Vertex2.Z = - (Y2 + 1) * Constants.TerrainGridSpacing;
-                                Vertex3.X = (X2 + 1) * Constants.TerrainGridSpacing;
-                                Vertex3.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2 + 1].Height * HeightMultiplier);
-                                Vertex3.Z = - (Y2 + 1) * Constants.TerrainGridSpacing;
+                                vertex0.X = x2 * Constants.TerrainGridSpacing;
+                                vertex0.Y = Convert.ToDouble(Terrain.Vertices[x2, y2].Height * HeightMultiplier);
+                                vertex0.Z = - y2 * Constants.TerrainGridSpacing;
+                                vertex1.X = (x2 + 1) * Constants.TerrainGridSpacing;
+                                vertex1.Y = Convert.ToDouble(Terrain.Vertices[x2 + 1, y2].Height * HeightMultiplier);
+                                vertex1.Z = - y2 * Constants.TerrainGridSpacing;
+                                vertex2.X = x2 * Constants.TerrainGridSpacing;
+                                vertex2.Y = Convert.ToDouble(Terrain.Vertices[x2, y2 + 1].Height * HeightMultiplier);
+                                vertex2.Z = - (y2 + 1) * Constants.TerrainGridSpacing;
+                                vertex3.X = (x2 + 1) * Constants.TerrainGridSpacing;
+                                vertex3.Y = Convert.ToDouble(Terrain.Vertices[x2 + 1, y2 + 1].Height * HeightMultiplier);
+                                vertex3.Z = - (y2 + 1) * Constants.TerrainGridSpacing;
                                 GL.Begin(BeginMode.LineLoop);
                                 GL.Color3(0.0F, 1.0F, 1.0F);
-                                GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
-                                GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
-                                GL.Vertex3(Vertex3.X, Vertex3.Y, Convert.ToDouble(- Vertex3.Z));
-                                GL.Vertex3(Vertex2.X, Vertex2.Y, Convert.ToDouble(- Vertex2.Z));
+                                GL.Vertex3(vertex0.X, vertex0.Y, Convert.ToDouble(- vertex0.Z));
+                                GL.Vertex3(vertex1.X, vertex1.Y, Convert.ToDouble(- vertex1.Z));
+                                GL.Vertex3(vertex3.X, vertex3.Y, Convert.ToDouble(- vertex3.Z));
+                                GL.Vertex3(vertex2.X, vertex2.Y, Convert.ToDouble(- vertex2.Z));
                                 GL.End();
                             }
                         }
                     }
                     else
                     {
-                        X2 = MouseOverTerrain.Tile.Normal.X;
-                        Y2 = MouseOverTerrain.Tile.Normal.Y;
+                        x2 = mouseOverTerrain.Tile.Normal.X;
+                        y2 = mouseOverTerrain.Tile.Normal.Y;
 
-                        Vertex0.X = X2 * Constants.TerrainGridSpacing;
-                        Vertex0.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2].Height * HeightMultiplier);
-                        Vertex0.Z = - Y2 * Constants.TerrainGridSpacing;
-                        Vertex1.X = (X2 + 1) * Constants.TerrainGridSpacing;
-                        Vertex1.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2].Height * HeightMultiplier);
-                        Vertex1.Z = - Y2 * Constants.TerrainGridSpacing;
-                        Vertex2.X = X2 * Constants.TerrainGridSpacing;
-                        Vertex2.Y = Convert.ToDouble(Terrain.Vertices[X2, Y2 + 1].Height * HeightMultiplier);
-                        Vertex2.Z = - (Y2 + 1) * Constants.TerrainGridSpacing;
-                        Vertex3.X = (X2 + 1) * Constants.TerrainGridSpacing;
-                        Vertex3.Y = Convert.ToDouble(Terrain.Vertices[X2 + 1, Y2 + 1].Height * HeightMultiplier);
-                        Vertex3.Z = - (Y2 + 1) * Constants.TerrainGridSpacing;
+                        vertex0.X = x2 * Constants.TerrainGridSpacing;
+                        vertex0.Y = Convert.ToDouble(Terrain.Vertices[x2, y2].Height * HeightMultiplier);
+                        vertex0.Z = - y2 * Constants.TerrainGridSpacing;
+                        vertex1.X = (x2 + 1) * Constants.TerrainGridSpacing;
+                        vertex1.Y = Convert.ToDouble(Terrain.Vertices[x2 + 1, y2].Height * HeightMultiplier);
+                        vertex1.Z = - y2 * Constants.TerrainGridSpacing;
+                        vertex2.X = x2 * Constants.TerrainGridSpacing;
+                        vertex2.Y = Convert.ToDouble(Terrain.Vertices[x2, y2 + 1].Height * HeightMultiplier);
+                        vertex2.Z = - (y2 + 1) * Constants.TerrainGridSpacing;
+                        vertex3.X = (x2 + 1) * Constants.TerrainGridSpacing;
+                        vertex3.Y = Convert.ToDouble(Terrain.Vertices[x2 + 1, y2 + 1].Height * HeightMultiplier);
+                        vertex3.Z = - (y2 + 1) * Constants.TerrainGridSpacing;
                         GL.Begin(BeginMode.LineLoop);
                         GL.Color3(0.0F, 1.0F, 1.0F);
-                        GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
-                        GL.Vertex3(Vertex1.X, Vertex1.Y, Convert.ToDouble(- Vertex1.Z));
-                        GL.Vertex3(Vertex3.X, Vertex3.Y, Convert.ToDouble(- Vertex3.Z));
-                        GL.Vertex3(Vertex2.X, Vertex2.Y, Convert.ToDouble(- Vertex2.Z));
+                        GL.Vertex3(vertex0.X, vertex0.Y, Convert.ToDouble(- vertex0.Z));
+                        GL.Vertex3(vertex1.X, vertex1.Y, Convert.ToDouble(- vertex1.Z));
+                        GL.Vertex3(vertex3.X, vertex3.Y, Convert.ToDouble(- vertex3.Z));
+                        GL.Vertex3(vertex2.X, vertex2.Y, Convert.ToDouble(- vertex2.Z));
                         GL.End();
                     }
                     DebugGLError("Line brush");
@@ -671,39 +668,38 @@ namespace SharpFlame.Mapping
 
                 //draw mouseover tiles
 
-                var ToolBrush = default(clsBrush);
+                var toolBrush = default(clsBrush);
 
                 if ( modTools.Tool == modTools.Tools.TextureBrush )
                 {
-                    ToolBrush = App.TextureBrush;
+                    toolBrush = App.TextureBrush;
                 }
                 else if ( modTools.Tool == modTools.Tools.CliffBrush )
                 {
-                    ToolBrush = App.CliffBrush;
+                    toolBrush = App.CliffBrush;
                 }
                 else if ( modTools.Tool == modTools.Tools.CliffRemove )
                 {
-                    ToolBrush = App.CliffBrush;
+                    toolBrush = App.CliffBrush;
                 }
                 else if ( modTools.Tool == modTools.Tools.RoadRemove )
                 {
-                    ToolBrush = App.CliffBrush;
+                    toolBrush = App.CliffBrush;
                 }
                 else
                 {
-                    ToolBrush = null;
+                    toolBrush = null;
                 }
 
-                if ( ToolBrush != null )
+                if ( toolBrush != null )
                 {
                     GL.LineWidth(2.0F);
-                    var DrawTileOutline = new clsDrawTileOutline();
-                    DrawTileOutline.Map = this;
-                    DrawTileOutline.Colour.Red = 0.0F;
-                    DrawTileOutline.Colour.Green = 1.0F;
-                    DrawTileOutline.Colour.Blue = 1.0F;
-                    DrawTileOutline.Colour.Alpha = 1.0F;
-                    ToolBrush.PerformActionMapTiles(DrawTileOutline, MouseOverTerrain.Tile);
+                    var drawTileOutline = new clsDrawTileOutline
+                        {
+                            Map = this, 
+                            Colour = {Red = 0.0F, Green = 1.0F, Blue = 1.0F, Alpha = 1.0F}
+                        };
+                    toolBrush.PerformActionMapTiles(drawTileOutline, mouseOverTerrain.Tile);
 
                     DebugGLError("Brush tiles");
                 }
@@ -713,15 +709,15 @@ namespace SharpFlame.Mapping
                 {
                     GL.LineWidth(2.0F);
 
-                    Vertex0.X = MouseOverTerrain.Vertex.Normal.X * Constants.TerrainGridSpacing;
-                    Vertex0.Y = Convert.ToDouble(Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height * HeightMultiplier);
-                    Vertex0.Z = - MouseOverTerrain.Vertex.Normal.Y * Constants.TerrainGridSpacing;
+                    vertex0.X = mouseOverTerrain.Vertex.Normal.X * Constants.TerrainGridSpacing;
+                    vertex0.Y = Convert.ToDouble(Terrain.Vertices[mouseOverTerrain.Vertex.Normal.X, mouseOverTerrain.Vertex.Normal.Y].Height * HeightMultiplier);
+                    vertex0.Z = - mouseOverTerrain.Vertex.Normal.Y * Constants.TerrainGridSpacing;
                     GL.Begin(BeginMode.Lines);
                     GL.Color3(0.0F, 1.0F, 1.0F);
-                    GL.Vertex3(Vertex0.X - 8.0D, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
-                    GL.Vertex3(Vertex0.X + 8.0D, Vertex0.Y, Convert.ToDouble(- Vertex0.Z));
-                    GL.Vertex3(Vertex0.X, Vertex0.Y, Convert.ToDouble(- Vertex0.Z - 8.0D));
-                    GL.Vertex3(Vertex0.X, Vertex0.Y, - Vertex0.Z + 8.0D);
+                    GL.Vertex3(vertex0.X - 8.0D, vertex0.Y, Convert.ToDouble(- vertex0.Z));
+                    GL.Vertex3(vertex0.X + 8.0D, vertex0.Y, Convert.ToDouble(- vertex0.Z));
+                    GL.Vertex3(vertex0.X, vertex0.Y, Convert.ToDouble(- vertex0.Z - 8.0D));
+                    GL.Vertex3(vertex0.X, vertex0.Y, - vertex0.Z + 8.0D);
                     GL.End();
 
                     DebugGLError("Mouse over vertex");
@@ -729,35 +725,34 @@ namespace SharpFlame.Mapping
 
                 if ( modTools.Tool == modTools.Tools.TerrainBrush )
                 {
-                    ToolBrush = App.TerrainBrush;
+                    toolBrush = App.TerrainBrush;
                 }
                 else if ( modTools.Tool == modTools.Tools.HeightSetBrush )
                 {
-                    ToolBrush = App.HeightBrush;
+                    toolBrush = App.HeightBrush;
                 }
                 else if ( modTools.Tool == modTools.Tools.HeightChangeBrush )
                 {
-                    ToolBrush = App.HeightBrush;
+                    toolBrush = App.HeightBrush;
                 }
                 else if ( modTools.Tool == modTools.Tools.HeightSmoothBrush )
                 {
-                    ToolBrush = App.HeightBrush;
+                    toolBrush = App.HeightBrush;
                 }
                 else
                 {
-                    ToolBrush = null;
+                    toolBrush = null;
                 }
 
-                if ( ToolBrush != null )
+                if ( toolBrush != null )
                 {
                     GL.LineWidth(2.0F);
-                    var DrawVertexMarker = new clsDrawVertexMarker();
-                    DrawVertexMarker.Map = this;
-                    DrawVertexMarker.Colour.Red = 0.0F;
-                    DrawVertexMarker.Colour.Green = 1.0F;
-                    DrawVertexMarker.Colour.Blue = 1.0F;
-                    DrawVertexMarker.Colour.Alpha = 1.0F;
-                    ToolBrush.PerformActionMapVertices(DrawVertexMarker, MouseOverTerrain.Vertex);
+                    var drawVertexMarker = new clsDrawVertexMarker
+                        {
+                            Map = this, 
+                            Colour = {Red = 0.0F, Green = 1.0F, Blue = 1.0F, Alpha = 1.0F}
+                        };
+                    toolBrush.PerformActionMapVertices(drawVertexMarker, mouseOverTerrain.Vertex);
 
                     DebugGLError("Brush vertices");
                 }
@@ -781,12 +776,12 @@ namespace SharpFlame.Mapping
             {
                 GL.Color3(1.0F, 1.0F, 1.0F);
                 GL.Enable(EnableCap.Texture2D);
-                App.VisionSectors.PerformActionMapSectors(DrawObjects, DrawCentreSector);
+                App.VisionSectors.PerformActionMapSectors(drawObjects, drawCentreSector);
                 GL.Disable(EnableCap.Texture2D);
                 DebugGLError("Objects");
             }
 
-            if ( MouseOverTerrain != null )
+            if ( mouseOverTerrain != null )
             {
                 GL.Enable(EnableCap.Texture2D);
                 if ( modTools.Tool == modTools.Tools.ObjectPlace )
@@ -794,24 +789,24 @@ namespace SharpFlame.Mapping
                     var placeObject = Program.frmMainInstance.SingleSelectedObjectTypeBase;
                     if ( placeObject != null )
                     {
-                        var Rotation = 0;
+                        var rotation = 0;
                         try
                         {
-                            IOUtil.InvariantParse(Program.frmMainInstance.txtNewObjectRotation.Text, ref Rotation);
-                            if ( Rotation < 0 | Rotation > 359 )
+                            IOUtil.InvariantParse(Program.frmMainInstance.txtNewObjectRotation.Text, ref rotation);
+                            if ( rotation < 0 | rotation > 359 )
                             {
-                                Rotation = 0;
+                                rotation = 0;
                             }
                         }
                         catch
                         {
-                            Rotation = 0;
+                            rotation = 0;
                         }
-                        WorldPos = TileAlignedPosFromMapPos(MouseOverTerrain.Pos.Horizontal, placeObject.get_GetFootprintSelected(Rotation));
+                        WorldPos worldPos = TileAlignedPosFromMapPos(mouseOverTerrain.Pos.Horizontal, placeObject.GetGetFootprintSelected(rotation));
                         GL.PushMatrix();
-                        GL.Translate(WorldPos.Horizontal.X - ViewInfo.ViewPos.X, WorldPos.Altitude - ViewInfo.ViewPos.Y + 2.0D,
-                            ViewInfo.ViewPos.Z + WorldPos.Horizontal.Y);
-                        placeObject.GLDraw(Rotation);
+                        GL.Translate(worldPos.Horizontal.X - ViewInfo.ViewPos.X, worldPos.Altitude - ViewInfo.ViewPos.Y + 2.0D,
+                            ViewInfo.ViewPos.Z + worldPos.Horizontal.Y);
+                        placeObject.GLDraw(rotation);
                         GL.PopMatrix();
                     }
                 }
@@ -821,78 +816,78 @@ namespace SharpFlame.Mapping
 
             GL.Disable(EnableCap.DepthTest);
 
-            var ScriptMarkerTextLabels = new clsTextLabels(256);
-            var TextLabel = default(clsTextLabel);
+            var scriptMarkerTextLabels = new clsTextLabels(256);
+            clsTextLabel textLabel;
             if ( App.Draw_ScriptMarkers )
             {
-                var ScriptPosition = default(clsScriptPosition);
-                var ScriptArea = default(clsScriptArea);
+                clsScriptPosition scriptPosition;
+                clsScriptArea scriptArea;
                 GL.PushMatrix();
                 GL.Translate(Convert.ToDouble(- ViewInfo.ViewPos.X), Convert.ToDouble(- ViewInfo.ViewPos.Y), ViewInfo.ViewPos.Z);
                 foreach ( var tempLoopVar_ScriptPosition in ScriptPositions )
                 {
-                    ScriptPosition = tempLoopVar_ScriptPosition;
-                    ScriptPosition.GLDraw();
+                    scriptPosition = tempLoopVar_ScriptPosition;
+                    scriptPosition.GLDraw();
                 }
                 foreach ( var tempLoopVar_ScriptArea in ScriptAreas )
                 {
-                    ScriptArea = tempLoopVar_ScriptArea;
-                    ScriptArea.GLDraw();
+                    scriptArea = tempLoopVar_ScriptArea;
+                    scriptArea.GLDraw();
                 }
                 foreach ( var tempLoopVar_ScriptPosition in ScriptPositions )
                 {
-                    ScriptPosition = tempLoopVar_ScriptPosition;
-                    if ( ScriptMarkerTextLabels.AtMaxCount() )
+                    scriptPosition = tempLoopVar_ScriptPosition;
+                    if ( scriptMarkerTextLabels.AtMaxCount() )
                     {
                         break;
                     }
-                    XYZ_dbl.X = ScriptPosition.PosX - ViewInfo.ViewPos.X;
-                    XYZ_dbl.Z = - ScriptPosition.PosY - ViewInfo.ViewPos.Z;
-                    XYZ_dbl.Y = GetTerrainHeight(new XYInt(ScriptPosition.PosX, ScriptPosition.PosY)) - ViewInfo.ViewPos.Y;
-                    Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrix_Inverted, XYZ_dbl, ref XYZ_dbl2);
-                    if ( ViewInfo.Pos_Get_Screen_XY(XYZ_dbl2, ref ScreenPos) )
+                    xyzDbl.X = scriptPosition.PosX - ViewInfo.ViewPos.X;
+                    xyzDbl.Z = - scriptPosition.PosY - ViewInfo.ViewPos.Z;
+                    xyzDbl.Y = GetTerrainHeight(new XYInt(scriptPosition.PosX, scriptPosition.PosY)) - ViewInfo.ViewPos.Y;
+                    Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrixInverted, xyzDbl, ref xyzDbl2);
+                    if ( ViewInfo.PosGetScreenXY(xyzDbl2, ref screenPos) )
                     {
-                        if ( ScreenPos.X >= 0 & ScreenPos.X <= GLSize.X & ScreenPos.Y >= 0 & ScreenPos.Y <= GLSize.Y )
+                        if ( screenPos.X >= 0 & screenPos.X <= glSize.X & screenPos.Y >= 0 & screenPos.Y <= glSize.Y )
                         {
-                            TextLabel = new clsTextLabel();
-                            TextLabel.Colour.Red = 1.0F;
-                            TextLabel.Colour.Green = 1.0F;
-                            TextLabel.Colour.Blue = 0.5F;
-                            TextLabel.Colour.Alpha = 0.75F;
-                            TextLabel.TextFont = App.UnitLabelFont;
-                            TextLabel.SizeY = SettingsManager.Settings.FontSize;
-                            TextLabel.Pos = ScreenPos;
-                            TextLabel.Text = ScriptPosition.Label;
-                            ScriptMarkerTextLabels.Add(TextLabel);
+                            textLabel = new clsTextLabel();
+                            textLabel.Colour.Red = 1.0F;
+                            textLabel.Colour.Green = 1.0F;
+                            textLabel.Colour.Blue = 0.5F;
+                            textLabel.Colour.Alpha = 0.75F;
+                            textLabel.TextFont = App.UnitLabelFont;
+                            textLabel.SizeY = SettingsManager.Settings.FontSize;
+                            textLabel.Pos = screenPos;
+                            textLabel.Text = scriptPosition.Label;
+                            scriptMarkerTextLabels.Add(textLabel);
                         }
                     }
                 }
                 DebugGLError("Script positions");
                 foreach ( var tempLoopVar_ScriptArea in ScriptAreas )
                 {
-                    ScriptArea = tempLoopVar_ScriptArea;
-                    if ( ScriptMarkerTextLabels.AtMaxCount() )
+                    scriptArea = tempLoopVar_ScriptArea;
+                    if ( scriptMarkerTextLabels.AtMaxCount() )
                     {
                         break;
                     }
-                    XYZ_dbl.X = ScriptArea.PosAX - ViewInfo.ViewPos.X;
-                    XYZ_dbl.Z = - ScriptArea.PosAY - ViewInfo.ViewPos.Z;
-                    XYZ_dbl.Y = GetTerrainHeight(new XYInt(ScriptArea.PosAX, ScriptArea.PosAY)) - ViewInfo.ViewPos.Y;
-                    Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrix_Inverted, XYZ_dbl, ref XYZ_dbl2);
-                    if ( ViewInfo.Pos_Get_Screen_XY(XYZ_dbl2, ref ScreenPos) )
+                    xyzDbl.X = scriptArea.PosAX - ViewInfo.ViewPos.X;
+                    xyzDbl.Z = - scriptArea.PosAY - ViewInfo.ViewPos.Z;
+                    xyzDbl.Y = GetTerrainHeight(new XYInt(scriptArea.PosAX, scriptArea.PosAY)) - ViewInfo.ViewPos.Y;
+                    Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrixInverted, xyzDbl, ref xyzDbl2);
+                    if ( ViewInfo.PosGetScreenXY(xyzDbl2, ref screenPos) )
                     {
-                        if ( ScreenPos.X >= 0 & ScreenPos.X <= GLSize.X & ScreenPos.Y >= 0 & ScreenPos.Y <= GLSize.Y )
+                        if ( screenPos.X >= 0 & screenPos.X <= glSize.X & screenPos.Y >= 0 & screenPos.Y <= glSize.Y )
                         {
-                            TextLabel = new clsTextLabel();
-                            TextLabel.Colour.Red = 1.0F;
-                            TextLabel.Colour.Green = 1.0F;
-                            TextLabel.Colour.Blue = 0.5F;
-                            TextLabel.Colour.Alpha = 0.75F;
-                            TextLabel.TextFont = App.UnitLabelFont;
-                            TextLabel.SizeY = SettingsManager.Settings.FontSize;
-                            TextLabel.Pos = ScreenPos;
-                            TextLabel.Text = ScriptArea.Label;
-                            ScriptMarkerTextLabels.Add(TextLabel);
+                            textLabel = new clsTextLabel();
+                            textLabel.Colour.Red = 1.0F;
+                            textLabel.Colour.Green = 1.0F;
+                            textLabel.Colour.Blue = 0.5F;
+                            textLabel.Colour.Alpha = 0.75F;
+                            textLabel.TextFont = App.UnitLabelFont;
+                            textLabel.SizeY = SettingsManager.Settings.FontSize;
+                            textLabel.Pos = screenPos;
+                            textLabel.Text = scriptArea.Label;
+                            scriptMarkerTextLabels.Add(textLabel);
                         }
                     }
                 }
@@ -901,25 +896,25 @@ namespace SharpFlame.Mapping
                 DebugGLError("Script areas");
             }
 
-            var MessageTextLabels = new clsTextLabels(24);
+            var messageTextLabels = new clsTextLabels(24);
 
-            B = 0;
-            for ( A = Math.Max(Messages.Count - MessageTextLabels.MaxCount, 0); A <= Messages.Count - 1; A++ )
+            b = 0;
+            for ( a = Math.Max(Messages.Count - messageTextLabels.MaxCount, 0); a <= Messages.Count - 1; a++ )
             {
-                if ( !MessageTextLabels.AtMaxCount() )
+                if ( !messageTextLabels.AtMaxCount() )
                 {
-                    TextLabel = new clsTextLabel();
-                    TextLabel.Colour.Red = 0.875F;
-                    TextLabel.Colour.Green = 0.875F;
-                    TextLabel.Colour.Blue = 1.0F;
-                    TextLabel.Colour.Alpha = 1.0F;
-                    TextLabel.TextFont = App.UnitLabelFont;
-                    TextLabel.SizeY = SettingsManager.Settings.FontSize;
-                    TextLabel.Pos.X = 32 + MinimapSizeXY.X;
-                    TextLabel.Pos.Y = 32 + (int)(Math.Ceiling((decimal)(B * TextLabel.SizeY)));
-                    TextLabel.Text = Convert.ToString(Messages[A].Text);
-                    MessageTextLabels.Add(TextLabel);
-                    B++;
+                    textLabel = new clsTextLabel();
+                    textLabel.Colour.Red = 0.875F;
+                    textLabel.Colour.Green = 0.875F;
+                    textLabel.Colour.Blue = 1.0F;
+                    textLabel.Colour.Alpha = 1.0F;
+                    textLabel.TextFont = App.UnitLabelFont;
+                    textLabel.SizeY = SettingsManager.Settings.FontSize;
+                    textLabel.Pos.X = 32 + minimapSizeXy.X;
+                    textLabel.Pos.Y = 32 + (int)(Math.Ceiling((decimal)(b * textLabel.SizeY)));
+                    textLabel.Text = Convert.ToString(Messages[a].Text);
+                    messageTextLabels.Add(textLabel);
+                    b++;
                 }
             }
 
@@ -928,24 +923,24 @@ namespace SharpFlame.Mapping
             GL.Begin(BeginMode.Quads);
             foreach ( var tempLoopVar_Unit in SelectedUnits )
             {
-                Unit = tempLoopVar_Unit;
-                RGB_sng = GetUnitGroupColour(Unit.UnitGroup);
-                ColourA = new sRGBA_sng((1.0F + RGB_sng.Red) / 2.0F, (1.0F + RGB_sng.Green) / 2.0F, (1.0F + RGB_sng.Blue) / 2.0F, 0.75F);
-                ColourB = new sRGBA_sng(RGB_sng.Red, RGB_sng.Green, RGB_sng.Blue, 0.75F);
-                DrawUnitRectangle(Unit, 8, ColourA, ColourB);
+                unit = tempLoopVar_Unit;
+                rgbSng = GetUnitGroupColour(unit.UnitGroup);
+                colourA = new sRGBA_sng((1.0F + rgbSng.Red) / 2.0F, (1.0F + rgbSng.Green) / 2.0F, (1.0F + rgbSng.Blue) / 2.0F, 0.75F);
+                colourB = new sRGBA_sng(rgbSng.Red, rgbSng.Green, rgbSng.Blue, 0.75F);
+                DrawUnitRectangle(unit, 8, colourA, colourB);
             }
-            if ( MouseOverTerrain != null )
+            if ( mouseOverTerrain != null )
             {
-                foreach ( var tempLoopVar_Unit in MouseOverTerrain.Units )
+                foreach ( var tempLoopVar_Unit in mouseOverTerrain.Units )
                 {
-                    Unit = tempLoopVar_Unit;
-                    if ( Unit != null && modTools.Tool == modTools.Tools.ObjectSelect )
+                    unit = tempLoopVar_Unit;
+                    if ( unit != null && modTools.Tool == modTools.Tools.ObjectSelect )
                     {
-                        RGB_sng = GetUnitGroupColour(Unit.UnitGroup);
-                        GL.Color4((0.5F + RGB_sng.Red) / 1.5F, (0.5F + RGB_sng.Green) / 1.5F, (0.5F + RGB_sng.Blue) / 1.5F, 0.75F);
-                        ColourA = new sRGBA_sng((1.0F + RGB_sng.Red) / 2.0F, (1.0F + RGB_sng.Green) / 2.0F, (1.0F + RGB_sng.Blue) / 2.0F, 0.75F);
-                        ColourB = new sRGBA_sng(RGB_sng.Red, RGB_sng.Green, RGB_sng.Blue, 0.875F);
-                        DrawUnitRectangle(Unit, 16, ColourA, ColourB);
+                        rgbSng = GetUnitGroupColour(unit.UnitGroup);
+                        GL.Color4((0.5F + rgbSng.Red) / 1.5F, (0.5F + rgbSng.Green) / 1.5F, (0.5F + rgbSng.Blue) / 1.5F, 0.75F);
+                        colourA = new sRGBA_sng((1.0F + rgbSng.Red) / 2.0F, (1.0F + rgbSng.Green) / 2.0F, (1.0F + rgbSng.Blue) / 2.0F, 0.75F);
+                        colourB = new sRGBA_sng(rgbSng.Red, rgbSng.Green, rgbSng.Blue, 0.875F);
+                        DrawUnitRectangle(unit, 16, colourA, colourB);
                     }
                 }
             }
@@ -954,8 +949,8 @@ namespace SharpFlame.Mapping
             DebugGLError("Unit selection");
 
             GL.MatrixMode(MatrixMode.Projection);
-            var temp_mat2 = Matrix4.CreateOrthographicOffCenter(0.0F, GLSize.X, GLSize.Y, 0.0F, -1.0F, 1.0F);
-            GL.LoadMatrix(ref temp_mat2);
+            var tempMat2 = Matrix4.CreateOrthographicOffCenter(0.0F, glSize.X, glSize.Y, 0.0F, -1.0F, 1.0F);
+            GL.LoadMatrix(ref tempMat2);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
@@ -963,10 +958,10 @@ namespace SharpFlame.Mapping
 
             GL.Enable(EnableCap.Texture2D);
 
-            ScriptMarkerTextLabels.Draw();
-            DrawObjects.UnitTextLabels.Draw();
-            SelectionLabel.Draw();
-            MessageTextLabels.Draw();
+            scriptMarkerTextLabels.Draw();
+            drawObjects.UnitTextLabels.Draw();
+            selectionLabel.Draw();
+            messageTextLabels.Draw();
 
             DebugGLError("Text labels");
 
@@ -977,19 +972,19 @@ namespace SharpFlame.Mapping
             //draw minimap
 
             GL.MatrixMode(MatrixMode.Projection);
-            var temp_mat3 = Matrix4.CreateOrthographicOffCenter(0.0F, GLSize.X, 0.0F, GLSize.Y, -1.0F, 1.0F);
-            GL.LoadMatrix(ref temp_mat3);
+            var tempMat3 = Matrix4.CreateOrthographicOffCenter(0.0F, glSize.X, 0.0F, glSize.Y, -1.0F, 1.0F);
+            GL.LoadMatrix(ref tempMat3);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
             DebugGLError("Minimap matrix modes");
 
-            if ( Minimap_Texture_Size > 0 & ViewInfo.Tiles_Per_Minimap_Pixel > 0.0D )
+            if ( Minimap_Texture_Size > 0 & ViewInfo.TilesPerMinimapPixel > 0.0D )
             {
-                GL.Translate(0.0F, GLSize.Y - MinimapSizeXY.Y, 0.0F);
+                GL.Translate(0.0F, glSize.Y - minimapSizeXy.Y, 0.0F);
 
-                XYZ_dbl.X = (double)Terrain.TileSize.X / Minimap_Texture_Size;
-                XYZ_dbl.Z = (double)Terrain.TileSize.Y / Minimap_Texture_Size;
+                xyzDbl.X = (double)Terrain.TileSize.X / Minimap_Texture_Size;
+                xyzDbl.Z = (double)Terrain.TileSize.Y / Minimap_Texture_Size;
 
                 if ( Minimap_GLTexture > 0 )
                 {
@@ -1000,15 +995,15 @@ namespace SharpFlame.Mapping
                     GL.Begin(BeginMode.Quads);
 
                     GL.TexCoord2(0.0F, 0.0F);
-                    GL.Vertex2(0, MinimapSizeXY.Y);
+                    GL.Vertex2(0, minimapSizeXy.Y);
 
-                    GL.TexCoord2((float)XYZ_dbl.X, 0.0F);
-                    GL.Vertex2(MinimapSizeXY.X, MinimapSizeXY.Y);
+                    GL.TexCoord2((float)xyzDbl.X, 0.0F);
+                    GL.Vertex2(minimapSizeXy.X, minimapSizeXy.Y);
 
-                    GL.TexCoord2((float)XYZ_dbl.X, (float)XYZ_dbl.Z);
-                    GL.Vertex2(MinimapSizeXY.X, 0);
+                    GL.TexCoord2((float)xyzDbl.X, (float)xyzDbl.Z);
+                    GL.Vertex2(minimapSizeXy.X, 0);
 
-                    GL.TexCoord2(0.0F, (float)XYZ_dbl.Z);
+                    GL.TexCoord2(0.0F, (float)xyzDbl.Z);
                     GL.Vertex2(0, 0);
 
                     GL.End();
@@ -1023,36 +1018,36 @@ namespace SharpFlame.Mapping
                 GL.LineWidth(1.0F);
                 GL.Begin(BeginMode.Lines);
                 GL.Color3(0.75F, 0.75F, 0.75F);
-                GL.Vertex2(MinimapSizeXY.X, 0.0F);
-                GL.Vertex2(MinimapSizeXY.X, MinimapSizeXY.Y);
+                GL.Vertex2(minimapSizeXy.X, 0.0F);
+                GL.Vertex2(minimapSizeXy.X, minimapSizeXy.Y);
                 GL.Vertex2(0.0F, 0.0F);
-                GL.Vertex2(MinimapSizeXY.X, 0.0F);
+                GL.Vertex2(minimapSizeXy.X, 0.0F);
                 GL.End();
 
                 DebugGLError("Minimap border");
 
                 //draw minimap view pos box
 
-                if ( ShowMinimapViewPosBox )
+                if ( showMinimapViewPosBox )
                 {
-                    dblTemp = Constants.TerrainGridSpacing * ViewInfo.Tiles_Per_Minimap_Pixel;
+                    dblTemp = Constants.TerrainGridSpacing * ViewInfo.TilesPerMinimapPixel;
 
-                    PosA.X = ViewCorner0.X / dblTemp;
-                    PosA.Y = MinimapSizeXY.Y + ViewCorner0.Y / dblTemp;
-                    PosB.X = ViewCorner1.X / dblTemp;
-                    PosB.Y = MinimapSizeXY.Y + ViewCorner1.Y / dblTemp;
-                    PosC.X = ViewCorner2.X / dblTemp;
-                    PosC.Y = MinimapSizeXY.Y + ViewCorner2.Y / dblTemp;
-                    PosD.X = ViewCorner3.X / dblTemp;
-                    PosD.Y = MinimapSizeXY.Y + ViewCorner3.Y / dblTemp;
+                    posA.X = viewCorner0.X / dblTemp;
+                    posA.Y = minimapSizeXy.Y + viewCorner0.Y / dblTemp;
+                    posB.X = viewCorner1.X / dblTemp;
+                    posB.Y = minimapSizeXy.Y + viewCorner1.Y / dblTemp;
+                    posC.X = viewCorner2.X / dblTemp;
+                    posC.Y = minimapSizeXy.Y + viewCorner2.Y / dblTemp;
+                    posD.X = viewCorner3.X / dblTemp;
+                    posD.Y = minimapSizeXy.Y + viewCorner3.Y / dblTemp;
 
                     GL.LineWidth(1.0F);
                     GL.Begin(BeginMode.LineLoop);
                     GL.Color3(1.0F, 1.0F, 1.0F);
-                    GL.Vertex2(PosA.X, PosA.Y);
-                    GL.Vertex2(PosB.X, PosB.Y);
-                    GL.Vertex2(PosC.X, PosC.Y);
-                    GL.Vertex2(PosD.X, PosD.Y);
+                    GL.Vertex2(posA.X, posA.Y);
+                    GL.Vertex2(posB.X, posB.Y);
+                    GL.Vertex2(posC.X, posC.Y);
+                    GL.Vertex2(posD.X, posD.Y);
                     GL.End();
 
                     DebugGLError("Minimap view position polygon");
@@ -1060,39 +1055,39 @@ namespace SharpFlame.Mapping
 
                 if ( Selected_Area_VertexA != null )
                 {
-                    DrawIt = false;
+                    drawIt = false;
                     if ( Selected_Area_VertexB != null )
                     {
                         //area is selected
-                        MathUtil.ReorderXY(Selected_Area_VertexA, Selected_Area_VertexB, ref StartXY, ref FinishXY);
-                        DrawIt = true;
+                        MathUtil.ReorderXY(Selected_Area_VertexA, Selected_Area_VertexB, ref startXy, ref finishXy);
+                        drawIt = true;
                     }
                     else if ( modTools.Tool == modTools.Tools.TerrainSelect )
                     {
-                        if ( MouseOverTerrain != null )
+                        if ( mouseOverTerrain != null )
                         {
                             //selection is changing under mouse
-                            MathUtil.ReorderXY(Selected_Area_VertexA, MouseOverTerrain.Vertex.Normal, ref StartXY, ref FinishXY);
-                            DrawIt = true;
+                            MathUtil.ReorderXY(Selected_Area_VertexA, mouseOverTerrain.Vertex.Normal, ref startXy, ref finishXy);
+                            drawIt = true;
                         }
                     }
-                    if ( DrawIt )
+                    if ( drawIt )
                     {
                         GL.LineWidth(1.0F);
-                        PosA.X = StartXY.X / ViewInfo.Tiles_Per_Minimap_Pixel;
-                        PosA.Y = MinimapSizeXY.Y - StartXY.Y / ViewInfo.Tiles_Per_Minimap_Pixel;
-                        PosB.X = FinishXY.X / ViewInfo.Tiles_Per_Minimap_Pixel;
-                        PosB.Y = MinimapSizeXY.Y - StartXY.Y / ViewInfo.Tiles_Per_Minimap_Pixel;
-                        PosC.X = FinishXY.X / ViewInfo.Tiles_Per_Minimap_Pixel;
-                        PosC.Y = MinimapSizeXY.Y - FinishXY.Y / ViewInfo.Tiles_Per_Minimap_Pixel;
-                        PosD.X = StartXY.X / ViewInfo.Tiles_Per_Minimap_Pixel;
-                        PosD.Y = MinimapSizeXY.Y - FinishXY.Y / ViewInfo.Tiles_Per_Minimap_Pixel;
+                        posA.X = startXy.X / ViewInfo.TilesPerMinimapPixel;
+                        posA.Y = minimapSizeXy.Y - startXy.Y / ViewInfo.TilesPerMinimapPixel;
+                        posB.X = finishXy.X / ViewInfo.TilesPerMinimapPixel;
+                        posB.Y = minimapSizeXy.Y - startXy.Y / ViewInfo.TilesPerMinimapPixel;
+                        posC.X = finishXy.X / ViewInfo.TilesPerMinimapPixel;
+                        posC.Y = minimapSizeXy.Y - finishXy.Y / ViewInfo.TilesPerMinimapPixel;
+                        posD.X = startXy.X / ViewInfo.TilesPerMinimapPixel;
+                        posD.Y = minimapSizeXy.Y - finishXy.Y / ViewInfo.TilesPerMinimapPixel;
                         GL.Begin(BeginMode.LineLoop);
                         GL.Color3(1.0F, 1.0F, 1.0F);
-                        GL.Vertex2(PosA.X, PosA.Y);
-                        GL.Vertex2(PosB.X, PosB.Y);
-                        GL.Vertex2(PosC.X, PosC.Y);
-                        GL.Vertex2(PosD.X, PosD.Y);
+                        GL.Vertex2(posA.X, posA.Y);
+                        GL.Vertex2(posB.X, posB.Y);
+                        GL.Vertex2(posC.X, posC.Y);
+                        GL.Vertex2(posD.X, posD.Y);
                         GL.End();
 
                         DebugGLError("Minimap selection box");
@@ -1103,7 +1098,7 @@ namespace SharpFlame.Mapping
 
         private void DebugGLError(string Name)
         {
-            if ( App.Debug_GL )
+            if ( App.DebugGL )
             {
                 if ( Messages.Count < 8 )
                 {
@@ -1119,45 +1114,45 @@ namespace SharpFlame.Mapping
 
         public void DrawUnitRectangle(clsUnit Unit, int BorderInsideThickness, sRGBA_sng InsideColour, sRGBA_sng OutsideColour)
         {
-            var PosA = new XYInt();
-            var PosB = new XYInt();
-            var A = 0;
-            var Altitude = Unit.Pos.Altitude - ViewInfo.ViewPos.Y;
+            var posA = new XYInt();
+            var posB = new XYInt();
+            var a = 0;
+            var altitude = Unit.Pos.Altitude - ViewInfo.ViewPos.Y;
 
-            GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation), ref PosA, ref PosB);
-            A = PosA.Y;
-            PosA.X = (int)((PosA.X + 0.125D) * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X);
-            PosA.Y = (int)((PosB.Y + 0.875D) * - Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z);
-            PosB.X = (int)((PosB.X + 0.875D) * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X);
-            PosB.Y = (int)((A + 0.125D) * - Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z);
-
-            GL.Color4(OutsideColour.Red, OutsideColour.Green, OutsideColour.Blue, OutsideColour.Alpha);
-            GL.Vertex3(PosB.X, Altitude, Convert.ToInt32(- PosA.Y));
-            GL.Vertex3(PosA.X, Altitude, Convert.ToInt32(- PosA.Y));
-            GL.Color4(InsideColour.Red, InsideColour.Green, InsideColour.Blue, InsideColour.Alpha);
-            GL.Vertex3(PosA.X + BorderInsideThickness, Altitude, Convert.ToInt32(- (PosA.Y + BorderInsideThickness)));
-            GL.Vertex3(PosB.X - BorderInsideThickness, Altitude, Convert.ToInt32(- (PosA.Y + BorderInsideThickness)));
+            GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.TypeBase.GetGetFootprintSelected(Unit.Rotation), ref posA, ref posB);
+            a = posA.Y;
+            posA.X = (int)((posA.X + 0.125D) * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X);
+            posA.Y = (int)((posB.Y + 0.875D) * - Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z);
+            posB.X = (int)((posB.X + 0.875D) * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X);
+            posB.Y = (int)((a + 0.125D) * - Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z);
 
             GL.Color4(OutsideColour.Red, OutsideColour.Green, OutsideColour.Blue, OutsideColour.Alpha);
-            GL.Vertex3(PosA.X, Altitude, Convert.ToInt32(- PosA.Y));
-            GL.Vertex3(PosA.X, Altitude, Convert.ToInt32(- PosB.Y));
+            GL.Vertex3(posB.X, altitude, Convert.ToInt32(- posA.Y));
+            GL.Vertex3(posA.X, altitude, Convert.ToInt32(- posA.Y));
             GL.Color4(InsideColour.Red, InsideColour.Green, InsideColour.Blue, InsideColour.Alpha);
-            GL.Vertex3(PosA.X + BorderInsideThickness, Altitude, Convert.ToInt32(- (PosB.Y - BorderInsideThickness)));
-            GL.Vertex3(PosA.X + BorderInsideThickness, Altitude, Convert.ToInt32(- (PosA.Y + BorderInsideThickness)));
+            GL.Vertex3(posA.X + BorderInsideThickness, altitude, Convert.ToInt32(- (posA.Y + BorderInsideThickness)));
+            GL.Vertex3(posB.X - BorderInsideThickness, altitude, Convert.ToInt32(- (posA.Y + BorderInsideThickness)));
 
             GL.Color4(OutsideColour.Red, OutsideColour.Green, OutsideColour.Blue, OutsideColour.Alpha);
-            GL.Vertex3(PosB.X, Altitude, Convert.ToInt32(- PosB.Y));
-            GL.Vertex3(PosB.X, Altitude, Convert.ToInt32(- PosA.Y));
+            GL.Vertex3(posA.X, altitude, Convert.ToInt32(- posA.Y));
+            GL.Vertex3(posA.X, altitude, Convert.ToInt32(- posB.Y));
             GL.Color4(InsideColour.Red, InsideColour.Green, InsideColour.Blue, InsideColour.Alpha);
-            GL.Vertex3(PosB.X - BorderInsideThickness, Altitude, - (PosA.Y + BorderInsideThickness));
-            GL.Vertex3(PosB.X - BorderInsideThickness, Altitude, - (PosB.Y - BorderInsideThickness));
+            GL.Vertex3(posA.X + BorderInsideThickness, altitude, Convert.ToInt32(- (posB.Y - BorderInsideThickness)));
+            GL.Vertex3(posA.X + BorderInsideThickness, altitude, Convert.ToInt32(- (posA.Y + BorderInsideThickness)));
 
             GL.Color4(OutsideColour.Red, OutsideColour.Green, OutsideColour.Blue, OutsideColour.Alpha);
-            GL.Vertex3(PosA.X, Altitude, Convert.ToInt32(- PosB.Y));
-            GL.Vertex3(PosB.X, Altitude, Convert.ToInt32(- PosB.Y));
+            GL.Vertex3(posB.X, altitude, Convert.ToInt32(- posB.Y));
+            GL.Vertex3(posB.X, altitude, Convert.ToInt32(- posA.Y));
             GL.Color4(InsideColour.Red, InsideColour.Green, InsideColour.Blue, InsideColour.Alpha);
-            GL.Vertex3(PosB.X - BorderInsideThickness, Altitude, - (PosB.Y - BorderInsideThickness));
-            GL.Vertex3(PosA.X + BorderInsideThickness, Altitude, Convert.ToInt32(- (PosB.Y - BorderInsideThickness)));
+            GL.Vertex3(posB.X - BorderInsideThickness, altitude, - (posA.Y + BorderInsideThickness));
+            GL.Vertex3(posB.X - BorderInsideThickness, altitude, - (posB.Y - BorderInsideThickness));
+
+            GL.Color4(OutsideColour.Red, OutsideColour.Green, OutsideColour.Blue, OutsideColour.Alpha);
+            GL.Vertex3(posA.X, altitude, Convert.ToInt32(- posB.Y));
+            GL.Vertex3(posB.X, altitude, Convert.ToInt32(- posB.Y));
+            GL.Color4(InsideColour.Red, InsideColour.Green, InsideColour.Blue, InsideColour.Alpha);
+            GL.Vertex3(posB.X - BorderInsideThickness, altitude, - (posB.Y - BorderInsideThickness));
+            GL.Vertex3(posA.X + BorderInsideThickness, altitude, Convert.ToInt32(- (posB.Y - BorderInsideThickness)));
         }
     }
 }

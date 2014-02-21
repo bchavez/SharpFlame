@@ -8,6 +8,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.AppSettings;
 using SharpFlame.Bitmaps;
 using SharpFlame.Colors;
+using SharpFlame.Core.Extensions;
 using SharpFlame.FileIO;
 using SharpFlame.Util;
 
@@ -164,10 +165,6 @@ namespace SharpFlame.Mapping.Tiles
                     returnResult.WarningAdd("Tile graphic " + graphicPath + " from tileset " + Name + " is not 128x128.");
                     return returnResult;
                 }
-
-//                Tiles[tileNum].TextureViewGlTextureNum = BitmapUtil.CreateGLTexture (bitmap, 0, 0,
-//                                                                             TextureMagFilter.Nearest, 
-//                                                                             TextureMinFilter.Nearest);
 
                 if ( SettingsManager.Settings.Mipmaps )
                 {
@@ -330,7 +327,7 @@ namespace SharpFlame.Mapping.Tiles
                     red = Convert.ToInt32(((pixelColorA.R) + pixelColorB.R + pixelColorC.R + pixelColorD.R) / 4.0F);
                     green = Convert.ToInt32(((pixelColorA.G) + pixelColorB.G + pixelColorC.G + pixelColorD.G) / 4.0F);
                     blue = Convert.ToInt32(((pixelColorA.B) + pixelColorB.B + pixelColorC.B + pixelColorD.B) / 4.0F);
-                    bitmap8.SetPixel(pixX, pixY, ColorTranslator.FromOle(ColorUtil.OSRGB(red, green, blue)));
+                    bitmap8.SetPixel(pixX, pixY, ColorTranslator.FromOle(ColorUtil.OsRgb(red, green, blue)));
                 }
             }
 
@@ -355,7 +352,7 @@ namespace SharpFlame.Mapping.Tiles
                     red = Convert.ToInt32(((pixelColorA.R) + pixelColorB.R + pixelColorC.R + pixelColorD.R) / 4.0F);
                     green = Convert.ToInt32(((pixelColorA.G) + pixelColorB.G + pixelColorC.G + pixelColorD.G) / 4.0F);
                     blue = Convert.ToInt32(((pixelColorA.B) + pixelColorB.B + pixelColorC.B + pixelColorD.B) / 4.0F);
-                    bitmap4.SetPixel(pixX, pixY, ColorTranslator.FromOle(ColorUtil.OSRGB(red, green, blue)));
+                    bitmap4.SetPixel(pixX, pixY, ColorTranslator.FromOle(ColorUtil.OsRgb(red, green, blue)));
                 }
             }
 
@@ -380,7 +377,7 @@ namespace SharpFlame.Mapping.Tiles
                     red = Convert.ToInt32(((pixelColorA.R) + pixelColorB.R + pixelColorC.R + pixelColorD.R) / 4.0F);
                     green = Convert.ToInt32(((pixelColorA.G) + pixelColorB.G + pixelColorC.G + pixelColorD.G) / 4.0F);
                     blue = Convert.ToInt32(((pixelColorA.B) + pixelColorB.B + pixelColorC.B + pixelColorD.B) / 4.0F);
-                    bitmap2.SetPixel(pixX, pixY, ColorTranslator.FromOle(ColorUtil.OSRGB(red, green, blue)));
+                    bitmap2.SetPixel(pixX, pixY, ColorTranslator.FromOle(ColorUtil.OsRgb(red, green, blue)));
                 }
             }
 
@@ -403,7 +400,7 @@ namespace SharpFlame.Mapping.Tiles
             red = Convert.ToInt32(((pixelColorA.R) + pixelColorB.R + pixelColorC.R + pixelColorD.R) / 4.0F);
             green = Convert.ToInt32(((pixelColorA.G) + pixelColorB.G + pixelColorC.G + pixelColorD.G) / 4.0F);
             blue = Convert.ToInt32(((pixelColorA.B) + pixelColorB.B + pixelColorC.B + pixelColorD.B) / 4.0F);
-            bitmap1.SetPixel(pixX, pixY, ColorTranslator.FromOle(ColorUtil.OSRGB(red, green, blue)));
+            bitmap1.SetPixel(pixX, pixY, ColorTranslator.FromOle(ColorUtil.OsRgb(red, green, blue)));
 
             BitmapUtil.CreateGLTexture (bitmap1, 7, textureNum);
 

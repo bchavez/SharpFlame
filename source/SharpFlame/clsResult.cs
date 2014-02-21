@@ -20,19 +20,19 @@ namespace SharpFlame
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        private readonly SimpleList<clsResultItemInterface> Items = new SimpleList<clsResultItemInterface>();
-        private bool Bad;
+        private readonly SimpleList<clsResultItemInterface> items = new SimpleList<clsResultItemInterface>();
+        private bool bad;
         public string Text;
 
-        public clsResult(string Text, bool log = true)
+        public clsResult(string text, bool log = true)
         {
             if ( log )
             {
-                logger.Debug(Text);
+                logger.Debug(text);
             }
-            Items.MaintainOrder = true;
+            items.MaintainOrder = true;
 
-            this.Text = Text;
+            this.Text = text;
         }
 
         public override string GetText
@@ -42,41 +42,41 @@ namespace SharpFlame
 
         public bool HasWarnings
         {
-            get { return Items.Count > 0; }
+            get { return items.Count > 0; }
         }
 
         public bool HasProblems
         {
-            get { return Bad; }
+            get { return bad; }
         }
 
-        public void AddBypass(clsResult ResultToAdd)
+        public void AddBypass(clsResult resultToAdd)
         {
-            if ( ResultToAdd.HasWarnings )
+            if ( resultToAdd.HasWarnings )
             {
-                Items.Add(ResultToAdd);
-            }
-        }
-
-        public void Add(clsResult ResultToAdd)
-        {
-            if ( ResultToAdd.HasProblems )
-            {
-                Bad = true;
-            }
-            if ( ResultToAdd.HasWarnings )
-            {
-                Items.Add(ResultToAdd);
+                items.Add(resultToAdd);
             }
         }
 
-        public void Take(clsResult ResultToMerge)
+        public void Add(clsResult resultToAdd)
         {
-            if ( ResultToMerge.HasProblems )
+            if ( resultToAdd.HasProblems )
             {
-                Bad = true;
+                bad = true;
             }
-            Items.AddRange(ResultToMerge.Items);
+            if ( resultToAdd.HasWarnings )
+            {
+                items.Add(resultToAdd);
+            }
+        }
+
+        public void Take(clsResult resultToMerge)
+        {
+            if ( resultToMerge.HasProblems )
+            {
+                bad = true;
+            }
+            items.AddRange(resultToMerge.items);
         }
 
         public void ProblemAdd(string text, bool log = true)
@@ -105,9 +105,9 @@ namespace SharpFlame
         {
             if ( item is clsProblem )
             {
-                Bad = true;
+                bad = true;
             }
-            Items.Add(item);
+            items.Add(item);
         }
 
         public TreeNode MakeNodes(TreeNodeCollection owner)
@@ -115,9 +115,9 @@ namespace SharpFlame
             var node = new TreeNode();
             node.Text = Text;
             owner.Add(node);
-            for ( var i = 0; i <= Items.Count - 1; i++ )
+            for ( var i = 0; i <= items.Count - 1; i++ )
             {
-                var item = Items[i];
+                var item = items[i];
                 var childNode = new TreeNode();
                 childNode.Tag = item;
                 if ( item is clsProblem )

@@ -121,14 +121,14 @@ namespace SharpFlame
             Centre = GetPosNum(PosNum);
 
             Action.Effect = 1.0D;
-            for ( Y = MathUtil.Clamp_int(Tiles.YMin + Centre.Y, 0, LastValidNum.Y) - Centre.Y;
-                Y <= MathUtil.Clamp_int(Tiles.YMax + Centre.Y, 0, LastValidNum.Y) - Centre.Y;
+            for ( Y = MathUtil.ClampInt(Tiles.YMin + Centre.Y, 0, LastValidNum.Y) - Centre.Y;
+                Y <= MathUtil.ClampInt(Tiles.YMax + Centre.Y, 0, LastValidNum.Y) - Centre.Y;
                 Y++ )
             {
                 Action.PosNum.Y = Centre.Y + Y;
                 XNum = Y - Tiles.YMin;
-                for ( X = MathUtil.Clamp_int(Tiles.XMin[XNum] + Centre.X, 0, LastValidNum.X) - Centre.X;
-                    X <= MathUtil.Clamp_int(Convert.ToInt32(Tiles.XMax[XNum] + Centre.X), 0, LastValidNum.X) - Centre.X;
+                for ( X = MathUtil.ClampInt(Tiles.XMin[XNum] + Centre.X, 0, LastValidNum.X) - Centre.X;
+                    X <= MathUtil.ClampInt(Convert.ToInt32(Tiles.XMax[XNum] + Centre.X), 0, LastValidNum.X) - Centre.X;
                     X++ )
                 {
                     Action.PosNum.X = Centre.X + X;

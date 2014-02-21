@@ -455,9 +455,9 @@ namespace SharpFlame.Mapping.IO.Wz
             var moduleTypeBase = default(StructureTypeBase);
             var newModule = default(clsUnit);
 
-            var factoryModule = App.ObjectData.FindFirstStructureType(StructureTypeBase.enumStructureType.FactoryModule);
-            var researchModule = App.ObjectData.FindFirstStructureType(StructureTypeBase.enumStructureType.ResearchModule);
-            var powerModule = App.ObjectData.FindFirstStructureType(StructureTypeBase.enumStructureType.PowerModule);
+            var factoryModule = App.ObjectData.FindFirstStructureType(StructureType.FactoryModule);
+            var researchModule = App.ObjectData.FindFirstStructureType(StructureType.ResearchModule);
+            var powerModule = App.ObjectData.FindFirstStructureType(StructureType.PowerModule);
 
             if ( factoryModule == null )
             {
@@ -514,14 +514,14 @@ namespace SharpFlame.Mapping.IO.Wz
                             newUnit.UnitGroup = iniStructure.UnitGroup;
                         }
                         newUnit.Pos = new WorldPos(iniStructure.Pos, iniStructure.Pos.Z);
-                        newUnit.Rotation = Convert.ToInt32(iniStructure.Rotation.Direction * 360.0D / Constants.INIRotationMax);
+                        newUnit.Rotation = Convert.ToInt32(iniStructure.Rotation.Direction * 360.0D / Constants.IniRotationMax);
                         if ( newUnit.Rotation == 360 )
                         {
                             newUnit.Rotation = 0;
                         }
                         if ( iniStructure.HealthPercent >= 0 )
                         {
-                            newUnit.Health = MathUtil.Clamp_dbl(iniStructure.HealthPercent / 100.0D, 0.01D, 1.0D);
+                            newUnit.Health = MathUtil.ClampDbl(iniStructure.HealthPercent / 100.0D, 0.01D, 1.0D);
                         }
                         if ( iniStructure.ID == 0U )
                         {
@@ -539,19 +539,19 @@ namespace SharpFlame.Mapping.IO.Wz
                         //create modules
                         switch ( structureTypeBase.StructureType )
                         {
-                            case StructureTypeBase.enumStructureType.Factory:
+                            case StructureType.Factory:
                                 moduleLimit = 2;
                                 moduleTypeBase = factoryModule;
                                 break;
-                            case StructureTypeBase.enumStructureType.VTOLFactory:
+                            case StructureType.VTOLFactory:
                                 moduleLimit = 2;
                                 moduleTypeBase = factoryModule;
                                 break;
-                            case StructureTypeBase.enumStructureType.PowerGenerator:
+                            case StructureType.PowerGenerator:
                                 moduleLimit = 1;
                                 moduleTypeBase = powerModule;
                                 break;
-                            case StructureTypeBase.enumStructureType.Research:
+                            case StructureType.Research:
                                 moduleLimit = 1;
                                 moduleTypeBase = researchModule;
                                 break;
@@ -628,14 +628,14 @@ namespace SharpFlame.Mapping.IO.Wz
                         newUnit.TypeBase = featureTypeBase;
                         newUnit.UnitGroup = map.ScavengerUnitGroup;
                         newUnit.Pos = new WorldPos(iniFeature.Pos, iniFeature.Pos.Z);
-                        newUnit.Rotation = Convert.ToInt32(iniFeature.Rotation.Direction * 360.0D / Constants.INIRotationMax);
+                        newUnit.Rotation = Convert.ToInt32(iniFeature.Rotation.Direction * 360.0D / Constants.IniRotationMax);
                         if ( newUnit.Rotation == 360 )
                         {
                             newUnit.Rotation = 0;
                         }
                         if ( iniFeature.HealthPercent >= 0 )
                         {
-                            newUnit.Health = MathUtil.Clamp_dbl(iniFeature.HealthPercent / 100.0D, 0.01D, 1.0D);
+                            newUnit.Health = MathUtil.ClampDbl(iniFeature.HealthPercent / 100.0D, 0.01D, 1.0D);
                         }
                         if ( iniFeature.ID == 0U )
                         {
@@ -673,7 +673,7 @@ namespace SharpFlame.Mapping.IO.Wz
                     if ( iniDroid.Template == null || iniDroid.Template == "" )
                     {
                         droidType = new DroidDesign();
-                        if ( !droidType.SetDroidType((enumDroidType)(iniDroid.DroidType)) )
+                        if ( !droidType.SetDroidType((DroidType)(iniDroid.DroidType)) )
                         {
                             unknownDroidTypeCount++;
                         }
@@ -835,14 +835,14 @@ namespace SharpFlame.Mapping.IO.Wz
                             newUnit.UnitGroup = iniDroid.UnitGroup;
                         }
                         newUnit.Pos = new WorldPos(iniDroid.Pos, iniDroid.Pos.Z);
-                        newUnit.Rotation = Convert.ToInt32(iniDroid.Rotation.Direction * 360.0D / Constants.INIRotationMax);
+                        newUnit.Rotation = Convert.ToInt32(iniDroid.Rotation.Direction * 360.0D / Constants.IniRotationMax);
                         if ( newUnit.Rotation == 360 )
                         {
                             newUnit.Rotation = 0;
                         }
                         if ( iniDroid.HealthPercent >= 0 )
                         {
-                            newUnit.Health = MathUtil.Clamp_dbl(iniDroid.HealthPercent / 100.0D, 0.01D, 1.0D);
+                            newUnit.Health = MathUtil.ClampDbl(iniDroid.HealthPercent / 100.0D, 0.01D, 1.0D);
                         }
                         if ( iniDroid.ID == 0U )
                         {

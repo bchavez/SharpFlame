@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Core.Parsers.Lev;
 using Sprache;
 
@@ -141,6 +143,30 @@ data    ""wrf/multi/fog1.wrf""";
             levfile.Levels [0].Data [1].Should ().Be ("wrf/multi/fog1.wrf");
             levfile.Levels [1].Name.Should ().Be ("Tinny-War-T2");
             levfile.Levels [2].Name.Should ().Be ("Tinny-War-T3");
+        }
+
+        [Test]
+        [Explicit]
+        public void bechmark()
+        {
+            var file = "Data"
+                .CombinePathWith("Levels")
+                .CombinePathWith("addon.lev");
+
+            var txt = File.ReadAllText( file );
+            Console.WriteLine( "Parsing: {0}", file );
+            var s = new Stopwatch();
+
+            s.Start();
+            for( int i = 0; i < 1000; i++)
+            {
+                LevGrammar.Lev.Parse(txt);
+            }
+            s.Stop();
+            Console.WriteLine("Total Time: " + s.Elapsed);       
+            //CPU: INTEL 3960X EE, 64GB RAM
+            //Total Time: 00:00:39.4012016
+
         }
     }
 }

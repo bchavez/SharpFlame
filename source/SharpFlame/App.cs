@@ -10,6 +10,7 @@ using SharpFlame.AppSettings;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Graphics.OpenGL;
@@ -32,7 +33,7 @@ namespace SharpFlame
 
         public static char PlatformPathSeparator;
 
-        public static bool Debug_GL = false;
+        public static bool DebugGL = false;
 
         public static string SettingsPath;
         public static string AutoSavePath;
@@ -109,14 +110,14 @@ namespace SharpFlame
 
         public static bool Draw_TileTextures = true;
 
-        public static enumDrawLighting Draw_Lighting = enumDrawLighting.Half;
+        public static DrawLighting Draw_Lighting = DrawLighting.Half;
         public static bool Draw_TileWireframe;
         public static bool Draw_Units = true;
         public static bool Draw_VertexTerrain;
         public static bool Draw_Gateways;
         public static bool Draw_ScriptMarkers = true;
 
-        public static enumView_Move_Type ViewMoveType = enumView_Move_Type.RTS;
+        public static ViewMoveType ViewMoveType = ViewMoveType.RTS;
         public static bool RTSOrbit = true;
 
         public static Matrix3DMath.Matrix3D SunAngleMatrix = new Matrix3DMath.Matrix3D();
@@ -174,7 +175,7 @@ namespace SharpFlame
 
             foreach ( Option<KeyboardControl> control in KeyboardManager.OptionsKeyboardControls.Options )
             {
-                ((KeyboardControl)(KeyboardManager.KeyboardProfile.get_Value(control))).KeysChanged(IsViewKeyDown);
+                ((KeyboardControl)(KeyboardManager.KeyboardProfile.GetValue(control))).KeysChanged(IsViewKeyDown);
             }
         }
 

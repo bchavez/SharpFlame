@@ -1,6 +1,6 @@
 namespace SharpFlame.Util
 {
-    public enum enumTileWalls
+    public enum TileWalls
     {
         None = 0,
         Left = 1,

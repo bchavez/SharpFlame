@@ -8,11 +8,11 @@ namespace SharpFlame.Colors
         public float Green;
         public float Blue;
 
-        public sRGB_sng(float Red, float Green, float Blue)
+        public sRGB_sng(float red, float green, float blue)
         {
-            this.Red = Red;
-            this.Green = Green;
-            this.Blue = Blue;
+            this.Red = red;
+            this.Green = green;
+            this.Blue = blue;
         }
     }
 
@@ -23,12 +23,12 @@ namespace SharpFlame.Colors
         public float Blue;
         public float Alpha;
 
-        public sRGBA_sng( float Red, float Green, float Blue, float Alpha )
+        public sRGBA_sng( float red, float green, float blue, float alpha )
         {
-            this.Red = Red;
-            this.Green = Green;
-            this.Blue = Blue;
-            this.Alpha = Alpha;
+            this.Red = red;
+            this.Green = green;
+            this.Blue = blue;
+            this.Alpha = alpha;
         }
     }
 
@@ -38,43 +38,43 @@ namespace SharpFlame.Colors
         public float Green;
         public float Blue;
 
-        public clsRGB_sng( float Red, float Green, float Blue )
+        public clsRGB_sng( float red, float green, float blue )
         {
-            this.Red = Red;
-            this.Green = Green;
-            this.Blue = Blue;
+            this.Red = red;
+            this.Green = green;
+            this.Blue = blue;
         }
 
-        public virtual string GetINIOutput()
+        public virtual string GetIniOutput()
         {
             return Red.ToStringInvariant() + ", " + Green.ToStringInvariant() + ", " + Blue.ToStringInvariant();
         }
 
-        public virtual bool ReadINIText( SplitCommaText SplitText )
+        public virtual bool ReadINIText( SplitCommaText splitText )
         {
-            if( SplitText.PartCount < 3 )
+            if( splitText.PartCount < 3 )
             {
                 return false;
             }
 
-            sRGB_sng Colour = new sRGB_sng();
+            var colour = new sRGB_sng();
 
-            if( !IOUtil.InvariantParse( SplitText.Parts[0], ref Colour.Red ) )
+            if( !IOUtil.InvariantParse( splitText.Parts[0], ref colour.Red ) )
             {
                 return false;
             }
-            if( !IOUtil.InvariantParse( SplitText.Parts[1], ref Colour.Green ) )
+            if( !IOUtil.InvariantParse( splitText.Parts[1], ref colour.Green ) )
             {
                 return false;
             }
-            if( !IOUtil.InvariantParse( SplitText.Parts[2], ref Colour.Blue ) )
+            if( !IOUtil.InvariantParse( splitText.Parts[2], ref colour.Blue ) )
             {
                 return false;
             }
 
-            Red = Colour.Red;
-            Green = Colour.Green;
-            Blue = Colour.Blue;
+            Red = colour.Red;
+            Green = colour.Green;
+            Blue = colour.Blue;
 
             return true;
         }
@@ -84,36 +84,36 @@ namespace SharpFlame.Colors
     {
         public float Alpha;
 
-        public clsRGBA_sng( float Red, float Green, float Blue, float Alpha )
-            : base( Red, Green, Blue )
+        public clsRGBA_sng( float red, float green, float blue, float alpha )
+            : base( red, green, blue )
         {
-            this.Alpha = Alpha;
+            this.Alpha = alpha;
         }
 
-        public clsRGBA_sng( clsRGBA_sng CopyItem )
-            : base( CopyItem.Red, CopyItem.Green, CopyItem.Blue )
+        public clsRGBA_sng( clsRGBA_sng copyItem )
+            : base( copyItem.Red, copyItem.Green, copyItem.Blue )
         {
-            Alpha = CopyItem.Alpha;
+            Alpha = copyItem.Alpha;
         }
 
-        public override string GetINIOutput()
+        public override string GetIniOutput()
         {
-            return base.GetINIOutput() + ", " + Alpha.ToStringInvariant();
+            return base.GetIniOutput() + ", " + Alpha.ToStringInvariant();
         }
 
-        public override bool ReadINIText( SplitCommaText SplitText )
+        public override bool ReadINIText( SplitCommaText splitText )
         {
-            if( !base.ReadINIText( SplitText ) )
+            if( !base.ReadINIText( splitText ) )
             {
                 return false;
             }
 
-            if( SplitText.PartCount < 4 )
+            if( splitText.PartCount < 4 )
             {
                 return false;
             }
 
-            if( !IOUtil.InvariantParse( SplitText.Parts[3], ref Alpha ) )
+            if( !IOUtil.InvariantParse( splitText.Parts[3], ref Alpha ) )
             {
                 Alpha = 1.0F;
             }

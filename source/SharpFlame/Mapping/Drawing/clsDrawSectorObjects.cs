@@ -88,8 +88,8 @@ namespace SharpFlame.Mapping.Drawing
                     }
                     if ( DrawUnitLabel && !UnitTextLabels.AtMaxCount() )
                     {
-                        Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrix_Inverted, XYZ_dbl, ref XYZ_dbl2);
-                        if ( ViewInfo.Pos_Get_Screen_XY(XYZ_dbl2, ref ScreenPos) )
+                        Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrixInverted, XYZ_dbl, ref XYZ_dbl2);
+                        if ( ViewInfo.PosGetScreenXY(XYZ_dbl2, ref ScreenPos) )
                         {
                             if ( ScreenPos.X >= 0 & ScreenPos.X <= ViewInfo.MapViewControl.GLSize.X & ScreenPos.Y >= 0 & ScreenPos.Y <= ViewInfo.MapViewControl.GLSize.Y )
                             {

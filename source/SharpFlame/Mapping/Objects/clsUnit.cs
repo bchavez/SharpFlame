@@ -102,15 +102,15 @@ namespace SharpFlame.Mapping.Objects
         {
             var rotation16 = 0;
 
-            rotation16 = (int)(Rotation * Constants.INIRotationMax / 360.0D);
-            if ( rotation16 >= Constants.INIRotationMax )
+            rotation16 = (int)(Rotation * Constants.IniRotationMax / 360.0D);
+            if ( rotation16 >= Constants.IniRotationMax )
             {
-                rotation16 -= Constants.INIRotationMax;
+                rotation16 -= Constants.IniRotationMax;
             }
             else if ( rotation16 < 0 )
             {
                 Debugger.Break();
-                rotation16 += Constants.INIRotationMax;
+                rotation16 += Constants.IniRotationMax;
             }
 
             return string.Format("{0}, 0, 0", rotation16);
@@ -118,7 +118,7 @@ namespace SharpFlame.Mapping.Objects
 
         public string GetINIHealthPercent()
         {
-            return string.Format("{0}%", (int)(MathUtil.Clamp_dbl(Health * 100.0D, 1.0D, 100.0D)));
+            return string.Format("{0}%", (int)(MathUtil.ClampDbl(Health * 100.0D, 1.0D, 100.0D)));
         }
 
         public string GetPosText()
@@ -134,9 +134,9 @@ namespace SharpFlame.Mapping.Objects
             {
                 var structureTypeBase = (StructureTypeBase)TypeBase;
                 var StructureTypeType = structureTypeBase.StructureType;
-                if ( StructureTypeType == StructureTypeBase.enumStructureType.FactoryModule
-                     | StructureTypeType == StructureTypeBase.enumStructureType.PowerModule
-                     | StructureTypeType == StructureTypeBase.enumStructureType.ResearchModule )
+                if ( StructureTypeType == StructureType.FactoryModule
+                     | StructureTypeType == StructureType.PowerModule
+                     | StructureTypeType == StructureType.ResearchModule )
                 {
                     Result.Problem = "Error: Trying to assign label to structure module.";
                     return Result;

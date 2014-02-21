@@ -7,7 +7,7 @@ using SharpFlame.Mapping.Objects;
 
 namespace SharpFlame.Mapping.Tools
 {
-    public class clsObjectSelect : SimpleListTool<clsUnit>
+    public class clsObjectSelect : ISimpleListTool<clsUnit>
     {
         private clsUnit Unit;
 
@@ -16,9 +16,9 @@ namespace SharpFlame.Mapping.Tools
             Unit.MapSelect();
         }
 
-        public void SetItem(clsUnit Item)
+        public void SetItem(clsUnit item)
         {
-            Unit = Item;
+            Unit = item;
         }
     }
 }

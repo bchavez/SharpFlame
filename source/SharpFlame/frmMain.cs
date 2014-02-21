@@ -14,6 +14,7 @@ using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
 using SharpFlame.Controls;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Generators;
@@ -140,7 +141,7 @@ namespace SharpFlame
 
         public enumTextureTerrainAction TextureTerrainAction = enumTextureTerrainAction.Reinterpret;
 
-        public enumFillCliffAction FillCliffAction = enumFillCliffAction.Ignore;
+        public FillCliffAction FillCliffAction = FillCliffAction.Ignore;
 
         public Timer tmrKey;
         public Timer tmrTool;
@@ -282,7 +283,7 @@ namespace SharpFlame
                 }
             }
 
-            SettingsManager.Settings_Write();
+            SettingsManager.SettingsWrite();
         }
 
 #if !Mono
@@ -445,7 +446,7 @@ namespace SharpFlame
             }
 
             // var tilesetNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultTilesetsPathNum));
-            var tilesetsList = (List<string>)SettingsManager.Settings.get_Value(SettingsManager.Setting_TilesetDirectories);
+            var tilesetsList = (List<string>)SettingsManager.Settings.GetValue(SettingsManager.Setting_TilesetDirectories);
             foreach (var path in tilesetsList) {
                 if (path != null && path != "") {
                     InitializeStatus = "Loading tilesets";
@@ -463,7 +464,7 @@ namespace SharpFlame
 
             App.ObjectData = new clsObjectData();
             // var ObjectDataNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultObjectDataPathNum));
-            var objectDataList = (List<string>)(SettingsManager.Settings.get_Value(SettingsManager.Setting_ObjectDataDirectories));
+            var objectDataList = (List<string>)(SettingsManager.Settings.GetValue(SettingsManager.Setting_ObjectDataDirectories));
             foreach (var path in objectDataList) {
                 if (path != null && path != "") {
                     InitializeStatus = "Loading object data";
@@ -521,7 +522,7 @@ namespace SharpFlame
 
             MainMapAfterChanged();
 
-            MapViewControl.DrawView_SetEnabled(true);
+            MapViewControl.DrawViewSetEnabled(true);
             TextureViewControl.DrawView_SetEnabled(true);
 
             WindowState = FormWindowState.Maximized;
@@ -1272,7 +1273,7 @@ namespace SharpFlame
                 for ( X = StartXY.X; X <= FinishXY.X; X++ )
                 {
                     Map.Terrain.Vertices[X, Y].Height =
-                        (byte)(Math.Round(MathUtil.Clamp_dbl(Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height + Offset), byte.MinValue, byte.MaxValue)));
+                        (byte)(Math.Round(MathUtil.ClampDbl(Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height + Offset), byte.MinValue, byte.MaxValue)));
                     Pos.X = X;
                     Pos.Y = Y;
                     Map.SectorGraphicsChanges.VertexAndNormalsChanged(Pos);
@@ -1509,7 +1510,7 @@ namespace SharpFlame
                 return;
             }
 
-            Angle = MathUtil.Clamp_int(Angle, 0, 359);
+            Angle = MathUtil.ClampInt(Angle, 0, 359);
 
             if ( Map.SelectedUnits.Count > 1 )
             {
@@ -2443,7 +2444,7 @@ namespace SharpFlame
             {
                 return;
             }
-            Height = (byte)(MathUtil.Clamp_dbl(Height_dbl, byte.MinValue, byte.MaxValue));
+            Height = (byte)(MathUtil.ClampDbl(Height_dbl, byte.MinValue, byte.MaxValue));
             HeightSetPalette[tabHeightSetL.SelectedIndex] = Height;
             if ( tabHeightSetL.SelectedIndex == tabHeightSetL.SelectedIndex )
             {
@@ -2464,7 +2465,7 @@ namespace SharpFlame
             {
                 return;
             }
-            Height = (byte)(MathUtil.Clamp_dbl(Height_dbl, byte.MinValue, byte.MaxValue));
+            Height = (byte)(MathUtil.ClampDbl(Height_dbl, byte.MinValue, byte.MaxValue));
             HeightSetPalette[tabHeightSetR.SelectedIndex] = Height;
             if ( tabHeightSetL.SelectedIndex == tabHeightSetR.SelectedIndex )
             {
@@ -2564,14 +2565,14 @@ namespace SharpFlame
             {
                 return;
             }
-            Multiplier = MathUtil.Clamp_dbl(dblTemp, 0.0D, 255.0D);
+            Multiplier = MathUtil.ClampDbl(dblTemp, 0.0D, 255.0D);
             MathUtil.ReorderXY(Map.Selected_Area_VertexA, Map.Selected_Area_VertexB, ref StartXY, ref FinishXY);
             for ( Y = StartXY.Y; Y <= FinishXY.Y; Y++ )
             {
                 for ( X = StartXY.X; X <= FinishXY.X; X++ )
                 {
                     Map.Terrain.Vertices[X, Y].Height =
-                        (byte)(Math.Round(MathUtil.Clamp_dbl(Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height * Multiplier), byte.MinValue, byte.MaxValue)));
+                        (byte)(Math.Round(MathUtil.ClampDbl(Convert.ToDouble(Map.Terrain.Vertices[X, Y].Height * Multiplier), byte.MinValue, byte.MaxValue)));
                     Pos.X = X;
                     Pos.Y = Y;
                     Map.SectorGraphicsChanges.VertexAndNormalsChanged(Pos);
@@ -2738,7 +2739,7 @@ namespace SharpFlame
                 return;
             }
 
-            Health = MathUtil.Clamp_dbl(Health, 1.0D, 100.0D) / 100.0D;
+            Health = MathUtil.ClampDbl(Health, 1.0D, 100.0D) / 100.0D;
 
             if ( Map.SelectedUnits.Count > 1 )
             {
@@ -2800,11 +2801,11 @@ namespace SharpFlame
             }
         }
 
-        public enumObjectRotateMode PasteRotateObjects = enumObjectRotateMode.Walls;
+        public ObjectRotateMode PasteRotateObjects = ObjectRotateMode.Walls;
 
         public void menuRotateUnits_Click(Object sender, EventArgs e)
         {
-            PasteRotateObjects = enumObjectRotateMode.All;
+            PasteRotateObjects = ObjectRotateMode.All;
             menuRotateUnits.Checked = true;
             menuRotateWalls.Checked = false;
             menuRotateNothing.Checked = false;
@@ -2812,7 +2813,7 @@ namespace SharpFlame
 
         public void menuRotateWalls_Click(Object sender, EventArgs e)
         {
-            PasteRotateObjects = enumObjectRotateMode.Walls;
+            PasteRotateObjects = ObjectRotateMode.Walls;
             menuRotateUnits.Checked = false;
             menuRotateWalls.Checked = true;
             menuRotateNothing.Checked = false;
@@ -2820,7 +2821,7 @@ namespace SharpFlame
 
         public void menuRotateNothing_Click(Object sender, EventArgs e)
         {
-            PasteRotateObjects = enumObjectRotateMode.None;
+            PasteRotateObjects = ObjectRotateMode.None;
             menuRotateUnits.Checked = false;
             menuRotateWalls.Checked = false;
             menuRotateNothing.Checked = true;
@@ -3359,7 +3360,7 @@ namespace SharpFlame
             if ( Map != null )
             {
                 Map.CheckMessages();
-                Map.ViewInfo.FOV_Calc();
+                Map.ViewInfo.FovCalc();
                 Map.SectorGraphicsChanges.SetAllChanged();
                 Map.Update();
                 Map.MinimapMakeLater();
@@ -3570,17 +3571,17 @@ namespace SharpFlame
 
         public void rdoFillCliffIgnore_CheckedChanged(Object sender, EventArgs e)
         {
-            FillCliffAction = enumFillCliffAction.Ignore;
+            FillCliffAction = FillCliffAction.Ignore;
         }
 
         public void rdoFillCliffStopBefore_CheckedChanged(Object sender, EventArgs e)
         {
-            FillCliffAction = enumFillCliffAction.StopBefore;
+            FillCliffAction = FillCliffAction.StopBefore;
         }
 
         public void rdoFillCliffStopAfter_CheckedChanged(Object sender, EventArgs e)
         {
-            FillCliffAction = enumFillCliffAction.StopAfter;
+            FillCliffAction = FillCliffAction.StopAfter;
         }
 
         public void btnScriptAreaCreate_Click(Object sender, EventArgs e)
@@ -3787,7 +3788,7 @@ namespace SharpFlame
                 ScripPosition.Deallocate();
                 if ( Map.ScriptPositions.Count > 0 )
                 {
-                    _SelectedScriptMarker = Map.ScriptPositions[MathUtil.Clamp_int(Number, 0, Map.ScriptPositions.Count - 1)];
+                    _SelectedScriptMarker = Map.ScriptPositions[MathUtil.ClampInt(Number, 0, Map.ScriptPositions.Count - 1)];
                 }
                 else
                 {
@@ -3801,7 +3802,7 @@ namespace SharpFlame
                 ScriptArea.Deallocate();
                 if ( Map.ScriptAreas.Count > 0 )
                 {
-                    _SelectedScriptMarker = Map.ScriptAreas[MathUtil.Clamp_int(Number, 0, Map.ScriptAreas.Count - 1)];
+                    _SelectedScriptMarker = Map.ScriptAreas[MathUtil.ClampInt(Number, 0, Map.ScriptAreas.Count - 1)];
                 }
                 else
                 {

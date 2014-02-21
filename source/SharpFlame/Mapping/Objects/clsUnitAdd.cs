@@ -68,8 +68,8 @@ namespace SharpFlame.Mapping.Objects
 
             NewUnit.MapLink.Connect(Map.Units);
 
-            NewUnit.Pos.Horizontal.X = MathUtil.Clamp_int(NewUnit.Pos.Horizontal.X, 0, Map.Terrain.TileSize.X * Constants.TerrainGridSpacing - 1);
-            NewUnit.Pos.Horizontal.Y = MathUtil.Clamp_int(NewUnit.Pos.Horizontal.Y, 0, Map.Terrain.TileSize.Y * Constants.TerrainGridSpacing - 1);
+            NewUnit.Pos.Horizontal.X = MathUtil.ClampInt(NewUnit.Pos.Horizontal.X, 0, Map.Terrain.TileSize.X * Constants.TerrainGridSpacing - 1);
+            NewUnit.Pos.Horizontal.Y = MathUtil.ClampInt(NewUnit.Pos.Horizontal.Y, 0, Map.Terrain.TileSize.Y * Constants.TerrainGridSpacing - 1);
             NewUnit.Pos.Altitude = (int)(Math.Ceiling(Map.GetTerrainHeight(NewUnit.Pos.Horizontal)));
 
             if ( Label != null )

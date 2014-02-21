@@ -3,6 +3,7 @@ using System.IO;
 using NLog;
 using SharpFlame.Collections;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.Objects;
@@ -318,15 +319,15 @@ namespace SharpFlame.Mapping.IO.LND
                                 IOUtil.InvariantParse(ObjectText[7], ref NewObject.Pos.Z);
                                 if ( IOUtil.InvariantParse(ObjectText[8], ref dblTemp) )
                                 {
-                                    NewObject.Rotation.X = (int)(MathUtil.Clamp_dbl(dblTemp, 0.0D, 359.0D));
+                                    NewObject.Rotation.X = (int)(MathUtil.ClampDbl(dblTemp, 0.0D, 359.0D));
                                 }
                                 if ( IOUtil.InvariantParse(ObjectText[9], ref dblTemp) )
                                 {
-                                    NewObject.Rotation.Y = (int)(MathUtil.Clamp_dbl(dblTemp, 0.0D, 359.0D));
+                                    NewObject.Rotation.Y = (int)(MathUtil.ClampDbl(dblTemp, 0.0D, 359.0D));
                                 }
                                 if ( IOUtil.InvariantParse(ObjectText[10], ref dblTemp) )
                                 {
-                                    NewObject.Rotation.Z = (int)(MathUtil.Clamp_dbl(dblTemp, 0.0D, 359.0D));
+                                    NewObject.Rotation.Z = (int)(MathUtil.ClampDbl(dblTemp, 0.0D, 359.0D));
                                 }
                                 LNDObjects.Add(NewObject);
                             }

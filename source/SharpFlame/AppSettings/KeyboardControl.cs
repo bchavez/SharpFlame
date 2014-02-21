@@ -11,37 +11,37 @@ namespace SharpFlame.AppSettings
     {
         public Keys[] Keys;
         public Keys[] UnlessKeys;
-        private bool _Active;
+        private bool active;
 
-        public KeyboardControl(Keys[] Keys)
+        public KeyboardControl(Keys[] keys)
         {
-            this.Keys = Keys;
+            this.Keys = keys;
             UnlessKeys = new Keys[0];
         }
 
-        public KeyboardControl(Keys[] Keys, Keys[] UnlessKeys)
+        public KeyboardControl(Keys[] keys, Keys[] unlessKeys)
         {
-            this.Keys = Keys;
-            this.UnlessKeys = UnlessKeys;
+            this.Keys = keys;
+            this.UnlessKeys = unlessKeys;
         }
 
         public bool Active
         {
-            get { return _Active; }
+            get { return active; }
         }
 
-        private bool IsPressed(clsKeysActive KeysDown)
+        private bool IsPressed(clsKeysActive keysDown)
         {
             foreach ( var keys in Keys )
             {
-                if ( !KeysDown.Keys[(int)keys] )
+                if ( !keysDown.Keys[(int)keys] )
                 {
                     return false;
                 }
             }
             foreach ( var keys in UnlessKeys )
             {
-                if ( KeysDown.Keys[(int)keys] )
+                if ( keysDown.Keys[(int)keys] )
                 {
                     return false;
                 }
@@ -50,9 +50,9 @@ namespace SharpFlame.AppSettings
             return true;
         }
 
-        public void KeysChanged(clsKeysActive KeysDown)
+        public void KeysChanged(clsKeysActive keysDown)
         {
-            _Active = IsPressed(KeysDown);
+            active = IsPressed(keysDown);
         }
     }
 }

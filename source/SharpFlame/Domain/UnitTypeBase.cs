@@ -21,7 +21,7 @@ namespace SharpFlame.Domain
 
         public UnitType Type;
 
-        public UnitTypeBase()
+        protected UnitTypeBase()
         {
             UnitType_frmMainSelectedLink = new ConnectedListLink<UnitTypeBase, frmMain>(this);
             UnitType_ObjectDataLink = new ConnectedListLink<UnitTypeBase, clsObjectData>(this);
@@ -48,13 +48,13 @@ namespace SharpFlame.Domain
         {
             switch ( App.Draw_Lighting )
             {
-                case enumDrawLighting.Off:
+                case DrawLighting.Off:
                     GL.Color3(1.0F, 1.0F, 1.0F);
                     break;
-                case enumDrawLighting.Half:
+                case DrawLighting.Half:
                     GL.Color3(0.875F, 0.875F, 0.875F);
                     break;
-                case enumDrawLighting.Normal:
+                case DrawLighting.Normal:
                     GL.Color3(0.75F, 0.75F, 0.75F);
                     break;
             }
@@ -69,7 +69,7 @@ namespace SharpFlame.Domain
         {
         }
 
-        public XYInt get_GetFootprintNew(int Rotation)
+        public XYInt GetGetFootprintNew(int Rotation)
         {
             //get initial footprint
             XYInt result;
@@ -101,11 +101,11 @@ namespace SharpFlame.Domain
             return result;
         }
 
-        public XYInt get_GetFootprintSelected(int Rotation)
+        public XYInt GetGetFootprintSelected(int rotation)
         {
             if ( Program.frmMainInstance.cbxFootprintRotate.Checked )
             {
-                return get_GetFootprintNew(Rotation);
+                return GetGetFootprintNew(rotation);
             }
             return GetFootprintOld;
         }
@@ -192,7 +192,7 @@ namespace SharpFlame.Domain
         public Matrix3DMath.Matrix3D AngleOffsetMatrix = new Matrix3DMath.Matrix3D();
         public SimpleClassList<clsAttachment> Attachments = new SimpleClassList<clsAttachment>();
         public SimpleClassList<clsModel> Models = new SimpleClassList<clsModel>();
-        public XYZDouble Pos_Offset;
+        public XYZDouble PosOffset;
 
         public clsAttachment()
         {
@@ -202,51 +202,49 @@ namespace SharpFlame.Domain
 
         public void GLDraw()
         {
-            var AngleRPY = default(Angles.AngleRPY);
+            var angleRpy = default(Angles.AngleRPY);
             var matrixA = new Matrix3DMath.Matrix3D();
-            var Attachment = default(clsAttachment);
-            var Model = default(clsModel);
 
-            foreach ( var tempLoopVar_Model in Models )
+            foreach ( var model in Models )
             {
-                Model = tempLoopVar_Model;
-                Model.GLDraw();
+                model.GLDraw();
             }
 
-            foreach ( var tempLoopVar_Attachment in Attachments )
+            foreach ( var attachment in Attachments )
             {
-                Attachment = tempLoopVar_Attachment;
                 GL.PushMatrix();
-                Matrix3DMath.MatrixInvert(Attachment.AngleOffsetMatrix, matrixA);
-                Matrix3DMath.MatrixToRPY(matrixA, ref AngleRPY);
-                GL.Translate(Attachment.Pos_Offset.X, Attachment.Pos_Offset.Y, Convert.ToDouble(- Attachment.Pos_Offset.Z));
-                GL.Rotate((float)(AngleRPY.Roll / MathUtil.RadOf1Deg), 0.0F, 0.0F, -1.0F);
-                GL.Rotate((float)(AngleRPY.Pitch / MathUtil.RadOf1Deg), 1.0F, 0.0F, 0.0F);
-                GL.Rotate((float)(AngleRPY.Yaw / MathUtil.RadOf1Deg), 0.0F, 1.0F, 0.0F);
-                Attachment.GLDraw();
+                Matrix3DMath.MatrixInvert(attachment.AngleOffsetMatrix, matrixA);
+                Matrix3DMath.MatrixToRPY(matrixA, ref angleRpy);
+                GL.Translate(attachment.PosOffset.X, attachment.PosOffset.Y, Convert.ToDouble(- attachment.PosOffset.Z));
+                GL.Rotate((float)(angleRpy.Roll / MathUtil.RadOf1Deg), 0.0F, 0.0F, -1.0F);
+                GL.Rotate((float)(angleRpy.Pitch / MathUtil.RadOf1Deg), 1.0F, 0.0F, 0.0F);
+                GL.Rotate((float)(angleRpy.Yaw / MathUtil.RadOf1Deg), 0.0F, 1.0F, 0.0F);
+                attachment.GLDraw();
                 GL.PopMatrix();
             }
         }
 
         public clsAttachment CreateAttachment()
         {
-            var Result = new clsAttachment();
+            var result = new clsAttachment();
 
-            Attachments.Add(Result);
-            return Result;
+            Attachments.Add(result);
+            return result;
         }
 
         public clsAttachment CopyAttachment(clsAttachment Other)
         {
-            var Result = new clsAttachment();
+            var result = new clsAttachment
+                {
+                    PosOffset = Other.PosOffset
+                };
 
-            Result.Pos_Offset = Other.Pos_Offset;
-            Attachments.Add(Result);
-            Matrix3DMath.MatrixCopy(Other.AngleOffsetMatrix, Result.AngleOffsetMatrix);
-            Result.Models.AddRange(Other.Models);
-            Result.Attachments.AddRange(Other.Attachments);
+            Attachments.Add(result);
+            Matrix3DMath.MatrixCopy(Other.AngleOffsetMatrix, result.AngleOffsetMatrix);
+            result.Models.AddRange(Other.Models);
+            result.Attachments.AddRange(Other.Attachments);
 
-            return Result;
+            return result;
         }
 
         public clsAttachment AddCopyOfAttachment(clsAttachment AttachmentToCopy)
@@ -315,31 +313,6 @@ namespace SharpFlame.Domain
 
     public class StructureTypeBase : UnitTypeBase
     {
-        public enum enumStructureType
-        {
-            Unknown,
-            Demolish,
-            Wall,
-            CornerWall,
-            Factory,
-            CyborgFactory,
-            VTOLFactory,
-            Command,
-            HQ,
-            Defense,
-            PowerGenerator,
-            PowerModule,
-            Research,
-            ResearchModule,
-            FactoryModule,
-            DOOR,
-            RepairFacility,
-            SatUplink,
-            RearmPad,
-            MissileSilo,
-            ResourceExtractor
-        }
-
         public clsAttachment BaseAttachment = new clsAttachment();
 
         public string Code = "";
@@ -347,7 +320,7 @@ namespace SharpFlame.Domain
         public string Name = "Unknown";
         public clsModel StructureBasePlate;
 
-        public enumStructureType StructureType = enumStructureType.Unknown;
+        public StructureType StructureType = StructureType.Unknown;
         public ConnectedListLink<StructureTypeBase, clsObjectData> StructureType_ObjectDataLink;
 
         public ConnectedListLink<StructureTypeBase, clsWallType> WallLink;
@@ -375,9 +348,9 @@ namespace SharpFlame.Domain
 
         public bool IsModule()
         {
-            return StructureType == enumStructureType.FactoryModule
-                   | StructureType == enumStructureType.PowerModule
-                   | StructureType == enumStructureType.ResearchModule;
+            return StructureType == StructureType.FactoryModule
+                   | StructureType == StructureType.PowerModule
+                   | StructureType == StructureType.ResearchModule;
         }
 
         public override string GetName()
@@ -407,15 +380,15 @@ namespace SharpFlame.Domain
             Type = UnitType.PlayerDroid;
         }
 
-        public void CopyDesign(DroidDesign DroidTypeToCopy)
+        public void CopyDesign(DroidDesign droidTypeToCopy)
         {
-            TemplateDroidType = DroidTypeToCopy.TemplateDroidType;
-            Body = DroidTypeToCopy.Body;
-            Propulsion = DroidTypeToCopy.Propulsion;
-            TurretCount = DroidTypeToCopy.TurretCount;
-            Turret1 = DroidTypeToCopy.Turret1;
-            Turret2 = DroidTypeToCopy.Turret2;
-            Turret3 = DroidTypeToCopy.Turret3;
+            TemplateDroidType = droidTypeToCopy.TemplateDroidType;
+            Body = droidTypeToCopy.Body;
+            Propulsion = droidTypeToCopy.Propulsion;
+            TurretCount = droidTypeToCopy.TurretCount;
+            Turret1 = droidTypeToCopy.Turret1;
+            Turret2 = droidTypeToCopy.Turret2;
+            Turret3 = droidTypeToCopy.Turret3;
         }
 
         protected override void TypeGLDraw()
@@ -459,16 +432,14 @@ namespace SharpFlame.Domain
                 return;
             }
 
-            var TurretConnector = new XYZDouble();
-
-            TurretConnector = Body.Attachment.Models[0].Connectors[0];
+            var turretConnector = Body.Attachment.Models[0].Connectors[0];
 
             if ( TurretCount >= 1 )
             {
                 if ( Turret1 != null )
                 {
-                    var NewTurret = NewBody.AddCopyOfAttachment(Turret1.Attachment);
-                    NewTurret.Pos_Offset = TurretConnector;
+                    var newTurret = NewBody.AddCopyOfAttachment(Turret1.Attachment);
+                    newTurret.PosOffset = turretConnector;
                 }
             }
 
@@ -477,21 +448,21 @@ namespace SharpFlame.Domain
                 return;
             }
 
-            TurretConnector = Body.Attachment.Models[0].Connectors[1];
+            turretConnector = Body.Attachment.Models[0].Connectors[1];
 
             if ( TurretCount >= 2 )
             {
                 if ( Turret2 != null )
                 {
-                    var NewTurret = NewBody.AddCopyOfAttachment(Turret2.Attachment);
-                    NewTurret.Pos_Offset = TurretConnector;
+                    var newTurret = NewBody.AddCopyOfAttachment(Turret2.Attachment);
+                    newTurret.PosOffset = turretConnector;
                 }
             }
         }
 
         public int GetMaxHitPoints()
         {
-            var Result = 0;
+            var result = 0;
 
             //this is inaccurate
 
@@ -499,36 +470,36 @@ namespace SharpFlame.Domain
             {
                 return 0;
             }
-            Result = Body.Hitpoints;
+            result = Body.Hitpoints;
             if ( Propulsion == null )
             {
-                return Result;
+                return result;
             }
-            Result += (int)(Body.Hitpoints * Propulsion.HitPoints / 100.0D);
+            result += (int)(Body.Hitpoints * Propulsion.HitPoints / 100.0D);
             if ( Turret1 == null )
             {
-                return Result;
+                return result;
             }
-            Result += Body.Hitpoints + Turret1.HitPoints;
+            result += Body.Hitpoints + Turret1.HitPoints;
             if ( TurretCount < 2 || Turret2 == null )
             {
-                return Result;
+                return result;
             }
             if ( Turret2.TurretType != enumTurretType.Weapon )
             {
-                return Result;
+                return result;
             }
-            Result += Body.Hitpoints + Turret2.HitPoints;
+            result += Body.Hitpoints + Turret2.HitPoints;
             if ( TurretCount < 3 || Turret3 == null )
             {
-                return Result;
+                return result;
             }
             if ( Turret3.TurretType != enumTurretType.Weapon )
             {
-                return Result;
+                return result;
             }
-            Result += Body.Hitpoints + Turret3.HitPoints;
-            return Result;
+            result += Body.Hitpoints + Turret3.HitPoints;
+            return result;
         }
 
         public bool LoadParts(sLoadPartsArgs Args)
@@ -688,114 +659,114 @@ namespace SharpFlame.Domain
             return Result;
         }
 
-        public enumDroidType GetDroidType()
+        public DroidType GetDroidType()
         {
-            var Result = default(enumDroidType);
+            var Result = default(DroidType);
 
             if ( TemplateDroidType == App.TemplateDroidType_Null )
             {
-                Result = enumDroidType.Default_;
+                Result = DroidType.Default;
             }
             else if ( TemplateDroidType == App.TemplateDroidType_Person )
             {
-                Result = enumDroidType.Person;
+                Result = DroidType.Person;
             }
             else if ( TemplateDroidType == App.TemplateDroidType_Cyborg )
             {
-                Result = enumDroidType.Cyborg;
+                Result = DroidType.Cyborg;
             }
             else if ( TemplateDroidType == App.TemplateDroidType_CyborgSuper )
             {
-                Result = enumDroidType.Cyborg_Super;
+                Result = DroidType.CyborgSuper;
             }
             else if ( TemplateDroidType == App.TemplateDroidType_CyborgConstruct )
             {
-                Result = enumDroidType.Cyborg_Construct;
+                Result = DroidType.CyborgConstruct;
             }
             else if ( TemplateDroidType == App.TemplateDroidType_CyborgRepair )
             {
-                Result = enumDroidType.Cyborg_Repair;
+                Result = DroidType.CyborgRepair;
             }
             else if ( TemplateDroidType == App.TemplateDroidType_Transporter )
             {
-                Result = enumDroidType.Transporter;
+                Result = DroidType.Transporter;
             }
             else if ( Turret1 == null )
             {
-                Result = enumDroidType.Default_;
+                Result = DroidType.Default;
             }
             else if ( Turret1.TurretType == enumTurretType.Brain )
             {
-                Result = enumDroidType.Command;
+                Result = DroidType.Command;
             }
             else if ( Turret1.TurretType == enumTurretType.Sensor )
             {
-                Result = enumDroidType.Sensor;
+                Result = DroidType.Sensor;
             }
             else if ( Turret1.TurretType == enumTurretType.ECM )
             {
-                Result = enumDroidType.ECM;
+                Result = DroidType.ECM;
             }
             else if ( Turret1.TurretType == enumTurretType.Construct )
             {
-                Result = enumDroidType.Construct;
+                Result = DroidType.Construct;
             }
             else if ( Turret1.TurretType == enumTurretType.Repair )
             {
-                Result = enumDroidType.Repair;
+                Result = DroidType.Repair;
             }
             else if ( Turret1.TurretType == enumTurretType.Weapon )
             {
-                Result = enumDroidType.Weapon;
+                Result = DroidType.Weapon;
             }
             else
             {
-                Result = enumDroidType.Default_;
+                Result = DroidType.Default;
             }
             return Result;
         }
 
-        public bool SetDroidType(enumDroidType DroidType)
+        public bool SetDroidType(DroidType DroidType)
         {
             switch ( DroidType )
             {
-                case enumDroidType.Weapon:
+                case DroidType.Weapon:
                     TemplateDroidType = App.TemplateDroidType_Droid;
                     break;
-                case enumDroidType.Sensor:
+                case DroidType.Sensor:
                     TemplateDroidType = App.TemplateDroidType_Droid;
                     break;
-                case enumDroidType.ECM:
+                case DroidType.ECM:
                     TemplateDroidType = App.TemplateDroidType_Droid;
                     break;
-                case enumDroidType.Construct:
+                case DroidType.Construct:
                     TemplateDroidType = App.TemplateDroidType_Droid;
                     break;
-                case enumDroidType.Person:
+                case DroidType.Person:
                     TemplateDroidType = App.TemplateDroidType_Person;
                     break;
-                case enumDroidType.Cyborg:
+                case DroidType.Cyborg:
                     TemplateDroidType = App.TemplateDroidType_Cyborg;
                     break;
-                case enumDroidType.Transporter:
+                case DroidType.Transporter:
                     TemplateDroidType = App.TemplateDroidType_Transporter;
                     break;
-                case enumDroidType.Command:
+                case DroidType.Command:
                     TemplateDroidType = App.TemplateDroidType_Droid;
                     break;
-                case enumDroidType.Repair:
+                case DroidType.Repair:
                     TemplateDroidType = App.TemplateDroidType_Droid;
                     break;
-                case enumDroidType.Default_:
+                case DroidType.Default:
                     TemplateDroidType = App.TemplateDroidType_Null;
                     break;
-                case enumDroidType.Cyborg_Construct:
+                case DroidType.CyborgConstruct:
                     TemplateDroidType = App.TemplateDroidType_CyborgConstruct;
                     break;
-                case enumDroidType.Cyborg_Repair:
+                case DroidType.CyborgRepair:
                     TemplateDroidType = App.TemplateDroidType_CyborgRepair;
                     break;
-                case enumDroidType.Cyborg_Super:
+                case DroidType.CyborgSuper:
                     TemplateDroidType = App.TemplateDroidType_CyborgSuper;
                     break;
                 default:

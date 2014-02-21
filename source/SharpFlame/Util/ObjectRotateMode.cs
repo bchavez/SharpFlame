@@ -1,6 +1,6 @@
 namespace SharpFlame.Util
 {
-    public enum enumObjectRotateMode
+    public enum ObjectRotateMode
     {
         None,
         Walls,

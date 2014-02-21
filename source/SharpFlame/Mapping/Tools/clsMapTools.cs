@@ -17,7 +17,7 @@ namespace SharpFlame.Mapping
 {
     public partial class clsMap
     {
-        public void Rotate(TileOrientation Orientation, enumObjectRotateMode ObjectRotateMode)
+        public void Rotate(TileOrientation Orientation, ObjectRotateMode ObjectRotateMode)
         {
             var X = 0;
             var Y = 0;
@@ -153,7 +153,7 @@ namespace SharpFlame.Mapping
             {
                 Unit = tempLoopVar_Unit;
                 Unit.Sectors.Clear();
-                if ( ObjectRotateMode == enumObjectRotateMode.All )
+                if ( ObjectRotateMode == ObjectRotateMode.All )
                 {
                     Unit.Rotation =
                         (int)
@@ -165,11 +165,11 @@ namespace SharpFlame.Mapping
                         Unit.Rotation += 360;
                     }
                 }
-                else if ( ObjectRotateMode == enumObjectRotateMode.Walls )
+                else if ( ObjectRotateMode == ObjectRotateMode.Walls )
                 {
                     if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
                     {
-                        if ( ((StructureTypeBase)Unit.TypeBase).StructureType == StructureTypeBase.enumStructureType.Wall )
+                        if ( ((StructureTypeBase)Unit.TypeBase).StructureType == StructureType.Wall )
                         {
                             Unit.Rotation =
                                 (int)
@@ -296,7 +296,7 @@ namespace SharpFlame.Mapping
                     TextureNum = Terrain.Tiles[X, Y].Texture.TextureNum;
                     if ( TextureNum >= 0 & TextureNum < Tileset.TileCount )
                     {
-                        if ( Tileset.Tiles[TextureNum].DefaultType == Constants.TileTypeNum_Water )
+                        if ( Tileset.Tiles[TextureNum].DefaultType == Constants.TileTypeNumWater )
                         {
                             Terrain.Vertices[X, Y].Height = 0;
                             Terrain.Vertices[X + 1, Y].Height = 0;
@@ -457,7 +457,7 @@ namespace SharpFlame.Mapping
                     {
                         if ( Args.Layers[Layer_Num].AvoidLayers[A] )
                         {
-                            bmA.Expand_One_Tile(LayerResult[A]);
+                            bmA.ExpandOneTile(LayerResult[A]);
                             bmB.Remove(LayerResult[Layer_Num], bmA);
                             LayerResult[Layer_Num].ValueData = bmB.ValueData;
                             bmB.ValueData = new BooleanMapDataValue();
@@ -649,7 +649,7 @@ namespace SharpFlame.Mapping
                     {
                         if ( LayerList.Layers[LayerNum].AvoidLayers[A] )
                         {
-                            bmA.Expand_One_Tile(LayerResult[A]);
+                            bmA.ExpandOneTile(LayerResult[A]);
                             bmB.Remove(LayerResult[LayerNum], bmA);
                             LayerResult[LayerNum].ValueData = bmB.ValueData;
                             bmB.ValueData = new BooleanMapDataValue();
@@ -717,7 +717,7 @@ namespace SharpFlame.Mapping
                         }
                     }
 
-                    LayerResult[LayerNum].Remove_Diagonals();
+                    LayerResult[LayerNum].RemoveDiagonals();
 
                     for ( Y = 0; Y <= Terrain.TileSize.Y; Y++ )
                     {
@@ -781,7 +781,7 @@ namespace SharpFlame.Mapping
                     {
                         if ( Terrain.Tiles[X, Y].Texture.TextureNum >= 0 )
                         {
-                            if ( Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNum_Water )
+                            if ( Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNumWater )
                             {
                                 Terrain.Tiles[X, Y].Tri = false;
                                 SectorGraphicsChanges.TileChanged(TileNum);

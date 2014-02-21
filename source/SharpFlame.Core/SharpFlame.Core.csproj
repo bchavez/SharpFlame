@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ExtensionsForEnum.cs" />
+    <Compile Include="Extensions\ExtensionsForString.cs" />
     <Compile Include="Parsers\Lev2\Lev2Grammar.cs" />
     <Compile Include="Parsers\Lev\LevGrammar.cs" />
     <Compile Include="Parsers\Pie\Connector.cs" />
@@ -96,7 +97,5 @@
   </Target>
   -->
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="Domain\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

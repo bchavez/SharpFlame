@@ -27,8 +27,8 @@ namespace SharpFlame
         public int BaseLevel;
         public int BaseOilCount;
         public int BaseTruckCount;
-        private int ConnectionCount;
-        private clsConnection[] Connections;
+        private int connectionCount;
+        private clsConnection[] connections;
         public int ExtraOilClusterSizeMax;
         public int ExtraOilClusterSizeMin;
         public int ExtraOilCount;
@@ -47,18 +47,18 @@ namespace SharpFlame
         public clsMap Map;
         public float MaxDisconnectionDist;
         public int MaxLevelTransition;
-        private int NearestCount;
-        private clsNearest[] Nearests;
+        private int nearestCount;
+        private clsNearest[] nearests;
         public float NodeScale;
         public int OilAtATime;
         public float OilDispersion;
-        private int PassageNodeCount;
-        private float[,,,] PassageNodeDists;
-        private clsPassageNode[,] PassageNodes;
+        private int passageNodeCount;
+        private float[,,,] passageNodeDists;
+        private clsPassageNode[,] passageNodes;
         public int PassagesChance;
         public XYInt[] PlayerBasePos;
 
-        private sPlayerBase[] PlayerBases;
+        private sPlayerBase[] playerBases;
         public double RampBase;
         public int SymmetryBlockCount;
         public XYInt SymmetryBlockCountXY;
@@ -69,7 +69,7 @@ namespace SharpFlame
         public PathfinderNetwork TilePathMap;
         public XYInt TileSize;
         public int TopLeftPlayerCount;
-        private int TotalPlayerCount;
+        private int totalPlayerCount;
         public int TotalWaterQuantity;
         public int VariationChance;
         public PathfinderNetwork VertexPathMap;
@@ -77,26 +77,25 @@ namespace SharpFlame
 
         public int GetTotalPlayerCount
         {
-            get { return TotalPlayerCount; }
+            get { return totalPlayerCount; }
         }
 
         public clsResult GenerateLayout()
         {
-            var ReturnResult = new clsResult("Layout", false);
+            var returnResult = new clsResult("Layout", false);
             logger.Info("Generating Layouts");
 
-            var X = 0;
-            var Y = 0;
-            var A = 0;
-            var B = 0;
-            var C = 0;
-            var D = 0;
-            var E = 0;
-            var F = 0;
-            var G = 0;
-            var H = 0;
+            var x = 0;
+            var y = 0;
+            var a = 0;
+            var b = 0;
+            var c = 0;
+            var d = 0;
+            var e = 0;
+            var g = 0;
+            var h = 0;
 
-            TotalPlayerCount = TopLeftPlayerCount * SymmetryBlockCount;
+            totalPlayerCount = TopLeftPlayerCount * SymmetryBlockCount;
 
             var SymmetrySize = new XYInt();
 
@@ -105,33 +104,32 @@ namespace SharpFlame
 
             //create passage nodes
 
-            var PassageRadius = (int)(128.0F * NodeScale);
-            var MaxLikelyPassageNodeCount = 0;
-            MaxLikelyPassageNodeCount =
-                (int)(Math.Ceiling(Convert.ToDecimal(2.0D * TileSize.X * 128 * TileSize.Y * 128 / (Math.PI * PassageRadius * PassageRadius))));
+            var passageRadius = (int)(128.0F * NodeScale);
+            var maxLikelyPassageNodeCount = 0;
+            maxLikelyPassageNodeCount =
+                (int)(Math.Ceiling(Convert.ToDecimal(2.0D * TileSize.X * 128 * TileSize.Y * 128 / (Math.PI * passageRadius * passageRadius))));
 
-            PassageNodes = new clsPassageNode[SymmetryBlockCount, MaxLikelyPassageNodeCount];
-            var LoopCount = 0;
-            var EdgeOffset = 0 * 128;
-            var EdgeSections = new XYInt();
-            var EdgeSectionSize = default(XYDouble);
-            var NewPointPos = new XYInt();
+            passageNodes = new clsPassageNode[SymmetryBlockCount, maxLikelyPassageNodeCount];
+            const int EdgeOffset = 0 * 128;
+            var edgeSections = new XYInt();
+            var edgeSectionSize = default(XYDouble);
+            var newPointPos = new XYInt();
 
             if ( SymmetryBlockCountXY.X == 1 )
             {
-                EdgeSections.X =
+                edgeSections.X =
                     Convert.ToInt32(
                         ((TileSize.X * Constants.TerrainGridSpacing - EdgeOffset * 2.0D) / (NodeScale * Constants.TerrainGridSpacing * 2.0F)));
-                EdgeSectionSize.X = (TileSize.X * Constants.TerrainGridSpacing - EdgeOffset * 2.0D) / EdgeSections.X;
-                EdgeSections.X--;
+                edgeSectionSize.X = (TileSize.X * Constants.TerrainGridSpacing - EdgeOffset * 2.0D) / edgeSections.X;
+                edgeSections.X--;
             }
             else
             {
-                EdgeSections.X =
+                edgeSections.X =
                     (int)
                         (((TileSize.X * Constants.TerrainGridSpacing / SymmetryBlockCountXY.X - EdgeOffset) /
                           (NodeScale * Constants.TerrainGridSpacing * 2.0F) - 0.5D));
-                EdgeSectionSize.X =
+                edgeSectionSize.X =
                     Convert.ToDouble((TileSize.X * Constants.TerrainGridSpacing / SymmetryBlockCountXY.X - EdgeOffset) /
                                      (Convert.ToDouble(
                                          ((TileSize.X * Constants.TerrainGridSpacing / SymmetryBlockCountXY.X - EdgeOffset) /
@@ -139,188 +137,186 @@ namespace SharpFlame
             }
             if ( SymmetryBlockCountXY.Y == 1 )
             {
-                EdgeSections.Y =
+                edgeSections.Y =
                     Convert.ToInt32(
                         ((TileSize.Y * Constants.TerrainGridSpacing - EdgeOffset * 2.0D) / (NodeScale * Constants.TerrainGridSpacing * 2.0F)));
-                EdgeSectionSize.Y = (TileSize.Y * Constants.TerrainGridSpacing - EdgeOffset * 2.0D) / EdgeSections.Y;
-                EdgeSections.Y--;
+                edgeSectionSize.Y = (TileSize.Y * Constants.TerrainGridSpacing - EdgeOffset * 2.0D) / edgeSections.Y;
+                edgeSections.Y--;
             }
             else
             {
-                EdgeSections.Y =
+                edgeSections.Y =
                     Convert.ToInt32(
                         ((TileSize.Y * Constants.TerrainGridSpacing / SymmetryBlockCountXY.Y - EdgeOffset) /
                          (NodeScale * Constants.TerrainGridSpacing * 2.0F) - 0.5D));
-                EdgeSectionSize.Y =
+                edgeSectionSize.Y =
                     Convert.ToDouble((TileSize.Y * Constants.TerrainGridSpacing / SymmetryBlockCountXY.Y - EdgeOffset) /
                                      (Convert.ToDouble(
                                          ((TileSize.Y * Constants.TerrainGridSpacing / SymmetryBlockCountXY.Y - EdgeOffset) /
                                           (NodeScale * Constants.TerrainGridSpacing * 2.0F) - 0.5D)) + 0.5D));
             }
 
-            PassageNodeCount = 0;
-            for ( Y = 0; Y <= EdgeSections.Y; Y++ )
+            passageNodeCount = 0;
+            for ( y = 0; y <= edgeSections.Y; y++ )
             {
-                if ( !MakePassageNodes(new XYInt(EdgeOffset, EdgeOffset + (int)(Y * EdgeSectionSize.Y)), true) )
+                if ( !MakePassageNodes(new XYInt(EdgeOffset, EdgeOffset + (int)(y * edgeSectionSize.Y)), true) )
                 {
-                    ReturnResult.ProblemAdd("Error: Bad border node.");
-                    return ReturnResult;
+                    returnResult.ProblemAdd("Error: Bad border node.");
+                    return returnResult;
                 }
                 if ( SymmetryBlockCountXY.X == 1 )
                 {
                     if (
-                        !MakePassageNodes(new XYInt(TileSize.X * Constants.TerrainGridSpacing - EdgeOffset, EdgeOffset + (int)(Y * EdgeSectionSize.Y)), true) )
+                        !MakePassageNodes(new XYInt(TileSize.X * Constants.TerrainGridSpacing - EdgeOffset, EdgeOffset + (int)(y * edgeSectionSize.Y)), true) )
                     {
-                        ReturnResult.ProblemAdd("Error: Bad border node.");
-                        return ReturnResult;
+                        returnResult.ProblemAdd("Error: Bad border node.");
+                        return returnResult;
                     }
                 }
             }
-            for ( X = 1; X <= EdgeSections.X; X++ )
+            for ( x = 1; x <= edgeSections.X; x++ )
             {
-                if ( !MakePassageNodes(new XYInt(EdgeOffset + (int)(X * EdgeSectionSize.X), EdgeOffset), true) )
+                if ( !MakePassageNodes(new XYInt(EdgeOffset + (int)(x * edgeSectionSize.X), EdgeOffset), true) )
                 {
-                    ReturnResult.ProblemAdd("Error: Bad border node.");
-                    return ReturnResult;
+                    returnResult.ProblemAdd("Error: Bad border node.");
+                    return returnResult;
                 }
                 if ( SymmetryBlockCountXY.Y == 1 )
                 {
                     if (
-                        !MakePassageNodes(new XYInt(EdgeOffset + (int)(X * EdgeSectionSize.X), TileSize.Y * Constants.TerrainGridSpacing - EdgeOffset), true) )
+                        !MakePassageNodes(new XYInt(EdgeOffset + (int)(x * edgeSectionSize.X), TileSize.Y * Constants.TerrainGridSpacing - EdgeOffset), true) )
                     {
-                        ReturnResult.ProblemAdd("Error: Bad border node.");
-                        return ReturnResult;
+                        returnResult.ProblemAdd("Error: Bad border node.");
+                        return returnResult;
                     }
                 }
             }
             do
             {
-                LoopCount = 0;
+                var loopCount = 0;
                 do
                 {
                     if ( SymmetryBlockCountXY.X == 1 )
                     {
-                        NewPointPos.X = EdgeOffset + (App.Random.Next() * (SymmetrySize.X - EdgeOffset * 2 + 1));
+                        newPointPos.X = EdgeOffset + (App.Random.Next() * (SymmetrySize.X - EdgeOffset * 2 + 1));
                     }
                     else
                     {
-                        NewPointPos.X = EdgeOffset + App.Random.Next() * (SymmetrySize.X - EdgeOffset + 1);
+                        newPointPos.X = EdgeOffset + App.Random.Next() * (SymmetrySize.X - EdgeOffset + 1);
                     }
                     if ( SymmetryBlockCountXY.Y == 1 )
                     {
-                        NewPointPos.Y = EdgeOffset + App.Random.Next() * (SymmetrySize.Y - EdgeOffset * 2 + 1);
+                        newPointPos.Y = EdgeOffset + App.Random.Next() * (SymmetrySize.Y - EdgeOffset * 2 + 1);
                     }
                     else
                     {
-                        NewPointPos.Y = EdgeOffset + Convert.ToInt32((App.Random.Next() * (SymmetrySize.Y - EdgeOffset + 1)));
+                        newPointPos.Y = EdgeOffset + Convert.ToInt32((App.Random.Next() * (SymmetrySize.Y - EdgeOffset + 1)));
                     }
-                    for ( A = 0; A <= PassageNodeCount - 1; A++ )
+                    for ( a = 0; a <= passageNodeCount - 1; a++ )
                     {
-                        for ( B = 0; B <= SymmetryBlockCount - 1; B++ )
+                        for ( b = 0; b <= SymmetryBlockCount - 1; b++ )
                         {
-                            if ( (PassageNodes[B, A].Pos - NewPointPos).ToDoubles().GetMagnitude() < PassageRadius * 2 )
+                            if ( (passageNodes[b, a].Pos - newPointPos).ToDoubles().GetMagnitude() < passageRadius * 2 )
                             {
                                 goto PointTooClose;
                             }
                         }
                     }
                     PointTooClose:
-                    if ( A == PassageNodeCount )
+                    if ( a == passageNodeCount )
                     {
-                        if ( MakePassageNodes(NewPointPos, false) )
+                        if ( MakePassageNodes(newPointPos, false) )
                         {
                             break;
                         }
                     }
-                    LoopCount++;
-                    if ( LoopCount >= (int)(64.0F * TileSize.X * TileSize.Y / (NodeScale * NodeScale)) )
+                    loopCount++;
+                    if ( loopCount >= (int)(64.0F * TileSize.X * TileSize.Y / (NodeScale * NodeScale)) )
                     {
                         goto PointMakingFinished;
                     }
                 } while ( true );
             } while ( true );
             PointMakingFinished:
-            var tmpPassgeNodes = new clsPassageNode[SymmetryBlockCount, PassageNodeCount];
-            Array.Copy(PassageNodes, tmpPassgeNodes, PassageNodeCount);
-            PassageNodes = tmpPassgeNodes;
+            var tmpPassgeNodes = new clsPassageNode[SymmetryBlockCount, passageNodeCount];
+            Array.Copy(passageNodes, tmpPassgeNodes, passageNodeCount);
+            passageNodes = tmpPassgeNodes;
             //connect until all are connected without intersecting
 
-            var IntersectPos = new MathUtil.sIntersectPos();
-            var MaxConDist2 = PassageRadius * 2 * 4;
-            MaxConDist2 *= MaxConDist2;
-            var NearestA = default(clsNearest);
-            Nearests = new clsNearest[PassageNodeCount * 64];
+            var maxConDist2 = passageRadius * 2 * 4;
+            maxConDist2 *= maxConDist2;
+            var nearestA = default(clsNearest);
+            nearests = new clsNearest[passageNodeCount * 64];
             var tmpPassageNodeA = default(clsPassageNode);
             var tmpPassageNodeB = default(clsPassageNode);
-            var NearestArgs = new clsTestNearestArgs();
-            var MinConDist = (int)(NodeScale * 1.25F * 128.0F);
+            var nearestArgs = new clsTestNearestArgs();
+            var minConDist = (int)(NodeScale * 1.25F * 128.0F);
 
-            NearestArgs.MaxConDist2 = MaxConDist2;
-            NearestArgs.MinConDist = MinConDist;
+            nearestArgs.MaxConDist2 = maxConDist2;
+            nearestArgs.MinConDist = minConDist;
 
-            for ( A = 0; A <= PassageNodeCount - 1; A++ )
+            for ( a = 0; a <= passageNodeCount - 1; a++ )
             {
-                NearestArgs.PassageNodeA = PassageNodes[0, A];
-                for ( B = A; B <= PassageNodeCount - 1; B++ )
+                nearestArgs.PassageNodeA = passageNodes[0, a];
+                for ( b = a; b <= passageNodeCount - 1; b++ )
                 {
-                    for ( C = 0; C <= SymmetryBlockCount - 1; C++ )
+                    for ( c = 0; c <= SymmetryBlockCount - 1; c++ )
                     {
-                        NearestArgs.PassageNodeB = PassageNodes[C, B];
-                        if ( NearestArgs.PassageNodeA != NearestArgs.PassageNodeB )
+                        nearestArgs.PassageNodeB = passageNodes[c, b];
+                        if ( nearestArgs.PassageNodeA != nearestArgs.PassageNodeB )
                         {
-                            TestNearest(NearestArgs);
+                            TestNearest(nearestArgs);
                         }
                     }
                 }
             }
 
-            var NearestB = default(clsNearest);
-            var Flag = default(bool);
+            var flag = default(bool);
 
-            for ( G = 0; G <= NearestCount - 1; G++ )
+            for ( g = 0; g <= nearestCount - 1; g++ )
             {
-                NearestA = Nearests[G];
-                for ( A = 0; A <= NearestA.NodeCount - 1; A++ )
+                nearestA = nearests[g];
+                for ( a = 0; a <= nearestA.NodeCount - 1; a++ )
                 {
-                    tmpPassageNodeA = NearestA.NodeA[A];
-                    tmpPassageNodeB = NearestA.NodeB[A];
-                    for ( H = 0; H <= NearestCount - 1; H++ )
+                    tmpPassageNodeA = nearestA.NodeA[a];
+                    tmpPassageNodeB = nearestA.NodeB[a];
+                    for ( h = 0; h <= nearestCount - 1; h++ )
                     {
-                        NearestB = Nearests[H];
-                        if ( NearestB != NearestA )
+                        var nearestB = nearests[h];
+                        if ( nearestB != nearestA )
                         {
-                            if ( NearestB.Dist2 < NearestA.Dist2 )
+                            if ( nearestB.Dist2 < nearestA.Dist2 )
                             {
-                                Flag = true;
+                                flag = true;
                             }
-                            else if ( NearestB.Dist2 == NearestA.Dist2 )
+                            else if ( nearestB.Dist2 == nearestA.Dist2 )
                             {
-                                Flag = NearestA.Num > NearestB.Num;
+                                flag = nearestA.Num > nearestB.Num;
                             }
                             else
                             {
-                                Flag = false;
+                                flag = false;
                             }
-                            if ( Flag )
+                            if ( flag )
                             {
-                                for ( B = 0; B <= NearestB.NodeCount - 1; B++ )
+                                for ( b = 0; b <= nearestB.NodeCount - 1; b++ )
                                 {
-                                    if ( !(tmpPassageNodeA == NearestB.NodeA[B] || tmpPassageNodeA == NearestB.NodeB[B]
-                                           || tmpPassageNodeB == NearestB.NodeA[B] || tmpPassageNodeB == NearestB.NodeB[B]) )
+                                    if ( !(tmpPassageNodeA == nearestB.NodeA[b] || tmpPassageNodeA == nearestB.NodeB[b]
+                                           || tmpPassageNodeB == nearestB.NodeA[b] || tmpPassageNodeB == nearestB.NodeB[b]) )
                                     {
-                                        IntersectPos = MathUtil.GetLinesIntersectBetween(tmpPassageNodeA.Pos, tmpPassageNodeB.Pos, NearestB.NodeA[B].Pos,
-                                            NearestB.NodeB[B].Pos);
-                                        if ( IntersectPos.Exists )
+                                        MathUtil.sIntersectPos intersectPos = MathUtil.GetLinesIntersectBetween(tmpPassageNodeA.Pos, tmpPassageNodeB.Pos, nearestB.NodeA[b].Pos,
+                                            nearestB.NodeB[b].Pos);
+                                        if ( intersectPos.Exists )
                                         {
                                             break;
                                         }
                                     }
                                 }
-                                if ( B < NearestB.NodeCount )
+                                if ( b < nearestB.NodeCount )
                                 {
-                                    NearestA.BlockedCount++;
-                                    NearestB.BlockedNearests[NearestB.BlockedNearestCount] = NearestA;
-                                    NearestB.BlockedNearestCount++;
+                                    nearestA.BlockedCount++;
+                                    nearestB.BlockedNearests[nearestB.BlockedNearestCount] = nearestA;
+                                    nearestB.BlockedNearestCount++;
                                 }
                             }
                         }
@@ -329,118 +325,118 @@ namespace SharpFlame
             }
 
             var ChangeCount = 0;
-            Connections = new clsConnection[PassageNodeCount * 16];
+            connections = new clsConnection[passageNodeCount * 16];
 
             do
             {
                 //create valid connections
                 ChangeCount = 0;
-                G = 0;
-                while ( G < NearestCount )
+                g = 0;
+                while ( g < nearestCount )
                 {
-                    NearestA = Nearests[G];
-                    Flag = true;
-                    if ( NearestA.BlockedCount == 0 && Flag )
+                    nearestA = nearests[g];
+                    flag = true;
+                    if ( nearestA.BlockedCount == 0 && flag )
                     {
-                        F = ConnectionCount;
-                        for ( D = 0; D <= NearestA.NodeCount - 1; D++ )
+                        var f = connectionCount;
+                        for ( d = 0; d <= nearestA.NodeCount - 1; d++ )
                         {
-                            Connections[ConnectionCount] = new clsConnection(NearestA.NodeA[D], NearestA.NodeB[D]);
-                            ConnectionCount++;
+                            connections[connectionCount] = new clsConnection(nearestA.NodeA[d], nearestA.NodeB[d]);
+                            connectionCount++;
                         }
-                        for ( D = 0; D <= NearestA.NodeCount - 1; D++ )
+                        for ( d = 0; d <= nearestA.NodeCount - 1; d++ )
                         {
-                            A = F + D;
-                            Connections[A].ReflectionCount = NearestA.NodeCount - 1;
-                            Connections[A].Reflections = new clsConnection[Connections[A].ReflectionCount];
-                            B = 0;
-                            for ( E = 0; E <= NearestA.NodeCount - 1; E++ )
+                            a = f + d;
+                            connections[a].ReflectionCount = nearestA.NodeCount - 1;
+                            connections[a].Reflections = new clsConnection[connections[a].ReflectionCount];
+                            b = 0;
+                            for ( e = 0; e <= nearestA.NodeCount - 1; e++ )
                             {
-                                if ( E != D )
+                                if ( e != d )
                                 {
-                                    Connections[A].Reflections[B] = Connections[F + E];
-                                    B++;
+                                    connections[a].Reflections[b] = connections[f + e];
+                                    b++;
                                 }
                             }
                         }
-                        for ( C = 0; C <= NearestA.BlockedNearestCount - 1; C++ )
+                        for ( c = 0; c <= nearestA.BlockedNearestCount - 1; c++ )
                         {
-                            NearestA.BlockedNearests[C].Invalid = true;
+                            nearestA.BlockedNearests[c].Invalid = true;
                         }
-                        NearestCount--;
-                        H = NearestA.Num;
-                        NearestA.Num = -1;
-                        if ( H != NearestCount )
+                        nearestCount--;
+                        h = nearestA.Num;
+                        nearestA.Num = -1;
+                        if ( h != nearestCount )
                         {
-                            Nearests[H] = Nearests[NearestCount];
-                            Nearests[H].Num = H;
+                            nearests[h] = nearests[nearestCount];
+                            nearests[h].Num = h;
                         }
                         ChangeCount++;
                     }
                     else
                     {
-                        if ( !Flag )
+                        if ( !flag )
                         {
-                            NearestA.Invalid = true;
+                            nearestA.Invalid = true;
                         }
-                        G++;
+                        g++;
                     }
                 }
                 //remove blocked ones and their blocking effect
-                G = 0;
-                while ( G < NearestCount )
+                g = 0;
+                while ( g < nearestCount )
                 {
-                    NearestA = Nearests[G];
-                    if ( NearestA.Invalid )
+                    nearestA = nearests[g];
+                    if ( nearestA.Invalid )
                     {
-                        NearestA.Num = -1;
-                        for ( D = 0; D <= NearestA.BlockedNearestCount - 1; D++ )
+                        nearestA.Num = -1;
+                        for ( d = 0; d <= nearestA.BlockedNearestCount - 1; d++ )
                         {
-                            NearestA.BlockedNearests[D].BlockedCount--;
+                            nearestA.BlockedNearests[d].BlockedCount--;
                         }
-                        NearestCount--;
-                        if ( G != NearestCount )
+                        nearestCount--;
+                        if ( g != nearestCount )
                         {
-                            Nearests[G] = Nearests[NearestCount];
-                            Nearests[G].Num = G;
+                            nearests[g] = nearests[nearestCount];
+                            nearests[g].Num = g;
                         }
                     }
                     else
                     {
-                        G++;
+                        g++;
                     }
                 }
             } while ( ChangeCount > 0 );
 
             //put connections in order of angle
 
-            for ( A = 0; A <= PassageNodeCount - 1; A++ )
+            for ( a = 0; a <= passageNodeCount - 1; a++ )
             {
-                for ( B = 0; B <= SymmetryBlockCount - 1; B++ )
+                for ( b = 0; b <= SymmetryBlockCount - 1; b++ )
                 {
-                    PassageNodes[B, A].ReorderConnections();
-                    PassageNodes[B, A].CalcIsNearBorder();
+                    passageNodes[b, a].ReorderConnections();
+                    passageNodes[b, a].CalcIsNearBorder();
                 }
             }
 
             //get nodes in random order
 
-            var PassageNodeListOrder = new clsPassageNode[PassageNodeCount];
+            var PassageNodeListOrder = new clsPassageNode[passageNodeCount];
             var PassageNodeListOrderCount = 0;
-            var PassageNodeOrder = new clsPassageNode[PassageNodeCount];
-            for ( A = 0; A <= PassageNodeCount - 1; A++ )
+            var PassageNodeOrder = new clsPassageNode[passageNodeCount];
+            for ( a = 0; a <= passageNodeCount - 1; a++ )
             {
-                PassageNodeListOrder[PassageNodeListOrderCount] = PassageNodes[0, A];
+                PassageNodeListOrder[PassageNodeListOrderCount] = passageNodes[0, a];
                 PassageNodeListOrderCount++;
             }
-            B = 0;
+            b = 0;
             while ( PassageNodeListOrderCount > 0 )
             {
-                A = App.Random.Next() * PassageNodeListOrderCount;
-                PassageNodeOrder[B] = PassageNodeListOrder[A];
-                B++;
+                a = App.Random.Next() * PassageNodeListOrderCount;
+                PassageNodeOrder[b] = PassageNodeListOrder[a];
+                b++;
                 PassageNodeListOrderCount--;
-                PassageNodeListOrder[A] = PassageNodeListOrder[PassageNodeListOrderCount];
+                PassageNodeListOrder[a] = PassageNodeListOrder[PassageNodeListOrderCount];
             }
 
             //designate height levels
@@ -449,15 +445,15 @@ namespace SharpFlame
             var BestNum = 0;
             double Dist = 0;
             var HeightsArgs = new clsPassageNodeHeightLevelArgs();
-            HeightsArgs.PassageNodesMinLevel.Nodes = new int[PassageNodeCount];
-            HeightsArgs.PassageNodesMaxLevel.Nodes = new int[PassageNodeCount];
+            HeightsArgs.PassageNodesMinLevel.Nodes = new int[passageNodeCount];
+            HeightsArgs.PassageNodesMaxLevel.Nodes = new int[passageNodeCount];
             HeightsArgs.MapLevelCount = new int[LevelCount];
             var RotatedPos = new XYInt();
 
-            for ( A = 0; A <= PassageNodeCount - 1; A++ )
+            for ( a = 0; a <= passageNodeCount - 1; a++ )
             {
-                HeightsArgs.PassageNodesMinLevel.Nodes[A] = 0;
-                HeightsArgs.PassageNodesMaxLevel.Nodes[A] = LevelCount - 1;
+                HeightsArgs.PassageNodesMinLevel.Nodes[a] = 0;
+                HeightsArgs.PassageNodesMaxLevel.Nodes[a] = LevelCount - 1;
             }
 
             //create bases
@@ -465,36 +461,36 @@ namespace SharpFlame
             var BestNodes = new clsPassageNode[BaseFlatArea];
             var BestNodesReflectionNums = new int[BaseFlatArea];
             var BestDistCount = 0;
-            PlayerBases = new sPlayerBase[TotalPlayerCount];
-            for ( B = 0; B <= TopLeftPlayerCount - 1; B++ )
+            playerBases = new sPlayerBase[totalPlayerCount];
+            for ( b = 0; b <= TopLeftPlayerCount - 1; b++ )
             {
                 BestDistCount = 0;
-                for ( A = 0; A <= PassageNodeCount - 1; A++ )
+                for ( a = 0; a <= passageNodeCount - 1; a++ )
                 {
-                    for ( E = 0; E <= SymmetryBlockCount - 1; E++ )
+                    for ( e = 0; e <= SymmetryBlockCount - 1; e++ )
                     {
-                        tmpPassageNodeA = PassageNodes[E, A];
+                        tmpPassageNodeA = passageNodes[e, a];
                         if ( !tmpPassageNodeA.IsOnBorder )
                         {
-                            Dist = (tmpPassageNodeA.Pos - PlayerBasePos[B]).ToDoubles().GetMagnitude();
-                            for ( C = BestDistCount - 1; C >= 0; C-- )
+                            Dist = (tmpPassageNodeA.Pos - PlayerBasePos[b]).ToDoubles().GetMagnitude();
+                            for ( c = BestDistCount - 1; c >= 0; c-- )
                             {
-                                if ( Dist > BestDists[C] )
+                                if ( Dist > BestDists[c] )
                                 {
                                     break;
                                 }
                             }
-                            C++;
-                            for ( D = Math.Min(BestDistCount - 1, BaseFlatArea - 2); D >= C; D-- )
+                            c++;
+                            for ( d = Math.Min(BestDistCount - 1, BaseFlatArea - 2); d >= c; d-- )
                             {
-                                BestDists[D + 1] = BestDists[D];
-                                BestNodes[D + 1] = BestNodes[D];
+                                BestDists[d + 1] = BestDists[d];
+                                BestNodes[d + 1] = BestNodes[d];
                             }
-                            if ( C < BaseFlatArea )
+                            if ( c < BaseFlatArea )
                             {
-                                BestDists[C] = Dist;
-                                BestNodes[C] = tmpPassageNodeA;
-                                BestDistCount = Math.Max(BestDistCount, C + 1);
+                                BestDists[c] = Dist;
+                                BestNodes[c] = tmpPassageNodeA;
+                                BestDistCount = Math.Max(BestDistCount, c + 1);
                             }
                         }
                     }
@@ -502,59 +498,59 @@ namespace SharpFlame
 
                 if ( BaseLevel < 0 )
                 {
-                    D = Convert.ToInt32((App.Random.Next() * LevelCount));
+                    d = Convert.ToInt32((App.Random.Next() * LevelCount));
                 }
                 else
                 {
-                    D = BaseLevel;
+                    d = BaseLevel;
                 }
 
-                HeightsArgs.MapLevelCount[D] += BestDistCount;
+                HeightsArgs.MapLevelCount[d] += BestDistCount;
 
-                for ( A = 0; A <= BestDistCount - 1; A++ )
+                for ( a = 0; a <= BestDistCount - 1; a++ )
                 {
-                    if ( BestNodes[A].MirrorNum == 0 )
+                    if ( BestNodes[a].MirrorNum == 0 )
                     {
-                        BestNodesReflectionNums[A] = -1;
+                        BestNodesReflectionNums[a] = -1;
                     }
                     else
                     {
-                        for ( C = 0; C <= ((int)(SymmetryBlockCount / 2.0D)) - 1; C++ )
+                        for ( c = 0; c <= ((int)(SymmetryBlockCount / 2.0D)) - 1; c++ )
                         {
-                            if ( SymmetryBlocks[0].ReflectToNum[C] == BestNodes[A].MirrorNum )
+                            if ( SymmetryBlocks[0].ReflectToNum[c] == BestNodes[a].MirrorNum )
                             {
                                 break;
                             }
                         }
-                        BestNodesReflectionNums[A] = C;
+                        BestNodesReflectionNums[a] = c;
                     }
                 }
 
-                for ( A = 0; A <= SymmetryBlockCount - 1; A++ )
+                for ( a = 0; a <= SymmetryBlockCount - 1; a++ )
                 {
-                    E = A * TopLeftPlayerCount + B;
-                    PlayerBases[E].NodeCount = BestDistCount;
-                    PlayerBases[E].Nodes = new clsPassageNode[PlayerBases[E].NodeCount];
-                    for ( C = 0; C <= BestDistCount - 1; C++ )
+                    e = a * TopLeftPlayerCount + b;
+                    playerBases[e].NodeCount = BestDistCount;
+                    playerBases[e].Nodes = new clsPassageNode[playerBases[e].NodeCount];
+                    for ( c = 0; c <= BestDistCount - 1; c++ )
                     {
-                        if ( BestNodesReflectionNums[C] < 0 )
+                        if ( BestNodesReflectionNums[c] < 0 )
                         {
-                            PlayerBases[E].Nodes[C] = PassageNodes[A, BestNodes[C].Num];
+                            playerBases[e].Nodes[c] = passageNodes[a, BestNodes[c].Num];
                         }
                         else
                         {
-                            PlayerBases[E].Nodes[C] = PassageNodes[SymmetryBlocks[A].ReflectToNum[BestNodesReflectionNums[C]], BestNodes[C].Num];
+                            playerBases[e].Nodes[c] = passageNodes[SymmetryBlocks[a].ReflectToNum[BestNodesReflectionNums[c]], BestNodes[c].Num];
                         }
-                        PlayerBases[E].Nodes[C].PlayerBaseNum = E;
-                        PlayerBases[E].Nodes[C].Level = D;
-                        PassageNodesMinLevelSet(PlayerBases[E].Nodes[C], HeightsArgs.PassageNodesMinLevel, D, MaxLevelTransition);
-                        PassageNodesMaxLevelSet(PlayerBases[E].Nodes[C], HeightsArgs.PassageNodesMaxLevel, D, MaxLevelTransition);
+                        playerBases[e].Nodes[c].PlayerBaseNum = e;
+                        playerBases[e].Nodes[c].Level = d;
+                        PassageNodesMinLevelSet(playerBases[e].Nodes[c], HeightsArgs.PassageNodesMinLevel, d, MaxLevelTransition);
+                        PassageNodesMaxLevelSet(playerBases[e].Nodes[c], HeightsArgs.PassageNodesMaxLevel, d, MaxLevelTransition);
                     }
                     //PlayerBases(E).CalcPos()
-                    RotatedPos = TileUtil.GetRotatedPos(SymmetryBlocks[A].Orientation, PlayerBasePos[B],
+                    RotatedPos = TileUtil.GetRotatedPos(SymmetryBlocks[a].Orientation, PlayerBasePos[b],
                         new XYInt(SymmetrySize.X - 1, SymmetrySize.Y - 1));
-                    PlayerBases[E].Pos.X = SymmetryBlocks[A].XYNum.X * SymmetrySize.X + RotatedPos.X;
-                    PlayerBases[E].Pos.Y = SymmetryBlocks[A].XYNum.Y * SymmetrySize.Y + RotatedPos.Y;
+                    playerBases[e].Pos.X = SymmetryBlocks[a].XYNum.X * SymmetrySize.X + RotatedPos.X;
+                    playerBases[e].Pos.Y = SymmetryBlocks[a].XYNum.Y * SymmetrySize.Y + RotatedPos.Y;
                 }
             }
 
@@ -563,24 +559,24 @@ namespace SharpFlame
             var TotalWater = 0;
             var WaterSpawns = 0;
 
-            for ( A = 0; A <= PassageNodeCount - 1; A++ )
+            for ( a = 0; a <= passageNodeCount - 1; a++ )
             {
-                tmpPassageNodeA = PassageNodeOrder[A];
+                tmpPassageNodeA = PassageNodeOrder[a];
                 if ( tmpPassageNodeA.Level < 0 && !tmpPassageNodeA.IsOnBorder )
                 {
                     WaterCount = 0;
-                    for ( B = 0; B <= tmpPassageNodeA.ConnectionCount - 1; B++ )
+                    for ( b = 0; b <= tmpPassageNodeA.ConnectionCount - 1; b++ )
                     {
-                        tmpPassageNodeB = tmpPassageNodeA.Connections[B].GetOther();
+                        tmpPassageNodeB = tmpPassageNodeA.Connections[b].GetOther();
                         if ( tmpPassageNodeB.IsWater )
                         {
                             WaterCount++;
                         }
                     }
                     CanDoFlatsAroundWater = true;
-                    for ( B = 0; B <= tmpPassageNodeA.ConnectionCount - 1; B++ )
+                    for ( b = 0; b <= tmpPassageNodeA.ConnectionCount - 1; b++ )
                     {
-                        if ( HeightsArgs.PassageNodesMinLevel.Nodes[tmpPassageNodeA.Connections[B].GetOther().Num] > 0 )
+                        if ( HeightsArgs.PassageNodesMinLevel.Nodes[tmpPassageNodeA.Connections[b].GetOther().Num] > 0 )
                         {
                             CanDoFlatsAroundWater = false;
                         }
@@ -594,18 +590,18 @@ namespace SharpFlame
                             WaterSpawns++;
                         }
                         TotalWater++;
-                        C = tmpPassageNodeA.Num;
-                        for ( D = 0; D <= SymmetryBlockCount - 1; D++ )
+                        c = tmpPassageNodeA.Num;
+                        for ( d = 0; d <= SymmetryBlockCount - 1; d++ )
                         {
-                            PassageNodes[D, C].IsWater = true;
-                            PassageNodes[D, C].Level = 0;
+                            passageNodes[d, c].IsWater = true;
+                            passageNodes[d, c].Level = 0;
                         }
                         PassageNodesMinLevelSet(tmpPassageNodeA, HeightsArgs.PassageNodesMinLevel, 0, MaxLevelTransition);
                         PassageNodesMaxLevelSet(tmpPassageNodeA, HeightsArgs.PassageNodesMaxLevel, 0, MaxLevelTransition);
                         HeightsArgs.MapLevelCount[0]++;
-                        for ( B = 0; B <= tmpPassageNodeA.ConnectionCount - 1; B++ )
+                        for ( b = 0; b <= tmpPassageNodeA.ConnectionCount - 1; b++ )
                         {
-                            tmpPassageNodeB = tmpPassageNodeA.Connections[B].GetOther();
+                            tmpPassageNodeB = tmpPassageNodeA.Connections[b].GetOther();
                             PassageNodesMinLevelSet(tmpPassageNodeB, HeightsArgs.PassageNodesMinLevel, 0, MaxLevelTransition);
                             PassageNodesMaxLevelSet(tmpPassageNodeB, HeightsArgs.PassageNodesMaxLevel, 0, MaxLevelTransition);
                         }
@@ -621,17 +617,17 @@ namespace SharpFlame
             HeightsArgs.VariationCutoff = 1;
             HeightsArgs.ActionTotal = 1;
 
-            for ( A = 0; A <= PassageNodeCount - 1; A++ )
+            for ( a = 0; a <= passageNodeCount - 1; a++ )
             {
-                tmpPassageNodeA = PassageNodeOrder[A];
+                tmpPassageNodeA = PassageNodeOrder[a];
                 if ( tmpPassageNodeA.Level < 0 && !tmpPassageNodeA.IsOnBorder && tmpPassageNodeA.IsNearBorder )
                 {
                     HeightsArgs.PassageNode = tmpPassageNodeA;
                     Result = PassageNodeHeightLevel(HeightsArgs);
                     if ( !Result.Success )
                     {
-                        ReturnResult.ProblemAdd(Result.Problem);
-                        return ReturnResult;
+                        returnResult.ProblemAdd(Result.Problem);
+                        return returnResult;
                     }
                 }
             }
@@ -642,35 +638,35 @@ namespace SharpFlame
             HeightsArgs.ActionTotal = HeightsArgs.VariationCutoff;
             if ( HeightsArgs.ActionTotal <= 0 )
             {
-                ReturnResult.ProblemAdd("All height level behaviors are zero");
-                return ReturnResult;
+                returnResult.ProblemAdd("All height level behaviors are zero");
+                return returnResult;
             }
 
-            for ( A = 0; A <= PassageNodeCount - 1; A++ )
+            for ( a = 0; a <= passageNodeCount - 1; a++ )
             {
-                tmpPassageNodeA = PassageNodeOrder[A];
+                tmpPassageNodeA = PassageNodeOrder[a];
                 if ( tmpPassageNodeA.Level < 0 && !tmpPassageNodeA.IsOnBorder )
                 {
                     HeightsArgs.PassageNode = tmpPassageNodeA;
                     Result = PassageNodeHeightLevel(HeightsArgs);
                     if ( !Result.Success )
                     {
-                        ReturnResult.ProblemAdd(Result.Problem);
-                        return ReturnResult;
+                        returnResult.ProblemAdd(Result.Problem);
+                        return returnResult;
                     }
                 }
             }
 
             //set edge points to the level of their neighbour
-            for ( A = 0; A <= PassageNodeCount - 1; A++ )
+            for ( a = 0; a <= passageNodeCount - 1; a++ )
             {
-                tmpPassageNodeA = PassageNodes[0, A];
+                tmpPassageNodeA = passageNodes[0, a];
                 if ( tmpPassageNodeA.IsOnBorder )
                 {
                     if ( tmpPassageNodeA.Level >= 0 )
                     {
-                        ReturnResult.ProblemAdd("Error: Border has had its height set.");
-                        return ReturnResult;
+                        returnResult.ProblemAdd("Error: Border has had its height set.");
+                        return returnResult;
                     }
                     //If tmpPassageNodeA.ConnectionCount <> 1 Then
                     //    ReturnResult.Problem = "Error: Border has incorrect connections."
@@ -678,9 +674,9 @@ namespace SharpFlame
                     //End If
                     tmpPassageNodeC = null;
                     CanDoFlatsAroundWater = true;
-                    for ( B = 0; B <= tmpPassageNodeA.ConnectionCount - 1; B++ )
+                    for ( b = 0; b <= tmpPassageNodeA.ConnectionCount - 1; b++ )
                     {
-                        tmpPassageNodeB = tmpPassageNodeA.Connections[B].GetOther();
+                        tmpPassageNodeB = tmpPassageNodeA.Connections[b].GetOther();
                         if ( tmpPassageNodeB.Level >= 0 && !tmpPassageNodeB.IsOnBorder )
                         {
                             if ( HeightsArgs.PassageNodesMinLevel.Nodes[tmpPassageNodeA.Num] <= tmpPassageNodeB.Level &&
@@ -706,16 +702,16 @@ namespace SharpFlame
                         BestNum = tmpPassageNodeC.Level;
                         PassageNodesMinLevelSet(tmpPassageNodeA, HeightsArgs.PassageNodesMinLevel, BestNum, MaxLevelTransition);
                         PassageNodesMaxLevelSet(tmpPassageNodeA, HeightsArgs.PassageNodesMaxLevel, BestNum, MaxLevelTransition);
-                        for ( D = 0; D <= SymmetryBlockCount - 1; D++ )
+                        for ( d = 0; d <= SymmetryBlockCount - 1; d++ )
                         {
-                            PassageNodes[D, A].IsWater = tmpPassageNodeC.IsWater && CanDoFlatsAroundWater;
-                            PassageNodes[D, A].Level = BestNum;
+                            passageNodes[d, a].IsWater = tmpPassageNodeC.IsWater && CanDoFlatsAroundWater;
+                            passageNodes[d, a].Level = BestNum;
                         }
                         if ( tmpPassageNodeA.IsWater )
                         {
-                            for ( B = 0; B <= tmpPassageNodeA.ConnectionCount - 1; B++ )
+                            for ( b = 0; b <= tmpPassageNodeA.ConnectionCount - 1; b++ )
                             {
-                                tmpPassageNodeB = tmpPassageNodeA.Connections[B].GetOther();
+                                tmpPassageNodeB = tmpPassageNodeA.Connections[b].GetOther();
                                 PassageNodesMinLevelSet(tmpPassageNodeB, HeightsArgs.PassageNodesMinLevel, tmpPassageNodeA.Level, MaxLevelTransition);
                                 PassageNodesMaxLevelSet(tmpPassageNodeB, HeightsArgs.PassageNodesMaxLevel, tmpPassageNodeA.Level, MaxLevelTransition);
                             }
@@ -724,21 +720,21 @@ namespace SharpFlame
                 }
                 else if ( tmpPassageNodeA.Level < 0 )
                 {
-                    ReturnResult.ProblemAdd("Error: Node height not set");
-                    return ReturnResult;
+                    returnResult.ProblemAdd("Error: Node height not set");
+                    return returnResult;
                 }
             }
             //set level of edge points only connected to another border point
-            for ( A = 0; A <= PassageNodeCount - 1; A++ )
+            for ( a = 0; a <= passageNodeCount - 1; a++ )
             {
-                tmpPassageNodeA = PassageNodes[0, A];
+                tmpPassageNodeA = passageNodes[0, a];
                 if ( tmpPassageNodeA.IsOnBorder && tmpPassageNodeA.Level < 0 )
                 {
                     tmpPassageNodeC = null;
                     CanDoFlatsAroundWater = true;
-                    for ( B = 0; B <= tmpPassageNodeA.ConnectionCount - 1; B++ )
+                    for ( b = 0; b <= tmpPassageNodeA.ConnectionCount - 1; b++ )
                     {
-                        tmpPassageNodeB = tmpPassageNodeA.Connections[B].GetOther();
+                        tmpPassageNodeB = tmpPassageNodeA.Connections[b].GetOther();
                         if ( tmpPassageNodeB.Level >= 0 )
                         {
                             if ( HeightsArgs.PassageNodesMinLevel.Nodes[tmpPassageNodeA.Num] <= tmpPassageNodeB.Level &&
@@ -757,22 +753,22 @@ namespace SharpFlame
                     }
                     if ( tmpPassageNodeC == null )
                     {
-                        ReturnResult.ProblemAdd("Error: No connection for border node");
-                        return ReturnResult;
+                        returnResult.ProblemAdd("Error: No connection for border node");
+                        return returnResult;
                     }
                     BestNum = tmpPassageNodeC.Level;
                     PassageNodesMinLevelSet(tmpPassageNodeA, HeightsArgs.PassageNodesMinLevel, BestNum, MaxLevelTransition);
                     PassageNodesMaxLevelSet(tmpPassageNodeA, HeightsArgs.PassageNodesMaxLevel, BestNum, MaxLevelTransition);
-                    for ( D = 0; D <= SymmetryBlockCount - 1; D++ )
+                    for ( d = 0; d <= SymmetryBlockCount - 1; d++ )
                     {
-                        PassageNodes[D, A].IsWater = tmpPassageNodeC.IsWater && CanDoFlatsAroundWater;
-                        PassageNodes[D, A].Level = BestNum;
+                        passageNodes[d, a].IsWater = tmpPassageNodeC.IsWater && CanDoFlatsAroundWater;
+                        passageNodes[d, a].Level = BestNum;
                     }
                     if ( tmpPassageNodeA.IsWater )
                     {
-                        for ( B = 0; B <= tmpPassageNodeA.ConnectionCount - 1; B++ )
+                        for ( b = 0; b <= tmpPassageNodeA.ConnectionCount - 1; b++ )
                         {
-                            tmpPassageNodeB = tmpPassageNodeA.Connections[B].GetOther();
+                            tmpPassageNodeB = tmpPassageNodeA.Connections[b].GetOther();
                             PassageNodesMinLevelSet(tmpPassageNodeB, HeightsArgs.PassageNodesMinLevel, tmpPassageNodeA.Level, MaxLevelTransition);
                             PassageNodesMaxLevelSet(tmpPassageNodeB, HeightsArgs.PassageNodesMaxLevel, tmpPassageNodeA.Level, MaxLevelTransition);
                         }
@@ -784,9 +780,9 @@ namespace SharpFlame
             MaxDisconnectionDist = 99999.0F;
 
             var RampResult = GenerateRamps();
-            ReturnResult.Add(RampResult);
+            returnResult.Add(RampResult);
 
-            return ReturnResult;
+            return returnResult;
         }
 
         private bool TestNearest(clsTestNearestArgs args)
@@ -810,14 +806,14 @@ namespace SharpFlame
             {
                 return false;
             }
-            for ( index0 = 0; index0 <= PassageNodeCount - 1; index0++ )
+            for ( index0 = 0; index0 <= passageNodeCount - 1; index0++ )
             {
                 for ( index1 = 0; index1 <= SymmetryBlockCount - 1; index1++ )
                 {
-                    if ( PassageNodes[index1, index0] != args.PassageNodeA && PassageNodes[index1, index0] != args.PassageNodeB )
+                    if ( passageNodes[index1, index0] != args.PassageNodeA && passageNodes[index1, index0] != args.PassageNodeB )
                     {
-                        xyInt = MathUtil.PointGetClosestPosOnLine(args.PassageNodeA.Pos, args.PassageNodeB.Pos, PassageNodes[index1, index0].Pos);
-                        if ( (xyInt - PassageNodes[index1, index0].Pos).ToDoubles().GetMagnitude() < args.MinConDist )
+                        xyInt = MathUtil.PointGetClosestPosOnLine(args.PassageNodeA.Pos, args.PassageNodeB.Pos, passageNodes[index1, index0].Pos);
+                        if ( (xyInt - passageNodes[index1, index0].Pos).ToDoubles().GetMagnitude() < args.MinConDist )
                         {
                             return false;
                         }
@@ -826,7 +822,7 @@ namespace SharpFlame
             }
 
             nearestA = new clsNearest();
-            nearestA.Num = NearestCount;
+            nearestA.Num = nearestCount;
             nearestA.Dist2 = dist2;
             if ( args.PassageNodeA.MirrorNum == args.PassageNodeB.MirrorNum )
             {
@@ -834,8 +830,8 @@ namespace SharpFlame
                 nearestA.NodeB = new clsPassageNode[SymmetryBlockCount];
                 for ( index0 = 0; index0 <= SymmetryBlockCount - 1; index0++ )
                 {
-                    nearestA.NodeA[index0] = PassageNodes[index0, args.PassageNodeA.Num];
-                    nearestA.NodeB[index0] = PassageNodes[index0, args.PassageNodeB.Num];
+                    nearestA.NodeA[index0] = passageNodes[index0, args.PassageNodeA.Num];
+                    nearestA.NodeB[index0] = passageNodes[index0, args.PassageNodeB.Num];
                 }
                 nearestA.NodeCount = SymmetryBlockCount;
             }
@@ -860,8 +856,8 @@ namespace SharpFlame
                     }
                     for ( index0 = 0; index0 <= SymmetryBlockCount - 1; index0++ )
                     {
-                        nearestA.NodeA[index0] = PassageNodes[index0, args.PassageNodeA.Num];
-                        nearestA.NodeB[index0] = PassageNodes[SymmetryBlocks[index0].ReflectToNum[reflectionNum], args.PassageNodeB.Num];
+                        nearestA.NodeA[index0] = passageNodes[index0, args.PassageNodeA.Num];
+                        nearestA.NodeB[index0] = passageNodes[SymmetryBlocks[index0].ReflectToNum[reflectionNum], args.PassageNodeB.Num];
                     }
                     nearestA.NodeCount = SymmetryBlockCount;
                 }
@@ -891,8 +887,8 @@ namespace SharpFlame
                         nearestA.NodeA[0] = args.PassageNodeA;
                         nearestA.NodeB[0] = args.PassageNodeB;
                         index1 = Convert.ToInt32(SymmetryBlocks[0].ReflectToNum[1 - reflectionNum]);
-                        nearestA.NodeA[1] = PassageNodes[index1, args.PassageNodeA.Num];
-                        nearestA.NodeB[1] = PassageNodes[SymmetryBlocks[index1].ReflectToNum[reflectionNum], args.PassageNodeB.Num];
+                        nearestA.NodeA[1] = passageNodes[index1, args.PassageNodeA.Num];
+                        nearestA.NodeB[1] = passageNodes[SymmetryBlocks[index1].ReflectToNum[reflectionNum], args.PassageNodeB.Num];
                         nearestA.NodeCount = 2;
                     }
                     else
@@ -907,8 +903,8 @@ namespace SharpFlame
             }
 
             nearestA.BlockedNearests = new clsNearest[512];
-            Nearests[NearestCount] = nearestA;
-            NearestCount++;
+            nearests[nearestCount] = nearestA;
+            nearestCount++;
 
             return true;
         }
@@ -1069,41 +1065,41 @@ namespace SharpFlame
                 BestDist = float.MaxValue;
                 BestConnection = null;
                 BestNode = null;
-                for ( B = 0; B <= ConnectionCount - 1; B++ )
+                for ( B = 0; B <= connectionCount - 1; B++ )
                 {
                     //If Not (Connections(B).PassageNodeA.IsOnBorder Or Connections(B).PassageNodeB.IsOnBorder) Then
-                    if ( Connections[B].PassageNodeA.Level == Connections[B].PassageNodeB.Level )
+                    if ( connections[B].PassageNodeA.Level == connections[B].PassageNodeB.Level )
                     {
                         //only do this if the levels are the same
                         //this is to make sure nodes that are connected are actually connected on the terrain
-                        XY_int = MathUtil.PointGetClosestPosOnLine(Connections[B].PassageNodeA.Pos, Connections[B].PassageNodeB.Pos, NodeTag.Pos);
+                        XY_int = MathUtil.PointGetClosestPosOnLine(connections[B].PassageNodeA.Pos, connections[B].PassageNodeB.Pos, NodeTag.Pos);
                         Dist = Convert.ToSingle((XY_int - NodeTag.Pos).ToDoubles().GetMagnitude());
                         if ( Dist < BestDist )
                         {
                             BestDist = Dist;
-                            if ( (NodeTag.Pos - Connections[B].PassageNodeA.Pos).ToDoubles().GetMagnitude() <=
-                                 (NodeTag.Pos - Connections[B].PassageNodeB.Pos).ToDoubles().GetMagnitude() )
+                            if ( (NodeTag.Pos - connections[B].PassageNodeA.Pos).ToDoubles().GetMagnitude() <=
+                                 (NodeTag.Pos - connections[B].PassageNodeB.Pos).ToDoubles().GetMagnitude() )
                             {
-                                BestNode = Connections[B].PassageNodeA;
+                                BestNode = connections[B].PassageNodeA;
                             }
                             else
                             {
-                                BestNode = Connections[B].PassageNodeB;
+                                BestNode = connections[B].PassageNodeB;
                             }
                             Flag = true;
                         }
                     }
                 }
-                for ( C = 0; C <= PassageNodeCount - 1; C++ )
+                for ( C = 0; C <= passageNodeCount - 1; C++ )
                 {
                     //If Not PassageNodesA(C).IsOnBorder Then
                     for ( D = 0; D <= SymmetryBlockCount - 1; D++ )
                     {
-                        Dist = Convert.ToSingle((NodeTag.Pos - PassageNodes[D, C].Pos).ToDoubles().GetMagnitude());
+                        Dist = Convert.ToSingle((NodeTag.Pos - passageNodes[D, C].Pos).ToDoubles().GetMagnitude());
                         if ( Dist < BestDist )
                         {
                             BestDist = Dist;
-                            BestNode = PassageNodes[D, C];
+                            BestNode = passageNodes[D, C];
                             Flag = true;
                         }
                     }
@@ -1141,18 +1137,18 @@ namespace SharpFlame
             var RampArgs = new clsSetBaseLevelRampArgs();
             RampArgs.BaseLevel = BaseNodeLevel;
             RampArgs.RampRadius = 320.0F;
-            for ( B = 0; B <= ConnectionCount - 1; B++ )
+            for ( B = 0; B <= connectionCount - 1; B++ )
             {
-                RampArgs.Connection = Connections[B];
+                RampArgs.Connection = connections[B];
                 RampArgs.RampLength =
-                    Math.Max(Convert.ToInt32((Connections[B].PassageNodeA.Pos - Connections[B].PassageNodeB.Pos).ToDoubles().GetMagnitude() * 0.75D),
-                        MinRampLength * Math.Abs(Connections[B].PassageNodeA.Level - Connections[B].PassageNodeB.Level));
+                    Math.Max(Convert.ToInt32((connections[B].PassageNodeA.Pos - connections[B].PassageNodeB.Pos).ToDoubles().GetMagnitude() * 0.75D),
+                        MinRampLength * Math.Abs(connections[B].PassageNodeA.Level - connections[B].PassageNodeB.Level));
                 for ( A = 0; A <= JitterLayer.GetNodeCount - 1; A++ )
                 {
-                    if ( Connections[B].IsRamp )
+                    if ( connections[B].IsRamp )
                     {
                         NodeTag = (clsNodeTag)(JitterLayer.get_GetNode(A).Tag);
-                        XY_int = MathUtil.PointGetClosestPosOnLine(Connections[B].PassageNodeA.Pos, Connections[B].PassageNodeB.Pos, NodeTag.Pos);
+                        XY_int = MathUtil.PointGetClosestPosOnLine(connections[B].PassageNodeA.Pos, connections[B].PassageNodeB.Pos, NodeTag.Pos);
                         Dist = Convert.ToSingle((XY_int - NodeTag.Pos).ToDoubles().GetMagnitude());
                         if ( Dist < RampArgs.RampLength * 2.0F )
                         {
@@ -1343,7 +1339,7 @@ namespace SharpFlame
                     tmpOtherNode = PassageNode.Connections[A].GetOther();
                     if ( !Args.PassageNodeUpdated[tmpOtherNode.Num] && tmpOtherNode.MirrorNum == 0 )
                     {
-                        for ( B = 0; B <= PassageNodeCount - 1; B++ )
+                        for ( B = 0; B <= passageNodeCount - 1; B++ )
                         {
                             for ( C = 0; C <= Args.SymmetryBlockCount - 1; C++ )
                             {
@@ -1365,9 +1361,9 @@ namespace SharpFlame
             var NextLoopNum = LoopNum + 1;
             var tmpPassageNodeA = default(clsPassageNode);
 
-            for ( A = 0; A <= PassageNodeCount - 1; A++ )
+            for ( A = 0; A <= passageNodeCount - 1; A++ )
             {
-                tmpPassageNodeA = PassageNodes[0, A];
+                tmpPassageNodeA = passageNodes[0, A];
                 if ( tmpPassageNodeA.PlayerBaseNum < 0 && !tmpPassageNodeA.IsOnBorder && tmpPassageNodeA.OilCount == 0 && !tmpPassageNodeA.IsWater )
                 {
                     for ( C = 0; C <= LoopNum - 1; C++ )
@@ -1436,7 +1432,7 @@ namespace SharpFlame
                     //OilMassMultiplier = Args.OilClusterSizes(NewOilNum) * Args.OilClusterSizes(OtherOilNum)
                     //OilDistScore += OilMassMultiplier / PassageNodeDists(0, NewOilNodeNum, 0, OtherOilNodeNum)
                     //OilStraightDistScore += OilMassMultiplier / GetDist_XY_int(PassageNodes(0, NewOilNodeNum).Pos, PassageNodes(0, OtherOilNodeNum).Pos)
-                    OilDistValue = 4.0D * PassageNodeDists[0, NewOilNodeNum, 0, OtherOilNodeNum];
+                    OilDistValue = 4.0D * passageNodeDists[0, NewOilNodeNum, 0, OtherOilNodeNum];
                     //+ GetDist_XY_int(PassageNodes(0, NewOilNodeNum).Pos, PassageNodes(0, OtherOilNodeNum).Pos))
                     if ( OilDistValue < NearestOilValue )
                     {
@@ -1452,7 +1448,7 @@ namespace SharpFlame
                     {
                         //OilDistScore += OilMassMultiplier / PassageNodeDists(0, NewOilNodeNum, SymmetryBlockNum, OtherOilNodeNum)
                         //OilStraightDistScore += OilMassMultiplier / GetDist_XY_int(PassageNodes(0, NewOilNodeNum).Pos, PassageNodes(SymmetryBlockNum, OtherOilNodeNum).Pos)
-                        OilDistValue = 4.0D * PassageNodeDists[0, NewOilNodeNum, SymmetryBlockNum, OtherOilNodeNum];
+                        OilDistValue = 4.0D * passageNodeDists[0, NewOilNodeNum, SymmetryBlockNum, OtherOilNodeNum];
                         // + GetDist_XY_int(PassageNodes(0, NewOilNodeNum).Pos, PassageNodes(SymmetryBlockNum, OtherOilNodeNum).Pos))
                         if ( OilDistValue < NearestOilValue )
                         {
@@ -1461,16 +1457,16 @@ namespace SharpFlame
                     }
                 }
                 //oil on the map
-                for ( MapNodeNum = 0; MapNodeNum <= PassageNodeCount - 1; MapNodeNum++ )
+                for ( MapNodeNum = 0; MapNodeNum <= passageNodeCount - 1; MapNodeNum++ )
                 {
                     for ( SymmetryBlockNum = 0; SymmetryBlockNum <= SymmetryBlockCount - 1; SymmetryBlockNum++ )
                     {
-                        if ( PassageNodes[SymmetryBlockNum, MapNodeNum].OilCount > 0 )
+                        if ( passageNodes[SymmetryBlockNum, MapNodeNum].OilCount > 0 )
                         {
                             //OilMassMultiplier = Args.OilClusterSizes(NewOilNum) * PassageNodes(SymmetryBlockNum, MapNodeNum).OilCount
                             //OilDistScore += OilMassMultiplier / PassageNodeDists(0, NewOilNodeNum, SymmetryBlockNum, MapNodeNum)
                             //OilStraightDistScore += OilMassMultiplier / GetDist_XY_int(PassageNodes(0, NewOilNodeNum).Pos, PassageNodes(SymmetryBlockNum, MapNodeNum).Pos)
-                            OilDistValue = 4.0D * OilMassMultiplier / PassageNodeDists[0, NewOilNodeNum, SymmetryBlockNum, MapNodeNum];
+                            OilDistValue = 4.0D * OilMassMultiplier / passageNodeDists[0, NewOilNodeNum, SymmetryBlockNum, MapNodeNum];
                             // + GetDist_XY_int(PassageNodes(0, NewOilNodeNum).Pos, PassageNodes(SymmetryBlockNum, MapNodeNum).Pos))
                             if ( OilDistValue < NearestOilValue )
                             {
@@ -1486,8 +1482,8 @@ namespace SharpFlame
                     for ( SymmetryBlockNum = 0; SymmetryBlockNum <= SymmetryBlockCount - 1; SymmetryBlockNum++ )
                     {
                         dblTemp =
-                            Convert.ToDouble(PassageNodeDists[0, PlayerBases[PlayerNum].Nodes[0].Num, SymmetryBlockNum, NewOilNodeNum] * 2.0D +
-                                             (PlayerBases[PlayerNum].Nodes[0].Pos - PassageNodes[SymmetryBlockNum, NewOilNodeNum].Pos).ToDoubles().GetMagnitude());
+                            Convert.ToDouble(passageNodeDists[0, playerBases[PlayerNum].Nodes[0].Num, SymmetryBlockNum, NewOilNodeNum] * 2.0D +
+                                             (playerBases[PlayerNum].Nodes[0].Pos - passageNodes[SymmetryBlockNum, NewOilNodeNum].Pos).ToDoubles().GetMagnitude());
                         BaseOilScore[PlayerNum] += 100.0D / dblTemp;
                     }
                 }
@@ -1584,7 +1580,7 @@ namespace SharpFlame
                 var ConnectionLength = Convert.ToSingle((Args.Connection.PassageNodeA.Pos - Args.Connection.PassageNodeB.Pos).ToDoubles().GetMagnitude());
                 var Extra = ConnectionLength - Args.RampLength;
                 var ConnectionPos = Convert.ToSingle((XY_int - Args.Connection.PassageNodeA.Pos).ToDoubles().GetMagnitude());
-                var RampPos = MathUtil.Clamp_sng((ConnectionPos - Extra / 2.0F) / Args.RampLength, 0.0F, 1.0F);
+                var RampPos = MathUtil.ClampSng((ConnectionPos - Extra / 2.0F) / Args.RampLength, 0.0F, 1.0F);
                 var Layer_NodeNum = Node.GetLayer_NodeNum;
                 RampPos = (float)(1.0D - (Math.Cos(RampPos * Math.PI) + 1.0D) / 2.0D);
                 if ( RampPos > 0.0F & RampPos < 1.0F )
@@ -1629,8 +1625,8 @@ namespace SharpFlame
                 {
                     if ( Map.Terrain.Tiles[X, Y].Texture.TextureNum >= 0 )
                     {
-                        if ( GenerateTileset.Tileset.Tiles[Map.Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNum_Cliff ||
-                             GenerateTileset.Tileset.Tiles[Map.Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNum_Water )
+                        if ( GenerateTileset.Tileset.Tiles[Map.Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNumCliff ||
+                             GenerateTileset.Tileset.Tiles[Map.Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNumWater )
                         {
                             TileNodeBlock(X, Y);
                         }
@@ -1660,39 +1656,39 @@ namespace SharpFlame
                 {
                     BestDist = float.MaxValue;
                     Pos = new XYInt(X * Constants.TerrainGridSpacing, Y * Constants.TerrainGridSpacing);
-                    for ( B = 0; B <= ConnectionCount - 1; B++ )
+                    for ( B = 0; B <= connectionCount - 1; B++ )
                     {
                         //If Not (Connections(B).PassageNodeA.IsOnBorder Or Connections(B).PassageNodeB.IsOnBorder) Then
-                        if ( Connections[B].PassageNodeA.IsWater == Connections[B].PassageNodeB.IsWater )
+                        if ( connections[B].PassageNodeA.IsWater == connections[B].PassageNodeB.IsWater )
                         {
                             //only do this if the waters are the same
                             //this is to make sure nodes that are connected are actually connected as water
-                            XY_int = MathUtil.PointGetClosestPosOnLine(Connections[B].PassageNodeA.Pos, Connections[B].PassageNodeB.Pos, Pos);
+                            XY_int = MathUtil.PointGetClosestPosOnLine(connections[B].PassageNodeA.Pos, connections[B].PassageNodeB.Pos, Pos);
                             Dist = Convert.ToSingle((XY_int - Pos).ToDoubles().GetMagnitude());
                             if ( Dist < BestDist )
                             {
                                 BestDist = Dist;
-                                if ( (Pos - Connections[B].PassageNodeA.Pos).ToDoubles().GetMagnitude() <=
-                                     (Pos - Connections[B].PassageNodeB.Pos).ToDoubles().GetMagnitude() )
+                                if ( (Pos - connections[B].PassageNodeA.Pos).ToDoubles().GetMagnitude() <=
+                                     (Pos - connections[B].PassageNodeB.Pos).ToDoubles().GetMagnitude() )
                                 {
-                                    BestIsWater = Connections[B].PassageNodeA.IsWater;
+                                    BestIsWater = connections[B].PassageNodeA.IsWater;
                                 }
                                 else
                                 {
-                                    BestIsWater = Connections[B].PassageNodeB.IsWater;
+                                    BestIsWater = connections[B].PassageNodeB.IsWater;
                                 }
                             }
                         }
                     }
-                    for ( C = 0; C <= PassageNodeCount - 1; C++ )
+                    for ( C = 0; C <= passageNodeCount - 1; C++ )
                     {
                         for ( B = 0; B <= SymmetryBlockCount - 1; B++ )
                         {
-                            Dist = Convert.ToSingle((Pos - PassageNodes[B, C].Pos).ToDoubles().GetMagnitude());
+                            Dist = Convert.ToSingle((Pos - passageNodes[B, C].Pos).ToDoubles().GetMagnitude());
                             if ( Dist < BestDist )
                             {
                                 BestDist = Dist;
-                                BestIsWater = PassageNodes[B, C].IsWater;
+                                BestIsWater = passageNodes[B, C].IsWater;
                             }
                         }
                     }
@@ -1826,7 +1822,7 @@ namespace SharpFlame
 
                     FinalTilePos.X = NodeTag.Pos.X / Constants.TerrainGridSpacing;
                     FinalTilePos.Y = (NodeTag.Pos.Y / Constants.TerrainGridSpacing);
-                    Footprint = TypeBase.get_GetFootprintSelected(Rotation);
+                    Footprint = TypeBase.GetGetFootprintSelected(Rotation);
                     Remainder = Footprint.X % 2;
                     if ( Remainder > 0 )
                     {
@@ -1904,7 +1900,7 @@ namespace SharpFlame
             FinalTilePos.X = Pos.Horizontal.X / Constants.TerrainGridSpacing;
             FinalTilePos.Y = Pos.Horizontal.Y / Constants.TerrainGridSpacing;
 
-            Footprint = TypeBase.get_GetFootprintSelected(Rotation);
+            Footprint = TypeBase.GetGetFootprintSelected(Rotation);
 
             NewUnit.Pos = Pos;
             TilePosA.X = (int)(((double)NewUnit.Pos.Horizontal.X / Constants.TerrainGridSpacing - Footprint.X / 2.0D + 0.5D));
@@ -2033,24 +2029,24 @@ namespace SharpFlame
             var PlayerNum = 0;
             var Terrain = Map.Terrain;
 
-            for ( A = 0; A <= PassageNodeCount - 1; A++ )
+            for ( A = 0; A <= passageNodeCount - 1; A++ )
             {
                 for ( B = 0; B <= SymmetryBlockCount - 1; B++ )
                 {
-                    PassageNodes[B, A].HasFeatureCluster = false;
+                    passageNodes[B, A].HasFeatureCluster = false;
                 }
             }
 
-            for ( A = 0; A <= TotalPlayerCount - 1; A++ )
+            for ( A = 0; A <= totalPlayerCount - 1; A++ )
             {
                 PlayerNum = A;
-                tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBaseCommandCentre, PlayerBases[A].Pos, Map.UnitGroups[PlayerNum], 3, 0, BasePlaceRange);
+                tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBaseCommandCentre, playerBases[A].Pos, Map.UnitGroups[PlayerNum], 3, 0, BasePlaceRange);
                 if ( tmpUnit == null )
                 {
                     ReturnResult.ProblemAdd("No room for base structures");
                     return ReturnResult;
                 }
-                tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBasePowerGenerator, PlayerBases[A].Pos, Map.UnitGroups[PlayerNum], 3, 0, BasePlaceRange);
+                tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBasePowerGenerator, playerBases[A].Pos, Map.UnitGroups[PlayerNum], 3, 0, BasePlaceRange);
                 if ( tmpUnit == null )
                 {
                     ReturnResult.ProblemAdd("No room for base structures.");
@@ -2064,7 +2060,7 @@ namespace SharpFlame
                 }
                 for ( B = 1; B <= 2; B++ )
                 {
-                    tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBaseResearchFacility, PlayerBases[A].Pos, Map.UnitGroups[PlayerNum], 3, 0, BasePlaceRange);
+                    tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBaseResearchFacility, playerBases[A].Pos, Map.UnitGroups[PlayerNum], 3, 0, BasePlaceRange);
                     if ( tmpUnit == null )
                     {
                         ReturnResult.ProblemAdd("No room for base structures");
@@ -2079,7 +2075,7 @@ namespace SharpFlame
                 }
                 for ( B = 1; B <= 2; B++ )
                 {
-                    tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBaseFactory, PlayerBases[A].Pos, Map.UnitGroups[PlayerNum], 4, 0, BasePlaceRange);
+                    tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBaseFactory, playerBases[A].Pos, Map.UnitGroups[PlayerNum], 4, 0, BasePlaceRange);
                     if ( tmpUnit == null )
                     {
                         ReturnResult.ProblemAdd("No room for base structures");
@@ -2092,7 +2088,7 @@ namespace SharpFlame
                         return ReturnResult;
                     }
                 }
-                tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBaseCyborgFactory, PlayerBases[A].Pos, Map.UnitGroups[PlayerNum], 3, 0, BasePlaceRange);
+                tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBaseCyborgFactory, playerBases[A].Pos, Map.UnitGroups[PlayerNum], 3, 0, BasePlaceRange);
                 if ( tmpUnit == null )
                 {
                     ReturnResult.ProblemAdd("No room for base structures");
@@ -2100,7 +2096,7 @@ namespace SharpFlame
                 }
                 for ( B = 1; B <= BaseTruckCount; B++ )
                 {
-                    tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBaseTruck, PlayerBases[A].Pos, Map.UnitGroups[PlayerNum], 2, 0, BasePlaceRange);
+                    tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBaseTruck, playerBases[A].Pos, Map.UnitGroups[PlayerNum], 2, 0, BasePlaceRange);
                     if ( tmpUnit == null )
                     {
                         ReturnResult.ProblemAdd("No room for trucks");
@@ -2108,19 +2104,19 @@ namespace SharpFlame
                     }
                 }
             }
-            for ( A = 0; A <= PassageNodeCount - 1; A++ )
+            for ( A = 0; A <= passageNodeCount - 1; A++ )
             {
                 for ( D = 0; D <= SymmetryBlockCount - 1; D++ )
                 {
-                    for ( B = 0; B <= PassageNodes[D, A].OilCount - 1; B++ )
+                    for ( B = 0; B <= passageNodes[D, A].OilCount - 1; B++ )
                     {
-                        if ( PassageNodes[D, A].PlayerBaseNum >= 0 )
+                        if ( passageNodes[D, A].PlayerBaseNum >= 0 )
                         {
-                            tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBaseOilResource, PassageNodes[D, A].Pos, Map.ScavengerUnitGroup, 2, 0, BasePlaceRange);
+                            tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBaseOilResource, passageNodes[D, A].Pos, Map.ScavengerUnitGroup, 2, 0, BasePlaceRange);
                         }
                         else
                         {
-                            tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBaseOilResource, PassageNodes[D, A].Pos, Map.ScavengerUnitGroup, 2, 0, FeaturePlaceRange);
+                            tmpUnit = PlaceUnitNear(DefaultGenerator.UnitTypeBaseOilResource, passageNodes[D, A].Pos, Map.ScavengerUnitGroup, 2, 0, FeaturePlaceRange);
                         }
                         if ( tmpUnit == null )
                         {
@@ -2142,10 +2138,10 @@ namespace SharpFlame
                         Map.SectorUnitHeightsChanges.TileChanged(TilePos);
                         Map.SectorTerrainUndoChanges.TileChanged(TilePos);
                         tmpUnit.Pos.Altitude = AverageHeight * Map.HeightMultiplier;
-                        if ( PassageNodes[D, A].PlayerBaseNum >= 0 )
+                        if ( passageNodes[D, A].PlayerBaseNum >= 0 )
                         {
                             //place base derrick
-                            tmpUnit = PlaceUnit(DefaultGenerator.UnitTypeBaseDerrick, tmpUnit.Pos, Map.UnitGroups[PassageNodes[D, A].PlayerBaseNum], 0);
+                            tmpUnit = PlaceUnit(DefaultGenerator.UnitTypeBaseDerrick, tmpUnit.Pos, Map.UnitGroups[passageNodes[D, A].PlayerBaseNum], 0);
                             if ( tmpUnit == null )
                             {
                                 ReturnResult.ProblemAdd("No room for derrick.");
@@ -2157,13 +2153,13 @@ namespace SharpFlame
             }
 
             //feature clusters
-            for ( A = 0; A <= PassageNodeCount - 1; A++ )
+            for ( A = 0; A <= passageNodeCount - 1; A++ )
             {
                 for ( D = 0; D <= SymmetryBlockCount - 1; D++ )
                 {
-                    if ( PassageNodes[D, A].PlayerBaseNum < 0 && !PassageNodes[D, A].IsOnBorder )
+                    if ( passageNodes[D, A].PlayerBaseNum < 0 && !passageNodes[D, A].IsOnBorder )
                     {
-                        PassageNodes[D, A].HasFeatureCluster = App.Random.Next() < FeatureClusterChance;
+                        passageNodes[D, A].HasFeatureCluster = App.Random.Next() < FeatureClusterChance;
                     }
                 }
             }
@@ -2178,11 +2174,11 @@ namespace SharpFlame
 
             if ( GenerateTileset.ClusteredUnitChanceTotal > 0 )
             {
-                for ( A = 0; A <= PassageNodeCount - 1; A++ )
+                for ( A = 0; A <= passageNodeCount - 1; A++ )
                 {
                     for ( D = 0; D <= SymmetryBlockCount - 1; D++ )
                     {
-                        if ( PassageNodes[D, A].HasFeatureCluster )
+                        if ( passageNodes[D, A].HasFeatureCluster )
                         {
                             Count = FeatureClusterMinUnits +
                                     Convert.ToInt32((App.Random.Next() * (FeatureClusterMaxUnits - FeatureClusterMinUnits + 1)));
@@ -2199,9 +2195,9 @@ namespace SharpFlame
                                     }
                                 }
                                 Rotation = 0;
-                                Footprint = GenerateTileset.ClusteredUnits[C].TypeBase.get_GetFootprintSelected(Rotation);
+                                Footprint = GenerateTileset.ClusteredUnits[C].TypeBase.GetGetFootprintSelected(Rotation);
                                 E = ((int)(Math.Ceiling((decimal)(Math.Max(Footprint.X, Footprint.Y) / 2.0F)))) + 1;
-                                tmpUnit = PlaceUnitNear(GenerateTileset.ClusteredUnits[C].TypeBase, PassageNodes[D, A].Pos, Map.ScavengerUnitGroup, E, Rotation,
+                                tmpUnit = PlaceUnitNear(GenerateTileset.ClusteredUnits[C].TypeBase, passageNodes[D, A].Pos, Map.ScavengerUnitGroup, E, Rotation,
                                     FeaturePlaceRange);
                                 if ( tmpUnit == null )
                                 {
@@ -2239,7 +2235,7 @@ namespace SharpFlame
                         }
                     }
                     Rotation = 0;
-                    Footprint = GenerateTileset.ScatteredUnits[C].TypeBase.get_GetFootprintSelected(Rotation);
+                    Footprint = GenerateTileset.ScatteredUnits[C].TypeBase.GetGetFootprintSelected(Rotation);
                     B = FeatureScatterGap + (int)(Math.Ceiling((decimal)(Math.Max(Footprint.X, Footprint.Y) / 2.0F)));
                     tmpNode = GetRandomChildNode(TilePathMap.get_GetNodeLayer(TilePathMap.GetNodeLayerCount - 1).get_GetNode(0), B);
                     if ( tmpNode == null )
@@ -2556,24 +2552,24 @@ namespace SharpFlame
                 VertexPathMap = null;
             }
 
-            for ( A = 0; A <= ConnectionCount - 1; A++ )
+            for ( A = 0; A <= connectionCount - 1; A++ )
             {
-                Connections[A].PassageNodeA = null;
-                Connections[A].PassageNodeB = null;
-                Connections[A].Reflections = null;
+                connections[A].PassageNodeA = null;
+                connections[A].PassageNodeB = null;
+                connections[A].Reflections = null;
             }
-            ConnectionCount = 0;
+            connectionCount = 0;
 
-            for ( A = 0; A <= PassageNodeCount - 1; A++ )
+            for ( A = 0; A <= passageNodeCount - 1; A++ )
             {
                 for ( B = 0; B <= SymmetryBlockCount - 1; B++ )
                 {
-                    PassageNodes[B, A].Connections = null;
+                    passageNodes[B, A].Connections = null;
                 }
             }
-            PassageNodeCount = 0;
+            passageNodeCount = 0;
 
-            NearestCount = 0;
+            nearestCount = 0;
         }
 
         private bool MakePassageNodes(XYInt Pos, bool IsOnBorder)
@@ -2609,13 +2605,13 @@ namespace SharpFlame
             for ( A = 0; A <= SymmetryBlockCount - 1; A++ )
             {
                 tmpNode = new clsPassageNode();
-                PassageNodes[A, PassageNodeCount] = tmpNode;
-                tmpNode.Num = PassageNodeCount;
+                passageNodes[A, passageNodeCount] = tmpNode;
+                tmpNode.Num = passageNodeCount;
                 tmpNode.MirrorNum = A;
                 tmpNode.Pos = Positions[A];
                 tmpNode.IsOnBorder = IsOnBorder;
             }
-            PassageNodeCount++;
+            passageNodeCount++;
 
             return true;
         }
@@ -2946,7 +2942,7 @@ namespace SharpFlame
             }
             for ( B = 0; B <= SymmetryBlockCount - 1; B++ )
             {
-                PassageNodes[B, Args.PassageNode.Num].Level = NewHeightLevel;
+                passageNodes[B, Args.PassageNode.Num].Level = NewHeightLevel;
             }
             PassageNodesMinLevelSet(Args.PassageNode, Args.PassageNodesMinLevel, NewHeightLevel, MaxLevelTransition);
             PassageNodesMaxLevelSet(Args.PassageNode, Args.PassageNodesMaxLevel, NewHeightLevel, MaxLevelTransition);
@@ -2972,9 +2968,9 @@ namespace SharpFlame
 
             //make ramps
 
-            for ( A = 0; A <= ConnectionCount - 1; A++ )
+            for ( A = 0; A <= connectionCount - 1; A++ )
             {
-                Connections[A].IsRamp = false;
+                connections[A].IsRamp = false;
             }
 
             PathfinderNode[,] PassageNodePathNodes = null;
@@ -2982,23 +2978,23 @@ namespace SharpFlame
             var PassageNodeNetwork = MakePassageNodeNetwork();
             PassageNodePathNodes = PassageNodeNetwork.PassageNodePathNodes;
 
-            var PossibleRamps = new clsConnection[ConnectionCount];
+            var PossibleRamps = new clsConnection[connectionCount];
             var PossibleRampCount = 0;
             var GetPathStartNodes = new PathfinderNode[1];
             PathfinderNetwork.PathList[] ResultPaths = null;
 
             //ramp connections whose points are too far apart
 
-            var ConnectionsCanRamp = new bool[ConnectionCount];
+            var ConnectionsCanRamp = new bool[connectionCount];
 
-            for ( B = 0; B <= ConnectionCount - 1; B++ )
+            for ( B = 0; B <= connectionCount - 1; B++ )
             {
-                C = Math.Abs(Connections[B].PassageNodeA.Level - Connections[B].PassageNodeB.Level);
+                C = Math.Abs(connections[B].PassageNodeA.Level - connections[B].PassageNodeB.Level);
                 if ( C == 1 )
                 {
-                    if ( !(Connections[B].PassageNodeA.IsOnBorder || Connections[B].PassageNodeB.IsOnBorder)
-                         && Connections[B].PassageNodeA.MirrorNum == 0
-                         && Connections[B].PassageNodeA.Num != Connections[B].PassageNodeB.Num )
+                    if ( !(connections[B].PassageNodeA.IsOnBorder || connections[B].PassageNodeB.IsOnBorder)
+                         && connections[B].PassageNodeA.MirrorNum == 0
+                         && connections[B].PassageNodeA.Num != connections[B].PassageNodeB.Num )
                     {
                         ConnectionsCanRamp[B] = true;
                     }
@@ -3014,8 +3010,8 @@ namespace SharpFlame
             }
 
             var Connectedness = new clsNodeConnectedness();
-            Connectedness.NodeConnectedness = new float[PassageNodeCount];
-            Connectedness.PassageNodeVisited = new bool[SymmetryBlockCount, PassageNodeCount];
+            Connectedness.NodeConnectedness = new float[passageNodeCount];
+            Connectedness.PassageNodeVisited = new bool[SymmetryBlockCount, passageNodeCount];
             Connectedness.PassageNodePathNodes = PassageNodePathNodes;
             Connectedness.PassageNodePathMap = PassageNodeNetwork.Network;
 
@@ -3028,21 +3024,21 @@ namespace SharpFlame
 
             UpdateNodeConnectednessArgs.Args = Connectedness;
             UpdateNetworkConnectednessArgs.Args = Connectedness;
-            UpdateNetworkConnectednessArgs.PassageNodeUpdated = new bool[PassageNodeCount];
+            UpdateNetworkConnectednessArgs.PassageNodeUpdated = new bool[passageNodeCount];
             UpdateNetworkConnectednessArgs.SymmetryBlockCount = SymmetryBlockCount;
 
-            for ( A = 0; A <= PassageNodeCount - 1; A++ )
+            for ( A = 0; A <= passageNodeCount - 1; A++ )
             {
                 Connectedness.NodeConnectedness[A] = 0.0F;
-                for ( B = 0; B <= PassageNodeCount - 1; B++ )
+                for ( B = 0; B <= passageNodeCount - 1; B++ )
                 {
                     for ( C = 0; C <= SymmetryBlockCount - 1; C++ )
                     {
                         Connectedness.PassageNodeVisited[C, B] = false;
                     }
                 }
-                UpdateNodeConnectednessArgs.OriginalNode = PassageNodes[0, A];
-                UpdateNodeConnectedness(UpdateNodeConnectednessArgs, PassageNodes[0, A]);
+                UpdateNodeConnectednessArgs.OriginalNode = passageNodes[0, A];
+                UpdateNodeConnectedness(UpdateNodeConnectednessArgs, passageNodes[0, A]);
             }
 
             do
@@ -3051,22 +3047,22 @@ namespace SharpFlame
                 BestDist = 1.0F; //for connections that can already reach the other side
                 BestDistB = 0.0F; //for connections that cant
                 PossibleRampCount = 0;
-                for ( B = 0; B <= ConnectionCount - 1; B++ )
+                for ( B = 0; B <= connectionCount - 1; B++ )
                 {
-                    if ( ConnectionsCanRamp[B] && !Connections[B].IsRamp )
+                    if ( ConnectionsCanRamp[B] && !connections[B].IsRamp )
                     {
-                        if ( CheckRampAngles(Connections[B], Convert.ToDouble(80.0D * MathUtil.RadOf1Deg), Convert.ToDouble(120.0D * MathUtil.RadOf1Deg),
+                        if ( CheckRampAngles(connections[B], Convert.ToDouble(80.0D * MathUtil.RadOf1Deg), Convert.ToDouble(120.0D * MathUtil.RadOf1Deg),
                             0.0D * MathUtil.RadOf1Deg) )
                         {
-                            GetPathStartNodes[0] = PassageNodePathNodes[Connections[B].PassageNodeA.MirrorNum, Connections[B].PassageNodeA.Num];
+                            GetPathStartNodes[0] = PassageNodePathNodes[connections[B].PassageNodeA.MirrorNum, connections[B].PassageNodeA.Num];
                             ResultPaths = PassageNodeNetwork.Network.GetPath(GetPathStartNodes,
-                                PassageNodePathNodes[Connections[B].PassageNodeB.MirrorNum, Connections[B].PassageNodeB.Num], -1, 0);
+                                PassageNodePathNodes[connections[B].PassageNodeB.MirrorNum, connections[B].PassageNodeB.Num], -1, 0);
                             BaseDist = double.MaxValue;
-                            XY_int.X = (int)((Connections[B].PassageNodeA.Pos.X + Connections[B].PassageNodeB.Pos.X) / 2.0D);
-                            XY_int.Y = (int)((Connections[B].PassageNodeA.Pos.Y + Connections[B].PassageNodeB.Pos.Y) / 2.0D);
-                            for ( E = 0; E <= TotalPlayerCount - 1; E++ )
+                            XY_int.X = (int)((connections[B].PassageNodeA.Pos.X + connections[B].PassageNodeB.Pos.X) / 2.0D);
+                            XY_int.Y = (int)((connections[B].PassageNodeA.Pos.Y + connections[B].PassageNodeB.Pos.Y) / 2.0D);
+                            for ( E = 0; E <= totalPlayerCount - 1; E++ )
                             {
-                                Dist = Convert.ToDouble((PlayerBases[E].Pos - XY_int).ToDoubles().GetMagnitude());
+                                Dist = Convert.ToDouble((playerBases[E].Pos - XY_int).ToDoubles().GetMagnitude());
                                 if ( Dist < BaseDist )
                                 {
                                     BaseDist = Dist;
@@ -3075,13 +3071,13 @@ namespace SharpFlame
                             RampDist = Math.Max(MaxDisconnectionDist * Math.Pow(RampBase, (BaseDist / 1024.0D)), 1.0F);
                             if ( ResultPaths == null )
                             {
-                                Value = Connectedness.NodeConnectedness[Connections[B].PassageNodeA.Num] +
-                                        Connectedness.NodeConnectedness[Connections[B].PassageNodeB.Num];
+                                Value = Connectedness.NodeConnectedness[connections[B].PassageNodeA.Num] +
+                                        Connectedness.NodeConnectedness[connections[B].PassageNodeB.Num];
                                 if ( double.MaxValue > BestDist )
                                 {
                                     BestDist = double.MaxValue;
                                     BestDistB = Value;
-                                    PossibleRamps[0] = Connections[B];
+                                    PossibleRamps[0] = connections[B];
                                     PossibleRampCount = 1;
                                 }
                                 else
@@ -3089,12 +3085,12 @@ namespace SharpFlame
                                     if ( Value < BestDistB )
                                     {
                                         BestDistB = Value;
-                                        PossibleRamps[0] = Connections[B];
+                                        PossibleRamps[0] = connections[B];
                                         PossibleRampCount = 1;
                                     }
                                     else if ( Value == BestDistB )
                                     {
-                                        PossibleRamps[PossibleRampCount] = Connections[B];
+                                        PossibleRamps[PossibleRampCount] = connections[B];
                                         PossibleRampCount++;
                                     }
                                 }
@@ -3107,12 +3103,12 @@ namespace SharpFlame
                             else if ( ResultPaths[0].Paths[0].Value / RampDist > BestDist )
                             {
                                 BestDist = ResultPaths[0].Paths[0].Value / RampDist;
-                                PossibleRamps[0] = Connections[B];
+                                PossibleRamps[0] = connections[B];
                                 PossibleRampCount = 1;
                             }
                             else if ( ResultPaths[0].Paths[0].Value / RampDist == BestDist )
                             {
-                                PossibleRamps[PossibleRampCount] = Connections[B];
+                                PossibleRamps[PossibleRampCount] = connections[B];
                                 PossibleRampCount++;
                             }
                             else if ( ResultPaths[0].Paths[0].Value <= RampDist )
@@ -3139,7 +3135,7 @@ namespace SharpFlame
                         PossibleRamps[BestNum].Reflections[C].IsRamp = true;
                     }
                     PassageNodeNetwork.Network.FindCalc();
-                    for ( E = 0; E <= PassageNodeCount - 1; E++ )
+                    for ( E = 0; E <= passageNodeCount - 1; E++ )
                     {
                         UpdateNetworkConnectednessArgs.PassageNodeUpdated[E] = false;
                     }
@@ -3166,7 +3162,7 @@ namespace SharpFlame
             var FloodArgs = new PathfinderNetwork.sFloodProximityArgs();
             FloodArgs.StartNode = PassageNodeNetwork.PassageNodePathNodes[0, 0];
             FloodArgs.NodeValues = PassageNodeNetwork.Network.NetworkLargeArrays.Nodes_ValuesA;
-            for ( A = 0; A <= PassageNodeCount - 1; A++ )
+            for ( A = 0; A <= passageNodeCount - 1; A++ )
             {
                 for ( B = 0; B <= SymmetryBlockCount - 1; B++ )
                 {
@@ -3174,11 +3170,11 @@ namespace SharpFlame
                 }
             }
             PassageNodeNetwork.Network.FloodProximity(ref FloodArgs);
-            for ( A = 0; A <= PassageNodeCount - 1; A++ )
+            for ( A = 0; A <= passageNodeCount - 1; A++ )
             {
                 for ( B = 0; B <= SymmetryBlockCount - 1; B++ )
                 {
-                    if ( !PassageNodes[B, A].IsWater )
+                    if ( !passageNodes[B, A].IsWater )
                     {
                         if ( FloodArgs.NodeValues[PassageNodeNetwork.PassageNodePathNodes[B, A].Layer_NodeNum] == float.MaxValue )
                         {
@@ -3203,14 +3199,14 @@ namespace SharpFlame
             var B = 0;
 
             ReturnResult.Network = new PathfinderNetwork();
-            ReturnResult.PassageNodePathNodes = new PathfinderNode[SymmetryBlockCount, PassageNodeCount];
-            for ( A = 0; A <= PassageNodeCount - 1; A++ )
+            ReturnResult.PassageNodePathNodes = new PathfinderNode[SymmetryBlockCount, passageNodeCount];
+            for ( A = 0; A <= passageNodeCount - 1; A++ )
             {
                 for ( B = 0; B <= SymmetryBlockCount - 1; B++ )
                 {
                     ReturnResult.PassageNodePathNodes[B, A] = new PathfinderNode(ReturnResult.Network);
                     NodeTag = new clsNodeTag();
-                    NodeTag.Pos = PassageNodes[B, A].Pos;
+                    NodeTag.Pos = passageNodes[B, A].Pos;
                     ReturnResult.PassageNodePathNodes[B, A].Tag = NodeTag;
                 }
             }
@@ -3230,11 +3226,11 @@ namespace SharpFlame
             var C = 0;
             var D = 0;
 
-            for ( A = 0; A <= PassageNodeCount - 1; A++ )
+            for ( A = 0; A <= passageNodeCount - 1; A++ )
             {
                 for ( B = 0; B <= SymmetryBlockCount - 1; B++ )
                 {
-                    PassageNodes[B, A].OilCount = 0;
+                    passageNodes[B, A].OilCount = 0;
                 }
             }
 
@@ -3243,20 +3239,20 @@ namespace SharpFlame
             var GetPathStartNodes = new PathfinderNode[1];
             PathfinderNetwork.PathList[] ResultPaths = null;
 
-            PassageNodeDists = new float[SymmetryBlockCount, PassageNodeCount, SymmetryBlockCount, PassageNodeCount];
-            for ( A = 0; A <= PassageNodeCount - 1; A++ )
+            passageNodeDists = new float[SymmetryBlockCount, passageNodeCount, SymmetryBlockCount, passageNodeCount];
+            for ( A = 0; A <= passageNodeCount - 1; A++ )
             {
                 for ( D = 0; D <= SymmetryBlockCount - 1; D++ )
                 {
-                    PassageNodeDists[D, A, D, A] = 0.0F;
-                    for ( B = 0; B <= PassageNodeCount - 1; B++ )
+                    passageNodeDists[D, A, D, A] = 0.0F;
+                    for ( B = 0; B <= passageNodeCount - 1; B++ )
                     {
                         for ( C = 0; C <= SymmetryBlockCount - 1; C++ )
                         {
-                            if ( PassageNodes[0, A].IsWater || PassageNodes[C, B].IsWater || (C != 0 & D != 0) )
+                            if ( passageNodes[0, A].IsWater || passageNodes[C, B].IsWater || (C != 0 & D != 0) )
                             {
-                                PassageNodeDists[D, A, C, B] = float.MaxValue;
-                                PassageNodeDists[C, B, D, A] = float.MaxValue;
+                                passageNodeDists[D, A, C, B] = float.MaxValue;
+                                passageNodeDists[C, B, D, A] = float.MaxValue;
                             }
                             else
                             {
@@ -3272,8 +3268,8 @@ namespace SharpFlame
                                 {
                                     Debugger.Break();
                                 }
-                                PassageNodeDists[D, A, C, B] = ResultPaths[0].Paths[0].Value;
-                                PassageNodeDists[C, B, D, A] = ResultPaths[0].Paths[0].Value;
+                                passageNodeDists[D, A, C, B] = ResultPaths[0].Paths[0].Value;
+                                passageNodeDists[C, B, D, A] = ResultPaths[0].Paths[0].Value;
                             }
                         }
                     }
@@ -3288,7 +3284,7 @@ namespace SharpFlame
             MaxBestNodeCount = 1;
             for ( A = 0; A <= OilAtATime - 1; A++ )
             {
-                MaxBestNodeCount *= PassageNodeCount;
+                MaxBestNodeCount *= passageNodeCount;
             }
             var oilArgs = new clsOilBalanceLoopArgs
                 {
@@ -3318,7 +3314,7 @@ namespace SharpFlame
                     {
                         for ( A = 0; A <= SymmetryBlockCount - 1; A++ )
                         {
-                            PassageNodes[A, bestPossibility.Nodes[B].Num].OilCount += oilArgs.OilClusterSizes[B];
+                            passageNodes[A, bestPossibility.Nodes[B].Num].OilCount += oilArgs.OilClusterSizes[B];
                         }
                         PlacedExtraOilCount += oilArgs.OilClusterSizes[B] * SymmetryBlockCount;
                     }
@@ -3339,7 +3335,7 @@ namespace SharpFlame
             {
                 for ( B = 0; B <= SymmetryBlockCount - 1; B++ )
                 {
-                    PassageNodes[B, PlayerBases[A].Nodes[0].Num].OilCount += BaseOilCount;
+                    passageNodes[B, playerBases[A].Nodes[0].Num].OilCount += BaseOilCount;
                 }
             }
 

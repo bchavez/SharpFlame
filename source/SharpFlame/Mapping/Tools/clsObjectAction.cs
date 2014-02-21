@@ -8,7 +8,7 @@ using SharpFlame.Mapping.Objects;
 
 namespace SharpFlame.Mapping.Tools
 {
-    public abstract class clsObjectAction : SimpleListTool<clsUnit>
+    public abstract class clsObjectAction : ISimpleListTool<clsUnit>
     {
         private readonly SimpleClassList<clsUnit> _ResultUnits = new SimpleClassList<clsUnit>();
         public bool ActionPerformed;
@@ -50,9 +50,9 @@ namespace SharpFlame.Mapping.Tools
             }
         }
 
-        public void SetItem(clsUnit Item)
+        public void SetItem(clsUnit item)
         {
-            Unit = Item;
+            Unit = item;
         }
 
         protected virtual void ActionCondition()

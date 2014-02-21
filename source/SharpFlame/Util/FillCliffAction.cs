@@ -1,6 +1,6 @@
 namespace SharpFlame.Util
 {
-    public enum enumFillCliffAction
+    public enum FillCliffAction
     {
         Ignore,
         StopBefore,

@@ -13,43 +13,42 @@ namespace SharpFlame.Controls
     public partial class PlayerNumControl
     {
         public const int ScavButtonNum = 10;
-        private clsUnitGroupContainer _Target;
+        private clsUnitGroupContainer target;
         public ToolStripButton[] tsbNumber = new ToolStripButton[11];
 
         public PlayerNumControl()
         {
             InitializeComponent();
 
-            var A = 0;
-            var B = 0;
-            var ButtonsPerRow = 5;
+            var a = 0;
+            const int ButtonsPerRow = 5;
 
-            for ( A = 0; A <= ButtonsPerRow - 1; A++ )
+            for ( a = 0; a <= ButtonsPerRow - 1; a++ )
             {
-                tsbNumber[A] = new ToolStripButton();
-                tsbNumber[A].DisplayStyle = ToolStripItemDisplayStyle.Text;
-                tsbNumber[A].Text = A.ToStringInvariant();
-                tsbNumber[A].AutoToolTip = false;
-                tsbNumber[A].Click += tsbNumber_Clicked;
-                tsPlayerNum1.Items.Add(tsbNumber[A]);
+                tsbNumber[a] = new ToolStripButton();
+                tsbNumber[a].DisplayStyle = ToolStripItemDisplayStyle.Text;
+                tsbNumber[a].Text = a.ToStringInvariant();
+                tsbNumber[a].AutoToolTip = false;
+                tsbNumber[a].Click += tsbNumber_Clicked;
+                tsPlayerNum1.Items.Add(tsbNumber[a]);
 
-                B = A + ButtonsPerRow;
-                tsbNumber[B] = new ToolStripButton();
-                tsbNumber[B].DisplayStyle = ToolStripItemDisplayStyle.Text;
-                tsbNumber[B].Text = B.ToStringInvariant();
-                tsbNumber[B].AutoToolTip = false;
-                tsbNumber[B].Click += tsbNumber_Clicked;
-                tsPlayerNum2.Items.Add(tsbNumber[B]);
+                var b = a + ButtonsPerRow;
+                tsbNumber[b] = new ToolStripButton();
+                tsbNumber[b].DisplayStyle = ToolStripItemDisplayStyle.Text;
+                tsbNumber[b].Text = b.ToStringInvariant();
+                tsbNumber[b].AutoToolTip = false;
+                tsbNumber[b].Click += tsbNumber_Clicked;
+                tsPlayerNum2.Items.Add(tsbNumber[b]);
             }
 
-            A = 10;
+            a = 10;
 
-            tsbNumber[A] = new ToolStripButton();
-            tsbNumber[A].DisplayStyle = ToolStripItemDisplayStyle.Text;
-            tsbNumber[A].Text = "S";
-            tsbNumber[A].AutoToolTip = false;
-            tsbNumber[A].Click += tsbNumber_Clicked;
-            tsPlayerNum2.Items.Add(tsbNumber[A]);
+            tsbNumber[a] = new ToolStripButton();
+            tsbNumber[a].DisplayStyle = ToolStripItemDisplayStyle.Text;
+            tsbNumber[a].Text = "S";
+            tsbNumber[a].AutoToolTip = false;
+            tsbNumber[a].Click += tsbNumber_Clicked;
+            tsPlayerNum2.Items.Add(tsbNumber[a]);
 
             Width = 24 * 6;
             Height = 25 * 2;
@@ -57,21 +56,21 @@ namespace SharpFlame.Controls
 
         public clsUnitGroupContainer Target
         {
-            get { return _Target; }
+            get { return target; }
             set
             {
-                if ( value == _Target )
+                if ( value == target )
                 {
                     return;
                 }
-                if ( _Target != null )
+                if ( target != null )
                 {
-                    _Target.Changed -= SelectedChanged;
+                    target.Changed -= SelectedChanged;
                 }
-                _Target = value;
-                if ( _Target != null )
+                target = value;
+                if ( target != null )
                 {
-                    _Target.Changed += SelectedChanged;
+                    target.Changed += SelectedChanged;
                 }
                 SelectedChanged();
             }
@@ -79,62 +78,62 @@ namespace SharpFlame.Controls
 
         private void tsbNumber_Clicked(object sender, EventArgs e)
         {
-            if ( _Target == null )
+            if ( target == null )
             {
                 return;
             }
 
             var tsb = (ToolStripButton)sender;
-            var UnitGroup = (clsUnitGroup)tsb.Tag;
+            var unitGroup = (clsUnitGroup)tsb.Tag;
 
-            _Target.Item = UnitGroup;
+            target.Item = unitGroup;
         }
 
         private void SelectedChanged()
         {
-            var A = 0;
-            var UnitGroup = default(clsUnitGroup);
+            var a = 0;
+            var unitGroup = default(clsUnitGroup);
 
-            if ( _Target != null )
+            if ( target != null )
             {
-                UnitGroup = _Target.Item;
+                unitGroup = target.Item;
             }
 
-            if ( UnitGroup == null )
+            if ( unitGroup == null )
             {
-                for ( A = 0; A <= 10; A++ )
+                for ( a = 0; a <= 10; a++ )
                 {
-                    tsbNumber[A].Checked = false;
+                    tsbNumber[a].Checked = false;
                 }
             }
             else
             {
-                for ( A = 0; A <= 10; A++ )
+                for ( a = 0; a <= 10; a++ )
                 {
-                    tsbNumber[A].Checked = tsbNumber[A].Tag == UnitGroup;
+                    tsbNumber[a].Checked = tsbNumber[a].Tag == unitGroup;
                 }
             }
         }
 
-        public void SetMap(clsMap NewMap)
+        public void SetMap(clsMap newMap)
         {
-            var A = 0;
+            var a = 0;
 
-            if ( NewMap == null )
+            if ( newMap == null )
             {
-                for ( A = 0; A <= Constants.PlayerCountMax - 1; A++ )
+                for ( a = 0; a <= Constants.PlayerCountMax - 1; a++ )
                 {
-                    tsbNumber[A].Tag = null;
+                    tsbNumber[a].Tag = null;
                 }
                 tsbNumber[ScavButtonNum].Tag = null;
             }
             else
             {
-                for ( A = 0; A <= Constants.PlayerCountMax - 1; A++ )
+                for ( a = 0; a <= Constants.PlayerCountMax - 1; a++ )
                 {
-                    tsbNumber[A].Tag = NewMap.UnitGroups[A];
+                    tsbNumber[a].Tag = newMap.UnitGroups[a];
                 }
-                tsbNumber[ScavButtonNum].Tag = NewMap.ScavengerUnitGroup;
+                tsbNumber[ScavButtonNum].Tag = newMap.ScavengerUnitGroup;
             }
             SelectedChanged();
         }

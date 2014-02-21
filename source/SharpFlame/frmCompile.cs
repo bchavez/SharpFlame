@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using NLog;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping;
@@ -236,7 +237,7 @@ namespace SharpFlame
             var StartPos = new XYInt();
             var FinishPos = new XYInt();
             var CentrePos = new XYInt();
-            StructureTypeBase.enumStructureType StructureTypeType;
+            StructureType StructureTypeType;
             StructureTypeBase structureTypeBase;
             var Footprint = new XYInt();
             var UnitIsStructureModule = new bool[Map.Units.Count];
@@ -249,7 +250,7 @@ namespace SharpFlame
                     structureTypeBase = (StructureTypeBase)unit.TypeBase;
                     StructureTypeType = structureTypeBase.StructureType;
                     UnitIsStructureModule[unit.MapLink.ArrayPosition] = structureTypeBase.IsModule() |
-                                                                        StructureTypeType == StructureTypeBase.enumStructureType.ResourceExtractor;
+                                                                        StructureTypeType == StructureType.ResourceExtractor;
                 }
             }
             //check and store non-module units first. modules need to check for the underlying unit.
@@ -257,7 +258,7 @@ namespace SharpFlame
             {
                 if ( !UnitIsStructureModule[unit.MapLink.ArrayPosition] )
                 {
-                    Footprint = unit.TypeBase.get_GetFootprintSelected(unit.Rotation);
+                    Footprint = unit.TypeBase.GetGetFootprintSelected(unit.Rotation);
                     Map.GetFootprintTileRange(unit.Pos.Horizontal, Footprint, ref StartPos, ref FinishPos);
                     if ( StartPos.X < 0 | FinishPos.X >= Map.Terrain.TileSize.X
                          | StartPos.Y < 0 | FinishPos.Y >= Map.Terrain.TileSize.Y )
@@ -320,10 +321,10 @@ namespace SharpFlame
                         {
                             if ( TileObjectGroup[CentrePos.X, CentrePos.Y] == unit.UnitGroup )
                             {
-                                if ( StructureTypeType == StructureTypeBase.enumStructureType.FactoryModule )
+                                if ( StructureTypeType == StructureType.FactoryModule )
                                 {
-                                    if ( tileStructureTypeBase[CentrePos.X, CentrePos.Y].StructureType == StructureTypeBase.enumStructureType.Factory
-                                         | tileStructureTypeBase[CentrePos.X, CentrePos.Y].StructureType == StructureTypeBase.enumStructureType.VTOLFactory )
+                                    if ( tileStructureTypeBase[CentrePos.X, CentrePos.Y].StructureType == StructureType.Factory
+                                         | tileStructureTypeBase[CentrePos.X, CentrePos.Y].StructureType == StructureType.VTOLFactory )
                                     {
                                         IsValid = true;
                                     }
@@ -332,9 +333,9 @@ namespace SharpFlame
                                         IsValid = false;
                                     }
                                 }
-                                else if ( StructureTypeType == StructureTypeBase.enumStructureType.PowerModule )
+                                else if ( StructureTypeType == StructureType.PowerModule )
                                 {
-                                    if ( tileStructureTypeBase[CentrePos.X, CentrePos.Y].StructureType == StructureTypeBase.enumStructureType.PowerGenerator )
+                                    if ( tileStructureTypeBase[CentrePos.X, CentrePos.Y].StructureType == StructureType.PowerGenerator )
                                     {
                                         IsValid = true;
                                     }
@@ -343,9 +344,9 @@ namespace SharpFlame
                                         IsValid = false;
                                     }
                                 }
-                                else if ( StructureTypeType == StructureTypeBase.enumStructureType.ResearchModule )
+                                else if ( StructureTypeType == StructureType.ResearchModule )
                                 {
-                                    if ( tileStructureTypeBase[CentrePos.X, CentrePos.Y].StructureType == StructureTypeBase.enumStructureType.Research )
+                                    if ( tileStructureTypeBase[CentrePos.X, CentrePos.Y].StructureType == StructureType.Research )
                                     {
                                         IsValid = true;
                                     }
@@ -366,7 +367,7 @@ namespace SharpFlame
                         }
                         else if ( tileFeatureTypeBase[CentrePos.X, CentrePos.Y] != null )
                         {
-                            if ( StructureTypeType == StructureTypeBase.enumStructureType.ResourceExtractor )
+                            if ( StructureTypeType == StructureType.ResourceExtractor )
                             {
                                 if ( tileFeatureTypeBase[CentrePos.X, CentrePos.Y].FeatureType == FeatureTypeBase.enumFeatureType.OilResource )
                                 {
@@ -382,7 +383,7 @@ namespace SharpFlame
                                 IsValid = false;
                             }
                         }
-                        else if ( StructureTypeType == StructureTypeBase.enumStructureType.ResourceExtractor )
+                        else if ( StructureTypeType == StructureType.ResourceExtractor )
                         {
                             IsValid = true;
                         }
@@ -581,7 +582,7 @@ namespace SharpFlame
                     {
                         if ( Map.Terrain.Tiles[X, Y].Texture.TextureNum >= 0 && Map.Terrain.Tiles[X, Y].Texture.TextureNum < Map.Tileset.TileCount )
                         {
-                            if ( Map.Tileset.Tiles[Map.Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNum_Water )
+                            if ( Map.Tileset.Tiles[Map.Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNumWater )
                             {
                                 Count++;
                             }

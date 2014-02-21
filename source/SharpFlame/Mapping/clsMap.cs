@@ -262,10 +262,10 @@ namespace SharpFlame.Mapping
 
             XG = Horizontal.X / Constants.TerrainGridSpacing;
             YG = (Horizontal.Y / Constants.TerrainGridSpacing);
-            InTileX = MathUtil.Clamp_dbl(Horizontal.X / Constants.TerrainGridSpacing - XG, 0.0D, 1.0D);
-            InTileZ = MathUtil.Clamp_dbl(Horizontal.Y / Constants.TerrainGridSpacing - YG, 0.0D, 1.0D);
-            X1 = MathUtil.Clamp_int(XG, 0, Terrain.TileSize.X - 1);
-            Y1 = MathUtil.Clamp_int(YG, 0, Terrain.TileSize.Y - 1);
+            InTileX = MathUtil.ClampDbl(Horizontal.X / Constants.TerrainGridSpacing - XG, 0.0D, 1.0D);
+            InTileZ = MathUtil.ClampDbl(Horizontal.Y / Constants.TerrainGridSpacing - YG, 0.0D, 1.0D);
+            X1 = MathUtil.ClampInt(XG, 0, Terrain.TileSize.X - 1);
+            Y1 = MathUtil.ClampInt(YG, 0, Terrain.TileSize.Y - 1);
             if ( Terrain.Tiles[X1, Y1].Tri )
             {
                 if ( InTileZ <= 1.0D - InTileX )
@@ -301,12 +301,12 @@ namespace SharpFlame.Mapping
 
             XG = (Horizontal.X / Constants.TerrainGridSpacing);
             YG = Horizontal.Y / Constants.TerrainGridSpacing;
-            InTileX = MathUtil.Clamp_dbl(Horizontal.X / Constants.TerrainGridSpacing - XG, 0.0D, 1.0D);
-            InTileZ = MathUtil.Clamp_dbl(Horizontal.Y / Constants.TerrainGridSpacing - YG, 0.0D, 1.0D);
-            X1 = MathUtil.Clamp_int(XG, 0, Terrain.TileSize.X - 1);
-            Y1 = MathUtil.Clamp_int(YG, 0, Terrain.TileSize.Y - 1);
-            X2 = MathUtil.Clamp_int(XG + 1, 0, Terrain.TileSize.X);
-            Y2 = MathUtil.Clamp_int(YG + 1, 0, Terrain.TileSize.Y);
+            InTileX = MathUtil.ClampDbl(Horizontal.X / Constants.TerrainGridSpacing - XG, 0.0D, 1.0D);
+            InTileZ = MathUtil.ClampDbl(Horizontal.Y / Constants.TerrainGridSpacing - YG, 0.0D, 1.0D);
+            X1 = MathUtil.ClampInt(XG, 0, Terrain.TileSize.X - 1);
+            Y1 = MathUtil.ClampInt(YG, 0, Terrain.TileSize.Y - 1);
+            X2 = MathUtil.ClampInt(XG + 1, 0, Terrain.TileSize.X);
+            Y2 = MathUtil.ClampInt(YG + 1, 0, Terrain.TileSize.Y);
             if ( Terrain.Tiles[X1, Y1].Tri )
             {
                 if ( InTileZ <= 1.0D - InTileX )
@@ -371,12 +371,12 @@ namespace SharpFlame.Mapping
 
             XG = (Horizontal.X / Constants.TerrainGridSpacing);
             YG = Horizontal.Y / Constants.TerrainGridSpacing;
-            InTileX = MathUtil.Clamp_dbl(Horizontal.X / Constants.TerrainGridSpacing - XG, 0.0D, 1.0D);
-            InTileZ = MathUtil.Clamp_dbl(Horizontal.Y / Constants.TerrainGridSpacing - YG, 0.0D, 1.0D);
-            X1 = MathUtil.Clamp_int(XG, 0, Terrain.TileSize.X - 1);
-            Y1 = MathUtil.Clamp_int(YG, 0, Terrain.TileSize.Y - 1);
-            X2 = MathUtil.Clamp_int(XG + 1, 0, Terrain.TileSize.X);
-            Y2 = MathUtil.Clamp_int(YG + 1, 0, Terrain.TileSize.Y);
+            InTileX = MathUtil.ClampDbl(Horizontal.X / Constants.TerrainGridSpacing - XG, 0.0D, 1.0D);
+            InTileZ = MathUtil.ClampDbl(Horizontal.Y / Constants.TerrainGridSpacing - YG, 0.0D, 1.0D);
+            X1 = MathUtil.ClampInt(XG, 0, Terrain.TileSize.X - 1);
+            Y1 = MathUtil.ClampInt(YG, 0, Terrain.TileSize.Y - 1);
+            X2 = MathUtil.ClampInt(XG + 1, 0, Terrain.TileSize.X);
+            Y2 = MathUtil.ClampInt(YG + 1, 0, Terrain.TileSize.Y);
             if ( Terrain.Tiles[X1, Y1].Tri )
             {
                 if ( InTileZ <= 1.0D - InTileX )
@@ -431,17 +431,17 @@ namespace SharpFlame.Mapping
             var vector2 = default(XYZDouble);
             double dblTemp = 0;
 
-            X2 = MathUtil.Clamp_int(X - 1, 0, Terrain.TileSize.X);
-            Y2 = MathUtil.Clamp_int(Y, 0, Terrain.TileSize.Y);
+            X2 = MathUtil.ClampInt(X - 1, 0, Terrain.TileSize.X);
+            Y2 = MathUtil.ClampInt(Y, 0, Terrain.TileSize.Y);
             TerrainHeightX1 = Terrain.Vertices[X2, Y2].Height;
-            X2 = MathUtil.Clamp_int(X + 1, 0, Terrain.TileSize.X);
-            Y2 = MathUtil.Clamp_int(Y, 0, Terrain.TileSize.Y);
+            X2 = MathUtil.ClampInt(X + 1, 0, Terrain.TileSize.X);
+            Y2 = MathUtil.ClampInt(Y, 0, Terrain.TileSize.Y);
             TerrainHeightX2 = Terrain.Vertices[X2, Y2].Height;
-            X2 = MathUtil.Clamp_int(X, 0, Terrain.TileSize.X);
-            Y2 = MathUtil.Clamp_int(Y - 1, 0, Terrain.TileSize.Y);
+            X2 = MathUtil.ClampInt(X, 0, Terrain.TileSize.X);
+            Y2 = MathUtil.ClampInt(Y - 1, 0, Terrain.TileSize.Y);
             TerrainHeightY1 = Terrain.Vertices[X2, Y2].Height;
-            X2 = MathUtil.Clamp_int(X, 0, Terrain.TileSize.X);
-            Y2 = MathUtil.Clamp_int(Y + 1, 0, Terrain.TileSize.Y);
+            X2 = MathUtil.ClampInt(X, 0, Terrain.TileSize.X);
+            Y2 = MathUtil.ClampInt(Y + 1, 0, Terrain.TileSize.Y);
             TerrainHeightY2 = Terrain.Vertices[X2, Y2].Height;
             vector1.X = (TerrainHeightX1 - TerrainHeightX2) * HeightMultiplier;
             vector1.Y = Constants.TerrainGridSpacing * 2.0D;
@@ -678,7 +678,7 @@ namespace SharpFlame.Mapping
                         structureTypeBase = (StructureTypeBase)Unit.TypeBase;
                         if ( structureTypeBase.StructureBasePlate != null )
                         {
-                            Footprint = structureTypeBase.get_GetFootprintSelected(Unit.Rotation);
+                            Footprint = structureTypeBase.GetGetFootprintSelected(Unit.Rotation);
                             GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Footprint, ref FootprintStart, ref FootprintFinish);
                             for ( TileY = Math.Max(FootprintStart.Y, StartY); TileY <= Math.Min(FootprintFinish.Y, FinishY); TileY++ )
                             {
@@ -910,7 +910,7 @@ namespace SharpFlame.Mapping
                         {
                             if ( Terrain.Tiles[X, Y].Texture.TextureNum >= 0 && Terrain.Tiles[X, Y].Texture.TextureNum < Tileset.TileCount )
                             {
-                                if ( Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNum_Cliff )
+                                if ( Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNumCliff )
                                 {
                                     sngTexture[Y, X, 0] = sngTexture[Y, X, 0] * AntiAlpha + SettingsManager.Settings.MinimapCliffColour.Red * Alpha;
                                     sngTexture[Y, X, 1] = sngTexture[Y, X, 1] * AntiAlpha + SettingsManager.Settings.MinimapCliffColour.Green * Alpha;
@@ -953,7 +953,7 @@ namespace SharpFlame.Mapping
                     }
                     else
                     {
-                        Footprint = Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation);
+                        Footprint = Unit.TypeBase.GetGetFootprintSelected(Unit.Rotation);
                     }
                     if ( Flag )
                     {
@@ -1010,7 +1010,7 @@ namespace SharpFlame.Mapping
                     if ( Unit.TypeBase.UnitType_frmMainSelectedLink.IsConnected )
                     {
                         Flag = true;
-                        Footprint = Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation);
+                        Footprint = Unit.TypeBase.GetGetFootprintSelected(Unit.Rotation);
                         Footprint.X += 2;
                         Footprint.Y += 2;
                     }
@@ -1140,10 +1140,10 @@ namespace SharpFlame.Mapping
         {
             ResultSectorStart = GetTileSectorNum(StartTile);
             ResultSectorFinish = GetTileSectorNum(FinishTile);
-            ResultSectorStart.X = MathUtil.Clamp_int(ResultSectorStart.X, 0, SectorCount.X - 1);
-            ResultSectorStart.Y = MathUtil.Clamp_int(ResultSectorStart.Y, 0, SectorCount.Y - 1);
-            ResultSectorFinish.X = MathUtil.Clamp_int(ResultSectorFinish.X, 0, SectorCount.X - 1);
-            ResultSectorFinish.Y = MathUtil.Clamp_int(ResultSectorFinish.Y, 0, SectorCount.Y - 1);
+            ResultSectorStart.X = MathUtil.ClampInt(ResultSectorStart.X, 0, SectorCount.X - 1);
+            ResultSectorStart.Y = MathUtil.ClampInt(ResultSectorStart.Y, 0, SectorCount.Y - 1);
+            ResultSectorFinish.X = MathUtil.ClampInt(ResultSectorFinish.X, 0, SectorCount.X - 1);
+            ResultSectorFinish.Y = MathUtil.ClampInt(ResultSectorFinish.Y, 0, SectorCount.Y - 1);
         }
 
         public WorldPos TileAlignedPos(XYInt TileNum, XYInt Footprint)
@@ -1184,13 +1184,13 @@ namespace SharpFlame.Mapping
             var X = 0;
             var Y = 0;
 
-            GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.TypeBase.get_GetFootprintSelected(Unit.Rotation), ref TileStart, ref TileFinish);
+            GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.TypeBase.GetGetFootprintSelected(Unit.Rotation), ref TileStart, ref TileFinish);
             Start = GetTileSectorNum(TileStart);
             Finish = GetTileSectorNum(TileFinish);
-            Start.X = MathUtil.Clamp_int(Start.X, 0, SectorCount.X - 1);
-            Start.Y = MathUtil.Clamp_int(Start.Y, 0, SectorCount.Y - 1);
-            Finish.X = MathUtil.Clamp_int(Finish.X, 0, SectorCount.X - 1);
-            Finish.Y = MathUtil.Clamp_int(Finish.Y, 0, SectorCount.Y - 1);
+            Start.X = MathUtil.ClampInt(Start.X, 0, SectorCount.X - 1);
+            Start.Y = MathUtil.ClampInt(Start.Y, 0, SectorCount.Y - 1);
+            Finish.X = MathUtil.ClampInt(Finish.X, 0, SectorCount.X - 1);
+            Finish.Y = MathUtil.ClampInt(Finish.Y, 0, SectorCount.Y - 1);
             Unit.Sectors.Clear();
             for ( Y = Start.Y; Y <= Finish.Y; Y++ )
             {
@@ -1213,10 +1213,10 @@ namespace SharpFlame.Mapping
             }
 
             var timeDiff = DateTime.Now - AutoSave.SavedDate;
-            if ( timeDiff.Seconds < SettingsManager.Settings.AutoSaveMinInterval_s )
+            if ( timeDiff.Seconds < SettingsManager.Settings.AutoSaveMinIntervalSeconds )
             {
                 logger.Debug(string.Format("No autosave, we have {0} seconds of {1}",
-                    timeDiff.Seconds, SettingsManager.Settings.AutoSaveMinInterval_s));
+                    timeDiff.Seconds, SettingsManager.Settings.AutoSaveMinIntervalSeconds));
                 return;
             }
 
@@ -1889,11 +1889,11 @@ namespace SharpFlame.Mapping
             var Half = 0;
 
             Half = Math.DivRem(Footprint.X, 2, out Remainder);
-            ResultStart.X = MathUtil.Clamp_int(Centre.X - Half, 0, Terrain.TileSize.X - 1);
-            ResultFinish.X = MathUtil.Clamp_int(ResultStart.X + Footprint.X - 1, 0, Terrain.TileSize.X - 1);
+            ResultStart.X = MathUtil.ClampInt(Centre.X - Half, 0, Terrain.TileSize.X - 1);
+            ResultFinish.X = MathUtil.ClampInt(ResultStart.X + Footprint.X - 1, 0, Terrain.TileSize.X - 1);
             Half = Math.DivRem(Footprint.Y, 2, out Remainder);
-            ResultStart.Y = MathUtil.Clamp_int(Centre.Y - Half, 0, Terrain.TileSize.Y - 1);
-            ResultFinish.Y = MathUtil.Clamp_int(ResultStart.Y + Footprint.Y - 1, 0, Terrain.TileSize.Y - 1);
+            ResultStart.Y = MathUtil.ClampInt(Centre.Y - Half, 0, Terrain.TileSize.Y - 1);
+            ResultFinish.Y = MathUtil.ClampInt(ResultStart.Y + Footprint.Y - 1, 0, Terrain.TileSize.Y - 1);
         }
 
         public void GetFootprintTileRange(XYInt Horizontal, XYInt Footprint, ref XYInt ResultStart, ref XYInt ResultFinish)
@@ -1943,8 +1943,8 @@ namespace SharpFlame.Mapping
         {
             var Result = new XYInt();
 
-            Result.X = MathUtil.Clamp_int(SectorNum.X, 0, SectorCount.X - 1);
-            Result.Y = MathUtil.Clamp_int(SectorNum.Y, 0, SectorCount.Y - 1);
+            Result.X = MathUtil.ClampInt(SectorNum.X, 0, SectorCount.X - 1);
+            Result.Y = MathUtil.ClampInt(SectorNum.Y, 0, SectorCount.Y - 1);
 
             return Result;
         }
@@ -1963,8 +1963,8 @@ namespace SharpFlame.Mapping
         {
             var Result = new XYInt();
 
-            Result.X = MathUtil.Clamp_int(TileNum.X, 0, Terrain.TileSize.X - 1);
-            Result.Y = MathUtil.Clamp_int(TileNum.Y, 0, Terrain.TileSize.Y - 1);
+            Result.X = MathUtil.ClampInt(TileNum.X, 0, Terrain.TileSize.X - 1);
+            Result.Y = MathUtil.ClampInt(TileNum.Y, 0, Terrain.TileSize.Y - 1);
 
             return Result;
         }
@@ -2422,7 +2422,7 @@ namespace SharpFlame.Mapping
             var Unit = default(clsUnit);
             var UnitTile = new XYInt();
             var Difference = new XYInt();
-            var TileWalls = enumTileWalls.None;
+            var TileWalls = Util.TileWalls.None;
             var Walls = new SimpleList<clsUnit>();
             var Removals = new SimpleList<clsUnit>();
             var unitTypeBase = default(UnitTypeBase);
@@ -2462,7 +2462,7 @@ namespace SharpFlame.Mapping
                                 {
                                     if ( Difference.X == 0 )
                                     {
-                                        TileWalls = TileWalls | enumTileWalls.Bottom;
+                                        TileWalls = TileWalls | TileWalls.Bottom;
                                         Walls.Add(Unit);
                                     }
                                 }
@@ -2474,12 +2474,12 @@ namespace SharpFlame.Mapping
                                     }
                                     else if ( Difference.X == -1 )
                                     {
-                                        TileWalls = TileWalls | enumTileWalls.Left;
+                                        TileWalls = TileWalls | TileWalls.Left;
                                         Walls.Add(Unit);
                                     }
                                     else if ( Difference.X == 1 )
                                     {
-                                        TileWalls = TileWalls | enumTileWalls.Right;
+                                        TileWalls = TileWalls | TileWalls.Right;
                                         Walls.Add(Unit);
                                     }
                                 }
@@ -2487,7 +2487,7 @@ namespace SharpFlame.Mapping
                                 {
                                     if ( Difference.X == 0 )
                                     {
-                                        TileWalls = TileWalls | enumTileWalls.Top;
+                                        TileWalls = TileWalls | TileWalls.Top;
                                         Walls.Add(Unit);
                                     }
                                 }

@@ -41,8 +41,8 @@ namespace SharpFlame.Mapping.Script
             set
             {
                 var Map = _ParentMapLink.Source;
-                _PosA.X = MathUtil.Clamp_int(value.X, 0, Map.Terrain.TileSize.X * Constants.TerrainGridSpacing - 1);
-                _PosA.Y = MathUtil.Clamp_int(value.Y, 0, Map.Terrain.TileSize.Y * Constants.TerrainGridSpacing - 1);
+                _PosA.X = MathUtil.ClampInt(value.X, 0, Map.Terrain.TileSize.X * Constants.TerrainGridSpacing - 1);
+                _PosA.Y = MathUtil.ClampInt(value.Y, 0, Map.Terrain.TileSize.Y * Constants.TerrainGridSpacing - 1);
                 MathUtil.ReorderXY(_PosA, _PosB, ref _PosA, ref _PosB);
             }
         }
@@ -52,8 +52,8 @@ namespace SharpFlame.Mapping.Script
             set
             {
                 var Map = _ParentMapLink.Source;
-                _PosB.X = MathUtil.Clamp_int(value.X, 0, Map.Terrain.TileSize.X * Constants.TerrainGridSpacing - 1);
-                _PosB.Y = MathUtil.Clamp_int(value.Y, 0, Map.Terrain.TileSize.Y * Constants.TerrainGridSpacing - 1);
+                _PosB.X = MathUtil.ClampInt(value.X, 0, Map.Terrain.TileSize.X * Constants.TerrainGridSpacing - 1);
+                _PosB.Y = MathUtil.ClampInt(value.Y, 0, Map.Terrain.TileSize.Y * Constants.TerrainGridSpacing - 1);
                 MathUtil.ReorderXY(_PosA, _PosB, ref _PosA, ref _PosB);
             }
         }
@@ -63,7 +63,7 @@ namespace SharpFlame.Mapping.Script
             get { return _PosA.X; }
             set
             {
-                _PosA.X = MathUtil.Clamp_int(value, 0,
+                _PosA.X = MathUtil.ClampInt(value, 0,
                     Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.X * Constants.TerrainGridSpacing) - 1));
                 MathUtil.ReorderXY(_PosA, _PosB, ref _PosA, ref _PosB);
             }
@@ -74,7 +74,7 @@ namespace SharpFlame.Mapping.Script
             get { return _PosA.Y; }
             set
             {
-                _PosA.Y = MathUtil.Clamp_int(value, 0,
+                _PosA.Y = MathUtil.ClampInt(value, 0,
                     Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.Y * Constants.TerrainGridSpacing) - 1));
                 MathUtil.ReorderXY(_PosA, _PosB, ref _PosA, ref _PosB);
             }
@@ -85,7 +85,7 @@ namespace SharpFlame.Mapping.Script
             get { return _PosB.X; }
             set
             {
-                _PosB.X = MathUtil.Clamp_int(value, 0,
+                _PosB.X = MathUtil.ClampInt(value, 0,
                     Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.X * Constants.TerrainGridSpacing) - 1));
                 MathUtil.ReorderXY(_PosA, _PosB, ref _PosA, ref _PosB);
             }
@@ -96,7 +96,7 @@ namespace SharpFlame.Mapping.Script
             get { return _PosB.Y; }
             set
             {
-                _PosB.Y = MathUtil.Clamp_int(value, 0,
+                _PosB.Y = MathUtil.ClampInt(value, 0,
                     Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.Y * Constants.TerrainGridSpacing) - 1));
                 MathUtil.ReorderXY(_PosA, _PosB, ref _PosA, ref _PosB);
             }
@@ -106,10 +106,10 @@ namespace SharpFlame.Mapping.Script
         {
             var map = _ParentMapLink.Source;
 
-            posA.X = MathUtil.Clamp_int(posA.X, 0, map.Terrain.TileSize.X * Constants.TerrainGridSpacing - 1);
-            posA.Y = MathUtil.Clamp_int(posA.Y, 0, map.Terrain.TileSize.Y * Constants.TerrainGridSpacing - 1);
-            posB.X = MathUtil.Clamp_int(posB.X, 0, map.Terrain.TileSize.X * Constants.TerrainGridSpacing - 1);
-            posB.Y = MathUtil.Clamp_int(posB.Y, 0, map.Terrain.TileSize.Y * Constants.TerrainGridSpacing - 1);
+            posA.X = MathUtil.ClampInt(posA.X, 0, map.Terrain.TileSize.X * Constants.TerrainGridSpacing - 1);
+            posA.Y = MathUtil.ClampInt(posA.Y, 0, map.Terrain.TileSize.Y * Constants.TerrainGridSpacing - 1);
+            posB.X = MathUtil.ClampInt(posB.X, 0, map.Terrain.TileSize.X * Constants.TerrainGridSpacing - 1);
+            posB.Y = MathUtil.ClampInt(posB.Y, 0, map.Terrain.TileSize.Y * Constants.TerrainGridSpacing - 1);
 
             MathUtil.ReorderXY(posA, posB, ref _PosA, ref _PosB);
         }

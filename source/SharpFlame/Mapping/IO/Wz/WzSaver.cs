@@ -11,6 +11,7 @@ using Ionic.Zip;
 using Ionic.Zlib;
 using NLog;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Core.Parsers;
 using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.Core.Parsers.Lev;
@@ -246,7 +247,7 @@ namespace SharpFlame.Mapping.IO.Wz
             var moduleMax = new XYInt();
             var footprint = new XYInt();
             var A = 0;
-            var underneathTypes = new StructureTypeBase.enumStructureType[2];
+            var underneathTypes = new StructureType[2];
             var underneathTypeCount = 0;
             var badModuleCount = 0;
             var priorityOrder = new clsObjectPriorityOrderList();
@@ -256,17 +257,17 @@ namespace SharpFlame.Mapping.IO.Wz
                 structureTypeBase = (StructureTypeBase)unit.TypeBase;
                 switch ( structureTypeBase.StructureType )
                 {
-                    case StructureTypeBase.enumStructureType.FactoryModule:
-                    underneathTypes[0] = StructureTypeBase.enumStructureType.Factory;
-                    underneathTypes[1] = StructureTypeBase.enumStructureType.VTOLFactory;
+                    case StructureType.FactoryModule:
+                    underneathTypes[0] = StructureType.Factory;
+                    underneathTypes[1] = StructureType.VTOLFactory;
                     underneathTypeCount = 2;
                     break;
-                    case StructureTypeBase.enumStructureType.PowerModule:
-                    underneathTypes[0] = StructureTypeBase.enumStructureType.PowerGenerator;
+                    case StructureType.PowerModule:
+                    underneathTypes[0] = StructureType.PowerGenerator;
                     underneathTypeCount = 1;
                     break;
-                    case StructureTypeBase.enumStructureType.ResearchModule:
-                    underneathTypes[0] = StructureTypeBase.enumStructureType.Research;
+                    case StructureType.ResearchModule:
+                    underneathTypes[0] = StructureType.Research;
                     underneathTypeCount = 1;
                     break;
                     default:
@@ -303,7 +304,7 @@ namespace SharpFlame.Mapping.IO.Wz
                                 }
                                 if ( A < underneathTypeCount )
                                 {
-                                    footprint = otherStructureTypeBase.get_GetFootprintSelected(otherUnit.Rotation);
+                                    footprint = otherStructureTypeBase.GetGetFootprintSelected(otherUnit.Rotation);
                                     moduleMin.X = otherUnit.Pos.Horizontal.X - (int)(footprint.X * Constants.TerrainGridSpacing / 2.0D);
                                     moduleMin.Y = otherUnit.Pos.Horizontal.Y - (int)(footprint.Y * Constants.TerrainGridSpacing / 2.0D);
                                     moduleMax.X = otherUnit.Pos.Horizontal.X + (int)(footprint.X * Constants.TerrainGridSpacing / 2.0D);
@@ -369,16 +370,16 @@ namespace SharpFlame.Mapping.IO.Wz
                     }
                     switch ( structureTypeBase.StructureType )
                     {
-                        case StructureTypeBase.enumStructureType.Factory:
+                        case StructureType.Factory:
                         moduleLimit = 2;
                         break;
-                        case StructureTypeBase.enumStructureType.VTOLFactory:
+                        case StructureType.VTOLFactory:
                         moduleLimit = 2;
                         break;
-                        case StructureTypeBase.enumStructureType.PowerGenerator:
+                        case StructureType.PowerGenerator:
                         moduleLimit = 1;
                         break;
-                        case StructureTypeBase.enumStructureType.Research:
+                        case StructureType.Research:
                         moduleLimit = 1;
                         break;
                         default:
@@ -774,10 +775,10 @@ namespace SharpFlame.Mapping.IO.Wz
             fileMAP.Write((uint)map.Gateways.Count);
             foreach ( var gateway in map.Gateways )
             {
-                fileMAP.Write((byte)(MathUtil.Clamp_int(gateway.PosA.X, 0, 255)));
-                fileMAP.Write((byte)(MathUtil.Clamp_int(gateway.PosA.Y, 0, 255)));
-                fileMAP.Write((byte)(MathUtil.Clamp_int(gateway.PosB.X, 0, 255)));
-                fileMAP.Write((byte)(MathUtil.Clamp_int(gateway.PosB.Y, 0, 255)));
+                fileMAP.Write((byte)(MathUtil.ClampInt(gateway.PosA.X, 0, 255)));
+                fileMAP.Write((byte)(MathUtil.ClampInt(gateway.PosA.Y, 0, 255)));
+                fileMAP.Write((byte)(MathUtil.ClampInt(gateway.PosB.X, 0, 255)));
+                fileMAP.Write((byte)(MathUtil.ClampInt(gateway.PosB.Y, 0, 255)));
             }
             fileMAP.Flush();
 

@@ -39,15 +39,15 @@ namespace SharpFlame.Collections
             }
         }
 
-        public int FindFirstItemPosition(ItemType ItemToFind)
+        public int FindFirstItemPosition(ItemType itemToFind)
         {
-            var Position = 0;
+            var position = 0;
 
-            for ( Position = 0; Position < Count ; Position++ )
+            for ( position = 0; position < Count ; position++ )
             {
-                if ( this[Position] == ItemToFind )
+                if ( this[position] == itemToFind )
                 {
-                    return Position;
+                    return position;
                 }
             }
             return -1;

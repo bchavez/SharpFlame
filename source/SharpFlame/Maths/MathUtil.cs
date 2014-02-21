@@ -15,77 +15,77 @@ namespace SharpFlame.Maths
 
         public const double RootTwo = 1.4142135623730951D;
 
-        public static double AngleClamp(double Angle)
+        public static double AngleClamp(double angle)
         {
-            double ReturnResult = 0;
+            double returnResult = 0;
 
-            ReturnResult = Angle;
-            if ( ReturnResult < - Math.PI )
+            returnResult = angle;
+            if ( returnResult < - Math.PI )
             {
-                ReturnResult += RadOf360Deg;
+                returnResult += RadOf360Deg;
             }
-            else if ( ReturnResult >= Math.PI )
+            else if ( returnResult >= Math.PI )
             {
-                ReturnResult -= RadOf360Deg;
+                returnResult -= RadOf360Deg;
             }
-            return ReturnResult;
+            return returnResult;
         }
 
-        public static double Clamp_dbl(double Amount, double Minimum, double Maximum)
+        public static double ClampDbl(double amount, double minimum, double maximum)
         {
-            double ReturnResult = 0;
+            double returnResult = 0;
 
-            ReturnResult = Amount;
-            if ( ReturnResult < Minimum )
+            returnResult = amount;
+            if ( returnResult < minimum )
             {
-                ReturnResult = Minimum;
+                returnResult = minimum;
             }
-            else if ( ReturnResult > Maximum )
+            else if ( returnResult > maximum )
             {
-                ReturnResult = Maximum;
+                returnResult = maximum;
             }
-            return ReturnResult;
+            return returnResult;
         }
 
-        public static float Clamp_sng(float Amount, float Minimum, float Maximum)
+        public static float ClampSng(float amount, float minimum, float maximum)
         {
-            float ReturnResult = 0;
+            float returnResult = 0;
 
-            ReturnResult = Amount;
-            if ( ReturnResult < Minimum )
+            returnResult = amount;
+            if ( returnResult < minimum )
             {
-                ReturnResult = Minimum;
+                returnResult = minimum;
             }
-            else if ( ReturnResult > Maximum )
+            else if ( returnResult > maximum )
             {
-                ReturnResult = Maximum;
+                returnResult = maximum;
             }
-            return ReturnResult;
+            return returnResult;
         }
 
-        public static int Clamp_int(int Amount, int Minimum, int Maximum)
+        public static int ClampInt(int amount, int minimum, int maximum)
         {
-            var ReturnResult = 0;
+            var returnResult = 0;
 
-            ReturnResult = Amount;
-            if ( ReturnResult < Minimum )
+            returnResult = amount;
+            if ( returnResult < minimum )
             {
-                ReturnResult = Minimum;
+                returnResult = minimum;
             }
-            else if ( ReturnResult > Maximum )
+            else if ( returnResult > maximum )
             {
-                ReturnResult = Maximum;
+                returnResult = maximum;
             }
-            return ReturnResult;
+            return returnResult;
         }
 
-        public static sIntersectPos GetLinesIntersectBetween(XYInt A1, XYInt A2, XYInt B1, XYInt B2)
+        public static sIntersectPos GetLinesIntersectBetween(XYInt a1, XYInt a2, XYInt b1, XYInt b2)
         {
-            var Result = new sIntersectPos();
+            var result = new sIntersectPos();
 
-            if ( (A1.X == A2.X & A1.Y == A2.Y) || (B1.X == B2.X & B1.Y == B2.Y) )
+            if ( (a1.X == a2.X & a1.Y == a2.Y) || (b1.X == b2.X & b1.Y == b2.Y) )
             {
-                Result.Exists = false;
+                result.Exists = false;
             }
             else
             {
@@ -99,16 +99,16 @@ namespace SharpFlame.Maths
                 double ar = 0;
                 double br = 0;
 
-                y1dif = B1.Y - A1.Y;
-                x1dif = B1.X - A1.X;
-                adifx = A2.X - A1.X;
-                adify = A2.Y - A1.Y;
-                bdifx = B2.X - B1.X;
-                bdify = B2.Y - B1.Y;
+                y1dif = b1.Y - a1.Y;
+                x1dif = b1.X - a1.X;
+                adifx = a2.X - a1.X;
+                adify = a2.Y - a1.Y;
+                bdifx = b2.X - b1.X;
+                bdify = b2.Y - b1.Y;
                 m = adifx * bdify - adify * bdifx;
                 if ( m == 0.0D )
                 {
-                    Result.Exists = false;
+                    result.Exists = false;
                 }
                 else
                 {
@@ -116,69 +116,69 @@ namespace SharpFlame.Maths
                     br = (x1dif * adify - y1dif * adifx) / m;
                     if ( ar <= 0.0D | ar >= 1.0D | br <= 0.0D | br >= 1.0D )
                     {
-                        Result.Exists = false;
+                        result.Exists = false;
                     }
                     else
                     {
-                        Result.Pos.X = A1.X + (int)(ar * adifx);
-                        Result.Pos.Y = A1.Y + (int)(ar * adify);
-                        Result.Exists = true;
+                        result.Pos.X = a1.X + (int)(ar * adifx);
+                        result.Pos.Y = a1.Y + (int)(ar * adify);
+                        result.Exists = true;
                     }
                 }
             }
-            return Result;
+            return result;
         }
 
-        public static XYInt PointGetClosestPosOnLine(XYInt LinePointA, XYInt LinePointB, XYInt Point)
+        public static XYInt PointGetClosestPosOnLine(XYInt linePointA, XYInt linePointB, XYInt point)
         {
-            double x1dif = Point.X - LinePointA.X;
-            double y1dif = Point.Y - LinePointA.Y;
-            double adifx = LinePointB.X - LinePointA.X;
-            double adify = LinePointB.Y - LinePointA.Y;
+            double x1dif = point.X - linePointA.X;
+            double y1dif = point.Y - linePointA.Y;
+            double adifx = linePointB.X - linePointA.X;
+            double adify = linePointB.Y - linePointA.Y;
             double m = 0;
 
             m = adifx * adifx + adify * adify;
             if ( m == 0.0D )
             {
-                return LinePointA;
+                return linePointA;
             }
             double ar = 0;
             ar = (x1dif * adifx + y1dif * adify) / m;
             if ( ar <= 0.0D )
             {
-                return LinePointA;
+                return linePointA;
             }
             if ( ar >= 1.0D )
             {
-                return LinePointB;
+                return linePointB;
             }
-            var Result = new XYInt();
-            Result.X = LinePointA.X + (int)(adifx * ar);
-            Result.Y = LinePointA.Y + (int)(adify * ar);
-            return Result;
+            var result = new XYInt();
+            result.X = linePointA.X + (int)(adifx * ar);
+            result.Y = linePointA.Y + (int)(adify * ar);
+            return result;
         }
 
-        public static void ReorderXY(XYInt A, XYInt B, ref XYInt Lesser, ref XYInt Greater)
+        public static void ReorderXY(XYInt a, XYInt b, ref XYInt lesser, ref XYInt greater)
         {
-            if ( A.X <= B.X )
+            if ( a.X <= b.X )
             {
-                Lesser.X = A.X;
-                Greater.X = B.X;
+                lesser.X = a.X;
+                greater.X = b.X;
             }
             else
             {
-                Lesser.X = B.X;
-                Greater.X = A.X;
+                lesser.X = b.X;
+                greater.X = a.X;
             }
-            if ( A.Y <= B.Y )
+            if ( a.Y <= b.Y )
             {
-                Lesser.Y = A.Y;
-                Greater.Y = B.Y;
+                lesser.Y = a.Y;
+                greater.Y = b.Y;
             }
             else
             {
-                Lesser.Y = B.Y;
-                Greater.Y = A.Y;
+                lesser.Y = b.Y;
+                greater.Y = a.Y;
             }
         }
 

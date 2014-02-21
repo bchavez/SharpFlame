@@ -42,11 +42,11 @@ namespace SharpFlame.Mapping.Tools
             }
             for ( PainterBrushNum = 0; PainterBrushNum <= Painter.TransitionBrushCount - 1; PainterBrushNum++ )
             {
-                PainterTerrainA = Painter.TransitionBrushes[PainterBrushNum].Terrain_Inner;
-                PainterTerrainB = Painter.TransitionBrushes[PainterBrushNum].Terrain_Outer;
-                for ( A = 0; A <= Painter.TransitionBrushes[PainterBrushNum].Tiles_Straight.TileCount - 1; A++ )
+                PainterTerrainA = Painter.TransitionBrushes[PainterBrushNum].TerrainInner;
+                PainterTerrainB = Painter.TransitionBrushes[PainterBrushNum].TerrainOuter;
+                for ( A = 0; A <= Painter.TransitionBrushes[PainterBrushNum].TilesStraight.TileCount - 1; A++ )
                 {
-                    PainterTexture = Painter.TransitionBrushes[PainterBrushNum].Tiles_Straight.Tiles[A];
+                    PainterTexture = Painter.TransitionBrushes[PainterBrushNum].TilesStraight.Tiles[A];
                     if ( PainterTexture.TextureNum == Texture.TextureNum )
                     {
                         TileUtil.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
@@ -60,9 +60,9 @@ namespace SharpFlame.Mapping.Tools
                         }
                     }
                 }
-                for ( A = 0; A <= Painter.TransitionBrushes[PainterBrushNum].Tiles_Corner_In.TileCount - 1; A++ )
+                for ( A = 0; A <= Painter.TransitionBrushes[PainterBrushNum].TilesCornerIn.TileCount - 1; A++ )
                 {
-                    PainterTexture = Painter.TransitionBrushes[PainterBrushNum].Tiles_Corner_In.Tiles[A];
+                    PainterTexture = Painter.TransitionBrushes[PainterBrushNum].TilesCornerIn.Tiles[A];
                     if ( PainterTexture.TextureNum == Texture.TextureNum )
                     {
                         TileUtil.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
@@ -76,9 +76,9 @@ namespace SharpFlame.Mapping.Tools
                         }
                     }
                 }
-                for ( A = 0; A <= Painter.TransitionBrushes[PainterBrushNum].Tiles_Corner_Out.TileCount - 1; A++ )
+                for ( A = 0; A <= Painter.TransitionBrushes[PainterBrushNum].TilesCornerOut.TileCount - 1; A++ )
                 {
-                    PainterTexture = Painter.TransitionBrushes[PainterBrushNum].Tiles_Corner_Out.Tiles[A];
+                    PainterTexture = Painter.TransitionBrushes[PainterBrushNum].TilesCornerOut.Tiles[A];
                     if ( PainterTexture.TextureNum == Texture.TextureNum )
                     {
                         OppositeDirection = PainterTexture.Direction;
