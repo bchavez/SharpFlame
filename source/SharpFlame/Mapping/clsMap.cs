@@ -1213,10 +1213,10 @@ namespace SharpFlame.Mapping
             }
 
             var timeDiff = DateTime.Now - AutoSave.SavedDate;
-            if ( timeDiff.Seconds < SettingsManager.Settings.AutoSaveMinInterval_s )
+            if ( timeDiff.Seconds < SettingsManager.Settings.AutoSaveMinIntervalSeconds )
             {
                 logger.Debug(string.Format("No autosave, we have {0} seconds of {1}",
-                    timeDiff.Seconds, SettingsManager.Settings.AutoSaveMinInterval_s));
+                    timeDiff.Seconds, SettingsManager.Settings.AutoSaveMinIntervalSeconds));
                 return;
             }
 

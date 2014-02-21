@@ -426,7 +426,7 @@ namespace SharpFlame.Controls
 
             foreach ( Option<KeyboardControl> control in KeyboardManager.OptionsKeyboardControls.Options )
             {
-                ((KeyboardControl)(KeyboardManager.KeyboardProfile.get_Value(control))).KeysChanged(App.IsViewKeyDown);
+                ((KeyboardControl)(KeyboardManager.KeyboardProfile.GetValue(control))).KeysChanged(App.IsViewKeyDown);
             }
 
             if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Undo) )
@@ -711,7 +711,7 @@ namespace SharpFlame.Controls
 
             foreach ( Option<KeyboardControl> control in KeyboardManager.OptionsKeyboardControls.Options )
             {
-                ((KeyboardControl)(KeyboardManager.KeyboardProfile.get_Value(control))).KeysChanged(App.IsViewKeyDown);
+                ((KeyboardControl)(KeyboardManager.KeyboardProfile.GetValue(control))).KeysChanged(App.IsViewKeyDown);
             }
         }
 

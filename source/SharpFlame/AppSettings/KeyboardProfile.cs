@@ -8,7 +8,7 @@ namespace SharpFlame.AppSettings
 
         public bool Active(Option<KeyboardControl> control)
         {
-            return ((KeyboardControl)(get_Value(control))).Active;
+            return ((KeyboardControl)(GetValue(control))).Active;
         }
     }
 }

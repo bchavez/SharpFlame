@@ -9,42 +9,42 @@ namespace SharpFlame.AppSettings
 {
     public class Option<ValueType> : OptionInterface
     {
-        private readonly ValueType _DefaultValue;
-        private readonly ConnectedListLink<OptionInterface, OptionGroup> _GroupLink;
+        private readonly ValueType defaultValue;
+        private readonly ConnectedListLink<OptionInterface, OptionGroup> groupLink;
 
-        private readonly string _SaveKey;
+        private readonly string saveKey;
 
         public Option(string saveKey, ValueType defaultValue)
         {
-            _GroupLink = new ConnectedListLink<OptionInterface, OptionGroup>(this);
+            groupLink = new ConnectedListLink<OptionInterface, OptionGroup>(this);
 
 
-            _SaveKey = saveKey;
-            _DefaultValue = defaultValue;
+            this.saveKey = saveKey;
+            this.defaultValue = defaultValue;
         }
 
         [JsonIgnore]
         public override ConnectedListLink<OptionInterface, OptionGroup> GroupLink
         {
-            get { return _GroupLink; }
+            get { return groupLink; }
         }
 
         [JsonIgnore]
         public ValueType DefaultValue
         {
-            get { return _DefaultValue; }
+            get { return defaultValue; }
         }
 
         [JsonIgnore]
         public override object DefaultValueObject
         {
-            get { return _DefaultValue; }
+            get { return defaultValue; }
         }
 
         [JsonIgnore]
         public override string SaveKey
         {
-            get { return _SaveKey; }
+            get { return saveKey; }
         }
 
         public override bool IsValueValid(object value)

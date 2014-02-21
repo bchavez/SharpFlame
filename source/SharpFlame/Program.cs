@@ -44,7 +44,7 @@ namespace SharpFlame
             {
             }
 
-            var SettingsLoadResult = SettingsManager.Settings_Load(ref SettingsManager.InitializeSettings);        
+            var SettingsLoadResult = SettingsManager.SettingsLoad(ref SettingsManager.InitializeSettings);        
 
             InitializeResult.Add(SettingsLoadResult);
 

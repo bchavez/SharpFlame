@@ -33,7 +33,7 @@ namespace SharpFlame
 
         public static char PlatformPathSeparator;
 
-        public static bool Debug_GL = false;
+        public static bool DebugGL = false;
 
         public static string SettingsPath;
         public static string AutoSavePath;
@@ -175,7 +175,7 @@ namespace SharpFlame
 
             foreach ( Option<KeyboardControl> control in KeyboardManager.OptionsKeyboardControls.Options )
             {
-                ((KeyboardControl)(KeyboardManager.KeyboardProfile.get_Value(control))).KeysChanged(IsViewKeyDown);
+                ((KeyboardControl)(KeyboardManager.KeyboardProfile.GetValue(control))).KeysChanged(IsViewKeyDown);
             }
         }
 

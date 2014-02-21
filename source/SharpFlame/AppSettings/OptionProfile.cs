@@ -8,7 +8,7 @@ namespace SharpFlame.AppSettings
 {
     public class OptionProfile
     {
-        private readonly ChangeInterface[] _Changes;
+        private readonly ChangeInterface[] changes;
 
         [JsonIgnore]
         private readonly OptionGroup options;
@@ -16,7 +16,7 @@ namespace SharpFlame.AppSettings
         public OptionProfile(OptionGroup newOptions)
         {
             options = newOptions;
-            _Changes = new ChangeInterface[newOptions.Options.Count];
+            changes = new ChangeInterface[newOptions.Options.Count];
         }
 
         [JsonIgnore]
@@ -26,7 +26,7 @@ namespace SharpFlame.AppSettings
             {
                 foreach ( var item in options.Options )
                 {
-                    if ( get_Changes(item) != null )
+                    if ( GetChanges(item) != null )
                     {
                         return true;
                     }
@@ -41,20 +41,20 @@ namespace SharpFlame.AppSettings
             get { return options; }
         }
 
-        public ChangeInterface get_Changes(OptionInterface optionItem)
+        public ChangeInterface GetChanges(OptionInterface optionItem)
         {
-            return _Changes[optionItem.GroupLink.ArrayPosition];
+            return changes[optionItem.GroupLink.ArrayPosition];
         }
 
-        public void set_Changes(OptionInterface optionItem, ChangeInterface value)
+        public void SetChanges(OptionInterface optionItem, ChangeInterface value)
         {
-            _Changes[optionItem.GroupLink.ArrayPosition] = value;
+            changes[optionItem.GroupLink.ArrayPosition] = value;
         }
 
-        public object get_Value(OptionInterface optionItem)
+        public object GetValue(OptionInterface optionItem)
         {
             var index = optionItem.GroupLink.ArrayPosition;
-            var change = _Changes[index];
+            var change = changes[index];
             if ( change == null )
             {
                 return optionItem.DefaultValueObject;
@@ -68,8 +68,8 @@ namespace SharpFlame.AppSettings
             var result = creator.Create ();
 
             for (var i = 0; i <= options.Options.Count - 1; i++) {
-                if (_Changes [i] != null) {
-                    result._Changes [i] = _Changes [i].GetCopy ();
+                if (changes [i] != null) {
+                    result.changes [i] = changes [i].GetCopy ();
                 }
             }
 

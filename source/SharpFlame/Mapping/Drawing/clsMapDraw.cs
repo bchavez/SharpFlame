@@ -1103,7 +1103,7 @@ namespace SharpFlame.Mapping
 
         private void DebugGLError(string Name)
         {
-            if ( App.Debug_GL )
+            if ( App.DebugGL )
             {
                 if ( Messages.Count < 8 )
                 {
