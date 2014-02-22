@@ -6,6 +6,7 @@ using NLog;
 using SharpFlame.AppSettings;
 using SharpFlame.Collections;
 using SharpFlame.Controls;
+using SharpFlame.Core;
 using SharpFlame.Core.Collections;
 using SharpFlame.Core.Domain;
 using SharpFlame.FileIO;

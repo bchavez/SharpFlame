@@ -2,6 +2,7 @@
 
 using System;
 using SharpFlame.Collections.Specialized;
+using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 using SharpFlame.Mapping.Objects;

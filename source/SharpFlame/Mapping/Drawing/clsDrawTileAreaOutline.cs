@@ -3,6 +3,7 @@
 using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
+using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
 

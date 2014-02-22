@@ -3,6 +3,7 @@
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
+using SharpFlame.Core;
 using SharpFlame.Maths;
 
 #endregion

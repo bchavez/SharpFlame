@@ -5,6 +5,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.AppSettings;
 using SharpFlame.Colors;
+using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
 using SharpFlame.FileIO;
