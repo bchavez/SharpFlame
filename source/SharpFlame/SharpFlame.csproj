@@ -152,7 +152,6 @@
     <Compile Include="Mapping\Script\clsScriptPosition.cs" />
     <Compile Include="Mapping\Tiles\clsGeneratorTileset.cs" />
     <Compile Include="Mapping\clsHeightmap.cs" />
-    <Compile Include="Constants.cs" />
     <Compile Include="FileIO\ExtensionsForIO.cs" />
     <Compile Include="frmKeyboardControl.Designer.cs">
       <DependentUpon>frmKeyboardControl.cs</DependentUpon>

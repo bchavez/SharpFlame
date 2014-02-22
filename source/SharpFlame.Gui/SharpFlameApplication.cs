@@ -1,8 +1,9 @@
 using System;
+using Eto;
 using Eto.Forms;
 using SharpFlame.Gui.Forms;
 
-namespace Eto.Test
+namespace SharpFlame.Gui
 {
 	public class SharpFlameApplication : Application
 	{
