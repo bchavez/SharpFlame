@@ -9,9 +9,9 @@ namespace SharpFlame.Mapping
 {
     public class Undo
     {
-        public SimpleList<clsShadowSector> ChangedSectors = new SimpleList<clsShadowSector>();
+        public SimpleList<ShadowSector> ChangedSectors = new SimpleList<ShadowSector>();
         public SimpleList<GatewayChange> GatewayChanges = new SimpleList<GatewayChange>();
         public string Name;
-        public SimpleList<clsUnitChange> UnitChanges = new SimpleList<clsUnitChange>();
+        public SimpleList<UnitChange> UnitChanges = new SimpleList<UnitChange>();
     }
 }
