@@ -29,4 +29,22 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Reference Include="Eto">
+      <HintPath>..\packages\Eto-20140222\Eto.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto.Platform.Gtk">
+      <HintPath>..\packages\Eto-20140222\Eto.Platform.Gtk.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Startup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpFlame.Gui\SharpFlame.Gui.csproj">
+      <Project>{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}</Project>
+      <Name>SharpFlame.Gui</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

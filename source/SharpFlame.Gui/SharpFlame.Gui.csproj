@@ -6,7 +6,7 @@
     <ProductVersion>12.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>SharpFlame.Gui</RootNamespace>
     <AssemblyName>SharpFlame.Gui</AssemblyName>
   </PropertyGroup>
@@ -29,4 +29,27 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="LICENSE" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Eto">
+      <HintPath>..\packages\Eto-20140222\Eto.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Dialogs\About.cs" />
+    <Compile Include="Actions\Quit.cs" />
+    <Compile Include="Actions\About.cs" />
+    <Compile Include="Forms\MainForm.cs" />
+    <Compile Include="SharpFlameApplication.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Forms\" />
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\flaME.ico" />
+  </ItemGroup>
 </Project>

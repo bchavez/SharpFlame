@@ -2,14 +2,13 @@ using System;
 using Eto.Drawing;
 using Eto.Forms;
 
-namespace Eto.Test.Actions
+namespace SharpFlame.Gui.Actions
 {
 	public class About : Command
 	{
 		public About()
 		{
 			ID = "about";
-			Image = TestIcons.TestIcon();
 			MenuText = "About Test Application";
 			ToolBarText = "About";
 			Shortcut = Keys.F11;

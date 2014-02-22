@@ -1,5 +1,6 @@
 using System;
 using Eto.Forms;
+using SharpFlame.Gui.Forms;
 
 namespace Eto.Test
 {
