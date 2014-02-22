@@ -19,9 +19,9 @@ namespace SharpFlame.Mapping.IO.LND
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        protected readonly clsMap map;
+        protected readonly Map map;
 
-        public LNDLoader(clsMap newMap)
+        public LNDLoader(Map newMap)
         {
             map = newMap;
         }
@@ -73,8 +73,8 @@ namespace SharpFlame.Mapping.IO.LND
                 var GateText = new string[4];
                 var TileTypeText = new string[256];
                 var LNDTileTypeCount = 0;
-                var LNDGates = new SimpleList<clsGateway>();
-                var Gateway = default(clsGateway);
+                var LNDGates = new SimpleList<Gateway>();
+                var Gateway = default(Gateway);
                 var C = 0;
                 var D = 0;
                 var GotText = default(bool);
@@ -387,7 +387,7 @@ namespace SharpFlame.Mapping.IO.LND
                                     }
                                 }
 
-                                Gateway = new clsGateway();
+                                Gateway = new Gateway();
                                 IOUtil.InvariantParse(GateText[0], ref Gateway.PosA.X);
                                 Gateway.PosA.X = Math.Max(Gateway.PosA.X, 0);
                                 IOUtil.InvariantParse(GateText[1], ref Gateway.PosA.Y);
@@ -541,7 +541,7 @@ namespace SharpFlame.Mapping.IO.LND
                     }
                 }
 
-                var newUnit = default(clsUnit);
+                var newUnit = default(Unit);
                 var xyzInt = new XYZInt(0, 0, 0);
                 var newTypeBase = default(UnitTypeBase);
                 UInt32 availableID = 0;
@@ -573,7 +573,7 @@ namespace SharpFlame.Mapping.IO.LND
                     }
                     if ( newTypeBase != null )
                     {
-                        newUnit = new clsUnit();
+                        newUnit = new Unit();
                         newUnit.TypeBase = newTypeBase;
                         if ( currentObject.PlayerNum < 0 | currentObject.PlayerNum >= Constants.PlayerCountMax )
                         {
@@ -614,7 +614,7 @@ namespace SharpFlame.Mapping.IO.LND
                 {
                     for ( A = 0; A <= Math.Min(LNDTileTypeCount - 1, map.Tileset.TileCount) - 1; A++ )
                     {
-                        map.Tile_TypeNum[A] = LNDTileType[A + 1]; //lnd value 0 is ignored
+                        map.TileTypeNum[A] = LNDTileType[A + 1]; //lnd value 0 is ignored
                     }
                 }
             }

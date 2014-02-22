@@ -1,11 +1,11 @@
 namespace SharpFlame.Mapping
 {
-    public class clsPathInfo
+    public class PathInfo
     {
         private readonly bool _IsFMap;
         private readonly string _Path;
 
-        public clsPathInfo(string Path, bool IsFMap)
+        public PathInfo(string Path, bool IsFMap)
         {
             _Path = Path;
             _IsFMap = IsFMap;

@@ -12,9 +12,9 @@ namespace SharpFlame.Mapping.IO.Heightmap
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        protected readonly clsMap map;
+        protected readonly Map map;
 
-		public HeightmapSaver(clsMap newMap)
+		public HeightmapSaver(Map newMap)
         {
             map = newMap;
         }

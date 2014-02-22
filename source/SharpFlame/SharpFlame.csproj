@@ -125,19 +125,9 @@
     <Compile Include="Mapping\Changes\clsPointChanges.cs" />
     <Compile Include="Mapping\Changes\clsSectorChanges.cs" />
     <Compile Include="Mapping\Changes\clsTerrainUpdate.cs" />
-    <Compile Include="Mapping\clsAutoSave.cs" />
-    <Compile Include="Mapping\clsGateway.cs" />
-    <Compile Include="Mapping\clsGatewayChange.cs" />
     <Compile Include="Mapping\clsGeneratorMap.cs" />
-    <Compile Include="Mapping\clsInterfaceOptions.cs" />
-    <Compile Include="Mapping\clsMessage.cs" />
     <Compile Include="Mapping\clsMinimapTexture.cs" />
-    <Compile Include="Mapping\clsPathInfo.cs" />
-    <Compile Include="Mapping\clsSector.cs" />
-    <Compile Include="Mapping\clsShadowSector.cs" />
     <Compile Include="Mapping\clsTerrain.cs" />
-    <Compile Include="Mapping\clsUndo.cs" />
-    <Compile Include="Mapping\clsUnitChange.cs" />
     <Compile Include="Mapping\clsUpdateAutotexture.cs" />
     <Compile Include="Mapping\clsUpdateSectorGraphics.cs" />
     <Compile Include="Mapping\clsUpdateSectorUnitHeights.cs" />
@@ -151,7 +141,6 @@
     <Compile Include="Mapping\Drawing\clsDrawTileOutline.cs" />
     <Compile Include="Mapping\Drawing\clsDrawVertexMarker.cs" />
     <Compile Include="Mapping\Drawing\clsDrawVertexTerrain.cs" />
-    <Compile Include="Mapping\Objects\clsUnit.cs" />
     <Compile Include="Mapping\Objects\clsUnitAdd.cs" />
     <Compile Include="Mapping\Objects\clsUnitCreate.cs" />
     <Compile Include="Mapping\Objects\clsUnitGroup.cs" />
@@ -172,7 +161,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="AppSettings\KeyboardManager.cs" />
-    <Compile Include="Mapping\clsMap.cs" />
     <Compile Include="Mapping\Changes\clsMapChanges.cs" />
     <Compile Include="Mapping\Drawing\clsMapDraw.cs" />
     <Compile Include="Mapping\Objects\clsMapObject.cs" />
@@ -395,6 +383,18 @@
     <Compile Include="Mapping\IO\FMap\FMapLoader.cs" />
     <Compile Include="Mapping\IO\FMap\FMapSaver.cs" />
     <Compile Include="FileIO\TilesetLoader.cs" />
+    <Compile Include="Mapping\AutoSave.cs" />
+    <Compile Include="Mapping\Gateway.cs" />
+    <Compile Include="Mapping\GatewayChange.cs" />
+    <Compile Include="Mapping\InterfaceOptions.cs" />
+    <Compile Include="Mapping\Map.cs" />
+    <Compile Include="Mapping\Message.cs" />
+    <Compile Include="Mapping\PathInfo.cs" />
+    <Compile Include="Mapping\Sector.cs" />
+    <Compile Include="Mapping\ShadowSector.cs" />
+    <Compile Include="Mapping\Undo.cs" />
+    <Compile Include="Mapping\UnitChange.cs" />
+    <Compile Include="Mapping\Objects\Unit.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">

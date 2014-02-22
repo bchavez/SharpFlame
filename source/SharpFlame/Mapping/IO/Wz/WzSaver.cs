@@ -37,9 +37,9 @@ namespace SharpFlame.Mapping.IO.Wz
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        protected readonly clsMap map;
+        protected readonly Map map;
 
-        public WzSaver(clsMap newMap)
+        public WzSaver(Map newMap)
         {
             map = newMap;
         }
@@ -244,7 +244,7 @@ namespace SharpFlame.Mapping.IO.Wz
             var unitModuleCount = new int[map.Units.Count];
             var sectorNum = new XYInt();
             var otherStructureTypeBase = default(StructureTypeBase);
-            var otherUnit = default(clsUnit);
+            var otherUnit = default(Unit);
             var moduleMin = new XYInt();
             var moduleMax = new XYInt();
             var footprint = new XYInt();
@@ -286,7 +286,7 @@ namespace SharpFlame.Mapping.IO.Wz
                 {
                     // IS module.
                     sectorNum = map.GetPosSectorNum(unit.Pos.Horizontal);
-                    clsUnit underneath = null;
+                    Unit underneath = null;
                     var connection = default(clsUnitSectorConnection);
                     foreach ( var tempLoopVar_Connection in map.Sectors[sectorNum.X, sectorNum.Y].Units )
                     {
@@ -424,7 +424,7 @@ namespace SharpFlame.Mapping.IO.Wz
             var droid = default(DroidDesign);
             var template = default(DroidTemplate);
             var text = "";
-            var unit = default(clsUnit);
+            var unit = default(Unit);
             var asPartsNotTemplate = default(bool);
             var validDroid = false;
             var invalidPartCount = 0;
@@ -618,7 +618,7 @@ namespace SharpFlame.Mapping.IO.Wz
             var ReturnResult = new Result("Serializing features INI", false);
             logger.Info("Serializing features INI");
             var featureTypeBase = default(FeatureTypeBase);
-            var Unit = default(clsUnit);
+            var Unit = default(Unit);
             var Valid = default(bool);
 
             foreach ( var tempLoopVar_Unit in map.Units )
@@ -674,7 +674,7 @@ namespace SharpFlame.Mapping.IO.Wz
                 }
                 if ( PlayerCount >= 0 ) //not an FMap
                 {
-                    var Unit = default(clsUnit);
+                    var Unit = default(Unit);
                     foreach ( var tempLoopVar_Unit in map.Units )
                     {
                         Unit = tempLoopVar_Unit;

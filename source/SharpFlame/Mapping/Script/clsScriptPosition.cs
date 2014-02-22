@@ -19,7 +19,7 @@ namespace SharpFlame.Mapping.Script
 {
     public class clsScriptPosition
     {
-        private readonly ConnectedListLink<clsScriptPosition, clsMap> parentMapLink;
+        private readonly ConnectedListLink<clsScriptPosition, Map> parentMapLink;
 
         private string label;
 
@@ -27,17 +27,17 @@ namespace SharpFlame.Mapping.Script
 
         public clsScriptPosition()
         {
-            parentMapLink = new ConnectedListLink<clsScriptPosition, clsMap>(this);
+            parentMapLink = new ConnectedListLink<clsScriptPosition, Map>(this);
         }
 
-        public clsScriptPosition(clsMap map)
+        public clsScriptPosition(Map map)
         {
             label = map.GetDefaultScriptLabel("Position");
 
             parentMapLink.Connect(map.ScriptPositions);
         }
 
-        public ConnectedListLink<clsScriptPosition, clsMap> ParentMap
+        public ConnectedListLink<clsScriptPosition, Map> ParentMap
         {
             get { return parentMapLink; }
         }

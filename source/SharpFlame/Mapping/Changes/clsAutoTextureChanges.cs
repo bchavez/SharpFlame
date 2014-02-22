@@ -8,7 +8,7 @@ namespace SharpFlame.Mapping.Changes
 {
     public class clsAutoTextureChanges : clsMapTileChanges
     {
-        public clsAutoTextureChanges(clsMap map) : base(map, map.Terrain.TileSize)
+        public clsAutoTextureChanges(Map map) : base(map, map.Terrain.TileSize)
         {
         }
 

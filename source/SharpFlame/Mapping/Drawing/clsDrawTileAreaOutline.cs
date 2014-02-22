@@ -18,7 +18,7 @@ namespace SharpFlame.Mapping.Drawing
         private readonly XYZInt vertex1;
         public SRgba Colour;
         public XYInt FinishXY;
-        public clsMap Map;
+        public Map Map;
         public XYInt StartXY;
 
         public clsDrawTileAreaOutline()

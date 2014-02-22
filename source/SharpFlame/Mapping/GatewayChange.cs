@@ -1,8 +1,8 @@
 namespace SharpFlame.Mapping
 {
-    public class clsGatewayChange
+    public class GatewayChange
     {
-        public clsGateway Gateway;
+        public Gateway Gateway;
         public GatewayChangeType Type;
     }
 

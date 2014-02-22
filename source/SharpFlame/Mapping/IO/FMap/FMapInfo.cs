@@ -11,7 +11,7 @@ namespace SharpFlame.Mapping.IO.FMap
 {
     public class FMapInfo
     {
-        public clsInterfaceOptions InterfaceOptions = new clsInterfaceOptions();
+        public InterfaceOptions InterfaceOptions = new InterfaceOptions();
         public XYInt TerrainSize = new XYInt(-1, -1);
         public Tileset Tileset;
 

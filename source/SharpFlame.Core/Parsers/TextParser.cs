@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace SharpFlame.Core.Parsers
 {
@@ -168,12 +169,7 @@ namespace SharpFlame.Core.Parsers
         /// <returns></returns>
         protected bool IsInArray( char c, char[] chars )
         {
-            foreach( char ch in chars )
-            {
-                if( c == ch )
-                    return true;
-            }
-            return false;
+            return chars.Any(ch => c == ch);
         }
 
         /// <summary>

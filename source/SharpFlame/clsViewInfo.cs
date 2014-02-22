@@ -28,7 +28,7 @@ namespace SharpFlame
         public double FOVMultiplier;
         public double FOVMultiplierExponent;
         public float FieldOfViewY;
-        public clsMap Map;
+        public Map Map;
         public MapViewControl MapViewControl;
         public clsMouseDown MouseLeftDown;
         public clsMouseOver MouseOver;
@@ -39,7 +39,7 @@ namespace SharpFlame
         public Angles.AngleRPY ViewAngleRPY;
         public XYZInt ViewPos;
 
-        public clsViewInfo(clsMap map, MapViewControl mapViewControl)
+        public clsViewInfo(Map map, MapViewControl mapViewControl)
         {
             Map = map;
             MapViewControl = mapViewControl;
@@ -579,7 +579,7 @@ namespace SharpFlame
                         mouseOverTerrain.SideNum.Y = mouseOverTerrain.Tile.Normal.Y;
                     }
                     var sectorNum = Map.GetPosSectorNum(mouseOverTerrain.Pos.Horizontal);
-                    var unit = default(clsUnit);
+                    var unit = default(Unit);
                     var connection = default(clsUnitSectorConnection);
                     foreach ( var tempLoopVar_Connection in Map.Sectors[sectorNum.X, sectorNum.Y].Units )
                     {
@@ -813,27 +813,27 @@ namespace SharpFlame
             var tile = mouseOverTerrian.Tile.Normal;
             var sideNum = new XYInt();
 
-            if ( Map.Selected_Tile_A != null )
+            if ( Map.SelectedTileA != null )
             {
                 var num = 0;
                 var a = 0;
                 var b = 0;
-                if ( tile.X == Map.Selected_Tile_A.X )
+                if ( tile.X == Map.SelectedTileA.X )
                 {
-                    if ( tile.Y <= Map.Selected_Tile_A.Y )
+                    if ( tile.Y <= Map.SelectedTileA.Y )
                     {
                         a = tile.Y;
-                        b = Map.Selected_Tile_A.Y;
+                        b = Map.SelectedTileA.Y;
                     }
                     else
                     {
-                        a = Map.Selected_Tile_A.Y;
+                        a = Map.SelectedTileA.Y;
                         b = tile.Y;
                     }
                     for ( num = a + 1; num <= b; num++ )
                     {
-                        Map.Terrain.SideH[Map.Selected_Tile_A.X, num].Road = App.SelectedRoad;
-                        sideNum.X = Map.Selected_Tile_A.X;
+                        Map.Terrain.SideH[Map.SelectedTileA.X, num].Road = App.SelectedRoad;
+                        sideNum.X = Map.SelectedTileA.X;
                         sideNum.Y = num;
                         Map.AutoTextureChanges.SideHChanged(sideNum);
                         Map.SectorGraphicsChanges.SideHChanged(sideNum);
@@ -844,26 +844,26 @@ namespace SharpFlame
 
                     Map.UndoStepCreate("Road Line");
 
-                    Map.Selected_Tile_A = null;
+                    Map.SelectedTileA = null;
                     MapViewControl.DrawViewLater();
                 }
-                else if ( tile.Y == Map.Selected_Tile_A.Y )
+                else if ( tile.Y == Map.SelectedTileA.Y )
                 {
-                    if ( tile.X <= Map.Selected_Tile_A.X )
+                    if ( tile.X <= Map.SelectedTileA.X )
                     {
                         a = tile.X;
-                        b = Map.Selected_Tile_A.X;
+                        b = Map.SelectedTileA.X;
                     }
                     else
                     {
-                        a = Map.Selected_Tile_A.X;
+                        a = Map.SelectedTileA.X;
                         b = tile.X;
                     }
                     for ( num = a + 1; num <= b; num++ )
                     {
-                        Map.Terrain.SideV[num, Map.Selected_Tile_A.Y].Road = App.SelectedRoad;
+                        Map.Terrain.SideV[num, Map.SelectedTileA.Y].Road = App.SelectedRoad;
                         sideNum.X = num;
-                        sideNum.Y = Map.Selected_Tile_A.Y;
+                        sideNum.Y = Map.SelectedTileA.Y;
                         Map.AutoTextureChanges.SideVChanged(sideNum);
                         Map.SectorGraphicsChanges.SideVChanged(sideNum);
                         Map.SectorTerrainUndoChanges.SideVChanged(sideNum);
@@ -873,13 +873,13 @@ namespace SharpFlame
 
                     Map.UndoStepCreate("Road Line");
 
-                    Map.Selected_Tile_A = null;
+                    Map.SelectedTileA = null;
                     MapViewControl.DrawViewLater();
                 }
             }
             else
             {
-                Map.Selected_Tile_A = tile;
+                Map.SelectedTileA = tile;
             }
         }
 
@@ -1505,18 +1505,18 @@ namespace SharpFlame
             }
             else
             {
-                if ( Map.Selected_Tile_A == null )
+                if ( Map.SelectedTileA == null )
                 {
-                    Map.Selected_Tile_A = tile;
+                    Map.SelectedTileA = tile;
                     MapViewControl.DrawViewLater();
                 }
-                else if ( tile.X == Map.Selected_Tile_A.X | tile.Y == Map.Selected_Tile_A.Y )
+                else if ( tile.X == Map.SelectedTileA.X | tile.Y == Map.SelectedTileA.Y )
                 {
-                    if ( Map.GatewayCreateStoreChange(Map.Selected_Tile_A, tile) != null )
+                    if ( Map.GatewayCreateStoreChange(Map.SelectedTileA, tile) != null )
                     {
                         Map.UndoStepCreate("Gateway Place");
-                        Map.Selected_Tile_A = null;
-                        Map.Selected_Tile_B = null;
+                        Map.SelectedTileA = null;
+                        Map.SelectedTileB = null;
                         Map.MinimapMakeLater();
                         MapViewControl.DrawViewLater();
                     }
@@ -1587,7 +1587,7 @@ namespace SharpFlame
                                     Map.SelectedUnits.Clear();
                                 }
                                 Program.frmMainInstance.SelectedObject_Changed();
-                                Map.Unit_Selected_Area_VertexA = mouseOverTerrain.Vertex.Normal;
+                                Map.UnitSelectedAreaVertexA = mouseOverTerrain.Vertex.Normal;
                                 MapViewControl.DrawViewLater();
                             }
                         }
@@ -1700,20 +1700,20 @@ namespace SharpFlame
                         }
                         else if ( modTools.Tool == modTools.Tools.TerrainSelect )
                         {
-                            if ( Map.Selected_Area_VertexA == null )
+                            if ( Map.SelectedAreaVertexA == null )
                             {
-                                Map.Selected_Area_VertexA = mouseOverTerrain.Vertex.Normal;
+                                Map.SelectedAreaVertexA = mouseOverTerrain.Vertex.Normal;
                                 MapViewControl.DrawViewLater();
                             }
-                            else if ( Map.Selected_Area_VertexB == null )
+                            else if ( Map.SelectedAreaVertexB == null )
                             {
-                                Map.Selected_Area_VertexB = mouseOverTerrain.Vertex.Normal;
+                                Map.SelectedAreaVertexB = mouseOverTerrain.Vertex.Normal;
                                 MapViewControl.DrawViewLater();
                             }
                             else
                             {
-                                Map.Selected_Area_VertexA = null;
-                                Map.Selected_Area_VertexB = null;
+                                Map.SelectedAreaVertexA = null;
+                                Map.SelectedAreaVertexB = null;
                                 MapViewControl.DrawViewLater();
                             }
                         }
@@ -1748,13 +1748,13 @@ namespace SharpFlame
                 }
                 if ( modTools.Tool == modTools.Tools.RoadLines || modTools.Tool == modTools.Tools.ObjectLines )
                 {
-                    Map.Selected_Tile_A = null;
+                    Map.SelectedTileA = null;
                     MapViewControl.DrawViewLater();
                 }
                 else if ( modTools.Tool == modTools.Tools.TerrainSelect )
                 {
-                    Map.Selected_Area_VertexA = null;
-                    Map.Selected_Area_VertexB = null;
+                    Map.SelectedAreaVertexA = null;
+                    Map.SelectedAreaVertexB = null;
                     MapViewControl.DrawViewLater();
                 }
                 else if ( modTools.Tool == modTools.Tools.CliffTriangle )
@@ -1763,8 +1763,8 @@ namespace SharpFlame
                 }
                 else if ( modTools.Tool == modTools.Tools.Gateways )
                 {
-                    Map.Selected_Tile_A = null;
-                    Map.Selected_Tile_B = null;
+                    Map.SelectedTileA = null;
+                    Map.SelectedTileB = null;
                     MapViewControl.DrawViewLater();
                 }
                 else if ( modTools.Tool == modTools.Tools.HeightSetBrush )
@@ -2043,18 +2043,18 @@ namespace SharpFlame
                 var b = 0;
                 var tile = mouseOverTerrian.Tile.Normal;
 
-                if ( Map.Selected_Tile_A != null )
+                if ( Map.SelectedTileA != null )
                 {
-                    if ( tile.X == Map.Selected_Tile_A.X )
+                    if ( tile.X == Map.SelectedTileA.X )
                     {
-                        if ( tile.Y <= Map.Selected_Tile_A.Y )
+                        if ( tile.Y <= Map.SelectedTileA.Y )
                         {
                             a = tile.Y;
-                            b = Map.Selected_Tile_A.Y;
+                            b = Map.SelectedTileA.Y;
                         }
                         else
                         {
-                            a = Map.Selected_Tile_A.Y;
+                            a = Map.SelectedTileA.Y;
                             b = tile.Y;
                         }
                         var objectCreator = new clsUnitCreate();
@@ -2069,19 +2069,19 @@ namespace SharpFlame
                         Map.UndoStepCreate("Object Line");
                         Map.Update();
                         Map.MinimapMakeLater();
-                        Map.Selected_Tile_A = null;
+                        Map.SelectedTileA = null;
                         MapViewControl.DrawViewLater();
                     }
-                    else if ( tile.Y == Map.Selected_Tile_A.Y )
+                    else if ( tile.Y == Map.SelectedTileA.Y )
                     {
-                        if ( tile.X <= Map.Selected_Tile_A.X )
+                        if ( tile.X <= Map.SelectedTileA.X )
                         {
                             a = tile.X;
-                            b = Map.Selected_Tile_A.X;
+                            b = Map.SelectedTileA.X;
                         }
                         else
                         {
-                            a = Map.Selected_Tile_A.X;
+                            a = Map.SelectedTileA.X;
                             b = tile.X;
                         }
                         var objectCreator = new clsUnitCreate();
@@ -2096,13 +2096,13 @@ namespace SharpFlame
                         Map.UndoStepCreate("Object Line");
                         Map.Update();
                         Map.MinimapMakeLater();
-                        Map.Selected_Tile_A = null;
+                        Map.SelectedTileA = null;
                         MapViewControl.DrawViewLater();
                     }
                 }
                 else
                 {
-                    Map.Selected_Tile_A = tile;
+                    Map.SelectedTileA = tile;
                 }
             }
         }
@@ -2140,7 +2140,7 @@ namespace SharpFlame
                 public XYInt SideNum;
                 public clsBrush.sPosNum Tile;
                 public bool Triangle;
-                public SimpleClassList<clsUnit> Units = new SimpleClassList<clsUnit>();
+                public SimpleClassList<Unit> Units = new SimpleClassList<Unit>();
                 public clsBrush.sPosNum Vertex;
             }
         }

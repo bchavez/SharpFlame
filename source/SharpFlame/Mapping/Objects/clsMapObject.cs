@@ -13,11 +13,11 @@ using SharpFlame.Mapping.Objects;
 
 namespace SharpFlame.Mapping
 {
-    public partial class clsMap
+    public partial class Map
     {
         public clsUnitGroup ScavengerUnitGroup;
-        public ConnectedList<clsUnitGroup, clsMap> UnitGroups;
-        public ConnectedList<clsUnit, clsMap> Units;
+        public ConnectedList<clsUnitGroup, Map> UnitGroups;
+        public ConnectedList<Unit, Map> Units;
 
         private clsUnitGroupContainer _SelectedUnitGroup;
 
@@ -28,7 +28,7 @@ namespace SharpFlame.Mapping
 
         public UInt32 GetAvailableID()
         {
-            var Unit = default(clsUnit);
+            var Unit = default(Unit);
             UInt32 ID = 0;
 
             ID = 1U;
@@ -46,7 +46,7 @@ namespace SharpFlame.Mapping
 
         public void UnitRemoveStoreChange(int Num)
         {
-            var UnitChange = new clsUnitChange();
+            var UnitChange = new UnitChange();
             UnitChange.Type = UnitChangeType.Deleted;
             UnitChange.Unit = Units[Num];
             UnitChanges.Add(UnitChange);
@@ -56,7 +56,7 @@ namespace SharpFlame.Mapping
 
         public void UnitRemove(int Num)
         {
-            var Unit = default(clsUnit);
+            var Unit = default(Unit);
 
             Unit = Units[Num];
 
@@ -81,7 +81,7 @@ namespace SharpFlame.Mapping
             Unit.DisconnectFromMap();
         }
 
-        public void UnitSwap(clsUnit OldUnit, clsUnit NewUnit)
+        public void UnitSwap(Unit OldUnit, Unit NewUnit)
         {
             if ( OldUnit.MapLink.Source != this )
             {
@@ -135,7 +135,7 @@ namespace SharpFlame.Mapping
             return App.PlayerColour[ColourUnitGroup.WZ_StartPos].MinimapColour;
         }
 
-        public clsUnit IDUsage(UInt32 ID)
+        public Unit IDUsage(UInt32 ID)
         {
             foreach ( var Unit in Units )
             {

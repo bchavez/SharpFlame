@@ -11,13 +11,13 @@ namespace SharpFlame.Mapping.Objects
     {
         public bool AutoWalls = false;
         public XYInt Horizontal;
-        public clsMap Map;
+        public Map Map;
         public UnitTypeBase ObjectTypeBase;
         public bool RandomizeRotation = false;
         public int Rotation = 0;
         public clsUnitGroup UnitGroup;
 
-        public clsUnit Perform()
+        public Unit Perform()
         {
             if ( AutoWalls )
             {
@@ -33,7 +33,7 @@ namespace SharpFlame.Mapping.Objects
                     }
                 }
             }
-            var newUnit = new clsUnit();
+            var newUnit = new Unit();
             if ( RandomizeRotation )
             {
                 newUnit.Rotation = (int)(App.Random.Next() * 360.0D);

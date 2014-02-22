@@ -10,21 +10,21 @@ using SharpFlame.Mapping.Objects;
 
 namespace SharpFlame.Mapping
 {
-    public class clsSector
+    public class Sector
     {
         public int GLList_Textured;
         public int GLList_Wireframe;
         public XYInt Pos;
-        public ConnectedList<clsUnitSectorConnection, clsSector> Units;
+        public ConnectedList<clsUnitSectorConnection, Sector> Units;
 
-        public clsSector()
+        public Sector()
         {
-            Units = new ConnectedList<clsUnitSectorConnection, clsSector>(this);
+            Units = new ConnectedList<clsUnitSectorConnection, Sector>(this);
         }
 
-        public clsSector(XYInt NewPos)
+        public Sector(XYInt NewPos)
         {
-            Units = new ConnectedList<clsUnitSectorConnection, clsSector>(this);
+            Units = new ConnectedList<clsUnitSectorConnection, Sector>(this);
 
 
             Pos = NewPos;

@@ -18,6 +18,7 @@ using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 using SharpFlame.Util;
+using Message = SharpFlame.Mapping.Message;
 
 #endregion
 
@@ -78,7 +79,7 @@ namespace SharpFlame.Controls
             UndoMessageTimer.Interval = 4000;
         }
 
-        private clsMap MainMap
+        private Map MainMap
         {
             get { return owner.MainMap; }
         }
@@ -313,6 +314,8 @@ namespace SharpFlame.Controls
             map.ViewInfo.MouseOver.ScreenPos.Y = e.Y;
 
             map.ViewInfo.MouseOverPosCalc();
+
+            DrawViewLater ();
         }
 
         public void Pos_Display_Update()
@@ -363,7 +366,7 @@ namespace SharpFlame.Controls
         private void ListSelect_Click(object Sender, ToolStripItemClickedEventArgs e)
         {
             var button = e.ClickedItem;
-            var unit = (clsUnit)button.Tag;
+            var unit = (Unit)button.Tag;
 
             if ( listSelectIsPicker )
             {
@@ -436,7 +439,7 @@ namespace SharpFlame.Controls
                 if ( map.UndoPosition > 0 )
                 {
                     message = "Undid: " + map.Undos[map.UndoPosition - 1].Name;
-                    var mapMessage = new clsMessage();
+                    var mapMessage = new Message();
                     mapMessage.Text = message;
                     map.Messages.Add(mapMessage);
                     map.UndoPerform();
@@ -454,7 +457,7 @@ namespace SharpFlame.Controls
                 if ( map.UndoPosition < map.Undos.Count )
                 {
                     message = "Redid: " + map.Undos[map.UndoPosition].Name;
-                    var mapMessage = new clsMessage();
+                    var mapMessage = new Message();
                     mapMessage.Text = message;
                     map.Messages.Add(mapMessage);
                     map.RedoPerform();
@@ -775,13 +778,13 @@ namespace SharpFlame.Controls
                     }
                     else if ( modTools.Tool == modTools.Tools.ObjectSelect )
                     {
-                        if ( map.Unit_Selected_Area_VertexA != null )
+                        if ( map.UnitSelectedAreaVertexA != null )
                         {
                             if ( mouseOverTerrain != null )
                             {
-                                SelectUnits(map.Unit_Selected_Area_VertexA, mouseOverTerrain.Vertex.Normal);
+                                SelectUnits(map.UnitSelectedAreaVertexA, mouseOverTerrain.Vertex.Normal);
                             }
-                            map.Unit_Selected_Area_VertexA = null;
+                            map.UnitSelectedAreaVertexA = null;
                         }
                     }
                 }
@@ -812,7 +815,7 @@ namespace SharpFlame.Controls
             var map = MainMap;
             var mouseOverTerrain = map.ViewInfo.GetMouseOverTerrain();
             var sectorNum = new XYInt();
-            clsUnit unit;
+            Unit unit;
             var sectorStart = new XYInt();
             var sectorFinish = new XYInt();
             var startPos = new XYInt();
@@ -923,6 +926,8 @@ namespace SharpFlame.Controls
             {
                 OpenGLControl.Focus();
             }
+
+            DrawViewLater ();
         }
 
         public void OpenGL_MouseWheel(object sender, MouseEventArgs e)
@@ -1017,7 +1022,7 @@ namespace SharpFlame.Controls
                 return;
             }
 
-            var map = (clsMap)tabMaps.SelectedTab.Tag;
+            var map = (Map)tabMaps.SelectedTab.Tag;
 
             owner.SetMainMap(map);
         }
@@ -1030,7 +1035,7 @@ namespace SharpFlame.Controls
             {
                 return;
             }
-            if ( !map.frmMainLink.IsConnected )
+            if ( !map.FrmMainLink.IsConnected )
             {
                 MessageBox.Show("Error: Map should be closed already.");
                 return;
@@ -1046,19 +1051,19 @@ namespace SharpFlame.Controls
 
         public void UpdateTabs()
         {
-            clsMap map;
+            Map map;
 
             tabMaps.Enabled = false;
             tabMaps.TabPages.Clear();
             foreach ( var tempMap in owner.LoadedMaps )
             {
                 map = tempMap;
-                tabMaps.TabPages.Add(map.MapView_TabPage);
+                tabMaps.TabPages.Add(map.MapViewTabPage);
             }
             map = MainMap;
             if ( map != null )
             {
-                tabMaps.SelectedIndex = map.frmMainLink.ArrayPosition;
+                tabMaps.SelectedIndex = map.FrmMainLink.ArrayPosition;
             }
             else
             {

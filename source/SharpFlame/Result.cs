@@ -61,7 +61,7 @@ namespace SharpFlame
 
     public sealed class modResults
     {
-        public static ResultProblemGoto<clsResultItemPosGoto> CreateResultProblemGotoForObject(clsUnit unit)
+        public static ResultProblemGoto<clsResultItemPosGoto> CreateResultProblemGotoForObject(Unit unit)
         {
             var resultGoto = new clsResultItemPosGoto();
             resultGoto.View = unit.MapLink.Source.ViewInfo;

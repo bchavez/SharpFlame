@@ -1,6 +1,5 @@
 #region
 
-using SharpFlame.Collections;
 using SharpFlame.Core.Collections;
 using SharpFlame.Core.Domain;
 
@@ -8,29 +7,29 @@ using SharpFlame.Core.Domain;
 
 namespace SharpFlame.Mapping
 {
-    public class clsGateway
+    public class Gateway
     {
-        public ConnectedListLink<clsGateway, clsMap> MapLink;
+        public ConnectedListLink<Gateway, Map> MapLink;
         public XYInt PosA;
         public XYInt PosB;
 
-        public clsGateway()
+        public Gateway()
         {
-            MapLink = new ConnectedListLink<clsGateway, clsMap>(this);
+            MapLink = new ConnectedListLink<Gateway, Map>(this);
         }
 
         public bool IsOffMap()
         {
-            var TerrainSize = MapLink.Source.Terrain.TileSize;
+            var terrainSize = MapLink.Source.Terrain.TileSize;
 
             return PosA.X < 0
-                   | PosA.X >= TerrainSize.X
+                   | PosA.X >= terrainSize.X
                    | PosA.Y < 0
-                   | PosA.Y >= TerrainSize.Y
+                   | PosA.Y >= terrainSize.Y
                    | PosB.X < 0
-                   | PosB.X >= TerrainSize.X
+                   | PosB.X >= terrainSize.X
                    | PosB.Y < 0
-                   | PosB.Y >= TerrainSize.Y;
+                   | PosB.Y >= terrainSize.Y;
         }
 
         public void Deallocate()

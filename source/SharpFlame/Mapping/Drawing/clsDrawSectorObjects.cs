@@ -36,7 +36,7 @@ namespace SharpFlame.Mapping.Drawing
                 return;
             }
 
-            var Unit = default(clsUnit);
+            var Unit = default(Unit);
             var Sector = Map.Sectors[PosNum.X, PosNum.Y];
             var DrawUnitLabel = default(bool);
             var ViewInfo = Map.ViewInfo;

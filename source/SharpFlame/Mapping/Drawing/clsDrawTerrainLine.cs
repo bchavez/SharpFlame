@@ -23,7 +23,7 @@ namespace SharpFlame.Mapping.Drawing
         private MathUtil.sIntersectPos IntersectX;
         private MathUtil.sIntersectPos IntersectY;
         private int LastXTile;
-        public clsMap Map;
+        public Map Map;
         private XYInt StartTile;
         public XYInt StartXY;
         private XYInt TileEdgeFinish;

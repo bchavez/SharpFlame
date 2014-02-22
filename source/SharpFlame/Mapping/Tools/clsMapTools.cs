@@ -15,7 +15,7 @@ using SharpFlame.Util;
 
 namespace SharpFlame.Mapping
 {
-    public partial class clsMap
+    public partial class Map
     {
         public void Rotate(TileOrientation Orientation, ObjectRotateMode ObjectRotateMode)
         {
@@ -148,7 +148,7 @@ namespace SharpFlame.Mapping
                 }
             }
 
-            var Unit = default(clsUnit);
+            var Unit = default(Unit);
             foreach ( var tempLoopVar_Unit in Units )
             {
                 Unit = tempLoopVar_Unit;
@@ -206,7 +206,7 @@ namespace SharpFlame.Mapping
 
             Terrain = NewTerrain;
 
-            var Gateway = default(clsGateway);
+            var Gateway = default(Gateway);
             foreach ( var tempLoopVar_Gateway in Gateways.GetItemsAsSimpleClassList() )
             {
                 Gateway = tempLoopVar_Gateway;
@@ -215,7 +215,7 @@ namespace SharpFlame.Mapping
                 Gateway.Deallocate();
             }
 
-            if ( _ReadyForUserInput )
+            if ( readyForUserInput )
             {
                 CancelUserInput();
                 InitializeUserInput();

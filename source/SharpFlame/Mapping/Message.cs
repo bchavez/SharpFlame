@@ -6,7 +6,7 @@ using System;
 
 namespace SharpFlame.Mapping
 {
-    public class clsMessage
+    public class Message
     {
         private readonly DateTime _CreatedDate = DateTime.Now;
         public string Text;

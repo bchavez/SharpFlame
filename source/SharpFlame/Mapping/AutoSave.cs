@@ -6,12 +6,12 @@ using System;
 
 namespace SharpFlame.Mapping
 {
-    public class clsAutoSave
+    public class AutoSave
     {
         public int ChangeCount;
         public DateTime SavedDate;
 
-        public clsAutoSave()
+        public AutoSave()
         {
             SavedDate = DateTime.Now;
         }
