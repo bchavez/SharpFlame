@@ -89,36 +89,36 @@ namespace SharpFlame
 
             if ( IOUtil.InvariantParse(txtAutosaveChanges.Text, ref dblTemp) )
             {
-                NewSettings.SetChanges(SettingsManager.Setting_AutoSaveMinChanges,
+                NewSettings.SetChanges(SettingsManager.SettingAutoSaveMinChanges,
                     new Change<UInt32>((uint)(MathUtil.ClampDbl(dblTemp, 1.0D, (Convert.ToDouble(UInt32.MaxValue)) - 1.0D))));
             }
             if ( IOUtil.InvariantParse(txtAutosaveInterval.Text, ref dblTemp) )
             {
-                NewSettings.SetChanges(SettingsManager.Setting_AutoSaveMinInterval_s,
+                NewSettings.SetChanges(SettingsManager.SettingAutoSaveMinIntervalS,
                     new Change<UInt32>((uint)(MathUtil.ClampDbl(dblTemp, 1.0D, (Convert.ToDouble(UInt32.MaxValue)) - 1.0D))));
             }
-            NewSettings.SetChanges(SettingsManager.Setting_AutoSaveCompress, new Change<bool>(cbxAutosaveCompression.Checked));
-            NewSettings.SetChanges(SettingsManager.Setting_AutoSaveEnabled, new Change<bool>(cbxAutosaveEnabled.Checked));
-            NewSettings.SetChanges(SettingsManager.Setting_DirectoriesPrompt, new Change<bool>(cbxAskDirectories.Checked));
-            NewSettings.SetChanges(SettingsManager.Setting_DirectPointer, new Change<bool>(cbxPointerDirect.Checked));
-            NewSettings.SetChanges(SettingsManager.Setting_FontFamily, new Change<FontFamily>(DisplayFont.FontFamily));
+            NewSettings.SetChanges(SettingsManager.SettingAutoSaveCompress, new Change<bool>(cbxAutosaveCompression.Checked));
+            NewSettings.SetChanges(SettingsManager.SettingAutoSaveEnabled, new Change<bool>(cbxAutosaveEnabled.Checked));
+            NewSettings.SetChanges(SettingsManager.SettingDirectoriesPrompt, new Change<bool>(cbxAskDirectories.Checked));
+            NewSettings.SetChanges(SettingsManager.SettingDirectPointer, new Change<bool>(cbxPointerDirect.Checked));
+            NewSettings.SetChanges(SettingsManager.SettingFontFamily, new Change<FontFamily>(DisplayFont.FontFamily));
             if ( IOUtil.InvariantParse(txtFOV.Text, ref dblTemp) )
             {
-                NewSettings.SetChanges(SettingsManager.Setting_FOVDefault, new Change<double>(dblTemp));
+                NewSettings.SetChanges(SettingsManager.SettingFovDefault, new Change<double>(dblTemp));
             }
-            NewSettings.SetChanges(SettingsManager.Setting_MinimapCliffColour, new Change<Rgba>(MinimapCliffColour));
-            NewSettings.SetChanges(SettingsManager.Setting_MinimapSelectedObjectsColour, new Change<Rgba>(MinimapSelectedObjectColour));
+            NewSettings.SetChanges(SettingsManager.SettingMinimapCliffColour, new Change<Rgba>(MinimapCliffColour));
+            NewSettings.SetChanges(SettingsManager.SettingMinimapSelectedObjectsColour, new Change<Rgba>(MinimapSelectedObjectColour));
             if ( IOUtil.InvariantParse(txtMinimapSize.Text, ref intTemp) )
             {
-                NewSettings.SetChanges(SettingsManager.Setting_MinimapSize, new Change<int>(intTemp));
+                NewSettings.SetChanges(SettingsManager.SettingMinimapSize, new Change<int>(intTemp));
             }
-            NewSettings.SetChanges(SettingsManager.Setting_MinimapTeamColours, new Change<bool>(cbxMinimapObjectColours.Checked));
-            NewSettings.SetChanges(SettingsManager.Setting_MinimapTeamColoursExceptFeatures, new Change<bool>(cbxMinimapTeamColourFeatures.Checked));
-            NewSettings.SetChanges(SettingsManager.Setting_Mipmaps, new Change<bool>(cbxMipmaps.Checked));
-            NewSettings.SetChanges(SettingsManager.Setting_MipmapsHardware, new Change<bool>(cbxMipmapsHardware.Checked));
+            NewSettings.SetChanges(SettingsManager.SettingMinimapTeamColours, new Change<bool>(cbxMinimapObjectColours.Checked));
+            NewSettings.SetChanges(SettingsManager.SettingMinimapTeamColoursExceptFeatures, new Change<bool>(cbxMinimapTeamColourFeatures.Checked));
+            NewSettings.SetChanges(SettingsManager.SettingMipmaps, new Change<bool>(cbxMipmaps.Checked));
+            NewSettings.SetChanges(SettingsManager.SettingMipmapsHardware, new Change<bool>(cbxMipmapsHardware.Checked));
             if ( IOUtil.InvariantParse(txtUndoSteps.Text, ref intTemp) )
             {
-                NewSettings.SetChanges(SettingsManager.Setting_UndoLimit, new Change<int>(intTemp));
+                NewSettings.SetChanges(SettingsManager.SettingUndoLimit, new Change<int>(intTemp));
             }
             var tilesetPaths = new List<string>();
             var objectsPaths = new List<string>();
@@ -132,25 +132,25 @@ namespace SharpFlame
             {
                 objectsPaths.Add(controlobjectsPaths[i]);
             }
-            NewSettings.SetChanges(SettingsManager.Setting_TilesetDirectories, new Change<List<string>>(tilesetPaths));
-            NewSettings.SetChanges(SettingsManager.Setting_ObjectDataDirectories, new Change<List<string>>(objectsPaths));
+            NewSettings.SetChanges(SettingsManager.SettingTilesetDirectories, new Change<List<string>>(tilesetPaths));
+            NewSettings.SetChanges(SettingsManager.SettingObjectDataDirectories, new Change<List<string>>(objectsPaths));
             if ( IOUtil.InvariantParse(txtMapBPP.Text, ref intTemp) )
             {
-                NewSettings.SetChanges(SettingsManager.Setting_MapViewBPP, new Change<int>(intTemp));
+                NewSettings.SetChanges(SettingsManager.SettingMapViewBpp, new Change<int>(intTemp));
             }
             if ( IOUtil.InvariantParse(txtMapDepth.Text, ref intTemp) )
             {
-                NewSettings.SetChanges(SettingsManager.Setting_MapViewDepth, new Change<int>(intTemp));
+                NewSettings.SetChanges(SettingsManager.SettingMapViewDepth, new Change<int>(intTemp));
             }
             if ( IOUtil.InvariantParse(txtTexturesBPP.Text, ref intTemp) )
             {
-                NewSettings.SetChanges(SettingsManager.Setting_TextureViewBPP, new Change<int>(intTemp));
+                NewSettings.SetChanges(SettingsManager.SettingTextureViewBpp, new Change<int>(intTemp));
             }
             if ( IOUtil.InvariantParse(txtTexturesDepth.Text, ref intTemp) )
             {
-                NewSettings.SetChanges(SettingsManager.Setting_TextureViewDepth, new Change<int>(intTemp));
+                NewSettings.SetChanges(SettingsManager.SettingTextureViewDepth, new Change<int>(intTemp));
             }
-            NewSettings.SetChanges(SettingsManager.Setting_PickOrientation, new Change<bool>(cbxPickerOrientation.Checked));
+            NewSettings.SetChanges(SettingsManager.SettingPickOrientation, new Change<bool>(cbxPickerOrientation.Checked));
 
             SettingsManager.UpdateSettings(NewSettings);
 

@@ -449,7 +449,7 @@ namespace SharpFlame
             }
 
             // var tilesetNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultTilesetsPathNum));
-            var tilesetsList = (List<string>)SettingsManager.Settings.GetValue(SettingsManager.Setting_TilesetDirectories);
+            var tilesetsList = (List<string>)SettingsManager.Settings.GetValue(SettingsManager.SettingTilesetDirectories);
             foreach (var path in tilesetsList) {
                 if (path != null && path != "") {
                     InitializeStatus = "Loading tilesets";
@@ -467,7 +467,7 @@ namespace SharpFlame
 
             App.ObjectData = new clsObjectData();
             // var ObjectDataNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultObjectDataPathNum));
-            var objectDataList = (List<string>)(SettingsManager.Settings.GetValue(SettingsManager.Setting_ObjectDataDirectories));
+            var objectDataList = (List<string>)(SettingsManager.Settings.GetValue(SettingsManager.SettingObjectDataDirectories));
             foreach (var path in objectDataList) {
                 if (path != null && path != "") {
                     InitializeStatus = "Loading object data";

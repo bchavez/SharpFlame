@@ -1,6 +1,5 @@
 #region
 
-using SharpFlame.Collections;
 using SharpFlame.Core.Collections;
 using SharpFlame.Core.Domain;
 
@@ -21,16 +20,16 @@ namespace SharpFlame.Mapping
 
         public bool IsOffMap()
         {
-            var TerrainSize = MapLink.Source.Terrain.TileSize;
+            var terrainSize = MapLink.Source.Terrain.TileSize;
 
             return PosA.X < 0
-                   | PosA.X >= TerrainSize.X
+                   | PosA.X >= terrainSize.X
                    | PosA.Y < 0
-                   | PosA.Y >= TerrainSize.Y
+                   | PosA.Y >= terrainSize.Y
                    | PosB.X < 0
-                   | PosB.X >= TerrainSize.X
+                   | PosB.X >= terrainSize.X
                    | PosB.Y < 0
-                   | PosB.Y >= TerrainSize.Y;
+                   | PosB.Y >= terrainSize.Y;
         }
 
         public void Deallocate()

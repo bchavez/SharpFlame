@@ -21,41 +21,41 @@ namespace SharpFlame.AppSettings
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public static OptionGroup Options_Settings = new OptionGroup();
+        public static OptionGroup OptionsSettings = new OptionGroup();
         public static clsSettings InitializeSettings;
         public static clsSettings Settings;
 
-        public static Option<bool> Setting_AutoSaveEnabled;
-        public static Option<bool> Setting_AutoSaveCompress;
-        public static Option<UInt32> Setting_AutoSaveMinInterval_s;
-        public static Option<UInt32> Setting_AutoSaveMinChanges;
-        public static Option<UInt32> Setting_UndoLimit;
-        public static Option<bool> Setting_DirectoriesPrompt;
-        public static Option<bool> Setting_DirectPointer;
-        public static Option<FontFamily> Setting_FontFamily;
-        public static Option<bool> Setting_FontBold;
-        public static Option<bool> Setting_FontItalic;
+        public static Option<bool> SettingAutoSaveEnabled;
+        public static Option<bool> SettingAutoSaveCompress;
+        public static Option<UInt32> SettingAutoSaveMinIntervalS;
+        public static Option<UInt32> SettingAutoSaveMinChanges;
+        public static Option<UInt32> SettingUndoLimit;
+        public static Option<bool> SettingDirectoriesPrompt;
+        public static Option<bool> SettingDirectPointer;
+        public static Option<FontFamily> SettingFontFamily;
+        public static Option<bool> SettingFontBold;
+        public static Option<bool> SettingFontItalic;
 
-        public static OptionFontSize Setting_FontSize;
+        public static OptionFontSize SettingFontSize;
 
-        public static OptionMinimapSize Setting_MinimapSize;
-        public static Option<bool> Setting_MinimapTeamColours;
-        public static Option<bool> Setting_MinimapTeamColoursExceptFeatures;
-        public static Option<Rgba> Setting_MinimapCliffColour;
-        public static Option<Rgba> Setting_MinimapSelectedObjectsColour;
+        public static OptionMinimapSize SettingMinimapSize;
+        public static Option<bool> SettingMinimapTeamColours;
+        public static Option<bool> SettingMinimapTeamColoursExceptFeatures;
+        public static Option<Rgba> SettingMinimapCliffColour;
+        public static Option<Rgba> SettingMinimapSelectedObjectsColour;
 
-        public static OptionFovDefault Setting_FOVDefault;
-        public static Option<bool> Setting_Mipmaps;
-        public static Option<bool> Setting_MipmapsHardware;
-        public static Option<string> Setting_OpenPath;
-        public static Option<string> Setting_SavePath;
-        public static Option<int> Setting_MapViewBPP;
-        public static Option<int> Setting_TextureViewBPP;
-        public static Option<int> Setting_MapViewDepth;
-        public static Option<int> Setting_TextureViewDepth;
-        public static Option<List<string>> Setting_TilesetDirectories;
-        public static Option<List<string>> Setting_ObjectDataDirectories;
-        public static Option<bool> Setting_PickOrientation;
+        public static OptionFovDefault SettingFovDefault;
+        public static Option<bool> SettingMipmaps;
+        public static Option<bool> SettingMipmapsHardware;
+        public static Option<string> SettingOpenPath;
+        public static Option<string> SettingSavePath;
+        public static Option<int> SettingMapViewBpp;
+        public static Option<int> SettingTextureViewBpp;
+        public static Option<int> SettingMapViewDepth;
+        public static Option<int> SettingTextureViewDepth;
+        public static Option<List<string>> SettingTilesetDirectories;
+        public static Option<List<string>> SettingObjectDataDirectories;
+        public static Option<bool> SettingPickOrientation;
 
         private static Option<T> CreateSetting<T>(string saveKey, T defaultValue)
         {
@@ -63,7 +63,7 @@ namespace SharpFlame.AppSettings
             creator.SaveKey = saveKey;
             creator.DefaultValue = defaultValue;
             var result = creator.Create();
-            Options_Settings.Options.Add(result.GroupLink);
+            OptionsSettings.Options.Add(result.GroupLink);
             return result;
         }
 
@@ -72,41 +72,41 @@ namespace SharpFlame.AppSettings
             creator.SaveKey = saveKey;
             creator.DefaultValue = defaultValue;
             var result = creator.Create();
-            Options_Settings.Options.Add(result.GroupLink);
+            OptionsSettings.Options.Add(result.GroupLink);
             return result;
         }
 
         public static void CreateSettingOptions()
         {
-            Setting_AutoSaveEnabled = CreateSetting("AutoSave", true);
-            Setting_AutoSaveCompress = CreateSetting("AutoSaveCompress", false);
-            Setting_AutoSaveMinInterval_s = CreateSetting("AutoSaveMinInterval", 180U);
-            Setting_AutoSaveMinChanges = CreateSetting("AutoSaveMinChanges", 20U);
-            Setting_UndoLimit = CreateSetting("UndoLimit", 256U);
-            Setting_DirectoriesPrompt = CreateSetting("DirectoriesPrompt", true);
-            Setting_DirectPointer = CreateSetting("DirectPointer", true);
-            Setting_FontFamily = CreateSetting("FontFamily", FontFamily.GenericSerif);
-            Setting_FontBold = CreateSetting("FontBold", true);
-            Setting_FontItalic = CreateSetting("FontItalic", false);
-            Setting_FontSize = (OptionFontSize)(CreateSetting(new OptionCreatorFontSize(), "FontSize", 20.0F));
-            Setting_MinimapSize = (OptionMinimapSize)(CreateSetting(new OptionCreatorMinimapSize(), "MinimapSize", 160));
-            Setting_MinimapTeamColours = CreateSetting("MinimapTeamColours", true);
-            Setting_MinimapTeamColoursExceptFeatures = CreateSetting("MinimapTeamColoursExceptFeatures", true);
-            Setting_MinimapCliffColour = CreateSetting("MinimapCliffColour", new Rgba(1.0F, 0.25F, 0.25F, 0.5F));
-            Setting_MinimapSelectedObjectsColour = CreateSetting("MinimapSelectedObjectsColour", new Rgba(1.0F, 1.0F, 1.0F, 0.75F));
-            Setting_FOVDefault = (OptionFovDefault)(CreateSetting(new OptionCreatorFovDefault(), "FOVDefault", 30.0D / (50.0D * 900.0D)));
+            SettingAutoSaveEnabled = CreateSetting("AutoSave", true);
+            SettingAutoSaveCompress = CreateSetting("AutoSaveCompress", false);
+            SettingAutoSaveMinIntervalS = CreateSetting("AutoSaveMinInterval", 180U);
+            SettingAutoSaveMinChanges = CreateSetting("AutoSaveMinChanges", 20U);
+            SettingUndoLimit = CreateSetting("UndoLimit", 256U);
+            SettingDirectoriesPrompt = CreateSetting("DirectoriesPrompt", true);
+            SettingDirectPointer = CreateSetting("DirectPointer", true);
+            SettingFontFamily = CreateSetting("FontFamily", FontFamily.GenericSerif);
+            SettingFontBold = CreateSetting("FontBold", true);
+            SettingFontItalic = CreateSetting("FontItalic", false);
+            SettingFontSize = (OptionFontSize)(CreateSetting(new OptionCreatorFontSize(), "FontSize", 20.0F));
+            SettingMinimapSize = (OptionMinimapSize)(CreateSetting(new OptionCreatorMinimapSize(), "MinimapSize", 160));
+            SettingMinimapTeamColours = CreateSetting("MinimapTeamColours", true);
+            SettingMinimapTeamColoursExceptFeatures = CreateSetting("MinimapTeamColoursExceptFeatures", true);
+            SettingMinimapCliffColour = CreateSetting("MinimapCliffColour", new Rgba(1.0F, 0.25F, 0.25F, 0.5F));
+            SettingMinimapSelectedObjectsColour = CreateSetting("MinimapSelectedObjectsColour", new Rgba(1.0F, 1.0F, 1.0F, 0.75F));
+            SettingFovDefault = (OptionFovDefault)(CreateSetting(new OptionCreatorFovDefault(), "FOVDefault", 30.0D / (50.0D * 900.0D)));
             //screenVerticalSize/(screenDist*screenVerticalPixels)
-            Setting_Mipmaps = CreateSetting("Mipmaps", false);
-            Setting_MipmapsHardware = CreateSetting("MipmapsHardware", false);
-            Setting_OpenPath = CreateSetting<string>("OpenPath", null);
-            Setting_SavePath = CreateSetting<string>("SavePath", null);
-            Setting_MapViewBPP = CreateSetting("MapViewBPP", DisplayDevice.Default.BitsPerPixel);
-            Setting_TextureViewBPP = CreateSetting("TextureViewBPP", DisplayDevice.Default.BitsPerPixel);
-            Setting_MapViewDepth = CreateSetting("MapViewDepth", 24);
-            Setting_TextureViewDepth = CreateSetting("TextureViewDepth", 24);
-            Setting_TilesetDirectories = CreateSetting("TilesetsPath", new List<string>());
-            Setting_ObjectDataDirectories = CreateSetting("ObjectDataPath", new List<string>());
-            Setting_PickOrientation = CreateSetting("PickOrientation", true);
+            SettingMipmaps = CreateSetting("Mipmaps", false);
+            SettingMipmapsHardware = CreateSetting("MipmapsHardware", false);
+            SettingOpenPath = CreateSetting<string>("OpenPath", null);
+            SettingSavePath = CreateSetting<string>("SavePath", null);
+            SettingMapViewBpp = CreateSetting("MapViewBPP", DisplayDevice.Default.BitsPerPixel);
+            SettingTextureViewBpp = CreateSetting("TextureViewBPP", DisplayDevice.Default.BitsPerPixel);
+            SettingMapViewDepth = CreateSetting("MapViewDepth", 24);
+            SettingTextureViewDepth = CreateSetting("TextureViewDepth", 24);
+            SettingTilesetDirectories = CreateSetting("TilesetsPath", new List<string>());
+            SettingObjectDataDirectories = CreateSetting("ObjectDataPath", new List<string>());
+            SettingPickOrientation = CreateSetting("PickOrientation", true);
         }
 
         public static void UpdateSettings(clsSettings newSettings)
@@ -212,179 +212,179 @@ namespace SharpFlame.AppSettings
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public clsSettings() : base(SettingsManager.Options_Settings)
+        public clsSettings() : base(SettingsManager.OptionsSettings)
         {
         }
 
         public bool AutoSaveEnabled
         {
-            get { return Convert.ToBoolean(GetValue(SettingsManager.Setting_AutoSaveEnabled)); }
-            set { SetChanges (SettingsManager.Setting_AutoSaveEnabled, new Change<bool>(value)); }
+            get { return Convert.ToBoolean(GetValue(SettingsManager.SettingAutoSaveEnabled)); }
+            set { SetChanges (SettingsManager.SettingAutoSaveEnabled, new Change<bool>(value)); }
         }
 
         public bool AutoSaveCompress
         {
-            get { return Convert.ToBoolean(GetValue(SettingsManager.Setting_AutoSaveCompress)); }
-            set { SetChanges (SettingsManager.Setting_AutoSaveCompress, new Change<bool>(value)); }
+            get { return Convert.ToBoolean(GetValue(SettingsManager.SettingAutoSaveCompress)); }
+            set { SetChanges (SettingsManager.SettingAutoSaveCompress, new Change<bool>(value)); }
         }
 
         public UInt32 AutoSaveMinIntervalSeconds
         {
-            get { return Convert.ToUInt32(GetValue(SettingsManager.Setting_AutoSaveMinInterval_s)); }
-            set { SetChanges (SettingsManager.Setting_AutoSaveMinInterval_s, new Change<UInt32> (value)); }
+            get { return Convert.ToUInt32(GetValue(SettingsManager.SettingAutoSaveMinIntervalS)); }
+            set { SetChanges (SettingsManager.SettingAutoSaveMinIntervalS, new Change<UInt32> (value)); }
         }
 
         public UInt32 AutoSaveMinChanges
         {
-            get { return Convert.ToUInt32(GetValue(SettingsManager.Setting_AutoSaveMinChanges)); }
-            set { SetChanges (SettingsManager.Setting_AutoSaveMinChanges, new Change<UInt32>(value)); }
+            get { return Convert.ToUInt32(GetValue(SettingsManager.SettingAutoSaveMinChanges)); }
+            set { SetChanges (SettingsManager.SettingAutoSaveMinChanges, new Change<UInt32>(value)); }
         }
 
         public UInt32 UndoLimit
         {
-            get { return Convert.ToUInt32(GetValue(SettingsManager.Setting_UndoLimit)); }
-            set { SetChanges (SettingsManager.Setting_UndoLimit, new Change<UInt32>(value)); }
+            get { return Convert.ToUInt32(GetValue(SettingsManager.SettingUndoLimit)); }
+            set { SetChanges (SettingsManager.SettingUndoLimit, new Change<UInt32>(value)); }
         }
 
         public bool DirectoriesPrompt
         {
-            get { return Convert.ToBoolean(GetValue(SettingsManager.Setting_DirectoriesPrompt)); }
-            set { SetChanges (SettingsManager.Setting_DirectoriesPrompt, new Change<bool>(value)); }
+            get { return Convert.ToBoolean(GetValue(SettingsManager.SettingDirectoriesPrompt)); }
+            set { SetChanges (SettingsManager.SettingDirectoriesPrompt, new Change<bool>(value)); }
         }
 
         public bool DirectPointer
         {
-            get { return Convert.ToBoolean(GetValue(SettingsManager.Setting_DirectPointer)); }
-            set { SetChanges (SettingsManager.Setting_DirectPointer, new Change<bool>(value)); }
+            get { return Convert.ToBoolean(GetValue(SettingsManager.SettingDirectPointer)); }
+            set { SetChanges (SettingsManager.SettingDirectPointer, new Change<bool>(value)); }
         }
 
         public FontFamily FontFamily
         {
-            get { return ((FontFamily)(GetValue(SettingsManager.Setting_FontFamily))); }
-            set { SetChanges (SettingsManager.Setting_FontFamily, new Change<FontFamily>(value)); }
+            get { return ((FontFamily)(GetValue(SettingsManager.SettingFontFamily))); }
+            set { SetChanges (SettingsManager.SettingFontFamily, new Change<FontFamily>(value)); }
         }
 
         public bool FontBold
         {
-            get { return Convert.ToBoolean(GetValue(SettingsManager.Setting_FontBold)); }
-            set { SetChanges (SettingsManager.Setting_FontBold, new Change<bool>(value)); }
+            get { return Convert.ToBoolean(GetValue(SettingsManager.SettingFontBold)); }
+            set { SetChanges (SettingsManager.SettingFontBold, new Change<bool>(value)); }
         }
 
         public bool FontItalic
         {
-            get { return Convert.ToBoolean(GetValue(SettingsManager.Setting_FontItalic)); }
-            set { SetChanges (SettingsManager.Setting_FontItalic, new Change<bool>(value)); }
+            get { return Convert.ToBoolean(GetValue(SettingsManager.SettingFontItalic)); }
+            set { SetChanges (SettingsManager.SettingFontItalic, new Change<bool>(value)); }
         }
 
         public float FontSize
         {
-            get { return Convert.ToSingle(Convert.ToSingle(GetValue(SettingsManager.Setting_FontSize))); }
-            set { SetChanges (SettingsManager.Setting_FontSize, new Change<float>(value)); }
+            get { return Convert.ToSingle(Convert.ToSingle(GetValue(SettingsManager.SettingFontSize))); }
+            set { SetChanges (SettingsManager.SettingFontSize, new Change<float>(value)); }
         }
 
         public int MinimapSize
         {
-            get { return Convert.ToInt32(GetValue(SettingsManager.Setting_MinimapSize)); }
-            set { SetChanges (SettingsManager.Setting_MinimapSize, new Change<int>(value)); }
+            get { return Convert.ToInt32(GetValue(SettingsManager.SettingMinimapSize)); }
+            set { SetChanges (SettingsManager.SettingMinimapSize, new Change<int>(value)); }
         }
 
         public bool MinimapTeamColours
         {
-            get { return Convert.ToBoolean(GetValue(SettingsManager.Setting_MinimapTeamColours)); }
-            set { SetChanges (SettingsManager.Setting_MinimapTeamColours, new Change<bool>(value)); }
+            get { return Convert.ToBoolean(GetValue(SettingsManager.SettingMinimapTeamColours)); }
+            set { SetChanges (SettingsManager.SettingMinimapTeamColours, new Change<bool>(value)); }
         }
 
         public bool MinimapTeamColoursExceptFeatures
         {
-            get { return Convert.ToBoolean(GetValue(SettingsManager.Setting_MinimapTeamColoursExceptFeatures)); }
-            set { SetChanges (SettingsManager.Setting_MinimapTeamColoursExceptFeatures, new Change<bool>(value)); }
+            get { return Convert.ToBoolean(GetValue(SettingsManager.SettingMinimapTeamColoursExceptFeatures)); }
+            set { SetChanges (SettingsManager.SettingMinimapTeamColoursExceptFeatures, new Change<bool>(value)); }
         }
 
         public Rgba MinimapCliffColour
         {
-            get { return ((Rgba)(GetValue(SettingsManager.Setting_MinimapCliffColour))); }
-            set { SetChanges (SettingsManager.Setting_MinimapCliffColour, new Change<Rgba>(value)); }
+            get { return ((Rgba)(GetValue(SettingsManager.SettingMinimapCliffColour))); }
+            set { SetChanges (SettingsManager.SettingMinimapCliffColour, new Change<Rgba>(value)); }
         }
 
         public Rgba MinimapSelectedObjectsColour
         {
-            get { return ((Rgba)(GetValue(SettingsManager.Setting_MinimapSelectedObjectsColour))); }
-            set { SetChanges (SettingsManager.Setting_MinimapSelectedObjectsColour, new Change<Rgba>(value)); }
+            get { return ((Rgba)(GetValue(SettingsManager.SettingMinimapSelectedObjectsColour))); }
+            set { SetChanges (SettingsManager.SettingMinimapSelectedObjectsColour, new Change<Rgba>(value)); }
         }
 
         public double FOVDefault
         {
-            get { return Convert.ToDouble(GetValue(SettingsManager.Setting_FOVDefault)); }
-            set { SetChanges (SettingsManager.Setting_FOVDefault, new Change<double>(value)); }
+            get { return Convert.ToDouble(GetValue(SettingsManager.SettingFovDefault)); }
+            set { SetChanges (SettingsManager.SettingFovDefault, new Change<double>(value)); }
         }
 
         public bool Mipmaps
         {
-            get { return Convert.ToBoolean(GetValue(SettingsManager.Setting_Mipmaps)); }
-            set { SetChanges (SettingsManager.Setting_Mipmaps, new Change<bool>(value)); }
+            get { return Convert.ToBoolean(GetValue(SettingsManager.SettingMipmaps)); }
+            set { SetChanges (SettingsManager.SettingMipmaps, new Change<bool>(value)); }
         }
 
         public bool MipmapsHardware
         {
-            get { return Convert.ToBoolean(GetValue(SettingsManager.Setting_MipmapsHardware)); }
-            set { SetChanges (SettingsManager.Setting_MipmapsHardware, new Change<bool>(value)); }
+            get { return Convert.ToBoolean(GetValue(SettingsManager.SettingMipmapsHardware)); }
+            set { SetChanges (SettingsManager.SettingMipmapsHardware, new Change<bool>(value)); }
         }
 
         public string OpenPath
         {
-            get { return Convert.ToString(GetValue(SettingsManager.Setting_OpenPath)); }
-            set { SetChanges(SettingsManager.Setting_OpenPath, new Change<string>(value)); }
+            get { return Convert.ToString(GetValue(SettingsManager.SettingOpenPath)); }
+            set { SetChanges(SettingsManager.SettingOpenPath, new Change<string>(value)); }
         }
 
         public string SavePath
         {
-            get { return Convert.ToString(GetValue(SettingsManager.Setting_SavePath)); }
-            set { SetChanges(SettingsManager.Setting_SavePath, new Change<string>(value)); }
+            get { return Convert.ToString(GetValue(SettingsManager.SettingSavePath)); }
+            set { SetChanges(SettingsManager.SettingSavePath, new Change<string>(value)); }
         }
 
         public int MapViewBPP
         {
-            get { return Convert.ToInt32(GetValue(SettingsManager.Setting_MapViewBPP)); }
-            set { SetChanges (SettingsManager.Setting_MapViewBPP, new Change<int>(value)); }
+            get { return Convert.ToInt32(GetValue(SettingsManager.SettingMapViewBpp)); }
+            set { SetChanges (SettingsManager.SettingMapViewBpp, new Change<int>(value)); }
         }
 
         public int TextureViewBPP
         {
-            get { return Convert.ToInt32(GetValue(SettingsManager.Setting_TextureViewBPP)); }
-            set { SetChanges (SettingsManager.Setting_TextureViewBPP, new Change<int>(value)); }
+            get { return Convert.ToInt32(GetValue(SettingsManager.SettingTextureViewBpp)); }
+            set { SetChanges (SettingsManager.SettingTextureViewBpp, new Change<int>(value)); }
         }
 
         public int MapViewDepth
         {
-            get { return Convert.ToInt32(GetValue(SettingsManager.Setting_MapViewDepth)); }
-            set { SetChanges (SettingsManager.Setting_MapViewDepth, new Change<int>(value)); }
+            get { return Convert.ToInt32(GetValue(SettingsManager.SettingMapViewDepth)); }
+            set { SetChanges (SettingsManager.SettingMapViewDepth, new Change<int>(value)); }
         }
 
         public int TextureViewDepth
         {
-            get { return Convert.ToInt32(GetValue(SettingsManager.Setting_TextureViewDepth)); }
-            set { SetChanges (SettingsManager.Setting_TextureViewDepth, new Change<int>(value)); }
+            get { return Convert.ToInt32(GetValue(SettingsManager.SettingTextureViewDepth)); }
+            set { SetChanges (SettingsManager.SettingTextureViewDepth, new Change<int>(value)); }
         }
 
         public List<string> TilesetDirectories
         {
-            get { return ((List<string>)(GetValue(SettingsManager.Setting_TilesetDirectories))); }
+            get { return ((List<string>)(GetValue(SettingsManager.SettingTilesetDirectories))); }
             set { 
                 logger.Info("Test");
-                SetChanges (SettingsManager.Setting_TilesetDirectories, new Change<List<string>>(value)); 
+                SetChanges (SettingsManager.SettingTilesetDirectories, new Change<List<string>>(value)); 
             }
         }
 
         public List<string> ObjectDataDirectories
         {
-            get { return ((List<string>)(GetValue(SettingsManager.Setting_ObjectDataDirectories))); }
-            set { SetChanges (SettingsManager.Setting_ObjectDataDirectories, new Change<List<string>>(value)); }
+            get { return ((List<string>)(GetValue(SettingsManager.SettingObjectDataDirectories))); }
+            set { SetChanges (SettingsManager.SettingObjectDataDirectories, new Change<List<string>>(value)); }
         }
 
         public bool PickOrientation
         {
-            get { return Convert.ToBoolean(GetValue(SettingsManager.Setting_PickOrientation)); }
-            set { SetChanges (SettingsManager.Setting_PickOrientation, new Change<bool>(value)); }
+            get { return Convert.ToBoolean(GetValue(SettingsManager.SettingPickOrientation)); }
+            set { SetChanges (SettingsManager.SettingPickOrientation, new Change<bool>(value)); }
         }
 
         public Font MakeFont()
