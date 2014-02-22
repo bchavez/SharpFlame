@@ -3,6 +3,7 @@
 using System;
 using System.Diagnostics;
 using SharpFlame.Collections;
+using SharpFlame.Core;
 using SharpFlame.Core.Collections;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Parsers.Ini;

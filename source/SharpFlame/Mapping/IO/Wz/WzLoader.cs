@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Ionic.Zip;
 using Ionic.Zlib;
 using NLog;
+using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Interfaces.Mapping.IO;
 using SharpFlame.Core.Parsers;

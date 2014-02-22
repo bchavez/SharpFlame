@@ -1,6 +1,7 @@
 #region
 
 using System;
+using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Mapping.Tiles;
 

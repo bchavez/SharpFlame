@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using SharpFlame.Collections;
 using SharpFlame.Colors;
+using SharpFlame.Core;
 using SharpFlame.Core.Collections;
 using SharpFlame.Core.Domain.Colors;
 using SharpFlame.FileIO;
