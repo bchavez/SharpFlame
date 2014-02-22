@@ -314,6 +314,8 @@ namespace SharpFlame.Controls
             map.ViewInfo.MouseOver.ScreenPos.Y = e.Y;
 
             map.ViewInfo.MouseOverPosCalc();
+
+            DrawViewLater ();
         }
 
         public void Pos_Display_Update()
@@ -924,6 +926,8 @@ namespace SharpFlame.Controls
             {
                 OpenGLControl.Focus();
             }
+
+            DrawViewLater ();
         }
 
         public void OpenGL_MouseWheel(object sender, MouseEventArgs e)
