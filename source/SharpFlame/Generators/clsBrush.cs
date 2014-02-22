@@ -75,58 +75,56 @@ namespace SharpFlame
             }
         }
 
-        public void PerformActionMapTiles(clsAction Tool, sPosNum Centre)
+        public void PerformActionMapTiles(clsAction tool, sPosNum centre)
         {
-            PerformAction(Tool, Centre, new XYInt(Tool.Map.Terrain.TileSize.X - 1, Tool.Map.Terrain.TileSize.Y - 1));
+            PerformAction(tool, centre, new XYInt(tool.Map.Terrain.TileSize.X - 1, tool.Map.Terrain.TileSize.Y - 1));
         }
 
-        public void PerformActionMapVertices(clsAction Tool, sPosNum Centre)
+        public void PerformActionMapVertices(clsAction tool, sPosNum centre)
         {
-            PerformAction(Tool, Centre, Tool.Map.Terrain.TileSize);
+            PerformAction(tool, centre, tool.Map.Terrain.TileSize);
         }
 
-        public void PerformActionMapSectors(clsAction Tool, sPosNum Centre)
+        public void PerformActionMapSectors(clsAction tool, sPosNum centre)
         {
-            PerformAction(Tool, Centre, new XYInt(Tool.Map.SectorCount.X - 1, Tool.Map.SectorCount.Y - 1));
+            PerformAction(tool, centre, new XYInt(tool.Map.SectorCount.X - 1, tool.Map.SectorCount.Y - 1));
         }
 
-        public XYInt GetPosNum(sPosNum PosNum)
+        public XYInt GetPosNum(sPosNum posNum)
         {
             if ( alignment )
             {
-                return PosNum.Alignment;
+                return posNum.Alignment;
             }
-            return PosNum.Normal;
+            return posNum.Normal;
         }
 
-        private void PerformAction(clsAction Action, sPosNum PosNum, XYInt LastValidNum)
+        private void PerformAction(clsAction action, sPosNum posNum, XYInt lastValidNum)
         {
-            var XNum = 0;
-            var X = 0;
-            var Y = 0;
-            var Centre = new XYInt(0, 0);
+            var y = 0;
 
-            if ( Action.Map == null )
+            if ( action.Map == null )
             {
                 Debugger.Break();
                 return;
             }
 
-            Centre = GetPosNum(PosNum);
+            var centre = GetPosNum(posNum);
 
-            Action.Effect = 1.0D;
-            for ( Y = MathUtil.ClampInt(Tiles.YMin + Centre.Y, 0, LastValidNum.Y) - Centre.Y;
-                Y <= MathUtil.ClampInt(Tiles.YMax + Centre.Y, 0, LastValidNum.Y) - Centre.Y;
-                Y++ )
+            action.Effect = 1.0D;
+            for ( y = MathUtil.ClampInt(Tiles.YMin + centre.Y, 0, lastValidNum.Y) - centre.Y;
+                y <= MathUtil.ClampInt(Tiles.YMax + centre.Y, 0, lastValidNum.Y) - centre.Y;
+                y++ )
             {
-                Action.PosNum.Y = Centre.Y + Y;
-                XNum = Y - Tiles.YMin;
-                for ( X = MathUtil.ClampInt(Tiles.XMin[XNum] + Centre.X, 0, LastValidNum.X) - Centre.X;
-                    X <= MathUtil.ClampInt(Convert.ToInt32(Tiles.XMax[XNum] + Centre.X), 0, LastValidNum.X) - Centre.X;
-                    X++ )
+                action.PosNum.Y = centre.Y + y;
+                var xNum = y - Tiles.YMin;
+                var x = 0;
+                for ( x = MathUtil.ClampInt(Tiles.XMin[xNum] + centre.X, 0, lastValidNum.X) - centre.X;
+                    x <= MathUtil.ClampInt(Convert.ToInt32(Tiles.XMax[xNum] + centre.X), 0, lastValidNum.X) - centre.X;
+                    x++ )
                 {
-                    Action.PosNum.X = Centre.X + X;
-                    if ( Action.UseEffect )
+                    action.PosNum.X = centre.X + x;
+                    if ( action.UseEffect )
                     {
                         if ( Tiles.ResultRadius > 0.0D )
                         {
@@ -135,35 +133,35 @@ namespace SharpFlame
                                 case ShapeType.Circle:
                                     if ( alignment )
                                     {
-                                        Action.Effect =
+                                        action.Effect =
                                             Convert.ToDouble(1.0D -
-                                                             (new XYDouble(Action.PosNum.X, Action.PosNum.Y) -
-                                                              new XYDouble(Centre.X - 0.5D, Centre.Y - 0.5D)).GetMagnitude() /
+                                                             (new XYDouble(action.PosNum.X, action.PosNum.Y) -
+                                                              new XYDouble(centre.X - 0.5D, centre.Y - 0.5D)).GetMagnitude() /
                                                              (Tiles.ResultRadius + 0.5D));
                                     }
                                     else
                                     {
-                                        Action.Effect = Convert.ToDouble(1.0D - (Centre - Action.PosNum).ToDoubles().GetMagnitude() / (Tiles.ResultRadius + 0.5D));
+                                        action.Effect = Convert.ToDouble(1.0D - (centre - action.PosNum).ToDoubles().GetMagnitude() / (Tiles.ResultRadius + 0.5D));
                                     }
                                     break;
                                 case ShapeType.Square:
                                     if ( alignment )
                                     {
-                                        Action.Effect = 1.0D -
-                                                        Math.Max(Math.Abs(Action.PosNum.X - (Centre.X - 0.5D)), Math.Abs(Action.PosNum.Y - (Centre.Y - 0.5D))) /
+                                        action.Effect = 1.0D -
+                                                        Math.Max(Math.Abs(action.PosNum.X - (centre.X - 0.5D)), Math.Abs(action.PosNum.Y - (centre.Y - 0.5D))) /
                                                         (Tiles.ResultRadius + 0.5D);
                                     }
                                     else
                                     {
-                                        Action.Effect = 1.0D -
-                                                        Math.Max(Math.Abs(Action.PosNum.X - Centre.X), Math.Abs(Action.PosNum.Y - Centre.Y)) /
+                                        action.Effect = 1.0D -
+                                                        Math.Max(Math.Abs(action.PosNum.X - centre.X), Math.Abs(action.PosNum.Y - centre.Y)) /
                                                         (Tiles.ResultRadius + 0.5D);
                                     }
                                     break;
                             }
                         }
                     }
-                    Action.ActionPerform();
+                    action.ActionPerform();
                 }
             }
         }

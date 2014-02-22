@@ -28,116 +28,115 @@ namespace SharpFlame.Mapping.Tiles
 
         public static clsTerrain.Tile.sTexture OrientateTile(ref TileOrientationChance tileChance, TileDirection newDirection)
         {
-            var ReturnResult = new clsTerrain.Tile.sTexture();
+            var returnResult = new clsTerrain.Tile.sTexture();
 
             //use random for empty tiles
             if ( tileChance.TextureNum < 0 )
             {
-                ReturnResult.Orientation.ResultXFlip = App.Random.Next() >= 0.5F;
-                ReturnResult.Orientation.ResultYFlip = App.Random.Next() >= 0.5F;
-                ReturnResult.Orientation.SwitchedAxes = App.Random.Next() >= 0.5F;
-                ReturnResult.TextureNum = -1;
-                return ReturnResult;
+                returnResult.Orientation.ResultXFlip = App.Random.Next() >= 0.5F;
+                returnResult.Orientation.ResultYFlip = App.Random.Next() >= 0.5F;
+                returnResult.Orientation.SwitchedAxes = App.Random.Next() >= 0.5F;
+                returnResult.TextureNum = -1;
+                return returnResult;
             }
             //stop invalid numbers
             if ( tileChance.Direction.X > 2 | tileChance.Direction.Y > 2 | newDirection.X > 2 | newDirection.Y > 2 )
             {
                 Debugger.Break();
-                return ReturnResult;
+                return returnResult;
             }
             //stop different direction types
             if ( (newDirection.X == 1 ^ newDirection.Y == 1) ^ (tileChance.Direction.X == 1 ^ tileChance.Direction.Y == 1) )
             {
                 Debugger.Break();
-                return ReturnResult;
+                return returnResult;
             }
 
-            ReturnResult.TextureNum = tileChance.TextureNum;
+            returnResult.TextureNum = tileChance.TextureNum;
 
             //if a direction is neutral then give a random orientation
             if ( (newDirection.X == 1 & newDirection.Y == 1) || (tileChance.Direction.X == 1 & tileChance.Direction.Y == 1) )
             {
-                ReturnResult.Orientation.SwitchedAxes = App.Random.Next() >= 0.5F;
-                ReturnResult.Orientation.ResultXFlip = App.Random.Next() >= 0.5F;
-                ReturnResult.Orientation.ResultYFlip = App.Random.Next() >= 0.5F;
-                return ReturnResult;
+                returnResult.Orientation.SwitchedAxes = App.Random.Next() >= 0.5F;
+                returnResult.Orientation.ResultXFlip = App.Random.Next() >= 0.5F;
+                returnResult.Orientation.ResultYFlip = App.Random.Next() >= 0.5F;
+                return returnResult;
             }
 
-            var IsDiagonal = default(bool);
+            bool isDiagonal = newDirection.X != 1 & newDirection.Y != 1;
 
-            IsDiagonal = newDirection.X != 1 & newDirection.Y != 1;
-            if ( IsDiagonal )
+            if ( isDiagonal )
             {
-                ReturnResult.Orientation.SwitchedAxes = false;
+                returnResult.Orientation.SwitchedAxes = false;
                 //use flips to match the directions
                 if ( tileChance.Direction.X == 0 ^ newDirection.X == 0 )
                 {
-                    ReturnResult.Orientation.ResultXFlip = true;
+                    returnResult.Orientation.ResultXFlip = true;
                 }
                 else
                 {
-                    ReturnResult.Orientation.ResultXFlip = false;
+                    returnResult.Orientation.ResultXFlip = false;
                 }
                 if ( tileChance.Direction.Y == 0 ^ newDirection.Y == 0 )
                 {
-                    ReturnResult.Orientation.ResultYFlip = true;
+                    returnResult.Orientation.ResultYFlip = true;
                 }
                 else
                 {
-                    ReturnResult.Orientation.ResultYFlip = false;
+                    returnResult.Orientation.ResultYFlip = false;
                 }
                 //randomly switch to the alternate orientation
                 if ( App.Random.Next() >= 0.5F )
                 {
-                    ReturnResult.Orientation.SwitchedAxes = !ReturnResult.Orientation.SwitchedAxes;
-                    if ( (newDirection.X == 0 ^ newDirection.Y == 0) ^ (ReturnResult.Orientation.ResultXFlip ^ ReturnResult.Orientation.ResultYFlip) )
+                    returnResult.Orientation.SwitchedAxes = !returnResult.Orientation.SwitchedAxes;
+                    if ( (newDirection.X == 0 ^ newDirection.Y == 0) ^ (returnResult.Orientation.ResultXFlip ^ returnResult.Orientation.ResultYFlip) )
                     {
-                        ReturnResult.Orientation.ResultXFlip = !ReturnResult.Orientation.ResultXFlip;
-                        ReturnResult.Orientation.ResultYFlip = !ReturnResult.Orientation.ResultYFlip;
+                        returnResult.Orientation.ResultXFlip = !returnResult.Orientation.ResultXFlip;
+                        returnResult.Orientation.ResultYFlip = !returnResult.Orientation.ResultYFlip;
                     }
                 }
             }
             else
             {
                 //switch axes if the directions are on different axes
-                ReturnResult.Orientation.SwitchedAxes = tileChance.Direction.X == 1 ^ newDirection.X == 1;
+                returnResult.Orientation.SwitchedAxes = tileChance.Direction.X == 1 ^ newDirection.X == 1;
                 //use a flip to match the directions
-                if ( ReturnResult.Orientation.SwitchedAxes )
+                if ( returnResult.Orientation.SwitchedAxes )
                 {
                     if ( tileChance.Direction.Y != newDirection.X )
                     {
-                        ReturnResult.Orientation.ResultXFlip = true;
+                        returnResult.Orientation.ResultXFlip = true;
                     }
                     else
                     {
-                        ReturnResult.Orientation.ResultXFlip = false;
+                        returnResult.Orientation.ResultXFlip = false;
                     }
                     if ( tileChance.Direction.X != newDirection.Y )
                     {
-                        ReturnResult.Orientation.ResultYFlip = true;
+                        returnResult.Orientation.ResultYFlip = true;
                     }
                     else
                     {
-                        ReturnResult.Orientation.ResultYFlip = false;
+                        returnResult.Orientation.ResultYFlip = false;
                     }
                 }
                 else
                 {
                     if ( tileChance.Direction.X != newDirection.X )
                     {
-                        ReturnResult.Orientation.ResultXFlip = true;
+                        returnResult.Orientation.ResultXFlip = true;
                     }
                     else
                     {
-                        ReturnResult.Orientation.ResultXFlip = false;
+                        returnResult.Orientation.ResultXFlip = false;
                     }
                     if ( tileChance.Direction.Y != newDirection.Y )
                     {
-                        ReturnResult.Orientation.ResultYFlip = true;
+                        returnResult.Orientation.ResultYFlip = true;
                     }
                     else
                     {
-                        ReturnResult.Orientation.ResultYFlip = false;
+                        returnResult.Orientation.ResultYFlip = false;
                     }
                 }
                 //randomly switch to the alternate orientation
@@ -145,227 +144,225 @@ namespace SharpFlame.Mapping.Tiles
                 {
                     if ( newDirection.X == 1 )
                     {
-                        ReturnResult.Orientation.ResultXFlip = !ReturnResult.Orientation.ResultXFlip;
+                        returnResult.Orientation.ResultXFlip = !returnResult.Orientation.ResultXFlip;
                     }
                     else
                     {
-                        ReturnResult.Orientation.ResultYFlip = !ReturnResult.Orientation.ResultYFlip;
+                        returnResult.Orientation.ResultYFlip = !returnResult.Orientation.ResultYFlip;
                     }
                 }
             }
 
-            return ReturnResult;
+            return returnResult;
         }
 
-        public static void RotateDirection(TileDirection initialDirection, TileOrientation orientation, ref TileDirection ResultDirection)
+        public static void RotateDirection(TileDirection initialDirection, TileOrientation orientation, ref TileDirection resultDirection)
         {
-            ResultDirection = initialDirection;
+            resultDirection = initialDirection;
             if ( orientation.SwitchedAxes )
             {
-                ResultDirection.SwitchAxes();
+                resultDirection.SwitchAxes();
             }
             if ( orientation.ResultXFlip )
             {
-                ResultDirection.FlipX();
+                resultDirection.FlipX();
             }
             if ( orientation.ResultYFlip )
             {
-                ResultDirection.FlipY();
+                resultDirection.FlipY();
             }
         }
 
         public static XYInt GetTileRotatedOffset(TileOrientation tileOrientation, XYInt pos)
         {
-            var Result = new XYInt();
+            var result = new XYInt();
 
             if ( tileOrientation.SwitchedAxes )
             {
                 if ( tileOrientation.ResultXFlip )
                 {
-                    Result.X = Constants.TerrainGridSpacing - pos.Y;
+                    result.X = Constants.TerrainGridSpacing - pos.Y;
                 }
                 else
                 {
-                    Result.X = pos.Y;
+                    result.X = pos.Y;
                 }
                 if ( tileOrientation.ResultYFlip )
                 {
-                    Result.Y = Constants.TerrainGridSpacing - pos.X;
+                    result.Y = Constants.TerrainGridSpacing - pos.X;
                 }
                 else
                 {
-                    Result.Y = pos.X;
+                    result.Y = pos.X;
                 }
             }
             else
             {
                 if ( tileOrientation.ResultXFlip )
                 {
-                    Result.X = Constants.TerrainGridSpacing - pos.X;
+                    result.X = Constants.TerrainGridSpacing - pos.X;
                 }
                 else
                 {
-                    Result.X = pos.X;
+                    result.X = pos.X;
                 }
                 if ( tileOrientation.ResultYFlip )
                 {
-                    Result.Y = Constants.TerrainGridSpacing - pos.Y;
+                    result.Y = Constants.TerrainGridSpacing - pos.Y;
                 }
                 else
                 {
-                    Result.Y = pos.Y;
+                    result.Y = pos.Y;
                 }
             }
 
-            return Result;
+            return result;
         }
 
         public static XYDouble GetTileRotatedPos_sng(TileOrientation tileOrientation, XYDouble pos)
         {
-            var ReturnResult = new XYDouble();
+            var returnResult = new XYDouble();
 
             if ( tileOrientation.SwitchedAxes )
             {
                 if ( tileOrientation.ResultXFlip )
                 {
-                    ReturnResult.X = 1.0F - pos.Y;
+                    returnResult.X = 1.0F - pos.Y;
                 }
                 else
                 {
-                    ReturnResult.X = pos.Y;
+                    returnResult.X = pos.Y;
                 }
                 if ( tileOrientation.ResultYFlip )
                 {
-                    ReturnResult.Y = 1.0F - pos.X;
+                    returnResult.Y = 1.0F - pos.X;
                 }
                 else
                 {
-                    ReturnResult.Y = pos.X;
+                    returnResult.Y = pos.X;
                 }
             }
             else
             {
                 if ( tileOrientation.ResultXFlip )
                 {
-                    ReturnResult.X = 1.0F - pos.X;
+                    returnResult.X = 1.0F - pos.X;
                 }
                 else
                 {
-                    ReturnResult.X = pos.X;
+                    returnResult.X = pos.X;
                 }
                 if ( tileOrientation.ResultYFlip )
                 {
-                    ReturnResult.Y = 1.0F - pos.Y;
+                    returnResult.Y = 1.0F - pos.Y;
                 }
                 else
                 {
-                    ReturnResult.Y = pos.Y;
+                    returnResult.Y = pos.Y;
                 }
             }
 
-            return ReturnResult;
+            return returnResult;
         }
 
         public static XYDouble GetTileRotatedPos_dbl(TileOrientation tileOrientation, XYDouble pos)
         {
-            var ReturnResult = default(XYDouble);
+            var returnResult = default(XYDouble);
 
             if ( tileOrientation.SwitchedAxes )
             {
                 if ( tileOrientation.ResultXFlip )
                 {
-                    ReturnResult.X = 1.0D - pos.Y;
+                    returnResult.X = 1.0D - pos.Y;
                 }
                 else
                 {
-                    ReturnResult.X = pos.Y;
+                    returnResult.X = pos.Y;
                 }
                 if ( tileOrientation.ResultYFlip )
                 {
-                    ReturnResult.Y = 1.0D - pos.X;
+                    returnResult.Y = 1.0D - pos.X;
                 }
                 else
                 {
-                    ReturnResult.Y = pos.X;
+                    returnResult.Y = pos.X;
                 }
             }
             else
             {
                 if ( tileOrientation.ResultXFlip )
                 {
-                    ReturnResult.X = 1.0D - pos.X;
+                    returnResult.X = 1.0D - pos.X;
                 }
                 else
                 {
-                    ReturnResult.X = pos.X;
+                    returnResult.X = pos.X;
                 }
                 if ( tileOrientation.ResultYFlip )
                 {
-                    ReturnResult.Y = 1.0D - pos.Y;
+                    returnResult.Y = 1.0D - pos.Y;
                 }
                 else
                 {
-                    ReturnResult.Y = pos.Y;
+                    returnResult.Y = pos.Y;
                 }
             }
 
-            return ReturnResult;
+            return returnResult;
         }
 
         public static XYInt GetRotatedPos(TileOrientation orientation, XYInt pos, XYInt limits)
         {
-            var Result = new XYInt();
+            var result = new XYInt();
 
             if ( orientation.SwitchedAxes )
             {
                 if ( orientation.ResultXFlip )
                 {
-                    Result.X = limits.Y - pos.Y;
+                    result.X = limits.Y - pos.Y;
                 }
                 else
                 {
-                    Result.X = pos.Y;
+                    result.X = pos.Y;
                 }
                 if ( orientation.ResultYFlip )
                 {
-                    Result.Y = limits.X - pos.X;
+                    result.Y = limits.X - pos.X;
                 }
                 else
                 {
-                    Result.Y = pos.X;
+                    result.Y = pos.X;
                 }
             }
             else
             {
                 if ( orientation.ResultXFlip )
                 {
-                    Result.X = limits.X - pos.X;
+                    result.X = limits.X - pos.X;
                 }
                 else
                 {
-                    Result.X = pos.X;
+                    result.X = pos.X;
                 }
                 if ( orientation.ResultYFlip )
                 {
-                    Result.Y = limits.Y - pos.Y;
+                    result.Y = limits.Y - pos.Y;
                 }
                 else
                 {
-                    Result.Y = pos.Y;
+                    result.Y = pos.Y;
                 }
             }
 
-            return Result;
+            return result;
         }
 
         public static double GetRotatedAngle(TileOrientation orientation, double angle)
         {
-            var XY_dbl = default(XYDouble);
-
-            XY_dbl = GetTileRotatedPos_dbl(orientation, new XYDouble((Math.Cos(angle) + 1.0D) / 2.0D, (Math.Sin(angle) + 1.0D) / 2.0D));
-            XY_dbl.X = XY_dbl.X * 2.0D - 1.0D;
-            XY_dbl.Y = XY_dbl.Y * 2.0D - 1.0D;
-            return Math.Atan2(XY_dbl.Y, XY_dbl.X);
+            var xyDbl = GetTileRotatedPos_dbl(orientation, new XYDouble((Math.Cos(angle) + 1.0D) / 2.0D, (Math.Sin(angle) + 1.0D) / 2.0D));
+            xyDbl.X = xyDbl.X * 2.0D - 1.0D;
+            xyDbl.Y = xyDbl.Y * 2.0D - 1.0D;
+            return Math.Atan2(xyDbl.Y, xyDbl.X);
         }
 
         public static void GetTileRotatedTexCoords(TileOrientation tileOrientation, ref XYDouble coordA, ref XYDouble coordB,

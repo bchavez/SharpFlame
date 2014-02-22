@@ -2,6 +2,7 @@
 
 using System;
 using System.Windows.Forms;
+using NLog;
 using SharpFlame.AppSettings;
 using SharpFlame.Collections;
 using SharpFlame.Controls;
@@ -11,6 +12,7 @@ using SharpFlame.FileIO;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
+using SharpFlame.Mapping.Tiles;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
@@ -22,6 +24,7 @@ namespace SharpFlame
 {
     public class clsViewInfo
     {
+        private readonly Logger logger = LogManager.GetCurrentClassLogger();
         public double FOVMultiplier;
         public double FOVMultiplierExponent;
         public float FieldOfViewY;
@@ -1144,19 +1147,64 @@ namespace SharpFlame
                 return;
             }
 
-            var applyTexture = new clsApplyTexture();
-            applyTexture.Map = Map;
-            applyTexture.TextureNum = App.SelectedTextureNum;
-            applyTexture.SetTexture = Program.frmMainInstance.chkSetTexture.Checked;
-            applyTexture.Orientation = App.TextureOrientation;
-            applyTexture.RandomOrientation = Program.frmMainInstance.chkTextureOrientationRandomize.Checked;
-            applyTexture.SetOrientation = Program.frmMainInstance.chkSetTextureOrientation.Checked;
-            applyTexture.TerrainAction = Program.frmMainInstance.TextureTerrainAction;
+            var applyTexture = new clsApplyTexture
+                {
+                    Map = Map,
+                    TextureNum = App.SelectedTextureNum,
+                    SetTexture = Program.frmMainInstance.chkSetTexture.Checked,
+                    Orientation = RelativeToViewAngle(App.TextureOrientation),
+                    RandomOrientation = Program.frmMainInstance.chkTextureOrientationRandomize.Checked,
+                    SetOrientation = Program.frmMainInstance.chkSetTextureOrientation.Checked,
+                    TerrainAction = Program.frmMainInstance.TextureTerrainAction
+                };
+
             App.TextureBrush.PerformActionMapTiles(applyTexture, mouseOverTerrain.Tile);
 
             Map.Update();
 
             MapViewControl.DrawViewLater();
+        }
+
+        /// <summary>
+        /// Given the current ViewAngleMatrix:Yaw, this method ensures the correct tile orientation 
+        /// respecting where the view camera is oriented. 
+        /// </summary>
+        /// <param name="currentOrientation"></param>
+        /// <returns></returns>
+        private TileOrientation RelativeToViewAngle(TileOrientation currentOrientation)
+        {
+            var anglePY = new Angles.AnglePY();
+            Matrix3DMath.MatrixToPY(ViewAngleMatrix, ref anglePY);
+
+            logger.Debug( "View Angle: Yaw:{1}", anglePY.Pitch, anglePY.Yaw );
+
+            var yaw = anglePY.Yaw;
+            
+            //heading/viewing north, no relative change.
+
+            //heading east
+            if ( yaw > Angles.RadOf90Deg / 4 && yaw < 3 * Angles.Pi / 4 )
+            {
+                currentOrientation.RotateClockwise();
+            }
+            //heading west
+            else if ( yaw < -Angles.RadOf90Deg / 4 && yaw > -3 * Angles.Pi / 4 )
+            {
+                currentOrientation.RotateAntiClockwise();
+            }
+            //heading south
+            else if( yaw > 3 * Angles.Pi / 4 )
+            {
+                currentOrientation.RotateClockwise();
+                currentOrientation.RotateClockwise();
+            }
+            else if ( yaw < -3 * Angles.Pi / 4 )
+            {
+                currentOrientation.RotateAntiClockwise();
+                currentOrientation.RotateAntiClockwise();
+            }
+
+            return currentOrientation;
         }
 
         private void ApplyCliffTriangle(bool remove)
@@ -1489,8 +1537,10 @@ namespace SharpFlame
                 MouseLeftDown = new clsMouseDown();
                 if ( IsViewPosOverMinimap(screenPos) )
                 {
-                    MouseLeftDown.OverMinimap = new clsMouseDown.clsOverMinimap();
-                    MouseLeftDown.OverMinimap.DownPos = screenPos;
+                    MouseLeftDown.OverMinimap = new clsMouseDown.clsOverMinimap
+                        {
+                            DownPos = screenPos
+                        };
                     var pos = new XYInt((int)((screenPos.X * TilesPerMinimapPixel)),
                         (int)(screenPos.Y * TilesPerMinimapPixel));
                     Map.TileNumClampToMap(pos);

@@ -15,9 +15,9 @@ namespace SharpFlame.Maths
         public const double RadOf360Deg = 6.2831853071795862;
         public const double RadOf90Deg = 1.5707963267948966;
 
-        public static double AngleClamp(double Angle)
+        public static double AngleClamp(double angle)
         {
-            var num = Angle;
+            var num = angle;
             if ( num < -3.1415926535897931 )
             {
                 return (num + 6.2831853071795862);
@@ -29,9 +29,9 @@ namespace SharpFlame.Maths
             return num;
         }
 
-        public static double AngleClamp360(double Angle)
+        public static double AngleClamp360(double angle)
         {
-            var num = Angle;
+            var num = angle;
             if ( num < 0.0 )
             {
                 return (num + 6.2831853071795862);
@@ -43,31 +43,40 @@ namespace SharpFlame.Maths
             return num;
         }
 
-        internal static double AngleClampUnlimited(double Angle)
+        internal static double AngleClampUnlimited(double angle)
         {
-            var num2 = (int)Math.Round((Angle + 3.1415926535897931) / 6.2831853071795862);
-            return (Angle - (num2 * 6.2831853071795862));
+            var num2 = (int)Math.Round((angle + 3.1415926535897931) / 6.2831853071795862);
+            return (angle - (num2 * 6.2831853071795862));
         }
 
-        public static double GetAngle(XYDouble Length)
+        public static double GetAngle(XYDouble length)
         {
-            return Math.Atan2(Length.Y, Length.X);
+            return Math.Atan2(length.Y, length.X);
         }
 
+        /// <summary>
+        /// Angle Pitch, Yaw. Values in radians
+        /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public struct AnglePY
         {
             public double Pitch;
+
+            /// <summary>
+            /// With respect to the ViewAngleMatrix, typical values range from -Pi (counter-clockwise) to Pi (clockwise).
+            /// Or, if you prefer from zero to 180 deg (clockwise) and zero to -180 (counter-clockwise)
+            /// </summary>
             public double Yaw;
 
-            public AnglePY(double Pitch, double Yaw)
+            public AnglePY(double pitch, double yaw)
             {
-                this = new AnglePY();
-                this.Pitch = Pitch;
-                this.Yaw = Yaw;
+                this = new AnglePY {Pitch = pitch, Yaw = yaw};
             }
         }
 
+        /// <summary>
+        /// Angle Roll, Pitch, Yaw. Values in radians.
+        /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public struct AngleRPY
         {
@@ -77,7 +86,10 @@ namespace SharpFlame.Maths
 
             public AnglePY PY
             {
-                get { return new AnglePY(Pitch, Yaw); }
+                get
+                {
+                    return new AnglePY(Pitch, Yaw);
+                }
                 set
                 {
                     Pitch = value.Pitch;
@@ -85,12 +97,14 @@ namespace SharpFlame.Maths
                 }
             }
 
-            public AngleRPY(double Roll, double Pitch, double Yaw)
+            public AngleRPY(double roll, double pitch, double yaw)
             {
-                this = new AngleRPY();
-                this.Roll = Roll;
-                this.Pitch = Pitch;
-                this.Yaw = Yaw;
+                this = new AngleRPY
+                    {
+                        Roll = roll,
+                        Pitch = pitch,
+                        Yaw = yaw
+                    };
             }
         }
     }

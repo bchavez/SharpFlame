@@ -9,121 +9,121 @@ namespace SharpFlame.Mapping.Tools
 {
     public class clsApplyTileTerrainInterpret : clsAction
     {
-        private TileDirection OppositeDirection;
-        private Painter Painter;
-        private TileOrientationChance PainterTexture;
-        private TileDirection ResultDirection;
-        private clsTerrain Terrain;
-        private clsTerrain.Tile.sTexture Texture;
-        private clsTerrain.Tile Tile;
+        private TileDirection oppositeDirection;
+        private Painter painter;
+        private TileOrientationChance painterTexture;
+        private TileDirection resultDirection;
+        private clsTerrain terrain;
+        private clsTerrain.Tile.sTexture texture;
+        private clsTerrain.Tile tile;
 
         public override void ActionPerform()
         {
-            var PainterBrushNum = 0;
-            var A = 0;
+            var painterBrushNum = 0;
 
-            Terrain = Map.Terrain;
+            terrain = Map.Terrain;
 
-            Painter = Map.Painter;
+            painter = Map.Painter;
 
-            Tile = Terrain.Tiles[PosNum.X, PosNum.Y];
-            Texture = Tile.Texture;
+            tile = terrain.Tiles[PosNum.X, PosNum.Y];
+            texture = tile.Texture;
 
-            Terrain.Tiles[PosNum.X, PosNum.Y].TriTopLeftIsCliff = false;
-            Terrain.Tiles[PosNum.X, PosNum.Y].TriTopRightIsCliff = false;
-            Terrain.Tiles[PosNum.X, PosNum.Y].TriBottomLeftIsCliff = false;
-            Terrain.Tiles[PosNum.X, PosNum.Y].TriBottomRightIsCliff = false;
-            Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileUtil.None;
+            terrain.Tiles[PosNum.X, PosNum.Y].TriTopLeftIsCliff = false;
+            terrain.Tiles[PosNum.X, PosNum.Y].TriTopRightIsCliff = false;
+            terrain.Tiles[PosNum.X, PosNum.Y].TriBottomLeftIsCliff = false;
+            terrain.Tiles[PosNum.X, PosNum.Y].TriBottomRightIsCliff = false;
+            terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileUtil.None;
 
-            for ( PainterBrushNum = 0; PainterBrushNum <= Painter.CliffBrushCount - 1; PainterBrushNum++ )
+            for ( painterBrushNum = 0; painterBrushNum <= painter.CliffBrushCount - 1; painterBrushNum++ )
             {
-                for ( A = 0; A <= Painter.CliffBrushes[PainterBrushNum].Tiles_Straight.TileCount - 1; A++ )
+                var a = 0;
+                for ( a = 0; a <= painter.CliffBrushes[painterBrushNum].Tiles_Straight.TileCount - 1; a++ )
                 {
-                    PainterTexture = Painter.CliffBrushes[PainterBrushNum].Tiles_Straight.Tiles[A];
-                    if ( PainterTexture.TextureNum == Texture.TextureNum )
+                    painterTexture = painter.CliffBrushes[painterBrushNum].Tiles_Straight.Tiles[a];
+                    if ( painterTexture.TextureNum == texture.TextureNum )
                     {
-                        if ( Tile.Tri )
+                        if ( tile.Tri )
                         {
-                            Terrain.Tiles[PosNum.X, PosNum.Y].TriTopLeftIsCliff = true;
-                            Terrain.Tiles[PosNum.X, PosNum.Y].TriBottomRightIsCliff = true;
+                            terrain.Tiles[PosNum.X, PosNum.Y].TriTopLeftIsCliff = true;
+                            terrain.Tiles[PosNum.X, PosNum.Y].TriBottomRightIsCliff = true;
                         }
                         else
                         {
-                            Terrain.Tiles[PosNum.X, PosNum.Y].TriTopRightIsCliff = true;
-                            Terrain.Tiles[PosNum.X, PosNum.Y].TriBottomLeftIsCliff = true;
+                            terrain.Tiles[PosNum.X, PosNum.Y].TriTopRightIsCliff = true;
+                            terrain.Tiles[PosNum.X, PosNum.Y].TriBottomLeftIsCliff = true;
                         }
-                        Terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
-                        TileUtil.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
-                        Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = ResultDirection;
+                        terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
+                        TileUtil.RotateDirection(painterTexture.Direction, texture.Orientation, ref resultDirection);
+                        terrain.Tiles[PosNum.X, PosNum.Y].DownSide = resultDirection;
                     }
                 }
-                for ( A = 0; A <= Painter.CliffBrushes[PainterBrushNum].Tiles_Corner_In.TileCount - 1; A++ )
+                for ( a = 0; a <= painter.CliffBrushes[painterBrushNum].Tiles_Corner_In.TileCount - 1; a++ )
                 {
-                    PainterTexture = Painter.CliffBrushes[PainterBrushNum].Tiles_Corner_In.Tiles[A];
-                    if ( PainterTexture.TextureNum == Texture.TextureNum )
+                    painterTexture = painter.CliffBrushes[painterBrushNum].Tiles_Corner_In.Tiles[a];
+                    if ( painterTexture.TextureNum == texture.TextureNum )
                     {
-                        TileUtil.RotateDirection(PainterTexture.Direction, Texture.Orientation, ref ResultDirection);
-                        if ( Tile.Tri )
+                        TileUtil.RotateDirection(painterTexture.Direction, texture.Orientation, ref resultDirection);
+                        if ( tile.Tri )
                         {
-                            if ( TileUtil.IdenticalTileDirections(ResultDirection, TileUtil.TopLeft) )
+                            if ( TileUtil.IdenticalTileDirections(resultDirection, TileUtil.TopLeft) )
                             {
-                                Terrain.Tiles[PosNum.X, PosNum.Y].TriTopLeftIsCliff = true;
-                                Terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
+                                terrain.Tiles[PosNum.X, PosNum.Y].TriTopLeftIsCliff = true;
+                                terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
                             }
-                            else if ( TileUtil.IdenticalTileDirections(ResultDirection, TileUtil.BottomRight) )
+                            else if ( TileUtil.IdenticalTileDirections(resultDirection, TileUtil.BottomRight) )
                             {
-                                Terrain.Tiles[PosNum.X, PosNum.Y].TriBottomRightIsCliff = true;
-                                Terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
+                                terrain.Tiles[PosNum.X, PosNum.Y].TriBottomRightIsCliff = true;
+                                terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
                             }
                         }
                         else
                         {
-                            if ( TileUtil.IdenticalTileDirections(ResultDirection, TileUtil.TopRight) )
+                            if ( TileUtil.IdenticalTileDirections(resultDirection, TileUtil.TopRight) )
                             {
-                                Terrain.Tiles[PosNum.X, PosNum.Y].TriTopRightIsCliff = true;
-                                Terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
+                                terrain.Tiles[PosNum.X, PosNum.Y].TriTopRightIsCliff = true;
+                                terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
                             }
-                            else if ( TileUtil.IdenticalTileDirections(ResultDirection, TileUtil.BottomLeft) )
+                            else if ( TileUtil.IdenticalTileDirections(resultDirection, TileUtil.BottomLeft) )
                             {
-                                Terrain.Tiles[PosNum.X, PosNum.Y].TriBottomLeftIsCliff = true;
-                                Terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
+                                terrain.Tiles[PosNum.X, PosNum.Y].TriBottomLeftIsCliff = true;
+                                terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
                             }
                         }
                     }
                 }
-                for ( A = 0; A <= Painter.CliffBrushes[PainterBrushNum].Tiles_Corner_Out.TileCount - 1; A++ )
+                for ( a = 0; a <= painter.CliffBrushes[painterBrushNum].Tiles_Corner_Out.TileCount - 1; a++ )
                 {
-                    PainterTexture = Painter.CliffBrushes[PainterBrushNum].Tiles_Corner_Out.Tiles[A];
-                    if ( PainterTexture.TextureNum == Texture.TextureNum )
+                    painterTexture = painter.CliffBrushes[painterBrushNum].Tiles_Corner_Out.Tiles[a];
+                    if ( painterTexture.TextureNum == texture.TextureNum )
                     {
-                        OppositeDirection = PainterTexture.Direction;
-                        OppositeDirection.FlipX();
-                        OppositeDirection.FlipY();
-                        TileUtil.RotateDirection(OppositeDirection, Texture.Orientation, ref ResultDirection);
-                        if ( Tile.Tri )
+                        oppositeDirection = painterTexture.Direction;
+                        oppositeDirection.FlipX();
+                        oppositeDirection.FlipY();
+                        TileUtil.RotateDirection(oppositeDirection, texture.Orientation, ref resultDirection);
+                        if ( tile.Tri )
                         {
-                            if ( TileUtil.IdenticalTileDirections(ResultDirection, TileUtil.TopLeft) )
+                            if ( TileUtil.IdenticalTileDirections(resultDirection, TileUtil.TopLeft) )
                             {
-                                Terrain.Tiles[PosNum.X, PosNum.Y].TriTopLeftIsCliff = true;
-                                Terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
+                                terrain.Tiles[PosNum.X, PosNum.Y].TriTopLeftIsCliff = true;
+                                terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
                             }
-                            else if ( TileUtil.IdenticalTileDirections(ResultDirection, TileUtil.BottomRight) )
+                            else if ( TileUtil.IdenticalTileDirections(resultDirection, TileUtil.BottomRight) )
                             {
-                                Terrain.Tiles[PosNum.X, PosNum.Y].TriBottomRightIsCliff = true;
-                                Terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
+                                terrain.Tiles[PosNum.X, PosNum.Y].TriBottomRightIsCliff = true;
+                                terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
                             }
                         }
                         else
                         {
-                            if ( TileUtil.IdenticalTileDirections(ResultDirection, TileUtil.TopRight) )
+                            if ( TileUtil.IdenticalTileDirections(resultDirection, TileUtil.TopRight) )
                             {
-                                Terrain.Tiles[PosNum.X, PosNum.Y].TriTopRightIsCliff = true;
-                                Terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
+                                terrain.Tiles[PosNum.X, PosNum.Y].TriTopRightIsCliff = true;
+                                terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
                             }
-                            else if ( TileUtil.IdenticalTileDirections(ResultDirection, TileUtil.BottomLeft) )
+                            else if ( TileUtil.IdenticalTileDirections(resultDirection, TileUtil.BottomLeft) )
                             {
-                                Terrain.Tiles[PosNum.X, PosNum.Y].TriBottomLeftIsCliff = true;
-                                Terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
+                                terrain.Tiles[PosNum.X, PosNum.Y].TriBottomLeftIsCliff = true;
+                                terrain.Tiles[PosNum.X, PosNum.Y].Terrain_IsCliff = true;
                             }
                         }
                     }
