@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,6 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>SharpFlame.Gui</RootNamespace>
     <AssemblyName>SharpFlame.Gui</AssemblyName>
+    <ReleaseVersion>0.24</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,17 +40,40 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dialogs\About.cs" />
-    <Compile Include="Actions\Quit.cs" />
-    <Compile Include="Actions\About.cs" />
-    <Compile Include="Forms\MainForm.cs" />
+    <Compile Include="Dialogs\About.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Forms\MainForm.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
     <Compile Include="SharpFlameApplication.cs" />
+    <Compile Include="Actions\About.cs" />
+    <Compile Include="Actions\Quit.cs" />
+    <Compile Include="Sections\Texture.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Sections\MainMapView.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Resources.cs" />
+    <Compile Include="Controls\ImageButton.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\flaME.ico" />
+    <EmbeddedResource Include="Resources\selectionrotateanticlockwise.png" />
+    <EmbeddedResource Include="Resources\selectionrotateclockwise.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpFlame.Core\SharpFlame.Core.csproj">
+      <Project>{8AE7F7A3-841A-44A7-B016-4661BBBF7821}</Project>
+      <Name>SharpFlame.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Forms\" />
     <Folder Include="Resources\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\flaME.ico" />
+    <Folder Include="Sections\" />
+    <Folder Include="Controls\" />
   </ItemGroup>
 </Project>

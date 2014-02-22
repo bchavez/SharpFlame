@@ -1,7 +1,9 @@
 using System;
 using Eto;
 using Eto.Forms;
+using SharpFlame.Core;
 using SharpFlame.Gui.Forms;
+
 
 namespace SharpFlame.Gui
 {
@@ -10,7 +12,7 @@ namespace SharpFlame.Gui
 		public SharpFlameApplication(Generator generator)
 			: base(generator)
 		{
-			this.Name = "Test Application";
+			this.Name = string.Format ("{0} {1}", Constants.ProgramName, Constants.ProgramVersionNumber);
 			this.Style = "application";
 		}
 
@@ -23,17 +25,15 @@ namespace SharpFlame.Gui
 			// show the main form
 			MainForm.Show();
 		}
-		#if DESKTOP
+
 		public override void OnTerminating(System.ComponentModel.CancelEventArgs e)
 		{
 			base.OnTerminating(e);
-			Log.Write(this, "Terminating");
 
 			var result = MessageBox.Show(MainForm, "Are you sure you want to quit?", MessageBoxButtons.YesNo, MessageBoxType.Question);
 			if (result == DialogResult.No)
 				e.Cancel = true;
 		}
-		#endif
 	}
 }
 

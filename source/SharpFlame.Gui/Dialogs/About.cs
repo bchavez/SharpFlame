@@ -1,8 +1,9 @@
-using Eto.Drawing;
-using Eto.Forms;
 using System;
 using System.Reflection;
+using Eto.Drawing;
+using Eto.Forms;
 using SharpFlame;
+using SharpFlame.Core;
 
 namespace SharpFlame.Gui.Dialogs
 {
@@ -10,27 +11,26 @@ namespace SharpFlame.Gui.Dialogs
 	{
 		public About()
 		{
-			this.Title = "About Eto Test";
+			this.Title = string.Format ("{0} {1}", Constants.ProgramName, Constants.ProgramVersionNumber);
 			this.Resizable = true;
 
 			var layout = new DynamicLayout(new Padding(20, 5), new Size(10, 10));
 
 			layout.AddCentered(new ImageView
 			{
-				Image = Icon.FromResource ("SharpFlame.Gui.Resources.flaME.ico")
+				Image = Resources.SharpFlameIcon()
 			}, true, true);
 			
 			layout.Add(new Label
 			{
-				Text = "About Eto Test",
+				Text = Constants.ProgramName,
 				Font = new Font(SystemFont.Bold, 20),
 				HorizontalAlign = HorizontalAlign.Center
 			});
 
-			var version = Assembly.GetEntryAssembly().GetName().Version;
 			layout.Add(new Label
 			{
-				Text = string.Format("Version {0}", version),
+				Text = string.Format("Version {0}", Constants.ProgramVersionNumber),
 				Font = new Font(SystemFont.Default, 10),
 				HorizontalAlign = HorizontalAlign.Center
 			});
@@ -38,7 +38,7 @@ namespace SharpFlame.Gui.Dialogs
 			
 			layout.Add(new Label
 			{
-				Text = "Copyright 2014 by Cowboy and pcdummy",
+				Text = "Copyright 2014 by Cowboy, pcdummy and jorzi",
 				Font = new Font(SystemFont.Default, 10),
 				HorizontalAlign = HorizontalAlign.Center
 			});

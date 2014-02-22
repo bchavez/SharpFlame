@@ -1,6 +1,8 @@
 using System;
 using Eto.Forms;
 using Eto.Drawing;
+using SharpFlame.Core;
+using SharpFlame.Gui.Sections;
 
 namespace SharpFlame.Gui.Forms
 {
@@ -9,52 +11,37 @@ namespace SharpFlame.Gui.Forms
 		public MainForm()
 		{
 			this.ClientSize = new Size(1024, 768);
-			this.Title = "";
+			this.Title = string.Format ("{0} {1}", Constants.ProgramName, Constants.ProgramVersionNumber);
+			this.Icon = Resources.SharpFlameIcon();
 
 			// Using a DynamicLayout for a simple table is actually a lot easier to maintain than using a TableLayout 
 			// and having to specify the x/y co-ordinates for each control added.
+			var tabControl = new TabControl ();
+			tabControl.TabPages.Add(new TabPage { Text = "Textures", Content = new Texture() });
+			tabControl.TabPages.Add(new TabPage { Text = "Terrain", Content = new Texture() });
+			tabControl.TabPages.Add(new TabPage { Text = "Height", Content = new Texture() });
+			tabControl.TabPages.Add(new TabPage { Text = "Resize", Content = new Texture() });
+			tabControl.TabPages.Add(new TabPage { Text = "Place Objects", Content = new Texture() });
+			tabControl.TabPages.Add(new TabPage { Text = "Object", Content = new Texture() });
+			tabControl.TabPages.Add(new TabPage { Text = "Label", Content = new Texture() });
 
-			// 1. Create a new DynamicLayout object
-
-			var layout = new DynamicLayout();
-
-			// 2. Begin a horizontal row of controls
-
-			layout.BeginHorizontal();
-
-			// 3. Add controls for each column.  We are setting xscale to true to make each column use an equal portion
-			// of the available space.
-
-			layout.Add(new Label { Text = "First Column" }, xscale: true);
-			layout.Add(new Label { Text = "Second Column" }, xscale: true);
-			layout.Add(new Label { Text = "Third Column" }, xscale: true);
-
-			// 4. End the horizontal section
-
-			layout.EndHorizontal();
-
-			// 5. To add a new row, begin another horizontal section and add more controls:
-
-			layout.BeginHorizontal();
-			layout.Add(new TextBox { Text = "Second Row, First Column" });
-			layout.Add(new ComboBox { DataStore = new ListItemCollection { new ListItem { Text = "Second Row, Second Column" } } });
-			layout.Add(new CheckBox { Text = "Second Row, Third Column" });
-			layout.EndHorizontal();
-
-			// 6. By default, the last row & column of a table expands to fill the rest of the space.  We can add one 
-			// last row with nothing in it to make the space empty.  Since we are not in a horizontal group, calling 
-			// Add() adds a new row.
-
-			layout.Add(null);
+			var splitter = new Splitter
+			{
+				Position = 392,
+				FixedPanel = SplitterFixedPanel.Panel1,
+				Panel1 = tabControl,
+				Panel2 = new MainMapView()
+			};
 
 			// 7. Set the content of the form to use the layout
 
-			Content = layout;
+			Content = splitter;
 
-			GenerateMenuToolBar();
+			generateMenuToolBar ();
+			Maximize ();
 		}
 
-		void GenerateMenuToolBar()
+		private void generateMenuToolBar()
 		{
 			var about = new Actions.About();
 			var quit = new Actions.Quit();
@@ -66,26 +53,46 @@ namespace SharpFlame.Gui.Forms
 			// add our own items to the menu
 
 			var file = menu.Items.GetSubmenu("&File", 100);
-			menu.Items.GetSubmenu("&Edit", 200);
-			menu.Items.GetSubmenu("&Window", 900);
-			var help = menu.Items.GetSubmenu("&Help", 1000);
+			file.Items.GetSubmenu ("&New Map", 100);
+			file.Items.AddSeparator ();
+			file.Items.GetSubmenu ("&Open", 200);
+			file.Items.AddSeparator ();
 
-			if (Generator.IsMac)
-			{
-				// have a nice OS X style menu
-				var main = menu.Items.GetSubmenu(Application.Instance.Name, 0);
-				main.Items.Add(about, 0);
-				main.Items.Add(quit, 1000);
-			}
-			else
-			{
-				// windows/gtk style window
-				file.Items.Add(quit);
-				help.Items.Add(about);
-			}
+			var saveMenu = file.Items.GetSubmenu ("&Save", 300);
+			file.Items.AddSeparator ();
+			saveMenu.Items.GetSubmenu ("&Map fmap");
+			saveMenu.Items.AddSeparator ();
+			saveMenu.Items.GetSubmenu ("&Quick Save fmap");
+			saveMenu.Items.AddSeparator ();
+			saveMenu.Items.GetSubmenu ("Export map &LND");
+			saveMenu.Items.AddSeparator ();
+			saveMenu.Items.GetSubmenu ("Export &Tile Types");
+			saveMenu.Items.AddSeparator ();
+			saveMenu.Items.GetSubmenu ("Minimap Bitmap");
+			saveMenu.Items.GetSubmenu ("Heightmap Bitmap");
+
+			file.Items.GetSubmenu ("&Import", 400);
+			file.Items.AddSeparator ();
+			file.Items.GetSubmenu ("&Compile Map", 500);
+			file.Items.AddSeparator ();
+			file.Items.Add(quit);
+
+			var toolsMenu = menu.Items.GetSubmenu("&Tools", 600);
+			toolsMenu.Items.GetSubmenu ("Reinterpret Terrain", 100);
+			toolsMenu.Items.GetSubmenu ("Water Triangle Correction", 200);
+			toolsMenu.Items.AddSeparator ();
+			toolsMenu.Items.GetSubmenu ("Flaten Under Oils", 300);
+			toolsMenu.Items.GetSubmenu ("Flaten Under Structures", 400);
+			toolsMenu.Items.AddSeparator ();
+			toolsMenu.Items.GetSubmenu ("Generator", 500);
+
+			menu.Items.GetSubmenu("&Options", 900);
+
+			var help = menu.Items.GetSubmenu("&Help", 1000);
+			help.Items.Add(about);
 
 			// optional, removes empty submenus and duplicate separators
-			menu.Items.Trim();
+			// menu.Items.Trim();
 
 			Menu = menu;
 		}

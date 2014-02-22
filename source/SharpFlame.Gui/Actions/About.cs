@@ -1,6 +1,7 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
+using SharpFlame.Core;
 
 namespace SharpFlame.Gui.Actions
 {
@@ -9,7 +10,7 @@ namespace SharpFlame.Gui.Actions
 		public About()
 		{
 			ID = "about";
-			MenuText = "About Test Application";
+			MenuText = string.Format("About {0}", Constants.ProgramName);
 			ToolBarText = "About";
 			Shortcut = Keys.F11;
 		}
