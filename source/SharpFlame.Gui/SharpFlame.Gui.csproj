@@ -56,13 +56,13 @@
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Resources.cs" />
-    <Compile Include="Controls\ImageButton.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Resources\flaME.ico" />
-    <EmbeddedResource Include="Resources\selectionrotateanticlockwise.png" />
-    <EmbeddedResource Include="Resources\selectionrotateclockwise.png" />
+    <EmbeddedResource Include="Resources\btnrotateclockwise.png" />
+    <EmbeddedResource Include="Resources\btnrotateanticlockwise.png" />
+    <EmbeddedResource Include="Resources\btnflipx.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpFlame.Core\SharpFlame.Core.csproj">
@@ -74,6 +74,5 @@
     <Folder Include="Forms\" />
     <Folder Include="Resources\" />
     <Folder Include="Sections\" />
-    <Folder Include="Controls\" />
   </ItemGroup>
 </Project>
