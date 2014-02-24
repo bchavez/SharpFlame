@@ -177,13 +177,11 @@ namespace SharpFlame.Gui.Sections
 			};
 
 			control.MouseEnter += (sender, e) => {
-				var s = (ImageView)sender;
-				s.BackgroundColor = Colors.Gray;
+				((ImageView)sender).BackgroundColor = Colors.Gray;
 			};
 
 			control.MouseLeave += (sender, e) => {
-				var s = (ImageView)sender;
-				s.BackgroundColor = Colors.Transparent;
+				((ImageView)sender).BackgroundColor = Colors.Transparent;
 			};
 
 			return TableLayout.AutoSized(control);
@@ -204,13 +202,11 @@ namespace SharpFlame.Gui.Sections
 			};
 
 			control.MouseEnter += (sender, e) => {
-				var s = (ImageView)sender;
-				s.BackgroundColor = Colors.Gray;
+				((ImageView)sender).BackgroundColor = Colors.Gray;
 			};
 
 			control.MouseLeave += (sender, e) => {
-				var s = (ImageView)sender;
-				s.BackgroundColor = Colors.Transparent;
+				((ImageView)sender).BackgroundColor = Colors.Transparent;
 			};
 
 			return TableLayout.AutoSized(control);
@@ -231,13 +227,11 @@ namespace SharpFlame.Gui.Sections
 			};
 
 			control.MouseEnter += (sender, e) => {
-				var s = (ImageView)sender;
-				s.BackgroundColor = Colors.Gray;
+				((ImageView)sender).BackgroundColor = Colors.Gray;
 			};
 
 			control.MouseLeave += (sender, e) => {
-				var s = (ImageView)sender;
-				s.BackgroundColor = Colors.Transparent;
+				((ImageView)sender).BackgroundColor = Colors.Transparent;
 			};
 
 			return TableLayout.AutoSized(control);

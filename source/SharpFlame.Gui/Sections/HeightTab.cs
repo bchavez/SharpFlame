@@ -10,29 +10,8 @@ namespace SharpFlame.Gui.Sections
 		public HeightTab ()
 		{
 			var setRadio = new RadioButton { Text = "Set" };
-			var changeRadio = new RadioButton { Text = "Change" };
-			var smoothRadio = new RadioButton { Text = "Smooth" };
-
-			setRadio.CheckedChanged += delegate {			
-				if (setRadio.Checked) {				
-					changeRadio.Checked = false;
-					smoothRadio.Checked = false;
-				}
-			};
-
-			changeRadio.CheckedChanged += delegate {
-				if (changeRadio.Checked) {
-					setRadio.Checked = false;
-					smoothRadio.Checked = false;
-				}
-			};
-
-			smoothRadio.CheckedChanged += delegate {
-				if (smoothRadio.Checked) {
-					setRadio.Checked = false;
-					changeRadio.Checked = false;
-				}
-			};
+			var changeRadio = new RadioButton (setRadio){ Text = "Change" };
+			var smoothRadio = new RadioButton (changeRadio) { Text = "Smooth" };
 
 			var mainLayout = new DynamicLayout ();
 
