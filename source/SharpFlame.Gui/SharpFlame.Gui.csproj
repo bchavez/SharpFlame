@@ -56,10 +56,16 @@
     <Compile Include="Sections\TextureTab.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Sections\TerrainTab.cs" />
-    <Compile Include="Sections\HeightTab.cs" />
+    <Compile Include="Sections\TerrainTab.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Sections\HeightTab.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Controls\" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\flaME.ico" />
     <EmbeddedResource Include="Resources\btnrotateclockwise.png" />
@@ -72,10 +78,5 @@
       <Name>SharpFlame.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Forms\" />
-    <Folder Include="Resources\" />
-    <Folder Include="Sections\" />
-    <Folder Include="Controls\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

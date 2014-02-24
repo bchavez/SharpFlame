@@ -33,12 +33,12 @@ namespace SharpFlame.Gui.Sections
 							 new NumericUpDown { Size = new Size(-1, -1), Value = 2, MaxValue = 512, MinValue = 1 }, 
 							 circularButton, 
 							 squareButton);
-			mainLayout.AddRow (null, nLayout1, null);
+			mainLayout.AddRow (nLayout1);
 
 			var nLayout2 = new DynamicLayout ();
 			nLayout2.Padding = Padding.Empty;	
 			nLayout2.AddRow (setRadio, new Label { Text = "(0 - 255)", VerticalAlign = VerticalAlign.Middle });
-			mainLayout.AddRow (null, nLayout2, null);
+			mainLayout.AddRow (nLayout2);
 
 			var lmbHeight = new NumericUpDown { Size = new Size(-1, -1), Value = 85, MaxValue = 255, MinValue = 0 };
 			var lmb0 = new Button { Text = "0", Size = new Size(35, 26) };
@@ -107,7 +107,7 @@ namespace SharpFlame.Gui.Sections
 
 			var nLayout3 = new DynamicLayout ();
 			nLayout3.AddRow (null, new Label { Text = "LMB Height", VerticalAlign = VerticalAlign.Middle }, lmbHeight, null);
-			mainLayout.AddRow (null, nLayout3, null);
+			mainLayout.AddRow (nLayout3);
 
 			var nLayout4 = new DynamicLayout ();
 			nLayout4.Padding = Padding.Empty;
@@ -123,7 +123,7 @@ namespace SharpFlame.Gui.Sections
 			nLayout4.AddAutoSized (lmb255);
 			nLayout4.EndHorizontal ();
 
-			mainLayout.AddRow (null, nLayout4, null);
+			mainLayout.AddRow (nLayout4);
 
 			var rmbHeight = new NumericUpDown { Size = new Size(-1, -1), Value = 0, MaxValue = 255, MinValue = 0 };
 			var rmb0 = new Button { Text = "0", Size = new Size(35, 26), Enabled = false};
@@ -192,7 +192,7 @@ namespace SharpFlame.Gui.Sections
 
 			var nLayout5 = new DynamicLayout ();
 			nLayout5.AddRow (null, new Label { Text = "RMB Height", VerticalAlign = VerticalAlign.Middle }, rmbHeight, null);
-			mainLayout.AddRow (null, nLayout5, null);
+			mainLayout.AddRow (nLayout5);
 
 			var nLayout6 = new DynamicLayout ();
 			nLayout6.Padding = Padding.Empty;
@@ -208,18 +208,14 @@ namespace SharpFlame.Gui.Sections
 			nLayout6.AddAutoSized (rmb255);
 			nLayout6.EndHorizontal ();
 
-			mainLayout.AddRow (null, nLayout6, null);
+			mainLayout.AddRow (nLayout6);
 		
 			mainLayout.BeginHorizontal ();
-			mainLayout.Add (null);
-			mainLayout.Add (null);
 			mainLayout.Add (null);
 			mainLayout.EndHorizontal ();
 
 			mainLayout.BeginHorizontal ();
-			mainLayout.Add (null);
 			mainLayout.Add (changeRadio);
-			mainLayout.Add (null);
 			mainLayout.EndHorizontal ();
 
 			var nLayout7 = new DynamicLayout ();
@@ -228,19 +224,24 @@ namespace SharpFlame.Gui.Sections
 							 new NumericUpDown { Size = new Size(-1, -1), Value = 16, MaxValue = 512, MinValue = 0 },
 							 new CheckBox { Text = "Fading" });
 
-			mainLayout.AddRow (null, nLayout7, null);
+			mainLayout.AddRow (nLayout7);
 
-			mainLayout.AddRow (null, smoothRadio, null);
+			mainLayout.AddRow (smoothRadio);
 			var nLayout8 = new DynamicLayout ();
 			nLayout8.Padding = Padding.Empty;
 			nLayout8.AddRow (new Label { Text = "Rate", VerticalAlign = VerticalAlign.Middle }, 
 							 TableLayout.AutoSized(new NumericUpDown { Size = new Size(-1, -1), Value = 3, MaxValue = 512, MinValue = 0 }));
 
-			mainLayout.AddRow (null, nLayout8, null);
+			mainLayout.AddRow (nLayout8);
 
-			mainLayout.Add (null);
+		    var newMainyLayout = new DynamicLayout();
+		    newMainyLayout.Padding = Padding.Empty;
+            newMainyLayout.Spacing = Size.Empty;
+		    newMainyLayout.AddRow(null, mainLayout, null);
+            newMainyLayout.Add(null);
 
-			Content = mainLayout;
+
+            Content = newMainyLayout;
 		}
 	}
 }
