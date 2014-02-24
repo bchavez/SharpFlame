@@ -2,6 +2,7 @@ using System;
 using Eto;
 using Eto.Drawing;
 using Eto.Forms;
+using SharpFlame.Core;
 
 namespace SharpFlame.Gui.Sections
 {
@@ -30,7 +31,7 @@ namespace SharpFlame.Gui.Sections
 			var nLayout1 = new DynamicLayout ();
 			nLayout1.Padding = Padding.Empty;
 			nLayout1.AddRow (new Label { Text = "Radius:", VerticalAlign = VerticalAlign.Middle },
-							 new NumericUpDown { Size = new Size(-1, -1), Value = 2, MaxValue = 512, MinValue = 1 }, 
+							 new NumericUpDown { Size = new Size(-1, -1), Value = 2, MaxValue = Constants.MapMaxSize, MinValue = 1 }, 
 							 circularButton, 
 							 squareButton);
 			mainLayout.AddRow (nLayout1);
@@ -209,32 +210,48 @@ namespace SharpFlame.Gui.Sections
 			nLayout6.EndHorizontal ();
 
 			mainLayout.AddRow (nLayout6);
-		
-			mainLayout.BeginHorizontal ();
-			mainLayout.Add (null);
-			mainLayout.EndHorizontal ();
 
-			mainLayout.BeginHorizontal ();
-			mainLayout.Add (changeRadio);
-			mainLayout.EndHorizontal ();
+
 
 			var nLayout7 = new DynamicLayout ();
-			nLayout7.Padding = Padding.Empty;
+			nLayout7.Padding = new Padding (0, 20);
+			nLayout7.AddRow (changeRadio);
 			nLayout7.AddRow (new Label { Text = "Rate", VerticalAlign = VerticalAlign.Middle }, 
 							 new NumericUpDown { Size = new Size(-1, -1), Value = 16, MaxValue = 512, MinValue = 0 },
 							 new CheckBox { Text = "Fading" });
 
 			mainLayout.AddRow (nLayout7);
 
-			mainLayout.AddRow (smoothRadio);
 			var nLayout8 = new DynamicLayout ();
-			nLayout8.Padding = Padding.Empty;
+			nLayout8.Padding = new Padding (0, 20);
+			nLayout8.AddRow (smoothRadio);
 			nLayout8.AddRow (new Label { Text = "Rate", VerticalAlign = VerticalAlign.Middle }, 
 							 TableLayout.AutoSized(new NumericUpDown { Size = new Size(-1, -1), Value = 3, MaxValue = 512, MinValue = 0 }));
 
 			mainLayout.AddRow (nLayout8);
 
-		    var newMainyLayout = new DynamicLayout();
+			var nLayout9 = new DynamicLayout ();
+			nLayout9.AddRow (new Label { Text = "Multiply Heights of Selection", VerticalAlign = VerticalAlign.Middle });
+			mainLayout.AddRow (nLayout9);
+
+			var nLayout10 = new DynamicLayout ();
+			nLayout10.Padding = Padding.Empty;
+			nLayout10.AddRow(new NumericUpDown { Size = new Size(-1, -1), Value = 1, MaxValue = 512, MinValue = 0 },
+							new Button { Text = "Do" }, null);
+			mainLayout.AddRow (nLayout10);
+
+			var nLayout11 = new DynamicLayout ();
+			nLayout11.AddRow (new Label { Text = "Offset Heights of Selection", VerticalAlign = VerticalAlign.Middle });
+			mainLayout.AddRow (nLayout11);
+
+			var nLayout12 = new DynamicLayout ();
+			nLayout12.Padding = Padding.Empty;
+			nLayout12.AddRow(new NumericUpDown { Size = new Size(-1, -1), Value = 1, MaxValue = 512, MinValue = 0 },
+			new Button { Text = "Do" }, null);
+			mainLayout.AddRow (nLayout12);
+
+
+			var newMainyLayout = new DynamicLayout();
 		    newMainyLayout.Padding = Padding.Empty;
             newMainyLayout.Spacing = Size.Empty;
 		    newMainyLayout.AddRow(null, mainLayout, null);

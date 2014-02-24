@@ -11,15 +11,15 @@ namespace SharpFlame.Gui.Forms
 		public MainForm()
 		{
 			this.ClientSize = new Size(1024, 768);
-			this.Title = string.Format ("{0} {1}", Constants.ProgramName, Constants.ProgramVersionNumber);
+			this.Title = string.Format ("No Map - {0} {1}", Constants.ProgramName, Constants.ProgramVersionNumber);
 			this.Icon = Resources.SharpFlameIcon();
 
 			var tabControl = new TabControl ();
 			tabControl.TabPages.Add(new TabPage { Text = "Textures", Content = new TextureTab() });
 			tabControl.TabPages.Add(new TabPage { Text = "Terrain", Content = new TerrainTab() });
 			tabControl.TabPages.Add(new TabPage { Text = "Height", Content = new HeightTab() });
-			tabControl.TabPages.Add(new TabPage { Text = "Resize", Content = new HeightTab() });
-			tabControl.TabPages.Add(new TabPage { Text = "Place Objects", Content = new HeightTab() });
+			tabControl.TabPages.Add(new TabPage { Text = "Resize", Content = new ResizeTab() });
+			tabControl.TabPages.Add(new TabPage { Text = "Place Objects", Content = new PlaceObjectsTab() });
 			tabControl.TabPages.Add(new TabPage { Text = "Object", Content = new HeightTab() });
 			tabControl.TabPages.Add(new TabPage { Text = "Label", Content = new HeightTab() });
 

@@ -62,6 +62,9 @@
     <Compile Include="Sections\HeightTab.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
+    <Compile Include="Sections\ResizeTab.cs" />
+    <Compile Include="Sections\PlaceObjectsTab.cs" />
+    <Compile Include="Controls\PlayerSelector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\" />
