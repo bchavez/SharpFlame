@@ -14,16 +14,14 @@ namespace SharpFlame.Gui.Forms
 			this.Title = string.Format ("{0} {1}", Constants.ProgramName, Constants.ProgramVersionNumber);
 			this.Icon = Resources.SharpFlameIcon();
 
-			// Using a DynamicLayout for a simple table is actually a lot easier to maintain than using a TableLayout 
-			// and having to specify the x/y co-ordinates for each control added.
 			var tabControl = new TabControl ();
-			tabControl.TabPages.Add(new TabPage { Text = "Textures", Content = new Texture() });
-			tabControl.TabPages.Add(new TabPage { Text = "Terrain", Content = new Texture() });
-			tabControl.TabPages.Add(new TabPage { Text = "Height", Content = new Texture() });
-			tabControl.TabPages.Add(new TabPage { Text = "Resize", Content = new Texture() });
-			tabControl.TabPages.Add(new TabPage { Text = "Place Objects", Content = new Texture() });
-			tabControl.TabPages.Add(new TabPage { Text = "Object", Content = new Texture() });
-			tabControl.TabPages.Add(new TabPage { Text = "Label", Content = new Texture() });
+			tabControl.TabPages.Add(new TabPage { Text = "Textures", Content = new TextureTab() });
+			tabControl.TabPages.Add(new TabPage { Text = "Terrain", Content = new TerrainTab() });
+			tabControl.TabPages.Add(new TabPage { Text = "Height", Content = new HeightTab() });
+			tabControl.TabPages.Add(new TabPage { Text = "Resize", Content = new HeightTab() });
+			tabControl.TabPages.Add(new TabPage { Text = "Place Objects", Content = new HeightTab() });
+			tabControl.TabPages.Add(new TabPage { Text = "Object", Content = new HeightTab() });
+			tabControl.TabPages.Add(new TabPage { Text = "Label", Content = new HeightTab() });
 
 			var splitter = new Splitter
 			{

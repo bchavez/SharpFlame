@@ -34,7 +34,14 @@ namespace SharpFlame.Gui.Dialogs
 				Font = new Font(SystemFont.Default, 10),
 				HorizontalAlign = HorizontalAlign.Center
 			});
-			
+
+			layout.Add(new Label
+			           {
+				Text = "Copyright 2013 by Flail13",
+				Font = new Font(SystemFont.Default, 10),
+				HorizontalAlign = HorizontalAlign.Center
+			});
+
 			
 			layout.Add(new Label
 			{

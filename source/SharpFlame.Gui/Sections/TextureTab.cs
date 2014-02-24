@@ -7,9 +7,9 @@ using Eto.Forms;
 
 namespace SharpFlame.Gui.Sections
 {
-	public class Texture : Panel
+	public class TextureTab : Panel
 	{
-		public Texture() {
+		public TextureTab() {
 			var layout = new DynamicLayout();
 			layout.Padding = new Padding (0);
 			layout.Spacing = new Size (0, 0);
@@ -35,7 +35,7 @@ namespace SharpFlame.Gui.Sections
 			layout.BeginVertical();
 			layout.AddRow (null,
 			               new Label { Text = "Radius:", VerticalAlign = VerticalAlign.Middle }, 
-						  new NumericUpDown {Size = new Size(-1, -1) }, 
+						  new NumericUpDown {Size = new Size(-1, -1), MinValue = 1, MaxValue = 512 }, 
 			              circularButton, 
 			              squareButton,
 						 null);
@@ -47,17 +47,11 @@ namespace SharpFlame.Gui.Sections
 
 			textureOrientationLayout.Add (null);
 			textureOrientationLayout.BeginHorizontal ();
-			textureOrientationLayout.AddRow (null, 
-			                                new CheckBox (),
-			                                new Label { Text = "Set Texture", VerticalAlign = VerticalAlign.Middle },
-											null);
+			textureOrientationLayout.AddRow (null, new CheckBox { Text = "Set Texture" }, null);
 			textureOrientationLayout.EndHorizontal ();
 
 			textureOrientationLayout.BeginHorizontal ();
-			textureOrientationLayout.AddRow (null, 
-			                                 new CheckBox (),
-			                                 new Label { Text = "Set Orientation", VerticalAlign = VerticalAlign.Middle },
-											 null);
+		    textureOrientationLayout.AddRow (null, new CheckBox { Text = "Set Orientation" }, null);
 			textureOrientationLayout.EndHorizontal ();
 			textureOrientationLayout.Add (null);
 
@@ -75,12 +69,12 @@ namespace SharpFlame.Gui.Sections
 			buttonsRandomize.EndVertical ();
 
 			buttonsRandomize.BeginVertical();
-			buttonsRandomize.AddRow (null, new CheckBox (), 
-	               		new Label { Text = "Randomize", VerticalAlign = VerticalAlign.Middle }, null);
+			buttonsRandomize.AddRow (null, new CheckBox { Text = "Randomize" }, null);
 			buttonsRandomize.EndVertical ();
 			buttonsRandomize.Add (null);
 
 			var terrainModifier = new RadioButtonList ();
+            terrainModifier.Spacing = new Size(0, 0);
 			terrainModifier.Orientation = RadioButtonListOrientation.Vertical;
 			terrainModifier.Items.Add(new ListItem { Text = "Ignore Terrain" });
 			terrainModifier.Items.Add(new ListItem { Text = "Reinterpret" });
@@ -97,8 +91,46 @@ namespace SharpFlame.Gui.Sections
 			var mainLayout = new DynamicLayout ();
 			mainLayout.Padding = new Padding (0);
 			mainLayout.Spacing = new Size (0, 0);
+
+			var textureSelector = new Drawable ();
+			textureSelector.BackgroundColor = Colors.Black;
+
+			var tileTypeCombo = new DynamicLayout ();
+			tileTypeCombo.BeginHorizontal ();
+			tileTypeCombo.Add (new Label {
+				Text = "Tile Type:",
+				VerticalAlign = VerticalAlign.Middle
+			});
+			tileTypeCombo.Add (TileTypeComboBox());
+			tileTypeCombo.EndHorizontal ();
+
+			var tileTypeCheckBoxes = new DynamicLayout ();
+			tileTypeCheckBoxes.BeginHorizontal ();
+			tileTypeCheckBoxes.Add (new CheckBox { Text = "Display Tile Types" });
+			tileTypeCheckBoxes.Add (null);
+			tileTypeCheckBoxes.Add (new CheckBox { Text = "Display Tile Numbers" });
+			tileTypeCheckBoxes.EndHorizontal ();
+
+			var tileTypeSetter = new DynamicLayout ();
+			tileTypeSetter.Padding = new Padding (0);
+			tileTypeSetter.Spacing = new Size (0, 0);
+			tileTypeSetter.BeginHorizontal ();
+			tileTypeSetter.Add (null);
+			tileTypeSetter.Add (tileTypeCombo);
+			tileTypeSetter.Add (null);
+			tileTypeSetter.EndHorizontal ();
+			tileTypeSetter.BeginHorizontal ();
+			tileTypeSetter.Add (null);
+			tileTypeSetter.Add (tileTypeCheckBoxes);
+			tileTypeSetter.Add (null);
+			tileTypeSetter.EndHorizontal ();
+
 			mainLayout.Add (layout);
-			mainLayout.Add(null);
+			mainLayout.BeginVertical (xscale: true, yscale: true);
+			mainLayout.Add (textureSelector);
+			mainLayout.EndVertical ();
+			mainLayout.Add (tileTypeSetter);
+			//mainLayout.Add();
 
 			Content = mainLayout;
 		}
@@ -121,6 +153,12 @@ namespace SharpFlame.Gui.Sections
 			control.Items.Add(new ListItem { Text = "Arizona" });
 			control.Items.Add(new ListItem { Text = "Urban" });
 			control.Items.Add(new ListItem { Text = "Rocky Mountains" });
+			return control;
+		}
+
+		Control TileTypeComboBox()
+		{
+			var control = new ComboBox { };
 			return control;
 		}
 

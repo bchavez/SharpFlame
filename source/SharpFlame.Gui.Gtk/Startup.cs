@@ -1,7 +1,7 @@
 using SharpFlame.Gui;
 using System.Diagnostics;
 
-namespace Eto.Test.Gtk
+namespace SharpFlame.Gui.Gtk
 {
 	class Startup
 	{

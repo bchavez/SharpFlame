@@ -1,5 +1,6 @@
 using System;
 using Eto;
+using Eto.Drawing;
 using Eto.Forms;
 using SharpFlame.Core;
 using SharpFlame.Gui.Forms;
@@ -12,6 +13,9 @@ namespace SharpFlame.Gui
 		public SharpFlameApplication(Generator generator)
 			: base(generator)
 		{
+			// Allows manual Button size on GTK2.
+			Button.DefaultSize = new Size (1, 1);
+
 			this.Name = string.Format ("{0} {1}", Constants.ProgramName, Constants.ProgramVersionNumber);
 			this.Style = "application";
 		}

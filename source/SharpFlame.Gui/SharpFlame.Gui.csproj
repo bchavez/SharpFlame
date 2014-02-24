@@ -49,13 +49,15 @@
     <Compile Include="SharpFlameApplication.cs" />
     <Compile Include="Actions\About.cs" />
     <Compile Include="Actions\Quit.cs" />
-    <Compile Include="Sections\Texture.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
     <Compile Include="Sections\MainMapView.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Resources.cs" />
+    <Compile Include="Sections\TextureTab.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Sections\TerrainTab.cs" />
+    <Compile Include="Sections\HeightTab.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -74,5 +76,6 @@
     <Folder Include="Forms\" />
     <Folder Include="Resources\" />
     <Folder Include="Sections\" />
+    <Folder Include="Controls\" />
   </ItemGroup>
 </Project>
