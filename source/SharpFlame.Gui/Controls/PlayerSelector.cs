@@ -1,16 +1,44 @@
+#region License
+// /*
+// The MIT License (MIT)
+//
+// Copyright (c) 2013-2014 The SharpFlame Authors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+// */
+#endregion
+
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Eto;
 using Eto.Forms;
 using Eto.Drawing;
 
-namespace SharpFlame.Gui
+namespace SharpFlame.Gui.Controls
 {
 	public class PlayerSelector : Panel
 	{
-		readonly List<Button> buttons = new List<Button> ();
-		Button selectedButton;
+		readonly List<CustomButton> buttons = new List<CustomButton> ();
+		CustomButton selectedButton;
+
+		Color backGroundColor = Color.FromArgb(0xFFF3F2EC);
+		Color hoverColor = Color.FromArgb(0xFFB6BDD2);
+		Color hoverBorderColor = Color.FromArgb(0xFF316AC5);
 
 		public string SelectedPlayer {
 			get { 
@@ -32,9 +60,17 @@ namespace SharpFlame.Gui
 
 		public PlayerSelector (int players = 10, bool addScavenger = true)
 		{
-			for (var i = 1; i <= players; i++)
+			for (var i = 0; i < players; i++)
 			{
-				var button = new Button { Text = i.ToString() };
+				var button = new CustomButton { 
+					Text = i.ToString(), 
+					BorderWith = new Padding(1, 1), 
+					BorderColor = backGroundColor,
+					BackGroundColor = backGroundColor, 
+					HoverColor = hoverColor,
+					HoverBorderColor = hoverBorderColor
+				};
+
 				button.Click += delegate {
 					SetSelected(button);
 				};
@@ -42,7 +78,14 @@ namespace SharpFlame.Gui
 			}
 			if (addScavenger)
 			{
-				var button = new Button { Text = "S" };
+				var button = new CustomButton { 
+					Text = "S", 
+					BorderWith = new Padding(1, 1), 
+					BorderColor = backGroundColor,
+					BackGroundColor = backGroundColor, 
+					HoverColor = hoverColor,
+					HoverBorderColor = hoverBorderColor
+				};
 				button.Click += delegate {
 					SetSelected(button);
 				};
@@ -64,16 +107,17 @@ namespace SharpFlame.Gui
 				if (r == 0 && mod == 1)
 				{
 					layout.Add (null);
-				} else {
-					layout.Add(buttons[buttons.Count -1]);
-	            }
+				} else if (r == 1 && mod == 1)
+				{
+					layout.Add (buttons[buttons.Count - 1]);
+				}
 				layout.EndBeginHorizontal ();
 			}
 
 			Content = layout;
 		}
 
-		void SetSelected (Button button, bool force = false, bool sendEvent = true) 
+		void SetSelected (CustomButton button, bool force = false, bool sendEvent = true) 
 		{
 			var changed = selectedButton != button;
 			if (force || changed)

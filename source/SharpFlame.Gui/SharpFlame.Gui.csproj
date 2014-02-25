@@ -62,13 +62,18 @@
     <Compile Include="Sections\HeightTab.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Sections\ResizeTab.cs" />
-    <Compile Include="Sections\PlaceObjectsTab.cs" />
-    <Compile Include="Controls\PlayerSelector.cs" />
+    <Compile Include="Sections\ResizeTab.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Sections\PlaceObjectsTab.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Controls\PlayerSelector.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Controls\CustomButton.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controls\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Resources\flaME.ico" />
     <EmbeddedResource Include="Resources\btnrotateclockwise.png" />
