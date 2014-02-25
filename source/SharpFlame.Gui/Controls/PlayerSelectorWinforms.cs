@@ -46,13 +46,6 @@ namespace SharpFlame.Gui.Controls
 			}
 		}
 
-		public event EventHandler<EventArgs> SelectedPlayerChanged = delegate {};
-
-		public virtual void OnSelectedPlayerChanged (EventArgs e)
-		{
-			SelectedPlayerChanged (this, e);
-		}
-
 		public PlayerSelectorWinforms (int players = 10, bool addScavenger = true)
 		{
 			for (var i = 0; i < players; i++)

@@ -40,7 +40,7 @@ namespace SharpFlame.Gui.Controls
 		Color hoverColor = Color.FromArgb(0xFFB6BDD2);
 		Color hoverBorderColor = Color.FromArgb(0xFF316AC5);
 
-		public string SelectedPlayer {
+		public virtual string SelectedPlayer {
 			get { 
 				if (selectedButton == null)
 				{
