@@ -31,7 +31,7 @@ using Eto.Drawing;
 
 namespace SharpFlame.Gui.Controls
 {
-	public class PlayerSelectorWinforms : Panel, IPlayerSelector
+	public class PlayerSelectorWinforms : PlayerSelector
 	{
 		readonly List<Button> buttons = new List<Button> ();
 		Button selectedButton;
@@ -46,12 +46,11 @@ namespace SharpFlame.Gui.Controls
 			}
 		}
 
-		public event EventHandler<EventArgs> SelectedPlayerChanged;
+		public event EventHandler<EventArgs> SelectedPlayerChanged = delegate {};
 
 		public virtual void OnSelectedPlayerChanged (EventArgs e)
 		{
-			if (SelectedPlayerChanged != null)
-				SelectedPlayerChanged (this, e);
+			SelectedPlayerChanged (this, e);
 		}
 
 		public PlayerSelectorWinforms (int players = 10, bool addScavenger = true)

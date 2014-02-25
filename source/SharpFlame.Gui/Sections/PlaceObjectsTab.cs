@@ -37,7 +37,7 @@ namespace SharpFlame.Gui
 			var mainLayout = new DynamicLayout ();
 
 
-            IPlayerSelector playerSelector;
+            PlayerSelector playerSelector;
             if (Generator.IsWinForms)
             {
                 playerSelector = new PlayerSelectorWinforms (Constants.PlayerCountMax);

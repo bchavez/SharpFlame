@@ -31,12 +31,7 @@ using Eto.Drawing;
 
 namespace SharpFlame.Gui.Controls
 {
-    interface IPlayerSelector : IPanel {
-        string SelectedPlayer { get; }
-        void OnSelectedPlayerChanged(EventArgs e);
-    }
-
-	public class PlayerSelector : Panel, IPlayerSelector
+	public class PlayerSelector : Panel
 	{
 		readonly List<CustomButton> buttons = new List<CustomButton> ();
 		CustomButton selectedButton;
