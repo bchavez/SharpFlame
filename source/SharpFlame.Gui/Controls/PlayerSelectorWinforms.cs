@@ -31,19 +31,10 @@ using Eto.Drawing;
 
 namespace SharpFlame.Gui.Controls
 {
-    interface IPlayerSelector : IPanel {
-        string SelectedPlayer { get; }
-        void OnSelectedPlayerChanged(EventArgs e);
-    }
-
-	public class PlayerSelector : Panel, IPlayerSelector
+	public class PlayerSelectorWinforms : Panel, IPlayerSelector
 	{
-		readonly List<CustomButton> buttons = new List<CustomButton> ();
-		CustomButton selectedButton;
-
-		Color backGroundColor = Color.FromArgb(0xFFF3F2EC);
-		Color hoverColor = Color.FromArgb(0xFFB6BDD2);
-		Color hoverBorderColor = Color.FromArgb(0xFF316AC5);
+		readonly List<Button> buttons = new List<Button> ();
+		Button selectedButton;
 
 		public string SelectedPlayer {
 			get { 
@@ -63,19 +54,11 @@ namespace SharpFlame.Gui.Controls
 				SelectedPlayerChanged (this, e);
 		}
 
-		public PlayerSelector (int players = 10, bool addScavenger = true)
+		public PlayerSelectorWinforms (int players = 10, bool addScavenger = true)
 		{
 			for (var i = 0; i < players; i++)
 			{
-				var button = new CustomButton { 
-					Text = i.ToString(), 
-					BorderWith = new Padding(1, 1), 
-					BorderColor = backGroundColor,
-					BackGroundColor = backGroundColor, 
-					HoverColor = hoverColor,
-					HoverBorderColor = hoverBorderColor
-				};
-
+				var button = new Button { Text = i.ToString() };
 				button.Click += delegate {
 					SetSelected(button);
 				};
@@ -83,14 +66,7 @@ namespace SharpFlame.Gui.Controls
 			}
 			if (addScavenger)
 			{
-				var button = new CustomButton { 
-					Text = "S", 
-					BorderWith = new Padding(1, 1), 
-					BorderColor = backGroundColor,
-					BackGroundColor = backGroundColor, 
-					HoverColor = hoverColor,
-					HoverBorderColor = hoverBorderColor
-				};
+				var button = new Button { Text = "S" };
 				button.Click += delegate {
 					SetSelected(button);
 				};
@@ -122,7 +98,7 @@ namespace SharpFlame.Gui.Controls
 			Content = layout;
 		}
 
-		void SetSelected (CustomButton button, bool force = false, bool sendEvent = true) 
+		void SetSelected (Button button, bool force = false, bool sendEvent = true) 
 		{
 			var changed = selectedButton != button;
 			if (force || changed)

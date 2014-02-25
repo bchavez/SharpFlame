@@ -72,6 +72,9 @@
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Controls\CustomButton.cs" />
+    <Compile Include="Controls\PlayerSelectorWinforms.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

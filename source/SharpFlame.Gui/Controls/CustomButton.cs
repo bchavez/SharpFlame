@@ -57,10 +57,14 @@ namespace SharpFlame.Gui.Controls
 			set { borderLayout.Padding = value; }
 		}
 
+        Color borderColor;
 		public Color BorderColor
 		{
-			get { return borderLayout.BackgroundColor; }
-			set { borderLayout.BackgroundColor = value; }
+			get { return borderColor; }
+			set { 
+                borderColor = value;
+                borderLayout.BackgroundColor = value; 
+            }
 		}
 
 		public Color HoverColor
@@ -105,8 +109,8 @@ namespace SharpFlame.Gui.Controls
 			};
 
 			layout.MouseLeave += delegate {
-				borderLayout.BackgroundColor = BorderColor;
 				layout.BackgroundColor = BackgroundColor;
+                borderLayout.BackgroundColor = BorderColor;
 			};
 
 
