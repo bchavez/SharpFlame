@@ -25,6 +25,7 @@
 #endregion
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Eto.Forms;
 using Eto.Drawing;
@@ -36,13 +37,17 @@ namespace SharpFlame.Gui.Controls
 		readonly List<Button> buttons = new List<Button> ();
 		Button selectedButton;
 
-		public string SelectedPlayer {
+		public override string SelectedPlayer {
 			get { 
 				if (selectedButton == null)
 				{
 					return null;
 				}
 				return selectedButton.Text;			
+			}
+			set {
+				var button = buttons.FirstOrDefault(b => b.Text == value);
+				SetSelected (button, true, true);
 			}
 		}
 
@@ -100,6 +105,8 @@ namespace SharpFlame.Gui.Controls
 				{
 					r.Enabled = !object.ReferenceEquals (r, button);
 				}
+
+				button.Focus ();
 
 				if (sendEvent && changed) 
 					OnSelectedPlayerChanged (EventArgs.Empty);

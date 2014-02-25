@@ -25,6 +25,7 @@
 #endregion
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Eto.Forms;
 using Eto.Drawing;
@@ -48,6 +49,10 @@ namespace SharpFlame.Gui.Controls
 				}
 				return selectedButton.Text;			
 			}
+            set {
+                var button = buttons.FirstOrDefault(b => b.Text == value);
+                SetSelected (button, true, true);
+            }
 		}
 
 		public event EventHandler<EventArgs> SelectedPlayerChanged;
