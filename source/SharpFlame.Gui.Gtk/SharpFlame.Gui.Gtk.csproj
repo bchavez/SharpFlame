@@ -47,5 +47,9 @@
       <Project>{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}</Project>
       <Name>SharpFlame.Gui</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SharpFlame.Core\SharpFlame.Core.csproj">
+      <Project>{8AE7F7A3-841A-44A7-B016-4661BBBF7821}</Project>
+      <Name>SharpFlame.Core</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

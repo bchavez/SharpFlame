@@ -24,6 +24,8 @@
  // */
  #endregion
 
+using System;
+
 namespace SharpFlame.Gui.UiOptions
 {
     /// <summary>
@@ -53,7 +55,7 @@ namespace SharpFlame.Gui.UiOptions
         public double Radius { get; set; }
 
         /// <summary>
-        /// Index of the Tileset
+        /// Index of the selected Tileset
         /// </summary>
         public int TilesetNum { get; set; }
 
@@ -61,6 +63,7 @@ namespace SharpFlame.Gui.UiOptions
             SetTexture = true;
             SetOrientation = true;
             Randomize = false;
+            TilesetNum = -1;
         }
     }
 }

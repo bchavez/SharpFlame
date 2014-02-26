@@ -24,12 +24,26 @@
  // */
  #endregion
 
+using System;
+using System.Collections.Generic;
+using SharpFlame.Core.Domain;
 using SharpFlame.Gui.UiOptions;
 
 namespace SharpFlame.Gui
 {
     public class App
     {
+        static List<Tileset> tileset;
+        public static List<Tileset> Tileset { 
+            get { return tileset; }
+            set { 
+                tileset = value; 
+                TilesetChanged (new Object(), EventArgs.Empty);
+            } 
+        }
+
+        public static event EventHandler<EventArgs> TilesetChanged = delegate {};
+
         public static Options UiOptions = new Options();
     }
 }

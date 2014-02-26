@@ -25,10 +25,12 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using Eto;
 using Eto.Drawing;
 using Eto.Forms;
 using SharpFlame.Core;
+using SharpFlame.Core.Domain;
 using SharpFlame.Gui.Forms;
 
 namespace SharpFlame.Gui
@@ -43,13 +45,19 @@ namespace SharpFlame.Gui
 
 			Name = string.Format ("No Map - {0} {1}", Constants.ProgramName, Constants.ProgramVersionNumber);
 			Style = "application";
+
+            App.Tileset = new List<Tileset> {
+                new Tileset { Name = "Arizona" },
+                new Tileset { Name = "Urban" },
+                new Tileset { Name = "Rocky Mountains" }
+            };
 		}
 
 		public override void OnInitialized(EventArgs e)
 		{
 			MainForm = new MainForm();
 
-			base.OnInitialized(e);
+			base.OnInitialized(e);          
 
 			// show the main form
 			MainForm.Show();

@@ -25,10 +25,12 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using Eto;
 using Eto.Forms;
 using Eto.Drawing;
 using SharpFlame.Gui.UiOptions;
+using SharpFlame.Core.Domain;
 
 namespace SharpFlame.Gui.Sections
 {
@@ -45,12 +47,14 @@ namespace SharpFlame.Gui.Sections
 
         RadioButtonList rblTerrainModifier;
 
+        ComboBox cbTileset;
+
 		public TextureTab() {
 			var layout = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty};
 
             var row = layout.AddSeparateRow (null,
 			                                 new Label { Text = "Tileset:", VerticalAlign = VerticalAlign.Middle },
-											 TextureComboBox (),
+											 cbTileset = TextureComboBox (),
 											 null);
 			row.Table.Visible = false;
 
@@ -184,14 +188,19 @@ namespace SharpFlame.Gui.Sections
 
             // NumericUpDown radius
             nudRadius.Bind (r => r.Value, texturesOptions, t => t.Radius);
+
+            // Read Tileset Combobox
+            App.TilesetChanged += delegate
+            {
+                cbTileset.Items.Clear ();
+                cbTileset.Items.AddRange (App.Tileset);
+            };
 		}
 
-		Control TextureComboBox()
+		ComboBox TextureComboBox()
 		{
 			var control = new ComboBox();
-			control.Items.Add(new ListItem { Text = "Arizona" });
-			control.Items.Add(new ListItem { Text = "Urban" });
-			control.Items.Add(new ListItem { Text = "Rocky Mountains" });
+            control.Items.AddRange (App.Tileset);
 			return control;
 		}
 

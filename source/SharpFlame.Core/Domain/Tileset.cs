@@ -1,5 +1,6 @@
 #region
 
+using Eto.Forms;
 using SharpFlame.Core.Domain.Colors;
 
 #endregion
@@ -13,7 +14,7 @@ namespace SharpFlame.Core.Domain
         public int GlTextureNum;
     }
 
-    public class Tileset
+    public class Tileset : IListItem
     {      
         public SRgb BGColour = new SRgb(0.5F, 0.5F, 0.5F);
 
@@ -23,6 +24,24 @@ namespace SharpFlame.Core.Domain
 
         public int TileCount { get; set; }
 
-        public string Name { get; set; }         
+        public string Name { get; set; }   
+
+        /// <summary>
+        /// Implements IListItem, this is for the eto GUI.
+        /// </summary>
+        /// <value>The text.</value>
+        public string Text { 
+            get { return Name; }
+            set { Name = value; }
+        }
+
+        /// <summary>
+        /// Implements IListItem, this is for the eto GUI.
+        /// </summary>
+        /// <value>The text.</value>
+        public string Key { 
+            get { return Name; }
+            set { Name = value; }
+        }
     }
 }

@@ -95,11 +95,15 @@ namespace SharpFlame.Gui.Sections
 
         class MyGridItem
         {
-            bool? check;
-
             public int Row { get; set; }
 
-            public string Text
+            public string InternalName
+            {
+                get;
+                set;
+            }
+
+            public string InGameName
             {
                 get;
                 set;
@@ -111,12 +115,8 @@ namespace SharpFlame.Gui.Sections
             {
                 // initialize to random values
                 Row = row;
-                var val = rand.Next(3);
-                check = val == 0 ? false : val == 1 ? (bool?)true : null;
-
-                val = rand.Next(3);
-
-                text = string.Format("{0} 1 Row {1}", prefix, row);
+                InternalName = string.Format("{0} Internal Row {1}", prefix, row);
+                InGameName = string.Format("{0} In-Game Row {1}", prefix, row);
 
                 Color = Color.FromArgb(rand.Next(256), rand.Next(256), rand.Next(256));
             }
@@ -126,8 +126,8 @@ namespace SharpFlame.Gui.Sections
             var mainLayout = new DynamicLayout ();
 
             var control = new GridView { Size = new Size(300, 100) };
-            control.Columns.Add(new GridColumn { HeaderText = "Internal Name", DataCell = new TextBoxCell("Text"), Editable = false, Sortable = true });
-            control.Columns.Add(new GridColumn { HeaderText = "In-Game Name", DataCell = new TextBoxCell("Text"), Editable = false, Sortable = true });
+            control.Columns.Add(new GridColumn { HeaderText = "Internal Name", DataCell = new TextBoxCell("InternalName"), Editable = false, Sortable = true });
+            control.Columns.Add(new GridColumn { HeaderText = "In-Game Name", DataCell = new TextBoxCell("InGameName"), Editable = false, Sortable = true });
 
             var items = new GridItemCollection();
             var rand = new Random();
@@ -148,11 +148,13 @@ namespace SharpFlame.Gui.Sections
                     var matches = true;
 
                     // Every item in the split filter string should be within the Text property
-                    foreach (var filterItem in filterItems)
-                    if (i.Text.IndexOf(filterItem, StringComparison.CurrentCultureIgnoreCase) == -1)
-                    {
-                        matches = false;
-                        break;
+                    foreach (var filterItem in filterItems) {
+                        if (i.InternalName.IndexOf(filterItem, StringComparison.CurrentCultureIgnoreCase) == -1 && 
+                            i.InGameName.IndexOf(filterItem, StringComparison.CurrentCultureIgnoreCase) == -1)
+                        {
+                            matches = false;
+                            break;
+                        }                       
                     }
 
                     return matches;
@@ -167,8 +169,8 @@ namespace SharpFlame.Gui.Sections
         DynamicLayout StructuresPanel() {
             var mainLayout = new DynamicLayout ();
             var control = new GridView { Size = new Size(300, 100) };
-            control.Columns.Add(new GridColumn { HeaderText = "Internal Name", DataCell = new TextBoxCell("Text"), Editable = false, Sortable = true });
-            control.Columns.Add(new GridColumn { HeaderText = "In-Game Name", DataCell = new TextBoxCell("Text"), Editable = false, Sortable = true });
+            control.Columns.Add(new GridColumn { HeaderText = "Internal Name", DataCell = new TextBoxCell("InternalName"), Editable = false, Sortable = true });
+            control.Columns.Add(new GridColumn { HeaderText = "In-Game Name", DataCell = new TextBoxCell("InGameName"), Editable = false, Sortable = true });
 
             var items = new GridItemCollection();
             var rand = new Random();
@@ -189,11 +191,13 @@ namespace SharpFlame.Gui.Sections
                     var matches = true;
 
                     // Every item in the split filter string should be within the Text property
-                    foreach (var filterItem in filterItems)
-                    if (i.Text.IndexOf(filterItem, StringComparison.CurrentCultureIgnoreCase) == -1)
-                    {
-                        matches = false;
-                        break;
+                    foreach (var filterItem in filterItems) {
+                        if (i.InternalName.IndexOf(filterItem, StringComparison.CurrentCultureIgnoreCase) == -1 && 
+                            i.InGameName.IndexOf(filterItem, StringComparison.CurrentCultureIgnoreCase) == -1)
+                        {
+                            matches = false;
+                            break;
+                        }                       
                     }
 
                     return matches;
@@ -207,8 +211,8 @@ namespace SharpFlame.Gui.Sections
         DynamicLayout DroidsPanel() {
             var mainLayout = new DynamicLayout ();
             var control = new GridView { Size = new Size(300, 100) };
-            control.Columns.Add(new GridColumn { HeaderText = "Internal Name", DataCell = new TextBoxCell("Text"), Editable = false, Sortable = true, Width = 200 });
-            control.Columns.Add(new GridColumn { HeaderText = "In-Game Name", DataCell = new TextBoxCell("Text"), Editable = false, Sortable = true, Width = 200 });
+            control.Columns.Add(new GridColumn { HeaderText = "Internal Name", DataCell = new TextBoxCell("InternalName"), Editable = false, Sortable = true, Width = 200 });
+            control.Columns.Add(new GridColumn { HeaderText = "In-Game Name", DataCell = new TextBoxCell("InGameName"), Editable = false, Sortable = true, Width = 200 });
 
             var items = new GridItemCollection();
             var rand = new Random();
@@ -229,11 +233,13 @@ namespace SharpFlame.Gui.Sections
                     var matches = true;
 
                     // Every item in the split filter string should be within the Text property
-                    foreach (var filterItem in filterItems)
-                    if (i.Text.IndexOf(filterItem, StringComparison.CurrentCultureIgnoreCase) == -1)
-                    {
-                        matches = false;
-                        break;
+                    foreach (var filterItem in filterItems) {
+                        if (i.InternalName.IndexOf(filterItem, StringComparison.CurrentCultureIgnoreCase) == -1 && 
+                            i.InGameName.IndexOf(filterItem, StringComparison.CurrentCultureIgnoreCase) == -1)
+                        {
+                            matches = false;
+                            break;
+                        }                       
                     }
 
                     return matches;
