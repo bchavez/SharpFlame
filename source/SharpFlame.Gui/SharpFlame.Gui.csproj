@@ -53,9 +53,6 @@
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Resources.cs" />
-    <Compile Include="Sections\TextureTab.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
     <Compile Include="Sections\TerrainTab.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
@@ -75,6 +72,14 @@
     <Compile Include="Controls\PlayerSelectorWinforms.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
+    <Compile Include="Sections\ObjectTab.cs" />
+    <Compile Include="Sections\LabelsTab.cs" />
+    <Compile Include="Sections\TexturesTab.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="App.cs" />
+    <Compile Include="UiOptions\TexturesOptions.cs" />
+    <Compile Include="UiOptions\Options.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

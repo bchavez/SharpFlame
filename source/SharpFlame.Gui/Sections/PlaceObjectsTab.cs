@@ -30,7 +30,7 @@ using Eto.Drawing;
 using SharpFlame.Core;
 using SharpFlame.Gui.Controls;
 
-namespace SharpFlame.Gui
+namespace SharpFlame.Gui.Sections
 {
 	public class PlaceObjectsTab : Panel
 	{

@@ -24,10 +24,13 @@
 // */
 #endregion
 
+using System;
 using Eto.Forms;
 using Eto.Drawing;
+using SharpFlame;
 using SharpFlame.Core;
 using SharpFlame.Gui.Sections;
+using SharpFlame.Gui.UiOptions;
 
 namespace SharpFlame.Gui.Forms
 {
@@ -45,8 +48,38 @@ namespace SharpFlame.Gui.Forms
 			tabControl.TabPages.Add(new TabPage { Text = "Height", Content = new HeightTab() });
 			tabControl.TabPages.Add(new TabPage { Text = "Resize", Content = new ResizeTab() });
 			tabControl.TabPages.Add(new TabPage { Text = "Place Objects", Content = new PlaceObjectsTab() });
-			tabControl.TabPages.Add(new TabPage { Text = "Object", Content = new HeightTab() });
-			tabControl.TabPages.Add(new TabPage { Text = "Label", Content = new HeightTab() });
+            tabControl.TabPages.Add(new TabPage { Text = "Object", Content = new ObjectTab() });
+            tabControl.TabPages.Add(new TabPage { Text = "Label", Content = new LabelsTab() });
+
+            tabControl.SelectedIndexChanged += delegate
+            {
+                // Could easily do a cast but, we might change the enum
+                // in the future.
+                switch (tabControl.SelectedIndex) {
+                case 0:
+                    App.UiOptions.MouseMode = MouseMode.Textures;
+                    break;
+                case 1:
+                    App.UiOptions.MouseMode = MouseMode.Terrain;
+                    break;
+                case 2:
+                    App.UiOptions.MouseMode = MouseMode.Height;
+                    break;
+                case 3:
+                    // Ignored.
+                    App.UiOptions.MouseMode = MouseMode.Resize;
+                    break;
+                case 4:
+                    App.UiOptions.MouseMode = MouseMode.PlaceObjects;
+                    break;
+                case 5:
+                    App.UiOptions.MouseMode = MouseMode.SelectObject;
+                    break;
+                case 6:
+                    App.UiOptions.MouseMode = MouseMode.SetLabels;
+                    break;
+                }
+            };
 
 			var splitter = new Splitter
 			{

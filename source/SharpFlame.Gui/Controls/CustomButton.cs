@@ -93,8 +93,8 @@ namespace SharpFlame.Gui.Controls
 
 			Text = "_NOT_SET_";
 			BorderWith = new Padding (1, 1);
-			BorderColor = Colors.Black;
-			HoverColor = Colors.Gray;
+			BorderColor = Eto.Drawing.Colors.Black;
+            HoverColor = Eto.Drawing.Colors.Gray;
 
 			layout.Add (label);
 

@@ -25,13 +25,27 @@
 #endregion
 
 using System;
-using Eto.Drawing;
+using Eto;
 using Eto.Forms;
+using Eto.Drawing;
+using SharpFlame.Gui;
+using SharpFlame.Gui.UiOptions;
 
 namespace SharpFlame.Gui.Sections
 {
 	public class TextureTab : Panel
 	{
+		CheckBox chkBoxTexture;
+		CheckBox chkBoxOrientation;
+        CheckBox chkBoxRandomize;
+
+        Button btnCircular;
+        Button btnSquare;
+
+        NumericUpDown nudRadius;
+
+        RadioButtonList rblTerrainModifier;
+
 		public TextureTab() {
 			var layout = new DynamicLayout();
 			layout.Padding = new Padding (0);
@@ -43,24 +57,13 @@ namespace SharpFlame.Gui.Sections
 											 null);
 			row.Table.Visible = false;
 
-			var circularButton = new Button { Text = "Circular" };
-			circularButton.Enabled = false;
-			var squareButton = new Button { Text = "Square" };
-			circularButton.Click += (sender, e) => { 
-				circularButton.Enabled = false;
-				squareButton.Enabled = true;
-			};
-			squareButton.Click += (sender, e) => { 
-				squareButton.Enabled = false;
-				circularButton.Enabled = true;
-			};
 
 			layout.BeginVertical();
 			layout.AddRow (null,
 			               new Label { Text = "Radius:", VerticalAlign = VerticalAlign.Middle }, 
-						  new NumericUpDown {Size = new Size(-1, -1), MinValue = 1, MaxValue = 512 }, 
-			              circularButton, 
-			              squareButton,
+                           nudRadius = new NumericUpDown {Size = new Size(-1, -1), MinValue = 1, MaxValue = 512 }, 
+                          btnCircular = new Button { Text = "Circular", Enabled = false }, 
+                          btnSquare = new Button { Text = "Square" },
 						 null);
 			layout.EndVertical ();
 
@@ -70,11 +73,11 @@ namespace SharpFlame.Gui.Sections
 
 			textureOrientationLayout.Add (null);
 			textureOrientationLayout.BeginHorizontal ();
-			textureOrientationLayout.AddRow (null, new CheckBox { Text = "Set Texture" }, null);
+			textureOrientationLayout.AddRow (null, chkBoxTexture = new CheckBox { Text = "Set Texture" }, null);
 			textureOrientationLayout.EndHorizontal ();
 
 			textureOrientationLayout.BeginHorizontal ();
-		    textureOrientationLayout.AddRow (null, new CheckBox { Text = "Set Orientation" }, null);
+			textureOrientationLayout.AddRow (null, chkBoxOrientation = new CheckBox { Text = "Set Orientation", Checked = true }, null);
 			textureOrientationLayout.EndHorizontal ();
 			textureOrientationLayout.Add (null);
 
@@ -92,22 +95,22 @@ namespace SharpFlame.Gui.Sections
 			buttonsRandomize.EndVertical ();
 
 			buttonsRandomize.BeginVertical();
-			buttonsRandomize.AddRow (null, new CheckBox { Text = "Randomize" }, null);
+            buttonsRandomize.AddRow (null, chkBoxRandomize = new CheckBox { Text = "Randomize" }, null);
 			buttonsRandomize.EndVertical ();
 			buttonsRandomize.Add (null);
 
-			var terrainModifier = new RadioButtonList ();
-            terrainModifier.Spacing = new Size(0, 0);
-			terrainModifier.Orientation = RadioButtonListOrientation.Vertical;
-			terrainModifier.Items.Add(new ListItem { Text = "Ignore Terrain" });
-			terrainModifier.Items.Add(new ListItem { Text = "Reinterpret" });
-			terrainModifier.Items.Add(new ListItem { Text = "Remove Terrain" });
-			terrainModifier.SelectedIndex = 1;
+            rblTerrainModifier = new RadioButtonList ();
+            rblTerrainModifier.Spacing = new Size(0, 0);
+			rblTerrainModifier.Orientation = RadioButtonListOrientation.Vertical;
+			rblTerrainModifier.Items.Add(new ListItem { Text = "Ignore Terrain" });
+			rblTerrainModifier.Items.Add(new ListItem { Text = "Reinterpret" });
+			rblTerrainModifier.Items.Add(new ListItem { Text = "Remove Terrain" });
+			rblTerrainModifier.SelectedIndex = 1;
 
 			row = layout.AddSeparateRow(null,
 			        textureOrientationLayout,
 			        buttonsRandomize,
-			        TableLayout.AutoSized(terrainModifier),
+			        TableLayout.AutoSized(rblTerrainModifier),
 			        null);
 			row.Table.Visible = false;
 
@@ -155,7 +158,44 @@ namespace SharpFlame.Gui.Sections
 			mainLayout.Add (tileTypeSetter);
 			//mainLayout.Add();
 
+			// Set the bindings to UiOptions.Textures
+			SetBindings ();
+
 			Content = mainLayout;
+		}
+
+		/// <summary>
+		/// Sets the Bindings to App.UiOptions.Textures;
+		/// </summary>
+		void SetBindings() 
+		{
+            TexturesOptions texturesOptions = App.UiOptions.Textures; 
+
+            // Circular / Square Button
+            btnCircular.Click += (sender, e) => { 
+                btnCircular.Enabled = false;
+                btnSquare.Enabled = true;
+                texturesOptions.TerrainMouseMode = TerrainMouseMode.Circular;
+            };
+            btnSquare.Click += (sender, e) => { 
+                btnSquare.Enabled = false;
+                btnCircular.Enabled = true;
+                texturesOptions.TerrainMouseMode = TerrainMouseMode.Square;
+            };
+
+            // Checkboxes
+            chkBoxTexture.Bind (r => r.Checked, texturesOptions, t => t.SetTexture);
+            chkBoxOrientation.Bind (r => r.Checked, texturesOptions, t => t.SetOrientation);
+            chkBoxRandomize.Bind (r => r.Checked, texturesOptions, t => t.Randomize);
+
+            // RadiobuttonList 
+            rblTerrainModifier.SelectedIndexChanged += delegate
+            {
+                texturesOptions.TerrainMode = (TerrainMode)rblTerrainModifier.SelectedIndex;
+            };
+
+            // NumericUpDown radius
+            nudRadius.Bind (r => r.Value, texturesOptions, t => t.Radius);
 		}
 
 		Control TextureComboBox()
