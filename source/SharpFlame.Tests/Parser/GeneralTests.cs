@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
 using SharpFlame.Core.Parsers;
+using SharpFlame.Core.Parsers;
 using Sprache;
 
 namespace SharpFlame.Tests.Parser

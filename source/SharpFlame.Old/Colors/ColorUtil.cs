@@ -1,0 +1,17 @@
+using System.Drawing;
+
+namespace SharpFlame.Old.Colors
+{
+    public sealed class ColorUtil
+    {
+        public static int OsRgb(int red, int green, int blue)
+        {		
+#if !Mono
+            Color c = Color.FromArgb(red, green, blue);
+#else
+			Color c = Color.FromArgb(blue, green, red);
+#endif
+			return c.ToArgb ();
+        }
+	}
+}
