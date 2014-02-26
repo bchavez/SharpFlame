@@ -6,6 +6,8 @@ using FluentValidation.Attributes;
 using NUnit.Framework;
 using SharpFlame.Core.Parsers.Pie;
 using SharpFlame.Core.Parsers.Validators;
+using SharpFlame.Core.Parsers.Pie;
+using SharpFlame.Core.Parsers.Validators;
 using Sprache;
 
 namespace SharpFlame.Tests.Parser

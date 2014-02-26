@@ -8,6 +8,9 @@ using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Core.Parsers;
 using SharpFlame.Core.Parsers.Ini;
+using SharpFlame.Core.Domain;
+using SharpFlame.Core.Domain.Colors;
+using SharpFlame.Core.Parsers.Ini;
 using Sprache;
 
 namespace SharpFlame.Tests.Parser

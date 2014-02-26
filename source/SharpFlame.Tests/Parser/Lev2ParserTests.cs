@@ -6,6 +6,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Core.Parsers.Lev2;
+using SharpFlame.Core.Parsers.Lev2;
 using Sprache;
 
 namespace SharpFlame.Tests.Parser

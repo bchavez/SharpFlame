@@ -1,0 +1,593 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{152475A4-3ABE-41C4-B338-A2FB7B350FAF}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>SharpFlame.Old.Program</StartupObject>
+    <RootNamespace>SharpFlame</RootNamespace>
+    <AssemblyName>SharpFlame</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>Console</MyType>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>0.0.0.0</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NOWARN>1591,660,661</NOWARN>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
+    <DefineConstants>Trace;DEBUG;Mono;Portable</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>FlaME.xml</DocumentationFile>
+    <NOWARN>1591,660,661</NOWARN>
+    <DefineConstants>Mono;Portable</DefineConstants>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <DebugSymbols>true</DebugSymbols>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>flaME.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Ionic.Zip.Reduced">
+      <HintPath>..\packages\DotNetZipLib.1.9\zip-v1.9-Reduced\Release\Ionic.Zip.Reduced.dll</HintPath>
+    </Reference>
+    <Reference Include="Sprache">
+      <HintPath>..\packages\Sprache.1.10.0.35\lib\net40\Sprache.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4">
+      <HintPath>..\packages\OpenTK.1.1.1508.5724\lib\NET40\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4">
+      <HintPath>..\packages\OpenTK.GLControl.1.1.1508.5724\lib\NET40\OpenTK.GLControl.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="AppSettings\Change.cs" />
+    <Compile Include="AppSettings\ChangeInterface.cs" />
+    <Compile Include="AppSettings\KeyboardControl.cs" />
+    <Compile Include="AppSettings\KeyboardProfile.cs" />
+    <Compile Include="AppSettings\KeyboardProfileCreator.cs" />
+    <Compile Include="AppSettings\OptionCreator.cs" />
+    <Compile Include="AppSettings\OptionProfile.cs" />
+    <Compile Include="Collections\Specialized\BooleanMap.cs" />
+    <Compile Include="Domain\ObjData\clsTextFile.cs" />
+    <Compile Include="Domain\Definitions.cs" />
+    <Compile Include="Domain\ObjData\Definitions.cs" />
+    <Compile Include="Generators\clsBrush.cs" />
+    <Compile Include="Domain\ComponentBase.cs" />
+    <Compile Include="Mapping\Changes\clsAutoTextureChanges.cs" />
+    <Compile Include="Mapping\Changes\clsMapTileChanges.cs" />
+    <Compile Include="Mapping\Changes\clsPointChanges.cs" />
+    <Compile Include="Mapping\Changes\clsSectorChanges.cs" />
+    <Compile Include="Mapping\Changes\clsTerrainUpdate.cs" />
+    <Compile Include="Mapping\clsGeneratorMap.cs" />
+    <Compile Include="Mapping\clsMinimapTexture.cs" />
+    <Compile Include="Mapping\clsTerrain.cs" />
+    <Compile Include="Mapping\clsUpdateAutotexture.cs" />
+    <Compile Include="Mapping\clsUpdateSectorGraphics.cs" />
+    <Compile Include="Mapping\clsUpdateSectorUnitHeights.cs" />
+    <Compile Include="Mapping\Drawing\clsDrawCallTerrain.cs" />
+    <Compile Include="Mapping\Drawing\clsDrawCallTerrainWireframe.cs" />
+    <Compile Include="Mapping\Drawing\clsDrawHorizontalPosOnTerrain.cs" />
+    <Compile Include="Mapping\Drawing\clsDrawSectorObjects.cs" />
+    <Compile Include="Mapping\Drawing\clsDrawTerrainLine.cs" />
+    <Compile Include="Mapping\Drawing\clsDrawTileAreaOutline.cs" />
+    <Compile Include="Mapping\Drawing\clsDrawTileOrientation.cs" />
+    <Compile Include="Mapping\Drawing\clsDrawTileOutline.cs" />
+    <Compile Include="Mapping\Drawing\clsDrawVertexMarker.cs" />
+    <Compile Include="Mapping\Drawing\clsDrawVertexTerrain.cs" />
+    <Compile Include="Mapping\Objects\clsUnitAdd.cs" />
+    <Compile Include="Mapping\Objects\clsUnitCreate.cs" />
+    <Compile Include="Mapping\Objects\clsUnitGroup.cs" />
+    <Compile Include="Mapping\Objects\clsUnitGroupContainer.cs" />
+    <Compile Include="Mapping\Objects\clsUnitSectorConnection.cs" />
+    <Compile Include="Mapping\Renderers\clsDrawTile.cs" />
+    <Compile Include="Mapping\Renderers\clsDrawTileMiddleVertex.cs" />
+    <Compile Include="Mapping\Script\clsScriptArea.cs" />
+    <Compile Include="Mapping\Script\clsScriptPosition.cs" />
+    <Compile Include="Mapping\Tiles\clsGeneratorTileset.cs" />
+    <Compile Include="Mapping\clsHeightmap.cs" />
+    <Compile Include="FileIO\ExtensionsForIO.cs" />
+    <Compile Include="frmKeyboardControl.Designer.cs">
+      <DependentUpon>frmKeyboardControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmKeyboardControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AppSettings\KeyboardManager.cs" />
+    <Compile Include="Mapping\Changes\clsMapChanges.cs" />
+    <Compile Include="Mapping\Drawing\clsMapDraw.cs" />
+    <Compile Include="Mapping\Objects\clsMapObject.cs" />
+    <Compile Include="Mapping\Script\clsMapScriptMarkers.cs" />
+    <Compile Include="Mapping\Tools\clsAction.cs" />
+    <Compile Include="Mapping\Tools\clsApplyAutoTri.cs" />
+    <Compile Include="Mapping\Tools\clsApplyCliff.cs" />
+    <Compile Include="Mapping\Tools\clsApplyCliffRemove.cs" />
+    <Compile Include="Mapping\Tools\clsApplyCliffTriangle.cs" />
+    <Compile Include="Mapping\Tools\clsApplyCliffTriangleRemove.cs" />
+    <Compile Include="Mapping\Tools\clsApplyHeightChange.cs" />
+    <Compile Include="Mapping\Tools\clsApplyHeightSet.cs" />
+    <Compile Include="Mapping\Tools\clsApplyHeightSmoothing.cs" />
+    <Compile Include="Mapping\Tools\clsApplyRoadRemove.cs" />
+    <Compile Include="Mapping\Tools\clsApplySideHTerrainInterpret.cs" />
+    <Compile Include="Mapping\Tools\clsApplySideTerrainInterpret.cs" />
+    <Compile Include="Mapping\Tools\clsApplySideVTerrainInterpret.cs" />
+    <Compile Include="Mapping\Tools\clsApplyTexture.cs" />
+    <Compile Include="Mapping\Tools\clsApplyTileTerrainInterpret.cs" />
+    <Compile Include="Mapping\Tools\clsApplyVertexTerrain.cs" />
+    <Compile Include="Mapping\Tools\clsApplyVertexTerrainInterpret.cs" />
+    <Compile Include="Mapping\Tools\clsMapTools.cs" />
+    <Compile Include="Mapping\Tools\clsObjectAction.cs" />
+    <Compile Include="Mapping\Tools\clsObjectAlignment.cs" />
+    <Compile Include="Mapping\Tools\clsObjectBody.cs" />
+    <Compile Include="Mapping\Tools\clsObjectComponent.cs" />
+    <Compile Include="Mapping\Tools\clsObjectDroidType.cs" />
+    <Compile Include="Mapping\Tools\clsObjectFlattenTerrain.cs" />
+    <Compile Include="Mapping\Tools\clsObjectHealth.cs" />
+    <Compile Include="Mapping\Tools\clsObjectPosOffset.cs" />
+    <Compile Include="Mapping\Tools\clsObjectPriority.cs" />
+    <Compile Include="Mapping\Tools\clsObjectPriorityOrderList.cs" />
+    <Compile Include="Mapping\Tools\clsObjectPropulsion.cs" />
+    <Compile Include="Mapping\Tools\clsObjectRotation.cs" />
+    <Compile Include="Mapping\Tools\clsObjectRotationOffset.cs" />
+    <Compile Include="Mapping\Tools\clsObjectSelect.cs" />
+    <Compile Include="Mapping\Tools\clsObjectTemplateToDesign.cs" />
+    <Compile Include="Mapping\Tools\clsObjectTurret.cs" />
+    <Compile Include="Mapping\Tools\clsObjectTurretCount.cs" />
+    <Compile Include="Mapping\Tools\clsObjectUnitGroup.cs" />
+    <Compile Include="Mapping\Tools\sGenerateMasterTerrainArgs.cs" />
+    <Compile Include="Domain\clsModel.cs" />
+    <Compile Include="Domain\ObjData\clsObjectData.cs" />
+    <Compile Include="Mapping\Tiles\TileDirection.cs" />
+    <Compile Include="Mapping\Tiles\TileOrientation.cs" />
+    <Compile Include="AppSettings\OptionGroup.cs" />
+    <Compile Include="AppSettings\OptionInterface.cs" />
+    <Compile Include="AppSettings\OptionProfileCreator.cs" />
+    <Compile Include="Maths\Angles.cs" />
+    <Compile Include="Maths\Matrix3DMath.cs" />
+    <Compile Include="Painters\CliffBrush.cs" />
+    <Compile Include="Painters\Painter.cs" />
+    <Compile Include="Maths\Definitions.cs" />
+    <Compile Include="AppSettings\Options.cs" />
+    <Compile Include="Painters\Road.cs" />
+    <Compile Include="Painters\RoadBrush.cs" />
+    <Compile Include="Painters\Terrain.cs" />
+    <Compile Include="Painters\TileList.cs" />
+    <Compile Include="Painters\TileOrientationChance.cs" />
+    <Compile Include="Painters\TransitionBrush.cs" />
+    <Compile Include="Pathfinding\LargeArrays.cs" />
+    <Compile Include="Pathfinding\Path.cs" />
+    <Compile Include="PathUtil.cs" />
+    <Compile Include="Result.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Util\clsKeysActive.cs" />
+    <Compile Include="Util\clsLayer.cs" />
+    <Compile Include="Util\clsTileType.cs" />
+    <Compile Include="Util\FillCliffAction.cs" />
+    <Compile Include="Util\ObjectRotateMode.cs" />
+    <Compile Include="Util\TextureTerrainAction.cs" />
+    <Compile Include="Util\TileWalls.cs" />
+    <Compile Include="Util\sLayerList.cs" />
+    <Compile Include="Util\sSplitPath.cs" />
+    <Compile Include="Util\Tools.cs" />
+    <Compile Include="Domain\UnitTypeBase.cs" />
+    <Compile Include="clsViewInfo.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Colors\ColorUtil.cs" />
+    <Compile Include="frmQuit.Designer.cs">
+      <DependentUpon>frmQuit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmQuit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\BrushControl.Designer.cs">
+      <DependentUpon>BrushControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BrushControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ColourControl.Designer.cs">
+      <DependentUpon>ColourControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ColourControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\MapViewControl.Designer.cs">
+      <DependentUpon>MapViewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MapViewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\PathSetControl.Designer.cs">
+      <DependentUpon>PathSetControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PathSetControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\PlayerNumControl.Designer.cs">
+      <DependentUpon>PlayerNumControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PlayerNumControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\TextureViewControl.Designer.cs">
+      <DependentUpon>TextureViewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TextureViewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="frmClose.Designer.cs">
+      <DependentUpon>frmClose.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmClose.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCompile.Designer.cs">
+      <DependentUpon>frmCompile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmCompile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmGenerator.Designer.cs">
+      <DependentUpon>frmGenerator.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmGenerator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain.Designer.cs">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmOptions.Designer.cs">
+      <DependentUpon>frmOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSplash.Designer.cs">
+      <DependentUpon>frmSplash.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmSplash.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmWarnings.Designer.cs">
+      <DependentUpon>frmWarnings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmWarnings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmWZLoad.Designer.cs">
+      <DependentUpon>frmWZLoad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmWZLoad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Graphics\OpenGL\GLFont.cs" />
+    <Compile Include="Bitmaps\BitmapUtil.cs" />
+    <Compile Include="Generators\DefaultGenerator.cs" />
+    <Compile Include="FileIO\IOUtil.cs" />
+    <Compile Include="Maths\MathUtil.cs" />
+    <Compile Include="Painters\PainterFactory.cs" />
+    <Compile Include="App.cs" />
+    <Compile Include="AppSettings\SettingsManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Application.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Pathfinding\PathfinderConnection.cs" />
+    <Compile Include="Pathfinding\PathfinderLayer.cs" />
+    <Compile Include="Pathfinding\PathfinderNetwork.cs" />
+    <Compile Include="Pathfinding\PathfinderNode.cs" />
+    <Compile Include="Mapping\Tiles\TileUtil.cs" />
+    <Compile Include="FileIO\ZipSplitPath.cs" />
+    <Compile Include="Util\clsInputBox.cs" />
+    <Compile Include="Mapping\IO\FMap\FMapInfo.cs" />
+    <Compile Include="Mapping\IO\FMap\FMapIniGateways.cs" />
+    <Compile Include="Mapping\IO\LND\LNDObject.cs" />
+    <Compile Include="Mapping\IO\LND\LNDTile.cs" />
+    <Compile Include="Mapping\IO\Minimap\Minimap.cs" />
+    <Compile Include="Mapping\IO\Wz\Game.cs" />
+    <Compile Include="Mapping\IO\Wz\IniDroid.cs" />
+    <Compile Include="Mapping\IO\Wz\IniFeature.cs" />
+    <Compile Include="Mapping\IO\Wz\IniStructure.cs" />
+    <Compile Include="Mapping\IO\Wz\WZBJOUnit.cs" />
+    <Compile Include="Mapping\IO\FMap\INIObject.cs" />
+    <Compile Include="Mapping\IO\Wz\WzSaver.cs" />
+    <Compile Include="Mapping\IO\Wz\WzLoader.cs" />
+    <Compile Include="Mapping\IO\TTP\TTPLoader.cs" />
+    <Compile Include="Mapping\IO\TTP\TTPSaver.cs" />
+    <Compile Include="Mapping\IO\LND\LNDLoader.cs" />
+    <Compile Include="Mapping\IO\LND\LNDSaver.cs" />
+    <Compile Include="Mapping\IO\Heightmap\HeightmapSaver.cs" />
+    <Compile Include="Mapping\IO\FMap\FMapLoader.cs" />
+    <Compile Include="Mapping\IO\FMap\FMapSaver.cs" />
+    <Compile Include="FileIO\TilesetLoader.cs" />
+    <Compile Include="Mapping\AutoSave.cs" />
+    <Compile Include="Mapping\Gateway.cs" />
+    <Compile Include="Mapping\GatewayChange.cs" />
+    <Compile Include="Mapping\InterfaceOptions.cs" />
+    <Compile Include="Mapping\Map.cs" />
+    <Compile Include="Mapping\Message.cs" />
+    <Compile Include="Mapping\PathInfo.cs" />
+    <Compile Include="Mapping\Sector.cs" />
+    <Compile Include="Mapping\ShadowSector.cs" />
+    <Compile Include="Mapping\Undo.cs" />
+    <Compile Include="Mapping\UnitChange.cs" />
+    <Compile Include="Mapping\Objects\Unit.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="frmKeyboardControl.resx">
+      <DependentUpon>frmKeyboardControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmQuit.resx">
+      <DependentUpon>frmQuit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\BrushControl.resx">
+      <DependentUpon>BrushControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ColourControl.resx">
+      <DependentUpon>ColourControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\MapViewControl.resx">
+      <DependentUpon>MapViewControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PathSetControl.resx">
+      <DependentUpon>PathSetControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PlayerNumControl.resx">
+      <DependentUpon>PlayerNumControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TextureViewControl.resx">
+      <DependentUpon>TextureViewControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmClose.resx">
+      <DependentUpon>frmClose.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCompile.resx">
+      <DependentUpon>frmCompile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmGenerator.resx">
+      <DependentUpon>frmGenerator.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMain.resx">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmOptions.resx">
+      <DependentUpon>frmOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSplash.resx">
+      <DependentUpon>frmSplash.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmWarnings.resx">
+      <DependentUpon>frmWarnings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmWZLoad.resx">
+      <DependentUpon>frmWZLoad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>SharpFlame</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\app.manifest">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>SharpFlame</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="flaME.ico" />
+    <None Include="Resources\overflow.png" />
+    <None Include="Resources\objectsselect.png" />
+    <None Include="Resources\notile.png" />
+    <None Include="Resources\gateways.png" />
+    <None Include="Resources\drawtileorientation.png" />
+    <None Include="Resources\displayautotexture.png" />
+    <None Include="Resources\warning.png" />
+    <None Include="Resources\selectionrotateclockwise.png" />
+    <None Include="Resources\selectionrotateanticlockwise.png" />
+    <None Include="Resources\selectionpasteoptions.png" />
+    <None Include="Resources\selectionpaste.png" />
+    <None Include="Resources\selectionflipx.png" />
+    <None Include="Resources\selectioncopy.png" />
+    <None Include="Resources\selection.png" />
+    <None Include="Resources\save.png" />
+    <None Include="Resources\problem.png" />
+    <None Include="Resources\flaME.ico" />
+  </ItemGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\SharpFlame.Core\SharpFlame.Core.csproj">
+      <Project>{8AE7F7A3-841A-44A7-B016-4661BBBF7821}</Project>
+      <Name>SharpFlame.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <TextStylePolicy EolMarker="Windows" inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/plain" />
+          <NameConventionPolicy>
+            <Rules>
+              <NamingRule Name="Namespaces" AffectedEntity="Namespace" VisibilityMask="VisibilityMask" NamingStyle="PascalCase" IncludeInstanceMembers="True" IncludeStaticEntities="True" />
+              <NamingRule Name="Types" AffectedEntity="Class, Struct, Enum, Delegate" VisibilityMask="VisibilityMask" NamingStyle="PascalCase" IncludeInstanceMembers="True" IncludeStaticEntities="True" />
+              <NamingRule Name="Interfaces" AffectedEntity="Interface" VisibilityMask="VisibilityMask" NamingStyle="PascalCase" IncludeInstanceMembers="True" IncludeStaticEntities="True">
+                <RequiredPrefixes>
+                  <String>I</String>
+                </RequiredPrefixes>
+              </NamingRule>
+              <NamingRule Name="Attributes" AffectedEntity="CustomAttributes" VisibilityMask="VisibilityMask" NamingStyle="PascalCase" IncludeInstanceMembers="True" IncludeStaticEntities="True">
+                <RequiredSuffixes>
+                  <String>Attribute</String>
+                </RequiredSuffixes>
+              </NamingRule>
+              <NamingRule Name="Event Arguments" AffectedEntity="CustomEventArgs" VisibilityMask="VisibilityMask" NamingStyle="PascalCase" IncludeInstanceMembers="True" IncludeStaticEntities="True">
+                <RequiredSuffixes>
+                  <String>EventArgs</String>
+                </RequiredSuffixes>
+              </NamingRule>
+              <NamingRule Name="Exceptions" AffectedEntity="CustomExceptions" VisibilityMask="VisibilityMask" NamingStyle="PascalCase" IncludeInstanceMembers="True" IncludeStaticEntities="True">
+                <RequiredSuffixes>
+                  <String>Exception</String>
+                </RequiredSuffixes>
+              </NamingRule>
+              <NamingRule Name="Methods" AffectedEntity="Methods" VisibilityMask="VisibilityMask" NamingStyle="PascalCase" IncludeInstanceMembers="True" IncludeStaticEntities="True" />
+              <NamingRule Name="Static Readonly Fields" AffectedEntity="ReadonlyField" VisibilityMask="Internal, Protected, Public" NamingStyle="PascalCase" IncludeInstanceMembers="False" IncludeStaticEntities="True" />
+              <NamingRule Name="Fields (Non Private)" AffectedEntity="Field" VisibilityMask="Internal, Protected, Public" NamingStyle="PascalCase" IncludeInstanceMembers="True" IncludeStaticEntities="True" />
+              <NamingRule Name="ReadOnly Fields (Non Private)" AffectedEntity="ReadonlyField" VisibilityMask="Internal, Protected, Public" NamingStyle="PascalCase" IncludeInstanceMembers="True" IncludeStaticEntities="False" />
+              <NamingRule Name="Fields (Private)" AffectedEntity="Field, ReadonlyField" VisibilityMask="Private" NamingStyle="CamelCase" IncludeInstanceMembers="True" IncludeStaticEntities="False">
+                <AllowedPrefixes>
+                  <String>_</String>
+                  <String>m_</String>
+                </AllowedPrefixes>
+              </NamingRule>
+              <NamingRule Name="Static Fields (Private)" AffectedEntity="Field" VisibilityMask="Private" NamingStyle="CamelCase" IncludeInstanceMembers="False" IncludeStaticEntities="True" />
+              <NamingRule Name="ReadOnly Fields (Private)" AffectedEntity="ReadonlyField" VisibilityMask="Private" NamingStyle="CamelCase" IncludeInstanceMembers="True" IncludeStaticEntities="False">
+                <AllowedPrefixes>
+                  <String>_</String>
+                  <String>m_</String>
+                </AllowedPrefixes>
+              </NamingRule>
+              <NamingRule Name="Constant Fields" AffectedEntity="ConstantField" VisibilityMask="VisibilityMask" NamingStyle="PascalCase" IncludeInstanceMembers="True" IncludeStaticEntities="True" />
+              <NamingRule Name="Properties" AffectedEntity="Property" VisibilityMask="VisibilityMask" NamingStyle="PascalCase" IncludeInstanceMembers="True" IncludeStaticEntities="True" />
+              <NamingRule Name="Events" AffectedEntity="Event" VisibilityMask="VisibilityMask" NamingStyle="PascalCase" IncludeInstanceMembers="True" IncludeStaticEntities="True" />
+              <NamingRule Name="Enum Members" AffectedEntity="EnumMember" VisibilityMask="VisibilityMask" NamingStyle="PascalCase" IncludeInstanceMembers="True" IncludeStaticEntities="True" />
+              <NamingRule Name="Parameters" AffectedEntity="Parameter" VisibilityMask="VisibilityMask" NamingStyle="CamelCase" IncludeInstanceMembers="True" IncludeStaticEntities="True" />
+              <NamingRule Name="Type Parameters" AffectedEntity="TypeParameter" VisibilityMask="VisibilityMask" NamingStyle="PascalCase" IncludeInstanceMembers="True" IncludeStaticEntities="True">
+                <RequiredPrefixes>
+                  <String>T</String>
+                </RequiredPrefixes>
+              </NamingRule>
+            </Rules>
+          </NameConventionPolicy>
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+  <ItemGroup />
+  <ItemGroup />
+</Project>
