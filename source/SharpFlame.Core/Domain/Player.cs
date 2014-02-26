@@ -1,14 +1,13 @@
 #region
 
 using System;
-using SharpFlame.Colors;
 using SharpFlame.Core.Domain.Colors;
 
 #endregion
 
-namespace SharpFlame.Util
+namespace SharpFlame.Core.Domain
 {
-    public class clsPlayer
+    public class Player
     {
         public SRgb Colour;
         public SRgb MinimapColour;

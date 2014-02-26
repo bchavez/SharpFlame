@@ -18,9 +18,9 @@ namespace SharpFlame.Bitmaps
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public static sResult LoadBitmap(string path, ref Bitmap resultBitmap)
+        public static SimpleResult LoadBitmap(string path, ref Bitmap resultBitmap)
         {
-            var returnResult = new sResult();
+            var returnResult = new SimpleResult();
             returnResult.Problem = "";
             returnResult.Success = false;
 
@@ -42,9 +42,9 @@ namespace SharpFlame.Bitmaps
             return returnResult;
         }
 
-        public static sResult SaveBitmap(string path, bool overwrite, Bitmap bitmapToSave)
+        public static SimpleResult SaveBitmap(string path, bool overwrite, Bitmap bitmapToSave)
         {
-            var returnResult = new sResult();
+            var returnResult = new SimpleResult();
             returnResult.Problem = "";
             returnResult.Success = false;
 

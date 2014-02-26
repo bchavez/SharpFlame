@@ -2,6 +2,7 @@
 
 using System.Windows.Forms;
 using SharpFlame.Collections;
+using SharpFlame.Core;
 using SharpFlame.Core.Collections;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.Objects;
@@ -20,7 +21,7 @@ namespace SharpFlame.Mapping
         public string GetDefaultScriptLabel(string Prefix)
         {
             var Number = 1;
-            var Valid = new sResult();
+            var Valid = new SimpleResult();
             var Label = "";
 
             do
@@ -40,9 +41,9 @@ namespace SharpFlame.Mapping
             } while ( true );
         }
 
-        public sResult ScriptLabelIsValid(string Text)
+        public SimpleResult ScriptLabelIsValid(string Text)
         {
-            var ReturnResult = new sResult();
+            var ReturnResult = new SimpleResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 

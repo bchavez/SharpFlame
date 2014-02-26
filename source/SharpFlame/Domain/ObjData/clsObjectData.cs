@@ -203,7 +203,7 @@ namespace SharpFlame.Domain.ObjData
                     var result = new Result(string.Format("Loading texture page \"{0}\"", text));
                     if ( File.Exists(text) )
                     {
-                        sResult bitmapResult = BitmapUtil.LoadBitmap(text, ref bitmap);
+                        SimpleResult bitmapResult = BitmapUtil.LoadBitmap(text, ref bitmap);
                         var newPage = new clsTexturePage();
                         if ( bitmapResult.Success )
                         {

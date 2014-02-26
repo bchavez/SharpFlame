@@ -34,7 +34,7 @@ namespace SharpFlame.FileIO
             Bitmap bitmap = null;
             var SplitPath = new sSplitPath(path);
             var slashPath = PathUtil.EndWithPathSeperator(path);
-            var result = new sResult();
+            var result = new SimpleResult();
 
             if ( SplitPath.FileTitle != "" )
             {
@@ -153,9 +153,9 @@ namespace SharpFlame.FileIO
             return returnResult;
         }
 
-        private sResult loadTileType(string path)
+        private SimpleResult loadTileType(string path)
         {
-            var returnResult = new sResult();
+            var returnResult = new SimpleResult();
 
             try
             {
@@ -171,9 +171,9 @@ namespace SharpFlame.FileIO
             return returnResult;
         }
 
-        private sResult readTileType(BinaryReader file)
+        private SimpleResult readTileType(BinaryReader file)
         {
-            var returnResult = new sResult();
+            var returnResult = new SimpleResult();
             returnResult.Success = false;
             returnResult.Problem = "";
 
@@ -246,7 +246,7 @@ namespace SharpFlame.FileIO
             var bitmap2 = default(Bitmap);
             var bitmap1 = default(Bitmap);
             Bitmap bitmap = null;
-            var result = new sResult();
+            var result = new SimpleResult();
 
             //-------- 64 --------
 
