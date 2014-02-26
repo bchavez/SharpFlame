@@ -26,6 +26,7 @@
 
 using Eto.Forms;
 using Eto.Drawing;
+using SharpFlame.Gui.UiOptions;
 
 namespace SharpFlame.Gui.Sections
 {
@@ -75,7 +76,16 @@ namespace SharpFlame.Gui.Sections
 
             mainLayout.Add (null);
 
+            setBindings ();
+
             Content = mainLayout;
+        }
+
+        void setBindings() {
+            // Set Mousetool, when we are shown.
+            Shown += delegate {
+                App.UiOptions.MouseTool = MouseTool.Default;
+            };
         }
     }
 }

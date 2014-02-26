@@ -24,6 +24,7 @@
 // */
 #endregion
 
+using System;
 using Eto.Forms;
 using Eto.Drawing;
 using SharpFlame.Core;
@@ -51,32 +52,7 @@ namespace SharpFlame.Gui.Forms
 
             tabControl.SelectedIndexChanged += delegate
             {
-                // Could easily do a cast but, we might change the enum
-                // in the future.
-                switch (tabControl.SelectedIndex) {
-                case 0:
-                    App.UiOptions.MouseMode = MouseMode.Textures;
-                    break;
-                case 1:
-                    App.UiOptions.MouseMode = MouseMode.Terrain;
-                    break;
-                case 2:
-                    App.UiOptions.MouseMode = MouseMode.Height;
-                    break;
-                case 3:
-                    // Ignored.
-                    App.UiOptions.MouseMode = MouseMode.Resize;
-                    break;
-                case 4:
-                    App.UiOptions.MouseMode = MouseMode.PlaceObjects;
-                    break;
-                case 5:
-                    App.UiOptions.MouseMode = MouseMode.SelectObject;
-                    break;
-                case 6:
-                    App.UiOptions.MouseMode = MouseMode.SetLabels;
-                    break;
-                }
+                tabControl.SelectedPage.Content.OnShown(EventArgs.Empty);
             };
 
 			var splitter = new Splitter

@@ -29,12 +29,19 @@ using Eto.Forms;
 using Eto.Drawing;
 using SharpFlame.Core;
 using SharpFlame.Gui.Controls;
+using SharpFlame.Gui.UiOptions;
 
 namespace SharpFlame.Gui.Sections
 {
 	public class PlaceObjectsTab : Panel
 	{
         readonly SearchBox filterText;
+        readonly Button btnRotation0;
+        readonly Button btnRotation90;
+        readonly Button btnRotation180;
+        readonly Button btnRotation270;
+
+        readonly NumericUpDown nudRotation;
 
 		public PlaceObjectsTab ()
 		{
@@ -61,18 +68,26 @@ namespace SharpFlame.Gui.Sections
 
 			topLayout.AddRow (null, nLayout1, null);
 
-            var nLayout2 = new DynamicLayout ();
-            var nLayout3 = new DynamicLayout ();
+            var nLayout2 = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty };
+            var nLayout3 = new DynamicLayout { Spacing = Size.Empty };
             var nLayout4 = new DynamicLayout ();
 
-            nLayout2.AddRow(new Label { Text = "Rotation:", VerticalAlign = VerticalAlign.Middle },
-                            new NumericUpDown { MinValue = 0, MaxValue = 360, Value = 0, Size = new Size(-1, -1) },
+            nLayout2.AddSeparateRow (TableLayout.AutoSized (btnRotation0 = new Button { Text = "0" }),
+                                     TableLayout.AutoSized (btnRotation90 = new Button { Text = "90" }),
+                                     TableLayout.AutoSized (btnRotation180 = new Button { Text = "180" }),
+                                     TableLayout.AutoSized (btnRotation270 = new Button { Text = "270" }));
+
+            nLayout2.AddSeparateRow(new Label { Text = "Rotation:", VerticalAlign = VerticalAlign.Middle },
+                            nudRotation = new NumericUpDown { MinValue = 0, MaxValue = 360, Value = 0, Size = new Size(-1, -1) },
                             new CheckBox { Text = "Random" }
             );
+            var gbRotation = new GroupBox { Text = "Rotation" };
+            gbRotation.Content = nLayout2;
+
 
             nLayout3.Add (new CheckBox { Text = "Rotate Footprints" });
             nLayout3.Add (new CheckBox { Text = "Automatic Walls" });
-            nLayout4.AddRow (nLayout2, nLayout3);
+            nLayout4.AddRow (gbRotation, nLayout3);
 
             topLayout.AddRow (null, nLayout4, null);
 
@@ -90,8 +105,35 @@ namespace SharpFlame.Gui.Sections
             mainLayout.AddRow (nLayout5);
 			mainLayout.Add (tabControl);
 
+            setBindings ();
+
 			Content = mainLayout;
 		}
+
+        void setBindings() {
+            // Rotation buttons
+            btnRotation0.Click += delegate {
+                nudRotation.Value = 0D;
+            };
+
+            btnRotation90.Click += delegate {
+                nudRotation.Value = 90D;
+            };
+
+
+            btnRotation180.Click += delegate {
+                nudRotation.Value = 180D;
+            };
+
+            btnRotation270.Click += delegate {
+                nudRotation.Value = 270D;
+            };
+
+            // Set Mousetool, when we are shown.
+            Shown += delegate {
+                App.UiOptions.MouseTool = MouseTool.Default;
+            };
+        }
 
         class MyGridItem
         {

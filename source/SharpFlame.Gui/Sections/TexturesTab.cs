@@ -36,18 +36,18 @@ namespace SharpFlame.Gui.Sections
 {
 	public class TextureTab : Panel
 	{
-		CheckBox chkBoxTexture;
-		CheckBox chkBoxOrientation;
-        CheckBox chkBoxRandomize;
+        readonly CheckBox chkBoxTexture;
+        readonly CheckBox chkBoxOrientation;
+        readonly CheckBox chkBoxRandomize;
 
-        Button btnCircular;
-        Button btnSquare;
+        readonly Button btnCircular;
+        readonly Button btnSquare;
 
-        NumericUpDown nudRadius;
+        readonly NumericUpDown nudRadius;
 
-        RadioButtonList rblTerrainModifier;
+        readonly RadioButtonList rblTerrainModifier;
 
-        ComboBox cbTileset;
+        readonly ComboBox cbTileset;
 
 		public TextureTab() {
 			var layout = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty};
@@ -151,7 +151,7 @@ namespace SharpFlame.Gui.Sections
 			//mainLayout.Add();
 
 			// Set the bindings to UiOptions.Textures
-			SetBindings ();
+			setBindings ();
 
 			Content = mainLayout;
 		}
@@ -159,7 +159,7 @@ namespace SharpFlame.Gui.Sections
 		/// <summary>
 		/// Sets the Bindings to App.UiOptions.Textures;
 		/// </summary>
-		void SetBindings() 
+		void setBindings() 
 		{
             TexturesOptions texturesOptions = App.UiOptions.Textures; 
 
@@ -194,6 +194,11 @@ namespace SharpFlame.Gui.Sections
             {
                 cbTileset.Items.Clear ();
                 cbTileset.Items.AddRange (App.Tileset);
+            };
+
+            // Set Mousetool, when we are shown.
+            Shown += delegate {
+                App.UiOptions.MouseTool = MouseTool.TextureBrush;
             };
 		}
 

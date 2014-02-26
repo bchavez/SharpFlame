@@ -26,19 +26,30 @@
 
 namespace SharpFlame.Gui.UiOptions
 {
-    public enum MouseMode {
-        Textures,
-        Terrain,
-        Height,
-        Resize,
-        PlaceObjects,
-        SelectObject,
-        SetLabels
+    public enum MouseTool {
+        Default,
+        CliffBrush,
+        CliffRemove,
+        CliffTriangle,
+        Gateways,
+        HeightChangeBrush,
+        HeightSetBrush,
+        HeightSmoothBrush,
+        ObjectLines,
+        ObjectPlace,
+        ObjectSelect,
+        RoadLines,
+        RoadPlace,
+        RoadRemove,
+        TerrainBrush,
+        TerrainFill,
+        TerrainSelect,
+        TextureBrush
     }
 
     public class Options
     {
-        public MouseMode MouseMode;
+        public MouseTool MouseTool;
      
         public TexturesOptions Textures;
 

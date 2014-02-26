@@ -27,6 +27,7 @@
 
 using Eto.Drawing;
 using Eto.Forms;
+using SharpFlame.Gui.UiOptions;
 
 namespace SharpFlame.Gui.Sections
 {
@@ -85,8 +86,18 @@ namespace SharpFlame.Gui.Sections
 			layout.Add (RoadTypeSection ());
 			layout.Add (CliffSection ());
             layout.Add (null);
+
+            setBindings ();
+
 			Content = layout;
 		}
+
+        void setBindings() {
+            // Set Mousetool, when we are shown.
+            Shown += delegate {
+                App.UiOptions.MouseTool = MouseTool.Default;
+            };
+        }
 
 		Control CliffSection () {
 			var control = new GroupBox { Text = "Cliff:" };
