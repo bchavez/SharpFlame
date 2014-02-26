@@ -49,8 +49,7 @@ namespace SharpFlame.Gui.Sections
             playerSelector.SelectedPlayer = "S";
 
             var topLayout = new DynamicLayout ();
-            var nLayout1 = new DynamicLayout ();
-            nLayout1.Padding = Padding.Empty;
+            var nLayout1 = new DynamicLayout { Padding = Padding.Empty };
             nLayout1.AddRow(new Label { Text = "Player", VerticalAlign = VerticalAlign.Middle }, 
                             playerSelector, 
                             TableLayout.AutoSized(new Button { Text = "Select Player Objects" }, centered: true)
@@ -77,8 +76,7 @@ namespace SharpFlame.Gui.Sections
 
             topLayout.AddRow (null, nLayout4, null);
 
-            var nLayout5 = new DynamicLayout ();
-            nLayout5.Padding = Padding.Empty;
+            var nLayout5 = new DynamicLayout { Padding = Padding.Empty };
             filterText = new SearchBox { PlaceholderText = "Filter", Size = new Size(235, 27) };
             nLayout5.AddRow (filterText, TableLayout.AutoSized(new Button { Text = "Select this Objects" }));
 
@@ -98,38 +96,23 @@ namespace SharpFlame.Gui.Sections
         class MyGridItem
         {
             bool? check;
-            string text;
 
             public int Row { get; set; }
 
-            public bool? Check
-            {
-                get { return check; }
-                set
-                {
-                    check = value;
-                }
-            }
-
             public string Text
             {
-                get { return text; }
-                set
-                {
-                    text = value;
-                }
+                get;
+                set;
             }
-
-            public Image Image { get; set; }
 
             public Color Color { get; set; }
             // used for owner-drawn cells
             public MyGridItem(Random rand, int row, string prefix)
             {
                 // initialize to random values
-                this.Row = row;
+                Row = row;
                 var val = rand.Next(3);
-                check = val == 0 ? (bool?)false : val == 1 ? (bool?)true : null;
+                check = val == 0 ? false : val == 1 ? (bool?)true : null;
 
                 val = rand.Next(3);
 
@@ -265,8 +248,7 @@ namespace SharpFlame.Gui.Sections
         Control ToolGroupBox() {
             var control = new GroupBox { Text = "Tool" };
             var nLayout1 = new DynamicLayout ();
-            var rbList = new RadioButtonList ();
-            rbList.Orientation = RadioButtonListOrientation.Vertical;
+            var rbList = new RadioButtonList { Orientation = RadioButtonListOrientation.Vertical };
             rbList.Items.Add(new ListItem { Text = "Place" });
             rbList.Items.Add(new ListItem { Text = "Lines" });
             rbList.SelectedIndex = 0;

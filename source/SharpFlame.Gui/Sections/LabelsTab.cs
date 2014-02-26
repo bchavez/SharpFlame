@@ -24,7 +24,6 @@
  // */
  #endregion
 
-using System;
 using Eto.Forms;
 using Eto.Drawing;
 
@@ -50,7 +49,7 @@ namespace SharpFlame.Gui.Sections
             var nLayout2 = new DynamicLayout ();
             var nLayout3 = new DynamicLayout ();
             nLayout3.AddRow (new Label { Text = "Label:", VerticalAlign = VerticalAlign.Middle },
-                             new TextBox {});
+                             new TextBox());
             nLayout2.Add (nLayout3);
 
             var nLayout4 = new DynamicLayout ();

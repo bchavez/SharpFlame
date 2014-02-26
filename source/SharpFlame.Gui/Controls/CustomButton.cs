@@ -38,10 +38,10 @@ namespace SharpFlame.Gui.Controls
 
 		public Color BackGroundColor 
 		{
-			get { return base.BackgroundColor; }
+			get { return BackgroundColor; }
 			set { 
 				layout.BackgroundColor = value;
-				base.BackgroundColor = value;
+				BackgroundColor = value;
 			}
 		}
 
@@ -93,8 +93,8 @@ namespace SharpFlame.Gui.Controls
 
 			Text = "_NOT_SET_";
 			BorderWith = new Padding (1, 1);
-			BorderColor = Eto.Drawing.Colors.Black;
-            HoverColor = Eto.Drawing.Colors.Gray;
+			BorderColor = Colors.Black;
+            HoverColor = Colors.Gray;
 
 			layout.Add (label);
 
@@ -103,7 +103,7 @@ namespace SharpFlame.Gui.Controls
 			// Change background color on enter/leave.
 			layout.MouseEnter += delegate {
 				layout.BackgroundColor = HoverColor;
-				if (HoverBorderColor != new Color{}) {
+				if (HoverBorderColor != new Color()) {
 					borderLayout.BackgroundColor = HoverBorderColor;
 				}
 			};

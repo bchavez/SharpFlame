@@ -32,6 +32,9 @@ namespace SharpFlame.Gui.Sections
 	{
 		public MainMapView ()
 		{
+		    var mainLayout = new DynamicLayout();
+
+		    Content = mainLayout;
 		}
 	}
 }

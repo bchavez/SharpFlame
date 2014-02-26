@@ -28,7 +28,6 @@ using System;
 using Eto;
 using Eto.Forms;
 using Eto.Drawing;
-using SharpFlame.Gui;
 using SharpFlame.Gui.UiOptions;
 
 namespace SharpFlame.Gui.Sections
@@ -47,11 +46,9 @@ namespace SharpFlame.Gui.Sections
         RadioButtonList rblTerrainModifier;
 
 		public TextureTab() {
-			var layout = new DynamicLayout();
-			layout.Padding = new Padding (0);
-			layout.Spacing = new Size (0, 0);
+			var layout = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty};
 
-			var row = layout.AddSeparateRow (null,
+            var row = layout.AddSeparateRow (null,
 			                                 new Label { Text = "Tileset:", VerticalAlign = VerticalAlign.Middle },
 											 TextureComboBox (),
 											 null);
@@ -67,9 +64,7 @@ namespace SharpFlame.Gui.Sections
 						 null);
 			layout.EndVertical ();
 
-			var textureOrientationLayout = new DynamicLayout ();
-			textureOrientationLayout.Padding = new Padding (0);
-			textureOrientationLayout.Spacing = new Size (0, 0);
+			var textureOrientationLayout = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty };
 
 			textureOrientationLayout.Add (null);
 			textureOrientationLayout.BeginHorizontal ();
@@ -81,9 +76,7 @@ namespace SharpFlame.Gui.Sections
 			textureOrientationLayout.EndHorizontal ();
 			textureOrientationLayout.Add (null);
 
-			var buttonsRandomize = new DynamicLayout ();
-			buttonsRandomize.Padding = new Padding (0);
-			buttonsRandomize.Spacing = new Size (0, 0);
+            var buttonsRandomize = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty };
 
 			buttonsRandomize.Add (null);
 			buttonsRandomize.BeginVertical();
@@ -114,12 +107,9 @@ namespace SharpFlame.Gui.Sections
 			        null);
 			row.Table.Visible = false;
 
-			var mainLayout = new DynamicLayout ();
-			mainLayout.Padding = new Padding (0);
-			mainLayout.Spacing = new Size (0, 0);
+		    var mainLayout = new DynamicLayout {Padding = Padding.Empty, Spacing = Size.Empty};
 
-			var textureSelector = new Drawable ();
-			textureSelector.BackgroundColor = Colors.Black;
+			var textureSelector = new Drawable { BackgroundColor = Colors.Black };
 
 			var tileTypeCombo = new DynamicLayout ();
 			tileTypeCombo.BeginHorizontal ();
@@ -137,9 +127,7 @@ namespace SharpFlame.Gui.Sections
 			tileTypeCheckBoxes.Add (new CheckBox { Text = "Display Tile Numbers" });
 			tileTypeCheckBoxes.EndHorizontal ();
 
-			var tileTypeSetter = new DynamicLayout ();
-			tileTypeSetter.Padding = new Padding (0);
-			tileTypeSetter.Spacing = new Size (0, 0);
+			var tileTypeSetter = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty };
 			tileTypeSetter.BeginHorizontal ();
 			tileTypeSetter.Add (null);
 			tileTypeSetter.Add (tileTypeCombo);

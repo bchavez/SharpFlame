@@ -51,7 +51,7 @@ namespace SharpFlame.Gui.Controls
 			}
             set {
                 var button = buttons.FirstOrDefault(b => b.Text == value);
-                SetSelected (button, true, true);
+                SetSelected (button, true);
             }
 		}
 
@@ -100,8 +100,7 @@ namespace SharpFlame.Gui.Controls
 			var columns = buttons.Count / 2;
 			var mod = buttons.Count % 2;
 
-			var layout = new DynamicLayout ();
-			layout.Spacing = Size.Empty;
+			var layout = new DynamicLayout { Spacing = Size.Empty };
 			for (var r = 0; r < 2; r++)
 			{
 				layout.BeginHorizontal ();
@@ -130,7 +129,7 @@ namespace SharpFlame.Gui.Controls
 				selectedButton = button;
 				foreach (var r in buttons)
 				{
-					r.Enabled = !object.ReferenceEquals (r, button);
+					r.Enabled = !ReferenceEquals (r, button);
 				}
 
 				if (sendEvent && changed) 

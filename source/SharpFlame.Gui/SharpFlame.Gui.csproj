@@ -68,12 +68,18 @@
     <Compile Include="Controls\PlayerSelector.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Controls\CustomButton.cs" />
+    <Compile Include="Controls\CustomButton.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
     <Compile Include="Controls\PlayerSelectorWinforms.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Sections\ObjectTab.cs" />
-    <Compile Include="Sections\LabelsTab.cs" />
+    <Compile Include="Sections\ObjectTab.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Sections\LabelsTab.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
     <Compile Include="Sections\TexturesTab.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>

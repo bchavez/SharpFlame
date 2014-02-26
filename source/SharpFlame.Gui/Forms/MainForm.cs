@@ -24,10 +24,8 @@
 // */
 #endregion
 
-using System;
 using Eto.Forms;
 using Eto.Drawing;
-using SharpFlame;
 using SharpFlame.Core;
 using SharpFlame.Gui.Sections;
 using SharpFlame.Gui.UiOptions;
@@ -97,7 +95,7 @@ namespace SharpFlame.Gui.Forms
 			Maximize ();
 		}
 
-		private void generateMenuToolBar()
+		void generateMenuToolBar()
 		{
 			var about = new Actions.About();
 			var quit = new Actions.Quit();

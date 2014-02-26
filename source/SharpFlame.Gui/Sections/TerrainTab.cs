@@ -38,22 +38,16 @@ namespace SharpFlame.Gui.Sections
 
 		public TerrainTab ()
 		{
-			placeFillRadios = new RadioButtonList ();
-			placeFillRadios.Spacing = new Size(0, 0);
-			placeFillRadios.Orientation = RadioButtonListOrientation.Vertical;
+			placeFillRadios = new RadioButtonList { Spacing = Size.Empty, Orientation = RadioButtonListOrientation.Vertical };
 			placeFillRadios.Items.Add(new ListItem { Text = "Place" });
 			placeFillRadios.Items.Add(new ListItem { Text = "Fill" });
 
-			roadRadios = new RadioButtonList ();
-			roadRadios.Spacing = new Size(0, 0);
-			roadRadios.Orientation = RadioButtonListOrientation.Vertical;
+            roadRadios = new RadioButtonList { Spacing = Size.Empty, Orientation = RadioButtonListOrientation.Vertical };
 			roadRadios.Items.Add(new ListItem { Text = "Sides" });
 			roadRadios.Items.Add(new ListItem { Text = "Lines" });
 			roadRadios.Items.Add(new ListItem { Text = "Remove" });
 
-			cliffRadios = new RadioButtonList ();
-			cliffRadios.Spacing = new Size(0, 0);
-			cliffRadios.Orientation = RadioButtonListOrientation.Vertical;
+            cliffRadios = new RadioButtonList { Spacing = Size.Empty, Orientation = RadioButtonListOrientation.Vertical };
 			cliffRadios.Items.Add(new ListItem { Text = "Cliff Triangle" });
 			cliffRadios.Items.Add(new ListItem { Text = "Cliff Brush" });
 			cliffRadios.Items.Add(new ListItem { Text = "Cliff Remove" });
@@ -99,32 +93,25 @@ namespace SharpFlame.Gui.Sections
 
 			var mainLayout = new DynamicLayout ();
 
-			var nLayout1 = new DynamicLayout ();
-			nLayout1.Padding = Padding.Empty;
+			var nLayout1 = new DynamicLayout { Padding = Padding.Empty };
 			nLayout1.AddRow(new Label { Text = "Cliff Angle", VerticalAlign = VerticalAlign.Middle },
 							new NumericUpDown { Size = new Size(-1, -1), Value = 35, MaxValue = 360, MinValue = 1 },
 							null);
 
-			var nLayout2 = new DynamicLayout ();
-			nLayout2.Padding = Padding.Empty;
-			nLayout2.AddRow(new CheckBox { Text = "Set Tris" }, null);
+            var nLayout2 = new DynamicLayout { Padding = Padding.Empty };
+            nLayout2.AddRow(new CheckBox { Text = "Set Tris" }, null);
 
-			var nLayout3 = new DynamicLayout ();
-			nLayout3.Padding = Padding.Empty;
-			nLayout3.Spacing = Size.Empty;
-			nLayout3.Add (nLayout1);
+            var nLayout3 = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty };
+            nLayout3.Add(nLayout1);
 			nLayout3.Add (nLayout2);
 			nLayout3.Add (null);
 
-			var nLayout4 = new DynamicLayout ();
-			nLayout4.Padding = Padding.Empty;
-			nLayout4.Spacing = Size.Empty;
+            var nLayout4 = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty };
 			nLayout4.AddRow (cliffRadios, null, nLayout3, null);
 
 			mainLayout.AddRow (nLayout4);
 
-			var circularButton = new Button { Text = "Circular" };
-			circularButton.Enabled = false;
+			var circularButton = new Button { Text = "Circular", Enabled = false };
 			var squareButton = new Button { Text = "Square" };
 			circularButton.Click += (sender, e) => { 
 				circularButton.Enabled = false;
@@ -193,16 +180,9 @@ namespace SharpFlame.Gui.Sections
             				null);
             mainLayout.EndVertical ();
 
-            var gdLayout2 = new DynamicLayout ();
-			gdLayout2.Padding = Padding.Empty;
-			gdLayout2.Spacing = Size.Empty;
-
-			var gdLayout3 = new DynamicLayout ();
-			gdLayout3.Padding = Padding.Empty;
-			gdLayout3.Spacing = Size.Empty;
-			var gdLayout4 = new DynamicLayout ();
-			gdLayout4.Padding = Padding.Empty;
-			gdLayout4.Spacing = Size.Empty;
+            var gdLayout2 = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty };
+            var gdLayout3 = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty };
+            var gdLayout4 = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty };
 
 			var groundTypeListBox = GroundTypeListBox ();
 			var eraseButton = new Button { Text = "Erase", Size = new Size(80, 26) };
@@ -226,9 +206,7 @@ namespace SharpFlame.Gui.Sections
 			groundTypeLayout.EndHorizontal ();
             mainLayout.AddRow (groundTypeLayout);
 
-			var gdCliffRadios = new RadioButtonList ();
-			gdCliffRadios.Spacing = new Size(0, 0);
-			gdCliffRadios.Orientation = RadioButtonListOrientation.Vertical;
+			var gdCliffRadios = new RadioButtonList { Spacing = Size.Empty, Orientation = RadioButtonListOrientation.Vertical};
 			gdCliffRadios.Items.Add(new ListItem { Text = "Ignore Cliff" });
 			gdCliffRadios.Items.Add(new ListItem { Text = "Stop Before Cliff" });
 			gdCliffRadios.Items.Add(new ListItem { Text = "Stop After Cliff" });
@@ -253,9 +231,8 @@ namespace SharpFlame.Gui.Sections
         }
 
 		ListBox GroundTypeListBox() {
-            var control = new ListBox ();
-			control.Size = new Size (200, 150);
-            control.Items.Add (new ListItem { Text = "Grass" });
+            var control = new ListBox { Size = new Size(200, 150)};
+			control.Items.Add (new ListItem { Text = "Grass" });
             control.Items.Add (new ListItem { Text = "Gravel" });
             control.Items.Add (new ListItem { Text = "Dirt" });
             control.Items.Add (new ListItem { Text = "Grass Snow" });
@@ -267,10 +244,10 @@ namespace SharpFlame.Gui.Sections
             return control;
         }
 
-		ListBox RoadTypeListBox() {
-			var control = new ListBox ();
-			control.Size = new Size (200, 48);
-			control.Items.Add (new ListItem { Text = "Road" });
+		ListBox RoadTypeListBox()
+		{
+		    var control = new ListBox { Size = new Size(200, 48) };
+			control.Items.Add (new ListItem { Text = "Road" }); 
 			control.Items.Add (new ListItem { Text = "Track" });
 
 			return control;

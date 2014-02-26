@@ -24,7 +24,6 @@
  // */
  #endregion
 
-using System;
 using SharpFlame.Gui.UiOptions;
 
 namespace SharpFlame.Gui
@@ -32,10 +31,6 @@ namespace SharpFlame.Gui
     public class App
     {
         public static Options UiOptions = new Options();
-
-        public App ()
-        {
-        }
     }
 }
 

@@ -24,8 +24,6 @@
  // */
  #endregion
 
-using System;
-
 namespace SharpFlame.Gui.UiOptions
 {
     public enum MouseMode {

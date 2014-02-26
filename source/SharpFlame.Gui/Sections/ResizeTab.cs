@@ -28,7 +28,7 @@ using Eto.Drawing;
 using Eto.Forms;
 using SharpFlame.Core;
 
-namespace SharpFlame.Gui
+namespace SharpFlame.Gui.Sections
 {
 	public class ResizeTab : Panel
 	{

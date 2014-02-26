@@ -24,7 +24,6 @@
  // */
  #endregion
 
-using System;
 using Eto.Forms;
 using Eto.Drawing;
 using SharpFlame.Core;
@@ -38,8 +37,7 @@ namespace SharpFlame.Gui.Sections
         {
             var mainLayout = new DynamicLayout ();
 
-            var nLayout0 = new DynamicLayout ();
-            nLayout0.Padding = Padding.Empty;
+            var nLayout0 = new DynamicLayout { Padding = Padding.Empty };
             var nLayout1 = new DynamicLayout ();
             nLayout1.AddRow(
                 new Label { Text = "Type:", VerticalAlign = VerticalAlign.Middle },
@@ -58,8 +56,7 @@ namespace SharpFlame.Gui.Sections
             }
             playerSelector.SelectedPlayer = "S";
 
-            var nLayout2 = new DynamicLayout ();
-            nLayout2.Padding = Padding.Empty;
+            var nLayout2 = new DynamicLayout { Padding = Padding.Empty };
             nLayout2.AddRow(new Label { Text = "Player", VerticalAlign = VerticalAlign.Middle }, 
                             TableLayout.AutoSized(playerSelector)
             );
@@ -67,8 +64,7 @@ namespace SharpFlame.Gui.Sections
             nLayout0.AddRow (nLayout2);
 
             var nLayout3 = new DynamicLayout ();
-            var nLayout4 = new DynamicLayout ();
-            nLayout4.Padding = Padding.Empty;
+            var nLayout4 = new DynamicLayout { Padding = Padding.Empty };
             nLayout4.AddRow(TableLayout.AutoSized(new NumericUpDown { MaxValue = 360, MinValue = 0, Value = 0, Size = new Size(-1, -1) }),
                             new Label { Text = "(0-359)", VerticalAlign = VerticalAlign.Middle });
 
@@ -81,7 +77,7 @@ namespace SharpFlame.Gui.Sections
                             new Button { Text = "Flatten Terrain" });
 
             nLayout3.AddRow(new Label { Text = "Label:", VerticalAlign = VerticalAlign.Middle },
-                            new TextBox {});
+                            new TextBox ());
 
             nLayout3.AddRow(new Label { Text = "Health%:", VerticalAlign = VerticalAlign.Middle },
                             TableLayout.AutoSized(new NumericUpDown { MinValue = 0, MaxValue = 100, Value = 100, Size = new Size(-1, -1) }));
@@ -96,26 +92,24 @@ namespace SharpFlame.Gui.Sections
             mainLayout.AddRow (null, nLayout5, null);
 
             var nLayout6 = new DynamicLayout ();
-            nLayout6.AddRow (new Label { Text = "Type", VerticalAlign = VerticalAlign.Middle }, new ComboBox { });
-            nLayout6.AddRow (new Label { Text = "Body", VerticalAlign = VerticalAlign.Middle }, new ComboBox { });
-            nLayout6.AddRow (new Label { Text = "Propulsion", VerticalAlign = VerticalAlign.Middle }, new ComboBox { });
+            nLayout6.AddRow (new Label { Text = "Type", VerticalAlign = VerticalAlign.Middle }, new ComboBox ());
+            nLayout6.AddRow (new Label { Text = "Body", VerticalAlign = VerticalAlign.Middle }, new ComboBox ());
+            nLayout6.AddRow (new Label { Text = "Propulsion", VerticalAlign = VerticalAlign.Middle }, new ComboBox ());
 
             var radio0 = new RadioButton { Text = "0" };
             var radio1 = new RadioButton (radio0) { Text = "1" };
             var radio2 = new RadioButton (radio1) { Text = "2" };
             var radio3 = new RadioButton (radio2) { Text = "3" };
 
-            var nLayout7 = new DynamicLayout();
-            nLayout7.Padding = Padding.Empty;
+            var nLayout7 = new DynamicLayout { Padding = Padding.Empty };
             nLayout7.AddRow(new Label { Text = "Turrets", VerticalAlign = VerticalAlign.Middle }, radio1);
-            nLayout6.AddRow(nLayout7, new ComboBox {});
+            nLayout6.AddRow(nLayout7, new ComboBox ());
     
-            var nLayout8 = new DynamicLayout();
-            nLayout8.Padding = Padding.Empty;
+            var nLayout8 = new DynamicLayout { Padding = Padding.Empty };
             nLayout8.AddRow(radio0, radio2);
-            nLayout6.AddRow(nLayout8, new ComboBox {});
+            nLayout6.AddRow(nLayout8, new ComboBox ());
 
-            nLayout6.AddRow(radio3, new ComboBox {});
+            nLayout6.AddRow(radio3, new ComboBox ());
 
             mainLayout.AddRow(null, nLayout6, null);
             mainLayout.Add (null);

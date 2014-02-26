@@ -40,8 +40,7 @@ namespace SharpFlame.Gui.Sections
 
 			var mainLayout = new DynamicLayout ();
 
-			var circularButton = new Button { Text = "Circular" };
-			circularButton.Enabled = false;
+			var circularButton = new Button { Text = "Circular", Enabled = false };
 			var squareButton = new Button { Text = "Square" };
 			circularButton.Click += (sender, e) => { 
 				circularButton.Enabled = false;
@@ -52,16 +51,14 @@ namespace SharpFlame.Gui.Sections
 				circularButton.Enabled = true;
 			};
 
-			var nLayout1 = new DynamicLayout ();
-			nLayout1.Padding = Padding.Empty;
+			var nLayout1 = new DynamicLayout { Padding = Padding.Empty };
 			nLayout1.AddRow (new Label { Text = "Radius:", VerticalAlign = VerticalAlign.Middle },
 							 new NumericUpDown { Size = new Size(-1, -1), Value = 2, MaxValue = Constants.MapMaxSize, MinValue = 1 }, 
 							 circularButton, 
 							 squareButton);
 			mainLayout.AddRow (nLayout1);
 
-			var nLayout2 = new DynamicLayout ();
-			nLayout2.Padding = Padding.Empty;	
+			var nLayout2 = new DynamicLayout { Padding = Padding.Empty };
 			nLayout2.AddRow (setRadio, new Label { Text = "(0 - 255)", VerticalAlign = VerticalAlign.Middle });
 			mainLayout.AddRow (nLayout2);
 
@@ -134,10 +131,7 @@ namespace SharpFlame.Gui.Sections
 			nLayout3.AddRow (null, new Label { Text = "LMB Height", VerticalAlign = VerticalAlign.Middle }, lmbHeight, null);
 			mainLayout.AddRow (nLayout3);
 
-			var nLayout4 = new DynamicLayout ();
-			nLayout4.Padding = Padding.Empty;
-			nLayout4.Spacing = Size.Empty;
-
+            var nLayout4 = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty };
 			nLayout4.BeginHorizontal ();
 			nLayout4.AddAutoSized (lmb0);
 			nLayout4.AddAutoSized (lmb64);
@@ -219,10 +213,7 @@ namespace SharpFlame.Gui.Sections
 			nLayout5.AddRow (null, new Label { Text = "RMB Height", VerticalAlign = VerticalAlign.Middle }, rmbHeight, null);
 			mainLayout.AddRow (nLayout5);
 
-			var nLayout6 = new DynamicLayout ();
-			nLayout6.Padding = Padding.Empty;
-			nLayout6.Spacing = Size.Empty;
-
+			var nLayout6 = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty };
 			nLayout6.BeginHorizontal ();
 			nLayout6.AddAutoSized (rmb0);
 			nLayout6.AddAutoSized (rmb64);
@@ -237,8 +228,7 @@ namespace SharpFlame.Gui.Sections
 
 
 
-			var nLayout7 = new DynamicLayout ();
-			nLayout7.Padding = new Padding (0, 20);
+			var nLayout7 = new DynamicLayout { Padding = new Padding (0, 20) };
 			nLayout7.AddRow (changeRadio);
 			nLayout7.AddRow (new Label { Text = "Rate", VerticalAlign = VerticalAlign.Middle }, 
 							 new NumericUpDown { Size = new Size(-1, -1), Value = 16, MaxValue = 512, MinValue = 0 },
@@ -246,8 +236,7 @@ namespace SharpFlame.Gui.Sections
 
 			mainLayout.AddRow (nLayout7);
 
-			var nLayout8 = new DynamicLayout ();
-			nLayout8.Padding = new Padding (0, 20);
+            var nLayout8 = new DynamicLayout { Padding = new Padding(0, 20) };
 			nLayout8.AddRow (smoothRadio);
 			nLayout8.AddRow (new Label { Text = "Rate", VerticalAlign = VerticalAlign.Middle }, 
 							 TableLayout.AutoSized(new NumericUpDown { Size = new Size(-1, -1), Value = 3, MaxValue = 512, MinValue = 0 }));
@@ -258,8 +247,7 @@ namespace SharpFlame.Gui.Sections
 			nLayout9.AddRow (new Label { Text = "Multiply Heights of Selection", VerticalAlign = VerticalAlign.Middle });
 			mainLayout.AddRow (nLayout9);
 
-			var nLayout10 = new DynamicLayout ();
-			nLayout10.Padding = Padding.Empty;
+			var nLayout10 = new DynamicLayout { Padding = Padding.Empty };
 			nLayout10.AddRow(new NumericUpDown { Size = new Size(-1, -1), Value = 1, MaxValue = 512, MinValue = 0 },
 							new Button { Text = "Do" }, null);
 			mainLayout.AddRow (nLayout10);
@@ -268,16 +256,13 @@ namespace SharpFlame.Gui.Sections
 			nLayout11.AddRow (new Label { Text = "Offset Heights of Selection", VerticalAlign = VerticalAlign.Middle });
 			mainLayout.AddRow (nLayout11);
 
-			var nLayout12 = new DynamicLayout ();
-			nLayout12.Padding = Padding.Empty;
+			var nLayout12 = new DynamicLayout { Padding = Padding.Empty };
 			nLayout12.AddRow(new NumericUpDown { Size = new Size(-1, -1), Value = 1, MaxValue = 512, MinValue = 0 },
 			new Button { Text = "Do" }, null);
 			mainLayout.AddRow (nLayout12);
 
 
-			var newMainyLayout = new DynamicLayout();
-		    newMainyLayout.Padding = Padding.Empty;
-            newMainyLayout.Spacing = Size.Empty;
+			var newMainyLayout = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty };
 		    newMainyLayout.AddRow(null, mainLayout, null);
             newMainyLayout.Add(null);
 
