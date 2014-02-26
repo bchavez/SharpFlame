@@ -104,6 +104,8 @@
     <Compile Include="Domain\WorldPos.cs" />
     <Compile Include="Parsers\Ini\IniWriter.cs" />
     <Compile Include="Result.cs" />
+    <Compile Include="Domain\Player.cs" />
+    <Compile Include="SimpleResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
