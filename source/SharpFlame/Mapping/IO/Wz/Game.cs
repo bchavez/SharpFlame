@@ -28,7 +28,7 @@ namespace SharpFlame.Mapping.IO.Wz
             var returnResult =
                 new Result("Loading game file from \"{0}\"".Format2(path), false);
             logger.Info("Loading game file from \"{0}\"", path);
-            var subResult = new sResult();
+            var subResult = new SimpleResult();
 
             map.Tileset = null;
 

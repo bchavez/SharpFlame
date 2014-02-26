@@ -68,9 +68,9 @@ namespace SharpFlame.Mapping.Script
             }
         }
 
-        public sResult SetLabel(string Text)
+        public SimpleResult SetLabel(string Text)
         {
-            var Result = new sResult();
+            var Result = new SimpleResult();
 
             Result = parentMapLink.Source.ScriptLabelIsValid(Text);
             if ( Result.Success )

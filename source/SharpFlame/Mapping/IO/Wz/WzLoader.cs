@@ -47,7 +47,7 @@ namespace SharpFlame.Mapping.IO.Wz
         {
             var returnResult = new Result(string.Format("Loading WZ from '{0}'.", path), false);
             logger.Info("Loading WZ from '{0}'.", path);
-            var subResult = new sResult();
+            var subResult = new SimpleResult();
 
             ZipSplitPath splitPath;
             var mapLoadName = "";
@@ -1418,9 +1418,9 @@ namespace SharpFlame.Mapping.IO.Wz
             return resultObject;
         }
 
-        protected sResult read_WZ_gam(BinaryReader File)
+        protected SimpleResult read_WZ_gam(BinaryReader File)
         {
-            var ReturnResult = new sResult();
+            var ReturnResult = new SimpleResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -1470,9 +1470,9 @@ namespace SharpFlame.Mapping.IO.Wz
             return ReturnResult;
         }
 
-        protected sResult read_WZ_map(BinaryReader File)
+        protected SimpleResult read_WZ_map(BinaryReader File)
         {
-            var returnResult = new sResult();
+            var returnResult = new SimpleResult();
             returnResult.Success = false;
             returnResult.Problem = "";
 
@@ -1584,9 +1584,9 @@ namespace SharpFlame.Mapping.IO.Wz
             return returnResult;
         }
 
-        protected sResult read_WZ_Features(BinaryReader file, List<WZBJOUnit> wzUnits)
+        protected SimpleResult read_WZ_Features(BinaryReader file, List<WZBJOUnit> wzUnits)
         {
-            var returnResult = new sResult();
+            var returnResult = new SimpleResult();
             returnResult.Success = false;
             returnResult.Problem = "";
 
@@ -1643,9 +1643,9 @@ namespace SharpFlame.Mapping.IO.Wz
             return returnResult;
         }
 
-        protected sResult read_WZ_Structures(BinaryReader File, List<WZBJOUnit> WZUnits)
+        protected SimpleResult read_WZ_Structures(BinaryReader File, List<WZBJOUnit> WZUnits)
         {
-            var returnResult = new sResult();
+            var returnResult = new SimpleResult();
             returnResult.Success = false;
             returnResult.Problem = "";
 
@@ -1702,9 +1702,9 @@ namespace SharpFlame.Mapping.IO.Wz
             return returnResult;
         }
 
-        protected sResult read_WZ_Droids(BinaryReader File, List<WZBJOUnit> WZUnits)
+        protected SimpleResult read_WZ_Droids(BinaryReader File, List<WZBJOUnit> WZUnits)
         {
-            var ReturnResult = new sResult();
+            var ReturnResult = new SimpleResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 

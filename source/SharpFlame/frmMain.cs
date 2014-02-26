@@ -376,7 +376,7 @@ namespace SharpFlame
 
             for ( var i = 0; i <= 15; i++ )
             {
-                App.PlayerColour[i] = new clsPlayer();
+                App.PlayerColour[i] = new Player();
             }
             App.PlayerColour[0].Colour.Red = 0.0F;
             App.PlayerColour[0].Colour.Green = 96.0F / 255.0F;
@@ -3829,7 +3829,7 @@ namespace SharpFlame
                 return;
             }
 
-            var Result = new sResult();
+            var Result = new SimpleResult();
             if ( _SelectedScriptMarker is clsScriptPosition )
             {
                 var ScriptPosition = (clsScriptPosition)_SelectedScriptMarker;

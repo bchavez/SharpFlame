@@ -99,7 +99,7 @@ namespace SharpFlame
         public static GLFont UnitLabelFont;
         //Public TextureViewFont As GLFont
 
-        public static clsPlayer[] PlayerColour = new clsPlayer[16];
+        public static Player[] PlayerColour = new Player[16];
 
         public static DroidDesign.clsTemplateDroidType TemplateDroidType_Droid;
         public static DroidDesign.clsTemplateDroidType TemplateDroidType_Cyborg;

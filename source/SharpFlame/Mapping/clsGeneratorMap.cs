@@ -611,7 +611,7 @@ namespace SharpFlame
             }
 
             var tmpPassageNodeC = default(clsPassageNode);
-            var Result = new sResult();
+            var Result = new SimpleResult();
 
             HeightsArgs.FlatsCutoff = 1;
             HeightsArgs.PassagesCutoff = 1;
@@ -2279,9 +2279,9 @@ namespace SharpFlame
             return ReturnResult;
         }
 
-        public sResult GenerateGateways()
+        public SimpleResult GenerateGateways()
         {
-            var ReturnResult = new sResult();
+            var ReturnResult = new SimpleResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 
@@ -2784,9 +2784,9 @@ namespace SharpFlame
             return true;
         }
 
-        private sResult PassageNodeHeightLevel(clsPassageNodeHeightLevelArgs Args)
+        private SimpleResult PassageNodeHeightLevel(clsPassageNodeHeightLevelArgs Args)
         {
-            var ReturnResult = new sResult();
+            var ReturnResult = new SimpleResult();
             ReturnResult.Problem = "";
             ReturnResult.Success = false;
 

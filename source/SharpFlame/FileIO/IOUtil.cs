@@ -141,9 +141,9 @@ namespace SharpFlame.FileIO
             return ReturnResult;
         }
 
-        public static sResult TryOpenFileStream(string Path, ref FileStream Output)
+        public static SimpleResult TryOpenFileStream(string Path, ref FileStream Output)
         {
-            var ReturnResult = new sResult();
+            var ReturnResult = new SimpleResult();
             ReturnResult.Success = false;
             ReturnResult.Problem = "";
 

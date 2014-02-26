@@ -1,4 +1,4 @@
-namespace SharpFlame.Util
+namespace SharpFlame.Core
 {
     public struct sResult
     {

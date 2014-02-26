@@ -128,9 +128,9 @@ namespace SharpFlame.Mapping.Objects
             return Pos.Horizontal.X.ToStringInvariant() + ", " + Pos.Horizontal.Y.ToStringInvariant();
         }
 
-        public sResult SetLabel(string Text)
+        public SimpleResult SetLabel(string Text)
         {
-            var Result = new sResult();
+            var Result = new SimpleResult();
 
             if ( TypeBase.Type == UnitType.PlayerStructure )
             {
