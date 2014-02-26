@@ -25,61 +25,37 @@
 // */
 #endregion
 
+using System.Diagnostics;
 using Eto.Drawing;
 using Eto.Forms;
+using NLog;
 using SharpFlame.Gui.UiOptions;
 
 namespace SharpFlame.Gui.Sections
 {
 	public class TerrainTab : Panel
 	{
-		RadioButtonList placeFillRadios;
-		RadioButtonList roadRadios;
-		RadioButtonList cliffRadios;
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger ();
+
+        readonly RadioButton rbGroundPlace;
+        readonly RadioButton rbGroundFill;
+        readonly RadioButton rbRoadSides;
+        readonly RadioButton rbRoadLines;
+        readonly RadioButton rbRoadRemove;
+        readonly RadioButton rbCliffTriangle;
+        readonly RadioButton rbCliffBrush;
+        readonly RadioButton rbCliffRemove;
 
 		public TerrainTab ()
 		{
-			placeFillRadios = new RadioButtonList { Spacing = Size.Empty, Orientation = RadioButtonListOrientation.Vertical };
-			placeFillRadios.Items.Add(new ListItem { Text = "Place" });
-			placeFillRadios.Items.Add(new ListItem { Text = "Fill" });
-
-            roadRadios = new RadioButtonList { Spacing = Size.Empty, Orientation = RadioButtonListOrientation.Vertical };
-			roadRadios.Items.Add(new ListItem { Text = "Sides" });
-			roadRadios.Items.Add(new ListItem { Text = "Lines" });
-			roadRadios.Items.Add(new ListItem { Text = "Remove" });
-
-            cliffRadios = new RadioButtonList { Spacing = Size.Empty, Orientation = RadioButtonListOrientation.Vertical };
-			cliffRadios.Items.Add(new ListItem { Text = "Cliff Triangle" });
-			cliffRadios.Items.Add(new ListItem { Text = "Cliff Brush" });
-			cliffRadios.Items.Add(new ListItem { Text = "Cliff Remove" });
-
-			placeFillRadios.SelectedIndexChanged += (sender, e) => {
-				var s = (RadioButtonList)sender;
-				if (s.SelectedIndex != 0) 
-				{
-					roadRadios.SelectedIndex = 0;
-					cliffRadios.SelectedIndex = 0;
-				}
-			};
-
-			roadRadios.SelectedIndexChanged += (sender, e) => {
-				var s = (RadioButtonList)sender;
-				if (s.SelectedIndex != 0)
-				{
-					placeFillRadios.SelectedIndex = 0;
-					cliffRadios.SelectedIndex = 0;
-				}
-			};
-
-			cliffRadios.SelectedIndexChanged += (sender, e) => {
-				var s = (RadioButtonList)sender;
-				if (s.SelectedIndex != 0)
-				{
-					placeFillRadios.SelectedIndex = 0;
-					roadRadios.SelectedIndex = 0;
-				}
-			};
-
+            rbGroundPlace = new RadioButton { Text = "Place", Checked = true };
+            rbGroundFill = new RadioButton (rbGroundPlace) { Text = "Fill" };
+            rbRoadSides = new RadioButton (rbGroundFill) { Text = "Sides" };
+            rbRoadLines = new RadioButton (rbRoadSides) { Text = "Lines" };
+            rbRoadRemove = new RadioButton (rbRoadLines) { Text = "Remove" };
+            rbCliffTriangle = new RadioButton (rbRoadRemove) { Text = "Triangle" };
+            rbCliffBrush = new RadioButton (rbCliffTriangle) { Text = "Brush" };
+            rbCliffRemove = new RadioButton (rbCliffBrush) { Text = "Remove" };
 
 			var layout = new DynamicLayout();
             layout.Add (GroundTypeSection ());
@@ -93,10 +69,76 @@ namespace SharpFlame.Gui.Sections
 		}
 
         void setBindings() {
+            rbGroundPlace.CheckedChanged += delegate
+            {
+                setMouseMode ();
+            };
+            rbGroundFill.CheckedChanged += delegate
+            {
+                setMouseMode ();
+            };
+            rbRoadSides.CheckedChanged += delegate
+            {
+                setMouseMode ();
+            };
+            rbRoadLines.CheckedChanged += delegate
+            {
+                setMouseMode ();
+            };
+            rbRoadRemove.CheckedChanged += delegate
+            {
+                setMouseMode ();
+            };
+            rbCliffTriangle.CheckedChanged += delegate
+            {
+                setMouseMode ();
+            };
+            rbCliffBrush.CheckedChanged += delegate
+            {
+                setMouseMode ();
+            };
+            rbCliffRemove.CheckedChanged += delegate
+            {
+                setMouseMode ();
+            };
+
             // Set Mousetool, when we are shown.
             Shown += delegate {
-                App.UiOptions.MouseTool = MouseTool.Default;
+                setMouseMode();
             };
+        }
+
+        void setMouseMode() {
+            if (rbGroundPlace.Checked)
+            {
+                App.UiOptions.MouseTool = MouseTool.TerrainBrush;
+            } else if (rbGroundFill.Checked)
+            {
+                App.UiOptions.MouseTool = MouseTool.TerrainFill;
+            } else if (rbRoadSides.Checked)
+            {
+                App.UiOptions.MouseTool = MouseTool.RoadPlace;
+            } else if (rbRoadLines.Checked)
+            {
+                App.UiOptions.MouseTool = MouseTool.RoadLines;
+            } else if (rbRoadRemove.Checked)
+            {
+                App.UiOptions.MouseTool = MouseTool.RoadRemove;
+            } else if (rbCliffTriangle.Checked)
+            {
+                App.UiOptions.MouseTool = MouseTool.CliffTriangle;
+            } else if (rbCliffBrush.Checked)
+            {
+                App.UiOptions.MouseTool = MouseTool.CliffBrush;
+            } else if (rbCliffRemove.Checked)
+            {
+                App.UiOptions.MouseTool = MouseTool.CliffRemove;
+            } else
+            {
+                Debugger.Break ();
+                logger.Error ("No Radiobutton in the TerrainTab selected, this should never happen!");
+                App.UiOptions.MouseTool = MouseTool.Default;
+            }
         }
 
 		Control CliffSection () {
@@ -118,6 +160,11 @@ namespace SharpFlame.Gui.Sections
 			nLayout3.Add (null);
 
             var nLayout4 = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty };
+            var cliffRadios = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty };
+            cliffRadios.Add (rbCliffTriangle);
+            cliffRadios.Add (rbCliffBrush);
+            cliffRadios.Add (rbCliffRemove);
+
 			nLayout4.AddRow (cliffRadios, null, nLayout3, null);
 
 			mainLayout.AddRow (nLayout4);
@@ -160,6 +207,11 @@ namespace SharpFlame.Gui.Sections
 			mainLayout.AddRow (roadTypeListBox,
 			                   TableLayout.AutoSized (eraseButton),
 			                   null);
+
+            var roadRadios = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty };
+            roadRadios.Add (rbRoadSides);
+            roadRadios.Add (rbRoadLines);
+            roadRadios.Add (rbRoadRemove);
 
 			mainLayout.AddRow (roadRadios, null);
 
@@ -226,6 +278,10 @@ namespace SharpFlame.Gui.Sections
 			var gdLayout6 = new DynamicLayout ();
 			gdLayout6.AddRow(new CheckBox { Text = "Stop Before Edge" }, null);
 			gdLayout6.AddRow (null);
+
+            var placeFillRadios = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty };
+            placeFillRadios.Add (rbGroundPlace);
+            placeFillRadios.Add (rbGroundFill);
 
 			var gdLayout5 = new DynamicLayout();
 			gdLayout5.BeginHorizontal ();

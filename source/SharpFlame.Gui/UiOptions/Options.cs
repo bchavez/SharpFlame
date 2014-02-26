@@ -24,6 +24,8 @@
  // */
  #endregion
 
+using NLog;
+
 namespace SharpFlame.Gui.UiOptions
 {
     public enum MouseTool {
@@ -49,7 +51,20 @@ namespace SharpFlame.Gui.UiOptions
 
     public class Options
     {
-        public MouseTool MouseTool;
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
+        MouseTool mouseTool;
+        public MouseTool MouseTool { 
+            get { return mouseTool; }
+            set { 
+                if (mouseTool != value)
+                {
+                    logger.Debug ("Setting Mousemode to {0}", value);
+                    mouseTool = value;
+                }
+            }
+
+        }
      
         public TexturesOptions Textures;
 
