@@ -7,10 +7,11 @@
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{152475A4-3ABE-41C4-B338-A2FB7B350FAF}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <StartupObject>SharpFlame.Old.Program</StartupObject>
-    <RootNamespace>SharpFlame</RootNamespace>
-    <AssemblyName>SharpFlame</AssemblyName>
+    <OutputType>Library</OutputType>
+    <StartupObject>
+    </StartupObject>
+    <RootNamespace>SharpFlame.Old</RootNamespace>
+    <AssemblyName>SharpFlame.Old</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Console</MyType>
     <TargetFrameworkProfile>
@@ -73,9 +74,7 @@
   <PropertyGroup>
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
-  </PropertyGroup>
+  <PropertyGroup />
   <PropertyGroup>
     <ApplicationIcon>flaME.ico</ApplicationIcon>
   </PropertyGroup>
@@ -229,6 +228,8 @@
     <Compile Include="PathUtil.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="UiOptions\Options.cs" />
+    <Compile Include="UiOptions\TexturesOptions.cs" />
     <Compile Include="Util\clsKeysActive.cs" />
     <Compile Include="Util\clsLayer.cs" />
     <Compile Include="Util\clsTileType.cs" />

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SharpFlame.Old {
+namespace SharpFlame {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

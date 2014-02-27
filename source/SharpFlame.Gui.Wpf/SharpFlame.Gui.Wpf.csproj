@@ -15,7 +15,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -25,11 +25,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -68,12 +69,24 @@
     <Reference Include="Eto.Platform.Wpf">
       <HintPath>..\packages\Eto-20140222\Eto.Platform.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="NLog, Version=2.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SharpFlame.Core\SharpFlame.Core.csproj">
+      <Project>{8ae7f7a3-841a-44a7-b016-4661bbbf7821}</Project>
+      <Name>SharpFlame.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SharpFlame.Gui\SharpFlame.Gui.csproj">
       <Project>{ea9d0d64-812b-4a4f-9227-6bec303a10db}</Project>
       <Name>SharpFlame.Gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpFlame.Old\SharpFlame.Old.csproj">
+      <Project>{152475a4-3abe-41c4-b338-a2fb7b350faf}</Project>
+      <Name>SharpFlame.Old</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

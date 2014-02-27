@@ -27,7 +27,8 @@
 using Eto.Drawing;
 using Eto.Forms;
 using SharpFlame.Core;
-using SharpFlame.Gui.UiOptions;
+using SharpFlame.Old;
+using SharpFlame.Old.UiOptions;
 
 namespace SharpFlame.Gui.Sections
 {
@@ -39,16 +40,16 @@ namespace SharpFlame.Gui.Sections
 
 			var nLayout1 = new DynamicLayout ();
 			nLayout1.AddRow(new Label { Text = "Size X:" }, 
-							new NumericUpDown { Size = new Size(-1, -1), Value = 0, MaxValue = Constants.MapMaxSize, MinValue = 1 });
+							new NumericUpDown { Size = new Size(-1, -1), Value = 1, MaxValue = Constants.MapMaxSize, MinValue = 1 });
 
 			nLayout1.AddRow(new Label { Text = "Size Y:" }, 
-							new NumericUpDown { Size = new Size(-1, -1), Value = 0, MaxValue = Constants.MapMaxSize, MinValue = 1 });
+							new NumericUpDown { Size = new Size(-1, -1), Value = 1, MaxValue = Constants.MapMaxSize, MinValue = 1 });
 
 			nLayout1.AddRow(new Label { Text = "Offset X:" }, 
-			new NumericUpDown { Size = new Size(-1, -1), Value = 0, MaxValue = Constants.MapMaxSize, MinValue = 1 });
+			                new NumericUpDown { Size = new Size(-1, -1), Value = 1, MaxValue = Constants.MapMaxSize, MinValue = 1 });
 
 			nLayout1.AddRow(new Label { Text = "Offset Y:" }, 
-			new NumericUpDown { Size = new Size(-1, -1), Value = 0, MaxValue = Constants.MapMaxSize, MinValue = 1 });
+			                new NumericUpDown { Size = new Size(-1, -1), Value = 1, MaxValue = Constants.MapMaxSize, MinValue = 1 });
 
 			mainLayout.AddRow (null, nLayout1, null);
 

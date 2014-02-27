@@ -24,9 +24,7 @@
  // */
  #endregion
 
-using System;
-
-namespace SharpFlame.Gui.UiOptions
+namespace SharpFlame.Old.UiOptions
 {
     /// <summary>
     /// DO NOT Change: Enumeration of the terrain modes.
@@ -59,7 +57,9 @@ namespace SharpFlame.Gui.UiOptions
         /// </summary>
         public int TilesetNum { get; set; }
 
-        public TexturesOptions() {
+        public TexturesOptions()
+        {
+            Radius = 2;
             SetTexture = true;
             SetOrientation = true;
             Randomize = false;

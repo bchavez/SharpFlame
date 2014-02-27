@@ -26,7 +26,8 @@
 
 using Eto.Forms;
 using Eto.Drawing;
-using SharpFlame.Gui.UiOptions;
+using SharpFlame.Old;
+using SharpFlame.Old.UiOptions;
 
 namespace SharpFlame.Gui.Sections
 {

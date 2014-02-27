@@ -54,6 +54,10 @@
       <Project>{8AE7F7A3-841A-44A7-B016-4661BBBF7821}</Project>
       <Name>SharpFlame.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SharpFlame.Old\SharpFlame.Old.csproj">
+      <Project>{152475A4-3ABE-41C4-B338-A2FB7B350FAF}</Project>
+      <Name>SharpFlame.Old</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

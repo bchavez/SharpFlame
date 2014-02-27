@@ -32,6 +32,7 @@ using Eto.Forms;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Gui.Forms;
+using SharpFlame.Old;
 
 namespace SharpFlame.Gui
 {

@@ -1,13 +1,12 @@
 #region
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using NLog;
-using SharpFlame.Old.Collections;
-using SharpFlame.Old.Colors;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Old.AppSettings;
 using SharpFlame.Core;
@@ -24,6 +23,7 @@ using SharpFlame.Old.Mapping.Tiles;
 using SharpFlame.Old.Maths;
 using SharpFlame.Old.Painters;
 using SharpFlame.Old.Util;
+using SharpFlame.Old.UiOptions;
 
 #endregion
 
@@ -128,6 +128,21 @@ namespace SharpFlame.Old
         public static clsBrush VisionSectors = new clsBrush(0.0D, ShapeType.Circle);
 
         public static sLayerList LayerList;
+
+        static List<Tileset> tileset;
+        public static List<Tileset> Tileset
+        {
+            get { return tileset; }
+            set
+            {
+                tileset = value;
+                TilesetChanged(new Object(), EventArgs.Empty);
+            }
+        }
+
+        public static event EventHandler<EventArgs> TilesetChanged = delegate { };
+
+        public static Options UiOptions = new Options();
 
         public static void SetProgramSubDirs()
         {

@@ -24,27 +24,54 @@
  // */
  #endregion
 
-using System;
-using System.Collections.Generic;
-using SharpFlame.Core.Domain;
-using SharpFlame.Gui.UiOptions;
+using NLog;
 
-namespace SharpFlame.Gui
+namespace SharpFlame.Old.UiOptions
 {
-    public class App
+    public enum MouseTool {
+        Default,
+        CliffBrush,
+        CliffRemove,
+        CliffTriangle,
+        Gateways,
+        HeightChangeBrush,
+        HeightSetBrush,
+        HeightSmoothBrush,
+        ObjectLines,
+        ObjectPlace,
+        ObjectSelect,
+        RoadLines,
+        RoadPlace,
+        RoadRemove,
+        TerrainBrush,
+        TerrainFill,
+        TerrainSelect,
+        TextureBrush
+    }
+
+    public class Options
     {
-        static List<Tileset> tileset;
-        public static List<Tileset> Tileset { 
-            get { return tileset; }
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
+        MouseTool mouseTool;
+        public MouseTool MouseTool { 
+            get { return mouseTool; }
             set { 
-                tileset = value; 
-                TilesetChanged (new Object(), EventArgs.Empty);
-            } 
+                if (mouseTool != value)
+                {
+                    logger.Debug ("Setting Mousemode to {0}", value);
+                    mouseTool = value;
+                }
+            }
+
         }
+     
+        public TexturesOptions Textures;
 
-        public static event EventHandler<EventArgs> TilesetChanged = delegate {};
-
-        public static Options UiOptions = new Options();
+        public Options ()
+        {
+            Textures = new TexturesOptions ();
+        }
     }
 }
 

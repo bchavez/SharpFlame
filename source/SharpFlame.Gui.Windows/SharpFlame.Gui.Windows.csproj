@@ -16,7 +16,7 @@
     <ReleaseVersion>0.24</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -26,7 +26,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -87,6 +87,10 @@
     <ProjectReference Include="..\SharpFlame.Gui\SharpFlame.Gui.csproj">
       <Project>{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}</Project>
       <Name>SharpFlame.Gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpFlame.Old\SharpFlame.Old.csproj">
+      <Project>{152475A4-3ABE-41C4-B338-A2FB7B350FAF}</Project>
+      <Name>SharpFlame.Old</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

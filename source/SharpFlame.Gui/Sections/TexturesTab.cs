@@ -25,12 +25,11 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using Eto;
 using Eto.Forms;
 using Eto.Drawing;
-using SharpFlame.Gui.UiOptions;
-using SharpFlame.Core.Domain;
+using SharpFlame.Old;
+using SharpFlame.Old.UiOptions;
 
 namespace SharpFlame.Gui.Sections
 {
@@ -62,7 +61,7 @@ namespace SharpFlame.Gui.Sections
 			layout.BeginVertical();
 			layout.AddRow (null,
 			               new Label { Text = "Radius:", VerticalAlign = VerticalAlign.Middle }, 
-                           nudRadius = new NumericUpDown {Size = new Size(-1, -1), MinValue = 1, MaxValue = 512 }, 
+                           nudRadius = new NumericUpDown {Size = new Size(-1, -1), MinValue = 0, MaxValue = 512 }, 
                           btnCircular = new Button { Text = "Circular", Enabled = false }, 
                           btnSquare = new Button { Text = "Square" },
 						 null);
