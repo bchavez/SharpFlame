@@ -42,17 +42,15 @@
       <HintPath>..\packages\Eto-20140222\Eto.Platform.Windows.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.1.0\lib\net45\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="OpenTK">
+      <HintPath>..\packages\OpenTK.1.1.1508.5724\lib\NET40\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -87,6 +85,14 @@
     <ProjectReference Include="..\SharpFlame.Old\SharpFlame.Old.csproj">
       <Project>{152475A4-3ABE-41C4-B338-A2FB7B350FAF}</Project>
       <Name>SharpFlame.Old</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpFlame.Gui\SharpFlame.Gui.csproj">
+      <Project>{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}</Project>
+      <Name>SharpFlame.Gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpFlame.Core\SharpFlame.Core.csproj">
+      <Project>{8AE7F7A3-841A-44A7-B016-4661BBBF7821}</Project>
+      <Name>SharpFlame.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

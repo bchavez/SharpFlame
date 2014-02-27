@@ -30,10 +30,9 @@ namespace SharpFlame.Gui.Sections
 {
 	public class MainMapView : Panel
 	{
-		public MainMapView ()
+        public MainMapView (SharpFlameApplication a)
 		{
 		    var mainLayout = new DynamicLayout();
-
 		    Content = mainLayout;
 		}
 	}

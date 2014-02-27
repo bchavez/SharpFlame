@@ -47,7 +47,7 @@ namespace SharpFlame.Gui.Sections
         readonly RadioButton rbCliffBrush;
         readonly RadioButton rbCliffRemove;
 
-		public TerrainTab ()
+        public TerrainTab (SharpFlameApplication a)
 		{
             rbGroundPlace = new RadioButton { Text = "Place", Checked = true };
             rbGroundFill = new RadioButton (rbGroundPlace) { Text = "Fill" };

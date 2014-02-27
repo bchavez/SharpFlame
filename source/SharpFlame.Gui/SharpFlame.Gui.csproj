@@ -48,6 +48,7 @@
     <Reference Include="OpenTK.GLControl">
       <HintPath>..\packages\OpenTK.GLControl.1.1.1508.5724\lib\NET40\OpenTK.GLControl.dll</HintPath>
     </Reference>
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dialogs\About.cs">
@@ -93,6 +94,8 @@
     <Compile Include="Sections\TexturesTab.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
+    <Compile Include="Controls\GLSurface.cs" />
+    <Compile Include="OTK\IGLControl.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

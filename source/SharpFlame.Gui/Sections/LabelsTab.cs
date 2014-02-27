@@ -33,7 +33,7 @@ namespace SharpFlame.Gui.Sections
 {
     public class LabelsTab : Panel
     {
-        public LabelsTab ()
+        public LabelsTab (SharpFlameApplication a)
         {
             var mainLayout = new DynamicLayout ();
 

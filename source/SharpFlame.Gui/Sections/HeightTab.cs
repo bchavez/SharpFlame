@@ -34,7 +34,7 @@ namespace SharpFlame.Gui.Sections
 {
 	public class HeightTab : Panel
 	{
-		public HeightTab ()
+        public HeightTab (SharpFlameApplication a)
 		{
 			var setRadio = new RadioButton { Text = "Set" };
 			var changeRadio = new RadioButton (setRadio){ Text = "Change" };

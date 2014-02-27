@@ -26,6 +26,7 @@ using System.Threading;
 using Gtk;
 using OpenTK;
 using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Platform;
 
 namespace SharpFlame.UI.Linux
@@ -243,6 +244,16 @@ namespace SharpFlame.UI.Linux
 			graphicsContext.SwapBuffers();
 			return result;
 		}
+
+        public virtual void MakeCurrent() {
+            if (!initialized)
+            {
+                return;
+            }
+
+            Console.WriteLine ("MakeCurrent is going, graphicsContext is: {0}", graphicsContext);
+            graphicsContext.MakeCurrent(windowInfo);
+        }
 
 		// Called on Resize
 		protected override bool OnConfigureEvent(Gdk.EventConfigure evnt)

@@ -35,6 +35,7 @@ using OpenTK;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Gui.Forms;
+using SharpFlame.Gui.Controls;
 using SharpFlame.Old;
 using SharpFlame.Old.AppSettings;
 
@@ -43,6 +44,11 @@ namespace SharpFlame.Gui
 	public class SharpFlameApplication : Application
 	{
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
+        public readonly GLSurface GlTexturesView;
+        public readonly GLSurface GlMapView;
+
+        private Result initializeResult = new Result("Startup result", false);
 
 		public SharpFlameApplication(Generator generator)
 			: base(generator)
@@ -56,8 +62,6 @@ namespace SharpFlame.Gui
             // Run this before everything else.
             App.Initalize ();
 
-            var initializeResult = new Result("Startup result", false);
-
             App.SetProgramSubDirs();
 
             SettingsManager.CreateSettingOptions();
@@ -70,28 +74,54 @@ namespace SharpFlame.Gui
             catch (Exception ex)
             {
                 logger.ErrorException ("Got an exception while initalizing OpenTK", ex);
-                initializeResult.ProblemAdd (string.Format("Failure while loading opentk, error was: {0}", ex.Message));
+                // initializeResult.ProblemAdd (string.Format("Failure while loading opentk, error was: {0}", ex.Message));
+                Application.Instance.Quit();
             }
 
             var SettingsLoadResult = SettingsManager.SettingsLoad(ref SettingsManager.InitializeSettings);                  
             initializeResult.Add(SettingsLoadResult);
 
-            SettingsManager.UpdateSettings(SettingsManager.InitializeSettings);
-            SettingsManager.InitializeSettings = null;
+            GlTexturesView = new GLSurface ();
+            GlTexturesView.Initialized += new EventHandler (onGLControlInitialized);
 
-//            var tilesetsList = (List<string>)SettingsManager.Settings.GetValue(SettingsManager.SettingTilesetDirectories);
-//            foreach (var path in tilesetsList) {
-//                if (path != null && path != "") {
-//                    initializeResult.Add(App.LoadTilesets(PathUtil.EndWithPathSeperator(path)));
-//                }
-//            }
+            GlMapView = new GLSurface ();
 		}
+
+        /// <summary>
+        /// Ons the GL control initialized.
+        /// </summary>
+        /// <param name="o">Not used.</param>
+        /// <param name="e">Not used.</param>
+        void onGLControlInitialized(object o, EventArgs e) {
+            GlTexturesView.MakeCurrent ();
+
+            var tilesetsList = (List<string>)SettingsManager.Settings.GetValue(SettingsManager.SettingTilesetDirectories);
+            foreach (var path in tilesetsList) {
+                if (path != null && path != "") {
+                    initializeResult.Add (App.LoadTilesets (PathUtil.EndWithPathSeperator (path)));
+                }
+            }
+
+            if (initializeResult.HasProblems)
+            {
+                logger.Error (initializeResult.ToString ());
+            } else if (initializeResult.HasWarnings)
+            {
+                logger.Warn (initializeResult.ToString ());
+            } else
+            {
+                logger.Debug (initializeResult.ToString ());
+            }
+        }
 
 		public override void OnInitialized(EventArgs e)
 		{
-			MainForm = new MainForm();
+			MainForm = new MainForm(this);
 
 			base.OnInitialized(e);          
+
+            SettingsManager.UpdateSettings(SettingsManager.InitializeSettings);
+            SettingsManager.InitializeSettings = null;
 
 			// show the main form
 			MainForm.Show();

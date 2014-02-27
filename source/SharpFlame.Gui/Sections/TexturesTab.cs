@@ -25,16 +25,24 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using Eto;
 using Eto.Forms;
 using Eto.Drawing;
+using SharpFlame.Gui.Forms;
+using SharpFlame.Gui.Controls;
 using SharpFlame.Old;
+using SharpFlame.Old.AppSettings;
 using SharpFlame.Old.UiOptions;
+using SharpFlame.Core.Domain;
 
 namespace SharpFlame.Gui.Sections
 {
 	public class TextureTab : Panel
 	{
+        readonly SharpFlameApplication application;
+
         readonly CheckBox chkBoxTexture;
         readonly CheckBox chkBoxOrientation;
         readonly CheckBox chkBoxRandomize;
@@ -48,7 +56,10 @@ namespace SharpFlame.Gui.Sections
 
         readonly ComboBox cbTileset;
 
-		public TextureTab() {
+		public TextureTab(SharpFlameApplication a) 
+        {
+            application = a;
+
 			var layout = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty};
 
             var row = layout.AddSeparateRow (null,
@@ -112,8 +123,6 @@ namespace SharpFlame.Gui.Sections
 
 		    var mainLayout = new DynamicLayout {Padding = Padding.Empty, Spacing = Size.Empty};
 
-			var textureSelector = new Drawable { BackgroundColor = Colors.Black };
-
 			var tileTypeCombo = new DynamicLayout ();
 			tileTypeCombo.BeginHorizontal ();
 			tileTypeCombo.Add (new Label {
@@ -144,7 +153,7 @@ namespace SharpFlame.Gui.Sections
 
 			mainLayout.Add (layout);
 			mainLayout.BeginVertical (xscale: true, yscale: true);
-			mainLayout.Add (textureSelector);
+            mainLayout.Add (a.GlTexturesView);
 			mainLayout.EndVertical ();
 			mainLayout.Add (tileTypeSetter);
 			//mainLayout.Add();
@@ -189,10 +198,24 @@ namespace SharpFlame.Gui.Sections
             nudRadius.Bind (r => r.Value, texturesOptions, t => t.Radius);
 
             // Read Tileset Combobox
-            App.TilesetChanged += delegate
+            App.Tilesets.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) => 
             {
-                cbTileset.Items.Clear ();
-                cbTileset.Items.AddRange (App.Tileset);
+                if (e.Action == NotifyCollectionChangedAction.Add) {
+                    var list = new List<IListItem>();
+                    foreach (var item in e.NewItems) {
+                        list.Add((IListItem)item);
+                    }
+                    cbTileset.Items.AddRange (list);
+                    cbTileset.Visible = false;
+                    cbTileset.Visible = true;
+                } else if (e.Action == NotifyCollectionChangedAction.Remove) {
+                    foreach (var item in e.OldItems) {
+                        cbTileset.Items.Remove((IListItem)item);
+                    }
+
+                    cbTileset.Visible = false;
+                    cbTileset.Visible = true;
+                }
             };
 
             // Set Mousetool, when we are shown.
@@ -204,9 +227,9 @@ namespace SharpFlame.Gui.Sections
 		ComboBox TextureComboBox()
 		{
 			var control = new ComboBox();
-            if (App.Tileset != null)
+            if (App.Tilesets != null)
             {
-                control.Items.AddRange (App.Tileset);
+                control.Items.AddRange (App.Tilesets);
             }
 			return control;
 		}

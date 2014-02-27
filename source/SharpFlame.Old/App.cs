@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Drawing;
 using System.IO;
 using System.Text;
@@ -89,8 +90,6 @@ namespace SharpFlame.Old
 
         public static Map Copied_Map;
 
-        public static SimpleList<Tileset> Tilesets = new SimpleList<Tileset>();
-
         public static Tileset Tileset_Arizona;
         public static Tileset Tileset_Urban;
         public static Tileset Tileset_Rockies;
@@ -132,19 +131,13 @@ namespace SharpFlame.Old
 
         public static sLayerList LayerList;
 
-        private static ObservableCollection<Tileset> tileset = new ObservableCollection<Tileset>();
-        public static ObservableCollection<Tileset> Tileset { get { return tileset; } }
-
-        public static event EventHandler<EventArgs> TilesetChanged = delegate { };
+        private static ObservableCollection<Tileset> tilesets = new ObservableCollection<Tileset>();
+        public static ObservableCollection<Tileset> Tilesets { get { return tilesets; } }
 
         public static Options UiOptions = new Options();
 
-        public static GLControl OpenGL1 { get; set; }
-        public static GLControl OpenGL2 { get; set; }
-
         public static void Initalize ()
         {
-            setUpEvents ();
             createTileTypes ();
         }
 
@@ -237,16 +230,6 @@ namespace SharpFlame.Old
             App.TileTypes.Add(newTileType);
         }
 
-
-        /// <summary>
-        /// Sets up events
-        /// </summary>
-        private static void setUpEvents ()
-        {
-            Tileset.CollectionChanged += delegate {
-                TilesetChanged(new Object(), EventArgs.Empty);
-            };          
-        }
 
         public static void SetProgramSubDirs()
         {
@@ -414,8 +397,7 @@ namespace SharpFlame.Old
 
         public static void ZeroIDWarning(Unit IDUnit, UInt32 NewID, Result Output)
         {
-            var MessageText = "An object\'s ID has been changed from 0 to " + NewID.ToStringInvariant() + ". Zero is not a valid ID. The object is of type " +
-                          IDUnit.TypeBase.GetDisplayTextCode() + " and is at map position " + IDUnit.GetPosText() + ".";
+            var MessageText = string.Format ("An object\'s ID has been changed from 0 to {0}. Zero is not a valid ID. The object is of type {1} and is at map position {2}.", NewID.ToStringInvariant (), IDUnit.TypeBase.GetDisplayTextCode (), IDUnit.GetPosText ());
 
             //MsgBox(MessageText, MsgBoxStyle.OkOnly)
             Output.WarningAdd(MessageText);
@@ -451,21 +433,20 @@ namespace SharpFlame.Old
                 return returnResult;
             }
 
-            Result result;
-
+            var tmpTilesets = new List<Tileset> ();;
             foreach ( var path in tilesetDirs )
             {
                 var tileset = new Tileset();
                 var loader = new TilesetLoader (ref tileset);
-                result = loader.Load (path);
+                var result = loader.Load (path);
                 returnResult.Add(result);
                 if ( !result.HasProblems )
                 {
-                    Tilesets.Add(tileset);
+                    tmpTilesets.Add(tileset);
                 }
             }
 
-            foreach ( var tileset in Tilesets )
+            foreach ( var tileset in tmpTilesets )
             {
                 if ( tileset.Name == "tertilesc1hw" )
                 {
@@ -488,6 +469,8 @@ namespace SharpFlame.Old
                     tileset.IsOriginal = true;
                     tileset.BGColour = new SRgb(182.0f / 255.0f, 225.0f / 255.0f, 236.0f / 255.0f);
                 }
+
+                Tilesets.Add (tileset);
             }
 
             if ( Tileset_Arizona == null )

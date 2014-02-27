@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 using NLog;
 using SharpFlame.Core.Interfaces;
@@ -131,6 +132,30 @@ namespace SharpFlame.Core
             public override void DoubleClicked()
             {
             }
+        }
+
+        public override string ToString() {
+            return toStringHelper (this, 0);
+        }
+
+        private string toStringHelper (object item, int intending) {
+            string result = "";
+            result += String.Format ("{0}TASK: {1}\n", new string (' ', intending), ((Result)item).GetText);
+            foreach (var lItem in ((Result)item).Items)
+            {
+                if (lItem is Result.Problem)
+                {
+                    result += String.Format ("{0}PROBLEM: {1}\n", new string (' ', intending+2), ((Result.Problem)lItem).GetText);
+                } else if (lItem is Result.Warning)
+                {
+                    result += String.Format ("{0}WARNING: {1}\n", new string (' ', intending+2), ((Result.Warning)lItem).GetText);
+                } else if (lItem is Core.Result)
+                {
+                    result += toStringHelper (lItem, intending + 4);
+                }
+            }
+
+            return result;
         }
     }
 }

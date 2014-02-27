@@ -28,26 +28,27 @@ using System;
 using Eto.Forms;
 using Eto.Drawing;
 using SharpFlame.Core;
+using SharpFlame.Gui.Controls;
 using SharpFlame.Gui.Sections;
 
 namespace SharpFlame.Gui.Forms
 {
 	public class MainForm : Form
 	{
-		public MainForm()
+		public MainForm(SharpFlameApplication app)
 		{
 			ClientSize = new Size(1024, 768);
 			Title = string.Format ("No Map - {0} {1}", Constants.ProgramName, Constants.ProgramVersionNumber);
 			Icon = Resources.SharpFlameIcon();
 
 			var tabControl = new TabControl ();
-			tabControl.TabPages.Add(new TabPage { Text = "Textures", Content = new TextureTab() });
-			tabControl.TabPages.Add(new TabPage { Text = "Terrain", Content = new TerrainTab() });
-			tabControl.TabPages.Add(new TabPage { Text = "Height", Content = new HeightTab() });
-			tabControl.TabPages.Add(new TabPage { Text = "Resize", Content = new ResizeTab() });
-			tabControl.TabPages.Add(new TabPage { Text = "Place Objects", Content = new PlaceObjectsTab() });
-            tabControl.TabPages.Add(new TabPage { Text = "Object", Content = new ObjectTab() });
-            tabControl.TabPages.Add(new TabPage { Text = "Label", Content = new LabelsTab() });
+			tabControl.TabPages.Add(new TabPage { Text = "Textures", Content = new TextureTab(app) });
+			tabControl.TabPages.Add(new TabPage { Text = "Terrain", Content = new TerrainTab(app) });
+			tabControl.TabPages.Add(new TabPage { Text = "Height", Content = new HeightTab(app) });
+			tabControl.TabPages.Add(new TabPage { Text = "Resize", Content = new ResizeTab(app) });
+			tabControl.TabPages.Add(new TabPage { Text = "Place Objects", Content = new PlaceObjectsTab(app) });
+            tabControl.TabPages.Add(new TabPage { Text = "Object", Content = new ObjectTab(app) });
+            tabControl.TabPages.Add(new TabPage { Text = "Label", Content = new LabelsTab(app) });
 
             tabControl.SelectedIndexChanged += delegate
             {
@@ -59,7 +60,7 @@ namespace SharpFlame.Gui.Forms
 				Position = 392,
 				FixedPanel = SplitterFixedPanel.Panel1,
 				Panel1 = tabControl,
-				Panel2 = new MainMapView()
+				Panel2 = new MainMapView(app)
 			};
 
 			// 7. Set the content of the form to use the layout
@@ -68,7 +69,7 @@ namespace SharpFlame.Gui.Forms
 
 			generateMenuToolBar ();
 			Maximize ();
-		}
+		}     
 
 		void generateMenuToolBar()
 		{

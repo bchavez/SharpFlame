@@ -44,7 +44,7 @@ namespace SharpFlame.Gui.Sections
 
         readonly NumericUpDown nudRotation;
 
-		public PlaceObjectsTab ()
+        public PlaceObjectsTab (SharpFlameApplication a)
 		{
             PlayerSelector playerSelector;
             if (Generator.IsWinForms)
