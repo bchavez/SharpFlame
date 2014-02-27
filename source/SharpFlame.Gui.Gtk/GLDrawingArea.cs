@@ -32,7 +32,7 @@ using SharpFlame.Gui.Controls;
 namespace SharpFlame.Gui.Gtk
 {
     [ToolboxItem(true)]
-    public class GLDrawingArea : DrawingArea, IDisposable
+    public class GLDrawingArea : DrawingArea, IDisposable, IGLSurfaceControl
     {
         IGraphicsContext graphicsContext;
         static int graphicsContextCount;

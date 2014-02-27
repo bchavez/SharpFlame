@@ -32,49 +32,17 @@ using SharpFlame.Gui.Controls;
 
 namespace SharpFlame.Gui.Gtk
 {
-    internal class LinuxGLSurfaceHandler : GtkControl<GLDrawingArea, GLSurface>, IGLSurface
+    internal class LinuxGLSurfaceHandler : GtkControl<GLDrawingArea, GLSurface>, IGLSurfaceHandler
     {
+        public new IGLSurfaceControl Control { get; set; }
+
         public override GLDrawingArea CreateControl()
         {
-            Control = new GLDrawingArea();
-            Control.Initialized += new System.EventHandler(onInitalized);
-            Control.Paint += new System.EventHandler(onPaint);
-            Control.ShuttingDown += new System.EventHandler(onShuttingDown);
+            var myControl = new GLDrawingArea();
 
-            return Control;
-        }
+            Control = myControl;
 
-        public event EventHandler Initialized = delegate {}; 
-        private void onInitalized(object obj, EventArgs e) 
-        {
-            Initialized (obj, e);
-        }
-
-        public event EventHandler Paint = delegate {}; 
-        private void onPaint(object obj, EventArgs e) 
-        {
-            Paint (obj, e);
-        }
-
-        public event EventHandler ShuttingDown = delegate {};
-        private void onShuttingDown(object obj, EventArgs e) 
-        {
-            ShuttingDown (obj, e);
-        }
-
-        protected override void Initialize()
-        {
-            base.Initialize();
-        }
-
-        public void MakeCurrent() 
-        {
-            Control.MakeCurrent ();
-        }
-
-        public void SwapBuffers()
-        {
-            Control.SwapBuffers ();
+            return myControl;
         }
     }
 }

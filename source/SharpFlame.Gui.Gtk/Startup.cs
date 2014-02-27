@@ -27,7 +27,7 @@ namespace SharpFlame.Gui.Gtk
 			Debug.Listeners.Add (new ConsoleTraceListener());
 			#endif
 			var generator = new Eto.Platform.GtkSharp.Generator ();
-            generator.Add<IGLSurface>(()=> new LinuxGLSurfaceHandler());
+            generator.Add<IGLSurfaceHandler>(()=> new LinuxGLSurfaceHandler());
 
             var app = new SharpFlameApplication (generator);
 			app.Run (args);

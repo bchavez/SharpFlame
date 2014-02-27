@@ -4,14 +4,9 @@ using Eto.Forms;
 
 namespace SharpFlame.Gui.Controls
 {
-    public interface IGLSurface : IControl
+    public interface IGLSurfaceHandler : IControl
     {
-        void MakeCurrent();
-        void SwapBuffers();
-
-        event EventHandler Initialized;
-        event EventHandler Paint;
-        event EventHandler ShuttingDown;
+        IGLSurfaceControl Control { get; set; }
     }
 
     public interface IGLSurfaceControl 
@@ -26,15 +21,17 @@ namespace SharpFlame.Gui.Controls
 
     public class GLSurface : Control, IGLSurfaceControl
     {
+        IGLSurfaceControl Control;
+
         public GLSurface() : this(Generator.Current)
         {
         }
-        public GLSurface(Generator generator) : this(generator, typeof(IGLSurface), true)
+        public GLSurface(Generator generator) : this(generator, typeof(IGLSurfaceHandler), true)
         {
-            var handler = (IGLSurface)this.Handler;
-            handler.Initialized += new System.EventHandler(OnInitialized);
-            handler.Paint += new System.EventHandler(OnPaint);
-            handler.ShuttingDown += new System.EventHandler(OnShuttingDown);
+            Control = (IGLSurfaceControl)((IGLSurfaceHandler)this.Handler).Control;
+            Control.Initialized += new System.EventHandler(OnInitialized);
+            Control.Paint += new System.EventHandler(OnPaint);
+            Control.ShuttingDown += new System.EventHandler(OnShuttingDown);
         }
         public GLSurface(Generator generator, Type type, bool initialize = true) : base(generator, type, initialize)
         {
@@ -63,12 +60,12 @@ namespace SharpFlame.Gui.Controls
 
         public virtual void MakeCurrent() 
         {
-            ((IGLSurface)Handler).MakeCurrent ();
+            Control.MakeCurrent ();
         }
 
         public virtual void SwapBuffers() 
         {
-            ((IGLSurface)Handler).SwapBuffers ();
+            Control.SwapBuffers ();
         }
 
         public override void OnLoadComplete( EventArgs e )
