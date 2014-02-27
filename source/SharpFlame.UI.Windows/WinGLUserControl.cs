@@ -97,7 +97,7 @@ namespace SharpFlame.UI.Windows
             {
                 Backend = PlatformBackend.PreferNative
             });
-            
+
             SetStyle(ControlStyles.Opaque, true);
             SetStyle(ControlStyles.UserPaint, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
@@ -380,7 +380,5 @@ namespace SharpFlame.UI.Windows
         {
             get { return implementation.WindowInfo; }
         }
-        
-
     }
 }

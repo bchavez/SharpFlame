@@ -11,6 +11,9 @@
     <AssemblyName>SharpFlame.UI.Linux</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ProductVersion>12.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ReleaseVersion>0.24</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,41 +35,38 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\other\GtkSharp\2.12\lib\gtk-sharp-2.0\atk-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Eto">
-      <HintPath>..\packages\Eto.Forms.1.2.1\lib\net40\Eto.dll</HintPath>
-    </Reference>
-    <Reference Include="Eto.Platform.Gtk">
-      <HintPath>..\packages\Eto.Platform.Gtk.1.2.1\lib\net40\Eto.Platform.Gtk.dll</HintPath>
-    </Reference>
-    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\other\GtkSharp\2.12\lib\gtk-sharp-2.0\gdk-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\other\GtkSharp\2.12\lib\gtk-sharp-2.0\glib-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\other\GtkSharp\2.12\lib\gtk-sharp-2.0\gtk-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\other\OpenTK.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
+    <Reference Include="OpenTK">
+      <HintPath>..\packages\OpenTK.1.1.1508.5724\lib\NET40\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Private>False</Private>
+      <Package>gtk-sharp-2.0</Package>
+    </Reference>
+    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Private>False</Private>
+      <Package>gtk-sharp-2.0</Package>
+    </Reference>
+    <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Package>glib-sharp-2.0</Package>
+    </Reference>
+    <Reference Include="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Private>False</Private>
+      <Package>gtk-sharp-2.0</Package>
+    </Reference>
+    <Reference Include="Eto">
+      <HintPath>..\packages\Eto-20140222\Eto.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto.Platform.Gtk">
+      <HintPath>..\packages\Eto-20140222\Eto.Platform.Gtk.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GLDrawingArea.cs" />
@@ -94,7 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpFlame.UI\SharpFlame.UI.csproj">
-      <Project>{1fbd5990-abdb-4c32-b253-c4ce31c4dcb6}</Project>
+      <Project>{1FBD5990-ABDB-4C32-B253-C4CE31C4DCB6}</Project>
       <Name>SharpFlame.UI</Name>
     </ProjectReference>
   </ItemGroup>

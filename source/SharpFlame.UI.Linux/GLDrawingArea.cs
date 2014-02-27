@@ -77,7 +77,7 @@ namespace SharpFlame.UI.Linux
 		public GLDrawingArea() : this(GraphicsMode.Default) { }
 
 		/// <summary>Constructs a new GLWidget using a given GraphicsMode</summary>
-		public GLDrawingArea(GraphicsMode graphicsMode) : this(graphicsMode, 1, 0, GraphicsContextFlags.Default) { }
+		public GLDrawingArea(GraphicsMode graphicsMode) : this(graphicsMode, 3, 0, GraphicsContextFlags.Default) { }
 
 		/// <summary>Constructs a new GLWidget</summary>
 		public GLDrawingArea(GraphicsMode graphicsMode, int glVersionMajor, int glVersionMinor, GraphicsContextFlags graphicsContextFlags)
@@ -157,7 +157,7 @@ namespace SharpFlame.UI.Linux
 				// If this looks uninitialized...  initialize.
 				if( ColorBPP == 0 )
 				{
-					ColorBPP = 32;
+					ColorBPP = 24;
 					
 					if( DepthBPP == 0 ) DepthBPP = 16;
 				}

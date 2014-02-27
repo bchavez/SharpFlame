@@ -10,9 +10,10 @@ namespace SharpFlame.Test.UI
 	/// </summary>
 	public class SharpFlameEtoApplication : Application
 	{
-	    public SharpFlameEtoApplication(Generator g) : base(g)
-	    {
-	    }
+        public SharpFlameEtoApplication(Generator generator)
+            : base(generator)
+        {
+        }
 
 	    /// <summary>
 		/// Handles when the application is initialized and running

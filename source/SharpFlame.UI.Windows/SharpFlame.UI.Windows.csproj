@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -11,6 +11,9 @@
     <AssemblyName>SharpFlame.UI.Windows</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ProductVersion>12.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ReleaseVersion>0.24</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,15 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Eto">
-      <HintPath>..\packages\Eto.Forms.1.2.1\lib\net40\Eto.dll</HintPath>
-    </Reference>
-    <Reference Include="Eto.Platform.Windows">
-      <HintPath>..\packages\Eto.Platform.Windows.1.2.1\lib\net40\Eto.Platform.Windows.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenTK.1.1.1508.5724\lib\NET40\OpenTK.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms" />
@@ -50,6 +44,15 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4">
+      <HintPath>..\packages\OpenTK.1.1.1508.5724\lib\NET40\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto">
+      <HintPath>..\packages\Eto-20140222\Eto.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto.Platform.Windows">
+      <HintPath>..\packages\Eto-20140222\Eto.Platform.Windows.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="WinGLUserControl.cs">
@@ -86,7 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpFlame.UI\SharpFlame.UI.csproj">
-      <Project>{1fbd5990-abdb-4c32-b253-c4ce31c4dcb6}</Project>
+      <Project>{1FBD5990-ABDB-4C32-B253-C4CE31C4DCB6}</Project>
       <Name>SharpFlame.UI</Name>
     </ProjectReference>
   </ItemGroup>

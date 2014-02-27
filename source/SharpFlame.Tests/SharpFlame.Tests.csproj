@@ -68,12 +68,6 @@
     <None Include="Maps\6c-NTW_3v3wBases-4oil.wz" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SharpFlame.Core\SharpFlame.Core.csproj">
-      <Project>{8AE7F7A3-841A-44A7-B016-4661BBBF7821}</Project>
-      <Name>SharpFlame.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
