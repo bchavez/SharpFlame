@@ -204,7 +204,10 @@ namespace SharpFlame.Gui.Sections
 		ComboBox TextureComboBox()
 		{
 			var control = new ComboBox();
-            control.Items.AddRange (App.Tileset);
+            if (App.Tileset != null)
+            {
+                control.Items.AddRange (App.Tileset);
+            }
 			return control;
 		}
 

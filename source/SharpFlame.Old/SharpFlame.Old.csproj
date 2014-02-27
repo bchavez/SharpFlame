@@ -8,8 +8,6 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{152475A4-3ABE-41C4-B338-A2FB7B350FAF}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <StartupObject>
-    </StartupObject>
     <RootNamespace>SharpFlame.Old</RootNamespace>
     <AssemblyName>SharpFlame.Old</AssemblyName>
     <FileAlignment>512</FileAlignment>
@@ -525,12 +523,6 @@
   </Target>
   -->
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\SharpFlame.Core\SharpFlame.Core.csproj">
-      <Project>{8AE7F7A3-841A-44A7-B016-4661BBBF7821}</Project>
-      <Name>SharpFlame.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>
@@ -595,4 +587,10 @@
   </ProjectExtensions>
   <ItemGroup />
   <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SharpFlame.Core\SharpFlame.Core.csproj">
+      <Project>{8AE7F7A3-841A-44A7-B016-4661BBBF7821}</Project>
+      <Name>SharpFlame.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

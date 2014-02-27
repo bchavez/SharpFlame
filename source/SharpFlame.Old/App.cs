@@ -2,11 +2,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using NLog;
+using OpenTK;
+using OpenTK.Graphics;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Old.AppSettings;
 using SharpFlame.Core;
@@ -35,7 +38,7 @@ namespace SharpFlame.Old
 
         public static SRgb MinimapFeatureColour;
 
-        public static char PlatformPathSeparator;
+        public static char PlatformPathSeparator = Path.DirectorySeparatorChar;
 
         public static bool DebugGL = false;
 
@@ -129,20 +132,121 @@ namespace SharpFlame.Old
 
         public static sLayerList LayerList;
 
-        static List<Tileset> tileset;
-        public static List<Tileset> Tileset
-        {
-            get { return tileset; }
-            set
-            {
-                tileset = value;
-                TilesetChanged(new Object(), EventArgs.Empty);
-            }
-        }
+        private static ObservableCollection<Tileset> tileset = new ObservableCollection<Tileset>();
+        public static ObservableCollection<Tileset> Tileset { get { return tileset; } }
 
         public static event EventHandler<EventArgs> TilesetChanged = delegate { };
 
         public static Options UiOptions = new Options();
+
+        public static GLControl OpenGL1 { get; set; }
+        public static GLControl OpenGL2 { get; set; }
+
+        public static void Initalize ()
+        {
+            setUpEvents ();
+            createTileTypes ();
+        }
+
+        private static void createTileTypes()
+        {
+            clsTileType newTileType;
+
+            newTileType = new clsTileType();
+            newTileType.Name = "Sand";
+            newTileType.DisplayColour.Red = 1.0F;
+            newTileType.DisplayColour.Green = 1.0F;
+            newTileType.DisplayColour.Blue = 0.0F;
+            App.TileTypes.Add(newTileType);
+
+            newTileType = new clsTileType();
+            newTileType.Name = "Sandy Brush";
+            newTileType.DisplayColour.Red = 0.5F;
+            newTileType.DisplayColour.Green = 0.5F;
+            newTileType.DisplayColour.Blue = 0.0F;
+            App.TileTypes.Add(newTileType);
+
+            newTileType = new clsTileType();
+            newTileType.Name = "Rubble";
+            newTileType.DisplayColour.Red = 0.25F;
+            newTileType.DisplayColour.Green = 0.25F;
+            newTileType.DisplayColour.Blue = 0.25F;
+            App.TileTypes.Add(newTileType);
+
+            newTileType = new clsTileType();
+            newTileType.Name = "Green Mud";
+            newTileType.DisplayColour.Red = 0.0F;
+            newTileType.DisplayColour.Green = 0.5F;
+            newTileType.DisplayColour.Blue = 0.0F;
+            App.TileTypes.Add(newTileType);
+
+            newTileType = new clsTileType();
+            newTileType.Name = "Red Brush";
+            newTileType.DisplayColour.Red = 1.0F;
+            newTileType.DisplayColour.Green = 0.0F;
+            newTileType.DisplayColour.Blue = 0.0F;
+            App.TileTypes.Add(newTileType);
+
+            newTileType = new clsTileType();
+            newTileType.Name = "Pink Rock";
+            newTileType.DisplayColour.Red = 1.0F;
+            newTileType.DisplayColour.Green = 0.5F;
+            newTileType.DisplayColour.Blue = 0.5F;
+            App.TileTypes.Add(newTileType);
+
+            newTileType = new clsTileType();
+            newTileType.Name = "Road";
+            newTileType.DisplayColour.Red = 0.0F;
+            newTileType.DisplayColour.Green = 0.0F;
+            newTileType.DisplayColour.Blue = 0.0F;
+            App.TileTypes.Add(newTileType);
+
+            newTileType = new clsTileType();
+            newTileType.Name = "Water";
+            newTileType.DisplayColour.Red = 0.0F;
+            newTileType.DisplayColour.Green = 0.0F;
+            newTileType.DisplayColour.Blue = 1.0F;
+            App.TileTypes.Add(newTileType);
+
+            newTileType = new clsTileType();
+            newTileType.Name = "Cliff Face";
+            newTileType.DisplayColour.Red = 0.5F;
+            newTileType.DisplayColour.Green = 0.5F;
+            newTileType.DisplayColour.Blue = 0.5F;
+            App.TileTypes.Add(newTileType);
+
+            newTileType = new clsTileType();
+            newTileType.Name = "Baked Earth";
+            newTileType.DisplayColour.Red = 0.5F;
+            newTileType.DisplayColour.Green = 0.0F;
+            newTileType.DisplayColour.Blue = 0.0F;
+            App.TileTypes.Add(newTileType);
+
+            newTileType = new clsTileType();
+            newTileType.Name = "Sheet Ice";
+            newTileType.DisplayColour.Red = 1.0F;
+            newTileType.DisplayColour.Green = 1.0F;
+            newTileType.DisplayColour.Blue = 1.0F;
+            App.TileTypes.Add(newTileType);
+
+            newTileType = new clsTileType();
+            newTileType.Name = "Slush";
+            newTileType.DisplayColour.Red = 0.75F;
+            newTileType.DisplayColour.Green = 0.75F;
+            newTileType.DisplayColour.Blue = 0.75F;
+            App.TileTypes.Add(newTileType);
+        }
+
+
+        /// <summary>
+        /// Sets up events
+        /// </summary>
+        private static void setUpEvents ()
+        {
+            Tileset.CollectionChanged += delegate {
+                TilesetChanged(new Object(), EventArgs.Empty);
+            };          
+        }
 
         public static void SetProgramSubDirs()
         {

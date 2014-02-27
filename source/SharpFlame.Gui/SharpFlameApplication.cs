@@ -25,19 +25,25 @@
 #endregion
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using Eto;
 using Eto.Drawing;
 using Eto.Forms;
+using NLog;
+using OpenTK;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Gui.Forms;
 using SharpFlame.Old;
+using SharpFlame.Old.AppSettings;
 
 namespace SharpFlame.Gui
 {
 	public class SharpFlameApplication : Application
 	{
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
 		public SharpFlameApplication(Generator generator)
 			: base(generator)
 		{
@@ -47,11 +53,38 @@ namespace SharpFlame.Gui
 			Name = string.Format ("No Map - {0} {1}", Constants.ProgramName, Constants.ProgramVersionNumber);
 			Style = "application";
 
-            App.Tileset = new List<Tileset> {
-                new Tileset { Name = "Arizona" },
-                new Tileset { Name = "Urban" },
-                new Tileset { Name = "Rocky Mountains" }
-            };
+            // Run this before everything else.
+            App.Initalize ();
+
+            var initializeResult = new Result("Startup result", false);
+
+            App.SetProgramSubDirs();
+
+            SettingsManager.CreateSettingOptions();
+            KeyboardManager.CreateControls(); //needed to load key control settings
+
+            try
+            {
+                Toolkit.Init();
+            }
+            catch (Exception ex)
+            {
+                logger.ErrorException ("Got an exception while initalizing OpenTK", ex);
+                initializeResult.ProblemAdd (string.Format("Failure while loading opentk, error was: {0}", ex.Message));
+            }
+
+            var SettingsLoadResult = SettingsManager.SettingsLoad(ref SettingsManager.InitializeSettings);                  
+            initializeResult.Add(SettingsLoadResult);
+
+            SettingsManager.UpdateSettings(SettingsManager.InitializeSettings);
+            SettingsManager.InitializeSettings = null;
+
+//            var tilesetsList = (List<string>)SettingsManager.Settings.GetValue(SettingsManager.SettingTilesetDirectories);
+//            foreach (var path in tilesetsList) {
+//                if (path != null && path != "") {
+//                    initializeResult.Add(App.LoadTilesets(PathUtil.EndWithPathSeperator(path)));
+//                }
+//            }
 		}
 
 		public override void OnInitialized(EventArgs e)

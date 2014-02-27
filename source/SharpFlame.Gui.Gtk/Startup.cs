@@ -1,5 +1,6 @@
 using SharpFlame.Gui;
 using System.Diagnostics;
+using SharpFlame.Gui;
 
 namespace SharpFlame.Gui.Gtk
 {
@@ -13,7 +14,7 @@ namespace SharpFlame.Gui.Gtk
 			#endif
 			var generator = new Eto.Platform.GtkSharp.Generator ();
 
-			var app = new SharpFlameApplication (generator);
+            var app = new SharpFlameApplication (generator);
 			app.Run (args);
 		}
 	}

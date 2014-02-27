@@ -31,7 +31,6 @@ namespace SharpFlame.Old
         {
             Application.EnableVisualStyles();
 
-            App.PlatformPathSeparator = Path.DirectorySeparatorChar;
             App.SetProgramSubDirs();
 
             SettingsManager.CreateSettingOptions();
