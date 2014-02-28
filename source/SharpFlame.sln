@@ -19,8 +19,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFlame.UI", "SharpFlame
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFlame.UI.Linux", "SharpFlame.UI.Linux\SharpFlame.UI.Linux.csproj", "{1CD53D0D-6349-4075-BBE7-1D7EDE24B221}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFlame.UI.Mac", "SharpFlame.UI.Mac\SharpFlame.UI.Mac.csproj", "{27D32E72-B25F-4329-BAA3-882B30563518}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFlame.UI.Windows", "SharpFlame.UI.Windows\SharpFlame.UI.Windows.csproj", "{B4FBF7E5-583F-4C6A-B100-FBD670A3D737}"
 EndProject
 Global
@@ -69,18 +67,6 @@ Global
 		{1FBD5990-ABDB-4C32-B253-C4CE31C4DCB6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{1FBD5990-ABDB-4C32-B253-C4CE31C4DCB6}.Release|x86.ActiveCfg = Release|Any CPU
 		{1FBD5990-ABDB-4C32-B253-C4CE31C4DCB6}.Release|x86.Build.0 = Release|Any CPU
-		{27D32E72-B25F-4329-BAA3-882B30563518}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{27D32E72-B25F-4329-BAA3-882B30563518}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{27D32E72-B25F-4329-BAA3-882B30563518}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{27D32E72-B25F-4329-BAA3-882B30563518}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{27D32E72-B25F-4329-BAA3-882B30563518}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{27D32E72-B25F-4329-BAA3-882B30563518}.Debug|x86.Build.0 = Debug|Any CPU
-		{27D32E72-B25F-4329-BAA3-882B30563518}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{27D32E72-B25F-4329-BAA3-882B30563518}.Release|Any CPU.Build.0 = Release|Any CPU
-		{27D32E72-B25F-4329-BAA3-882B30563518}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{27D32E72-B25F-4329-BAA3-882B30563518}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{27D32E72-B25F-4329-BAA3-882B30563518}.Release|x86.ActiveCfg = Release|Any CPU
-		{27D32E72-B25F-4329-BAA3-882B30563518}.Release|x86.Build.0 = Release|Any CPU
 		{5FDA3465-03C0-493D-9E10-97E97C289FB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5FDA3465-03C0-493D-9E10-97E97C289FB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FDA3465-03C0-493D-9E10-97E97C289FB3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
