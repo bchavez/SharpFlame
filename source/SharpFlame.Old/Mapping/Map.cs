@@ -1859,7 +1859,12 @@ namespace SharpFlame.Old.Mapping
             foreach ( var tempLoopVar_Connection in UnitToUpdateFor.Sectors )
             {
                 Connection = tempLoopVar_Connection;
-                SectorGraphicsChanges.Changed(Connection.Sector.Pos);
+                try {
+                    SectorGraphicsChanges.Changed(Connection.Sector.Pos);
+                } catch (Exception ex) {
+                    Debugger.Break ();
+                    logger.WarnException ("Got an exception in UnitSectorsGraphicsChanged", ex);
+                }
             }
         }
 

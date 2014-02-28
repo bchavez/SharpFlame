@@ -19,6 +19,7 @@ namespace SharpFlame.Old.Mapping
 
         public Sector()
         {
+            Pos = new XYInt (0, 0);
             Units = new ConnectedList<clsUnitSectorConnection, Sector>(this);
         }
 
