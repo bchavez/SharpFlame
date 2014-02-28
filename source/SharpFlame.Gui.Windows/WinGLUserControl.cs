@@ -31,9 +31,9 @@ using System.Windows.Forms;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Platform;
-using SharpFlame.UI.OTK;
+using SharpFlame.Gui.OTK;
 
-namespace SharpFlame.UI.Windows
+namespace SharpFlame.Gui.Windows
 {
     /// <summary>
     /// OpenGL-aware WinForms control.

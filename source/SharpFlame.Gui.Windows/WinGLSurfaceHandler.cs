@@ -2,9 +2,9 @@ using System;
 using System.Drawing.Imaging;
 using Eto.Platform.Windows;
 using OpenTK.Graphics.OpenGL;
-using SharpFlame.UI.Controls;
+using SharpFlame.Gui.Controls;
 
-namespace SharpFlame.UI.Windows
+namespace SharpFlame.Gui.Windows
 {
     //                                              <NativePlatformType, ETOControl>
     public class WinGLSurfaceHandler : WindowsControl<WinGLUserControl, GLSurface>, IGLSurface

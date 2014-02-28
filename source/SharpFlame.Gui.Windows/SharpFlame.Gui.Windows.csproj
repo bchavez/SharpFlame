@@ -77,6 +77,16 @@
     <None Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Compile Include="WinGLSurfaceHandler.cs" />
+    <Compile Include="WinGLUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WinGLUserControl.Designer.cs">
+      <DependentUpon>WinGLUserControl.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="WinGLUserControl.resx">
+      <DependentUpon>WinGLUserControl.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
