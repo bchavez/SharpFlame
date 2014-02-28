@@ -1,16 +1,19 @@
 using System;
 using Eto;
+using Eto.Drawing;
 using Eto.Forms;
 
 namespace SharpFlame.Gui.Controls
 {
     public interface IGLSurfaceHandler : IControl
     {
-        IGLSurfaceControl Control { get; set; }
+        IGLSurfaceControl Control { get; }
     }
 
     public interface IGLSurfaceControl 
     {
+        Size Size { get; set; }
+
         void MakeCurrent();
         void SwapBuffers();
 
@@ -21,7 +24,12 @@ namespace SharpFlame.Gui.Controls
 
     public class GLSurface : Control, IGLSurfaceControl
     {
-        IGLSurfaceControl Control;
+        IGLSurfaceControl Control { get; set; }
+
+        public new Size Size {
+            get { return Control.Size; } 
+            set { Control.Size = value; }
+        }
 
         public GLSurface() : this(Generator.Current)
         {

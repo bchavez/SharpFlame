@@ -23,6 +23,8 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading;
+using Eto.Drawing;
+using Eto.Platform.GtkSharp;
 using Gtk;
 using OpenTK;
 using OpenTK.Graphics;
@@ -66,6 +68,29 @@ namespace SharpFlame.Gui.Gtk
 
         /// <summary>The minor version of OpenGL to use.</summary>
         public int GlVersionMinor { get; set; }
+
+        private Size size;
+        /// <summary>
+        /// Gets or sets the context size.
+        /// </summary>
+        /// <value>The width.</value>
+        public new virtual Size Size
+        {
+            get
+            {
+                return Visible ? Allocation.Size.ToEto() : size; 
+            }
+            set
+            {
+                if (size != value)
+                {
+                    size = value;
+                    var alloc = Allocation;
+                    alloc.Size = value.ToGdk();
+                    SetSizeRequest(size.Width, size.Height);
+                }
+            }
+        }
 
         public GraphicsContextFlags GraphicsContextFlags
         {
@@ -258,8 +283,9 @@ namespace SharpFlame.Gui.Gtk
             }
 
             bool result = base.OnExposeEvent(eventExpose);
+
             OnRenderFrame();
-            eventExpose.Window.Display.Sync(); // Add Sync call to fix resize rendering problem (Jay L. T. Cornwall) - How does this affect VSync?
+            eventExpose.Window.Display.Sync(); // Add Sync call to fix resize rendering problem (Jay L. T. Cornwall) - How does this affect VSync?           
             graphicsContext.SwapBuffers();
             return result;
         }

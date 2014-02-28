@@ -63,6 +63,7 @@
       <Private>False</Private>
       <Package>gtk-sharp-2.0</Package>
     </Reference>
+    <Reference Include="Mono.Cairo" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Startup.cs" />
