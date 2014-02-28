@@ -1,0 +1,5 @@
+Xamarin IDE needs these project types to build & debug MonoMac .app applications.
+
+    <ProjectTypeGuids>{948B3504-5B70-4649-8FE4-BDE1FB46EC69};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    
+ 

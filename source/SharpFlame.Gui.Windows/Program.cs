@@ -12,6 +12,7 @@ namespace SharpFlame.Gui.Windows
             var generator = Generator.GetGenerator(Generators.WinAssembly);
             var app = new SharpFlameApplication(generator);
             app.Run(args);
+            
         }
     }
 }

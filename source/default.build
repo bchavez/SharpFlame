@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="SharpFlame" xmlns="http://nant.sf.net/release/0.92/nant.xsd" >
+     <!-- _________________________________________________________________ -->
+     <!-- _________________________________________________________________ -->
+     <!--                          BUILD VARIABLES                          -->
+     <!-- _________________________________________________________________ -->
+     <!-- _________________________________________________________________ -->
+    <fail message="ERROR: 'platform' (linux | win | osx) property must be specified." unless="${property::exists('platform')}" />
+    <echo message="BUILD PLATFORM: ${platform}"/>
+
+    <property name="win" value="${platform == 'win'}"/>
+    <property name="osx" value="${platform == 'osx'}"/>
+    <property name="linux" value="${platform == 'linux'}"/>
+
+
+    <!-- Global Project Variables -->
+    <property name="BuildLabel" value="2.0" />
+     <property name="BuildLabel" value ="${BuildLabel}.${build.number}" if ="${property::exists('build.number')}" />
+     <property name="build.number" value="0.DEBUG" overwrite ="false" />
+    
+
+
+    <!-- MISC -->
+    <target name="test" description="test">
+        
+    </target>
+    
+
+     <!-- PRIVATE BUILD TARGETS -->
+     <!-- PRIVATE BUILD TARGETS -->
+
+     <script language="C#">
+         <references>
+             <include name="System.dll"/>
+             <include name="System.Core.dll" if="${win}"/>
+         </references>
+         <imports>
+             <import namespace="System.Text.RegularExpressions"/>
+             <import namespace="System.Linq"/>
+         </imports>
+          <code><![CDATA[
+          
+    [TaskName("filepoke")]
+    public class FilePoke : Task {
+      private string _file;
+      private string _target;
+      private string _value;
+      [TaskAttribute("file", Required=true)]
+      public string TargetFile {
+          get { return _file; }
+          set { _file = value; }
+      }
+      [TaskAttribute("target", Required=true)]
+      public string Target {
+          get { return _target; }
+          set { _target = value; }
+      }
+      [TaskAttribute("value", Required=true)]
+      public string Value {
+          get { return _value; }
+          set { _value = value; }
+      }
+      protected override void ExecuteTask() {
+        string path = _file;
+        StringBuilder filecontents = new StringBuilder();
+        using (StreamReader sr = File.OpenText(path)) {
+          string s = "";
+           while ((s = sr.ReadLine()) != null) {
+              filecontents.Append(Regex.Replace( s, _target, _value ) + "\n");
+          }
+      }
+      using (StreamWriter sw = new StreamWriter(path)) {
+        sw.Write(filecontents.ToString());
+      }
+      }
+    }
+        
+    [FunctionSet("directory", "Directory")]
+    public class CustomDirectoryFunctions : FunctionSetBase {
+        public CustomDirectoryFunctions(Project project, PropertyDictionary properties) : base(project, properties) {
+        }
+        
+        [Function("is-empty")]
+        public static bool IsEmpty(string path) {
+            return !Directory.EnumerateFileSystemEntries(path).Any();
+        }
+    }
+    
+    ]]></code>
+     </script>
+    
+    
+    
+    <!-- Continuous Integration -->
+    <target name="ci-build" description="cibuild">
+        <property name ="ci.output" value ="_COMPILE_OUTPUT" />
+        
+        <call target ="ci-build-projects"/>
+        <call target ="ci-package"/>
+    </target>
+
+    <target name="ci-build-projects">
+        <delete dir ="${ci.output}" />
+
+
+        <msbuild project="SharpFlame.VS2013.sln" target="Rebuild" >
+            <!--<arg value ="/verbosity:diag" />-->
+            <property name="Configuration" value="Release"/>
+            <property name="VisualStudioVersion" value="11.0"/>            
+            <property name="EnablePackageProcessLoggingAndAssert" value="false" />
+        </msbuild>
+     
+    </target>
+    <target name ="ci-package">
+        <zip zipfile="${ci.output}\SharpFlame.Windows.zip" unless="${directory::is-empty(path::combine(ci.output,'SharpFlame.Windows'))}">
+            <fileset basedir ="${ci.output}">
+                <include name ="**/*"/>
+                <exclude name="**/*.log"/>
+                <exclude name ="**/**publishproj.teamcity*"/>
+            </fileset>
+        </zip>
+    </target>
+
+    <target name ="clean-all">
+        <fail if ="${not property::exists('dryrun')}" message="'/D:dryrun=true|false' property must be specified"/>
+        
+        <foreach item="Folder" property="dir">
+            <in>
+                <items>
+                    <include name ="_COMPILE_OUTPUT" />
+                    <include name ="**/bin/**" />
+                    <include name ="**/obj/**" />
+
+                    <exclude name ="tools/**"/>
+                    <exclude name ="packages/**"/>
+                </items>
+            </in>
+            <do>
+                <delete dir ="${dir}" if="${not dryrun}" />
+                <echo message ="${dir}" if="${dryrun}"/>
+            </do>
+        </foreach>
+        <foreach item="File" property="file">
+            <in>
+                <items>
+                </items>
+            </in>
+            <do>
+                <delete file="${file}" if="${not dryrun}" />
+                <echo message ="${file}" if="${dryrun}"/>
+            </do>
+        </foreach>
+    </target>
+
+</project>
