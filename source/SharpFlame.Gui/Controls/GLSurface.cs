@@ -37,10 +37,10 @@ namespace SharpFlame.Gui.Controls
         }
         public GLSurface(Generator generator) : this(generator, typeof(IGLSurfaceHandler), true)
         {
-            Control = (IGLSurfaceControl)((IGLSurfaceHandler)this.Handler).Control;
-            Control.Initialized += new System.EventHandler(OnInitialized);
-            Control.Resize += new System.EventHandler(OnResize);
-            Control.ShuttingDown += new System.EventHandler(OnShuttingDown);
+            Control = ((IGLSurfaceHandler)Handler).Control;
+            Control.Initialized += OnInitialized;
+            Control.Resize += OnResize;
+            Control.ShuttingDown += OnShuttingDown;
         }
         public GLSurface(Generator generator, Type type, bool initialize = true) : base(generator, type, initialize)
         {
@@ -75,11 +75,6 @@ namespace SharpFlame.Gui.Controls
         public virtual void SwapBuffers() 
         {
             Control.SwapBuffers ();
-        }
-
-        public override void OnLoadComplete( EventArgs e )
-        {
-            base.OnLoadComplete( e );
         }
 
         public GLFont CreateGLFont(System.Drawing.Font baseFont)

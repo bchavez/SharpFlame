@@ -225,19 +225,7 @@ namespace SharpFlame.Gui.Gtk
                 GraphicsMode graphicsMode = new GraphicsMode(colorBufferColorFormat, DepthBPP, StencilBPP, Samples, accumulationColorFormat, buffers, Stereo);
 
                 // IWindowInfo
-                if (Configuration.RunningOnWindows)
-                {
-                    IntPtr windowHandle = gdk_win32_drawable_get_handle(GdkWindow.Handle);
-                    windowInfo = OpenTK.Platform.Utilities.CreateWindowsWindowInfo(windowHandle);
-                }
-                else if (Configuration.RunningOnMacOS)
-                {
-                    IntPtr windowHandle = gdk_x11_drawable_get_xid(GdkWindow.Handle);
-                    bool ownHandle = true;
-                    bool isControl = true;
-                    windowInfo = OpenTK.Platform.Utilities.CreateMacOSCarbonWindowInfo(windowHandle, ownHandle, isControl);
-                }
-                else if (Configuration.RunningOnX11)
+                if (Configuration.RunningOnX11)
                 {
                     IntPtr display = gdk_x11_display_get_xdisplay(Display.Handle);
                     int screen = Screen.Number;

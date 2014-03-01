@@ -25,7 +25,6 @@
 #endregion
 
 using System;
-using System.IO;
 using System.Collections.Generic;
 using Eto;
 using Eto.Drawing;
@@ -33,7 +32,6 @@ using Eto.Forms;
 using NLog;
 using OpenTK;
 using SharpFlame.Core;
-using SharpFlame.Core.Domain;
 using SharpFlame.Gui.Forms;
 using SharpFlame.Gui.Controls;
 using SharpFlame.Old;
@@ -75,14 +73,14 @@ namespace SharpFlame.Gui
             {
                 logger.ErrorException ("Got an exception while initalizing OpenTK", ex);
                 // initializeResult.ProblemAdd (string.Format("Failure while loading opentk, error was: {0}", ex.Message));
-                Application.Instance.Quit();
+                Instance.Quit();
             }
 
             var SettingsLoadResult = SettingsManager.SettingsLoad(ref SettingsManager.InitializeSettings);                  
             initializeResult.Add(SettingsLoadResult);
 
             GlTexturesView = new GLSurface ();
-            GlTexturesView.Initialized += new EventHandler (onGLControlInitialized);
+            GlTexturesView.Initialized += onGLControlInitialized;
 
             GlMapView = new GLSurface ();
 		}

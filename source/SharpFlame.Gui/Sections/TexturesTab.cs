@@ -33,10 +33,7 @@ using Eto.Drawing;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core.Domain;
-using SharpFlame.Gui.Forms;
-using SharpFlame.Gui.Controls;
 using SharpFlame.Old;
-using SharpFlame.Old.AppSettings;
 using SharpFlame.Old.Graphics.OpenGL;
 using SharpFlame.Old.Mapping.Tiles;
 using SharpFlame.Old.UiOptions;
@@ -225,7 +222,7 @@ namespace SharpFlame.Gui.Sections
             nudRadius.Bind (r => r.Value, texturesOptions, t => t.Radius);
 
             // Read Tileset Combobox
-            App.Tilesets.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) => 
+            App.Tilesets.CollectionChanged += (sender, e) => 
             {
                 if (e.Action == NotifyCollectionChangedAction.Add) {
                     var list = new List<IListItem>();
@@ -368,9 +365,10 @@ namespace SharpFlame.Gui.Sections
                             goto EndOfTextures2;
                         }
 
-                        num = (int)tileset.Tiles [num].DefaultType;
-
+                        // TODO: Change this to a per map value once we have a map.
+                        num = tileset.Tiles [num].DefaultType;
                         GL.Color3(App.TileTypes[num].DisplayColour.Red, App.TileTypes[num].DisplayColour.Green, App.TileTypes[num].DisplayColour.Blue);
+
                         GL.Vertex2(x * 64 + 24, y * 64 + 24);
                         GL.Vertex2(x * 64 + 24, y * 64 + 40);
                         GL.Vertex2(x * 64 + 40, y * 64 + 40);

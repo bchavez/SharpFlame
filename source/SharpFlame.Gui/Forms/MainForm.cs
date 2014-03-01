@@ -28,7 +28,6 @@ using System;
 using Eto.Forms;
 using Eto.Drawing;
 using SharpFlame.Core;
-using SharpFlame.Gui.Controls;
 using SharpFlame.Gui.Sections;
 
 namespace SharpFlame.Gui.Forms

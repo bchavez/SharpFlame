@@ -25,8 +25,10 @@
 #endregion
 
 using System;
+using System.Linq;
 using Eto.Forms;
 using Eto.Drawing;
+using NLog.Filters;
 using SharpFlame.Core;
 using SharpFlame.Gui.Controls;
 using SharpFlame.Old;
@@ -82,9 +84,7 @@ namespace SharpFlame.Gui.Sections
                             nudRotation = new NumericUpDown { MinValue = 0, MaxValue = 360, Value = 0, Size = new Size(-1, -1) },
                             new CheckBox { Text = "Random" }
             );
-            var gbRotation = new GroupBox { Text = "Rotation" };
-            gbRotation.Content = nLayout2;
-
+            var gbRotation = new GroupBox { Text = "Rotation", Content = nLayout2 };
 
             nLayout3.Add (new CheckBox { Text = "Rotate Footprints" });
             nLayout3.Add (new CheckBox { Text = "Automatic Walls" });
@@ -191,14 +191,8 @@ namespace SharpFlame.Gui.Sections
                     var matches = true;
 
                     // Every item in the split filter string should be within the Text property
-                    foreach (var filterItem in filterItems) {
-                        if (i.InternalName.IndexOf(filterItem, StringComparison.CurrentCultureIgnoreCase) == -1 && 
-                            i.InGameName.IndexOf(filterItem, StringComparison.CurrentCultureIgnoreCase) == -1)
-                        {
-                            matches = false;
-                            break;
-                        }                       
-                    }
+                    matches = filterItems.Any(f => i.InternalName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) == -1 && 
+                                                   i.InGameName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) == -1);
 
                     return matches;
                 };
@@ -234,14 +228,8 @@ namespace SharpFlame.Gui.Sections
                     var matches = true;
 
                     // Every item in the split filter string should be within the Text property
-                    foreach (var filterItem in filterItems) {
-                        if (i.InternalName.IndexOf(filterItem, StringComparison.CurrentCultureIgnoreCase) == -1 && 
-                            i.InGameName.IndexOf(filterItem, StringComparison.CurrentCultureIgnoreCase) == -1)
-                        {
-                            matches = false;
-                            break;
-                        }                       
-                    }
+                    matches = filterItems.Any(f => i.InternalName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) == -1 &&
+                                                    i.InGameName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) == -1);
 
                     return matches;
                 };
@@ -276,14 +264,8 @@ namespace SharpFlame.Gui.Sections
                     var matches = true;
 
                     // Every item in the split filter string should be within the Text property
-                    foreach (var filterItem in filterItems) {
-                        if (i.InternalName.IndexOf(filterItem, StringComparison.CurrentCultureIgnoreCase) == -1 && 
-                            i.InGameName.IndexOf(filterItem, StringComparison.CurrentCultureIgnoreCase) == -1)
-                        {
-                            matches = false;
-                            break;
-                        }                       
-                    }
+                    matches = filterItems.Any(f => i.InternalName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) == -1 &&
+                                                    i.InGameName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) == -1);
 
                     return matches;
                 };

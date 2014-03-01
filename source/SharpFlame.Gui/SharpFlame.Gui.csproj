@@ -94,7 +94,9 @@
     <Compile Include="Sections\TexturesTab.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Controls\GLSurface.cs" />
+    <Compile Include="Controls\GLSurface.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
     <Compile Include="OTK\IGLControl.cs" />
   </ItemGroup>
   <ItemGroup />
