@@ -99,6 +99,12 @@ namespace SharpFlame.Gui.Gtk
             }
         }
 
+        bool initialized = false;
+        public virtual bool IsInitialized 
+        {
+            get { return initialized; }
+        }
+
         public GraphicsContextFlags GraphicsContextFlags
         {
             get { return graphicsContextFlags; }
@@ -198,7 +204,6 @@ namespace SharpFlame.Gui.Gtk
         // protected override void OnRealized() { base.OnRealized(); }
 
         static bool sharedContextInitialized = false;
-        bool initialized = false;
 
         // Called when the widget needs to be (fully or partially) redrawn.
         protected override bool OnExposeEvent(Gdk.EventExpose eventExpose)

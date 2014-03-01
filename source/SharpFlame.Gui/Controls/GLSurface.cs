@@ -14,6 +14,7 @@ namespace SharpFlame.Gui.Controls
     public interface IGLSurfaceControl 
     {
         Size Size { get; set; }
+        bool IsInitialized { get; }
 
         void MakeCurrent();
         void SwapBuffers();
@@ -30,6 +31,10 @@ namespace SharpFlame.Gui.Controls
         public new Size Size {
             get { return Control.Size; } 
             set { Control.Size = value; }
+        }
+
+        public bool IsInitialized {
+            get { return Control.IsInitialized; }
         }
 
         public GLSurface() : this(Generator.Current)
