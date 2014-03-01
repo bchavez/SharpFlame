@@ -1,26 +1,37 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>SharpFlame</name>
+        <name>SharpFlame.Old</name>
     </assembly>
     <members>
-        <member name="T:SharpFlame.Maths.Angles.AnglePY">
+        <member name="T:SharpFlame.Old.Maths.Angles.AnglePY">
             <summary>
             Angle Pitch, Yaw. Values in radians
             </summary>
         </member>
-        <member name="F:SharpFlame.Maths.Angles.AnglePY.Yaw">
+        <member name="F:SharpFlame.Old.Maths.Angles.AnglePY.Yaw">
             <summary>
             With respect to the ViewAngleMatrix, typical values range from -Pi (counter-clockwise) to Pi (clockwise).
             Or, if you prefer from zero to 180 deg (clockwise) and zero to -180 (counter-clockwise)
             </summary>
         </member>
-        <member name="T:SharpFlame.Maths.Angles.AngleRPY">
+        <member name="T:SharpFlame.Old.Maths.Angles.AngleRPY">
             <summary>
             Angle Roll, Pitch, Yaw. Values in radians.
             </summary>
         </member>
-        <member name="M:SharpFlame.clsViewInfo.RelativeToViewAngle(SharpFlame.Mapping.Tiles.TileOrientation)">
+        <member name="T:SharpFlame.Old.UiOptions.TerrainMode">
+            <summary>
+            DO NOT Change: Enumeration of the terrain modes.
+            If you change also change the UI (Sections/TextureTab.cs -&gt;
+            </summary>
+        </member>
+        <member name="P:SharpFlame.Old.UiOptions.TexturesOptions.TilesetNum">
+            <summary>
+            Index of the selected Tileset
+            </summary>
+        </member>
+        <member name="M:SharpFlame.Old.clsViewInfo.RelativeToViewAngle(SharpFlame.Old.Mapping.Tiles.TileOrientation)">
             <summary>
             Given the current ViewAngleMatrix:Yaw, this method ensures the correct tile orientation
             respecting where the view camera is oriented.

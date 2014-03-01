@@ -105,13 +105,17 @@ namespace SharpFlame.Gui
             if (initializeResult.HasProblems)
             {
                 logger.Error (initializeResult.ToString ());
+                var statusDialog = new Dialogs.Status (initializeResult);
+                statusDialog.Show();
             } else if (initializeResult.HasWarnings)
             {
                 logger.Warn (initializeResult.ToString ());
+                var statusDialog = new Dialogs.Status (initializeResult);
+                statusDialog.Show();
             } else
             {
                 logger.Debug (initializeResult.ToString ());
-            }
+            }           
         }
 
 		public override void OnInitialized(EventArgs e)

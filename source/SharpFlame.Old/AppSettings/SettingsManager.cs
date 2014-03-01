@@ -367,7 +367,6 @@ namespace SharpFlame.Old.AppSettings
         {
             get { return ((List<string>)(GetValue(SettingsManager.SettingTilesetDirectories))); }
             set { 
-                logger.Info("Test");
                 SetChanges (SettingsManager.SettingTilesetDirectories, new Change<List<string>>(value)); 
             }
         }

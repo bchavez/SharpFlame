@@ -98,6 +98,7 @@
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="OTK\IGLControl.cs" />
+    <Compile Include="Dialogs\Status.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -105,6 +106,8 @@
     <EmbeddedResource Include="Resources\btnrotateclockwise.png" />
     <EmbeddedResource Include="Resources\btnrotateanticlockwise.png" />
     <EmbeddedResource Include="Resources\btnflipx.png" />
+    <EmbeddedResource Include="Resources\problem.png" />
+    <EmbeddedResource Include="Resources\warning.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpFlame.Old\SharpFlame.Old.csproj">
