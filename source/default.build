@@ -14,11 +14,49 @@
 
 
     <!-- Global Project Variables -->
-    <property name="BuildLabel" value="2.0" />
+     <property name="BuildLabel" value="2.0" />
      <property name="BuildLabel" value ="${BuildLabel}.${build.number}" if ="${property::exists('build.number')}" />
      <property name="build.number" value="0.DEBUG" overwrite ="false" />
-    
 
+
+
+    <target name="build-win" if="${win}" description="Main Build Script for Windows OS">
+        <call target="set-dev-env"/>
+
+        <msbuild project="SharpFlame.VS2013.sln" target="Rebuild" >
+            <!--<arg value ="/verbosity:diag" />-->
+            <property name="Configuration" value="Release"/>
+            <property name="VisualStudioVersion" value="11.0"/>
+            <property name="EnablePackageProcessLoggingAndAssert" value="false" />
+        </msbuild>
+        
+    </target>
+
+    <target name="build-linux" if="${linux}" description="Main Build Script for Linux">
+        <call target="set-dev-env"/>
+
+    </target>
+
+    <target name="build-osx" if="${osx}" description="Main Build Script for OSX">
+        <call target="set-dev-env"/>
+
+    </target>
+
+
+
+    <target name="set-dev-env" description="Sets the Mac project development enviornment so it can be opened by MonoDevelop/VS/XamarionStudio.">
+        <xmlpoke if="${linux or win}" xpath="/def:Project/def:PropertyGroup[1]/def:ProjectTypeGuids" value="{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}" file="SharpFlame.Gui.Mac/SharpFlame.Gui.Mac.csproj">
+            <namespaces>
+                <namespace prefix="def" uri="http://schemas.microsoft.com/developer/msbuild/2003"/>
+            </namespaces>
+        </xmlpoke>
+        <xmlpoke if="${osx}" xpath="/def:Project/def:PropertyGroup[1]/def:ProjectTypeGuids" value="{948B3504-5B70-4649-8FE4-BDE1FB46EC69};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}" file="SharpFlame.Gui.Mac/SharpFlame.Gui.Mac.csproj">
+            <namespaces>
+                <namespace prefix="def" uri="http://schemas.microsoft.com/developer/msbuild/2003"/>
+            </namespaces>
+        </xmlpoke>
+    </target>
+    
 
     <!-- MISC -->
     <target name="test" description="test">
