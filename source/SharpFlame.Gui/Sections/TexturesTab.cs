@@ -274,7 +274,7 @@ namespace SharpFlame.Gui.Sections
                 var x = (int)Math.Floor(args.Location.X / 64);
                 var y = (int)Math.Floor(args.Location.Y / 64);
                 var tile = x + (y * TextureCount.X);
-                if (tile > App.Tilesets[App.UiOptions.Textures.TilesetNum].Tiles.Count) {
+                if (tile >= App.Tilesets[App.UiOptions.Textures.TilesetNum].Tiles.Count) {
                     return;
                 }
                 App.UiOptions.Textures.SelectedTile = tile;
@@ -469,7 +469,6 @@ namespace SharpFlame.Gui.Sections
 
             if ( App.UiOptions.Textures.SelectedTile >= 0 & TextureCount.X > 0 )
             {
-                var a = App.UiOptions.Textures.SelectedTile * TextureCount.X;
                 xyInt.X = App.UiOptions.Textures.SelectedTile % TextureCount.X;
                 xyInt.Y = App.UiOptions.Textures.SelectedTile / TextureCount.X;
                 GL.Begin(BeginMode.LineLoop);
@@ -509,12 +508,6 @@ namespace SharpFlame.Gui.Sections
 				Size = new Size (image.Width, image.Height)
 			};
 
-			// var control = new Button { Image = image };
-			// control.Size = new Size(30, 30);
-			control.MouseDown += delegate {
-				Console.WriteLine("Mousedown");
-			};
-
 			control.MouseEnter += (sender, e) => {
 				((ImageView)sender).BackgroundColor = Colors.Gray;
 			};
@@ -534,12 +527,6 @@ namespace SharpFlame.Gui.Sections
 				Size = new Size (image.Width, image.Height)
 			};
 				
-			// var control = new Button { Image = image };
-			// control.Size = new Size(30, 30);
-			control.MouseDown += delegate {
-				Console.WriteLine("Mousedown");
-			};
-
 			control.MouseEnter += (sender, e) => {
 				((ImageView)sender).BackgroundColor = Colors.Gray;
 			};
@@ -557,12 +544,6 @@ namespace SharpFlame.Gui.Sections
 			var control = new ImageView {
 				Image = image,
 				Size = new Size (image.Width, image.Height)
-			};
-
-			// var control = new Button { Image = image };
-			// control.Size = new Size(30, 30);
-			control.MouseDown += delegate {
-				Console.WriteLine("Mousedown");
 			};
 
 			control.MouseEnter += (sender, e) => {
