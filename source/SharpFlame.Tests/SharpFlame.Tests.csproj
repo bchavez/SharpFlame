@@ -76,7 +76,12 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SharpFlame.Core\SharpFlame.Core.csproj">
+      <Project>{8ae7f7a3-841a-44a7-b016-4661bbbf7821}</Project>
+      <Name>SharpFlame.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Data\Levels\2c-Tinny-War.addon.lev">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
