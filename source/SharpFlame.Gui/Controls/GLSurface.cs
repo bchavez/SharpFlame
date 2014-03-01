@@ -8,10 +8,10 @@ namespace SharpFlame.Gui.Controls
 {
     public interface IGLSurfaceHandler : IControl
     {
-        IGLSurfaceControl Control { get; }
+
     }
 
-    public interface IGLSurfaceControl 
+    public interface IGLSurface 
     {
         Size Size { get; set; }
         bool IsInitialized { get; }
@@ -24,17 +24,20 @@ namespace SharpFlame.Gui.Controls
         event EventHandler ShuttingDown;
     }
 
-    public class GLSurface : Control, IGLSurfaceControl
+    public class GLSurface : Control, IGLSurface
     {
-        IGLSurfaceControl Control { get; set; }
+        public IGLSurface PlatformControl
+        {
+            get { return this.ControlObject as IGLSurface; }
+        }
 
         public new Size Size {
-            get { return Control.Size; } 
-            set { Control.Size = value; }
+            get { return PlatformControl.Size; } 
+            set { PlatformControl.Size = value; }
         }
 
         public bool IsInitialized {
-            get { return Control.IsInitialized; }
+            get { return PlatformControl.IsInitialized; }
         }
 
         public GLSurface() : this(Generator.Current)
@@ -42,10 +45,9 @@ namespace SharpFlame.Gui.Controls
         }
         public GLSurface(Generator generator) : this(generator, typeof(IGLSurfaceHandler), true)
         {
-            Control = ((IGLSurfaceHandler)Handler).Control;
-            Control.Initialized += OnInitialized;
-            Control.Resize += OnResize;
-            Control.ShuttingDown += OnShuttingDown;
+            PlatformControl.Initialized += OnInitialized;
+            PlatformControl.Resize += OnResize;
+            PlatformControl.ShuttingDown += OnShuttingDown;
         }
         public GLSurface(Generator generator, Type type, bool initialize = true) : base(generator, type, initialize)
         {
@@ -74,12 +76,12 @@ namespace SharpFlame.Gui.Controls
 
         public virtual void MakeCurrent() 
         {
-            Control.MakeCurrent ();
+            PlatformControl.MakeCurrent ();
         }
 
         public virtual void SwapBuffers() 
         {
-            Control.SwapBuffers ();
+            PlatformControl.SwapBuffers ();
         }
 
         public GLFont CreateGLFont(System.Drawing.Font baseFont)
