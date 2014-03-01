@@ -24,6 +24,8 @@
  // */
  #endregion
 
+using SharpFlame.Old.Mapping.Tiles;
+
 namespace SharpFlame.Old.UiOptions
 {
     /// <summary>
@@ -57,6 +59,8 @@ namespace SharpFlame.Old.UiOptions
         /// </summary>
         public int TilesetNum { get; set; }
 
+        public TileOrientation TextureOrientation;
+
         public TexturesOptions()
         {
             Radius = 2;
@@ -64,6 +68,7 @@ namespace SharpFlame.Old.UiOptions
             SetOrientation = true;
             Randomize = false;
             TilesetNum = -1;
+            TextureOrientation = new TileOrientation (false, false, false);
         }
     }
 }

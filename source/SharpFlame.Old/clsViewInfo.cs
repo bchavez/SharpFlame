@@ -1361,7 +1361,7 @@ namespace SharpFlame.Old
 
             var tile = mouseOverTerrain.Tile.Normal;
 
-            Map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.ResultXFlip = !Map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.ResultXFlip;
+            Map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.XFlip = !Map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.XFlip;
             Map.TileTextureChangeTerrainAction(tile, Program.frmMainInstance.TextureTerrainAction);
 
             Map.SectorGraphicsChanges.TileChanged(tile);

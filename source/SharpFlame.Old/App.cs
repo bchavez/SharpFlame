@@ -98,6 +98,7 @@ namespace SharpFlame.Old
         public static Painter Painter_Urban;
         public static Painter Painter_Rockies;
 
+        public static Font UnitLabelBaseFont;
         public static GLFont UnitLabelFont;
         //Public TextureViewFont As GLFont
 

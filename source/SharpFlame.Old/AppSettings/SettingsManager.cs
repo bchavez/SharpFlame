@@ -151,10 +151,7 @@ namespace SharpFlame.Old.AppSettings
 
         private static void SetFont(Font newFont)
         {
-            if ( App.UnitLabelFont != null )
-            {
-                App.UnitLabelFont.Deallocate();
-            }
+            App.UnitLabelBaseFont = newFont;
             // App.UnitLabelFont = Program.frmMainInstance.MapViewControl.CreateGLFont(newFont);
         }
 

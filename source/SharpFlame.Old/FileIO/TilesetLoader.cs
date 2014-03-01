@@ -71,8 +71,10 @@ namespace SharpFlame.Old.FileIO
 
             //tile count has been set by the ttp file
 
-            for ( tileNum = 0; tileNum <= tileset.TileCount - 1; tileNum++ )
+            for ( tileNum = 0; tileNum < tileset.TileCount; tileNum++ )
             {
+                var tile = tileset.Tiles[tileNum];
+
                 strTile = "tile-" + App.MinDigits(tileNum, 2) + ".png";
 
                 //-------- 128 --------
@@ -84,6 +86,7 @@ namespace SharpFlame.Old.FileIO
                 result = BitmapUtil.LoadBitmap(graphicPath, ref bitmap);
                 if ( !result.Success )
                 {
+                    tileset.Tiles.RemoveRange (tileNum, tileset.Tiles.Count - tileNum);
                     //ignore and exit, since not all tile types have a corresponding tile graphic
                     return returnResult;
                 }
@@ -96,13 +99,13 @@ namespace SharpFlame.Old.FileIO
 
                 if ( SettingsManager.Settings.Mipmaps )
                 {
-                    tileset.Tiles[tileNum].GlTextureNum = BitmapUtil.CreateGLTexture (bitmap, 0, 0,
+                    tile.GlTextureNum = BitmapUtil.CreateGLTexture (bitmap, 0, 0,
                                                                               TextureMagFilter.Nearest, 
                                                                               TextureMinFilter.LinearMipmapLinear);
                 }
                 else
                 {
-                    tileset.Tiles[tileNum].GlTextureNum = BitmapUtil.CreateGLTexture (bitmap, 0, 0, 
+                    tile.GlTextureNum = BitmapUtil.CreateGLTexture (bitmap, 0, 0, 
                                                                               TextureMagFilter.Nearest, 
                                                                               TextureMinFilter.Nearest);
                 }
@@ -127,9 +130,9 @@ namespace SharpFlame.Old.FileIO
                         }
                     }
                     GL.GetTexImage(TextureTarget.Texture2D, 7, PixelFormat.Rgba, PixelType.Float, AverageColour);
-                    tileset.Tiles[tileNum].AverageColour.Red = AverageColour[0];
-                    tileset.Tiles[tileNum].AverageColour.Green = AverageColour[1];
-                    tileset.Tiles[tileNum].AverageColour.Blue = AverageColour[2];
+                    tile.AverageColour.Red = AverageColour[0];
+                    tile.AverageColour.Green = AverageColour[1];
+                    tile.AverageColour.Blue = AverageColour[2];
                 }
                 else
                 {
@@ -146,10 +149,12 @@ namespace SharpFlame.Old.FileIO
                             blueTotal += Pixel.B;
                         }
                     }
-                    tileset.Tiles[tileNum].AverageColour.Red = (float)(redTotal / 4177920.0D);
-                    tileset.Tiles[tileNum].AverageColour.Green = (float)(greenTotal / 4177920.0D);
-                    tileset.Tiles[tileNum].AverageColour.Blue = (float)(blueTotal / 4177920.0D);
+                    tile.AverageColour.Red = (float)(redTotal / 4177920.0D);
+                    tile.AverageColour.Green = (float)(greenTotal / 4177920.0D);
+                    tile.AverageColour.Blue = (float)(blueTotal / 4177920.0D);
                 }
+
+                tileset.Tiles[tileNum] = tile;
             }
 
             return returnResult;
@@ -202,17 +207,19 @@ namespace SharpFlame.Old.FileIO
 
                 uintTemp = file.ReadUInt32();
                 tileset.TileCount = Convert.ToInt32(uintTemp);
-                tileset.Tiles = new Tile[tileset.TileCount];
+                // tileset.Tiles = new Tile[tileset.TileCount];
 
                 for ( i = 0; i < Math.Min((Int32)uintTemp,tileset.TileCount); i++ )
                 {
+                    var tile = new Tile();
                     ushortTemp = file.ReadUInt16();
                     if ( ushortTemp > App.TileTypes.Count )
                     {
                         returnResult.Problem = "Unknown tile type.";
                         return returnResult;
                     }
-                    tileset.Tiles[i].DefaultType = (byte)ushortTemp;
+                    tile.DefaultType = (byte)ushortTemp;
+                    tileset.Tiles.Add(tile);
                 }
             }
             catch ( Exception ex )

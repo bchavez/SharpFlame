@@ -34,8 +34,8 @@ namespace SharpFlame.Old.Mapping.Tiles
             //use random for empty tiles
             if ( tileChance.TextureNum < 0 )
             {
-                returnResult.Orientation.ResultXFlip = App.Random.Next() >= 0.5F;
-                returnResult.Orientation.ResultYFlip = App.Random.Next() >= 0.5F;
+                returnResult.Orientation.XFlip = App.Random.Next() >= 0.5F;
+                returnResult.Orientation.YFlip = App.Random.Next() >= 0.5F;
                 returnResult.Orientation.SwitchedAxes = App.Random.Next() >= 0.5F;
                 returnResult.TextureNum = -1;
                 return returnResult;
@@ -59,8 +59,8 @@ namespace SharpFlame.Old.Mapping.Tiles
             if ( (newDirection.X == 1 & newDirection.Y == 1) || (tileChance.Direction.X == 1 & tileChance.Direction.Y == 1) )
             {
                 returnResult.Orientation.SwitchedAxes = App.Random.Next() >= 0.5F;
-                returnResult.Orientation.ResultXFlip = App.Random.Next() >= 0.5F;
-                returnResult.Orientation.ResultYFlip = App.Random.Next() >= 0.5F;
+                returnResult.Orientation.XFlip = App.Random.Next() >= 0.5F;
+                returnResult.Orientation.YFlip = App.Random.Next() >= 0.5F;
                 return returnResult;
             }
 
@@ -72,28 +72,28 @@ namespace SharpFlame.Old.Mapping.Tiles
                 //use flips to match the directions
                 if ( tileChance.Direction.X == 0 ^ newDirection.X == 0 )
                 {
-                    returnResult.Orientation.ResultXFlip = true;
+                    returnResult.Orientation.XFlip = true;
                 }
                 else
                 {
-                    returnResult.Orientation.ResultXFlip = false;
+                    returnResult.Orientation.XFlip = false;
                 }
                 if ( tileChance.Direction.Y == 0 ^ newDirection.Y == 0 )
                 {
-                    returnResult.Orientation.ResultYFlip = true;
+                    returnResult.Orientation.YFlip = true;
                 }
                 else
                 {
-                    returnResult.Orientation.ResultYFlip = false;
+                    returnResult.Orientation.YFlip = false;
                 }
                 //randomly switch to the alternate orientation
                 if ( App.Random.Next() >= 0.5F )
                 {
                     returnResult.Orientation.SwitchedAxes = !returnResult.Orientation.SwitchedAxes;
-                    if ( (newDirection.X == 0 ^ newDirection.Y == 0) ^ (returnResult.Orientation.ResultXFlip ^ returnResult.Orientation.ResultYFlip) )
+                    if ( (newDirection.X == 0 ^ newDirection.Y == 0) ^ (returnResult.Orientation.XFlip ^ returnResult.Orientation.YFlip) )
                     {
-                        returnResult.Orientation.ResultXFlip = !returnResult.Orientation.ResultXFlip;
-                        returnResult.Orientation.ResultYFlip = !returnResult.Orientation.ResultYFlip;
+                        returnResult.Orientation.XFlip = !returnResult.Orientation.XFlip;
+                        returnResult.Orientation.YFlip = !returnResult.Orientation.YFlip;
                     }
                 }
             }
@@ -106,38 +106,38 @@ namespace SharpFlame.Old.Mapping.Tiles
                 {
                     if ( tileChance.Direction.Y != newDirection.X )
                     {
-                        returnResult.Orientation.ResultXFlip = true;
+                        returnResult.Orientation.XFlip = true;
                     }
                     else
                     {
-                        returnResult.Orientation.ResultXFlip = false;
+                        returnResult.Orientation.XFlip = false;
                     }
                     if ( tileChance.Direction.X != newDirection.Y )
                     {
-                        returnResult.Orientation.ResultYFlip = true;
+                        returnResult.Orientation.YFlip = true;
                     }
                     else
                     {
-                        returnResult.Orientation.ResultYFlip = false;
+                        returnResult.Orientation.YFlip = false;
                     }
                 }
                 else
                 {
                     if ( tileChance.Direction.X != newDirection.X )
                     {
-                        returnResult.Orientation.ResultXFlip = true;
+                        returnResult.Orientation.XFlip = true;
                     }
                     else
                     {
-                        returnResult.Orientation.ResultXFlip = false;
+                        returnResult.Orientation.XFlip = false;
                     }
                     if ( tileChance.Direction.Y != newDirection.Y )
                     {
-                        returnResult.Orientation.ResultYFlip = true;
+                        returnResult.Orientation.YFlip = true;
                     }
                     else
                     {
-                        returnResult.Orientation.ResultYFlip = false;
+                        returnResult.Orientation.YFlip = false;
                     }
                 }
                 //randomly switch to the alternate orientation
@@ -145,11 +145,11 @@ namespace SharpFlame.Old.Mapping.Tiles
                 {
                     if ( newDirection.X == 1 )
                     {
-                        returnResult.Orientation.ResultXFlip = !returnResult.Orientation.ResultXFlip;
+                        returnResult.Orientation.XFlip = !returnResult.Orientation.XFlip;
                     }
                     else
                     {
-                        returnResult.Orientation.ResultYFlip = !returnResult.Orientation.ResultYFlip;
+                        returnResult.Orientation.YFlip = !returnResult.Orientation.YFlip;
                     }
                 }
             }
@@ -164,11 +164,11 @@ namespace SharpFlame.Old.Mapping.Tiles
             {
                 resultDirection.SwitchAxes();
             }
-            if ( orientation.ResultXFlip )
+            if ( orientation.XFlip )
             {
                 resultDirection.FlipX();
             }
-            if ( orientation.ResultYFlip )
+            if ( orientation.YFlip )
             {
                 resultDirection.FlipY();
             }
@@ -180,7 +180,7 @@ namespace SharpFlame.Old.Mapping.Tiles
 
             if ( tileOrientation.SwitchedAxes )
             {
-                if ( tileOrientation.ResultXFlip )
+                if ( tileOrientation.XFlip )
                 {
                     result.X = Constants.TerrainGridSpacing - pos.Y;
                 }
@@ -188,7 +188,7 @@ namespace SharpFlame.Old.Mapping.Tiles
                 {
                     result.X = pos.Y;
                 }
-                if ( tileOrientation.ResultYFlip )
+                if ( tileOrientation.YFlip )
                 {
                     result.Y = Constants.TerrainGridSpacing - pos.X;
                 }
@@ -199,7 +199,7 @@ namespace SharpFlame.Old.Mapping.Tiles
             }
             else
             {
-                if ( tileOrientation.ResultXFlip )
+                if ( tileOrientation.XFlip )
                 {
                     result.X = Constants.TerrainGridSpacing - pos.X;
                 }
@@ -207,7 +207,7 @@ namespace SharpFlame.Old.Mapping.Tiles
                 {
                     result.X = pos.X;
                 }
-                if ( tileOrientation.ResultYFlip )
+                if ( tileOrientation.YFlip )
                 {
                     result.Y = Constants.TerrainGridSpacing - pos.Y;
                 }
@@ -226,7 +226,7 @@ namespace SharpFlame.Old.Mapping.Tiles
 
             if ( tileOrientation.SwitchedAxes )
             {
-                if ( tileOrientation.ResultXFlip )
+                if ( tileOrientation.XFlip )
                 {
                     returnResult.X = 1.0F - pos.Y;
                 }
@@ -234,7 +234,7 @@ namespace SharpFlame.Old.Mapping.Tiles
                 {
                     returnResult.X = pos.Y;
                 }
-                if ( tileOrientation.ResultYFlip )
+                if ( tileOrientation.YFlip )
                 {
                     returnResult.Y = 1.0F - pos.X;
                 }
@@ -245,7 +245,7 @@ namespace SharpFlame.Old.Mapping.Tiles
             }
             else
             {
-                if ( tileOrientation.ResultXFlip )
+                if ( tileOrientation.XFlip )
                 {
                     returnResult.X = 1.0F - pos.X;
                 }
@@ -253,7 +253,7 @@ namespace SharpFlame.Old.Mapping.Tiles
                 {
                     returnResult.X = pos.X;
                 }
-                if ( tileOrientation.ResultYFlip )
+                if ( tileOrientation.YFlip )
                 {
                     returnResult.Y = 1.0F - pos.Y;
                 }
@@ -272,7 +272,7 @@ namespace SharpFlame.Old.Mapping.Tiles
 
             if ( tileOrientation.SwitchedAxes )
             {
-                if ( tileOrientation.ResultXFlip )
+                if ( tileOrientation.XFlip )
                 {
                     returnResult.X = 1.0D - pos.Y;
                 }
@@ -280,7 +280,7 @@ namespace SharpFlame.Old.Mapping.Tiles
                 {
                     returnResult.X = pos.Y;
                 }
-                if ( tileOrientation.ResultYFlip )
+                if ( tileOrientation.YFlip )
                 {
                     returnResult.Y = 1.0D - pos.X;
                 }
@@ -291,7 +291,7 @@ namespace SharpFlame.Old.Mapping.Tiles
             }
             else
             {
-                if ( tileOrientation.ResultXFlip )
+                if ( tileOrientation.XFlip )
                 {
                     returnResult.X = 1.0D - pos.X;
                 }
@@ -299,7 +299,7 @@ namespace SharpFlame.Old.Mapping.Tiles
                 {
                     returnResult.X = pos.X;
                 }
-                if ( tileOrientation.ResultYFlip )
+                if ( tileOrientation.YFlip )
                 {
                     returnResult.Y = 1.0D - pos.Y;
                 }
@@ -318,7 +318,7 @@ namespace SharpFlame.Old.Mapping.Tiles
 
             if ( orientation.SwitchedAxes )
             {
-                if ( orientation.ResultXFlip )
+                if ( orientation.XFlip )
                 {
                     result.X = limits.Y - pos.Y;
                 }
@@ -326,7 +326,7 @@ namespace SharpFlame.Old.Mapping.Tiles
                 {
                     result.X = pos.Y;
                 }
-                if ( orientation.ResultYFlip )
+                if ( orientation.YFlip )
                 {
                     result.Y = limits.X - pos.X;
                 }
@@ -337,7 +337,7 @@ namespace SharpFlame.Old.Mapping.Tiles
             }
             else
             {
-                if ( orientation.ResultXFlip )
+                if ( orientation.XFlip )
                 {
                     result.X = limits.X - pos.X;
                 }
@@ -345,7 +345,7 @@ namespace SharpFlame.Old.Mapping.Tiles
                 {
                     result.X = pos.X;
                 }
-                if ( orientation.ResultYFlip )
+                if ( orientation.YFlip )
                 {
                     result.Y = limits.Y - pos.Y;
                 }
@@ -376,7 +376,7 @@ namespace SharpFlame.Old.Mapping.Tiles
 
             if ( reverseOrientation.SwitchedAxes )
             {
-                if ( reverseOrientation.ResultXFlip )
+                if ( reverseOrientation.XFlip )
                 {
                     coordA.X = 1f;
                     coordB.X = 1f;
@@ -390,7 +390,7 @@ namespace SharpFlame.Old.Mapping.Tiles
                     coordC.X = 1f;
                     coordD.X = 1f;
                 }
-                if ( reverseOrientation.ResultYFlip )
+                if ( reverseOrientation.YFlip )
                 {
                     coordA.Y = 1f;
                     coordB.Y = 0f;
@@ -407,7 +407,7 @@ namespace SharpFlame.Old.Mapping.Tiles
             }
             else
             {
-                if ( reverseOrientation.ResultXFlip )
+                if ( reverseOrientation.XFlip )
                 {
                     coordA.X = 1f;
                     coordB.X = 0f;
@@ -421,7 +421,7 @@ namespace SharpFlame.Old.Mapping.Tiles
                     coordC.X = 0f;
                     coordD.X = 1f;
                 }
-                if ( reverseOrientation.ResultYFlip )
+                if ( reverseOrientation.YFlip )
                 {
                     coordA.Y = 1f;
                     coordB.Y = 1f;
@@ -442,7 +442,7 @@ namespace SharpFlame.Old.Mapping.Tiles
         {
             if ( tileOrientation.SwitchedAxes )
             {
-                if ( tileOrientation.ResultXFlip )
+                if ( tileOrientation.XFlip )
                 {
                     OutputRotation = 1;
                 }
@@ -450,11 +450,11 @@ namespace SharpFlame.Old.Mapping.Tiles
                 {
                     OutputRotation = 3;
                 }
-                OutputFlipX = !(tileOrientation.ResultXFlip ^ tileOrientation.ResultYFlip);
+                OutputFlipX = !(tileOrientation.XFlip ^ tileOrientation.YFlip);
             }
             else
             {
-                if ( tileOrientation.ResultYFlip )
+                if ( tileOrientation.YFlip )
                 {
                     OutputRotation = 2;
                 }
@@ -462,7 +462,7 @@ namespace SharpFlame.Old.Mapping.Tiles
                 {
                     OutputRotation = 0;
                 }
-                OutputFlipX = tileOrientation.ResultXFlip ^ tileOrientation.ResultYFlip;
+                OutputFlipX = tileOrientation.XFlip ^ tileOrientation.YFlip;
             }
         }
 
@@ -471,47 +471,47 @@ namespace SharpFlame.Old.Mapping.Tiles
             if ( oldRotation == 0 )
             {
                 result.SwitchedAxes = false;
-                result.ResultXFlip = false;
-                result.ResultYFlip = false;
+                result.XFlip = false;
+                result.YFlip = false;
             }
             else if ( oldRotation == 1 )
             {
                 result.SwitchedAxes = true;
-                result.ResultXFlip = true;
-                result.ResultYFlip = false;
+                result.XFlip = true;
+                result.YFlip = false;
             }
             else if ( oldRotation == 2 )
             {
                 result.SwitchedAxes = false;
-                result.ResultXFlip = true;
-                result.ResultYFlip = true;
+                result.XFlip = true;
+                result.YFlip = true;
             }
             else if ( oldRotation == 3 )
             {
                 result.SwitchedAxes = true;
-                result.ResultXFlip = false;
-                result.ResultYFlip = true;
+                result.XFlip = false;
+                result.YFlip = true;
             }
             if ( oldFlipX )
             {
                 if ( result.SwitchedAxes )
                 {
-                    result.ResultYFlip = !result.ResultYFlip;
+                    result.YFlip = !result.YFlip;
                 }
                 else
                 {
-                    result.ResultXFlip = !result.ResultXFlip;
+                    result.XFlip = !result.XFlip;
                 }
             }
             if ( oldFlipZ )
             {
                 if ( result.SwitchedAxes )
                 {
-                    result.ResultXFlip = !result.ResultXFlip;
+                    result.XFlip = !result.XFlip;
                 }
                 else
                 {
-                    result.ResultYFlip = !result.ResultYFlip;
+                    result.YFlip = !result.YFlip;
                 }
             }
         }

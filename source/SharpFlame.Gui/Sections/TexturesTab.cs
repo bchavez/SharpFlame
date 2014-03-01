@@ -51,15 +51,22 @@ namespace SharpFlame.Gui.Sections
         readonly CheckBox chkOrientation;
         readonly CheckBox chkRandomize;
         readonly CheckBox chkDisplayTileTypes;
+        readonly CheckBox chkDisplayTileNumbers;
 
         readonly Button btnCircular;
         readonly Button btnSquare;
+
+        readonly ImageView btnRotateAntiClockwise;
+        readonly ImageView btnRotateClockwise;
+        readonly ImageView btnFlipX;
 
         readonly NumericUpDown nudRadius;
 
         readonly RadioButtonList rblTerrainModifier;
 
         readonly ComboBox cbTileset;
+
+        readonly Scrollable scrollTextureView;
 
 		public TextureTab(SharpFlameApplication a) 
         {
@@ -69,7 +76,7 @@ namespace SharpFlame.Gui.Sections
 
             var row = layout.AddSeparateRow (null,
 			                                 new Label { Text = "Tileset:", VerticalAlign = VerticalAlign.Middle },
-											 cbTileset = TextureComboBox (),
+											 cbTileset = textureComboBox (),
 											 null);
 			row.Table.Visible = false;
 
@@ -100,9 +107,9 @@ namespace SharpFlame.Gui.Sections
 			buttonsRandomize.Add (null);
 			buttonsRandomize.BeginVertical();
 			buttonsRandomize.AddRow(null,
-			                              BtnRotateAntiClockwise (),
-			                              BtnRotateClockwise (),
-			                              BtnFlipX(),
+                                    TableLayout.AutoSized(btnRotateAntiClockwise = makeBtnRotateAntiClockwise ()),
+                                    TableLayout.AutoSized(btnRotateClockwise = makeBtnRotateClockwise ()),
+                                    TableLayout.AutoSized(btnFlipX = makeBtnFlipX()),
 						   				  null);
 			buttonsRandomize.EndVertical ();
 
@@ -134,14 +141,14 @@ namespace SharpFlame.Gui.Sections
 				Text = "Tile Type:",
 				VerticalAlign = VerticalAlign.Middle
 			});
-			tileTypeCombo.Add (TileTypeComboBox());
+			tileTypeCombo.Add (tileTypeComboBox());
 			tileTypeCombo.EndHorizontal ();
 
 			var tileTypeCheckBoxes = new DynamicLayout ();
 			tileTypeCheckBoxes.BeginHorizontal ();
             tileTypeCheckBoxes.Add (chkDisplayTileTypes = new CheckBox { Text = "Display Tile Types" });
 			tileTypeCheckBoxes.Add (null);
-			tileTypeCheckBoxes.Add (new CheckBox { Text = "Display Tile Numbers" });
+			tileTypeCheckBoxes.Add (chkDisplayTileNumbers = new CheckBox { Text = "Display Tile Numbers" });
 			tileTypeCheckBoxes.EndHorizontal ();
 
 			var tileTypeSetter = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty };
@@ -157,9 +164,8 @@ namespace SharpFlame.Gui.Sections
 			tileTypeSetter.EndHorizontal ();
 
 			mainLayout.Add (layout);
-			mainLayout.BeginVertical (xscale: true, yscale: true);
-            mainLayout.Add (a.GlTexturesView);
-			mainLayout.EndVertical ();
+            scrollTextureView = new Scrollable { Content = a.GlTexturesView };
+            mainLayout.Add (scrollTextureView, true, true);
 			mainLayout.Add (tileTypeSetter);
 			//mainLayout.Add();
 
@@ -186,6 +192,22 @@ namespace SharpFlame.Gui.Sections
                 btnSquare.Enabled = false;
                 btnCircular.Enabled = true;
                 texturesOptions.TerrainMouseMode = TerrainMouseMode.Square;
+            };
+
+            // Orientation buttons
+            btnRotateClockwise.MouseDown += delegate {
+                texturesOptions.TextureOrientation.RotateClockwise();
+                DrawTexturesView();
+            };
+
+            btnRotateAntiClockwise.MouseDown += delegate {
+                texturesOptions.TextureOrientation.RotateAntiClockwise();
+                DrawTexturesView();
+            };
+
+            btnFlipX.MouseDown += delegate {
+                texturesOptions.TextureOrientation.FlipX();
+                DrawTexturesView();
             };
 
             // Checkboxes
@@ -225,13 +247,27 @@ namespace SharpFlame.Gui.Sections
 
             // Bind tileset combobox.
             cbTileset.Bind (r => r.SelectedIndex, texturesOptions, t => t.TilesetNum);
+            cbTileset.SelectedIndexChanged += delegate
+            {
+                DrawTexturesView ();
+            };
+
+            chkDisplayTileTypes.CheckedChanged += delegate
+            {
+                DrawTexturesView ();
+            };
+
+            chkDisplayTileNumbers.CheckedChanged += delegate
+            {
+                DrawTexturesView ();
+            };
 
             // Set Mousetool, when we are shown.
             Shown += delegate {
                 App.UiOptions.MouseTool = MouseTool.TextureBrush;
             };
 
-            application.GlTexturesView.Paint += delegate {
+            application.GlTexturesView.Resize += delegate {
                 DrawTexturesView();
             };
 		}
@@ -239,17 +275,29 @@ namespace SharpFlame.Gui.Sections
         void DrawTexturesView() {
             if (App.UiOptions.Textures.TilesetNum == -1)
             {
-                Console.WriteLine ("Not drawing, no tileset selected");
+                GL.Clear(ClearBufferMask.ColorBufferBit);
+                GL.Flush();
+                application.GlTexturesView.SwapBuffers ();
                 return;
             }
 
-            Console.WriteLine ("Drawing");
+            application.GlTexturesView.MakeCurrent ();
+
             var tileset = App.Tilesets[App.UiOptions.Textures.TilesetNum];
-            var size = application.GlTexturesView.Size;
 
             var textureCount = new XYInt (0, 0);
-            textureCount.X = (int)(Math.Floor(size.Width / 64.0D));
-            textureCount.Y = (int)(Math.Ceiling(size.Height / 64.0D));
+            textureCount.X = (int)(Math.Floor((scrollTextureView.Size.Width - 20) / 64.0D));
+            textureCount.Y = (int)(Math.Ceiling((double)tileset.Tiles.Count / textureCount.X));
+
+            var height = textureCount.Y * 64;
+            // TODO: See how thick the scroll is on winforms and mac, 20px seems to be right on GTK.
+            var glSize = application.GlTexturesView.Size = new Size (scrollTextureView.Size.Width - 20, height);
+
+            // send the resize event to the Graphics card.
+            GL.Viewport( 0, 0, glSize.Width, glSize.Height );
+            GL.MatrixMode( MatrixMode.Projection );
+            GL.LoadIdentity();
+            GL.Ortho( -1.0, 1.0, -1.0, 1.0, 0.0, 4.0 );
 
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
@@ -261,41 +309,44 @@ namespace SharpFlame.Gui.Sections
             var texCoord3 = new XYDouble();
 
             GL.MatrixMode(MatrixMode.Projection);
-            var temp_mat = Matrix4.CreateOrthographicOffCenter(0.0F, size.Width, size.Height, 0.0F, -1.0F, 1.0F);
+            var temp_mat = Matrix4.CreateOrthographicOffCenter(0.0F, glSize.Width, glSize.Height, 0.0F, -1.0F, 1.0F);
+            // var temp_mat = Matrix4.CreateOrthographic(glSize.Width, glSize.Height, 1.0f, 1000.0f);
             GL.LoadMatrix(ref temp_mat);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
-            TileUtil.GetTileRotatedTexCoords(App.TextureOrientation, ref texCoord0, ref texCoord1, ref texCoord2, ref texCoord3);
+            TileUtil.GetTileRotatedTexCoords(App.UiOptions.Textures.TextureOrientation, ref texCoord0, ref texCoord1, ref texCoord2, ref texCoord3);
 
             GL.Enable(EnableCap.Texture2D);
             GL.Color4(0.0F, 0.0F, 0.0F, 1.0F);
 
-            var x = 0;
-            var y = 0;
-            var num = 0;
-            var a = 0;
-            for ( y = 0; y <= textureCount.Y - 1; y++ )
+            for ( var y = 0; y < textureCount.Y; y++ )
             {
-                for ( x = 0; x <= textureCount.X - 1; x++ )
+                for ( var x = 0; x < textureCount.X; x++ )
                 {
-                    num = y * textureCount.X + x;
-                    if ( num >= tileset.TileCount )
+                    var num = y * textureCount.X + x;
+                    if ( num >= tileset.Tiles.Count )
                     {
                         goto EndOfTextures1;
                     }
-                    a = tileset.Tiles[num].GlTextureNum;
-                    GL.BindTexture(TextureTarget.Texture2D, a);
+                    GL.BindTexture(TextureTarget.Texture2D, tileset.Tiles[num].GlTextureNum);
                     GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Decal);
                     GL.Begin(BeginMode.Quads);
+                    //Top-Right
                     GL.TexCoord2(texCoord0.X, texCoord0.Y);
-                    GL.Vertex2(x * 64, y * 64); // Top Left
+                    GL.Vertex2(x * 64, y * 64);
+
+                    //Top-Left
                     GL.TexCoord2(texCoord1.X, texCoord1.Y);
-                    GL.Vertex2(x * 64 + 64, y * 64); // Bottom Left
+                    GL.Vertex2(x * 64 + 64, y * 64);
+
+                    //Bottom-Left
                     GL.TexCoord2(texCoord3.X, texCoord3.Y);
-                    GL.Vertex2(x * 64 + 64, y * 64 + 64); // Bottom right
+                    GL.Vertex2(x * 64 + 64, y * 64 + 64);
+
+                    //Bottom-Right
                     GL.TexCoord2(texCoord2.X, texCoord2.Y);
-                    GL.Vertex2(x * 64, y * 64 + 64); // Top right
+                    GL.Vertex2(x * 64, y * 64 + 64);
 
                     GL.End();
                 }
@@ -304,29 +355,31 @@ namespace SharpFlame.Gui.Sections
             EndOfTextures1:
             GL.Disable(EnableCap.Texture2D);
 
-//            if ( chkBoxDisplayTileTypes.Checked )
-//            {
-//                GL.Begin(BeginMode.Quads);
-//                for ( y = 0; y <= textureCount.Y - 1; y++ )
-//                {
-//                    for ( x = 0; x <= textureCount.X - 1; x++ )
-//                    {
-//                        num = y * textureCount.X + x;
-//                        if ( num >= tileset.TileCount )
-//                        {
-//                            goto EndOfTextures2;
-//                        }
-//                        a = map.TileTypeNum[num];
-//                        GL.Color3(App.TileTypes[a].DisplayColour.Red, App.TileTypes[a].DisplayColour.Green, App.TileTypes[a].DisplayColour.Blue);
-//                        GL.Vertex2(x * 64 + 24, y * 64 + 24);
-//                        GL.Vertex2(x * 64 + 24, y * 64 + 40);
-//                        GL.Vertex2(x * 64 + 40, y * 64 + 40);
-//                        GL.Vertex2(x * 64 + 40, y * 64 + 24);
-//                    }
-//                }
-//                EndOfTextures2:
-//                    GL.End();
-//            }
+            if ( (bool)chkDisplayTileTypes.Checked )
+            {
+                GL.Begin(BeginMode.Quads);
+                for ( var y = 0; y <= textureCount.Y - 1; y++ )
+                {
+                    for ( var x = 0; x <= textureCount.X - 1; x++ )
+                    {
+                        var num = y * textureCount.X + x;
+                        if ( num >= tileset.Tiles.Count )
+                        {
+                            goto EndOfTextures2;
+                        }
+
+                        num = (int)tileset.Tiles [num].DefaultType;
+
+                        GL.Color3(App.TileTypes[num].DisplayColour.Red, App.TileTypes[num].DisplayColour.Green, App.TileTypes[num].DisplayColour.Blue);
+                        GL.Vertex2(x * 64 + 24, y * 64 + 24);
+                        GL.Vertex2(x * 64 + 24, y * 64 + 40);
+                        GL.Vertex2(x * 64 + 40, y * 64 + 40);
+                        GL.Vertex2(x * 64 + 40, y * 64 + 24);
+                    }
+                }
+                EndOfTextures2:
+                    GL.End();
+            }
 
             if ( App.DisplayTileOrientation )
             {
@@ -344,12 +397,12 @@ namespace SharpFlame.Gui.Sections
 
                 GL.Begin(BeginMode.Triangles);
                 GL.Color3(1.0F, 1.0F, 0.0F);
-                for ( y = 0; y <= textureCount.Y - 1; y++ )
+                for ( var y = 0; y <= textureCount.Y - 1; y++ )
                 {
-                    for ( x = 0; x <= textureCount.X - 1; x++ )
+                    for ( var x = 0; x <= textureCount.X - 1; x++ )
                     {
-                        num = y * textureCount.X + x;
-                        if ( num >= tileset.TileCount )
+                        var num = y * textureCount.X + x;
+                        if ( num >= tileset.Tiles.Count )
                         {
                             goto EndOfTextures3;
                         }
@@ -364,38 +417,38 @@ namespace SharpFlame.Gui.Sections
                 GL.Enable(EnableCap.CullFace);
             }
 
-//            if ( DisplayTileNumbers && App.UnitLabelFont != null ) //TextureViewFont IsNot Nothing Then
-//            {
-//                GL.Enable(EnableCap.Texture2D);
-//                for ( y = 0; y <= TextureCount.Y - 1; y++ )
-//                {
-//                    for ( x = 0; x <= TextureCount.X - 1; x++ )
-//                    {
-//                        num = (TextureYOffset + y) * TextureCount.X + x;
-//                        if ( num >= tileset.TileCount )
-//                        {
-//                            goto EndOfTextures4;
-//                        }
-//                        clsTextLabel textLabel = new clsTextLabel();
-//                        textLabel.Text = num.ToStringInvariant();
-//                        textLabel.SizeY = 24.0F;
-//                        textLabel.Colour.Red = 1.0F;
-//                        textLabel.Colour.Green = 1.0F;
-//                        textLabel.Colour.Blue = 0.0F;
-//                        textLabel.Colour.Alpha = 1.0F;
-//                        textLabel.Pos.X = x * 64;
-//                        textLabel.Pos.Y = y * 64;
-//                        textLabel.TextFont = App.UnitLabelFont; //TextureViewFont
-//                        textLabel.Draw();
-//                    }
-//                }
-//                EndOfTextures4:
-//                    GL.Disable(EnableCap.Texture2D);
-//            }
+            if ( (bool)chkDisplayTileNumbers.Checked && App.UnitLabelFont != null ) //TextureViewFont IsNot Nothing Then
+            {
+                GL.Enable(EnableCap.Texture2D);
+                for ( var y = 0; y <= textureCount.Y - 1; y++ )
+                {
+                    for ( var x = 0; x <= textureCount.X - 1; x++ )
+                    {
+                        var num = y * textureCount.X + x;
+                        if ( num >= tileset.Tiles.Count )
+                        {
+                            goto EndOfTextures4;
+                        }
+                        clsTextLabel textLabel = new clsTextLabel();
+                        textLabel.Text = num.ToString ();
+                        textLabel.SizeY = 24.0F;
+                        textLabel.Colour.Red = 1.0F;
+                        textLabel.Colour.Green = 1.0F;
+                        textLabel.Colour.Blue = 0.0F;
+                        textLabel.Colour.Alpha = 1.0F;
+                        textLabel.Pos.X = x * 64;
+                        textLabel.Pos.Y = y * 64;
+                        textLabel.TextFont = App.UnitLabelFont; //TextureViewFont
+                        textLabel.Draw();
+                    }
+                }
+                EndOfTextures4:
+                    GL.Disable(EnableCap.Texture2D);
+            }
 
             if ( App.SelectedTextureNum >= 0 & textureCount.X > 0 )
             {
-                a = App.SelectedTextureNum - 1 * textureCount.X;
+                var a = App.SelectedTextureNum - 1 * textureCount.X;
                 xyInt.X = a - a / textureCount.X * textureCount.X;
                 xyInt.Y = a / textureCount.X;
                 GL.Begin(BeginMode.LineLoop);
@@ -408,9 +461,10 @@ namespace SharpFlame.Gui.Sections
             }
 
             GL.Flush();
+            application.GlTexturesView.SwapBuffers ();
         }
 
-		ComboBox TextureComboBox()
+		ComboBox textureComboBox()
 		{
 			var control = new ComboBox();
             if (App.Tilesets != null)
@@ -420,13 +474,13 @@ namespace SharpFlame.Gui.Sections
 			return control;
 		}
 
-		Control TileTypeComboBox()
+		Control tileTypeComboBox()
 		{
 			var control = new ComboBox();
 			return control;
 		}
 
-		Control BtnRotateAntiClockwise()
+        ImageView makeBtnRotateAntiClockwise()
 		{
 			var image = Resources.BtnRotateAntiClockwise ();
 			var control = new ImageView {
@@ -448,10 +502,10 @@ namespace SharpFlame.Gui.Sections
 				((ImageView)sender).BackgroundColor = Colors.Transparent;
 			};
 
-			return TableLayout.AutoSized(control);
+			return control;
 		}
 
-		Control BtnRotateClockwise()
+        ImageView makeBtnRotateClockwise()
 		{
 			var image = Resources.BtnRotateClockwise ();
 			var control = new ImageView {
@@ -473,10 +527,10 @@ namespace SharpFlame.Gui.Sections
 				((ImageView)sender).BackgroundColor = Colors.Transparent;
 			};
 
-			return TableLayout.AutoSized(control);
+			return control;
 		}
 
-		Control BtnFlipX()
+        ImageView makeBtnFlipX()
 		{
 			var image = Resources.BtnFlipX ();
 			var control = new ImageView {
@@ -498,7 +552,7 @@ namespace SharpFlame.Gui.Sections
 				((ImageView)sender).BackgroundColor = Colors.Transparent;
 			};
 
-			return TableLayout.AutoSized(control);
+			return control;
 		}
 	}
 }

@@ -2,6 +2,7 @@ using System;
 using Eto;
 using Eto.Drawing;
 using Eto.Forms;
+using SharpFlame.Old.Graphics.OpenGL;
 
 namespace SharpFlame.Gui.Controls
 {
@@ -18,7 +19,7 @@ namespace SharpFlame.Gui.Controls
         void SwapBuffers();
 
         event EventHandler Initialized;
-        event EventHandler Paint;
+        event EventHandler Resize;
         event EventHandler ShuttingDown;
     }
 
@@ -38,7 +39,7 @@ namespace SharpFlame.Gui.Controls
         {
             Control = (IGLSurfaceControl)((IGLSurfaceHandler)this.Handler).Control;
             Control.Initialized += new System.EventHandler(OnInitialized);
-            Control.Paint += new System.EventHandler(OnPaint);
+            Control.Resize += new System.EventHandler(OnResize);
             Control.ShuttingDown += new System.EventHandler(OnShuttingDown);
         }
         public GLSurface(Generator generator, Type type, bool initialize = true) : base(generator, type, initialize)
@@ -54,10 +55,10 @@ namespace SharpFlame.Gui.Controls
             Initialized (obj, e);
         }
 
-        public event EventHandler Paint = delegate {};
-        public virtual void OnPaint(object obj, EventArgs e) 
+        public event EventHandler Resize = delegate {};
+        public virtual void OnResize(object obj, EventArgs e) 
         {
-            Paint (obj, e);
+            Resize (obj, e);
         }
 
         public event EventHandler ShuttingDown = delegate {};
@@ -79,6 +80,11 @@ namespace SharpFlame.Gui.Controls
         public override void OnLoadComplete( EventArgs e )
         {
             base.OnLoadComplete( e );
+        }
+
+        public GLFont CreateGLFont(System.Drawing.Font baseFont)
+        {
+            return new GLFont(new System.Drawing.Font(baseFont.FontFamily, 24.0F, baseFont.Style, System.Drawing.GraphicsUnit.Pixel));
         }
     }
 }

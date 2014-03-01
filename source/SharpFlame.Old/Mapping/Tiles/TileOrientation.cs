@@ -2,73 +2,85 @@ namespace SharpFlame.Old.Mapping.Tiles
 {
     public struct TileOrientation
     {
-        public bool ResultXFlip;
-        public bool ResultYFlip;
+        public bool XFlip;
+        public bool YFlip;
         public bool SwitchedAxes;
 
         public TileOrientation(bool resultXFlip, bool resultZFlip, bool switchedAxes)
         {
-            ResultXFlip = resultXFlip;
-            ResultYFlip = resultZFlip;
+            XFlip = resultXFlip;
+            YFlip = resultZFlip;
             SwitchedAxes = switchedAxes;
         }
 
-        public TileOrientation GetRotated(TileOrientation Orientation)
+        public TileOrientation GetRotated(TileOrientation orientation)
         {
             var ReturnResult = new TileOrientation();
 
-            ReturnResult.SwitchedAxes = SwitchedAxes ^ Orientation.SwitchedAxes;
+            ReturnResult.SwitchedAxes = SwitchedAxes ^ orientation.SwitchedAxes;
 
-            if ( Orientation.SwitchedAxes )
+            if ( orientation.SwitchedAxes )
             {
-                if ( Orientation.ResultXFlip )
+                if ( orientation.XFlip )
                 {
-                    ReturnResult.ResultXFlip = !ResultYFlip;
+                    ReturnResult.XFlip = !YFlip;
                 }
                 else
                 {
-                    ReturnResult.ResultXFlip = ResultYFlip;
+                    ReturnResult.XFlip = YFlip;
                 }
-                if ( Orientation.ResultYFlip )
+                if ( orientation.YFlip )
                 {
-                    ReturnResult.ResultYFlip = !ResultXFlip;
+                    ReturnResult.YFlip = !XFlip;
                 }
                 else
                 {
-                    ReturnResult.ResultYFlip = ResultXFlip;
+                    ReturnResult.YFlip = XFlip;
                 }
             }
             else
             {
-                if ( Orientation.ResultXFlip )
+                if ( orientation.XFlip )
                 {
-                    ReturnResult.ResultXFlip = !ResultXFlip;
+                    ReturnResult.XFlip = !XFlip;
                 }
                 else
                 {
-                    ReturnResult.ResultXFlip = ResultXFlip;
+                    ReturnResult.XFlip = XFlip;
                 }
-                if ( Orientation.ResultYFlip )
+                if ( orientation.YFlip )
                 {
-                    ReturnResult.ResultYFlip = !ResultYFlip;
+                    ReturnResult.YFlip = !YFlip;
                 }
                 else
                 {
-                    ReturnResult.ResultYFlip = ResultYFlip;
+                    ReturnResult.YFlip = YFlip;
                 }
             }
 
             return ReturnResult;
         }
 
+        public void FlipX()
+        {
+            if ( SwitchedAxes )
+            {
+                YFlip = !YFlip;
+            }
+            else
+            {
+                XFlip = !XFlip;
+            }
+        }
+
         public void Reverse()
         {
             if ( SwitchedAxes )
             {
-                if ( ResultXFlip ^ ResultYFlip )
+                if ( XFlip ^ YFlip )
                 {
-                    ResultXFlip = !ResultXFlip;
-                    ResultYFlip = !ResultYFlip;
+                    XFlip = !XFlip;
+                    YFlip = !YFlip;
                 }
             }
         }
@@ -76,27 +88,33 @@ namespace SharpFlame.Old.Mapping.Tiles
         public void RotateClockwise()
         {
             SwitchedAxes = !SwitchedAxes;
-            if ( ResultXFlip ^ ResultYFlip )
+            if ( XFlip ^ YFlip )
             {
-                ResultYFlip = !ResultYFlip;
+                YFlip = !YFlip;
             }
             else
             {
-                ResultXFlip = !ResultXFlip;
+                XFlip = !XFlip;
             }
         }
 
         public void RotateAntiClockwise()
         {
             SwitchedAxes = !SwitchedAxes;
-            if ( ResultXFlip ^ ResultYFlip )
+            if ( XFlip ^ YFlip )
             {
-                ResultXFlip = !ResultXFlip;
+                XFlip = !XFlip;
             }
             else
             {
-                ResultYFlip = !ResultYFlip;
+                YFlip = !YFlip;
             }
+        }
+
+        public new string ToString()
+        {
+            return string.Format ("SwitchAxes={0}, ResultXFlip={1}, ResultYFlip={2}", 
+                                  SwitchedAxes, XFlip, YFlip);
         }
     }
 }

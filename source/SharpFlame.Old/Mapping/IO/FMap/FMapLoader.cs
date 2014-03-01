@@ -510,11 +510,11 @@ namespace SharpFlame.Old.Mapping.IO.FMap
                         value -= partValue * 8;
 
                         partValue = (int)(value / 4.0D);
-                        map.Terrain.Tiles[x, y].Texture.Orientation.ResultXFlip = partValue > 0;
+                        map.Terrain.Tiles[x, y].Texture.Orientation.XFlip = partValue > 0;
                         value -= partValue * 4;
 
                         partValue = (int)(value / 2.0D);
-                        map.Terrain.Tiles[x, y].Texture.Orientation.ResultYFlip = partValue > 0;
+                        map.Terrain.Tiles[x, y].Texture.Orientation.YFlip = partValue > 0;
                         value -= partValue * 2;
 
                         partValue = value;

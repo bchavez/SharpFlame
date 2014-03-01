@@ -28,6 +28,7 @@ using Eto.Platform.GtkSharp;
 using Gtk;
 using OpenTK;
 using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Platform;
 using SharpFlame.Gui.Controls;
 
@@ -38,6 +39,12 @@ namespace SharpFlame.Gui.Gtk
     {
         IGraphicsContext graphicsContext;
         static int graphicsContextCount;
+
+        const string linux_libx11_name = "libX11.so.6";
+        const string linux_libgdk_x11_name = "libgdk-x11-2.0.so.0";
+        const string linux_libgl_name = "libGL.so.1";
+        const string libgdk_name = "libgdk-win32-2.0-0.dll";
+        const string libX11_name = "libX11";
 
         /// <summary>Use a single buffer versus a double buffer.</summary>
         [Browsable(true)]
@@ -161,8 +168,10 @@ namespace SharpFlame.Gui.Gtk
             {
                 return;
             }
-
+                       
+            Display.Flush ();
             graphicsContext.SwapBuffers ();
+            Display.Sync ();           
         }
 
         // Called when the first GraphicsContext is created in the case of GraphicsContext.ShareContexts == True;
@@ -178,9 +187,8 @@ namespace SharpFlame.Gui.Gtk
         protected virtual void OnInitialized() { Initialized(this, EventArgs.Empty); }
 
         // Called when this GLWidget needs to render a frame
-        public event EventHandler RenderFrame = delegate {};
-        public event EventHandler Paint = delegate {};
-        protected virtual void OnRenderFrame() { RenderFrame(this, EventArgs.Empty); Paint (this, EventArgs.Empty); }
+        public event EventHandler Resize = delegate {};
+        protected virtual void OnResize() { Resize (this, EventArgs.Empty); }
 
         // Called when this GLWidget is being Disposed
         public event EventHandler ShuttingDown;
@@ -284,22 +292,22 @@ namespace SharpFlame.Gui.Gtk
 
             bool result = base.OnExposeEvent(eventExpose);
 
-            OnRenderFrame();
+            GL.Viewport( 0, 0, Size.Width, Size.Height );
+            GL.MatrixMode( MatrixMode.Projection );
+            GL.LoadIdentity();
+            GL.Ortho( -1.0, 1.0, -1.0, 1.0, 0.0, 4.0 );
+
+            OnResize();
             eventExpose.Window.Display.Sync(); // Add Sync call to fix resize rendering problem (Jay L. T. Cornwall) - How does this affect VSync?           
-            graphicsContext.SwapBuffers();
             return result;
         }
 
-        // Called on Resize
         protected override bool OnConfigureEvent(Gdk.EventConfigure evnt)
         {
             bool result = base.OnConfigureEvent(evnt);
             if (graphicsContext != null) graphicsContext.Update(windowInfo);
             return result;
         }
-
-        [SuppressUnmanagedCodeSecurity, DllImport("libgdk-win32-2.0-0.dll")]
-        public static extern IntPtr gdk_win32_drawable_get_handle(IntPtr d);
 
         public enum XVisualClass : int
         {
@@ -348,19 +356,18 @@ namespace SharpFlame.Gui.Gtk
             All = 0x1FF,
         }
 
-        [DllImport("libX11", EntryPoint = "XGetVisualInfo")]
+        [DllImport(libX11_name, EntryPoint = "XGetVisualInfo")]
         static extern IntPtr XGetVisualInfoInternal(IntPtr display, IntPtr vinfo_mask, ref XVisualInfo template, out int nitems);
         static IntPtr XGetVisualInfo(IntPtr display, XVisualInfoMask vinfo_mask, ref XVisualInfo template, out int nitems)
         {
             return XGetVisualInfoInternal(display, (IntPtr)(int)vinfo_mask, ref template, out nitems);
         }
 
-        const string linux_libx11_name = "libX11.so.6";
+        [SuppressUnmanagedCodeSecurity, DllImport(libgdk_name)]
+        public static extern IntPtr gdk_win32_drawable_get_handle(IntPtr d);
 
         [SuppressUnmanagedCodeSecurity, DllImport(linux_libx11_name)]
         static extern void XFree(IntPtr handle);
-
-        const string linux_libgdk_x11_name = "libgdk-x11-2.0.so.0";
 
         /// <summary> Returns the X resource (window or pixmap) belonging to a GdkDrawable. </summary>
         /// <remarks> XID gdk_x11_drawable_get_xid(GdkDrawable *drawable); </remarks>
@@ -375,6 +382,9 @@ namespace SharpFlame.Gui.Gtk
         /// <returns> The X Display of the GdkDisplay. </returns>
         [SuppressUnmanagedCodeSecurity, DllImport(linux_libgdk_x11_name)]
         static extern IntPtr gdk_x11_display_get_xdisplay(IntPtr gdkDisplay);
+
+        [SuppressUnmanagedCodeSecurity, DllImport(linux_libgl_name)]
+        static extern IntPtr glXChooseVisual(IntPtr display, int screen, int[] attr);
 
         IntPtr GetVisualInfo(IntPtr display)
         {
@@ -461,11 +471,6 @@ namespace SharpFlame.Gui.Gtk
 
                 return attributeList;
             }
-        }
-
-        const string linux_libgl_name = "libGL.so.1";
-
-        [SuppressUnmanagedCodeSecurity, DllImport(linux_libgl_name)]
-        static extern IntPtr glXChooseVisual(IntPtr display, int screen, int[] attr);
+        }      
     }
 }

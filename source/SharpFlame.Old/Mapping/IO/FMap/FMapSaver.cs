@@ -337,11 +337,11 @@ namespace SharpFlame.Old.Mapping.IO.FMap
                         {
                             value += 8;
                         }
-                        if ( map.Terrain.Tiles[x, y].Texture.Orientation.ResultXFlip )
+                        if ( map.Terrain.Tiles[x, y].Texture.Orientation.XFlip )
                         {
                             value += 4;
                         }
-                        if ( map.Terrain.Tiles[x, y].Texture.Orientation.ResultYFlip )
+                        if ( map.Terrain.Tiles[x, y].Texture.Orientation.YFlip )
                         {
                             value += 2;
                         }

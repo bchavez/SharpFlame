@@ -102,6 +102,8 @@ namespace SharpFlame.Gui
                 }
             }
 
+            App.UnitLabelFont = GlTexturesView.CreateGLFont (App.UnitLabelBaseFont);
+
             if (initializeResult.HasProblems)
             {
                 logger.Error (initializeResult.ToString ());

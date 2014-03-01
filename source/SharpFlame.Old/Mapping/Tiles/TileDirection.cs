@@ -17,7 +17,7 @@ namespace SharpFlame.Old.Mapping.Tiles
 
             if ( Orientation.SwitchedAxes )
             {
-                if ( Orientation.ResultXFlip )
+                if ( Orientation.XFlip )
                 {
                     returnResult.X = (byte)(2 - Y);
                 }
@@ -25,7 +25,7 @@ namespace SharpFlame.Old.Mapping.Tiles
                 {
                     returnResult.X = Y;
                 }
-                if ( Orientation.ResultYFlip )
+                if ( Orientation.YFlip )
                 {
                     returnResult.Y = (byte)(2 - X);
                 }
@@ -36,7 +36,7 @@ namespace SharpFlame.Old.Mapping.Tiles
             }
             else
             {
-                if ( Orientation.ResultXFlip )
+                if ( Orientation.XFlip )
                 {
                     returnResult.X = (byte)(2 - X);
                 }
@@ -44,7 +44,7 @@ namespace SharpFlame.Old.Mapping.Tiles
                 {
                     returnResult.X = X;
                 }
-                if ( Orientation.ResultYFlip )
+                if ( Orientation.YFlip )
                 {
                     returnResult.Y = (byte)(2 - Y);
                 }

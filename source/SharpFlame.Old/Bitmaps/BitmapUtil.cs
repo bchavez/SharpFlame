@@ -24,6 +24,12 @@ namespace SharpFlame.Old.Bitmaps
             returnResult.Problem = "";
             returnResult.Success = false;
 
+            if (!File.Exists(path)) {
+                returnResult.Problem = string.Format("File \"{0}\" does not exists.", path);
+                resultBitmap = null;
+                return returnResult;
+            }
+
             Bitmap bitmap;
             try
             {

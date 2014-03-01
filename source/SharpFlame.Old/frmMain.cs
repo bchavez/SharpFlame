@@ -2609,11 +2609,11 @@ namespace SharpFlame.Old
         {
             if ( App.TextureOrientation.SwitchedAxes )
             {
-                App.TextureOrientation.ResultYFlip = !App.TextureOrientation.ResultYFlip;
+                App.TextureOrientation.YFlip = !App.TextureOrientation.YFlip;
             }
             else
             {
-                App.TextureOrientation.ResultXFlip = !App.TextureOrientation.ResultXFlip;
+                App.TextureOrientation.XFlip = !App.TextureOrientation.XFlip;
             }
 
             TextureViewControl.DrawViewLater();
