@@ -1,4 +1,3 @@
-using SharpFlame.Gui;
 using System.Diagnostics;
 using SharpFlame.Gui;
 using SharpFlame.Gui.Controls;

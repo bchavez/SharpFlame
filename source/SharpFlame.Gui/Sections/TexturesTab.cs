@@ -65,9 +65,13 @@ namespace SharpFlame.Gui.Sections
 
         readonly Scrollable scrollTextureView;
 
+        XYInt TextureCount { get; set; }
+
 		public TextureTab(SharpFlameApplication a) 
         {
             application = a;
+
+            TextureCount = new XYInt (0, 0);
 
 			var layout = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty};
 
@@ -259,6 +263,24 @@ namespace SharpFlame.Gui.Sections
                 DrawTexturesView ();
             };
 
+            application.GlTexturesView.MouseDown += (sender, e) => {
+                if (App.UiOptions.Textures.TilesetNum == -1)
+                {
+                    return;
+                }
+
+                var args = (MouseEventArgs)e;
+
+                var x = (int)Math.Floor(args.Location.X / 64);
+                var y = (int)Math.Floor(args.Location.Y / 64);
+                var tile = x + (y * TextureCount.X);
+                if (tile > App.Tilesets[App.UiOptions.Textures.TilesetNum].Tiles.Count) {
+                    return;
+                }
+                App.UiOptions.Textures.SelectedTile = tile;
+                DrawTexturesView();
+            };
+
             // Set Mousetool, when we are shown.
             Shown += delegate {
                 App.UiOptions.MouseTool = MouseTool.TextureBrush;
@@ -282,11 +304,12 @@ namespace SharpFlame.Gui.Sections
 
             var tileset = App.Tilesets[App.UiOptions.Textures.TilesetNum];
 
-            var textureCount = new XYInt (0, 0);
-            textureCount.X = (int)(Math.Floor((scrollTextureView.Size.Width - 20) / 64.0D));
-            textureCount.Y = (int)(Math.Ceiling((double)tileset.Tiles.Count / textureCount.X));
+            TextureCount = new XYInt {
+                X = (int)(Math.Floor ((scrollTextureView.Size.Width - 20) / 64.0D)),
+                Y = (int)(Math.Ceiling ((double)tileset.Tiles.Count / TextureCount.X))
+            };
 
-            var height = textureCount.Y * 64;
+            var height = TextureCount.Y * 64;
             // TODO: See how thick the scroll is on winforms and mac, 20px seems to be right on GTK.
             var glSize = application.GlTexturesView.Size = new Size (scrollTextureView.Size.Width - 20, height);
 
@@ -317,11 +340,11 @@ namespace SharpFlame.Gui.Sections
             GL.Enable(EnableCap.Texture2D);
             GL.Color4(0.0F, 0.0F, 0.0F, 1.0F);
 
-            for ( var y = 0; y < textureCount.Y; y++ )
+            for ( var y = 0; y < TextureCount.Y; y++ )
             {
-                for ( var x = 0; x < textureCount.X; x++ )
+                for ( var x = 0; x < TextureCount.X; x++ )
                 {
-                    var num = y * textureCount.X + x;
+                    var num = y * TextureCount.X + x;
                     if ( num >= tileset.Tiles.Count )
                     {
                         goto EndOfTextures1;
@@ -355,11 +378,11 @@ namespace SharpFlame.Gui.Sections
             if ( (bool)chkDisplayTileTypes.Checked )
             {
                 GL.Begin(BeginMode.Quads);
-                for ( var y = 0; y <= textureCount.Y - 1; y++ )
+                for ( var y = 0; y <= TextureCount.Y - 1; y++ )
                 {
-                    for ( var x = 0; x <= textureCount.X - 1; x++ )
+                    for ( var x = 0; x <= TextureCount.X - 1; x++ )
                     {
-                        var num = y * textureCount.X + x;
+                        var num = y * TextureCount.X + x;
                         if ( num >= tileset.Tiles.Count )
                         {
                             goto EndOfTextures2;
@@ -395,11 +418,11 @@ namespace SharpFlame.Gui.Sections
 
                 GL.Begin(BeginMode.Triangles);
                 GL.Color3(1.0F, 1.0F, 0.0F);
-                for ( var y = 0; y <= textureCount.Y - 1; y++ )
+                for ( var y = 0; y <= TextureCount.Y - 1; y++ )
                 {
-                    for ( var x = 0; x <= textureCount.X - 1; x++ )
+                    for ( var x = 0; x <= TextureCount.X - 1; x++ )
                     {
-                        var num = y * textureCount.X + x;
+                        var num = y * TextureCount.X + x;
                         if ( num >= tileset.Tiles.Count )
                         {
                             goto EndOfTextures3;
@@ -418,11 +441,11 @@ namespace SharpFlame.Gui.Sections
             if ( (bool)chkDisplayTileNumbers.Checked && App.UnitLabelFont != null ) //TextureViewFont IsNot Nothing Then
             {
                 GL.Enable(EnableCap.Texture2D);
-                for ( var y = 0; y <= textureCount.Y - 1; y++ )
+                for ( var y = 0; y <= TextureCount.Y - 1; y++ )
                 {
-                    for ( var x = 0; x <= textureCount.X - 1; x++ )
+                    for ( var x = 0; x <= TextureCount.X - 1; x++ )
                     {
-                        var num = y * textureCount.X + x;
+                        var num = y * TextureCount.X + x;
                         if ( num >= tileset.Tiles.Count )
                         {
                             goto EndOfTextures4;
@@ -444,11 +467,11 @@ namespace SharpFlame.Gui.Sections
                     GL.Disable(EnableCap.Texture2D);
             }
 
-            if ( App.SelectedTextureNum >= 0 & textureCount.X > 0 )
+            if ( App.UiOptions.Textures.SelectedTile >= 0 & TextureCount.X > 0 )
             {
-                var a = App.SelectedTextureNum - 1 * textureCount.X;
-                xyInt.X = a - a / textureCount.X * textureCount.X;
-                xyInt.Y = a / textureCount.X;
+                var a = App.UiOptions.Textures.SelectedTile * TextureCount.X;
+                xyInt.X = App.UiOptions.Textures.SelectedTile % TextureCount.X;
+                xyInt.Y = App.UiOptions.Textures.SelectedTile / TextureCount.X;
                 GL.Begin(BeginMode.LineLoop);
                 GL.Color3(1.0F, 1.0F, 0.0F);
                 GL.Vertex2(xyInt.X * 64, xyInt.Y * 64);

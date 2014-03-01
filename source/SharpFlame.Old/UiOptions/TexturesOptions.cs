@@ -59,6 +59,8 @@ namespace SharpFlame.Old.UiOptions
         /// </summary>
         public int TilesetNum { get; set; }
 
+        public int SelectedTile { get; set; }
+
         public TileOrientation TextureOrientation;
 
         public TexturesOptions()
@@ -68,6 +70,7 @@ namespace SharpFlame.Old.UiOptions
             SetOrientation = true;
             Randomize = false;
             TilesetNum = -1;
+            SelectedTile = -1;
             TextureOrientation = new TileOrientation (false, false, false);
         }
     }
