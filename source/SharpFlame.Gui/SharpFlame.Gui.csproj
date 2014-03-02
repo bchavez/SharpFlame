@@ -99,6 +99,8 @@
     </Compile>
     <Compile Include="OTK\IGLControl.cs" />
     <Compile Include="Dialogs\Status.cs" />
+    <Compile Include="Dialogs\Settings.cs" />
+    <Compile Include="Actions\Settings.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

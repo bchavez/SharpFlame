@@ -74,6 +74,7 @@ namespace SharpFlame.Gui.Forms
 		{
 			var about = new Actions.About();
 			var quit = new Actions.Quit();
+            var settings = new Actions.Settings ();
 
 			var menu = new MenuBar();
 			// create standard system menu (e.g. for OS X)
@@ -115,7 +116,7 @@ namespace SharpFlame.Gui.Forms
 			toolsMenu.Items.AddSeparator ();
 			toolsMenu.Items.GetSubmenu ("Generator", 500);
 
-			menu.Items.GetSubmenu("&Options", 900);
+            menu.Items.Add (settings);
 
 			var help = menu.Items.GetSubmenu("&Help", 1000);
 			help.Items.Add(about);

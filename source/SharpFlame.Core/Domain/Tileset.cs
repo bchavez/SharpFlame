@@ -31,7 +31,13 @@ namespace SharpFlame.Core.Domain
         /// <value>The TTP tile count.</value>
         public int TileCount { get; set; }
 
-        public string Name { get; set; }   
+        public string Name { get; set; }  
+
+        /// <summary>
+        /// Gets or sets the directory where this tileset is stored.
+        /// </summary>
+        /// <value>The directory.</value>
+        public string Directory { get; set; } 
 
         /// <summary>
         /// Implements IListItem, this is for the eto GUI.

@@ -137,6 +137,8 @@ namespace SharpFlame.Old
 
         public static Options UiOptions = new Options();
 
+        public static SharpFlame.Old.Settings.SettingsManager Settings;
+
         public static void Initalize ()
         {
             createTileTypes ();

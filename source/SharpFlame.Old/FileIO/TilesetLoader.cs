@@ -33,6 +33,8 @@ namespace SharpFlame.Old.FileIO
             var returnResult = new Result("Loading tileset from '{0}'".Format2(path), false);
             logger.Info("Loading tileset from '{0}'".Format2(path));
 
+            tileset.Directory = path;
+
             Bitmap bitmap = null;
             var SplitPath = new sSplitPath(path);
             var slashPath = PathUtil.EndWithPathSeperator(path);
@@ -97,7 +99,7 @@ namespace SharpFlame.Old.FileIO
                     return returnResult;
                 }
 
-                if ( SettingsManager.Settings.Mipmaps )
+                if ( App.Settings.Mipmaps )
                 {
                     tile.GlTextureNum = BitmapUtil.CreateGLTexture (bitmap, 0, 0,
                                                                               TextureMagFilter.Nearest, 
@@ -110,9 +112,9 @@ namespace SharpFlame.Old.FileIO
                                                                               TextureMinFilter.Nearest);
                 }
 
-                if ( SettingsManager.Settings.Mipmaps )
+                if ( App.Settings.Mipmaps )
                 {
-                    if ( SettingsManager.Settings.MipmapsHardware )
+                    if ( App.Settings.MipmapsHardware )
                     {
                         GL.Enable(EnableCap.Texture2D);
                         GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
