@@ -37,8 +37,6 @@ namespace SharpFlame.Gui.Dialogs
 {
     public class Settings : Form
     {
-        readonly SharpFlameApplication application;
-
         readonly Button btnOk;
         Button btnAddTilesetDirectory { get; set; }
         Button btnRemoveTilesetDirectory { get; set; }
@@ -57,8 +55,6 @@ namespace SharpFlame.Gui.Dialogs
             Topmost = true;
             ShowInTaskbar = false;
             // Location = new Point (200, 100);
-
-            application = (SharpFlameApplication)Application.Instance;
 
             var layout = new DynamicLayout ();
             var tabControl = new TabControl ();
@@ -86,7 +82,7 @@ namespace SharpFlame.Gui.Dialogs
         }
 
         void setBindings() {
-            var settings = application.Settings;
+            var settings = App.Settings;
 
             btnOk.Click += delegate {
                 var result = settings.Save(App.SettingsPath);

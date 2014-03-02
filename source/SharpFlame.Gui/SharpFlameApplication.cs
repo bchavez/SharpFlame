@@ -53,8 +53,6 @@ namespace SharpFlame.Gui
         public readonly GLSurface GlTexturesView;
         public readonly GLSurface GlMapView;
 
-        public readonly SharpFlame.Old.Settings.SettingsManager Settings;
-
         private Result initializeResult = new Result("Startup result", false);
 
 		public SharpFlameApplication(Generator generator)
@@ -84,13 +82,12 @@ namespace SharpFlame.Gui
 
             // Set them up before you call settingsBindings().
             GlTexturesView = new GLSurface ();
-            GlTexturesView.Initialized += onGLControlInitialized;
             GlMapView = new GLSurface ();
+            GlTexturesView.Initialized += onGLControlInitialized;           
 
-            App.Settings = Settings = new SharpFlame.Old.Settings.SettingsManager ();
             settingsBindings ();
 
-            initializeResult.Add (Settings.Load (App.SettingsPath));
+            initializeResult.Add (App.Settings.Load (App.SettingsPath));
             // initializeResult.Add (SettingsManager.SettingsLoad (ref SettingsManager.InitializeSettings));           
 		}          
 
@@ -122,16 +119,14 @@ namespace SharpFlame.Gui
             GlTexturesView.MakeCurrent ();
 
             // Load tileset directories.
-            foreach (var path in Settings.TilesetDirectories) {
+            foreach (var path in App.Settings.TilesetDirectories) {
                 if (path != null && path != "") {
                     initializeResult.Add (App.LoadTilesets (PathUtil.EndWithPathSeperator (path)));
                 }
             }
 
             // Load Object Data.
-            App.ObjectData = new clsObjectData();
-            // var ObjectDataNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultObjectDataPathNum));
-            foreach (var path in Settings.ObjectDataDirectories) {
+            foreach (var path in App.Settings.ObjectDataDirectories) {
                 if (path != null && path != "") {
                     initializeResult.Add(App.ObjectData.LoadDirectory(path));
                 }
@@ -155,7 +150,7 @@ namespace SharpFlame.Gui
         }
 
         void settingsBindings() {
-            Settings.PropertyChanged += (object sender, PropertyChangedEventArgs e) => {
+            App.Settings.PropertyChanged += (object sender, PropertyChangedEventArgs e) => {
                 #if DEBUG
                 Console.WriteLine("Setting {0} changed ", e.PropertyName);
                 #endif
@@ -165,7 +160,7 @@ namespace SharpFlame.Gui
                 }
             };
 
-            Settings.TilesetDirectories.CollectionChanged += (sender, e) => 
+            App.Settings.TilesetDirectories.CollectionChanged += (sender, e) => 
             {
                 if (!GlTexturesView.IsInitialized) {
                     return;
@@ -177,7 +172,7 @@ namespace SharpFlame.Gui
                             var result = App.LoadTilesets (PathUtil.EndWithPathSeperator ((string)item));
                             if (result.HasProblems || result.HasWarnings) {
                                 new Dialogs.Status (result).Show();
-                                Settings.TilesetDirectories.Remove((string)item);
+                                App.Settings.TilesetDirectories.Remove((string)item);
                             }
                         }
                     } else if (e.Action == NotifyCollectionChangedAction.Remove) {
@@ -198,15 +193,15 @@ namespace SharpFlame.Gui
         void makeGlFont()
         {
             var style = FontStyle.Regular;
-            if ( Settings.FontBold )
+            if ( App.Settings.FontBold )
             {
                 style = style | FontStyle.Bold;
             }
-            if ( Settings.FontItalic )
+            if ( App.Settings.FontItalic )
             {
                 style = style | FontStyle.Italic;
             }
-            App.UnitLabelFont = GlTexturesView.CreateGLFont (new Font(Settings.FontFamily, Settings.FontSize, style, GraphicsUnit.Point));
+            App.UnitLabelFont = GlTexturesView.CreateGLFont (new Font(App.Settings.FontFamily, App.Settings.FontSize, style, GraphicsUnit.Point));
         }
 	}
 }

@@ -25,6 +25,7 @@ using SharpFlame.Old.Mapping.Objects;
 using SharpFlame.Old.Mapping.Tiles;
 using SharpFlame.Old.Maths;
 using SharpFlame.Old.Painters;
+using SharpFlame.Old.Settings;
 using SharpFlame.Old.Util;
 using SharpFlame.Old.UiOptions;
 
@@ -68,7 +69,7 @@ namespace SharpFlame.Old
 
         public static bool DisplayTileOrientation;
 
-        public static clsObjectData ObjectData;
+        public static ObjectData ObjectData = new ObjectData();
 
         public static int SelectedTextureNum = -1;
         public static TileOrientation TextureOrientation = new TileOrientation(false, false, false);
@@ -136,7 +137,7 @@ namespace SharpFlame.Old
 
         public static Options UiOptions = new Options();
 
-        public static SharpFlame.Old.Settings.SettingsManager Settings;
+        public static SettingsManager Settings = new SettingsManager();
 
         public static void Initalize ()
         {
