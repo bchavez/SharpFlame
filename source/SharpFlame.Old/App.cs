@@ -70,6 +70,7 @@ namespace SharpFlame.Old
         public static bool DisplayTileOrientation;
 
         public static ObjectData ObjectData = new ObjectData();
+        public static event EventHandler ObjectDataChanged = delegate {};
 
         public static int SelectedTextureNum = -1;
         public static TileOrientation TextureOrientation = new TileOrientation(false, false, false);
@@ -231,6 +232,17 @@ namespace SharpFlame.Old
             newTileType.DisplayColour.Green = 0.75F;
             newTileType.DisplayColour.Blue = 0.75F;
             App.TileTypes.Add(newTileType);
+        }
+
+        /// <summary>
+        /// Raises the object data changed event.
+        /// Call me every time you change ObjectData!
+        /// </summary>
+        /// <param name="o">O.</param>
+        /// <param name="e">E.</param>
+        public static void OnObjectDataChanged(object o, EventArgs e) 
+        {
+            ObjectDataChanged(o, e);
         }
 
 

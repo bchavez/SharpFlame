@@ -99,6 +99,11 @@ namespace SharpFlame.Gui
 
 			// show the main form
 			MainForm.Show();
+
+            if (App.Settings.ShowOptionsAtStartup)
+            {
+                new Dialogs.Settings ().Show ();
+            }
 		}
 
 		public override void OnTerminating(System.ComponentModel.CancelEventArgs e)
@@ -121,7 +126,7 @@ namespace SharpFlame.Gui
             // Load tileset directories.
             foreach (var path in App.Settings.TilesetDirectories) {
                 if (path != null && path != "") {
-                    initializeResult.Add (App.LoadTilesets (PathUtil.EndWithPathSeperator (path)));
+                    initializeResult.Add (App.LoadTilesets (path));
                 }
             }
 
@@ -169,7 +174,7 @@ namespace SharpFlame.Gui
                 try {
                     if (e.Action == NotifyCollectionChangedAction.Add) {
                         foreach (var item in e.NewItems) {
-                            var result = App.LoadTilesets (PathUtil.EndWithPathSeperator ((string)item));
+                            var result = App.LoadTilesets ((string)item);
                             if (result.HasProblems || result.HasWarnings) {
                                 new Dialogs.Status (result).Show();
                                 App.Settings.TilesetDirectories.Remove((string)item);
@@ -178,11 +183,46 @@ namespace SharpFlame.Gui
                     } else if (e.Action == NotifyCollectionChangedAction.Remove) {
                         foreach (var item in e.OldItems) {
                             var found = App.Tilesets.Where(w => w.Directory.StartsWith((string)item)).ToList();
-                            Console.WriteLine("found={0}", found);
                             foreach (var foundItem in found) {
                                 App.Tilesets.Remove(foundItem);
                             }
                         }
+                    }
+                } catch (Exception ex) {
+                    logger.ErrorException("Got an Exception", ex);
+                }
+            };
+
+            App.Settings.ObjectDataDirectories.CollectionChanged += (sender, e) =>
+            {
+                if (!GlTexturesView.IsInitialized) {
+                    return;
+                }
+
+                try {
+                    var result = new Result("Reloading object data.", false);
+                    if (e.Action == NotifyCollectionChangedAction.Add) {
+                        // Just reload Object Data.
+                        App.ObjectData = new ObjectData();
+                        foreach (var path in App.Settings.ObjectDataDirectories) {
+                            if (path != null && path != "") {
+                                result.Add(App.ObjectData.LoadDirectory(path));
+                            }
+                        }
+                    } else if (e.Action == NotifyCollectionChangedAction.Remove) {
+                        // Just reload Object Data.
+                        App.ObjectData = new ObjectData();
+                        foreach (var path in App.Settings.ObjectDataDirectories) {
+                            if (path != null && path != "") {
+                                result.Add(App.ObjectData.LoadDirectory(path));
+                            }
+                        }
+                        // Need to send an objectchanged event as LoadDirectory may never occurs.
+                        App.OnObjectDataChanged(this, EventArgs.Empty);
+                    }
+
+                    if (result.HasProblems || result.HasWarnings) {
+                        new Dialogs.Status (result).Show();
                     }
                 } catch (Exception ex) {
                     logger.ErrorException("Got an Exception", ex);

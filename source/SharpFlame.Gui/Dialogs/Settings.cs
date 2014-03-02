@@ -25,13 +25,17 @@
 // #endregion
 //
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using Eto;
 using Eto.Drawing;
 using Eto.Forms;
 using SharpFlame.Old;
+using SharpFlame.Core.Domain.Colors;
+using sd = System.Drawing;
 
 namespace SharpFlame.Gui.Dialogs
 {
@@ -43,9 +47,43 @@ namespace SharpFlame.Gui.Dialogs
 
         Button btnAddObjectDirectory  { get; set; }
         Button btnRemoveObjectDirectory  { get; set; }
+        Button btnSelectFont { get; set; }
 
         GridView grvTilesets { get; set; }
         GridView grvObjects { get; set; }
+
+        Drawable drawMinimapCliffColour { get; set; }
+        Drawable drawMinimapObjectColour { get; set; }
+
+        Label lblFont { get; set; }
+
+        CheckBox chkStartupShowOptions { get; set; }
+
+        CheckBox chkAutoSaveEnabled { get; set; }
+        CheckBox chkAutoSaveCompress { get; set; }
+
+        CheckBox chkMipmapsGenerate { get; set; }
+        CheckBox chkMipmapsHardware { get; set; }
+
+        CheckBox chkMinimapTeamColours { get; set; }
+        CheckBox chkMinimapExceptFeatures { get; set; }
+
+        CheckBox chkPointerDirect { get; set; }
+        CheckBox chkPickerTextureOrientations { get; set; }
+
+        NumericUpDown nudUndoSteps { get; set; }
+
+        NumericUpDown nudAutosaveChanges { get; set; }
+        NumericUpDown nudAutosaveInterval { get; set; }
+
+        NumericUpDown nudGraphicsMapViewColours { get; set; }
+        NumericUpDown nudGraphicsMapViewDepth { get; set; }
+        NumericUpDown nudGraphicsTextureViewColours { get; set; }
+        NumericUpDown nudGraphicsTextureViewDepth { get; set; }
+
+        NumericUpDown nudMinimapSize { get; set; }
+        TextBox tbFoV { get; set; }
+
 
         public Settings ()
         {
@@ -209,6 +247,87 @@ namespace SharpFlame.Gui.Dialogs
                     }
                 }
             };
+
+            drawMinimapCliffColour.MouseDown += (sender, e) => 
+            {
+                var dialog = new ColorDialog();
+                var result = dialog.ShowDialog(ParentWindow);
+                if (result == DialogResult.Ok)
+                {
+                    drawMinimapCliffColour.BackgroundColor = dialog.Color;
+                    App.Settings.MinimapCliffColour = new Rgba(dialog.Color);
+                }
+            };
+
+            drawMinimapObjectColour.MouseDown += (sender, e) => 
+            {
+                var dialog = new ColorDialog();
+                var result = dialog.ShowDialog(ParentWindow);
+                if (result == DialogResult.Ok)
+                {
+                    drawMinimapObjectColour.BackgroundColor = dialog.Color;
+                    App.Settings.MinimapSelectedObjectsColour = new Rgba(dialog.Color);
+                }
+            };
+
+            btnSelectFont.Click += delegate
+            {
+                var fontStyle = App.Settings.FontBold ? FontStyle.Bold : FontStyle.None;
+                if (App.Settings.FontItalic) {
+                    fontStyle |= FontStyle.Italic;
+                }
+                var dialog = new FontDialog {
+                    Font = new Font(App.Settings.FontFamily.Name, App.Settings.FontSize, fontStyle)
+                };
+                var result = dialog.ShowDialog(ParentWindow);
+                if (result == DialogResult.Ok)
+                {
+                    var resultFont = dialog.Font;
+                    App.Settings.FontFamily = new sd.FontFamily(resultFont.FamilyName);
+                    App.Settings.FontSize = resultFont.Size;
+                    App.Settings.FontBold = resultFont.Bold;
+                    App.Settings.FontItalic = resultFont.Italic;
+                }
+            };
+
+            App.Settings.PropertyChanged += (object sender, PropertyChangedEventArgs e) => {
+                if (e.PropertyName.StartsWith("Font")) {
+                    setFontLabelText();
+                }
+            };
+
+            // Checkboxes
+            chkStartupShowOptions.Bind (r => r.Checked, App.Settings, t => t.ShowOptionsAtStartup );
+            chkAutoSaveEnabled.Bind (r => r.Checked, App.Settings, t => t.AutoSaveEnabled );
+            chkAutoSaveCompress.Bind (r => r.Checked, App.Settings, t => t.AutoSaveCompress );
+            chkMipmapsGenerate.Bind (r => r.Checked, App.Settings, t => t.Mipmaps );
+            chkMipmapsHardware.Bind (r => r.Checked, App.Settings, t => t.MipmapsHardware );
+            chkMinimapTeamColours.Bind (r => r.Checked, App.Settings, t => t.MinimapTeamColours );
+            chkMinimapExceptFeatures.Bind (r => r.Checked, App.Settings, t => t.MinimapTeamColoursExceptFeatures );
+            chkPointerDirect.Bind (r => r.Checked, App.Settings, t => t.DirectPointer );
+            chkPickerTextureOrientations.Bind (r => r.Checked, App.Settings, t => t.PickOrientation );
+
+            // NumericUpDowns
+            nudUndoSteps.Bind (r => r.Value, App.Settings, s => s.UndoLimit);
+            nudAutosaveChanges.Bind (r => r.Value, App.Settings, s => s.AutoSaveMinChanges);
+            nudAutosaveInterval.Bind (r => r.Value, App.Settings, s => s.AutoSaveMinIntervalSeconds);
+            nudGraphicsMapViewColours.Bind (r => r.Value, App.Settings, s => s.MapViewBPP);
+            nudGraphicsMapViewDepth.Bind (r => r.Value, App.Settings, s => s.MapViewDepth);
+            nudGraphicsTextureViewColours.Bind (r => r.Value, App.Settings, s => s.TextureViewBPP);
+            nudGraphicsTextureViewDepth.Bind (r => r.Value, App.Settings, s => s.TextureViewDepth);
+            nudMinimapSize.Bind (r => r.Value, App.Settings, s => s.MinimapSize);
+            tbFoV.Bind (r => r.Text, App.Settings, s => s.FOVDefault);
+
+        }
+
+        void setFontLabelText()
+        {
+            lblFont.Text = string.Format("{0}, {1}, {2}{3}",
+                App.Settings.FontFamily.Name,
+                (int)App.Settings.FontSize,
+                App.Settings.FontBold ? "B" : "",
+                App.Settings.FontItalic ? "I" : ""
+            );
         }
 
         Panel directories () {
@@ -235,7 +354,7 @@ namespace SharpFlame.Gui.Dialogs
                 Editable = false
             });
 
-            layout.Add (new CheckBox { Text = "Show options after startup." });
+            layout.Add (chkStartupShowOptions = new CheckBox { Text = "Show options after startup." });
             var gboxTilesets = new GroupBox { Text = "Tileset Directories" };
             var layoutTilesets = new DynamicLayout ();
             layoutTilesets.BeginHorizontal ();
@@ -265,10 +384,177 @@ namespace SharpFlame.Gui.Dialogs
         }
 
         Panel general () {
-            var panel = new Panel ();
-            var layout = new DynamicLayout ();
-            layout.Add (null);
+            var gboxUndo = new GroupBox { Text = "Undo" };
+            var nLayout0 = new DynamicLayout ();
+            nLayout0.AddRow (new Label {
+                Text = "Maximum stored steps:",
+                VerticalAlign = VerticalAlign.Middle
+            },
+                nudUndoSteps = new NumericUpDown { MinValue = 0, MaxValue = 512, Size = new Size(-1, -1) }
+            );
+            gboxUndo.Content = nLayout0;
 
+            var gboxAutosave = new GroupBox { Text = "Autosave" };
+            var nLayout1 = new DynamicLayout { Padding = Padding.Empty };
+            nLayout1.BeginHorizontal ();
+            nLayout1.BeginVertical ();
+            nLayout1.Add (chkAutoSaveEnabled = new CheckBox { Text = "Enabled" });
+            nLayout1.Add (new Label {
+                Text = "Number of changes:",
+                VerticalAlign = VerticalAlign.Middle
+            });
+            nLayout1.Add (new Label {
+                Text = "Time interval (s):",
+                VerticalAlign = VerticalAlign.Middle
+            });
+            nLayout1.EndVertical ();
+            nLayout1.BeginVertical ();
+            nLayout1.Add (chkAutoSaveCompress = new CheckBox { Text = "Use compression" });
+            nLayout1.Add (nudAutosaveChanges =  new NumericUpDown { MinValue = 0, MaxValue = 512, Size = new Size(-1, -1)});
+            nLayout1.Add (nudAutosaveInterval = new NumericUpDown { MinValue = 0, MaxValue = 512, Size = new Size(-1, -1)});
+            nLayout1.EndVertical ();
+            nLayout1.EndHorizontal ();
+            gboxAutosave.Content = nLayout1;
+
+            var gboxDisplayFont = new GroupBox { Text = "Display Font" };
+            var nLayout2 = new DynamicLayout ();
+            nLayout2.AddRow(
+                lblFont = new Label { Text = "", VerticalAlign = VerticalAlign.Middle },
+                null,
+                TableLayout.AutoSized(btnSelectFont = new Button { Text = "Select", Size = new Size(80, -1) })
+            );
+            setFontLabelText ();
+            gboxDisplayFont.Content = nLayout2;
+
+            var gboxGrahpics = new GroupBox { Text = "Graphics" };
+            var nLayout3 = new DynamicLayout ();
+            var nLayout4 = new DynamicLayout { Padding = Padding.Empty };
+            var nLayout5 = new DynamicLayout { Padding = Padding.Empty };
+            nLayout4.AddRow (
+                chkMipmapsGenerate = new CheckBox { Text = "Generate mipmaps" },
+                chkMipmapsHardware = new CheckBox { Text = "Use Hardware" }
+            );
+            nLayout5.AddRow (
+                null,
+                new Label {
+                    Text = "Colour Bits",
+                    VerticalAlign = VerticalAlign.Middle
+                },
+                new Label {
+                    Text = "Depth Bits",
+                    VerticalAlign = VerticalAlign.Middle
+                }
+            );
+            nLayout5.AddRow (
+                new Label {
+                    Text = "Map View",
+                    VerticalAlign = VerticalAlign.Middle
+                },
+                nudGraphicsMapViewColours = new NumericUpDown { MinValue = 8, MaxValue = 32, Size = new Size(-1, -1) },
+                nudGraphicsMapViewDepth = new NumericUpDown { MinValue = 8, MaxValue = 32, Size = new Size(-1, -1) }
+            );
+            nLayout5.AddRow (
+                new Label {
+                    Text = "Textures View",
+                    VerticalAlign = VerticalAlign.Middle
+                },
+                nudGraphicsTextureViewColours = new NumericUpDown { MinValue = 8, MaxValue = 32, Size = new Size(-1, -1) },
+                nudGraphicsTextureViewDepth = new NumericUpDown { MinValue = 8, MaxValue = 32, Size = new Size(-1, -1) }
+            );
+            nLayout3.Add (nLayout4);
+            nLayout3.Add (nLayout5);
+            gboxGrahpics.Content = nLayout3;
+
+            var gboxMinimap = new GroupBox { Text = "Minimap" };
+            var nLayout6 = new DynamicLayout();
+            nLayout6.AddRow (
+                new Label { Text = "Size", VerticalAlign = VerticalAlign.Middle },
+                nudMinimapSize = new NumericUpDown { MinValue = 0, MaxValue = 512, Size = new Size(-1, -1) }
+            );
+            nLayout6.AddRow (
+                chkMinimapTeamColours = new CheckBox {
+                    Text = "Use team colours",
+                },
+                chkMinimapExceptFeatures = new CheckBox {
+                    Text = "Except for features",
+                }
+            );
+            var tblCliffColourBorder = new TableLayout (1, 1) {
+                BackgroundColor = Colors.Black,
+                Spacing = Size.Empty,
+                Padding = new Padding(1, 1)
+            };
+            tblCliffColourBorder.Add (
+                drawMinimapCliffColour = new Drawable { 
+                    Style = "direct",
+                    BackgroundColor = App.Settings.MinimapCliffColour.ToEto (),
+                    Size = new Size (50, 27) 
+                }
+            , 0, 0, false, false);
+
+            var tblObjectHighlightBorder = new TableLayout (1, 1) {
+                BackgroundColor = Colors.Black,
+                Spacing = Size.Empty,
+                Padding = new Padding(1, 1)
+            };
+            tblObjectHighlightBorder.Add (
+                drawMinimapObjectColour = new Drawable { 
+                    Style = "direct",
+                    BackgroundColor = App.Settings.MinimapSelectedObjectsColour.ToEto (),
+                    Size = new Size (50, 27) 
+                }
+                , 0, 0, false, false);
+
+            nLayout6.AddRow (
+                new Label { Text = "Cliff Colour" },
+                TableLayout.AutoSized (tblCliffColourBorder)
+            );
+            nLayout6.AddRow (
+                new Label { Text = "Object Highlight" },
+                TableLayout.AutoSized (tblObjectHighlightBorder)
+            );
+            gboxMinimap.Content = nLayout6;
+
+            var gboxPointer = new GroupBox { Text = "Pointer" };
+            var nLayout7 = new DynamicLayout();
+            nLayout7.Add (chkPointerDirect = new CheckBox { Text = "Direct" });
+            gboxPointer.Content = nLayout7;
+
+            var gboxFOV = new GroupBox { Text = "Field Of View" };
+            var nLayout8 = new DynamicLayout();
+            nLayout8.AddRow (
+                new Label { Text = "Default Multiplier", VerticalAlign = VerticalAlign.Middle },
+                tbFoV = new TextBox { }
+            );
+            gboxFOV.Content = nLayout8;
+
+            var gobxPicker = new GroupBox { Text = "Picker" };
+            var nLayout9 = new DynamicLayout();
+            nLayout9.Add (
+                chkPickerTextureOrientations = new CheckBox { Text = "Capture texture orientations." }
+            );
+            gobxPicker.Content = nLayout9;
+
+            var layout = new DynamicLayout ();
+            layout.BeginHorizontal ();
+            layout.BeginVertical ();// Column1
+            layout.Add (gboxUndo, true, false);
+            layout.Add (gboxAutosave, true, false);
+            layout.Add (gboxDisplayFont, true, false);
+            layout.Add (gboxGrahpics, true, false);
+            layout.Add (null);
+            layout.EndVertical ();
+
+            layout.BeginVertical ();// Column2
+            layout.Add (gboxMinimap);
+            layout.Add (gboxPointer);
+            layout.Add (gboxFOV);
+            layout.Add (gobxPicker);
+            layout.Add (null);
+            layout.EndVertical ();
+            layout.EndBeginHorizontal ();
+
+            var panel = new Panel ();
             panel.Content = layout;
             return panel;
         }
@@ -292,4 +578,3 @@ namespace SharpFlame.Gui.Dialogs
         }
     }
 }
-

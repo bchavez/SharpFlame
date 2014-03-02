@@ -46,6 +46,10 @@ namespace SharpFlame.Gui.Sections
 
         readonly NumericUpDown nudRotation;
 
+        GridView grvFeatures { get; set; }
+        GridView grvStructures { get; set; }
+        GridView grvDroids { get; set; }
+
         public PlaceObjectsTab (SharpFlameApplication a)
 		{
             PlayerSelector playerSelector;
@@ -134,12 +138,43 @@ namespace SharpFlame.Gui.Sections
             Shown += delegate {
                 App.UiOptions.MouseTool = MouseTool.Default;
             };
+
+            App.ObjectDataChanged += delegate
+            {
+                var objFeatures = App.ObjectData.FeatureTypes.GetItemsAsSimpleList();
+                var gicFeatures = new GridItemCollection();
+                foreach (var obj in objFeatures) 
+                {
+                    string code = null;
+                    obj.GetCode(ref code);
+                    gicFeatures.Add(new MyGridItem(code, obj.GetName().Replace("*", "")));
+                }
+                grvFeatures.DataStore = gicFeatures;
+
+                var objStructures = App.ObjectData.StructureTypes.GetItemsAsSimpleList();
+                var gicStructures = new GridItemCollection();
+                foreach (var obj in objStructures) 
+                {
+                    string code = null;
+                    obj.GetCode(ref code);
+                    gicStructures.Add(new MyGridItem(code, obj.GetName().Replace("*", "")));
+                }
+                grvStructures.DataStore = gicStructures;
+
+                var objDroids = App.ObjectData.DroidTemplates.GetItemsAsSimpleList();
+                var gicDroids = new GridItemCollection();
+                foreach (var obj in objDroids) 
+                {
+                    string code = null;
+                    obj.GetCode(ref code);
+                    gicDroids.Add(new MyGridItem(code, obj.GetName().Replace("*", "")));
+                }
+                grvDroids.DataStore = gicDroids;
+            };
         }
 
         class MyGridItem
         {
-            public int Row { get; set; }
-
             public string InternalName
             {
                 get;
@@ -152,126 +187,98 @@ namespace SharpFlame.Gui.Sections
                 set;
             }
 
-            public Color Color { get; set; }
             // used for owner-drawn cells
-            public MyGridItem(Random rand, int row, string prefix)
+            public MyGridItem(string internalName, string inGameName)
             {
                 // initialize to random values
-                Row = row;
-                InternalName = string.Format("{0} Internal Row {1}", prefix, row);
-                InGameName = string.Format("{0} In-Game Row {1}", prefix, row);
-
-                Color = Color.FromArgb(rand.Next(256), rand.Next(256), rand.Next(256));
+                InternalName = internalName;
+                InGameName = inGameName;
             }
         }
 
         DynamicLayout FeaturesPanel() {
             var mainLayout = new DynamicLayout ();
 
-            var control = new GridView { Size = new Size(300, 100) };
-            control.Columns.Add(new GridColumn { HeaderText = "Internal Name", DataCell = new TextBoxCell("InternalName"), Editable = false, Sortable = true });
-            control.Columns.Add(new GridColumn { HeaderText = "In-Game Name", DataCell = new TextBoxCell("InGameName"), Editable = false, Sortable = true });
-
-            var items = new GridItemCollection();
-            var rand = new Random();
-            for (int i = 0; i < 10000; i++)
-            {
-                items.Add(new MyGridItem(rand, i, "Feature"));
-            }
-            control.DataStore = items;
+            grvFeatures = new GridView { Size = new Size(300, 100) };
+            grvFeatures.Columns.Add(new GridColumn { HeaderText = "Internal Name", DataCell = new TextBoxCell("InternalName"), Editable = false, Sortable = true });
+            grvFeatures.Columns.Add(new GridColumn { HeaderText = "In-Game Name", DataCell = new TextBoxCell("InGameName"), Editable = false, Sortable = true });
 
             filterText.TextChanged += (s, e) =>
             {
                 var filterItems = (filterText.Text ?? "").Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
                 // Set the filter delegate on the GridView
-                control.Filter = (filterItems.Length == 0) ? (Func<object, bool>)null : o =>
+                grvFeatures.Filter = (filterItems.Length == 0) ? (Func<object, bool>)null : o =>
                 {
                     var i = o as MyGridItem;
                     var matches = true;
 
                     // Every item in the split filter string should be within the Text property
-                    matches = filterItems.Any(f => i.InternalName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) == -1 && 
-                                                   i.InGameName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) == -1);
+                    matches = filterItems.Any(f => i.InternalName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) != -1 ||
+                        i.InGameName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) != -1);
 
                     return matches;
                 };
             };
 
-            mainLayout.Add (control);
+            mainLayout.Add (grvFeatures);
 
             return mainLayout;
         }
 
         DynamicLayout StructuresPanel() {
             var mainLayout = new DynamicLayout ();
-            var control = new GridView { Size = new Size(300, 100) };
-            control.Columns.Add(new GridColumn { HeaderText = "Internal Name", DataCell = new TextBoxCell("InternalName"), Editable = false, Sortable = true });
-            control.Columns.Add(new GridColumn { HeaderText = "In-Game Name", DataCell = new TextBoxCell("InGameName"), Editable = false, Sortable = true });
-
-            var items = new GridItemCollection();
-            var rand = new Random();
-            for (int i = 0; i < 10000; i++)
-            {
-                items.Add(new MyGridItem(rand, i, "Structure"));
-            }
-            control.DataStore = items;
+            grvStructures = new GridView { Size = new Size(300, 100) };
+            grvStructures.Columns.Add(new GridColumn { HeaderText = "Internal Name", DataCell = new TextBoxCell("InternalName"), Editable = false, Sortable = true });
+            grvStructures.Columns.Add(new GridColumn { HeaderText = "In-Game Name", DataCell = new TextBoxCell("InGameName"), Editable = false, Sortable = true });
 
             filterText.TextChanged += (s, e) =>
             {
                 var filterItems = (filterText.Text ?? "").Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
                 // Set the filter delegate on the GridView
-                control.Filter = (filterItems.Length == 0) ? (Func<object, bool>)null : o =>
+                grvStructures.Filter = (filterItems.Length == 0) ? (Func<object, bool>)null : o =>
                 {
                     var i = o as MyGridItem;
                     var matches = true;
 
                     // Every item in the split filter string should be within the Text property
-                    matches = filterItems.Any(f => i.InternalName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) == -1 &&
-                                                    i.InGameName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) == -1);
+                    matches = filterItems.Any(f => i.InternalName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) != -1 ||
+                        i.InGameName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) != -1);
 
                     return matches;
                 };
             };
 
-            mainLayout.Add (control);
+            mainLayout.Add (grvStructures);
             return mainLayout;
         }
 
         DynamicLayout DroidsPanel() {
             var mainLayout = new DynamicLayout ();
-            var control = new GridView { Size = new Size(300, 100) };
-            control.Columns.Add(new GridColumn { HeaderText = "Internal Name", DataCell = new TextBoxCell("InternalName"), Editable = false, Sortable = true, Width = 200 });
-            control.Columns.Add(new GridColumn { HeaderText = "In-Game Name", DataCell = new TextBoxCell("InGameName"), Editable = false, Sortable = true, Width = 200 });
-
-            var items = new GridItemCollection();
-            var rand = new Random();
-            for (int i = 0; i < 10000; i++)
-            {
-                items.Add(new MyGridItem(rand, i, "Droids"));
-            }
-            control.DataStore = items;
+            grvDroids = new GridView { Size = new Size(300, 100) };
+            grvDroids.Columns.Add(new GridColumn { HeaderText = "Internal Name", DataCell = new TextBoxCell("InternalName"), Editable = false, Sortable = true, Width = 200 });
+            grvDroids.Columns.Add(new GridColumn { HeaderText = "In-Game Name", DataCell = new TextBoxCell("InGameName"), Editable = false, Sortable = true, Width = 200 });
 
             filterText.TextChanged += (s, e) =>
             {
                 var filterItems = (filterText.Text ?? "").Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
                 // Set the filter delegate on the GridView
-                control.Filter = (filterItems.Length == 0) ? (Func<object, bool>)null : o =>
+                grvDroids.Filter = (filterItems.Length == 0) ? (Func<object, bool>)null : o =>
                 {
                     var i = o as MyGridItem;
                     var matches = true;
 
                     // Every item in the split filter string should be within the Text property
-                    matches = filterItems.Any(f => i.InternalName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) == -1 &&
-                                                    i.InGameName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) == -1);
+                    matches = filterItems.Any(f => i.InternalName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) != -1 ||
+                        i.InGameName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) != -1);
 
                     return matches;
                 };
             };
 
-            mainLayout.Add (control);
+            mainLayout.Add (grvDroids);
             return mainLayout;
         }
 
