@@ -30,13 +30,18 @@ using System.Collections.Specialized;
 using Eto;
 using Eto.Forms;
 using Eto.Drawing;
-using OpenTK;
-using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core.Domain;
 using SharpFlame.Old;
 using SharpFlame.Old.Graphics.OpenGL;
 using SharpFlame.Old.Mapping.Tiles;
 using SharpFlame.Old.UiOptions;
+
+#if Mac
+    using MonoMac.OpenGL;
+#else
+    using OpenTK;
+    using OpenTK.Graphics.OpenGL;
+#endif
 
 namespace SharpFlame.Gui.Sections
 {

@@ -330,7 +330,7 @@ namespace SharpFlame.Old
                 return;
             }
 
-#if !Mono
+ #if !Mono
             Hide();
             Thread SplashThread = new Thread(new ThreadStart(ShowThreadedSplashScreen));
             SplashThread.IsBackground = true;
