@@ -1,6 +1,8 @@
-﻿namespace SharpFlame.UI.Windows
+﻿using System.Windows.Forms;
+
+namespace SharpFlame.Gui.Windows
 {
-    partial class WinGLUserControl
+    public partial class WinGLUserControl
     {
         /// <summary> 
         /// Required designer variable.

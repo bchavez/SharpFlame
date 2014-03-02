@@ -1,8 +1,7 @@
 ﻿using System;
 using Eto;
-using SharpFlame.Gui;
 
-namespace SharpFlame.Gui.Windows
+namespace SharpFlame.Gui.Wpf
 {
     class Startup
     {

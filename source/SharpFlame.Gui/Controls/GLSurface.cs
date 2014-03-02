@@ -13,7 +13,7 @@ namespace SharpFlame.Gui.Controls
 
     public interface IGLSurface 
     {
-        Size Size { get; set; }
+        Size GLSize { get; set; }
         bool IsInitialized { get; }
 
         void MakeCurrent();
@@ -31,9 +31,9 @@ namespace SharpFlame.Gui.Controls
             get { return this.ControlObject as IGLSurface; }
         }
 
-        public new Size Size {
-            get { return PlatformControl.Size; } 
-            set { PlatformControl.Size = value; }
+        public Size GLSize {
+            get { return PlatformControl.GLSize; } 
+            set { PlatformControl.GLSize = value; }
         }
 
         public bool IsInitialized {

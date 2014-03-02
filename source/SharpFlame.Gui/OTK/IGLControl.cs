@@ -30,10 +30,5 @@ using OpenTK.Platform;
 
 namespace SharpFlame.Gui.OTK
 {
-    public interface IGLControl
-    {
-        IGraphicsContext CreateContext(int major, int minor, GraphicsContextFlags flags);
-        bool IsIdle { get; }
-        IWindowInfo WindowInfo { get; }
-    }
+    
 }

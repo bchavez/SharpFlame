@@ -282,11 +282,13 @@ namespace SharpFlame.Gui.Sections
             };
 
             // Set Mousetool, when we are shown.
-            Shown += delegate {
-                App.UiOptions.MouseTool = MouseTool.TextureBrush;
-            };
+		    Shown += (sender, args) =>
+		        {
+		            App.UiOptions.MouseTool = MouseTool.TextureBrush;
+		        };
+		    
 
-            application.GlTexturesView.Resize += delegate {
+		    application.GlTexturesView.Resize += delegate {
                 DrawTexturesView();
             };
 		}
@@ -311,7 +313,7 @@ namespace SharpFlame.Gui.Sections
 
             var height = TextureCount.Y * 64;
             // TODO: See how thick the scroll is on winforms and mac, 20px seems to be right on GTK.
-            var glSize = application.GlTexturesView.Size = new Size (scrollTextureView.Size.Width - 20, height);
+            var glSize = application.GlTexturesView.GLSize = new Size (scrollTextureView.Size.Width - 20, height);
 
             // send the resize event to the Graphics card.
             GL.Viewport( 0, 0, glSize.Width, glSize.Height );
