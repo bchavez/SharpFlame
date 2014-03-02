@@ -1,9 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFlame.UI", "SharpFlame.UI\SharpFlame.UI.csproj", "{1FBD5990-ABDB-4C32-B253-C4CE31C4DCB6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFlame.Gui.Mac", "SharpFlame.Gui.Mac\SharpFlame.Gui.Mac.csproj", "{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFlame.Core", "SharpFlame.Core\SharpFlame.Core.csproj", "{8AE7F7A3-841A-44A7-B016-4661BBBF7821}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFlame.Old", "SharpFlame.Old\SharpFlame.Old.csproj", "{152475A4-3ABE-41C4-B338-A2FB7B350FAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFlame.Tests", "SharpFlame.Tests\SharpFlame.Tests.csproj", "{7FFE9034-AE5C-413C-A430-3C3C769E9954}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFlame.Gui", "SharpFlame.Gui\SharpFlame.Gui.csproj", "{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,22 +20,82 @@ Global
 		Release|Mixed Platforms = Release|Mixed Platforms
 		Release|x86 = Release|x86
 		AppStore|Any CPU = AppStore|Any CPU
+		DebugMac|Any CPU = DebugMac|Any CPU
+		ReleaseMac|Any CPU = ReleaseMac|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1FBD5990-ABDB-4C32-B253-C4CE31C4DCB6}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
-		{1FBD5990-ABDB-4C32-B253-C4CE31C4DCB6}.AppStore|Any CPU.Build.0 = Debug|Any CPU
-		{1FBD5990-ABDB-4C32-B253-C4CE31C4DCB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1FBD5990-ABDB-4C32-B253-C4CE31C4DCB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1FBD5990-ABDB-4C32-B253-C4CE31C4DCB6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{1FBD5990-ABDB-4C32-B253-C4CE31C4DCB6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{1FBD5990-ABDB-4C32-B253-C4CE31C4DCB6}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{1FBD5990-ABDB-4C32-B253-C4CE31C4DCB6}.Debug|x86.Build.0 = Debug|Any CPU
-		{1FBD5990-ABDB-4C32-B253-C4CE31C4DCB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1FBD5990-ABDB-4C32-B253-C4CE31C4DCB6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1FBD5990-ABDB-4C32-B253-C4CE31C4DCB6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{1FBD5990-ABDB-4C32-B253-C4CE31C4DCB6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{1FBD5990-ABDB-4C32-B253-C4CE31C4DCB6}.Release|x86.ActiveCfg = Release|Any CPU
-		{1FBD5990-ABDB-4C32-B253-C4CE31C4DCB6}.Release|x86.Build.0 = Release|Any CPU
+		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.AppStore|Any CPU.ActiveCfg = Debug|x86
+		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.AppStore|Any CPU.Build.0 = Debug|x86
+		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Debug|Any CPU.Build.0 = Debug|x86
+		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Debug|x86.ActiveCfg = Debug|x86
+		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Debug|x86.Build.0 = Debug|x86
+		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.DebugMac|Any CPU.ActiveCfg = DebugMac|Any CPU
+		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.DebugMac|Any CPU.Build.0 = DebugMac|Any CPU
+		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Release|Any CPU.ActiveCfg = Release|x86
+		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Release|Any CPU.Build.0 = Release|x86
+		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Release|Mixed Platforms.Build.0 = Release|x86
+		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Release|x86.ActiveCfg = Release|x86
+		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Release|x86.Build.0 = Release|x86
+		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.ReleaseMac|Any CPU.ActiveCfg = ReleaseMac|Any CPU
+		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.ReleaseMac|Any CPU.Build.0 = ReleaseMac|Any CPU
+		{7FFE9034-AE5C-413C-A430-3C3C769E9954}.AppStore|Any CPU.ActiveCfg = Release|Any CPU
+		{7FFE9034-AE5C-413C-A430-3C3C769E9954}.AppStore|Any CPU.Build.0 = Release|Any CPU
+		{7FFE9034-AE5C-413C-A430-3C3C769E9954}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FFE9034-AE5C-413C-A430-3C3C769E9954}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FFE9034-AE5C-413C-A430-3C3C769E9954}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{7FFE9034-AE5C-413C-A430-3C3C769E9954}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{7FFE9034-AE5C-413C-A430-3C3C769E9954}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7FFE9034-AE5C-413C-A430-3C3C769E9954}.Debug|x86.Build.0 = Debug|Any CPU
+		{7FFE9034-AE5C-413C-A430-3C3C769E9954}.DebugMac|Any CPU.ActiveCfg = DebugMac|Any CPU
+		{7FFE9034-AE5C-413C-A430-3C3C769E9954}.DebugMac|Any CPU.Build.0 = DebugMac|Any CPU
+		{7FFE9034-AE5C-413C-A430-3C3C769E9954}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FFE9034-AE5C-413C-A430-3C3C769E9954}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FFE9034-AE5C-413C-A430-3C3C769E9954}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{7FFE9034-AE5C-413C-A430-3C3C769E9954}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{7FFE9034-AE5C-413C-A430-3C3C769E9954}.Release|x86.ActiveCfg = Release|Any CPU
+		{7FFE9034-AE5C-413C-A430-3C3C769E9954}.Release|x86.Build.0 = Release|Any CPU
+		{7FFE9034-AE5C-413C-A430-3C3C769E9954}.ReleaseMac|Any CPU.ActiveCfg = ReleaseMac|Any CPU
+		{7FFE9034-AE5C-413C-A430-3C3C769E9954}.ReleaseMac|Any CPU.Build.0 = ReleaseMac|Any CPU
+		{8AE7F7A3-841A-44A7-B016-4661BBBF7821}.AppStore|Any CPU.ActiveCfg = Release|Any CPU
+		{8AE7F7A3-841A-44A7-B016-4661BBBF7821}.AppStore|Any CPU.Build.0 = Release|Any CPU
+		{8AE7F7A3-841A-44A7-B016-4661BBBF7821}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AE7F7A3-841A-44A7-B016-4661BBBF7821}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AE7F7A3-841A-44A7-B016-4661BBBF7821}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8AE7F7A3-841A-44A7-B016-4661BBBF7821}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8AE7F7A3-841A-44A7-B016-4661BBBF7821}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8AE7F7A3-841A-44A7-B016-4661BBBF7821}.Debug|x86.Build.0 = Debug|Any CPU
+		{8AE7F7A3-841A-44A7-B016-4661BBBF7821}.DebugMac|Any CPU.ActiveCfg = DebugMac|Any CPU
+		{8AE7F7A3-841A-44A7-B016-4661BBBF7821}.DebugMac|Any CPU.Build.0 = DebugMac|Any CPU
+		{8AE7F7A3-841A-44A7-B016-4661BBBF7821}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AE7F7A3-841A-44A7-B016-4661BBBF7821}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AE7F7A3-841A-44A7-B016-4661BBBF7821}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8AE7F7A3-841A-44A7-B016-4661BBBF7821}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8AE7F7A3-841A-44A7-B016-4661BBBF7821}.Release|x86.ActiveCfg = Release|Any CPU
+		{8AE7F7A3-841A-44A7-B016-4661BBBF7821}.Release|x86.Build.0 = Release|Any CPU
+		{8AE7F7A3-841A-44A7-B016-4661BBBF7821}.ReleaseMac|Any CPU.ActiveCfg = ReleaseMac|Any CPU
+		{8AE7F7A3-841A-44A7-B016-4661BBBF7821}.ReleaseMac|Any CPU.Build.0 = ReleaseMac|Any CPU
+		{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}.AppStore|Any CPU.ActiveCfg = Release|Any CPU
+		{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}.AppStore|Any CPU.Build.0 = Release|Any CPU
+		{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}.Debug|x86.Build.0 = Debug|Any CPU
+		{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}.DebugMac|Any CPU.ActiveCfg = DebugMac|Any CPU
+		{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}.DebugMac|Any CPU.Build.0 = DebugMac|Any CPU
+		{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}.Release|x86.ActiveCfg = Release|Any CPU
+		{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}.Release|x86.Build.0 = Release|Any CPU
+		{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}.ReleaseMac|Any CPU.ActiveCfg = ReleaseMac|Any CPU
+		{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}.ReleaseMac|Any CPU.Build.0 = ReleaseMac|Any CPU
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.AppStore|Any CPU.ActiveCfg = AppStore|Any CPU
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.AppStore|Any CPU.Build.0 = AppStore|Any CPU
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -38,12 +104,16 @@ Global
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Debug|x86.Build.0 = Debug|Any CPU
+		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.DebugMac|Any CPU.ActiveCfg = DebugMac|Any CPU
+		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.DebugMac|Any CPU.Build.0 = DebugMac|Any CPU
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Release|x86.ActiveCfg = Release|Any CPU
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Release|x86.Build.0 = Release|Any CPU
+		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.ReleaseMac|Any CPU.ActiveCfg = ReleaseMac|Any CPU
+		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.ReleaseMac|Any CPU.Build.0 = ReleaseMac|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = SharpFlame.Gui.Mac\SharpFlame.Gui.Mac.csproj

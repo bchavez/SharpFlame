@@ -74,7 +74,22 @@
   <PropertyGroup>
     <ApplicationIcon>flaME.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugMac|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\DebugMac</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>DEBUG;Mac;Mono;Portable</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseMac|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\ReleaseMac</OutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MonoMac">
+      <HintPath>..\packages\Eto-20140222\MonoMac.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -592,7 +607,5 @@
       <Name>SharpFlame.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Settings\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

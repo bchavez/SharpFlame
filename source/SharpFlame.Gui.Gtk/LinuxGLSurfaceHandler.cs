@@ -34,15 +34,9 @@ namespace SharpFlame.Gui.Gtk
 {
     internal class LinuxGLSurfaceHandler : GtkControl<GLDrawingArea, GLSurface>, IGLSurfaceHandler
     {
-        public new IGLSurfaceControl Control { get; set; }
-
         public override GLDrawingArea CreateControl()
         {
-            var myControl = new GLDrawingArea();
-
-            Control = myControl;
-
-            return myControl;
+            return new GLDrawingArea();
         }
     }
 }

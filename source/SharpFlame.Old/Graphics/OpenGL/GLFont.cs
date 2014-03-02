@@ -1,16 +1,20 @@
-#region
-
 using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
-using OpenTK.Graphics.OpenGL;
 using SharpFlame.Old.Colors;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
-#endregion
+#if Mac
+    using MonoMac.OpenGL;
+    using PixelFormat = MonoMac.OpenGL.PixelFormat;
+
+#else
+    using OpenTK.Graphics.OpenGL;
+    using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
+#endif
+
 
 namespace SharpFlame.Old.Graphics.OpenGL
 {
@@ -35,7 +39,7 @@ namespace SharpFlame.Old.Graphics.OpenGL
             for ( a = 0; a <= 255; a++ )
             {
                 var text = ((char)a).ToString();
-                var tempBitmap = new Bitmap(Height * 2, Height, PixelFormat.Format32bppArgb);
+                var tempBitmap = new Bitmap(Height * 2, Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 var gfx = System.Drawing.Graphics.FromImage(tempBitmap);
                 gfx.Clear(Color.Transparent);
                 gfx.DrawString(text, BaseFont, Brushes.White, 0.0F, 0.0F);
@@ -79,17 +83,17 @@ namespace SharpFlame.Old.Graphics.OpenGL
                 {
                     newSizeX = Math.Max((int)(Math.Round(Height / 4.0F)), 1);
                     Character[a].TexSize = (int)(Math.Round(Math.Pow(2.0D, Math.Ceiling(Math.Log(Math.Max(newSizeX, tempBitmap.Height)) / Math.Log(2.0D)))));
-                    texBitmap = new Bitmap(Character[a].TexSize, Convert.ToInt32(Character[a].TexSize), PixelFormat.Format32bppArgb);
+                    texBitmap = new Bitmap( Character[a].TexSize, Convert.ToInt32( Character[a].TexSize ), System.Drawing.Imaging.PixelFormat.Format32bppArgb );
                     gfx = System.Drawing.Graphics.FromImage(texBitmap);
                     gfx.Clear(Color.Transparent);
                     gfx.Dispose();
                     bitmapData = texBitmap.LockBits(new Rectangle(0, 0, texBitmap.Width, texBitmap.Height), ImageLockMode.ReadOnly,
-                        PixelFormat.Format32bppArgb);
+                        System.Drawing.Imaging.PixelFormat.Format32bppArgb );
                     GL.GenTextures(1, out Character[a].GLTexture);
                     GL.BindTexture(TextureTarget.Texture2D, Convert.ToInt32(Character[a].GLTexture));
                     GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
                     GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-                    GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, texBitmap.Width, texBitmap.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra,
+                    GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, texBitmap.Width, texBitmap.Height, 0, PixelFormat.Bgra,
                         PixelType.UnsignedByte, bitmapData.Scan0);
                     texBitmap.UnlockBits(bitmapData);
                     Character[a].Width = newSizeX;
@@ -97,7 +101,7 @@ namespace SharpFlame.Old.Graphics.OpenGL
                 else
                 {
                     Character[a].TexSize = (int)(Math.Round(Math.Pow(2.0D, Math.Ceiling(Math.Log(Math.Max(newSizeX, tempBitmap.Height)) / Math.Log(2.0D)))));
-                    texBitmap = new Bitmap(Convert.ToInt32(Character[a].TexSize), Character[a].TexSize, PixelFormat.Format32bppArgb);
+                    texBitmap = new Bitmap( Convert.ToInt32( Character[a].TexSize ), Character[a].TexSize, System.Drawing.Imaging.PixelFormat.Format32bppArgb );
                     gfx = System.Drawing.Graphics.FromImage(texBitmap);
                     gfx.Clear(Color.Transparent);
                     gfx.Dispose();
@@ -109,12 +113,12 @@ namespace SharpFlame.Old.Graphics.OpenGL
                         }
                     }
                     bitmapData = texBitmap.LockBits(new Rectangle(0, 0, texBitmap.Width, texBitmap.Height), ImageLockMode.ReadOnly,
-                        PixelFormat.Format32bppArgb);
+                        System.Drawing.Imaging.PixelFormat.Format32bppArgb );
                     GL.GenTextures(1, out Character[a].GLTexture);
                     GL.BindTexture(TextureTarget.Texture2D, Character[a].GLTexture);
                     GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
                     GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-                    GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, texBitmap.Width, texBitmap.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra,
+                    GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, texBitmap.Width, texBitmap.Height, 0, PixelFormat.Bgra,
                         PixelType.UnsignedByte, bitmapData.Scan0);
                     texBitmap.UnlockBits(bitmapData);
                     Character[a].Width = newSizeX;

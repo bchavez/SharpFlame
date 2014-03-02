@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Diagnostics;
-using Eto.Platform.Mac.Forms;
-using Eto.Platform.Mac.Forms.Controls;
-using MonoMac.AppKit;
-using SharpFlame.UI.Controls;
-using MonoMac.OpenGL;
 using System.Drawing;
+using Eto.Forms;
+using Eto.Platform;
+using Eto.Platform.Mac;
+using Eto.Platform.Mac.Forms;
+using MonoMac.AppKit;
+using MonoMac.OpenGL;
+using SharpFlame.Gui.Controls;
+using Size = Eto.Drawing.Size;
 
-namespace SharpFlame.UI.Mac
+namespace SharpFlame.Gui.Mac
 {
     static class Program
     {
@@ -18,64 +21,80 @@ namespace SharpFlame.UI.Mac
         static void Main(string[] args)
         {
             var macGenrator = new Eto.Platform.Mac.Generator();
-			macGenrator.Add<IGLSurface>( () => new GLViewHandler() );
+			macGenrator.Add<IGLSurfaceHandler>( () => new MacGLSurfaceHandler() );
 
-
-            var app = new SharpFlameEtoApplication( macGenrator );
+            var app = new SharpFlameApplication( macGenrator );
 
             app.Run( args );
         }
     }
 		
 
-	internal class GLViewHandler : MacView<MacGLView, GLSurface>, IGLSurface
+	internal class MacGLSurfaceHandler : MacView<MacGLView, GLSurface>, IGLSurfaceHandler
     {
-        public GLViewHandler()
-        {
-            Debugger.Break();
-        }
-
 		public override MacGLView CreateControl()
 		{
 			return new MacGLView ();
 		}
 
-		protected override void Initialize()
-		{
-			base.Initialize ();
-			this.Control.DrawNow += ctrl_DrawNow;	
-		}
+        public override void AttachEvent( string id )
+        {
+            switch( id )
+            {
+                case "Control.MouseEnter":
+                    break;
 
-		private void ctrl_DrawNow(System.Drawing.RectangleF rect){
+                case "Control.MouseLeave":
 
-			this.Control.OpenGLContext.MakeCurrentContext ();
+                    break;
+                case "Control.MouseMove":
+                    break;
 
-			GL.ClearColor(Color.Brown);
+                case "Control.SizeChanged":
+                    break;
 
-			GL.ClearColor (0, 0, 0, 0);
-			GL.Clear(ClearBufferMask.ColorBufferBit);
+                case "Control.MouseDown":
+                    this.Control.GLMouseDown += Control_GLMouseDown;
+                    break;
 
-			DrawTriangle ();
+                case "Control.MouseUp":
+                    break;
 
-			GL.Flush ();
+                case "Control.MouseDoubleClick":
+                    break;
 
-		}
+                case "Control.MouseWheel":
+                    break;
 
+                case "Control.KeyDown":
+                    break;
 
-		private void DrawTriangle(){
-			GL.Color3 (1.0f, 0.85f, 0.35f);
-			GL.Begin (BeginMode.Triangles);
+                case "Control.KeyUp":
+                    break;
 
-			GL.Vertex3 (0.0, 0.6, 0.0);
-			GL.Vertex3 (-0.2, -0.3, 0.0);
-			GL.Vertex3 (0.2, -0.3 ,0.0);
+                case "Control.LostFocus":
+                    break;
 
-			GL.End ();
+                case "Control.GotFocus":
+                    break;
 
+                case "Control.Shown":
+                    break;
 
-		}
+                default:
+                    base.AttachEvent( id );
+                    break;
+            }
 
-		public override bool Enabled{	get;	set;	}
+        }
+
+        void Control_GLMouseDown( MacGLView sender, NSEvent args )
+        {
+            var mouseEvent = Eto.Platform.Mac.Conversions.GetMouseEvent(sender, args, false);
+            this.Widget.OnMouseDown(mouseEvent);
+        }
+
+        public override bool Enabled{	get;	set;	}
 
 		public override NSView ContainerControl
 		{
@@ -87,24 +106,106 @@ namespace SharpFlame.UI.Mac
     }
 
 
+    internal class MacGLView : NSOpenGLView, IGLSurface
+    {
+	    public delegate void GLEventHandler(MacGLView sender, NSEvent args );
+
+        public delegate void DrawRectHandler(System.Drawing.RectangleF dirtyRect);
+
+        public event DrawRectHandler DrawNow = delegate { };
+
+        public override void DrawRect(System.Drawing.RectangleF dirtyRect)
+        {
+            this.DrawNow(dirtyRect);
+        }
+        
+        public override void PrepareOpenGL()
+        {
+            base.PrepareOpenGL();
+            this.IsInitialized = true;
+            this.Initialized( this, EventArgs.Empty );
+        }
+
+        public override void Reshape()
+        {
+            base.Reshape();
+            this.Resize( this, EventArgs.Empty );
+        }
+
+        public override void ViewDidEndLiveResize()
+        {
+            base.ViewDidEndLiveResize();
+            this.Resize(this, EventArgs.Empty);
+        }
 
 
-	class MacGLView : NSOpenGLView{
+        public Size GLSize
+        {
+            get { return this.Bounds.Size.ToSize().ToEto(); }
+            set
+            {
+                this.Bounds =
+                    new RectangleF(this.Bounds.X, this.Bounds.Y, value.Width, value.Height);
+            }
+        }
+
+        public bool IsInitialized { get; private set; }
+
+        public void MakeCurrent()
+        {
+            this.OpenGLContext.MakeCurrentContext();
+        }
+
+        public void SwapBuffers()
+        {
+            this.OpenGLContext.FlushBuffer();
+        }
+
+        public event EventHandler Initialized = delegate { };
+
+        public event EventHandler Resize = delegate {  };
+
+        public event EventHandler ShuttingDown = delegate { };
 
 
-		public MacGLView(){
-			Debugger.Break ();
-		}
+        public event GLEventHandler GLKeyDown = delegate { };
+        public override void KeyDown( NSEvent theEvent )
+        {
+            base.KeyDown( theEvent );
+            GLKeyDown(this, theEvent);
+        }
 
-		public delegate void DrawRectHandler(System.Drawing.RectangleF dirtyRect);
-		public event DrawRectHandler DrawNow = delegate{};
-		public override void DrawRect(System.Drawing.RectangleF dirtyRect){
-			this.DrawNow (dirtyRect);
-		}
+        public event GLEventHandler GLMouseDown = delegate { };
+        public override void MouseDown( NSEvent theEvent )
+        {
+            base.MouseDown( theEvent );
+            GLMouseDown(this, theEvent);
+        }
+        public event GLEventHandler GLMouseUp = delegate { };
+        public override void MouseUp( NSEvent theEvent )
+        {
+            base.MouseUp( theEvent );
+            GLMouseUp(this, theEvent);
+        }
 
-		
-	}
+        public event GLEventHandler GLMouseDragged = delegate { };
+        public override void MouseDragged( NSEvent theEvent )
+        {
+            base.MouseDragged( theEvent );
+            GLMouseDragged(this, theEvent);
+        }
+        public event GLEventHandler GLMouseMoved = delegate { };
+        public override void MouseMoved( NSEvent theEvent )
+        {
+            base.MouseMoved( theEvent );
+            GLMouseMoved(this, theEvent);
+        }
 
-
-
+        public event GLEventHandler GLScrollWheel = delegate { };
+        public override void ScrollWheel(NSEvent theEvent)
+        {
+            base.ScrollWheel(theEvent);
+            GLScrollWheel(this, theEvent);
+        }
+    }
 }

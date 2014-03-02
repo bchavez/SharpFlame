@@ -82,8 +82,8 @@ namespace SharpFlame.Old.Bitmaps
 
         public static Result BitmapIsGlCompatible(Bitmap bitmapToCheck)
         {
-            var returnResult = new Result("Compatability check", false);
-            logger.Debug("Compatability check");
+            var returnResult = new Result("Compatibility check", false);
+            logger.Debug("Compatibility check");
 
             if ( !App.SizeIsPowerOf2(bitmapToCheck.Width) )
             {

@@ -35,7 +35,7 @@ using SharpFlame.Gui.Controls;
 namespace SharpFlame.Gui.Gtk
 {
     [ToolboxItem(true)]
-    public class GLDrawingArea : DrawingArea, IDisposable, IGLSurfaceControl
+    public class GLDrawingArea : DrawingArea, IDisposable, IGLSurface
     {
         IGraphicsContext graphicsContext;
         static int graphicsContextCount;
@@ -81,7 +81,7 @@ namespace SharpFlame.Gui.Gtk
         /// Gets or sets the context size.
         /// </summary>
         /// <value>The width.</value>
-        public new virtual Size Size
+        public virtual Size GLSize
         {
             get
             {
@@ -297,7 +297,7 @@ namespace SharpFlame.Gui.Gtk
 
             bool result = base.OnExposeEvent(eventExpose);
 
-            GL.Viewport( 0, 0, Size.Width, Size.Height );
+            GL.Viewport( 0, 0, GLSize.Width, GLSize.Height );
             GL.MatrixMode( MatrixMode.Projection );
             GL.LoadIdentity();
             GL.Ortho( -1.0, 1.0, -1.0, 1.0, 0.0, 4.0 );

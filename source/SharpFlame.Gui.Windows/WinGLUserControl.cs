@@ -28,10 +28,11 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using Eto.Platform.Windows;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Platform;
-using SharpFlame.Gui.OTK;
+using SharpFlame.Gui.Controls;
 
 namespace SharpFlame.Gui.Windows
 {
@@ -41,23 +42,20 @@ namespace SharpFlame.Gui.Windows
     /// Inherit from this class and call one of its specialized constructors
     /// to enable antialiasing or custom <see cref="GraphicsMode"/>s.
     /// </summary>
-    public partial class WinGLUserControl : UserControl
+    public partial class WinGLUserControl : UserControl, IGLSurface
     {
         IGraphicsContext context;
-        IGLControl implementation;
-        GraphicsMode format;
-        int major, minor;
-        GraphicsContextFlags flags;
-        bool? initial_vsync_value;
+        readonly GraphicsMode graphicsMode;
+        readonly int major;
+        readonly int minor;
+        readonly GraphicsContextFlags flags;
+        bool? initialVsyncValue;
         // Indicates that OnResize was called before OnHandleCreated.
         // To avoid issues with missing OpenGL contexts, we suppress
         // the premature Resize event and raise it as soon as the handle
         // is ready.
-        bool resize_event_suppressed;
-        // Indicates whether the control is in design mode. Due to issues
-        // wiith the DesignMode property and nested controls,we need to
-        // evaluate this in the constructor.
-        readonly bool design_mode;
+        bool resizeEventSuppressed;
+        private IWindowInfo windowInfo;
 
         /// <summary>
         /// Constructs a new instance.
@@ -71,7 +69,7 @@ namespace SharpFlame.Gui.Windows
         /// </summary>
         /// <param name="mode">The OpenTK.Graphics.GraphicsMode of the control.</param>
         public WinGLUserControl(GraphicsMode mode)
-            : this(mode, 1, 0, GraphicsContextFlags.Default)
+            : this(mode, 3, 0, GraphicsContextFlags.Default)
         { }
 
         /// <summary>
@@ -85,7 +83,7 @@ namespace SharpFlame.Gui.Windows
         {
             if (mode == null)
                 throw new ArgumentNullException("mode");
-
+            
             // SDL does not currently support embedding
             // on external windows. If Open.Toolkit is not yet
             // initialized, we'll try to request a native backend
@@ -103,33 +101,22 @@ namespace SharpFlame.Gui.Windows
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             DoubleBuffered = false;
 
-            this.format = mode;
+            this.graphicsMode = mode;
             this.major = major;
             this.minor = minor;
             this.flags = flags;
-
-            // Note: the DesignMode property may be incorrect when nesting controls.
-            // We use LicenseManager.UsageMode as a workaround (this only works in
-            // the constructor).
-            design_mode =
-                DesignMode ||
-                LicenseManager.UsageMode == LicenseUsageMode.Designtime;
-
+            
             InitializeComponent();
+
+            this.Disposed += WinGLUserControl_Disposed;
         }
 
-
-        IGLControl Implementation
+        void WinGLUserControl_Disposed( object sender, EventArgs e )
         {
-            get
-            {
-                ValidateState();
-
-                return implementation;
-            }
+            this.ShuttingDown(sender, e);
         }
 
-        void ValidateState()
+        private void EnsureValidHandle()
         {
             if (IsDisposed)
                 throw new ObjectDisposedException(GetType().Name);
@@ -137,7 +124,7 @@ namespace SharpFlame.Gui.Windows
             if (!IsHandleCreated)
                 CreateControl();
 
-            if (implementation == null || context == null || context.IsDisposed)
+            if (windowInfo == null || context == null || context.IsDisposed)
                 RecreateHandle();
         }
 
@@ -170,33 +157,36 @@ namespace SharpFlame.Gui.Windows
             if (context != null)
                 context.Dispose();
 
-            if (implementation != null)
-                implementation.WindowInfo.Dispose();
+            if ( windowInfo != null )
+                windowInfo.Dispose();
 
-            if (design_mode)
-                implementation = new DummyGLControl();
-            else
-                implementation = new GLControlFactory().CreateGLControl(format, this.Handle);
+            this.windowInfo = Utilities.CreateWindowsWindowInfo(this.Handle);
             
-            context = implementation.CreateContext(major, minor, flags);
+            this.context = new GraphicsContext(this.graphicsMode, this.windowInfo, major, minor, flags);
+
             MakeCurrent();
 
-            if (!design_mode)
-                ((IGraphicsContextInternal)Context).LoadAll();
+            ((IGraphicsContextInternal)Context).LoadAll();
+
+            if( !this.IsInitialized )
+            {
+                this.IsInitialized = true;
+                this.Initialized( this, EventArgs.Empty );
+            }
 
             // Deferred setting of vsync mode. See VSync property for more information.
-            if (initial_vsync_value.HasValue)
+            if (initialVsyncValue.HasValue)
             {
-                Context.SwapInterval = initial_vsync_value.Value ? 1 : 0;
-                initial_vsync_value = null;
+                Context.SwapInterval = initialVsyncValue.Value ? 1 : 0;
+                initialVsyncValue = null;
             }
 
             base.OnHandleCreated(e);
 
-            if (resize_event_suppressed)
+            if (resizeEventSuppressed)
             {
                 OnResize(EventArgs.Empty);
-                resize_event_suppressed = false;
+                resizeEventSuppressed = false;
             }
         }
 
@@ -210,10 +200,10 @@ namespace SharpFlame.Gui.Windows
                 context = null;
             }
 
-            if (implementation != null)
+            if (windowInfo != null)
             {
-                implementation.WindowInfo.Dispose();
-                implementation = null;
+                windowInfo.Dispose();
+                windowInfo = null;
             }
 
             base.OnHandleDestroyed(e);
@@ -225,10 +215,7 @@ namespace SharpFlame.Gui.Windows
         /// <param name="e">A System.Windows.Forms.PaintEventArgs that contains the event data.</param>
         protected override void OnPaint(PaintEventArgs e)
         {
-            ValidateState();
-
-            if (design_mode)
-                e.Graphics.Clear(BackColor);
+            EnsureValidHandle();
 
             base.OnPaint(e);
         }
@@ -244,12 +231,15 @@ namespace SharpFlame.Gui.Windows
             // Do not raise OnResize event before the handle and context are created.
             if (!IsHandleCreated)
             {
-                resize_event_suppressed = true;
+                resizeEventSuppressed = true;
                 return;
             }
 
-            if (context != null)
-                context.Update(Implementation.WindowInfo);
+            if ( context != null )
+            {
+                EnsureValidHandle();
+                context.Update(windowInfo);
+            }
 
             base.OnResize(e);
         }
@@ -260,8 +250,11 @@ namespace SharpFlame.Gui.Windows
         /// <param name="e">A System.EventArgs that contains the event data.</param>
         protected override void OnParentChanged(EventArgs e)
         {
-            if (context != null)
-                context.Update(Implementation.WindowInfo);
+            if ( context != null )
+            {
+                EnsureValidHandle();
+                context.Update(windowInfo);
+            }
 
             base.OnParentChanged(e);
         }
@@ -272,17 +265,28 @@ namespace SharpFlame.Gui.Windows
         /// </summary>
         public void SwapBuffers()
         {
-            ValidateState();
+            EnsureValidHandle();
             Context.SwapBuffers();
         }
+
+        public event EventHandler Initialized = delegate {  };
+        public event EventHandler ShuttingDown = delegate { };
+
+        public Eto.Drawing.Size GLSize {
+            get { return this.Size.ToEto(); }
+            set { this.Size = value.ToSD(); }
+        }
+
+        public bool IsInitialized { get; private set; }
+
         /// <summary>
         /// Makes the underlying this GLControl current in the calling thread.
         /// All OpenGL commands issued are hereafter interpreted by this GLControl.
         /// </summary>
         public void MakeCurrent()
         {
-            ValidateState();
-            Context.MakeCurrent(Implementation.WindowInfo);
+            EnsureValidHandle();
+            Context.MakeCurrent(windowInfo);
         }
 
 
@@ -294,8 +298,8 @@ namespace SharpFlame.Gui.Windows
         {
             get
             {
-                ValidateState();
-                return Implementation.IsIdle;
+                EnsureValidHandle();
+                return Win32Helper.IsIdle;
             }
         }
         /// <summary>
@@ -306,7 +310,7 @@ namespace SharpFlame.Gui.Windows
         {
             get
             {
-                ValidateState();
+                EnsureValidHandle();
                 return context;
             }
             private set { context = value; }
@@ -321,7 +325,7 @@ namespace SharpFlame.Gui.Windows
         {
             get
             {
-                ValidateState();
+                EnsureValidHandle();
                 return ClientSize.Width / (float)ClientSize.Height;
             }
         }
@@ -337,7 +341,7 @@ namespace SharpFlame.Gui.Windows
                 if (!IsHandleCreated)
                     return false;
 
-                ValidateState();
+                EnsureValidHandle();
                 return Context.VSync;
             }
             set
@@ -348,11 +352,11 @@ namespace SharpFlame.Gui.Windows
                 // Work around this issue by deferring VSync mode setting to the HandleCreated event.
                 if (!IsHandleCreated)
                 {
-                    initial_vsync_value = value;
+                    initialVsyncValue = value;
                     return;
                 }
 
-                ValidateState();
+                EnsureValidHandle();
                 Context.VSync = value;
             }
         }
@@ -367,7 +371,7 @@ namespace SharpFlame.Gui.Windows
         {
             get
             {
-                ValidateState();
+                EnsureValidHandle();
                 return Context.GraphicsMode;
             }
         }
@@ -378,7 +382,7 @@ namespace SharpFlame.Gui.Windows
         /// </summary>
         public IWindowInfo WindowInfo
         {
-            get { return implementation.WindowInfo; }
+            get { return windowInfo; }
         }
     }
 }
