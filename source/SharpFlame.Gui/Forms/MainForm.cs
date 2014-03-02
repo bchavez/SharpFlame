@@ -116,7 +116,8 @@ namespace SharpFlame.Gui.Forms
 			toolsMenu.Items.AddSeparator ();
 			toolsMenu.Items.GetSubmenu ("Generator", 500);
 
-            menu.Items.Add (settings);
+            var editMenu = menu.Items.GetSubmenu ("&Edit", 700);
+            editMenu.Items.Add (settings);
 
 			var help = menu.Items.GetSubmenu("&Help", 1000);
 			help.Items.Add(about);

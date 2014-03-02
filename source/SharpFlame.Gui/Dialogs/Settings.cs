@@ -239,7 +239,7 @@ namespace SharpFlame.Gui.Dialogs
                 Editable = false
             });
 
-            layout.Add (new CheckBox { Text = "Show options before loading data." });
+            layout.Add (new CheckBox { Text = "Show options after startup." });
             var gboxTilesets = new GroupBox { Text = "Tileset Directories" };
             var layoutTilesets = new DynamicLayout ();
             layoutTilesets.BeginHorizontal ();
