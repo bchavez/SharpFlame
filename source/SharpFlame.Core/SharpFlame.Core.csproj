@@ -106,6 +106,7 @@
     <Compile Include="Result.cs" />
     <Compile Include="Domain\Player.cs" />
     <Compile Include="SimpleResult.cs" />
+    <Compile Include="Interfaces\ISharpFlameApplication.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

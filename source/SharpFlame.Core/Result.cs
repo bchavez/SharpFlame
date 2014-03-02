@@ -16,6 +16,7 @@ namespace SharpFlame.Core
         public readonly List<IResultItem> Items = new List<IResultItem>();
         public string Text;
         private bool bad;
+        private bool warnings;
 
         public Result(string text, bool log = true)
         {
@@ -34,7 +35,7 @@ namespace SharpFlame.Core
 
         public bool HasWarnings
         {
-            get { return Items.Count > 0; }
+            get { return warnings; }
         }
 
         public bool HasProblems
@@ -58,8 +59,9 @@ namespace SharpFlame.Core
             }
             if (resultToAdd.HasWarnings)
             {
-                Items.Add(resultToAdd);
+                warnings = true;
             }
+            Items.Add(resultToAdd);
         }
 
         public void Take(Result resultToMerge)
@@ -90,6 +92,7 @@ namespace SharpFlame.Core
             }
             var warning = new Warning();
             warning.Text = text;
+            warnings = true;
             ItemAdd(warning);
         }
 

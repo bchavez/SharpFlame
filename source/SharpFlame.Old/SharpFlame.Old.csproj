@@ -38,8 +38,6 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>
-    </DocumentationFile>
     <NOWARN>1591,660,661</NOWARN>
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <WarningLevel>4</WarningLevel>
@@ -395,6 +393,7 @@
     <Compile Include="Mapping\Undo.cs" />
     <Compile Include="Mapping\UnitChange.cs" />
     <Compile Include="Mapping\Objects\Unit.cs" />
+    <Compile Include="Settings\SettingsManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">
@@ -592,5 +591,8 @@
       <Project>{8AE7F7A3-841A-44A7-B016-4661BBBF7821}</Project>
       <Name>SharpFlame.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Settings\" />
   </ItemGroup>
 </Project>

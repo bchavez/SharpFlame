@@ -57,7 +57,7 @@ namespace SharpFlame.Old.AppSettings
         public static Option<List<string>> SettingObjectDataDirectories;
         public static Option<bool> SettingPickOrientation;
 
-        private static Option<T> CreateSetting<T>(string saveKey, T defaultValue)
+        public static Option<T> CreateSetting<T>(string saveKey, T defaultValue)
         {
             var creator = new OptionCreator<T>();
             creator.SaveKey = saveKey;
