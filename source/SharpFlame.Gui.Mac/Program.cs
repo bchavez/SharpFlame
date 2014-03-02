@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
-using Eto.Platform.Mac.Forms;
-using Eto.Platform.Mac.Forms.Controls;
-using MonoMac.AppKit;
-using SharpFlame.UI.Controls;
-using MonoMac.OpenGL;
 using System.Drawing;
+using Eto.Platform;
+using Eto.Platform.Mac.Forms;
+using MonoMac.AppKit;
+using MonoMac.OpenGL;
+using SharpFlame.Gui.Controls;
+using Size = Eto.Drawing.Size;
 
-namespace SharpFlame.UI.Mac
+namespace SharpFlame.Gui.Mac
 {
     static class Program
     {
@@ -18,19 +19,18 @@ namespace SharpFlame.UI.Mac
         static void Main(string[] args)
         {
             var macGenrator = new Eto.Platform.Mac.Generator();
-			macGenrator.Add<IGLSurface>( () => new GLViewHandler() );
+			macGenrator.Add<IGLSurfaceHandler>( () => new MacGLSurfaceHandler() );
 
-
-            var app = new SharpFlameEtoApplication( macGenrator );
+            var app = new SharpFlameApplication( macGenrator );
 
             app.Run( args );
         }
     }
 		
 
-	internal class GLViewHandler : MacView<MacGLView, GLSurface>, IGLSurface
+	internal class MacGLSurfaceHandler : MacView<MacGLView, GLSurface>, IGLSurfaceHandler
     {
-        public GLViewHandler()
+        public MacGLSurfaceHandler()
         {
             Debugger.Break();
         }
@@ -87,24 +87,63 @@ namespace SharpFlame.UI.Mac
     }
 
 
+    internal class MacGLView : NSOpenGLView, IGLSurface
+    {
 
+        public MacGLView()
+        {
+            Debugger.Break();
+        }
 
-	class MacGLView : NSOpenGLView{
+        public delegate void DrawRectHandler(System.Drawing.RectangleF dirtyRect);
 
+        public event DrawRectHandler DrawNow = delegate { };
 
-		public MacGLView(){
-			Debugger.Break ();
-		}
+        public override void DrawRect(System.Drawing.RectangleF dirtyRect)
+        {
+            this.DrawNow(dirtyRect);
+        }
+        public override void AwakeFromNib()
+        {
+            base.AwakeFromNib();
+            this.IsInitialized = true;
+            this.Initialized(this, EventArgs.Empty);
+        }
+        public override void Reshape()
+        {
+            base.Reshape();
+            this.Resize( this, EventArgs.Empty );
+        }
 
-		public delegate void DrawRectHandler(System.Drawing.RectangleF dirtyRect);
-		public event DrawRectHandler DrawNow = delegate{};
-		public override void DrawRect(System.Drawing.RectangleF dirtyRect){
-			this.DrawNow (dirtyRect);
-		}
+        public override void ViewDidEndLiveResize()
+        {
+            base.ViewDidEndLiveResize();
+            this.Resize(this, EventArgs.Empty);
+        }
 
-		
-	}
+        public Size GLSize
+        {
+            get { return this.Bounds.Size.ToSize().ToEto(); }
+            set
+            {
+                this.Bounds =
+                    new RectangleF(this.Bounds.X, this.Bounds.Y, value.Width, value.Height);
+            }
+        }
 
+        public bool IsInitialized { get; private set; }
+        public void MakeCurrent()
+        {
+            this.OpenGLContext.MakeCurrentContext();
+        }
 
+        public void SwapBuffers()
+        {
+            this.OpenGLContext.FlushBuffer();
+        }
 
+        public event EventHandler Initialized = delegate { };
+        public event EventHandler Resize = delegate {  };
+        public event EventHandler ShuttingDown = delegate { };
+    }
 }

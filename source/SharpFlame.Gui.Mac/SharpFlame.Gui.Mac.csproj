@@ -60,20 +60,27 @@
     <EnablePackageSigning>true</EnablePackageSigning>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Eto">
+      <HintPath>..\packages\Eto-20140222\Eto.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto.Platform.Mac">
+      <HintPath>..\packages\Eto-20140222\Eto.Platform.Mac.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoMac">
+      <HintPath>..\packages\Eto-20140222\MonoMac.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
-    <Reference Include="MonoMac" />
-    <Reference Include="Eto">
-      <HintPath>..\lib\Eto.dll</HintPath>
-    </Reference>
-    <Reference Include="Eto.Platform.Mac">
-      <HintPath>..\lib\Eto.Platform.Mac.dll</HintPath>
-    </Reference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SharpFlame.Gui\SharpFlame.Gui.csproj">
+      <Project>{ea9d0d64-812b-4a4f-9227-6bec303a10db}</Project>
+      <Name>SharpFlame.Gui</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
   </ItemGroup>
