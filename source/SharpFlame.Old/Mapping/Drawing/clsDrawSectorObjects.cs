@@ -3,12 +3,10 @@
 using System;
 using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
-using SharpFlame.Old.AppSettings;
 using SharpFlame.Old.Domain;
 using SharpFlame.Old.Graphics.OpenGL;
 using SharpFlame.Old.Mapping.Objects;
 using SharpFlame.Old.Maths;
-using SharpFlame.Old.AppSettings;
 using SharpFlame.Core.Domain;
 using SharpFlame.Old.Domain;
 using SharpFlame.Old.Graphics.OpenGL;
@@ -100,7 +98,7 @@ namespace SharpFlame.Old.Mapping.Drawing
                             {
                                 TextLabel = new clsTextLabel();
                                 TextLabel.TextFont = App.UnitLabelFont;
-                                TextLabel.SizeY = SettingsManager.Settings.FontSize;
+                                TextLabel.SizeY = App.Settings.FontSize;
                                 TextLabel.Colour.Red = 1.0F;
                                 TextLabel.Colour.Green = 1.0F;
                                 TextLabel.Colour.Blue = 1.0F;

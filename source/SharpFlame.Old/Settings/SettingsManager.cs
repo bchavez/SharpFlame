@@ -39,7 +39,6 @@ using NLog;
 using OpenTK;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain.Colors;
-using SharpFlame.Old.AppSettings;
 
 namespace SharpFlame.Old.Settings
 {

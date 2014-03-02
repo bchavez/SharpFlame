@@ -39,7 +39,7 @@ using SharpFlame.Core;
 using SharpFlame.Gui.Forms;
 using SharpFlame.Gui.Controls;
 using SharpFlame.Old;
-using SharpFlame.Old.AppSettings;
+using SharpFlame.Old.Domain.ObjData;
 using Size = Eto.Drawing.Size;
 using Font = System.Drawing.Font;
 using FontStyle = System.Drawing.FontStyle;
@@ -70,9 +70,6 @@ namespace SharpFlame.Gui
             App.Initalize ();
 
             App.SetProgramSubDirs();
-
-            SettingsManager.CreateSettingOptions();
-            KeyboardManager.CreateControls(); //needed to load key control settings
 
             try
             {
@@ -124,13 +121,24 @@ namespace SharpFlame.Gui
         void onGLControlInitialized(object o, EventArgs e) {
             GlTexturesView.MakeCurrent ();
 
+            // Load tileset directories.
             foreach (var path in Settings.TilesetDirectories) {
                 if (path != null && path != "") {
                     initializeResult.Add (App.LoadTilesets (PathUtil.EndWithPathSeperator (path)));
                 }
             }
 
-            makeFont ();
+            // Load Object Data.
+            App.ObjectData = new clsObjectData();
+            // var ObjectDataNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultObjectDataPathNum));
+            foreach (var path in Settings.ObjectDataDirectories) {
+                if (path != null && path != "") {
+                    initializeResult.Add(App.ObjectData.LoadDirectory(path));
+                }
+            }
+
+            // Make the GL Font.
+            makeGlFont ();
 
             if (initializeResult.HasProblems)
             {
@@ -153,7 +161,7 @@ namespace SharpFlame.Gui
                 #endif
 
                 if (e.PropertyName.StartsWith("Font") && GlTexturesView.IsInitialized) {
-                    makeFont();
+                    makeGlFont();
                 }
             };
 
@@ -187,7 +195,7 @@ namespace SharpFlame.Gui
             };
         }
 
-        void makeFont()
+        void makeGlFont()
         {
             var style = FontStyle.Regular;
             if ( Settings.FontBold )

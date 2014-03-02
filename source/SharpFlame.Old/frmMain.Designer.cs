@@ -401,7 +401,6 @@ namespace SharpFlame.Old
 			this.menuGenerator = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuGenerator.Click += this.GeneratorToolStripMenuItem_Click;
 			this.menuOptions = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuOptions.Click += this.menuOptions_Click;
 			this.TableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
 			this.TabPage13 = new System.Windows.Forms.TabPage();
 			this.TabPage14 = new System.Windows.Forms.TabPage();

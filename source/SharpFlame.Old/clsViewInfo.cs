@@ -4,7 +4,6 @@ using System;
 using System.Windows.Forms;
 using NLog;
 using SharpFlame.Old.Collections;
-using SharpFlame.Old.AppSettings;
 using SharpFlame.Old.Controls;
 using SharpFlame.Core;
 using SharpFlame.Core.Collections;
@@ -46,7 +45,7 @@ namespace SharpFlame.Old
             MapViewControl = mapViewControl;
 
             ViewPos = new XYZInt(0, 3072, 0);
-            FovMultiplierSet(SettingsManager.Settings.FOVDefault);
+            FovMultiplierSet(App.Settings.FOVDefault);
             ViewAngleSetToDefault();
             LookAtPos(new XYInt((int)(map.Terrain.TileSize.X * Constants.TerrainGridSpacing / 2.0D),
                 (int)(map.Terrain.TileSize.Y * Constants.TerrainGridSpacing / 2.0D)));
@@ -531,7 +530,7 @@ namespace SharpFlame.Old
             else
             {
                 var mouseOverTerrain = new clsMouseOver.clsOverTerrain();
-                if ( SettingsManager.Settings.DirectPointer )
+                if ( App.Settings.DirectPointer )
                 {
                     if ( ScreenXYGetTerrainPos(MouseOver.ScreenPos, ref mouseOverTerrain.Pos) )
                     {
@@ -1481,48 +1480,48 @@ namespace SharpFlame.Old
 
             var tile = mouseOverTerrain.Tile.Normal;
 
-            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Gateway_Delete) )
-            {
-                var a = 0;
-                var low = new XYInt();
-                var high = new XYInt();
-                a = 0;
-                while ( a < Map.Gateways.Count )
-                {
-                    MathUtil.ReorderXY(Map.Gateways[a].PosA, Map.Gateways[a].PosB, ref low, ref high);
-                    if ( low.X <= tile.X
-                         & high.X >= tile.X
-                         & low.Y <= tile.Y
-                         & high.Y >= tile.Y )
-                    {
-                        Map.GatewayRemoveStoreChange(a);
-                        Map.UndoStepCreate("Gateway Delete");
-                        Map.MinimapMakeLater();
-                        MapViewControl.DrawViewLater();
-                        break;
-                    }
-                    a++;
-                }
-            }
-            else
-            {
-                if ( Map.SelectedTileA == null )
-                {
-                    Map.SelectedTileA = tile;
-                    MapViewControl.DrawViewLater();
-                }
-                else if ( tile.X == Map.SelectedTileA.X | tile.Y == Map.SelectedTileA.Y )
-                {
-                    if ( Map.GatewayCreateStoreChange(Map.SelectedTileA, tile) != null )
-                    {
-                        Map.UndoStepCreate("Gateway Place");
-                        Map.SelectedTileA = null;
-                        Map.SelectedTileB = null;
-                        Map.MinimapMakeLater();
-                        MapViewControl.DrawViewLater();
-                    }
-                }
-            }
+//            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Gateway_Delete) )
+//            {
+//                var a = 0;
+//                var low = new XYInt();
+//                var high = new XYInt();
+//                a = 0;
+//                while ( a < Map.Gateways.Count )
+//                {
+//                    MathUtil.ReorderXY(Map.Gateways[a].PosA, Map.Gateways[a].PosB, ref low, ref high);
+//                    if ( low.X <= tile.X
+//                         & high.X >= tile.X
+//                         & low.Y <= tile.Y
+//                         & high.Y >= tile.Y )
+//                    {
+//                        Map.GatewayRemoveStoreChange(a);
+//                        Map.UndoStepCreate("Gateway Delete");
+//                        Map.MinimapMakeLater();
+//                        MapViewControl.DrawViewLater();
+//                        break;
+//                    }
+//                    a++;
+//                }
+//            }
+//            else
+//            {
+//                if ( Map.SelectedTileA == null )
+//                {
+//                    Map.SelectedTileA = tile;
+//                    MapViewControl.DrawViewLater();
+//                }
+//                else if ( tile.X == Map.SelectedTileA.X | tile.Y == Map.SelectedTileA.Y )
+//                {
+//                    if ( Map.GatewayCreateStoreChange(Map.SelectedTileA, tile) != null )
+//                    {
+//                        Map.UndoStepCreate("Gateway Place");
+//                        Map.SelectedTileA = null;
+//                        Map.SelectedTileB = null;
+//                        Map.MinimapMakeLater();
+//                        MapViewControl.DrawViewLater();
+//                    }
+//                }
+//            }
         }
 
         public void MouseDown(MouseEventArgs e)
@@ -1558,83 +1557,83 @@ namespace SharpFlame.Old
                             };
                         if ( modTools.Tool == modTools.Tools.ObjectSelect )
                         {
-                            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Picker) )
-                            {
-                                if ( mouseOverTerrain.Units.Count > 0 )
-                                {
-                                    if ( mouseOverTerrain.Units.Count == 1 )
-                                    {
-                                        Program.frmMainInstance.ObjectPicker(mouseOverTerrain.Units[0].TypeBase);
-                                    }
-                                    else
-                                    {
-                                        MapViewControl.ListSelectBegin(true);
-                                    }
-                                }
-                            }
-                            else if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ScriptPosition) )
-                            {
-                                var newPosition = new clsScriptPosition(Map)
-                                    {
-                                        PosX = MouseLeftDown.OverTerrain.DownPos.Horizontal.X,
-                                        PosY = MouseLeftDown.OverTerrain.DownPos.Horizontal.Y
-                                    };
-                                Program.frmMainInstance.ScriptMarkerLists_Update();
-                            }
-                            else
-                            {
-                                if ( !KeyboardManager.KeyboardProfile.Active(KeyboardManager.UnitMultiselect) )
-                                {
-                                    Map.SelectedUnits.Clear();
-                                }
-                                Program.frmMainInstance.SelectedObject_Changed();
-                                Map.UnitSelectedAreaVertexA = mouseOverTerrain.Vertex.Normal;
-                                MapViewControl.DrawViewLater();
-                            }
-                        }
-                        else if ( modTools.Tool == modTools.Tools.TerrainBrush )
-                        {
-                            if ( Map.Tileset != null )
-                            {
-                                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Picker) )
-                                {
-                                    Program.frmMainInstance.TerrainPicker();
-                                }
-                                else
-                                {
-                                    ApplyTerrain();
-                                    if ( Program.frmMainInstance.cbxAutoTexSetHeight.Checked )
-                                    {
-                                        ApplyHeightSet(App.TerrainBrush,
-                                            Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
-                                    }
-                                }
-                            }
-                        }
-                        else if ( modTools.Tool == modTools.Tools.HeightSetBrush )
-                        {
-                            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Picker) )
-                            {
-                                Program.frmMainInstance.HeightPickerL();
-                            }
-                            else
-                            {
-                                ApplyHeightSet(App.HeightBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
-                            }
-                        }
-                        else if ( modTools.Tool == modTools.Tools.TextureBrush )
-                        {
-                            if ( Map.Tileset != null )
-                            {
-                                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Picker) )
-                                {
-                                    Program.frmMainInstance.TexturePicker();
-                                }
-                                else
-                                {
-                                    ApplyTexture();
-                                }
-                            }
+//                            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Picker) )
+//                            {
+//                                if ( mouseOverTerrain.Units.Count > 0 )
+//                                {
+//                                    if ( mouseOverTerrain.Units.Count == 1 )
+//                                    {
+//                                        Program.frmMainInstance.ObjectPicker(mouseOverTerrain.Units[0].TypeBase);
+//                                    }
+//                                    else
+//                                    {
+//                                        MapViewControl.ListSelectBegin(true);
+//                                    }
+//                                }
+//                            }
+//                            else if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ScriptPosition) )
+//                            {
+//                                var newPosition = new clsScriptPosition(Map)
+//                                    {
+//                                        PosX = MouseLeftDown.OverTerrain.DownPos.Horizontal.X,
+//                                        PosY = MouseLeftDown.OverTerrain.DownPos.Horizontal.Y
+//                                    };
+//                                Program.frmMainInstance.ScriptMarkerLists_Update();
+//                            }
+//                            else
+//                            {
+//                                if ( !KeyboardManager.KeyboardProfile.Active(KeyboardManager.UnitMultiselect) )
+//                                {
+//                                    Map.SelectedUnits.Clear();
+//                                }
+//                                Program.frmMainInstance.SelectedObject_Changed();
+//                                Map.UnitSelectedAreaVertexA = mouseOverTerrain.Vertex.Normal;
+//                                MapViewControl.DrawViewLater();
+//                            }
+//                        }
+//                        else if ( modTools.Tool == modTools.Tools.TerrainBrush )
+//                        {
+//                            if ( Map.Tileset != null )
+//                            {
+//                                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Picker) )
+//                                {
+//                                    Program.frmMainInstance.TerrainPicker();
+//                                }
+//                                else
+//                                {
+//                                    ApplyTerrain();
+//                                    if ( Program.frmMainInstance.cbxAutoTexSetHeight.Checked )
+//                                    {
+//                                        ApplyHeightSet(App.TerrainBrush,
+//                                            Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        else if ( modTools.Tool == modTools.Tools.HeightSetBrush )
+//                        {
+//                            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Picker) )
+//                            {
+//                                Program.frmMainInstance.HeightPickerL();
+//                            }
+//                            else
+//                            {
+//                                ApplyHeightSet(App.HeightBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
+//                            }
+//                        }
+//                        else if ( modTools.Tool == modTools.Tools.TextureBrush )
+//                        {
+//                            if ( Map.Tileset != null )
+//                            {
+//                                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Picker) )
+//                                {
+//                                    Program.frmMainInstance.TexturePicker();
+//                                }
+//                                else
+//                                {
+//                                    ApplyTexture();
+//                                }
+//                            }
                         }
                         else if ( modTools.Tool == modTools.Tools.CliffTriangle )
                         {
@@ -1652,15 +1651,15 @@ namespace SharpFlame.Old
                         {
                             if ( Map.Tileset != null )
                             {
-                                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Picker) )
-                                {
-                                    Program.frmMainInstance.TerrainPicker();
-                                }
-                                else
-                                {
-                                    ApplyTerrainFill(Program.frmMainInstance.FillCliffAction, Program.frmMainInstance.cbxFillInside.Checked);
-                                    MapViewControl.DrawViewLater();
-                                }
+//                                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Picker) )
+//                                {
+//                                    Program.frmMainInstance.TerrainPicker();
+//                                }
+//                                else
+//                                {
+//                                    ApplyTerrainFill(Program.frmMainInstance.FillCliffAction, Program.frmMainInstance.cbxFillInside.Checked);
+//                                    MapViewControl.DrawViewLater();
+//                                }
                             }
                         }
                         else if ( modTools.Tool == modTools.Tools.RoadPlace )
@@ -1770,14 +1769,14 @@ namespace SharpFlame.Old
                 }
                 else if ( modTools.Tool == modTools.Tools.HeightSetBrush )
                 {
-                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Picker) )
-                    {
-                        Program.frmMainInstance.HeightPickerR();
-                    }
-                    else
-                    {
-                        ApplyHeightSet(App.HeightBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetR.SelectedIndex]);
-                    }
+//                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Picker) )
+//                    {
+//                        Program.frmMainInstance.HeightPickerR();
+//                    }
+//                    else
+//                    {
+//                        ApplyHeightSet(App.HeightBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetR.SelectedIndex]);
+//                    }
                 }
             }
         }
@@ -1795,84 +1794,84 @@ namespace SharpFlame.Old
 
             move *= FOVMultiplier * (MapViewControl.GLSize.X + MapViewControl.GLSize.Y) * Math.Max(Math.Abs(ViewPos.Y), 512.0D);
 
-            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewZoomIn) )
-            {
-                FovScale_2EChange(Convert.ToDouble(- zoom));
-            }
-            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewZoomOut) )
-            {
-                FovScale_2EChange(zoom);
-            }
+//            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewZoomIn) )
+//            {
+//                FovScale_2EChange(Convert.ToDouble(- zoom));
+//            }
+//            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewZoomOut) )
+//            {
+//                FovScale_2EChange(zoom);
+//            }
 
             if ( App.ViewMoveType == ViewMoveType.Free )
             {
                 viewPosChangeXyz.X = 0;
                 viewPosChangeXyz.Y = 0;
                 viewPosChangeXyz.Z = 0;
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveForward) )
-                {
-                    Matrix3DMath.VectorForwardsRotationByMatrix(ViewAngleMatrix, move, ref xyzDbl);
-                    viewPosChangeXyz.AddDbl(xyzDbl);
-                }
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveBackward) )
-                {
-                    Matrix3DMath.VectorBackwardsRotationByMatrix(ViewAngleMatrix, move, ref xyzDbl);
-                    viewPosChangeXyz.AddDbl(xyzDbl);
-                }
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveLeft) )
-                {
-                    Matrix3DMath.VectorLeftRotationByMatrix(ViewAngleMatrix, move, ref xyzDbl);
-                    viewPosChangeXyz.AddDbl(xyzDbl);
-                }
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveRight) )
-                {
-                    Matrix3DMath.VectorRightRotationByMatrix(ViewAngleMatrix, move, ref xyzDbl);
-                    viewPosChangeXyz.AddDbl(xyzDbl);
-                }
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveUp) )
-                {
-                    Matrix3DMath.VectorUpRotationByMatrix(ViewAngleMatrix, move, ref xyzDbl);
-                    viewPosChangeXyz.AddDbl(xyzDbl);
-                }
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveDown) )
-                {
-                    Matrix3DMath.VectorDownRotationByMatrix(ViewAngleMatrix, move, ref xyzDbl);
-                    viewPosChangeXyz.AddDbl(xyzDbl);
-                }
-
+//  s              if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveForward) )
+//                {
+//                    Matrix3DMath.VectorForwardsRotationByMatrix(ViewAngleMatrix, move, ref xyzDbl);
+//                    viewPosChangeXyz.AddDbl(xyzDbl);
+//                }
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveBackward) )
+//                {
+//                    Matrix3DMath.VectorBackwardsRotationByMatrix(ViewAngleMatrix, move, ref xyzDbl);
+//                    viewPosChangeXyz.AddDbl(xyzDbl);
+//                }
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveLeft) )
+//                {
+//                    Matrix3DMath.VectorLeftRotationByMatrix(ViewAngleMatrix, move, ref xyzDbl);
+//                    viewPosChangeXyz.AddDbl(xyzDbl);
+//                }
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveRight) )
+//                {
+//                    Matrix3DMath.VectorRightRotationByMatrix(ViewAngleMatrix, move, ref xyzDbl);
+//                    viewPosChangeXyz.AddDbl(xyzDbl);
+//                }
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveUp) )
+//                {
+//                    Matrix3DMath.VectorUpRotationByMatrix(ViewAngleMatrix, move, ref xyzDbl);
+//                    viewPosChangeXyz.AddDbl(xyzDbl);
+//                }
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveDown) )
+//                {
+//                    Matrix3DMath.VectorDownRotationByMatrix(ViewAngleMatrix, move, ref xyzDbl);
+//                    viewPosChangeXyz.AddDbl(xyzDbl);
+//                }
+//
                 viewAngleChange.X = 0.0D;
                 viewAngleChange.Y = 0.0D;
                 viewAngleChange.Z = 0.0D;
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewLeft) )
-                {
-                    Matrix3DMath.VectorForwardsRotationByMatrix(ViewAngleMatrix, roll, ref xyzDbl);
-                    viewAngleChange += xyzDbl;
-                }
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRight) )
-                {
-                    Matrix3DMath.VectorBackwardsRotationByMatrix(ViewAngleMatrix, roll, ref xyzDbl);
-                    viewAngleChange += xyzDbl;
-                }
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewBackward) )
-                {
-                    Matrix3DMath.VectorLeftRotationByMatrix(ViewAngleMatrix, panRate, ref xyzDbl);
-                    viewAngleChange += xyzDbl;
-                }
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewForward) )
-                {
-                    Matrix3DMath.VectorRightRotationByMatrix(ViewAngleMatrix, panRate, ref xyzDbl);
-                    viewAngleChange += xyzDbl;
-                }
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRollLeft) )
-                {
-                    Matrix3DMath.VectorDownRotationByMatrix(ViewAngleMatrix, panRate, ref xyzDbl);
-                    viewAngleChange += xyzDbl;
-                }
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRollRight) )
-                {
-                    Matrix3DMath.VectorUpRotationByMatrix(ViewAngleMatrix, panRate, ref xyzDbl);
-                    viewAngleChange += xyzDbl;
-                }
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewLeft) )
+//                {
+//                    Matrix3DMath.VectorForwardsRotationByMatrix(ViewAngleMatrix, roll, ref xyzDbl);
+//                    viewAngleChange += xyzDbl;
+//                }
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRight) )
+//                {
+//                    Matrix3DMath.VectorBackwardsRotationByMatrix(ViewAngleMatrix, roll, ref xyzDbl);
+//                    viewAngleChange += xyzDbl;
+//                }
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewBackward) )
+//                {
+//                    Matrix3DMath.VectorLeftRotationByMatrix(ViewAngleMatrix, panRate, ref xyzDbl);
+//                    viewAngleChange += xyzDbl;
+//                }
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewForward) )
+//                {
+//                    Matrix3DMath.VectorRightRotationByMatrix(ViewAngleMatrix, panRate, ref xyzDbl);
+//                    viewAngleChange += xyzDbl;
+//                }
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRollLeft) )
+//                {
+//                    Matrix3DMath.VectorDownRotationByMatrix(ViewAngleMatrix, panRate, ref xyzDbl);
+//                    viewAngleChange += xyzDbl;
+//                }
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRollRight) )
+//                {
+//                    Matrix3DMath.VectorUpRotationByMatrix(ViewAngleMatrix, panRate, ref xyzDbl);
+//                    viewAngleChange += xyzDbl;
+//                }
 
                 if ( viewPosChangeXyz.X != 0.0D | viewPosChangeXyz.Y != 0.0D | viewPosChangeXyz.Z != 0.0D )
                 {
@@ -1893,84 +1892,84 @@ namespace SharpFlame.Old
 
                 Matrix3DMath.MatrixToPY(ViewAngleMatrix, ref anglePY);
                 Matrix3DMath.MatrixSetToYAngle(matrixA, anglePY.Yaw);
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveForward) )
-                {
-                    Matrix3DMath.VectorForwardsRotationByMatrix(matrixA, move, ref xyzDbl);
-                    viewPosChangeXyz.AddDbl(xyzDbl);
-                }
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveBackward) )
-                {
-                    Matrix3DMath.VectorBackwardsRotationByMatrix(matrixA, move, ref xyzDbl);
-                    viewPosChangeXyz.AddDbl(xyzDbl);
-                }
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveLeft) )
-                {
-                    Matrix3DMath.VectorLeftRotationByMatrix(matrixA, move, ref xyzDbl);
-                    viewPosChangeXyz.AddDbl(xyzDbl);
-                }
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveRight) )
-                {
-                    Matrix3DMath.VectorRightRotationByMatrix(matrixA, move, ref xyzDbl);
-                    viewPosChangeXyz.AddDbl(xyzDbl);
-                }
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveUp) )
-                {
-                    viewPosChangeXyz.Y += (int)move;
-                }
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveDown) )
-                {
-                    viewPosChangeXyz.Y -= (int)move;
-                }
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveForward) )
+//                {
+//                    Matrix3DMath.VectorForwardsRotationByMatrix(matrixA, move, ref xyzDbl);
+//                    viewPosChangeXyz.AddDbl(xyzDbl);
+//                }
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveBackward) )
+//                {
+//                    Matrix3DMath.VectorBackwardsRotationByMatrix(matrixA, move, ref xyzDbl);
+//                    viewPosChangeXyz.AddDbl(xyzDbl);
+//                }
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveLeft) )
+//                {
+//                    Matrix3DMath.VectorLeftRotationByMatrix(matrixA, move, ref xyzDbl);
+//                    viewPosChangeXyz.AddDbl(xyzDbl);
+//                }
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveRight) )
+//                {
+//                    Matrix3DMath.VectorRightRotationByMatrix(matrixA, move, ref xyzDbl);
+//                    viewPosChangeXyz.AddDbl(xyzDbl);
+//                }
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveUp) )
+//                {
+//                    viewPosChangeXyz.Y += (int)move;
+//                }
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveDown) )
+//                {
+//                    viewPosChangeXyz.Y -= (int)move;
+//                }
 
                 if ( App.RTSOrbit )
                 {
-                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewForward) )
-                    {
-                        anglePY.Pitch = MathUtil.ClampDbl(anglePY.Pitch + orbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
-                            MathUtil.RadOf90Deg - 0.03125D * MathUtil.RadOf1Deg);
-                        angleChanged = true;
-                    }
-                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewBackward) )
-                    {
-                        anglePY.Pitch = MathUtil.ClampDbl(anglePY.Pitch - orbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
-                            MathUtil.RadOf90Deg - 0.03125D * MathUtil.RadOf1Deg);
-                        angleChanged = true;
-                    }
-                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewLeft) )
-                    {
-                        anglePY.Yaw = MathUtil.AngleClamp(anglePY.Yaw + orbitRate);
-                        angleChanged = true;
-                    }
-                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRight) )
-                    {
-                        anglePY.Yaw = MathUtil.AngleClamp(anglePY.Yaw - orbitRate);
-                        angleChanged = true;
-                    }
+//                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewForward) )
+//                    {
+//                        anglePY.Pitch = MathUtil.ClampDbl(anglePY.Pitch + orbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
+//                            MathUtil.RadOf90Deg - 0.03125D * MathUtil.RadOf1Deg);
+//                        angleChanged = true;
+//                    }
+//                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewBackward) )
+//                    {
+//                        anglePY.Pitch = MathUtil.ClampDbl(anglePY.Pitch - orbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
+//                            MathUtil.RadOf90Deg - 0.03125D * MathUtil.RadOf1Deg);
+//                        angleChanged = true;
+//                    }
+//                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewLeft) )
+//                    {
+//                        anglePY.Yaw = MathUtil.AngleClamp(anglePY.Yaw + orbitRate);
+//                        angleChanged = true;
+//                    }
+//                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRight) )
+//                    {
+//                        anglePY.Yaw = MathUtil.AngleClamp(anglePY.Yaw - orbitRate);
+//                        angleChanged = true;
+//                    }
                 }
                 else
                 {
-                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewForward) )
-                    {
-                        anglePY.Pitch = MathUtil.ClampDbl(anglePY.Pitch - orbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
-                            MathUtil.RadOf90Deg - 0.03125D * MathUtil.RadOf1Deg);
-                        angleChanged = true;
-                    }
-                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewBackward) )
-                    {
-                        anglePY.Pitch = MathUtil.ClampDbl(anglePY.Pitch + orbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
-                            MathUtil.RadOf90Deg - 0.03125D * MathUtil.RadOf1Deg);
-                        angleChanged = true;
-                    }
-                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewLeft) )
-                    {
-                        anglePY.Yaw = MathUtil.AngleClamp(anglePY.Yaw - orbitRate);
-                        angleChanged = true;
-                    }
-                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRight) )
-                    {
-                        anglePY.Yaw = MathUtil.AngleClamp(anglePY.Yaw + orbitRate);
-                        angleChanged = true;
-                    }
+//                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewForward) )
+//                    {
+//                        anglePY.Pitch = MathUtil.ClampDbl(anglePY.Pitch - orbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
+//                            MathUtil.RadOf90Deg - 0.03125D * MathUtil.RadOf1Deg);
+//                        angleChanged = true;
+//                    }
+//                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewBackward) )
+//                    {
+//                        anglePY.Pitch = MathUtil.ClampDbl(anglePY.Pitch + orbitRate, Convert.ToDouble(- MathUtil.RadOf90Deg + 0.03125D * MathUtil.RadOf1Deg),
+//                            MathUtil.RadOf90Deg - 0.03125D * MathUtil.RadOf1Deg);
+//                        angleChanged = true;
+//                    }
+//                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewLeft) )
+//                    {
+//                        anglePY.Yaw = MathUtil.AngleClamp(anglePY.Yaw - orbitRate);
+//                        angleChanged = true;
+//                    }
+//                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRight) )
+//                    {
+//                        anglePY.Yaw = MathUtil.AngleClamp(anglePY.Yaw + orbitRate);
+//                        angleChanged = true;
+//                    }
                 }
 
                 //Dim HeightChange As Double

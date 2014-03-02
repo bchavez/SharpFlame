@@ -9,12 +9,10 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Old.Colors;
 using SharpFlame.Old.Graphics.OpenGL;
-using SharpFlame.Old.AppSettings;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Old.Domain;
-using SharpFlame.Old.Graphics.OpenGL;
 using SharpFlame.Old.Mapping;
 using SharpFlame.Old.Mapping.Objects;
 using SharpFlame.Old.Mapping.Tools;
@@ -430,47 +428,47 @@ namespace SharpFlame.Old.Controls
 
             App.IsViewKeyDown.Keys[(int)e.KeyCode] = true;
 
-            foreach ( Option<KeyboardControl> control in KeyboardManager.OptionsKeyboardControls.Options )
-            {
-                ((KeyboardControl)(KeyboardManager.KeyboardProfile.GetValue(control))).KeysChanged(App.IsViewKeyDown);
-            }
-
-            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Undo) )
-            {
-                var message = "";
-                if ( map.UndoPosition > 0 )
-                {
-                    message = "Undid: " + map.Undos[map.UndoPosition - 1].Name;
-                    var mapMessage = new Mapping.Message();
-                    mapMessage.Text = message;
-                    map.Messages.Add(mapMessage);
-                    map.UndoPerform();
-                    DrawViewLater();
-                }
-                else
-                {
-                    message = "Nothing to undo";
-                }
-                DisplayUndoMessage(message);
-            }
-            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Redo) )
-            {
-                var message = "";
-                if ( map.UndoPosition < map.Undos.Count )
-                {
-                    message = "Redid: " + map.Undos[map.UndoPosition].Name;
-                    var mapMessage = new Mapping.Message();
-                    mapMessage.Text = message;
-                    map.Messages.Add(mapMessage);
-                    map.RedoPerform();
-                    DrawViewLater();
-                }
-                else
-                {
-                    message = "Nothing to redo";
-                }
-                DisplayUndoMessage(message);
-            }
+//            foreach ( Option<KeyboardControl> control in KeyboardManager.OptionsKeyboardControls.Options )
+//            {
+//                ((KeyboardControl)(KeyboardManager.KeyboardProfile.GetValue(control))).KeysChanged(App.IsViewKeyDown);
+//            }
+//
+//            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Undo) )
+//            {
+//                var message = "";
+//                if ( map.UndoPosition > 0 )
+//                {
+//                    message = "Undid: " + map.Undos[map.UndoPosition - 1].Name;
+//                    var mapMessage = new Mapping.Message();
+//                    mapMessage.Text = message;
+//                    map.Messages.Add(mapMessage);
+//                    map.UndoPerform();
+//                    DrawViewLater();
+//                }
+//                else
+//                {
+//                    message = "Nothing to undo";
+//                }
+//                DisplayUndoMessage(message);
+//            }
+//            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Redo) )
+//            {
+//                var message = "";
+//                if ( map.UndoPosition < map.Undos.Count )
+//                {
+//                    message = "Redid: " + map.Undos[map.UndoPosition].Name;
+//                    var mapMessage = new Mapping.Message();
+//                    mapMessage.Text = message;
+//                    map.Messages.Add(mapMessage);
+//                    map.RedoPerform();
+//                    DrawViewLater();
+//                }
+//                else
+//                {
+//                    message = "Nothing to redo";
+//                }
+//                DisplayUndoMessage(message);
+//            }
             if ( App.IsViewKeyDown.Keys[(int)Keys.ControlKey] )
             {
                 if ( e.KeyCode == Keys.D1 )
@@ -516,210 +514,210 @@ namespace SharpFlame.Old.Controls
                 App.VisionRadius_2E_Changed();
             }
 
-            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveType) )
-            {
-                if ( App.ViewMoveType == ViewMoveType.Free )
-                {
-                    App.ViewMoveType = ViewMoveType.RTS;
-                }
-                else if ( App.ViewMoveType == ViewMoveType.RTS )
-                {
-                    App.ViewMoveType = ViewMoveType.Free;
-                }
-            }
-            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRotateType) )
-            {
-                App.RTSOrbit = !App.RTSOrbit;
-            }
-            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewReset) )
-            {
-                map.ViewInfo.FovMultiplierSet(SettingsManager.Settings.FOVDefault);
-                if ( App.ViewMoveType == ViewMoveType.Free )
-                {
-                    Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
-                    map.ViewInfo.ViewAngleSetRotate(matrixA);
-                }
-                else if ( App.ViewMoveType == ViewMoveType.RTS )
-                {
-                    Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
-                    map.ViewInfo.ViewAngleSetRotate(matrixA);
-                }
-            }
-            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewTextures) )
-            {
-                App.Draw_TileTextures = !App.Draw_TileTextures;
-                DrawViewLater();
-            }
-            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewWireframe) )
-            {
-                App.Draw_TileWireframe = !App.Draw_TileWireframe;
-                DrawViewLater();
-            }
-            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewUnits) )
-            {
-                App.Draw_Units = !App.Draw_Units;
-                
-                var sectorNum = new XYInt();
-                for (var y = 0; y <= map.SectorCount.Y - 1; y++ )
-                {
-                    for (var  x = 0; x <= map.SectorCount.X - 1; x++ )
-                    {
-                        foreach ( var connection in map.Sectors[x, y].Units )
-                        {    
-                            var Unit = connection.Unit;
-                            if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
-                            {
-                                if ( ((StructureTypeBase)Unit.TypeBase).StructureBasePlate != null )
-                                {
-                                    sectorNum.X = x;
-                                    sectorNum.Y = y;
-                                    map.SectorGraphicsChanges.Changed(sectorNum);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                map.Update();
-                DrawViewLater();
-            }
-            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewScriptMarkers) )
-            {
-                App.Draw_ScriptMarkers = !App.Draw_ScriptMarkers;
-                DrawViewLater();
-            }
-            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewLighting) )
-            {
-                if ( App.Draw_Lighting == DrawLighting.Off )
-                {
-                    App.Draw_Lighting = DrawLighting.Half;
-                }
-                else if ( App.Draw_Lighting == DrawLighting.Half )
-                {
-                    App.Draw_Lighting = DrawLighting.Normal;
-                }
-                else if ( App.Draw_Lighting == DrawLighting.Normal )
-                {
-                    App.Draw_Lighting = DrawLighting.Off;
-                }
-                DrawViewLater();
-            }
-            if ( modTools.Tool == modTools.Tools.TextureBrush )
-            {
-                if ( mouseOverTerrain != null )
-                {
-                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Clockwise) )
-                    {
-                        map.ViewInfo.ApplyTextureClockwise();
-                    }
-                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.CounterClockwise) )
-                    {
-                        map.ViewInfo.ApplyTextureCounterClockwise();
-                    }
-                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.TextureFlip) )
-                    {
-                        map.ViewInfo.ApplyTextureFlipX();
-                    }
-                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.TriFlip) )
-                    {
-                        map.ViewInfo.ApplyTriFlip();
-                    }
-                }
-            }
-            if ( modTools.Tool == modTools.Tools.ObjectSelect )
-            {
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.UnitDelete) )
-                {
-                    if ( map.SelectedUnits.Count > 0 )
-                    {
-                        foreach ( var unit in map.SelectedUnits.GetItemsAsSimpleList() )
-                        {
-                            
-                            map.UnitRemoveStoreChange(unit.MapLink.ArrayPosition);
-                        }
-                        Program.frmMainInstance.SelectedObject_Changed();
-                        map.UndoStepCreate("Object Deleted");
-                        map.Update();
-                        map.MinimapMakeLater();
-                        DrawViewLater();
-                    }
-                }
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.UnitMove) )
-                {
-                    if ( mouseOverTerrain != null )
-                    {
-                        if ( map.SelectedUnits.Count > 0 )
-                        {
-                            var centre = App.CalcUnitsCentrePos(map.SelectedUnits.GetItemsAsSimpleList());
-                            var offset = new XYInt();
-                            offset.X = ((int)(Math.Round(Convert.ToDouble((mouseOverTerrain.Pos.Horizontal.X - centre.X) / Constants.TerrainGridSpacing)))) *
-                                       Constants.TerrainGridSpacing;
-                            offset.Y = ((int)(Math.Round(Convert.ToDouble((mouseOverTerrain.Pos.Horizontal.Y - centre.Y) / Constants.TerrainGridSpacing)))) *
-                                       Constants.TerrainGridSpacing;
-                            var objectPosOffset = new clsObjectPosOffset
-                                {
-                                    Map = map,
-                                    Offset = offset
-                                };
-                            map.SelectedUnitsAction(objectPosOffset);
-
-                            map.UndoStepCreate("Objects Moved");
-                            map.Update();
-                            map.MinimapMakeLater();
-                            Program.frmMainInstance.SelectedObject_Changed();
-                            DrawViewLater();
-                        }
-                    }
-                }
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Clockwise) )
-                {
-                    var objectRotationOffset = new clsObjectRotationOffset
-                        {
-                            Map = map,
-                            Offset = -90
-                        };
-                    map.SelectedUnitsAction(objectRotationOffset);
-                    map.Update();
-                    Program.frmMainInstance.SelectedObject_Changed();
-                    map.UndoStepCreate("Object Rotated");
-                    DrawViewLater();
-                }
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.CounterClockwise) )
-                {
-                    var objectRotationOffset = new clsObjectRotationOffset
-                        {
-                            Map = map,
-                            Offset = 90
-                        };
-                    map.SelectedUnitsAction(objectRotationOffset);
-                    map.Update();
-                    Program.frmMainInstance.SelectedObject_Changed();
-                    map.UndoStepCreate("Object Rotated");
-                    DrawViewLater();
-                }
-            }
-
-            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Deselect) )
-            {
-                modTools.Tool = modTools.Tools.ObjectSelect;
-                DrawViewLater();
-            }
-
-            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.PreviousTool) )
-            {
-                modTools.Tool = modTools.PreviousTool;
-                DrawViewLater();
-            }
+//            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewMoveType) )
+//            {
+//                if ( App.ViewMoveType == ViewMoveType.Free )
+//                {
+//                    App.ViewMoveType = ViewMoveType.RTS;
+//                }
+//                else if ( App.ViewMoveType == ViewMoveType.RTS )
+//                {
+//                    App.ViewMoveType = ViewMoveType.Free;
+//                }
+//            }
+//            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewRotateType) )
+//            {
+//                App.RTSOrbit = !App.RTSOrbit;
+//            }
+//            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewReset) )
+//            {
+//                map.ViewInfo.FovMultiplierSet(App.Settings.FOVDefault);
+//                if ( App.ViewMoveType == ViewMoveType.Free )
+//                {
+//                    Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
+//                    map.ViewInfo.ViewAngleSetRotate(matrixA);
+//                }
+//                else if ( App.ViewMoveType == ViewMoveType.RTS )
+//                {
+//                    Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
+//                    map.ViewInfo.ViewAngleSetRotate(matrixA);
+//                }
+//            }
+//            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewTextures) )
+//            {
+//                App.Draw_TileTextures = !App.Draw_TileTextures;
+//                DrawViewLater();
+//            }
+//            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewWireframe) )
+//            {
+//                App.Draw_TileWireframe = !App.Draw_TileWireframe;
+//                DrawViewLater();
+//            }
+//            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewUnits) )
+//            {
+//                App.Draw_Units = !App.Draw_Units;
+//                
+//                var sectorNum = new XYInt();
+//                for (var y = 0; y <= map.SectorCount.Y - 1; y++ )
+//                {
+//                    for (var  x = 0; x <= map.SectorCount.X - 1; x++ )
+//                    {
+//                        foreach ( var connection in map.Sectors[x, y].Units )
+//                        {    
+//                            var Unit = connection.Unit;
+//                            if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
+//                            {
+//                                if ( ((StructureTypeBase)Unit.TypeBase).StructureBasePlate != null )
+//                                {
+//                                    sectorNum.X = x;
+//                                    sectorNum.Y = y;
+//                                    map.SectorGraphicsChanges.Changed(sectorNum);
+//                                    break;
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//                map.Update();
+//                DrawViewLater();
+//            }
+//            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewScriptMarkers) )
+//            {
+//                App.Draw_ScriptMarkers = !App.Draw_ScriptMarkers;
+//                DrawViewLater();
+//            }
+//            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewLighting) )
+//            {
+//                if ( App.Draw_Lighting == DrawLighting.Off )
+//                {
+//                    App.Draw_Lighting = DrawLighting.Half;
+//                }
+//                else if ( App.Draw_Lighting == DrawLighting.Half )
+//                {
+//                    App.Draw_Lighting = DrawLighting.Normal;
+//                }
+//                else if ( App.Draw_Lighting == DrawLighting.Normal )
+//                {
+//                    App.Draw_Lighting = DrawLighting.Off;
+//                }
+//                DrawViewLater();
+//            }
+//            if ( modTools.Tool == modTools.Tools.TextureBrush )
+//            {
+//                if ( mouseOverTerrain != null )
+//                {
+//                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Clockwise) )
+//                    {
+//                        map.ViewInfo.ApplyTextureClockwise();
+//                    }
+//                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.CounterClockwise) )
+//                    {
+//                        map.ViewInfo.ApplyTextureCounterClockwise();
+//                    }
+//                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.TextureFlip) )
+//                    {
+//                        map.ViewInfo.ApplyTextureFlipX();
+//                    }
+//                    if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.TriFlip) )
+//                    {
+//                        map.ViewInfo.ApplyTriFlip();
+//                    }
+//                }
+//            }
+//            if ( modTools.Tool == modTools.Tools.ObjectSelect )
+//            {
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.UnitDelete) )
+//                {
+//                    if ( map.SelectedUnits.Count > 0 )
+//                    {
+//                        foreach ( var unit in map.SelectedUnits.GetItemsAsSimpleList() )
+//                        {
+//                            
+//                            map.UnitRemoveStoreChange(unit.MapLink.ArrayPosition);
+//                        }
+//                        Program.frmMainInstance.SelectedObject_Changed();
+//                        map.UndoStepCreate("Object Deleted");
+//                        map.Update();
+//                        map.MinimapMakeLater();
+//                        DrawViewLater();
+//                    }
+//                }
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.UnitMove) )
+//                {
+//                    if ( mouseOverTerrain != null )
+//                    {
+//                        if ( map.SelectedUnits.Count > 0 )
+//                        {
+//                            var centre = App.CalcUnitsCentrePos(map.SelectedUnits.GetItemsAsSimpleList());
+//                            var offset = new XYInt();
+//                            offset.X = ((int)(Math.Round(Convert.ToDouble((mouseOverTerrain.Pos.Horizontal.X - centre.X) / Constants.TerrainGridSpacing)))) *
+//                                       Constants.TerrainGridSpacing;
+//                            offset.Y = ((int)(Math.Round(Convert.ToDouble((mouseOverTerrain.Pos.Horizontal.Y - centre.Y) / Constants.TerrainGridSpacing)))) *
+//                                       Constants.TerrainGridSpacing;
+//                            var objectPosOffset = new clsObjectPosOffset
+//                                {
+//                                    Map = map,
+//                                    Offset = offset
+//                                };
+//                            map.SelectedUnitsAction(objectPosOffset);
+//
+//                            map.UndoStepCreate("Objects Moved");
+//                            map.Update();
+//                            map.MinimapMakeLater();
+//                            Program.frmMainInstance.SelectedObject_Changed();
+//                            DrawViewLater();
+//                        }
+//                    }
+//                }
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Clockwise) )
+//                {
+//                    var objectRotationOffset = new clsObjectRotationOffset
+//                        {
+//                            Map = map,
+//                            Offset = -90
+//                        };
+//                    map.SelectedUnitsAction(objectRotationOffset);
+//                    map.Update();
+//                    Program.frmMainInstance.SelectedObject_Changed();
+//                    map.UndoStepCreate("Object Rotated");
+//                    DrawViewLater();
+//                }
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.CounterClockwise) )
+//                {
+//                    var objectRotationOffset = new clsObjectRotationOffset
+//                        {
+//                            Map = map,
+//                            Offset = 90
+//                        };
+//                    map.SelectedUnitsAction(objectRotationOffset);
+//                    map.Update();
+//                    Program.frmMainInstance.SelectedObject_Changed();
+//                    map.UndoStepCreate("Object Rotated");
+//                    DrawViewLater();
+//                }
+//            }
+//
+//            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Deselect) )
+//            {
+//                modTools.Tool = modTools.Tools.ObjectSelect;
+//                DrawViewLater();
+//            }
+//
+//            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.PreviousTool) )
+//            {
+//                modTools.Tool = modTools.PreviousTool;
+//                DrawViewLater();
+//            }
         }
 
         private void OpenGL_KeyUp(object sender, KeyEventArgs e)
         {
             App.IsViewKeyDown.Keys[(int)e.KeyCode] = false;
 
-            foreach ( Option<KeyboardControl> control in KeyboardManager.OptionsKeyboardControls.Options )
-            {
-                ((KeyboardControl)(KeyboardManager.KeyboardProfile.GetValue(control))).KeysChanged(App.IsViewKeyDown);
-            }
+//            foreach ( Option<KeyboardControl> control in KeyboardManager.OptionsKeyboardControls.Options )
+//            {
+//                ((KeyboardControl)(KeyboardManager.KeyboardProfile.GetValue(control))).KeysChanged(App.IsViewKeyDown);
+//            }
         }
 
         private void OpenGL_MouseUp(object sender, MouseEventArgs e)

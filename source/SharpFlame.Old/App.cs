@@ -12,7 +12,6 @@ using NLog;
 using OpenTK;
 using OpenTK.Graphics;
 using SharpFlame.Core.Extensions;
-using SharpFlame.Old.AppSettings;
 using SharpFlame.Core;
 using SharpFlame.Core.Collections;
 using SharpFlame.Core.Domain;
@@ -282,10 +281,10 @@ namespace SharpFlame.Old
         {
             IsViewKeyDown.Deactivate();
 
-            foreach ( Option<KeyboardControl> control in KeyboardManager.OptionsKeyboardControls.Options )
-            {
-                ((KeyboardControl)(KeyboardManager.KeyboardProfile.GetValue(control))).KeysChanged(IsViewKeyDown);
-            }
+//            foreach ( Option<KeyboardControl> control in KeyboardManager.OptionsKeyboardControls.Options )
+//            {
+//                ((KeyboardControl)(KeyboardManager.KeyboardProfile.GetValue(control))).KeysChanged(IsViewKeyDown);
+//            }
         }
 
         public static void CreateTemplateDroidTypes()

@@ -6,7 +6,6 @@ using System.Threading;
 using System.Windows.Forms;
 using OpenTK;
 using OpenTK.Graphics;
-using SharpFlame.Old.AppSettings;
 using SharpFlame.Core;
 using Timer = System.Windows.Forms.Timer;
 
@@ -21,7 +20,6 @@ namespace SharpFlame.Old
 
         public static frmMain frmMainInstance;
         public static frmGenerator frmGeneratorInstance;
-        public static frmOptions frmOptionsInstance;
 
         public static GLControl OpenGL1;
         public static GLControl OpenGL2;
@@ -33,8 +31,8 @@ namespace SharpFlame.Old
 
             App.SetProgramSubDirs();
 
-            SettingsManager.CreateSettingOptions();
-            KeyboardManager.CreateControls(); //needed to load key control settings
+//            SettingsManager.CreateSettingOptions();
+//            KeyboardManager.CreateControls(); //needed to load key control settings
 
             try
             {
@@ -44,16 +42,16 @@ namespace SharpFlame.Old
             {
             }
 
-            var SettingsLoadResult = SettingsManager.SettingsLoad(ref SettingsManager.InitializeSettings);        
+//            var SettingsLoadResult = SettingsManager.SettingsLoad(ref SettingsManager.InitializeSettings);        
 
-            InitializeResult.Add(SettingsLoadResult);
+//            InitializeResult.Add(SettingsLoadResult);
 
 
-            OpenGL1 =
-                new GLControl(new GraphicsMode(new ColorFormat(SettingsManager.InitializeSettings.MapViewBPP), SettingsManager.InitializeSettings.MapViewDepth, 0));
-            OpenGL2 =
-                new GLControl(new GraphicsMode(new ColorFormat(SettingsManager.InitializeSettings.TextureViewBPP), SettingsManager.InitializeSettings.TextureViewDepth,
-                    0));
+//            OpenGL1 =
+//                new GLControl(new GraphicsMode(new ColorFormat(SettingsManager.InitializeSettings.MapViewBPP), SettingsManager.InitializeSettings.MapViewDepth, 0));
+//            OpenGL2 =
+//                new GLControl(new GraphicsMode(new ColorFormat(SettingsManager.InitializeSettings.TextureViewBPP), SettingsManager.InitializeSettings.TextureViewDepth,
+//                    0));
 
             App.Random = new Random();
 

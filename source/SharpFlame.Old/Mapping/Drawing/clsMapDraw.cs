@@ -5,12 +5,10 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Old.Colors;
 using SharpFlame.Old.Graphics.OpenGL;
-using SharpFlame.Old.AppSettings;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Old.FileIO;
-using SharpFlame.Old.Graphics.OpenGL;
 using SharpFlame.Old.Mapping.Drawing;
 using SharpFlame.Old.Mapping.Objects;
 using SharpFlame.Old.Mapping.Script;
@@ -67,7 +65,7 @@ namespace SharpFlame.Old.Mapping
             var glSize = ViewInfo.MapViewControl.GLSize;
             var drawCentre = default(XYDouble);
 
-            dblTemp = SettingsManager.Settings.MinimapSize;
+            dblTemp = App.Settings.MinimapSize;
             ViewInfo.TilesPerMinimapPixel = Math.Sqrt(Terrain.TileSize.X * Terrain.TileSize.X + Terrain.TileSize.Y * Terrain.TileSize.Y) /
                                                (MathUtil.RootTwo * dblTemp);
             if ( MinimapTextureSize > 0 & ViewInfo.TilesPerMinimapPixel > 0.0D )
@@ -255,7 +253,7 @@ namespace SharpFlame.Old.Mapping
                             selectionLabel.Colour.Blue = 1.0F;
                             selectionLabel.Colour.Alpha = 1.0F;
                             selectionLabel.TextFont = App.UnitLabelFont;
-                            selectionLabel.SizeY = SettingsManager.Settings.FontSize;
+                            selectionLabel.SizeY = App.Settings.FontSize;
                             selectionLabel.Pos = screenPos;
                             selectionLabel.Text = finishXy.X - startXy.X + "x" + Convert.ToString(finishXy.Y - startXy.Y);
                         }
@@ -858,7 +856,7 @@ namespace SharpFlame.Old.Mapping
                             textLabel.Colour.Blue = 0.5F;
                             textLabel.Colour.Alpha = 0.75F;
                             textLabel.TextFont = App.UnitLabelFont;
-                            textLabel.SizeY = SettingsManager.Settings.FontSize;
+                            textLabel.SizeY = App.Settings.FontSize;
                             textLabel.Pos = screenPos;
                             textLabel.Text = scriptPosition.Label;
                             scriptMarkerTextLabels.Add(textLabel);
@@ -887,7 +885,7 @@ namespace SharpFlame.Old.Mapping
                             textLabel.Colour.Blue = 0.5F;
                             textLabel.Colour.Alpha = 0.75F;
                             textLabel.TextFont = App.UnitLabelFont;
-                            textLabel.SizeY = SettingsManager.Settings.FontSize;
+                            textLabel.SizeY = App.Settings.FontSize;
                             textLabel.Pos = screenPos;
                             textLabel.Text = scriptArea.Label;
                             scriptMarkerTextLabels.Add(textLabel);
@@ -912,7 +910,7 @@ namespace SharpFlame.Old.Mapping
                     textLabel.Colour.Blue = 1.0F;
                     textLabel.Colour.Alpha = 1.0F;
                     textLabel.TextFont = App.UnitLabelFont;
-                    textLabel.SizeY = SettingsManager.Settings.FontSize;
+                    textLabel.SizeY = App.Settings.FontSize;
                     textLabel.Pos.X = 32 + minimapSizeXy.X;
                     textLabel.Pos.Y = 32 + (int)(Math.Ceiling((decimal)(b * textLabel.SizeY)));
                     textLabel.Text = Convert.ToString(Messages[a].Text);

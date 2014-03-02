@@ -121,13 +121,6 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Compile Include="AppSettings\Change.cs" />
-    <Compile Include="AppSettings\ChangeInterface.cs" />
-    <Compile Include="AppSettings\KeyboardControl.cs" />
-    <Compile Include="AppSettings\KeyboardProfile.cs" />
-    <Compile Include="AppSettings\KeyboardProfileCreator.cs" />
-    <Compile Include="AppSettings\OptionCreator.cs" />
-    <Compile Include="AppSettings\OptionProfile.cs" />
     <Compile Include="Collections\Specialized\BooleanMap.cs" />
     <Compile Include="Domain\ObjData\clsTextFile.cs" />
     <Compile Include="Domain\Definitions.cs" />
@@ -173,7 +166,6 @@
     <Compile Include="frmKeyboardControl.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AppSettings\KeyboardManager.cs" />
     <Compile Include="Mapping\Changes\clsMapChanges.cs" />
     <Compile Include="Mapping\Drawing\clsMapDraw.cs" />
     <Compile Include="Mapping\Objects\clsMapObject.cs" />
@@ -219,15 +211,11 @@
     <Compile Include="Domain\ObjData\clsObjectData.cs" />
     <Compile Include="Mapping\Tiles\TileDirection.cs" />
     <Compile Include="Mapping\Tiles\TileOrientation.cs" />
-    <Compile Include="AppSettings\OptionGroup.cs" />
-    <Compile Include="AppSettings\OptionInterface.cs" />
-    <Compile Include="AppSettings\OptionProfileCreator.cs" />
     <Compile Include="Maths\Angles.cs" />
     <Compile Include="Maths\Matrix3DMath.cs" />
     <Compile Include="Painters\CliffBrush.cs" />
     <Compile Include="Painters\Painter.cs" />
     <Compile Include="Maths\Definitions.cs" />
-    <Compile Include="AppSettings\Options.cs" />
     <Compile Include="Painters\Road.cs" />
     <Compile Include="Painters\RoadBrush.cs" />
     <Compile Include="Painters\Terrain.cs" />
@@ -321,12 +309,6 @@
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmOptions.Designer.cs">
-      <DependentUpon>frmOptions.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmOptions.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="frmSplash.Designer.cs">
       <DependentUpon>frmSplash.cs</DependentUpon>
     </Compile>
@@ -352,7 +334,6 @@
     <Compile Include="Maths\MathUtil.cs" />
     <Compile Include="Painters\PainterFactory.cs" />
     <Compile Include="App.cs" />
-    <Compile Include="AppSettings\SettingsManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Application.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -446,9 +427,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmOptions.resx">
-      <DependentUpon>frmOptions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmSplash.resx">
       <DependentUpon>frmSplash.cs</DependentUpon>
