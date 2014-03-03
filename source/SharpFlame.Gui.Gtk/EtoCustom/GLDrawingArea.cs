@@ -32,7 +32,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Platform;
 using SharpFlame.Gui.Controls;
 
-namespace SharpFlame.Gui.Gtk
+namespace SharpFlame.Gui.Gtk.EtoCustom
 {
     [ToolboxItem(true)]
     public class GLDrawingArea : DrawingArea, IDisposable, IGLSurface

@@ -1,9 +1,7 @@
 ﻿using System;
-using Eto;
 using Eto.Forms;
-using SharpFlame.Gui;
 using SharpFlame.Gui.Controls;
-using SharpFlame.Gui.Windows.Eto;
+using SharpFlame.Gui.Windows.EtoCustom;
 
 namespace SharpFlame.Gui.Windows
 {

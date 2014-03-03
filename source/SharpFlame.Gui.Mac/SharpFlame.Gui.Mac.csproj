@@ -115,8 +115,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MacGLSurfaceHandler.cs" />
-    <Compile Include="MacGLView.cs" />
+    <Compile Include="EtoCustom\MacGLSurfaceHandler.cs" />
+    <Compile Include="EtoCustom\MacGLView.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

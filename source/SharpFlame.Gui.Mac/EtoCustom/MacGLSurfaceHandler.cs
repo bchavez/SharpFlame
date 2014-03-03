@@ -2,7 +2,7 @@
 using MonoMac.AppKit;
 using SharpFlame.Gui.Controls;
 
-namespace SharpFlame.Gui.Mac
+namespace SharpFlame.Gui.Mac.EtoCustom
 {
     internal class MacGLSurfaceHandler : MacView<MacGLView, GLSurface>, IGLSurfaceHandler
     {

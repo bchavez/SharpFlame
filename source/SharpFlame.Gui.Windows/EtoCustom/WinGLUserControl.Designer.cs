@@ -1,6 +1,4 @@
-﻿using System.Windows.Forms;
-
-namespace SharpFlame.Gui.Windows
+﻿namespace SharpFlame.Gui.Windows.EtoCustom
 {
     public partial class WinGLUserControl
     {

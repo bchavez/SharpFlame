@@ -2,6 +2,7 @@ using System.Diagnostics;
 using SharpFlame.Gui;
 using SharpFlame.Gui.Controls;
 using OpenTK;
+using SharpFlame.Gui.Gtk.EtoCustom;
 
 namespace SharpFlame.Gui.Gtk
 {

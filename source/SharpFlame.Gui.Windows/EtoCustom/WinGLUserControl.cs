@@ -34,7 +34,7 @@ using OpenTK.Graphics;
 using OpenTK.Platform;
 using SharpFlame.Gui.Controls;
 
-namespace SharpFlame.Gui.Windows
+namespace SharpFlame.Gui.Windows.EtoCustom
 {
     /// <summary>
     /// OpenGL-aware WinForms control.

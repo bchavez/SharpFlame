@@ -54,9 +54,19 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Eto\WinPanelHandler.cs" />
+    <Compile Include="EtoCustom\WinGLSurfaceHandler.cs" />
+    <Compile Include="EtoCustom\WinGLUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="EtoCustom\WinGLUserControl.Designer.cs">
+      <DependentUpon>WinGLUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EtoCustom\WinPanelHandler.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="EtoCustom\WinGLUserControl.resx">
+      <DependentUpon>WinGLUserControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -81,16 +91,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Compile Include="Win32Helper.cs" />
-    <Compile Include="WinGLSurfaceHandler.cs" />
-    <Compile Include="WinGLUserControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="WinGLUserControl.Designer.cs">
-      <DependentUpon>WinGLUserControl.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="WinGLUserControl.resx">
-      <DependentUpon>WinGLUserControl.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

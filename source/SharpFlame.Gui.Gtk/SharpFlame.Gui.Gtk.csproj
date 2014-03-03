@@ -80,9 +80,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EtoCustom\GLDrawingArea.cs" />
+    <Compile Include="EtoCustom\LinuxGLSurfaceHandler.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="GLDrawingArea.cs" />
-    <Compile Include="LinuxGLSurfaceHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpFlame.Old\SharpFlame.Old.csproj">

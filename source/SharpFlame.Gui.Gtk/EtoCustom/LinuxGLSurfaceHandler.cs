@@ -24,13 +24,11 @@
 // // */
 // #endregion
 //
-using System;
-using Gtk;
+
 using Eto.Platform.GtkSharp;
-using SharpFlame.Gui;
 using SharpFlame.Gui.Controls;
 
-namespace SharpFlame.Gui.Gtk
+namespace SharpFlame.Gui.Gtk.EtoCustom
 {
     internal class LinuxGLSurfaceHandler : GtkControl<GLDrawingArea, GLSurface>, IGLSurfaceHandler
     {

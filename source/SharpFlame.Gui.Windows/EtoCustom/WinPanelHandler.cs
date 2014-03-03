@@ -1,6 +1,6 @@
 ﻿using Eto.Platform.Windows;
 
-namespace SharpFlame.Gui.Windows.Eto
+namespace SharpFlame.Gui.Windows.EtoCustom
 {
     public class WinPanelHandler : PanelHandler
     {
