@@ -1,7 +1,6 @@
-﻿using Eto.Forms;
-using Eto.Platform.Windows;
+﻿using Eto.Platform.Windows;
 
-namespace SharpFlame.Gui.Windows.Override
+namespace SharpFlame.Gui.Windows.Eto
 {
     public class WinPanelHandler : PanelHandler
     {

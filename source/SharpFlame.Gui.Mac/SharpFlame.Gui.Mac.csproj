@@ -6,7 +6,7 @@
     <ProductVersion>12.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}</ProjectGuid>
-    <ProjectTypeGuids>{948B3504-5B70-4649-8FE4-BDE1FB46EC69};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
     <RootNamespace>SharpFlame.Gui.Mac</RootNamespace>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
@@ -92,6 +92,9 @@
     <EnableCodeSigning>true</EnableCodeSigning>
     <CreatePackage>true</CreatePackage>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>SharpFlame.Gui.Mac.Startup</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Eto">
       <HintPath>..\packages\Eto-20140222\Eto.dll</HintPath>
@@ -112,7 +115,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="MacGLSurfaceHandler.cs" />
+    <Compile Include="MacGLView.cs" />
+    <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />

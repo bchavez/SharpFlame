@@ -3,7 +3,7 @@ using Eto;
 using Eto.Forms;
 using SharpFlame.Gui;
 using SharpFlame.Gui.Controls;
-using SharpFlame.Gui.Windows.Override;
+using SharpFlame.Gui.Windows.Eto;
 
 namespace SharpFlame.Gui.Windows
 {
