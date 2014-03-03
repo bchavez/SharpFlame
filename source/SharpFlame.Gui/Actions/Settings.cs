@@ -37,7 +37,7 @@ namespace SharpFlame.Gui.Actions
             ID = "settings";
             MenuText = "&Settings";
             ToolBarText = "Settings";
-            Shortcut = Keys.F10;
+            Shortcut = Keys.F12;
         }
 
         public override void OnExecuted(EventArgs e)

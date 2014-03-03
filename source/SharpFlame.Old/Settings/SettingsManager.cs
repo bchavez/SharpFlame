@@ -39,7 +39,6 @@ using NLog;
 using OpenTK;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain.Colors;
-using SharpFlame.Old.AppSettings;
 
 namespace SharpFlame.Old.Settings
 {
@@ -53,7 +52,7 @@ namespace SharpFlame.Old.Settings
         public UInt32 AutoSaveMinIntervalSeconds { get; set; }
         public UInt32 AutoSaveMinChanges { get; set; }
         public UInt32 UndoLimit { get; set; }
-        public bool DirectoriesPrompt { get; set; }
+        public bool ShowOptionsAtStartup { get; set; }
         public bool DirectPointer { get; set; }
         private FontFamily fontFamily;
         public FontFamily FontFamily { 
@@ -143,7 +142,7 @@ namespace SharpFlame.Old.Settings
             AutoSaveMinIntervalSeconds = 180U;
             AutoSaveMinChanges = 20U;
             UndoLimit = 256U;
-            DirectoriesPrompt = true;
+            ShowOptionsAtStartup = true;
             DirectPointer = true;
             FontFamily = FontFamily.GenericSerif;
             FontBold = true;

@@ -13,7 +13,6 @@ using SharpFlame.Old.Bitmaps;
 using SharpFlame.Old.Collections;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Old.Mapping.IO.Minimap;
-using SharpFlame.Old.AppSettings;
 using SharpFlame.Old.Controls;
 using SharpFlame.Core;
 using SharpFlame.Core.Collections;
@@ -285,8 +284,6 @@ namespace SharpFlame.Old
                         return;
                 }
             }
-
-            SettingsManager.SettingsWrite();
         }
 
 #if !Mono
@@ -435,28 +432,28 @@ namespace SharpFlame.Old
             App.MinimapFeatureColour.Green = 0.5F;
             App.MinimapFeatureColour.Blue = 0.5F;
 
-            SettingsManager.UpdateSettings(SettingsManager.InitializeSettings);
-            SettingsManager.InitializeSettings = null;
-
-            if ( SettingsManager.Settings.DirectoriesPrompt )
-            {
-                Program.frmOptionsInstance = new frmOptions();
-                Program.frmOptionsInstance.FormClosing += Program.frmOptionsInstance.frmOptions_FormClosing;
-                if ( Program.frmOptionsInstance.ShowDialog() == DialogResult.Cancel )
-                {
-                    Application.Exit();
-                }
-            }
+//            SettingsManager.UpdateSettings(SettingsManager.InitializeSettings);
+//            SettingsManager.InitializeSettings = null;
+//
+//            if ( SettingsManager.Settings.DirectoriesPrompt )
+//            {
+//                Program.frmOptionsInstance = new frmOptions();
+//                Program.frmOptionsInstance.FormClosing += Program.frmOptionsInstance.frmOptions_FormClosing;
+//                if ( Program.frmOptionsInstance.ShowDialog() == DialogResult.Cancel )
+//                {
+//                    Application.Exit();
+//                }
+//            }
 
             // var tilesetNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultTilesetsPathNum));
-            var tilesetsList = (List<string>)SettingsManager.Settings.GetValue(SettingsManager.SettingTilesetDirectories);
-            foreach (var path in tilesetsList) {
-                if (path != null && path != "") {
-                    InitializeStatus = "Loading tilesets";
-                    Program.InitializeResult.Add(App.LoadTilesets(PathUtil.EndWithPathSeperator(path)));
-                    InitializeStatus = "";
-                }
-            }
+//            var tilesetsList = (List<string>)SettingsManager.Settings.GetValue(SettingsManager.SettingTilesetDirectories);
+//            foreach (var path in tilesetsList) {
+//                if (path != null && path != "") {
+//                    InitializeStatus = "Loading tilesets";
+//                    Program.InitializeResult.Add(App.LoadTilesets(PathUtil.EndWithPathSeperator(path)));
+//                    InitializeStatus = "";
+//                }
+//            }
 
             cboTileset_Update(-1);
 
@@ -465,16 +462,16 @@ namespace SharpFlame.Old
 
             App.CreateTemplateDroidTypes(); //do before loading data
 
-            App.ObjectData = new clsObjectData();
-            // var ObjectDataNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultObjectDataPathNum));
-            var objectDataList = (List<string>)(SettingsManager.Settings.GetValue(SettingsManager.SettingObjectDataDirectories));
-            foreach (var path in objectDataList) {
-                if (path != null && path != "") {
-                    InitializeStatus = "Loading object data";
-                    Program.InitializeResult.Add(App.ObjectData.LoadDirectory(path));
-                    InitializeStatus = "";
-                }
-            }
+//            App.ObjectData = new clsObjectData();
+//            // var ObjectDataNum = Convert.ToInt32(SettingsManager.Settings.get_Value(SettingsManager.Setting_DefaultObjectDataPathNum));
+//            var objectDataList = (List<string>)(SettingsManager.Settings.GetValue(SettingsManager.SettingObjectDataDirectories));
+//            foreach (var path in objectDataList) {
+//                if (path != null && path != "") {
+//                    InitializeStatus = "Loading object data";
+//                    Program.InitializeResult.Add(App.ObjectData.LoadDirectory(path));
+//                    InitializeStatus = "";
+//                }
+//            }
 
             DefaultGenerator.CreateGeneratorTilesets();
             PainterFactory.CreatePainterArizona();
@@ -570,25 +567,25 @@ namespace SharpFlame.Old
             double Pan = 0;
             double OrbitRate = 0;
 
-            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Fast) )
-            {
-                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Slow) )
-                {
-                    Rate = 8.0D;
-                }
-                else
-                {
-                    Rate = 4.0D;
-                }
-            }
-            else if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Slow) )
-            {
-                Rate = 0.25D;
-            }
-            else
-            {
-                Rate = 1.0D;
-            }
+//            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Fast) )
+//            {
+//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Slow) )
+//                {
+//                    Rate = 8.0D;
+//                }
+//                else
+//                {
+//                    Rate = 4.0D;
+//                }
+//            }
+//            else if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Slow) )
+//            {
+//                Rate = 0.25D;
+//            }
+//            else
+//            {
+            Rate = 1.0D;
+//            }
 
             Zoom = tmrKey.Interval * 0.002D;
             Move = tmrKey.Interval * Rate / 2048.0D;
@@ -611,7 +608,7 @@ namespace SharpFlame.Old
         {
             var Dialog = new OpenFileDialog();
 
-            Dialog.InitialDirectory = SettingsManager.Settings.OpenPath;
+            Dialog.InitialDirectory = App.Settings.OpenPath;
             Dialog.FileName = "";
             Dialog.Filter = "Warzone Map Files (*.fmap, *.wz, *.gam, *.lnd)|*.fmap;*.wz;*.gam;*.lnd|All Files (*.*)|*.*";
             Dialog.Multiselect = true;
@@ -619,7 +616,7 @@ namespace SharpFlame.Old
             {
                 return;
             }
-            SettingsManager.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
+            App.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
             var fileName = "";
             var Results = new Result("Loading maps", false);
             foreach ( var tempLoopVar_FileName in Dialog.FileNames )
@@ -635,14 +632,14 @@ namespace SharpFlame.Old
         {
             var Dialog = new OpenFileDialog();
 
-            Dialog.InitialDirectory = SettingsManager.Settings.OpenPath;
+            Dialog.InitialDirectory = App.Settings.OpenPath;
             Dialog.FileName = "";
             Dialog.Filter = "Image Files (*.bmp, *.png)|*.bmp;*.png|All Files (*.*)|*.*";
             if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
-            SettingsManager.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
+            App.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
 
             Bitmap HeightmapBitmap = null;
             var Result = BitmapUtil.LoadBitmap(Dialog.FileName, ref HeightmapBitmap);
@@ -708,14 +705,14 @@ namespace SharpFlame.Old
                 return;
             }
 
-            Dialog.InitialDirectory = SettingsManager.Settings.OpenPath;
+            Dialog.InitialDirectory = App.Settings.OpenPath;
             Dialog.FileName = "";
             Dialog.Filter = "TTP Files (*.ttp)|*.ttp|All Files (*.*)|*.*";
             if ( !(Dialog.ShowDialog(this) == DialogResult.OK) )
             {
                 return;
             }
-            SettingsManager.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
+            App.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
             var ttpLoader = new TTPLoader (Map);
             var result = ttpLoader.Load(Dialog.FileName);
             if (!result.HasProblems && !result.HasWarnings)
@@ -1076,14 +1073,14 @@ namespace SharpFlame.Old
 
             var Dialog = new SaveFileDialog();
 
-            Dialog.InitialDirectory = SettingsManager.Settings.SavePath;
+            Dialog.InitialDirectory = App.Settings.SavePath;
             Dialog.FileName = "";
             Dialog.Filter = "Editworld Files (*.lnd)|*.lnd";
             if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
-            SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
+            App.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
                  
             var lndSaver = new LNDSaver (Map);
             var result = lndSaver.Save(Dialog.FileName, true);
@@ -1101,14 +1098,14 @@ namespace SharpFlame.Old
 
             var Dialog = new SaveFileDialog();
 
-            Dialog.InitialDirectory = SettingsManager.Settings.SavePath;
+            Dialog.InitialDirectory = App.Settings.SavePath;
             Dialog.FileName = "";
             Dialog.Filter = "Bitmap File (*.bmp)|*.bmp";
             if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
-            SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
+            App.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
             var minmapSaver = new MinimapSaver (Map);
             var result = minmapSaver.Save(Dialog.FileName, true);
             if (result.HasProblems || result.HasWarnings) {
@@ -1127,14 +1124,14 @@ namespace SharpFlame.Old
 
             var Dialog = new SaveFileDialog();
 
-            Dialog.InitialDirectory = SettingsManager.Settings.SavePath;
+            Dialog.InitialDirectory = App.Settings.SavePath;
             Dialog.FileName = "";
             Dialog.Filter = "Bitmap File (*.bmp)|*.bmp";
             if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
-            SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
+            App.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
             var hmSaver = new HeightmapSaver (Map);
             var result = hmSaver.Save(Dialog.FileName, true);
             if (result.HasProblems || result.HasWarnings) {
@@ -1153,14 +1150,14 @@ namespace SharpFlame.Old
 
             var Dialog = new SaveFileDialog();
 
-            Dialog.InitialDirectory = SettingsManager.Settings.SavePath;
+            Dialog.InitialDirectory = App.Settings.SavePath;
             Dialog.FileName = "";
             Dialog.Filter = "TTP Files (*.ttp)|*.ttp";
             if ( Dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
-            SettingsManager.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
+            App.Settings.SavePath = Path.GetDirectoryName(Dialog.FileName);
             var ttpSaver = new TTPSaver (Map);
             var result = ttpSaver.Save(Dialog.FileName, true);
             if (result.HasProblems || result.HasWarnings) {
@@ -2430,7 +2427,7 @@ namespace SharpFlame.Old
 
             SelectedObject_Changed();
             Map.UndoStepCreate("Object Player Changed");
-            if ( SettingsManager.Settings.MinimapTeamColours )
+            if ( App.Settings.MinimapTeamColours )
             {
                 Map.MinimapMakeLater();
             }
@@ -3302,10 +3299,10 @@ namespace SharpFlame.Old
                 return;
             }
 
-            if ( !KeyboardManager.KeyboardProfile.Active(KeyboardManager.UnitMultiselect) )
-            {
-                Map.SelectedUnits.Clear();
-            }
+//            if ( !KeyboardManager.KeyboardProfile.Active(KeyboardManager.UnitMultiselect) )
+//            {
+//                Map.SelectedUnits.Clear();
+//            }
 
             var UnitGroup = Map.SelectedUnitGroup.Item;
             var Unit = default(Unit);
@@ -3327,17 +3324,17 @@ namespace SharpFlame.Old
             View_DrawViewLater();
         }
 
-        public void menuOptions_Click(Object sender, EventArgs e)
-        {
-            if ( Program.frmOptionsInstance != null )
-            {
-                Program.frmOptionsInstance.Activate();
-                return;
-            }
-            Program.frmOptionsInstance = new frmOptions();
-            Program.frmOptionsInstance.FormClosing += Program.frmOptionsInstance.frmOptions_FormClosing;
-            Program.frmOptionsInstance.Show();
-        }
+//        public void menuOptions_Click(Object sender, EventArgs e)
+//        {
+//            if ( Program.frmOptionsInstance != null )
+//            {
+//                Program.frmOptionsInstance.Activate();
+//                return;
+//            }
+//            Program.frmOptionsInstance = new frmOptions();
+//            Program.frmOptionsInstance.FormClosing += Program.frmOptionsInstance.frmOptions_FormClosing;
+//            Program.frmOptionsInstance.Show();
+//        }
 
         public void rdoCliffTriBrush_CheckedChanged(Object sender, EventArgs e)
         {
@@ -3421,12 +3418,12 @@ namespace SharpFlame.Old
         public void ObjectPicker(UnitTypeBase unitTypeBase)
         {
             modTools.Tool = modTools.Tools.ObjectPlace;
-            if ( !KeyboardManager.KeyboardProfile.Active(KeyboardManager.UnitMultiselect) )
-            {
-                dgvFeatures.ClearSelection();
-                dgvStructures.ClearSelection();
-                dgvDroids.ClearSelection();
-            }
+//            if ( !KeyboardManager.KeyboardProfile.Active(KeyboardManager.UnitMultiselect) )
+//            {
+//                dgvFeatures.ClearSelection();
+//                dgvStructures.ClearSelection();
+//                dgvDroids.ClearSelection();
+//            }
             SelectedObjectTypes.Clear();
             SelectedObjectTypes.Add(unitTypeBase.UnitType_frmMainSelectedLink);
             var Map = MainMap;
@@ -3490,11 +3487,11 @@ namespace SharpFlame.Old
                 }
             }
 
-            if ( SettingsManager.Settings.PickOrientation )
-            {
-                App.TextureOrientation = Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation;
-                TextureViewControl.DrawViewLater();
-            }
+//            if ( SettingsManager.Settings.PickOrientation )
+//            {
+//                App.TextureOrientation = Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation;
+//                TextureViewControl.DrawViewLater();
+//            }
         }
 
         public void HeightPickerL()
@@ -4106,7 +4103,7 @@ namespace SharpFlame.Old
             {
                 return;
             }
-            SettingsManager.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
+            App.Settings.OpenPath = Path.GetDirectoryName(Dialog.FileName);
             var Result = new Result("Loading map", false);
             Result.Take(LoadMap(Dialog.FileName));
             App.ShowWarnings(Result);
@@ -4323,10 +4320,10 @@ namespace SharpFlame.Old
                 return;
             }
 
-            if ( !KeyboardManager.KeyboardProfile.Active(KeyboardManager.UnitMultiselect) )
-            {
-                Map.SelectedUnits.Clear();
-            }
+//            if ( !KeyboardManager.KeyboardProfile.Active(KeyboardManager.UnitMultiselect) )
+//            {
+//                Map.SelectedUnits.Clear();
+//            }
             foreach ( var Unit in Map.Units )
             {
                 if ( Unit.TypeBase.UnitType_frmMainSelectedLink.IsConnected )

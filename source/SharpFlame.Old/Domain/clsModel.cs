@@ -80,7 +80,7 @@ namespace SharpFlame.Old.Domain
             GL.End();
         }
 
-        public Result ReadPIE(StreamReader file, clsObjectData owner)
+        public Result ReadPIE(StreamReader file, ObjectData owner)
         {
             var returnResult = new Result("Reading PIE", false);
             logger.Debug("Reading PIE");

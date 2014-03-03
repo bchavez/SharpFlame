@@ -32,11 +32,11 @@ namespace SharpFlame.Old.Domain
     {
         public clsAttachment Attachment = new clsAttachment();
         public int Hitpoints;
-        public ConnectedListLink<Body, clsObjectData> ObjectDataLink;
+        public ConnectedListLink<Body, ObjectData> ObjectDataLink;
 
         public Body()
         {
-            ObjectDataLink = new ConnectedListLink<Body, clsObjectData>(this);
+            ObjectDataLink = new ConnectedListLink<Body, ObjectData>(this);
 
             ComponentType = ComponentType.Body;
         }
@@ -46,11 +46,11 @@ namespace SharpFlame.Old.Domain
     {
         public sBody[] Bodies = new sBody[0];
         public int HitPoints;
-        public ConnectedListLink<Propulsion, clsObjectData> ObjectDataLink;
+        public ConnectedListLink<Propulsion, ObjectData> ObjectDataLink;
 
         public Propulsion(int BodyCount)
         {
-            ObjectDataLink = new ConnectedListLink<Propulsion, clsObjectData>(this);
+            ObjectDataLink = new ConnectedListLink<Propulsion, ObjectData>(this);
 
 
             ComponentType = ComponentType.Propulsion;
@@ -76,13 +76,13 @@ namespace SharpFlame.Old.Domain
     {
         public clsAttachment Attachment = new clsAttachment();
         public int HitPoints;
-        public ConnectedListLink<Turret, clsObjectData> TurretObjectDataLink;
+        public ConnectedListLink<Turret, ObjectData> TurretObjectDataLink;
 
         public TurretType TurretType = TurretType.Unknown;
 
         public Turret()
         {
-            TurretObjectDataLink = new ConnectedListLink<Turret, clsObjectData>(this);
+            TurretObjectDataLink = new ConnectedListLink<Turret, ObjectData>(this);
         }
 
         public bool GetTurretTypeName(ref string Result)
@@ -127,11 +127,11 @@ namespace SharpFlame.Old.Domain
 
     public class Weapon : Turret
     {
-        public ConnectedListLink<Weapon, clsObjectData> ObjectDataLink;
+        public ConnectedListLink<Weapon, ObjectData> ObjectDataLink;
 
         public Weapon()
         {
-            ObjectDataLink = new ConnectedListLink<Weapon, clsObjectData>(this);
+            ObjectDataLink = new ConnectedListLink<Weapon, ObjectData>(this);
 
 
             TurretType = TurretType.Weapon;
@@ -140,11 +140,11 @@ namespace SharpFlame.Old.Domain
 
     public class Construct : Turret
     {
-        public ConnectedListLink<Construct, clsObjectData> ObjectDataLink;
+        public ConnectedListLink<Construct, ObjectData> ObjectDataLink;
 
         public Construct()
         {
-            ObjectDataLink = new ConnectedListLink<Construct, clsObjectData>(this);
+            ObjectDataLink = new ConnectedListLink<Construct, ObjectData>(this);
 
 
             TurretType = TurretType.Construct;
@@ -153,11 +153,11 @@ namespace SharpFlame.Old.Domain
 
     public class Repair : Turret
     {
-        public ConnectedListLink<Repair, clsObjectData> ObjectDataLink;
+        public ConnectedListLink<Repair, ObjectData> ObjectDataLink;
 
         public Repair()
         {
-            ObjectDataLink = new ConnectedListLink<Repair, clsObjectData>(this);
+            ObjectDataLink = new ConnectedListLink<Repair, ObjectData>(this);
 
 
             TurretType = TurretType.Repair;
@@ -167,11 +167,11 @@ namespace SharpFlame.Old.Domain
     public class Sensor : Turret
     {
         public SensorLocationType Location = SensorLocationType.Unspecified;
-        public ConnectedListLink<Sensor, clsObjectData> ObjectDataLink;
+        public ConnectedListLink<Sensor, ObjectData> ObjectDataLink;
 
         public Sensor()
         {
-            ObjectDataLink = new ConnectedListLink<Sensor, clsObjectData>(this);
+            ObjectDataLink = new ConnectedListLink<Sensor, ObjectData>(this);
 
 
             TurretType = TurretType.Sensor;
@@ -187,13 +187,13 @@ namespace SharpFlame.Old.Domain
 
     public class Brain : Turret
     {
-        public ConnectedListLink<Brain, clsObjectData> ObjectDataLink;
+        public ConnectedListLink<Brain, ObjectData> ObjectDataLink;
 
         public Weapon Weapon;
 
         public Brain()
         {
-            ObjectDataLink = new ConnectedListLink<Brain, clsObjectData>(this);
+            ObjectDataLink = new ConnectedListLink<Brain, ObjectData>(this);
 
 
             TurretType = TurretType.Brain;
@@ -202,11 +202,11 @@ namespace SharpFlame.Old.Domain
 
     public class Ecm : Turret
     {
-        public ConnectedListLink<Ecm, clsObjectData> ObjectDataLink;
+        public ConnectedListLink<Ecm, ObjectData> ObjectDataLink;
 
         public Ecm()
         {
-            ObjectDataLink = new ConnectedListLink<Ecm, clsObjectData>(this);
+            ObjectDataLink = new ConnectedListLink<Ecm, ObjectData>(this);
 
 
             TurretType = TurretType.ECM;

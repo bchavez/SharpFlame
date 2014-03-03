@@ -15,7 +15,7 @@ namespace SharpFlame.Old.Domain
 {
     public abstract class UnitTypeBase
     {
-        public readonly ConnectedListLink<UnitTypeBase, clsObjectData> UnitType_ObjectDataLink;
+        public readonly ConnectedListLink<UnitTypeBase, ObjectData> UnitType_ObjectDataLink;
 
         public readonly ConnectedListLink<UnitTypeBase, frmMain> UnitType_frmMainSelectedLink;
 
@@ -26,7 +26,7 @@ namespace SharpFlame.Old.Domain
         protected UnitTypeBase()
         {
             UnitType_frmMainSelectedLink = new ConnectedListLink<UnitTypeBase, frmMain>(this);
-            UnitType_ObjectDataLink = new ConnectedListLink<UnitTypeBase, clsObjectData>(this);
+            UnitType_ObjectDataLink = new ConnectedListLink<UnitTypeBase, ObjectData>(this);
         }
 
         public XYInt GetFootprintOld
@@ -280,14 +280,14 @@ namespace SharpFlame.Old.Domain
         public clsAttachment BaseAttachment;
         public string Code = "";
         public FeatureType FeatureType = FeatureType.Unknown;
-        public ConnectedListLink<FeatureTypeBase, clsObjectData> FeatureType_ObjectDataLink;
+        public ConnectedListLink<FeatureTypeBase, ObjectData> FeatureType_ObjectDataLink;
         public XYInt Footprint;
         public string Name = "Unknown";
 
         public FeatureTypeBase()
         {
             Footprint = new XYInt(0, 0);
-            FeatureType_ObjectDataLink = new ConnectedListLink<FeatureTypeBase, clsObjectData>(this);
+            FeatureType_ObjectDataLink = new ConnectedListLink<FeatureTypeBase, ObjectData>(this);
 
 
             Type = UnitType.Feature;
@@ -323,13 +323,13 @@ namespace SharpFlame.Old.Domain
         public clsModel StructureBasePlate;
 
         public StructureType StructureType = StructureType.Unknown;
-        public ConnectedListLink<StructureTypeBase, clsObjectData> StructureType_ObjectDataLink;
+        public ConnectedListLink<StructureTypeBase, ObjectData> StructureType_ObjectDataLink;
 
         public ConnectedListLink<StructureTypeBase, clsWallType> WallLink;
 
         public StructureTypeBase()
         {
-            StructureType_ObjectDataLink = new ConnectedListLink<StructureTypeBase, clsObjectData>(this);
+            StructureType_ObjectDataLink = new ConnectedListLink<StructureTypeBase, ObjectData>(this);
             WallLink = new ConnectedListLink<StructureTypeBase, clsWallType>(this);
 
 
@@ -970,11 +970,11 @@ namespace SharpFlame.Old.Domain
     public class DroidTemplate : DroidDesign
     {
         public string Code = "";
-        public ConnectedListLink<DroidTemplate, clsObjectData> DroidTemplate_ObjectDataLink;
+        public ConnectedListLink<DroidTemplate, ObjectData> DroidTemplate_ObjectDataLink;
 
         public DroidTemplate()
         {
-            DroidTemplate_ObjectDataLink = new ConnectedListLink<DroidTemplate, clsObjectData>(this);
+            DroidTemplate_ObjectDataLink = new ConnectedListLink<DroidTemplate, ObjectData>(this);
 
 
             IsTemplate = true;
@@ -994,11 +994,11 @@ namespace SharpFlame.Old.Domain
         public ConnectedList<StructureTypeBase, clsWallType> Segments;
         public int[] TileWalls_Direction = {d0, d0, d2, d0, d3, d0, d3, d0, d1, d1, d2, d2, d3, d1, d3, d0};
         public int[] TileWalls_Segment = {0, 0, 0, 0, 0, 3, 3, 2, 0, 3, 3, 2, 0, 2, 2, 1};
-        public ConnectedListLink<clsWallType, clsObjectData> WallType_ObjectDataLink;
+        public ConnectedListLink<clsWallType, ObjectData> WallType_ObjectDataLink;
 
         public clsWallType()
         {
-            WallType_ObjectDataLink = new ConnectedListLink<clsWallType, clsObjectData>(this);
+            WallType_ObjectDataLink = new ConnectedListLink<clsWallType, ObjectData>(this);
             Segments = new ConnectedList<StructureTypeBase, clsWallType>(this);
 
 

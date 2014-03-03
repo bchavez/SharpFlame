@@ -119,7 +119,6 @@ Global
 		$3.AnonymousMethodBraceStyle = NextLine
 		$3.PropertyBraceStyle = NextLine
 		$3.StatementBraceStyle = NextLine
-		$3.ElseIfNewLinePlacement = SameLine
 		$3.BeforeMethodDeclarationParentheses = False
 		$3.AfterDelegateDeclarationParameterComma = True
 		$3.inheritsSet = Mono

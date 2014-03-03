@@ -12,7 +12,6 @@ using NLog;
 using OpenTK;
 using OpenTK.Graphics;
 using SharpFlame.Core.Extensions;
-using SharpFlame.Old.AppSettings;
 using SharpFlame.Core;
 using SharpFlame.Core.Collections;
 using SharpFlame.Core.Domain;
@@ -26,6 +25,7 @@ using SharpFlame.Old.Mapping.Objects;
 using SharpFlame.Old.Mapping.Tiles;
 using SharpFlame.Old.Maths;
 using SharpFlame.Old.Painters;
+using SharpFlame.Old.Settings;
 using SharpFlame.Old.Util;
 using SharpFlame.Old.UiOptions;
 
@@ -69,7 +69,8 @@ namespace SharpFlame.Old
 
         public static bool DisplayTileOrientation;
 
-        public static clsObjectData ObjectData;
+        public static ObjectData ObjectData = new ObjectData();
+        public static event EventHandler ObjectDataChanged = delegate {};
 
         public static int SelectedTextureNum = -1;
         public static TileOrientation TextureOrientation = new TileOrientation(false, false, false);
@@ -137,7 +138,7 @@ namespace SharpFlame.Old
 
         public static Options UiOptions = new Options();
 
-        public static SharpFlame.Old.Settings.SettingsManager Settings;
+        public static SettingsManager Settings = new SettingsManager();
 
         public static void Initalize ()
         {
@@ -233,6 +234,17 @@ namespace SharpFlame.Old
             App.TileTypes.Add(newTileType);
         }
 
+        /// <summary>
+        /// Raises the object data changed event.
+        /// Call me every time you change ObjectData!
+        /// </summary>
+        /// <param name="o">O.</param>
+        /// <param name="e">E.</param>
+        public static void OnObjectDataChanged(object o, EventArgs e) 
+        {
+            ObjectDataChanged(o, e);
+        }
+
 
         public static void SetProgramSubDirs()
         {
@@ -282,10 +294,10 @@ namespace SharpFlame.Old
         {
             IsViewKeyDown.Deactivate();
 
-            foreach ( Option<KeyboardControl> control in KeyboardManager.OptionsKeyboardControls.Options )
-            {
-                ((KeyboardControl)(KeyboardManager.KeyboardProfile.GetValue(control))).KeysChanged(IsViewKeyDown);
-            }
+//            foreach ( Option<KeyboardControl> control in KeyboardManager.OptionsKeyboardControls.Options )
+//            {
+//                ((KeyboardControl)(KeyboardManager.KeyboardProfile.GetValue(control))).KeysChanged(IsViewKeyDown);
+//            }
         }
 
         public static void CreateTemplateDroidTypes()

@@ -17,41 +17,41 @@ using SharpFlame.Old.Util;
 
 namespace SharpFlame.Old.Domain.ObjData
 {
-    public class clsObjectData
+    public class ObjectData
     {
-        public ConnectedList<Body, clsObjectData> Bodies;
-        public ConnectedList<Brain, clsObjectData> Brains;
-        public ConnectedList<Construct, clsObjectData> Constructors;
-        public ConnectedList<DroidTemplate, clsObjectData> DroidTemplates;
-        public ConnectedList<Ecm, clsObjectData> ECMs;
-        public ConnectedList<FeatureTypeBase, clsObjectData> FeatureTypes;
-        public ConnectedList<Propulsion, clsObjectData> Propulsions;
-        public ConnectedList<Repair, clsObjectData> Repairs;
-        public ConnectedList<Sensor, clsObjectData> Sensors;
-        public ConnectedList<StructureTypeBase, clsObjectData> StructureTypes;
+        public ConnectedList<Body, ObjectData> Bodies;
+        public ConnectedList<Brain, ObjectData> Brains;
+        public ConnectedList<Construct, ObjectData> Constructors;
+        public ConnectedList<DroidTemplate, ObjectData> DroidTemplates;
+        public ConnectedList<Ecm, ObjectData> ECMs;
+        public ConnectedList<FeatureTypeBase, ObjectData> FeatureTypes;
+        public ConnectedList<Propulsion, ObjectData> Propulsions;
+        public ConnectedList<Repair, ObjectData> Repairs;
+        public ConnectedList<Sensor, ObjectData> Sensors;
+        public ConnectedList<StructureTypeBase, ObjectData> StructureTypes;
 
         public SimpleList<clsTexturePage> TexturePages = new SimpleList<clsTexturePage>();
-        public ConnectedList<Turret, clsObjectData> Turrets;
-        public ConnectedList<UnitTypeBase, clsObjectData> UnitTypes;
-        public ConnectedList<clsWallType, clsObjectData> WallTypes;
-        public ConnectedList<Weapon, clsObjectData> Weapons;
+        public ConnectedList<Turret, ObjectData> Turrets;
+        public ConnectedList<UnitTypeBase, ObjectData> UnitTypes;
+        public ConnectedList<clsWallType, ObjectData> WallTypes;
+        public ConnectedList<Weapon, ObjectData> Weapons;
 
-        public clsObjectData()
+        public ObjectData()
         {
-            UnitTypes = new ConnectedList<UnitTypeBase, clsObjectData>(this);
-            FeatureTypes = new ConnectedList<FeatureTypeBase, clsObjectData>(this);
-            StructureTypes = new ConnectedList<StructureTypeBase, clsObjectData>(this);
-            DroidTemplates = new ConnectedList<DroidTemplate, clsObjectData>(this);
-            WallTypes = new ConnectedList<clsWallType, clsObjectData>(this);
-            Bodies = new ConnectedList<Body, clsObjectData>(this);
-            Propulsions = new ConnectedList<Propulsion, clsObjectData>(this);
-            Turrets = new ConnectedList<Turret, clsObjectData>(this);
-            Weapons = new ConnectedList<Weapon, clsObjectData>(this);
-            Sensors = new ConnectedList<Sensor, clsObjectData>(this);
-            Repairs = new ConnectedList<Repair, clsObjectData>(this);
-            Constructors = new ConnectedList<Construct, clsObjectData>(this);
-            Brains = new ConnectedList<Brain, clsObjectData>(this);
-            ECMs = new ConnectedList<Ecm, clsObjectData>(this);
+            UnitTypes = new ConnectedList<UnitTypeBase, ObjectData>(this);
+            FeatureTypes = new ConnectedList<FeatureTypeBase, ObjectData>(this);
+            StructureTypes = new ConnectedList<StructureTypeBase, ObjectData>(this);
+            DroidTemplates = new ConnectedList<DroidTemplate, ObjectData>(this);
+            WallTypes = new ConnectedList<clsWallType, ObjectData>(this);
+            Bodies = new ConnectedList<Body, ObjectData>(this);
+            Propulsions = new ConnectedList<Propulsion, ObjectData>(this);
+            Turrets = new ConnectedList<Turret, ObjectData>(this);
+            Weapons = new ConnectedList<Weapon, ObjectData>(this);
+            Sensors = new ConnectedList<Sensor, ObjectData>(this);
+            Repairs = new ConnectedList<Repair, ObjectData>(this);
+            Constructors = new ConnectedList<Construct, ObjectData>(this);
+            Brains = new ConnectedList<Brain, ObjectData>(this);
+            ECMs = new ConnectedList<Ecm, ObjectData>(this);
         }
 
         public Result LoadDirectory(string path)
@@ -746,6 +746,9 @@ namespace SharpFlame.Old.Domain.ObjData
             {
                 returnResult.WarningAdd(turretConflictCount + " templates had multiple conflicting turrets.");
             }
+
+            // Advertise the App.ObjectData changes, now we are done.
+            App.OnObjectDataChanged (this, EventArgs.Empty);
 
             return returnResult;
         }

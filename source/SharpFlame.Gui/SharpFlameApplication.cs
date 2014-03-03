@@ -39,7 +39,7 @@ using SharpFlame.Core;
 using SharpFlame.Gui.Forms;
 using SharpFlame.Gui.Controls;
 using SharpFlame.Old;
-using SharpFlame.Old.AppSettings;
+using SharpFlame.Old.Domain.ObjData;
 using Size = Eto.Drawing.Size;
 using Font = System.Drawing.Font;
 using FontStyle = System.Drawing.FontStyle;
@@ -52,8 +52,6 @@ namespace SharpFlame.Gui
 
         public readonly GLSurface GlTexturesView;
         public readonly GLSurface GlMapView;
-
-        public readonly SharpFlame.Old.Settings.SettingsManager Settings;
 
         private Result initializeResult = new Result("Startup result", false);
 
@@ -71,9 +69,6 @@ namespace SharpFlame.Gui
 
             App.SetProgramSubDirs();
 
-            SettingsManager.CreateSettingOptions();
-            KeyboardManager.CreateControls(); //needed to load key control settings
-
             try
             {
                 Toolkit.Init();
@@ -87,13 +82,12 @@ namespace SharpFlame.Gui
 
             // Set them up before you call settingsBindings().
             GlTexturesView = new GLSurface ();
-            GlTexturesView.Initialized += onGLControlInitialized;
             GlMapView = new GLSurface ();
+            GlTexturesView.Initialized += onGLControlInitialized;           
 
-            App.Settings = Settings = new SharpFlame.Old.Settings.SettingsManager ();
             settingsBindings ();
 
-            initializeResult.Add (Settings.Load (App.SettingsPath));
+            initializeResult.Add (App.Settings.Load (App.SettingsPath));
             // initializeResult.Add (SettingsManager.SettingsLoad (ref SettingsManager.InitializeSettings));           
 		}          
 
@@ -105,6 +99,11 @@ namespace SharpFlame.Gui
 
 			// show the main form
 			MainForm.Show();
+
+            if (App.Settings.ShowOptionsAtStartup)
+            {
+                new Dialogs.Settings ().Show ();
+            }
 		}
 
 		public override void OnTerminating(System.ComponentModel.CancelEventArgs e)
@@ -124,13 +123,22 @@ namespace SharpFlame.Gui
         void onGLControlInitialized(object o, EventArgs e) {
             GlTexturesView.MakeCurrent ();
 
-            foreach (var path in Settings.TilesetDirectories) {
+            // Load tileset directories.
+            foreach (var path in App.Settings.TilesetDirectories) {
                 if (path != null && path != "") {
-                    initializeResult.Add (App.LoadTilesets (PathUtil.EndWithPathSeperator (path)));
+                    initializeResult.Add (App.LoadTilesets (path));
                 }
             }
 
-            makeFont ();
+            // Load Object Data.
+            foreach (var path in App.Settings.ObjectDataDirectories) {
+                if (path != null && path != "") {
+                    initializeResult.Add(App.ObjectData.LoadDirectory(path));
+                }
+            }
+
+            // Make the GL Font.
+            makeGlFont ();
 
             if (initializeResult.HasProblems)
             {
@@ -147,17 +155,17 @@ namespace SharpFlame.Gui
         }
 
         void settingsBindings() {
-            Settings.PropertyChanged += (object sender, PropertyChangedEventArgs e) => {
+            App.Settings.PropertyChanged += (object sender, PropertyChangedEventArgs e) => {
                 #if DEBUG
                 Console.WriteLine("Setting {0} changed ", e.PropertyName);
                 #endif
 
                 if (e.PropertyName.StartsWith("Font") && GlTexturesView.IsInitialized) {
-                    makeFont();
+                    makeGlFont();
                 }
             };
 
-            Settings.TilesetDirectories.CollectionChanged += (sender, e) => 
+            App.Settings.TilesetDirectories.CollectionChanged += (sender, e) => 
             {
                 if (!GlTexturesView.IsInitialized) {
                     return;
@@ -166,16 +174,15 @@ namespace SharpFlame.Gui
                 try {
                     if (e.Action == NotifyCollectionChangedAction.Add) {
                         foreach (var item in e.NewItems) {
-                            var result = App.LoadTilesets (PathUtil.EndWithPathSeperator ((string)item));
+                            var result = App.LoadTilesets ((string)item);
                             if (result.HasProblems || result.HasWarnings) {
                                 new Dialogs.Status (result).Show();
-                                Settings.TilesetDirectories.Remove((string)item);
+                                App.Settings.TilesetDirectories.Remove((string)item);
                             }
                         }
                     } else if (e.Action == NotifyCollectionChangedAction.Remove) {
                         foreach (var item in e.OldItems) {
                             var found = App.Tilesets.Where(w => w.Directory.StartsWith((string)item)).ToList();
-                            Console.WriteLine("found={0}", found);
                             foreach (var foundItem in found) {
                                 App.Tilesets.Remove(foundItem);
                             }
@@ -185,20 +192,56 @@ namespace SharpFlame.Gui
                     logger.ErrorException("Got an Exception", ex);
                 }
             };
+
+            App.Settings.ObjectDataDirectories.CollectionChanged += (sender, e) =>
+            {
+                if (!GlTexturesView.IsInitialized) {
+                    return;
+                }
+
+                try {
+                    var result = new Result("Reloading object data.", false);
+                    if (e.Action == NotifyCollectionChangedAction.Add) {
+                        // Just reload Object Data.
+                        App.ObjectData = new ObjectData();
+                        foreach (var path in App.Settings.ObjectDataDirectories) {
+                            if (path != null && path != "") {
+                                result.Add(App.ObjectData.LoadDirectory(path));
+                            }
+                        }
+                    } else if (e.Action == NotifyCollectionChangedAction.Remove) {
+                        // Just reload Object Data.
+                        App.ObjectData = new ObjectData();
+                        foreach (var path in App.Settings.ObjectDataDirectories) {
+                            if (path != null && path != "") {
+                                result.Add(App.ObjectData.LoadDirectory(path));
+                            }
+                        }
+                        // Need to send an objectchanged event as LoadDirectory may never occurs.
+                        App.OnObjectDataChanged(this, EventArgs.Empty);
+                    }
+
+                    if (result.HasProblems || result.HasWarnings) {
+                        new Dialogs.Status (result).Show();
+                    }
+                } catch (Exception ex) {
+                    logger.ErrorException("Got an Exception", ex);
+                }
+            };
         }
 
-        void makeFont()
+        void makeGlFont()
         {
             var style = FontStyle.Regular;
-            if ( Settings.FontBold )
+            if ( App.Settings.FontBold )
             {
                 style = style | FontStyle.Bold;
             }
-            if ( Settings.FontItalic )
+            if ( App.Settings.FontItalic )
             {
                 style = style | FontStyle.Italic;
             }
-            App.UnitLabelFont = GlTexturesView.CreateGLFont (new Font(Settings.FontFamily, Settings.FontSize, style, GraphicsUnit.Point));
+            App.UnitLabelFont = GlTexturesView.CreateGLFont (new Font(App.Settings.FontFamily, App.Settings.FontSize, style, GraphicsUnit.Point));
         }
 	}
 }
