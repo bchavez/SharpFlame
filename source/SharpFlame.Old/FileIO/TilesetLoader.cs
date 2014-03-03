@@ -2,7 +2,6 @@ using System;
 using System.Drawing;
 using System.IO;
 using NLog;
-using OpenTK.Graphics.OpenGL;
 using SharpFlame.Old.Bitmaps;
 using SharpFlame.Old.Colors;
 using SharpFlame.Core.Domain.Colors;
@@ -14,6 +13,8 @@ using SharpFlame.Old.Colors;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Old.Util;
+using OpenTK.Graphics.OpenGL;
+
 
 namespace SharpFlame.Old.FileIO
 {

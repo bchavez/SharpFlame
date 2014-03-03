@@ -1,16 +1,12 @@
-#region
-
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using NLog;
-using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
-using SharpFlame.Old.Util;
+using OpenTK.Graphics.OpenGL;
+using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
 
-#endregion
 
 namespace SharpFlame.Old.Bitmaps
 {
@@ -106,7 +102,7 @@ namespace SharpFlame.Old.Bitmaps
                                  TextureMinFilter minFilter = TextureMinFilter.Nearest) 
         {
             var bitmapData = texture.LockBits(new Rectangle(0, 0, texture.Width, texture.Height),
-                                              ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                                              ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb );
             int textureNum;
             if (mipMapLevel == 0)
             {
@@ -119,7 +115,7 @@ namespace SharpFlame.Old.Bitmaps
             GL.BindTexture(TextureTarget.Texture2D, textureNum);
 
             GL.TexImage2D(TextureTarget.Texture2D, mipMapLevel, PixelInternalFormat.Rgba, bitmapData.Width, bitmapData.Height, 0,
-                          OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bitmapData.Scan0);
+                          PixelFormat.Bgra, PixelType.UnsignedByte, bitmapData.Scan0);
 
             if ( mipMapLevel == 0 )
             {

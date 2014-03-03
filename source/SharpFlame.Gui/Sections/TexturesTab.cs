@@ -35,13 +35,8 @@ using SharpFlame.Old;
 using SharpFlame.Old.Graphics.OpenGL;
 using SharpFlame.Old.Mapping.Tiles;
 using SharpFlame.Old.UiOptions;
-
-#if Mac
-    using MonoMac.OpenGL;
-#else
-    using OpenTK;
-    using OpenTK.Graphics.OpenGL;
-#endif
+using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 namespace SharpFlame.Gui.Sections
 {

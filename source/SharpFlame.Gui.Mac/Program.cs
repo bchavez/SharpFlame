@@ -113,6 +113,9 @@ namespace SharpFlame.Gui.Mac
         public delegate void DrawRectHandler(System.Drawing.RectangleF dirtyRect);
 
         public event DrawRectHandler DrawNow = delegate { };
+	
+		private OpenTK.Graphics.GraphicsContext openTK = null;
+		private OpenTK.Platform.IWindowInfo windowInfo = null;
 
         public override void DrawRect(System.Drawing.RectangleF dirtyRect)
         {
@@ -121,9 +124,19 @@ namespace SharpFlame.Gui.Mac
         
         public override void PrepareOpenGL()
         {
-            base.PrepareOpenGL();
-            this.IsInitialized = true;
-            this.Initialized( this, EventArgs.Empty );
+			base.PrepareOpenGL ();
+
+			var currentContextPtr = this.OpenGLContext.CGLContext.Handle;
+			var currentContextHandle = new OpenTK.ContextHandle (currentContextPtr);
+
+			this.windowInfo = OpenTK.Platform.Utilities.CreateMacOSCarbonWindowInfo(this.Handle, false, true);
+
+			this.openTK = new OpenTK.Graphics.GraphicsContext(currentContextHandle,windowInfo);
+
+
+			this.IsInitialized = true;
+			this.Initialized (this, EventArgs.Empty);
+
         }
 
         public override void Reshape()
@@ -141,11 +154,13 @@ namespace SharpFlame.Gui.Mac
 
         public Size GLSize
         {
-            get { return this.Bounds.Size.ToSize().ToEto(); }
+            get { 
+				return this.Bounds.Size.ToSize().ToEto();
+			}
             set
             {
-                this.Bounds =
-                    new RectangleF(this.Bounds.X, this.Bounds.Y, value.Width, value.Height);
+				//  this.Bounds =
+				//new RectangleF(this.Bounds.X, this.Bounds.Y, value.Width, value.Height);
             }
         }
 
@@ -153,12 +168,14 @@ namespace SharpFlame.Gui.Mac
 
         public void MakeCurrent()
         {
-            this.OpenGLContext.MakeCurrentContext();
+			//this.OpenGLContext.MakeCurrentContext();
+			this.openTK.MakeCurrent (this.windowInfo);
         }
 
         public void SwapBuffers()
         {
-            this.OpenGLContext.FlushBuffer();
+			//this.OpenGLContext.FlushBuffer();
+			this.openTK.SwapBuffers ();
         }
 
         public event EventHandler Initialized = delegate { };

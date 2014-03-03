@@ -5,15 +5,8 @@ using System.Drawing.Imaging;
 using SharpFlame.Old.Colors;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
-
-#if Mac
-    using MonoMac.OpenGL;
-    using PixelFormat = MonoMac.OpenGL.PixelFormat;
-
-#else
-    using OpenTK.Graphics.OpenGL;
-    using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
-#endif
+using OpenTK.Graphics.OpenGL;
+using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
 
 
 namespace SharpFlame.Old.Graphics.OpenGL
