@@ -33,6 +33,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using bbv.Common.EventBroker;
 using Eto.Forms;
 using Newtonsoft.Json;
 using NLog;
@@ -97,12 +98,15 @@ namespace SharpFlame.Old.Settings
         #endregion
 
         #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
+
+        [EventPublication(EventTopics.SettingsChanged)]
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
+
         protected bool SetField<T>(ref T field, T value, string propertyName)
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return false;

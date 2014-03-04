@@ -83,6 +83,7 @@
     <Compile Include="Collections\SimpleClassList.cs" />
     <Compile Include="Collections\SimpleList.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="EventTopics.cs" />
     <Compile Include="Extensions\ExtensionsForILogger.cs" />
     <Compile Include="GlobalAssemblyInfo.cs" />
     <Compile Include="Interfaces\IResultItem.cs" />

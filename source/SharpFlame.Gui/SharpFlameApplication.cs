@@ -29,6 +29,8 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using bbv.Common.EventBroker;
+using bbv.Common.EventBroker.Handlers;
 using Eto;
 using Eto.Forms;
 using Ninject;
@@ -47,11 +49,6 @@ using FontStyle = System.Drawing.FontStyle;
 
 namespace SharpFlame.Gui
 {
-    public static class EventTopics
-    {
-        public const string SettingsChanged = "topic://settings/changed";
-    }
-
     public class SharpFlameApplication : Application
     {
         private readonly IKernel kernel;
@@ -120,7 +117,7 @@ namespace SharpFlame.Gui
             }
         }
 
-        public override void OnTerminating(System.ComponentModel.CancelEventArgs e)
+        public override void OnTerminating(CancelEventArgs e)
         {
             base.OnTerminating(e);
 
@@ -141,7 +138,7 @@ namespace SharpFlame.Gui
             // Load tileset directories.
             foreach( var path in App.Settings.TilesetDirectories )
             {
-                if( path != null && path != "" )
+                if( !string.IsNullOrEmpty(path) )
                 {
                     initializeResult.Add(App.LoadTilesets(path));
                 }
@@ -150,7 +147,7 @@ namespace SharpFlame.Gui
             // Load Object Data.
             foreach( var path in App.Settings.ObjectDataDirectories )
             {
-                if( path != null && path != "" )
+                if( !string.IsNullOrEmpty(path) )
                 {
                     initializeResult.Add(App.ObjectData.LoadDirectory(path));
                 }
@@ -175,19 +172,33 @@ namespace SharpFlame.Gui
             }
         }
 
-        private void SetupEventHandlers()
+        [EventSubscription(EventTopics.SettingsChanged, typeof(Publisher))]
+        internal void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            App.Settings.PropertyChanged += (sender, e) =>
-                {
 #if DEBUG
-                    Console.WriteLine("Setting {0} changed ", e.PropertyName);
+            Console.WriteLine("Setting {0} changed ", e.PropertyName);
 #endif
 
-                    if( e.PropertyName.StartsWith("Font") && GlTexturesView.IsInitialized )
-                    {
-                        MakeGlFont();
-                    }
-                };
+            if( e.PropertyName.StartsWith("Font") && GlTexturesView.IsInitialized )
+            {
+                MakeGlFont();
+            }
+        }
+
+        private void SetupEventHandlers()
+        {
+            //SEE EXAMPLE ABOVE ......
+//            App.Settings.PropertyChanged += (sender, e) =>
+//                {
+//#if DEBUG
+//                    Console.WriteLine("Setting {0} changed ", e.PropertyName);
+//#endif
+
+//                    //if( e.PropertyName.StartsWith("Font") && GlTexturesView.IsInitialized )
+//                    //{
+//                    //    MakeGlFont();
+//                    //}
+//                };
 
             App.Settings.TilesetDirectories.CollectionChanged += (sender, e) =>
                 {
