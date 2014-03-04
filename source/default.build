@@ -22,6 +22,7 @@
 
     <target name="build-win" if="${win}" description="Main Build Script for Windows OS">
         <call target="set-dev-env"/>
+        <call target="gen-asminfo" />
 
         <msbuild project="SharpFlame.Gui.Windows\SharpFlame.Gui.Windows.csproj" target="Rebuild" >
             <!--<arg value ="/verbosity:diag" />-->

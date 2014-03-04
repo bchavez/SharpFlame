@@ -31,6 +31,7 @@ using Eto;
 using Eto.Forms;
 using Eto.Drawing;
 using SharpFlame.Core.Domain;
+using SharpFlame.Gui.Controls;
 using SharpFlame.Old;
 using SharpFlame.Old.Graphics.OpenGL;
 using SharpFlame.Old.Mapping.Tiles;
@@ -40,286 +41,317 @@ using OpenTK.Graphics.OpenGL;
 
 namespace SharpFlame.Gui.Sections
 {
-	public class TextureTab : Panel
-	{
-        readonly SharpFlameApplication application;
+    public class TextureTab : Panel
+    {
+        private readonly CheckBox chkTexture;
+        private readonly CheckBox chkOrientation;
+        private readonly CheckBox chkRandomize;
+        private readonly CheckBox chkDisplayTileTypes;
+        private readonly CheckBox chkDisplayTileNumbers;
 
-        readonly CheckBox chkTexture;
-        readonly CheckBox chkOrientation;
-        readonly CheckBox chkRandomize;
-        readonly CheckBox chkDisplayTileTypes;
-        readonly CheckBox chkDisplayTileNumbers;
+        private readonly Button btnCircular;
+        private readonly Button btnSquare;
 
-        readonly Button btnCircular;
-        readonly Button btnSquare;
+        private readonly ImageView btnRotateAntiClockwise;
+        private readonly ImageView btnRotateClockwise;
+        private readonly ImageView btnFlipX;
 
-        readonly ImageView btnRotateAntiClockwise;
-        readonly ImageView btnRotateClockwise;
-        readonly ImageView btnFlipX;
+        private readonly NumericUpDown nudRadius;
 
-        readonly NumericUpDown nudRadius;
+        private readonly RadioButtonList rblTerrainModifier;
 
-        readonly RadioButtonList rblTerrainModifier;
+        private readonly ComboBox cbTileset;
 
-        readonly ComboBox cbTileset;
+        private readonly Scrollable scrollTextureView;
 
-        readonly Scrollable scrollTextureView;
+        private readonly GLSurface glSurface;
 
-        XYInt TextureCount { get; set; }
+        private XYInt TextureCount { get; set; }
 
-		public TextureTab(SharpFlameApplication a) 
+        public TextureTab(SharpFlameApplication a)
         {
-            application = a;
+            this.glSurface = a.GlTexturesView;
 
-            TextureCount = new XYInt (0, 0);
+            this.TextureCount = new XYInt(0, 0);
 
-			var layout = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty};
+            var layout = new DynamicLayout {Padding = Padding.Empty, Spacing = Size.Empty};
 
-            var row = layout.AddSeparateRow (null,
-			                                 new Label { Text = "Tileset:", VerticalAlign = VerticalAlign.Middle },
-											 cbTileset = textureComboBox (),
-											 null);
-			row.Table.Visible = false;
+            this.cbTileset = TextureComboBox();
+            var row = layout.AddSeparateRow(null,
+                new Label {Text = "Tileset:", VerticalAlign = VerticalAlign.Middle},
+                this.cbTileset,
+                null);
+            row.Table.Visible = false;
 
 
-			layout.BeginVertical();
-			layout.AddRow (null,
-			               new Label { Text = "Radius:", VerticalAlign = VerticalAlign.Middle }, 
-                           nudRadius = new NumericUpDown {Size = new Size(-1, -1), MinValue = 0, MaxValue = 512 }, 
-                          btnCircular = new Button { Text = "Circular", Enabled = false }, 
-                          btnSquare = new Button { Text = "Square" },
-						 null);
-			layout.EndVertical ();
+            layout.BeginVertical();
+            this.nudRadius = new NumericUpDown {Size = new Size(-1, -1), MinValue = 0, MaxValue = 512};
+            this.btnCircular = new Button {Text = "Circular", Enabled = false};
+            this.btnSquare = new Button {Text = "Square"};
 
-			var textureOrientationLayout = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty };
+            layout.AddRow(null,
+                new Label {Text = "Radius:", VerticalAlign = VerticalAlign.Middle},
+                this.nudRadius,
+                this.btnCircular,
+                this.btnSquare,
+                null);
+            layout.EndVertical();
 
-			textureOrientationLayout.Add (null);
-			textureOrientationLayout.BeginHorizontal ();
-			textureOrientationLayout.AddRow (null, chkTexture = new CheckBox { Text = "Set Texture" }, null);
-			textureOrientationLayout.EndHorizontal ();
+            var textureOrientationLayout = new DynamicLayout {Padding = Padding.Empty, Spacing = Size.Empty};
 
-			textureOrientationLayout.BeginHorizontal ();
-			textureOrientationLayout.AddRow (null, chkOrientation = new CheckBox { Text = "Set Orientation", Checked = true }, null);
-			textureOrientationLayout.EndHorizontal ();
-			textureOrientationLayout.Add (null);
+            textureOrientationLayout.Add(null);
+            textureOrientationLayout.BeginHorizontal();
+            textureOrientationLayout.AddRow(null, chkTexture = new CheckBox {Text = "Set Texture"}, null);
+            textureOrientationLayout.EndHorizontal();
 
-            var buttonsRandomize = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty };
+            textureOrientationLayout.BeginHorizontal();
+            textureOrientationLayout.AddRow(null, chkOrientation = new CheckBox {Text = "Set Orientation", Checked = true}, null);
+            textureOrientationLayout.EndHorizontal();
+            textureOrientationLayout.Add(null);
 
-			buttonsRandomize.Add (null);
-			buttonsRandomize.BeginVertical();
-			buttonsRandomize.AddRow(null,
-                                    TableLayout.AutoSized(btnRotateAntiClockwise = makeBtnRotateAntiClockwise ()),
-                                    TableLayout.AutoSized(btnRotateClockwise = makeBtnRotateClockwise ()),
-                                    TableLayout.AutoSized(btnFlipX = makeBtnFlipX()),
-						   				  null);
-			buttonsRandomize.EndVertical ();
+            var buttonsRandomize = new DynamicLayout {Padding = Padding.Empty, Spacing = Size.Empty};
 
-			buttonsRandomize.BeginVertical();
-            buttonsRandomize.AddRow (null, chkRandomize = new CheckBox { Text = "Randomize" }, null);
-			buttonsRandomize.EndVertical ();
-			buttonsRandomize.Add (null);
+            buttonsRandomize.Add(null);
+            buttonsRandomize.BeginVertical();
+            this.btnRotateAntiClockwise = MakeBtnRotateAntiClockwise();
+            this.btnRotateClockwise = MakeBtnRotateClockwise();
+            this.btnFlipX = MakeBtnFlipX();
+            buttonsRandomize.AddRow(null,
+                TableLayout.AutoSized(this.btnRotateAntiClockwise),
+                TableLayout.AutoSized(this.btnRotateClockwise),
+                TableLayout.AutoSized(this.btnFlipX),
+                null);
+            buttonsRandomize.EndVertical();
 
-            rblTerrainModifier = new RadioButtonList ();
-            rblTerrainModifier.Spacing = new Size(0, 0);
-			rblTerrainModifier.Orientation = RadioButtonListOrientation.Vertical;
-			rblTerrainModifier.Items.Add(new ListItem { Text = "Ignore Terrain" });
-			rblTerrainModifier.Items.Add(new ListItem { Text = "Reinterpret" });
-			rblTerrainModifier.Items.Add(new ListItem { Text = "Remove Terrain" });
-			rblTerrainModifier.SelectedIndex = 1;
+            buttonsRandomize.BeginVertical();
+            this.chkRandomize = new CheckBox {Text = "Randomize"};
+            buttonsRandomize.AddRow(null, this.chkRandomize, null);
+            buttonsRandomize.EndVertical();
+            buttonsRandomize.Add(null);
 
-			row = layout.AddSeparateRow(null,
-			        textureOrientationLayout,
-			        buttonsRandomize,
-			        TableLayout.AutoSized(rblTerrainModifier),
-			        null);
-			row.Table.Visible = false;
+            this.rblTerrainModifier = new RadioButtonList
+                {
+                    Spacing = new Size(0, 0),
+                    Orientation = RadioButtonListOrientation.Vertical,
+                    Items =
+                        {
+                            new ListItem {Text = "Ignore Terrain"},
+                            new ListItem {Text = "Reinterpret"},
+                            new ListItem {Text = "Remove Terrain"}
+                        },
+                    SelectedIndex = 1
+                };
 
-		    var mainLayout = new DynamicLayout {Padding = Padding.Empty, Spacing = Size.Empty};
+            row = layout.AddSeparateRow(null,
+                textureOrientationLayout,
+                buttonsRandomize,
+                TableLayout.AutoSized(this.rblTerrainModifier),
+                null);
+            row.Table.Visible = false;
 
-			var tileTypeCombo = new DynamicLayout ();
-			tileTypeCombo.BeginHorizontal ();
-			tileTypeCombo.Add (new Label {
-				Text = "Tile Type:",
-				VerticalAlign = VerticalAlign.Middle
-			});
-			tileTypeCombo.Add (tileTypeComboBox());
-			tileTypeCombo.EndHorizontal ();
+            var mainLayout = new DynamicLayout {Padding = Padding.Empty, Spacing = Size.Empty};
 
-			var tileTypeCheckBoxes = new DynamicLayout ();
-			tileTypeCheckBoxes.BeginHorizontal ();
-            tileTypeCheckBoxes.Add (chkDisplayTileTypes = new CheckBox { Text = "Display Tile Types" });
-			tileTypeCheckBoxes.Add (null);
-			tileTypeCheckBoxes.Add (chkDisplayTileNumbers = new CheckBox { Text = "Display Tile Numbers" });
-			tileTypeCheckBoxes.EndHorizontal ();
+            var tileTypeCombo = new DynamicLayout();
+            tileTypeCombo.BeginHorizontal();
+            tileTypeCombo.Add(new Label
+                {
+                    Text = "Tile Type:",
+                    VerticalAlign = VerticalAlign.Middle
+                });
+            tileTypeCombo.Add(TileTypeComboBox());
+            tileTypeCombo.EndHorizontal();
 
-			var tileTypeSetter = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty };
-			tileTypeSetter.BeginHorizontal ();
-			tileTypeSetter.Add (null);
-			tileTypeSetter.Add (tileTypeCombo);
-			tileTypeSetter.Add (null);
-			tileTypeSetter.EndHorizontal ();
-			tileTypeSetter.BeginHorizontal ();
-			tileTypeSetter.Add (null);
-			tileTypeSetter.Add (tileTypeCheckBoxes);
-			tileTypeSetter.Add (null);
-			tileTypeSetter.EndHorizontal ();
+            var tileTypeCheckBoxes = new DynamicLayout();
+            tileTypeCheckBoxes.BeginHorizontal();
+            tileTypeCheckBoxes.Add(chkDisplayTileTypes = new CheckBox {Text = "Display Tile Types"});
+            tileTypeCheckBoxes.Add(null);
+            tileTypeCheckBoxes.Add(chkDisplayTileNumbers = new CheckBox {Text = "Display Tile Numbers"});
+            tileTypeCheckBoxes.EndHorizontal();
 
-			mainLayout.Add (layout);
-            scrollTextureView = new Scrollable { Content = a.GlTexturesView };
-            mainLayout.Add (scrollTextureView, true, true);
-			mainLayout.Add (tileTypeSetter);
-			//mainLayout.Add();
+            var tileTypeSetter = new DynamicLayout {Padding = Padding.Empty, Spacing = Size.Empty};
+            tileTypeSetter.BeginHorizontal();
+            tileTypeSetter.Add(null);
+            tileTypeSetter.Add(tileTypeCombo);
+            tileTypeSetter.Add(null);
+            tileTypeSetter.EndHorizontal();
+            tileTypeSetter.BeginHorizontal();
+            tileTypeSetter.Add(null);
+            tileTypeSetter.Add(tileTypeCheckBoxes);
+            tileTypeSetter.Add(null);
+            tileTypeSetter.EndHorizontal();
 
-			// Set the bindings to UiOptions.Textures
-			setBindings ();
+            mainLayout.Add(layout);
+            scrollTextureView = new Scrollable {Content = a.GlTexturesView};
+            mainLayout.Add(scrollTextureView, true, true);
+            mainLayout.Add(tileTypeSetter);
+            //mainLayout.Add();
 
-			Content = mainLayout;
-		}
+            // Set the bindings to UiOptions.Textures
+            SetBindings();
 
-		/// <summary>
-		/// Sets the Bindings to App.UiOptions.Textures;
-		/// </summary>
-		void setBindings() 
-		{
-            TexturesOptions texturesOptions = App.UiOptions.Textures; 
+            Content = mainLayout;
+        }
+
+        /// <summary>
+        /// Sets the Bindings to App.UiOptions.Textures;
+        /// </summary>
+        private void SetBindings()
+        {
+            TexturesOptions texturesOptions = App.UiOptions.Textures;
 
             // Circular / Square Button
-            btnCircular.Click += (sender, e) => { 
-                btnCircular.Enabled = false;
-                btnSquare.Enabled = true;
-                texturesOptions.TerrainMouseMode = TerrainMouseMode.Circular;
-            };
-            btnSquare.Click += (sender, e) => { 
-                btnSquare.Enabled = false;
-                btnCircular.Enabled = true;
-                texturesOptions.TerrainMouseMode = TerrainMouseMode.Square;
-            };
+            btnCircular.Click += (sender, e) =>
+                {
+                    btnCircular.Enabled = false;
+                    btnSquare.Enabled = true;
+                    texturesOptions.TerrainMouseMode = TerrainMouseMode.Circular;
+                };
+            btnSquare.Click += (sender, e) =>
+                {
+                    btnSquare.Enabled = false;
+                    btnCircular.Enabled = true;
+                    texturesOptions.TerrainMouseMode = TerrainMouseMode.Square;
+                };
 
             // Orientation buttons
-            btnRotateClockwise.MouseDown += delegate {
-                texturesOptions.TextureOrientation.RotateClockwise();
-                DrawTexturesView();
-            };
+            btnRotateClockwise.MouseDown += delegate
+                {
+                    texturesOptions.TextureOrientation.RotateClockwise();
+                    DrawTexturesView();
+                };
 
-            btnRotateAntiClockwise.MouseDown += delegate {
-                texturesOptions.TextureOrientation.RotateAntiClockwise();
-                DrawTexturesView();
-            };
+            btnRotateAntiClockwise.MouseDown += delegate
+                {
+                    texturesOptions.TextureOrientation.RotateAntiClockwise();
+                    DrawTexturesView();
+                };
 
-            btnFlipX.MouseDown += delegate {
-                texturesOptions.TextureOrientation.FlipX();
-                DrawTexturesView();
-            };
+            btnFlipX.MouseDown += delegate
+                {
+                    texturesOptions.TextureOrientation.FlipX();
+                    DrawTexturesView();
+                };
 
             // Checkboxes
-            chkTexture.Bind (r => r.Checked, texturesOptions, t => t.SetTexture);
-            chkOrientation.Bind (r => r.Checked, texturesOptions, t => t.SetOrientation);
-            chkRandomize.Bind (r => r.Checked, texturesOptions, t => t.Randomize);
+            chkTexture.Bind(r => r.Checked, texturesOptions, t => t.SetTexture);
+            chkOrientation.Bind(r => r.Checked, texturesOptions, t => t.SetOrientation);
+            chkRandomize.Bind(r => r.Checked, texturesOptions, t => t.Randomize);
 
             // RadiobuttonList 
             rblTerrainModifier.SelectedIndexChanged += delegate
-            {
-                texturesOptions.TerrainMode = (TerrainMode)rblTerrainModifier.SelectedIndex;
-            };
+                {
+                    texturesOptions.TerrainMode = (TerrainMode)rblTerrainModifier.SelectedIndex;
+                };
 
             // NumericUpDown radius
-            nudRadius.Bind (r => r.Value, texturesOptions, t => t.Radius);
+            nudRadius.Bind(r => r.Value, texturesOptions, t => t.Radius);
 
             // Read Tileset Combobox
-            App.Tilesets.CollectionChanged += (sender, e) => 
-            {
-                if (e.Action == NotifyCollectionChangedAction.Add) {
-                    var list = new List<IListItem>();
-                    foreach (var item in e.NewItems) {
-                        list.Add((IListItem)item);
+            App.Tilesets.CollectionChanged += (sender, e) =>
+                {
+                    if( e.Action == NotifyCollectionChangedAction.Add )
+                    {
+                        var list = new List<IListItem>();
+                        foreach( var item in e.NewItems )
+                        {
+                            list.Add((IListItem)item);
+                        }
+                        cbTileset.Items.AddRange(list);
+                        cbTileset.Visible = false;
+                        cbTileset.Visible = true;
                     }
-                    cbTileset.Items.AddRange (list);
-                    cbTileset.Visible = false;
-                    cbTileset.Visible = true;
-                } else if (e.Action == NotifyCollectionChangedAction.Remove) {
-                    foreach (var item in e.OldItems) {
-                        cbTileset.Items.Remove((IListItem)item);
-                    }
+                    else if( e.Action == NotifyCollectionChangedAction.Remove )
+                    {
+                        foreach( var item in e.OldItems )
+                        {
+                            cbTileset.Items.Remove((IListItem)item);
+                        }
 
-                    cbTileset.Visible = false;
-                    cbTileset.Visible = true;
-                }
-            };
+                        cbTileset.Visible = false;
+                        cbTileset.Visible = true;
+                    }
+                };
 
             // Bind tileset combobox.
-            cbTileset.Bind (r => r.SelectedIndex, texturesOptions, t => t.TilesetNum);
+            cbTileset.Bind(r => r.SelectedIndex, texturesOptions, t => t.TilesetNum);
             cbTileset.SelectedIndexChanged += delegate
-            {
-                DrawTexturesView ();
-            };
+                {
+                    DrawTexturesView();
+                };
 
             chkDisplayTileTypes.CheckedChanged += delegate
-            {
-                DrawTexturesView ();
-            };
+                {
+                    DrawTexturesView();
+                };
 
             chkDisplayTileNumbers.CheckedChanged += delegate
-            {
-                DrawTexturesView ();
-            };
-
-            application.GlTexturesView.MouseDown += (sender, e) => {
-                if (App.UiOptions.Textures.TilesetNum == -1)
                 {
-                    return;
-                }
+                    DrawTexturesView();
+                };
 
-                var args = (MouseEventArgs)e;
+            this.glSurface.MouseDown += (sender, e) =>
+                {
+                    if( App.UiOptions.Textures.TilesetNum == -1 )
+                    {
+                        return;
+                    }
 
-                var x = (int)Math.Floor(args.Location.X / 64);
-                var y = (int)Math.Floor(args.Location.Y / 64);
-                var tile = x + (y * TextureCount.X);
-                if (tile >= App.Tilesets[App.UiOptions.Textures.TilesetNum].Tiles.Count) {
-                    return;
-                }
-                App.UiOptions.Textures.SelectedTile = tile;
-                DrawTexturesView();
-            };
+                    var args = (MouseEventArgs)e;
+
+                    var x = (int)Math.Floor(args.Location.X / 64);
+                    var y = (int)Math.Floor(args.Location.Y / 64);
+                    var tile = x + (y * TextureCount.X);
+                    if( tile >= App.Tilesets[App.UiOptions.Textures.TilesetNum].Tiles.Count )
+                    {
+                        return;
+                    }
+                    App.UiOptions.Textures.SelectedTile = tile;
+                    DrawTexturesView();
+                };
 
             // Set Mousetool, when we are shown.
-		    Shown += (sender, args) =>
-		        {
-		            App.UiOptions.MouseTool = MouseTool.TextureBrush;
-		        };
-		    
+            Shown += (sender, args) =>
+                {
+                    App.UiOptions.MouseTool = MouseTool.TextureBrush;
+                };
 
-		    application.GlTexturesView.Resize += delegate {
-                DrawTexturesView();
-            };
-		}
 
-        void DrawTexturesView() {
-            if (App.UiOptions.Textures.TilesetNum == -1)
+            this.glSurface.Resize += (sender, args) =>
+                {
+                    DrawTexturesView();
+                };
+           
+        }
+
+        private void DrawTexturesView()
+        {
+            if( App.UiOptions.Textures.TilesetNum == -1 )
             {
                 GL.Clear(ClearBufferMask.ColorBufferBit);
                 GL.Flush();
-                application.GlTexturesView.SwapBuffers ();
+                this.glSurface.SwapBuffers();
                 return;
             }
 
-            application.GlTexturesView.MakeCurrent ();
+            this.glSurface.MakeCurrent();
 
             var tileset = App.Tilesets[App.UiOptions.Textures.TilesetNum];
 
-            TextureCount = new XYInt {
-                X = (int)(Math.Floor ((scrollTextureView.Size.Width - 20) / 64.0D)),
-                Y = (int)(Math.Ceiling ((double)tileset.Tiles.Count / TextureCount.X))
-            };
+            TextureCount = new XYInt
+                {
+                    X = (int)(Math.Floor((scrollTextureView.Size.Width - 20) / 64.0D)),
+                    Y = (int)(Math.Ceiling((double)tileset.Tiles.Count / TextureCount.X))
+                };
 
             var height = TextureCount.Y * 64;
             // TODO: See how thick the scroll is on winforms and mac, 20px seems to be right on GTK.
-            var glSize = application.GlTexturesView.GLSize = new Size (scrollTextureView.Size.Width - 20, height);
+            var glSize = this.glSurface.GLSize = new Size(scrollTextureView.Size.Width - 20, height);
 
             // send the resize event to the Graphics card.
-            GL.Viewport( 0, 0, glSize.Width, glSize.Height );
-            GL.MatrixMode( MatrixMode.Projection );
+            GL.Viewport(0, 0, glSize.Width, glSize.Height);
+            GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
-            GL.Ortho( -1.0, 1.0, -1.0, 1.0, 0.0, 4.0 );
+            GL.Ortho(-1.0, 1.0, -1.0, 1.0, 0.0, 4.0);
 
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
@@ -342,12 +374,12 @@ namespace SharpFlame.Gui.Sections
             GL.Enable(EnableCap.Texture2D);
             GL.Color4(0.0F, 0.0F, 0.0F, 1.0F);
 
-            for ( var y = 0; y < TextureCount.Y; y++ )
+            for( var y = 0; y < TextureCount.Y; y++ )
             {
-                for ( var x = 0; x < TextureCount.X; x++ )
+                for( var x = 0; x < TextureCount.X; x++ )
                 {
                     var num = y * TextureCount.X + x;
-                    if ( num >= tileset.Tiles.Count )
+                    if( num >= tileset.Tiles.Count )
                     {
                         goto EndOfTextures1;
                     }
@@ -377,21 +409,21 @@ namespace SharpFlame.Gui.Sections
             EndOfTextures1:
             GL.Disable(EnableCap.Texture2D);
 
-            if ( (bool)chkDisplayTileTypes.Checked )
+            if( (bool)chkDisplayTileTypes.Checked )
             {
                 GL.Begin(BeginMode.Quads);
-                for ( var y = 0; y <= TextureCount.Y - 1; y++ )
+                for( var y = 0; y <= TextureCount.Y - 1; y++ )
                 {
-                    for ( var x = 0; x <= TextureCount.X - 1; x++ )
+                    for( var x = 0; x <= TextureCount.X - 1; x++ )
                     {
                         var num = y * TextureCount.X + x;
-                        if ( num >= tileset.Tiles.Count )
+                        if( num >= tileset.Tiles.Count )
                         {
                             goto EndOfTextures2;
                         }
 
                         // TODO: Change this to a per map value once we have a map.
-                        num = tileset.Tiles [num].DefaultType;
+                        num = tileset.Tiles[num].DefaultType;
                         GL.Color3(App.TileTypes[num].DisplayColour.Red, App.TileTypes[num].DisplayColour.Green, App.TileTypes[num].DisplayColour.Blue);
 
                         GL.Vertex2(x * 64 + 24, y * 64 + 24);
@@ -401,10 +433,10 @@ namespace SharpFlame.Gui.Sections
                     }
                 }
                 EndOfTextures2:
-                    GL.End();
+                GL.End();
             }
 
-            if ( App.DisplayTileOrientation )
+            if( App.DisplayTileOrientation )
             {
                 GL.Disable(EnableCap.CullFace);
 
@@ -420,12 +452,12 @@ namespace SharpFlame.Gui.Sections
 
                 GL.Begin(BeginMode.Triangles);
                 GL.Color3(1.0F, 1.0F, 0.0F);
-                for ( var y = 0; y <= TextureCount.Y - 1; y++ )
+                for( var y = 0; y <= TextureCount.Y - 1; y++ )
                 {
-                    for ( var x = 0; x <= TextureCount.X - 1; x++ )
+                    for( var x = 0; x <= TextureCount.X - 1; x++ )
                     {
                         var num = y * TextureCount.X + x;
-                        if ( num >= tileset.Tiles.Count )
+                        if( num >= tileset.Tiles.Count )
                         {
                             goto EndOfTextures3;
                         }
@@ -435,25 +467,25 @@ namespace SharpFlame.Gui.Sections
                     }
                 }
                 EndOfTextures3:
-                    GL.End();
+                GL.End();
 
                 GL.Enable(EnableCap.CullFace);
             }
 
-            if ( (bool)chkDisplayTileNumbers.Checked && App.UnitLabelFont != null ) //TextureViewFont IsNot Nothing Then
+            if( (bool)chkDisplayTileNumbers.Checked && App.UnitLabelFont != null ) //TextureViewFont IsNot Nothing Then
             {
                 GL.Enable(EnableCap.Texture2D);
-                for ( var y = 0; y <= TextureCount.Y - 1; y++ )
+                for( var y = 0; y <= TextureCount.Y - 1; y++ )
                 {
-                    for ( var x = 0; x <= TextureCount.X - 1; x++ )
+                    for( var x = 0; x <= TextureCount.X - 1; x++ )
                     {
                         var num = y * TextureCount.X + x;
-                        if ( num >= tileset.Tiles.Count )
+                        if( num >= tileset.Tiles.Count )
                         {
                             goto EndOfTextures4;
                         }
                         clsTextLabel textLabel = new clsTextLabel();
-                        textLabel.Text = num.ToString ();
+                        textLabel.Text = num.ToString();
                         textLabel.SizeY = 24.0F;
                         textLabel.Colour.Red = 1.0F;
                         textLabel.Colour.Green = 1.0F;
@@ -466,10 +498,10 @@ namespace SharpFlame.Gui.Sections
                     }
                 }
                 EndOfTextures4:
-                    GL.Disable(EnableCap.Texture2D);
+                GL.Disable(EnableCap.Texture2D);
             }
 
-            if ( App.UiOptions.Textures.SelectedTile >= 0 & TextureCount.X > 0 )
+            if( App.UiOptions.Textures.SelectedTile >= 0 & TextureCount.X > 0 )
             {
                 xyInt.X = App.UiOptions.Textures.SelectedTile % TextureCount.X;
                 xyInt.Y = App.UiOptions.Textures.SelectedTile / TextureCount.X;
@@ -483,81 +515,89 @@ namespace SharpFlame.Gui.Sections
             }
 
             GL.Flush();
-            application.GlTexturesView.SwapBuffers ();
+            this.glSurface.SwapBuffers();
         }
 
-		ComboBox textureComboBox()
-		{
-			var control = new ComboBox();
-            if (App.Tilesets != null)
+        private static ComboBox TextureComboBox()
+        {
+            var control = new ComboBox();
+            if( App.Tilesets != null )
             {
-                control.Items.AddRange (App.Tilesets);
+                control.Items.AddRange(App.Tilesets);
             }
-			return control;
-		}
+            return control;
+        }
 
-		Control tileTypeComboBox()
-		{
-			var control = new ComboBox();
-			return control;
-		}
+        private static Control TileTypeComboBox()
+        {
+            var control = new ComboBox();
+            return control;
+        }
 
-        ImageView makeBtnRotateAntiClockwise()
-		{
-			var image = Resources.BtnRotateAntiClockwise ();
-			var control = new ImageView {
-				Image = image,
-				Size = new Size (image.Width, image.Height)
-			};
+        private static ImageView MakeBtnRotateAntiClockwise()
+        {
+            var image = Resources.BtnRotateAntiClockwise();
+            var control = new ImageView
+                {
+                    Image = image,
+                    Size = new Size(image.Width, image.Height)
+                };
 
-			control.MouseEnter += (sender, e) => {
-				((ImageView)sender).BackgroundColor = Colors.Gray;
-			};
+            control.MouseEnter += (sender, e) =>
+                {
+                    ((ImageView)sender).BackgroundColor = Colors.Gray;
+                };
 
-			control.MouseLeave += (sender, e) => {
-				((ImageView)sender).BackgroundColor = Colors.Transparent;
-			};
+            control.MouseLeave += (sender, e) =>
+                {
+                    ((ImageView)sender).BackgroundColor = Colors.Transparent;
+                };
 
-			return control;
-		}
+            return control;
+        }
 
-        ImageView makeBtnRotateClockwise()
-		{
-			var image = Resources.BtnRotateClockwise ();
-			var control = new ImageView {
-				Image = image,
-				Size = new Size (image.Width, image.Height)
-			};
-				
-			control.MouseEnter += (sender, e) => {
-				((ImageView)sender).BackgroundColor = Colors.Gray;
-			};
+        private static ImageView MakeBtnRotateClockwise()
+        {
+            var image = Resources.BtnRotateClockwise();
+            var control = new ImageView
+                {
+                    Image = image,
+                    Size = new Size(image.Width, image.Height)
+                };
 
-			control.MouseLeave += (sender, e) => {
-				((ImageView)sender).BackgroundColor = Colors.Transparent;
-			};
+            control.MouseEnter += (sender, e) =>
+                {
+                    ((ImageView)sender).BackgroundColor = Colors.Gray;
+                };
 
-			return control;
-		}
+            control.MouseLeave += (sender, e) =>
+                {
+                    ((ImageView)sender).BackgroundColor = Colors.Transparent;
+                };
 
-        ImageView makeBtnFlipX()
-		{
-			var image = Resources.BtnFlipX ();
-			var control = new ImageView {
-				Image = image,
-				Size = new Size (image.Width, image.Height)
-			};
+            return control;
+        }
 
-			control.MouseEnter += (sender, e) => {
-				((ImageView)sender).BackgroundColor = Colors.Gray;
-			};
+        private static ImageView MakeBtnFlipX()
+        {
+            var image = Resources.BtnFlipX();
+            var control = new ImageView
+                {
+                    Image = image,
+                    Size = new Size(image.Width, image.Height)
+                };
 
-			control.MouseLeave += (sender, e) => {
-				((ImageView)sender).BackgroundColor = Colors.Transparent;
-			};
+            control.MouseEnter += (sender, e) =>
+                {
+                    ((ImageView)sender).BackgroundColor = Colors.Gray;
+                };
 
-			return control;
-		}
-	}
+            control.MouseLeave += (sender, e) =>
+                {
+                    ((ImageView)sender).BackgroundColor = Colors.Transparent;
+                };
+
+            return control;
+        }
+    }
 }
-
