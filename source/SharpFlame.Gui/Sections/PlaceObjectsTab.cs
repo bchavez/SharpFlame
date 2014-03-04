@@ -110,12 +110,12 @@ namespace SharpFlame.Gui.Sections
             mainLayout.AddRow (nLayout5);
 			mainLayout.Add (tabControl);
 
-            setBindings ();
+            SetupEventHandlers ();
 
 			Content = mainLayout;
 		}
 
-        void setBindings() {
+        void SetupEventHandlers() {
             // Rotation buttons
             btnRotation0.Click += delegate {
                 nudRotation.Value = 0D;

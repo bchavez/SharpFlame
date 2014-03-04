@@ -92,8 +92,8 @@
     <Compile Include="..\SharpFlame.Core\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="NinjectBindings\Bootstrap.cs" />
     <Compile Include="NinjectBindings\NamedBinding.cs" />
-    <Compile Include="NinjectBindings\NinjectHook.cs" />
     <Compile Include="NinjectBindings\SharpFlameModule.cs" />
     <Compile Include="Dialogs\About.cs">
       <SubType>Eto.Forms</SubType>

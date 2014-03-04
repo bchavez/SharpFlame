@@ -48,30 +48,24 @@ using FontStyle = System.Drawing.FontStyle;
 namespace SharpFlame.Gui
 {
     public class SharpFlameApplication : Application
-	{
+    {
         private readonly IKernel kernel;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        //[Inject, Named(NamedBinding.TextureView)]
+        [Inject, Named(NamedBinding.TextureView)]
         public GLSurface GlTexturesView { get; set; }
-        
-        //[Inject, Named(NamedBinding.MapView)]
+
+        [Inject, Named(NamedBinding.MapView)]
         public GLSurface GlMapView { get; set; }
 
         private Result initializeResult = new Result("Startup result", false);
 
         [Inject]
-        public SharpFlameApplication(
-            IKernel kernel,
-            Generator generator,
-            [Named(NamedBinding.MapView)] GLSurface mapView,
-            [Named(NamedBinding.TextureView)] GLSurface textureView
-            )
+        public SharpFlameApplication(IKernel kernel, Generator generator)
             : base(generator)
         {
             this.kernel = kernel;
-            this.GlTexturesView = textureView;
-            this.GlMapView = mapView;
+            kernel.Inject(this); //inject properties also, not just constructor.
 
             // Allows manual Button size on GTK2.
             Button.DefaultSize = new Size(1, 1);
@@ -100,7 +94,7 @@ namespace SharpFlame.Gui
             //GlMapView = new GLSurface ();
             GlTexturesView.Initialized += OnGLControlInitialized;
 
-            SettingsBindings();
+            SetupEventHandlers();
 
             initializeResult.Add(App.Settings.Load(App.SettingsPath));
             // initializeResult.Add (SettingsManager.SettingsLoad (ref SettingsManager.InitializeSettings));           
@@ -110,154 +104,187 @@ namespace SharpFlame.Gui
         {
             this.MainForm = kernel.Get<MainForm>();
 
-			base.OnInitialized(e);          
+            base.OnInitialized(e);
 
-			// show the main form
-			MainForm.Show();
+            // show the main form
+            MainForm.Show();
 
-            if (App.Settings.ShowOptionsAtStartup)
+            if( App.Settings.ShowOptionsAtStartup )
             {
-                new Dialogs.Settings ().Show ();
+                new Dialogs.Settings().Show();
             }
-		}
+        }
 
-		public override void OnTerminating(System.ComponentModel.CancelEventArgs e)
-		{
-			base.OnTerminating(e);
+        public override void OnTerminating(System.ComponentModel.CancelEventArgs e)
+        {
+            base.OnTerminating(e);
 
-			var result = MessageBox.Show(MainForm, "Are you sure you want to quit?", MessageBoxButtons.YesNo, MessageBoxType.Question);
-			if (result == DialogResult.No)
-				e.Cancel = true;
-		}
+            var result = MessageBox.Show(MainForm, "Are you sure you want to quit?", MessageBoxButtons.YesNo, MessageBoxType.Question);
+            if( result == DialogResult.No )
+                e.Cancel = true;
+        }
 
         /// <summary>
         /// Ons the GL control initialized.
         /// </summary>
         /// <param name="o">Not used.</param>
         /// <param name="e">Not used.</param>
-        void OnGLControlInitialized(object o, EventArgs e) {
-            GlTexturesView.MakeCurrent ();
+        private void OnGLControlInitialized(object o, EventArgs e)
+        {
+            GlTexturesView.MakeCurrent();
 
             // Load tileset directories.
-            foreach (var path in App.Settings.TilesetDirectories) {
-                if (path != null && path != "") {
-                    initializeResult.Add (App.LoadTilesets (path));
+            foreach( var path in App.Settings.TilesetDirectories )
+            {
+                if( path != null && path != "" )
+                {
+                    initializeResult.Add(App.LoadTilesets(path));
                 }
             }
 
             // Load Object Data.
-            foreach (var path in App.Settings.ObjectDataDirectories) {
-                if (path != null && path != "") {
+            foreach( var path in App.Settings.ObjectDataDirectories )
+            {
+                if( path != null && path != "" )
+                {
                     initializeResult.Add(App.ObjectData.LoadDirectory(path));
                 }
             }
 
             // Make the GL Font.
-            MakeGlFont ();
+            MakeGlFont();
 
-            if (initializeResult.HasProblems)
+            if( initializeResult.HasProblems )
             {
-                logger.Error (initializeResult.ToString ());
-                new Dialogs.Status (initializeResult).Show();
-            } else if (initializeResult.HasWarnings)
+                logger.Error(initializeResult.ToString());
+                new Dialogs.Status(initializeResult).Show();
+            }
+            else if( initializeResult.HasWarnings )
             {
-                logger.Warn (initializeResult.ToString ());
-                new Dialogs.Status (initializeResult).Show();
-            } else
+                logger.Warn(initializeResult.ToString());
+                new Dialogs.Status(initializeResult).Show();
+            }
+            else
             {
-                logger.Debug (initializeResult.ToString ());
-            }           
+                logger.Debug(initializeResult.ToString());
+            }
         }
 
-        void SettingsBindings() {
-            App.Settings.PropertyChanged += (object sender, PropertyChangedEventArgs e) => {
-                #if DEBUG
-                Console.WriteLine("Setting {0} changed ", e.PropertyName);
-                #endif
+        private void SetupEventHandlers()
+        {
+            App.Settings.PropertyChanged += (sender, e) =>
+                {
+#if DEBUG
+                    Console.WriteLine("Setting {0} changed ", e.PropertyName);
+#endif
 
-                if (e.PropertyName.StartsWith("Font") && GlTexturesView.IsInitialized) {
-                    MakeGlFont();
-                }
-            };
+                    if( e.PropertyName.StartsWith("Font") && GlTexturesView.IsInitialized )
+                    {
+                        MakeGlFont();
+                    }
+                };
 
-            App.Settings.TilesetDirectories.CollectionChanged += (sender, e) => 
-            {
-                if (!GlTexturesView.IsInitialized) {
-                    return;
-                }
+            App.Settings.TilesetDirectories.CollectionChanged += (sender, e) =>
+                {
+                    if( !GlTexturesView.IsInitialized )
+                    {
+                        return;
+                    }
 
-                try {
-                    if (e.Action == NotifyCollectionChangedAction.Add) {
-                        foreach (var item in e.NewItems) {
-                            var result = App.LoadTilesets ((string)item);
-                            if (result.HasProblems || result.HasWarnings) {
-                                new Dialogs.Status (result).Show();
-                                App.Settings.TilesetDirectories.Remove((string)item);
+                    try
+                    {
+                        if( e.Action == NotifyCollectionChangedAction.Add )
+                        {
+                            foreach( var item in e.NewItems )
+                            {
+                                var result = App.LoadTilesets((string)item);
+                                if( result.HasProblems || result.HasWarnings )
+                                {
+                                    new Dialogs.Status(result).Show();
+                                    App.Settings.TilesetDirectories.Remove((string)item);
+                                }
                             }
                         }
-                    } else if (e.Action == NotifyCollectionChangedAction.Remove) {
-                        foreach (var item in e.OldItems) {
-                            var found = App.Tilesets.Where(w => w.Directory.StartsWith((string)item)).ToList();
-                            foreach (var foundItem in found) {
-                                App.Tilesets.Remove(foundItem);
+                        else if( e.Action == NotifyCollectionChangedAction.Remove )
+                        {
+                            foreach( var item in e.OldItems )
+                            {
+                                var found = App.Tilesets.Where(w => w.Directory.StartsWith((string)item)).ToList();
+                                foreach( var foundItem in found )
+                                {
+                                    App.Tilesets.Remove(foundItem);
+                                }
                             }
                         }
                     }
-                } catch (Exception ex) {
-                    logger.ErrorException("Got an Exception", ex);
-                }
-            };
+                    catch( Exception ex )
+                    {
+                        logger.ErrorException("Got an Exception", ex);
+                    }
+                };
 
             App.Settings.ObjectDataDirectories.CollectionChanged += (sender, e) =>
-            {
-                if (!GlTexturesView.IsInitialized) {
-                    return;
-                }
-
-                try {
-                    var result = new Result("Reloading object data.", false);
-                    if (e.Action == NotifyCollectionChangedAction.Add) {
-                        // Just reload Object Data.
-                        App.ObjectData = new ObjectData();
-                        foreach (var path in App.Settings.ObjectDataDirectories) {
-                            if (path != null && path != "") {
-                                result.Add(App.ObjectData.LoadDirectory(path));
-                            }
-                        }
-                    } else if (e.Action == NotifyCollectionChangedAction.Remove) {
-                        // Just reload Object Data.
-                        App.ObjectData = new ObjectData();
-                        foreach (var path in App.Settings.ObjectDataDirectories) {
-                            if (path != null && path != "") {
-                                result.Add(App.ObjectData.LoadDirectory(path));
-                            }
-                        }
-                        // Need to send an objectchanged event as LoadDirectory may never occurs.
-                        App.OnObjectDataChanged(this, EventArgs.Empty);
+                {
+                    if( !GlTexturesView.IsInitialized )
+                    {
+                        return;
                     }
 
-                    if (result.HasProblems || result.HasWarnings) {
-                        new Dialogs.Status (result).Show();
+                    try
+                    {
+                        var result = new Result("Reloading object data.", false);
+                        if( e.Action == NotifyCollectionChangedAction.Add )
+                        {
+                            // Just reload Object Data.
+                            App.ObjectData = new ObjectData();
+                            foreach( var path in App.Settings.ObjectDataDirectories )
+                            {
+                                if( path != null && path != "" )
+                                {
+                                    result.Add(App.ObjectData.LoadDirectory(path));
+                                }
+                            }
+                        }
+                        else if( e.Action == NotifyCollectionChangedAction.Remove )
+                        {
+                            // Just reload Object Data.
+                            App.ObjectData = new ObjectData();
+                            foreach( var path in App.Settings.ObjectDataDirectories )
+                            {
+                                if( path != null && path != "" )
+                                {
+                                    result.Add(App.ObjectData.LoadDirectory(path));
+                                }
+                            }
+                            // Need to send an objectchanged event as LoadDirectory may never occurs.
+                            App.OnObjectDataChanged(this, EventArgs.Empty);
+                        }
+
+                        if( result.HasProblems || result.HasWarnings )
+                        {
+                            new Dialogs.Status(result).Show();
+                        }
                     }
-                } catch (Exception ex) {
-                    logger.ErrorException("Got an Exception", ex);
-                }
-            };
+                    catch( Exception ex )
+                    {
+                        logger.ErrorException("Got an Exception", ex);
+                    }
+                };
         }
 
-        void MakeGlFont()
+        private void MakeGlFont()
         {
             var style = FontStyle.Regular;
-            if ( App.Settings.FontBold )
+            if( App.Settings.FontBold )
             {
                 style = style | FontStyle.Bold;
             }
-            if ( App.Settings.FontItalic )
+            if( App.Settings.FontItalic )
             {
                 style = style | FontStyle.Italic;
             }
-            App.UnitLabelFont = GlTexturesView.CreateGLFont (new Font(App.Settings.FontFamily, App.Settings.FontSize, style, GraphicsUnit.Point));
+            App.UnitLabelFont = GlTexturesView.CreateGLFont(new Font(App.Settings.FontFamily, App.Settings.FontSize, style, GraphicsUnit.Point));
         }
-	}
+    }
 }
 

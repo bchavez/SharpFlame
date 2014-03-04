@@ -268,12 +268,12 @@ namespace SharpFlame.Gui.Sections
 		    newMainyLayout.AddRow(null, mainLayout, null);
             newMainyLayout.Add(null);
 
-            setBindings ();
+            SetupEventHandlers ();
 
             Content = newMainyLayout;
 		}
 
-        void setBindings() {
+        void SetupEventHandlers() {
             // Set Mousetool, when we are shown.
             Shown += delegate {
                 App.UiOptions.MouseTool = MouseTool.ObjectSelect;

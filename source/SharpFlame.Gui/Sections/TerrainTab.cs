@@ -64,52 +64,52 @@ namespace SharpFlame.Gui.Sections
 			layout.Add (CliffSection ());
             layout.Add (null);
 
-            setBindings ();
+            SetupEventHandlers ();
 
 			Content = layout;
 		}
 
-        void setBindings() {
+        void SetupEventHandlers() {
             rbGroundPlace.CheckedChanged += delegate
             {
-                setMouseMode ();
+                SetMouseMode ();
             };
             rbGroundFill.CheckedChanged += delegate
             {
-                setMouseMode ();
+                SetMouseMode ();
             };
             rbRoadSides.CheckedChanged += delegate
             {
-                setMouseMode ();
+                SetMouseMode ();
             };
             rbRoadLines.CheckedChanged += delegate
             {
-                setMouseMode ();
+                SetMouseMode ();
             };
             rbRoadRemove.CheckedChanged += delegate
             {
-                setMouseMode ();
+                SetMouseMode ();
             };
             rbCliffTriangle.CheckedChanged += delegate
             {
-                setMouseMode ();
+                SetMouseMode ();
             };
             rbCliffBrush.CheckedChanged += delegate
             {
-                setMouseMode ();
+                SetMouseMode ();
             };
             rbCliffRemove.CheckedChanged += delegate
             {
-                setMouseMode ();
+                SetMouseMode ();
             };
 
             // Set Mousetool, when we are shown.
             Shown += delegate {
-                setMouseMode();
+                SetMouseMode();
             };
         }
 
-        void setMouseMode() {
+        void SetMouseMode() {
             if (rbGroundPlace.Checked)
             {
                 App.UiOptions.MouseTool = MouseTool.TerrainBrush;

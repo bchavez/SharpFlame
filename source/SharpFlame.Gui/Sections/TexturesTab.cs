@@ -190,7 +190,7 @@ namespace SharpFlame.Gui.Sections
             //mainLayout.Add();
 
             // Set the bindings to UiOptions.Textures
-            SetBindings();
+            SetupEventHandlers();
 
             Content = mainLayout;
         }
@@ -198,7 +198,7 @@ namespace SharpFlame.Gui.Sections
         /// <summary>
         /// Sets the Bindings to App.UiOptions.Textures;
         /// </summary>
-        private void SetBindings()
+        private void SetupEventHandlers()
         {
             TexturesOptions texturesOptions = App.UiOptions.Textures;
 
