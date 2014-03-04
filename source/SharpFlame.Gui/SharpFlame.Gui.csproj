@@ -141,7 +141,6 @@
     <Compile Include="Controls\GLSurface.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="OTK\IGLControl.cs" />
     <Compile Include="Dialogs\Status.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
@@ -149,6 +148,7 @@
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Actions\Settings.cs" />
+    <Compile Include="Dialogs\KeyInput.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

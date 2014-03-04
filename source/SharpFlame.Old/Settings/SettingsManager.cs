@@ -93,6 +93,8 @@ namespace SharpFlame.Old.Settings
         public ObservableCollection<string> ObjectDataDirectories { get; private set; }
         public bool PickOrientation { get; set; }
 
+        public Keyboard Keyboard { get; set; }
+
         [JsonIgnore]
         public Font Font { get; private set; }
         #endregion
@@ -136,6 +138,7 @@ namespace SharpFlame.Old.Settings
         #region Public Methods
         public SettingsManager ()
         {
+            Keyboard = new Keyboard ();
             SetDefaults ();
         }
 
@@ -169,6 +172,60 @@ namespace SharpFlame.Old.Settings
             TilesetDirectories = new ObservableCollection<string> ();
             ObjectDataDirectories = new ObservableCollection<string> ();
             PickOrientation = true;
+
+            //interface controls
+            Keyboard.Create ("ObjectSelectTool", Keys.Escape);
+            Keyboard.Create ("PreviousTool", Keys.Grave);
+
+            //selected unit controls
+            Keyboard.Create ("MoveObjects", Keys.M);
+            Keyboard.Create ("DeleteObjects", Keys.Delete);
+            Keyboard.Create ("Multiselect", Keys.Shift);
+
+            //generalised controls
+            Keyboard.Create ("ViewSlow", Keys.R);
+            Keyboard.Create ("ViewFast", Keys.F);
+
+            //picker controls
+            Keyboard.Create ("Picker", Keys.Control);
+
+            //view controls
+            Keyboard.Create ("ShowTextures", Keys.F5);
+            Keyboard.Create ("ShowLighting", Keys.F8);
+            Keyboard.Create ("ShowWireframe", Keys.F6);
+            Keyboard.Create ("ShowObjects", Keys.F7);
+            Keyboard.Create ("ShowLabels", Keys.F4);
+            Keyboard.Create ("ViewMoveMode", Keys.F1);
+            Keyboard.Create ("ViewRotateMode", Keys.F2);
+            Keyboard.Create ("ViewMoveLeft", Keys.A);
+            Keyboard.Create ("ViewMoveRight", Keys.D);
+            Keyboard.Create ("ViewMoveForwards", Keys.W);
+            Keyboard.Create ("ViewMoveBackwards", Keys.S);
+            Keyboard.Create ("ViewMoveUp", Keys.E);
+            Keyboard.Create ("ViewMoveDown", Keys.C);
+            Keyboard.Create ("ViewZoomIn", Keys.Home);
+            Keyboard.Create ("ViewZoomOut", Keys.End);
+            Keyboard.Create ("ViewRotateLeft", Keys.Left);
+            Keyboard.Create ("ViewRotateRight", Keys.Right);
+            Keyboard.Create ("ViewRotateForwards", Keys.Up);
+            Keyboard.Create ("ViewRotateBackwards", Keys.Down);
+            Keyboard.Create ("ViewRotateUp", Keys.PageUp);
+            Keyboard.Create ("ViewRotateDown", Keys.PageDown);
+            Keyboard.Create ("ViewRollLeft", Keys.LeftBracket);
+            Keyboard.Create ("ViewRollRight", Keys.RightBracket);
+            Keyboard.Create ("ViewReset", Keys.Backspace);
+
+            //texture controls
+            Keyboard.Create ("CounterClockwise", Keys.D1);
+            Keyboard.Create ("Clockwise", Keys.D2);
+            Keyboard.Create ("TextureFlip", Keys.D3);
+            Keyboard.Create ("TriangleFlip", Keys.D4);
+            Keyboard.Create ("GatewayDelete", Keys.D5);
+
+            //undo controls
+            Keyboard.Create ("Undo", Keys.Z);
+            Keyboard.Create ("Redo", Keys.Y);
+            Keyboard.Create ("PositionLabel", Keys.P);
         }
 
         public Result Save(string path)
@@ -214,4 +271,3 @@ namespace SharpFlame.Old.Settings
         #endregion       
     }
 }
-
