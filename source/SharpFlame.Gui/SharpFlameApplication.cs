@@ -47,6 +47,11 @@ using FontStyle = System.Drawing.FontStyle;
 
 namespace SharpFlame.Gui
 {
+    public static class EventTopics
+    {
+        public const string SettingsChanged = "topic://settings/changed";
+    }
+
     public class SharpFlameApplication : Application
     {
         private readonly IKernel kernel;
