@@ -340,22 +340,35 @@ namespace SharpFlame.Gui.Sections
 
             var tileset = App.Tilesets[App.UiOptions.Textures.TilesetNum];
 
-            TextureCount = new XYInt
-                {
-                    X = (int)(Math.Floor((scrollTextureView.Size.Width - 20) / 64.0D)),
-                    Y = (int)(Math.Ceiling((double)tileset.Tiles.Count / TextureCount.X))
-                };
+            var glSize = new Size (0, 0);
+            TextureCount = new XYInt {
+                X = (int)(Math.Floor (scrollTextureView.ClientSize.Width / 64.0D)),
+                Y = (int)(Math.Ceiling ((double)tileset.Tiles.Count / TextureCount.X))
+            };        
 
-            var height = TextureCount.Y * 64;
-            // TODO: See how thick the scroll is on winforms and mac, 20px seems to be right on GTK.
-            var glSize = this.GLSurface.GLSize = new Size(scrollTextureView.Size.Width - 20, height);
-
+            Console.WriteLine ("Test xy:{0}, size:{1}, csize:{2}", TextureCount, scrollTextureView.Size, scrollTextureView.ClientSize);
+            if (TextureCount.Y * 64 >= scrollTextureView.Size.Height)
+            {
+                // TODO: See how thick the scroll is on winforms and mac, 20px seems to be right on GTK.
+                glSize = GLSurface.GLSize = new Size(scrollTextureView.ClientSize.Width - 20, TextureCount.Y * 64);
+            }
+            else
+            {
+                TextureCount = new XYInt {
+                    X = (int)(Math.Floor (GLSurface.Size.Width / 64.0D)),
+                    Y = (int)(Math.Ceiling (GLSurface.Size.Height / 64.0D))
+                };        
+                glSize = GLSurface.GLSize = scrollTextureView.ClientSize;
+            }
+                
             // send the resize event to the Graphics card.
             GL.Viewport(0, 0, glSize.Width, glSize.Height);
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
             GL.Ortho(-1.0, 1.0, -1.0, 1.0, 0.0, 4.0);
+            GL.MatrixMode (MatrixMode.Modelview);
 
+            GL.Disable (EnableCap.DepthTest);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             var xyInt = new XYInt();
@@ -366,9 +379,8 @@ namespace SharpFlame.Gui.Sections
             var texCoord3 = new XYDouble();
 
             GL.MatrixMode(MatrixMode.Projection);
-            var temp_mat = Matrix4.CreateOrthographicOffCenter(0.0F, glSize.Width, glSize.Height, 0.0F, -1.0F, 1.0F);
-            // var temp_mat = Matrix4.CreateOrthographic(glSize.Width, glSize.Height, 1.0f, 1000.0f);
-            GL.LoadMatrix(ref temp_mat);
+            GL.LoadIdentity();
+            GL.Ortho (0, glSize.Width, glSize.Height, 0, 0, 1);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
@@ -516,6 +528,8 @@ namespace SharpFlame.Gui.Sections
                 GL.Vertex2(xyInt.X * 64 + 64, xyInt.Y * 64);
                 GL.End();
             }
+
+            GL.Enable (EnableCap.DepthTest);
 
             GL.Flush();
             this.GLSurface.SwapBuffers();
