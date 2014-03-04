@@ -346,11 +346,9 @@ namespace SharpFlame.Gui.Sections
                 Y = (int)(Math.Ceiling ((double)tileset.Tiles.Count / TextureCount.X))
             };        
 
-            Console.WriteLine ("Test xy:{0}, size:{1}, csize:{2}", TextureCount, scrollTextureView.Size, scrollTextureView.ClientSize);
             if (TextureCount.Y * 64 >= scrollTextureView.Size.Height)
             {
-                // TODO: See how thick the scroll is on winforms and mac, 20px seems to be right on GTK.
-                glSize = GLSurface.GLSize = new Size(scrollTextureView.ClientSize.Width - 20, TextureCount.Y * 64);
+                glSize = GLSurface.GLSize = new Size(scrollTextureView.ClientSize.Width, TextureCount.Y * 64);
             }
             else
             {
