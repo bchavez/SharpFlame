@@ -31,7 +31,7 @@ namespace SharpFlame.Gui.Gtk
 			var generator = new Eto.Platform.GtkSharp.Generator ();
             generator.Add<IGLSurfaceHandler>(()=> new LinuxGLSurfaceHandler());
 
-		    var kernel = Bootstrap.Kernel(generator);
+		    var kernel = Bootstrap.KernelWith(generator);
 
             //var app = new SharpFlameApplication (generator);
 		    var app = kernel.Get<SharpFlameApplication>();

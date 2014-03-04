@@ -58,13 +58,13 @@ namespace SharpFlame.Gui.NinjectBindings
 
     public static class Bootstrap
     {
-        public static IKernel Kernel(Eto.Generator generator)
+        public static IKernel KernelWith(Eto.Generator generator)
         {
             var settings = new NinjectSettings
-            {
-                InjectNonPublic = true,
-                LoadExtensions = false,
-            };
+                {
+                    InjectNonPublic = true,
+                    LoadExtensions = false,
+                };
 
             var kernelModules = new List<INinjectModule>
                 {
@@ -84,7 +84,7 @@ namespace SharpFlame.Gui.NinjectBindings
             return kernel;
         }
 
-        internal static void HookEtoGenerator(Eto.Generator eto, IKernel k)
+        private static void HookEtoGenerator(Eto.Generator eto, IKernel k)
         {
             //actually, WidgetCreated is fired when the *generator handler* is created 
             //from the generator factory.

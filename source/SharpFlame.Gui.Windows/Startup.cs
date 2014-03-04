@@ -21,7 +21,7 @@ namespace SharpFlame.Gui.Windows
             generator.Add<IGLSurfaceHandler>(() => new WinGLSurfaceHandler());
             generator.Add<IPanel>(() => new WinPanelHandler());
 
-            var kernel = Bootstrap.Kernel(generator);
+            var kernel = Bootstrap.KernelWith(generator);
             
             var app = kernel.Get<SharpFlameApplication>();
 

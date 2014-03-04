@@ -1,6 +1,8 @@
 ﻿using System;
+using Ninject;
 using SharpFlame.Gui.Controls;
 using SharpFlame.Gui.Mac.EtoCustom;
+using SharpFlame.Gui.NinjectBindings;
 
 namespace SharpFlame.Gui.Mac
 {
@@ -12,10 +14,14 @@ namespace SharpFlame.Gui.Mac
         [STAThread]
         public static void Main(string[] args)
         {
-            var macGenrator = new Eto.Platform.Mac.Generator();
-			macGenrator.Add<IGLSurfaceHandler>( () => new MacGLSurfaceHandler() );
+            var macGenerator = new Eto.Platform.Mac.Generator();
+			macGenerator.Add<IGLSurfaceHandler>( () => new MacGLSurfaceHandler() );
 
-            var app = new SharpFlameApplication( macGenrator );
+            //var app = new SharpFlameApplication( macGenrator );
+
+            var kernel = Bootstrap.KernelWith(macGenerator);
+
+            var app = kernel.Get<SharpFlameApplication>();
 
             app.Run( args );
         }
