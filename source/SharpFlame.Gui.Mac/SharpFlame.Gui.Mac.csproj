@@ -115,6 +115,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SharpFlame.Core\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="EtoCustom\MacGLSurfaceHandler.cs" />
     <Compile Include="EtoCustom\MacGLView.cs" />
     <Compile Include="Startup.cs" />

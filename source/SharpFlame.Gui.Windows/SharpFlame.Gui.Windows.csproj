@@ -54,6 +54,9 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SharpFlame.Core\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="EtoCustom\WinGLSurfaceHandler.cs" />
     <Compile Include="EtoCustom\WinGLUserControl.cs">
       <SubType>UserControl</SubType>

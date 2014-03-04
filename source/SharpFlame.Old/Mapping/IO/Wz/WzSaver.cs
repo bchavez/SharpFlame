@@ -834,7 +834,7 @@ namespace SharpFlame.Old.Mapping.IO.Wz
                 return returnResult;
             }
 
-            fileLEV.Write("// Made with {0} {1} {2}{3}", Constants.ProgramName, Constants.ProgramVersionNumber, Constants.ProgramPlatform, Convert.ToString(endChar));
+            fileLEV.Write("// Made with {0} {1} {2}{3}", Constants.ProgramName, Constants.ProgramVersion(), Constants.ProgramPlatform, Convert.ToString(endChar));
             var DateNow = DateTime.Now;
             fileLEV.Write("// Date: {0}/{1}/{2} {3}:{4}:{5}{6}", DateNow.Year, App.MinDigits(DateNow.Month, 2), App.MinDigits(DateNow.Day, 2),
                           App.MinDigits(DateNow.Hour, 2), App.MinDigits(DateNow.Minute, 2), App.MinDigits(DateNow.Second, 2), endChar);

@@ -14,22 +14,26 @@
 
 
     <!-- Global Project Variables -->
-     <property name="BuildLabel" value="2.0" />
-     <property name="BuildLabel" value ="${BuildLabel}.${build.number}" if ="${property::exists('build.number')}" />
-     <property name="build.number" value="0.DEBUG" overwrite ="false" />
+    <property name="build.label" value="0.24" />
+    <property name="build.label" value ="${build.label}.${build.number}" if ="${property::exists('build.number')}" />
+    <property name="build.label" value ="${build.label}.11111.11111" unless="${property::exists('build.number')}" />
 
-
+    <property name="build.dir"  value="${path::get-full-path('__COMPILEOUTPUT')}" />
 
     <target name="build-win" if="${win}" description="Main Build Script for Windows OS">
         <call target="set-dev-env"/>
 
-        <msbuild project="SharpFlame.VS2013.sln" target="Rebuild" >
+        <msbuild project="SharpFlame.Gui.Windows\SharpFlame.Gui.Windows.csproj" target="Rebuild" >
             <!--<arg value ="/verbosity:diag" />-->
             <property name="Configuration" value="Release"/>
             <property name="VisualStudioVersion" value="11.0"/>
             <property name="EnablePackageProcessLoggingAndAssert" value="false" />
         </msbuild>
-        
+
+        <property name="il.input.dir" value="SharpFlame.Gui.Windows\bin\Release" />
+        <property name="il.input.exe" value="SharpFlame.Gui.Windows.exe"/>
+        <property name="il.output.dir" value="${build.dir}"/>
+        <call target="il-repack" />
     </target>
 
     <target name="build-linux" if="${linux}" description="Main Build Script for Linux">
@@ -42,6 +46,19 @@
 
     </target>
 
+    <target name="package">
+        <copy todir="${build.dir}">
+            <fileset basedir="Data">
+                <include name="tilesets/**"/>
+                <include name="3.1_b4-objects/**"/>
+            </fileset>
+        </copy>
+        <zip zipfile="${build.dir}\SharpFlame.zip">
+            <fileset basedir="${build.dir}">
+                <include name="**" />
+            </fileset>
+        </zip>
+    </target>
 
 
     <target name="set-dev-env" description="Sets the Mac project development enviornment so it can be opened by MonoDevelop/VS/XamarionStudio.">
@@ -66,6 +83,37 @@
 
      <!-- PRIVATE BUILD TARGETS -->
      <!-- PRIVATE BUILD TARGETS -->
+
+    <target name="gen-asminfo">
+        <asminfo output="SharpFlame.Core\GlobalAssemblyInfo.cs" language="CSharp">
+            <imports>
+                <import namespace="System" />
+                <import namespace="System.Reflection" />
+                <import namespace="System.Runtime.InteropServices" />
+            </imports>
+            <attributes>
+                <attribute type="AssemblyVersionAttribute" value="${build.label}" />
+                <attribute type="AssemblyFileVersionAttribute" value="${build.label}" />
+                <attribute type="AssemblyProductAttribute" value="SharpFlame"/>
+                <attribute type="AssemblyCopyrightAttribute" value="Copyright (c) ${datetime::get-year(datetime::now())}" />
+                <attribute type="AssemblyDescriptionAttribute" value="SharpFlame: A modern Warzone 21000 map editor based on the original Warzone 2100 FlaME map editor." />
+                <attribute type="AssemblyTrademarkAttribute" value="MIT License"/>
+            </attributes>
+        </asminfo>
+    </target>
+
+    <target name="il-repack">
+        <!--tools\ILRepack.exe /target:winexe /targetplatform:v4 /wildcards /out:C:\Code\Projects\Public\SharpFlame\source\SharpFlame.Gui.Windows\bin\Release\REPACK\SharpFlame.exe SharpFlame.Gui.Windows\bin\Release\*.exe SharpFlame.Gui.Windows\bin\Release\*.dll-->
+        <mkdir dir="${il.output.dir}" />
+        <exec workingdir="${il.input.dir}" program="tools\ILRepack.exe" verbose="true">
+            <arg value="/target:winexe" />
+            <arg value="/targetplatform:v4" />
+            <arg value="/wildcards" />
+            <arg line="/out:${path::combine(il.output.dir,'SharpFlame.exe')}"/>
+            <arg line="${il.input.exe}" />
+            <arg line="*.dll" />
+        </exec>
+    </target>
 
      <script language="C#">
          <references>

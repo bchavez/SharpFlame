@@ -37,7 +37,7 @@ namespace SharpFlame.Gui.Forms
 		public MainForm(SharpFlameApplication app)
 		{
 			ClientSize = new Size(1024, 768);
-			Title = string.Format ("No Map - {0} {1}", Constants.ProgramName, Constants.ProgramVersionNumber);
+			Title = string.Format ("No Map - {0} {1}", Constants.ProgramName, Constants.ProgramVersion());
 			Icon = Resources.SharpFlameIcon();
 
 			var tabControl = new TabControl ();

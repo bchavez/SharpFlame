@@ -61,7 +61,7 @@ namespace SharpFlame.Gui
 			// Allows manual Button size on GTK2.
 			Button.DefaultSize = new Size (1, 1);
 
-			Name = string.Format ("No Map - {0} {1}", Constants.ProgramName, Constants.ProgramVersionNumber);
+			Name = string.Format ("No Map - {0} {1}", Constants.ProgramName, Constants.ProgramVersion());
 			Style = "application";
 
             // Run this before everything else.

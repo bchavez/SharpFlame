@@ -13,8 +13,8 @@ namespace SharpFlame.Old
         {
             InitializeComponent();
 
-            Text = Constants.ProgramName + " " + Constants.ProgramVersionNumber + " Loading";
-            lblVersion.Text = Constants.ProgramVersionNumber;
+            Text = Constants.ProgramName + " " + Constants.ProgramVersion() + " Loading";
+            lblVersion.Text = Constants.ProgramVersion();
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)

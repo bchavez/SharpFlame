@@ -121,6 +121,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="..\SharpFlame.Core\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Collections\Specialized\BooleanMap.cs" />
     <Compile Include="Domain\ObjData\clsTextFile.cs" />
     <Compile Include="Domain\Definitions.cs" />

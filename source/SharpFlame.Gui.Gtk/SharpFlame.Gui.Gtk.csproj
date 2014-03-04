@@ -80,6 +80,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SharpFlame.Core\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="EtoCustom\GLDrawingArea.cs" />
     <Compile Include="EtoCustom\LinuxGLSurfaceHandler.cs" />
     <Compile Include="Startup.cs" />

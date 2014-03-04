@@ -34,7 +34,7 @@ namespace SharpFlame.Gui.Dialogs
 	{
 		public About()
 		{
-			Title = string.Format ("{0} {1}", Constants.ProgramName, Constants.ProgramVersionNumber);
+			Title = string.Format ("{0} {1}", Constants.ProgramName, Constants.ProgramVersion());
 			Resizable = true;
 
 			var layout = new DynamicLayout(new Padding(20, 5), new Size(10, 10));
@@ -53,7 +53,7 @@ namespace SharpFlame.Gui.Dialogs
 
 			layout.Add(new Label
 			{
-				Text = string.Format("Version {0}", Constants.ProgramVersionNumber),
+				Text = string.Format("Version {0}", Constants.ProgramVersion()),
 				Font = new Font(SystemFont.Default, 10),
 				HorizontalAlign = HorizontalAlign.Center
 			});

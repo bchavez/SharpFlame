@@ -2360,7 +2360,7 @@ namespace SharpFlame.Old
                 Map.SetTabText();
             }
 
-            Text = MapFileTitle + " - " + Constants.ProgramName + " " + Constants.ProgramVersionNumber;
+            Text = MapFileTitle + " - " + Constants.ProgramName + " " + Constants.ProgramVersion();
         }
 
         public void lstAutoTexture_SelectedIndexChanged(Object sender, EventArgs e)

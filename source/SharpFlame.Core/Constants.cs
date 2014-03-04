@@ -1,13 +1,17 @@
+using System.Reflection;
+using SharpFlame.Core.Extensions;
+
 namespace SharpFlame.Core
 {
     public static class Constants
     {
         public const string ProgramName = "SharpFlame";
-        public const string ProgramVersionNumber = "0.24";
 #if Mono
-        public const string ProgramPlatform = "Mono 0.24";
+        public const string ProgramPlatform = "Mono";
+#elif Mac
+        public const string ProgramPlatform = "MacOS";
 #else
-    public const string ProgramPlatform = "Windows";
+        public const string ProgramPlatform = "Windows";
 #endif
         public const int PlayerCountMax = 10;
         public const int GameTypeCount = 3;
@@ -23,5 +27,12 @@ namespace SharpFlame.Core
         public const int TileTypeNumWater = 7;
         public const int TileTypeNumCliff = 8;
         public const int TerrainGridSpacing = 128;
+
+        public static string ProgramVersion()
+        {
+            var ver = Assembly.GetExecutingAssembly()
+                .GetName().Version;
+            return "{0}.{1}".Format2(ver.Major, ver.Minor);
+        }
     }
 }
