@@ -27,50 +27,70 @@
 using System;
 using Eto.Forms;
 using Eto.Drawing;
+using Ninject;
 using SharpFlame.Core;
 using SharpFlame.Gui.Sections;
 
 namespace SharpFlame.Gui.Forms
 {
-	public class MainForm : Form
+	public class MainForm : Form, IInitializable
 	{
-		public MainForm(SharpFlameApplication app)
-		{
-			ClientSize = new Size(1024, 768);
-			Title = string.Format ("No Map - {0} {1}", Constants.ProgramName, Constants.ProgramVersion());
-			Icon = Resources.SharpFlameIcon();
+        [Inject]
+        internal TextureTab TextureTab { get; set; }
+        [Inject]
+        internal TerrainTab TerrainTab { get; set; }
+        [Inject]
+        internal HeightTab HeightTab { get; set; }
+        [Inject]
+        internal ResizeTab ResizeTab { get; set; }
+        [Inject]
+        internal PlaceObjectsTab PlaceObjectsTab { get; set; }
+        [Inject]
+        internal ObjectTab ObjectTab { get; set; }
+        [Inject]
+        internal LabelsTab LabelsTab { get; set; }
+        [Inject]
+        internal MainMapView MainMapView { get; set; }
 
-			var tabControl = new TabControl ();
-			tabControl.TabPages.Add(new TabPage { Text = "Textures", Content = new TextureTab(app) });
-			tabControl.TabPages.Add(new TabPage { Text = "Terrain", Content = new TerrainTab(app) });
-			tabControl.TabPages.Add(new TabPage { Text = "Height", Content = new HeightTab(app) });
-			tabControl.TabPages.Add(new TabPage { Text = "Resize", Content = new ResizeTab(app) });
-			tabControl.TabPages.Add(new TabPage { Text = "Place Objects", Content = new PlaceObjectsTab(app) });
-            tabControl.TabPages.Add(new TabPage { Text = "Object", Content = new ObjectTab(app) });
-            tabControl.TabPages.Add(new TabPage { Text = "Label", Content = new LabelsTab(app) });
+	    //Ninject initializer
+	    void IInitializable.Initialize()
+	    {
+	        ClientSize = new Size(1024, 768);
+	        Title = string.Format("No Map - {0} {1}", Constants.ProgramName, Constants.ProgramVersion());
+	        Icon = Resources.SharpFlameIcon();
 
-		    tabControl.SelectedIndexChanged += delegate
-		        {
-		            tabControl.SelectedPage.Content.OnShown(EventArgs.Empty);
-		        };
+	        var tabControl = new TabControl();
+	        tabControl.TabPages.Add(new TabPage {Text = "Textures", Content = this.TextureTab});
+	        tabControl.TabPages.Add(new TabPage {Text = "Terrain", Content = this.TerrainTab});
+	        tabControl.TabPages.Add(new TabPage {Text = "Height", Content = this.HeightTab});
+	        tabControl.TabPages.Add(new TabPage {Text = "Resize", Content = this.ResizeTab});
+	        tabControl.TabPages.Add(new TabPage {Text = "Place Objects", Content = this.PlaceObjectsTab});
+	        tabControl.TabPages.Add(new TabPage {Text = "Object", Content = this.ObjectTab});
+	        tabControl.TabPages.Add(new TabPage {Text = "Label", Content = this.LabelsTab});
 
-		    var splitter = new Splitter
-		        {
-		            Position = 392,
-		            FixedPanel = SplitterFixedPanel.Panel1,
-		            Panel1 = tabControl,
-		            Panel2 = new MainMapView(app)
-		        };
+	        tabControl.SelectedIndexChanged += delegate
+	            {
+	                tabControl.SelectedPage.Content.OnShown(EventArgs.Empty);
+	            };
 
-			// 7. Set the content of the form to use the layout
+	        var splitter = new Splitter
+	            {
+	                Position = 392,
+	                FixedPanel = SplitterFixedPanel.Panel1,
+	                Panel1 = tabControl,
+	                Panel2 = this.MainMapView
+	            };
 
-			Content = splitter;
+	        // 7. Set the content of the form to use the layout
 
-			GenerateMenuToolBar ();
-			Maximize ();
-		}     
+	        Content = splitter;
 
-		private void GenerateMenuToolBar()
+	        GenerateMenuToolBar();
+	        Maximize();
+	    }
+
+
+	    private void GenerateMenuToolBar()
 		{
 			var about = new Actions.About();
 			var quit = new Actions.Quit();

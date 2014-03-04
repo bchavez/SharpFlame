@@ -78,6 +78,9 @@
     <Reference Include="Eto.Platform.Gtk">
       <HintPath>..\packages\Eto-20140222\Eto.Platform.Gtk.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\packages\other\Ninject.Mono\Ninject.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharpFlame.Core\GlobalAssemblyInfo.cs">

@@ -31,11 +31,14 @@ using System.Drawing;
 using System.Linq;
 using Eto;
 using Eto.Forms;
+using Ninject;
 using NLog;
 using OpenTK;
 using SharpFlame.Core;
+using SharpFlame.Core.Parsers.Pie;
 using SharpFlame.Gui.Forms;
 using SharpFlame.Gui.Controls;
+using SharpFlame.Gui.NinjectBindings;
 using SharpFlame.Old;
 using SharpFlame.Old.Domain.ObjData;
 using Size = Eto.Drawing.Size;
@@ -46,24 +49,38 @@ namespace SharpFlame.Gui
 {
     public class SharpFlameApplication : Application
 	{
+        private readonly IKernel kernel;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public readonly GLSurface GlTexturesView;
-        public readonly GLSurface GlMapView;
+        //[Inject, Named(NamedBinding.TextureView)]
+        public GLSurface GlTexturesView { get; set; }
+        
+        //[Inject, Named(NamedBinding.MapView)]
+        public GLSurface GlMapView { get; set; }
 
         private Result initializeResult = new Result("Startup result", false);
 
-		public SharpFlameApplication(Generator generator)
-			: base(generator)
-		{
-			// Allows manual Button size on GTK2.
-			Button.DefaultSize = new Size (1, 1);
+        [Inject]
+        public SharpFlameApplication(
+            IKernel kernel,
+            Generator generator,
+            [Named(NamedBinding.MapView)] GLSurface mapView,
+            [Named(NamedBinding.TextureView)] GLSurface textureView
+            )
+            : base(generator)
+        {
+            this.kernel = kernel;
+            this.GlTexturesView = textureView;
+            this.GlMapView = mapView;
 
-			Name = string.Format ("No Map - {0} {1}", Constants.ProgramName, Constants.ProgramVersion());
-			Style = "application";
+            // Allows manual Button size on GTK2.
+            Button.DefaultSize = new Size(1, 1);
+
+            Name = string.Format("No Map - {0} {1}", Constants.ProgramName, Constants.ProgramVersion());
+            Style = "application";
 
             // Run this before everything else.
-            App.Initalize ();
+            App.Initalize();
 
             App.SetProgramSubDirs();
 
@@ -71,27 +88,27 @@ namespace SharpFlame.Gui
             {
                 Toolkit.Init();
             }
-            catch (Exception ex)
+            catch( Exception ex )
             {
-                logger.ErrorException ("Got an exception while initializing OpenTK", ex);
+                logger.ErrorException("Got an exception while initializing OpenTK", ex);
                 // initializeResult.ProblemAdd (string.Format("Failure while loading opentk, error was: {0}", ex.Message));
                 Instance.Quit();
             }
 
             // Set them up before you call settingsBindings().
-            GlTexturesView = new GLSurface ();
-            GlMapView = new GLSurface ();
-            GlTexturesView.Initialized += OnGLControlInitialized;           
+            //GlTexturesView = new GLSurface ();
+            //GlMapView = new GLSurface ();
+            GlTexturesView.Initialized += OnGLControlInitialized;
 
-            settingsBindings ();
+            SettingsBindings();
 
-            initializeResult.Add (App.Settings.Load (App.SettingsPath));
+            initializeResult.Add(App.Settings.Load(App.SettingsPath));
             // initializeResult.Add (SettingsManager.SettingsLoad (ref SettingsManager.InitializeSettings));           
-		}          
+        }
 
-		public override void OnInitialized(EventArgs e)
-		{
-			MainForm = new MainForm(this);
+        public override void OnInitialized(EventArgs e)
+        {
+            this.MainForm = kernel.Get<MainForm>();
 
 			base.OnInitialized(e);          
 
@@ -152,7 +169,7 @@ namespace SharpFlame.Gui
             }           
         }
 
-        void settingsBindings() {
+        void SettingsBindings() {
             App.Settings.PropertyChanged += (object sender, PropertyChangedEventArgs e) => {
                 #if DEBUG
                 Console.WriteLine("Setting {0} changed ", e.PropertyName);

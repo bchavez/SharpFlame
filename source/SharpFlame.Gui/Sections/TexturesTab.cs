@@ -30,8 +30,10 @@ using System.Collections.Specialized;
 using Eto;
 using Eto.Forms;
 using Eto.Drawing;
+using Ninject;
 using SharpFlame.Core.Domain;
 using SharpFlame.Gui.Controls;
+using SharpFlame.Gui.NinjectBindings;
 using SharpFlame.Old;
 using SharpFlame.Old.Graphics.OpenGL;
 using SharpFlame.Old.Mapping.Tiles;
@@ -41,37 +43,36 @@ using OpenTK.Graphics.OpenGL;
 
 namespace SharpFlame.Gui.Sections
 {
-    public class TextureTab : Panel
+    public class TextureTab : Panel, Ninject.IInitializable
     {
-        private readonly CheckBox chkTexture;
-        private readonly CheckBox chkOrientation;
-        private readonly CheckBox chkRandomize;
-        private readonly CheckBox chkDisplayTileTypes;
-        private readonly CheckBox chkDisplayTileNumbers;
+        private CheckBox chkTexture;
+        private CheckBox chkOrientation;
+        private CheckBox chkRandomize;
+        private CheckBox chkDisplayTileTypes;
+        private CheckBox chkDisplayTileNumbers;
 
-        private readonly Button btnCircular;
-        private readonly Button btnSquare;
+        private Button btnCircular;
+        private Button btnSquare;
 
-        private readonly ImageView btnRotateAntiClockwise;
-        private readonly ImageView btnRotateClockwise;
-        private readonly ImageView btnFlipX;
+        private ImageView btnRotateAntiClockwise;
+        private ImageView btnRotateClockwise;
+        private ImageView btnFlipX;
 
-        private readonly NumericUpDown nudRadius;
+        private NumericUpDown nudRadius;
 
-        private readonly RadioButtonList rblTerrainModifier;
+        private RadioButtonList rblTerrainModifier;
 
-        private readonly ComboBox cbTileset;
+        private ComboBox cbTileset;
 
-        private readonly Scrollable scrollTextureView;
+        private Scrollable scrollTextureView;
 
-        private readonly GLSurface glSurface;
+        [Inject, Named(NamedBinding.TextureView)]
+        internal GLSurface GLSurface { get; set; }
 
         private XYInt TextureCount { get; set; }
 
-        public TextureTab(SharpFlameApplication a)
+        void IInitializable.Initialize()
         {
-            this.glSurface = a.GlTexturesView;
-
             this.TextureCount = new XYInt(0, 0);
 
             var layout = new DynamicLayout {Padding = Padding.Empty, Spacing = Size.Empty};
@@ -183,7 +184,7 @@ namespace SharpFlame.Gui.Sections
             tileTypeSetter.EndHorizontal();
 
             mainLayout.Add(layout);
-            this.scrollTextureView = new Scrollable {Content = a.GlTexturesView};
+            this.scrollTextureView = new Scrollable {Content = this.GLSurface};
             mainLayout.Add(this.scrollTextureView, true, true);
             mainLayout.Add(tileTypeSetter);
             //mainLayout.Add();
@@ -291,7 +292,7 @@ namespace SharpFlame.Gui.Sections
                     DrawTexturesView();
                 };
 
-            this.glSurface.MouseDown += (sender, e) =>
+            this.GLSurface.MouseDown += (sender, e) =>
                 {
                     if( App.UiOptions.Textures.TilesetNum == -1 )
                     {
@@ -318,7 +319,7 @@ namespace SharpFlame.Gui.Sections
                 };
 
 
-            this.glSurface.Resize += (sender, args) =>
+            this.GLSurface.Resize += (sender, args) =>
                 {
                     DrawTexturesView();
                 };
@@ -331,11 +332,11 @@ namespace SharpFlame.Gui.Sections
             {
                 GL.Clear(ClearBufferMask.ColorBufferBit);
                 GL.Flush();
-                this.glSurface.SwapBuffers();
+                this.GLSurface.SwapBuffers();
                 return;
             }
 
-            this.glSurface.MakeCurrent();
+            this.GLSurface.MakeCurrent();
 
             var tileset = App.Tilesets[App.UiOptions.Textures.TilesetNum];
 
@@ -347,7 +348,7 @@ namespace SharpFlame.Gui.Sections
 
             var height = TextureCount.Y * 64;
             // TODO: See how thick the scroll is on winforms and mac, 20px seems to be right on GTK.
-            var glSize = this.glSurface.GLSize = new Size(scrollTextureView.Size.Width - 20, height);
+            var glSize = this.GLSurface.GLSize = new Size(scrollTextureView.Size.Width - 20, height);
 
             // send the resize event to the Graphics card.
             GL.Viewport(0, 0, glSize.Width, glSize.Height);
@@ -517,7 +518,7 @@ namespace SharpFlame.Gui.Sections
             }
 
             GL.Flush();
-            this.glSurface.SwapBuffers();
+            this.GLSurface.SwapBuffers();
         }
 
         private static ComboBox TextureComboBox()

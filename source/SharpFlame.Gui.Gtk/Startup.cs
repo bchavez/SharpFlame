@@ -1,8 +1,10 @@
 using System.Diagnostics;
+using Ninject;
 using SharpFlame.Gui;
 using SharpFlame.Gui.Controls;
 using OpenTK;
 using SharpFlame.Gui.Gtk.EtoCustom;
+using SharpFlame.Gui.NinjectBindings;
 
 namespace SharpFlame.Gui.Gtk
 {
@@ -29,7 +31,11 @@ namespace SharpFlame.Gui.Gtk
 			var generator = new Eto.Platform.GtkSharp.Generator ();
             generator.Add<IGLSurfaceHandler>(()=> new LinuxGLSurfaceHandler());
 
-            var app = new SharpFlameApplication (generator);
+		    var kernel = Bootstrap.Kernel(generator);
+
+            //var app = new SharpFlameApplication (generator);
+		    var app = kernel.Get<SharpFlameApplication>();
+
 			app.Run (args);
 		}
 	}

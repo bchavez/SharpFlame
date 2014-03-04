@@ -21,27 +21,9 @@ namespace SharpFlame.Gui.Windows
             generator.Add<IGLSurfaceHandler>(() => new WinGLSurfaceHandler());
             generator.Add<IPanel>(() => new WinPanelHandler());
 
-
-            var settings = new NinjectSettings
-                {
-                    InjectNonPublic = true,
-                    LoadExtensions = false,
-                };
-
-            var kernelModules = new List<INinjectModule>
-                {
-                    new Ninject.Extensions.NamedScope.NamedScopeModule(),
-                    new Ninject.Extensions.ContextPreservation.ContextPreservationModule(),
-                    new Ninject.Extensions.bbvEventBroker.EventBrokerModule(),
-                    new Ninject.Extensions.Logging.NLog2.NLogModule(),
-                    new SharpFlameModule(),
-                };
-
-            var kernel = new StandardKernel(settings, kernelModules.ToArray());
-
-            NinjectHook.HookGenerator(generator, kernel);
-
-            var app = new SharpFlameApplication(generator);
+            var kernel = Bootstrap.Kernel(generator);
+            
+            var app = kernel.Get<SharpFlameApplication>();
 
             kernel.Inject(app);
             

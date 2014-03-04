@@ -52,14 +52,32 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="bbv.Common">
+      <HintPath>..\packages\bbv.Common.7.1.12149.1635\lib\Net40\bbv.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="bbv.Common.EventBroker">
+      <HintPath>..\packages\bbv.Common.EventBroker.7.1.12149.1635\lib\Net40\bbv.Common.EventBroker.dll</HintPath>
+    </Reference>
     <Reference Include="Eto">
       <HintPath>..\packages\Eto-20140222\Eto.dll</HintPath>
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject.Extensions.bbvEventBroker">
+      <HintPath>..\packages\Ninject.Extensions.bbvEventBroker.3.0.2-unstable-9007\lib\net40\Ninject.Extensions.bbvEventBroker.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.ContextPreservation">
+      <HintPath>..\packages\Ninject.Extensions.ContextPreservation.3.0.0.8\lib\net40\Ninject.Extensions.ContextPreservation.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject.Extensions.Logging">
       <HintPath>..\packages\Ninject.Extensions.Logging.3.0.1.0\lib\net40\Ninject.Extensions.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.Logging.NLog2">
+      <HintPath>..\packages\Ninject.Extensions.Logging.nlog2.3.0.1.0\lib\net40\Ninject.Extensions.Logging.NLog2.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.NamedScope">
+      <HintPath>..\packages\Ninject.Extensions.NamedScope.3.0.0.5\lib\net40\Ninject.Extensions.NamedScope.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="NLog">
@@ -74,7 +92,7 @@
     <Compile Include="..\SharpFlame.Core\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="NinjectBindings\Binding.cs" />
+    <Compile Include="NinjectBindings\NamedBinding.cs" />
     <Compile Include="NinjectBindings\NinjectHook.cs" />
     <Compile Include="NinjectBindings\SharpFlameModule.cs" />
     <Compile Include="Dialogs\About.cs">
