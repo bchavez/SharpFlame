@@ -55,6 +55,12 @@
     <Reference Include="Eto">
       <HintPath>..\packages\Eto-20140222\Eto.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.Logging">
+      <HintPath>..\packages\Ninject.Extensions.Logging.3.0.1.0\lib\net40\Ninject.Extensions.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
@@ -68,6 +74,9 @@
     <Compile Include="..\SharpFlame.Core\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="NinjectBindings\Binding.cs" />
+    <Compile Include="NinjectBindings\NinjectHook.cs" />
+    <Compile Include="NinjectBindings\SharpFlameModule.cs" />
     <Compile Include="Dialogs\About.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>

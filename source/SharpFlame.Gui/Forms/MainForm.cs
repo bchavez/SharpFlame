@@ -49,28 +49,28 @@ namespace SharpFlame.Gui.Forms
             tabControl.TabPages.Add(new TabPage { Text = "Object", Content = new ObjectTab(app) });
             tabControl.TabPages.Add(new TabPage { Text = "Label", Content = new LabelsTab(app) });
 
-            tabControl.SelectedIndexChanged += delegate
-            {
-                tabControl.SelectedPage.Content.OnShown(EventArgs.Empty);
-            };
+		    tabControl.SelectedIndexChanged += delegate
+		        {
+		            tabControl.SelectedPage.Content.OnShown(EventArgs.Empty);
+		        };
 
-			var splitter = new Splitter
-			{
-				Position = 392,
-				FixedPanel = SplitterFixedPanel.Panel1,
-				Panel1 = tabControl,
-				Panel2 = new MainMapView(app)
-			};
+		    var splitter = new Splitter
+		        {
+		            Position = 392,
+		            FixedPanel = SplitterFixedPanel.Panel1,
+		            Panel1 = tabControl,
+		            Panel2 = new MainMapView(app)
+		        };
 
 			// 7. Set the content of the form to use the layout
 
 			Content = splitter;
 
-			generateMenuToolBar ();
+			GenerateMenuToolBar ();
 			Maximize ();
 		}     
 
-		void generateMenuToolBar()
+		private void GenerateMenuToolBar()
 		{
 			var about = new Actions.About();
 			var quit = new Actions.Quit();

@@ -163,9 +163,11 @@ namespace SharpFlame.Gui.Sections
 
             var tileTypeCheckBoxes = new DynamicLayout();
             tileTypeCheckBoxes.BeginHorizontal();
-            tileTypeCheckBoxes.Add(chkDisplayTileTypes = new CheckBox {Text = "Display Tile Types"});
+            this.chkDisplayTileTypes = new CheckBox {Text = "Display Tile Types"};
+            tileTypeCheckBoxes.Add(this.chkDisplayTileTypes);
             tileTypeCheckBoxes.Add(null);
-            tileTypeCheckBoxes.Add(chkDisplayTileNumbers = new CheckBox {Text = "Display Tile Numbers"});
+            this.chkDisplayTileNumbers = new CheckBox {Text = "Display Tile Numbers"};
+            tileTypeCheckBoxes.Add(this.chkDisplayTileNumbers);
             tileTypeCheckBoxes.EndHorizontal();
 
             var tileTypeSetter = new DynamicLayout {Padding = Padding.Empty, Spacing = Size.Empty};
@@ -181,8 +183,8 @@ namespace SharpFlame.Gui.Sections
             tileTypeSetter.EndHorizontal();
 
             mainLayout.Add(layout);
-            scrollTextureView = new Scrollable {Content = a.GlTexturesView};
-            mainLayout.Add(scrollTextureView, true, true);
+            this.scrollTextureView = new Scrollable {Content = a.GlTexturesView};
+            mainLayout.Add(this.scrollTextureView, true, true);
             mainLayout.Add(tileTypeSetter);
             //mainLayout.Add();
 

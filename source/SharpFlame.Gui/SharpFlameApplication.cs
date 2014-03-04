@@ -25,13 +25,11 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using Eto;
-using Eto.Drawing;
 using Eto.Forms;
 using NLog;
 using OpenTK;
@@ -46,7 +44,7 @@ using FontStyle = System.Drawing.FontStyle;
 
 namespace SharpFlame.Gui
 {
-	public class SharpFlameApplication : Application
+    public class SharpFlameApplication : Application
 	{
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -75,7 +73,7 @@ namespace SharpFlame.Gui
             }
             catch (Exception ex)
             {
-                logger.ErrorException ("Got an exception while initalizing OpenTK", ex);
+                logger.ErrorException ("Got an exception while initializing OpenTK", ex);
                 // initializeResult.ProblemAdd (string.Format("Failure while loading opentk, error was: {0}", ex.Message));
                 Instance.Quit();
             }
@@ -83,7 +81,7 @@ namespace SharpFlame.Gui
             // Set them up before you call settingsBindings().
             GlTexturesView = new GLSurface ();
             GlMapView = new GLSurface ();
-            GlTexturesView.Initialized += onGLControlInitialized;           
+            GlTexturesView.Initialized += OnGLControlInitialized;           
 
             settingsBindings ();
 
@@ -120,7 +118,7 @@ namespace SharpFlame.Gui
         /// </summary>
         /// <param name="o">Not used.</param>
         /// <param name="e">Not used.</param>
-        void onGLControlInitialized(object o, EventArgs e) {
+        void OnGLControlInitialized(object o, EventArgs e) {
             GlTexturesView.MakeCurrent ();
 
             // Load tileset directories.
@@ -138,7 +136,7 @@ namespace SharpFlame.Gui
             }
 
             // Make the GL Font.
-            makeGlFont ();
+            MakeGlFont ();
 
             if (initializeResult.HasProblems)
             {
@@ -161,7 +159,7 @@ namespace SharpFlame.Gui
                 #endif
 
                 if (e.PropertyName.StartsWith("Font") && GlTexturesView.IsInitialized) {
-                    makeGlFont();
+                    MakeGlFont();
                 }
             };
 
@@ -230,7 +228,7 @@ namespace SharpFlame.Gui
             };
         }
 
-        void makeGlFont()
+        void MakeGlFont()
         {
             var style = FontStyle.Regular;
             if ( App.Settings.FontBold )

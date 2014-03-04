@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>Ninject.Extensions.bbvEventBroker</id>
+    <version>3.0.2-unstable-9007</version>
+    <authors>Ninject Project Contributors</authors>
+    <owners>Ninject Project Contributors</owners>
+    <licenseUrl>https://github.com/ninject/ninject.extensions.bbveventbroker/raw/master/LICENSE.txt</licenseUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Ninject extension which adds support for bbv.Common.EventBroker</description>
+    <language>en-US</language>
+    <dependencies>
+      <dependency id="Ninject" version="3.0.0-unstable" />
+      <dependency id="Ninject.Extensions.ContextPreservation" version="3.0.0-unstable" />
+      <dependency id="Ninject.Extensions.NamedScope" version="3.0.0-unstable" />
+      <dependency id="bbv.Common.EventBroker" version="[7.1, 7.2)" />
+    </dependencies>
+  </metadata>
+</package>
