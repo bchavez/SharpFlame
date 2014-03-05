@@ -38,7 +38,7 @@ namespace SharpFlame.Old.Mapping.IO.Wz
             map.SetPainterToDefaults();
 
             var gameSplitPath = new sSplitPath(path);
-            var gameFilesPath = gameSplitPath.FilePath + gameSplitPath.FileTitleWithoutExtension + Convert.ToString(App.PlatformPathSeparator);
+            var gameFilesPath = gameSplitPath.FilePath + gameSplitPath.FileTitleWithoutExtension + Convert.ToString(Path.DirectorySeparatorChar);
             var mapDirectory = "";
             FileStream file = null;
 
@@ -76,7 +76,7 @@ namespace SharpFlame.Old.Mapping.IO.Wz
                     returnResult.ProblemAdd("Aborted.");
                     return returnResult;
                 }
-                mapDirectory = DirectorySelect.SelectedPath + Convert.ToString(App.PlatformPathSeparator);
+                mapDirectory = DirectorySelect.SelectedPath + Convert.ToString(Path.DirectorySeparatorChar);
 
                 subResult = IOUtil.TryOpenFileStream(mapDirectory + "game.map", ref file);
                 if ( !subResult.Success )

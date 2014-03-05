@@ -176,7 +176,7 @@ namespace SharpFlame.Old.Mapping.IO.Wz
                                                           map.InterfaceOptions.CompileType, map.InterfaceOptions.ScrollMin, map.InterfaceOptions.ScrollMax));
                     }
 
-                    CampDirectory += map.InterfaceOptions.CompileName + Convert.ToString(App.PlatformPathSeparator);
+                    CampDirectory += map.InterfaceOptions.CompileName + Convert.ToString(Path.DirectorySeparatorChar);
                     try
                     {
                         Directory.CreateDirectory(CampDirectory);

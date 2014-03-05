@@ -39,8 +39,6 @@ namespace SharpFlame.Old
 
         public static SRgb MinimapFeatureColour;
 
-        public static char PlatformPathSeparator = Path.DirectorySeparatorChar;
-
         public static bool DebugGL = false;
 
         public static string SettingsPath;

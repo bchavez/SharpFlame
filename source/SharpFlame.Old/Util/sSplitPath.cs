@@ -1,6 +1,7 @@
 #region
 
 using System;
+using System.IO;
 
 #endregion
 
@@ -19,12 +20,12 @@ namespace SharpFlame.Old.Util
         {
             var a = 0;
 
-            Parts = path.Split(App.PlatformPathSeparator);
+            Parts = path.Split(Path.DirectorySeparatorChar);
             PartCount = Parts.GetUpperBound(0) + 1;
             FilePath = "";
             for ( a = 0; a <= PartCount - 2; a++ )
             {
-                FilePath += Parts[a] + Convert.ToString(App.PlatformPathSeparator);
+                FilePath += Parts[a] + Convert.ToString(Path.DirectorySeparatorChar);
             }
             FileTitle = Parts[a];
             a = FileTitle.LastIndexOf('.');

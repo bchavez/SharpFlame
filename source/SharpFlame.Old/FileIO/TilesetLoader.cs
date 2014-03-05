@@ -239,10 +239,10 @@ namespace SharpFlame.Old.FileIO
             var graphicPath = "";
             var pixX = 0;
             var pixY = 0;
-            var pixelColorA = new Color();
-            var pixelColorB = new Color();
-            var pixelColorC = new Color();
-            var pixelColorD = new Color();
+            Color pixelColorA;
+            Color pixelColorB;
+            Color pixelColorC;
+            Color pixelColorD;
             var x1 = 0;
             var y1 = 0;
             var x2 = 0;
@@ -250,18 +250,13 @@ namespace SharpFlame.Old.FileIO
             var red = 0;
             var green = 0;
             var blue = 0;
-            var bitmap8 = default(Bitmap);
-            var bitmap4 = default(Bitmap);
-            var bitmap2 = default(Bitmap);
-            var bitmap1 = default(Bitmap);
             Bitmap bitmap = null;
-            var result = new SimpleResult();
 
             //-------- 64 --------
 
-            graphicPath = string.Format ("{0}{1}-64{2}{3}", slashPath, tileset.Name, App.PlatformPathSeparator, strTile);
+            graphicPath = string.Format ("{0}{1}-64{2}{3}", slashPath, tileset.Name, Path.DirectorySeparatorChar, strTile);
 
-            result = BitmapUtil.LoadBitmap(graphicPath, ref bitmap);
+            var result = BitmapUtil.LoadBitmap(graphicPath, ref bitmap);
             if ( !result.Success )
             {
                 returnResult.WarningAdd("Unable to load tile graphic: " + result.Problem);
@@ -278,7 +273,7 @@ namespace SharpFlame.Old.FileIO
 
             //-------- 32 --------
 
-            graphicPath = string.Format ("{0}{1}-32{2}{3}", slashPath, tileset.Name, App.PlatformPathSeparator, strTile);
+            graphicPath = string.Format ("{0}{1}-32{2}{3}", slashPath, tileset.Name, Path.DirectorySeparatorChar, strTile);
 
             result = BitmapUtil.LoadBitmap(graphicPath, ref bitmap);
             if ( !result.Success )
@@ -297,7 +292,7 @@ namespace SharpFlame.Old.FileIO
 
             //-------- 16 --------
 
-            graphicPath = string.Format ("{0}{1}-16{2}{3}", slashPath, tileset.Name, App.PlatformPathSeparator, strTile);
+            graphicPath = string.Format ("{0}{1}-16{2}{3}", slashPath, tileset.Name, Path.DirectorySeparatorChar, strTile);
 
             result = BitmapUtil.LoadBitmap(graphicPath, ref bitmap);
             if ( !result.Success )
@@ -316,7 +311,7 @@ namespace SharpFlame.Old.FileIO
 
             //-------- 8 --------
 
-            bitmap8 = new Bitmap(8, 8, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var bitmap8 = new Bitmap(8, 8, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             for ( pixY = 0; pixY <= 7; pixY++ )
             {
                 y1 = pixY * 2;
@@ -341,7 +336,7 @@ namespace SharpFlame.Old.FileIO
             //-------- 4 --------
 
             bitmap = bitmap8;
-            bitmap4 = new Bitmap(4, 4, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var bitmap4 = new Bitmap(4, 4, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             for ( pixY = 0; pixY <= 3; pixY++ )
             {
                 y1 = pixY * 2;
@@ -366,7 +361,7 @@ namespace SharpFlame.Old.FileIO
             //-------- 2 --------
 
             bitmap = bitmap4;
-            bitmap2 = new Bitmap(2, 2, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var bitmap2 = new Bitmap(2, 2, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             for ( pixY = 0; pixY <= 1; pixY++ )
             {
                 y1 = pixY * 2;
@@ -391,7 +386,7 @@ namespace SharpFlame.Old.FileIO
             //-------- 1 --------
 
             bitmap = bitmap2;
-            bitmap1 = new Bitmap(1, 1, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var bitmap1 = new Bitmap(1, 1, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             pixX = 0;
             pixY = 0;
             y1 = pixY * 2;
