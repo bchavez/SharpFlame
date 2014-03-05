@@ -26,18 +26,16 @@
 
 using System;
 using Eto.Forms;
+using Ninject;
 using SharpFlame.Core;
+using SharpFlame.Old;
 
 namespace SharpFlame.Gui.Actions
 {
     public class Settings : Command
     {
-        private readonly Dialogs.Settings dialogSettings;
-
-        public Settings(Dialogs.Settings ds)
+        public Settings()
         {
-            dialogSettings = ds;
-
             ID = "settings";
             MenuText = "&Settings";
             ToolBarText = "Settings";
@@ -48,7 +46,7 @@ namespace SharpFlame.Gui.Actions
         {
             base.OnExecuted(e);
             // show the settings dialog
-            dialogSettings.Show ();
+            App.Kernel.Get<Dialogs.Settings>().Show();
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using Ninject.Modules;
+using Ninject;
 using NLog;
 using OpenTK;
 using OpenTK.Graphics;
@@ -137,7 +137,13 @@ namespace SharpFlame.Old
 
         public static Options UiOptions = new Options();
 
-        public static SettingsManager Settings;
+        public static SettingsManager Settings { get; set; }
+
+        /// <summary>
+        /// The Ninject Kernel
+        /// </summary>
+        /// <value>The kernel.</value>
+        public static IKernel Kernel { get; set; }
 
         public static void Initalize ()
         {

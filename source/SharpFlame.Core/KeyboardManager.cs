@@ -28,7 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Eto.Forms;
-using NLog;
+using Ninject.Extensions.Logging;
 
 namespace SharpFlame.Core
 {
@@ -99,14 +99,16 @@ namespace SharpFlame.Core
 
     public class KeyboardManager
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger logger;
 
         public readonly Dictionary<string, KeyboardKey> Keys;
         readonly Dictionary<Keys, KeyboardKey> keyLookupTable;
         readonly Dictionary<char, KeyboardKey> charLookupTable;
 
-        public KeyboardManager()
+        public KeyboardManager(ILoggerFactory logFactory)
         {
+            logger = logFactory.GetCurrentClassLogger();
+
             Keys = new Dictionary<string, KeyboardKey> ();
             keyLookupTable = new Dictionary<Keys, KeyboardKey> ();
             charLookupTable = new Dictionary<char, KeyboardKey>();

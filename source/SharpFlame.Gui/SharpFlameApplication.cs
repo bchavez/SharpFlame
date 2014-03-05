@@ -51,7 +51,6 @@ namespace SharpFlame.Gui
 {
     public class SharpFlameApplication : Application
     {
-        private readonly IKernel kernel;
         private readonly ILogger logger;
 
         [Inject, Named(NamedBinding.TextureView)]
@@ -72,7 +71,7 @@ namespace SharpFlame.Gui
         public SharpFlameApplication(IKernel kernel, Generator generator, ILoggerFactory logFactory)
             : base(generator)
         {
-            this.kernel = kernel;
+            App.Kernel = kernel;
             kernel.Inject(this); //inject properties also, not just constructor.
 
             logger = logFactory.GetCurrentClassLogger();
@@ -117,7 +116,7 @@ namespace SharpFlame.Gui
 
         public override void OnInitialized(EventArgs e)
         {
-            this.MainForm = kernel.Get<MainForm>();
+            this.MainForm = App.Kernel.Get<MainForm>();
 
             base.OnInitialized(e);
 

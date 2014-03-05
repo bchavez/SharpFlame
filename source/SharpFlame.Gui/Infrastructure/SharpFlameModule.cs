@@ -49,9 +49,7 @@ namespace SharpFlame.Gui.Infrastructure
 
             // Settings dialog
             this.Bind<Dialogs.Settings>()
-                .ToSelf()
-                .InSingletonScope();
-
+                .ToSelf();
         }
     }
 }
