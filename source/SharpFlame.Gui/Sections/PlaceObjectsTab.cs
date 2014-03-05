@@ -28,7 +28,6 @@ using System;
 using System.Linq;
 using Eto.Forms;
 using Eto.Drawing;
-using NLog.Filters;
 using SharpFlame.Core;
 using SharpFlame.Gui.Controls;
 using SharpFlame.Old;
@@ -50,7 +49,7 @@ namespace SharpFlame.Gui.Sections
         GridView grvStructures { get; set; }
         GridView grvDroids { get; set; }
 
-        public PlaceObjectsTab (SharpFlameApplication a)
+        public PlaceObjectsTab ()
 		{
             PlayerSelector playerSelector;
             if (Generator.IsWinForms)

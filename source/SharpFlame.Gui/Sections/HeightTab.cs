@@ -32,7 +32,7 @@ using SharpFlame.Old.UiOptions;
 
 namespace SharpFlame.Gui.Sections
 {
-	public class HeightTab : Panel
+    public class HeightTab : Panel
 	{
         public HeightTab (SharpFlameApplication a)
 		{

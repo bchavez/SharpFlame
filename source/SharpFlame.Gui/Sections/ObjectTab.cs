@@ -35,7 +35,7 @@ namespace SharpFlame.Gui.Sections
 {
     public class ObjectTab : Panel
     {
-        public ObjectTab (SharpFlameApplication a)
+        public ObjectTab ()
         {
             var mainLayout = new DynamicLayout ();
 

@@ -28,15 +28,16 @@
 using System.Diagnostics;
 using Eto.Drawing;
 using Eto.Forms;
-using NLog;
+using Ninject;
+using Ninject.Extensions.Logging;
 using SharpFlame.Old;
 using SharpFlame.Old.UiOptions;
 
 namespace SharpFlame.Gui.Sections
 {
-	public class TerrainTab : Panel
+    public class TerrainTab : Panel
 	{
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger ();
+        private readonly ILogger logger;
 
         readonly RadioButton rbGroundPlace;
         readonly RadioButton rbGroundFill;
@@ -47,8 +48,10 @@ namespace SharpFlame.Gui.Sections
         readonly RadioButton rbCliffBrush;
         readonly RadioButton rbCliffRemove;
 
-        public TerrainTab (SharpFlameApplication a)
+        public TerrainTab (ILoggerFactory logFactory)
 		{
+            logger = logFactory.GetCurrentClassLogger();
+
             rbGroundPlace = new RadioButton { Text = "Place", Checked = true };
             rbGroundFill = new RadioButton (rbGroundPlace) { Text = "Fill" };
             rbRoadSides = new RadioButton (rbGroundFill) { Text = "Sides" };

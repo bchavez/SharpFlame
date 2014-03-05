@@ -34,7 +34,7 @@ namespace SharpFlame.Gui.Sections
 {
 	public class ResizeTab : Panel
 	{
-        public ResizeTab (SharpFlameApplication a)
+        public ResizeTab ()
 		{
             var mainLayout = new DynamicLayout ();
 

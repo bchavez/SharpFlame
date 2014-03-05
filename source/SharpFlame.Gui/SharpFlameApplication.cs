@@ -34,7 +34,7 @@ using Appccelerate.EventBroker.Handlers;
 using Eto;
 using Eto.Forms;
 using Ninject;
-using NLog;
+using Ninject.Extensions.Logging;
 using OpenTK;
 using SharpFlame.Core;
 using SharpFlame.Gui.Forms;
@@ -51,7 +51,7 @@ namespace SharpFlame.Gui
     public class SharpFlameApplication : Application
     {
         private readonly IKernel kernel;
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger logger;
 
         [Inject, Named(NamedBinding.TextureView)]
         internal GLSurface GlTexturesView { get; set; }
@@ -65,11 +65,13 @@ namespace SharpFlame.Gui
         private Result initializeResult = new Result("Startup result", false);
 
         [Inject]
-        public SharpFlameApplication(IKernel kernel, Generator generator)
+        public SharpFlameApplication(IKernel kernel, Generator generator, ILoggerFactory logFactory)
             : base(generator)
         {
             this.kernel = kernel;
             kernel.Inject(this); //inject properties also, not just constructor.
+
+            logger = logFactory.GetCurrentClassLogger();
 
             // Allows manual Button size on GTK2.
             Button.DefaultSize = new Size(1, 1);
@@ -89,7 +91,7 @@ namespace SharpFlame.Gui
             }
             catch( Exception ex )
             {
-                logger.ErrorException("Got an exception while initializing OpenTK", ex);
+                logger.Error(ex, "Got an exception while initializing OpenTK");
                 // initializeResult.ProblemAdd (string.Format("Failure while loading opentk, error was: {0}", ex.Message));
                 Instance.Quit();
             }
@@ -181,7 +183,7 @@ namespace SharpFlame.Gui
             App.Settings.PropertyChanged += (sender, e) =>
                 {
 #if DEBUG
-                    Console.WriteLine("Setting {0} changed ", e.PropertyName);
+                    logger.Debug("Setting {0} changed ", e.PropertyName);
 #endif
 
                     if( e.PropertyName.StartsWith("Font") && GlTexturesView.IsInitialized )
@@ -225,7 +227,7 @@ namespace SharpFlame.Gui
                     }
                     catch( Exception ex )
                     {
-                        logger.ErrorException("Got an Exception", ex);
+                        logger.Error(ex, "Got an exception while loading tilesets.");
                     }
                 };
 
@@ -273,7 +275,7 @@ namespace SharpFlame.Gui
                     }
                     catch( Exception ex )
                     {
-                        logger.ErrorException("Got an Exception", ex);
+                        logger.Error(ex, "Got an Exception while loading object data.");
                     }
                 };
         }
