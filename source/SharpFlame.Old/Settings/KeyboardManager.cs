@@ -30,7 +30,7 @@ using System.Diagnostics;
 using Eto.Forms;
 using Ninject.Extensions.Logging;
 
-namespace SharpFlame.Core
+namespace SharpFlame.Old.Settings
 {
     public sealed class InvalidKeyException : Exception
     {

@@ -408,6 +408,7 @@
     <Compile Include="Mapping\UnitChange.cs" />
     <Compile Include="Mapping\Objects\Unit.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
+    <Compile Include="Settings\KeyboardManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">
