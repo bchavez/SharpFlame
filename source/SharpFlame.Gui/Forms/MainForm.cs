@@ -51,6 +51,8 @@ namespace SharpFlame.Gui.Forms
         internal LabelsTab LabelsTab { get; set; }
         [Inject]
         internal MainMapView MainMapView { get; set; }
+        [Inject]
+        internal Dialogs.Settings dialogSettings { get; set; }
 
 	    //Ninject initializer
 	    void IInitializable.Initialize()
@@ -94,7 +96,7 @@ namespace SharpFlame.Gui.Forms
 		{
 			var about = new Actions.About();
 			var quit = new Actions.Quit();
-            var settings = new Actions.Settings ();
+            var settings = new Actions.Settings (dialogSettings);
 
 			var menu = new MenuBar();
 			// create standard system menu (e.g. for OS X)

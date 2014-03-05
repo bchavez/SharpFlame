@@ -50,26 +50,50 @@ namespace SharpFlame.Core
     }
 
     public class KeyboardKey {
-        public Keys Key { get; set; }
-        public char KeyChar { get; set; }
-        public bool Active { get; set; }
+        private Keys? key;
+        public Keys? Key { 
+            get { return key; } 
+            private set { 
+                key = value; 
+                IsChar = false;
+            }
+        }
+
+        private char? keyChar;
+        public char? KeyChar { 
+            get { return keyChar; }
+            private set { 
+                keyChar = value;
+                IsChar = true;
+            }
+        }
+
+        public bool IsChar { get; private set; }
         public bool Invalid { get; set; }
 
         public KeyboardKey(Keys? key = null, char? keyChar = null) 
         {
             if(key != null)
             {
-                Key = (Keys)key;
+                Key = key;
             } else if(keyChar != null)
             {
-                KeyChar = (char)keyChar;
+                KeyChar = keyChar;
             } else
             {
-                // This should never happen as this is checked in KeyboardManager.Create.
                 throw new InvalidKeyException("Give either a key or a keyChar.");
             }
-            Active = false;
             Invalid = false;
+        }
+
+        public new string ToString() 
+        {
+            string text = Invalid ? "!! " : "";
+            if (IsChar) {
+                return text + ((char)KeyChar).ToString();
+            } else {
+                return text + ((Keys)Key).ToShortcutString();
+            }
         }
     }
 
@@ -88,7 +112,12 @@ namespace SharpFlame.Core
             charLookupTable = new Dictionary<char, KeyboardKey>();
         }
 
-        public bool Create(string name, Keys? key = null, char? keyChar = null) {
+        public bool Create(string name, Keys? key = null, char? keyChar = null) 
+        {
+            if (Keys.ContainsKey(name)) {
+                throw new Exception(string.Format("The key \"{0}\" does exist.", name));
+            }
+
             KeyboardKey kkey;
             if(key == null && keyChar == null)
             {
@@ -100,18 +129,7 @@ namespace SharpFlame.Core
 
             kkey = new KeyboardKey (key, keyChar);
             Keys.Add (name, kkey);
-            if(key != null)
-            {
-                try
-                {
-                    keyLookupTable.Add((Keys)key, kkey);
-                } catch(System.ArgumentException)
-                {
-                    kkey.Invalid = true;
-                    logger.Error("Tried to add key \"{0}\", key: \"{1}\" but it already exists.", name, ((Keys)key).ToShortcutString());
-                    return false;
-                }
-            } else
+            if(kkey.IsChar)
             {
                 try
                 {
@@ -122,6 +140,17 @@ namespace SharpFlame.Core
                     logger.Error("Tried to add key \"{0}\", keyChar: \"{1}\" but it already exists.", name, keyChar);
                     return false;
                 }
+            } else
+            {
+                try
+                {
+                    keyLookupTable.Add((Keys)key, kkey);
+                } catch(System.ArgumentException)
+                {
+                    kkey.Invalid = true;
+                    logger.Error("Tried to add key \"{0}\", key: \"{1}\" but it already exists.", name, ((Keys)key).ToShortcutString());
+                    return false;
+                }
             }
 
             return true;
@@ -129,12 +158,10 @@ namespace SharpFlame.Core
 
         /// <summary>
         /// Updates the specified Key.
-        /// It set the key back to the old value if the key already exists and returns false.
-        /// On Success it returns true.
         /// </summary>
         /// <param name="name">Name.</param>
         /// <param name="key">Key.</param>
-        public bool Update(string name, Keys? key = null, char? keyChar = null)
+        public void Update(string name, Keys? key = null, char? keyChar = null)
         {
             if (!Keys.ContainsKey(name)) {
                 throw new Exception(string.Format("The key \"{0}\" does not exist.", name));
@@ -142,29 +169,19 @@ namespace SharpFlame.Core
 
             var kkey = Keys [name];
             Keys.Remove (name);
-            keyLookupTable.Remove (kkey.Key);
-
-            if (!Create (name, key))
+            if(kkey.IsChar)
             {
-                Keys.Remove (name);
-                Create (name, kkey.Key);
-                return false;
+                charLookupTable.Remove((char)kkey.KeyChar);
+            } else
+            {
+                keyLookupTable.Remove((Keys)kkey.Key);
             }
 
-            return true;
+            Create(name, key, keyChar);
         }
 
-        /// <summary>
-        /// Determines whether the key "name" is active
-        /// </summary>
-        /// <returns><c>true</c> if key is active name; otherwise, <c>false</c>.</returns>
-        /// <param name="name">Name.</param>
-        public bool IsKeyActive(string name) {
-            if (!Keys.ContainsKey(name)) {
-                throw new Exception(string.Format("The key \"{0}\" does not exist.", name));
-            }
-
-            return Keys [name].Active;
+        public void Update(string name, KeyboardKey kkey) {
+            Update(name, kkey.Key, kkey.KeyChar);
         }
     }
 }

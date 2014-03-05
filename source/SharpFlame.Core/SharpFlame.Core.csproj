@@ -132,6 +132,7 @@
     <Compile Include="Domain\Player.cs" />
     <Compile Include="SimpleResult.cs" />
     <Compile Include="Interfaces\ISharpFlameApplication.cs" />
+    <Compile Include="KeyboardManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

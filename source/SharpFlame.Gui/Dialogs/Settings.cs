@@ -33,16 +33,18 @@ using System.Collections.Specialized;
 using Eto;
 using Eto.Drawing;
 using Eto.Forms;
+using Ninject;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Old;
+using SharpFlame.Old.Settings;
 using sd = System.Drawing;
 
 namespace SharpFlame.Gui.Dialogs
 {
-    public class Settings : Form
+    public class Settings : Form, IInitializable
     {
-        private readonly Button btnOk;
+        private Button btnOk;
         private Button btnAddTilesetDirectory;
         private Button btnRemoveTilesetDirectory;
 
@@ -86,8 +88,13 @@ namespace SharpFlame.Gui.Dialogs
         private NumericUpDown nudMinimapSize;
         private TextBox tbFoV;
 
+        [Inject]
+        internal SettingsManager SettingsManager { get; set; }
 
-        public Settings()
+        [Inject]
+        internal KeyboardManager Keyboard { get; set; }
+
+        void IInitializable.Initialize()
         {
             Title = "Settings";
             Resizable = true;
@@ -271,11 +278,18 @@ namespace SharpFlame.Gui.Dialogs
             // keyboard
             grvKeyboard.MouseUp += (sender, e) => 
             {
-                Console.WriteLine("mouse up");
+                // Show the Dialog
                 var name = ((KeyboardGridItem)grvKeyboard.SelectedItem).Name;
-                var key = App.Settings.Keyboard.Keys[name];
-                var dialog = new Dialogs.KeyInput { Key = key.Key };
+                var key = Keyboard.Keys[name];
+                var dialog = new Dialogs.KeyInput { Key = key };
                 dialog.ShowDialog(Application.Instance.MainForm);
+
+                // Update the key
+                Console.WriteLine("Update key: \"{0}\" to \"{1}\".", key.ToString(), dialog.Key.ToString());
+                Keyboard.Update(name, dialog.Key);
+
+                // Update the Gridview item.
+                ((KeyboardGridItem)grvKeyboard.SelectedItem).Key = Keyboard.Keys[name].ToString();              
             };
 
             drawMinimapCliffColour.MouseDown += (sender, e) =>
@@ -285,7 +299,7 @@ namespace SharpFlame.Gui.Dialogs
                     if( result == DialogResult.Ok )
                     {
                         drawMinimapCliffColour.BackgroundColor = dialog.Color;
-                        App.Settings.MinimapCliffColour = new Rgba(dialog.Color);
+                        SettingsManager.MinimapCliffColour = new Rgba(dialog.Color);
                     }
                 };
 
@@ -296,33 +310,33 @@ namespace SharpFlame.Gui.Dialogs
                     if( result == DialogResult.Ok )
                     {
                         drawMinimapObjectColour.BackgroundColor = dialog.Color;
-                        App.Settings.MinimapSelectedObjectsColour = new Rgba(dialog.Color);
+                        SettingsManager.MinimapSelectedObjectsColour = new Rgba(dialog.Color);
                     }
                 };
 
             btnSelectFont.Click += delegate
                 {
-                    var fontStyle = App.Settings.FontBold ? FontStyle.Bold : FontStyle.None;
-                    if( App.Settings.FontItalic )
+                    var fontStyle = SettingsManager.FontBold ? FontStyle.Bold : FontStyle.None;
+                    if( SettingsManager.FontItalic )
                     {
                         fontStyle |= FontStyle.Italic;
                     }
                     var dialog = new FontDialog
                         {
-                            Font = new Font(App.Settings.FontFamily.Name, App.Settings.FontSize, fontStyle)
+                            Font = new Font(SettingsManager.FontFamily.Name, SettingsManager.FontSize, fontStyle)
                         };
                     var result = dialog.ShowDialog(ParentWindow);
                     if( result == DialogResult.Ok )
                     {
                         var resultFont = dialog.Font;
-                        App.Settings.FontFamily = new sd.FontFamily(resultFont.FamilyName);
-                        App.Settings.FontSize = resultFont.Size;
-                        App.Settings.FontBold = resultFont.Bold;
-                        App.Settings.FontItalic = resultFont.Italic;
+                        SettingsManager.FontFamily = new sd.FontFamily(resultFont.FamilyName);
+                        SettingsManager.FontSize = resultFont.Size;
+                        SettingsManager.FontBold = resultFont.Bold;
+                        SettingsManager.FontItalic = resultFont.Italic;
                     }
                 };
 
-            App.Settings.PropertyChanged += (object sender, PropertyChangedEventArgs e) =>
+            SettingsManager.PropertyChanged += (object sender, PropertyChangedEventArgs e) =>
                 {
                     if( e.PropertyName.StartsWith("Font") )
                     {
@@ -357,10 +371,10 @@ namespace SharpFlame.Gui.Dialogs
         private void setFontLabelText()
         {
             lblFont.Text = string.Format("{0}, {1}, {2}{3}",
-                App.Settings.FontFamily.Name,
-                (int)App.Settings.FontSize,
-                App.Settings.FontBold ? "B" : "",
-                App.Settings.FontItalic ? "I" : ""
+                SettingsManager.FontFamily.Name,
+                (int)SettingsManager.FontSize,
+                SettingsManager.FontBold ? "B" : "",
+                SettingsManager.FontItalic ? "I" : ""
                 );
         }
 
@@ -538,7 +552,7 @@ namespace SharpFlame.Gui.Dialogs
                 drawMinimapCliffColour = new Drawable
                     {
                         Style = "direct",
-                        BackgroundColor = App.Settings.MinimapCliffColour.ToEto(),
+                        BackgroundColor = SettingsManager.MinimapCliffColour.ToEto(),
                         Size = new Size(50, 27)
                     }
                 , 0, 0, false, false);
@@ -553,7 +567,7 @@ namespace SharpFlame.Gui.Dialogs
                 drawMinimapObjectColour = new Drawable
                     {
                         Style = "direct",
-                        BackgroundColor = App.Settings.MinimapSelectedObjectsColour.ToEto(),
+                        BackgroundColor = SettingsManager.MinimapSelectedObjectsColour.ToEto(),
                         Size = new Size(50, 27)
                     }
                 , 0, 0, false, false);
@@ -632,12 +646,11 @@ namespace SharpFlame.Gui.Dialogs
 
             var store = new GridItemCollection ();
             grvKeyboard.DataStore = store;
-            var i = 0;
-            foreach (KeyValuePair<string, KeyboardKey> pair in App.Settings.Keyboard.Keys)
+            foreach (KeyValuePair<string, KeyboardKey> pair in Keyboard.Keys)
             {
                 store.Add(new KeyboardGridItem(
                     pair.Key, 
-                    pair.Value.Invalid ? "!! " : "" + pair.Value.Key.ToShortcutString()
+                    pair.Value.ToString()
                 ));
             }
             layout.Add (grvKeyboard, true, true);
@@ -648,7 +661,7 @@ namespace SharpFlame.Gui.Dialogs
 
         private class OneColumnGridItem
         {
-            public string Text { get; private set; }
+            public string Text { get; set; }
 
             public OneColumnGridItem(string text)
             {
@@ -658,8 +671,8 @@ namespace SharpFlame.Gui.Dialogs
 
         private class KeyboardGridItem 
         {
-            public string Name { get; private set;} 
-            public string Key { get; private set;} 
+            public string Name { get; set;} 
+            public string Key { get; set;} 
 
             public KeyboardGridItem(string name, string key)
             {

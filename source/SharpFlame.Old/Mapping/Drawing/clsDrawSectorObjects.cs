@@ -3,10 +3,6 @@
 using System;
 using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
-using SharpFlame.Old.Domain;
-using SharpFlame.Old.Graphics.OpenGL;
-using SharpFlame.Old.Mapping.Objects;
-using SharpFlame.Old.Maths;
 using SharpFlame.Core.Domain;
 using SharpFlame.Old.Domain;
 using SharpFlame.Old.Graphics.OpenGL;

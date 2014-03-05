@@ -32,8 +32,12 @@ namespace SharpFlame.Gui.Actions
 {
     public class Settings : Command
     {
-        public Settings()
+        private readonly Dialogs.Settings dialogSettings;
+
+        public Settings(Dialogs.Settings ds)
         {
+            dialogSettings = ds;
+
             ID = "settings";
             MenuText = "&Settings";
             ToolBarText = "Settings";
@@ -43,9 +47,8 @@ namespace SharpFlame.Gui.Actions
         public override void OnExecuted(EventArgs e)
         {
             base.OnExecuted(e);
-            // show the about dialog
-            var settings = new Dialogs.Settings();
-            settings.Show ();
+            // show the settings dialog
+            dialogSettings.Show ();
         }
     }
 }

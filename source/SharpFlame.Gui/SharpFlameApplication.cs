@@ -42,6 +42,7 @@ using SharpFlame.Gui.Controls;
 using SharpFlame.Gui.Infrastructure;
 using SharpFlame.Old;
 using SharpFlame.Old.Domain.ObjData;
+using SharpFlame.Old.Settings;
 using Size = Eto.Drawing.Size;
 using Font = System.Drawing.Font;
 using FontStyle = System.Drawing.FontStyle;
@@ -62,6 +63,9 @@ namespace SharpFlame.Gui
         [Inject]
         internal IEventBroker EventBroker { get; set; }
 
+        [Inject]
+        internal SettingsManager Settings { get; set; }
+
         private Result initializeResult = new Result("Startup result", false);
 
         [Inject]
@@ -81,7 +85,11 @@ namespace SharpFlame.Gui
 
             // Run this before everything else.
             App.Initalize();
-            this.EventBroker.Register(App.Settings);
+
+            // TODO: Remove me once everthing is inectable.
+            App.Settings = Settings;
+
+            this.EventBroker.Register(Settings);
 
             App.SetProgramSubDirs();
 
@@ -103,7 +111,7 @@ namespace SharpFlame.Gui
 
             SetupEventHandlers();
 
-            initializeResult.Add(App.Settings.Load(App.SettingsPath));
+            initializeResult.Add(Settings.Load(App.SettingsPath));
             // initializeResult.Add (SettingsManager.SettingsLoad (ref SettingsManager.InitializeSettings));           
         }
 
@@ -116,7 +124,7 @@ namespace SharpFlame.Gui
             // show the main form
             MainForm.Show();
 
-            if( App.Settings.ShowOptionsAtStartup )
+            if( Settings.ShowOptionsAtStartup )
             {
                 new Dialogs.Settings().Show();
             }
@@ -141,7 +149,7 @@ namespace SharpFlame.Gui
             GlTexturesView.MakeCurrent();
 
             // Load tileset directories.
-            foreach( var path in App.Settings.TilesetDirectories )
+            foreach( var path in Settings.TilesetDirectories )
             {
                 if( !string.IsNullOrEmpty(path) )
                 {
@@ -150,7 +158,7 @@ namespace SharpFlame.Gui
             }
 
             // Load Object Data.
-            foreach( var path in App.Settings.ObjectDataDirectories )
+            foreach( var path in Settings.ObjectDataDirectories )
             {
                 if( !string.IsNullOrEmpty(path) )
                 {
@@ -180,7 +188,7 @@ namespace SharpFlame.Gui
         private void SetupEventHandlers()
         {
             //SEE EXAMPLE ABOVE ......
-            App.Settings.PropertyChanged += (sender, e) =>
+            Settings.PropertyChanged += (sender, e) =>
                 {
 #if DEBUG
                     logger.Debug("Setting {0} changed ", e.PropertyName);
@@ -192,7 +200,7 @@ namespace SharpFlame.Gui
                     }
                 };
 
-            App.Settings.TilesetDirectories.CollectionChanged += (sender, e) =>
+            Settings.TilesetDirectories.CollectionChanged += (sender, e) =>
                 {
                     if( !GlTexturesView.IsInitialized )
                     {
@@ -209,7 +217,7 @@ namespace SharpFlame.Gui
                                 if( result.HasProblems || result.HasWarnings )
                                 {
                                     new Dialogs.Status(result).Show();
-                                    App.Settings.TilesetDirectories.Remove((string)item);
+                                    Settings.TilesetDirectories.Remove((string)item);
                                 }
                             }
                         }
@@ -231,7 +239,7 @@ namespace SharpFlame.Gui
                     }
                 };
 
-            App.Settings.ObjectDataDirectories.CollectionChanged += (sender, e) =>
+            Settings.ObjectDataDirectories.CollectionChanged += (sender, e) =>
                 {
                     if( !GlTexturesView.IsInitialized )
                     {
@@ -245,7 +253,7 @@ namespace SharpFlame.Gui
                         {
                             // Just reload Object Data.
                             App.ObjectData = new ObjectData();
-                            foreach( var path in App.Settings.ObjectDataDirectories )
+                            foreach( var path in Settings.ObjectDataDirectories )
                             {
                                 if( path != null && path != "" )
                                 {
@@ -257,7 +265,7 @@ namespace SharpFlame.Gui
                         {
                             // Just reload Object Data.
                             App.ObjectData = new ObjectData();
-                            foreach( var path in App.Settings.ObjectDataDirectories )
+                            foreach( var path in Settings.ObjectDataDirectories )
                             {
                                 if( path != null && path != "" )
                                 {
@@ -283,15 +291,15 @@ namespace SharpFlame.Gui
         private void MakeGlFont()
         {
             var style = FontStyle.Regular;
-            if( App.Settings.FontBold )
+            if( Settings.FontBold )
             {
                 style = style | FontStyle.Bold;
             }
-            if( App.Settings.FontItalic )
+            if( Settings.FontItalic )
             {
                 style = style | FontStyle.Italic;
             }
-            App.UnitLabelFont = GlTexturesView.CreateGLFont(new Font(App.Settings.FontFamily, App.Settings.FontSize, style, GraphicsUnit.Point));
+            App.UnitLabelFont = GlTexturesView.CreateGLFont(new Font(Settings.FontFamily, Settings.FontSize, style, GraphicsUnit.Point));
         }
     }
 }

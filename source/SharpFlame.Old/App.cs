@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using Ninject.Modules;
 using NLog;
 using OpenTK;
 using OpenTK.Graphics;
@@ -136,7 +137,7 @@ namespace SharpFlame.Old
 
         public static Options UiOptions = new Options();
 
-        public static SettingsManager Settings = new SettingsManager();
+        public static SettingsManager Settings;
 
         public static void Initalize ()
         {

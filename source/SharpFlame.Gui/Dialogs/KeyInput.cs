@@ -27,17 +27,19 @@
 using System;
 using Eto.Forms;
 using Eto.Drawing;
+using SharpFlame.Core;
+using SharpFlame.Old.Settings;
 
 namespace SharpFlame.Gui.Dialogs
 {
     public class KeyInput : Dialog
     {
-        private Keys key;
-        public Keys Key { 
+        private KeyboardKey key;
+        public KeyboardKey Key { 
             get { return key; }
             set { 
                 key = value;
-                lblKey.Text = key.ToShortcutString ();
+                lblKey.Text = key.ToString();
             }
         }
 
@@ -53,25 +55,29 @@ namespace SharpFlame.Gui.Dialogs
             var layout = new DynamicLayout ();
             layout.AddCentered(lblKey = new Label { VerticalAlign = VerticalAlign.Middle });
 
-            var keyDown = Keys.None;
+            KeyboardKey keyDown = null;
             KeyUp += (object sender, KeyEventArgs e) => 
             {
-                if (e.KeyData.HasFlag(Keys.Control) && keyDown.HasFlag(Keys.Control)) {
-                    Key = keyDown;
-                } else if (e.KeyData.HasFlag(Keys.Shift) && keyDown.HasFlag(Keys.Shift)) {
-                    Key = keyDown;
-                } else if (e.KeyData.HasFlag(Keys.Alt) && keyDown.HasFlag(Keys.Alt)) {
-                    Key = keyDown;
-                } else {
-                    Key = e.KeyData;
-                }
+                var currentKeyOnly = e.KeyData & Keys.KeyMask;
+                var currentModifier = e.KeyData & Keys.ModifierMask;
+                var keyDownModifier = (Keys)keyDown.Key & Keys.ModifierMask;
 
+                if (currentKeyOnly != Keys.None) {
+                    Key = new KeyboardKey(e.KeyData, null);
+                } else if (e.IsChar) {
+                    // Is Char
+                    Key = new KeyboardKey(null, e.KeyChar);
+                } else if (currentModifier != keyDownModifier) {
+                    // Is modifier only
+                    Key = new KeyboardKey(e.KeyData, null);
+                }
+ 
                 Console.WriteLine ("UP Key: {0}, Char: {1}, Handled: {2}", e.KeyData, e.IsChar ? e.KeyChar.ToString() : "no char", e.Handled);
             };
 
             KeyDown += (object sender, KeyEventArgs e) => 
             {
-                keyDown = e.KeyData;
+                keyDown = new KeyboardKey(e.KeyData, e.KeyChar);
 
                 Console.WriteLine ("DOWN Key: {0}, Char: {1}, Handled: {2}", e.KeyData, e.IsChar ? e.KeyChar.ToString() : "no char", e.Handled);
             };

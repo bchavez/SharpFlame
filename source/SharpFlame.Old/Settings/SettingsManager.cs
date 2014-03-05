@@ -35,7 +35,7 @@ using System.Linq.Expressions;
 using Appccelerate.EventBroker;
 using Eto.Forms;
 using Newtonsoft.Json;
-using NLog;
+using Ninject.Extensions.Logging;
 using OpenTK;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain.Colors;
@@ -44,7 +44,7 @@ namespace SharpFlame.Old.Settings
 {
     public class SettingsManager: INotifyPropertyChanged
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger logger;
 
         #region Properties
         public bool AutoSaveEnabled {  get; set; }
@@ -92,8 +92,6 @@ namespace SharpFlame.Old.Settings
         public ObservableCollection<string> ObjectDataDirectories { get; private set; }
         public bool PickOrientation { get; set; }
 
-        public KeyboardManager Keyboard { get; set; }
-
         [JsonIgnore]
         public Font Font { get; private set; }
         #endregion
@@ -134,13 +132,13 @@ namespace SharpFlame.Old.Settings
         #endregion
 
         #region Public Methods
-        public SettingsManager ()
+        public SettingsManager (ILoggerFactory logFactory, KeyboardManager keyboardManager)
         {
-            Keyboard = new KeyboardManager();
-            SetDefaults ();
+            logger = logFactory.GetCurrentClassLogger();
+            SetDefaults (keyboardManager);
         }
 
-        public void SetDefaults()
+        public void SetDefaults(KeyboardManager keyboardManager)
         {
             AutoSaveEnabled = true;
             AutoSaveCompress = false;
@@ -172,58 +170,58 @@ namespace SharpFlame.Old.Settings
             PickOrientation = true;
 
             //interface controls
-            Keyboard.Create ("ObjectSelectTool", Keys.Escape);
-            Keyboard.Create ("PreviousTool", Keys.Grave);
+            keyboardManager.Create ("ObjectSelectTool", Keys.Escape);
+            keyboardManager.Create ("PreviousTool", Keys.Grave);
 
             //selected unit controls
-            Keyboard.Create ("MoveObjects", Keys.M);
-            Keyboard.Create ("DeleteObjects", Keys.Delete);
-            Keyboard.Create ("Multiselect", Keys.Shift);
+            keyboardManager.Create ("MoveObjects", Keys.M);
+            keyboardManager.Create ("DeleteObjects", Keys.Delete);
+            keyboardManager.Create ("Multiselect", Keys.Shift);
 
             //generalised controls
-            Keyboard.Create ("ViewSlow", Keys.R);
-            Keyboard.Create ("ViewFast", Keys.F);
+            keyboardManager.Create ("ViewSlow", Keys.R);
+            keyboardManager.Create ("ViewFast", Keys.F);
 
             //picker controls
-            Keyboard.Create ("Picker", Keys.Control);
+            keyboardManager.Create ("Picker", Keys.Control);
 
             //view controls
-            Keyboard.Create ("ShowTextures", Keys.F5);
-            Keyboard.Create ("ShowLighting", Keys.F8);
-            Keyboard.Create ("ShowWireframe", Keys.F6);
-            Keyboard.Create ("ShowObjects", Keys.F7);
-            Keyboard.Create ("ShowLabels", Keys.F4);
-            Keyboard.Create ("ViewMoveMode", Keys.F1);
-            Keyboard.Create ("ViewRotateMode", Keys.F2);
-            Keyboard.Create ("ViewMoveLeft", Keys.A);
-            Keyboard.Create ("ViewMoveRight", Keys.D);
-            Keyboard.Create ("ViewMoveForwards", Keys.W);
-            Keyboard.Create ("ViewMoveBackwards", Keys.S);
-            Keyboard.Create ("ViewMoveUp", Keys.E);
-            Keyboard.Create ("ViewMoveDown", Keys.C);
-            Keyboard.Create ("ViewZoomIn", Keys.Home);
-            Keyboard.Create ("ViewZoomOut", Keys.End);
-            Keyboard.Create ("ViewRotateLeft", Keys.Left);
-            Keyboard.Create ("ViewRotateRight", Keys.Right);
-            Keyboard.Create ("ViewRotateForwards", Keys.Up);
-            Keyboard.Create ("ViewRotateBackwards", Keys.Down);
-            Keyboard.Create ("ViewRotateUp", Keys.PageUp);
-            Keyboard.Create ("ViewRotateDown", Keys.PageDown);
-            Keyboard.Create ("ViewRollLeft", Keys.LeftBracket);
-            Keyboard.Create ("ViewRollRight", Keys.RightBracket);
-            Keyboard.Create ("ViewReset", Keys.Backspace);
+            keyboardManager.Create ("ShowTextures", Keys.F5);
+            keyboardManager.Create ("ShowLighting", Keys.F8);
+            keyboardManager.Create ("ShowWireframe", Keys.F6);
+            keyboardManager.Create ("ShowObjects", Keys.F7);
+            keyboardManager.Create ("ShowLabels", Keys.F4);
+            keyboardManager.Create ("ViewMoveMode", Keys.F1);
+            keyboardManager.Create ("ViewRotateMode", Keys.F2);
+            keyboardManager.Create ("ViewMoveLeft", Keys.A);
+            keyboardManager.Create ("ViewMoveRight", Keys.D);
+            keyboardManager.Create ("ViewMoveForwards", Keys.W);
+            keyboardManager.Create ("ViewMoveBackwards", Keys.S);
+            keyboardManager.Create ("ViewMoveUp", Keys.E);
+            keyboardManager.Create ("ViewMoveDown", Keys.C);
+            keyboardManager.Create ("ViewZoomIn", Keys.Home);
+            keyboardManager.Create ("ViewZoomOut", Keys.End);
+            keyboardManager.Create ("ViewRotateLeft", Keys.Left);
+            keyboardManager.Create ("ViewRotateRight", Keys.Right);
+            keyboardManager.Create ("ViewRotateForwards", Keys.Up);
+            keyboardManager.Create ("ViewRotateBackwards", Keys.Down);
+            keyboardManager.Create ("ViewRotateUp", Keys.PageUp);
+            keyboardManager.Create ("ViewRotateDown", Keys.PageDown);
+            keyboardManager.Create ("ViewRollLeft", Keys.LeftBracket);
+            keyboardManager.Create ("ViewRollRight", Keys.RightBracket);
+            keyboardManager.Create ("ViewReset", Keys.Backspace);
 
             //texture controls
-            Keyboard.Create ("CounterClockwise", Keys.D1);
-            Keyboard.Create ("Clockwise", Keys.D2);
-            Keyboard.Create ("TextureFlip", Keys.D3);
-            Keyboard.Create ("TriangleFlip", Keys.D4);
-            Keyboard.Create ("GatewayDelete", Keys.D5);
+            keyboardManager.Create ("CounterClockwise", Keys.D1);
+            keyboardManager.Create ("Clockwise", Keys.D2);
+            keyboardManager.Create ("TextureFlip", Keys.D3);
+            keyboardManager.Create ("TriangleFlip", Keys.D4);
+            keyboardManager.Create ("GatewayDelete", Keys.D5);
 
             //undo controls
-            Keyboard.Create ("Undo", Keys.Z);
-            Keyboard.Create ("Redo", Keys.Y);
-            Keyboard.Create ("PositionLabel", Keys.P);
+            keyboardManager.Create ("Undo", Keys.Z);
+            keyboardManager.Create ("Redo", Keys.Y);
+            keyboardManager.Create ("PositionLabel", Keys.P);
         }
 
         public Result Save(string path)
@@ -240,7 +238,7 @@ namespace SharpFlame.Old.Settings
             catch (Exception ex) {
                 Debugger.Break ();
                 returnResult.ProblemAdd (string.Format("Got an exception: {0}.", ex.Message));
-                logger.ErrorException ("Got an exception while saving the settings.", ex);
+                logger.Error (ex, "Got an exception while saving the settings.");
             }           
 
             return returnResult;

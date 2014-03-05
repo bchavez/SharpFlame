@@ -1,7 +1,9 @@
 using Ninject.Modules;
+using SharpFlame.Core;
 using SharpFlame.Gui.Controls;
 using SharpFlame.Gui.Forms;
 using SharpFlame.Gui.Sections;
+using SharpFlame.Old.Settings;
 
 namespace SharpFlame.Gui.Infrastructure
 {
@@ -9,6 +11,14 @@ namespace SharpFlame.Gui.Infrastructure
     {
         public override void Load()
         {
+            this.Bind<KeyboardManager>()
+                .ToSelf()
+                .InSingletonScope();
+
+            this.Bind<SettingsManager>()
+                .ToSelf()
+                .InSingletonScope();
+
             this.Bind<GLSurface>()
                 .ToSelf()
                 .InSingletonScope()
@@ -36,6 +46,11 @@ namespace SharpFlame.Gui.Infrastructure
             this.Bind<PlaceObjectsTab>().ToSelf().InSingletonScope();
             this.Bind<ObjectTab>().ToSelf().InSingletonScope();
             this.Bind<LabelsTab>().ToSelf().InSingletonScope();
+
+            // Settings dialog
+            this.Bind<Dialogs.Settings>()
+                .ToSelf()
+                .InSingletonScope();
 
         }
     }
