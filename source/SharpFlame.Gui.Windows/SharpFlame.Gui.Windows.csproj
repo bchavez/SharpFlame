@@ -42,12 +42,6 @@
     <Reference Include="Appccelerate.Fundamentals">
       <HintPath>..\packages\Appccelerate.Fundamentals.1.0.29\lib\Net40\Appccelerate.Fundamentals.dll</HintPath>
     </Reference>
-    <Reference Include="Eto">
-      <HintPath>..\packages\Eto-20140222\Eto.dll</HintPath>
-    </Reference>
-    <Reference Include="Eto.Platform.Windows">
-      <HintPath>..\packages\Eto-20140222\Eto.Platform.Windows.dll</HintPath>
-    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
@@ -73,6 +67,12 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="Eto">
+      <HintPath>..\packages\Eto-20140305\net40\Eto.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto.Platform.Windows">
+      <HintPath>..\packages\Eto-20140305\net40\Eto.Platform.Windows.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharpFlame.Core\GlobalAssemblyInfo.cs">

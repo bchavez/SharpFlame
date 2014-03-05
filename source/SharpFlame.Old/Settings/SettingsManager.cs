@@ -92,7 +92,7 @@ namespace SharpFlame.Old.Settings
         public ObservableCollection<string> ObjectDataDirectories { get; private set; }
         public bool PickOrientation { get; set; }
 
-        public Keyboard Keyboard { get; set; }
+        public KeyboardManager Keyboard { get; set; }
 
         [JsonIgnore]
         public Font Font { get; private set; }
@@ -136,7 +136,7 @@ namespace SharpFlame.Old.Settings
         #region Public Methods
         public SettingsManager ()
         {
-            Keyboard = new Keyboard ();
+            Keyboard = new KeyboardManager();
             SetDefaults ();
         }
 
