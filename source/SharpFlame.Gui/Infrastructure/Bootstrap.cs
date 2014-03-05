@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Ninject;
 using Ninject.Modules;
 
-namespace SharpFlame.Gui.NinjectBindings
+namespace SharpFlame.Gui.Infrastructure
 {
     public static class Bootstrap
     {
@@ -18,8 +18,8 @@ namespace SharpFlame.Gui.NinjectBindings
                 {
                     new Ninject.Extensions.NamedScope.NamedScopeModule(),
                     new Ninject.Extensions.ContextPreservation.ContextPreservationModule(),
-                    new Ninject.Extensions.bbvEventBroker.EventBrokerModule(),
                     new Ninject.Extensions.Logging.NLog2.NLogModule(),
+                    new EventBrokerModule(),
                     new SharpFlameModule(),
                 };
 

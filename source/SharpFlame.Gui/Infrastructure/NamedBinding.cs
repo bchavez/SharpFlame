@@ -1,4 +1,4 @@
-namespace SharpFlame.Gui.NinjectBindings
+namespace SharpFlame.Gui.Infrastructure
 {
     public class NamedBinding
     {

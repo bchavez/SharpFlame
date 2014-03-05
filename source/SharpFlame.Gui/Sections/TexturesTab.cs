@@ -33,7 +33,7 @@ using Eto.Drawing;
 using Ninject;
 using SharpFlame.Core.Domain;
 using SharpFlame.Gui.Controls;
-using SharpFlame.Gui.NinjectBindings;
+using SharpFlame.Gui.Infrastructure;
 using SharpFlame.Old;
 using SharpFlame.Old.Graphics.OpenGL;
 using SharpFlame.Old.Mapping.Tiles;

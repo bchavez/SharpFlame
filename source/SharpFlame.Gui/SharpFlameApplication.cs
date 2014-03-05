@@ -29,18 +29,17 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using bbv.Common.EventBroker;
-using bbv.Common.EventBroker.Handlers;
+using Appccelerate.EventBroker;
+using Appccelerate.EventBroker.Handlers;
 using Eto;
 using Eto.Forms;
 using Ninject;
 using NLog;
 using OpenTK;
 using SharpFlame.Core;
-using SharpFlame.Core.Parsers.Pie;
 using SharpFlame.Gui.Forms;
 using SharpFlame.Gui.Controls;
-using SharpFlame.Gui.NinjectBindings;
+using SharpFlame.Gui.Infrastructure;
 using SharpFlame.Old;
 using SharpFlame.Old.Domain.ObjData;
 using Size = Eto.Drawing.Size;
@@ -55,10 +54,13 @@ namespace SharpFlame.Gui
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         [Inject, Named(NamedBinding.TextureView)]
-        public GLSurface GlTexturesView { get; set; }
+        internal GLSurface GlTexturesView { get; set; }
 
         [Inject, Named(NamedBinding.MapView)]
-        public GLSurface GlMapView { get; set; }
+        internal GLSurface GlMapView { get; set; }
+
+        [Inject]
+        internal IEventBroker EventBroker { get; set; }
 
         private Result initializeResult = new Result("Startup result", false);
 
@@ -77,6 +79,7 @@ namespace SharpFlame.Gui
 
             // Run this before everything else.
             App.Initalize();
+            this.EventBroker.Register(App.Settings);
 
             App.SetProgramSubDirs();
 
@@ -172,33 +175,20 @@ namespace SharpFlame.Gui
             }
         }
 
-        [EventSubscription(EventTopics.SettingsChanged, typeof(Publisher))]
-        internal void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-#if DEBUG
-            Console.WriteLine("Setting {0} changed ", e.PropertyName);
-#endif
-
-            if( e.PropertyName.StartsWith("Font") && GlTexturesView.IsInitialized )
-            {
-                MakeGlFont();
-            }
-        }
-
         private void SetupEventHandlers()
         {
             //SEE EXAMPLE ABOVE ......
-//            App.Settings.PropertyChanged += (sender, e) =>
-//                {
-//#if DEBUG
-//                    Console.WriteLine("Setting {0} changed ", e.PropertyName);
-//#endif
+            App.Settings.PropertyChanged += (sender, e) =>
+                {
+#if DEBUG
+                    Console.WriteLine("Setting {0} changed ", e.PropertyName);
+#endif
 
-//                    //if( e.PropertyName.StartsWith("Font") && GlTexturesView.IsInitialized )
-//                    //{
-//                    //    MakeGlFont();
-//                    //}
-//                };
+                    if( e.PropertyName.StartsWith("Font") && GlTexturesView.IsInitialized )
+                    {
+                        MakeGlFont();
+                    }
+                };
 
             App.Settings.TilesetDirectories.CollectionChanged += (sender, e) =>
                 {

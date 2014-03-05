@@ -1,10 +1,9 @@
-using Eto.Forms;
 using Ninject.Modules;
 using SharpFlame.Gui.Controls;
 using SharpFlame.Gui.Forms;
 using SharpFlame.Gui.Sections;
 
-namespace SharpFlame.Gui.NinjectBindings
+namespace SharpFlame.Gui.Infrastructure
 {
     public class SharpFlameModule : NinjectModule
     {

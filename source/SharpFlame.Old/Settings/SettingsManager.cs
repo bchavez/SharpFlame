@@ -31,9 +31,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Linq.Expressions;
-using bbv.Common.EventBroker;
+using Appccelerate.EventBroker;
 using Eto.Forms;
 using Newtonsoft.Json;
 using NLog;
@@ -101,7 +100,6 @@ namespace SharpFlame.Old.Settings
 
         #region INotifyPropertyChanged
 
-        [EventPublication(EventTopics.SettingsChanged)]
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         protected virtual void OnPropertyChanged(string propertyName)

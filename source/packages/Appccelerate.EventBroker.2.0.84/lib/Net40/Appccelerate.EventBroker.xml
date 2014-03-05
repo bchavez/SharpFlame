@@ -1,0 +1,1926 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Appccelerate.EventBroker</name>
+    </assembly>
+    <members>
+        <member name="T:Appccelerate.EventBroker.EventBroker">
+            <summary>
+            The <see cref="T:Appccelerate.EventBroker.EventBroker"/> is the facade component to the event broker framework.
+            It provides the registration and deregistration functionality for event publisher and subscribers.
+            </summary>
+        </member>
+        <member name="T:Appccelerate.EventBroker.IEventBroker">
+            <summary>
+            Interface for <see cref="T:Appccelerate.EventBroker.EventBroker"/>.
+            Use this interface to reference the event broker from your classes. This gives you the possibility to
+            mock it.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBroker.DescribeTo(System.IO.TextWriter)">
+            <summary>
+            Describes all event topics of this event broker:
+            publications, subscriptions, names, thread options, scopes, event args.
+            </summary>
+            <param name="writer">The writer.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBroker.Fire(System.String,System.Object,Appccelerate.EventBroker.HandlerRestriction,System.Object,System.EventArgs)">
+            <summary>
+            Fires the specified topic directly on the <see cref="T:Appccelerate.EventBroker.IEventBroker"/> without a real publisher.
+            This is useful when temporarily created objects need to fire events.
+            The event is fired globally but can be subscribed with <see cref="T:Appccelerate.EventBroker.Matchers.ISubscriptionMatcher"/>.
+            </summary>
+            <param name="topic">The topic URI.</param>
+            <param name="publisher">The publisher (for event flow and logging).</param>
+            <param name="handlerRestriction">The handler restriction.</param>
+            <param name="sender">The sender (passed to the event handler).</param>
+            <param name="eventArgs">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBroker.AddExtension(Appccelerate.EventBroker.IEventBrokerExtension)">
+            <summary>
+            Adds the extension.
+            </summary>
+            <param name="extension">The extension.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBroker.RemoveExtension(Appccelerate.EventBroker.IEventBrokerExtension)">
+            <summary>
+            Removes the specified extension.
+            </summary>
+            <param name="extension">The extension.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBroker.ClearExtensions">
+            <summary>
+            Clears all extensions, including the default logger extension.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBroker.AddGlobalMatcher(Appccelerate.EventBroker.Matchers.IMatcher)">
+            <summary>
+            Adds the global matcher.
+            </summary>
+            <param name="matcher">The matcher.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBroker.RemoveGlobalMatcher(Appccelerate.EventBroker.Matchers.IMatcher)">
+            <summary>
+            Removes the global matcher.
+            </summary>
+            <param name="matcher">The matcher.</param>
+        </member>
+        <member name="T:Appccelerate.EventBroker.IExtensionHost">
+            <summary>
+            Interface to execute actions on all extensions of the event broker.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IExtensionHost.ForEach(System.Action{Appccelerate.EventBroker.IEventBrokerExtension})">
+            <summary>
+            Executes the specified action for all extensions.
+            </summary>
+            <param name="action">The action to execute.</param>
+        </member>
+        <member name="F:Appccelerate.EventBroker.EventBroker.eventInspector">
+            <summary>
+            The inspector used to find publications and subscription within a class.
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.EventBroker.eventTopicHost">
+            <summary>
+            The event topic host that holds all event topics of this event broker.
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.EventBroker.factory">
+            <summary>
+            The factory used to create event broker related instances.
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.EventBroker.extensions">
+            <summary>
+            List of all extensions for this event broker.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.EventBroker.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.EventBroker"/> class.
+            The <see cref="T:Appccelerate.EventBroker.Factories.StandardFactory"/> is used to create <see cref="T:Appccelerate.EventBroker.IHandler"/>s <see cref="T:Appccelerate.EventBroker.Matchers.IPublicationMatcher"/>s and
+            <see cref="T:Appccelerate.EventBroker.Matchers.ISubscriptionMatcher"/>s.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.EventBroker.#ctor(Appccelerate.EventBroker.Internals.IFactory)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.EventBroker"/> class.
+            </summary>
+            <param name="factory">The factory.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.EventBroker.Fire(System.String,System.Object,Appccelerate.EventBroker.HandlerRestriction,System.Object,System.EventArgs)">
+            <summary>
+            Fires the specified topic directly on the <see cref="T:Appccelerate.EventBroker.IEventBroker"/> without a real publisher.
+            This is useful when temporarily created objects need to fire events.
+            The event is fired globally but can be matched with <see cref="T:Appccelerate.EventBroker.Matchers.ISubscriptionMatcher"/>.
+            </summary>
+            <param name="topic">The topic URI.</param>
+            <param name="publisher">The publisher (for event flow and logging).</param>
+            <param name="handlerRestriction">The handler restriction.</param>
+            <param name="sender">The sender (passed to the event handler).</param>
+            <param name="eventArgs">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.EventBroker.DescribeTo(System.IO.TextWriter)">
+            <summary>
+            Describes all event topics of this event broker:
+            publications, subscriptions, names, thread options, scopes, event arguments.
+            </summary>
+            <param name="writer">The writer.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.EventBroker.AddExtension(Appccelerate.EventBroker.IEventBrokerExtension)">
+            <summary>
+            Adds the specified extension. The extension will be considered in any future operation.
+            </summary>
+            <param name="extension">The extension.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.EventBroker.RemoveExtension(Appccelerate.EventBroker.IEventBrokerExtension)">
+            <summary>
+            Removes the specified extension.
+            </summary>
+            <param name="extension">The extension.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.EventBroker.ClearExtensions">
+            <summary>
+            Clears all extensions, including the default logger extension.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.EventBroker.Appccelerate#EventBroker#IExtensionHost#ForEach(System.Action{Appccelerate.EventBroker.IEventBrokerExtension})">
+            <summary>
+            Executes the specified action for all extensions.
+            </summary>
+            <param name="action">The action to execute.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.EventBroker.AddGlobalMatcher(Appccelerate.EventBroker.Matchers.IMatcher)">
+            <summary>
+            Adds the global matcher.
+            </summary>
+            <param name="matcher">The matcher.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.EventBroker.RemoveGlobalMatcher(Appccelerate.EventBroker.Matchers.IMatcher)">
+            <summary>
+            Removes the global matcher.
+            </summary>
+            <param name="matcher">The matcher.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.EventBroker.Dispose">
+            <summary>
+            See <see cref="M:System.IDisposable.Dispose"/> for more information.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.EventBroker.Dispose(System.Boolean)">
+            <summary>
+            Implementation of the disposable pattern.
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+            <remarks>
+            Unregisters the event handler of all topics
+            </remarks>
+        </member>
+        <member name="T:Appccelerate.EventBroker.EventPublicationAttribute">
+            <summary>
+            Declares an event as an <see cref="T:Appccelerate.EventBroker.IEventTopic"/> publication.
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.EventPublicationAttribute.topic">
+            <summary>
+            The URI of the event topic this publication refers to.
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.EventPublicationAttribute.matcherTypes">
+            <summary>
+            Which matchers are used for this publication.
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.EventPublicationAttribute.handlerRestriction">
+            <summary>
+            The restriction this publication has for subscribers.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.EventPublicationAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.EventPublicationAttribute"/> class with
+            global publication scope.
+            </summary>
+            <param name="topic">The topic URI.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.EventPublicationAttribute.#ctor(System.String,Appccelerate.EventBroker.HandlerRestriction)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.EventPublicationAttribute"/> class.
+            </summary>
+            <param name="topic">The topic URI.</param>
+            <param name="handlerRestriction">The handler restriction.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.EventPublicationAttribute.#ctor(System.String,System.Type[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.EventPublicationAttribute"/> class.
+            </summary>
+            <param name="topic">The topic.</param>
+            <param name="matcherTypes">The matcher types.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.EventPublicationAttribute.#ctor(System.String,Appccelerate.EventBroker.HandlerRestriction,System.Type[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.EventPublicationAttribute"/> class.
+            </summary>
+            <param name="topic">The topic.</param>
+            <param name="handlerRestriction">The handler restriction.</param>
+            <param name="matcherTypes">The matcher types.</param>
+        </member>
+        <member name="P:Appccelerate.EventBroker.EventPublicationAttribute.Topic">
+            <summary>
+            Gets the topic URI.
+            </summary>
+            <value>The topic URI.</value>
+        </member>
+        <member name="P:Appccelerate.EventBroker.EventPublicationAttribute.MatcherTypes">
+            <summary>
+            Gets the types of the matchers.
+            </summary>
+            <value>The types of the matchers.</value>
+        </member>
+        <member name="P:Appccelerate.EventBroker.EventPublicationAttribute.HandlerRestriction">
+            <summary>
+            Gets the handler restriction this publication has for its subscribers. Whether all (null),
+            only synchronous or asynchronous handling is allowed.
+            </summary>
+            <value>The handler restriction.</value>
+        </member>
+        <member name="T:Appccelerate.EventBroker.EventSubscriptionAttribute">
+            <summary>
+            Declares a handler as an <see cref="T:Appccelerate.EventBroker.IEventTopic"/> subscription.
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.EventSubscriptionAttribute.topic">
+            <summary>
+            The URI of the event topic this publication refers to.
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.EventSubscriptionAttribute.handlerType">
+            <summary>
+            Which threading strategy handler is used for this subscription.
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.EventSubscriptionAttribute.matcherTypes">
+            <summary>
+            Which matchers are used for this subscription.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.EventSubscriptionAttribute.#ctor(System.String,System.Type)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.EventSubscriptionAttribute"/> class using the specified handler to execute the subscription.
+            </summary>
+            <param name="topic">The name of the <see cref="T:Appccelerate.EventBroker.IEventTopic"/> to subscribe to.</param>
+            <param name="handlerType">The type of the handler to execute the subscription (on publisher thread, user interface, ...).</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.EventSubscriptionAttribute.#ctor(System.String,System.Type,System.Type[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.EventSubscriptionAttribute"/> class using the specified handler to execute the subscription and the
+            specified subscription scope matcher.
+            </summary>
+            <param name="topic">The name of the <see cref="T:Appccelerate.EventBroker.IEventTopic"/> to subscribe to.</param>
+            <param name="handlerType">The type of the handler to execute the subscription (on publisher thread, user interface, ...).</param>
+            <param name="matcherTypes">Type of the matchers used for this subscription.</param>
+        </member>
+        <member name="P:Appccelerate.EventBroker.EventSubscriptionAttribute.Topic">
+            <summary>
+            Gets the name of the <see cref="T:Appccelerate.EventBroker.IEventTopic"/> the decorated method is subscribed to.
+            </summary>
+        </member>
+        <member name="P:Appccelerate.EventBroker.EventSubscriptionAttribute.HandlerType">
+            <summary>
+            Gets the type of the subscription execution handler.
+            </summary>
+            <value>The type of the subscription execution handler.</value>
+        </member>
+        <member name="P:Appccelerate.EventBroker.EventSubscriptionAttribute.MatcherTypes">
+            <summary>
+            Gets the types of the matchers.
+            </summary>
+            <value>The types of the matchers.</value>
+        </member>
+        <member name="T:Appccelerate.EventBroker.EventTopicFireDelegate">
+            <summary>
+            Represents the signature for the subscription objects to get called from the <see cref="T:Appccelerate.EventBroker.Internals.EventTopic"/> during
+            a firing sequence.
+            </summary>
+            <param name="eventTopic">The event topic that is fired.</param>
+            <param name="sender">The publisher object firing the topic.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> data to be passed to the subscribers.</param>
+            <param name="publication">The publication firing the event.</param>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Exceptions.EventBrokerException">
+            <summary>
+            Base exception for all exceptions that are thrown within the event broker framework.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Exceptions.EventBrokerException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.Exceptions.EventBrokerException"/> class.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Exceptions.EventBrokerException.#ctor(System.String,System.Object[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.Exceptions.EventBrokerException"/> class.
+            </summary>
+            <param name="format">Exception message as a format string.</param>
+            <param name="args">Argument for the exception message format string.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Exceptions.EventBrokerException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.Exceptions.EventBrokerException"/> class.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Exceptions.EventBrokerException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.Exceptions.EventBrokerException"/> class.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"></see> that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"></see> that contains contextual information about the source or destination.</param>
+            <exception cref="T:System.Runtime.Serialization.SerializationException">The class name is null or <see cref="P:System.Exception.HResult"></see> is zero (0). </exception>
+            <exception cref="T:System.ArgumentNullException">The info parameter is null. </exception>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Exceptions.ExceptionHandlingContext">
+            <summary>
+            Provides context information for handling exceptions by extensions.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Exceptions.ExceptionHandlingContext.SetHandled">
+            <summary>
+            Sets <see cref="P:Appccelerate.EventBroker.Exceptions.ExceptionHandlingContext.Handled"/> to true.
+            </summary>
+        </member>
+        <member name="P:Appccelerate.EventBroker.Exceptions.ExceptionHandlingContext.Handled">
+            <summary>
+            Gets a value indicating whether the exception is handled by an extension.
+            When this value is set to true with <see cref="M:Appccelerate.EventBroker.Exceptions.ExceptionHandlingContext.SetHandled"/> then the exception is not re-thrown.
+            </summary>
+            <value><c>true</c> if handled; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Extensions.EventBrokerExtensionBase">
+            <summary>
+            Base class for <see cref="T:Appccelerate.EventBroker.IEventBrokerExtension"/>s that implements all members as virtual methods.
+            Derive from this class if you want to override only a few of the methods provided by <see cref="T:Appccelerate.EventBroker.IEventBrokerExtension"/>.
+            </summary>
+        </member>
+        <member name="T:Appccelerate.EventBroker.IEventBrokerExtension">
+            <summary>
+            Interface for implementing event broker extensions.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBrokerExtension.FiringEvent(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.IPublication,System.Object,System.EventArgs)">
+            <summary>
+            Called when an event is fired.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="publication">The publication.</param>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBrokerExtension.FiredEvent(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.IPublication,System.Object,System.EventArgs)">
+            <summary>
+            Called when the event was fired (processing completed).
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="publication">The publication.</param>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBrokerExtension.RegisteredItem(System.Object)">
+            <summary>
+            Called when an item was registered.
+            </summary>
+            <param name="item">The item that was registered.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBrokerExtension.UnregisteredItem(System.Object)">
+            <summary>
+            Called when an item was unregistered.
+            </summary>
+            <param name="item">The item that was unregistered.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBrokerExtension.CreatedTopic(Appccelerate.EventBroker.IEventTopicInfo)">
+            <summary>
+            Called after an event topic was created.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBrokerExtension.CreatedPublication(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.IPublication)">
+            <summary>
+            Called after a publication was created.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="publication">The publication.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBrokerExtension.CreatedSubscription(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.ISubscription)">
+            <summary>
+            Called after a subscription was created.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="subscription">The subscription.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBrokerExtension.AddedPublication(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.IPublication)">
+            <summary>
+            Called after a publication was added to an event topic.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="publication">The publication.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBrokerExtension.RemovedPublication(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.IPublication)">
+            <summary>
+            Called after a publication was removed from an event topic.
+            </summary>
+            <param name="eventTopic">The event topic. Null if removed by code.</param>
+            <param name="publication">The publication.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBrokerExtension.AddedSubscription(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.ISubscription)">
+            <summary>
+            Called after a subscription was added to an event topic.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="subscription">The subscription.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBrokerExtension.RemovedSubscription(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.ISubscription)">
+            <summary>
+            Called after a subscription was removed from an event topic.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="subscription">The subscription.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBrokerExtension.Disposed(Appccelerate.EventBroker.IEventTopicInfo)">
+            <summary>
+            Called after an event topic was disposed.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBrokerExtension.SubscriberExceptionOccurred(Appccelerate.EventBroker.IEventTopicInfo,System.Exception,Appccelerate.EventBroker.Exceptions.ExceptionHandlingContext)">
+            <summary>
+            Called when an exception occurred during event handling by a subscriber.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="exception">The exception.</param>
+            <param name="context">The context providing information whether the exception is handled by an extension or is re-thrown.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBrokerExtension.RelayingEvent(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.IPublication,Appccelerate.EventBroker.ISubscription,Appccelerate.EventBroker.IHandler,System.Object,System.EventArgs)">
+            <summary>
+            Called before an event is relayed from the publication to the subscribers.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="publication">The publication.</param>
+            <param name="subscription">The subscription.</param>
+            <param name="handler">The handler.</param>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBrokerExtension.RelayedEvent(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.IPublication,Appccelerate.EventBroker.ISubscription,Appccelerate.EventBroker.IHandler,System.Object,System.EventArgs)">
+            <summary>
+            Called after the event was relayed from the publication to the subscribers.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="publication">The publication.</param>
+            <param name="subscription">The subscription.</param>
+            <param name="handler">The handler.</param>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBrokerExtension.SkippedEvent(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.IPublication,Appccelerate.EventBroker.ISubscription,System.Object,System.EventArgs)">
+            <summary>
+            Called when a publication or subscription matcher did not match and the event was not relayed to a subscription.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="publication">The publication.</param>
+            <param name="subscription">The subscription.</param>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Extensions.EventBrokerExtensionBase.FiringEvent(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.IPublication,System.Object,System.EventArgs)">
+            <summary>
+            Called when an event is fired.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="publication">The publication.</param>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Extensions.EventBrokerExtensionBase.FiredEvent(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.IPublication,System.Object,System.EventArgs)">
+            <summary>
+            Called when the event was fired (processing completed).
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="publication">The publication.</param>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Extensions.EventBrokerExtensionBase.RegisteredItem(System.Object)">
+            <summary>
+            Called when an item was registered.
+            </summary>
+            <param name="item">The item that was registered.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Extensions.EventBrokerExtensionBase.UnregisteredItem(System.Object)">
+            <summary>
+            Called when an item was unregistered.
+            </summary>
+            <param name="item">The item that was unregistered.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Extensions.EventBrokerExtensionBase.CreatedTopic(Appccelerate.EventBroker.IEventTopicInfo)">
+            <summary>
+            Called after an event topic was created.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Extensions.EventBrokerExtensionBase.CreatedPublication(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.IPublication)">
+            <summary>
+            Called after a publication was created.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="publication">The publication.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Extensions.EventBrokerExtensionBase.CreatedSubscription(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.ISubscription)">
+            <summary>
+            Called after a subscription was created.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="subscription">The subscription.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Extensions.EventBrokerExtensionBase.AddedPublication(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.IPublication)">
+            <summary>
+            Called after a publication was added to an event topic.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="publication">The publication.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Extensions.EventBrokerExtensionBase.RemovedPublication(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.IPublication)">
+            <summary>
+            Called after a publication was removed from an event topic.
+            </summary>
+            <param name="eventTopic">The event topic. Null if removed by code.</param>
+            <param name="publication">The publication.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Extensions.EventBrokerExtensionBase.AddedSubscription(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.ISubscription)">
+            <summary>
+            Called after a subscription was added to an event topic.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="subscription">The subscription.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Extensions.EventBrokerExtensionBase.RemovedSubscription(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.ISubscription)">
+            <summary>
+            Called after a subscription was removed from an event topic.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="subscription">The subscription.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Extensions.EventBrokerExtensionBase.Disposed(Appccelerate.EventBroker.IEventTopicInfo)">
+            <summary>
+            Called after an event topic was disposed.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Extensions.EventBrokerExtensionBase.SubscriberExceptionOccurred(Appccelerate.EventBroker.IEventTopicInfo,System.Exception,Appccelerate.EventBroker.Exceptions.ExceptionHandlingContext)">
+            <summary>
+            Called when an exception occurred during event handling by a subscriber.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="exception">The exception.</param>
+            <param name="context">The context providing information whether the exception is handled by an extension or is re-thrown.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Extensions.EventBrokerExtensionBase.RelayingEvent(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.IPublication,Appccelerate.EventBroker.ISubscription,Appccelerate.EventBroker.IHandler,System.Object,System.EventArgs)">
+            <summary>
+            Called before an event is relayed from the publication to the subscribers.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="publication">The publication.</param>
+            <param name="subscription">The subscription.</param>
+            <param name="handler">The handler.</param>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Extensions.EventBrokerExtensionBase.RelayedEvent(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.IPublication,Appccelerate.EventBroker.ISubscription,Appccelerate.EventBroker.IHandler,System.Object,System.EventArgs)">
+            <summary>
+            Called after the event was relayed from the publication to the subscribers.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="publication">The publication.</param>
+            <param name="subscription">The subscription.</param>
+            <param name="handler">The handler.</param>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Extensions.EventBrokerExtensionBase.SkippedEvent(Appccelerate.EventBroker.IEventTopicInfo,Appccelerate.EventBroker.IPublication,Appccelerate.EventBroker.ISubscription,System.Object,System.EventArgs)">
+            <summary>
+            Called when a publication or subscription matcher did not match and the event was not relayed to a subscription.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="publication">The publication.</param>
+            <param name="subscription">The subscription.</param>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Factories.StandardFactory">
+            <summary>
+            Standard implementation for the <see cref="T:Appccelerate.EventBroker.Internals.IFactory"/> interface.
+            </summary>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Internals.IFactory">
+            <summary>
+            Factory for creating subscription execution handlers and scope matcher.
+            </summary>
+            <remarks>
+            The factory that is used by an <see cref="T:Appccelerate.EventBroker.IEventBroker"/> can be set on the constructor of the event broker.
+            </remarks>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.IFactory.Initialize(Appccelerate.EventBroker.IExtensionHost)">
+            <summary>
+            Initializes this factory with the specified <paramref name="extensionHost"/> holding all extensions.
+            </summary>
+            <param name="extensionHost">The extension host holding all extensions (this is the event broker).</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.IFactory.CreateEventTopicHost(Appccelerate.EventBroker.Internals.GlobalMatchers.IGlobalMatchersProvider)">
+            <summary>
+            Creates an event topic host.
+            </summary>
+            <param name="globalMatchersProvider">The global matchers provider.</param>
+            <returns>A newly created event topic host.</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.IFactory.CreatePublication(Appccelerate.EventBroker.IEventTopicExecuter,System.Object,System.Reflection.EventInfo,Appccelerate.EventBroker.HandlerRestriction,System.Collections.Generic.IList{Appccelerate.EventBroker.Matchers.IPublicationMatcher})">
+            <summary>
+            Creates a new publication
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="publisher">The publisher.</param>
+            <param name="eventInfo">The event info.</param>
+            <param name="handlerRestriction">The handler restriction.</param>
+            <param name="publicationMatchers">The publication matchers.</param>
+            <returns>A newly created publication</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.IFactory.CreatePublication(Appccelerate.EventBroker.IEventTopicExecuter,System.Object,System.EventHandler@,Appccelerate.EventBroker.HandlerRestriction,System.Collections.Generic.IList{Appccelerate.EventBroker.Matchers.IPublicationMatcher})">
+            <summary>
+            Creates a new publication
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="publisher">The publisher.</param>
+            <param name="eventHandler">The event handler.</param>
+            <param name="handlerRestriction">The handler restriction.</param>
+            <param name="publicationMatchers">The publication matchers.</param>
+            <returns>A newly created publication</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.IFactory.CreatePublication``1(Appccelerate.EventBroker.IEventTopicExecuter,System.Object,System.EventHandler{``0}@,Appccelerate.EventBroker.HandlerRestriction,System.Collections.Generic.IList{Appccelerate.EventBroker.Matchers.IPublicationMatcher})">
+            <summary>
+            Creates a new publication
+            </summary>
+            <typeparam name="TEventArgs">The type of the event arguments.</typeparam>
+            <param name="eventTopic">The event topic.</param>
+            <param name="publisher">The publisher.</param>
+            <param name="eventHandler">The event handler.</param>
+            <param name="handlerRestriction">The handler restriction.</param>
+            <param name="publicationMatchers">The publication matchers.</param>
+            <returns>A newly created publication</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.IFactory.CreateHandler(System.Type)">
+            <summary>
+            Creates a subscription execution handler. This handler defines on which thread the subscription is executed.
+            </summary>
+            <param name="handlerType">Type of the handler.</param>
+            <returns>A new subscription execution handler.</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.IFactory.CreatePublicationMatcher(System.Type)">
+            <summary>
+            Creates a publication matcher.
+            </summary>
+            <param name="matcherType">Type of the matcher.</param>
+            <returns>A newly created publication matcher.</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.IFactory.CreateSubscriptionMatcher(System.Type)">
+            <summary>
+            Creates a subscription matcher.
+            </summary>
+            <param name="matcherType">Type of the subscription matcher.</param>
+            <returns>A newly create subscription matcher.</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.IFactory.CreateGlobalMatchersHost">
+            <summary>
+            Creates the global matchers host.
+            </summary>
+            <returns>A newly created global matchers host.</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.IFactory.CreateEventTopicInternal(System.String,Appccelerate.EventBroker.Internals.GlobalMatchers.IGlobalMatchersProvider)">
+            <summary>
+            Creates a new event topic
+            </summary>
+            <param name="uri">The URI of the event topic.</param>
+            <param name="globalMatchersProvider">The global matchers provider.</param>
+            <returns>A newly created event topic</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Factories.StandardFactory.Initialize(Appccelerate.EventBroker.IExtensionHost)">
+            <summary>
+            Initializes this factory with the specified <paramref name="extensionHost"/> holding all extensions.
+            </summary>
+            <param name="extensionHost">The extension host holding all extensions (this is the event broker).</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Factories.StandardFactory.CreateEventTopicHost(Appccelerate.EventBroker.Internals.GlobalMatchers.IGlobalMatchersProvider)">
+            <summary>
+            Creates an event topic host.
+            </summary>
+            <param name="globalMatchersProvider">The global matchers provider.</param>
+            <returns>A newly created event topic host.</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Factories.StandardFactory.CreateEventInspector">
+            <summary>
+            Creates an event inspector.
+            </summary>
+            <returns>A newly created event inspector.</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Factories.StandardFactory.CreateEventTopicInternal(System.String,Appccelerate.EventBroker.Internals.GlobalMatchers.IGlobalMatchersProvider)">
+            <summary>
+            Creates a new event topic
+            </summary>
+            <param name="uri">The URI of the event topic.</param>
+            <param name="globalMatchersProvider">The global matchers provider.</param>
+            <returns>A newly created event topic</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Factories.StandardFactory.CreatePublication(Appccelerate.EventBroker.IEventTopicExecuter,System.Object,System.Reflection.EventInfo,Appccelerate.EventBroker.HandlerRestriction,System.Collections.Generic.IList{Appccelerate.EventBroker.Matchers.IPublicationMatcher})">
+            <summary>
+            Creates a new publication
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="publisher">The publisher.</param>
+            <param name="eventInfo">The event info.</param>
+            <param name="handlerRestriction">The handler restriction.</param>
+            <param name="publicationMatchers">The publication matchers.</param>
+            <returns>A newly created publication</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Factories.StandardFactory.CreatePublication(Appccelerate.EventBroker.IEventTopicExecuter,System.Object,System.EventHandler@,Appccelerate.EventBroker.HandlerRestriction,System.Collections.Generic.IList{Appccelerate.EventBroker.Matchers.IPublicationMatcher})">
+            <summary>
+            Creates a new publication.
+            </summary>
+            <param name="eventTopic">The event topic.</param>
+            <param name="publisher">The publisher.</param>
+            <param name="eventHandler">The event handler.</param>
+            <param name="handlerRestriction">The handler restriction.</param>
+            <param name="publicationMatchers">The matchers.</param>
+            <returns>A newly created publication</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Factories.StandardFactory.CreatePublication``1(Appccelerate.EventBroker.IEventTopicExecuter,System.Object,System.EventHandler{``0}@,Appccelerate.EventBroker.HandlerRestriction,System.Collections.Generic.IList{Appccelerate.EventBroker.Matchers.IPublicationMatcher})">
+            <summary>
+            Creates a new publication.
+            </summary>
+            <typeparam name="TEventArgs">The type of the event arguments.</typeparam>
+            <param name="eventTopic">The event topic.</param>
+            <param name="publisher">The publisher.</param>
+            <param name="eventHandler">The event handler.</param>
+            <param name="handlerRestriction">The handler restriction.</param>
+            <param name="publicationMatchers">The matchers.</param>
+            <returns>A newly created publication</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Factories.StandardFactory.CreateHandler(System.Type)">
+            <summary>
+            Creates a subscription execution handler. This handler defines on which thread the subscription is executed.
+            </summary>
+            <param name="handlerType">Type of the handler.</param>
+            <returns>A new subscription execution handler.</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Factories.StandardFactory.CreatePublicationMatcher(System.Type)">
+            <summary>
+            Creates a publication matcher.
+            </summary>
+            <param name="matcherType">Type of the matcher.</param>
+            <returns>
+            A newly created publication scope matcher.
+            </returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Factories.StandardFactory.CreateSubscriptionMatcher(System.Type)">
+            <summary>
+            Creates a subscription scope matcher.
+            </summary>
+            <param name="matcherType">Type of the subscription matcher.</param>
+            <returns>
+            A newly create subscription scope matcher.
+            </returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Factories.StandardFactory.CreateGlobalMatchersHost">
+            <summary>
+            Creates the global matchers host.
+            </summary>
+            <returns>A newly created global matchers host.</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Factories.StandardFactory.AssertIsHandler(System.Type)">
+            <summary>
+            Asserts that the given handler type implements <see cref="T:Appccelerate.EventBroker.IHandler"/> and is a class.
+            </summary>
+            <param name="handlerType">Type of the handler to check.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Factories.StandardFactory.AssertIsSubscriptionMatcher(System.Type)">
+            <summary>
+            Asserts that the given matcher type implements <see cref="T:Appccelerate.EventBroker.Matchers.ISubscriptionMatcher"/> and is a class.
+            </summary>
+            <param name="subscriptionMatcherType">Type of the matcher to check.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Factories.StandardFactory.AssertIsPublicationMatcher(System.Type)">
+            <summary>
+            Asserts that the given matcher type implements <see cref="T:Appccelerate.EventBroker.Matchers.IPublicationMatcher"/> and is a class.
+            </summary>
+            <param name="publicationMatcherType">Type of the matcher to check.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Factories.StandardFactory.ActivateSubscriptionMatcher(System.Type)">
+            <summary>
+            Creates a new instance of a subscription matcher type. 
+            </summary>
+            <remarks>Only called when subscription matcher assertions in 
+            <see cref="M:Appccelerate.EventBroker.Factories.StandardFactory.AssertIsSubscriptionMatcher(System.Type)"/> were successful.</remarks>
+            <param name="subscriptionMatcherType">The subscription matcher type.</param>
+            <returns>A new instance of <paramref name="subscriptionMatcherType"/>.</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Factories.StandardFactory.ActivatePublicationMatcher(System.Type)">
+            <summary>
+            Creates a new instance of a publication matcher type. 
+            </summary>
+            <remarks>Only called when publication matcher assertions in 
+            <see cref="M:Appccelerate.EventBroker.Factories.StandardFactory.AssertIsPublicationMatcher(System.Type)"/> were successful.</remarks>
+            <param name="publicationMatcherType">The publication matcher type.</param>
+            <returns>A new instance of <paramref name="publicationMatcherType"/>.</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Factories.StandardFactory.ActivateHandler(System.Type)">
+            <summary>
+            Creates a new instance of a handler type. 
+            </summary>
+            <remarks>Only called when handler matcher assertions in 
+            <see cref="M:Appccelerate.EventBroker.Factories.StandardFactory.AssertIsHandler(System.Type)"/> were successful.</remarks>
+            <param name="handlerType">The handler type.</param>
+            <returns>A new instance of <paramref name="handlerType"/>.</returns>
+        </member>
+        <member name="P:Appccelerate.EventBroker.Factories.StandardFactory.ExtensionHost">
+            <summary>
+            Gets the extension host holding all extensions.
+            </summary>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Factories.UnitTestFactory">
+            <summary>
+            Factory that creates only handlers that run on the same thread as the publisher.
+            This allows that subscriptions on user interface thread can be used in unit tests (with different threading behavior though)
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Factories.UnitTestFactory.CreateHandler(System.Type)">
+            <summary>
+            Creates a subscription handler usable in unit tests (always on publisher thread).
+            </summary>
+            <param name="handlerType">Type of the handler to create.</param>
+            <returns>Subscription handler.</returns>
+        </member>
+        <member name="T:Appccelerate.EventBroker.HandlerKind">
+            <summary>
+            Defines the way the subscription handler handles events (synchronously or asynchronously).
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.HandlerKind.Synchronous">
+            <summary>
+            Synchronous handling. The event invoker is blocked until event is handled. 
+            The event invoker can evaluate the event arguments on return.
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.HandlerKind.Asynchronous">
+            <summary>
+            Asynchronous handling. The event invoker is not blocked until event is handled. 
+            The event invoker must not evaluate the event arguments on return.
+            </summary>
+        </member>
+        <member name="T:Appccelerate.EventBroker.HandlerRestriction">
+            <summary>
+            Defines restrictions the publisher makes on how the event has to be handled (synchronously or asynchronously).
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.HandlerRestriction.None">
+            <summary>
+            Synchronous and asynchronous handling is allowed.
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.HandlerRestriction.Synchronous">
+            <summary>
+            Only synchronous handling is allowed, e.g. the publisher wants to evaluate the event arguments afterwards.
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.HandlerRestriction.Asynchronous">
+            <summary>
+            Only asynchronous handling is allowed. The publisher does not want to be blocked.
+            </summary>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Handlers.OnBackground">
+            <summary>
+            Handler that executes the subscription on a thread pool worker process (asynchronous).
+            </summary>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Handlers.EventBrokerHandlerBase">
+            <summary>
+            Abstract base class for event broker handles providing the host of extensions.
+            </summary>
+        </member>
+        <member name="T:Appccelerate.EventBroker.IHandler">
+            <summary>
+            A handler defines how a subscription is executed (on which thread, sync, asynchronous, ...).
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IHandler.Initialize(System.Object,System.Reflection.MethodInfo,Appccelerate.EventBroker.IExtensionHost)">
+            <summary>
+            Initializes the handler.
+            </summary>
+            <param name="subscriber">The subscriber.</param>
+            <param name="handlerMethod">Name of the handler method on the subscriber.</param>
+            <param name="extensionHost">Provides access to all registered extensions.</param>
+        </member>
+        <member name="P:Appccelerate.EventBroker.IHandler.Kind">
+            <summary>
+            Gets the kind of the handler, whether it is a synchronous or asynchronous handler.
+            </summary>
+            <value>The kind of the handler (synchronous or asynchronous).</value>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Handlers.EventBrokerHandlerBase.Initialize(System.Object,System.Reflection.MethodInfo,Appccelerate.EventBroker.IExtensionHost)">
+            <summary>
+            Initializes the handler.
+            </summary>
+            <param name="subscriber">The subscriber.</param>
+            <param name="handlerMethod">Name of the handler method on the subscriber.</param>
+            <param name="extensionHost">Provides access to all registered extensions.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Handlers.EventBrokerHandlerBase.HandleSubscriberMethodException(System.Reflection.TargetInvocationException,Appccelerate.EventBroker.IEventTopicInfo)">
+            <summary>
+            Handles a subscriber method exception by passing it to all extensions and re-throwing the inner exception in case that none of the
+            extensions handled it.
+            </summary>
+            <param name="targetInvocationException">The targetInvocationException.</param>
+            <param name="eventTopic">The event topic.</param>
+        </member>
+        <member name="P:Appccelerate.EventBroker.Handlers.EventBrokerHandlerBase.Kind">
+            <summary>
+            Gets the kind of the handler, whether it is a synchronous or asynchronous handler.
+            </summary>
+            <value>The kind of the handler (synchronous or asynchronous).</value>
+        </member>
+        <member name="P:Appccelerate.EventBroker.Handlers.EventBrokerHandlerBase.ExtensionHost">
+            <summary>
+            Gets the extension host.
+            </summary>
+            <value>The extension host.</value>
+        </member>
+        <member name="P:Appccelerate.EventBroker.Handlers.OnBackground.Kind">
+            <summary>
+            Gets the kind of the handler, whether it is a synchronous or asynchronous handler.
+            </summary>
+            <value>The kind of the handler (synchronous or asynchronous).</value>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Handlers.NotUserInterfaceThreadException">
+            <summary>
+            An <see cref="T:Appccelerate.EventBroker.Exceptions.EventBrokerException"/> thrown when a subscription on UI thread is found on a subscriber that is not registered on the UI thread.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Handlers.NotUserInterfaceThreadException.#ctor(System.Object,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.Handlers.NotUserInterfaceThreadException"/> class.
+            </summary>
+            <param name="subscriber">The subscriber.</param>
+            <param name="handlerMethodName">Name of the handler method.</param>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Handlers.OnPublisher">
+            <summary>
+            Handler that executes the subscription on the same thread the publisher is currently running (synchronous).
+            </summary>
+        </member>
+        <member name="P:Appccelerate.EventBroker.Handlers.OnPublisher.Kind">
+            <summary>
+            Gets the kind of the handler, whether it is a synchronous or asynchronous handler.
+            </summary>
+            <value>The kind of the handler (synchronous or asynchronous).</value>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Handlers.OnUserInterface">
+            <summary>
+            Handler that executes the subscription synchronously on the user interface thread (Send semantics).
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.Handlers.OnUserInterface.syncContextHolder">
+            <summary>
+            The synchronization context that is used to switch to the UI thread.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Handlers.OnUserInterface.Initialize(System.Object,System.Reflection.MethodInfo,Appccelerate.EventBroker.IExtensionHost)">
+            <summary>
+            Initializes the handler with the synchronization context for the user interface thread, which has to be the currently running process.
+            </summary>
+            <param name="subscriber">The subscriber.</param>
+            <param name="handlerMethod">Handler method on the subscriber.</param>
+            <param name="extensionHost">The extension host.</param>
+        </member>
+        <member name="P:Appccelerate.EventBroker.Handlers.OnUserInterface.Kind">
+            <summary>
+            Gets the kind of the handler, whether it is a synchronous or asynchronous handler.
+            </summary>
+            <value>The kind of the handler (synchronous or asynchronous).</value>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Handlers.OnUserInterfaceAsync">
+            <summary>
+            Handler that executes the subscription asynchronously on the user interface thread (Post semantics).
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.Handlers.OnUserInterfaceAsync.syncContextHolder">
+            <summary>
+            The synchronization context that is used to switch to the UI thread.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Handlers.OnUserInterfaceAsync.Initialize(System.Object,System.Reflection.MethodInfo,Appccelerate.EventBroker.IExtensionHost)">
+            <summary>
+            Initializes the handler with the synchronization context for the user interface thread, which has to be the currently running process.
+            </summary>
+            <param name="subscriber">The subscriber.</param>
+            <param name="handlerMethod">Handler method on the subscriber.</param>
+            <param name="extensionHost">The extension host.</param>
+        </member>
+        <member name="P:Appccelerate.EventBroker.Handlers.OnUserInterfaceAsync.Kind">
+            <summary>
+            Gets the kind of the handler, whether it is a synchronous or asynchronous handler.
+            </summary>
+            <value>The kind of the handler (synchronous or asynchronous).</value>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Handlers.UserInterfaceSyncContextHolder">
+            <summary>
+            Helper class to store the synchronization context.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Handlers.UserInterfaceSyncContextHolder.Initalize(System.Object,System.Reflection.MethodInfo)">
+            <summary>
+            Initializes this instance. If the current thread is not the user interface thread then an exception is thrown.
+            </summary>
+            <param name="subscriber">The subscriber.</param>
+            <param name="handlerMethod">Handler method on the subscriber.</param>
+        </member>
+        <member name="P:Appccelerate.EventBroker.Handlers.UserInterfaceSyncContextHolder.SyncContext">
+            <summary>
+            Gets the synchronization context that was acquired on registration.
+            </summary>
+            <value>The synchronization context that was acquired on registration.</value>
+        </member>
+        <member name="P:Appccelerate.EventBroker.Handlers.UserInterfaceSyncContextHolder.ThreadId">
+            <summary>
+            Gets the id of the thread this instance was initialized on.
+            </summary>
+            <value>The thread id.</value>
+        </member>
+        <member name="T:Appccelerate.EventBroker.IEventBrokerRegisterable">
+            <summary>
+            Publishers and subscribers implementing this interface or notified by a call to
+            <see cref="M:Appccelerate.EventBroker.IEventBrokerRegisterable.Register(Appccelerate.EventBroker.IEventRegistrar)"/> that they have been registered and a call to <see cref="M:Appccelerate.EventBroker.IEventBrokerRegisterable.Unregister(Appccelerate.EventBroker.IEventRegistrar)"/> that they have been unregistered.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBrokerRegisterable.Register(Appccelerate.EventBroker.IEventRegistrar)">
+            <summary>
+            The publisher or subscriber can register additional publications and subscriptions
+            on the <paramref name="eventRegistrar"/>.
+            </summary>
+            <param name="eventRegistrar">The event registerer to register publications and subscriptions.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventBrokerRegisterable.Unregister(Appccelerate.EventBroker.IEventRegistrar)">
+            <summary>
+            The publisher or subscribe has to clean-up all registrations made in call to <see cref="M:Appccelerate.EventBroker.IEventBrokerRegisterable.Register(Appccelerate.EventBroker.IEventRegistrar)"/>.
+            </summary>
+            <param name="eventRegistrar">The event registerer.</param>
+        </member>
+        <member name="T:Appccelerate.EventBroker.IEventRegistrar">
+            <summary>
+            This interface is passed to the registered publishers and subscribers so that they can register publications
+            and subscriptions by code.
+            </summary>
+        </member>
+        <member name="T:Appccelerate.EventBroker.IEventTopic">
+            <summary>
+            Represents a point of communication on a certain topic between the topic publishers and the topic subscribers.
+            </summary>
+        </member>
+        <member name="T:Appccelerate.EventBroker.IEventTopicInfo">
+            <summary>
+            Represents a point of information on a certain topic between the topic publishers and the topic subscribers.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventTopicInfo.DescribeTo(System.IO.TextWriter)">
+            <summary>
+            Describes this event topic:
+            publications, subscriptions, names, thread options, scopes, event arguments.
+            </summary>
+            <param name="writer">The writer.</param>
+        </member>
+        <member name="P:Appccelerate.EventBroker.IEventTopicInfo.Uri">
+            <summary>
+            Gets the URI for the event topic. This URI is the unique identifier for this event topic.
+            </summary>
+            <value>The URI of this event topic.</value>
+        </member>
+        <member name="P:Appccelerate.EventBroker.IEventTopicInfo.Publications">
+            <summary>
+            Gets the publications for the event topic.
+            </summary>
+            <remarks>The publications are frequently cleaned internally when
+            necessary. Therefore the publications are only valid at the time
+            when they are requested and should not be cached or referenced longer
+            then necessary.</remarks>
+        </member>
+        <member name="P:Appccelerate.EventBroker.IEventTopicInfo.Subscriptions">
+            <summary>
+            Gets the subscriptions for the event topic.
+            </summary>
+            <remarks>The subscriptions are frequently cleaned internally when
+            necessary. Therefore the subscriptions are only valid at the time
+            when they are requested and should not be cached or referenced longer
+            then necessary.</remarks>
+        </member>
+        <member name="T:Appccelerate.EventBroker.IEventTopicHost">
+            <summary>
+            An event topic hosts is context where publications and subscriptions are wired together through <see cref="T:Appccelerate.EventBroker.IEventTopic"/>s.
+            </summary>
+            <remarks>
+            Only publications and subscription in the same host are wired together. You can use several event topic hosts by exchanging them during registration on the <see cref="T:Appccelerate.EventBroker.EventBroker"/>.
+            </remarks>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventTopicHost.GetEventTopic(System.String)">
+            <summary>
+            Gets a event topic. Result is never null. Event topic is created if it does not yet exist.
+            </summary>
+            <param name="topic">The topic URI identifying the event topic to return.</param>
+            <returns>A non-null event topic. Event topic is created if it does not yet exist.</returns>
+            <remarks>
+            Returns a non null instance of the dictionary.
+            </remarks>
+            <value>The event topics.</value>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IEventTopicHost.DescribeTo(System.IO.TextWriter)">
+            <summary>
+            Describes all event topics:
+            publications, subscriptions, names, thread options, scopes, event arguments.
+            </summary>
+            <param name="writer">The writer.</param>
+        </member>
+        <member name="T:Appccelerate.EventBroker.INamedItem">
+            <summary>
+            <see cref="T:Appccelerate.EventBroker.INamedItem"/> is used to give publishers or subscribers names to use scope matchers.
+            </summary>
+        </member>
+        <member name="P:Appccelerate.EventBroker.INamedItem.EventBrokerItemName">
+            <summary>
+            Gets the name of the event broker item that is used for scope matchers.
+            </summary>
+            <value>The name of the event broker item.</value>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.EventTopic.CheckMatchers(Appccelerate.EventBroker.IPublication,Appccelerate.EventBroker.ISubscription,System.EventArgs)">
+            <summary>
+            Checks whether the event of the publisher has to be relayed to the subscriber (Matchers).
+            </summary>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Internals.Inspection.EventInspector">
+            <summary>
+            The <see cref="T:Appccelerate.EventBroker.Internals.Inspection.EventInspector"/> scans classes for publications or subscriptions.
+            </summary>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Internals.Publications.CodePublication`1">
+            <summary>
+            Publication that was registered by code.
+            </summary>
+            <typeparam name="TEventArgs">The type of the event arguments.</typeparam>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Internals.Publications.Publication">
+            <summary>
+            Represents a topic publication.
+            </summary>
+        </member>
+        <member name="T:Appccelerate.EventBroker.IPublication">
+            <summary>
+            Defines a publication. Either a real <see cref="T:Appccelerate.EventBroker.Internals.Publications.Publication"/> or a <see cref="T:Appccelerate.EventBroker.Internals.Publications.SpontaneousPublication"/>.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.IPublication.DescribeTo(System.IO.TextWriter)">
+            <summary>
+            Describes this publication
+            name, scope, event handler.
+            </summary>
+            <param name="writer">The writer.</param>
+        </member>
+        <member name="P:Appccelerate.EventBroker.IPublication.Publisher">
+            <summary>
+            Gets the publisher of the event.
+            </summary>
+        </member>
+        <member name="P:Appccelerate.EventBroker.IPublication.PublicationMatchers">
+            <summary>
+            Gets the publication matchers.
+            </summary>
+            <value>The publication matchers.</value>
+        </member>
+        <member name="P:Appccelerate.EventBroker.IPublication.HandlerRestriction">
+            <summary>
+            Gets the subscriber handler restriction.
+            </summary>
+            <value>The subscriber handler restriction.</value>
+        </member>
+        <member name="P:Appccelerate.EventBroker.IPublication.EventName">
+            <summary>
+            Gets the name of the event on the <see cref="P:Appccelerate.EventBroker.Internals.Publications.Publication.Publisher"/>.
+            </summary>
+        </member>
+        <member name="P:Appccelerate.EventBroker.IPublication.EventArgsType">
+            <summary>
+            Gets the type of the event arguments.
+            </summary>
+            <value>The type of the event arguments.</value>
+        </member>
+        <member name="F:Appccelerate.EventBroker.Internals.Publications.CodePublication`1.EventNameOfCodePublication">
+            <summary>
+            This name is used for events of publications made in code. The real name cannot be accessed through the event handler.
+            </summary>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Internals.EventTopicHost">
+            <summary>
+            Default implementation of a <see cref="T:Appccelerate.EventBroker.IEventTopicHost"/>.
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.Internals.EventTopicHost.eventTopics">
+            <summary>
+            Map from event topic URI to event topic instance.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.EventTopicHost.#ctor(Appccelerate.EventBroker.Internals.IFactory,Appccelerate.EventBroker.IExtensionHost,Appccelerate.EventBroker.Internals.GlobalMatchers.IGlobalMatchersProvider)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.Internals.EventTopicHost"/> class.
+            </summary>
+            <param name="factory">The factory.</param>
+            <param name="extensionHost">The extension host holding all extensions.</param>
+            <param name="globalMatchersProvider">The global matchers provider.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.EventTopicHost.GetEventTopic(System.String)">
+            <summary>
+            Gets a event topic. Result is never null. Event topic is created if it does not yet exist.
+            </summary>
+            <param name="topic">The topic URI identifying the event topic to return.</param>
+            <returns>A non-null event topic. Event topic is created if it does not yet exist.</returns>
+            <remarks>
+            Returns a non null instance of the dictionary.
+            </remarks>
+            <value>The event topics.</value>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.EventTopicHost.DescribeTo(System.IO.TextWriter)">
+            <summary>
+            Describes all event topics:
+            publications, subscriptions, names, thread options, matchers, event arguments.
+            </summary>
+            <param name="writer">The writer.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.EventTopicHost.Dispose">
+            <summary>
+            See <see cref="M:System.IDisposable.Dispose"/> for more information.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.EventTopicHost.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Internals.Exceptions.EventTopicException">
+            <summary>
+            An <see cref="T:Appccelerate.EventBroker.Exceptions.EventBrokerException"/> thrown by the <see cref="T:Appccelerate.EventBroker.IEventTopic"/> when exceptions occurs
+            on its subscriptions during a firing sequence.
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.Internals.Exceptions.EventTopicException.exceptions">
+            <summary>
+            The list of all exceptions that occurred on all subscription handlers.
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.Internals.Exceptions.EventTopicException.topic">
+            <summary>
+            Link to the event topic that was fired.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Exceptions.EventTopicException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.Internals.Exceptions.EventTopicException"/> class.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Exceptions.EventTopicException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.Internals.Exceptions.EventTopicException"/> class.
+            </summary>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Exceptions.EventTopicException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.Internals.Exceptions.EventTopicException"/> class with a specified error message 
+            and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The error message that explains the reason for the exception.</param>
+            <param name="innerException">The exception that is the cause of the current exception, 
+            or a null reference if no inner exception is specified.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Exceptions.EventTopicException.#ctor(Appccelerate.EventBroker.IEventTopic,System.Collections.ObjectModel.ReadOnlyCollection{System.Exception})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.Internals.Exceptions.EventTopicException"/> class with the specified list of exceptions.
+            </summary>
+            <param name="topic">The <see cref="T:Appccelerate.EventBroker.IEventTopic"/> instance whose subscribers incurred into an exception.</param>
+            <param name="exceptions">The list of exceptions that occurred during the subscribers invocation.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Exceptions.EventTopicException.#ctor(Appccelerate.EventBroker.IEventTopic,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.Internals.Exceptions.EventTopicException"/> class.
+            </summary>
+            <param name="topic">The <see cref="T:Appccelerate.EventBroker.IEventTopic"/> instance whose subscribers incurred into an exception.</param>
+            <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Exceptions.EventTopicException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.Internals.Exceptions.EventTopicException"/> class with serialized data.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+        </member>
+        <member name="P:Appccelerate.EventBroker.Internals.Exceptions.EventTopicException.Exceptions">
+            <summary>
+            Gets the list of exceptions that occurred during the subscribers invocation.
+            </summary>
+        </member>
+        <member name="P:Appccelerate.EventBroker.Internals.Exceptions.EventTopicException.Topic">
+            <summary>
+            Gets the <see cref="T:Appccelerate.EventBroker.IEventTopic"/> which incurred into errors.
+            </summary>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Internals.Exceptions.InvalidPublicationSignatureException">
+            <summary>
+            An <see cref="T:Appccelerate.EventBroker.Exceptions.EventBrokerException"/> thrown when an invalid publication signature is found while registering a publisher.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Exceptions.InvalidPublicationSignatureException.#ctor(System.Reflection.EventInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.Internals.Exceptions.InvalidPublicationSignatureException"/> class.
+            </summary>
+            <param name="eventInfo">The event info.</param>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Internals.Exceptions.InvalidSubscriptionSignatureException">
+            <summary>
+            An <see cref="T:Appccelerate.EventBroker.Exceptions.EventBrokerException"/> thrown when an invalid subscription signature is found while registering a subscriber.
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.Internals.Exceptions.InvalidSubscriptionSignatureException.methodInfo">
+            <summary>
+            The method info of the handler with invalid signature.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Exceptions.InvalidSubscriptionSignatureException.#ctor(System.Reflection.MethodInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.Internals.Exceptions.InvalidSubscriptionSignatureException"/> class.
+            </summary>
+            <param name="methodInfo">The method info.</param>
+        </member>
+        <member name="P:Appccelerate.EventBroker.Internals.Exceptions.InvalidSubscriptionSignatureException.MethodInfo">
+            <summary>
+            Gets the method info of the handler with invalid signature.
+            </summary>
+            <value>Method info of invalid subscription handler.</value>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Internals.Exceptions.PublisherEventNotFoundException">
+            <summary>
+            An <see cref="T:Appccelerate.EventBroker.Exceptions.EventBrokerException"/> thrown when a published event can not be found while registering a publisher.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Exceptions.PublisherEventNotFoundException.#ctor(System.Type,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.Internals.Exceptions.PublisherEventNotFoundException"/> class.
+            </summary>
+            <param name="publisherType">Type of the publisher.</param>
+            <param name="eventName">Name of the event.</param>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Internals.Exceptions.RepeatedPublicationException">
+            <summary>
+            An <see cref="T:Appccelerate.EventBroker.Exceptions.EventBrokerException"/> thrown when a single publication event defines the same topic several times.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Exceptions.RepeatedPublicationException.#ctor(System.Object,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.Internals.Exceptions.RepeatedPublicationException"/> class.
+            </summary>
+            <param name="publisher">The publisher.</param>
+            <param name="eventName">Name of the event.</param>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Internals.Exceptions.RepeatedSubscriptionException">
+            <summary>
+            An <see cref="T:Appccelerate.EventBroker.Exceptions.EventBrokerException"/> thrown when a single subscription handler method defines the same topic several times.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Exceptions.RepeatedSubscriptionException.#ctor(System.Object,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.Internals.Exceptions.RepeatedSubscriptionException"/> class.
+            </summary>
+            <param name="subscriber">The subscriber.</param>
+            <param name="handlerMethodName">Name of the handler method.</param>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Internals.Exceptions.StaticPublisherEventException">
+            <summary>
+            An <see cref="T:Appccelerate.EventBroker.Exceptions.EventBrokerException"/> thrown when a published event is static.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Exceptions.StaticPublisherEventException.#ctor(System.Reflection.EventInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.Internals.Exceptions.StaticPublisherEventException"/> class.
+            </summary>
+            <param name="eventInfo">The event info.</param>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Internals.Exceptions.StaticSubscriberHandlerException">
+            <summary>
+            An <see cref="T:Appccelerate.EventBroker.Exceptions.EventBrokerException"/> thrown when a static subscription handler is found.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Exceptions.StaticSubscriberHandlerException.#ctor(System.Reflection.MethodInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.Internals.Exceptions.StaticSubscriberHandlerException"/> class.
+            </summary>
+            <param name="methodInfo">The method info.</param>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Internals.Exceptions.SubscriberHandlerNotFoundException">
+            <summary>
+            An <see cref="T:Appccelerate.EventBroker.Exceptions.EventBrokerException"/> thrown when a handler method can not be found.
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.Internals.Exceptions.SubscriberHandlerNotFoundException.subscriberType">
+            <summary>
+            The type of the subscriber.
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.Internals.Exceptions.SubscriberHandlerNotFoundException.handlerMethodName">
+            <summary>
+            The name of the handler method.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Exceptions.SubscriberHandlerNotFoundException.#ctor(System.Type,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Appccelerate.EventBroker.Internals.Exceptions.SubscriberHandlerNotFoundException"/> class.
+            </summary>
+            <param name="subscriberType">Type of the subscriber.</param>
+            <param name="handlerMethodName">Name of the handler method.</param>
+        </member>
+        <member name="P:Appccelerate.EventBroker.Internals.Exceptions.SubscriberHandlerNotFoundException.SubscriberType">
+            <summary>
+            Gets the type of the subscriber.
+            </summary>
+            <value>The type of the subscriber.</value>
+        </member>
+        <member name="P:Appccelerate.EventBroker.Internals.Exceptions.SubscriberHandlerNotFoundException.HandlerMethodName">
+            <summary>
+            Gets the name of the handler method.
+            </summary>
+            <value>The name of the handler method.</value>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Internals.GlobalMatchers.GlobalMatchersHost">
+            <summary>
+            Host for global matchers.
+            </summary>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Internals.GlobalMatchers.IGlobalMatchersHost">
+            <summary>
+            Host for global matchers.
+            </summary>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Internals.GlobalMatchers.IGlobalMatchersProvider">
+            <summary>
+            Provides access to all global matchers.
+            </summary>
+        </member>
+        <member name="P:Appccelerate.EventBroker.Internals.GlobalMatchers.IGlobalMatchersProvider.Matchers">
+            <summary>
+            Gets the matchers.
+            </summary>
+            <value>The matchers.</value>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.GlobalMatchers.IGlobalMatchersHost.AddMatcher(Appccelerate.EventBroker.Matchers.IMatcher)">
+            <summary>
+            Adds the matcher.
+            </summary>
+            <param name="matcher">The matcher.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.GlobalMatchers.IGlobalMatchersHost.RemoveMatcher(Appccelerate.EventBroker.Matchers.IMatcher)">
+            <summary>
+            Removes the matcher.
+            </summary>
+            <param name="matcher">The matcher.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.GlobalMatchers.GlobalMatchersHost.AddMatcher(Appccelerate.EventBroker.Matchers.IMatcher)">
+            <summary>
+            Adds the matcher.
+            </summary>
+            <param name="matcher">The matcher.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.GlobalMatchers.GlobalMatchersHost.RemoveMatcher(Appccelerate.EventBroker.Matchers.IMatcher)">
+            <summary>
+            Removes the matcher.
+            </summary>
+            <param name="matcher">The matcher.</param>
+        </member>
+        <member name="P:Appccelerate.EventBroker.Internals.GlobalMatchers.GlobalMatchersHost.Matchers">
+            <summary>
+            Gets the matchers.
+            </summary>
+            <value>The matchers.</value>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Internals.Publications.PropertyPublication">
+            <summary>
+            Represents a topic publication.
+            </summary>
+        </member>
+        <member name="F:Appccelerate.EventBroker.Internals.Publications.PropertyPublication.eventInfo">
+            <summary>
+            The event on the publisher this publication stands for.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Publications.PropertyPublication.Dispose(System.Boolean)">
+            <summary>
+            Implementation of the disposable pattern.
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+            <remarks>
+            Unregisters the event handler.
+            </remarks>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Internals.Publications.SpontaneousPublication">
+            <summary>
+            A spontaneous publication is used when there is no real publisher but 
+            <see cref="M:Appccelerate.EventBroker.EventBroker.Fire(System.String,System.Object,Appccelerate.EventBroker.HandlerRestriction,System.Object,System.EventArgs)"/> was called directly to fire an event.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Registrar.AddPublication(System.String,System.Object,System.String,Appccelerate.EventBroker.HandlerRestriction,Appccelerate.EventBroker.Matchers.IPublicationMatcher[])">
+            <summary>
+            Registers the event as publication.
+            </summary>
+            <param name="topic">The topic.</param>
+            <param name="publisher">The publisher.</param>
+            <param name="eventName">Name of the event.</param>
+            <param name="handlerRestriction">The handler restriction.</param>
+            <param name="matchers">The matchers.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Registrar.Register(System.Object)">
+            <summary>
+            Registers an item with this event broker.
+            </summary>
+            <remarks>
+            The item is scanned for publications and subscriptions and wired to the corresponding invokers and handlers.
+            </remarks>
+            <param name="item">Item to register with the event broker.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Registrar.Unregister(System.Object)">
+            <summary>
+            Unregisters the specified item from this event broker.
+            </summary>
+            <param name="item">The item to unregister.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Registrar.AddPublication(System.String,System.Object,System.EventHandler@,Appccelerate.EventBroker.Matchers.IPublicationMatcher[])">
+            <summary>
+            Adds a publication with no handler restriction. Use this to register publications by code instead of using attributes.
+            </summary>
+            <param name="topic">The topic.</param>
+            <param name="publisher">The publisher.</param>
+            <param name="publishedEvent">The published event of the <paramref name="publisher"/>.</param>
+            <param name="matchers">The matchers.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Registrar.AddPublication(System.String,System.Object,System.EventHandler@,Appccelerate.EventBroker.HandlerRestriction,Appccelerate.EventBroker.Matchers.IPublicationMatcher[])">
+            <summary>
+            Adds a publication. Use this to register publications by code instead of using attributes.
+            </summary>
+            <param name="topic">The topic.</param>
+            <param name="publisher">The publisher.</param>
+            <param name="publishedEvent">The published event of the <paramref name="publisher"/>.</param>
+            <param name="handlerRestriction">The handler restriction.</param>
+            <param name="matchers">The matchers.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Registrar.AddPublication``1(System.String,System.Object,System.EventHandler{``0}@,Appccelerate.EventBroker.Matchers.IPublicationMatcher[])">
+            <summary>
+            Adds a publication with no handler restriction. Use this to register publications by code instead of using attributes.
+            </summary>
+            <typeparam name="TEventArgs">The type of the event arguments.</typeparam>
+            <param name="topic">The topic.</param>
+            <param name="publisher">The publisher.</param>
+            <param name="publishedEvent">The published event.</param>
+            <param name="matchers">The matchers.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Registrar.AddPublication``1(System.String,System.Object,System.EventHandler{``0}@,Appccelerate.EventBroker.HandlerRestriction,Appccelerate.EventBroker.Matchers.IPublicationMatcher[])">
+            <summary>
+            Adds a publication. Use this to register publications by code instead of using attributes.
+            </summary>
+            <typeparam name="TEventArgs">The type of the event arguments.</typeparam>
+            <param name="topic">The topic.</param>
+            <param name="publisher">The publisher.</param>
+            <param name="publishedEvent">The published event.</param>
+            <param name="handlerRestriction">The handler restriction.</param>
+            <param name="matchers">The matchers.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Registrar.RemovePublication(System.String,System.Object,System.EventHandler@)">
+            <summary>
+            Removes a publication. Publications added with <see cref="M:Appccelerate.EventBroker.Internals.Registrar.AddPublication(System.String,System.Object,System.EventHandler@,Appccelerate.EventBroker.HandlerRestriction,Appccelerate.EventBroker.Matchers.IPublicationMatcher[])"/> have to be removed in order that the event broker can be disposed.
+            </summary>
+            <param name="topic">The topic.</param>
+            <param name="publisher">The publisher.</param>
+            <param name="publishedEvent">The published event.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Registrar.RemovePublication``1(System.String,System.Object,System.EventHandler{``0}@)">
+            <summary>
+            Removes a publication. Publications added with <see cref="M:Appccelerate.EventBroker.Internals.Registrar.AddPublication(System.String,System.Object,System.EventHandler@,Appccelerate.EventBroker.HandlerRestriction,Appccelerate.EventBroker.Matchers.IPublicationMatcher[])"/> have to be removed in order that the event broker can be disposed.
+            </summary>
+            <param name="topic">The topic.</param>
+            <param name="publisher">The publisher.</param>
+            <param name="publishedEvent">The published event.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Registrar.AddSubscription(System.String,System.Object,System.EventHandler,Appccelerate.EventBroker.IHandler,Appccelerate.EventBroker.Matchers.ISubscriptionMatcher[])">
+            <summary>
+            Adds a subscription. Use this to register subscriptions by code instead of using attributes.
+            </summary>
+            <param name="topic">The topic.</param>
+            <param name="subscriber">The subscriber.</param>
+            <param name="handlerMethod">The handler method.</param>
+            <param name="handler">The handler.</param>
+            <param name="matchers">The subscription matchers.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Registrar.AddSubscription``1(System.String,System.Object,System.EventHandler{``0},Appccelerate.EventBroker.IHandler,Appccelerate.EventBroker.Matchers.ISubscriptionMatcher[])">
+            <summary>
+            Adds a subscription. Use this to register subscriptions by code instead of using attributes.
+            </summary>
+            <typeparam name="TEventArgs">The type of the event arguments.</typeparam>
+            <param name="topic">The topic.</param>
+            <param name="subscriber">The subscriber.</param>
+            <param name="handlerMethod">The handler method.</param>
+            <param name="handler">The handler.</param>
+            <param name="matchers">The subscription matchers.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Registrar.RemoveSubscription(System.String,System.Object,System.EventHandler)">
+            <summary>
+            Removes a subscription.
+            </summary>
+            <param name="topic">The topic.</param>
+            <param name="subscriber">The subscriber.</param>
+            <param name="handlerMethod">The handler method.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Internals.Registrar.RemoveSubscription``1(System.String,System.Object,System.EventHandler{``0})">
+            <summary>
+            Removes a subscription.
+            </summary>
+            <typeparam name="TEventArgs">The type of the event arguments.</typeparam>
+            <param name="topic">The topic.</param>
+            <param name="subscriber">The subscriber.</param>
+            <param name="handlerMethod">The handler method.</param>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Internals.Subscriptions.Subscription">
+            <summary>
+            Represents a topic subscription.
+            </summary>
+        </member>
+        <member name="T:Appccelerate.EventBroker.ISubscription">
+            <summary>
+            Represents a subscription to an <see cref="T:Appccelerate.EventBroker.Internals.EventTopic"/>.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.ISubscription.DescribeTo(System.IO.TextWriter)">
+            <summary>
+            Describes this subscription:
+            name, thread option, scope, event arguments.
+            </summary>
+            <param name="writer">The writer.</param>
+        </member>
+        <member name="M:Appccelerate.EventBroker.ISubscription.GetHandler">
+            <summary>
+            Gets the handler that will be called by the <see cref="T:Appccelerate.EventBroker.IEventTopic"/> during a firing sequence.
+            </summary>
+            <returns>A delegate that is used to call the subscription handler.</returns>
+        </member>
+        <member name="P:Appccelerate.EventBroker.ISubscription.EventArgsType">
+            <summary>
+            Gets the type of the event arguments this subscription is using.
+            </summary>
+            <value>The type of the event arguments.</value>
+        </member>
+        <member name="P:Appccelerate.EventBroker.ISubscription.Subscriber">
+            <summary>
+            Gets the subscriber of the event.
+            </summary>
+        </member>
+        <member name="P:Appccelerate.EventBroker.ISubscription.Handler">
+            <summary>
+            Gets the handler of this subscription.
+            </summary>
+            <value>The handler of this subscription.</value>
+        </member>
+        <member name="P:Appccelerate.EventBroker.ISubscription.SubscriptionMatchers">
+            <summary>
+            Gets the subscription matchers.
+            </summary>
+            <value>The subscription matchers.</value>
+        </member>
+        <member name="P:Appccelerate.EventBroker.ISubscription.HandlerMethodName">
+            <summary>
+            Gets the handler method name that's subscribed to the event.
+            </summary>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Matchers.IMatcher">
+            <summary>
+            Interface for matchers.
+            Matchers are used to determine whether an event is handled
+            depending on the state of the publisher and subscriber.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Matchers.IMatcher.Match(Appccelerate.EventBroker.IPublication,Appccelerate.EventBroker.ISubscription,System.EventArgs)">
+            <summary>
+            Returns whether the publication and subscription match and the event published by the
+            publisher will be relayed to the subscriber.
+            </summary>
+            <param name="publication">The publication.</param>
+            <param name="subscription">The subscription.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+            <returns><code>true</code> if event has to be sent to the subscriber.</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Matchers.IMatcher.DescribeTo(System.IO.TextWriter)">
+            <summary>
+            Describes this subscription matcher.
+            </summary>
+            <param name="writer">The writer the description is written to.</param>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Matchers.IPublicationMatcher">
+            <summary>
+            Interface for scope matchers on publications.
+            Scope matchers are used to determine whether an event is handled
+            depending on the name of the publisher and subscriber.
+            </summary>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Matchers.ISubscriptionMatcher">
+            <summary>
+            Interface for matchers on subscriptions.
+            Matchers are used to determine whether an event is handled
+            depending on the state of the publisher and subscriber.
+            </summary>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Matchers.NotAlreadyCanceled">
+            <summary>
+            Subscription matcher that matches only if the event arguments are <see cref="T:System.ComponentModel.CancelEventArgs"/> and
+            the event arguments are not yet canceled.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Matchers.NotAlreadyCanceled.Match(Appccelerate.EventBroker.IPublication,Appccelerate.EventBroker.ISubscription,System.EventArgs)">
+            <summary>
+            Returns whether the publication and subscription match and the event published by the
+            publisher will be relayed to the subscriber.
+            <para>
+            Matches if the event arguments are <see cref="T:System.ComponentModel.CancelEventArgs"/> that are not yet canceled.
+            </para>
+            </summary>
+            <param name="publication">The publication.</param>
+            <param name="subscription">The subscription.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+            <returns><code>true</code> if event has to be sent to the subscriber.</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Matchers.NotAlreadyCanceled.DescribeTo(System.IO.TextWriter)">
+            <summary>
+            Describes this subscription matcher.
+            </summary>
+            <param name="writer">The writer the description is written to.</param>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Matchers.Scope.PublishGlobal">
+            <summary>
+            Matcher for globally published events.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Matchers.Scope.PublishGlobal.Match(Appccelerate.EventBroker.IPublication,Appccelerate.EventBroker.ISubscription,System.EventArgs)">
+            <summary>
+            Returns whether the publication and subscription match and the event published by the
+            publisher will be relayed to the subscriber.
+            <para>
+            This is the always the case for global publications.
+            </para>
+            </summary>
+            <param name="publication">The publication.</param>
+            <param name="subscription">The subscription.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+            <returns><code>true</code> if event has to be sent to the subscriber.</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Matchers.Scope.PublishGlobal.DescribeTo(System.IO.TextWriter)">
+            <summary>
+            Describes this scope matcher.
+            </summary>
+            <param name="writer">The writer the description is written to.</param>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Matchers.Scope.PublishToChildren">
+            <summary>
+            Matcher for publications to children only.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Matchers.Scope.PublishToChildren.Match(Appccelerate.EventBroker.IPublication,Appccelerate.EventBroker.ISubscription,System.EventArgs)">
+            <summary>
+            Returns whether the publication and subscription match and the event published by the
+            publisher will be relayed to the subscriber.
+            <para>
+            This is the case if the name of the publisher is a prefix to the name of the subscriber.
+            </para>
+            </summary>
+            <param name="publication">The publication.</param>
+            <param name="subscription">The subscription.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+            <returns><code>true</code> if event has to be sent to the subscriber.</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Matchers.Scope.PublishToChildren.DescribeTo(System.IO.TextWriter)">
+            <summary>
+            Describes this scope matcher.
+            </summary>
+            <param name="writer">The writer the description is written to.</param>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Matchers.Scope.PublishToParents">
+            <summary>
+            Matcher for publications to parents only.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Matchers.Scope.PublishToParents.Match(Appccelerate.EventBroker.IPublication,Appccelerate.EventBroker.ISubscription,System.EventArgs)">
+            <summary>
+            Returns whether the publication and subscription match and the event published by the
+            publisher will be relayed to the subscriber.
+            <para>
+            This is the case if the name of the subscriber is a prefix to the name of the publisher.
+            </para>
+            </summary>
+            <param name="publication">The publication.</param>
+            <param name="subscription">The subscription.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+            <returns><code>true</code> if event has to be sent to the subscriber.</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Matchers.Scope.PublishToParents.DescribeTo(System.IO.TextWriter)">
+            <summary>
+            Describes this scope matcher.
+            </summary>
+            <param name="writer">The writer the description is written to.</param>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Matchers.Scope.SubscribeGlobal">
+            <summary>
+            Matcher for globally subscribed events.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Matchers.Scope.SubscribeGlobal.Match(Appccelerate.EventBroker.IPublication,Appccelerate.EventBroker.ISubscription,System.EventArgs)">
+            <summary>
+            Returns whether the publication and subscription match and the event published by the
+            publisher will be relayed to the subscriber.
+            <para>
+            This is the always the case for global subscriptions.
+            </para>
+            </summary>
+            <param name="publication">The publication.</param>
+            <param name="subscription">The subscription.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+            <returns>Always <code>true</code>.</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Matchers.Scope.SubscribeGlobal.DescribeTo(System.IO.TextWriter)">
+            <summary>
+            Describes this scope matcher.
+            </summary>
+            <param name="writer">The writer the description is written to.</param>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Matchers.Scope.SubscribeToChildren">
+            <summary>
+            Matcher for subscriptions to events from children only.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Matchers.Scope.SubscribeToChildren.Match(Appccelerate.EventBroker.IPublication,Appccelerate.EventBroker.ISubscription,System.EventArgs)">
+            <summary>
+            Returns whether the publication and subscription match and the event published by the
+            publisher will be relayed to the subscriber.
+            <para>
+            This is the case if the name of the subscriber is a prefix to the name of the publisher.
+            </para>
+            </summary>
+            <param name="publication">The publication.</param>
+            <param name="subscription">The subscription.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+            <returns><code>true</code> if event has to be sent to the subscriber.</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Matchers.Scope.SubscribeToChildren.DescribeTo(System.IO.TextWriter)">
+            <summary>
+            Describes this scope matcher.
+            </summary>
+            <param name="writer">The writer the description is written to.</param>
+        </member>
+        <member name="T:Appccelerate.EventBroker.Matchers.Scope.SubscribeToParents">
+            <summary>
+            Matcher for subscriptions to events from parents only.
+            </summary>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Matchers.Scope.SubscribeToParents.Match(Appccelerate.EventBroker.IPublication,Appccelerate.EventBroker.ISubscription,System.EventArgs)">
+            <summary>
+            Returns whether the publication and subscription match and the event published by the
+            publisher will be relayed to the subscriber.
+            <para>
+            This is the case if the name of the publisher is a prefix to the name of the subscriber.
+            </para>
+            </summary>
+            <param name="publication">The publication.</param>
+            <param name="subscription">The subscription.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+            <returns><code>true</code> if event has to be sent to the subscriber.</returns>
+        </member>
+        <member name="M:Appccelerate.EventBroker.Matchers.Scope.SubscribeToParents.DescribeTo(System.IO.TextWriter)">
+            <summary>
+            Describes this scope matcher.
+            </summary>
+            <param name="writer">The writer the description is written to.</param>
+        </member>
+    </members>
+</doc>

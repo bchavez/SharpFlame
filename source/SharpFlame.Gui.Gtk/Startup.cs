@@ -4,7 +4,7 @@ using SharpFlame.Gui;
 using SharpFlame.Gui.Controls;
 using OpenTK;
 using SharpFlame.Gui.Gtk.EtoCustom;
-using SharpFlame.Gui.NinjectBindings;
+using SharpFlame.Gui.Infrastructure;
 
 namespace SharpFlame.Gui.Gtk
 {

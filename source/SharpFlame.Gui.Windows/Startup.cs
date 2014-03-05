@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using Eto.Forms;
 using Ninject;
-using Ninject.Components;
-using Ninject.Modules;
-using Ninject.Parameters;
 using SharpFlame.Gui.Controls;
-using SharpFlame.Gui.NinjectBindings;
+using SharpFlame.Gui.Infrastructure;
 using SharpFlame.Gui.Windows.EtoCustom;
 
 namespace SharpFlame.Gui.Windows
