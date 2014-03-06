@@ -107,13 +107,13 @@ namespace SharpFlame.Gui.Controls
             ShuttingDown (obj, e);
         }
 
-        public event EventHandler<KeyEventArgs> KeyUp = delegate {};
+        public new event EventHandler<KeyEventArgs> KeyUp = delegate {};
         public virtual void OnKeyUp(object obj, KeyEventArgs e) 
         {
             KeyUp (obj, e);
         }
 
-        public event EventHandler<KeyEventArgs> KeyDown = delegate {};
+        public new event EventHandler<KeyEventArgs> KeyDown = delegate {};
         public virtual void OnKeyDown(object obj, KeyEventArgs e) 
         {
             KeyDown (obj, e);

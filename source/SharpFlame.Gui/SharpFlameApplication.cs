@@ -71,8 +71,11 @@ namespace SharpFlame.Gui
         public SharpFlameApplication(IKernel kernel, Generator generator, ILoggerFactory logFactory)
             : base(generator)
         {
-            App.Kernel = kernel;
             kernel.Inject(this); //inject properties also, not just constructor.
+
+            // TODO: Remove me once everthing is inectable.
+            App.Kernel = kernel;
+            App.Settings = Settings;
 
             logger = logFactory.GetCurrentClassLogger();
 
@@ -84,9 +87,6 @@ namespace SharpFlame.Gui
 
             // Run this before everything else.
             App.Initalize();
-
-            // TODO: Remove me once everthing is inectable.
-            App.Settings = Settings;
 
             this.EventBroker.Register(Settings);
 
@@ -184,21 +184,21 @@ namespace SharpFlame.Gui
             }
         }
 
-        private void SetupEventHandlers()
+        [EventSubscription(EventTopics.SettingsChanged, typeof(Publisher))]
+        internal void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            //SEE EXAMPLE ABOVE ......
-            Settings.PropertyChanged += (sender, e) =>
-                {
 #if DEBUG
-                    logger.Debug("Setting {0} changed ", e.PropertyName);
+            Console.WriteLine("Setting {0} changed ", e.PropertyName);
 #endif
 
-                    if( e.PropertyName.StartsWith("Font") && GlTexturesView.IsInitialized )
-                    {
-                        MakeGlFont();
-                    }
-                };
+            if( e.PropertyName.StartsWith("Font") && GlTexturesView.IsInitialized )
+            {
+                MakeGlFont();
+            }
+        }
 
+        private void SetupEventHandlers()
+        {
             Settings.TilesetDirectories.CollectionChanged += (sender, e) =>
                 {
                     if( !GlTexturesView.IsInitialized )
