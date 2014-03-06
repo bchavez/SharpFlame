@@ -1,3 +1,29 @@
+#region License
+/*
+ The MIT License (MIT)
+
+ Copyright (c) 2013-2014 The SharpFlame Authors.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ */
+#endregion
+
 using System;
 using Eto;
 using Eto.Drawing;
@@ -15,13 +41,18 @@ namespace SharpFlame.Gui.Controls
     {
         Size GLSize { get; set; }
         bool IsInitialized { get; }
+        bool HasFocus { get; }
 
         void MakeCurrent();
         void SwapBuffers();
+        void Focus();
 
         event EventHandler Initialized;
         event EventHandler Resize;
         event EventHandler ShuttingDown;
+
+        event EventHandler<KeyEventArgs> KeyDown;
+        event EventHandler<KeyEventArgs> KeyUp;
     }
 
     public class GLSurface : Control, IGLSurface
@@ -48,6 +79,8 @@ namespace SharpFlame.Gui.Controls
             PlatformControl.Initialized += OnInitialized;
             PlatformControl.Resize += OnResize;
             PlatformControl.ShuttingDown += OnShuttingDown;
+            PlatformControl.KeyDown += OnKeyDown;
+            PlatformControl.KeyUp += OnKeyUp;
         }
         public GLSurface(Generator generator, Type type, bool initialize = true) : base(generator, type, initialize)
         {
@@ -72,6 +105,18 @@ namespace SharpFlame.Gui.Controls
         public virtual void OnShuttingDown(object obj, EventArgs e) 
         {
             ShuttingDown (obj, e);
+        }
+
+        public event EventHandler<KeyEventArgs> KeyUp = delegate {};
+        public virtual void OnKeyUp(object obj, KeyEventArgs e) 
+        {
+            KeyUp (obj, e);
+        }
+
+        public event EventHandler<KeyEventArgs> KeyDown = delegate {};
+        public virtual void OnKeyDown(object obj, KeyEventArgs e) 
+        {
+            KeyDown (obj, e);
         }
 
         public virtual void MakeCurrent() 

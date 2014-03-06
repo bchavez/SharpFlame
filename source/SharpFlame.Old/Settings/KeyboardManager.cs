@@ -71,7 +71,7 @@ namespace SharpFlame.Old.Settings
         public bool IsChar { get; private set; }
         public bool Invalid { get; set; }
 
-        public KeyboardKey(Keys? key = null, char? keyChar = null) 
+        public KeyboardKey(Keys? key = null, char? keyChar = null, bool repeat = false) 
         {
             if(key != null)
             {
@@ -114,7 +114,7 @@ namespace SharpFlame.Old.Settings
             charLookupTable = new Dictionary<char, KeyboardKey>();
         }
 
-        public bool Create(string name, Keys? key = null, char? keyChar = null) 
+        public bool Create(string name, Keys? key = null, char? keyChar = null, bool repeat = false) 
         {
             if (Keys.ContainsKey(name)) {
                 throw new Exception(string.Format("The key \"{0}\" does exist.", name));
@@ -129,7 +129,7 @@ namespace SharpFlame.Old.Settings
                 return false;
             }
 
-            kkey = new KeyboardKey (key, keyChar);
+            kkey = new KeyboardKey (key, keyChar, repeat);
             Keys.Add (name, kkey);
             if(kkey.IsChar)
             {
@@ -163,7 +163,7 @@ namespace SharpFlame.Old.Settings
         /// </summary>
         /// <param name="name">Name.</param>
         /// <param name="key">Key.</param>
-        public void Update(string name, Keys? key = null, char? keyChar = null)
+        public void Update(string name, Keys? key = null, char? keyChar = null, bool repeat = false)
         {
             if (!Keys.ContainsKey(name)) {
                 throw new Exception(string.Format("The key \"{0}\" does not exist.", name));
@@ -179,12 +179,25 @@ namespace SharpFlame.Old.Settings
                 keyLookupTable.Remove((Keys)kkey.Key);
             }
 
-            Create(name, key, keyChar);
+            Create(name, key, keyChar, repeat);
         }
 
         public void Update(string name, KeyboardKey kkey) {
             Update(name, kkey.Key, kkey.KeyChar);
         }
+
+        public void HandleKeyUp(object sender, KeyEventArgs e)
+        {
+            Console.WriteLine ("UP Key: {0}, Char: {1}, Handled: {2}", e.KeyData, e.IsChar ? e.KeyChar.ToString() : "no char", e.Handled);
+            e.Handled = true;
+        }
+
+        public void HandleKeyDown(object sender, KeyEventArgs e)
+        {
+            Console.WriteLine ("DOWN Key: {0}, Char: {1}, Handled: {2}", e.KeyData, e.IsChar ? e.KeyChar.ToString() : "no char", e.Handled);
+            e.Handled = true;
+        }
+
     }
 }
 

@@ -24,6 +24,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading;
 using Eto.Drawing;
+using Eto.Forms;
 using Eto.Platform.GtkSharp;
 using Gtk;
 using OpenTK;
@@ -31,6 +32,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Platform;
 using SharpFlame.Gui.Controls;
+using KeyPressEventArgs = Gtk.KeyPressEventArgs;
 
 namespace SharpFlame.Gui.Gtk.EtoCustom
 {
@@ -122,7 +124,9 @@ namespace SharpFlame.Gui.Gtk.EtoCustom
         public GLDrawingArea(GraphicsMode graphicsMode, int glVersionMajor, int glVersionMinor, GraphicsContextFlags graphicsContextFlags)
         {
             this.DoubleBuffered = false;
-            
+
+            CanFocus = true;
+
             SingleBuffer = graphicsMode.Buffers == 1;
             ColorBPP = graphicsMode.ColorFormat.BitsPerPixel;
             AccumulatorBPP = graphicsMode.AccumulatorFormat.BitsPerPixel;
@@ -134,6 +138,9 @@ namespace SharpFlame.Gui.Gtk.EtoCustom
             GlVersionMajor = glVersionMajor;
             GlVersionMinor = glVersionMinor;
             GraphicsContextFlags = graphicsContextFlags;
+
+            KeyPressEvent += HandleKeyPressEvent;
+            KeyReleaseEvent += HandleKeyReleaseEvent;
         }
 
         ~GLDrawingArea() { Dispose(false); }
@@ -180,6 +187,11 @@ namespace SharpFlame.Gui.Gtk.EtoCustom
             Display.Sync ();           
         }
 
+        public virtual void Focus()
+        {
+            GrabFocus();
+        }
+
         // Called when the first GraphicsContext is created in the case of GraphicsContext.ShareContexts == True;
         public static event EventHandler GraphicsContextInitialized;
         static void OnGraphicsContextInitialized() { if (GraphicsContextInitialized != null) GraphicsContextInitialized(null, EventArgs.Empty); }
@@ -199,6 +211,29 @@ namespace SharpFlame.Gui.Gtk.EtoCustom
         // Called when this GLWidget is being Disposed
         public event EventHandler ShuttingDown;
         protected virtual void OnShuttingDown() { if (ShuttingDown != null) ShuttingDown(this, EventArgs.Empty); }
+
+
+        public event EventHandler<KeyEventArgs> KeyDown = delegate {};
+        protected virtual void HandleKeyPressEvent(object o, KeyPressEventArgs args)
+        {
+            var e = args.Event.ToEto();
+            if (e != null)
+            {
+                KeyDown(this, e);
+                args.RetVal = e.Handled;
+            }
+        }
+
+        public event EventHandler<KeyEventArgs> KeyUp = delegate {};
+        void HandleKeyReleaseEvent (object o, KeyReleaseEventArgs args)
+        {
+            var e = args.Event.ToEto();
+            if (e != null)
+            {
+                KeyUp(this, e);
+                args.RetVal = e.Handled;
+            }
+        }
 
         // Called when a widget is realized. (window handles and such are valid)
         // protected override void OnRealized() { base.OnRealized(); }
