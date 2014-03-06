@@ -170,58 +170,58 @@ namespace SharpFlame.Old.Settings
             PickOrientation = true;
 
             //interface controls
-            keyboardManager.Create ("ObjectSelectTool", Keys.Escape);
-            keyboardManager.Create ("PreviousTool", Keys.Grave);
+            keyboardManager.Create (KeyboardKeys.ObjectSelectTool, Keys.Escape);
+            keyboardManager.Create (KeyboardKeys.PreviousTool, Keys.Grave);
 
             //selected unit controls
-            keyboardManager.Create ("MoveObjects", Keys.M);
-            keyboardManager.Create ("DeleteObjects", Keys.Delete);
-            keyboardManager.Create ("Multiselect", Keys.Shift);
+            keyboardManager.Create (KeyboardKeys.MoveObjects, Keys.M);
+            keyboardManager.Create (KeyboardKeys.DeleteObjects, Keys.Delete);
+            keyboardManager.Create (KeyboardKeys.Multiselect, Keys.Shift);
 
             //generalised controls
-            keyboardManager.Create ("ViewSlow", Keys.R);
-            keyboardManager.Create ("ViewFast", Keys.F);
+            keyboardManager.Create (KeyboardKeys.ViewSlow, Keys.R);
+            keyboardManager.Create (KeyboardKeys.ViewFast, Keys.F);
 
             //picker controls
-            keyboardManager.Create ("Picker", Keys.Control);
+            keyboardManager.Create (KeyboardKeys.Picker, Keys.Control);
 
             //view controls
-            keyboardManager.Create ("ShowTextures", Keys.F5);
-            keyboardManager.Create ("ShowLighting", Keys.F8);
-            keyboardManager.Create ("ShowWireframe", Keys.F6);
-            keyboardManager.Create ("ShowObjects", Keys.F7);
-            keyboardManager.Create ("ShowLabels", Keys.F4);
-            keyboardManager.Create ("ViewMoveMode", Keys.F1);
-            keyboardManager.Create ("ViewRotateMode", Keys.F2);
-            keyboardManager.Create ("ViewMoveLeft", Keys.A);
-            keyboardManager.Create ("ViewMoveRight", Keys.D);
-            keyboardManager.Create ("ViewMoveForwards", Keys.W);
-            keyboardManager.Create ("ViewMoveBackwards", Keys.S);
-            keyboardManager.Create ("ViewMoveUp", Keys.E);
-            keyboardManager.Create ("ViewMoveDown", Keys.C);
-            keyboardManager.Create ("ViewZoomIn", Keys.Home);
-            keyboardManager.Create ("ViewZoomOut", Keys.End);
-            keyboardManager.Create ("ViewRotateLeft", Keys.Left);
-            keyboardManager.Create ("ViewRotateRight", Keys.Right);
-            keyboardManager.Create ("ViewRotateForwards", Keys.Up);
-            keyboardManager.Create ("ViewRotateBackwards", Keys.Down);
-            keyboardManager.Create ("ViewRotateUp", Keys.PageUp);
-            keyboardManager.Create ("ViewRotateDown", Keys.PageDown);
-            keyboardManager.Create ("ViewRollLeft", Keys.LeftBracket);
-            keyboardManager.Create ("ViewRollRight", Keys.RightBracket);
-            keyboardManager.Create ("ViewReset", Keys.Backspace);
+            keyboardManager.Create (KeyboardKeys.ShowTextures, Keys.F5);
+            keyboardManager.Create (KeyboardKeys.ShowLighting, Keys.F8);
+            keyboardManager.Create (KeyboardKeys.ShowWireframe, Keys.F6);
+            keyboardManager.Create (KeyboardKeys.ShowObjects, Keys.F7);
+            keyboardManager.Create (KeyboardKeys.ShowLabels, Keys.F4);
+            keyboardManager.Create (KeyboardKeys.ViewMoveMode, Keys.F1);
+            keyboardManager.Create (KeyboardKeys.ViewRotateMode, Keys.F2);
+            keyboardManager.Create (KeyboardKeys.ViewMoveLeft, Keys.A, null, true);
+            keyboardManager.Create (KeyboardKeys.ViewMoveRight, Keys.D, null, true);
+            keyboardManager.Create (KeyboardKeys.ViewMoveForwards, Keys.W, null, true);
+            keyboardManager.Create (KeyboardKeys.ViewMoveBackwards, Keys.S, null, true);
+            keyboardManager.Create (KeyboardKeys.ViewMoveUp, Keys.E, null, true);
+            keyboardManager.Create (KeyboardKeys.ViewMoveDown, Keys.C, null, true);
+            keyboardManager.Create (KeyboardKeys.ViewZoomIn, Keys.Home, null, true);
+            keyboardManager.Create (KeyboardKeys.ViewZoomOut, Keys.End, null, true);
+            keyboardManager.Create (KeyboardKeys.ViewRotateLeft, Keys.Left, null, true);
+            keyboardManager.Create (KeyboardKeys.ViewRotateRight, Keys.Right, null, true);
+            keyboardManager.Create (KeyboardKeys.ViewRotateForwards, Keys.Up, null, true);
+            keyboardManager.Create (KeyboardKeys.ViewRotateBackwards, Keys.Down, null, true);
+            keyboardManager.Create (KeyboardKeys.ViewRotateUp, Keys.PageUp, null, true);
+            keyboardManager.Create (KeyboardKeys.ViewRotateDown, Keys.PageDown, null, true);
+            keyboardManager.Create (KeyboardKeys.ViewRollLeft, Keys.LeftBracket, null, true);
+            keyboardManager.Create (KeyboardKeys.ViewRollRight, Keys.RightBracket, null, true);
+            keyboardManager.Create (KeyboardKeys.ViewReset, Keys.Backspace);
 
             //texture controls
-            keyboardManager.Create ("CounterClockwise", Keys.D1);
-            keyboardManager.Create ("Clockwise", Keys.D2);
-            keyboardManager.Create ("TextureFlip", Keys.D3);
-            keyboardManager.Create ("TriangleFlip", Keys.D4);
-            keyboardManager.Create ("GatewayDelete", Keys.D5);
+            keyboardManager.Create (KeyboardKeys.CounterClockwise, Keys.D1);
+            keyboardManager.Create (KeyboardKeys.Clockwise, Keys.D2);
+            keyboardManager.Create (KeyboardKeys.TextureFlip, Keys.D3);
+            keyboardManager.Create (KeyboardKeys.TriangleFlip, Keys.D4);
+            keyboardManager.Create (KeyboardKeys.GatewayDelete, Keys.D5);
 
             //undo controls
-            keyboardManager.Create ("Undo", Keys.Z);
-            keyboardManager.Create ("Redo", Keys.Y);
-            keyboardManager.Create ("PositionLabel", Keys.P);
+            keyboardManager.Create (KeyboardKeys.Undo, Keys.Z);
+            keyboardManager.Create (KeyboardKeys.Redo, Keys.Y);
+            keyboardManager.Create (KeyboardKeys.PositionLabel, Keys.P);
         }
 
         public Result Save(string path)

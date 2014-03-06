@@ -60,26 +60,46 @@ namespace SharpFlame.Gui.Dialogs
             {
                 var currentKeyOnly = e.KeyData & Keys.KeyMask;
                 var currentModifier = e.KeyData & Keys.ModifierMask;
-                var keyDownModifier = (Keys)keyDown.Key & Keys.ModifierMask;
+                Keys keyDownModifier;
+                if (keyDown.Key != null) {
+                    keyDownModifier = (Keys)keyDown.Key & Keys.ModifierMask;
+                }
+                else
+                {
+                    keyDownModifier = Keys.None;
+                }
 
                 if (currentKeyOnly != Keys.None) {
-                    Key = new KeyboardKey(e.KeyData, null);
+                    // Is known key.
+                    Key = new KeyboardKey("", e.KeyData, null, Key.Repeat);
+                    Console.WriteLine("keyUP={0}", Key.ToString());
                 } else if (e.IsChar) {
                     // Is Char
-                    Key = new KeyboardKey(null, e.KeyChar);
-                } else if (currentModifier != keyDownModifier) {
+                    Key = new KeyboardKey("", null, e.KeyChar, Key.Repeat);
+                    Console.WriteLine("keyUP={0}", Key.ToString());
+                } else if (keyDownModifier != Keys.None && currentModifier != keyDownModifier) {
                     // Is modifier only
-                    Key = new KeyboardKey(e.KeyData, null);
-                }
- 
-                Console.WriteLine ("UP Key: {0}, Char: {1}, Handled: {2}", e.KeyData, e.IsChar ? e.KeyChar.ToString() : "no char", e.Handled);
+                    Key = new KeyboardKey("", e.KeyData, null, Key.Repeat);
+                    Console.WriteLine("keyUP={0}", Key.ToString());
+                } 
             };
 
             KeyDown += (object sender, KeyEventArgs e) => 
             {
-                keyDown = new KeyboardKey(e.KeyData, e.KeyChar);
-
-                Console.WriteLine ("DOWN Key: {0}, Char: {1}, Handled: {2}", e.KeyData, e.IsChar ? e.KeyChar.ToString() : "no char", e.Handled);
+                var currentKeyOnly = e.KeyData & Keys.KeyMask;
+                if (currentKeyOnly != Keys.None) {
+                    // Is known key.
+                    keyDown = new KeyboardKey("", e.KeyData, null);
+                    Console.WriteLine("keyDown={0}", keyDown.ToString());
+                } else if (e.IsChar) {
+                    // Is Char
+                    keyDown = new KeyboardKey("", null, e.KeyChar);
+                    Console.WriteLine("keyDown={0}", keyDown.ToString());
+                } else {
+                    // Is modifier only
+                    keyDown = new KeyboardKey("", e.KeyData, null);
+                    Console.WriteLine("keyDown={0}", keyDown.ToString());                   
+                }
             };
 
             Content = layout;

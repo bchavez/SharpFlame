@@ -409,6 +409,9 @@
     <Compile Include="Mapping\Objects\Unit.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Settings\KeyboardManager.cs" />
+    <Compile Include="Settings\KeyboardKeys.cs" />
+    <Compile Include="Settings\KeyboardManagerEvents.cs" />
+    <Compile Include="Settings\Keylogger.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">

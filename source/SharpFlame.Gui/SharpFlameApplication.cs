@@ -65,6 +65,9 @@ namespace SharpFlame.Gui
         [Inject]
         internal SettingsManager Settings { get; set; }
 
+        [Inject]
+        internal KeyboardManager KeyboardManager { get; set; }
+
         private Result initializeResult = new Result("Startup result", false);
 
         [Inject]
@@ -75,7 +78,8 @@ namespace SharpFlame.Gui
 
             // TODO: Remove me once everthing is inectable.
             App.Kernel = kernel;
-            App.Settings = Settings;
+            App.Settings = this.Settings;
+            App.KeyboardManager = this.KeyboardManager;
 
             logger = logFactory.GetCurrentClassLogger();
 
@@ -88,7 +92,18 @@ namespace SharpFlame.Gui
             // Run this before everything else.
             App.Initalize();
 
-            this.EventBroker.Register(Settings);
+            // Uncomment me to debug the EventBroker.
+//            #if DEBUG
+//            EventBroker.AddExtension(new SharpFlame.Core.Extensions.EventBrokerLogExtension());
+//            #endif
+
+            EventBroker.Register(this.Settings);
+            EventBroker.Register(this.KeyboardManager);
+
+            #if DEBUG
+            var keylogger = kernel.Get<Keylogger>();
+            EventBroker.Register(keylogger);
+            #endif
 
             App.SetProgramSubDirs();
 
@@ -103,9 +118,6 @@ namespace SharpFlame.Gui
                 Instance.Quit();
             }
 
-            // Set them up before you call settingsBindings().
-            //GlTexturesView = new GLSurface ();
-            //GlMapView = new GLSurface ();
             GlTexturesView.Initialized += OnGLControlInitialized;
 
             SetupEventHandlers();
@@ -184,21 +196,20 @@ namespace SharpFlame.Gui
             }
         }
 
-        [EventSubscription(EventTopics.SettingsChanged, typeof(Publisher))]
-        internal void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-#if DEBUG
-            Console.WriteLine("Setting {0} changed ", e.PropertyName);
-#endif
-
-            if( e.PropertyName.StartsWith("Font") && GlTexturesView.IsInitialized )
-            {
-                MakeGlFont();
-            }
-        }
-
         private void SetupEventHandlers()
         {
+            Settings.PropertyChanged += (object sender, PropertyChangedEventArgs e) =>
+            {
+                #if DEBUG
+                Console.WriteLine("Setting {0} changed ", e.PropertyName);
+                #endif
+
+                if(e.PropertyName.StartsWith("Font"))
+                {
+                    MakeGlFont();
+                }
+            };
+                
             Settings.TilesetDirectories.CollectionChanged += (sender, e) =>
                 {
                     if( !GlTexturesView.IsInitialized )
@@ -289,6 +300,11 @@ namespace SharpFlame.Gui
 
         private void MakeGlFont()
         {
+            if(!GlTexturesView.IsInitialized)
+            {
+                return;
+            }
+
             var style = FontStyle.Regular;
             if( Settings.FontBold )
             {
@@ -302,4 +318,3 @@ namespace SharpFlame.Gui
         }
     }
 }
-

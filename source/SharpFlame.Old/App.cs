@@ -139,6 +139,8 @@ namespace SharpFlame.Old
 
         public static SettingsManager Settings { get; set; }
 
+        public static KeyboardManager KeyboardManager { get; set; }
+
         /// <summary>
         /// The Ninject Kernel
         /// </summary>

@@ -1,4 +1,4 @@
- #region License
+#region License
   /*
   The MIT License (MIT)
  
@@ -27,6 +27,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Appccelerate.EventBroker;
 using Eto.Forms;
 using Ninject.Extensions.Logging;
 
@@ -49,7 +50,17 @@ namespace SharpFlame.Old.Settings
         }
     }
 
+    public class KeyboardEventArgs : EventArgs {
+        public KeyboardKey Key;
+
+        public KeyboardEventArgs()
+        {
+        }
+    }
+
     public class KeyboardKey {
+        public string Name { get; set; }
+
         private Keys? key;
         public Keys? Key { 
             get { return key; } 
@@ -70,9 +81,12 @@ namespace SharpFlame.Old.Settings
 
         public bool IsChar { get; private set; }
         public bool Invalid { get; set; }
+        public bool Repeat { get; set; }
 
-        public KeyboardKey(Keys? key = null, char? keyChar = null, bool repeat = false) 
+        public KeyboardKey(string name, Keys? key = null, char? keyChar = null, bool repeat = false) 
         {
+            Name = name;
+
             if(key != null)
             {
                 Key = key;
@@ -84,6 +98,7 @@ namespace SharpFlame.Old.Settings
                 throw new InvalidKeyException("Give either a key or a keyChar.");
             }
             Invalid = false;
+            Repeat = repeat;
         }
 
         public new string ToString() 
@@ -99,11 +114,17 @@ namespace SharpFlame.Old.Settings
 
     public class KeyboardManager
     {
-        private readonly ILogger logger;
-
         public readonly Dictionary<string, KeyboardKey> Keys;
-        readonly Dictionary<Keys, KeyboardKey> keyLookupTable;
-        readonly Dictionary<char, KeyboardKey> charLookupTable;
+        public KeyboardKey ActiveKey { get; set; }
+
+        [EventPublication(KeyboardManagerEvents.OnKeyUp)]
+        public event EventHandler<KeyboardEventArgs> KeyUp = delegate {};
+        [EventPublication(KeyboardManagerEvents.OnKeyDown)]
+        public event EventHandler<KeyboardEventArgs> KeyDown = delegate {};
+
+        private readonly ILogger logger;
+        private readonly Dictionary<Keys, KeyboardKey> keyLookupTable;
+        private readonly Dictionary<char, KeyboardKey> charLookupTable;
 
         public KeyboardManager(ILoggerFactory logFactory)
         {
@@ -123,13 +144,13 @@ namespace SharpFlame.Old.Settings
             KeyboardKey kkey;
             if(key == null && keyChar == null)
             {
-                kkey = new KeyboardKey(Eto.Forms.Keys.None, null);
+                kkey = new KeyboardKey(name, Eto.Forms.Keys.None, null);
                 kkey.Invalid = true;
                 Keys.Add(name, kkey);
                 return false;
             }
 
-            kkey = new KeyboardKey (key, keyChar, repeat);
+            kkey = new KeyboardKey (name, key, keyChar, repeat);
             Keys.Add (name, kkey);
             if(kkey.IsChar)
             {
@@ -163,13 +184,18 @@ namespace SharpFlame.Old.Settings
         /// </summary>
         /// <param name="name">Name.</param>
         /// <param name="key">Key.</param>
-        public void Update(string name, Keys? key = null, char? keyChar = null, bool repeat = false)
+        public void Update(string name, Keys? key = null, char? keyChar = null, bool? repeat = null)
         {
             if (!Keys.ContainsKey(name)) {
                 throw new Exception(string.Format("The key \"{0}\" does not exist.", name));
             }
 
             var kkey = Keys [name];
+            if(repeat == null)
+            {
+                repeat = kkey.Repeat;
+            }
+
             Keys.Remove (name);
             if(kkey.IsChar)
             {
@@ -179,22 +205,62 @@ namespace SharpFlame.Old.Settings
                 keyLookupTable.Remove((Keys)kkey.Key);
             }
 
-            Create(name, key, keyChar, repeat);
+            Create(name, key, keyChar, (bool)repeat);
         }
 
         public void Update(string name, KeyboardKey kkey) {
-            Update(name, kkey.Key, kkey.KeyChar);
+            Update(name, kkey.Key, kkey.KeyChar, kkey.Repeat);
         }
-
+                   
         public void HandleKeyUp(object sender, KeyEventArgs e)
         {
-            Console.WriteLine ("UP Key: {0}, Char: {1}, Handled: {2}", e.KeyData, e.IsChar ? e.KeyChar.ToString() : "no char", e.Handled);
+            if(ActiveKey != null)
+            {
+                KeyUp(sender, new KeyboardEventArgs { Key = ActiveKey });
+                ActiveKey = null;
+            }
             e.Handled = true;
         }
-
+            
         public void HandleKeyDown(object sender, KeyEventArgs e)
         {
-            Console.WriteLine ("DOWN Key: {0}, Char: {1}, Handled: {2}", e.KeyData, e.IsChar ? e.KeyChar.ToString() : "no char", e.Handled);
+            KeyboardKey myActiveKey = null;
+            var currentKeyOnly = e.KeyData & Eto.Forms.Keys.KeyMask;
+            if (currentKeyOnly != Eto.Forms.Keys.None) {
+                // Is known key.
+                if (keyLookupTable.ContainsKey(e.KeyData)) {
+                    myActiveKey = keyLookupTable[e.KeyData];
+                }
+            } else if (e.IsChar) {
+                // Is Char
+                if(charLookupTable.ContainsKey(e.KeyChar))
+                {
+                    myActiveKey = charLookupTable[e.KeyChar];
+                }
+            } else {
+                // Is modifier only
+                if (keyLookupTable.ContainsKey(e.KeyData)) {
+                    myActiveKey = keyLookupTable[e.KeyData];
+                }
+            }
+
+            if(myActiveKey == null)
+            {
+                return;
+            }
+
+            if(myActiveKey == ActiveKey)
+            {
+                if(ActiveKey.Repeat)
+                {
+                    KeyDown(sender, new KeyboardEventArgs { Key = ActiveKey });
+                }
+            } else
+            {
+                ActiveKey = myActiveKey;
+                KeyDown(sender, new KeyboardEventArgs { Key = ActiveKey });
+            }
+
             e.Handled = true;
         }
 

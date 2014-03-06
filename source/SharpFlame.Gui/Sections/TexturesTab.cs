@@ -37,6 +37,7 @@ using SharpFlame.Gui.Infrastructure;
 using SharpFlame.Old;
 using SharpFlame.Old.Graphics.OpenGL;
 using SharpFlame.Old.Mapping.Tiles;
+using SharpFlame.Old.Settings;
 using SharpFlame.Old.UiOptions;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -68,6 +69,9 @@ namespace SharpFlame.Gui.Sections
 
         [Inject, Named(NamedBinding.TextureView)]
         internal GLSurface GLSurface { get; set; }
+
+        [Inject]
+        internal KeyboardManager KeyboardManager { get; set; }
 
         private XYInt TextureCount { get; set; }
 
@@ -200,6 +204,9 @@ namespace SharpFlame.Gui.Sections
         /// </summary>
         private void SetupEventHandlers()
         {
+            this.GLSurface.KeyDown += this.KeyboardManager.HandleKeyDown;
+            this.GLSurface.KeyUp += this.KeyboardManager.HandleKeyUp;
+
             TexturesOptions texturesOptions = App.UiOptions.Textures;
 
             // Circular / Square Button

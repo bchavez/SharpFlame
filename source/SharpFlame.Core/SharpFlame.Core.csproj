@@ -72,6 +72,12 @@
     <Reference Include="Eto">
       <HintPath>..\packages\Eto-20140305\net40\Eto.dll</HintPath>
     </Reference>
+    <Reference Include="Appccelerate.EventBroker">
+      <HintPath>..\packages\Appccelerate.EventBroker.2.0.84\lib\Net40\Appccelerate.EventBroker.dll</HintPath>
+    </Reference>
+    <Reference Include="Appccelerate.Fundamentals">
+      <HintPath>..\packages\Appccelerate.Fundamentals.1.0.29\lib\Net40\Appccelerate.Fundamentals.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\AddNullItemBehavior.cs" />
@@ -132,6 +138,7 @@
     <Compile Include="Domain\Player.cs" />
     <Compile Include="SimpleResult.cs" />
     <Compile Include="Interfaces\ISharpFlameApplication.cs" />
+    <Compile Include="Extensions\EventBrokerLogExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -146,6 +153,7 @@
   -->
   <ItemGroup>
     <Folder Include="Parsers\Names\" />
+    <Folder Include="Extensions\Appccelerate\" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup />

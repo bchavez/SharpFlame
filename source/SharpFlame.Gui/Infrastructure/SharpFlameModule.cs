@@ -76,6 +76,13 @@ namespace SharpFlame.Gui.Infrastructure
             // Settings dialog
             this.Bind<Dialogs.Settings>()
                 .ToSelf();
+
+            // Key Logger
+            #if DEBUG
+            this.Bind<Keylogger>()
+                .ToSelf()
+                .InSingletonScope();
+            #endif
         }
     }
 }
