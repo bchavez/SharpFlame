@@ -57,10 +57,13 @@ namespace SharpFlame.Gui.Actions
         }
 
         [Inject]
-        public SettingsManager Settings { get; set; }
+        internal SettingsManager Settings { get; set; }
 
         [Inject]
-        public MainMapView MainMapView { get; set; }
+        internal MainMapView MainMapView { get; set; }
+
+        [Inject]
+        internal IKernel Kernel { get; set; }
 
         public LoadMap(ILoggerFactory logFactory)
         {
@@ -99,7 +102,7 @@ namespace SharpFlame.Gui.Actions
                     new Dialogs.Status(returnResult).Show();
                 }
 
-                var map = new Map();
+                var map = Kernel.Get<Map>();
                 IIOLoader loader;
                 switch(Path.GetExtension(dialog.FileName))
                 {

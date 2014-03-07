@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using Ninject;
 using NLog;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Bitmaps;
@@ -660,7 +661,8 @@ namespace SharpFlame
             }
             if ( ApplyToMap == null )
             {
-                ApplyToMap = new Map(new XYInt(HeightmapBitmap.Width - 1, HeightmapBitmap.Height - 1));
+                // ApplyToMap = new Map(new XYInt(HeightmapBitmap.Width - 1, HeightmapBitmap.Height - 1));
+                ApplyToMap = App.Kernel.Get<Map>().Create(new XYInt(HeightmapBitmap.Width - 1, HeightmapBitmap.Height - 1));
             }
 
             var X = 0;
@@ -1172,7 +1174,7 @@ namespace SharpFlame
 
         public void NewMap()
         {
-            var NewMap = new Map(new XYInt(64, 64));
+            var NewMap = App.Kernel.Get<Map>().Create(new XYInt(64, 64));
             NewMainMap(NewMap);
 
             NewMap.RandomizeTileOrientations();
@@ -1936,7 +1938,7 @@ namespace SharpFlame
             MathUtil.ReorderXY(Map.SelectedAreaVertexA, Map.SelectedAreaVertexB, ref Start, ref Finish);
             Area.X = Finish.X - Start.X;
             Area.Y = Finish.Y - Start.Y;
-            App.Copied_Map = new Map(Map, Start, Area);
+            App.Copied_Map = App.Kernel.Get<Map>().Copy(Map, Start, Area);
         }
 
         public void tsbSelectionPaste_Click(Object sender, EventArgs e)
@@ -4046,7 +4048,7 @@ namespace SharpFlame
         {
             var ReturnResult = new Result("", false);
             var SplitPath = new sSplitPath(Path);
-            var resultMap = new Map();
+            var resultMap = App.Kernel.Get<Map>();
 
             switch ( SplitPath.FileExtension.ToLower() )
             {

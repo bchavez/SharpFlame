@@ -3,6 +3,7 @@
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
+using Ninject;
 using NLog;
 using SharpFlame.Collections.Specialized;
 using SharpFlame.Core;
@@ -957,7 +958,8 @@ namespace SharpFlame
             double BestDist = 0;
             var Flag = default(bool);
 
-            Map = new Map(TileSize);
+            // Map = new Map(TileSize);
+            Map = App.Kernel.Get<Map>().Create(TileSize);
             GenerateTerrainTiles = new GenerateTerrainTile[Map.Terrain.TileSize.X, Map.Terrain.TileSize.Y];
             GenerateTerrainVertices = new GenerateTerrainVertex[Map.Terrain.TileSize.X + 1, Map.Terrain.TileSize.Y + 1];
 

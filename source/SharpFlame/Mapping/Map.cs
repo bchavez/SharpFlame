@@ -1,4 +1,4 @@
-﻿#region
+﻿﻿#region
 
 using System;
 using System.Diagnostics;
@@ -6,7 +6,7 @@ using System.IO;
 using System.Windows.Forms;
 using Eto.Gl;
 using Ninject;
-using NLog;
+using Ninject.Extensions.Logging;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core;
 using SharpFlame.Core.Collections;
@@ -32,7 +32,7 @@ namespace SharpFlame.Mapping
     {
         public delegate void ChangedEventHandler();
 
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger logger;
         public AutoSave AutoSave = new AutoSave();
         private ChangedEventHandler changedEvent;
         public bool ChangedSinceSave = false;
@@ -73,11 +73,13 @@ namespace SharpFlame.Mapping
         private bool readyForUserInput;
         public ConnectedListLink<Map, frmMain> FrmMainLink;       
        
-        public Map()
+        public Map(ILoggerFactory logFactory)
         {
+            logger = logFactory.GetCurrentClassLogger();
+
             SectorCount = new XYInt(0, 0);
             SelectedAreaVertexA = new XYInt(0, 0);
-            SelectedAreaVertexB = new XYInt(0, 0);
+            SelectedAreaVertexB = new XYInt(0, 0);           
 
             FrmMainLink = new ConnectedListLink<Map, frmMain>(this);
             Sectors = new Sector[0, 0];
@@ -97,21 +99,19 @@ namespace SharpFlame.Mapping
             Initialize();
         }
 
-        public Map(XYInt tileSize) : this()
-        {
-            Initialize();
+        public Map Create(XYInt tileSize) {
             TerrainBlank(tileSize);
             TileType_Reset();
+
+            return this;
         }
 
-        public Map(Map mapToCopy, XYInt offset, XYInt area) : this()
+        public Map Copy(Map mapToCopy, XYInt offset, XYInt area)
         {
             var endX = 0;
             var endY = 0;
             var index0 = 0;
             var index1 = 0;
-
-            Initialize();
 
             //make some map data for selection
 
@@ -193,6 +193,8 @@ namespace SharpFlame.Mapping
                     newUnitAdd.Perform();
                 }
             }
+
+            return this;
         }
 
         public bool ReadyForUserInput

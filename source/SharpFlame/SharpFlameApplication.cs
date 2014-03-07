@@ -126,7 +126,6 @@ namespace SharpFlame
             SetupEventHandlers();
 
             initializeResult.Add(Settings.Load(App.SettingsPath));
-            // initializeResult.Add (SettingsManager.SettingsLoad (ref SettingsManager.InitializeSettings));           
         }
 
         public override void OnInitialized(EventArgs e)
