@@ -28,8 +28,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using Eto;
-using Eto.Forms;
 using Eto.Drawing;
+using Eto.Forms;
+using Eto.Gl;
 using Ninject;
 using SharpFlame.Core.Domain;
 using SharpFlame.Gui.Controls;
@@ -204,8 +205,8 @@ namespace SharpFlame.Gui.Sections
         /// </summary>
         private void SetupEventHandlers()
         {
-            this.GLSurface.KeyDown += this.KeyboardManager.HandleKeyDown;
-            this.GLSurface.KeyUp += this.KeyboardManager.HandleKeyUp;
+            this.GLSurface.GlKeyDown += this.KeyboardManager.HandleKeyDown;
+            this.GLSurface.GlKeyUp += this.KeyboardManager.HandleKeyUp;
 
             TexturesOptions texturesOptions = App.UiOptions.Textures;
 

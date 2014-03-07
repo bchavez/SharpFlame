@@ -105,10 +105,10 @@ namespace SharpFlame.Old.Domain
 
         public XYInt GetGetFootprintSelected(int rotation)
         {
-            if ( Program.frmMainInstance.cbxFootprintRotate.Checked )
-            {
-                return GetGetFootprintNew(rotation);
-            }
+//            if ( Program.frmMainInstance.cbxFootprintRotate.Checked )
+//            {
+//                return GetGetFootprintNew(rotation);
+//            }
             return GetFootprintOld;
         }
 

@@ -78,19 +78,8 @@
     <Compile Include="..\SharpFlame.Core\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="EtoCustom\WinGLSurfaceHandler.cs" />
-    <Compile Include="EtoCustom\WinGLUserControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="EtoCustom\WinGLUserControl.Designer.cs">
-      <DependentUpon>WinGLUserControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="EtoCustom\WinPanelHandler.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="EtoCustom\WinGLUserControl.resx">
-      <DependentUpon>WinGLUserControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -114,7 +103,6 @@
     <None Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Compile Include="Win32Helper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -132,9 +120,14 @@
       <Project>{8AE7F7A3-841A-44A7-B016-4661BBBF7821}</Project>
       <Name>SharpFlame.Core</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Bindings\" />
+    <ProjectReference Include="..\Eto.Gl\Eto.Gl.csproj">
+      <Project>{510CE98D-2169-48A0-889C-E743417EE5E1}</Project>
+      <Name>Eto.Gl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Eto.Gl.Windows\Eto.Gl.Windows.csproj">
+      <Project>{A0DCCC13-936C-4D5A-AD8C-ADFF75816A8F}</Project>
+      <Name>Eto.Gl.Windows</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

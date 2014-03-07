@@ -28,9 +28,8 @@ using System;
 using Eto;
 using Eto.Drawing;
 using Eto.Forms;
-using SharpFlame.Old.Graphics.OpenGL;
 
-namespace SharpFlame.Gui.Controls
+namespace Eto.Gl
 {
     public interface IGLSurfaceHandler : IControl
     {
@@ -51,8 +50,8 @@ namespace SharpFlame.Gui.Controls
         event EventHandler Resize;
         event EventHandler ShuttingDown;
 
-        event EventHandler<KeyEventArgs> KeyDown;
-        event EventHandler<KeyEventArgs> KeyUp;
+        event EventHandler<KeyEventArgs> GlKeyDown;
+        event EventHandler<KeyEventArgs> GlKeyUp;
     }
 
     public class GLSurface : Control, IGLSurface
@@ -79,8 +78,8 @@ namespace SharpFlame.Gui.Controls
             PlatformControl.Initialized += OnInitialized;
             PlatformControl.Resize += OnResize;
             PlatformControl.ShuttingDown += OnShuttingDown;
-            PlatformControl.KeyDown += OnKeyDown;
-            PlatformControl.KeyUp += OnKeyUp;
+            PlatformControl.GlKeyDown += OnGlKeyDown;
+            PlatformControl.GlKeyUp += OnGlKeyUp;
         }
         public GLSurface(Generator generator, Type type, bool initialize = true) : base(generator, type, initialize)
         {
@@ -107,16 +106,16 @@ namespace SharpFlame.Gui.Controls
             ShuttingDown (obj, e);
         }
 
-        public new event EventHandler<KeyEventArgs> KeyUp = delegate {};
-        public virtual void OnKeyUp(object obj, KeyEventArgs e) 
+        public new event EventHandler<KeyEventArgs> GlKeyUp = delegate {};
+        public virtual void OnGlKeyUp(object obj, KeyEventArgs e) 
         {
-            KeyUp (obj, e);
+            GlKeyUp (obj, e);
         }
 
-        public new event EventHandler<KeyEventArgs> KeyDown = delegate {};
-        public virtual void OnKeyDown(object obj, KeyEventArgs e) 
+        public new event EventHandler<KeyEventArgs> GlKeyDown = delegate {};
+        public virtual void OnGlKeyDown(object obj, KeyEventArgs e) 
         {
-            KeyDown (obj, e);
+            GlKeyDown (obj, e);
         }
 
         public virtual void MakeCurrent() 
@@ -127,11 +126,6 @@ namespace SharpFlame.Gui.Controls
         public virtual void SwapBuffers() 
         {
             PlatformControl.SwapBuffers ();
-        }
-
-        public GLFont CreateGLFont(System.Drawing.Font baseFont)
-        {
-            return new GLFont(new System.Drawing.Font(baseFont.FontFamily, 24.0F, baseFont.Style, System.Drawing.GraphicsUnit.Pixel));
         }
     }
 }

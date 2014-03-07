@@ -61,8 +61,8 @@ namespace SharpFlame.Old.Mapping
             var matrixB = new Matrix3DMath.Matrix3D();
             clsAction mapAction;
             float zNearFar = 0;
-            var mapViewControl = ViewInfo.MapViewControl;
-            var glSize = ViewInfo.MapViewControl.GLSize;
+            var mapViewControl = App.MapViewGlSurface;
+            var glSize = mapViewControl.Size;
             var drawCentre = default(XYDouble);
 
             dblTemp = App.Settings.MinimapSize;
@@ -73,8 +73,7 @@ namespace SharpFlame.Old.Mapping
                 minimapSizeXy.X = (int)(Terrain.TileSize.X / ViewInfo.TilesPerMinimapPixel);
                 minimapSizeXy.Y = (int)(Terrain.TileSize.Y / ViewInfo.TilesPerMinimapPixel);
             }
-
-            if ( !ViewInfo.ScreenXYGetViewPlanePos(new XYInt((int)(glSize.X / 2.0D), (int)(glSize.Y / 2.0D)), dblTemp, ref drawCentre) )
+            if ( !ViewInfo.ScreenXYGetViewPlanePos(new XYInt((int)(glSize.Width / 2.0D), (int)(glSize.Height / 2.0D)), dblTemp, ref drawCentre) )
             {
                 Matrix3DMath.VectorForwardsRotationByMatrix(ViewInfo.ViewAngleMatrix, ref xyzDbl);
                 var dblTemp2 = App.VisionRadius * 2.0D / Math.Sqrt(xyzDbl.X * xyzDbl.X + xyzDbl.Z * xyzDbl.Z);
@@ -100,7 +99,8 @@ namespace SharpFlame.Old.Mapping
 
             GL.Enable(EnableCap.DepthTest);
             GL.MatrixMode(MatrixMode.Projection);
-            var temp_mat = Matrix4.CreatePerspectiveFieldOfView(ViewInfo.FieldOfViewY, mapViewControl.OpenGLControl.AspectRatio, zNearFar / 128.0F, zNearFar * 128.0F);
+            float aspectRatio = (float)glSize.Width / (float)glSize.Height;
+            var temp_mat = Matrix4.CreatePerspectiveFieldOfView(ViewInfo.FieldOfViewY, aspectRatio, zNearFar / 128.0F, zNearFar * 128.0F);
             GL.LoadMatrix(ref temp_mat);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
@@ -135,9 +135,9 @@ namespace SharpFlame.Old.Mapping
 
             dblTemp = 127.5D * HeightMultiplier;
             if ( ViewInfo.ScreenXYGetViewPlanePosForwardDownOnly(0, 0, dblTemp, ref viewCorner0)
-                 && ViewInfo.ScreenXYGetViewPlanePosForwardDownOnly(glSize.X, 0, dblTemp, ref viewCorner1)
-                 && ViewInfo.ScreenXYGetViewPlanePosForwardDownOnly(glSize.X, glSize.Y, dblTemp, ref viewCorner2)
-                 && ViewInfo.ScreenXYGetViewPlanePosForwardDownOnly(0, glSize.Y, dblTemp, ref viewCorner3) )
+                && ViewInfo.ScreenXYGetViewPlanePosForwardDownOnly(glSize.Width, 0, dblTemp, ref viewCorner1)
+                && ViewInfo.ScreenXYGetViewPlanePosForwardDownOnly(glSize.Width, glSize.Height, dblTemp, ref viewCorner2)
+                && ViewInfo.ScreenXYGetViewPlanePosForwardDownOnly(0, glSize.Height, dblTemp, ref viewCorner3) )
             {
                 showMinimapViewPosBox = true;
             }
@@ -153,7 +153,7 @@ namespace SharpFlame.Old.Mapping
 
             GL.Enable(EnableCap.CullFace);
 
-            DebugGLError("Matrix modes");
+            debugGLError("Matrix modes");
 
             if ( App.Draw_TileTextures )
             {
@@ -164,7 +164,7 @@ namespace SharpFlame.Old.Mapping
                 App.VisionSectors.PerformActionMapSectors(mapAction, drawCentreSector);
                 GL.Disable(EnableCap.Texture2D);
 
-                DebugGLError("Tile textures");
+                debugGLError("Tile textures");
             }
 
             GL.Disable(EnableCap.DepthTest);
@@ -178,7 +178,7 @@ namespace SharpFlame.Old.Mapping
                 DrawCallTerrainWireframe.Map = this;
                 App.VisionSectors.PerformActionMapSectors(DrawCallTerrainWireframe, drawCentreSector);
 
-                DebugGLError("Wireframe");
+                debugGLError("Wireframe");
             }
 
             //draw tile orientation markers
@@ -196,7 +196,7 @@ namespace SharpFlame.Old.Mapping
 
                 GL.Enable(EnableCap.CullFace);
 
-                DebugGLError("Tile orientation");
+                debugGLError("Tile orientation");
             }
 
             //draw painted texture terrain type markers
@@ -212,7 +212,7 @@ namespace SharpFlame.Old.Mapping
                 DrawVertexTerran.Map = this;
                 DrawVertexTerran.ViewAngleMatrix = ViewInfo.ViewAngleMatrix;
                 App.VisionSectors.PerformActionMapSectors(DrawVertexTerran, drawCentreSector);
-                DebugGLError("Terrain type markers");
+                debugGLError("Terrain type markers");
             }
 
             selectionLabel.Text = "";
@@ -246,7 +246,7 @@ namespace SharpFlame.Old.Mapping
                     Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrixInverted, xyzDbl, ref xyzDbl2);
                     if ( ViewInfo.PosGetScreenXY(xyzDbl2, ref screenPos) )
                     {
-                        if ( screenPos.X >= 0 & screenPos.X <= glSize.X & screenPos.Y >= 0 & screenPos.Y <= glSize.Y )
+                        if ( screenPos.X >= 0 & screenPos.X <= glSize.Width & screenPos.Y >= 0 & screenPos.Y <= glSize.Height )
                         {
                             selectionLabel.Colour.Red = 1.0F;
                             selectionLabel.Colour.Green = 1.0F;
@@ -269,7 +269,7 @@ namespace SharpFlame.Old.Mapping
                     drawSelection.ActionPerform();
                 }
 
-                DebugGLError("Terrain selection box");
+                debugGLError("Terrain selection box");
             }
 
             if ( modTools.Tool == modTools.Tools.TerrainSelect )
@@ -290,7 +290,7 @@ namespace SharpFlame.Old.Mapping
                     GL.Vertex3(vertex0.X, vertex0.Y, - vertex0.Z + 8.0D);
                     GL.End();
                 }
-                DebugGLError("Terrain selection vertex");
+                debugGLError("Terrain selection vertex");
             }
 
             if ( App.Draw_Gateways )
@@ -421,7 +421,7 @@ namespace SharpFlame.Old.Mapping
                         GL.End();
                     }
                 }
-                DebugGLError("Gateways");
+                debugGLError("Gateways");
             }
 
             if ( mouseOverTerrain != null )
@@ -489,7 +489,7 @@ namespace SharpFlame.Old.Mapping
                             GL.End();
                         }
 
-                        DebugGLError("Object selection box");
+                        debugGLError("Object selection box");
                     }
                     else
                     {
@@ -502,7 +502,7 @@ namespace SharpFlame.Old.Mapping
                         GL.Vertex3(mouseOverTerrain.Pos.Horizontal.X - 16.0D, mouseOverTerrain.Pos.Altitude, mouseOverTerrain.Pos.Horizontal.Y + 16.0D);
                         GL.End();
 
-                        DebugGLError("Mouse over position");
+                        debugGLError("Mouse over position");
                     }
                 }
 
@@ -535,7 +535,7 @@ namespace SharpFlame.Old.Mapping
                     GL.Vertex3(vertex1.X, vertex1.Y, Convert.ToDouble(- vertex1.Z));
                     GL.End();
 
-                    DebugGLError("Road place brush");
+                    debugGLError("Road place brush");
                 }
                 else if ( modTools.Tool == modTools.Tools.RoadLines || modTools.Tool == modTools.Tools.Gateways || modTools.Tool == modTools.Tools.ObjectLines )
                 {
@@ -664,7 +664,7 @@ namespace SharpFlame.Old.Mapping
                         GL.Vertex3(vertex2.X, vertex2.Y, Convert.ToDouble(- vertex2.Z));
                         GL.End();
                     }
-                    DebugGLError("Line brush");
+                    debugGLError("Line brush");
                 }
 
                 //draw mouseover tiles
@@ -702,7 +702,7 @@ namespace SharpFlame.Old.Mapping
                         };
                     toolBrush.PerformActionMapTiles(drawTileOutline, mouseOverTerrain.Tile);
 
-                    DebugGLError("Brush tiles");
+                    debugGLError("Brush tiles");
                 }
 
                 //draw mouseover vertex
@@ -721,7 +721,7 @@ namespace SharpFlame.Old.Mapping
                     GL.Vertex3(vertex0.X, vertex0.Y, - vertex0.Z + 8.0D);
                     GL.End();
 
-                    DebugGLError("Mouse over vertex");
+                    debugGLError("Mouse over vertex");
                 }
 
                 if ( modTools.Tool == modTools.Tools.TerrainBrush )
@@ -755,7 +755,7 @@ namespace SharpFlame.Old.Mapping
                         };
                     toolBrush.PerformActionMapVertices(drawVertexMarker, mouseOverTerrain.Vertex);
 
-                    DebugGLError("Brush vertices");
+                    debugGLError("Brush vertices");
                 }
             }
 
@@ -771,7 +771,7 @@ namespace SharpFlame.Old.Mapping
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
-            DebugGLError("Object matrix modes");
+            debugGLError("Object matrix modes");
 
             if ( App.Draw_Units )
             {
@@ -779,7 +779,7 @@ namespace SharpFlame.Old.Mapping
                 GL.Enable(EnableCap.Texture2D);
                 App.VisionSectors.PerformActionMapSectors(drawObjects, drawCentreSector);
                 GL.Disable(EnableCap.Texture2D);
-                DebugGLError("Objects");
+                debugGLError("Objects");
             }
 
             if ( mouseOverTerrain != null )
@@ -812,7 +812,7 @@ namespace SharpFlame.Old.Mapping
                     }
                 }
                 GL.Disable(EnableCap.Texture2D);
-                DebugGLError("Mouse over object");
+                debugGLError("Mouse over object");
             }
 
             GL.Disable(EnableCap.DepthTest);
@@ -848,7 +848,7 @@ namespace SharpFlame.Old.Mapping
                     Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrixInverted, xyzDbl, ref xyzDbl2);
                     if ( ViewInfo.PosGetScreenXY(xyzDbl2, ref screenPos) )
                     {
-                        if ( screenPos.X >= 0 & screenPos.X <= glSize.X & screenPos.Y >= 0 & screenPos.Y <= glSize.Y )
+                        if ( screenPos.X >= 0 & screenPos.X <= glSize.Width & screenPos.Y >= 0 & screenPos.Y <= glSize.Height )
                         {
                             textLabel = new clsTextLabel();
                             textLabel.Colour.Red = 1.0F;
@@ -863,7 +863,7 @@ namespace SharpFlame.Old.Mapping
                         }
                     }
                 }
-                DebugGLError("Script positions");
+                debugGLError("Script positions");
                 foreach ( var tempLoopVar_ScriptArea in ScriptAreas )
                 {
                     scriptArea = tempLoopVar_ScriptArea;
@@ -877,7 +877,7 @@ namespace SharpFlame.Old.Mapping
                     Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrixInverted, xyzDbl, ref xyzDbl2);
                     if ( ViewInfo.PosGetScreenXY(xyzDbl2, ref screenPos) )
                     {
-                        if ( screenPos.X >= 0 & screenPos.X <= glSize.X & screenPos.Y >= 0 & screenPos.Y <= glSize.Y )
+                        if ( screenPos.X >= 0 & screenPos.X <= glSize.Width & screenPos.Y >= 0 & screenPos.Y <= glSize.Height )
                         {
                             textLabel = new clsTextLabel();
                             textLabel.Colour.Red = 1.0F;
@@ -894,7 +894,7 @@ namespace SharpFlame.Old.Mapping
                 }
                 GL.PopMatrix();
 
-                DebugGLError("Script areas");
+                debugGLError("Script areas");
             }
 
             var messageTextLabels = new clsTextLabels(24);
@@ -947,15 +947,15 @@ namespace SharpFlame.Old.Mapping
             }
             GL.End();
 
-            DebugGLError("Unit selection");
+            debugGLError("Unit selection");
 
             GL.MatrixMode(MatrixMode.Projection);
-            var tempMat2 = Matrix4.CreateOrthographicOffCenter(0.0F, glSize.X, glSize.Y, 0.0F, -1.0F, 1.0F);
+            var tempMat2 = Matrix4.CreateOrthographicOffCenter(0.0F, glSize.Width, glSize.Height, 0.0F, -1.0F, 1.0F);
             GL.LoadMatrix(ref tempMat2);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
-            DebugGLError("Text label matrix modes");
+            debugGLError("Text label matrix modes");
 
             GL.Enable(EnableCap.Texture2D);
 
@@ -964,7 +964,7 @@ namespace SharpFlame.Old.Mapping
             selectionLabel.Draw();
             messageTextLabels.Draw();
 
-            DebugGLError("Text labels");
+            debugGLError("Text labels");
 
             GL.Disable(EnableCap.Texture2D);
 
@@ -973,16 +973,16 @@ namespace SharpFlame.Old.Mapping
             //draw minimap
 
             GL.MatrixMode(MatrixMode.Projection);
-            var tempMat3 = Matrix4.CreateOrthographicOffCenter(0.0F, glSize.X, 0.0F, glSize.Y, -1.0F, 1.0F);
+            var tempMat3 = Matrix4.CreateOrthographicOffCenter(0.0F, glSize.Width, 0.0F, glSize.Height, -1.0F, 1.0F);
             GL.LoadMatrix(ref tempMat3);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
-            DebugGLError("Minimap matrix modes");
+            debugGLError("Minimap matrix modes");
 
             if ( MinimapTextureSize > 0 & ViewInfo.TilesPerMinimapPixel > 0.0D )
             {
-                GL.Translate(0.0F, glSize.Y - minimapSizeXy.Y, 0.0F);
+                GL.Translate(0.0F, glSize.Height - minimapSizeXy.Y, 0.0F);
 
                 xyzDbl.X = (double)Terrain.TileSize.X / MinimapTextureSize;
                 xyzDbl.Z = (double)Terrain.TileSize.Y / MinimapTextureSize;
@@ -1011,7 +1011,7 @@ namespace SharpFlame.Old.Mapping
 
                     GL.Disable(EnableCap.Texture2D);
 
-                    DebugGLError("Minimap");
+                    debugGLError("Minimap");
                 }
 
                 //draw minimap border
@@ -1025,7 +1025,7 @@ namespace SharpFlame.Old.Mapping
                 GL.Vertex2(minimapSizeXy.X, 0.0F);
                 GL.End();
 
-                DebugGLError("Minimap border");
+                debugGLError("Minimap border");
 
                 //draw minimap view pos box
 
@@ -1051,7 +1051,7 @@ namespace SharpFlame.Old.Mapping
                     GL.Vertex2(posD.X, posD.Y);
                     GL.End();
 
-                    DebugGLError("Minimap view position polygon");
+                    debugGLError("Minimap view position polygon");
                 }
 
                 if ( SelectedAreaVertexA != null )
@@ -1091,13 +1091,13 @@ namespace SharpFlame.Old.Mapping
                         GL.Vertex2(posD.X, posD.Y);
                         GL.End();
 
-                        DebugGLError("Minimap selection box");
+                        debugGLError("Minimap selection box");
                     }
                 }
             }
         }
 
-        private void DebugGLError(string Name)
+        private void debugGLError(string Name)
         {
             if ( App.DebugGL )
             {
@@ -1108,6 +1108,7 @@ namespace SharpFlame.Old.Mapping
                         var NewMessage = new Message();
                         NewMessage.Text = "OpenGL Error (" + Name + ")";
                         Messages.Add(NewMessage);
+                        logger.Error(NewMessage.Text);
                     }
                 }
             }

@@ -1,9 +1,9 @@
 ﻿using System;
 using Eto.Forms;
+using Eto.Gl;
+using Eto.Gl.Windows;
 using Ninject;
-using SharpFlame.Gui.Controls;
 using SharpFlame.Gui.Infrastructure;
-using SharpFlame.Gui.Windows.EtoCustom;
 
 namespace SharpFlame.Gui.Windows
 {

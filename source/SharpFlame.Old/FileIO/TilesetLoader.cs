@@ -71,7 +71,7 @@ namespace SharpFlame.Old.FileIO
 
             //tile count has been set by the ttp file
 
-            for ( tileNum = 0; tileNum < tileset.TileCount; tileNum++ )
+            for ( tileNum = 0; tileNum < tileset.Tiles.Count; tileNum++ )
             {
                 var tile = tileset.Tiles[tileNum];
 

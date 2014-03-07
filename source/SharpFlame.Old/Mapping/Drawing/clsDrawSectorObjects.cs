@@ -90,7 +90,7 @@ namespace SharpFlame.Old.Mapping.Drawing
                         Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrixInverted, XYZ_dbl, ref XYZ_dbl2);
                         if ( ViewInfo.PosGetScreenXY(XYZ_dbl2, ref ScreenPos) )
                         {
-                            if ( ScreenPos.X >= 0 & ScreenPos.X <= ViewInfo.MapViewControl.GLSize.X & ScreenPos.Y >= 0 & ScreenPos.Y <= ViewInfo.MapViewControl.GLSize.Y )
+                            if ( ScreenPos.X >= 0 & ScreenPos.X <= ViewInfo.MapViewControl.Size.Width & ScreenPos.Y >= 0 & ScreenPos.Y <= ViewInfo.MapViewControl.Size.Height )
                             {
                                 TextLabel = new clsTextLabel();
                                 TextLabel.TextFont = App.UnitLabelFont;

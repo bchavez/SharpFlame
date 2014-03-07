@@ -578,7 +578,7 @@ namespace SharpFlame.Old
                 {
                     if ( Map.Terrain.Tiles[X, Y].Tri )
                     {
-                        if ( Map.Terrain.Tiles[X, Y].Texture.TextureNum >= 0 && Map.Terrain.Tiles[X, Y].Texture.TextureNum < Map.Tileset.TileCount )
+                        if ( Map.Terrain.Tiles[X, Y].Texture.TextureNum >= 0 && Map.Terrain.Tiles[X, Y].Texture.TextureNum < Map.Tileset.Tiles.Count )
                         {
                             if ( Map.Tileset.Tiles[Map.Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNumWater )
                             {

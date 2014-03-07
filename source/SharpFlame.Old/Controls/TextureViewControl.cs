@@ -223,7 +223,7 @@ namespace SharpFlame.Old.Controls
                     for ( x = 0; x <= TextureCount.X - 1; x++ )
                     {
                         num = (TextureYOffset + y) * TextureCount.X + x;
-                        if ( num >= map.Tileset.TileCount )
+                        if ( num >= map.Tileset.Tiles.Count )
                         {
                             goto EndOfTextures1;
                         }
@@ -256,7 +256,7 @@ namespace SharpFlame.Old.Controls
                         for ( x = 0; x <= TextureCount.X - 1; x++ )
                         {
                             num = (TextureYOffset + y) * TextureCount.X + x;
-                            if ( num >= map.Tileset.TileCount )
+                            if ( num >= map.Tileset.Tiles.Count )
                             {
                                 goto EndOfTextures2;
                             }
@@ -293,7 +293,7 @@ namespace SharpFlame.Old.Controls
                         for ( x = 0; x <= TextureCount.X - 1; x++ )
                         {
                             num = (TextureYOffset + y) * TextureCount.X + x;
-                            if ( num >= map.Tileset.TileCount )
+                            if ( num >= map.Tileset.Tiles.Count )
                             {
                                 goto EndOfTextures3;
                             }
@@ -316,7 +316,7 @@ namespace SharpFlame.Old.Controls
                         for ( x = 0; x <= TextureCount.X - 1; x++ )
                         {
                             num = (TextureYOffset + y) * TextureCount.X + x;
-                            if ( num >= map.Tileset.TileCount )
+                            if ( num >= map.Tileset.Tiles.Count )
                             {
                                 goto EndOfTextures4;
                             }
@@ -374,7 +374,7 @@ namespace SharpFlame.Old.Controls
             else if ( e.X >= 0 & e.X < TextureCount.X * 64 & e.Y >= 0 & e.Y < TextureCount.Y * 64 )
             {
                 App.SelectedTextureNum = (int)((TextureYOffset + (int)(e.Y / 64.0D)) * TextureCount.X + (e.X / 64.0D));
-                if ( App.SelectedTextureNum >= map.Tileset.TileCount )
+                if ( App.SelectedTextureNum >= map.Tileset.Tiles.Count )
                 {
                     App.SelectedTextureNum = -1;
                 }
@@ -463,7 +463,7 @@ namespace SharpFlame.Old.Controls
             }
             else
             {
-                TextureScroll.Maximum = (int)(Math.Ceiling(((double)map.Tileset.TileCount / TextureCount.X)));
+                TextureScroll.Maximum = (int)(Math.Ceiling(((double)map.Tileset.Tiles.Count / TextureCount.X)));
                 TextureScroll.LargeChange = TextureCount.Y;
                 TextureScroll.Enabled = true;
             }

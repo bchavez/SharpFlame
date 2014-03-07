@@ -26,11 +26,10 @@
 //
 
 using Eto.Platform.GtkSharp;
-using SharpFlame.Gui.Controls;
 
-namespace SharpFlame.Gui.Gtk.EtoCustom
+namespace Eto.Gl
 {
-    internal class LinuxGLSurfaceHandler : GtkControl<GLDrawingArea, GLSurface>, IGLSurfaceHandler
+    public class LinuxGLSurfaceHandler : GtkControl<GLDrawingArea, GLSurface>, IGLSurfaceHandler
     {
         public override GLDrawingArea CreateControl()
         {

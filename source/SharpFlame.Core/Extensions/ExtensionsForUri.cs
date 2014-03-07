@@ -1,4 +1,4 @@
-#region License
+ #region License
 /*
 The MIT License (MIT)
 
@@ -22,31 +22,19 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+ #endregion
 
 using System;
-using Eto.Forms;
-using SharpFlame.Core;
 
-namespace SharpFlame.Gui.Actions
+namespace SharpFlame.Core.Extensions
 {
-	public class About : Command
-	{
-		public About()
-		{
-			ID = "about";
-			MenuText = string.Format("About {0}", Constants.ProgramName);
-			ToolBarText = "About";
-			Shortcut = Keys.F11;
-		}
-
-		public override void OnExecuted(EventArgs e)
-		{
-			base.OnExecuted(e);
-			// show the about dialog
-			var about = new Dialogs.About();
-			about.ShowDialog (Application.Instance.MainForm);
-		}
-	}
+    public static class ExtensionsForUri
+    {
+        public static Uri MakeRelativeUriToBinPath(this Uri fullpath)
+        {
+            var relRoot = new Uri(AppDomain.CurrentDomain.BaseDirectory, UriKind.Absolute);
+            return relRoot.MakeRelativeUri(fullpath);
+        }
+    }
 }
 

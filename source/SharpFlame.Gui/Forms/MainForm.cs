@@ -52,6 +52,9 @@ namespace SharpFlame.Gui.Forms
         [Inject]
         internal MainMapView MainMapView { get; set; }
 
+        [Inject]
+        internal Actions.LoadMap LoadMapAction { get; set; }
+
 	    //Ninject initializer
 	    void IInitializable.Initialize()
 	    {
@@ -78,7 +81,7 @@ namespace SharpFlame.Gui.Forms
 	                Position = 392,
 	                FixedPanel = SplitterFixedPanel.Panel1,
 	                Panel1 = tabControl,
-	                Panel2 = this.MainMapView
+                    Panel2 = (MainMapView)this.MainMapView
 	            };
 
 	        // Set the content of the form to use the layout
@@ -93,7 +96,7 @@ namespace SharpFlame.Gui.Forms
 		{
 			var about = new Actions.About();
 			var quit = new Actions.Quit();
-            var settings = new Actions.Settings ();
+            var settings = new Actions.Settings();
 
 			var menu = new MenuBar();
 			// create standard system menu (e.g. for OS X)
@@ -104,7 +107,7 @@ namespace SharpFlame.Gui.Forms
 			var file = menu.Items.GetSubmenu("&File", 100);
 			file.Items.GetSubmenu ("&New Map", 100);
 			file.Items.AddSeparator ();
-			file.Items.GetSubmenu ("&Open", 200);
+            file.Items.Add(LoadMapAction);
 			file.Items.AddSeparator ();
 
 			var saveMenu = file.Items.GetSubmenu ("&Save", 300);

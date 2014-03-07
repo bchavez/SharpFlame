@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using Eto.Gl;
 using Ninject;
 using NLog;
 using OpenTK;
@@ -140,6 +141,8 @@ namespace SharpFlame.Old
         public static SettingsManager Settings { get; set; }
 
         public static KeyboardManager KeyboardManager { get; set; }
+
+        public static GLSurface MapViewGlSurface { get; set; }
 
         /// <summary>
         /// The Ninject Kernel

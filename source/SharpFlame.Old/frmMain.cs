@@ -788,7 +788,7 @@ namespace SharpFlame.Old
                 Map.Tileset = NewTileset;
                 if ( Map.Tileset != null )
                 {
-                    App.SelectedTextureNum = Math.Min(0, Map.Tileset.TileCount - 1);
+                    App.SelectedTextureNum = Math.Min(0, Map.Tileset.Tiles.Count - 1);
                 }
                 Map.TileType_Reset();
 
@@ -2154,7 +2154,7 @@ namespace SharpFlame.Old
             {
                 return;
             }
-            if ( App.SelectedTextureNum < 0 | App.SelectedTextureNum >= Map.Tileset.TileCount )
+            if ( App.SelectedTextureNum < 0 | App.SelectedTextureNum >= Map.Tileset.Tiles.Count )
             {
                 return;
             }
@@ -3480,7 +3480,7 @@ namespace SharpFlame.Old
 
             if ( Map.Tileset != null )
             {
-                if ( Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.TextureNum < Map.Tileset.TileCount )
+                if ( Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.TextureNum < Map.Tileset.Tiles.Count )
                 {
                     App.SelectedTextureNum = Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.TextureNum;
                     TextureViewControl.DrawViewLater();
@@ -4061,7 +4061,7 @@ namespace SharpFlame.Old
                 resultMap.PathInfo = new PathInfo(Path, false);
                 break;
             case "gam":
-                var gameFormat = new Game(resultMap);
+                var gameFormat = new GameLoader(resultMap);
                 ReturnResult.Add(gameFormat.Load(Path));
                 resultMap.PathInfo = new PathInfo(Path, false);
                 break;

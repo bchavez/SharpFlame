@@ -296,7 +296,7 @@ namespace SharpFlame.Old.Mapping
                 for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
                 {
                     TextureNum = Terrain.Tiles[X, Y].Texture.TextureNum;
-                    if ( TextureNum >= 0 & TextureNum < Tileset.TileCount )
+                    if ( TextureNum >= 0 & TextureNum < Tileset.Tiles.Count )
                     {
                         if ( Tileset.Tiles[TextureNum].DefaultType == Constants.TileTypeNumWater )
                         {

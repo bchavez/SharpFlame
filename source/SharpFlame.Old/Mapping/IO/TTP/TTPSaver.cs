@@ -62,8 +62,8 @@ namespace SharpFlame.Old.Mapping.IO.TTP
 
             IOUtil.WriteText(fileTTP, false, "ttyp");
             fileTTP.Write(8U);
-            fileTTP.Write((uint)map.Tileset.TileCount);
-            for ( var a = 0; a <= map.Tileset.TileCount - 1; a++ )
+            fileTTP.Write((uint)map.Tileset.Tiles.Count);
+            for ( var a = 0; a <= map.Tileset.Tiles.Count - 1; a++ )
             {
                 fileTTP.Write((ushort)map.TileTypeNum[a]);
             }

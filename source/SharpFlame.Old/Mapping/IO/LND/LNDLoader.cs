@@ -615,7 +615,7 @@ namespace SharpFlame.Old.Mapping.IO.LND
 
                 if ( map.Tileset != null )
                 {
-                    for ( A = 0; A <= Math.Min(LNDTileTypeCount - 1, map.Tileset.TileCount) - 1; A++ )
+                    for ( A = 0; A <= Math.Min(LNDTileTypeCount - 1, map.Tileset.Tiles.Count) - 1; A++ )
                     {
                         map.TileTypeNum[A] = LNDTileType[A + 1]; //lnd value 0 is ignored
                     }

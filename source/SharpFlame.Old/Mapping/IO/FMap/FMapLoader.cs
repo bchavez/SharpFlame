@@ -1220,7 +1220,7 @@ namespace SharpFlame.Old.Mapping.IO.FMap
             {
                 if ( map.Tileset != null )
                 {
-                    for ( a = 0; a <= map.Tileset.TileCount - 1; a++ )
+                    for ( a = 0; a <= map.Tileset.Tiles.Count - 1; a++ )
                     {
                         byteTemp = file.ReadByte();
                         if ( byteTemp >= App.TileTypes.Count )

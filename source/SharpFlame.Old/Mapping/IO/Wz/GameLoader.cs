@@ -17,11 +17,11 @@ using SharpFlame.Old.Util;
 
 namespace SharpFlame.Old.Mapping.IO.Wz
 {
-    public class Game : WzLoader
+    public class GameLoader : WzLoader
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public Game(Map newMap) : base(newMap)
+        public GameLoader(Map newMap) : base(newMap)
         {
         }
 

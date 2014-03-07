@@ -139,6 +139,7 @@
     <Compile Include="SimpleResult.cs" />
     <Compile Include="Interfaces\ISharpFlameApplication.cs" />
     <Compile Include="Extensions\EventBrokerLogExtension.cs" />
+    <Compile Include="Extensions\ExtensionsForUri.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

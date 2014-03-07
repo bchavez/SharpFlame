@@ -24,6 +24,7 @@
   */
 #endregion
 
+using Eto.Gl;
 using Ninject.Modules;
 using SharpFlame.Core;
 using SharpFlame.Gui.Controls;
@@ -63,7 +64,6 @@ namespace SharpFlame.Gui.Infrastructure
                 .ToSelf()
                 .InSingletonScope();
 
-
             //tabs
             this.Bind<TextureTab>().ToSelf().InSingletonScope();
             this.Bind<TerrainTab>().ToSelf().InSingletonScope();
@@ -72,6 +72,10 @@ namespace SharpFlame.Gui.Infrastructure
             this.Bind<PlaceObjectsTab>().ToSelf().InSingletonScope();
             this.Bind<ObjectTab>().ToSelf().InSingletonScope();
             this.Bind<LabelsTab>().ToSelf().InSingletonScope();
+
+            this.Bind<Actions.LoadMap>()
+                .ToSelf()
+                .InSingletonScope();
 
             // Settings dialog
             this.Bind<Dialogs.Settings>()

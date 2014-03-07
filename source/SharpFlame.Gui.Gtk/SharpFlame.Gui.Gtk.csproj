@@ -86,8 +86,6 @@
     <Compile Include="..\SharpFlame.Core\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="EtoCustom\GLDrawingArea.cs" />
-    <Compile Include="EtoCustom\LinuxGLSurfaceHandler.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -98,6 +96,14 @@
     <ProjectReference Include="..\SharpFlame.Gui\SharpFlame.Gui.csproj">
       <Project>{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}</Project>
       <Name>SharpFlame.Gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Eto.Gl.Gtk\Eto.Gl.Gtk.csproj">
+      <Project>{06F7AC59-0E70-4646-BBFA-C105D9664FD0}</Project>
+      <Name>Eto.Gl.Gtk</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Eto.Gl\Eto.Gl.csproj">
+      <Project>{510CE98D-2169-48A0-889C-E743417EE5E1}</Project>
+      <Name>Eto.Gl</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -2,6 +2,7 @@
 
 using System;
 using System.Windows.Forms;
+using Eto.Gl;
 using NLog;
 using SharpFlame.Old.Collections;
 using SharpFlame.Old.Controls;
@@ -29,7 +30,7 @@ namespace SharpFlame.Old
         public double FOVMultiplierExponent;
         public float FieldOfViewY;
         public Map Map;
-        public MapViewControl MapViewControl;
+        public GLSurface MapViewControl;
         public clsMouseDown MouseLeftDown;
         public clsMouseOver MouseOver;
         public clsMouseDown MouseRightDown;
@@ -39,7 +40,7 @@ namespace SharpFlame.Old
         public Angles.AngleRPY ViewAngleRPY;
         public XYZInt ViewPos;
 
-        public clsViewInfo(Map map, MapViewControl mapViewControl)
+        public clsViewInfo(Map map, GLSurface mapViewControl)
         {
             Map = map;
             MapViewControl = mapViewControl;
@@ -69,7 +70,7 @@ namespace SharpFlame.Old
 
         public void FovSet(double radians, MapViewControl mapViewControl)
         {
-            FOVMultiplier = Math.Tan(radians / 2.0D) / mapViewControl.GLSize.Y * 2.0D;
+            FOVMultiplier = Math.Tan(radians / 2.0D) / mapViewControl.Size.Height * 2.0D;
             FOVMultiplierExponent = Math.Log(FOVMultiplier) / Math.Log(2.0D);
 
             FovCalc();
@@ -88,35 +89,35 @@ namespace SharpFlame.Old
             const float min = (float)(0.1d * MathUtil.RadOf1Deg);
             const float max = (float)(179.0d * MathUtil.RadOf1Deg);
 
-            FieldOfViewY = (float)(Math.Atan(MapViewControl.GLSize.Y * FOVMultiplier / 2.0D) * 2.0D);
+            FieldOfViewY = (float)(Math.Atan(MapViewControl.Size.Height * FOVMultiplier / 2.0D) * 2.0D);
             if ( FieldOfViewY < min )
             {
                 FieldOfViewY = min;
-                if ( MapViewControl.GLSize.Y > 0 )
+                if ( MapViewControl.Size.Height > 0 )
                 {
-                    FOVMultiplier = 2.0D * Math.Tan(FieldOfViewY / 2.0D) / MapViewControl.GLSize.Y;
+                    FOVMultiplier = 2.0D * Math.Tan(FieldOfViewY / 2.0D) / MapViewControl.Size.Height;
                     FOVMultiplierExponent = Math.Log(FOVMultiplier) / Math.Log(2.0D);
                 }
             }
             else if ( FieldOfViewY > max )
             {
                 FieldOfViewY = max;
-                if ( MapViewControl.GLSize.Y > 0 )
+                if ( MapViewControl.Size.Height > 0 )
                 {
-                    FOVMultiplier = 2.0D * Math.Tan(FieldOfViewY / 2.0D) / MapViewControl.GLSize.Y;
+                    FOVMultiplier = 2.0D * Math.Tan(FieldOfViewY / 2.0D) / MapViewControl.Size.Height;
                     FOVMultiplierExponent = Math.Log(FOVMultiplier) / Math.Log(2.0D);
                 }
             }
 
-            MapViewControl.DrawViewLater();
+            // MapViewControl.DrawViewLater();
         }
 
         public void ViewPosSet(XYZInt newViewPos)
         {
             ViewPos = newViewPos;
-            ViewPosClamp();
+            viewPosClamp();
 
-            MapViewControl.DrawViewLater();
+            // MapViewControl.DrawViewLater();
         }
 
         public void ViewPosChange(XYZInt displacement)
@@ -124,12 +125,12 @@ namespace SharpFlame.Old
             ViewPos.X += displacement.X;
             ViewPos.Z += displacement.Z;
             ViewPos.Y += displacement.Y;
-            ViewPosClamp();
+            viewPosClamp();
 
-            MapViewControl.DrawViewLater();
+            // MapViewControl.DrawViewLater();
         }
 
-        private void ViewPosClamp()
+        private void viewPosClamp()
         {
             const int maxHeight = 1048576;
             const int maxDist = 1048576;
@@ -146,7 +147,7 @@ namespace SharpFlame.Old
             Matrix3DMath.MatrixInvert(ViewAngleMatrix, ViewAngleMatrixInverted);
             Matrix3DMath.MatrixToRPY(ViewAngleMatrix, ref ViewAngleRPY);
 
-            MapViewControl.DrawViewLater();
+            // MapViewControl.DrawViewLater();
         }
 
         public void ViewAngleSetToDefault()
@@ -155,7 +156,7 @@ namespace SharpFlame.Old
             Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
             ViewAngleSet(matrixA);
 
-            MapViewControl.DrawViewLater();
+            // MapViewControl.DrawViewLater();
         }
 
         public void ViewAngleSetRotate(Matrix3DMath.Matrix3D newMatrix)
@@ -166,7 +167,7 @@ namespace SharpFlame.Old
 
             if ( App.ViewMoveType == ViewMoveType.RTS & App.RTSOrbit )
             {
-                if ( ScreenXYGetViewPlanePosForwardDownOnly((int)((MapViewControl.GLSize.X / 2.0D)), (int)((MapViewControl.GLSize.Y / 2.0D)), 127.5D,
+                if ( ScreenXYGetViewPlanePosForwardDownOnly((int)((MapViewControl.Size.Width / 2.0D)), (int)((MapViewControl.Size.Height / 2.0D)), 127.5D,
                     ref xyDbl) )
                 {
                     xyzDbl.X = xyDbl.X;
@@ -193,7 +194,7 @@ namespace SharpFlame.Old
                 MoveToViewTerrainPosFromDistance(xyzDbl, Convert.ToDouble((xyzDbl2 - xyzDbl).GetMagnitude()));
             }
 
-            MapViewControl.DrawViewLater();
+            // MapViewControl.DrawViewLater();
         }
 
         public void LookAtTile(XYInt tileNum)
@@ -259,8 +260,8 @@ namespace SharpFlame.Old
             try
             {
                 var ratioZpx = 1.0D / (FOVMultiplier * pos.Z);
-                result.X = (int)(MapViewControl.GLSize.X / 2.0D + (pos.X * ratioZpx));
-                result.Y = (int)(MapViewControl.GLSize.Y / 2.0D - (pos.Y * ratioZpx));
+                result.X = (int)(MapViewControl.Size.Height / 2.0D + (pos.X * ratioZpx));
+                result.Y = (int)(MapViewControl.Size.Width / 2.0D - (pos.Y * ratioZpx));
                 return true;
             }
             catch
@@ -279,8 +280,8 @@ namespace SharpFlame.Old
             try
             {
                 //convert screen pos to vector of one pos unit
-                xyzDbl.X = (screenPos.X - MapViewControl.GLSize.X / 2.0D) * FOVMultiplier;
-                xyzDbl.Y = (MapViewControl.GLSize.Y / 2.0D - screenPos.Y) * FOVMultiplier;
+                xyzDbl.X = (screenPos.X - MapViewControl.Size.Width / 2.0D) * FOVMultiplier;
+                xyzDbl.Y = (MapViewControl.Size.Height / 2.0D - screenPos.Y) * FOVMultiplier;
                 xyzDbl.Z = 1.0D;
                 //factor in the view angle
                 Matrix3DMath.VectorRotationByMatrix(ViewAngleMatrix, xyzDbl, ref xyzDbl2);
@@ -315,8 +316,8 @@ namespace SharpFlame.Old
                 terrainViewPos.Z = Convert.ToDouble(- ViewPos.Z);
 
                 //convert screen pos to vector of one pos unit
-                xyzDbl.X = (screenPos.X - MapViewControl.GLSize.X / 2.0D) * FOVMultiplier;
-                xyzDbl.Y = (MapViewControl.GLSize.Y / 2.0D - screenPos.Y) * FOVMultiplier;
+                xyzDbl.X = (screenPos.X - MapViewControl.Size.Height/ 2.0D) * FOVMultiplier;
+                xyzDbl.Y = (MapViewControl.Size.Width / 2.0D - screenPos.Y) * FOVMultiplier;
                 xyzDbl.Z = 1.0D;
                 //rotate the vector so that it points forward and level
                 Matrix3DMath.VectorRotationByMatrix(ViewAngleMatrix, xyzDbl, ref terrainViewVector);
@@ -487,8 +488,8 @@ namespace SharpFlame.Old
             {
                 //convert screen pos to vector of one pos unit
                 double dblTemp2 = FOVMultiplier;
-                xyzDouble.X = (screenX - MapViewControl.GLSize.X / 2.0D) * dblTemp2;
-                xyzDouble.Y = (MapViewControl.GLSize.Y / 2.0D - screenY) * dblTemp2;
+                xyzDouble.X = (screenX - MapViewControl.Size.Width / 2.0D) * dblTemp2;
+                xyzDouble.Y = (MapViewControl.Size.Height / 2.0D - screenY) * dblTemp2;
                 xyzDouble.Z = 1.0D;
                 //factor in the view angle
                 Matrix3DMath.VectorRotationByMatrix(ViewAngleMatrix, xyzDouble, ref xyzDbl2);
@@ -650,8 +651,8 @@ namespace SharpFlame.Old
                     }
                 }
             }
-            MapViewControl.Pos_Display_Update();
-            MapViewControl.DrawViewLater();
+            // MapViewControl.Pos_Display_Update();
+            // MapViewControl.DrawViewLater();
         }
 
         public clsMouseOver.clsOverTerrain GetMouseOverTerrain()
@@ -726,7 +727,7 @@ namespace SharpFlame.Old
 
             Map.Update();
 
-            MapViewControl.DrawViewLater();
+            // MapViewControl.DrawViewLater();
         }
 
         public void ApplyRoad()
@@ -767,7 +768,7 @@ namespace SharpFlame.Old
 
                     Map.UndoStepCreate("Road Side");
 
-                    MapViewControl.DrawViewLater();
+                    // MapViewControl.DrawViewLater();
                 }
             }
             else
@@ -796,7 +797,7 @@ namespace SharpFlame.Old
 
                     Map.UndoStepCreate("Road Side");
 
-                    MapViewControl.DrawViewLater();
+                    // MapViewControl.DrawViewLater();
                 }
             }
         }
@@ -845,7 +846,7 @@ namespace SharpFlame.Old
                     Map.UndoStepCreate("Road Line");
 
                     Map.SelectedTileA = null;
-                    MapViewControl.DrawViewLater();
+                    // MapViewControl.DrawViewLater();
                 }
                 else if ( tile.Y == Map.SelectedTileA.Y )
                 {
@@ -874,7 +875,7 @@ namespace SharpFlame.Old
                     Map.UndoStepCreate("Road Line");
 
                     Map.SelectedTileA = null;
-                    MapViewControl.DrawViewLater();
+                    // MapViewControl.DrawViewLater();
                 }
             }
             else
@@ -1135,7 +1136,7 @@ namespace SharpFlame.Old
 
             Map.UndoStepCreate("Ground Fill");
 
-            MapViewControl.DrawViewLater();
+            // MapViewControl.DrawViewLater();
         }
 
         public void ApplyTexture()
@@ -1162,7 +1163,7 @@ namespace SharpFlame.Old
 
             Map.Update();
 
-            MapViewControl.DrawViewLater();
+            // MapViewControl.DrawViewLater();
         }
 
         /// <summary>
@@ -1239,7 +1240,7 @@ namespace SharpFlame.Old
 
             Map.Update();
 
-            MapViewControl.DrawViewLater();
+            // MapViewControl.DrawViewLater();
         }
 
         public void ApplyCliff()
@@ -1264,7 +1265,7 @@ namespace SharpFlame.Old
 
             Map.Update();
 
-            MapViewControl.DrawViewLater();
+            // MapViewControl.DrawViewLater();
         }
 
         public void ApplyCliffRemove()
@@ -1281,7 +1282,7 @@ namespace SharpFlame.Old
 
             Map.Update();
 
-            MapViewControl.DrawViewLater();
+            // MapViewControl.DrawViewLater();
         }
 
         public void ApplyRoadRemove()
@@ -1298,7 +1299,7 @@ namespace SharpFlame.Old
 
             Map.Update();
 
-            MapViewControl.DrawViewLater();
+            // MapViewControl.DrawViewLater();
         }
 
         public void ApplyTextureClockwise()
@@ -1322,7 +1323,7 @@ namespace SharpFlame.Old
 
             Map.UndoStepCreate("Texture Rotate");
 
-            MapViewControl.DrawViewLater();
+            // MapViewControl.DrawViewLater();
         }
 
         public void ApplyTextureCounterClockwise()
@@ -1346,7 +1347,7 @@ namespace SharpFlame.Old
 
             Map.UndoStepCreate("Texture Rotate");
 
-            MapViewControl.DrawViewLater();
+            // MapViewControl.DrawViewLater();
         }
 
         public void ApplyTextureFlipX()
@@ -1370,7 +1371,7 @@ namespace SharpFlame.Old
 
             Map.UndoStepCreate("Texture Rotate");
 
-            MapViewControl.DrawViewLater();
+            // MapViewControl.DrawViewLater();
         }
 
         public void ApplyTriFlip()
@@ -1393,7 +1394,7 @@ namespace SharpFlame.Old
 
             Map.UndoStepCreate("Triangle Flip");
 
-            MapViewControl.DrawViewLater();
+            // MapViewControl.DrawViewLater();
         }
 
         public void ApplyHeightSmoothing(double ratio)
@@ -1425,7 +1426,7 @@ namespace SharpFlame.Old
 
             Map.Update();
 
-            MapViewControl.DrawViewLater();
+            // MapViewControl.DrawViewLater();
         }
 
         public void ApplyHeightChange(double rate)
@@ -1445,7 +1446,7 @@ namespace SharpFlame.Old
 
             Map.Update();
 
-            MapViewControl.DrawViewLater();
+            // MapViewControl.DrawViewLater();
         }
 
         public void ApplyHeightSet(clsBrush brush, byte height)
@@ -1466,7 +1467,7 @@ namespace SharpFlame.Old
 
             Map.Update();
 
-            MapViewControl.DrawViewLater();
+            // MapViewControl.DrawViewLater();
         }
 
         public void ApplyGateway()
@@ -1691,7 +1692,7 @@ namespace SharpFlame.Old
                                 Map.UndoStepCreate("Place Object");
                                 Map.Update();
                                 Map.MinimapMakeLater();
-                                MapViewControl.DrawViewLater();
+                                // MapViewControl.DrawViewLater();
                             }
                         }
                         else if ( modTools.Tool == modTools.Tools.ObjectLines )
@@ -1703,18 +1704,18 @@ namespace SharpFlame.Old
                             if ( Map.SelectedAreaVertexA == null )
                             {
                                 Map.SelectedAreaVertexA = mouseOverTerrain.Vertex.Normal;
-                                MapViewControl.DrawViewLater();
+                                // MapViewControl.DrawViewLater();
                             }
                             else if ( Map.SelectedAreaVertexB == null )
                             {
                                 Map.SelectedAreaVertexB = mouseOverTerrain.Vertex.Normal;
-                                MapViewControl.DrawViewLater();
+                                // MapViewControl.DrawViewLater();
                             }
                             else
                             {
                                 Map.SelectedAreaVertexA = null;
                                 Map.SelectedAreaVertexB = null;
-                                MapViewControl.DrawViewLater();
+                                // MapViewControl.DrawViewLater();
                             }
                         }
                         else if ( modTools.Tool == modTools.Tools.Gateways )
@@ -1749,13 +1750,13 @@ namespace SharpFlame.Old
                 if ( modTools.Tool == modTools.Tools.RoadLines || modTools.Tool == modTools.Tools.ObjectLines )
                 {
                     Map.SelectedTileA = null;
-                    MapViewControl.DrawViewLater();
+                    // MapViewControl.DrawViewLater();
                 }
                 else if ( modTools.Tool == modTools.Tools.TerrainSelect )
                 {
                     Map.SelectedAreaVertexA = null;
                     Map.SelectedAreaVertexB = null;
-                    MapViewControl.DrawViewLater();
+                    // MapViewControl.DrawViewLater();
                 }
                 else if ( modTools.Tool == modTools.Tools.CliffTriangle )
                 {
@@ -1765,7 +1766,7 @@ namespace SharpFlame.Old
                 {
                     Map.SelectedTileA = null;
                     Map.SelectedTileB = null;
-                    MapViewControl.DrawViewLater();
+                    // MapViewControl.DrawViewLater();
                 }
                 else if ( modTools.Tool == modTools.Tools.HeightSetBrush )
                 {
@@ -1792,7 +1793,7 @@ namespace SharpFlame.Old
             var viewPosChangeXyz = new XYZInt(0, 0, 0);
             var angleChanged = default(bool);
 
-            move *= FOVMultiplier * (MapViewControl.GLSize.X + MapViewControl.GLSize.Y) * Math.Max(Math.Abs(ViewPos.Y), 512.0D);
+            move *= FOVMultiplier * (MapViewControl.Size.Width + MapViewControl.Size.Height) * Math.Max(Math.Abs(ViewPos.Y), 512.0D);
 
 //            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.ViewZoomIn) )
 //            {
@@ -2070,7 +2071,7 @@ namespace SharpFlame.Old
                         Map.Update();
                         Map.MinimapMakeLater();
                         Map.SelectedTileA = null;
-                        MapViewControl.DrawViewLater();
+                        // MapViewControl.DrawViewLater();
                     }
                     else if ( tile.Y == Map.SelectedTileA.Y )
                     {
@@ -2097,7 +2098,7 @@ namespace SharpFlame.Old
                         Map.Update();
                         Map.MinimapMakeLater();
                         Map.SelectedTileA = null;
-                        MapViewControl.DrawViewLater();
+                        // MapViewControl.DrawViewLater();
                     }
                 }
                 else

@@ -1,9 +1,9 @@
 using System.Diagnostics;
+using Eto.Gl;
 using Ninject;
 using SharpFlame.Gui;
 using SharpFlame.Gui.Controls;
 using OpenTK;
-using SharpFlame.Gui.Gtk.EtoCustom;
 using SharpFlame.Gui.Infrastructure;
 
 namespace SharpFlame.Gui.Gtk
@@ -21,7 +21,7 @@ namespace SharpFlame.Gui.Gtk
             // WinForms designer in Visual Studio. This approach
             // works perfectly in that case.
             Toolkit.Init(new ToolkitOptions
-                         {
+            {
                 Backend = PlatformBackend.PreferNative
             });
 

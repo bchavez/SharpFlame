@@ -31,10 +31,9 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Platform;
-using SharpFlame.Gui.Controls;
 using KeyPressEventArgs = Gtk.KeyPressEventArgs;
 
-namespace SharpFlame.Gui.Gtk.EtoCustom
+namespace Eto.Gl
 {
     [ToolboxItem(true)]
     public class GLDrawingArea : DrawingArea, IDisposable, IGLSurface
@@ -213,24 +212,24 @@ namespace SharpFlame.Gui.Gtk.EtoCustom
         protected virtual void OnShuttingDown() { if (ShuttingDown != null) ShuttingDown(this, EventArgs.Empty); }
 
 
-        public event EventHandler<KeyEventArgs> KeyDown = delegate {};
+        public event EventHandler<KeyEventArgs> GlKeyDown = delegate {};
         protected virtual void HandleKeyPressEvent(object o, KeyPressEventArgs args)
         {
             var e = args.Event.ToEto();
             if (e != null)
             {
-                KeyDown(this, e);
+                GlKeyDown(this, e);
                 args.RetVal = e.Handled;
             }
         }
 
-        public event EventHandler<KeyEventArgs> KeyUp = delegate {};
+        public event EventHandler<KeyEventArgs> GlKeyUp = delegate {};
         void HandleKeyReleaseEvent (object o, KeyReleaseEventArgs args)
         {
             var e = args.Event.ToEto();
             if (e != null)
             {
-                KeyUp(this, e);
+                GlKeyUp(this, e);
                 args.RetVal = e.Handled;
             }
         }

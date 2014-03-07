@@ -379,7 +379,6 @@
     <Compile Include="Mapping\IO\LND\LNDObject.cs" />
     <Compile Include="Mapping\IO\LND\LNDTile.cs" />
     <Compile Include="Mapping\IO\Minimap\Minimap.cs" />
-    <Compile Include="Mapping\IO\Wz\Game.cs" />
     <Compile Include="Mapping\IO\Wz\IniDroid.cs" />
     <Compile Include="Mapping\IO\Wz\IniFeature.cs" />
     <Compile Include="Mapping\IO\Wz\IniStructure.cs" />
@@ -412,6 +411,7 @@
     <Compile Include="Settings\KeyboardKeys.cs" />
     <Compile Include="Settings\KeyboardManagerEvents.cs" />
     <Compile Include="Settings\Keylogger.cs" />
+    <Compile Include="Mapping\IO\Wz\GameLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">
@@ -605,6 +605,10 @@
     <ProjectReference Include="..\SharpFlame.Core\SharpFlame.Core.csproj">
       <Project>{8AE7F7A3-841A-44A7-B016-4661BBBF7821}</Project>
       <Name>SharpFlame.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Eto.Gl\Eto.Gl.csproj">
+      <Project>{510CE98D-2169-48A0-889C-E743417EE5E1}</Project>
+      <Name>Eto.Gl</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

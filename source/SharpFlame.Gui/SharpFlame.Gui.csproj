@@ -16,18 +16,18 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
+    <DefineConstants>DEBUG;Portable</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <DefineConstants>Portable</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugMac|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -137,9 +137,6 @@
     <Compile Include="Sections\TexturesTab.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Controls\GLSurface.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
     <Compile Include="Dialogs\Status.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
@@ -150,6 +147,7 @@
     <Compile Include="Dialogs\KeyInput.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
+    <Compile Include="Actions\LoadMap.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -169,6 +167,10 @@
     <ProjectReference Include="..\SharpFlame.Old\SharpFlame.Old.csproj">
       <Project>{152475A4-3ABE-41C4-B338-A2FB7B350FAF}</Project>
       <Name>SharpFlame.Old</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Eto.Gl\Eto.Gl.csproj">
+      <Project>{510CE98D-2169-48A0-889C-E743417EE5E1}</Project>
+      <Name>Eto.Gl</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

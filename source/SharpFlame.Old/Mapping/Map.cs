@@ -4,6 +4,8 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
+using Eto.Gl;
+using Ninject;
 using NLog;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core;
@@ -69,8 +71,8 @@ namespace SharpFlame.Old.Mapping
         public SimpleClassList<UnitChange> UnitChanges;
         public XYInt UnitSelectedAreaVertexA;
         private bool readyForUserInput;
-        public ConnectedListLink<Map, frmMain> FrmMainLink;
-
+        public ConnectedListLink<Map, frmMain> FrmMainLink;       
+       
         public Map()
         {
             SectorCount = new XYInt(0, 0);
@@ -838,7 +840,7 @@ namespace SharpFlame.Old.Mapping
                     {
                         for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
                         {
-                            if ( Terrain.Tiles[X, Y].Texture.TextureNum >= 0 && Terrain.Tiles[X, Y].Texture.TextureNum < Tileset.TileCount )
+                            if ( Terrain.Tiles[X, Y].Texture.TextureNum >= 0 && Terrain.Tiles[X, Y].Texture.TextureNum < Tileset.Tiles.Count )
                             {
                                 sngTexture[Y, X, 0] = Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].AverageColour.Red;
                                 sngTexture[Y, X, 1] = Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].AverageColour.Green;
@@ -902,7 +904,7 @@ namespace SharpFlame.Old.Mapping
                     {
                         for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
                         {
-                            if ( Terrain.Tiles[X, Y].Texture.TextureNum >= 0 && Terrain.Tiles[X, Y].Texture.TextureNum < Tileset.TileCount )
+                            if ( Terrain.Tiles[X, Y].Texture.TextureNum >= 0 && Terrain.Tiles[X, Y].Texture.TextureNum < Tileset.Tiles.Count )
                             {
                                 if ( Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNumCliff )
                                 {
@@ -1813,8 +1815,8 @@ namespace SharpFlame.Old.Mapping
             {
                 var A = 0;
 
-                TileTypeNum = new byte[Tileset.TileCount];
-                for ( A = 0; A <= Tileset.TileCount - 1; A++ )
+                TileTypeNum = new byte[Tileset.Tiles.Count];
+                for ( A = 0; A <= Tileset.Tiles.Count - 1; A++ )
                 {
                     TileTypeNum[A] = Tileset.Tiles[A].DefaultType;
                 }
@@ -2085,7 +2087,7 @@ namespace SharpFlame.Old.Mapping
                 InterfaceOptions = new InterfaceOptions();
             }
 
-            ViewInfo = new clsViewInfo(this, Program.frmMainInstance.MapViewControl);
+            ViewInfo = new clsViewInfo(this, App.MapViewGlSurface);
 
             _SelectedUnitGroup = new clsUnitGroupContainer();
             SelectedUnitGroup.Item = ScavengerUnitGroup;

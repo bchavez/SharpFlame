@@ -33,6 +33,7 @@ using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
 using Eto;
 using Eto.Forms;
+using Eto.Gl;
 using Ninject;
 using Ninject.Extensions.Logging;
 using OpenTK;
@@ -42,6 +43,7 @@ using SharpFlame.Gui.Controls;
 using SharpFlame.Gui.Infrastructure;
 using SharpFlame.Old;
 using SharpFlame.Old.Domain.ObjData;
+using SharpFlame.Old.Graphics.OpenGL;
 using SharpFlame.Old.Settings;
 using Size = Eto.Drawing.Size;
 using Font = System.Drawing.Font;
@@ -80,6 +82,7 @@ namespace SharpFlame.Gui
             App.Kernel = kernel;
             App.Settings = this.Settings;
             App.KeyboardManager = this.KeyboardManager;
+            App.MapViewGlSurface = this.GlMapView;
 
             logger = logFactory.GetCurrentClassLogger();
 
@@ -314,7 +317,7 @@ namespace SharpFlame.Gui
             {
                 style = style | FontStyle.Italic;
             }
-            App.UnitLabelFont = GlTexturesView.CreateGLFont(new Font(Settings.FontFamily, Settings.FontSize, style, GraphicsUnit.Point));
+            App.UnitLabelFont = new GLFont(new System.Drawing.Font(Settings.FontFamily, Settings.FontSize, style, System.Drawing.GraphicsUnit.Pixel));
         }
     }
 }

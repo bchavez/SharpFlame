@@ -29,7 +29,7 @@ namespace SharpFlame.Old.Mapping.Renderers
             {
                 GL.BindTexture(TextureTarget.Texture2D, App.GLTexture_OverflowTile);
             }
-            else if ( terrain.Tiles[TileX, TileY].Texture.TextureNum < tileset.TileCount )
+            else if ( terrain.Tiles[TileX, TileY].Texture.TextureNum < tileset.Tiles.Count )
             {
                 var viewGlTextureNum = tileset.Tiles[terrain.Tiles[TileX, TileY].Texture.TextureNum].GlTextureNum;
                 if ( viewGlTextureNum == 0 )

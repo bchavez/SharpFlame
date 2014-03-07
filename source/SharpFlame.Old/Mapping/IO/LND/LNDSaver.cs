@@ -300,16 +300,16 @@ namespace SharpFlame.Old.Mapping.IO.LND
                 File.Write(text);
                 text = "TileTypes {" + Convert.ToString(endChar);
                 File.Write(text);
-                text = "    NumTiles " + Convert.ToString(map.Tileset.TileCount) + Convert.ToString(endChar);
+                text = "    NumTiles " + Convert.ToString(map.Tileset.Tiles.Count) + Convert.ToString(endChar);
                 File.Write(text);
                 text = "    Tiles {" + Convert.ToString(endChar);
                 File.Write(text);
-                for ( a = 0; a <= ((int)(Math.Ceiling(Convert.ToDecimal((map.Tileset.TileCount + 1) / 16.0D)))) - 1; a++ )
+                for ( a = 0; a <= ((int)(Math.Ceiling(Convert.ToDecimal((map.Tileset.Tiles.Count + 1) / 16.0D)))) - 1; a++ )
                     //+1 because the first number is not a tile type
                 {
                     text = "        ";
                     c = a * 16 - 1; //-1 because the first number is not a tile type
-                    for ( b = 0; b <= Math.Min(16, map.Tileset.TileCount - c) - 1; b++ )
+                    for ( b = 0; b <= Math.Min(16, map.Tileset.Tiles.Count - c) - 1; b++ )
                     {
                         if ( c + b < 0 )
                         {
