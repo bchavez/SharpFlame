@@ -108,14 +108,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SharpFlame.Old\SharpFlame.Old.csproj">
-      <Project>{152475A4-3ABE-41C4-B338-A2FB7B350FAF}</Project>
-      <Name>SharpFlame.Old</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpFlame.Gui\SharpFlame.Gui.csproj">
-      <Project>{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}</Project>
-      <Name>SharpFlame.Gui</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SharpFlame.Core\SharpFlame.Core.csproj">
       <Project>{8AE7F7A3-841A-44A7-B016-4661BBBF7821}</Project>
       <Name>SharpFlame.Core</Name>
@@ -127,6 +119,10 @@
     <ProjectReference Include="..\Eto.Gl.Windows\Eto.Gl.Windows.csproj">
       <Project>{A0DCCC13-936C-4D5A-AD8C-ADFF75816A8F}</Project>
       <Name>Eto.Gl.Windows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpFlame\SharpFlame.csproj">
+      <Project>{152475A4-3ABE-41C4-B338-A2FB7B350FAF}</Project>
+      <Name>SharpFlame</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

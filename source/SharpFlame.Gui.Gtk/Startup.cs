@@ -2,7 +2,6 @@ using System.Diagnostics;
 using Eto.Gl;
 using Ninject;
 using SharpFlame.Gui;
-using SharpFlame.Gui.Controls;
 using OpenTK;
 using SharpFlame.Gui.Infrastructure;
 
