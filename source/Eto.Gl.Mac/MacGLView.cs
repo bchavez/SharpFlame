@@ -1,10 +1,10 @@
 ﻿using System;
 using Eto.Drawing;
+using Eto.Forms;
 using Eto.Platform;
 using MonoMac.AppKit;
-using SharpFlame.Gui.Controls;
 
-namespace SharpFlame.Gui.Mac.EtoCustom
+namespace Eto.Gl.Mac
 {
     /// <summary>
     /// An NSOpenGLView object maintains an NSOpenGLPixelFormat and NSOpenGLContext object into which OpenGL calls can be rendered. 
@@ -30,7 +30,7 @@ namespace SharpFlame.Gui.Mac.EtoCustom
     /// * Displaying
     ///     – isOpaque
     /// </remarks>
-    internal class MacGLView : NSOpenGLView, IGLSurface
+    public class MacGLView : NSOpenGLView, IGLSurface
     {
         public delegate void GLEventHandler(MacGLView sender, NSEvent args);
 
@@ -119,6 +119,7 @@ namespace SharpFlame.Gui.Mac.EtoCustom
         }
 
         public bool IsInitialized { get; private set; }
+        public bool HasFocus { get; private set; }
 
         public void MakeCurrent()
         {
@@ -132,11 +133,18 @@ namespace SharpFlame.Gui.Mac.EtoCustom
             this.openTK.SwapBuffers();
         }
 
+        public void Focus()
+        {
+            throw new NotImplementedException();
+        }
+
         public event EventHandler Initialized = delegate { };
 
         public event EventHandler Resize = delegate { };
 
         public event EventHandler ShuttingDown = delegate { };
+        public event EventHandler<KeyEventArgs> GlKeyDown;
+        public event EventHandler<KeyEventArgs> GlKeyUp;
 
         public event GLEventHandler GLKeyDown = delegate { };
 

@@ -1,10 +1,9 @@
 ﻿using Eto.Platform.Mac.Forms;
 using MonoMac.AppKit;
-using SharpFlame.Gui.Controls;
 
-namespace SharpFlame.Gui.Mac.EtoCustom
+namespace Eto.Gl.Mac
 {
-    internal class MacGLSurfaceHandler : MacView<MacGLView, GLSurface>, IGLSurfaceHandler
+    public class MacGLSurfaceHandler : MacView<MacGLView, GLSurface>, IGLSurfaceHandler
     {
         public override MacGLView CreateControl()
         {

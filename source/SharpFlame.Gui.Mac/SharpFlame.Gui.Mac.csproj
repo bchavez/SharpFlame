@@ -121,8 +121,6 @@
     <Compile Include="..\SharpFlame.Core\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="EtoCustom\MacGLSurfaceHandler.cs" />
-    <Compile Include="EtoCustom\MacGLView.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -137,9 +135,20 @@
     <BundleResource Include="Resources\Icon.icns" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SharpFlame.Gui\SharpFlame.Gui.csproj">
-      <Project>{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}</Project>
-      <Name>SharpFlame.Gui</Name>
+    <ProjectReference Include="..\Eto.Gl.Mac\Eto.Gl.Mac.csproj">
+      <Project>{c6d7920e-3fb5-4dad-80f1-2b76158d493f}</Project>
+      <Name>Eto.Gl.Mac</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Eto.Gl\Eto.Gl.csproj">
+      <Project>{510ce98d-2169-48a0-889c-e743417ee5e1}</Project>
+      <Name>Eto.Gl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpFlame\SharpFlame.csproj">
+      <Project>{152475a4-3abe-41c4-b338-a2fb7b350faf}</Project>
+      <Name>SharpFlame</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="EtoCustom\" />
   </ItemGroup>
 </Project>
