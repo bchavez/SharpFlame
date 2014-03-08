@@ -3,7 +3,7 @@ using Eto.Forms;
 using Eto.Gl;
 using Eto.Gl.Windows;
 using Ninject;
-using SharpFlame.Gui.Infrastructure;
+using SharpFlame.Infrastructure;
 
 namespace SharpFlame.Gui.Windows
 {

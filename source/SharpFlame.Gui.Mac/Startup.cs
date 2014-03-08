@@ -2,8 +2,7 @@
 using Eto.Gl;
 using Eto.Gl.Mac;
 using Ninject;
-using SharpFlame.Gui.Controls;
-using SharpFlame.Gui.Infrastructure;
+using SharpFlame.Infrastructure;
 
 namespace SharpFlame.Gui.Mac
 {
