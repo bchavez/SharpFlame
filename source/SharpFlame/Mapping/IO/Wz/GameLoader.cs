@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
+using Eto.Forms;
 using NLog;
 using SharpFlame.Core.Extensions;
 using SharpFlame.FileIO;
@@ -62,28 +62,8 @@ namespace SharpFlame.Mapping.IO.Wz
             subResult = IOUtil.TryOpenFileStream(gameFilesPath + "game.map", ref file);
             if ( !subResult.Success )
             {
-                if ( MessageBox.Show("game.map file not found at \"{0}\"\n" +
-                                     "Do you want to select another directory to load the underlying map from?".Format2(gameFilesPath),
-                    "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.Cancel )
-                {
-                    returnResult.ProblemAdd("Aborted.");
-                    return returnResult;
-                }
-                var DirectorySelect = new FolderBrowserDialog();
-                DirectorySelect.SelectedPath = gameFilesPath;
-                if ( DirectorySelect.ShowDialog() != DialogResult.OK )
-                {
-                    returnResult.ProblemAdd("Aborted.");
-                    return returnResult;
-                }
-                mapDirectory = DirectorySelect.SelectedPath + Convert.ToString(Path.DirectorySeparatorChar);
-
-                subResult = IOUtil.TryOpenFileStream(mapDirectory + "game.map", ref file);
-                if ( !subResult.Success )
-                {
-                    returnResult.ProblemAdd("game.map file not found: " + subResult.Problem);
-                    return returnResult;
-                }
+                returnResult.ProblemAdd("game.map file not found: " + subResult.Problem);
+                return returnResult;
             }
             else
             {

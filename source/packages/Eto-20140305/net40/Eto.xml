@@ -4467,6 +4467,13 @@
             Gets or sets the interval, in seconds
             </summary>
         </member>
+        <member name="P:Eto.Forms.UITimer.Started">
+            <summary>
+            Gets a value indicating whether this <see cref="T:Eto.Forms.UITimer" /> is started.
+            </summary>
+            <value>
+                <c>true</c> if started; otherwise, <c>false</c>.</value>
+        </member>
         <member name="M:Eto.Forms.Window.#ctor(Eto.Generator,System.Type,System.Boolean)">
             <summary>
             Initializes a new instance of the <see cref="T:Eto.Forms.Window" /> class.

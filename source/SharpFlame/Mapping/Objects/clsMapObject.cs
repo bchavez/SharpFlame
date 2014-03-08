@@ -8,7 +8,6 @@ using SharpFlame.FileIO;
 using SharpFlame.Core;
 using SharpFlame.Core.Collections;
 using SharpFlame.Core.Domain.Colors;
-using SharpFlame.FileIO;
 using SharpFlame.Mapping.Objects;
 
 #endregion

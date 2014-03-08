@@ -992,7 +992,8 @@ namespace SharpFlame.Mapping.IO.FMap
                             if ( iniObject2.TurretCodes[0] != "" )
                             {
                                 droidDesign.Turret1 = App.ObjectData.FindOrCreateTurret(iniObject2.TurretTypes[0],
-                                    Convert.ToString(iniObject2.TurretCodes[0]));
+                                    Convert.ToString(iniObject2.TurretCodes[0])
+                                );
                                 if ( droidDesign.Turret1.IsUnknown )
                                 {
                                     droidComponentUnknownCount++;
@@ -1000,8 +1001,9 @@ namespace SharpFlame.Mapping.IO.FMap
                             }
                             if ( iniObject2.TurretCodes[1] != "" )
                             {
-                                droidDesign.Turret2 = App.ObjectData.FindOrCreateTurret(iniObject2.TurretTypes[1],
-                                    Convert.ToString(iniObject2.TurretCodes[1]));
+                                droidDesign.Turret2 = App.ObjectData.FindOrCreateTurret(iniObject2.TurretTypes[1], 
+                                    Convert.ToString(iniObject2.TurretCodes[1])
+                                );
                                 if ( droidDesign.Turret2.IsUnknown )
                                 {
                                     droidComponentUnknownCount++;
@@ -1010,7 +1012,8 @@ namespace SharpFlame.Mapping.IO.FMap
                             if ( iniObject2.TurretCodes[2] != "" )
                             {
                                 droidDesign.Turret3 = App.ObjectData.FindOrCreateTurret(iniObject2.TurretTypes[2],
-                                    Convert.ToString(iniObject2.TurretCodes[2]));
+                                    Convert.ToString(iniObject2.TurretCodes[2])
+                                );
                                 if ( droidDesign.Turret3.IsUnknown )
                                 {
                                     droidComponentUnknownCount++;

@@ -2,7 +2,7 @@
 
 using System;
 using System.Diagnostics;
-using System.Windows.Forms;
+using Eto.Forms;
 using Ninject;
 using NLog;
 using SharpFlame.Collections.Specialized;

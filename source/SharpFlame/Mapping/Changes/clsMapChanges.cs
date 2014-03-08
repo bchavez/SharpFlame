@@ -1,7 +1,6 @@
 #region
 
 using SharpFlame.Mapping.Changes;
-using SharpFlame.Mapping.Changes;
 
 #endregion
 

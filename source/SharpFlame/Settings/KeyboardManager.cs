@@ -82,6 +82,7 @@ namespace SharpFlame.Settings
         public bool IsChar { get; private set; }
         public bool Invalid { get; set; }
         public bool Repeat { get; set; }
+        public bool Active { get; set; }
 
         public KeyboardKey(string name, Keys? key = null, char? keyChar = null, bool repeat = false) 
         {
@@ -98,6 +99,7 @@ namespace SharpFlame.Settings
                 throw new InvalidKeyException("Give either a key or a keyChar.");
             }
             Invalid = false;
+            Active = false;
             Repeat = repeat;
         }
 

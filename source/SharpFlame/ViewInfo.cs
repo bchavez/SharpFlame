@@ -122,7 +122,7 @@ namespace SharpFlame
                 }
             }
 
-            MainMapView.Draw();
+            MainMapView.DrawLater();
         }
 
         public void ViewPosSet(XYZInt newViewPos)
@@ -130,7 +130,7 @@ namespace SharpFlame
             ViewPos = newViewPos;
             viewPosClamp();
 
-            MainMapView.Draw();
+            MainMapView.DrawLater();
         }
 
         public void ViewPosChange(XYZInt displacement)
@@ -140,7 +140,7 @@ namespace SharpFlame
             ViewPos.Y += displacement.Y;
             viewPosClamp();
 
-            MainMapView.Draw();
+            MainMapView.DrawLater();
         }
 
         private void viewPosClamp()
@@ -160,7 +160,7 @@ namespace SharpFlame
             Matrix3DMath.MatrixInvert(ViewAngleMatrix, ViewAngleMatrixInverted);
             Matrix3DMath.MatrixToRPY(ViewAngleMatrix, ref ViewAngleRPY);
 
-            MainMapView.Draw();
+            MainMapView.DrawLater();
         }
 
         public void ViewAngleSetToDefault()
@@ -169,7 +169,7 @@ namespace SharpFlame
             Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
             ViewAngleSet(matrixA);
 
-            MainMapView.Draw();
+            MainMapView.DrawLater();
         }
 
         public void ViewAngleSetRotate(Matrix3DMath.Matrix3D newMatrix)
@@ -207,7 +207,7 @@ namespace SharpFlame
                 MoveToViewTerrainPosFromDistance(xyzDbl, Convert.ToDouble((xyzDbl2 - xyzDbl).GetMagnitude()));
             }
 
-            MainMapView.Draw();
+            MainMapView.DrawLater();
         }
 
         public void LookAtTile(XYInt tileNum)
@@ -665,7 +665,7 @@ namespace SharpFlame
                 }
             }
             // MapViewControl.Pos_Display_Update();
-            MainMapView.Draw();
+            MainMapView.DrawLater();
         }
 
         public clsMouseOver.clsOverTerrain GetMouseOverTerrain()
@@ -740,7 +740,7 @@ namespace SharpFlame
 
             map.Update();
 
-            MainMapView.Draw();
+            MainMapView.DrawLater();
         }
 
         public void ApplyRoad()
@@ -781,7 +781,7 @@ namespace SharpFlame
 
                     map.UndoStepCreate("Road Side");
 
-                    MainMapView.Draw();
+                    MainMapView.DrawLater();
                 }
             }
             else
@@ -810,7 +810,7 @@ namespace SharpFlame
 
                     map.UndoStepCreate("Road Side");
 
-                    MainMapView.Draw();
+                    MainMapView.DrawLater();
                 }
             }
         }
@@ -859,7 +859,7 @@ namespace SharpFlame
                     map.UndoStepCreate("Road Line");
 
                     map.SelectedTileA = null;
-                    MainMapView.Draw();
+                    MainMapView.DrawLater();
                 }
                 else if ( tile.Y == map.SelectedTileA.Y )
                 {
@@ -888,7 +888,7 @@ namespace SharpFlame
                     map.UndoStepCreate("Road Line");
 
                     map.SelectedTileA = null;
-                    MainMapView.Draw();
+                    MainMapView.DrawLater();
                 }
             }
             else
@@ -1149,7 +1149,7 @@ namespace SharpFlame
 
             map.UndoStepCreate("Ground Fill");
 
-            MainMapView.Draw();
+            MainMapView.DrawLater();
         }
 
         public void ApplyTexture()
@@ -1176,7 +1176,7 @@ namespace SharpFlame
 
             map.Update();
 
-            MainMapView.Draw();
+            MainMapView.DrawLater();
         }
 
         /// <summary>
@@ -1253,7 +1253,7 @@ namespace SharpFlame
 
             map.Update();
 
-            MainMapView.Draw();
+            MainMapView.DrawLater();
         }
 
         public void ApplyCliff()
@@ -1278,7 +1278,7 @@ namespace SharpFlame
 
             map.Update();
 
-            MainMapView.Draw();
+            MainMapView.DrawLater();
         }
 
         public void ApplyCliffRemove()
@@ -1295,7 +1295,7 @@ namespace SharpFlame
 
             map.Update();
 
-            MainMapView.Draw();
+            MainMapView.DrawLater();
         }
 
         public void ApplyRoadRemove()
@@ -1312,7 +1312,7 @@ namespace SharpFlame
 
             map.Update();
 
-            MainMapView.Draw();
+            MainMapView.DrawLater();
         }
 
         public void ApplyTextureClockwise()
@@ -1336,7 +1336,7 @@ namespace SharpFlame
 
             map.UndoStepCreate("Texture Rotate");
 
-            MainMapView.Draw();
+            MainMapView.DrawLater();
         }
 
         public void ApplyTextureCounterClockwise()
@@ -1360,7 +1360,7 @@ namespace SharpFlame
 
             map.UndoStepCreate("Texture Rotate");
 
-            MainMapView.Draw();
+            MainMapView.DrawLater();
         }
 
         public void ApplyTextureFlipX()
@@ -1384,7 +1384,7 @@ namespace SharpFlame
 
             map.UndoStepCreate("Texture Rotate");
 
-            MainMapView.Draw();
+            MainMapView.DrawLater();
         }
 
         public void ApplyTriFlip()
@@ -1407,7 +1407,7 @@ namespace SharpFlame
 
             map.UndoStepCreate("Triangle Flip");
 
-            MainMapView.Draw();
+            MainMapView.DrawLater();
         }
 
         public void ApplyHeightSmoothing(double ratio)
@@ -1439,7 +1439,7 @@ namespace SharpFlame
 
             map.Update();
 
-            MainMapView.Draw();
+            MainMapView.DrawLater();
         }
 
         public void ApplyHeightChange(double rate)
@@ -1459,7 +1459,7 @@ namespace SharpFlame
 
             map.Update();
 
-            MainMapView.Draw();
+            MainMapView.DrawLater();
         }
 
         public void ApplyHeightSet(clsBrush brush, byte height)
@@ -1480,7 +1480,7 @@ namespace SharpFlame
 
             map.Update();
 
-            MainMapView.Draw();
+            MainMapView.DrawLater();
         }
 
         public void ApplyGateway()
@@ -1511,7 +1511,7 @@ namespace SharpFlame
                         map.GatewayRemoveStoreChange(a);
                         map.UndoStepCreate("Gateway Delete");
                         map.MinimapMakeLater();
-                        MainMapView.Draw();
+                        MainMapView.DrawLater();
                         break;
                     }
                     a++;
@@ -1522,7 +1522,7 @@ namespace SharpFlame
                 if ( map.SelectedTileA == null )
                 {
                     map.SelectedTileA = tile;
-                    MainMapView.Draw();
+                    MainMapView.DrawLater();
                 }
                 else if ( tile.X == map.SelectedTileA.X | tile.Y == map.SelectedTileA.Y )
                 {
@@ -1532,7 +1532,7 @@ namespace SharpFlame
                         map.SelectedTileA = null;
                         map.SelectedTileB = null;
                         map.MinimapMakeLater();
-                        MainMapView.Draw();
+                        MainMapView.DrawLater();
                     }
                 }
             }
@@ -1581,13 +1581,13 @@ namespace SharpFlame
                                     }
                                     else
                                     {
-                                        MapViewControl.ListSelectBegin(true);
+                                        // MapViewControl.ListSelectBegin(true);
                                     }
                                 }
                             }
                             else if ( KeyboardManager.ActiveKey.Name == KeyboardKeys.PositionLabel )
                             {
-                                var newPosition = new clsScriptPosition(Map)
+                                var newPosition = new clsScriptPosition(map)
                                     {
                                         PosX = MouseLeftDown.OverTerrain.DownPos.Horizontal.X,
                                         PosY = MouseLeftDown.OverTerrain.DownPos.Horizontal.Y
@@ -1596,18 +1596,18 @@ namespace SharpFlame
                             }
                             else
                             {
-                                if ( !KeyboardManager.ActiveKey.Name == KeyboardKeys.Multiselect )
+                                if ( KeyboardManager.ActiveKey.Name != KeyboardKeys.Multiselect )
                                 {
-                                    Map.SelectedUnits.Clear();
+                                    map.SelectedUnits.Clear();
                                 }
                                 Program.frmMainInstance.SelectedObject_Changed();
-                                Map.UnitSelectedAreaVertexA = mouseOverTerrain.Vertex.Normal;
-                                MapViewControl.DrawViewLater();
+                                map.UnitSelectedAreaVertexA = mouseOverTerrain.Vertex.Normal;
+                                MainMapView.DrawLater();
                             }
                         }
                         else if ( modTools.Tool == modTools.Tools.TerrainBrush )
                         {
-                            if ( Map.Tileset != null )
+                            if ( map.Tileset != null )
                             {
                                 if ( KeyboardManager.ActiveKey.Name == KeyboardKeys.Picker )
                                 {
@@ -1637,7 +1637,7 @@ namespace SharpFlame
                         }
                         else if ( modTools.Tool == modTools.Tools.TextureBrush )
                         {
-                            if ( Map.Tileset != null )
+                            if ( map.Tileset != null )
                             {
                                 if ( KeyboardManager.ActiveKey.Name == KeyboardKeys.Picker )
                                 {
@@ -1672,7 +1672,7 @@ namespace SharpFlame
                                 else
                                 {
                                     ApplyTerrainFill(Program.frmMainInstance.FillCliffAction, Program.frmMainInstance.cbxFillInside.Checked);
-                                    MainMapView.Draw();
+                                    MainMapView.DrawLater();
                                 }
                             }
                         }
@@ -1705,7 +1705,7 @@ namespace SharpFlame
                                 map.UndoStepCreate("Place Object");
                                 map.Update();
                                 map.MinimapMakeLater();
-                                MainMapView.Draw();
+                                MainMapView.DrawLater();
                             }
                         }
                         else if ( modTools.Tool == modTools.Tools.ObjectLines )
@@ -1717,18 +1717,18 @@ namespace SharpFlame
                             if ( map.SelectedAreaVertexA == null )
                             {
                                 map.SelectedAreaVertexA = mouseOverTerrain.Vertex.Normal;
-                                MainMapView.Draw();
+                                MainMapView.DrawLater();
                             }
                             else if ( map.SelectedAreaVertexB == null )
                             {
                                 map.SelectedAreaVertexB = mouseOverTerrain.Vertex.Normal;
-                                MainMapView.Draw();
+                                MainMapView.DrawLater();
                             }
                             else
                             {
                                 map.SelectedAreaVertexA = null;
                                 map.SelectedAreaVertexB = null;
-                                MainMapView.Draw();
+                                MainMapView.DrawLater();
                             }
                         }
                         else if ( modTools.Tool == modTools.Tools.Gateways )
@@ -1763,13 +1763,13 @@ namespace SharpFlame
                 if ( modTools.Tool == modTools.Tools.RoadLines || modTools.Tool == modTools.Tools.ObjectLines )
                 {
                     map.SelectedTileA = null;
-                    MainMapView.Draw();
+                    MainMapView.DrawLater();
                 }
                 else if ( modTools.Tool == modTools.Tools.TerrainSelect )
                 {
                     map.SelectedAreaVertexA = null;
                     map.SelectedAreaVertexB = null;
-                    MainMapView.Draw();
+                    MainMapView.DrawLater();
                 }
                 else if ( modTools.Tool == modTools.Tools.CliffTriangle )
                 {
@@ -1779,7 +1779,7 @@ namespace SharpFlame
                 {
                     map.SelectedTileA = null;
                     map.SelectedTileB = null;
-                    MainMapView.Draw();
+                    MainMapView.DrawLater();
                 }
                 else if ( modTools.Tool == modTools.Tools.HeightSetBrush )
                 {
@@ -2079,7 +2079,7 @@ namespace SharpFlame
                         map.Update();
                         map.MinimapMakeLater();
                         map.SelectedTileA = null;
-                        MainMapView.Draw();
+                        MainMapView.DrawLater();
                     }
                     else if ( tile.Y == map.SelectedTileA.Y )
                     {
@@ -2106,7 +2106,7 @@ namespace SharpFlame
                         map.Update();
                         map.MinimapMakeLater();
                         map.SelectedTileA = null;
-                        MainMapView.Draw();
+                        MainMapView.DrawLater();
                     }
                 }
                 else

@@ -86,8 +86,8 @@ namespace SharpFlame
                     NewMap.InitializeUserInput();
                 }
 
-                NewMap.MapViewTabPage = new TabPage();
-                NewMap.MapViewTabPage.Tag = NewMap;
+//                NewMap.MapViewTabPage = new TabPage();
+//                NewMap.MapViewTabPage.Tag = NewMap;
 
                 NewMap.SetTabText();
 
@@ -114,9 +114,6 @@ namespace SharpFlame
                         MainMap = this[NewNum];
                     }
                 }
-
-                Map.MapViewTabPage.Tag = null;
-                Map.MapViewTabPage = null;
 
                 Owner.MapViewControl.UpdateTabs();
             }

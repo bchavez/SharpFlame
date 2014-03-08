@@ -138,7 +138,8 @@ namespace SharpFlame.Gui.Dialogs
                     var result = settings.Save(App.SettingsPath);
                     if( result.HasProblems || result.HasWarnings )
                     {
-                        new Dialogs.Status(result).Show();
+                    App.StatusDialog = new Dialogs.Status(result);
+                    App.StatusDialog.Show();
                     }
                     Close();
                 };

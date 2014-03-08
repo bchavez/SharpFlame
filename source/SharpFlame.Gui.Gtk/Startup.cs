@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using Eto.Gl;
 using Ninject;
@@ -35,7 +36,7 @@ namespace SharpFlame.Gui.Gtk
             //var app = new SharpFlameApplication (generator);
 		    var app = kernel.Get<SharpFlameApplication>();
 
-			app.Run (args);
+            app.Run (args);
 		}
 	}
 }

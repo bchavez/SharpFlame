@@ -25,6 +25,7 @@
 #endregion
 
 using System;
+using System.Diagnostics;
 using Eto.Forms;
 using Eto.Gl;
 using Ninject;
@@ -58,9 +59,12 @@ namespace SharpFlame.Gui.Sections
             get { return map; }
             set {
                 map = value;
-                Draw();
+                DrawLater();
             }
         }
+
+        private UITimer drawTimer;
+        private bool drawPending = false;
 
         void IInitializable.Initialize()
         {
@@ -158,6 +162,10 @@ namespace SharpFlame.Gui.Sections
             GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Specular, mat_specular);
             GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Diffuse, mat_diffuse);
             GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Shininess, mat_shininess);
+
+            drawTimer = new UITimer { Interval = 0.001 }; // Every millisecond.
+            drawTimer.Elapsed += draw;
+            drawTimer.Start();
         }
 
         private void resizeMapView(object sender, EventArgs e)
@@ -171,18 +179,21 @@ namespace SharpFlame.Gui.Sections
             GL.Clear(ClearBufferMask.ColorBufferBit);
             GL.Flush();
 
-            if(Map != null)
-            {
-                Draw();
-            } else
-            {
-                this.GLSurface.SwapBuffers();
-            }
+            this.GLSurface.SwapBuffers();
+
+            DrawLater();              
         }
 
-        public void Draw()
+        public void DrawLater()
         {
-            if(Map == null || !this.GLSurface.IsInitialized)
+            drawPending = true;
+        }            
+
+        private void draw(object sender, EventArgs e) 
+        {
+            if(!drawPending || 
+                Map == null || 
+                !this.GLSurface.IsInitialized)
             {
                 return;
             }
@@ -204,11 +215,34 @@ namespace SharpFlame.Gui.Sections
             GL.ClearColor(bgColour.Red, bgColour.Green, bgColour.Blue, 1.0F);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            Map.GLDraw();
+            try {
+                Map.SuppressMinimap = false;
+                Map.MinimapMakeLater();
+                Map.GLDraw();
+            } catch (Exception ex) {
+                Debugger.Break();
+                logger.Error(ex, "Got an exception");
+            }
 
             GL.Flush();
             this.GLSurface.SwapBuffers();
-        }            
+
+            drawPending = false;
+        }
+
+        protected override void Dispose(bool disposing) 
+        {
+            if(disposing)
+            {
+                if(GLSurface.IsInitialized)
+                {
+                    drawTimer.Stop();
+                    drawTimer = null;
+                }
+            }
+
+            base.Dispose(disposing);
+        }
 	}
 }
 

@@ -959,20 +959,23 @@ namespace SharpFlame.Domain.ObjData
         {
             switch ( turretType )
             {
-                case TurretType.Weapon:
-                    return FindOrCreateWeapon(turretCode);
-                case TurretType.Construct:
-                    return FindOrCreateConstruct(turretCode);
-                case TurretType.Repair:
-                    return FindOrCreateRepair(turretCode);
-                case TurretType.Sensor:
-                    return FindOrCreateSensor(turretCode);
-                case TurretType.Brain:
-                    return FindOrCreateBrain(turretCode);
-                case TurretType.ECM:
-                    return FindOrCreateECM(turretCode);
-                default:
-                    return null;
+            case TurretType.Weapon:
+                return FindOrCreateWeapon(turretCode);
+            case TurretType.Construct:
+                return FindOrCreateConstruct(turretCode);
+            case TurretType.Repair:
+                return FindOrCreateRepair(turretCode);
+            case TurretType.Sensor:
+                return FindOrCreateSensor(turretCode);
+            case TurretType.Brain:
+                return FindOrCreateBrain(turretCode);
+            case TurretType.ECM:
+                return FindOrCreateECM(turretCode);
+            case TurretType.Unknown:
+                return new Turret { IsUnknown = true };
+            default:
+            Console.WriteLine("Unknown turret type={0}, code={1}", turretType, turretCode);
+                return null;
             }
         }
 

@@ -1,6 +1,5 @@
 using FluentValidation.Attributes;
 using SharpFlame.Core.Parsers.Validators;
-using SharpFlame.Core.Parsers.Validators;
 
 namespace SharpFlame.Core.Parsers.Pie
 {

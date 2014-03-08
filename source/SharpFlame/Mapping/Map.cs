@@ -1,9 +1,9 @@
-﻿#region
+#region
 
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Windows.Forms;
+using Eto.Forms;
 using Eto.Gl;
 using Ninject;
 using Ninject.Parameters;
@@ -46,8 +46,7 @@ namespace SharpFlame.Mapping
 
         public int HeightMultiplier = Constants.DefaultHeightMultiplier;
         public InterfaceOptions InterfaceOptions;
-        private Timer makeMinimapTimer;
-        public TabPage MapViewTabPage;
+        private UITimer makeMinimapTimer;
         public SimpleClassList<Message> Messages;
         private bool minimapPending;
 
@@ -232,9 +231,8 @@ namespace SharpFlame.Mapping
 
         private void initialize()
         {
-            makeMinimapTimer = new Timer();
-            makeMinimapTimer.Tick += MinimapTimer_Tick;
-            makeMinimapTimer.Interval = Constants.MinimapDelay;
+            makeMinimapTimer = new UITimer { Interval = Constants.MinimapDelay };
+            makeMinimapTimer.Elapsed += MinimapTimer_Tick;
 
             MakeDefaultUnitGroups();
             ScriptPositions.MaintainOrder = true;
@@ -486,7 +484,7 @@ namespace SharpFlame.Mapping
         {
             CancelUserInput();
 
-            makeMinimapTimer.Enabled = false;
+            makeMinimapTimer.Stop();
             makeMinimapTimer.Dispose();
             makeMinimapTimer = null;
 
@@ -841,7 +839,7 @@ namespace SharpFlame.Mapping
             float AntiAlpha = 0;
             var RGB_sng = new SRgb();
 
-            if ( Program.frmMainInstance.menuMiniShowTex.Checked )
+            if ( true ) //TODO: use uioptions - Program.frmMainInstance.menuMiniShowTex.Checked
             {
                 if ( Tileset != null )
                 {
@@ -858,7 +856,7 @@ namespace SharpFlame.Mapping
                         }
                     }
                 }
-                if ( Program.frmMainInstance.menuMiniShowHeight.Checked )
+                if ( true ) // TODO: Use UiOptions  Program.frmMainInstance.menuMiniShowHeight.Checked
                 {
                     float Height = 0;
                     for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
@@ -875,7 +873,7 @@ namespace SharpFlame.Mapping
                     }
                 }
             }
-            else if ( Program.frmMainInstance.menuMiniShowHeight.Checked )
+            else if ( true ) //  TODO: Use UiOptions Program.frmMainInstance.menuMiniShowHeight.Checked
             {
                 float Height = 0;
                 for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
@@ -903,7 +901,7 @@ namespace SharpFlame.Mapping
                     }
                 }
             }
-            if ( Program.frmMainInstance.menuMiniShowCliffs.Checked )
+            if ( true ) // TODO: Use UiOptions - Program.frmMainInstance.menuMiniShowCliffs.Checked
             {
                 if ( Tileset != null )
                 {
@@ -926,7 +924,7 @@ namespace SharpFlame.Mapping
                     }
                 }
             }
-            if ( Program.frmMainInstance.menuMiniShowGateways.Checked )
+            if ( true )  // TODO: Use UiOptions - Program.frmMainInstance.menuMiniShowGateways.Checked
             {
                 var Gateway = default(Gateway);
                 foreach ( var tempLoopVar_Gateway in Gateways )
@@ -944,7 +942,7 @@ namespace SharpFlame.Mapping
                     }
                 }
             }
-            if ( Program.frmMainInstance.menuMiniShowUnits.Checked )
+            if ( true ) // TODO: Use UiOptions Program.frmMainInstance.menuMiniShowUnits.Checked
             {
                 //units that are not selected
                 var Unit = default(Unit);
@@ -1062,36 +1060,36 @@ namespace SharpFlame.Mapping
                 if ( !SuppressMinimap )
                 {
                     minimapPending = false;
-                    MinimapMake();
+                    minimapMake();
                 }
             }
             else
             {
-                makeMinimapTimer.Enabled = false;
+                makeMinimapTimer.Stop();
             }
         }
 
         public void MinimapMakeLater()
         {
-            if ( makeMinimapTimer.Enabled )
+            if ( makeMinimapTimer.Started )
             {
                 minimapPending = true;
             }
             else
             {
-                makeMinimapTimer.Enabled = true;
+                makeMinimapTimer.Start();
                 if ( SuppressMinimap )
                 {
                     minimapPending = true;
                 }
                 else
                 {
-                    MinimapMake();
+                    minimapMake();
                 }
             }
         }
 
-        private void MinimapMake()
+        private void minimapMake()
         {
             var newTextureSize =
                 (int)
@@ -1118,7 +1116,7 @@ namespace SharpFlame.Mapping
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, MinimapTextureSize, MinimapTextureSize, 0, PixelFormat.Rgba,
                 PixelType.Float, texture.InlinePixels);
 
-            Program.frmMainInstance.View_DrawViewLater();
+            MainMapView.DrawLater();
         }
 
         public void MinimapGLDelete()
@@ -2146,7 +2144,8 @@ namespace SharpFlame.Mapping
         {
             var UpdateAutotextures = new clsUpdateAutotexture();
             UpdateAutotextures.Map = this;
-            UpdateAutotextures.MakeInvalidTiles = Program.frmMainInstance.cbxInvalidTiles.Checked;
+            //TODO: Change to UiOptions
+            //UpdateAutotextures.MakeInvalidTiles = Program.frmMainInstance.cbxInvalidTiles.Checked;
 
             AutoTextureChanges.PerformTool(UpdateAutotextures);
             AutoTextureChanges.Clear();
@@ -2245,7 +2244,6 @@ namespace SharpFlame.Mapping
             {
                 Result = Result.Substring(0, MaxLength - 3) + "...";
             }
-            MapViewTabPage.Text = Result;
         }
 
         public bool SideHIsCliffOnBothSides(XYInt SideNum)
@@ -2547,25 +2545,26 @@ namespace SharpFlame.Mapping
 
         public bool Save_FMap_Prompt()
         {
-            var Dialog = new SaveFileDialog();
-
-            Dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            Dialog.FileName = "";
-            Dialog.Filter = Constants.ProgramName + " Map Files (*.fmap)|*.fmap";
-            if ( Dialog.ShowDialog(Program.frmMainInstance) != DialogResult.OK )
-            {
-                return false;
-            }
-            App.SettingsManager.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            var fMap = new FMapSaver (this);
-            var result = fMap.Save(Dialog.FileName, true, true);
-            if ( !result.HasProblems )
-            {
-                PathInfo = new PathInfo(Dialog.FileName, true);
-                ChangedSinceSave = false;
-            }
-            App.ShowWarnings(result);
-            return !result.HasProblems;
+//            var Dialog = new SaveFileDialog();
+//
+//            Dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+//            Dialog.FileName = "";
+//            Dialog.Filter = Constants.ProgramName + " Map Files (*.fmap)|*.fmap";
+//            if ( Dialog.ShowDialog(Program.frmMainInstance) != DialogResult.OK )
+//            {
+//                return false;
+//            }
+//            App.SettingsManager.SavePath = Path.GetDirectoryName(Dialog.FileName);
+//            var fMap = new FMapSaver (this);
+//            var result = fMap.Save(Dialog.FileName, true, true);
+//            if ( !result.HasProblems )
+//            {
+//                PathInfo = new PathInfo(Dialog.FileName, true);
+//                ChangedSinceSave = false;
+//            }
+//            App.ShowWarnings(result);
+//            return !result.HasProblems;
+            return true;
         }
 
         public bool Save_FMap_Quick()
@@ -2590,25 +2589,25 @@ namespace SharpFlame.Mapping
 
         public bool ClosePrompt()
         {
-            if ( ChangedSinceSave )
-            {
-                var Prompt = new frmClose(GetTitle());
-                var Result = Prompt.ShowDialog(Program.frmMainInstance);
-                switch ( Result )
-                {
-                    case DialogResult.OK:
-                        return Save_FMap_Prompt();
-                    case DialogResult.Yes:
-                        return Save_FMap_Quick();
-                    case DialogResult.No:
-                        return true;
-                    case DialogResult.Cancel:
-                        return false;
-                    default:
-                        Debugger.Break();
-                        return false;
-                }
-            }
+//            if ( ChangedSinceSave )
+//            {
+//                var Prompt = new frmClose(GetTitle());
+//                var Result = Prompt.ShowDialog(Program.frmMainInstance);
+//                switch ( Result )
+//                {
+//                    case DialogResult.OK:
+//                        return Save_FMap_Prompt();
+//                    case DialogResult.Yes:
+//                        return Save_FMap_Quick();
+//                    case DialogResult.No:
+//                        return true;
+//                    case DialogResult.Cancel:
+//                        return false;
+//                    default:
+//                        Debugger.Break();
+//                        return false;
+//                }
+//            }
             return true;
         }
     }

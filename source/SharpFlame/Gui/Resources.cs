@@ -39,7 +39,6 @@ namespace SharpFlame.Gui
 		public static string BtnRotateAntiClockwiseName = "btnrotateanticlockwise.png";
 		public static string BtnRotateClockwiseName = "btnrotateclockwise.png";
 		public static string BtnFlipXName = "btnflipx.png";
-        public static string TileTestName = "tiletest.png";
         public static string IconProblemName = "problem.png";
         public static string IconWarningmName = "warning.png";
 
@@ -62,11 +61,6 @@ namespace SharpFlame.Gui
 		{
 			return Bitmap.FromResource (string.Format ("{0}{1}", Prefix, BtnFlipXName), Assembly.GetExecutingAssembly(), generator);
 		}
-
-        public static Bitmap TileTest(Generator generator = null)
-        {
-            return Bitmap.FromResource (string.Format ("{0}{1}", Prefix, TileTestName), Assembly.GetExecutingAssembly(), generator);
-        }
 
         public static Bitmap IconProblem(Generator generator = null)
         {

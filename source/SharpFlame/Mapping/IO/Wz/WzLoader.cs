@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
+using Eto.Forms;
 using Ionic.Zip;
 using Ionic.Zlib;
 using NLog;
@@ -1447,7 +1447,7 @@ namespace SharpFlame.Mapping.IO.Wz
                 Version = File.ReadUInt32();
                 if ( Version != 8U )
                 {
-                    if ( MessageBox.Show("Game file version is unknown. Continue?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK )
+                    if ( MessageBox.Show("Game file version is unknown. Continue?", "", MessageBoxButtons.OKCancel, MessageBoxType.Question) == DialogResult.Ok )
                     {
                         ReturnResult.Problem = "Aborted.";
                         return ReturnResult;
@@ -1512,7 +1512,7 @@ namespace SharpFlame.Mapping.IO.Wz
                 version = File.ReadUInt32();
                 if ( version != 10U )
                 {
-                    if ( MessageBox.Show("game.map version is unknown. Continue?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK )
+                    if ( MessageBox.Show("game.map version is unknown. Continue?", "", MessageBoxButtons.OKCancel, MessageBoxType.Question) == DialogResult.Ok )
                     {
                         returnResult.Problem = "Aborted.";
                         return returnResult;
@@ -1616,7 +1616,7 @@ namespace SharpFlame.Mapping.IO.Wz
                 version = file.ReadUInt32();
                 if ( version != 8U )
                 {
-                    if ( MessageBox.Show("feat.bjo version is unknown. Continue?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK )
+                    if ( MessageBox.Show("feat.bjo version is unknown. Continue?", "", MessageBoxButtons.OKCancel, MessageBoxType.Question) == DialogResult.Ok )
                     {
                         returnResult.Problem = "Aborted.";
                         return returnResult;
@@ -1675,7 +1675,7 @@ namespace SharpFlame.Mapping.IO.Wz
                 version = File.ReadUInt32();
                 if ( version != 8U )
                 {
-                    if ( MessageBox.Show("struct.bjo version is unknown. Continue?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK )
+                    if ( MessageBox.Show("struct.bjo version is unknown. Continue?", "", MessageBoxButtons.OKCancel, MessageBoxType.Question) == DialogResult.Ok )
                     {
                         returnResult.Problem = "Aborted.";
                         return returnResult;
@@ -1734,7 +1734,7 @@ namespace SharpFlame.Mapping.IO.Wz
                 Version = File.ReadUInt32();
                 if ( Version > 19U )
                 {
-                    if ( MessageBox.Show("dinit.bjo version is unknown. Continue?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK )
+                    if ( MessageBox.Show("dinit.bjo version is unknown. Continue?", "", MessageBoxButtons.OKCancel, MessageBoxType.Question) == DialogResult.Ok )
                     {
                         ReturnResult.Problem = "Aborted.";
                         return ReturnResult;

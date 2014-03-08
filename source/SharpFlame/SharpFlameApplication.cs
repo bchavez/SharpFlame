@@ -44,7 +44,9 @@ using SharpFlame.Infrastructure;
 using SharpFlame;
 using SharpFlame.Domain.ObjData;
 using SharpFlame.Graphics.OpenGL;
+using SharpFlame.Maths;
 using SharpFlame.Settings;
+using SharpFlame.Util;
 using Size = Eto.Drawing.Size;
 using Font = System.Drawing.Font;
 using FontStyle = System.Drawing.FontStyle;
@@ -161,6 +163,15 @@ namespace SharpFlame
         {
             GlTexturesView.MakeCurrent();
 
+            // Create tools.
+            modTools.CreateTools();
+
+            // Set Vision radius
+            App.VisionRadius_2E = 10;
+            App.VisionRadius_2E_Changed();
+
+            Matrix3DMath.MatrixSetToPY(App.SunAngleMatrix, new Angles.AnglePY(-22.5D * MathUtil.RadOf1Deg, 157.5D * MathUtil.RadOf1Deg));
+
             // Load tileset directories.
             foreach( var path in Settings.TilesetDirectories )
             {
@@ -182,15 +193,18 @@ namespace SharpFlame
             // Make the GL Font.
             MakeGlFont();
 
+            // Show initialize problems.
             if( initializeResult.HasProblems )
             {
                 logger.Error(initializeResult.ToString());
-                new Gui.Dialogs.Status(initializeResult).Show();
+                App.StatusDialog = new Gui.Dialogs.Status(initializeResult);
+                App.StatusDialog.Show();
             }
             else if( initializeResult.HasWarnings )
             {
                 logger.Warn(initializeResult.ToString());
-                new Gui.Dialogs.Status(initializeResult).Show();
+                App.StatusDialog = new Gui.Dialogs.Status(initializeResult);
+                App.StatusDialog.Show();
             }
             else
             {
@@ -228,7 +242,8 @@ namespace SharpFlame
                                 var result = App.LoadTilesets((string)item);
                                 if( result.HasProblems || result.HasWarnings )
                                 {
-                                    new Gui.Dialogs.Status(result).Show();
+                                    App.StatusDialog = new Gui.Dialogs.Status(result);
+                                    App.StatusDialog.Show();
                                     Settings.TilesetDirectories.Remove((string)item);
                                 }
                             }
@@ -290,7 +305,8 @@ namespace SharpFlame
 
                         if( result.HasProblems || result.HasWarnings )
                         {
-                            new Gui.Dialogs.Status(result).Show();
+                            App.StatusDialog = new Gui.Dialogs.Status(result);
+                            App.StatusDialog.Show();
                         }
                     }
                     catch( Exception ex )

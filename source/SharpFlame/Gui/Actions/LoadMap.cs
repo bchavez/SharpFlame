@@ -99,7 +99,8 @@ namespace SharpFlame.Gui.Actions
                 var returnResult = Settings.Save(App.SettingsPath);
                 if(returnResult.HasProblems)
                 {
-                    new Dialogs.Status(returnResult).Show();
+                    App.StatusDialog = new Dialogs.Status(returnResult);
+                    App.StatusDialog.Show();
                 }
 
                 var map = Kernel.Get<Map>();
@@ -121,14 +122,25 @@ namespace SharpFlame.Gui.Actions
                 default:
                     returnResult = new Result(string.Format("Loading \"{0}\"", Path.GetExtension(dialog.FileName)), false);
                     returnResult.ProblemAdd(string.Format("UNKNOWN File type: can\'t load file \"{0}\"", dialog.FileName));
+                    App.StatusDialog = new Dialogs.Status(returnResult);
+                    App.StatusDialog.Show();
                     logger.Error("Loading \"{0}\", UNKNOWN File type: can\'t load file \"{1}\"", Path.GetExtension(dialog.FileName), dialog.FileName);
                     return;
                 }
 
-                loader.Load(dialog.FileName);
-                map.InitializeUserInput();
+                var loadResult = loader.Load(dialog.FileName);
+                if(loadResult.HasProblems || loadResult.HasWarnings)
+                {
+                    App.StatusDialog = new Dialogs.Status(loadResult);
+                    App.StatusDialog.Show();
+                }
 
-                MainMapView.Map = map;
+                if(!loadResult.HasProblems)
+                {
+                    map.InitializeUserInput();
+                    map.Update(); // TODO: Remove me once map drawing works.
+                    MainMapView.Map = map;
+                }
             }
         }
     }

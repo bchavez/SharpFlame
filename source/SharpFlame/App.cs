@@ -22,6 +22,7 @@ using SharpFlame.Domain;
 using SharpFlame.Domain.ObjData;
 using SharpFlame.FileIO;
 using SharpFlame.Graphics.OpenGL;
+using SharpFlame.Gui.Sections;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tiles;
@@ -103,7 +104,7 @@ namespace SharpFlame
         public static GLFont UnitLabelFont;
         //Public TextureViewFont As GLFont
 
-        public static Player[] PlayerColour = new Player[16];
+        public static Player[] PlayerColour = new Player[Constants.InternalPlayerCountMax + 1];
 
         public static DroidDesign.clsTemplateDroidType TemplateDroidType_Droid;
         public static DroidDesign.clsTemplateDroidType TemplateDroidType_Cyborg;
@@ -144,6 +145,14 @@ namespace SharpFlame
 
         public static GLSurface MapViewGlSurface { get; set; }
 
+        public static MainMapView MainMapView { get; set; }
+
+        /// <summary>
+        /// Holder for the Status form.
+        /// </summary>
+        /// <value>The status dialog.</value>
+        public static Gui.Dialogs.Status StatusDialog { get; set; }
+
         /// <summary>
         /// The Ninject Kernel
         /// </summary>
@@ -152,7 +161,73 @@ namespace SharpFlame
 
         public static void Initalize ()
         {
-            createTileTypes ();
+            createTileTypes();
+            createPlayerColours();
+            CreateTemplateDroidTypes();
+        }
+
+        private static void createPlayerColours()
+        {
+            for ( var i = 0; i <= Constants.InternalPlayerCountMax; i++ )
+            {
+                App.PlayerColour[i] = new Player();
+            }
+            App.PlayerColour[0].Colour.Red = 0.0F;
+            App.PlayerColour[0].Colour.Green = 96.0F / 255.0F;
+            App.PlayerColour[0].Colour.Blue = 0.0F;
+            App.PlayerColour[1].Colour.Red = 160.0F / 255.0F;
+            App.PlayerColour[1].Colour.Green = 112.0F / 255.0F;
+            App.PlayerColour[1].Colour.Blue = 0.0F;
+            App.PlayerColour[2].Colour.Red = 128.0F / 255.0F;
+            App.PlayerColour[2].Colour.Green = 128.0F / 255.0F;
+            App.PlayerColour[2].Colour.Blue = 128.0F / 255.0F;
+            App.PlayerColour[3].Colour.Red = 0.0F;
+            App.PlayerColour[3].Colour.Green = 0.0F;
+            App.PlayerColour[3].Colour.Blue = 0.0F;
+            App.PlayerColour[4].Colour.Red = 128.0F / 255.0F;
+            App.PlayerColour[4].Colour.Green = 0.0F;
+            App.PlayerColour[4].Colour.Blue = 0.0F;
+            App.PlayerColour[5].Colour.Red = 32.0F / 255.0F;
+            App.PlayerColour[5].Colour.Green = 48.0F / 255.0F;
+            App.PlayerColour[5].Colour.Blue = 96.0F / 255.0F;
+            App.PlayerColour[6].Colour.Red = 144.0F / 255.0F;
+            App.PlayerColour[6].Colour.Green = 0.0F;
+            App.PlayerColour[6].Colour.Blue = 112 / 255.0F;
+            App.PlayerColour[7].Colour.Red = 0.0F;
+            App.PlayerColour[7].Colour.Green = 128.0F / 255.0F;
+            App.PlayerColour[7].Colour.Blue = 128.0F / 255.0F;
+            App.PlayerColour[8].Colour.Red = 128.0F / 255.0F;
+            App.PlayerColour[8].Colour.Green = 192.0F / 255.0F;
+            App.PlayerColour[8].Colour.Blue = 0.0F;
+            App.PlayerColour[9].Colour.Red = 176.0F / 255.0F;
+            App.PlayerColour[9].Colour.Green = 112.0F / 255.0F;
+            App.PlayerColour[9].Colour.Blue = 112.0F / 255.0F;
+            App.PlayerColour[10].Colour.Red = 224.0F / 255.0F;
+            App.PlayerColour[10].Colour.Green = 224.0F / 255.0F;
+            App.PlayerColour[10].Colour.Blue = 224.0F / 255.0F;
+            App.PlayerColour[11].Colour.Red = 32.0F / 255.0F;
+            App.PlayerColour[11].Colour.Green = 32.0F / 255.0F;
+            App.PlayerColour[11].Colour.Blue = 255.0F / 255.0F;
+            App.PlayerColour[12].Colour.Red = 0.0F;
+            App.PlayerColour[12].Colour.Green = 160.0F / 255.0F;
+            App.PlayerColour[12].Colour.Blue = 0.0F;
+            App.PlayerColour[13].Colour.Red = 64.0F / 255.0F;
+            App.PlayerColour[13].Colour.Green = 0.0F;
+            App.PlayerColour[13].Colour.Blue = 0.0F;
+            App.PlayerColour[14].Colour.Red = 16.0F / 255.0F;
+            App.PlayerColour[14].Colour.Green = 0.0F;
+            App.PlayerColour[14].Colour.Blue = 64.0F / 255.0F;
+            App.PlayerColour[15].Colour.Red = 64.0F / 255.0F;
+            App.PlayerColour[15].Colour.Green = 96.0F / 255.0F;
+            App.PlayerColour[15].Colour.Blue = 0.0F;
+            for ( var i = 0; i <= Constants.InternalPlayerCountMax; i++ )
+            {
+                App.PlayerColour[i].CalcMinimapColour();
+            }
+
+            App.MinimapFeatureColour.Red = 0.5F;
+            App.MinimapFeatureColour.Green = 0.5F;
+            App.MinimapFeatureColour.Blue = 0.5F;
         }
 
         private static void createTileTypes()
@@ -285,10 +360,10 @@ namespace SharpFlame
         public static void VisionRadius_2E_Changed()
         {
             VisionRadius = 256.0D * Math.Pow(2.0D, (VisionRadius_2E / 2.0D));
-            if ( Program.frmMainInstance.MapViewControl != null )
+            if ( MainMapView != null )
             {
                 View_Radius_Set(VisionRadius);
-                Program.frmMainInstance.View_DrawViewLater();
+                MainMapView.DrawLater();
             }
         }
 
