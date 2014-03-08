@@ -117,7 +117,6 @@ namespace SharpFlame.Settings
     public class KeyboardManager
     {
         public readonly Dictionary<string, KeyboardKey> Keys;
-        public KeyboardKey ActiveKey { get; set; }
 
         [EventPublication(KeyboardManagerEvents.OnKeyUp)]
         public event EventHandler<KeyboardEventArgs> KeyUp = delegate {};
@@ -127,6 +126,8 @@ namespace SharpFlame.Settings
         private readonly ILogger logger;
         private readonly Dictionary<Keys, KeyboardKey> keyLookupTable;
         private readonly Dictionary<char, KeyboardKey> charLookupTable;
+
+        private KeyboardKey lastKeyUp;
 
         public KeyboardManager(ILoggerFactory logFactory)
         {
@@ -216,12 +217,48 @@ namespace SharpFlame.Settings
                    
         public void HandleKeyUp(object sender, KeyEventArgs e)
         {
-            if(ActiveKey != null)
-            {
-                KeyUp(sender, new KeyboardEventArgs { Key = ActiveKey });
-                ActiveKey = null;
+            KeyboardKey myActiveKey = null;
+            var currentKeyOnly = e.KeyData & Eto.Forms.Keys.KeyMask;
+            if (currentKeyOnly != Eto.Forms.Keys.None) {
+                // Is known key.
+                if (keyLookupTable.ContainsKey(e.KeyData)) {
+                    myActiveKey = keyLookupTable[e.KeyData];
+                }
+            } else if (e.IsChar) {
+                // Is Char
+                if(charLookupTable.ContainsKey(e.KeyChar))
+                {
+                    myActiveKey = charLookupTable[e.KeyChar];
+                }
+            } else {
+                // Is modifier only
+                if(!lastKeyUp.IsChar) // Not char
+                {
+                    var lastKeyOnly = (Eto.Forms.Key)lastKeyUp.Key & Eto.Forms.Keys.KeyMask;
+                    if(lastKeyOnly == Eto.Forms.Keys.None) // and modifier only
+                    {
+                        return; // skip
+                    }
+                }
+
+                if (keyLookupTable.ContainsKey(e.KeyData)) {
+                    myActiveKey = keyLookupTable[e.KeyData];
+                }
             }
+
+            if(myActiveKey == null)
+            {
+                return;
+            }
+
+            myActiveKey.Active = false;
+            lastKeyUp = myActiveKey;
+
+            KeyUp(sender, new KeyboardEventArgs { Key = myActiveKey });
+
             e.Handled = true;
+
+            // logger.Debug("KeyUp: {0}, Char: {1}, Handled: {2}", e.KeyData, e.IsChar ? e.KeyChar.ToString() : "no char", e.Handled);
         }
             
         public void HandleKeyDown(object sender, KeyEventArgs e)
@@ -250,20 +287,22 @@ namespace SharpFlame.Settings
             {
                 return;
             }
-
-            if(myActiveKey == ActiveKey)
+                
+            if(myActiveKey.Active)
             {
-                if(ActiveKey.Repeat)
+                if(myActiveKey.Repeat)
                 {
-                    KeyDown(sender, new KeyboardEventArgs { Key = ActiveKey });
+                    KeyDown(sender, new KeyboardEventArgs { Key = myActiveKey });
                 }
             } else
             {
-                ActiveKey = myActiveKey;
-                KeyDown(sender, new KeyboardEventArgs { Key = ActiveKey });
+                myActiveKey.Active = true;
+                KeyDown(sender, new KeyboardEventArgs { Key = myActiveKey });
             }
 
             e.Handled = true;
+
+            // logger.Debug("KeyDown: {0}, Char: {1}, Handled: {2}", e.KeyData, e.IsChar ? e.KeyChar.ToString() : "no char", e.Handled);
         }
 
     }

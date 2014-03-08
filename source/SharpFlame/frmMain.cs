@@ -562,9 +562,9 @@ namespace SharpFlame
             double Pan = 0;
             double OrbitRate = 0;
 
-            if ( KeyboardManager.ActiveKey.Name == KeyboardKeys.ViewFast )
+            if ( KeyboardManager.Keys[KeyboardKeys.ViewFast].Active )
             {
-                if (KeyboardManager.ActiveKey.Name == KeyboardKeys.ViewSlow )
+                if (KeyboardManager.Keys[KeyboardKeys.ViewSlow].Active)
                 {
                     Rate = 8.0D;
                 }
@@ -573,7 +573,7 @@ namespace SharpFlame
                     Rate = 4.0D;
                 }
             }
-            else if ( KeyboardManager.ActiveKey.Name == KeyboardKeys.ViewSlow )
+            else if (KeyboardManager.Keys[KeyboardKeys.ViewSlow].Active)
             {
                 Rate = 0.25D;
             }
