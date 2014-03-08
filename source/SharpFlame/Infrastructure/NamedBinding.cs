@@ -24,7 +24,7 @@
   */
 #endregion
 
-namespace SharpFlame.Gui.Infrastructure
+namespace SharpFlame.Infrastructure
 {
     public class NamedBinding
     {

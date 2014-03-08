@@ -263,7 +263,6 @@
     <Compile Include="Util\sSplitPath.cs" />
     <Compile Include="Util\Tools.cs" />
     <Compile Include="Domain\UnitTypeBase.cs" />
-    <Compile Include="clsViewInfo.cs" />
     <Compile Include="Colors\ColorUtil.cs" />
     <Compile Include="frmQuit.Designer.cs">
       <DependentUpon>frmQuit.cs</DependentUpon>
@@ -439,6 +438,7 @@
     <Compile Include="Infrastructure\SharpFlameModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Gui\Resources.cs" />
+    <Compile Include="ViewInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">

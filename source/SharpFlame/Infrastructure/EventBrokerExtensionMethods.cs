@@ -32,7 +32,7 @@ using Ninject.Extensions.ContextPreservation;
 using Ninject.Extensions.NamedScope;
 using Ninject.Syntax;
 
-namespace SharpFlame.Gui.Infrastructure
+namespace SharpFlame.Infrastructure
 {
     /// <summary>
     /// Extension methods for registering objects on the event broker.

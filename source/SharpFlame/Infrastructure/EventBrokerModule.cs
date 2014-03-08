@@ -31,7 +31,7 @@ using Ninject.Extensions.ContextPreservation;
 using Ninject.Extensions.NamedScope;
 using Ninject.Modules;
 
-namespace SharpFlame.Gui.Infrastructure
+namespace SharpFlame.Infrastructure
 {
     /// <summary>
     /// Module for the event broker extension.

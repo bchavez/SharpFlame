@@ -35,6 +35,7 @@ using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
 using SharpFlame.Util;
+using SharpFlame.Settings;
 
 #endregion
 
@@ -70,15 +71,7 @@ namespace SharpFlame
                     }
                     else
                     {
-                        if ( value.FrmMainLink.Source != Owner )
-                        {
-                            MessageBox.Show("Error: Assigning map to wrong main form.");
-                            _MainMap = null;
-                        }
-                        else
-                        {
-                            _MainMap = value;
-                        }
+                        _MainMap = value;
                     }
                     MainForm.MainMapAfterChanged();
                 }
@@ -157,10 +150,14 @@ namespace SharpFlame
         public BrushControl ctrlCliffRemoveBrush;
         public BrushControl ctrlHeightBrush;
 
+        public KeyboardManager KeyboardManager { get; set; }
+
         public frmMain()
         {
             _LoadedMaps = new clsMaps(this);
             SelectedObjectTypes = new ConnectedList<UnitTypeBase, frmMain>(this);
+
+            KeyboardManager = App.KeyboardManager;
 
             InitializeComponent();
 
@@ -568,25 +565,25 @@ namespace SharpFlame
             double Pan = 0;
             double OrbitRate = 0;
 
-//            if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Fast) )
-//            {
-//                if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Slow) )
-//                {
-//                    Rate = 8.0D;
-//                }
-//                else
-//                {
-//                    Rate = 4.0D;
-//                }
-//            }
-//            else if ( KeyboardManager.KeyboardProfile.Active(KeyboardManager.Slow) )
-//            {
-//                Rate = 0.25D;
-//            }
-//            else
-//            {
-            Rate = 1.0D;
-//            }
+            if ( KeyboardManager.ActiveKey.Name == KeyboardKeys.ViewFast )
+            {
+                if (KeyboardManager.ActiveKey.Name == KeyboardKeys.ViewSlow )
+                {
+                    Rate = 8.0D;
+                }
+                else
+                {
+                    Rate = 4.0D;
+                }
+            }
+            else if ( KeyboardManager.ActiveKey.Name == KeyboardKeys.ViewSlow )
+            {
+                Rate = 0.25D;
+            }
+            else
+            {
+                Rate = 1.0D;
+            }
 
             Zoom = tmrKey.Interval * 0.002D;
             Move = tmrKey.Interval * Rate / 2048.0D;
@@ -4025,7 +4022,6 @@ namespace SharpFlame
 
         public void NewMainMap(Map NewMap)
         {
-            NewMap.FrmMainLink.Connect(_LoadedMaps);
             SetMainMap(NewMap);
         }
 

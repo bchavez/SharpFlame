@@ -40,7 +40,7 @@ namespace SharpFlame
     public class clsResultItemTileGoto : clsResultItemGotoInterface
     {
         public XYInt TileNum;
-        public clsViewInfo View;
+        public ViewInfo View;
 
         public override void Perform()
         {
@@ -51,7 +51,7 @@ namespace SharpFlame
     public class clsResultItemPosGoto : clsResultItemGotoInterface
     {
         public XYInt Horizontal;
-        public clsViewInfo View;
+        public ViewInfo View;
 
         public override void Perform()
         {

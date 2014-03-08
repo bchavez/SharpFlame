@@ -486,10 +486,6 @@ namespace SharpFlame
             {
                 return;
             }
-            if ( !Generator.Map.FrmMainLink.IsConnected )
-            {
-                return;
-            }
 
             Generator.BaseOilCount = ValidateTextbox(txtBaseOil, 0.0D, 16.0D, 1.0D);
             Generator.ExtraOilCount = ValidateTextbox(txtOilElsewhere, 0.0D, 9999.0D, 1.0D);
@@ -561,10 +557,6 @@ namespace SharpFlame
         public void btnGenerateTextures_Click(Object sender, EventArgs e)
         {
             if ( Generator.Map == null )
-            {
-                return;
-            }
-            if ( !Generator.Map.FrmMainLink.IsConnected )
             {
                 return;
             }

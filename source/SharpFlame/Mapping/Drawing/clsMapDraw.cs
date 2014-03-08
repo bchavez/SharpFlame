@@ -22,7 +22,7 @@ namespace SharpFlame.Mapping
 {
     public partial class Map
     {
-        public clsViewInfo ViewInfo;
+        public ViewInfo ViewInfo;
 
         public void GLDraw()
         {

@@ -40,7 +40,7 @@ using OpenTK;
 using SharpFlame.Core;
 using SharpFlame.Gui;
 using SharpFlame.Gui.Forms;
-using SharpFlame.Gui.Infrastructure;
+using SharpFlame.Infrastructure;
 using SharpFlame;
 using SharpFlame.Domain.ObjData;
 using SharpFlame.Graphics.OpenGL;

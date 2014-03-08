@@ -34,7 +34,7 @@ using Eto.Gl;
 using Ninject;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core.Domain;
-using SharpFlame.Gui.Infrastructure;
+using SharpFlame.Infrastructure;
 using SharpFlame;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping.Tiles;

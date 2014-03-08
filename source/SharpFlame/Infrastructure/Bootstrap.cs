@@ -28,7 +28,7 @@ using System.Collections.Generic;
 using Ninject;
 using Ninject.Modules;
 
-namespace SharpFlame.Gui.Infrastructure
+namespace SharpFlame.Infrastructure
 {
     public static class Bootstrap
     {

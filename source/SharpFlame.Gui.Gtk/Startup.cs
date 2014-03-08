@@ -3,7 +3,7 @@ using Eto.Gl;
 using Ninject;
 using SharpFlame.Gui;
 using OpenTK;
-using SharpFlame.Gui.Infrastructure;
+using SharpFlame.Infrastructure;
 
 namespace SharpFlame.Gui.Gtk
 {

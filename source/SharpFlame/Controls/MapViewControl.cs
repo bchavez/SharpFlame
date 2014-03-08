@@ -309,7 +309,7 @@ namespace SharpFlame.Controls
                 return;
             }
 
-            map.ViewInfo.Map.ViewInfo.MouseOver = new clsViewInfo.clsMouseOver();
+            map.ViewInfo.MouseOver = new ViewInfo.clsMouseOver();
             map.ViewInfo.MouseOver.ScreenPos.X = e.X;
             map.ViewInfo.MouseOver.ScreenPos.Y = e.Y;
 
@@ -331,17 +331,9 @@ namespace SharpFlame.Controls
             }
             else
             {
-                lblTile.Text = "Tile x:" + Convert.ToString(mouseOverTerrain.Tile.Normal.X) + ", y:" + Convert.ToString(mouseOverTerrain.Tile.Normal.Y);
-                lblVertex.Text = "Vertex  x:" + Convert.ToString(mouseOverTerrain.Vertex.Normal.X) + ", y:" +
-                                 Convert.ToString(mouseOverTerrain.Vertex.Normal.Y) + ", alt:" +
-                                 map.Terrain.Vertices[mouseOverTerrain.Vertex.Normal.X, mouseOverTerrain.Vertex.Normal.Y].Height * map.HeightMultiplier + " (" +
-                                 Convert.ToString(map.Terrain.Vertices[mouseOverTerrain.Vertex.Normal.X, mouseOverTerrain.Vertex.Normal.Y].Height) + "x" +
-                                 Convert.ToString(map.HeightMultiplier) + ")";
-                lblPos.Text = "Pos x:" + Convert.ToString(mouseOverTerrain.Pos.Horizontal.X) + ", y:" +
-                              Convert.ToString(mouseOverTerrain.Pos.Horizontal.Y) + ", alt:" + Convert.ToString(mouseOverTerrain.Pos.Altitude) +
-                              ", slope: " +
-                              Convert.ToString(Math.Round(map.GetTerrainSlopeAngle(mouseOverTerrain.Pos.Horizontal) / MathUtil.RadOf1Deg * 10.0D) / 10.0D) +
-                              "°";
+                lblTile.Text = string.Format("Tile x:{0}, y:{1}", Convert.ToString(mouseOverTerrain.Tile.Normal.X), Convert.ToString(mouseOverTerrain.Tile.Normal.Y));
+                lblVertex.Text = string.Format("Vertex  x:{0}, y:{1}, alt:{2} ({3}x{4})", Convert.ToString(mouseOverTerrain.Vertex.Normal.X), Convert.ToString(mouseOverTerrain.Vertex.Normal.Y), map.Terrain.Vertices[mouseOverTerrain.Vertex.Normal.X, mouseOverTerrain.Vertex.Normal.Y].Height * map.HeightMultiplier, Convert.ToString(map.Terrain.Vertices[mouseOverTerrain.Vertex.Normal.X, mouseOverTerrain.Vertex.Normal.Y].Height), Convert.ToString(map.HeightMultiplier));
+                lblPos.Text = string.Format("Pos x:{0}, y:{1}, alt:{2}, slope: {3}°", Convert.ToString(mouseOverTerrain.Pos.Horizontal.X), Convert.ToString(mouseOverTerrain.Pos.Horizontal.Y), Convert.ToString(mouseOverTerrain.Pos.Altitude), Convert.ToString(Math.Round(map.GetTerrainSlopeAngle(mouseOverTerrain.Pos.Horizontal) / MathUtil.RadOf1Deg * 10.0D) / 10.0D));
             }
         }
 
@@ -1035,11 +1027,6 @@ namespace SharpFlame.Controls
             {
                 return;
             }
-            if ( !map.FrmMainLink.IsConnected )
-            {
-                MessageBox.Show("Error: Map should be closed already.");
-                return;
-            }
 
             if ( !map.ClosePrompt() )
             {
@@ -1051,25 +1038,8 @@ namespace SharpFlame.Controls
 
         public void UpdateTabs()
         {
-            Map map;
-
-            tabMaps.Enabled = false;
-            tabMaps.TabPages.Clear();
-            foreach ( var tempMap in owner.LoadedMaps )
-            {
-                map = tempMap;
-                tabMaps.TabPages.Add(map.MapViewTabPage);
-            }
-            map = MainMap;
-            if ( map != null )
-            {
-                tabMaps.SelectedIndex = map.FrmMainLink.ArrayPosition;
-            }
-            else
-            {
-                tabMaps.SelectedIndex = -1;
-            }
-            tabMaps.Enabled = true;
+            // Should never happen as we gona change that code.
+            throw new NotImplementedException();
         }
     }
 }

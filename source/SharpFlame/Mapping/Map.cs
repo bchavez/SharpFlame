@@ -1,4 +1,4 @@
-﻿﻿#region
+﻿#region
 
 using System;
 using System.Diagnostics;
@@ -6,6 +6,7 @@ using System.IO;
 using System.Windows.Forms;
 using Eto.Gl;
 using Ninject;
+using Ninject.Parameters;
 using Ninject.Extensions.Logging;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core;
@@ -13,6 +14,8 @@ using SharpFlame.Core.Collections;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Domain;
+using SharpFlame.Gui.Sections;
+using SharpFlame.Infrastructure;
 using SharpFlame.Mapping.Changes;
 using SharpFlame.Mapping.IO.FMap;
 using SharpFlame.Mapping.Objects;
@@ -71,7 +74,15 @@ namespace SharpFlame.Mapping
         public SimpleClassList<UnitChange> UnitChanges;
         public XYInt UnitSelectedAreaVertexA;
         private bool readyForUserInput;
-        public ConnectedListLink<Map, frmMain> FrmMainLink;       
+
+        [Inject]
+        internal MainMapView MainMapView { get; set; }
+
+        [Inject, Named(NamedBinding.MapView)]
+        public GLSurface GLSurface { get; set; }
+
+        [Inject]
+        internal IKernel Kernel { get; set; }
        
         public Map(ILoggerFactory logFactory)
         {
@@ -81,7 +92,6 @@ namespace SharpFlame.Mapping
             SelectedAreaVertexA = new XYInt(0, 0);
             SelectedAreaVertexB = new XYInt(0, 0);           
 
-            FrmMainLink = new ConnectedListLink<Map, frmMain>(this);
             Sectors = new Sector[0, 0];
             ShadowSectors = new ShadowSector[0, 0];
             HeightMultiplier = 2;
@@ -96,7 +106,7 @@ namespace SharpFlame.Mapping
             ScriptPositions = new ConnectedList<clsScriptPosition, Map>(this);
             ScriptAreas = new ConnectedList<clsScriptArea, Map>(this);
 
-            Initialize();
+            initialize();
         }
 
         public Map Create(XYInt tileSize) {
@@ -202,15 +212,15 @@ namespace SharpFlame.Mapping
             get { return readyForUserInput; }
         }
 
-        public Map MainMap
+        private bool isMainMap
         {
             get
             {
-                if ( !FrmMainLink.IsConnected )
+                if ( MainMapView.Map != this )
                 {
-                    return null;
+                    return false;
                 }
-                return FrmMainLink.Source.MainMap;
+                return true;
             }
         }
 
@@ -220,7 +230,7 @@ namespace SharpFlame.Mapping
             remove { changedEvent = (ChangedEventHandler)Delegate.Remove(changedEvent, value); }
         }
 
-        public void Initialize()
+        private void initialize()
         {
             makeMinimapTimer = new Timer();
             makeMinimapTimer.Tick += MinimapTimer_Tick;
@@ -479,9 +489,6 @@ namespace SharpFlame.Mapping
             makeMinimapTimer.Enabled = false;
             makeMinimapTimer.Dispose();
             makeMinimapTimer = null;
-
-            FrmMainLink.Deallocate();
-            FrmMainLink = null;
 
             UnitGroups.Deallocate();
             UnitGroups = null;
@@ -1046,7 +1053,7 @@ namespace SharpFlame.Mapping
 
         private void MinimapTimer_Tick(object sender, EventArgs e)
         {
-            if ( MainMap != this )
+            if ( !isMainMap )
             {
                 minimapPending = false;
             }
@@ -2089,7 +2096,9 @@ namespace SharpFlame.Mapping
                 InterfaceOptions = new InterfaceOptions();
             }
 
-            ViewInfo = new clsViewInfo(this, App.MapViewGlSurface);
+            ViewInfo = Kernel.Get<ViewInfo>(
+                new ConstructorArgument("myMap", this)
+            );
 
             _SelectedUnitGroup = new clsUnitGroupContainer();
             SelectedUnitGroup.Item = ScavengerUnitGroup;
@@ -2126,7 +2135,7 @@ namespace SharpFlame.Mapping
             var UpdateSectorGraphics = new clsUpdateSectorGraphics();
             UpdateSectorGraphics.Map = this;
 
-            if ( MainMap == this )
+            if ( !isMainMap )
             {
                 SectorGraphicsChanges.PerformTool(UpdateSectorGraphics);
             }

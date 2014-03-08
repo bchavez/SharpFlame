@@ -31,7 +31,7 @@ using Ninject;
 using Ninject.Extensions.Logging;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core.Domain.Colors;
-using SharpFlame.Gui.Infrastructure;
+using SharpFlame.Infrastructure;
 using SharpFlame.Mapping;
 using SharpFlame.Settings;
 
