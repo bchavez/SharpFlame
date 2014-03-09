@@ -1,5 +1,7 @@
 #region
 
+using System;
+using Ninject;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Mapping.Objects;
@@ -64,7 +66,12 @@ namespace SharpFlame
         public static ResultProblemGoto<clsResultItemPosGoto> CreateResultProblemGotoForObject(Unit unit)
         {
             var resultGoto = new clsResultItemPosGoto();
-            resultGoto.View = unit.MapLink.Source.ViewInfo;
+            var view = App.Kernel.Get<ViewInfo>();
+            if(view.Map != unit.MapLink.Source)
+            {
+                throw new Exception("Map changed?");
+            }
+
             resultGoto.Horizontal = unit.Pos.Horizontal;
             var resultProblem = new ResultProblemGoto<clsResultItemPosGoto>();
             resultProblem.MapGoto = resultGoto;

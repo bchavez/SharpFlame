@@ -139,7 +139,7 @@ namespace SharpFlame.Gui.Actions
                 {
                     map.InitializeUserInput();
                     map.Update(); // TODO: Remove me once map drawing works.
-                    MainMapView.Map = map;
+                    MainMapView.MainMap = map;
                 }
             }
         }

@@ -33,9 +33,6 @@ namespace SharpFlame
     /// </summary>
     public class ViewInfo
     {
-        private readonly ILogger logger;
-        private readonly Options uiOptions;
-
         public double FOVMultiplier;
         public double FOVMultiplierExponent;
         public float FieldOfViewY;
@@ -49,23 +46,41 @@ namespace SharpFlame
         public XYZInt ViewPos;
 
         private Map map;
-
-        private readonly MainMapView mainMapView;
-        private readonly KeyboardManager keyboardManager;
-
-        public ViewInfo(Map myMap, ILoggerFactory logFactory, MainMapView mmv, KeyboardManager kbm, Options argUiOptions)
+        public Map Map
         {
-            logger = logFactory.GetCurrentClassLogger();
-            map = myMap;
-            mainMapView = mmv;
+            get { return map; }
+            set {
+                map = value;
+                ViewPos = new XYZInt(0, 3072, 0);
+                FovMultiplierSet(settings.FOVDefault);
+                ViewAngleSetToDefault();
+                LookAtPos(new XYInt((int)(Map.Terrain.TileSize.X * Constants.TerrainGridSpacing / 2.0D),
+                    (int)(Map.Terrain.TileSize.Y * Constants.TerrainGridSpacing / 2.0D)));
+                // Reset Mouse on map change.
+                HandleLostFocus(this, EventArgs.Empty);
+            }
+        }
+                  
+        public MainMapView MainMapView { get; set; }
+
+        private readonly KeyboardManager keyboardManager;
+        private readonly Options uiOptions;
+        private readonly SettingsManager settings;
+        private readonly UITimer tmrMouseMove;
+
+        private bool blEnableMouseMove = false;
+
+        public ViewInfo(KeyboardManager kbm, Options argUiOptions,
+            SettingsManager argSettings
+        )
+        {
             keyboardManager = kbm;
             uiOptions = argUiOptions;
+            settings = argSettings;
 
-            ViewPos = new XYZInt(0, 3072, 0);
-            FovMultiplierSet(App.SettingsManager.FOVDefault);
-            ViewAngleSetToDefault();
-            LookAtPos(new XYInt((int)(map.Terrain.TileSize.X * Constants.TerrainGridSpacing / 2.0D),
-                (int)(map.Terrain.TileSize.Y * Constants.TerrainGridSpacing / 2.0D)));
+            tmrMouseMove = new UITimer { Interval = 0.1 };
+            tmrMouseMove.Elapsed += enableMouseMove;
+            tmrMouseMove.Start();
         }
 
         private void fovScale_2EChange(double powerChange)
@@ -89,27 +104,27 @@ namespace SharpFlame
             const float min = (float)(0.1d * MathUtil.RadOf1Deg);
             const float max = (float)(179.0d * MathUtil.RadOf1Deg);
 
-            FieldOfViewY = (float)(Math.Atan(mainMapView.GLSurface.Size.Height * FOVMultiplier / 2.0D) * 2.0D);
+            FieldOfViewY = (float)(Math.Atan(MainMapView.GLSurface.Size.Height * FOVMultiplier / 2.0D) * 2.0D);
             if ( FieldOfViewY < min )
             {
                 FieldOfViewY = min;
-                if ( mainMapView.GLSurface.Size.Height > 0 )
+                if ( MainMapView.GLSurface.Size.Height > 0 )
                 {
-                    FOVMultiplier = 2.0D * Math.Tan(FieldOfViewY / 2.0D) / mainMapView.GLSurface.Size.Height;
+                    FOVMultiplier = 2.0D * Math.Tan(FieldOfViewY / 2.0D) / MainMapView.GLSurface.Size.Height;
                     FOVMultiplierExponent = Math.Log(FOVMultiplier) / Math.Log(2.0D);
                 }
             }
             else if ( FieldOfViewY > max )
             {
                 FieldOfViewY = max;
-                if ( mainMapView.GLSurface.Size.Height > 0 )
+                if ( MainMapView.GLSurface.Size.Height > 0 )
                 {
-                    FOVMultiplier = 2.0D * Math.Tan(FieldOfViewY / 2.0D) / mainMapView.GLSurface.Size.Height;
+                    FOVMultiplier = 2.0D * Math.Tan(FieldOfViewY / 2.0D) / MainMapView.GLSurface.Size.Height;
                     FOVMultiplierExponent = Math.Log(FOVMultiplier) / Math.Log(2.0D);
                 }
             }
 
-            mainMapView.DrawLater();
+            MainMapView.DrawLater();
         }
 
         private void viewPosSet(XYZInt newViewPos)
@@ -117,7 +132,7 @@ namespace SharpFlame
             ViewPos = newViewPos;
             viewPosClamp();
 
-            mainMapView.DrawLater();
+            MainMapView.DrawLater();
         }
 
         public void ViewPosChange(XYZInt displacement)
@@ -127,7 +142,7 @@ namespace SharpFlame
             ViewPos.Y += displacement.Y;
             viewPosClamp();
 
-            mainMapView.DrawLater();
+            MainMapView.DrawLater();
         }
 
         private void viewPosClamp()
@@ -135,9 +150,9 @@ namespace SharpFlame
             const int maxHeight = 1048576;
             const int maxDist = 1048576;
 
-            ViewPos.X = MathUtil.ClampInt(ViewPos.X, Convert.ToInt32(- maxDist), map.Terrain.TileSize.X * Constants.TerrainGridSpacing + maxDist);
-            ViewPos.Z = MathUtil.ClampInt(ViewPos.Z, - map.Terrain.TileSize.Y * Constants.TerrainGridSpacing - maxDist, maxDist);
-            ViewPos.Y = MathUtil.ClampInt(ViewPos.Y, ((int)(Math.Ceiling(map.GetTerrainHeight(new XYInt(ViewPos.X, - ViewPos.Z))))) + 16, maxHeight);
+            ViewPos.X = MathUtil.ClampInt(ViewPos.X, Convert.ToInt32(- maxDist), Map.Terrain.TileSize.X * Constants.TerrainGridSpacing + maxDist);
+            ViewPos.Z = MathUtil.ClampInt(ViewPos.Z, - Map.Terrain.TileSize.Y * Constants.TerrainGridSpacing - maxDist, maxDist);
+            ViewPos.Y = MathUtil.ClampInt(ViewPos.Y, ((int)(Math.Ceiling(Map.GetTerrainHeight(new XYInt(ViewPos.X, - ViewPos.Z))))) + 16, maxHeight);
         }
 
         private void viewAngleSet(Matrix3DMath.Matrix3D newMatrix)
@@ -147,7 +162,7 @@ namespace SharpFlame
             Matrix3DMath.MatrixInvert(ViewAngleMatrix, ViewAngleMatrixInverted);
             Matrix3DMath.MatrixToRPY(ViewAngleMatrix, ref ViewAngleRPY);
 
-            mainMapView.DrawLater();
+            MainMapView.DrawLater();
         }
 
         private void ViewAngleSetToDefault()
@@ -156,7 +171,7 @@ namespace SharpFlame
             Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
             viewAngleSet(matrixA);
 
-            mainMapView.DrawLater();
+            MainMapView.DrawLater();
         }
 
         public void ViewAngleSetRotate(Matrix3DMath.Matrix3D newMatrix)
@@ -167,7 +182,7 @@ namespace SharpFlame
 
             if ( App.ViewMoveType == ViewMoveType.RTS & App.RTSOrbit )
             {
-                if ( ScreenXYGetViewPlanePosForwardDownOnly((int)((mainMapView.GLSurface.Size.Width / 2.0D)), (int)((mainMapView.GLSurface.Size.Height / 2.0D)), 127.5D,
+                if ( ScreenXYGetViewPlanePosForwardDownOnly((int)((MainMapView.GLSurface.Size.Width / 2.0D)), (int)((MainMapView.GLSurface.Size.Height / 2.0D)), 127.5D,
                     ref xyDbl) )
                 {
                     xyzDbl.X = xyDbl.X;
@@ -194,7 +209,7 @@ namespace SharpFlame
                 moveToViewTerrainPosFromDistance(xyzDbl, Convert.ToDouble((xyzDbl2 - xyzDbl).GetMagnitude()));
             }
 
-            mainMapView.DrawLater();
+            MainMapView.DrawLater();
         }
 
         public void LookAtTile(XYInt tileNum)
@@ -214,7 +229,7 @@ namespace SharpFlame
             var anglePy = default(Angles.AnglePY);
 
             Matrix3DMath.VectorForwardsRotationByMatrix(ViewAngleMatrix, ref xyzDbl);
-            var dblTemp = map.GetTerrainHeight(horizontal);
+            var dblTemp = Map.GetTerrainHeight(horizontal);
             var i = ((int)(Math.Ceiling(dblTemp))) + 128;
             if ( ViewPos.Y < i )
             {
@@ -260,8 +275,8 @@ namespace SharpFlame
             try
             {
                 var ratioZpx = 1.0D / (FOVMultiplier * pos.Z);
-                result.X = (int)(mainMapView.GLSurface.Size.Height / 2.0D + (pos.X * ratioZpx));
-                result.Y = (int)(mainMapView.GLSurface.Size.Width / 2.0D - (pos.Y * ratioZpx));
+                result.X = (int)(MainMapView.GLSurface.Size.Height / 2.0D + (pos.X * ratioZpx));
+                result.Y = (int)(MainMapView.GLSurface.Size.Width / 2.0D - (pos.Y * ratioZpx));
                 return true;
             }
             catch
@@ -280,8 +295,8 @@ namespace SharpFlame
             try
             {
                 //convert screen pos to vector of one pos unit
-                xyzDbl.X = (screenPos.X - mainMapView.GLSurface.Size.Width / 2.0D) * FOVMultiplier;
-                xyzDbl.Y = (mainMapView.GLSurface.Size.Height / 2.0D - screenPos.Y) * FOVMultiplier;
+                xyzDbl.X = (screenPos.X - MainMapView.GLSurface.Size.Width / 2.0D) * FOVMultiplier;
+                xyzDbl.Y = (MainMapView.GLSurface.Size.Height / 2.0D - screenPos.Y) * FOVMultiplier;
                 xyzDbl.Z = 1.0D;
                 //factor in the view angle
                 Matrix3DMath.VectorRotationByMatrix(ViewAngleMatrix, xyzDbl, ref xyzDbl2);
@@ -316,15 +331,15 @@ namespace SharpFlame
                 terrainViewPos.Z = Convert.ToDouble(- ViewPos.Z);
 
                 //convert screen pos to vector of one pos unit
-                xyzDbl.X = (screenPos.X - mainMapView.GLSurface.Size.Height/ 2.0D) * FOVMultiplier;
-                xyzDbl.Y = (mainMapView.GLSurface.Size.Width / 2.0D - screenPos.Y) * FOVMultiplier;
+                xyzDbl.X = (screenPos.X - MainMapView.GLSurface.Size.Height/ 2.0D) * FOVMultiplier;
+                xyzDbl.Y = (MainMapView.GLSurface.Size.Width / 2.0D - screenPos.Y) * FOVMultiplier;
                 xyzDbl.Z = 1.0D;
                 //rotate the vector so that it points forward and level
                 Matrix3DMath.VectorRotationByMatrix(ViewAngleMatrix, xyzDbl, ref terrainViewVector);
                 terrainViewVector.Y = Convert.ToDouble(- terrainViewVector.Y); //get the amount of looking down, not up
                 terrainViewVector.Z = Convert.ToDouble(- terrainViewVector.Z); //convert to terrain coordinates from view coordinates
                 //get range of possible tiles
-                double dblTemp = (terrainViewPos.Y - 255 * map.HeightMultiplier) / terrainViewVector.Y;
+                double dblTemp = (terrainViewPos.Y - 255 * Map.HeightMultiplier) / terrainViewVector.Y;
                 limitA.X = terrainViewPos.X + terrainViewVector.X * dblTemp;
                 limitA.Y = terrainViewPos.Z + terrainViewVector.Z * dblTemp;
                 dblTemp = terrainViewPos.Y / terrainViewVector.Y;
@@ -332,8 +347,8 @@ namespace SharpFlame
                 limitB.Y = terrainViewPos.Z + terrainViewVector.Z * dblTemp;
                 min.X = Math.Max(Convert.ToInt32((Math.Min(limitA.X, limitB.X) / Constants.TerrainGridSpacing)), 0);
                 min.Y = Math.Max((int)((Math.Min(limitA.Y, limitB.Y) / Constants.TerrainGridSpacing)), 0);
-                max.X = Math.Min(Convert.ToInt32((Math.Max(limitA.X, limitB.X) / Constants.TerrainGridSpacing)), map.Terrain.TileSize.X - 1);
-                max.Y = Math.Min(Convert.ToInt32((Math.Max(limitA.Y, limitB.Y) / Constants.TerrainGridSpacing)), map.Terrain.TileSize.Y - 1);
+                max.X = Math.Min(Convert.ToInt32((Math.Max(limitA.X, limitB.X) / Constants.TerrainGridSpacing)), Map.Terrain.TileSize.X - 1);
+                max.Y = Math.Min(Convert.ToInt32((Math.Max(limitA.Y, limitB.Y) / Constants.TerrainGridSpacing)), Map.Terrain.TileSize.Y - 1);
                 //find the nearest valid tile to the view
                 double bestDist = double.MaxValue;
                 bestPos.X = double.NaN;
@@ -355,11 +370,11 @@ namespace SharpFlame
                         double inTileX = 0;
                         XYZDouble dif;
                         double inTileZ = 0;
-                        if ( map.Terrain.Tiles[x, y].Tri )
+                        if ( Map.Terrain.Tiles[x, y].Tri )
                         {
-                            triHeightOffset = Convert.ToDouble(map.Terrain.Vertices[x, y].Height * map.HeightMultiplier);
-                            triGradientX = Convert.ToDouble(map.Terrain.Vertices[x + 1, y].Height * map.HeightMultiplier - triHeightOffset);
-                            triGradientZ = Convert.ToDouble(map.Terrain.Vertices[x, y + 1].Height * map.HeightMultiplier - triHeightOffset);
+                            triHeightOffset = Convert.ToDouble(Map.Terrain.Vertices[x, y].Height * Map.HeightMultiplier);
+                            triGradientX = Convert.ToDouble(Map.Terrain.Vertices[x + 1, y].Height * Map.HeightMultiplier - triHeightOffset);
+                            triGradientZ = Convert.ToDouble(Map.Terrain.Vertices[x, y + 1].Height * Map.HeightMultiplier - triHeightOffset);
                             xyzDbl.Y = (triHeightOffset +
                                          (triGradientX * (terrainViewPos.X - tilePos.X) + triGradientZ * (terrainViewPos.Z - tilePos.Y) +
                                           (triGradientX * terrainViewVector.X + triGradientZ * terrainViewVector.Z) * terrainViewPos.Y / terrainViewVector.Y) /
@@ -381,9 +396,9 @@ namespace SharpFlame
                                 }
                             }
 
-                            triHeightOffset = Convert.ToDouble(map.Terrain.Vertices[x + 1, y + 1].Height * map.HeightMultiplier);
-                            triGradientX = Convert.ToDouble(map.Terrain.Vertices[x, y + 1].Height * map.HeightMultiplier - triHeightOffset);
-                            triGradientZ = Convert.ToDouble(map.Terrain.Vertices[x + 1, y].Height * map.HeightMultiplier - triHeightOffset);
+                            triHeightOffset = Convert.ToDouble(Map.Terrain.Vertices[x + 1, y + 1].Height * Map.HeightMultiplier);
+                            triGradientX = Convert.ToDouble(Map.Terrain.Vertices[x, y + 1].Height * Map.HeightMultiplier - triHeightOffset);
+                            triGradientZ = Convert.ToDouble(Map.Terrain.Vertices[x + 1, y].Height * Map.HeightMultiplier - triHeightOffset);
                             xyzDbl.Y = (triHeightOffset + triGradientX + triGradientZ +
                                          (triGradientX * (tilePos.X - terrainViewPos.X) + triGradientZ * (tilePos.Y - terrainViewPos.Z) -
                                           (triGradientX * terrainViewVector.X + triGradientZ * terrainViewVector.Z) * terrainViewPos.Y / terrainViewVector.Y) /
@@ -407,9 +422,9 @@ namespace SharpFlame
                         }
                         else
                         {
-                            triHeightOffset = Convert.ToDouble(map.Terrain.Vertices[x + 1, y].Height * map.HeightMultiplier);
-                            triGradientX = Convert.ToDouble(map.Terrain.Vertices[x, y].Height * map.HeightMultiplier - triHeightOffset);
-                            triGradientZ = Convert.ToDouble(map.Terrain.Vertices[x + 1, y + 1].Height * map.HeightMultiplier - triHeightOffset);
+                            triHeightOffset = Convert.ToDouble(Map.Terrain.Vertices[x + 1, y].Height * Map.HeightMultiplier);
+                            triGradientX = Convert.ToDouble(Map.Terrain.Vertices[x, y].Height * Map.HeightMultiplier - triHeightOffset);
+                            triGradientZ = Convert.ToDouble(Map.Terrain.Vertices[x + 1, y + 1].Height * Map.HeightMultiplier - triHeightOffset);
                             xyzDbl.Y = (triHeightOffset + triGradientX +
                                          (triGradientX * (tilePos.X - terrainViewPos.X) + triGradientZ * (terrainViewPos.Z - tilePos.Y) -
                                           (triGradientX * terrainViewVector.X - triGradientZ * terrainViewVector.Z) * terrainViewPos.Y / terrainViewVector.Y) /
@@ -431,9 +446,9 @@ namespace SharpFlame
                                 }
                             }
 
-                            triHeightOffset = Convert.ToDouble(map.Terrain.Vertices[x, y + 1].Height * map.HeightMultiplier);
-                            triGradientX = Convert.ToDouble(map.Terrain.Vertices[x + 1, y + 1].Height * map.HeightMultiplier - triHeightOffset);
-                            triGradientZ = Convert.ToDouble(map.Terrain.Vertices[x, y].Height * map.HeightMultiplier - triHeightOffset);
+                            triHeightOffset = Convert.ToDouble(Map.Terrain.Vertices[x, y + 1].Height * Map.HeightMultiplier);
+                            triGradientX = Convert.ToDouble(Map.Terrain.Vertices[x + 1, y + 1].Height * Map.HeightMultiplier - triHeightOffset);
+                            triGradientZ = Convert.ToDouble(Map.Terrain.Vertices[x, y].Height * Map.HeightMultiplier - triHeightOffset);
                             xyzDbl.Y = (triHeightOffset + triGradientZ +
                                          (triGradientX * (terrainViewPos.X - tilePos.X) + triGradientZ * (tilePos.Y - terrainViewPos.Z) +
                                           (triGradientX * terrainViewVector.X - triGradientZ * terrainViewVector.Z) * terrainViewPos.Y / terrainViewVector.Y) /
@@ -488,8 +503,8 @@ namespace SharpFlame
             {
                 //convert screen pos to vector of one pos unit
                 double dblTemp2 = FOVMultiplier;
-                xyzDouble.X = (screenX - mainMapView.GLSurface.Size.Width / 2.0D) * dblTemp2;
-                xyzDouble.Y = (mainMapView.GLSurface.Size.Height / 2.0D - screenY) * dblTemp2;
+                xyzDouble.X = (screenX - MainMapView.GLSurface.Size.Width / 2.0D) * dblTemp2;
+                xyzDouble.Y = (MainMapView.GLSurface.Size.Height / 2.0D - screenY) * dblTemp2;
                 xyzDouble.Z = 1.0D;
                 //factor in the view angle
                 Matrix3DMath.VectorRotationByMatrix(ViewAngleMatrix, xyzDouble, ref xyzDbl2);
@@ -509,22 +524,908 @@ namespace SharpFlame
             return true;
         }
 
-        public void MouseOverPosCalc()
+        public clsMouseOver.clsOverTerrain GetMouseOverTerrain()
         {
+            if (Map == null || MouseOver == null)
+            {
+                return null;
+            }
+            return MouseOver.OverTerrain;
+        }
+
+        public clsMouseDown.clsOverTerrain GetMouseLeftDownOverTerrain()
+        {
+            if (Map == null || MouseLeftDown == null)
+            {
+                return null;
+            }
+            return MouseLeftDown.OverTerrain;
+        }
+
+        public clsMouseDown.clsOverTerrain GetMouseRightDownOverTerrain()
+        {
+            if (Map == null || MouseRightDown == null)
+            {
+                return null;
+            }
+            return MouseRightDown.OverTerrain;
+        }
+
+        public clsMouseDown.clsOverMinimap GetMouseLeftDownOverMinimap()
+        {
+            if (Map == null || MouseLeftDown == null)
+            {
+                return null;
+            }
+            return MouseLeftDown.OverMinimap;
+        }
+
+        public clsMouseDown.clsOverMinimap GetMouseRightDownOverMinimap()
+        {
+            if (Map == null ||  MouseRightDown == null)
+            {
+                return null;
+            }
+            return MouseRightDown.OverMinimap;
+        }
+
+        public bool IsViewPosOverMinimap(XYInt pos)
+        {
+            if ( pos.X >= 0 & pos.X < Map.Terrain.TileSize.X / TilesPerMinimapPixel
+                 & pos.Y >= 0 & pos.Y < Map.Terrain.TileSize.Y / TilesPerMinimapPixel )
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private void applyTerrain()
+        {
+            var mouseOverTerrain = GetMouseOverTerrain();
+
+            if ( mouseOverTerrain == null )
+            {
+                return;
+            }
+
+            var applyVertexTerrain = new clsApplyVertexTerrain
+                {
+                    Map = Map, VertexTerrain = App.SelectedTerrain
+                };
+            App.TerrainBrush.PerformActionMapVertices(applyVertexTerrain, mouseOverTerrain.Vertex);
+
+            Map.Update();
+
+            MainMapView.DrawLater();
+        }
+
+        private void applyRoad()
+        {
+            var mouseOverTerrain = GetMouseOverTerrain();
+
+            if ( mouseOverTerrain == null )
+            {
+                return;
+            }
+
+            var sideNum = mouseOverTerrain.SideNum;
+            var tileNum = new XYInt();
+
+            if ( mouseOverTerrain.SideIsV )
+            {
+                if ( Map.Terrain.SideV[sideNum.X, sideNum.Y].Road != App.SelectedRoad )
+                {
+                    Map.Terrain.SideV[sideNum.X, sideNum.Y].Road = App.SelectedRoad;
+
+                    if ( sideNum.X > 0 )
+                    {
+                        tileNum.X = sideNum.X - 1;
+                        tileNum.Y = sideNum.Y;
+                        Map.AutoTextureChanges.TileChanged(tileNum);
+                        Map.SectorGraphicsChanges.TileChanged(tileNum);
+                        Map.SectorTerrainUndoChanges.TileChanged(tileNum);
+                    }
+                    if ( sideNum.X < Map.Terrain.TileSize.X )
+                    {
+                        tileNum = sideNum;
+                        Map.AutoTextureChanges.TileChanged(tileNum);
+                        Map.SectorGraphicsChanges.TileChanged(tileNum);
+                        Map.SectorTerrainUndoChanges.TileChanged(tileNum);
+                    }
+
+                    Map.Update();
+
+                    Map.UndoStepCreate("Road Side");
+
+                    MainMapView.DrawLater();
+                }
+            }
+            else
+            {
+                if ( Map.Terrain.SideH[sideNum.X, sideNum.Y].Road != App.SelectedRoad )
+                {
+                    Map.Terrain.SideH[sideNum.X, sideNum.Y].Road = App.SelectedRoad;
+
+                    if ( sideNum.Y > 0 )
+                    {
+                        tileNum.X = sideNum.X;
+                        tileNum.Y = sideNum.Y - 1;
+                        Map.AutoTextureChanges.TileChanged(tileNum);
+                        Map.SectorGraphicsChanges.TileChanged(tileNum);
+                        Map.SectorTerrainUndoChanges.TileChanged(tileNum);
+                    }
+                    if ( sideNum.Y < Map.Terrain.TileSize.X )
+                    {
+                        tileNum = sideNum;
+                        Map.AutoTextureChanges.TileChanged(tileNum);
+                        Map.SectorGraphicsChanges.TileChanged(tileNum);
+                        Map.SectorTerrainUndoChanges.TileChanged(tileNum);
+                    }
+
+                    Map.Update();
+
+                    Map.UndoStepCreate("Road Side");
+
+                    MainMapView.DrawLater();
+                }
+            }
+        }
+
+        private void applyRoadLineSelection()
+        {
+            var mouseOverTerrian = GetMouseOverTerrain();
+
+            if ( mouseOverTerrian == null )
+            {
+                return;
+            }
+
+            var tile = mouseOverTerrian.Tile.Normal;
+            var sideNum = new XYInt();
+
+            if ( Map.SelectedTileA != null )
+            {
+                var num = 0;
+                var a = 0;
+                var b = 0;
+                if ( tile.X == Map.SelectedTileA.X )
+                {
+                    if ( tile.Y <= Map.SelectedTileA.Y )
+                    {
+                        a = tile.Y;
+                        b = Map.SelectedTileA.Y;
+                    }
+                    else
+                    {
+                        a = Map.SelectedTileA.Y;
+                        b = tile.Y;
+                    }
+                    for ( num = a + 1; num <= b; num++ )
+                    {
+                        Map.Terrain.SideH[Map.SelectedTileA.X, num].Road = App.SelectedRoad;
+                        sideNum.X = Map.SelectedTileA.X;
+                        sideNum.Y = num;
+                        Map.AutoTextureChanges.SideHChanged(sideNum);
+                        Map.SectorGraphicsChanges.SideHChanged(sideNum);
+                        Map.SectorTerrainUndoChanges.SideHChanged(sideNum);
+                    }
+
+                    Map.Update();
+
+                    Map.UndoStepCreate("Road Line");
+
+                    Map.SelectedTileA = null;
+                    MainMapView.DrawLater();
+                }
+                else if ( tile.Y == Map.SelectedTileA.Y )
+                {
+                    if ( tile.X <= Map.SelectedTileA.X )
+                    {
+                        a = tile.X;
+                        b = Map.SelectedTileA.X;
+                    }
+                    else
+                    {
+                        a = Map.SelectedTileA.X;
+                        b = tile.X;
+                    }
+                    for ( num = a + 1; num <= b; num++ )
+                    {
+                        Map.Terrain.SideV[num, Map.SelectedTileA.Y].Road = App.SelectedRoad;
+                        sideNum.X = num;
+                        sideNum.Y = Map.SelectedTileA.Y;
+                        Map.AutoTextureChanges.SideVChanged(sideNum);
+                        Map.SectorGraphicsChanges.SideVChanged(sideNum);
+                        Map.SectorTerrainUndoChanges.SideVChanged(sideNum);
+                    }
+
+                    Map.Update();
+
+                    Map.UndoStepCreate("Road Line");
+
+                    Map.SelectedTileA = null;
+                    MainMapView.DrawLater();
+                }
+            }
+            else
+            {
+                Map.SelectedTileA = tile;
+            }
+        }
+
+        private void applyTerrainFill(FillCliffAction cliffAction, bool inside)
+        {
+            var mouseOverTerrain = GetMouseOverTerrain();
+
+            if ( mouseOverTerrain == null )
+            {
+                return;
+            }
+
+            var startVertex = mouseOverTerrain.Vertex.Normal;
+
+            var fillType = App.SelectedTerrain;
+            var replaceType = Map.Terrain.Vertices[startVertex.X, startVertex.Y].Terrain;
+            if ( fillType == replaceType )
+            {
+                return; //otherwise will cause endless loop
+            }
+
+            var sourceOfFill = new XYInt[524289];
+            var sourceOfFillCount = 0;
+            var sourceOfFillNum = 0;
+            var nextSource = new XYInt();
+
+            sourceOfFill[0] = startVertex;
+            sourceOfFillCount = 1;
+            sourceOfFillNum = 0;
+            while ( sourceOfFillNum < sourceOfFillCount )
+            {
+                var currentSource = sourceOfFill[sourceOfFillNum];
+
+                bool stopForCliff;
+                if ( cliffAction == FillCliffAction.StopBefore )
+                {
+                    stopForCliff = Map.VertexIsCliffEdge(currentSource);
+                }
+                else
+                {
+                    stopForCliff = false;
+                }
+                var stopForEdge = false;
+                if ( inside )
+                {
+                    if ( currentSource.X > 0 )
+                    {
+                        if ( currentSource.Y > 0 )
+                        {
+                            if ( Map.Terrain.Vertices[currentSource.X - 1, currentSource.Y - 1].Terrain != replaceType
+                                 && Map.Terrain.Vertices[currentSource.X - 1, currentSource.Y - 1].Terrain != fillType )
+                            {
+                                stopForEdge = true;
+                            }
+                        }
+                        if ( Map.Terrain.Vertices[currentSource.X - 1, currentSource.Y].Terrain != replaceType
+                             && Map.Terrain.Vertices[currentSource.X - 1, currentSource.Y].Terrain != fillType )
+                        {
+                            stopForEdge = true;
+                        }
+                        if ( currentSource.Y < Map.Terrain.TileSize.Y )
+                        {
+                            if ( Map.Terrain.Vertices[currentSource.X - 1, currentSource.Y + 1].Terrain != replaceType
+                                 && Map.Terrain.Vertices[currentSource.X - 1, currentSource.Y + 1].Terrain != fillType )
+                            {
+                                stopForEdge = true;
+                            }
+                        }
+                    }
+                    if ( currentSource.Y > 0 )
+                    {
+                        if ( Map.Terrain.Vertices[currentSource.X, currentSource.Y - 1].Terrain != replaceType
+                             && Map.Terrain.Vertices[currentSource.X, currentSource.Y - 1].Terrain != fillType )
+                        {
+                            stopForEdge = true;
+                        }
+                    }
+                    if ( currentSource.X < Map.Terrain.TileSize.X )
+                    {
+                        if ( currentSource.Y > 0 )
+                        {
+                            if ( Map.Terrain.Vertices[currentSource.X + 1, currentSource.Y - 1].Terrain != replaceType
+                                 && Map.Terrain.Vertices[currentSource.X + 1, currentSource.Y - 1].Terrain != fillType )
+                            {
+                                stopForEdge = true;
+                            }
+                        }
+                        if ( Map.Terrain.Vertices[currentSource.X + 1, currentSource.Y].Terrain != replaceType
+                             && Map.Terrain.Vertices[currentSource.X + 1, currentSource.Y].Terrain != fillType )
+                        {
+                            stopForEdge = true;
+                        }
+                        if ( currentSource.Y < Map.Terrain.TileSize.Y )
+                        {
+                            if ( Map.Terrain.Vertices[currentSource.X + 1, currentSource.Y + 1].Terrain != replaceType
+                                 && Map.Terrain.Vertices[currentSource.X + 1, currentSource.Y + 1].Terrain != fillType )
+                            {
+                                stopForEdge = true;
+                            }
+                        }
+                    }
+                    if ( currentSource.Y < Map.Terrain.TileSize.Y )
+                    {
+                        if ( Map.Terrain.Vertices[currentSource.X, currentSource.Y + 1].Terrain != replaceType
+                             && Map.Terrain.Vertices[currentSource.X, currentSource.Y + 1].Terrain != fillType )
+                        {
+                            stopForEdge = true;
+                        }
+                    }
+                }
+
+                if ( !(stopForCliff || stopForEdge) )
+                {
+                    if ( Map.Terrain.Vertices[currentSource.X, currentSource.Y].Terrain == replaceType )
+                    {
+                        Map.Terrain.Vertices[currentSource.X, currentSource.Y].Terrain = fillType;
+                        Map.SectorGraphicsChanges.VertexChanged(currentSource);
+                        Map.SectorTerrainUndoChanges.VertexChanged(currentSource);
+                        Map.AutoTextureChanges.VertexChanged(currentSource);
+
+                        nextSource.X = currentSource.X + 1;
+                        nextSource.Y = currentSource.Y;
+                        if ( nextSource.X >= 0 & nextSource.X <= Map.Terrain.TileSize.X
+                             & nextSource.Y >= 0 & nextSource.Y <= Map.Terrain.TileSize.Y )
+                        {
+                            if ( cliffAction == FillCliffAction.StopAfter )
+                            {
+                                stopForCliff = Map.SideHIsCliffOnBothSides(new XYInt(currentSource.X, currentSource.Y));
+                            }
+                            else
+                            {
+                                stopForCliff = false;
+                            }
+                            if ( !stopForCliff )
+                            {
+                                if ( Map.Terrain.Vertices[nextSource.X, nextSource.Y].Terrain == replaceType )
+                                {
+                                    if ( sourceOfFill.GetUpperBound(0) < sourceOfFillCount )
+                                    {
+                                        Array.Resize(ref sourceOfFill, sourceOfFillCount * 2 + 1 + 1);
+                                    }
+                                    sourceOfFill[sourceOfFillCount] = nextSource;
+                                    sourceOfFillCount++;
+                                }
+                            }
+                        }
+
+                        nextSource.X = currentSource.X - 1;
+                        nextSource.Y = currentSource.Y;
+                        if ( nextSource.X >= 0 & nextSource.X <= Map.Terrain.TileSize.X
+                             & nextSource.Y >= 0 & nextSource.Y <= Map.Terrain.TileSize.Y )
+                        {
+                            if ( cliffAction == FillCliffAction.StopAfter )
+                            {
+                                stopForCliff = Map.SideHIsCliffOnBothSides(new XYInt(currentSource.X - 1, currentSource.Y));
+                            }
+                            else
+                            {
+                                stopForCliff = false;
+                            }
+                            if ( !stopForCliff )
+                            {
+                                if ( Map.Terrain.Vertices[nextSource.X, nextSource.Y].Terrain == replaceType )
+                                {
+                                    if ( sourceOfFill.GetUpperBound(0) < sourceOfFillCount )
+                                    {
+                                        Array.Resize(ref sourceOfFill, sourceOfFillCount * 2 + 1 + 1);
+                                    }
+                                    sourceOfFill[sourceOfFillCount] = nextSource;
+                                    sourceOfFillCount++;
+                                }
+                            }
+                        }
+
+                        nextSource.X = currentSource.X;
+                        nextSource.Y = currentSource.Y + 1;
+                        if ( nextSource.X >= 0 & nextSource.X <= Map.Terrain.TileSize.X
+                             & nextSource.Y >= 0 & nextSource.Y <= Map.Terrain.TileSize.Y )
+                        {
+                            if ( cliffAction == FillCliffAction.StopAfter )
+                            {
+                                stopForCliff = Map.SideVIsCliffOnBothSides(new XYInt(currentSource.X, currentSource.Y));
+                            }
+                            else
+                            {
+                                stopForCliff = false;
+                            }
+                            if ( !stopForCliff )
+                            {
+                                if ( Map.Terrain.Vertices[nextSource.X, nextSource.Y].Terrain == replaceType )
+                                {
+                                    if ( sourceOfFill.GetUpperBound(0) < sourceOfFillCount )
+                                    {
+                                        Array.Resize(ref sourceOfFill, sourceOfFillCount * 2 + 1 + 1);
+                                    }
+                                    sourceOfFill[sourceOfFillCount] = nextSource;
+                                    sourceOfFillCount++;
+                                }
+                            }
+                        }
+
+                        nextSource.X = currentSource.X;
+                        nextSource.Y = currentSource.Y - 1;
+                        if ( nextSource.X >= 0 & nextSource.X <= Map.Terrain.TileSize.X
+                             & nextSource.Y >= 0 & nextSource.Y <= Map.Terrain.TileSize.Y )
+                        {
+                            if ( cliffAction == FillCliffAction.StopAfter )
+                            {
+                                stopForCliff = Map.SideVIsCliffOnBothSides(new XYInt(currentSource.X, currentSource.Y - 1));
+                            }
+                            else
+                            {
+                                stopForCliff = false;
+                            }
+                            if ( !stopForCliff )
+                            {
+                                if ( Map.Terrain.Vertices[nextSource.X, nextSource.Y].Terrain == replaceType )
+                                {
+                                    if ( sourceOfFill.GetUpperBound(0) < sourceOfFillCount )
+                                    {
+                                        Array.Resize(ref sourceOfFill, sourceOfFillCount * 2 + 1 + 1);
+                                    }
+                                    sourceOfFill[sourceOfFillCount] = nextSource;
+                                    sourceOfFillCount++;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                sourceOfFillNum++;
+
+                if ( sourceOfFillNum >= 131072 )
+                {
+                    var remainingCount = sourceOfFillCount - sourceOfFillNum;
+                    var moveCount = Math.Min(sourceOfFillNum, remainingCount);
+                    var moveOffset = sourceOfFillCount - moveCount;
+                    var a = 0;
+                    for ( a = 0; a <= moveCount - 1; a++ )
+                    {
+                        sourceOfFill[a] = sourceOfFill[moveOffset + a];
+                    }
+                    sourceOfFillCount -= sourceOfFillNum;
+                    sourceOfFillNum = 0;
+                    if ( sourceOfFillCount * 3 < sourceOfFill.GetUpperBound(0) + 1 )
+                    {
+                        Array.Resize(ref sourceOfFill, sourceOfFillCount * 2 + 1 + 1);
+                    }
+                }
+            }
+
+            Map.Update();
+
+            Map.UndoStepCreate("Ground Fill");
+
+            MainMapView.DrawLater();
+        }
+
+        private void applyTexture()
+        {
+            var mouseOverTerrain = GetMouseOverTerrain();
+
+            if ( mouseOverTerrain == null )
+            {
+                return;
+            }
+
+            var applyTexture = new clsApplyTexture
+            {
+                Map = Map,
+                TextureNum = uiOptions.Textures.SelectedTile,
+                SetTexture = uiOptions.Textures.SetTexture,
+                Orientation = relativeToViewAngle(uiOptions.Textures.TextureOrientation),
+                RandomOrientation = uiOptions.Textures.Randomize,
+                SetOrientation = uiOptions.Textures.SetOrientation,
+                TerrainAction = uiOptions.Textures.TerrainMode
+            };
+
+            App.TextureBrush.PerformActionMapTiles(applyTexture, mouseOverTerrain.Tile);
+
+            Map.Update();
+
+            MainMapView.DrawLater();
+        }
+
+        /// <summary>
+        /// Given the current ViewAngleMatrix:Yaw, this method ensures the correct tile orientation 
+        /// respecting where the view camera is oriented. 
+        /// </summary>
+        /// <param name="currentOrientation"></param>
+        /// <returns></returns>
+        private TileOrientation relativeToViewAngle(TileOrientation currentOrientation)
+        {
+            var anglePY = new Angles.AnglePY();
+            Matrix3DMath.MatrixToPY(ViewAngleMatrix, ref anglePY);
+
+            var yaw = anglePY.Yaw;
+            
+            //heading/viewing north, no relative change.
+
+            //heading east
+            if ( yaw > Angles.RadOf90Deg / 4 && yaw < 3 * Angles.Pi / 4 )
+            {
+                currentOrientation.RotateClockwise();
+            }
+            //heading west
+            else if ( yaw < -Angles.RadOf90Deg / 4 && yaw > -3 * Angles.Pi / 4 )
+            {
+                currentOrientation.RotateAntiClockwise();
+            }
+            //heading south
+            else if( yaw > 3 * Angles.Pi / 4 )
+            {
+                currentOrientation.RotateClockwise();
+                currentOrientation.RotateClockwise();
+            }
+            else if ( yaw < -3 * Angles.Pi / 4 )
+            {
+                currentOrientation.RotateAntiClockwise();
+                currentOrientation.RotateAntiClockwise();
+            }
+
+            return currentOrientation;
+        }
+
+        private void applyCliffTriangle(bool remove)
+        {
+            var mouseOverTerrain = GetMouseOverTerrain();
+
+            if ( mouseOverTerrain == null )
+            {
+                return;
+            }
+
+            if ( remove )
+            {
+                var applyCliffTriangleRemove = new clsApplyCliffTriangleRemove
+                    {
+                        Map = Map, 
+                        PosNum = mouseOverTerrain.Tile.Normal,
+                        Triangle = mouseOverTerrain.Triangle
+                    };
+                applyCliffTriangleRemove.ActionPerform();
+            }
+            else
+            {
+                var applyCliffTriangle = new clsApplyCliffTriangle
+                    {
+                        Map = Map, 
+                        PosNum = mouseOverTerrain.Tile.Normal,
+                        Triangle = mouseOverTerrain.Triangle
+                    };
+                applyCliffTriangle.ActionPerform();
+            }
+
+            Map.Update();
+
+            MainMapView.DrawLater();
+        }
+
+        private void applyCliff()
+        {
+            var mouseOverTerrain = GetMouseOverTerrain();
+
+            if ( mouseOverTerrain == null )
+            {
+                return;
+            }
+
+            var applyCliff = new clsApplyCliff();
+            applyCliff.Map = Map;
+            double angle = 0;
+            if ( !IOUtil.InvariantParse(Program.frmMainInstance.txtAutoCliffSlope.Text, ref angle) )
+            {
+                return;
+            }
+            applyCliff.Angle = MathUtil.ClampDbl(angle * MathUtil.RadOf1Deg, 0.0D, MathUtil.RadOf90Deg);
+            applyCliff.SetTris = Program.frmMainInstance.cbxCliffTris.Checked;
+            App.CliffBrush.PerformActionMapTiles(applyCliff, mouseOverTerrain.Tile);
+
+            Map.Update();
+
+            MainMapView.DrawLater();
+        }
+
+        private void applyCliffRemove()
+        {
+            var mouseOverTerrain = GetMouseOverTerrain();
+
+            if ( mouseOverTerrain == null )
+            {
+                return;
+            }
+
+            var applyCliffRemove = new clsApplyCliffRemove {Map = Map};
+            App.CliffBrush.PerformActionMapTiles(applyCliffRemove, mouseOverTerrain.Tile);
+
+            Map.Update();
+
+            MainMapView.DrawLater();
+        }
+
+        private void applyRoadRemove()
+        {
+            var mouseOverTerrain = GetMouseOverTerrain();
+
+            if ( mouseOverTerrain == null )
+            {
+                return;
+            }
+
+            var applyRoadRemove = new clsApplyRoadRemove {Map = Map};
+            App.CliffBrush.PerformActionMapTiles(applyRoadRemove, mouseOverTerrain.Tile);
+
+            Map.Update();
+
+            MainMapView.DrawLater();
+        }
+
+        public void ApplyTextureClockwise()
+        {
+            var mouseOverTerrain = GetMouseOverTerrain();
+
+            if ( mouseOverTerrain == null )
+            {
+                return;
+            }
+
+            var tile = mouseOverTerrain.Tile.Normal;
+
+            Map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.RotateClockwise();
+            Map.TileTextureChangeTerrainAction(tile, uiOptions.Textures.TerrainMode);
+
+            Map.SectorGraphicsChanges.TileChanged(tile);
+            Map.SectorTerrainUndoChanges.TileChanged(tile);
+
+            Map.Update();
+
+            Map.UndoStepCreate("Texture Rotate");
+
+            MainMapView.DrawLater();
+        }
+
+        public void ApplyTextureCounterClockwise()
+        {
+            var mouseOverTerrain = GetMouseOverTerrain();
+
+            if ( mouseOverTerrain == null )
+            {
+                return;
+            }
+
+            var tile = mouseOverTerrain.Tile.Normal;
+
+            Map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.RotateAntiClockwise();
+            Map.TileTextureChangeTerrainAction(tile, uiOptions.Textures.TerrainMode);
+
+            Map.SectorGraphicsChanges.TileChanged(tile);
+            Map.SectorTerrainUndoChanges.TileChanged(tile);
+
+            Map.Update();
+
+            Map.UndoStepCreate("Texture Rotate");
+
+            MainMapView.DrawLater();
+        }
+
+        public void ApplyTextureFlipX()
+        {
+            var mouseOverTerrain = GetMouseOverTerrain();
+
+            if ( mouseOverTerrain == null )
+            {
+                return;
+            }
+
+            var tile = mouseOverTerrain.Tile.Normal;
+
+            Map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.XFlip = !Map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.XFlip;
+            Map.TileTextureChangeTerrainAction(tile, uiOptions.Textures.TerrainMode);
+
+            Map.SectorGraphicsChanges.TileChanged(tile);
+            Map.SectorTerrainUndoChanges.TileChanged(tile);
+
+            Map.Update();
+
+            Map.UndoStepCreate("Texture Rotate");
+
+            MainMapView.DrawLater();
+        }
+
+        public void ApplyTriFlip()
+        {
+            var mouseOverTerrain = GetMouseOverTerrain();
+
+            if ( mouseOverTerrain == null )
+            {
+                return;
+            }
+
+            var tile = mouseOverTerrain.Tile.Normal;
+
+            Map.Terrain.Tiles[tile.X, tile.Y].Tri = !Map.Terrain.Tiles[tile.X, tile.Y].Tri;
+
+            Map.SectorGraphicsChanges.TileChanged(tile);
+            Map.SectorTerrainUndoChanges.TileChanged(tile);
+
+            Map.Update();
+
+            Map.UndoStepCreate("Triangle Flip");
+
+            MainMapView.DrawLater();
+        }
+
+        public void ApplyHeightSmoothing(double ratio)
+        {
+            var mouseOverTerrain = GetMouseOverTerrain();
+
+            if ( mouseOverTerrain == null )
+            {
+                return;
+            }
+
+            var applyHeightSmoothing = new clsApplyHeightSmoothing();
+            applyHeightSmoothing.Map = Map;
+            applyHeightSmoothing.Ratio = ratio;
+            var radius = (int)(Math.Ceiling(App.HeightBrush.Radius));
+            var posNum = App.HeightBrush.GetPosNum(mouseOverTerrain.Vertex);
+            applyHeightSmoothing.Offset.X = MathUtil.ClampInt(posNum.X - radius, 0, Map.Terrain.TileSize.X);
+            applyHeightSmoothing.Offset.Y = MathUtil.ClampInt(posNum.Y - radius, 0, Map.Terrain.TileSize.Y);
+            var posEnd = new XYInt
+                {
+                    X = MathUtil.ClampInt(posNum.X + radius, 0, Map.Terrain.TileSize.X),
+                    Y = MathUtil.ClampInt(posNum.Y + radius, 0, Map.Terrain.TileSize.Y)
+                };
+            applyHeightSmoothing.AreaTileSize.X = posEnd.X - applyHeightSmoothing.Offset.X;
+            applyHeightSmoothing.AreaTileSize.Y = posEnd.Y - applyHeightSmoothing.Offset.Y;
+            applyHeightSmoothing.Start();
+            App.HeightBrush.PerformActionMapVertices(applyHeightSmoothing, mouseOverTerrain.Vertex);
+            applyHeightSmoothing.Finish();
+
+            Map.Update();
+
+            MainMapView.DrawLater();
+        }
+
+        private void applyHeightChange(double rate)
+        {
+            var mouseOverTerrain = GetMouseOverTerrain();
+
+            if ( mouseOverTerrain == null )
+            {
+                return;
+            }
+
+            var applyHeightChange = new clsApplyHeightChange();
+            applyHeightChange.Map = Map;
+            applyHeightChange.Rate = rate;
+            applyHeightChange.UseEffect = Program.frmMainInstance.cbxHeightChangeFade.Checked;
+            App.HeightBrush.PerformActionMapVertices(applyHeightChange, mouseOverTerrain.Vertex);
+
+            Map.Update();
+
+            MainMapView.DrawLater();
+        }
+
+        private void applyHeightSet(clsBrush brush, byte height)
+        {
+            var mouseOverTerrain = GetMouseOverTerrain();
+
+            if ( mouseOverTerrain == null )
+            {
+                return;
+            }
+
+            var applyHeightSet = new clsApplyHeightSet
+                {
+                    Map = Map,
+                    Height = height
+                };
+            brush.PerformActionMapVertices(applyHeightSet, mouseOverTerrain.Vertex);
+
+            Map.Update();
+
+            MainMapView.DrawLater();
+        }
+
+        private void applyGateway()
+        {
+            var mouseOverTerrain = GetMouseOverTerrain();
+
+            if ( mouseOverTerrain == null )
+            {
+                return;
+            }
+
+            var tile = mouseOverTerrain.Tile.Normal;
+
+            if (keyboardManager.Keys[KeyboardKeys.GatewayDelete].Active)
+            {
+                var a = 0;
+                var low = new XYInt();
+                var high = new XYInt();
+                a = 0;
+                while ( a < Map.Gateways.Count )
+                {
+                    MathUtil.ReorderXY(Map.Gateways[a].PosA, Map.Gateways[a].PosB, ref low, ref high);
+                    if ( low.X <= tile.X
+                         & high.X >= tile.X
+                         & low.Y <= tile.Y
+                         & high.Y >= tile.Y )
+                    {
+                        Map.GatewayRemoveStoreChange(a);
+                        Map.UndoStepCreate("Gateway Delete");
+                        Map.MinimapMakeLater();
+                        MainMapView.DrawLater();
+                        break;
+                    }
+                    a++;
+                }
+            }
+            else
+            {
+                if ( Map.SelectedTileA == null )
+                {
+                    Map.SelectedTileA = tile;
+                    MainMapView.DrawLater();
+                }
+                else if ( tile.X == Map.SelectedTileA.X | tile.Y == Map.SelectedTileA.Y )
+                {
+                    if ( Map.GatewayCreateStoreChange(Map.SelectedTileA, tile) != null )
+                    {
+                        Map.UndoStepCreate("Gateway Place");
+                        Map.SelectedTileA = null;
+                        Map.SelectedTileB = null;
+                        Map.MinimapMakeLater();
+                        MainMapView.DrawLater();
+                    }
+                }
+            }
+        }
+
+        public void enableMouseMove(object sender, EventArgs e)
+        {
+            if(Map == null)
+            {
+                return;
+            }
+
+            blEnableMouseMove = true;
+        }
+            
+        public void HandleMouseMove(object sender, MouseEventArgs e)
+        {
+            if(Map == null || !blEnableMouseMove)
+            {
+                return;
+            }
+            blEnableMouseMove = false;
+
+            MouseOver = new ViewInfo.clsMouseOver();
+            var pointFromScreen = MainMapView.GLSurface.PointFromScreen(Mouse.GetPosition());
+            MouseOver.ScreenPos.X = (int)pointFromScreen.X;
+            MouseOver.ScreenPos.Y = (int)pointFromScreen.Y;
+
             var xyDouble = default(XYDouble);
             var flag = false;
-            var mouseLeftDownOverMinimap = GetMouseLeftDownOverMinimap();
 
+            var mouseLeftDownOverMinimap = GetMouseLeftDownOverMinimap();
             if ( mouseLeftDownOverMinimap != null )
             {
-                if ( MouseOver == null )
-                {
-                }
-                else if ( IsViewPosOverMinimap(MouseOver.ScreenPos) )
+                if ( MouseOver != null && IsViewPosOverMinimap(MouseOver.ScreenPos) )
                 {
                     var pos = new XYInt((int)(MouseOver.ScreenPos.X * TilesPerMinimapPixel),
                         (int)((MouseOver.ScreenPos.Y * TilesPerMinimapPixel)));
-                    map.TileNumClampToMap(pos);
+                    Map.TileNumClampToMap(pos);
                     LookAtTile(pos);
                 }
             }
@@ -535,7 +1436,7 @@ namespace SharpFlame
                 {
                     if ( screenXYGetTerrainPos(MouseOver.ScreenPos, ref mouseOverTerrain.Pos) )
                     {
-                        if ( map.PosIsOnMap(mouseOverTerrain.Pos.Horizontal) )
+                        if ( Map.PosIsOnMap(mouseOverTerrain.Pos.Horizontal) )
                         {
                             flag = true;
                         }
@@ -543,14 +1444,14 @@ namespace SharpFlame
                 }
                 else
                 {
-                    mouseOverTerrain.Pos.Altitude = (int)(255.0D / 2.0D * map.HeightMultiplier);
+                    mouseOverTerrain.Pos.Altitude = (int)(255.0D / 2.0D * Map.HeightMultiplier);
                     if ( ScreenXYGetViewPlanePos(MouseOver.ScreenPos, mouseOverTerrain.Pos.Altitude, ref xyDouble) )
                     {
                         mouseOverTerrain.Pos.Horizontal.X = (int)xyDouble.X;
                         mouseOverTerrain.Pos.Horizontal.Y = Convert.ToInt32(- xyDouble.Y);
-                        if ( map.PosIsOnMap(mouseOverTerrain.Pos.Horizontal) )
+                        if ( Map.PosIsOnMap(mouseOverTerrain.Pos.Horizontal) )
                         {
-                            mouseOverTerrain.Pos.Altitude = (int)(map.GetTerrainHeight(mouseOverTerrain.Pos.Horizontal));
+                            mouseOverTerrain.Pos.Altitude = (int)(Map.GetTerrainHeight(mouseOverTerrain.Pos.Horizontal));
                             flag = true;
                         }
                     }
@@ -564,7 +1465,7 @@ namespace SharpFlame
                     mouseOverTerrain.Vertex.Normal.Y = (int)(Math.Round(((double)mouseOverTerrain.Pos.Horizontal.Y / Constants.TerrainGridSpacing)));
                     mouseOverTerrain.Tile.Alignment = mouseOverTerrain.Vertex.Normal;
                     mouseOverTerrain.Vertex.Alignment = new XYInt(mouseOverTerrain.Tile.Normal.X + 1, mouseOverTerrain.Tile.Normal.Y + 1);
-                    mouseOverTerrain.Triangle = map.GetTerrainTri(mouseOverTerrain.Pos.Horizontal);
+                    mouseOverTerrain.Triangle = Map.GetTerrainTri(mouseOverTerrain.Pos.Horizontal);
                     xyDouble.X = mouseOverTerrain.Pos.Horizontal.X - mouseOverTerrain.Vertex.Normal.X * Constants.TerrainGridSpacing;
                     xyDouble.Y = mouseOverTerrain.Pos.Horizontal.Y - mouseOverTerrain.Vertex.Normal.Y * Constants.TerrainGridSpacing;
                     if ( Math.Abs(xyDouble.Y) <= Math.Abs(xyDouble.X) )
@@ -579,10 +1480,10 @@ namespace SharpFlame
                         mouseOverTerrain.SideNum.X = mouseOverTerrain.Vertex.Normal.X;
                         mouseOverTerrain.SideNum.Y = mouseOverTerrain.Tile.Normal.Y;
                     }
-                    var sectorNum = map.GetPosSectorNum(mouseOverTerrain.Pos.Horizontal);
+                    var sectorNum = Map.GetPosSectorNum(mouseOverTerrain.Pos.Horizontal);
                     var unit = default(Unit);
                     var connection = default(clsUnitSectorConnection);
-                    foreach ( var tempLoopVar_Connection in map.Sectors[sectorNum.X, sectorNum.Y].Units )
+                    foreach ( var tempLoopVar_Connection in Map.Sectors[sectorNum.X, sectorNum.Y].Units )
                     {
                         connection = tempLoopVar_Connection;
                         unit = connection.Unit;
@@ -590,7 +1491,7 @@ namespace SharpFlame
                         xyDouble.Y = unit.Pos.Horizontal.Y - mouseOverTerrain.Pos.Horizontal.Y;
                         var footprint = unit.TypeBase.GetGetFootprintSelected(unit.Rotation);
                         if ( Math.Abs(xyDouble.X) <= Math.Max(footprint.X / 2.0D, 0.5D) * Constants.TerrainGridSpacing
-                             && Math.Abs(xyDouble.Y) <= Math.Max(footprint.Y / 2.0D, 0.5D) * Constants.TerrainGridSpacing )
+                            && Math.Abs(xyDouble.Y) <= Math.Max(footprint.Y / 2.0D, 0.5D) * Constants.TerrainGridSpacing )
                         {
                             mouseOverTerrain.Units.Add(unit);
                         }
@@ -651,892 +1552,20 @@ namespace SharpFlame
                     }
                 }
             }
-            // MapViewControl.Pos_Display_Update();
-            mainMapView.DrawLater();
-        }
 
-        public clsMouseOver.clsOverTerrain GetMouseOverTerrain()
-        {
-            if ( MouseOver == null )
-            {
-                return null;
-            }
-            return MouseOver.OverTerrain;
-        }
-
-        public clsMouseDown.clsOverTerrain GetMouseLeftDownOverTerrain()
-        {
-            if ( MouseLeftDown == null )
-            {
-                return null;
-            }
-            return MouseLeftDown.OverTerrain;
-        }
-
-        public clsMouseDown.clsOverTerrain GetMouseRightDownOverTerrain()
-        {
-            if ( MouseRightDown == null )
-            {
-                return null;
-            }
-            return MouseRightDown.OverTerrain;
-        }
-
-        public clsMouseDown.clsOverMinimap GetMouseLeftDownOverMinimap()
-        {
-            if ( MouseLeftDown == null )
-            {
-                return null;
-            }
-            return MouseLeftDown.OverMinimap;
-        }
-
-        public clsMouseDown.clsOverMinimap GetMouseRightDownOverMinimap()
-        {
-            if ( MouseRightDown == null )
-            {
-                return null;
-            }
-            return MouseRightDown.OverMinimap;
-        }
-
-        public bool IsViewPosOverMinimap(XYInt pos)
-        {
-            if ( pos.X >= 0 & pos.X < map.Terrain.TileSize.X / TilesPerMinimapPixel
-                 & pos.Y >= 0 & pos.Y < map.Terrain.TileSize.Y / TilesPerMinimapPixel )
-            {
-                return true;
-            }
-            return false;
-        }
-
-        private void applyTerrain()
-        {
-            var mouseOverTerrain = GetMouseOverTerrain();
-
-            if ( mouseOverTerrain == null )
-            {
-                return;
-            }
-
-            var applyVertexTerrain = new clsApplyVertexTerrain
-                {
-                    Map = map, VertexTerrain = App.SelectedTerrain
-                };
-            App.TerrainBrush.PerformActionMapVertices(applyVertexTerrain, mouseOverTerrain.Vertex);
-
-            map.Update();
-
-            mainMapView.DrawLater();
-        }
-
-        private void applyRoad()
-        {
-            var mouseOverTerrain = GetMouseOverTerrain();
-
-            if ( mouseOverTerrain == null )
-            {
-                return;
-            }
-
-            var sideNum = mouseOverTerrain.SideNum;
-            var tileNum = new XYInt();
-
-            if ( mouseOverTerrain.SideIsV )
-            {
-                if ( map.Terrain.SideV[sideNum.X, sideNum.Y].Road != App.SelectedRoad )
-                {
-                    map.Terrain.SideV[sideNum.X, sideNum.Y].Road = App.SelectedRoad;
-
-                    if ( sideNum.X > 0 )
-                    {
-                        tileNum.X = sideNum.X - 1;
-                        tileNum.Y = sideNum.Y;
-                        map.AutoTextureChanges.TileChanged(tileNum);
-                        map.SectorGraphicsChanges.TileChanged(tileNum);
-                        map.SectorTerrainUndoChanges.TileChanged(tileNum);
-                    }
-                    if ( sideNum.X < map.Terrain.TileSize.X )
-                    {
-                        tileNum = sideNum;
-                        map.AutoTextureChanges.TileChanged(tileNum);
-                        map.SectorGraphicsChanges.TileChanged(tileNum);
-                        map.SectorTerrainUndoChanges.TileChanged(tileNum);
-                    }
-
-                    map.Update();
-
-                    map.UndoStepCreate("Road Side");
-
-                    mainMapView.DrawLater();
-                }
-            }
-            else
-            {
-                if ( map.Terrain.SideH[sideNum.X, sideNum.Y].Road != App.SelectedRoad )
-                {
-                    map.Terrain.SideH[sideNum.X, sideNum.Y].Road = App.SelectedRoad;
-
-                    if ( sideNum.Y > 0 )
-                    {
-                        tileNum.X = sideNum.X;
-                        tileNum.Y = sideNum.Y - 1;
-                        map.AutoTextureChanges.TileChanged(tileNum);
-                        map.SectorGraphicsChanges.TileChanged(tileNum);
-                        map.SectorTerrainUndoChanges.TileChanged(tileNum);
-                    }
-                    if ( sideNum.Y < map.Terrain.TileSize.X )
-                    {
-                        tileNum = sideNum;
-                        map.AutoTextureChanges.TileChanged(tileNum);
-                        map.SectorGraphicsChanges.TileChanged(tileNum);
-                        map.SectorTerrainUndoChanges.TileChanged(tileNum);
-                    }
-
-                    map.Update();
-
-                    map.UndoStepCreate("Road Side");
-
-                    mainMapView.DrawLater();
-                }
-            }
-        }
-
-        private void applyRoadLineSelection()
-        {
-            var mouseOverTerrian = GetMouseOverTerrain();
-
-            if ( mouseOverTerrian == null )
-            {
-                return;
-            }
-
-            var tile = mouseOverTerrian.Tile.Normal;
-            var sideNum = new XYInt();
-
-            if ( map.SelectedTileA != null )
-            {
-                var num = 0;
-                var a = 0;
-                var b = 0;
-                if ( tile.X == map.SelectedTileA.X )
-                {
-                    if ( tile.Y <= map.SelectedTileA.Y )
-                    {
-                        a = tile.Y;
-                        b = map.SelectedTileA.Y;
-                    }
-                    else
-                    {
-                        a = map.SelectedTileA.Y;
-                        b = tile.Y;
-                    }
-                    for ( num = a + 1; num <= b; num++ )
-                    {
-                        map.Terrain.SideH[map.SelectedTileA.X, num].Road = App.SelectedRoad;
-                        sideNum.X = map.SelectedTileA.X;
-                        sideNum.Y = num;
-                        map.AutoTextureChanges.SideHChanged(sideNum);
-                        map.SectorGraphicsChanges.SideHChanged(sideNum);
-                        map.SectorTerrainUndoChanges.SideHChanged(sideNum);
-                    }
-
-                    map.Update();
-
-                    map.UndoStepCreate("Road Line");
-
-                    map.SelectedTileA = null;
-                    mainMapView.DrawLater();
-                }
-                else if ( tile.Y == map.SelectedTileA.Y )
-                {
-                    if ( tile.X <= map.SelectedTileA.X )
-                    {
-                        a = tile.X;
-                        b = map.SelectedTileA.X;
-                    }
-                    else
-                    {
-                        a = map.SelectedTileA.X;
-                        b = tile.X;
-                    }
-                    for ( num = a + 1; num <= b; num++ )
-                    {
-                        map.Terrain.SideV[num, map.SelectedTileA.Y].Road = App.SelectedRoad;
-                        sideNum.X = num;
-                        sideNum.Y = map.SelectedTileA.Y;
-                        map.AutoTextureChanges.SideVChanged(sideNum);
-                        map.SectorGraphicsChanges.SideVChanged(sideNum);
-                        map.SectorTerrainUndoChanges.SideVChanged(sideNum);
-                    }
-
-                    map.Update();
-
-                    map.UndoStepCreate("Road Line");
-
-                    map.SelectedTileA = null;
-                    mainMapView.DrawLater();
-                }
-            }
-            else
-            {
-                map.SelectedTileA = tile;
-            }
-        }
-
-        private void applyTerrainFill(FillCliffAction cliffAction, bool inside)
-        {
-            var mouseOverTerrain = GetMouseOverTerrain();
-
-            if ( mouseOverTerrain == null )
-            {
-                return;
-            }
-
-            var startVertex = mouseOverTerrain.Vertex.Normal;
-
-            var fillType = App.SelectedTerrain;
-            var replaceType = map.Terrain.Vertices[startVertex.X, startVertex.Y].Terrain;
-            if ( fillType == replaceType )
-            {
-                return; //otherwise will cause endless loop
-            }
-
-            var sourceOfFill = new XYInt[524289];
-            var sourceOfFillCount = 0;
-            var sourceOfFillNum = 0;
-            var nextSource = new XYInt();
-
-            sourceOfFill[0] = startVertex;
-            sourceOfFillCount = 1;
-            sourceOfFillNum = 0;
-            while ( sourceOfFillNum < sourceOfFillCount )
-            {
-                var currentSource = sourceOfFill[sourceOfFillNum];
-
-                bool stopForCliff;
-                if ( cliffAction == FillCliffAction.StopBefore )
-                {
-                    stopForCliff = map.VertexIsCliffEdge(currentSource);
-                }
-                else
-                {
-                    stopForCliff = false;
-                }
-                var stopForEdge = false;
-                if ( inside )
-                {
-                    if ( currentSource.X > 0 )
-                    {
-                        if ( currentSource.Y > 0 )
-                        {
-                            if ( map.Terrain.Vertices[currentSource.X - 1, currentSource.Y - 1].Terrain != replaceType
-                                 && map.Terrain.Vertices[currentSource.X - 1, currentSource.Y - 1].Terrain != fillType )
-                            {
-                                stopForEdge = true;
-                            }
-                        }
-                        if ( map.Terrain.Vertices[currentSource.X - 1, currentSource.Y].Terrain != replaceType
-                             && map.Terrain.Vertices[currentSource.X - 1, currentSource.Y].Terrain != fillType )
-                        {
-                            stopForEdge = true;
-                        }
-                        if ( currentSource.Y < map.Terrain.TileSize.Y )
-                        {
-                            if ( map.Terrain.Vertices[currentSource.X - 1, currentSource.Y + 1].Terrain != replaceType
-                                 && map.Terrain.Vertices[currentSource.X - 1, currentSource.Y + 1].Terrain != fillType )
-                            {
-                                stopForEdge = true;
-                            }
-                        }
-                    }
-                    if ( currentSource.Y > 0 )
-                    {
-                        if ( map.Terrain.Vertices[currentSource.X, currentSource.Y - 1].Terrain != replaceType
-                             && map.Terrain.Vertices[currentSource.X, currentSource.Y - 1].Terrain != fillType )
-                        {
-                            stopForEdge = true;
-                        }
-                    }
-                    if ( currentSource.X < map.Terrain.TileSize.X )
-                    {
-                        if ( currentSource.Y > 0 )
-                        {
-                            if ( map.Terrain.Vertices[currentSource.X + 1, currentSource.Y - 1].Terrain != replaceType
-                                 && map.Terrain.Vertices[currentSource.X + 1, currentSource.Y - 1].Terrain != fillType )
-                            {
-                                stopForEdge = true;
-                            }
-                        }
-                        if ( map.Terrain.Vertices[currentSource.X + 1, currentSource.Y].Terrain != replaceType
-                             && map.Terrain.Vertices[currentSource.X + 1, currentSource.Y].Terrain != fillType )
-                        {
-                            stopForEdge = true;
-                        }
-                        if ( currentSource.Y < map.Terrain.TileSize.Y )
-                        {
-                            if ( map.Terrain.Vertices[currentSource.X + 1, currentSource.Y + 1].Terrain != replaceType
-                                 && map.Terrain.Vertices[currentSource.X + 1, currentSource.Y + 1].Terrain != fillType )
-                            {
-                                stopForEdge = true;
-                            }
-                        }
-                    }
-                    if ( currentSource.Y < map.Terrain.TileSize.Y )
-                    {
-                        if ( map.Terrain.Vertices[currentSource.X, currentSource.Y + 1].Terrain != replaceType
-                             && map.Terrain.Vertices[currentSource.X, currentSource.Y + 1].Terrain != fillType )
-                        {
-                            stopForEdge = true;
-                        }
-                    }
-                }
-
-                if ( !(stopForCliff || stopForEdge) )
-                {
-                    if ( map.Terrain.Vertices[currentSource.X, currentSource.Y].Terrain == replaceType )
-                    {
-                        map.Terrain.Vertices[currentSource.X, currentSource.Y].Terrain = fillType;
-                        map.SectorGraphicsChanges.VertexChanged(currentSource);
-                        map.SectorTerrainUndoChanges.VertexChanged(currentSource);
-                        map.AutoTextureChanges.VertexChanged(currentSource);
-
-                        nextSource.X = currentSource.X + 1;
-                        nextSource.Y = currentSource.Y;
-                        if ( nextSource.X >= 0 & nextSource.X <= map.Terrain.TileSize.X
-                             & nextSource.Y >= 0 & nextSource.Y <= map.Terrain.TileSize.Y )
-                        {
-                            if ( cliffAction == FillCliffAction.StopAfter )
-                            {
-                                stopForCliff = map.SideHIsCliffOnBothSides(new XYInt(currentSource.X, currentSource.Y));
-                            }
-                            else
-                            {
-                                stopForCliff = false;
-                            }
-                            if ( !stopForCliff )
-                            {
-                                if ( map.Terrain.Vertices[nextSource.X, nextSource.Y].Terrain == replaceType )
-                                {
-                                    if ( sourceOfFill.GetUpperBound(0) < sourceOfFillCount )
-                                    {
-                                        Array.Resize(ref sourceOfFill, sourceOfFillCount * 2 + 1 + 1);
-                                    }
-                                    sourceOfFill[sourceOfFillCount] = nextSource;
-                                    sourceOfFillCount++;
-                                }
-                            }
-                        }
-
-                        nextSource.X = currentSource.X - 1;
-                        nextSource.Y = currentSource.Y;
-                        if ( nextSource.X >= 0 & nextSource.X <= map.Terrain.TileSize.X
-                             & nextSource.Y >= 0 & nextSource.Y <= map.Terrain.TileSize.Y )
-                        {
-                            if ( cliffAction == FillCliffAction.StopAfter )
-                            {
-                                stopForCliff = map.SideHIsCliffOnBothSides(new XYInt(currentSource.X - 1, currentSource.Y));
-                            }
-                            else
-                            {
-                                stopForCliff = false;
-                            }
-                            if ( !stopForCliff )
-                            {
-                                if ( map.Terrain.Vertices[nextSource.X, nextSource.Y].Terrain == replaceType )
-                                {
-                                    if ( sourceOfFill.GetUpperBound(0) < sourceOfFillCount )
-                                    {
-                                        Array.Resize(ref sourceOfFill, sourceOfFillCount * 2 + 1 + 1);
-                                    }
-                                    sourceOfFill[sourceOfFillCount] = nextSource;
-                                    sourceOfFillCount++;
-                                }
-                            }
-                        }
-
-                        nextSource.X = currentSource.X;
-                        nextSource.Y = currentSource.Y + 1;
-                        if ( nextSource.X >= 0 & nextSource.X <= map.Terrain.TileSize.X
-                             & nextSource.Y >= 0 & nextSource.Y <= map.Terrain.TileSize.Y )
-                        {
-                            if ( cliffAction == FillCliffAction.StopAfter )
-                            {
-                                stopForCliff = map.SideVIsCliffOnBothSides(new XYInt(currentSource.X, currentSource.Y));
-                            }
-                            else
-                            {
-                                stopForCliff = false;
-                            }
-                            if ( !stopForCliff )
-                            {
-                                if ( map.Terrain.Vertices[nextSource.X, nextSource.Y].Terrain == replaceType )
-                                {
-                                    if ( sourceOfFill.GetUpperBound(0) < sourceOfFillCount )
-                                    {
-                                        Array.Resize(ref sourceOfFill, sourceOfFillCount * 2 + 1 + 1);
-                                    }
-                                    sourceOfFill[sourceOfFillCount] = nextSource;
-                                    sourceOfFillCount++;
-                                }
-                            }
-                        }
-
-                        nextSource.X = currentSource.X;
-                        nextSource.Y = currentSource.Y - 1;
-                        if ( nextSource.X >= 0 & nextSource.X <= map.Terrain.TileSize.X
-                             & nextSource.Y >= 0 & nextSource.Y <= map.Terrain.TileSize.Y )
-                        {
-                            if ( cliffAction == FillCliffAction.StopAfter )
-                            {
-                                stopForCliff = map.SideVIsCliffOnBothSides(new XYInt(currentSource.X, currentSource.Y - 1));
-                            }
-                            else
-                            {
-                                stopForCliff = false;
-                            }
-                            if ( !stopForCliff )
-                            {
-                                if ( map.Terrain.Vertices[nextSource.X, nextSource.Y].Terrain == replaceType )
-                                {
-                                    if ( sourceOfFill.GetUpperBound(0) < sourceOfFillCount )
-                                    {
-                                        Array.Resize(ref sourceOfFill, sourceOfFillCount * 2 + 1 + 1);
-                                    }
-                                    sourceOfFill[sourceOfFillCount] = nextSource;
-                                    sourceOfFillCount++;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                sourceOfFillNum++;
-
-                if ( sourceOfFillNum >= 131072 )
-                {
-                    var remainingCount = sourceOfFillCount - sourceOfFillNum;
-                    var moveCount = Math.Min(sourceOfFillNum, remainingCount);
-                    var moveOffset = sourceOfFillCount - moveCount;
-                    var a = 0;
-                    for ( a = 0; a <= moveCount - 1; a++ )
-                    {
-                        sourceOfFill[a] = sourceOfFill[moveOffset + a];
-                    }
-                    sourceOfFillCount -= sourceOfFillNum;
-                    sourceOfFillNum = 0;
-                    if ( sourceOfFillCount * 3 < sourceOfFill.GetUpperBound(0) + 1 )
-                    {
-                        Array.Resize(ref sourceOfFill, sourceOfFillCount * 2 + 1 + 1);
-                    }
-                }
-            }
-
-            map.Update();
-
-            map.UndoStepCreate("Ground Fill");
-
-            mainMapView.DrawLater();
-        }
-
-        private void applyTexture()
-        {
-            var mouseOverTerrain = GetMouseOverTerrain();
-
-            if ( mouseOverTerrain == null )
-            {
-                return;
-            }
-
-            var applyTexture = new clsApplyTexture
-            {
-                Map = map,
-                TextureNum = uiOptions.Textures.SelectedTile,
-                SetTexture = uiOptions.Textures.SetTexture,
-                Orientation = relativeToViewAngle(uiOptions.Textures.TextureOrientation),
-                RandomOrientation = uiOptions.Textures.Randomize,
-                SetOrientation = uiOptions.Textures.SetOrientation,
-                TerrainAction = uiOptions.Textures.TerrainMode
-            };
-
-            App.TextureBrush.PerformActionMapTiles(applyTexture, mouseOverTerrain.Tile);
-
-            map.Update();
-
-            mainMapView.DrawLater();
-        }
-
-        /// <summary>
-        /// Given the current ViewAngleMatrix:Yaw, this method ensures the correct tile orientation 
-        /// respecting where the view camera is oriented. 
-        /// </summary>
-        /// <param name="currentOrientation"></param>
-        /// <returns></returns>
-        private TileOrientation relativeToViewAngle(TileOrientation currentOrientation)
-        {
-            var anglePY = new Angles.AnglePY();
-            Matrix3DMath.MatrixToPY(ViewAngleMatrix, ref anglePY);
-
-            var yaw = anglePY.Yaw;
-            
-            //heading/viewing north, no relative change.
-
-            //heading east
-            if ( yaw > Angles.RadOf90Deg / 4 && yaw < 3 * Angles.Pi / 4 )
-            {
-                currentOrientation.RotateClockwise();
-            }
-            //heading west
-            else if ( yaw < -Angles.RadOf90Deg / 4 && yaw > -3 * Angles.Pi / 4 )
-            {
-                currentOrientation.RotateAntiClockwise();
-            }
-            //heading south
-            else if( yaw > 3 * Angles.Pi / 4 )
-            {
-                currentOrientation.RotateClockwise();
-                currentOrientation.RotateClockwise();
-            }
-            else if ( yaw < -3 * Angles.Pi / 4 )
-            {
-                currentOrientation.RotateAntiClockwise();
-                currentOrientation.RotateAntiClockwise();
-            }
-
-            return currentOrientation;
-        }
-
-        private void applyCliffTriangle(bool remove)
-        {
-            var mouseOverTerrain = GetMouseOverTerrain();
-
-            if ( mouseOverTerrain == null )
-            {
-                return;
-            }
-
-            if ( remove )
-            {
-                var applyCliffTriangleRemove = new clsApplyCliffTriangleRemove
-                    {
-                        Map = map, 
-                        PosNum = mouseOverTerrain.Tile.Normal,
-                        Triangle = mouseOverTerrain.Triangle
-                    };
-                applyCliffTriangleRemove.ActionPerform();
-            }
-            else
-            {
-                var applyCliffTriangle = new clsApplyCliffTriangle
-                    {
-                        Map = map, 
-                        PosNum = mouseOverTerrain.Tile.Normal,
-                        Triangle = mouseOverTerrain.Triangle
-                    };
-                applyCliffTriangle.ActionPerform();
-            }
-
-            map.Update();
-
-            mainMapView.DrawLater();
-        }
-
-        private void applyCliff()
-        {
-            var mouseOverTerrain = GetMouseOverTerrain();
-
-            if ( mouseOverTerrain == null )
-            {
-                return;
-            }
-
-            var applyCliff = new clsApplyCliff();
-            applyCliff.Map = map;
-            double angle = 0;
-            if ( !IOUtil.InvariantParse(Program.frmMainInstance.txtAutoCliffSlope.Text, ref angle) )
-            {
-                return;
-            }
-            applyCliff.Angle = MathUtil.ClampDbl(angle * MathUtil.RadOf1Deg, 0.0D, MathUtil.RadOf90Deg);
-            applyCliff.SetTris = Program.frmMainInstance.cbxCliffTris.Checked;
-            App.CliffBrush.PerformActionMapTiles(applyCliff, mouseOverTerrain.Tile);
-
-            map.Update();
-
-            mainMapView.DrawLater();
-        }
-
-        private void applyCliffRemove()
-        {
-            var mouseOverTerrain = GetMouseOverTerrain();
-
-            if ( mouseOverTerrain == null )
-            {
-                return;
-            }
-
-            var applyCliffRemove = new clsApplyCliffRemove {Map = map};
-            App.CliffBrush.PerformActionMapTiles(applyCliffRemove, mouseOverTerrain.Tile);
-
-            map.Update();
-
-            mainMapView.DrawLater();
-        }
-
-        private void applyRoadRemove()
-        {
-            var mouseOverTerrain = GetMouseOverTerrain();
-
-            if ( mouseOverTerrain == null )
-            {
-                return;
-            }
-
-            var applyRoadRemove = new clsApplyRoadRemove {Map = map};
-            App.CliffBrush.PerformActionMapTiles(applyRoadRemove, mouseOverTerrain.Tile);
-
-            map.Update();
-
-            mainMapView.DrawLater();
-        }
-
-        public void ApplyTextureClockwise()
-        {
-            var mouseOverTerrain = GetMouseOverTerrain();
-
-            if ( mouseOverTerrain == null )
-            {
-                return;
-            }
-
-            var tile = mouseOverTerrain.Tile.Normal;
-
-            map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.RotateClockwise();
-            map.TileTextureChangeTerrainAction(tile, uiOptions.Textures.TerrainMode);
-
-            map.SectorGraphicsChanges.TileChanged(tile);
-            map.SectorTerrainUndoChanges.TileChanged(tile);
-
-            map.Update();
-
-            map.UndoStepCreate("Texture Rotate");
-
-            mainMapView.DrawLater();
-        }
-
-        public void ApplyTextureCounterClockwise()
-        {
-            var mouseOverTerrain = GetMouseOverTerrain();
-
-            if ( mouseOverTerrain == null )
-            {
-                return;
-            }
-
-            var tile = mouseOverTerrain.Tile.Normal;
-
-            map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.RotateAntiClockwise();
-            map.TileTextureChangeTerrainAction(tile, uiOptions.Textures.TerrainMode);
-
-            map.SectorGraphicsChanges.TileChanged(tile);
-            map.SectorTerrainUndoChanges.TileChanged(tile);
-
-            map.Update();
-
-            map.UndoStepCreate("Texture Rotate");
-
-            mainMapView.DrawLater();
-        }
-
-        public void ApplyTextureFlipX()
-        {
-            var mouseOverTerrain = GetMouseOverTerrain();
-
-            if ( mouseOverTerrain == null )
-            {
-                return;
-            }
-
-            var tile = mouseOverTerrain.Tile.Normal;
-
-            map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.XFlip = !map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.XFlip;
-            map.TileTextureChangeTerrainAction(tile, uiOptions.Textures.TerrainMode);
-
-            map.SectorGraphicsChanges.TileChanged(tile);
-            map.SectorTerrainUndoChanges.TileChanged(tile);
-
-            map.Update();
-
-            map.UndoStepCreate("Texture Rotate");
-
-            mainMapView.DrawLater();
-        }
-
-        public void ApplyTriFlip()
-        {
-            var mouseOverTerrain = GetMouseOverTerrain();
-
-            if ( mouseOverTerrain == null )
-            {
-                return;
-            }
-
-            var tile = mouseOverTerrain.Tile.Normal;
-
-            map.Terrain.Tiles[tile.X, tile.Y].Tri = !map.Terrain.Tiles[tile.X, tile.Y].Tri;
-
-            map.SectorGraphicsChanges.TileChanged(tile);
-            map.SectorTerrainUndoChanges.TileChanged(tile);
-
-            map.Update();
-
-            map.UndoStepCreate("Triangle Flip");
-
-            mainMapView.DrawLater();
-        }
-
-        public void ApplyHeightSmoothing(double ratio)
-        {
-            var mouseOverTerrain = GetMouseOverTerrain();
-
-            if ( mouseOverTerrain == null )
-            {
-                return;
-            }
-
-            var applyHeightSmoothing = new clsApplyHeightSmoothing();
-            applyHeightSmoothing.Map = map;
-            applyHeightSmoothing.Ratio = ratio;
-            var radius = (int)(Math.Ceiling(App.HeightBrush.Radius));
-            var posNum = App.HeightBrush.GetPosNum(mouseOverTerrain.Vertex);
-            applyHeightSmoothing.Offset.X = MathUtil.ClampInt(posNum.X - radius, 0, map.Terrain.TileSize.X);
-            applyHeightSmoothing.Offset.Y = MathUtil.ClampInt(posNum.Y - radius, 0, map.Terrain.TileSize.Y);
-            var posEnd = new XYInt
-                {
-                    X = MathUtil.ClampInt(posNum.X + radius, 0, map.Terrain.TileSize.X),
-                    Y = MathUtil.ClampInt(posNum.Y + radius, 0, map.Terrain.TileSize.Y)
-                };
-            applyHeightSmoothing.AreaTileSize.X = posEnd.X - applyHeightSmoothing.Offset.X;
-            applyHeightSmoothing.AreaTileSize.Y = posEnd.Y - applyHeightSmoothing.Offset.Y;
-            applyHeightSmoothing.Start();
-            App.HeightBrush.PerformActionMapVertices(applyHeightSmoothing, mouseOverTerrain.Vertex);
-            applyHeightSmoothing.Finish();
-
-            map.Update();
-
-            mainMapView.DrawLater();
-        }
-
-        private void applyHeightChange(double rate)
-        {
-            var mouseOverTerrain = GetMouseOverTerrain();
-
-            if ( mouseOverTerrain == null )
-            {
-                return;
-            }
-
-            var applyHeightChange = new clsApplyHeightChange();
-            applyHeightChange.Map = map;
-            applyHeightChange.Rate = rate;
-            applyHeightChange.UseEffect = Program.frmMainInstance.cbxHeightChangeFade.Checked;
-            App.HeightBrush.PerformActionMapVertices(applyHeightChange, mouseOverTerrain.Vertex);
-
-            map.Update();
-
-            mainMapView.DrawLater();
-        }
-
-        private void applyHeightSet(clsBrush brush, byte height)
-        {
-            var mouseOverTerrain = GetMouseOverTerrain();
-
-            if ( mouseOverTerrain == null )
-            {
-                return;
-            }
-
-            var applyHeightSet = new clsApplyHeightSet
-                {
-                    Map = map,
-                    Height = height
-                };
-            brush.PerformActionMapVertices(applyHeightSet, mouseOverTerrain.Vertex);
-
-            map.Update();
-
-            mainMapView.DrawLater();
-        }
-
-        private void applyGateway()
-        {
-            var mouseOverTerrain = GetMouseOverTerrain();
-
-            if ( mouseOverTerrain == null )
-            {
-                return;
-            }
-
-            var tile = mouseOverTerrain.Tile.Normal;
-
-            if (keyboardManager.Keys[KeyboardKeys.GatewayDelete].Active)
-            {
-                var a = 0;
-                var low = new XYInt();
-                var high = new XYInt();
-                a = 0;
-                while ( a < map.Gateways.Count )
-                {
-                    MathUtil.ReorderXY(map.Gateways[a].PosA, map.Gateways[a].PosB, ref low, ref high);
-                    if ( low.X <= tile.X
-                         & high.X >= tile.X
-                         & low.Y <= tile.Y
-                         & high.Y >= tile.Y )
-                    {
-                        map.GatewayRemoveStoreChange(a);
-                        map.UndoStepCreate("Gateway Delete");
-                        map.MinimapMakeLater();
-                        mainMapView.DrawLater();
-                        break;
-                    }
-                    a++;
-                }
-            }
-            else
-            {
-                if ( map.SelectedTileA == null )
-                {
-                    map.SelectedTileA = tile;
-                    mainMapView.DrawLater();
-                }
-                else if ( tile.X == map.SelectedTileA.X | tile.Y == map.SelectedTileA.Y )
-                {
-                    if ( map.GatewayCreateStoreChange(map.SelectedTileA, tile) != null )
-                    {
-                        map.UndoStepCreate("Gateway Place");
-                        map.SelectedTileA = null;
-                        map.SelectedTileB = null;
-                        map.MinimapMakeLater();
-                        mainMapView.DrawLater();
-                    }
-                }
-            }
-        }
-            
-        public void HandleMouseMove(object sender, MouseEventArgs e)
-        {
-            MouseOver = new ViewInfo.clsMouseOver();
-            MouseOver.ScreenPos.X = (int)e.Location.X;
-            MouseOver.ScreenPos.Y = (int)e.Location.Y;
-
-            MouseOverPosCalc();
+            MainMapView.DrawLater();
         }
 
         public void HandleMouseUp(object sender, MouseEventArgs e)
         {
+            if(Map == null)
+            {
+                return;
+            }
+
             var mouseOverTerrain = GetMouseOverTerrain();
 
-            map.SuppressMinimap = false;
+            Map.SuppressMinimap = false;
 
             if ( e.Buttons == MouseButtons.Primary )
             {
@@ -1547,49 +1576,49 @@ namespace SharpFlame
                 {
                     if ( modTools.Tool == modTools.Tools.TerrainBrush )
                     {
-                        map.UndoStepCreate("Ground Painted");
+                        Map.UndoStepCreate("Ground Painted");
                     }
                     else if ( modTools.Tool == modTools.Tools.CliffTriangle )
                     {
-                        map.UndoStepCreate("Cliff Triangles");
+                        Map.UndoStepCreate("Cliff Triangles");
                     }
                     else if ( modTools.Tool == modTools.Tools.CliffBrush )
                     {
-                        map.UndoStepCreate("Cliff Brush");
+                        Map.UndoStepCreate("Cliff Brush");
                     }
                     else if ( modTools.Tool == modTools.Tools.CliffRemove )
                     {
-                        map.UndoStepCreate("Cliff Remove Brush");
+                        Map.UndoStepCreate("Cliff Remove Brush");
                     }
                     else if ( modTools.Tool == modTools.Tools.HeightChangeBrush )
                     {
-                        map.UndoStepCreate("Height Change");
+                        Map.UndoStepCreate("Height Change");
                     }
                     else if ( modTools.Tool == modTools.Tools.HeightSetBrush )
                     {
-                        map.UndoStepCreate("Height Set");
+                        Map.UndoStepCreate("Height Set");
                     }
                     else if ( modTools.Tool == modTools.Tools.HeightSmoothBrush )
                     {
-                        map.UndoStepCreate("Height Smooth");
+                        Map.UndoStepCreate("Height Smooth");
                     }
                     else if ( modTools.Tool == modTools.Tools.TextureBrush )
                     {
-                        map.UndoStepCreate("Texture");
+                        Map.UndoStepCreate("Texture");
                     }
                     else if ( modTools.Tool == modTools.Tools.RoadRemove )
                     {
-                        map.UndoStepCreate("Road Remove");
+                        Map.UndoStepCreate("Road Remove");
                     }
                     else if ( modTools.Tool == modTools.Tools.ObjectSelect )
                     {
-                        if ( map.UnitSelectedAreaVertexA != null )
+                        if ( Map.UnitSelectedAreaVertexA != null )
                         {
                             if ( mouseOverTerrain != null )
                             {
-                                SelectUnits(map.UnitSelectedAreaVertexA, mouseOverTerrain.Vertex.Normal);
+                                SelectUnits(Map.UnitSelectedAreaVertexA, mouseOverTerrain.Vertex.Normal);
                             }
-                            map.UnitSelectedAreaVertexA = null;
+                            Map.UnitSelectedAreaVertexA = null;
                         }
                     }
                 }
@@ -1604,11 +1633,11 @@ namespace SharpFlame
                 {
                     if ( modTools.Tool == modTools.Tools.HeightChangeBrush )
                     {
-                        map.UndoStepCreate("Height Change");
+                        Map.UndoStepCreate("Height Change");
                     }
                     else if ( modTools.Tool == modTools.Tools.HeightSetBrush )
                     {
-                        map.UndoStepCreate("Height Set");
+                        Map.UndoStepCreate("Height Set");
                     }
                 }
                 MouseRightDown = null;
@@ -1618,9 +1647,14 @@ namespace SharpFlame
 
         public void HandleMouseDown(object sender, MouseEventArgs e)
         {
+            if(Map == null)
+            {
+                return;
+            }
+
             var screenPos = new XYInt();
 
-            map.SuppressMinimap = true;
+            Map.SuppressMinimap = true;
 
             screenPos.X = (int)e.Location.X;
             screenPos.Y = (int)e.Location.Y;
@@ -1635,7 +1669,7 @@ namespace SharpFlame
                         };
                     var pos = new XYInt((int)((screenPos.X * TilesPerMinimapPixel)),
                         (int)(screenPos.Y * TilesPerMinimapPixel));
-                    map.TileNumClampToMap(pos);
+                    Map.TileNumClampToMap(pos);
                     LookAtTile(pos);
                 }
                 else
@@ -1666,7 +1700,7 @@ namespace SharpFlame
                             }
                             else if (keyboardManager.Keys[KeyboardKeys.PositionLabel].Active)
                             {
-                                var newPosition = new clsScriptPosition(map)
+                                var newPosition = new clsScriptPosition(Map)
                                     {
                                         PosX = MouseLeftDown.OverTerrain.DownPos.Horizontal.X,
                                         PosY = MouseLeftDown.OverTerrain.DownPos.Horizontal.Y
@@ -1677,16 +1711,16 @@ namespace SharpFlame
                             {
                                 if (keyboardManager.Keys[KeyboardKeys.Multiselect].Active)
                                 {
-                                    map.SelectedUnits.Clear();
+                                    Map.SelectedUnits.Clear();
                                 }
                                 Program.frmMainInstance.SelectedObject_Changed();
-                                map.UnitSelectedAreaVertexA = mouseOverTerrain.Vertex.Normal;
-                                mainMapView.DrawLater();
+                                Map.UnitSelectedAreaVertexA = mouseOverTerrain.Vertex.Normal;
+                                MainMapView.DrawLater();
                             }
                         }
                         else if ( modTools.Tool == modTools.Tools.TerrainBrush )
                         {
-                            if ( map.Tileset != null )
+                            if ( Map.Tileset != null )
                             {
                                 if (keyboardManager.Keys[KeyboardKeys.Picker].Active)
                                 {
@@ -1716,7 +1750,7 @@ namespace SharpFlame
                         }
                         else if ( modTools.Tool == modTools.Tools.TextureBrush )
                         {
-                            if ( map.Tileset != null )
+                            if ( Map.Tileset != null )
                             {
                                 if (keyboardManager.Keys[KeyboardKeys.Picker].Active)
                                 {
@@ -1742,7 +1776,7 @@ namespace SharpFlame
                         }
                         else if ( modTools.Tool == modTools.Tools.TerrainFill )
                         {
-                            if ( map.Tileset != null )
+                            if ( Map.Tileset != null )
                             {
                                 if (keyboardManager.Keys[KeyboardKeys.Picker].Active)
                                 {
@@ -1751,20 +1785,20 @@ namespace SharpFlame
                                 else
                                 {
                                     applyTerrainFill(Program.frmMainInstance.FillCliffAction, Program.frmMainInstance.cbxFillInside.Checked);
-                                    mainMapView.DrawLater();
+                                    MainMapView.DrawLater();
                                 }
                             }
                         }
                         else if ( modTools.Tool == modTools.Tools.RoadPlace )
                         {
-                            if ( map.Tileset != null )
+                            if ( Map.Tileset != null )
                             {
                                 applyRoad();
                             }
                         }
                         else if ( modTools.Tool == modTools.Tools.RoadLines )
                         {
-                            if ( map.Tileset != null )
+                            if ( Map.Tileset != null )
                             {
                                 applyRoadLineSelection();
                             }
@@ -1775,16 +1809,16 @@ namespace SharpFlame
                         }
                         else if ( modTools.Tool == modTools.Tools.ObjectPlace )
                         {
-                            if ( Program.frmMainInstance.SingleSelectedObjectTypeBase != null && map.SelectedUnitGroup != null )
+                            if ( Program.frmMainInstance.SingleSelectedObjectTypeBase != null && Map.SelectedUnitGroup != null )
                             {
                                 var objectCreator = new clsUnitCreate();
-                                map.SetObjectCreatorDefaults(objectCreator);
+                                Map.SetObjectCreatorDefaults(objectCreator);
                                 objectCreator.Horizontal = mouseOverTerrain.Pos.Horizontal;
                                 objectCreator.Perform();
-                                map.UndoStepCreate("Place Object");
-                                map.Update();
-                                map.MinimapMakeLater();
-                                mainMapView.DrawLater();
+                                Map.UndoStepCreate("Place Object");
+                                Map.Update();
+                                Map.MinimapMakeLater();
+                                MainMapView.DrawLater();
                             }
                         }
                         else if ( modTools.Tool == modTools.Tools.ObjectLines )
@@ -1793,21 +1827,21 @@ namespace SharpFlame
                         }
                         else if ( modTools.Tool == modTools.Tools.TerrainSelect )
                         {
-                            if ( map.SelectedAreaVertexA == null )
+                            if ( Map.SelectedAreaVertexA == null )
                             {
-                                map.SelectedAreaVertexA = mouseOverTerrain.Vertex.Normal;
-                                mainMapView.DrawLater();
+                                Map.SelectedAreaVertexA = mouseOverTerrain.Vertex.Normal;
+                                MainMapView.DrawLater();
                             }
-                            else if ( map.SelectedAreaVertexB == null )
+                            else if ( Map.SelectedAreaVertexB == null )
                             {
-                                map.SelectedAreaVertexB = mouseOverTerrain.Vertex.Normal;
-                                mainMapView.DrawLater();
+                                Map.SelectedAreaVertexB = mouseOverTerrain.Vertex.Normal;
+                                MainMapView.DrawLater();
                             }
                             else
                             {
-                                map.SelectedAreaVertexA = null;
-                                map.SelectedAreaVertexB = null;
-                                mainMapView.DrawLater();
+                                Map.SelectedAreaVertexA = null;
+                                Map.SelectedAreaVertexB = null;
+                                MainMapView.DrawLater();
                             }
                         }
                         else if ( modTools.Tool == modTools.Tools.Gateways )
@@ -1817,7 +1851,7 @@ namespace SharpFlame
                     }
                     else if ( modTools.Tool == modTools.Tools.ObjectSelect )
                     {
-                        map.SelectedUnits.Clear();
+                        Map.SelectedUnits.Clear();
                         Program.frmMainInstance.SelectedObject_Changed();
                     }
                 }
@@ -1841,14 +1875,14 @@ namespace SharpFlame
                 }
                 if ( modTools.Tool == modTools.Tools.RoadLines || modTools.Tool == modTools.Tools.ObjectLines )
                 {
-                    map.SelectedTileA = null;
-                    mainMapView.DrawLater();
+                    Map.SelectedTileA = null;
+                    MainMapView.DrawLater();
                 }
                 else if ( modTools.Tool == modTools.Tools.TerrainSelect )
                 {
-                    map.SelectedAreaVertexA = null;
-                    map.SelectedAreaVertexB = null;
-                    mainMapView.DrawLater();
+                    Map.SelectedAreaVertexA = null;
+                    Map.SelectedAreaVertexB = null;
+                    MainMapView.DrawLater();
                 }
                 else if ( modTools.Tool == modTools.Tools.CliffTriangle )
                 {
@@ -1856,9 +1890,9 @@ namespace SharpFlame
                 }
                 else if ( modTools.Tool == modTools.Tools.Gateways )
                 {
-                    map.SelectedTileA = null;
-                    map.SelectedTileB = null;
-                    mainMapView.DrawLater();
+                    Map.SelectedTileA = null;
+                    Map.SelectedTileB = null;
+                    MainMapView.DrawLater();
                 }
                 else if ( modTools.Tool == modTools.Tools.HeightSetBrush )
                 {
@@ -1872,6 +1906,37 @@ namespace SharpFlame
                     }
                 }
             }
+        }
+
+        public void HandleLostFocus(object sender, EventArgs e)
+        {
+            MouseOver = null;
+            MouseLeftDown = null;
+            MouseRightDown = null;
+        }
+
+        public void HandleMouseWheel(object sender, MouseEventArgs e)
+        {
+            if(Map == null)
+            {
+                return;
+            }
+
+            var move = new XYZInt(0, 0, 0);
+            var xyzDbl = default(XYZDouble);
+            var a = 0;
+
+            for ( a = 0; a <= (int)(Math.Abs(e.Delta.Height / 120.0f)); a++ )
+            {
+                Matrix3DMath.VectorForwardsRotationByMatrix(ViewAngleMatrix, (Math.Sign(e.Delta.Height) * Math.Max(ViewPos.Y, 512.0D) / 24.0D), ref xyzDbl);
+                move.SetDbl(xyzDbl);
+                ViewPosChange(move);
+            }
+        }
+
+        public void HandleMouseLeave(object sender, MouseEventArgs e)
+        {
+            MouseOver = null;
         }
 
         private void SelectUnits(XYInt vertexA, XYInt vertexB)
@@ -1918,15 +1983,15 @@ namespace SharpFlame
                 startPos.Y = startVertex.Y * Constants.TerrainGridSpacing;
                 finishPos.X = finishVertex.X * Constants.TerrainGridSpacing;
                 finishPos.Y = finishVertex.Y * Constants.TerrainGridSpacing;
-                sectorStart.X = Math.Min(startVertex.X / Constants.SectorTileSize, map.SectorCount.X - 1);
-                sectorStart.Y = Math.Min(startVertex.Y / Constants.SectorTileSize, map.SectorCount.Y - 1);
-                sectorFinish.X = Math.Min(finishVertex.X / Constants.SectorTileSize, map.SectorCount.X - 1);
-                sectorFinish.Y = Math.Min(finishVertex.Y / Constants.SectorTileSize, map.SectorCount.Y - 1);
+                sectorStart.X = Math.Min(startVertex.X / Constants.SectorTileSize, Map.SectorCount.X - 1);
+                sectorStart.Y = Math.Min(startVertex.Y / Constants.SectorTileSize, Map.SectorCount.Y - 1);
+                sectorFinish.X = Math.Min(finishVertex.X / Constants.SectorTileSize, Map.SectorCount.X - 1);
+                sectorFinish.Y = Math.Min(finishVertex.Y / Constants.SectorTileSize, Map.SectorCount.Y - 1);
                 for ( sectorNum.Y = sectorStart.Y; sectorNum.Y <= sectorFinish.Y; sectorNum.Y++ )
                 {
                     for ( sectorNum.X = sectorStart.X; sectorNum.X <= sectorFinish.X; sectorNum.X++ )
                     {
-                        foreach ( var connection in map.Sectors[sectorNum.X, sectorNum.Y].Units )
+                        foreach ( var connection in Map.Sectors[sectorNum.X, sectorNum.Y].Units )
                         {
                             unit = connection.Unit;
                             if ( unit.Pos.Horizontal.X >= startPos.X & unit.Pos.Horizontal.Y >= startPos.Y &
@@ -1943,7 +2008,7 @@ namespace SharpFlame
             }
 
             //Program.frmMainInstance.SelectedObject_Changed(); // TODO: Implement with UiOptions
-            mainMapView.DrawLater();
+            MainMapView.DrawLater();
         }
 
         public void TimedActions(double zoom, double move, double pan, double roll, double orbitRate)
@@ -1957,7 +2022,7 @@ namespace SharpFlame
             var viewPosChangeXyz = new XYZInt(0, 0, 0);
             var angleChanged = default(bool);
 
-            move *= FOVMultiplier * (mainMapView.GLSurface.Size.Width + mainMapView.GLSurface.Size.Height) * Math.Max(Math.Abs(ViewPos.Y), 512.0D);
+            move *= FOVMultiplier * (MainMapView.GLSurface.Size.Width + MainMapView.GLSurface.Size.Height) * Math.Max(Math.Abs(ViewPos.Y), 512.0D);
 
             if (keyboardManager.Keys[KeyboardKeys.ViewZoomIn].Active)
             {
@@ -2189,7 +2254,7 @@ namespace SharpFlame
 
         private void applyObjectLine()
         {
-            if ( Program.frmMainInstance.SingleSelectedObjectTypeBase != null && map.SelectedUnitGroup != null )
+            if ( Program.frmMainInstance.SingleSelectedObjectTypeBase != null && Map.SelectedUnitGroup != null )
             {
                 var mouseOverTerrian = GetMouseOverTerrain();
 
@@ -2203,22 +2268,22 @@ namespace SharpFlame
                 var b = 0;
                 var tile = mouseOverTerrian.Tile.Normal;
 
-                if ( map.SelectedTileA != null )
+                if ( Map.SelectedTileA != null )
                 {
-                    if ( tile.X == map.SelectedTileA.X )
+                    if ( tile.X == Map.SelectedTileA.X )
                     {
-                        if ( tile.Y <= map.SelectedTileA.Y )
+                        if ( tile.Y <= Map.SelectedTileA.Y )
                         {
                             a = tile.Y;
-                            b = map.SelectedTileA.Y;
+                            b = Map.SelectedTileA.Y;
                         }
                         else
                         {
-                            a = map.SelectedTileA.Y;
+                            a = Map.SelectedTileA.Y;
                             b = tile.Y;
                         }
                         var objectCreator = new clsUnitCreate();
-                        map.SetObjectCreatorDefaults(objectCreator);
+                        Map.SetObjectCreatorDefaults(objectCreator);
                         for ( num = a; num <= b; num++ )
                         {
                             objectCreator.Horizontal.X = (int)((tile.X + 0.5D) * Constants.TerrainGridSpacing);
@@ -2226,26 +2291,26 @@ namespace SharpFlame
                             objectCreator.Perform();
                         }
 
-                        map.UndoStepCreate("Object Line");
-                        map.Update();
-                        map.MinimapMakeLater();
-                        map.SelectedTileA = null;
-                        mainMapView.DrawLater();
+                        Map.UndoStepCreate("Object Line");
+                        Map.Update();
+                        Map.MinimapMakeLater();
+                        Map.SelectedTileA = null;
+                        MainMapView.DrawLater();
                     }
-                    else if ( tile.Y == map.SelectedTileA.Y )
+                    else if ( tile.Y == Map.SelectedTileA.Y )
                     {
-                        if ( tile.X <= map.SelectedTileA.X )
+                        if ( tile.X <= Map.SelectedTileA.X )
                         {
                             a = tile.X;
-                            b = map.SelectedTileA.X;
+                            b = Map.SelectedTileA.X;
                         }
                         else
                         {
-                            a = map.SelectedTileA.X;
+                            a = Map.SelectedTileA.X;
                             b = tile.X;
                         }
                         var objectCreator = new clsUnitCreate();
-                        map.SetObjectCreatorDefaults(objectCreator);
+                        Map.SetObjectCreatorDefaults(objectCreator);
                         for ( num = a; num <= b; num++ )
                         {
                             objectCreator.Horizontal.X = (int)((num + 0.5D) * Constants.TerrainGridSpacing);
@@ -2253,16 +2318,16 @@ namespace SharpFlame
                             objectCreator.Perform();
                         }
 
-                        map.UndoStepCreate("Object Line");
-                        map.Update();
-                        map.MinimapMakeLater();
-                        map.SelectedTileA = null;
-                        mainMapView.DrawLater();
+                        Map.UndoStepCreate("Object Line");
+                        Map.Update();
+                        Map.MinimapMakeLater();
+                        Map.SelectedTileA = null;
+                        MainMapView.DrawLater();
                     }
                 }
                 else
                 {
-                    map.SelectedTileA = tile;
+                    Map.SelectedTileA = tile;
                 }
             }
         }

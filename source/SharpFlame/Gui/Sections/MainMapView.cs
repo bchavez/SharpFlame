@@ -46,74 +46,89 @@ using SharpFlame.Util;
 
 namespace SharpFlame.Gui.Sections
 {
-    public class MainMapView : Panel, IInitializable
+    public class MainMapView : Panel
 	{
-        private ILogger logger;
-
-        [Inject]
-        internal ILoggerFactory logFactory 
-        { 
-            set { logger = value.GetCurrentClassLogger(); } 
-        }
-
-        [Inject]
-        internal KeyboardManager KeyboardManager { get; set; }
-
         [Inject, Named(NamedBinding.MapView)]
         public GLSurface GLSurface { get; set; }
 
-        [Inject]
-        internal IEventBroker EventBroker { get; set; }
-
-        private Map map;
-        public Map Map { 
-            get { return map; }
+        private Map mainMap;
+        public Map MainMap { 
+            get { return mainMap; }
             set {
-                if(map != null)
+                mainMap = value;
+
+                if(mainMap != null)
                 {
-                    GLSurface.MouseDown -= map.ViewInfo.HandleMouseDown;
-                    GLSurface.MouseUp -= map.ViewInfo.HandleMouseUp;
-                    GLSurface.MouseMove -= map.ViewInfo.HandleMouseMove;
+                    mainMap.InitializeUserInput();
+                    mainMap.SectorGraphicsChanges.SetAllChanged();
+                    mainMap.Update();
+                    mainMap.MinimapMakeLater();
                 }
 
-                map = value;
-                GLSurface.MouseDown += map.ViewInfo.HandleMouseDown;
-                GLSurface.MouseUp += map.ViewInfo.HandleMouseUp;
-                GLSurface.MouseMove += map.ViewInfo.HandleMouseMove;
+                viewInfo.Map = mainMap;
 
                 DrawLater();
             }
         }
 
+        private readonly ILogger logger;
+        private readonly KeyboardManager keyboardManager;
+        private readonly ViewInfo viewInfo;
+
         private UITimer tmrDraw;
         private UITimer tmrKey;
 
+        private readonly Label lblTile;
+        private readonly Label lblVertex;
+        private readonly Label lblPos;
+
         private bool drawPending = false;
 
-        void IInitializable.Initialize()
+        public MainMapView(IKernel kernel, ILoggerFactory logFactory, 
+            KeyboardManager kbm, ViewInfo argViewInfo)
         {
+            kernel.Inject(this); // For GLSurface
+            logger = logFactory.GetCurrentClassLogger();
+            keyboardManager = kbm;
+            viewInfo = argViewInfo;
+            viewInfo.MainMapView = this; // They need each other.
+
 		    var mainLayout = new DynamicLayout();
             mainLayout.AddSeparateRow(
                 new Label { }
             );
             mainLayout.Add(GLSurface, true, true);
             mainLayout.AddSeparateRow(
-                new Label { }
+                lblTile = new Label { },
+                null,
+                lblVertex = new Label { },
+                null,
+                lblPos = new Label {}
             );
 
 		    Content = mainLayout;           
 
             setBindings();
-            EventBroker.Register(this);
 		}
 
         void setBindings() 
         {
-            this.GLSurface.KeyDown += this.KeyboardManager.HandleKeyDown;
-            this.GLSurface.KeyUp += this.KeyboardManager.HandleKeyUp;
+            GLSurface.KeyDown += keyboardManager.HandleKeyDown;
+            GLSurface.KeyUp += keyboardManager.HandleKeyUp;
 
-            this.GLSurface.Initialized += initalizeGlSurface;
-            this.GLSurface.Resize += resizeMapView;
+            GLSurface.MouseDown += viewInfo.HandleMouseDown;
+            GLSurface.MouseUp += viewInfo.HandleMouseUp;
+            GLSurface.MouseMove += viewInfo.HandleMouseMove;
+            GLSurface.MouseMove += handleMouseMove;
+            GLSurface.MouseWheel += viewInfo.HandleMouseWheel;
+
+            GLSurface.LostFocus += viewInfo.HandleLostFocus;
+            GLSurface.MouseLeave += viewInfo.HandleMouseLeave;
+
+            GLSurface.Initialized += initalizeGlSurface;
+            GLSurface.Resize += resizeMapView;
+
+            keyboardManager.KeyDown += handleKeyDown;
         }
 
         private void initalizeGlSurface(object sender, EventArgs e)
@@ -188,7 +203,7 @@ namespace SharpFlame.Gui.Sections
             GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Diffuse, mat_diffuse);
             GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Shininess, mat_shininess);
 
-            tmrDraw = new UITimer { Interval = 0.016 }; // Every Millisecond.
+            tmrDraw = new UITimer { Interval = 0.013 }; // Every Millisecond.
             tmrDraw.Elapsed += timedDraw;
             tmrDraw.Start();
 
@@ -210,9 +225,9 @@ namespace SharpFlame.Gui.Sections
 
             GLSurface.SwapBuffers();
 
-            if(Map != null)
+            if(viewInfo.Map != null)
             {
-                Map.ViewInfo.FovCalc();
+                viewInfo.FovCalc();
             }
 
             DrawLater();              
@@ -226,7 +241,6 @@ namespace SharpFlame.Gui.Sections
         private void timedDraw(object sender, EventArgs e)
         {
             if(!drawPending || 
-                Map == null || 
                 !this.GLSurface.IsInitialized)
             {
                 return;
@@ -235,7 +249,7 @@ namespace SharpFlame.Gui.Sections
             this.GLSurface.MakeCurrent();
 
             var bgColour = new SRgb();
-            if ( map.Tileset == null )
+            if ( mainMap == null || mainMap.Tileset == null )
             {
                 bgColour.Red = 0.5F;
                 bgColour.Green = 0.5F;
@@ -243,17 +257,22 @@ namespace SharpFlame.Gui.Sections
             }
             else
             {
-                bgColour = map.Tileset.BGColour;
+                bgColour = mainMap.Tileset.BGColour;
             }
 
             GL.ClearColor(bgColour.Red, bgColour.Green, bgColour.Blue, 1.0F);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            try {
-                Map.GLDraw();
-            } catch (Exception ex) {
-                Debugger.Break();
-                logger.Error(ex, "Got an exception");
+            if(mainMap != null) // Else just clear the screen.
+            {
+                try
+                {
+                    MainMap.GLDraw();
+                } catch(Exception ex)
+                {
+                    Debugger.Break();
+                    logger.Error(ex, "Got an exception");
+                }
             }
 
             GL.Flush();
@@ -264,7 +283,7 @@ namespace SharpFlame.Gui.Sections
 
         private void timedKey(object sender, EventArgs e)
         {
-            if ( Map == null )
+            if ( viewInfo.Map == null )
             {
                 return;
             }
@@ -276,9 +295,9 @@ namespace SharpFlame.Gui.Sections
             double Pan = 0;
             double OrbitRate = 0;
 
-            if ( KeyboardManager.Keys[KeyboardKeys.ViewFast].Active )
+            if ( keyboardManager.Keys[KeyboardKeys.ViewFast].Active )
             {
-                if (KeyboardManager.Keys[KeyboardKeys.ViewSlow].Active)
+                if (keyboardManager.Keys[KeyboardKeys.ViewSlow].Active)
                 {
                     Rate = 8.0D;
                 }
@@ -287,7 +306,7 @@ namespace SharpFlame.Gui.Sections
                     Rate = 4.0D;
                 }
             }
-            else if (KeyboardManager.Keys[KeyboardKeys.ViewSlow].Active)
+            else if (keyboardManager.Keys[KeyboardKeys.ViewSlow].Active)
             {
                 Rate = 0.25D;
             }
@@ -302,14 +321,11 @@ namespace SharpFlame.Gui.Sections
             Pan = 1.0D / 16.0D;
             OrbitRate = 1.0D / 32.0D;
 
-            if ( Map != null )
-            {
-                Map.ViewInfo.TimedActions(Zoom, Move, Pan, Roll, OrbitRate);
+            viewInfo.TimedActions(Zoom, Move, Pan, Roll, OrbitRate);
 
-                if ( Map.CheckMessages() )
-                {
-                    DrawLater();
-                }
+            if ( MainMap.CheckMessages() )
+            {
+                DrawLater();
             }
         }
 
@@ -330,76 +346,106 @@ namespace SharpFlame.Gui.Sections
             base.Dispose(disposing);
         }
 
-        [EventSubscription(KeyboardManagerEvents.OnKeyDown, typeof(OnPublisher))]
-        public void HandleKeyDown(object sender, KeyboardEventArgs e)
+        private void handleMouseMove(object sender, MouseEventArgs e)
         {
-            if(map == null)
+            var mouseOverTerrain = viewInfo.GetMouseOverTerrain();
+
+            if(mouseOverTerrain == null) // Map is maybe null here
+            {
+                lblTile.Text = "";
+                lblVertex.Text = "";
+                lblPos.Text = "";
+            } else
+            {
+                lblTile.Text = string.Format("Tile x:{0}, y:{1}", 
+                    mouseOverTerrain.Tile.Normal.X, 
+                    mouseOverTerrain.Tile.Normal.Y
+                );
+                lblVertex.Text = string.Format("Vertex  x:{0}, y:{1}, alt:{2} ({3}x{4})", 
+                    Convert.ToString(mouseOverTerrain.Vertex.Normal.X), 
+                    Convert.ToString(mouseOverTerrain.Vertex.Normal.Y), 
+                    mainMap.Terrain.Vertices[mouseOverTerrain.Vertex.Normal.X, mouseOverTerrain.Vertex.Normal.Y].Height * mainMap.HeightMultiplier, 
+                    Convert.ToString(mainMap.Terrain.Vertices[mouseOverTerrain.Vertex.Normal.X, mouseOverTerrain.Vertex.Normal.Y].Height), 
+                    Convert.ToString(mainMap.HeightMultiplier)
+                );
+                lblPos.Text = string.Format("Pos x:{0}, y:{1}, alt:{2}, slope: {3}°", 
+                    Convert.ToString(mouseOverTerrain.Pos.Horizontal.X), 
+                    Convert.ToString(mouseOverTerrain.Pos.Horizontal.Y), 
+                    Convert.ToString(mouseOverTerrain.Pos.Altitude), 
+                    Convert.ToString(Math.Round(mainMap.GetTerrainSlopeAngle(mouseOverTerrain.Pos.Horizontal) / MathUtil.RadOf1Deg * 10.0D) / 10.0D)
+                );
+            }
+        }
+
+        private void handleKeyDown(object sender, KeyboardEventArgs e)
+        {
+            if(mainMap == null)
             {
                 return;
             }
 
-            if(KeyboardManager.Keys[KeyboardKeys.VisionRadius6].Active)
+            if(keyboardManager.Keys[KeyboardKeys.VisionRadius6].Active)
             {
                 App.VisionRadius_2E = 6;
                 App.VisionRadius_2E_Changed();
                 DrawLater();
             }
-            if(KeyboardManager.Keys[KeyboardKeys.VisionRadius7].Active)
+            if(keyboardManager.Keys[KeyboardKeys.VisionRadius7].Active)
             {
                 App.VisionRadius_2E = 7;
                 App.VisionRadius_2E_Changed();
                 DrawLater();
             }
-            if(KeyboardManager.Keys[KeyboardKeys.VisionRadius8].Active)
+            if(keyboardManager.Keys[KeyboardKeys.VisionRadius8].Active)
             {
                 App.VisionRadius_2E = 8;
                 App.VisionRadius_2E_Changed();
                 DrawLater();
             }
-            if(KeyboardManager.Keys[KeyboardKeys.VisionRadius9].Active)
+            if(keyboardManager.Keys[KeyboardKeys.VisionRadius9].Active)
             {
                 App.VisionRadius_2E = 9;
                 App.VisionRadius_2E_Changed();
                 DrawLater();
             }
-            if(KeyboardManager.Keys[KeyboardKeys.VisionRadius10].Active)
+            if(keyboardManager.Keys[KeyboardKeys.VisionRadius10].Active)
             {
                 App.VisionRadius_2E = 10;
                 App.VisionRadius_2E_Changed();
                 DrawLater();
             }
-            if(KeyboardManager.Keys[KeyboardKeys.VisionRadius11].Active)
+            if(keyboardManager.Keys[KeyboardKeys.VisionRadius11].Active)
             {
                 App.VisionRadius_2E = 11;
                 App.VisionRadius_2E_Changed();
                 DrawLater();
             }
-            if(KeyboardManager.Keys[KeyboardKeys.VisionRadius12].Active)
+            if(keyboardManager.Keys[KeyboardKeys.VisionRadius12].Active)
             {
                 App.VisionRadius_2E = 12;
                 App.VisionRadius_2E_Changed();
                 DrawLater();
             }
-            if(KeyboardManager.Keys[KeyboardKeys.VisionRadius13].Active)
+            if(keyboardManager.Keys[KeyboardKeys.VisionRadius13].Active)
             {
                 App.VisionRadius_2E = 13;
                 App.VisionRadius_2E_Changed();
                 DrawLater();
             }
-            if(KeyboardManager.Keys[KeyboardKeys.VisionRadius14].Active)
+            if(keyboardManager.Keys[KeyboardKeys.VisionRadius14].Active)
             {
                 App.VisionRadius_2E = 14;
                 App.VisionRadius_2E_Changed();
                 DrawLater();
             }
-            if(KeyboardManager.Keys[KeyboardKeys.VisionRadius15].Active)
+            if(keyboardManager.Keys[KeyboardKeys.VisionRadius15].Active)
             {
                 App.VisionRadius_2E = 15;
                 App.VisionRadius_2E_Changed();
                 DrawLater();
             }
 
-            if (KeyboardManager.Keys[KeyboardKeys.ViewMoveMode].Active)
+            if (keyboardManager.Keys[KeyboardKeys.ViewMoveMode].Active)
             {
                 if ( App.ViewMoveType == ViewMoveType.Free )
                 {
@@ -410,46 +456,46 @@ namespace SharpFlame.Gui.Sections
                     App.ViewMoveType = ViewMoveType.Free;
                 }
             }
-            if (KeyboardManager.Keys[KeyboardKeys.ViewRotateMode].Active)
+            if (keyboardManager.Keys[KeyboardKeys.ViewRotateMode].Active)
             {
                 App.RTSOrbit = !App.RTSOrbit;
             }
-            if (KeyboardManager.Keys[KeyboardKeys.ViewReset].Active)
+            if (keyboardManager.Keys[KeyboardKeys.ViewReset].Active)
             {
                 var matrixA = new Matrix3DMath.Matrix3D();
 
-                map.ViewInfo.FovMultiplierSet(App.SettingsManager.FOVDefault);
+                viewInfo.FovMultiplierSet(App.SettingsManager.FOVDefault);
                 if ( App.ViewMoveType == ViewMoveType.Free )
                 {
                     Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
-                    map.ViewInfo.ViewAngleSetRotate(matrixA);
+                    viewInfo.ViewAngleSetRotate(matrixA);
                 }
                 else if ( App.ViewMoveType == ViewMoveType.RTS )
                 {
                     Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
-                    map.ViewInfo.ViewAngleSetRotate(matrixA);
+                    viewInfo.ViewAngleSetRotate(matrixA);
                 }
             }
-            if (KeyboardManager.Keys[KeyboardKeys.ShowTextures].Active)
+            if (keyboardManager.Keys[KeyboardKeys.ShowTextures].Active)
             {
                 App.Draw_TileTextures = !App.Draw_TileTextures;
                 DrawLater();
             }
-            if (KeyboardManager.Keys[KeyboardKeys.ShowWireframe].Active)
+            if (keyboardManager.Keys[KeyboardKeys.ShowWireframe].Active)
             {
                 App.Draw_TileWireframe = !App.Draw_TileWireframe;
                 DrawLater();
             }
-            if (KeyboardManager.Keys[KeyboardKeys.ShowObjects].Active)
+            if (keyboardManager.Keys[KeyboardKeys.ShowObjects].Active)
             {
                 App.Draw_Units = !App.Draw_Units;
                 
                 var sectorNum = new XYInt();
-                for (var y = 0; y <= map.SectorCount.Y - 1; y++ )
+                for (var y = 0; y <= mainMap.SectorCount.Y - 1; y++ )
                 {
-                    for (var  x = 0; x <= map.SectorCount.X - 1; x++ )
+                    for (var  x = 0; x <= mainMap.SectorCount.X - 1; x++ )
                     {
-                        foreach ( var connection in map.Sectors[x, y].Units )
+                        foreach ( var connection in mainMap.Sectors[x, y].Units )
                         {    
                             var Unit = connection.Unit;
                             if ( Unit.TypeBase.Type == UnitType.PlayerStructure )
@@ -458,22 +504,22 @@ namespace SharpFlame.Gui.Sections
                                 {
                                     sectorNum.X = x;
                                     sectorNum.Y = y;
-                                    map.SectorGraphicsChanges.Changed(sectorNum);
+                                    mainMap.SectorGraphicsChanges.Changed(sectorNum);
                                     break;
                                 }
                             }
                         }
                     }
                 }
-                map.Update();
+                mainMap.Update();
                 DrawLater();
             }
-            if (KeyboardManager.Keys[KeyboardKeys.ShowLabels].Active)
+            if (keyboardManager.Keys[KeyboardKeys.ShowLabels].Active)
             {
                 App.Draw_ScriptMarkers = !App.Draw_ScriptMarkers;
                 DrawLater();
             }
-            if (KeyboardManager.Keys[KeyboardKeys.ShowLighting].Active)
+            if (keyboardManager.Keys[KeyboardKeys.ShowLighting].Active)
             {
                 if ( App.Draw_Lighting == DrawLighting.Off )
                 {
@@ -490,54 +536,54 @@ namespace SharpFlame.Gui.Sections
                 DrawLater();
             }
 
-            var mouseOverTerrain = map.ViewInfo.GetMouseOverTerrain();
+            var mouseOverTerrain = viewInfo.GetMouseOverTerrain();
             if ( modTools.Tool == modTools.Tools.TextureBrush )
             {
                 if ( mouseOverTerrain != null )
                 {
-                    if (KeyboardManager.Keys[KeyboardKeys.Clockwise].Active)
+                    if (keyboardManager.Keys[KeyboardKeys.Clockwise].Active)
                     {
-                        map.ViewInfo.ApplyTextureClockwise();
+                        viewInfo.ApplyTextureClockwise();
                     }
-                    if (KeyboardManager.Keys[KeyboardKeys.CounterClockwise].Active)
+                    if (keyboardManager.Keys[KeyboardKeys.CounterClockwise].Active)
                     {
-                        map.ViewInfo.ApplyTextureCounterClockwise();
+                        viewInfo.ApplyTextureCounterClockwise();
                     }
-                    if (KeyboardManager.Keys[KeyboardKeys.TextureFlip].Active)
+                    if (keyboardManager.Keys[KeyboardKeys.TextureFlip].Active)
                     {
-                        map.ViewInfo.ApplyTextureFlipX();
+                        viewInfo.ApplyTextureFlipX();
                     }
-                    if (KeyboardManager.Keys[KeyboardKeys.TriangleFlip].Active)
+                    if (keyboardManager.Keys[KeyboardKeys.TriangleFlip].Active)
                     {
-                        map.ViewInfo.ApplyTriFlip();
+                        viewInfo.ApplyTriFlip();
                     }
                 }
             }
             if ( modTools.Tool == modTools.Tools.ObjectSelect )
             {
-                if (KeyboardManager.Keys[KeyboardKeys.DeleteObjects].Active)
+                if (keyboardManager.Keys[KeyboardKeys.DeleteObjects].Active)
                 {
-                    if ( map.SelectedUnits.Count > 0 )
+                    if ( mainMap.SelectedUnits.Count > 0 )
                     {
-                        foreach ( var unit in map.SelectedUnits.GetItemsAsSimpleList() )
+                        foreach ( var unit in mainMap.SelectedUnits.GetItemsAsSimpleList() )
                         {
                             
-                            map.UnitRemoveStoreChange(unit.MapLink.ArrayPosition);
+                            mainMap.UnitRemoveStoreChange(unit.MapLink.ArrayPosition);
                         }
                         Program.frmMainInstance.SelectedObject_Changed();
-                        map.UndoStepCreate("Object Deleted");
-                        map.Update();
-                        map.MinimapMakeLater();
+                        mainMap.UndoStepCreate("Object Deleted");
+                        mainMap.Update();
+                        mainMap.MinimapMakeLater();
                         DrawLater();
                     }
                 }
-                if (KeyboardManager.Keys[KeyboardKeys.MoveObjects].Active)
+                if (keyboardManager.Keys[KeyboardKeys.MoveObjects].Active)
                 {
                     if ( mouseOverTerrain != null )
                     {
-                        if ( map.SelectedUnits.Count > 0 )
+                        if ( mainMap.SelectedUnits.Count > 0 )
                         {
-                            var centre = App.CalcUnitsCentrePos(map.SelectedUnits.GetItemsAsSimpleList());
+                            var centre = App.CalcUnitsCentrePos(mainMap.SelectedUnits.GetItemsAsSimpleList());
                             var offset = new XYInt();
                             offset.X = ((int)(Math.Round(Convert.ToDouble((mouseOverTerrain.Pos.Horizontal.X - centre.X) / Constants.TerrainGridSpacing)))) *
                                        Constants.TerrainGridSpacing;
@@ -545,54 +591,54 @@ namespace SharpFlame.Gui.Sections
                                        Constants.TerrainGridSpacing;
                             var objectPosOffset = new clsObjectPosOffset
                                 {
-                                    Map = map,
+                                    Map = mainMap,
                                     Offset = offset
                                 };
-                            map.SelectedUnitsAction(objectPosOffset);
+                            mainMap.SelectedUnitsAction(objectPosOffset);
 
-                            map.UndoStepCreate("Objects Moved");
-                            map.Update();
-                            map.MinimapMakeLater();
+                            mainMap.UndoStepCreate("Objects Moved");
+                            mainMap.Update();
+                            mainMap.MinimapMakeLater();
                             Program.frmMainInstance.SelectedObject_Changed();
                             DrawLater();
                         }
                     }
                 }
-                if (KeyboardManager.Keys[KeyboardKeys.Clockwise].Active)
+                if (keyboardManager.Keys[KeyboardKeys.Clockwise].Active)
                 {
                     var objectRotationOffset = new clsObjectRotationOffset
                         {
-                            Map = map,
+                            Map = mainMap,
                             Offset = -90
                         };
-                    map.SelectedUnitsAction(objectRotationOffset);
-                    map.Update();
+                    mainMap.SelectedUnitsAction(objectRotationOffset);
+                    mainMap.Update();
                     Program.frmMainInstance.SelectedObject_Changed();
-                    map.UndoStepCreate("Object Rotated");
+                    mainMap.UndoStepCreate("Object Rotated");
                     DrawLater();
                 }
-                if (KeyboardManager.Keys[KeyboardKeys.CounterClockwise].Active)
+                if (keyboardManager.Keys[KeyboardKeys.CounterClockwise].Active)
                 {
                     var objectRotationOffset = new clsObjectRotationOffset
                         {
-                            Map = map,
+                            Map = mainMap,
                             Offset = 90
                         };
-                    map.SelectedUnitsAction(objectRotationOffset);
-                    map.Update();
+                    mainMap.SelectedUnitsAction(objectRotationOffset);
+                    mainMap.Update();
                     Program.frmMainInstance.SelectedObject_Changed();
-                    map.UndoStepCreate("Object Rotated");
+                    mainMap.UndoStepCreate("Object Rotated");
                     DrawLater();
                 }
             }
 
-            if (KeyboardManager.Keys[KeyboardKeys.ObjectSelectTool].Active)
+            if (keyboardManager.Keys[KeyboardKeys.ObjectSelectTool].Active)
             {
                 modTools.Tool = modTools.Tools.ObjectSelect;
                 DrawLater();
             }
 
-            if (KeyboardManager.Keys[KeyboardKeys.PreviousTool].Active)
+            if (keyboardManager.Keys[KeyboardKeys.PreviousTool].Active)
             {
                 modTools.Tool = modTools.PreviousTool;
                 DrawLater();

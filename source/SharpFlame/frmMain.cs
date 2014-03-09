@@ -545,58 +545,6 @@ namespace SharpFlame
 
         private void tmrKey_Tick(Object sender, EventArgs e)
         {
-            if ( !App.ProgramInitialized )
-            {
-                return;
-            }
-            var Map = MainMap;
-            if ( Map == null )
-            {
-                return;
-            }
-
-            double Rate = 0;
-            double Zoom = 0;
-            double Move = 0;
-            double Roll = 0;
-            double Pan = 0;
-            double OrbitRate = 0;
-
-            if ( KeyboardManager.Keys[KeyboardKeys.ViewFast].Active )
-            {
-                if (KeyboardManager.Keys[KeyboardKeys.ViewSlow].Active)
-                {
-                    Rate = 8.0D;
-                }
-                else
-                {
-                    Rate = 4.0D;
-                }
-            }
-            else if (KeyboardManager.Keys[KeyboardKeys.ViewSlow].Active)
-            {
-                Rate = 0.25D;
-            }
-            else
-            {
-                Rate = 1.0D;
-            }
-
-            Zoom = tmrKey.Interval * 0.002D;
-            Move = tmrKey.Interval * Rate / 2048.0D;
-            Roll = 5.0D * MathUtil.RadOf1Deg;
-            Pan = 1.0D / 16.0D;
-            OrbitRate = 1.0D / 32.0D;
-
-            if ( Map != null )
-            {
-                Map.ViewInfo.TimedActions(Zoom, Move, Pan, Roll, OrbitRate);
-
-                if ( Map.CheckMessages() )
-                {
-                    View_DrawViewLater();
-                }
-            }
         }
 
         public void Load_Map_Prompt()
@@ -942,19 +890,19 @@ namespace SharpFlame
 
         private void tmrTool_Tick(Object sender, EventArgs e)
         {
-            if ( !App.ProgramInitialized )
-            {
-                return;
-            }
-
-            var Map = MainMap;
-
-            if ( Map == null )
-            {
-                return;
-            }
-
-            Map.ViewInfo.TimedTools();
+//            if ( !App.ProgramInitialized )
+//            {
+//                return;
+//            }
+//
+//            var Map = MainMap;
+//
+//            if ( Map == null )
+//            {
+//                return;
+//            }
+//
+//            Map.viewInfo.TimedTools();
         }
 
         public void btnResize_Click(Object sender, EventArgs e)
@@ -3356,7 +3304,7 @@ namespace SharpFlame
             if ( Map != null )
             {
                 Map.CheckMessages();
-                Map.ViewInfo.FovCalc();
+//                Map.viewInfo.FovCalc();
                 Map.SectorGraphicsChanges.SetAllChanged();
                 Map.Update();
                 Map.MinimapMakeLater();
@@ -3432,94 +3380,98 @@ namespace SharpFlame
 
         public void TerrainPicker()
         {
-            var Map = MainMap;
-
-            var MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
-
-            if ( MouseOverTerrain == null )
-            {
-                return;
-            }
-
-            var Vertex = MouseOverTerrain.Vertex.Normal;
-            var A = 0;
-
-            lstAutoTexture.Enabled = false;
-            for ( A = 0; A <= lstAutoTexture.Items.Count - 1; A++ )
-            {
-                if ( Map.Painter.Terrains[A] == Map.Terrain.Vertices[Vertex.X, Vertex.Y].Terrain )
-                {
-                    lstAutoTexture.SelectedIndex = A;
-                    break;
-                }
-            }
-            if ( A == lstAutoTexture.Items.Count )
-            {
-                lstAutoTexture.SelectedIndex = -1;
-            }
-            lstAutoTexture.Enabled = true;
-            App.SelectedTerrain = Map.Terrain.Vertices[Vertex.X, Vertex.Y].Terrain;
+            // TODO: Implement me.
+//            var Map = MainMap;
+//
+//            var MouseOverTerrain = Map.viewInfo.GetMouseOverTerrain();
+//
+//            if ( MouseOverTerrain == null )
+//            {
+//                return;
+//            }
+//
+//            var Vertex = MouseOverTerrain.Vertex.Normal;
+//            var A = 0;
+//
+//            lstAutoTexture.Enabled = false;
+//            for ( A = 0; A <= lstAutoTexture.Items.Count - 1; A++ )
+//            {
+//                if ( Map.Painter.Terrains[A] == Map.Terrain.Vertices[Vertex.X, Vertex.Y].Terrain )
+//                {
+//                    lstAutoTexture.SelectedIndex = A;
+//                    break;
+//                }
+//            }
+//            if ( A == lstAutoTexture.Items.Count )
+//            {
+//                lstAutoTexture.SelectedIndex = -1;
+//            }
+//            lstAutoTexture.Enabled = true;
+//            App.SelectedTerrain = Map.Terrain.Vertices[Vertex.X, Vertex.Y].Terrain;
         }
 
         public void TexturePicker()
         {
-            var Map = MainMap;
-
-            var MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
-
-            if ( MouseOverTerrain == null )
-            {
-                return;
-            }
-
-            var Tile = MouseOverTerrain.Tile.Normal;
-
-            if ( Map.Tileset != null )
-            {
-                if ( Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.TextureNum < Map.Tileset.Tiles.Count )
-                {
-                    App.SelectedTextureNum = Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.TextureNum;
-                    TextureViewControl.DrawViewLater();
-                }
-            }
-
-//            if ( SettingsManager.Settings.PickOrientation )
+            // TODO: Implement me.
+//            var Map = MainMap;
+//
+//            var MouseOverTerrain = Map.viewInfo.GetMouseOverTerrain();
+//
+//            if ( MouseOverTerrain == null )
 //            {
-//                App.TextureOrientation = Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation;
-//                TextureViewControl.DrawViewLater();
+//                return;
 //            }
+//
+//            var Tile = MouseOverTerrain.Tile.Normal;
+//
+//            if ( Map.Tileset != null )
+//            {
+//                if ( Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.TextureNum < Map.Tileset.Tiles.Count )
+//                {
+//                    App.SelectedTextureNum = Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.TextureNum;
+//                    TextureViewControl.DrawViewLater();
+//                }
+//            }
+//
+////            if ( SettingsManager.Settings.PickOrientation )
+////            {
+////                App.TextureOrientation = Map.Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation;
+////                TextureViewControl.DrawViewLater();
+////            }
         }
 
         public void HeightPickerL()
         {
-            var Map = MainMap;
-
-            var MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
-
-            if ( MouseOverTerrain == null )
-            {
-                return;
-            }
-
-            txtHeightSetL.Text =
-                Convert.ToByte(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height).ToStringInvariant();
-            txtHeightSetL.Focus();
-            MapViewControl.OpenGLControl.Focus();
+            // TODO: Implement me.
+//            var Map = MainMap;
+//
+//            var MouseOverTerrain = Map.viewInfo.GetMouseOverTerrain();
+//
+//            if ( MouseOverTerrain == null )
+//            {
+//                return;
+//            }
+//
+//            txtHeightSetL.Text =
+//                Convert.ToByte(Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height).ToStringInvariant();
+//            txtHeightSetL.Focus();
+//            MapViewControl.OpenGLControl.Focus();
         }
 
         public void HeightPickerR()
         {
-            var Map = MainMap;
-
-            var MouseOverTerrain = Map.ViewInfo.GetMouseOverTerrain();
-            if ( MouseOverTerrain == null )
-            {
-                return;
-            }
-
-            txtHeightSetR.Text = Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height.ToStringInvariant();
-            txtHeightSetR.Focus();
-            MapViewControl.OpenGLControl.Focus();
+            // TODO: Implement me.
+//            var Map = MainMap;
+//
+//            var MouseOverTerrain = Map.viewInfo.GetMouseOverTerrain();
+//            if ( MouseOverTerrain == null )
+//            {
+//                return;
+//            }
+//
+//            txtHeightSetR.Text = Map.Terrain.Vertices[MouseOverTerrain.Vertex.Normal.X, MouseOverTerrain.Vertex.Normal.Y].Height.ToStringInvariant();
+//            txtHeightSetR.Focus();
+//            MapViewControl.OpenGLControl.Focus();
         }
 
         public void OpenGL_DragEnter(object sender, DragEventArgs e)

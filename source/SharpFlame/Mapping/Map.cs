@@ -76,14 +76,16 @@ namespace SharpFlame.Mapping
         private bool readyForUserInput;
 
         private readonly MainMapView mainMapView;
+        private readonly ViewInfo viewInfo;
 
         [Inject]
         internal IKernel Kernel { get; set; }
        
-        public Map(ILoggerFactory logFactory, MainMapView mmv)
+        public Map(ILoggerFactory logFactory, MainMapView mmv, ViewInfo vi)
         {
             logger = logFactory.GetCurrentClassLogger();
             mainMapView = mmv;
+            viewInfo = vi;
 
             SectorCount = new XYInt(0, 0);
             SelectedAreaVertexA = new XYInt(0, 0);
@@ -213,7 +215,7 @@ namespace SharpFlame.Mapping
         {
             get
             {
-                if ( mainMapView.Map != this )
+                if ( mainMapView.MainMap != this )
                 {
                     return false;
                 }
@@ -2024,8 +2026,6 @@ namespace SharpFlame.Mapping
             SelectedAreaVertexB = new XYZInt(0, 0, 0);
             UnitSelectedAreaVertexA = new XYZInt(0, 0, 0);
 
-            ViewInfo = null;
-
             _SelectedUnitGroup = null;
 
             Messages = null;
@@ -2091,10 +2091,6 @@ namespace SharpFlame.Mapping
             {
                 InterfaceOptions = new InterfaceOptions();
             }
-
-            ViewInfo = Kernel.Get<ViewInfo>(
-                new ConstructorArgument("myMap", this)
-            );
 
             _SelectedUnitGroup = new clsUnitGroupContainer();
             SelectedUnitGroup.Item = ScavengerUnitGroup;

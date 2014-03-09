@@ -25,6 +25,9 @@ namespace SharpFlame.Mapping.Drawing
         [Inject]
         internal MainMapView MainMapView { get; set; }
 
+        [Inject]
+        internal ViewInfo ViewInfo { get; set; }
+
         public void Start()
         {
             UnitDrawn = new bool[Map.Units.Count];
@@ -40,10 +43,16 @@ namespace SharpFlame.Mapping.Drawing
                 return;
             }
 
+            // Not the current map?
+            if(ViewInfo.Map != Map)
+            {
+                Debugger.Break();
+                return;
+            }
+
             var Unit = default(Unit);
             var Sector = Map.Sectors[PosNum.X, PosNum.Y];
             var DrawUnitLabel = default(bool);
-            var ViewInfo = Map.ViewInfo;
             var MouseOverTerrain = ViewInfo.GetMouseOverTerrain();
             var TextLabel = default(clsTextLabel);
             var XYZ_dbl = default(XYZDouble);

@@ -64,6 +64,10 @@ namespace SharpFlame.Infrastructure
                 .ToSelf()
                 .InSingletonScope();
 
+            this.Bind<ViewInfo>()
+                .ToSelf()
+                .InSingletonScope();
+
             this.Bind<MainForm>()
                 .ToSelf()
                 .InSingletonScope();
