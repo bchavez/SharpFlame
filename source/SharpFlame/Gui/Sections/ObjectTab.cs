@@ -35,8 +35,12 @@ namespace SharpFlame.Gui.Sections
 {
     public class ObjectTab : Panel
     {
-        public ObjectTab ()
+        private readonly Options uiOptions;
+
+        public ObjectTab (Options argUiOptions)
         {
+            uiOptions = argUiOptions;
+
             var mainLayout = new DynamicLayout ();
 
             var nLayout0 = new DynamicLayout { Padding = Padding.Empty };
@@ -124,7 +128,7 @@ namespace SharpFlame.Gui.Sections
         void SetupEventHandlers() {
             // Set Mousetool, when we are shown.
             Shown += delegate {
-                App.UiOptions.MouseTool = MouseTool.ObjectSelect;
+                uiOptions.MouseTool = MouseTool.ObjectSelect;
             };
         }
     }

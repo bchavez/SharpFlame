@@ -33,8 +33,12 @@ namespace SharpFlame.Gui.Sections
 {
     public class LabelsTab : Panel
     {
-        public LabelsTab ()
+        private readonly Options uiOptions;
+
+        public LabelsTab (Options argUiOptions)
         {
+            uiOptions = argUiOptions;
+
             var mainLayout = new DynamicLayout ();
 
             var nLayout0 = new DynamicLayout ();
@@ -85,7 +89,7 @@ namespace SharpFlame.Gui.Sections
         void SetupEventHandlers() {
             // Set Mousetool, when we are shown.
             Shown += delegate {
-                App.UiOptions.MouseTool = MouseTool.Default;
+                uiOptions.MouseTool = MouseTool.Default;
             };
         }
     }

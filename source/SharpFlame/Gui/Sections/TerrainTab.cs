@@ -37,19 +37,21 @@ namespace SharpFlame.Gui.Sections
     public class TerrainTab : Panel
 	{
         private readonly ILogger logger;
+        private readonly Options uiOptions;
 
-        readonly RadioButton rbGroundPlace;
-        readonly RadioButton rbGroundFill;
-        readonly RadioButton rbRoadSides;
-        readonly RadioButton rbRoadLines;
-        readonly RadioButton rbRoadRemove;
-        readonly RadioButton rbCliffTriangle;
-        readonly RadioButton rbCliffBrush;
-        readonly RadioButton rbCliffRemove;
+        private readonly RadioButton rbGroundPlace;
+        private readonly RadioButton rbGroundFill;
+        private readonly RadioButton rbRoadSides;
+        private readonly RadioButton rbRoadLines;
+        private readonly RadioButton rbRoadRemove;
+        private readonly RadioButton rbCliffTriangle;
+        private readonly RadioButton rbCliffBrush;
+        private readonly RadioButton rbCliffRemove;
 
-        public TerrainTab (ILoggerFactory logFactory)
+        public TerrainTab (ILoggerFactory logFactory, Options argUiOptions)
 		{
             logger = logFactory.GetCurrentClassLogger();
+            uiOptions = argUiOptions;
 
             rbGroundPlace = new RadioButton { Text = "Place", Checked = true };
             rbGroundFill = new RadioButton (rbGroundPlace) { Text = "Fill" };
@@ -114,33 +116,33 @@ namespace SharpFlame.Gui.Sections
         void SetMouseMode() {
             if (rbGroundPlace.Checked)
             {
-                App.UiOptions.MouseTool = MouseTool.TerrainBrush;
+                uiOptions.MouseTool = MouseTool.TerrainBrush;
             } else if (rbGroundFill.Checked)
             {
-                App.UiOptions.MouseTool = MouseTool.TerrainFill;
+                uiOptions.MouseTool = MouseTool.TerrainFill;
             } else if (rbRoadSides.Checked)
             {
-                App.UiOptions.MouseTool = MouseTool.RoadPlace;
+                uiOptions.MouseTool = MouseTool.RoadPlace;
             } else if (rbRoadLines.Checked)
             {
-                App.UiOptions.MouseTool = MouseTool.RoadLines;
+                uiOptions.MouseTool = MouseTool.RoadLines;
             } else if (rbRoadRemove.Checked)
             {
-                App.UiOptions.MouseTool = MouseTool.RoadRemove;
+                uiOptions.MouseTool = MouseTool.RoadRemove;
             } else if (rbCliffTriangle.Checked)
             {
-                App.UiOptions.MouseTool = MouseTool.CliffTriangle;
+                uiOptions.MouseTool = MouseTool.CliffTriangle;
             } else if (rbCliffBrush.Checked)
             {
-                App.UiOptions.MouseTool = MouseTool.CliffBrush;
+                uiOptions.MouseTool = MouseTool.CliffBrush;
             } else if (rbCliffRemove.Checked)
             {
-                App.UiOptions.MouseTool = MouseTool.CliffRemove;
+                uiOptions.MouseTool = MouseTool.CliffRemove;
             } else
             {
                 Debugger.Break ();
                 logger.Error ("No Radiobutton in the TerrainTab selected, this should never happen!");
-                App.UiOptions.MouseTool = MouseTool.Default;
+                uiOptions.MouseTool = MouseTool.Default;
             }
         }
 

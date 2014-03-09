@@ -250,7 +250,6 @@
     <Compile Include="Pathfinding\Path.cs" />
     <Compile Include="PathUtil.cs" />
     <Compile Include="Result.cs" />
-    <Compile Include="UiOptions\Options.cs" />
     <Compile Include="UiOptions\TexturesOptions.cs" />
     <Compile Include="Util\clsKeysActive.cs" />
     <Compile Include="Util\clsLayer.cs" />
@@ -439,6 +438,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Gui\Resources.cs" />
     <Compile Include="ViewInfo.cs" />
+    <Compile Include="UiOptions\Options.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">

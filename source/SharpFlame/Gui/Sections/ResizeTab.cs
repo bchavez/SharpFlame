@@ -34,8 +34,12 @@ namespace SharpFlame.Gui.Sections
 {
 	public class ResizeTab : Panel
 	{
-        public ResizeTab ()
+        private readonly Options uiOptions;
+
+        public ResizeTab (Options argUiOptions)
 		{
+            uiOptions = argUiOptions;
+
             var mainLayout = new DynamicLayout ();
 
 			var nLayout1 = new DynamicLayout ();
@@ -67,7 +71,7 @@ namespace SharpFlame.Gui.Sections
         void SetupEventHandlers() {
             // Set Mousetool, when we are shown.
             Shown += delegate {
-                App.UiOptions.MouseTool = MouseTool.Default;
+                uiOptions.MouseTool = MouseTool.Default;
             };
         }
 	}

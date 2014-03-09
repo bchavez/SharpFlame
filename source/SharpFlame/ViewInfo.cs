@@ -22,6 +22,7 @@ using SharpFlame.Maths;
 using SharpFlame.Util;
 using SharpFlame.Painters;
 using SharpFlame.Settings;
+using SharpFlame.UiOptions;
 
 #endregion
 
@@ -33,6 +34,7 @@ namespace SharpFlame
     public class ViewInfo
     {
         private readonly ILogger logger;
+        private readonly Options uiOptions;
 
         public double FOVMultiplier;
         public double FOVMultiplierExponent;
@@ -51,12 +53,13 @@ namespace SharpFlame
         private readonly MainMapView mainMapView;
         private readonly KeyboardManager keyboardManager;
 
-        public ViewInfo(Map myMap, ILoggerFactory logFactory, MainMapView mmv, KeyboardManager kbm)
+        public ViewInfo(Map myMap, ILoggerFactory logFactory, MainMapView mmv, KeyboardManager kbm, Options argUiOptions)
         {
             logger = logFactory.GetCurrentClassLogger();
             map = myMap;
             mainMapView = mmv;
             keyboardManager = kbm;
+            uiOptions = argUiOptions;
 
             ViewPos = new XYZInt(0, 3072, 0);
             FovMultiplierSet(App.SettingsManager.FOVDefault);
@@ -1148,12 +1151,12 @@ namespace SharpFlame
             var applyTexture = new clsApplyTexture
             {
                 Map = map,
-                TextureNum = App.UiOptions.Textures.SelectedTile,
-                SetTexture = App.UiOptions.Textures.SetTexture,
-                Orientation = relativeToViewAngle(App.UiOptions.Textures.TextureOrientation),
-                RandomOrientation = App.UiOptions.Textures.Randomize,
-                SetOrientation = App.UiOptions.Textures.SetOrientation,
-                TerrainAction = App.UiOptions.Textures.TerrainMode
+                TextureNum = uiOptions.Textures.SelectedTile,
+                SetTexture = uiOptions.Textures.SetTexture,
+                Orientation = relativeToViewAngle(uiOptions.Textures.TextureOrientation),
+                RandomOrientation = uiOptions.Textures.Randomize,
+                SetOrientation = uiOptions.Textures.SetOrientation,
+                TerrainAction = uiOptions.Textures.TerrainMode
             };
 
             App.TextureBrush.PerformActionMapTiles(applyTexture, mouseOverTerrain.Tile);
@@ -1309,7 +1312,7 @@ namespace SharpFlame
             var tile = mouseOverTerrain.Tile.Normal;
 
             map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.RotateClockwise();
-            map.TileTextureChangeTerrainAction(tile, App.UiOptions.Textures.TerrainMode);
+            map.TileTextureChangeTerrainAction(tile, uiOptions.Textures.TerrainMode);
 
             map.SectorGraphicsChanges.TileChanged(tile);
             map.SectorTerrainUndoChanges.TileChanged(tile);
@@ -1333,7 +1336,7 @@ namespace SharpFlame
             var tile = mouseOverTerrain.Tile.Normal;
 
             map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.RotateAntiClockwise();
-            map.TileTextureChangeTerrainAction(tile, App.UiOptions.Textures.TerrainMode);
+            map.TileTextureChangeTerrainAction(tile, uiOptions.Textures.TerrainMode);
 
             map.SectorGraphicsChanges.TileChanged(tile);
             map.SectorTerrainUndoChanges.TileChanged(tile);
@@ -1357,7 +1360,7 @@ namespace SharpFlame
             var tile = mouseOverTerrain.Tile.Normal;
 
             map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.XFlip = !map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.XFlip;
-            map.TileTextureChangeTerrainAction(tile, App.UiOptions.Textures.TerrainMode);
+            map.TileTextureChangeTerrainAction(tile, uiOptions.Textures.TerrainMode);
 
             map.SectorGraphicsChanges.TileChanged(tile);
             map.SectorTerrainUndoChanges.TileChanged(tile);

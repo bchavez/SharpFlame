@@ -30,7 +30,7 @@ using SharpFlame.Gui.Actions;
 using SharpFlame.Gui.Forms;
 using SharpFlame.Gui.Sections;
 using SharpFlame.Settings;
-using SettingsDialog = SharpFlame.Gui.Dialogs.Settings;
+using SharpFlame.UiOptions;
 
 namespace SharpFlame.Infrastructure
 {
@@ -65,6 +65,10 @@ namespace SharpFlame.Infrastructure
                 .InSingletonScope();
 
             this.Bind<MainForm>()
+                .ToSelf()
+                .InSingletonScope();
+
+            this.Bind<Options>()
                 .ToSelf()
                 .InSingletonScope();
                 

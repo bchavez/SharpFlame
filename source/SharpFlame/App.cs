@@ -137,8 +137,6 @@ namespace SharpFlame
         private static ObservableCollection<Tileset> tilesets = new ObservableCollection<Tileset>();
         public static ObservableCollection<Tileset> Tilesets { get { return tilesets; } }
 
-        public static Options UiOptions = new Options();
-
         public static SettingsManager SettingsManager { get; set; }
 
         public static KeyboardManager KeyboardManager { get; set; }

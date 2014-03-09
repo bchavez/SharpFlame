@@ -37,20 +37,24 @@ namespace SharpFlame.Gui.Sections
 {
 	public class PlaceObjectsTab : Panel
 	{
-        readonly SearchBox filterText;
-        readonly Button btnRotation0;
-        readonly Button btnRotation90;
-        readonly Button btnRotation180;
-        readonly Button btnRotation270;
+        private readonly Options uiOptions;
 
-        readonly NumericUpDown nudRotation;
+        private readonly SearchBox filterText;
+        private readonly Button btnRotation0;
+        private readonly Button btnRotation90;
+        private readonly Button btnRotation180;
+        private readonly Button btnRotation270;
 
-        GridView grvFeatures { get; set; }
-        GridView grvStructures { get; set; }
-        GridView grvDroids { get; set; }
+        private readonly NumericUpDown nudRotation;
 
-        public PlaceObjectsTab ()
+        private GridView grvFeatures { get; set; }
+        private GridView grvStructures { get; set; }
+        private GridView grvDroids { get; set; }
+
+        public PlaceObjectsTab (Options argUiOptions)
 		{
+            uiOptions = argUiOptions;
+
             PlayerSelector playerSelector;
             if (Generator.IsWinForms)
             {
@@ -135,7 +139,7 @@ namespace SharpFlame.Gui.Sections
 
             // Set Mousetool, when we are shown.
             Shown += delegate {
-                App.UiOptions.MouseTool = MouseTool.Default;
+                uiOptions.MouseTool = MouseTool.Default;
             };
 
             App.ObjectDataChanged += delegate

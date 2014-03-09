@@ -43,8 +43,10 @@ using SharpFlame.UiOptions;
 
 namespace SharpFlame.Gui.Sections
 {
-    public class TextureTab : Panel, Ninject.IInitializable
+    public class TextureTab : Panel
     {
+        private readonly Options uiOptions;
+
         private CheckBox chkTexture;
         private CheckBox chkOrientation;
         private CheckBox chkRandomize;
@@ -71,8 +73,11 @@ namespace SharpFlame.Gui.Sections
 
         private XYInt TextureCount { get; set; }
 
-        void IInitializable.Initialize()
+        public TextureTab(IKernel kernel, Options argUiOptions)
         {
+            uiOptions = argUiOptions;
+            kernel.Inject(this);
+
             this.TextureCount = new XYInt(0, 0);
 
             var layout = new DynamicLayout {Padding = Padding.Empty, Spacing = Size.Empty};
@@ -196,11 +201,11 @@ namespace SharpFlame.Gui.Sections
         }
 
         /// <summary>
-        /// Sets the Bindings to App.UiOptions.Textures;
+        /// Sets the Bindings to uiOptions.Textures;
         /// </summary>
         private void SetupEventHandlers()
         {
-            TexturesOptions texturesOptions = App.UiOptions.Textures;
+            TexturesOptions texturesOptions = uiOptions.Textures;
 
             // Circular / Square Button
             btnCircular.Click += (sender, e) =>
@@ -294,7 +299,7 @@ namespace SharpFlame.Gui.Sections
 
             this.GLSurface.MouseDown += (sender, e) =>
                 {
-                    if( App.UiOptions.Textures.TilesetNum == -1 )
+                    if( uiOptions.Textures.TilesetNum == -1 )
                     {
                         return;
                     }
@@ -304,18 +309,18 @@ namespace SharpFlame.Gui.Sections
                     var x = (int)Math.Floor(args.Location.X / 64);
                     var y = (int)Math.Floor(args.Location.Y / 64);
                     var tile = x + (y * TextureCount.X);
-                    if( tile >= App.Tilesets[App.UiOptions.Textures.TilesetNum].Tiles.Count )
+                    if( tile >= App.Tilesets[uiOptions.Textures.TilesetNum].Tiles.Count )
                     {
                         return;
                     }
-                    App.UiOptions.Textures.SelectedTile = tile;
+                    uiOptions.Textures.SelectedTile = tile;
                     DrawTexturesView();
                 };
 
             // Set Mousetool, when we are shown.
             Shown += (sender, args) =>
                 {
-                    App.UiOptions.MouseTool = MouseTool.TextureBrush;
+                    uiOptions.MouseTool = MouseTool.TextureBrush;
                 };
 
 
@@ -328,7 +333,7 @@ namespace SharpFlame.Gui.Sections
 
         private void DrawTexturesView()
         {
-            if( App.UiOptions.Textures.TilesetNum == -1 )
+            if( uiOptions.Textures.TilesetNum == -1 )
             {
                 GL.Clear(ClearBufferMask.ColorBufferBit);
                 GL.Flush();
@@ -338,7 +343,7 @@ namespace SharpFlame.Gui.Sections
 
             this.GLSurface.MakeCurrent();
 
-            var tileset = App.Tilesets[App.UiOptions.Textures.TilesetNum];
+            var tileset = App.Tilesets[uiOptions.Textures.TilesetNum];
 
             var glSize = new Size (0, 0);
             TextureCount = new XYInt {
@@ -382,7 +387,7 @@ namespace SharpFlame.Gui.Sections
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
-            TileUtil.GetTileRotatedTexCoords(App.UiOptions.Textures.TextureOrientation, ref texCoord0, ref texCoord1, ref texCoord2, ref texCoord3);
+            TileUtil.GetTileRotatedTexCoords(uiOptions.Textures.TextureOrientation, ref texCoord0, ref texCoord1, ref texCoord2, ref texCoord3);
 
             GL.Enable(EnableCap.Texture2D);
             GL.Color4(0.0F, 0.0F, 0.0F, 1.0F);
@@ -514,10 +519,10 @@ namespace SharpFlame.Gui.Sections
                 GL.Disable(EnableCap.Texture2D);
             }
 
-            if( App.UiOptions.Textures.SelectedTile >= 0 & TextureCount.X > 0 )
+            if( uiOptions.Textures.SelectedTile >= 0 & TextureCount.X > 0 )
             {
-                xyInt.X = App.UiOptions.Textures.SelectedTile % TextureCount.X;
-                xyInt.Y = App.UiOptions.Textures.SelectedTile / TextureCount.X;
+                xyInt.X = uiOptions.Textures.SelectedTile % TextureCount.X;
+                xyInt.Y = uiOptions.Textures.SelectedTile / TextureCount.X;
                 GL.Begin(BeginMode.LineLoop);
                 GL.Color3(1.0F, 1.0F, 0.0F);
                 GL.Vertex2(xyInt.X * 64, xyInt.Y * 64);

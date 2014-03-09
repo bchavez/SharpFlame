@@ -34,8 +34,12 @@ namespace SharpFlame.Gui.Sections
 {
     public class HeightTab : Panel
 	{
-        public HeightTab ()
+        private readonly Options uiOptions;
+
+        public HeightTab (Options argUiOptions)
 		{
+            uiOptions = argUiOptions;
+
 			var setRadio = new RadioButton { Text = "Set" };
 			var changeRadio = new RadioButton (setRadio){ Text = "Change" };
 			var smoothRadio = new RadioButton (changeRadio) { Text = "Smooth" };
@@ -276,7 +280,7 @@ namespace SharpFlame.Gui.Sections
         void SetupEventHandlers() {
             // Set Mousetool, when we are shown.
             Shown += delegate {
-                App.UiOptions.MouseTool = MouseTool.ObjectSelect;
+                uiOptions.MouseTool = MouseTool.ObjectSelect;
             };
         }
 	}
