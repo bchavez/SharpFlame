@@ -135,10 +135,13 @@ namespace SharpFlame.Settings
         public SettingsManager (ILoggerFactory logFactory, KeyboardManager keyboardManager)
         {
             logger = logFactory.GetCurrentClassLogger();
-            SetDefaults (keyboardManager);
+            TilesetDirectories = new ObservableCollection<string> ();
+            ObjectDataDirectories = new ObservableCollection<string> ();
+
+            SetToDefaults (keyboardManager);
         }
 
-        public void SetDefaults(KeyboardManager keyboardManager)
+        public void SetToDefaults(KeyboardManager keyboardManager)
         {
             AutoSaveEnabled = true;
             AutoSaveCompress = false;
@@ -159,15 +162,16 @@ namespace SharpFlame.Settings
             FOVDefault = 30.0D / (50.0D * 900.0D);
             Mipmaps = true;
             MipmapsHardware = true;
-            OpenPath = null;
-            SavePath = null;
+            OpenPath = "";
+            SavePath = "";
             MapViewBPP = DisplayDevice.Default.BitsPerPixel;
             TextureViewBPP = DisplayDevice.Default.BitsPerPixel;
             MapViewDepth = 24;
             TextureViewDepth = 24;
-            TilesetDirectories = new ObservableCollection<string> ();
-            ObjectDataDirectories = new ObservableCollection<string> ();
             PickOrientation = true;
+
+            //Remove "old" keys
+            keyboardManager.Clear();
 
             //interface controls
             keyboardManager.Create (KeyboardKeys.ObjectSelectTool, Keys.Escape);
@@ -222,6 +226,18 @@ namespace SharpFlame.Settings
             keyboardManager.Create (KeyboardKeys.Undo, Keys.Z);
             keyboardManager.Create (KeyboardKeys.Redo, Keys.Y);
             keyboardManager.Create (KeyboardKeys.PositionLabel, Keys.P);
+
+            // Vision Radius
+            keyboardManager.Create (KeyboardKeys.VisionRadius6, Keys.Control | Keys.D1);
+            keyboardManager.Create (KeyboardKeys.VisionRadius7, Keys.Control | Keys.D2);
+            keyboardManager.Create (KeyboardKeys.VisionRadius8, Keys.Control | Keys.D3);
+            keyboardManager.Create (KeyboardKeys.VisionRadius9, Keys.Control | Keys.D4);
+            keyboardManager.Create (KeyboardKeys.VisionRadius10, Keys.Control | Keys.D5);
+            keyboardManager.Create (KeyboardKeys.VisionRadius11, Keys.Control | Keys.D6);
+            keyboardManager.Create (KeyboardKeys.VisionRadius12, Keys.Control | Keys.D7);
+            keyboardManager.Create (KeyboardKeys.VisionRadius13, Keys.Control | Keys.D8);
+            keyboardManager.Create (KeyboardKeys.VisionRadius14, Keys.Control | Keys.D9);
+            keyboardManager.Create (KeyboardKeys.VisionRadius15, Keys.Control | Keys.D0);
         }
 
         public Result Save(string path)

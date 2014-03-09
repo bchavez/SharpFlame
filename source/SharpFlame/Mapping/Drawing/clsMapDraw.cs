@@ -1,6 +1,7 @@
 #region
 
 using System;
+using Ninject;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
@@ -61,8 +62,7 @@ namespace SharpFlame.Mapping
             var matrixB = new Matrix3DMath.Matrix3D();
             clsAction mapAction;
             float zNearFar = 0;
-            var mapViewControl = App.MapViewGlSurface;
-            var glSize = mapViewControl.Size;
+            var glSize = mainMapView.GLSurface.Size;
             var drawCentre = default(XYDouble);
 
             dblTemp = App.SettingsManager.MinimapSize;
@@ -87,7 +87,7 @@ namespace SharpFlame.Mapping
                 GetPosSectorNum(new XYInt((int)(drawCentre.X - Constants.SectorTileSize * Constants.TerrainGridSpacing / 2.0D),
                     (int)(drawCentre.Y - Constants.SectorTileSize * Constants.TerrainGridSpacing / 2.0D)));
 
-            var drawObjects = new clsDrawSectorObjects();
+            var drawObjects = Kernel.Get<clsDrawSectorObjects>();
             drawObjects.Map = this;
             drawObjects.UnitTextLabels = new clsTextLabels(64);
             drawObjects.Start();

@@ -43,6 +43,7 @@ namespace SharpFlame.Gui.Dialogs
     public class Settings : Form, IInitializable
     {
         private Button btnOk;
+        private Button btnReset;
         private Button btnAddTilesetDirectory;
         private Button btnRemoveTilesetDirectory;
 
@@ -120,6 +121,7 @@ namespace SharpFlame.Gui.Dialogs
                 });
             layout.Add(tabControl, true, true);
             layout.AddSeparateRow(
+                btnReset = new Button {Text = "Reset", Size = new Size(80, -1)},
                 null,
                 btnOk = new Button {Text = "OK", Size = new Size(80, -1)}
                 );
@@ -133,16 +135,21 @@ namespace SharpFlame.Gui.Dialogs
         {
             var settings = App.SettingsManager;
 
+            btnReset.Click += delegate
+            {
+                settings.SetToDefaults(Keyboard);
+            };
+
             btnOk.Click += delegate
+            {
+                var result = settings.Save(App.SettingsPath);
+                if( result.HasProblems || result.HasWarnings )
                 {
-                    var result = settings.Save(App.SettingsPath);
-                    if( result.HasProblems || result.HasWarnings )
-                    {
                     App.StatusDialog = new Dialogs.Status(result);
                     App.StatusDialog.Show();
-                    }
-                    Close();
-                };
+                }
+                Close();
+            };
 
             btnAddTilesetDirectory.Click += delegate
                 {

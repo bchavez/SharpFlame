@@ -81,6 +81,17 @@ namespace SharpFlame.Settings
         public const string Undo = "Undo";
         public const string Redo = "Redo";
         public const string PositionLabel = "PositionLabel";
+
+        //Vision Radius
+        public const string VisionRadius6 = "VisionRadius6";
+        public const string VisionRadius7 = "VisionRadius7";
+        public const string VisionRadius8 = "VisionRadius8";
+        public const string VisionRadius9 = "VisionRadius9";
+        public const string VisionRadius10 = "VisionRadius10";
+        public const string VisionRadius11 = "VisionRadius11";
+        public const string VisionRadius12 = "VisionRadius12";
+        public const string VisionRadius13 = "VisionRadius13";
+        public const string VisionRadius14 = "VisionRadius14";
+        public const string VisionRadius15 = "VisionRadius15";
     }
 }
-

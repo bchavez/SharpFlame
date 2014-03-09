@@ -145,8 +145,6 @@ namespace SharpFlame
 
         public static GLSurface MapViewGlSurface { get; set; }
 
-        public static MainMapView MainMapView { get; set; }
-
         /// <summary>
         /// Holder for the Status form.
         /// </summary>
@@ -359,11 +357,12 @@ namespace SharpFlame
 
         public static void VisionRadius_2E_Changed()
         {
+            var mmv = Kernel.Get<MainMapView>();
             VisionRadius = 256.0D * Math.Pow(2.0D, (VisionRadius_2E / 2.0D));
-            if ( MainMapView != null )
+            if (mmv != null)
             {
                 View_Radius_Set(VisionRadius);
-                MainMapView.DrawLater();
+                mmv.DrawLater();
             }
         }
 

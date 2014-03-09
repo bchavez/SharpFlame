@@ -117,6 +117,7 @@ namespace SharpFlame.Settings
     public class KeyboardManager
     {
         public readonly Dictionary<string, KeyboardKey> Keys;
+        public readonly Dictionary<string, KeyboardKey> ActiveKeys;
 
         [EventPublication(KeyboardManagerEvents.OnKeyUp)]
         public event EventHandler<KeyboardEventArgs> KeyUp = delegate {};
@@ -134,8 +135,10 @@ namespace SharpFlame.Settings
             logger = logFactory.GetCurrentClassLogger();
 
             Keys = new Dictionary<string, KeyboardKey> ();
+            ActiveKeys = new Dictionary<string, KeyboardKey> ();
             keyLookupTable = new Dictionary<Keys, KeyboardKey> ();
             charLookupTable = new Dictionary<char, KeyboardKey>();
+            lastKeyUp = new KeyboardKey("none", Eto.Forms.Keys.None);
         }
 
         public bool Create(string name, Keys? key = null, char? keyChar = null, bool repeat = false) 
@@ -214,6 +217,14 @@ namespace SharpFlame.Settings
         public void Update(string name, KeyboardKey kkey) {
             Update(name, kkey.Key, kkey.KeyChar, kkey.Repeat);
         }
+
+        public void Clear()
+        {
+            Keys.Clear();
+            charLookupTable.Clear();
+            keyLookupTable.Clear();
+            ActiveKeys.Clear(); // TODO: Send a KeyUp?
+        }
                    
         public void HandleKeyUp(object sender, KeyEventArgs e)
         {
@@ -234,7 +245,7 @@ namespace SharpFlame.Settings
                 // Is modifier only
                 if(!lastKeyUp.IsChar) // Not char
                 {
-                    var lastKeyOnly = (Eto.Forms.Key)lastKeyUp.Key & Eto.Forms.Keys.KeyMask;
+                    var lastKeyOnly = (Eto.Forms.Keys)lastKeyUp.Key & Eto.Forms.Keys.KeyMask;
                     if(lastKeyOnly == Eto.Forms.Keys.None) // and modifier only
                     {
                         return; // skip
@@ -253,6 +264,11 @@ namespace SharpFlame.Settings
 
             myActiveKey.Active = false;
             lastKeyUp = myActiveKey;
+
+            if(ActiveKeys.ContainsKey(myActiveKey.Name))
+            {
+                ActiveKeys.Remove(myActiveKey.Name);
+            }
 
             KeyUp(sender, new KeyboardEventArgs { Key = myActiveKey });
 
@@ -297,6 +313,7 @@ namespace SharpFlame.Settings
             } else
             {
                 myActiveKey.Active = true;
+                ActiveKeys.Add(myActiveKey.Name, myActiveKey);
                 KeyDown(sender, new KeyboardEventArgs { Key = myActiveKey });
             }
 

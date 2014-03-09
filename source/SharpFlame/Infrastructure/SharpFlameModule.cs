@@ -60,10 +60,14 @@ namespace SharpFlame.Infrastructure
                 .ToSelf()
                 .InSingletonScope();
 
-            this.Bind<MainForm>()
+            this.Bind<MainMapView>()
                 .ToSelf()
                 .InSingletonScope();
 
+            this.Bind<MainForm>()
+                .ToSelf()
+                .InSingletonScope();
+                
             #if DEBUG
             // This is here to keep a reference of it.
             this.Bind<Keylogger>()

@@ -2,8 +2,10 @@
 
 using System;
 using System.Diagnostics;
+using Ninject;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core.Domain;
+using SharpFlame.Gui.Sections;
 using SharpFlame.Domain;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping.Objects;
@@ -19,6 +21,9 @@ namespace SharpFlame.Mapping.Drawing
         private bool Started;
         private bool[] UnitDrawn;
         public clsTextLabels UnitTextLabels;
+
+        [Inject]
+        internal MainMapView MainMapView { get; set; }
 
         public void Start()
         {
@@ -90,7 +95,7 @@ namespace SharpFlame.Mapping.Drawing
                         Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrixInverted, XYZ_dbl, ref XYZ_dbl2);
                         if ( ViewInfo.PosGetScreenXY(XYZ_dbl2, ref ScreenPos) )
                         {
-                            if ( ScreenPos.X >= 0 & ScreenPos.X <= ViewInfo.MainMapView.GLSurface.Size.Width & ScreenPos.Y >= 0 & ScreenPos.Y <= ViewInfo.MainMapView.GLSurface.Size.Height )
+                            if ( ScreenPos.X >= 0 & ScreenPos.X <= MainMapView.GLSurface.Size.Width & ScreenPos.Y >= 0 & ScreenPos.Y <= MainMapView.GLSurface.Size.Height )
                             {
                                 TextLabel = new clsTextLabel();
                                 TextLabel.TextFont = App.UnitLabelFont;

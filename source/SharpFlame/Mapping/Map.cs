@@ -74,18 +74,15 @@ namespace SharpFlame.Mapping
         public XYInt UnitSelectedAreaVertexA;
         private bool readyForUserInput;
 
-        [Inject]
-        internal MainMapView MainMapView { get; set; }
-
-        [Inject, Named(NamedBinding.MapView)]
-        public GLSurface GLSurface { get; set; }
+        private readonly MainMapView mainMapView;
 
         [Inject]
         internal IKernel Kernel { get; set; }
        
-        public Map(ILoggerFactory logFactory)
+        public Map(ILoggerFactory logFactory, MainMapView mmv)
         {
             logger = logFactory.GetCurrentClassLogger();
+            mainMapView = mmv;
 
             SectorCount = new XYInt(0, 0);
             SelectedAreaVertexA = new XYInt(0, 0);
@@ -215,7 +212,7 @@ namespace SharpFlame.Mapping
         {
             get
             {
-                if ( MainMapView.Map != this )
+                if ( mainMapView.Map != this )
                 {
                     return false;
                 }
@@ -1116,7 +1113,7 @@ namespace SharpFlame.Mapping
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, MinimapTextureSize, MinimapTextureSize, 0, PixelFormat.Rgba,
                 PixelType.Float, texture.InlinePixels);
 
-            MainMapView.DrawLater();
+            mainMapView.DrawLater();
         }
 
         public void MinimapGLDelete()

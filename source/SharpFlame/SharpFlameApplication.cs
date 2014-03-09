@@ -72,16 +72,19 @@ namespace SharpFlame
         [Inject]
         internal KeyboardManager KeyboardManager { get; set; }
 
+        private readonly IKernel kernel;
+
         private Result initializeResult = new Result("Startup result", false);
 
         [Inject]
-        public SharpFlameApplication(IKernel kernel, Generator generator, ILoggerFactory logFactory)
+        public SharpFlameApplication(IKernel myKernel, Generator generator, ILoggerFactory logFactory)
             : base(generator)
         {
-            kernel.Inject(this); //inject properties also, not just constructor.
+            myKernel.Inject(this); //inject properties also, not just constructor.
+            kernel = myKernel;
 
             // TODO: Remove me once everthing is inectable.
-            App.Kernel = kernel;
+            App.Kernel = myKernel;
             App.SettingsManager = this.Settings;
             App.KeyboardManager = this.KeyboardManager;
             App.MapViewGlSurface = this.GlMapView;
@@ -141,8 +144,7 @@ namespace SharpFlame
 
             if( Settings.ShowOptionsAtStartup )
             {
-                new Gui.Dialogs.Settings().Show();
-            }
+                kernel.Get<Gui.Dialogs.Settings>().Show();            }
         }
 
         public override void OnTerminating(CancelEventArgs e)

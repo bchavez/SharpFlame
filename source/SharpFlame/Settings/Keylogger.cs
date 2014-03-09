@@ -43,13 +43,13 @@ namespace SharpFlame.Settings
         [EventSubscription(KeyboardManagerEvents.OnKeyDown, typeof(OnPublisher))]
         public void HandleKeyDown(object sender, KeyboardEventArgs e)
         {
-            logger.Debug("KeyDown: \"{0}\"", e.Key.ToString());
+            logger.Debug("KeyDown: \"{0}\"=\"{1}\"", e.Key.Name, e.Key.ToString());
         }
 
         [EventSubscription(KeyboardManagerEvents.OnKeyUp, typeof(OnPublisher))]
         public void HandleKeyUp(object sender, KeyboardEventArgs e)
         {
-            logger.Debug("KeyUp: \"{0}\"", e.Key.ToString());
+            logger.Debug("KeyUp: \"{0}\"=\"{1}\"", e.Key.Name, e.Key.ToString());
         }
     }
 }
