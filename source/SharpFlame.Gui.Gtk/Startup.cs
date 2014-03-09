@@ -29,7 +29,7 @@ namespace SharpFlame.Gui.Gtk
 			Debug.Listeners.Add (new ConsoleTraceListener());
 			#endif
 			var generator = new Eto.Platform.GtkSharp.Generator ();
-            generator.Add<IGLSurfaceHandler>(()=> new LinuxGLSurfaceHandler());
+            generator.Add<IGLSurfaceHandler>(()=> new GtkGlSurfaceHandler());
 
 		    var kernel = Bootstrap.KernelWith(generator);
 

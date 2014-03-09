@@ -403,7 +403,7 @@ namespace SharpFlame.Controls
                 return;
             }
 
-            map.ViewInfo.MouseDown(e);
+            // map.ViewInfo.MouseDown(sender, e);
         }
 
         private void OpenGL_KeyDown(object sender, PreviewKeyDownEventArgs e)

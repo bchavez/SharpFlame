@@ -33,9 +33,9 @@ namespace SharpFlame.UiOptions
     /// If you change also change the UI (Sections/TextureTab.cs -> 
     /// </summary>
     public enum TerrainMode {
-        IgnoreTerrain,
+        Ignore,
         Reinterpret,
-        RemoveTerrain
+        Remove
     }
 
     public enum TerrainMouseMode {
@@ -59,6 +59,10 @@ namespace SharpFlame.UiOptions
         /// </summary>
         public int TilesetNum { get; set; }
 
+        /// <summary>
+        /// Gets or sets the number of the selected tile/texture.
+        /// </summary>
+        /// <value>The selected tile.</value>
         public int SelectedTile { get; set; }
 
         public TileOrientation TextureOrientation;

@@ -137,9 +137,6 @@ namespace Eto.Gl
             GlVersionMajor = glVersionMajor;
             GlVersionMinor = glVersionMinor;
             GraphicsContextFlags = graphicsContextFlags;
-
-            KeyPressEvent += HandleKeyPressEvent;
-            KeyReleaseEvent += HandleKeyReleaseEvent;
         }
 
         ~GLDrawingArea() { Dispose(false); }
@@ -186,10 +183,6 @@ namespace Eto.Gl
             Display.Sync ();           
         }
 
-        public virtual void Focus()
-        {
-            GrabFocus();
-        }
 
         // Called when the first GraphicsContext is created in the case of GraphicsContext.ShareContexts == True;
         public static event EventHandler GraphicsContextInitialized;
@@ -210,33 +203,7 @@ namespace Eto.Gl
         // Called when this GLWidget is being Disposed
         public event EventHandler ShuttingDown;
         protected virtual void OnShuttingDown() { if (ShuttingDown != null) ShuttingDown(this, EventArgs.Empty); }
-
-
-        public event EventHandler<KeyEventArgs> GlKeyDown = delegate {};
-        protected virtual void HandleKeyPressEvent(object o, KeyPressEventArgs args)
-        {
-            var e = args.Event.ToEto();
-            if (e != null)
-            {
-                GlKeyDown(this, e);
-                args.RetVal = e.Handled;
-            }
-        }
-
-        public event EventHandler<KeyEventArgs> GlKeyUp = delegate {};
-        void HandleKeyReleaseEvent (object o, KeyReleaseEventArgs args)
-        {
-            var e = args.Event.ToEto();
-            if (e != null)
-            {
-                GlKeyUp(this, e);
-                args.RetVal = e.Handled;
-            }
-        }
-
-        // Called when a widget is realized. (window handles and such are valid)
-        // protected override void OnRealized() { base.OnRealized(); }
-
+               
         static bool sharedContextInitialized = false;
 
         // Called when the widget needs to be (fully or partially) redrawn.

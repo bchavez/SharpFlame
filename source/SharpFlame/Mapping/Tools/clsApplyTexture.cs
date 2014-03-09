@@ -1,9 +1,8 @@
 #region
 
 using SharpFlame.Mapping.Tiles;
-using SharpFlame.Mapping.Tiles;
 using SharpFlame.Util;
-using SharpFlame.Util;
+using SharpFlame.UiOptions;
 
 #endregion
 
@@ -17,7 +16,7 @@ namespace SharpFlame.Mapping.Tools
         public bool SetTexture;
 
         private clsTerrain Terrain;
-        public TextureTerrainAction TerrainAction;
+        public TerrainMode TerrainAction;
         public int TextureNum;
 
         public override void ActionPerform()

@@ -36,22 +36,17 @@ namespace Eto.Gl
 
     }
 
-    public interface IGLSurface 
+    public interface IGLSurface
     {
         Size GLSize { get; set; }
         bool IsInitialized { get; }
-        bool HasFocus { get; }
 
         void MakeCurrent();
         void SwapBuffers();
-        void Focus();
 
         event EventHandler Initialized;
         event EventHandler Resize;
         event EventHandler ShuttingDown;
-
-        event EventHandler<KeyEventArgs> GlKeyDown;
-        event EventHandler<KeyEventArgs> GlKeyUp;
     }
 
     public class GLSurface : Control, IGLSurface
@@ -78,8 +73,6 @@ namespace Eto.Gl
             PlatformControl.Initialized += OnInitialized;
             PlatformControl.Resize += OnResize;
             PlatformControl.ShuttingDown += OnShuttingDown;
-            PlatformControl.GlKeyDown += OnGlKeyDown;
-            PlatformControl.GlKeyUp += OnGlKeyUp;
         }
         public GLSurface(Generator generator, Type type, bool initialize = true) : base(generator, type, initialize)
         {
@@ -104,18 +97,6 @@ namespace Eto.Gl
         public virtual void OnShuttingDown(object obj, EventArgs e) 
         {
             ShuttingDown (obj, e);
-        }
-
-        public new event EventHandler<KeyEventArgs> GlKeyUp = delegate {};
-        public virtual void OnGlKeyUp(object obj, KeyEventArgs e) 
-        {
-            GlKeyUp (obj, e);
-        }
-
-        public new event EventHandler<KeyEventArgs> GlKeyDown = delegate {};
-        public virtual void OnGlKeyDown(object obj, KeyEventArgs e) 
-        {
-            GlKeyDown (obj, e);
         }
 
         public virtual void MakeCurrent() 

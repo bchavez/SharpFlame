@@ -32,7 +32,7 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Compile Include="GLDrawingArea.cs" />
-    <Compile Include="LinuxGLSurfaceHandler.cs" />
+    <Compile Include="GtkGlSurfaceHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Eto">

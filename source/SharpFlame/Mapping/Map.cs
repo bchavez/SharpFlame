@@ -26,6 +26,7 @@ using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
 using SharpFlame.Util;
+using SharpFlame.UiOptions;
 
 #endregion
 
@@ -2179,22 +2180,22 @@ namespace SharpFlame.Mapping
             TerrainInterpretChanges.SidesV.Changed(new XYInt(Pos.X + 1, Pos.Y));
         }
 
-        public void TileTextureChangeTerrainAction(XYInt Pos, TextureTerrainAction Action)
+        public void TileTextureChangeTerrainAction(XYInt Pos, TerrainMode Action)
         {
             switch ( Action )
             {
-                case TextureTerrainAction.Ignore:
-                    break;
+            case TerrainMode.Ignore:
+                break;
 
-                case TextureTerrainAction.Reinterpret:
-                    TileNeedsInterpreting(Pos);
-                    break;
-                case TextureTerrainAction.Remove:
-                    Terrain.Vertices[Pos.X, Pos.Y].Terrain = null;
-                    Terrain.Vertices[Pos.X + 1, Pos.Y].Terrain = null;
-                    Terrain.Vertices[Pos.X, Pos.Y + 1].Terrain = null;
-                    Terrain.Vertices[Pos.X + 1, Pos.Y + 1].Terrain = null;
-                    break;
+            case TerrainMode.Reinterpret:
+                TileNeedsInterpreting(Pos);
+                break;
+            case TerrainMode.Remove:
+                Terrain.Vertices[Pos.X, Pos.Y].Terrain = null;
+                Terrain.Vertices[Pos.X + 1, Pos.Y].Terrain = null;
+                Terrain.Vertices[Pos.X, Pos.Y + 1].Terrain = null;
+                Terrain.Vertices[Pos.X + 1, Pos.Y + 1].Terrain = null;
+                break;
             }
         }
 

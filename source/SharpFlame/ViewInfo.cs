@@ -1,7 +1,7 @@
 #region
 
 using System;
-using System.Windows.Forms;
+using Eto.Forms;
 using Eto.Gl;
 using Ninject;
 using Ninject.Extensions.Logging;
@@ -33,6 +33,7 @@ namespace SharpFlame
     public class ViewInfo
     {
         private readonly ILogger logger;
+
         public double FOVMultiplier;
         public double FOVMultiplierExponent;
         public float FieldOfViewY;
@@ -1145,15 +1146,15 @@ namespace SharpFlame
             }
 
             var applyTexture = new clsApplyTexture
-                {
-                    Map = map,
-                    TextureNum = App.SelectedTextureNum,
-                    SetTexture = Program.frmMainInstance.chkSetTexture.Checked,
-                    Orientation = relativeToViewAngle(App.TextureOrientation),
-                    RandomOrientation = Program.frmMainInstance.chkTextureOrientationRandomize.Checked,
-                    SetOrientation = Program.frmMainInstance.chkSetTextureOrientation.Checked,
-                    TerrainAction = Program.frmMainInstance.TextureTerrainAction
-                };
+            {
+                Map = map,
+                TextureNum = App.UiOptions.Textures.SelectedTile,
+                SetTexture = App.UiOptions.Textures.SetTexture,
+                Orientation = relativeToViewAngle(App.UiOptions.Textures.TextureOrientation),
+                RandomOrientation = App.UiOptions.Textures.Randomize,
+                SetOrientation = App.UiOptions.Textures.SetOrientation,
+                TerrainAction = App.UiOptions.Textures.TerrainMode
+            };
 
             App.TextureBrush.PerformActionMapTiles(applyTexture, mouseOverTerrain.Tile);
 
@@ -1172,8 +1173,6 @@ namespace SharpFlame
         {
             var anglePY = new Angles.AnglePY();
             Matrix3DMath.MatrixToPY(ViewAngleMatrix, ref anglePY);
-
-            logger.Debug( "View Angle: Yaw:{1}", anglePY.Pitch, anglePY.Yaw );
 
             var yaw = anglePY.Yaw;
             
@@ -1310,7 +1309,7 @@ namespace SharpFlame
             var tile = mouseOverTerrain.Tile.Normal;
 
             map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.RotateClockwise();
-            map.TileTextureChangeTerrainAction(tile, Program.frmMainInstance.TextureTerrainAction);
+            map.TileTextureChangeTerrainAction(tile, App.UiOptions.Textures.TerrainMode);
 
             map.SectorGraphicsChanges.TileChanged(tile);
             map.SectorTerrainUndoChanges.TileChanged(tile);
@@ -1334,7 +1333,7 @@ namespace SharpFlame
             var tile = mouseOverTerrain.Tile.Normal;
 
             map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.RotateAntiClockwise();
-            map.TileTextureChangeTerrainAction(tile, Program.frmMainInstance.TextureTerrainAction);
+            map.TileTextureChangeTerrainAction(tile, App.UiOptions.Textures.TerrainMode);
 
             map.SectorGraphicsChanges.TileChanged(tile);
             map.SectorTerrainUndoChanges.TileChanged(tile);
@@ -1358,7 +1357,7 @@ namespace SharpFlame
             var tile = mouseOverTerrain.Tile.Normal;
 
             map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.XFlip = !map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.XFlip;
-            map.TileTextureChangeTerrainAction(tile, Program.frmMainInstance.TextureTerrainAction);
+            map.TileTextureChangeTerrainAction(tile, App.UiOptions.Textures.TerrainMode);
 
             map.SectorGraphicsChanges.TileChanged(tile);
             map.SectorTerrainUndoChanges.TileChanged(tile);
@@ -1520,16 +1519,109 @@ namespace SharpFlame
                 }
             }
         }
+            
+        public void HandleMouseMove(object sender, MouseEventArgs e)
+        {
+            MouseOver = new ViewInfo.clsMouseOver();
+            MouseOver.ScreenPos.X = (int)e.Location.X;
+            MouseOver.ScreenPos.Y = (int)e.Location.Y;
 
-        public void MouseDown(MouseEventArgs e)
+            MouseOverPosCalc();
+        }
+
+        public void HandleMouseUp(object sender, MouseEventArgs e)
+        {
+            var mouseOverTerrain = GetMouseOverTerrain();
+
+            map.SuppressMinimap = false;
+
+            if ( e.Buttons == MouseButtons.Primary )
+            {
+                if ( GetMouseLeftDownOverMinimap() != null )
+                {
+                }
+                else
+                {
+                    if ( modTools.Tool == modTools.Tools.TerrainBrush )
+                    {
+                        map.UndoStepCreate("Ground Painted");
+                    }
+                    else if ( modTools.Tool == modTools.Tools.CliffTriangle )
+                    {
+                        map.UndoStepCreate("Cliff Triangles");
+                    }
+                    else if ( modTools.Tool == modTools.Tools.CliffBrush )
+                    {
+                        map.UndoStepCreate("Cliff Brush");
+                    }
+                    else if ( modTools.Tool == modTools.Tools.CliffRemove )
+                    {
+                        map.UndoStepCreate("Cliff Remove Brush");
+                    }
+                    else if ( modTools.Tool == modTools.Tools.HeightChangeBrush )
+                    {
+                        map.UndoStepCreate("Height Change");
+                    }
+                    else if ( modTools.Tool == modTools.Tools.HeightSetBrush )
+                    {
+                        map.UndoStepCreate("Height Set");
+                    }
+                    else if ( modTools.Tool == modTools.Tools.HeightSmoothBrush )
+                    {
+                        map.UndoStepCreate("Height Smooth");
+                    }
+                    else if ( modTools.Tool == modTools.Tools.TextureBrush )
+                    {
+                        map.UndoStepCreate("Texture");
+                    }
+                    else if ( modTools.Tool == modTools.Tools.RoadRemove )
+                    {
+                        map.UndoStepCreate("Road Remove");
+                    }
+                    else if ( modTools.Tool == modTools.Tools.ObjectSelect )
+                    {
+                        if ( map.UnitSelectedAreaVertexA != null )
+                        {
+                            if ( mouseOverTerrain != null )
+                            {
+                                SelectUnits(map.UnitSelectedAreaVertexA, mouseOverTerrain.Vertex.Normal);
+                            }
+                            map.UnitSelectedAreaVertexA = null;
+                        }
+                    }
+                }
+                MouseLeftDown = null;
+            }
+            else if ( e.Buttons == MouseButtons.Alternate )
+            {
+                if ( GetMouseRightDownOverMinimap() != null )
+                {
+                }
+                else
+                {
+                    if ( modTools.Tool == modTools.Tools.HeightChangeBrush )
+                    {
+                        map.UndoStepCreate("Height Change");
+                    }
+                    else if ( modTools.Tool == modTools.Tools.HeightSetBrush )
+                    {
+                        map.UndoStepCreate("Height Set");
+                    }
+                }
+                MouseRightDown = null;
+            }
+        }
+
+
+        public void HandleMouseDown(object sender, MouseEventArgs e)
         {
             var screenPos = new XYInt();
 
             map.SuppressMinimap = true;
 
-            screenPos.X = e.X;
-            screenPos.Y = e.Y;
-            if ( e.Button == MouseButtons.Left )
+            screenPos.X = (int)e.Location.X;
+            screenPos.Y = (int)e.Location.Y;
+            if ( e.Buttons == MouseButtons.Primary )
             {
                 MouseLeftDown = new clsMouseDown();
                 if ( IsViewPosOverMinimap(screenPos) )
@@ -1727,7 +1819,7 @@ namespace SharpFlame
                     }
                 }
             }
-            else if ( e.Button == MouseButtons.Right )
+            else if ( e.Buttons == MouseButtons.Alternate )
             {
                 MouseRightDown = new clsMouseDown();
                 if ( IsViewPosOverMinimap(screenPos) )
@@ -1777,6 +1869,78 @@ namespace SharpFlame
                     }
                 }
             }
+        }
+
+        private void SelectUnits(XYInt vertexA, XYInt vertexB)
+        {
+            var mouseOverTerrain = GetMouseOverTerrain();
+            var sectorNum = new XYInt();
+            Unit unit;
+            var sectorStart = new XYInt();
+            var sectorFinish = new XYInt();
+            var startPos = new XYInt();
+            var finishPos = new XYInt();
+            var startVertex = new XYInt();
+            var finishVertex = new XYInt();
+
+            if ( Math.Abs(vertexA.X - vertexB.X) <= 1 &&
+                Math.Abs(vertexA.Y - vertexB.Y) <= 1 &&
+                mouseOverTerrain != null )
+            {
+                if ( mouseOverTerrain.Units.Count > 0 )
+                {
+                    if ( mouseOverTerrain.Units.Count == 1 )
+                    {
+                        unit = mouseOverTerrain.Units[0];
+                        if ( unit.MapSelectedUnitLink.IsConnected )
+                        {
+                            unit.MapDeselect();
+                        }
+                        else
+                        {
+                            unit.MapSelect();
+                        }
+                    }
+                    else
+                    {
+                        // TODO: Implement me - ref MapViewControl.ListSelectBegin
+                        // ListSelectBegin(false);
+                    }
+                }
+            }
+            else
+            {
+                MathUtil.ReorderXY(vertexA, vertexB, ref startVertex, ref finishVertex);
+                startPos.X = startVertex.X * Constants.TerrainGridSpacing;
+                startPos.Y = startVertex.Y * Constants.TerrainGridSpacing;
+                finishPos.X = finishVertex.X * Constants.TerrainGridSpacing;
+                finishPos.Y = finishVertex.Y * Constants.TerrainGridSpacing;
+                sectorStart.X = Math.Min(startVertex.X / Constants.SectorTileSize, map.SectorCount.X - 1);
+                sectorStart.Y = Math.Min(startVertex.Y / Constants.SectorTileSize, map.SectorCount.Y - 1);
+                sectorFinish.X = Math.Min(finishVertex.X / Constants.SectorTileSize, map.SectorCount.X - 1);
+                sectorFinish.Y = Math.Min(finishVertex.Y / Constants.SectorTileSize, map.SectorCount.Y - 1);
+                for ( sectorNum.Y = sectorStart.Y; sectorNum.Y <= sectorFinish.Y; sectorNum.Y++ )
+                {
+                    for ( sectorNum.X = sectorStart.X; sectorNum.X <= sectorFinish.X; sectorNum.X++ )
+                    {
+                        foreach ( var connection in map.Sectors[sectorNum.X, sectorNum.Y].Units )
+                        {
+                            unit = connection.Unit;
+                            if ( unit.Pos.Horizontal.X >= startPos.X & unit.Pos.Horizontal.Y >= startPos.Y &
+                                unit.Pos.Horizontal.X <= finishPos.X & unit.Pos.Horizontal.Y <= finishPos.Y )
+                            {
+                                if ( !unit.MapSelectedUnitLink.IsConnected )
+                                {
+                                    unit.MapSelect();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            //Program.frmMainInstance.SelectedObject_Changed(); // TODO: Implement with UiOptions
+            mainMapView.DrawLater();
         }
 
         public void TimedActions(double zoom, double move, double pan, double roll, double orbitRate)

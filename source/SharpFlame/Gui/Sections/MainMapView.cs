@@ -69,7 +69,18 @@ namespace SharpFlame.Gui.Sections
         public Map Map { 
             get { return map; }
             set {
+                if(map != null)
+                {
+                    GLSurface.MouseDown -= map.ViewInfo.HandleMouseDown;
+                    GLSurface.MouseUp -= map.ViewInfo.HandleMouseUp;
+                    GLSurface.MouseMove -= map.ViewInfo.HandleMouseMove;
+                }
+
                 map = value;
+                GLSurface.MouseDown += map.ViewInfo.HandleMouseDown;
+                GLSurface.MouseUp += map.ViewInfo.HandleMouseUp;
+                GLSurface.MouseMove += map.ViewInfo.HandleMouseMove;
+
                 DrawLater();
             }
         }
@@ -98,8 +109,8 @@ namespace SharpFlame.Gui.Sections
 
         void setBindings() 
         {
-            this.GLSurface.GlKeyDown += this.KeyboardManager.HandleKeyDown;
-            this.GLSurface.GlKeyUp += this.KeyboardManager.HandleKeyUp;
+            this.GLSurface.KeyDown += this.KeyboardManager.HandleKeyDown;
+            this.GLSurface.KeyUp += this.KeyboardManager.HandleKeyUp;
 
             this.GLSurface.Initialized += initalizeGlSurface;
             this.GLSurface.Resize += resizeMapView;
@@ -177,7 +188,7 @@ namespace SharpFlame.Gui.Sections
             GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Diffuse, mat_diffuse);
             GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Shininess, mat_shininess);
 
-            tmrDraw = new UITimer { Interval = 0.005 }; // Every 5 Milliseconds.
+            tmrDraw = new UITimer { Interval = 0.016 }; // Every Millisecond.
             tmrDraw.Elapsed += timedDraw;
             tmrDraw.Start();
 
@@ -188,16 +199,16 @@ namespace SharpFlame.Gui.Sections
 
         private void resizeMapView(object sender, EventArgs e)
         {
-            this.GLSurface.MakeCurrent();
+            GLSurface.MakeCurrent();
 
-            var glSize = this.Size;
+            var glSize = GLSurface.Size;
 
             // send the resize event to the Graphics card.
             GL.Viewport(0, 0, glSize.Width, glSize.Height);
             GL.Clear(ClearBufferMask.ColorBufferBit);
             GL.Flush();
 
-            this.GLSurface.SwapBuffers();
+            GLSurface.SwapBuffers();
 
             if(Map != null)
             {
