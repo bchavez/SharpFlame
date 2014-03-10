@@ -18,6 +18,7 @@ using SharpFlame.Gui.Sections;
 using SharpFlame.Infrastructure;
 using SharpFlame.Mapping.Changes;
 using SharpFlame.Mapping.IO.FMap;
+using SharpFlame.Mapping.Minimap;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Renderers;
 using SharpFlame.Mapping.Script;
@@ -47,12 +48,7 @@ namespace SharpFlame.Mapping
 
         public int HeightMultiplier = Constants.DefaultHeightMultiplier;
         public InterfaceOptions InterfaceOptions;
-        private UITimer makeMinimapTimer;
         public SimpleClassList<Message> Messages;
-        private bool minimapPending;
-
-        public int MinimapGlTexture;
-        public int MinimapTextureSize;
 
         public Painter Painter = new Painter();
         public PathInfo PathInfo;
@@ -64,7 +60,6 @@ namespace SharpFlame.Mapping
         public XYInt SelectedTileA;
         public XYInt SelectedTileB;
         public ShadowSector[,] ShadowSectors = new ShadowSector[0, 0];
-        public bool SuppressMinimap;
         public clsTerrain Terrain;
 
         public byte[] TileTypeNum = new byte[0];
@@ -77,15 +72,17 @@ namespace SharpFlame.Mapping
 
         private readonly MainMapView mainMapView;
         private readonly ViewInfo viewInfo;
+        private readonly MinimapCreator minimap;
 
         [Inject]
         internal IKernel Kernel { get; set; }
        
-        public Map(ILoggerFactory logFactory, MainMapView mmv, ViewInfo vi)
+        public Map(ILoggerFactory logFactory, MainMapView mmv, ViewInfo vi, MinimapCreator mmc)
         {
             logger = logFactory.GetCurrentClassLogger();
             mainMapView = mmv;
             viewInfo = vi;
+            minimap = mmc;
 
             SectorCount = new XYInt(0, 0);
             SelectedAreaVertexA = new XYInt(0, 0);
@@ -231,9 +228,6 @@ namespace SharpFlame.Mapping
 
         private void initialize()
         {
-            makeMinimapTimer = new UITimer { Interval = Constants.MinimapDelay };
-            makeMinimapTimer.Elapsed += MinimapTimer_Tick;
-
             MakeDefaultUnitGroups();
             ScriptPositions.MaintainOrder = true;
             ScriptAreas.MaintainOrder = true;
@@ -484,10 +478,6 @@ namespace SharpFlame.Mapping
         {
             CancelUserInput();
 
-            makeMinimapTimer.Stop();
-            makeMinimapTimer.Dispose();
-            makeMinimapTimer = null;
-
             UnitGroups.Deallocate();
             UnitGroups = null;
 
@@ -737,6 +727,8 @@ namespace SharpFlame.Mapping
             }
 
             GL.EndList();
+
+            minimap.Refresh = true;
         }
 
         public void DrawTileWireframe(int TileX, int TileY)
@@ -824,310 +816,7 @@ namespace SharpFlame.Mapping
             GL.Vertex3(Vertex1.Horizontal.X, Vertex1.Altitude, Vertex1.Horizontal.Y);
             GL.Vertex3(Vertex2.Horizontal.X, Vertex2.Altitude, Vertex2.Horizontal.Y);
         }
-
-        public void MinimapTextureFill(clsMinimapTexture Texture)
-        {
-            var X = 0;
-            var Y = 0;
-            var Low = new XYInt();
-            var High = new XYInt();
-            var Footprint = new XYInt();
-            var Flag = default(bool);
-            var UnitMap = new bool[Texture.Size.Y, Texture.Size.X];
-            var sngTexture = new float[Texture.Size.Y, Texture.Size.X, 3];
-            float Alpha = 0;
-            float AntiAlpha = 0;
-            var RGB_sng = new SRgb();
-
-            if ( true ) //TODO: use uioptions - Program.frmMainInstance.menuMiniShowTex.Checked
-            {
-                if ( Tileset != null )
-                {
-                    for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
-                    {
-                        for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
-                        {
-                            if ( Terrain.Tiles[X, Y].Texture.TextureNum >= 0 && Terrain.Tiles[X, Y].Texture.TextureNum < Tileset.Tiles.Count )
-                            {
-                                sngTexture[Y, X, 0] = Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].AverageColour.Red;
-                                sngTexture[Y, X, 1] = Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].AverageColour.Green;
-                                sngTexture[Y, X, 2] = Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].AverageColour.Blue;
-                            }
-                        }
-                    }
-                }
-                if ( true ) // TODO: Use UiOptions  Program.frmMainInstance.menuMiniShowHeight.Checked
-                {
-                    float Height = 0;
-                    for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
-                    {
-                        for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
-                        {
-                            Height =
-                                Convert.ToSingle(((Terrain.Vertices[X, Y].Height) + Terrain.Vertices[X + 1, Y].Height + Terrain.Vertices[X, Y + 1].Height +
-                                                  Terrain.Vertices[X + 1, Y + 1].Height) / 1020.0F);
-                            sngTexture[Y, X, 0] = (sngTexture[Y, X, 0] * 2.0F + Height) / 3.0F;
-                            sngTexture[Y, X, 1] = (sngTexture[Y, X, 1] * 2.0F + Height) / 3.0F;
-                            sngTexture[Y, X, 2] = (sngTexture[Y, X, 2] * 2.0F + Height) / 3.0F;
-                        }
-                    }
-                }
-            }
-            else if ( true ) //  TODO: Use UiOptions Program.frmMainInstance.menuMiniShowHeight.Checked
-            {
-                float Height = 0;
-                for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
-                {
-                    for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
-                    {
-                        Height =
-                            Convert.ToSingle(((Terrain.Vertices[X, Y].Height) + Terrain.Vertices[X + 1, Y].Height + Terrain.Vertices[X, Y + 1].Height +
-                                              Terrain.Vertices[X + 1, Y + 1].Height) / 1020.0F);
-                        sngTexture[Y, X, 0] = Height;
-                        sngTexture[Y, X, 1] = Height;
-                        sngTexture[Y, X, 2] = Height;
-                    }
-                }
-            }
-            else
-            {
-                for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
-                {
-                    for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
-                    {
-                        sngTexture[Y, X, 0] = 0.0F;
-                        sngTexture[Y, X, 1] = 0.0F;
-                        sngTexture[Y, X, 2] = 0.0F;
-                    }
-                }
-            }
-            if ( true ) // TODO: Use UiOptions - Program.frmMainInstance.menuMiniShowCliffs.Checked
-            {
-                if ( Tileset != null )
-                {
-                    Alpha = App.SettingsManager.MinimapCliffColour.Alpha;
-                    AntiAlpha = 1.0F - Alpha;
-                    for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
-                    {
-                        for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
-                        {
-                            if ( Terrain.Tiles[X, Y].Texture.TextureNum >= 0 && Terrain.Tiles[X, Y].Texture.TextureNum < Tileset.Tiles.Count )
-                            {
-                                if ( Tileset.Tiles[Terrain.Tiles[X, Y].Texture.TextureNum].DefaultType == Constants.TileTypeNumCliff )
-                                {
-                                    sngTexture[Y, X, 0] = sngTexture[Y, X, 0] * AntiAlpha + App.SettingsManager.MinimapCliffColour.Red * Alpha;
-                                    sngTexture[Y, X, 1] = sngTexture[Y, X, 1] * AntiAlpha + App.SettingsManager.MinimapCliffColour.Green * Alpha;
-                                    sngTexture[Y, X, 2] = sngTexture[Y, X, 2] * AntiAlpha + App.SettingsManager.MinimapCliffColour.Blue * Alpha;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if ( true )  // TODO: Use UiOptions - Program.frmMainInstance.menuMiniShowGateways.Checked
-            {
-                var Gateway = default(Gateway);
-                foreach ( var tempLoopVar_Gateway in Gateways )
-                {
-                    Gateway = tempLoopVar_Gateway;
-                    MathUtil.ReorderXY(Gateway.PosA, Gateway.PosB, ref Low, ref High);
-                    for ( Y = Low.Y; Y <= High.Y; Y++ )
-                    {
-                        for ( X = Low.X; X <= High.X; X++ )
-                        {
-                            sngTexture[Y, X, 0] = 1.0F;
-                            sngTexture[Y, X, 1] = 1.0F;
-                            sngTexture[Y, X, 2] = 0.0F;
-                        }
-                    }
-                }
-            }
-            if ( true ) // TODO: Use UiOptions Program.frmMainInstance.menuMiniShowUnits.Checked
-            {
-                //units that are not selected
-                var Unit = default(Unit);
-                foreach ( var tempLoopVar_Unit in Units )
-                {
-                    Unit = tempLoopVar_Unit;
-                    Flag = true;
-                    if ( Unit.TypeBase.UnitType_frmMainSelectedLink.IsConnected )
-                    {
-                        Flag = false;
-                    }
-                    else
-                    {
-                        Footprint = Unit.TypeBase.GetGetFootprintSelected(Unit.Rotation);
-                    }
-                    if ( Flag )
-                    {
-                        GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Footprint, ref Low, ref High);
-                        for ( Y = Low.Y; Y <= High.Y; Y++ )
-                        {
-                            for ( X = Low.X; X <= High.X; X++ )
-                            {
-                                if ( !UnitMap[Y, X] )
-                                {
-                                    UnitMap[Y, X] = true;
-                                    if ( App.SettingsManager.MinimapTeamColours )
-                                    {
-                                        if ( App.SettingsManager.MinimapTeamColoursExceptFeatures & Unit.TypeBase.Type == UnitType.Feature )
-                                        {
-                                            sngTexture[Y, X, 0] = App.MinimapFeatureColour.Red;
-                                            sngTexture[Y, X, 1] = App.MinimapFeatureColour.Green;
-                                            sngTexture[Y, X, 2] = App.MinimapFeatureColour.Blue;
-                                        }
-                                        else
-                                        {
-                                            RGB_sng = GetUnitGroupMinimapColour(Unit.UnitGroup);
-                                            sngTexture[Y, X, 0] = RGB_sng.Red;
-                                            sngTexture[Y, X, 1] = RGB_sng.Green;
-                                            sngTexture[Y, X, 2] = RGB_sng.Blue;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        sngTexture[Y, X, 0] = sngTexture[Y, X, 0] * 0.6666667F + 0.333333343F;
-                                        sngTexture[Y, X, 1] = sngTexture[Y, X, 1] * 0.6666667F;
-                                        sngTexture[Y, X, 2] = sngTexture[Y, X, 2] * 0.6666667F;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                //reset unit map
-                for ( Y = 0; Y <= Texture.Size.Y - 1; Y++ )
-                {
-                    for ( X = 0; X <= Texture.Size.X - 1; X++ )
-                    {
-                        UnitMap[Y, X] = false;
-                    }
-                }
-                //units that are selected and highlighted
-                Alpha = App.SettingsManager.MinimapSelectedObjectsColour.Alpha;
-                AntiAlpha = 1.0F - Alpha;
-                foreach ( var tempLoopVar_Unit in Units )
-                {
-                    Unit = tempLoopVar_Unit;
-                    Flag = false;
-                    if ( Unit.TypeBase.UnitType_frmMainSelectedLink.IsConnected )
-                    {
-                        Flag = true;
-                        Footprint = Unit.TypeBase.GetGetFootprintSelected(Unit.Rotation);
-                        Footprint.X += 2;
-                        Footprint.Y += 2;
-                    }
-                    if ( Flag )
-                    {
-                        GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Footprint, ref Low, ref High);
-                        for ( Y = Low.Y; Y <= High.Y; Y++ )
-                        {
-                            for ( X = Low.X; X <= High.X; X++ )
-                            {
-                                if ( !UnitMap[Y, X] )
-                                {
-                                    UnitMap[Y, X] = true;
-                                    sngTexture[Y, X, 0] = sngTexture[Y, X, 0] * AntiAlpha + App.SettingsManager.MinimapSelectedObjectsColour.Red * Alpha;
-                                    sngTexture[Y, X, 1] = sngTexture[Y, X, 1] * AntiAlpha + App.SettingsManager.MinimapSelectedObjectsColour.Green * Alpha;
-                                    sngTexture[Y, X, 2] = sngTexture[Y, X, 2] * AntiAlpha + App.SettingsManager.MinimapSelectedObjectsColour.Blue * Alpha;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            for ( Y = 0; Y <= Terrain.TileSize.Y - 1; Y++ )
-            {
-                for ( X = 0; X <= Terrain.TileSize.X - 1; X++ )
-                {
-                    Texture.set_Pixels(X, Y, new SRgba(
-                        sngTexture[Y, X, 0],
-                        sngTexture[Y, X, 1],
-                        sngTexture[Y, X, 2],
-                        1.0F));
-                }
-            }
-        }
-
-        private void MinimapTimer_Tick(object sender, EventArgs e)
-        {
-            if ( !isMainMap )
-            {
-                minimapPending = false;
-            }
-            if ( minimapPending )
-            {
-                if ( !SuppressMinimap )
-                {
-                    minimapPending = false;
-                    minimapMake();
-                }
-            }
-            else
-            {
-                makeMinimapTimer.Stop();
-            }
-        }
-
-        public void MinimapMakeLater()
-        {
-            if ( makeMinimapTimer.Started )
-            {
-                minimapPending = true;
-            }
-            else
-            {
-                makeMinimapTimer.Start();
-                if ( SuppressMinimap )
-                {
-                    minimapPending = true;
-                }
-                else
-                {
-                    minimapMake();
-                }
-            }
-        }
-
-        private void minimapMake()
-        {
-            var newTextureSize =
-                (int)
-                    (Math.Round(
-                        Convert.ToDouble(Math.Pow(2.0D, Math.Ceiling(Math.Log(Math.Max(Terrain.TileSize.X, Terrain.TileSize.Y)) / Math.Log(2.0D))))));
-
-            if ( newTextureSize != MinimapTextureSize )
-            {
-                MinimapTextureSize = newTextureSize;
-            }
-
-            var texture = new clsMinimapTexture(new XYInt(MinimapTextureSize, MinimapTextureSize));
-
-            MinimapTextureFill(texture);
-
-            MinimapGLDelete();
-
-            GL.GenTextures(1, out MinimapGlTexture);
-            GL.BindTexture(TextureTarget.Texture2D, MinimapGlTexture);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, MinimapTextureSize, MinimapTextureSize, 0, PixelFormat.Rgba,
-                PixelType.Float, texture.InlinePixels);
-
-            mainMapView.DrawLater();
-        }
-
-        public void MinimapGLDelete()
-        {
-            if ( MinimapGlTexture != 0 )
-            {
-                GL.DeleteTextures(1, ref MinimapGlTexture);
-                MinimapGlTexture = 0;
-            }
-        }
-
+            
         public XYInt GetTileSectorNum(XYInt Tile)
         {
             var Result = new XYInt();
@@ -1442,7 +1131,7 @@ namespace SharpFlame.Mapping
             }
 
             SectorsUpdateGraphics();
-            MinimapMakeLater();
+            minimap.Refresh = true;
             Program.frmMainInstance.SelectedObject_Changed();
         }
 
@@ -1525,7 +1214,7 @@ namespace SharpFlame.Mapping
             UndoPosition++;
 
             SectorsUpdateGraphics();
-            MinimapMakeLater();
+            minimap.Refresh = true;
             Program.frmMainInstance.SelectedObject_Changed();
         }
 
@@ -1762,7 +1451,7 @@ namespace SharpFlame.Mapping
 
             SectorsUpdateGraphics();
             SectorsUpdateUnitHeights();
-            MinimapMakeLater();
+            minimap.Refresh = true;
         }
 
         public Gateway GatewayCreate(XYInt PosA, XYInt PosB)
@@ -1991,7 +1680,6 @@ namespace SharpFlame.Mapping
             }
 
             SectorAll_GLLists_Delete();
-            MinimapGLDelete();
 
             ShadowSectors = null;
             for ( Y = 0; Y <= SectorCount.Y - 1; Y++ )
@@ -2101,14 +1789,15 @@ namespace SharpFlame.Mapping
 
         public void Update()
         {
-            var PrevSuppress = SuppressMinimap;
-
-            SuppressMinimap = true;
+            var lastSuppress = minimap.Suppress;
+            minimap.Suppress = true;
             UpdateAutoTextures();
             TerrainInterpretUpdate();
             SectorsUpdateGraphics();
             SectorsUpdateUnitHeights();
-            SuppressMinimap = PrevSuppress;
+            minimap.Suppress = lastSuppress;
+
+            minimap.Refresh = true;
         }
 
         public void SectorsUpdateUnitHeights()

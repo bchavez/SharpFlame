@@ -66,7 +66,7 @@ namespace SharpFlame.Mapping
             dblTemp = App.SettingsManager.MinimapSize;
             viewInfo.TilesPerMinimapPixel = Math.Sqrt(Terrain.TileSize.X * Terrain.TileSize.X + Terrain.TileSize.Y * Terrain.TileSize.Y) /
                                                (MathUtil.RootTwo * dblTemp);
-            if ( MinimapTextureSize > 0 & viewInfo.TilesPerMinimapPixel > 0.0D )
+            if ( minimap.TextureSize > 0 & viewInfo.TilesPerMinimapPixel > 0.0D )
             {
                 minimapSizeXy.X = (int)(Terrain.TileSize.X / viewInfo.TilesPerMinimapPixel);
                 minimapSizeXy.Y = (int)(Terrain.TileSize.Y / viewInfo.TilesPerMinimapPixel);
@@ -978,17 +978,17 @@ namespace SharpFlame.Mapping
 
             debugGLError("Minimap matrix modes");
 
-            if ( MinimapTextureSize > 0 & viewInfo.TilesPerMinimapPixel > 0.0D )
+            if ( minimap.TextureSize > 0 & viewInfo.TilesPerMinimapPixel > 0.0D )
             {
                 GL.Translate(0.0F, glSize.Height - minimapSizeXy.Y, 0.0F);
 
-                xyzDbl.X = (double)Terrain.TileSize.X / MinimapTextureSize;
-                xyzDbl.Z = (double)Terrain.TileSize.Y / MinimapTextureSize;
+                xyzDbl.X = (double)Terrain.TileSize.X / minimap.TextureSize;
+                xyzDbl.Z = (double)Terrain.TileSize.Y / minimap.TextureSize;
 
-                if ( MinimapGlTexture > 0 )
+                if ( minimap.GLTexture > 0 )
                 {
                     GL.Enable(EnableCap.Texture2D);
-                    GL.BindTexture(TextureTarget.Texture2D, MinimapGlTexture);
+                    GL.BindTexture(TextureTarget.Texture2D, minimap.GLTexture);
                     GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Decal);
 
                     GL.Begin(BeginMode.Quads);

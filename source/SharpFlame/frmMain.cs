@@ -741,7 +741,6 @@ namespace SharpFlame
 
                 Map.SectorGraphicsChanges.SetAllChanged();
                 Map.Update();
-                Map.MinimapMakeLater();
                 View_DrawViewLater();
                 TextureViewControl.ScrollUpdate();
                 TextureViewControl.DrawViewLater();
@@ -2078,7 +2077,7 @@ namespace SharpFlame
                 return;
             }
 
-            Map.MinimapMakeLater();
+            // Map.MinimapMakeLater();
         }
 
         public void cmbTileType_SelectedIndexChanged(Object sender, EventArgs e)
@@ -2373,7 +2372,7 @@ namespace SharpFlame
             Map.UndoStepCreate("Object Player Changed");
             if ( App.SettingsManager.MinimapTeamColours )
             {
-                Map.MinimapMakeLater();
+                // Map.MinimapMakeLater();
             }
             View_DrawViewLater();
         }
@@ -3307,7 +3306,6 @@ namespace SharpFlame
 //                Map.viewInfo.FovCalc();
                 Map.SectorGraphicsChanges.SetAllChanged();
                 Map.Update();
-                Map.MinimapMakeLater();
                 tsbSave.Enabled = Map.ChangedSinceSave;
                 NewPlayerNumControl.SetMap(Map);
                 NewPlayerNumControl.Target = Map.SelectedUnitGroup;
@@ -3373,7 +3371,6 @@ namespace SharpFlame
             var Map = MainMap;
             if ( Map != null )
             {
-                Map.MinimapMakeLater(); //for unit highlight
                 View_DrawViewLater();
             }
         }
@@ -4311,7 +4308,6 @@ namespace SharpFlame
             var Map = MainMap;
             if ( Map != null )
             {
-                Map.MinimapMakeLater(); //for unit highlight
                 View_DrawViewLater();
             }
         }

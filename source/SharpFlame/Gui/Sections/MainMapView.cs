@@ -39,6 +39,7 @@ using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Domain;
 using SharpFlame.Infrastructure;
 using SharpFlame.Mapping;
+using SharpFlame.Mapping.Minimap;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 using SharpFlame.Settings;
@@ -57,15 +58,15 @@ namespace SharpFlame.Gui.Sections
             set {
                 mainMap = value;
 
+                viewInfo.Map = mainMap;
+                minimapCreator.Map = mainMap;
+
                 if(mainMap != null)
                 {
                     mainMap.InitializeUserInput();
                     mainMap.SectorGraphicsChanges.SetAllChanged();
                     mainMap.Update();
-                    mainMap.MinimapMakeLater();
-                }
-
-                viewInfo.Map = mainMap;
+                }                    
 
                 DrawLater();
             }
@@ -74,6 +75,7 @@ namespace SharpFlame.Gui.Sections
         private readonly ILogger logger;
         private readonly KeyboardManager keyboardManager;
         private readonly ViewInfo viewInfo;
+        private readonly MinimapCreator minimapCreator;
 
         private UITimer tmrDraw;
         private UITimer tmrKey;
@@ -85,13 +87,15 @@ namespace SharpFlame.Gui.Sections
         private bool drawPending = false;
 
         public MainMapView(IKernel kernel, ILoggerFactory logFactory, 
-            KeyboardManager kbm, ViewInfo argViewInfo)
+            KeyboardManager kbm, ViewInfo argViewInfo,
+            MinimapCreator mmc)
         {
             kernel.Inject(this); // For GLSurface
             logger = logFactory.GetCurrentClassLogger();
             keyboardManager = kbm;
             viewInfo = argViewInfo;
             viewInfo.MainMapView = this; // They need each other.
+            minimapCreator = mmc;
 
 		    var mainLayout = new DynamicLayout();
             mainLayout.AddSeparateRow(
@@ -573,7 +577,6 @@ namespace SharpFlame.Gui.Sections
                         Program.frmMainInstance.SelectedObject_Changed();
                         mainMap.UndoStepCreate("Object Deleted");
                         mainMap.Update();
-                        mainMap.MinimapMakeLater();
                         DrawLater();
                     }
                 }
@@ -598,7 +601,6 @@ namespace SharpFlame.Gui.Sections
 
                             mainMap.UndoStepCreate("Objects Moved");
                             mainMap.Update();
-                            mainMap.MinimapMakeLater();
                             Program.frmMainInstance.SelectedObject_Changed();
                             DrawLater();
                         }

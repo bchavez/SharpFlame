@@ -328,8 +328,6 @@ namespace SharpFlame.Controls
                 return;
             }
 
-            map.SuppressMinimap = false;
-
 //            map.viewInfo.MouseOver = null;
 //            map.viewInfo.MouseLeftDown = null;
 //            map.viewInfo.MouseRightDown = null;

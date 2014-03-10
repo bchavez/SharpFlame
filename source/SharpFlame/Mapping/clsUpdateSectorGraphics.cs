@@ -11,7 +11,6 @@ namespace SharpFlame.Mapping
         public override void ActionPerform()
         {
             Map.Sector_GLList_Make(PosNum.X, PosNum.Y);
-            Map.MinimapMakeLater();
         }
     }
 }

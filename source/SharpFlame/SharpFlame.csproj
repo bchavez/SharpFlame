@@ -157,7 +157,6 @@
     <Compile Include="Mapping\Changes\clsSectorChanges.cs" />
     <Compile Include="Mapping\Changes\clsTerrainUpdate.cs" />
     <Compile Include="Mapping\clsGeneratorMap.cs" />
-    <Compile Include="Mapping\clsMinimapTexture.cs" />
     <Compile Include="Mapping\clsTerrain.cs" />
     <Compile Include="Mapping\clsUpdateAutotexture.cs" />
     <Compile Include="Mapping\clsUpdateSectorGraphics.cs" />
@@ -439,6 +438,8 @@
     <Compile Include="Gui\Resources.cs" />
     <Compile Include="ViewInfo.cs" />
     <Compile Include="UiOptions\Options.cs" />
+    <Compile Include="Mapping\Minimap\MinimapTexture.cs" />
+    <Compile Include="Mapping\Minimap\MinimapCreator.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">
@@ -636,4 +637,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Mapping\Minimap\" />
+  </ItemGroup>
 </Project>

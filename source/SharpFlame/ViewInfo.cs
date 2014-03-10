@@ -14,6 +14,7 @@ using SharpFlame.FileIO;
 using SharpFlame.Gui.Sections;
 using SharpFlame.Infrastructure;
 using SharpFlame.Mapping;
+using SharpFlame.Mapping.Minimap;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tiles;
@@ -67,16 +68,18 @@ namespace SharpFlame
         private readonly Options uiOptions;
         private readonly SettingsManager settings;
         private readonly UITimer tmrMouseMove;
+        private readonly MinimapCreator minimap;
 
         private bool blEnableMouseMove = false;
 
         public ViewInfo(KeyboardManager kbm, Options argUiOptions,
-            SettingsManager argSettings
+            SettingsManager argSettings, MinimapCreator mmc
         )
         {
             keyboardManager = kbm;
             uiOptions = argUiOptions;
             settings = argSettings;
+            minimap = mmc;
 
             tmrMouseMove = new UITimer { Interval = 0.1 };
             tmrMouseMove.Elapsed += enableMouseMove;
@@ -1364,7 +1367,7 @@ namespace SharpFlame
                     {
                         Map.GatewayRemoveStoreChange(a);
                         Map.UndoStepCreate("Gateway Delete");
-                        Map.MinimapMakeLater();
+                        minimap.Refresh = true;
                         MainMapView.DrawLater();
                         break;
                     }
@@ -1385,7 +1388,7 @@ namespace SharpFlame
                         Map.UndoStepCreate("Gateway Place");
                         Map.SelectedTileA = null;
                         Map.SelectedTileB = null;
-                        Map.MinimapMakeLater();
+                        minimap.Refresh = true;
                         MainMapView.DrawLater();
                     }
                 }
@@ -1565,7 +1568,7 @@ namespace SharpFlame
 
             var mouseOverTerrain = GetMouseOverTerrain();
 
-            Map.SuppressMinimap = false;
+            minimap.Suppress = false;
 
             if ( e.Buttons == MouseButtons.Primary )
             {
@@ -1654,7 +1657,7 @@ namespace SharpFlame
 
             var screenPos = new XYInt();
 
-            Map.SuppressMinimap = true;
+            minimap.Suppress = true;
 
             screenPos.X = (int)e.Location.X;
             screenPos.Y = (int)e.Location.Y;
@@ -1817,7 +1820,6 @@ namespace SharpFlame
                                 objectCreator.Perform();
                                 Map.UndoStepCreate("Place Object");
                                 Map.Update();
-                                Map.MinimapMakeLater();
                                 MainMapView.DrawLater();
                             }
                         }
@@ -2293,7 +2295,6 @@ namespace SharpFlame
 
                         Map.UndoStepCreate("Object Line");
                         Map.Update();
-                        Map.MinimapMakeLater();
                         Map.SelectedTileA = null;
                         MainMapView.DrawLater();
                     }
@@ -2320,7 +2321,6 @@ namespace SharpFlame
 
                         Map.UndoStepCreate("Object Line");
                         Map.Update();
-                        Map.MinimapMakeLater();
                         Map.SelectedTileA = null;
                         MainMapView.DrawLater();
                     }

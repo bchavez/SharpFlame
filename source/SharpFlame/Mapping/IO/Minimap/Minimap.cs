@@ -1,11 +1,13 @@
 using System;
 using System.Drawing;
+using Ninject;
 using NLog;
 using SharpFlame.Bitmaps;
 using SharpFlame.Colors;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Interfaces.Mapping.IO;
+using SharpFlame.Mapping.Minimap;
 using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping.IO.Minimap
@@ -28,8 +30,10 @@ namespace SharpFlame.Mapping.IO.Minimap
 
             var minimapBitmap = new Bitmap(map.Terrain.TileSize.X, map.Terrain.TileSize.Y);
 
-            var texture = new clsMinimapTexture(new XYInt(map.Terrain.TileSize.X, map.Terrain.TileSize.Y));
-            map.MinimapTextureFill(texture);
+            var mmc = App.Kernel.Get<MinimapCreator>();
+
+            var texture = new MinimapTexture(new XYInt(map.Terrain.TileSize.X, map.Terrain.TileSize.Y));
+            mmc.FillTexture(texture, map);
 
             for ( var y = 0; y <= map.Terrain.TileSize.Y - 1; y++ )
             {
@@ -37,9 +41,9 @@ namespace SharpFlame.Mapping.IO.Minimap
                 {
                     minimapBitmap.SetPixel(x, y,
                                            ColorTranslator.FromOle(
-                        ColorUtil.OsRgb((int)(MathUtil.ClampSng(Convert.ToSingle(texture.get_Pixels(x, y).Red * 255.0F), 0.0F, 255.0F)),
-                                    (int)(MathUtil.ClampSng(Convert.ToSingle(texture.get_Pixels(x, y).Green * 255.0F), 0.0F, 255.0F)),
-                                    (int)(MathUtil.ClampSng(Convert.ToSingle(texture.get_Pixels(x, y).Blue * 255.0F), 0.0F, 255.0F)))));
+                            ColorUtil.OsRgb((int)(MathUtil.ClampSng(Convert.ToSingle(texture.get(x, y).Red * 255.0F), 0.0F, 255.0F)),
+                                (int)(MathUtil.ClampSng(Convert.ToSingle(texture.get(x, y).Green * 255.0F), 0.0F, 255.0F)),
+                                (int)(MathUtil.ClampSng(Convert.ToSingle(texture.get(x, y).Blue * 255.0F), 0.0F, 255.0F)))));
                 }
             }
 

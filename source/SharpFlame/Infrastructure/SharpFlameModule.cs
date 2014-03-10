@@ -29,6 +29,7 @@ using Ninject.Modules;
 using SharpFlame.Gui.Actions;
 using SharpFlame.Gui.Forms;
 using SharpFlame.Gui.Sections;
+using SharpFlame.Mapping.Minimap;
 using SharpFlame.Settings;
 using SharpFlame.UiOptions;
 
@@ -73,6 +74,10 @@ namespace SharpFlame.Infrastructure
                 .InSingletonScope();
 
             this.Bind<Options>()
+                .ToSelf()
+                .InSingletonScope();
+
+            this.Bind<MinimapCreator>()
                 .ToSelf()
                 .InSingletonScope();
                 
