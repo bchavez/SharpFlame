@@ -84,16 +84,23 @@ namespace SharpFlame.Mapping.Minimap
 
         private readonly UITimer timer;
         private readonly SettingsManager settings;
+        private readonly UiOptions.Minimap options;
 
-        public MinimapCreator(IKernel kernel, SettingsManager argSettings)
+        public MinimapCreator(IKernel kernel, SettingsManager argSettings, UiOptions.Options argUiOptions)
         {
             kernel.Inject(this); // For GLSurface
             settings = argSettings;
+            options = argUiOptions.Minimap;
 
             Suppress = false;
 
             timer = new UITimer { Interval = Constants.MinimapDelay };
             timer.Elapsed += tick;
+
+            options.PropertyChanged += delegate
+            {
+                Refresh = true;
+            };
         }           
 
         private void tick(object sender, EventArgs e)
@@ -186,7 +193,7 @@ namespace SharpFlame.Mapping.Minimap
             float antiAlpha = 0;
             var rGBSng = new SRgb();
 
-            if ( true ) //TODO: use uioptions - Program.frmMainInstance.menuMiniShowTex.Checked
+            if ( options.Textures )
             {
                 if ( tileset != null )
                 {
@@ -203,7 +210,7 @@ namespace SharpFlame.Mapping.Minimap
                         }
                     }
                 }
-                if ( true ) // TODO: Use UiOptions  Program.frmMainInstance.menuMiniShowHeight.Checked
+                if ( options.Heights )
                 {
                     float Height = 0;
                     for ( var Y = 0; Y <= terrain.TileSize.Y - 1; Y++ )
@@ -220,7 +227,7 @@ namespace SharpFlame.Mapping.Minimap
                     }
                 }
             }
-            else if ( true ) //  TODO: Use UiOptions Program.frmMainInstance.menuMiniShowHeight.Checked
+            else if ( options.Heights )
             {
                 for ( var y = 0; y <= terrain.TileSize.Y - 1; y++ )
                 {
@@ -247,7 +254,7 @@ namespace SharpFlame.Mapping.Minimap
                     }
                 }
             }
-            if ( true ) // TODO: Use UiOptions - Program.frmMainInstance.menuMiniShowCliffs.Checked
+            if ( options.Cliffs )
             {
                 if ( tileset != null )
                 {
@@ -270,7 +277,7 @@ namespace SharpFlame.Mapping.Minimap
                     }
                 }
             }
-            if ( true )  // TODO: Use UiOptions - Program.frmMainInstance.menuMiniShowGateways.Checked
+            if ( options.Gateways )
             {
                 foreach ( var gateway in gateways )
                 {
@@ -286,7 +293,7 @@ namespace SharpFlame.Mapping.Minimap
                     }
                 }
             }
-            if ( true ) // TODO: Use UiOptions Program.frmMainInstance.menuMiniShowUnits.Checked
+            if ( options.Objects )
             {
                 //units that are not selected
                 foreach ( var unit in units )

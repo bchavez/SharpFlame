@@ -249,7 +249,6 @@
     <Compile Include="Pathfinding\Path.cs" />
     <Compile Include="PathUtil.cs" />
     <Compile Include="Result.cs" />
-    <Compile Include="UiOptions\TexturesOptions.cs" />
     <Compile Include="Util\clsKeysActive.cs" />
     <Compile Include="Util\clsLayer.cs" />
     <Compile Include="Util\clsTileType.cs" />
@@ -440,6 +439,8 @@
     <Compile Include="UiOptions\Options.cs" />
     <Compile Include="Mapping\Minimap\MinimapTexture.cs" />
     <Compile Include="Mapping\Minimap\MinimapCreator.cs" />
+    <Compile Include="UiOptions\Textures.cs" />
+    <Compile Include="UiOptions\Minimap.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">

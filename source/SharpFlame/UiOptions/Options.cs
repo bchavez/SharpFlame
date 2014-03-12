@@ -66,11 +66,13 @@ namespace SharpFlame.UiOptions
 
         }
      
-        public TexturesOptions Textures;
+        public readonly Textures Textures;
+        public readonly Minimap Minimap;
 
         public Options ()
         {
-            Textures = new TexturesOptions ();
+            Textures = new Textures ();
+            Minimap = new Minimap ();
         }
     }
 }

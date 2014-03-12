@@ -76,10 +76,12 @@ namespace SharpFlame.Gui.Sections
         private readonly KeyboardManager keyboardManager;
         private readonly ViewInfo viewInfo;
         private readonly MinimapCreator minimapCreator;
+        private readonly UiOptions.Options uiOptions;
 
         private UITimer tmrDraw;
         private UITimer tmrKey;
 
+        private readonly Label lblMinimap;
         private readonly Label lblTile;
         private readonly Label lblVertex;
         private readonly Label lblPos;
@@ -88,7 +90,7 @@ namespace SharpFlame.Gui.Sections
 
         public MainMapView(IKernel kernel, ILoggerFactory logFactory, 
             KeyboardManager kbm, ViewInfo argViewInfo,
-            MinimapCreator mmc)
+            MinimapCreator mmc, UiOptions.Options argUiOptions)
         {
             kernel.Inject(this); // For GLSurface
             logger = logFactory.GetCurrentClassLogger();
@@ -96,10 +98,11 @@ namespace SharpFlame.Gui.Sections
             viewInfo = argViewInfo;
             viewInfo.MainMapView = this; // They need each other.
             minimapCreator = mmc;
+            uiOptions = argUiOptions;
 
 		    var mainLayout = new DynamicLayout();
             mainLayout.AddSeparateRow(
-                new Label { }
+                lblMinimap = new Label { Text = "Minimap" }
             );
             mainLayout.Add(GLSurface, true, true);
             mainLayout.AddSeparateRow(
@@ -133,6 +136,68 @@ namespace SharpFlame.Gui.Sections
             GLSurface.Resize += resizeMapView;
 
             keyboardManager.KeyDown += handleKeyDown;
+
+            lblMinimap.MouseDown += delegate
+            {
+                var menu = createMinimapContextMenu();
+                menu.Show(lblMinimap);
+            };
+        }
+
+        private ContextMenu createMinimapContextMenu() {
+            var menu = new ContextMenu();
+
+            var cmiTextures = new CheckMenuItem(new CheckCommand {
+                MenuText = "Show Textures",
+                Checked = uiOptions.Minimap.Textures
+            });
+            cmiTextures.Click += delegate
+            {
+                uiOptions.Minimap.Textures = !uiOptions.Minimap.Textures;
+            };
+            menu.Items.Add(cmiTextures);
+
+            var cmiHeights = new CheckMenuItem(new CheckCommand {
+                MenuText = "Show Heights",
+                Checked = uiOptions.Minimap.Heights
+            });
+            cmiHeights.Click += delegate
+            {
+                uiOptions.Minimap.Heights = !uiOptions.Minimap.Heights;
+            };
+            menu.Items.Add(cmiHeights);
+
+            var cmiCliffs = new CheckMenuItem(new CheckCommand {
+                MenuText = "Show Cliffs",
+                Checked = uiOptions.Minimap.Cliffs
+            });
+            cmiCliffs.Click += delegate
+            {
+                uiOptions.Minimap.Cliffs = !uiOptions.Minimap.Cliffs;
+            };
+            menu.Items.Add(cmiCliffs);
+
+            var cmiObjects = new CheckMenuItem(new CheckCommand {
+                MenuText = "Show Objects",
+                Checked = uiOptions.Minimap.Objects
+            });
+            cmiObjects.Click += delegate
+            {
+                uiOptions.Minimap.Objects = !uiOptions.Minimap.Objects;
+            };
+            menu.Items.Add(cmiObjects);
+
+            var cmiGateways = new CheckMenuItem(new CheckCommand {
+                MenuText = "Show Gateways",
+                Checked = uiOptions.Minimap.Gateways
+            });
+            cmiGateways.Click += delegate
+            {
+                uiOptions.Minimap.Gateways = !uiOptions.Minimap.Gateways;
+            };
+            menu.Items.Add(cmiGateways);
+
+            return menu;
         }
 
         private void initalizeGlSurface(object sender, EventArgs e)

@@ -205,7 +205,7 @@ namespace SharpFlame.Gui.Sections
         /// </summary>
         private void SetupEventHandlers()
         {
-            TexturesOptions texturesOptions = uiOptions.Textures;
+            Textures texturesOptions = uiOptions.Textures;
 
             // Circular / Square Button
             btnCircular.Click += (sender, e) =>
