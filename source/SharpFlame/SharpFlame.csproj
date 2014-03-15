@@ -258,7 +258,6 @@
     <Compile Include="Util\TileWalls.cs" />
     <Compile Include="Util\sLayerList.cs" />
     <Compile Include="Util\sSplitPath.cs" />
-    <Compile Include="Util\Tools.cs" />
     <Compile Include="Domain\UnitTypeBase.cs" />
     <Compile Include="Colors\ColorUtil.cs" />
     <Compile Include="frmQuit.Designer.cs">

@@ -44,6 +44,7 @@ using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 using SharpFlame.Settings;
 using SharpFlame.Util;
+using SharpFlame.UiOptions;
 
 namespace SharpFlame.Gui.Sections
 {
@@ -606,7 +607,7 @@ namespace SharpFlame.Gui.Sections
             }
 
             var mouseOverTerrain = viewInfo.GetMouseOverTerrain();
-            if ( modTools.Tool == modTools.Tools.TextureBrush )
+            if (uiOptions.MouseTool == MouseTool.TextureBrush)
             {
                 if ( mouseOverTerrain != null )
                 {
@@ -628,7 +629,7 @@ namespace SharpFlame.Gui.Sections
                     }
                 }
             }
-            if ( modTools.Tool == modTools.Tools.ObjectSelect )
+            if (uiOptions.MouseTool == MouseTool.ObjectSelect)
             {
                 if (keyboardManager.Keys[KeyboardKeys.DeleteObjects].Active)
                 {
@@ -701,13 +702,7 @@ namespace SharpFlame.Gui.Sections
 
             if (keyboardManager.Keys[KeyboardKeys.ObjectSelectTool].Active)
             {
-                modTools.Tool = modTools.Tools.ObjectSelect;
-                DrawLater();
-            }
-
-            if (keyboardManager.Keys[KeyboardKeys.PreviousTool].Active)
-            {
-                modTools.Tool = modTools.PreviousTool;
+                uiOptions.MouseTool = MouseTool.ObjectSelect;
                 DrawLater();
             }
         }            

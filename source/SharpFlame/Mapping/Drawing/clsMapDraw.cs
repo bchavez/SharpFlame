@@ -16,6 +16,7 @@ using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 using SharpFlame.Util;
+using SharpFlame.UiOptions;
 
 #endregion
 
@@ -227,7 +228,7 @@ namespace SharpFlame.Mapping
                     xyzDbl.Y = GetVertexAltitude(SelectedAreaVertexB) - viewInfo.ViewPos.Y;
                     drawIt = true;
                 }
-                else if ( modTools.Tool == modTools.Tools.TerrainSelect )
+                else if (uiOptions.MouseTool == MouseTool.TerrainSelect)
                 {
                     if ( mouseOverTerrain != null )
                     {
@@ -270,7 +271,7 @@ namespace SharpFlame.Mapping
                 debugGLError("Terrain selection box");
             }
 
-            if ( modTools.Tool == modTools.Tools.TerrainSelect )
+            if (uiOptions.MouseTool == MouseTool.TerrainSelect)
             {
                 if ( mouseOverTerrain != null )
                 {
@@ -424,7 +425,7 @@ namespace SharpFlame.Mapping
 
             if ( mouseOverTerrain != null )
             {
-                if ( modTools.Tool == modTools.Tools.ObjectSelect )
+                if (uiOptions.MouseTool == MouseTool.ObjectSelect)
                 {
                     if ( UnitSelectedAreaVertexA != null )
                     {
@@ -504,7 +505,7 @@ namespace SharpFlame.Mapping
                     }
                 }
 
-                if ( modTools.Tool == modTools.Tools.RoadPlace )
+                if (uiOptions.MouseTool == MouseTool.RoadPlace)
                 {
                     GL.LineWidth(2.0F);
 
@@ -535,7 +536,9 @@ namespace SharpFlame.Mapping
 
                     debugGLError("Road place brush");
                 }
-                else if ( modTools.Tool == modTools.Tools.RoadLines || modTools.Tool == modTools.Tools.Gateways || modTools.Tool == modTools.Tools.ObjectLines )
+                else if (uiOptions.MouseTool == MouseTool.RoadLines || 
+                    uiOptions.MouseTool == MouseTool.Gateways || 
+                    uiOptions.MouseTool == MouseTool.ObjectLines )
                 {
                     GL.LineWidth(2.0F);
 
@@ -669,19 +672,19 @@ namespace SharpFlame.Mapping
 
                 var toolBrush = default(clsBrush);
 
-                if ( modTools.Tool == modTools.Tools.TextureBrush )
+                if (uiOptions.MouseTool == MouseTool.TerrainBrush)
                 {
                     toolBrush = App.TextureBrush;
                 }
-                else if ( modTools.Tool == modTools.Tools.CliffBrush )
+                else if (uiOptions.MouseTool == MouseTool.CliffBrush)
                 {
                     toolBrush = App.CliffBrush;
                 }
-                else if ( modTools.Tool == modTools.Tools.CliffRemove )
+                else if (uiOptions.MouseTool == MouseTool.CliffRemove)
                 {
                     toolBrush = App.CliffBrush;
                 }
-                else if ( modTools.Tool == modTools.Tools.RoadRemove )
+                else if (uiOptions.MouseTool == MouseTool.RoadRemove)
                 {
                     toolBrush = App.CliffBrush;
                 }
@@ -704,7 +707,7 @@ namespace SharpFlame.Mapping
                 }
 
                 //draw mouseover vertex
-                if ( modTools.Tool == modTools.Tools.TerrainFill )
+                if (uiOptions.MouseTool == MouseTool.TerrainFill)
                 {
                     GL.LineWidth(2.0F);
 
@@ -722,19 +725,19 @@ namespace SharpFlame.Mapping
                     debugGLError("Mouse over vertex");
                 }
 
-                if ( modTools.Tool == modTools.Tools.TerrainBrush )
+                if (uiOptions.MouseTool == MouseTool.TerrainBrush)
                 {
                     toolBrush = App.TerrainBrush;
                 }
-                else if ( modTools.Tool == modTools.Tools.HeightSetBrush )
+                else if (uiOptions.MouseTool == MouseTool.HeightSetBrush)
                 {
                     toolBrush = App.HeightBrush;
                 }
-                else if ( modTools.Tool == modTools.Tools.HeightChangeBrush )
+                else if (uiOptions.MouseTool == MouseTool.HeightChangeBrush)
                 {
                     toolBrush = App.HeightBrush;
                 }
-                else if ( modTools.Tool == modTools.Tools.HeightSmoothBrush )
+                else if (uiOptions.MouseTool == MouseTool.HeightSmoothBrush)
                 {
                     toolBrush = App.HeightBrush;
                 }
@@ -783,7 +786,7 @@ namespace SharpFlame.Mapping
             if ( mouseOverTerrain != null )
             {
                 GL.Enable(EnableCap.Texture2D);
-                if ( modTools.Tool == modTools.Tools.ObjectPlace )
+                if (uiOptions.MouseTool == MouseTool.ObjectPlace)
                 {
                     var placeObject = Program.frmMainInstance.SingleSelectedObjectTypeBase;
                     if ( placeObject != null )
@@ -933,7 +936,7 @@ namespace SharpFlame.Mapping
                 foreach ( var tempLoopVar_Unit in mouseOverTerrain.Units )
                 {
                     unit = tempLoopVar_Unit;
-                    if ( unit != null && modTools.Tool == modTools.Tools.ObjectSelect )
+                    if ( unit != null && uiOptions.MouseTool == MouseTool.ObjectSelect)
                     {
                         rgb = GetUnitGroupColour(unit.UnitGroup);
                         GL.Color4((0.5F + rgb.Red) / 1.5F, (0.5F + rgb.Green) / 1.5F, (0.5F + rgb.Blue) / 1.5F, 0.75F);
@@ -1061,7 +1064,7 @@ namespace SharpFlame.Mapping
                         MathUtil.ReorderXY(SelectedAreaVertexA, SelectedAreaVertexB, ref startXy, ref finishXy);
                         drawIt = true;
                     }
-                    else if ( modTools.Tool == modTools.Tools.TerrainSelect )
+                    else if (uiOptions.MouseTool == MouseTool.TerrainSelect)
                     {
                         if ( mouseOverTerrain != null )
                         {

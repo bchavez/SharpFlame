@@ -24,7 +24,7 @@
  // */
  #endregion
 
-using NLog;
+using Ninject.Extensions.Logging;
 
 namespace SharpFlame.UiOptions
 {
@@ -51,7 +51,7 @@ namespace SharpFlame.UiOptions
 
     public class Options
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger logger;
 
         MouseTool mouseTool;
         public MouseTool MouseTool { 
@@ -63,14 +63,15 @@ namespace SharpFlame.UiOptions
                     mouseTool = value;
                 }
             }
-
         }
      
         public readonly Textures Textures;
         public readonly Minimap Minimap;
 
-        public Options ()
+        public Options (ILoggerFactory logFactory)
         {
+            logger = logFactory.GetCurrentClassLogger();
+
             Textures = new Textures ();
             Minimap = new Minimap ();
         }

@@ -138,10 +138,9 @@ namespace SharpFlame
         public static ObservableCollection<Tileset> Tilesets { get { return tilesets; } }
 
         public static SettingsManager SettingsManager { get; set; }
-
-        public static KeyboardManager KeyboardManager { get; set; }
-
+        public static KeyboardManager KeyboardManager { get; set; }       
         public static GLSurface MapViewGlSurface { get; set; }
+        public static Options UiOptions { get; set; }
 
         /// <summary>
         /// Holder for the Status form.

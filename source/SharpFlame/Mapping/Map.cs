@@ -73,16 +73,19 @@ namespace SharpFlame.Mapping
         private readonly MainMapView mainMapView;
         private readonly ViewInfo viewInfo;
         private readonly MinimapCreator minimap;
+        private readonly Options uiOptions;
 
         [Inject]
         internal IKernel Kernel { get; set; }
        
-        public Map(ILoggerFactory logFactory, MainMapView mmv, ViewInfo vi, MinimapCreator mmc)
+        public Map(ILoggerFactory logFactory, MainMapView mmv, ViewInfo vi, MinimapCreator mmc,
+            Options argUiOptions)
         {
             logger = logFactory.GetCurrentClassLogger();
             mainMapView = mmv;
             viewInfo = vi;
             minimap = mmc;
+            uiOptions = argUiOptions;
 
             SectorCount = new XYInt(0, 0);
             SelectedAreaVertexA = new XYInt(0, 0);

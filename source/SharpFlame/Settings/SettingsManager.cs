@@ -175,7 +175,6 @@ namespace SharpFlame.Settings
 
             //interface controls
             keyboardManager.Create (KeyboardKeys.ObjectSelectTool, Keys.Escape);
-            keyboardManager.Create (KeyboardKeys.PreviousTool, Keys.Grave);
 
             //selected unit controls
             keyboardManager.Create (KeyboardKeys.MoveObjects, Keys.M);

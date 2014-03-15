@@ -88,6 +88,7 @@ namespace SharpFlame
             App.SettingsManager = this.Settings;
             App.KeyboardManager = this.KeyboardManager;
             App.MapViewGlSurface = this.GlMapView;
+            App.Random = new Random();
 
             logger = logFactory.GetCurrentClassLogger();
 
@@ -135,7 +136,7 @@ namespace SharpFlame
 
         public override void OnInitialized(EventArgs e)
         {
-            this.MainForm = App.Kernel.Get<MainForm>();
+            this.MainForm = kernel.Get<MainForm>();
 
             base.OnInitialized(e);
 
@@ -164,9 +165,6 @@ namespace SharpFlame
         private void OnGLControlInitialized(object o, EventArgs e)
         {
             GlTexturesView.MakeCurrent();
-
-            // Create tools.
-            modTools.CreateTools();
 
             // Set Vision radius
             App.VisionRadius_2E = 10;

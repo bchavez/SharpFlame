@@ -11,6 +11,7 @@ using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Util;
+using SharpFlame.UiOptions;
 
 #endregion
 
@@ -380,7 +381,7 @@ namespace SharpFlame.Controls
                 }
                 else
                 {
-                    modTools.Tool = modTools.Tools.TextureBrush;
+                    App.UiOptions.MouseTool = MouseTool.TextureBrush;
                 }
             }
             else

@@ -30,7 +30,6 @@ namespace SharpFlame.Settings
     {
         //interface controls
         public const string ObjectSelectTool = "ObjectSelectTool";
-        public const string PreviousTool = "PreviousTool";
 
         //selected unit controls
         public const string MoveObjects = "MoveObjects";
