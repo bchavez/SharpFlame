@@ -1,9 +1,11 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace SharpFlame.Core.Domain
 {
+    [DebuggerDisplay("X={X}, Y={Y}")]
     [StructLayout(LayoutKind.Sequential)]
     public struct XYInt {
         public Int32 X;
