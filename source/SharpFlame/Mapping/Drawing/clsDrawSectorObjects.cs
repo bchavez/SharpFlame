@@ -50,7 +50,6 @@ namespace SharpFlame.Mapping.Drawing
                 return;
             }
 
-            var Unit = default(Unit);
             var Sector = Map.Sectors[PosNum.X, PosNum.Y];
             var DrawUnitLabel = default(bool);
             var MouseOverTerrain = ViewInfo.GetMouseOverTerrain();
@@ -58,20 +57,18 @@ namespace SharpFlame.Mapping.Drawing
             var XYZ_dbl = default(XYZDouble);
             var XYZ_dbl2 = default(XYZDouble);
             var ScreenPos = new XYInt();
-            var Connection = default(clsUnitSectorConnection);
 
-            foreach ( var tempLoopVar_Connection in Sector.Units )
+            foreach ( var connection in Sector.Units )
             {
-                Connection = tempLoopVar_Connection;
-                Unit = Connection.Unit;
-                if ( !UnitDrawn[Unit.MapLink.ArrayPosition] )
+                var unit = connection.Unit;
+                if ( !UnitDrawn[unit.MapLink.ArrayPosition] )
                 {
-                    UnitDrawn[Unit.MapLink.ArrayPosition] = true;
-                    XYZ_dbl.X = Unit.Pos.Horizontal.X - ViewInfo.ViewPos.X;
-                    XYZ_dbl.Y = Unit.Pos.Altitude - ViewInfo.ViewPos.Y;
-                    XYZ_dbl.Z = - Unit.Pos.Horizontal.Y - ViewInfo.ViewPos.Z;
+                    UnitDrawn[unit.MapLink.ArrayPosition] = true;
+                    XYZ_dbl.X = unit.Pos.Horizontal.X - ViewInfo.ViewPos.X;
+                    XYZ_dbl.Y = unit.Pos.Altitude - ViewInfo.ViewPos.Y;
+                    XYZ_dbl.Z = - unit.Pos.Horizontal.Y - ViewInfo.ViewPos.Z;
                     DrawUnitLabel = false;
-                    if ( Unit.TypeBase.IsUnknown )
+                    if ( unit.TypeBase.IsUnknown )
                     {
                         DrawUnitLabel = true;
                     }
@@ -79,11 +76,11 @@ namespace SharpFlame.Mapping.Drawing
                     {
                         GL.PushMatrix();
                         GL.Translate(XYZ_dbl.X, XYZ_dbl.Y, Convert.ToDouble(- XYZ_dbl.Z));
-                        Unit.TypeBase.GLDraw(Unit.Rotation);
+                        unit.TypeBase.GLDraw(unit.Rotation);
                         GL.PopMatrix();
-                        if ( Unit.TypeBase.Type == UnitType.PlayerDroid )
+                        if ( unit.TypeBase.Type == UnitType.PlayerDroid )
                         {
-                            if ( ((DroidDesign)Unit.TypeBase).AlwaysDrawTextLabel )
+                            if ( ((DroidDesign)unit.TypeBase).AlwaysDrawTextLabel )
                             {
                                 DrawUnitLabel = true;
                             }
@@ -92,7 +89,7 @@ namespace SharpFlame.Mapping.Drawing
                         {
                             if ( MouseOverTerrain.Units.Count > 0 )
                             {
-                                if ( MouseOverTerrain.Units[0] == Unit )
+                                if ( MouseOverTerrain.Units[0] == unit )
                                 {
                                     DrawUnitLabel = true;
                                 }
@@ -115,7 +112,7 @@ namespace SharpFlame.Mapping.Drawing
                                 TextLabel.Colour.Alpha = 1.0F;
                                 TextLabel.Pos.X = ScreenPos.X + 32;
                                 TextLabel.Pos.Y = ScreenPos.Y;
-                                TextLabel.Text = Unit.TypeBase.GetDisplayTextCode();
+                                TextLabel.Text = unit.TypeBase.GetDisplayTextCode();
                                 UnitTextLabels.Add(TextLabel);
                             }
                         }

@@ -87,6 +87,7 @@ namespace SharpFlame.Gui.Sections
 
         private UITimer tmrDraw;
         private UITimer tmrKey;
+        private UITimer tmrTool;
 
         private readonly Label lblMinimap;
         private readonly Label lblTile;
@@ -286,6 +287,10 @@ namespace SharpFlame.Gui.Sections
             tmrKey = new UITimer { Interval = 0.030 }; // Every 30 milliseconds.
             tmrKey.Elapsed += timedKey;
             tmrKey.Start();
+
+            tmrTool = new UITimer { Interval = 0.1 }; // Every 100 milliseconds.
+            tmrTool.Elapsed += timedTool;
+            tmrTool.Start();
         }
 
         private void resizeMapView(object sender, EventArgs e)
@@ -355,6 +360,16 @@ namespace SharpFlame.Gui.Sections
             this.GLSurface.SwapBuffers();
 
             drawPending = false;
+        }
+
+        private void timedTool(object sender, EventArgs e)
+        {
+            if ( viewInfo.Map == null )
+            {
+                return;
+            }
+
+            viewInfo.TimedTools();
         }
 
         private void timedKey(object sender, EventArgs e)

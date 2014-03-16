@@ -72,48 +72,48 @@ namespace SharpFlame.Gui.Sections
 			layout.Add (CliffSection ());
             layout.Add (null);
 
-            SetupEventHandlers ();
+            setupEventHandlers ();
 
 			Content = layout;
 		}
 
-        void SetupEventHandlers() {
+        private void setupEventHandlers() {
             rbGroundPlace.CheckedChanged += delegate
             {
-                SetMouseMode ();
+                setMouseMode ();
             };
             rbGroundFill.CheckedChanged += delegate
             {
-                SetMouseMode ();
+                setMouseMode ();
             };
             rbRoadSides.CheckedChanged += delegate
             {
-                SetMouseMode ();
+                setMouseMode ();
             };
             rbRoadLines.CheckedChanged += delegate
             {
-                SetMouseMode ();
+                setMouseMode ();
             };
             rbRoadRemove.CheckedChanged += delegate
             {
-                SetMouseMode ();
+                setMouseMode ();
             };
             rbCliffTriangle.CheckedChanged += delegate
             {
-                SetMouseMode ();
+                setMouseMode ();
             };
             rbCliffBrush.CheckedChanged += delegate
             {
-                SetMouseMode ();
+                setMouseMode ();
             };
             rbCliffRemove.CheckedChanged += delegate
             {
-                SetMouseMode ();
+                setMouseMode ();
             };
 
             // Set Mousetool, when we are shown.
             Shown += delegate {
-                SetMouseMode();
+                setMouseMode();
             };
 
             var terrainOptions = uiOptions.Terrain;
@@ -128,7 +128,7 @@ namespace SharpFlame.Gui.Sections
             };
         }
 
-        void SetMouseMode() {
+        private void setMouseMode() {
             if (rbGroundPlace.Checked)
             {
                 uiOptions.MouseTool = MouseTool.TerrainBrush;

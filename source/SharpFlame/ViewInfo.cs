@@ -1311,7 +1311,7 @@ namespace SharpFlame
             var applyHeightChange = new clsApplyHeightChange();
             applyHeightChange.Map = Map;
             applyHeightChange.Rate = rate;
-            applyHeightChange.UseEffect = Program.frmMainInstance.cbxHeightChangeFade.Checked;
+            applyHeightChange.UseEffect = uiOptions.Height.ChangeFade;
             uiOptions.Height.Brush.PerformActionMapVertices(applyHeightChange, mouseOverTerrain.Vertex);
 
             Map.Update();
@@ -1502,14 +1502,15 @@ namespace SharpFlame
                         if (uiOptions.MouseTool == MouseTool.TerrainBrush)
                         {
                             applyTerrain();
+                            // TODO: implement me.
 //                            if (Program.frmMainInstance.cbxAutoTexSetHeight.Checked)
 //                            {
-//                                applyHeightSet(App.TerrainBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
+//                                applyHeightSet(App.TerrainBrush, (byte)uiOptions.Height.LmbHeight);
 //                            }
                         }
                         else if (uiOptions.MouseTool == MouseTool.HeightSetBrush)
                         {
-                            applyHeightSet(uiOptions.Height.Brush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
+                            applyHeightSet(uiOptions.Height.Brush, (byte)uiOptions.Height.LmbHeight);
                         }
                         else if (uiOptions.MouseTool == MouseTool.TextureBrush)
                         {
@@ -1542,7 +1543,7 @@ namespace SharpFlame
                         {
                             if ( MouseLeftDown == null )
                             {
-                                applyHeightSet(uiOptions.Height.Brush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetR.SelectedIndex]);
+                                applyHeightSet(uiOptions.Height.Brush, (byte)uiOptions.Height.RmbHeight);
                             }
                         }
                         else if (uiOptions.MouseTool == MouseTool.CliffTriangle)
@@ -1731,8 +1732,7 @@ namespace SharpFlame
                                     applyTerrain();
                                     if ( Program.frmMainInstance.cbxAutoTexSetHeight.Checked )
                                     {
-                                        applyHeightSet(uiOptions.Terrain.Brush,
-                                            Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
+                                        applyHeightSet(uiOptions.Terrain.Brush, (byte)uiOptions.Height.LmbHeight);
                                     }
                                 }
                             }
@@ -1745,7 +1745,7 @@ namespace SharpFlame
                             }
                             else
                             {
-                                applyHeightSet(uiOptions.Height.Brush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
+                                applyHeightSet(uiOptions.Height.Brush, (byte)uiOptions.Height.LmbHeight);
                             }
                         }
                         else if (uiOptions.MouseTool == MouseTool.TextureBrush)
@@ -1901,7 +1901,7 @@ namespace SharpFlame
                     }
                     else
                     {
-                        applyHeightSet(uiOptions.Height.Brush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetR.SelectedIndex]);
+                        applyHeightSet(uiOptions.Height.Brush, (byte)uiOptions.Height.RmbHeight);
                     }
                 }
             }
@@ -2215,38 +2215,27 @@ namespace SharpFlame
 
         public void TimedTools()
         {
+            if(GetMouseOverTerrain() == null)
+            {
+                return;
+            }
+
             if (uiOptions.MouseTool == MouseTool.HeightSmoothBrush)
             {
-                if ( GetMouseOverTerrain() != null )
+                if ( GetMouseLeftDownOverTerrain() != null )
                 {
-                    if ( GetMouseLeftDownOverTerrain() != null )
-                    {
-                        double dblTemp = 0;
-                        if ( !IOUtil.InvariantParse(Program.frmMainInstance.txtSmoothRate.Text, ref dblTemp) )
-                        {
-                            return;
-                        }
-                        ApplyHeightSmoothing(MathUtil.ClampDbl(dblTemp * Program.frmMainInstance.tmrTool.Interval / 1000.0D, 0.0D, 1.0D));
-                    }
+                    ApplyHeightSmoothing(MathUtil.ClampDbl(uiOptions.Height.SmoothRate * 0.1D, 0.0D, 1.0D));
                 }
             }
             else if (uiOptions.MouseTool == MouseTool.HeightChangeBrush)
             {
-                if ( GetMouseOverTerrain() != null )
+                if ( GetMouseLeftDownOverTerrain() != null )
                 {
-                    double dblTemp = 0;
-                    if ( !IOUtil.InvariantParse(Program.frmMainInstance.txtHeightChangeRate.Text, ref dblTemp) )
-                    {
-                        return;
-                    }
-                    if ( GetMouseLeftDownOverTerrain() != null )
-                    {
-                        applyHeightChange(MathUtil.ClampDbl(dblTemp, -255.0D, 255.0D));
-                    }
-                    else if ( GetMouseRightDownOverTerrain() != null )
-                    {
-                        applyHeightChange(MathUtil.ClampDbl(Convert.ToDouble(- dblTemp), -255.0D, 255.0D));
-                    }
+                    applyHeightChange(MathUtil.ClampDbl(uiOptions.Height.ChangeRate, -255.0D, 255.0D));
+                }
+                else if ( GetMouseRightDownOverTerrain() != null )
+                {
+                    applyHeightChange(MathUtil.ClampDbl(Convert.ToDouble(-uiOptions.Height.ChangeRate), -255.0D, 255.0D));
                 }
             }
         }
