@@ -670,11 +670,10 @@ namespace SharpFlame.Mapping
 
                 //draw mouseover tiles
 
-                var toolBrush = default(clsBrush);
-
-                if (uiOptions.MouseTool == MouseTool.TerrainBrush)
+                clsBrush toolBrush;
+                if (uiOptions.MouseTool == MouseTool.TextureBrush)
                 {
-                    toolBrush = App.TextureBrush;
+                    toolBrush = uiOptions.Textures.Brush;
                 }
                 else if (uiOptions.MouseTool == MouseTool.CliffBrush)
                 {
@@ -697,10 +696,10 @@ namespace SharpFlame.Mapping
                 {
                     GL.LineWidth(2.0F);
                     var drawTileOutline = new clsDrawTileOutline
-                        {
-                            Map = this, 
-                            Colour = {Red = 0.0F, Green = 1.0F, Blue = 1.0F, Alpha = 1.0F}
-                        };
+                    {
+                        Map = this, 
+                        Colour = {Red = 0.0F, Green = 1.0F, Blue = 1.0F, Alpha = 1.0F}
+                    };
                     toolBrush.PerformActionMapTiles(drawTileOutline, mouseOverTerrain.Tile);
 
                     debugGLError("Brush tiles");

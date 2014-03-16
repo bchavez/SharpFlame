@@ -26,48 +26,10 @@ THE SOFTWARE.
 
 namespace SharpFlame.UiOptions
 {
-    public enum MouseTool {
-        Default,
-        CliffBrush,
-        CliffRemove,
-        CliffTriangle,
-        Gateways,
-        HeightChangeBrush,
-        HeightSetBrush,
-        HeightSmoothBrush,
-        ObjectLines,
-        ObjectPlace,
-        ObjectSelect,
-        RoadLines,
-        RoadPlace,
-        RoadRemove,
-        TerrainBrush,
-        TerrainFill,
-        TerrainSelect,
-        TextureBrush
-    }
-
-    public class Options
+    public class TerrainOptions
     {
-        MouseTool mouseTool;
-        public MouseTool MouseTool { 
-            get { return mouseTool; }
-            set { 
-                if (mouseTool != value)
-                {
-                    mouseTool = value;
-                }
-            }
-        }
-     
-        public readonly TerrainOptions Terrain;
-        public readonly Textures Textures;
-        public readonly Minimap Minimap;
-
-        public Options ()
+        public TerrainOptions()
         {
-            Textures = new Textures ();
-            Minimap = new Minimap ();
         }
     }
 }

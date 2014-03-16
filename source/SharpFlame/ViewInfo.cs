@@ -1031,7 +1031,7 @@ namespace SharpFlame
                 TerrainAction = uiOptions.Textures.TerrainMode
             };
 
-            App.TextureBrush.PerformActionMapTiles(applyTexture, mouseOverTerrain.Tile);
+            uiOptions.Textures.Brush.PerformActionMapTiles(applyTexture, mouseOverTerrain.Tile);
 
             Map.Update();
 
@@ -1484,12 +1484,9 @@ namespace SharpFlame
                         mouseOverTerrain.SideNum.Y = mouseOverTerrain.Tile.Normal.Y;
                     }
                     var sectorNum = Map.GetPosSectorNum(mouseOverTerrain.Pos.Horizontal);
-                    var unit = default(Unit);
-                    var connection = default(clsUnitSectorConnection);
-                    foreach ( var tempLoopVar_Connection in Map.Sectors[sectorNum.X, sectorNum.Y].Units )
+                    foreach ( var connection in Map.Sectors[sectorNum.X, sectorNum.Y].Units )
                     {
-                        connection = tempLoopVar_Connection;
-                        unit = connection.Unit;
+                        var unit = connection.Unit;
                         xyDouble.X = unit.Pos.Horizontal.X - mouseOverTerrain.Pos.Horizontal.X;
                         xyDouble.Y = unit.Pos.Horizontal.Y - mouseOverTerrain.Pos.Horizontal.Y;
                         var footprint = unit.TypeBase.GetGetFootprintSelected(unit.Rotation);

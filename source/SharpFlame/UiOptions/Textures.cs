@@ -39,21 +39,15 @@ namespace SharpFlame.UiOptions
         Remove
     }
 
-    public enum TerrainMouseMode {
-        Circular,
-        Square
-    }
-
     public class Textures
     {
+        public readonly clsBrush Brush;
+
         public bool SetTexture { get; set; }
         public bool SetOrientation { get; set; }
         public bool Randomize { get; set; }
 
         public TerrainMode TerrainMode { get; set; }
-        public TerrainMouseMode TerrainMouseMode { get; set; }
-
-        public double Radius { get; set; }
 
         public EventHandler TilesetNumChanged = delegate {};
 
@@ -82,7 +76,7 @@ namespace SharpFlame.UiOptions
 
         public Textures()
         {
-            Radius = 2;
+            Brush = new clsBrush(0.0D, ShapeType.Circle);
             SetTexture = true;
             SetOrientation = true;
             Randomize = false;

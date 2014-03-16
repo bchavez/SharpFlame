@@ -93,7 +93,7 @@ namespace SharpFlame.Gui.Sections
 
 
             layout.BeginVertical();
-            this.nudRadius = new NumericUpDown {Size = new Size(-1, -1), MinValue = 0, MaxValue = 512};
+            this.nudRadius = new NumericUpDown {Size = new Size(-1, -1), MinValue = 0, MaxValue = 512, Value = uiOptions.Textures.Brush.Radius};
             this.btnCircular = new Button {Text = "Circular", Enabled = false};
             this.btnSquare = new Button {Text = "Square"};
 
@@ -211,17 +211,23 @@ namespace SharpFlame.Gui.Sections
 
             // Circular / Square Button
             btnCircular.Click += (sender, e) =>
-                {
-                    btnCircular.Enabled = false;
-                    btnSquare.Enabled = true;
-                    texturesOptions.TerrainMouseMode = TerrainMouseMode.Circular;
-                };
+            {
+                btnCircular.Enabled = false;
+                btnSquare.Enabled = true;
+
+                texturesOptions.Brush.Shape = ShapeType.Circle;
+            };
             btnSquare.Click += (sender, e) =>
-                {
-                    btnSquare.Enabled = false;
-                    btnCircular.Enabled = true;
-                    texturesOptions.TerrainMouseMode = TerrainMouseMode.Square;
-                };
+            {
+                btnSquare.Enabled = false;
+                btnCircular.Enabled = true;
+                texturesOptions.Brush.Shape = ShapeType.Square;
+            };
+
+            nudRadius.ValueChanged += delegate
+            {
+                texturesOptions.Brush.Radius = nudRadius.Value;
+            };
 
             // Orientation buttons
             btnRotateClockwise.MouseDown += delegate
@@ -252,9 +258,6 @@ namespace SharpFlame.Gui.Sections
                 {
                     texturesOptions.TerrainMode = (TerrainMode)rblTerrainModifier.SelectedIndex;
                 };
-
-            // NumericUpDown radius
-            nudRadius.Bind(r => r.Value, texturesOptions, t => t.Radius);
 
             // Read Tileset Combobox
             App.Tilesets.CollectionChanged += (sender, e) =>
