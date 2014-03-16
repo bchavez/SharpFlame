@@ -30,6 +30,7 @@ using Eto.Drawing;
 using Eto.Forms;
 using Ninject.Extensions.Logging;
 using SharpFlame;
+using SharpFlame.Core;
 using SharpFlame.UiOptions;
 
 namespace SharpFlame.Gui.Sections
@@ -47,6 +48,9 @@ namespace SharpFlame.Gui.Sections
         private readonly RadioButton rbCliffTriangle;
         private readonly RadioButton rbCliffBrush;
         private readonly RadioButton rbCliffRemove;
+
+        private NumericUpDown nudTerrainBrushRadius;
+        private NumericUpDown nudCliffBrushRadius;
 
         public TerrainTab (ILoggerFactory logFactory, Options argUiOptions)
 		{
@@ -110,6 +114,17 @@ namespace SharpFlame.Gui.Sections
             // Set Mousetool, when we are shown.
             Shown += delegate {
                 SetMouseMode();
+            };
+
+            var terrainOptions = uiOptions.Terrain;
+            nudTerrainBrushRadius.ValueChanged += delegate
+            {
+                terrainOptions.Brush.Radius = nudTerrainBrushRadius.Value;
+            };
+
+            nudCliffBrushRadius.ValueChanged += delegate
+            {
+                terrainOptions.CliffBrush.Radius = nudCliffBrushRadius.Value;
             };
         }
 
@@ -179,18 +194,26 @@ namespace SharpFlame.Gui.Sections
 			circularButton.Click += (sender, e) => { 
 				circularButton.Enabled = false;
 				squareButton.Enabled = true;
+                uiOptions.Terrain.CliffBrush.Shape = ShapeType.Circle;
 			};
 			squareButton.Click += (sender, e) => { 
 				squareButton.Enabled = false;
 				circularButton.Enabled = true;
+                uiOptions.Terrain.CliffBrush.Shape = ShapeType.Square;
 			};
 
 			var nLayout5 = new DynamicLayout ();
 			nLayout5.AddRow (new Label { Text = "Radius:", VerticalAlign = VerticalAlign.Middle },
-							new NumericUpDown { Size = new Size(-1, -1), Value = 2, MaxValue = 512, MinValue = 1 }, 
-						    circularButton, 
-							squareButton,
-							null);
+                nudCliffBrushRadius = new NumericUpDown { 
+                    Size = new Size(-1, -1), 
+                    Value = uiOptions.Terrain.CliffBrush.Radius, 
+                    MaxValue = Constants.MapMaxSize, 
+                    MinValue = 1 
+                }, 
+			    circularButton, 
+				squareButton,
+				null
+            );
 
 			mainLayout.AddRow (nLayout5, null);
 
@@ -233,19 +256,27 @@ namespace SharpFlame.Gui.Sections
             circularButton.Click += (sender, e) => { 
                 circularButton.Enabled = false;
                 squareButton.Enabled = true;
+                uiOptions.Terrain.Brush.Shape = ShapeType.Circle;
             };
             squareButton.Click += (sender, e) => { 
                 squareButton.Enabled = false;
                 circularButton.Enabled = true;
+                uiOptions.Terrain.Brush.Shape = ShapeType.Square;
             };
 
             var mainLayout = new DynamicLayout ();
             mainLayout.BeginVertical();
             mainLayout.AddRow (new Label { Text = "Radius:", VerticalAlign = VerticalAlign.Middle }, 
-            				new NumericUpDown { Size = new Size(-1, -1), Value = 2, MaxValue = 512, MinValue = 1 }, 
-            				circularButton, 
-            				squareButton,
-            				null);
+                nudTerrainBrushRadius = new NumericUpDown { 
+                    Size = new Size(-1, -1), 
+                    Value = uiOptions.Terrain.Brush.Radius,
+                    MaxValue = Constants.MapMaxSize, 
+                    MinValue = 1 
+                }, 
+				circularButton, 
+				squareButton,
+				null
+            );
             mainLayout.EndVertical ();
 
             var gdLayout2 = new DynamicLayout { Padding = Padding.Empty, Spacing = Size.Empty };

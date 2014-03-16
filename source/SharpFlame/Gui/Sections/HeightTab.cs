@@ -36,6 +36,8 @@ namespace SharpFlame.Gui.Sections
 	{
         private readonly Options uiOptions;
 
+        private readonly NumericUpDown nudBrushRadius;
+
         public HeightTab (Options argUiOptions)
 		{
             uiOptions = argUiOptions;
@@ -51,17 +53,26 @@ namespace SharpFlame.Gui.Sections
 			circularButton.Click += (sender, e) => { 
 				circularButton.Enabled = false;
 				squareButton.Enabled = true;
+                uiOptions.Height.Brush.Shape = ShapeType.Circle;
 			};
 			squareButton.Click += (sender, e) => { 
 				squareButton.Enabled = false;
 				circularButton.Enabled = true;
+                uiOptions.Height.Brush.Shape = ShapeType.Square;
 			};
 
 			var nLayout1 = new DynamicLayout { Padding = Padding.Empty };
-			nLayout1.AddRow (new Label { Text = "Radius:", VerticalAlign = VerticalAlign.Middle },
-							 new NumericUpDown { Size = new Size(-1, -1), Value = 2, MaxValue = Constants.MapMaxSize, MinValue = 1 }, 
-							 circularButton, 
-							 squareButton);
+			nLayout1.AddRow (
+                new Label { Text = "Radius:", VerticalAlign = VerticalAlign.Middle },
+                nudBrushRadius = new NumericUpDown { 
+                    Size = new Size(-1, -1), 
+                    Value = uiOptions.Height.Brush.Radius, 
+                    MaxValue = Constants.MapMaxSize, 
+                    MinValue = 1
+                }, 
+                circularButton, 
+                squareButton
+            );
 			mainLayout.AddRow (nLayout1);
 
 			var nLayout2 = new DynamicLayout { Padding = Padding.Empty };
@@ -281,6 +292,11 @@ namespace SharpFlame.Gui.Sections
             // Set Mousetool, when we are shown.
             Shown += delegate {
                 uiOptions.MouseTool = MouseTool.ObjectSelect;
+            };
+
+            nudBrushRadius.ValueChanged += delegate
+            {
+                uiOptions.Height.Brush.Radius = nudBrushRadius.Value;
             };
         }
 	}

@@ -36,6 +36,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core.Domain;
 using SharpFlame.Infrastructure;
 using SharpFlame;
+using SharpFlame.Core;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Settings;
@@ -93,7 +94,12 @@ namespace SharpFlame.Gui.Sections
 
 
             layout.BeginVertical();
-            this.nudRadius = new NumericUpDown {Size = new Size(-1, -1), MinValue = 0, MaxValue = 512, Value = uiOptions.Textures.Brush.Radius};
+            this.nudRadius = new NumericUpDown {
+                Size = new Size(-1, -1), 
+                MinValue = 0, 
+                MaxValue = Constants.MapMaxSize, 
+                Value = uiOptions.Textures.Brush.Radius
+            };
             this.btnCircular = new Button {Text = "Circular", Enabled = false};
             this.btnSquare = new Button {Text = "Square"};
 

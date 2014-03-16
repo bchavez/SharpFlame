@@ -677,15 +677,15 @@ namespace SharpFlame.Mapping
                 }
                 else if (uiOptions.MouseTool == MouseTool.CliffBrush)
                 {
-                    toolBrush = App.CliffBrush;
+                    toolBrush = uiOptions.Terrain.CliffBrush;
                 }
                 else if (uiOptions.MouseTool == MouseTool.CliffRemove)
                 {
-                    toolBrush = App.CliffBrush;
+                    toolBrush = uiOptions.Terrain.CliffBrush;
                 }
                 else if (uiOptions.MouseTool == MouseTool.RoadRemove)
                 {
-                    toolBrush = App.CliffBrush;
+                    toolBrush = uiOptions.Terrain.CliffBrush;
                 }
                 else
                 {
@@ -726,19 +726,19 @@ namespace SharpFlame.Mapping
 
                 if (uiOptions.MouseTool == MouseTool.TerrainBrush)
                 {
-                    toolBrush = App.TerrainBrush;
+                    toolBrush = uiOptions.Terrain.Brush;
                 }
                 else if (uiOptions.MouseTool == MouseTool.HeightSetBrush)
                 {
-                    toolBrush = App.HeightBrush;
+                    toolBrush = uiOptions.Height.Brush;
                 }
                 else if (uiOptions.MouseTool == MouseTool.HeightChangeBrush)
                 {
-                    toolBrush = App.HeightBrush;
+                    toolBrush = uiOptions.Height.Brush;
                 }
                 else if (uiOptions.MouseTool == MouseTool.HeightSmoothBrush)
                 {
-                    toolBrush = App.HeightBrush;
+                    toolBrush = uiOptions.Height.Brush;
                 }
                 else
                 {

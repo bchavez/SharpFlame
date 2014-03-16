@@ -595,7 +595,7 @@ namespace SharpFlame
                 {
                     Map = Map, VertexTerrain = App.SelectedTerrain
                 };
-            App.TerrainBrush.PerformActionMapVertices(applyVertexTerrain, mouseOverTerrain.Vertex);
+            uiOptions.Terrain.Brush.PerformActionMapVertices(applyVertexTerrain, mouseOverTerrain.Vertex);
 
             Map.Update();
 
@@ -1131,7 +1131,7 @@ namespace SharpFlame
             }
             applyCliff.Angle = MathUtil.ClampDbl(angle * MathUtil.RadOf1Deg, 0.0D, MathUtil.RadOf90Deg);
             applyCliff.SetTris = Program.frmMainInstance.cbxCliffTris.Checked;
-            App.CliffBrush.PerformActionMapTiles(applyCliff, mouseOverTerrain.Tile);
+            uiOptions.Terrain.CliffBrush.PerformActionMapTiles(applyCliff, mouseOverTerrain.Tile);
 
             Map.Update();
 
@@ -1148,7 +1148,7 @@ namespace SharpFlame
             }
 
             var applyCliffRemove = new clsApplyCliffRemove {Map = Map};
-            App.CliffBrush.PerformActionMapTiles(applyCliffRemove, mouseOverTerrain.Tile);
+            uiOptions.Terrain.CliffBrush.PerformActionMapTiles(applyCliffRemove, mouseOverTerrain.Tile);
 
             Map.Update();
 
@@ -1165,7 +1165,7 @@ namespace SharpFlame
             }
 
             var applyRoadRemove = new clsApplyRoadRemove {Map = Map};
-            App.CliffBrush.PerformActionMapTiles(applyRoadRemove, mouseOverTerrain.Tile);
+            uiOptions.Terrain.CliffBrush.PerformActionMapTiles(applyRoadRemove, mouseOverTerrain.Tile);
 
             Map.Update();
 
@@ -1279,8 +1279,8 @@ namespace SharpFlame
             var applyHeightSmoothing = new clsApplyHeightSmoothing();
             applyHeightSmoothing.Map = Map;
             applyHeightSmoothing.Ratio = ratio;
-            var radius = (int)(Math.Ceiling(App.HeightBrush.Radius));
-            var posNum = App.HeightBrush.GetPosNum(mouseOverTerrain.Vertex);
+            var radius = (int)(Math.Ceiling(uiOptions.Height.Brush.Radius));
+            var posNum = uiOptions.Height.Brush.GetPosNum(mouseOverTerrain.Vertex);
             applyHeightSmoothing.Offset.X = MathUtil.ClampInt(posNum.X - radius, 0, Map.Terrain.TileSize.X);
             applyHeightSmoothing.Offset.Y = MathUtil.ClampInt(posNum.Y - radius, 0, Map.Terrain.TileSize.Y);
             var posEnd = new XYInt
@@ -1291,7 +1291,7 @@ namespace SharpFlame
             applyHeightSmoothing.AreaTileSize.X = posEnd.X - applyHeightSmoothing.Offset.X;
             applyHeightSmoothing.AreaTileSize.Y = posEnd.Y - applyHeightSmoothing.Offset.Y;
             applyHeightSmoothing.Start();
-            App.HeightBrush.PerformActionMapVertices(applyHeightSmoothing, mouseOverTerrain.Vertex);
+            uiOptions.Height.Brush.PerformActionMapVertices(applyHeightSmoothing, mouseOverTerrain.Vertex);
             applyHeightSmoothing.Finish();
 
             Map.Update();
@@ -1312,7 +1312,7 @@ namespace SharpFlame
             applyHeightChange.Map = Map;
             applyHeightChange.Rate = rate;
             applyHeightChange.UseEffect = Program.frmMainInstance.cbxHeightChangeFade.Checked;
-            App.HeightBrush.PerformActionMapVertices(applyHeightChange, mouseOverTerrain.Vertex);
+            uiOptions.Height.Brush.PerformActionMapVertices(applyHeightChange, mouseOverTerrain.Vertex);
 
             Map.Update();
 
@@ -1509,7 +1509,7 @@ namespace SharpFlame
                         }
                         else if (uiOptions.MouseTool == MouseTool.HeightSetBrush)
                         {
-                            applyHeightSet(App.HeightBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
+                            applyHeightSet(uiOptions.Height.Brush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
                         }
                         else if (uiOptions.MouseTool == MouseTool.TextureBrush)
                         {
@@ -1542,7 +1542,7 @@ namespace SharpFlame
                         {
                             if ( MouseLeftDown == null )
                             {
-                                applyHeightSet(App.HeightBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetR.SelectedIndex]);
+                                applyHeightSet(uiOptions.Height.Brush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetR.SelectedIndex]);
                             }
                         }
                         else if (uiOptions.MouseTool == MouseTool.CliffTriangle)
@@ -1731,7 +1731,7 @@ namespace SharpFlame
                                     applyTerrain();
                                     if ( Program.frmMainInstance.cbxAutoTexSetHeight.Checked )
                                     {
-                                        applyHeightSet(App.TerrainBrush,
+                                        applyHeightSet(uiOptions.Terrain.Brush,
                                             Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
                                     }
                                 }
@@ -1745,7 +1745,7 @@ namespace SharpFlame
                             }
                             else
                             {
-                                applyHeightSet(App.HeightBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
+                                applyHeightSet(uiOptions.Height.Brush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetL.SelectedIndex]);
                             }
                         }
                         else if (uiOptions.MouseTool == MouseTool.TextureBrush)
@@ -1901,7 +1901,7 @@ namespace SharpFlame
                     }
                     else
                     {
-                        applyHeightSet(App.HeightBrush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetR.SelectedIndex]);
+                        applyHeightSet(uiOptions.Height.Brush, Program.frmMainInstance.HeightSetPalette[Program.frmMainInstance.tabHeightSetR.SelectedIndex]);
                     }
                 }
             }

@@ -440,7 +440,8 @@
     <Compile Include="Mapping\Minimap\MinimapCreator.cs" />
     <Compile Include="UiOptions\Textures.cs" />
     <Compile Include="UiOptions\Minimap.cs" />
-    <Compile Include="UiOptions\Terrain.cs" />
+    <Compile Include="UiOptions\TerrainOptions.cs" />
+    <Compile Include="UiOptions\HeightOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">
