@@ -131,6 +131,10 @@ namespace SharpFlame.Gui.Sections
             GLSurface.KeyDown += keyboardManager.HandleKeyDown;
             GLSurface.KeyUp += keyboardManager.HandleKeyUp;
 
+            GLSurface.MouseEnter += (sender, e) => 
+            {
+                GLSurface.Focus();
+            };
             GLSurface.MouseDown += viewInfo.HandleMouseDown;
             GLSurface.MouseUp += viewInfo.HandleMouseUp;
             GLSurface.MouseMove += viewInfo.HandleMouseMove;
