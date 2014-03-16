@@ -67,7 +67,13 @@ namespace SharpFlame.Gui.Sections
                     mainMap.InitializeUserInput();
                     mainMap.SectorGraphicsChanges.SetAllChanged();
                     mainMap.Update();
-                }                    
+
+                    // Change the tileset in the TexturesView.
+                    uiOptions.Textures.TilesetNum = App.Tilesets.IndexOf(mainMap.Tileset);
+                } else
+                {
+                    uiOptions.Textures.TilesetNum = -1;
+                }
 
                 DrawLater();
             }
@@ -705,7 +711,7 @@ namespace SharpFlame.Gui.Sections
                 uiOptions.MouseTool = MouseTool.ObjectSelect;
                 DrawLater();
             }
-        }            
+        }
 	}
 }
 

@@ -3,7 +3,6 @@
 using System;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Domain;
-using SharpFlame.Mapping.Tiles;
 using SharpFlame.Mapping.Tools;
 
 #endregion

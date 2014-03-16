@@ -38,6 +38,7 @@ using Ninject;
 using Ninject.Extensions.Logging;
 using OpenTK;
 using SharpFlame.Core;
+using SharpFlame.Generators;
 using SharpFlame.Gui;
 using SharpFlame.Gui.Forms;
 using SharpFlame.Infrastructure;
@@ -45,6 +46,7 @@ using SharpFlame;
 using SharpFlame.Domain.ObjData;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Maths;
+using SharpFlame.Painters;
 using SharpFlame.Settings;
 using SharpFlame.Util;
 using Size = Eto.Drawing.Size;
@@ -189,6 +191,14 @@ namespace SharpFlame
                     initializeResult.Add(App.ObjectData.LoadDirectory(path));
                 }
             }
+
+
+            DefaultGenerator.CreateGeneratorTilesets();
+
+            // Create Painters for the known tilesets.
+            PainterFactory.CreatePainterArizona();
+            PainterFactory.CreatePainterUrban();
+            PainterFactory.CreatePainterRockies();
 
             // Make the GL Font.
             MakeGlFont();

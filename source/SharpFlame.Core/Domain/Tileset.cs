@@ -16,7 +16,7 @@ namespace SharpFlame.Core.Domain
         public int GlTextureNum;
     }
 
-    public class Tileset : IListItem
+    public class Tileset : IListItem, IEquatable<Tileset>
     {      
         public SRgb BGColour = new SRgb(0.5F, 0.5F, 0.5F);
 
@@ -39,6 +39,7 @@ namespace SharpFlame.Core.Domain
         /// <value>The directory.</value>
         public string Directory { get; set; } 
 
+        #region IListItem
         /// <summary>
         /// Implements IListItem, this is for the eto GUI.
         /// </summary>
@@ -56,6 +57,13 @@ namespace SharpFlame.Core.Domain
             get { return Name; }
             set { Name = value; }
         }
+        #endregion
+
+        #region IEquatable
+        public bool Equals(Tileset other) {
+            return Name == other.Name;
+        }
+        #endregion
 
         public Tileset() {
             Tiles = new List<Tile>();

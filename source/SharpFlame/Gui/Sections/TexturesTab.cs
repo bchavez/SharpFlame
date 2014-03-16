@@ -46,6 +46,7 @@ namespace SharpFlame.Gui.Sections
     public class TextureTab : Panel
     {
         private readonly Options uiOptions;
+        private readonly MainMapView mainMapView;
 
         private CheckBox chkTexture;
         private CheckBox chkOrientation;
@@ -73,10 +74,11 @@ namespace SharpFlame.Gui.Sections
 
         private XYInt TextureCount { get; set; }
 
-        public TextureTab(IKernel kernel, Options argUiOptions)
+        public TextureTab(IKernel kernel, Options argUiOptions, MainMapView mmv)
         {
             uiOptions = argUiOptions;
-            kernel.Inject(this);
+            kernel.Inject(this); // GLSurface
+            mainMapView = mmv;
 
             this.TextureCount = new XYInt(0, 0);
 
@@ -280,12 +282,35 @@ namespace SharpFlame.Gui.Sections
                     }
                 };
 
+            uiOptions.Textures.TilesetNumChanged += delegate
+            {
+                if (cbTileset.SelectedIndex == uiOptions.Textures.TilesetNum) {
+                    return;
+                }
+
+                cbTileset.SelectedIndex = uiOptions.Textures.TilesetNum;
+            };
+
             // Bind tileset combobox.
             cbTileset.Bind(r => r.SelectedIndex, texturesOptions, t => t.TilesetNum);
             cbTileset.SelectedIndexChanged += delegate
+            {
+                if (mainMapView.MainMap != null && 
+                    mainMapView.MainMap.Tileset != App.Tilesets[texturesOptions.TilesetNum]) 
                 {
-                    DrawTexturesView();
-                };
+                    var map = mainMapView.MainMap;
+                    map.Tileset = App.Tilesets[texturesOptions.TilesetNum];
+                    map.TileType_Reset();
+
+                    map.SetPainterToDefaults();
+
+                    map.SectorGraphicsChanges.SetAllChanged();
+                    map.Update();
+
+                    mainMapView.DrawLater();
+                }
+                DrawTexturesView();
+            };
 
             chkDisplayTileTypes.CheckedChanged += delegate
                 {

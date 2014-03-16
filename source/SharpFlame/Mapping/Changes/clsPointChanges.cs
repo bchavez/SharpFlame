@@ -11,43 +11,40 @@ namespace SharpFlame.Mapping.Changes
     public class clsPointChanges
     {
         public List<XYInt> ChangedPoints = new List<XYInt>();
-        public bool[,] PointIsChanged;
 
-        public clsPointChanges(XYInt PointSize)
+        private XYInt pointSize;
+
+        public clsPointChanges(XYInt ps)
         {
-            PointIsChanged = new bool[PointSize.X, PointSize.Y];
+            pointSize = ps;
             ChangedPoints.Clear();
         }
 
         public void Changed(XYInt Num)
         {
-            if ( !PointIsChanged[Num.X, Num.Y] )
+            if(!ChangedPoints.Contains(Num))
             {
-                PointIsChanged[Num.X, Num.Y] = true;
                 ChangedPoints.Add(Num);
             }
         }
 
         public void SetAllChanged()
         {
+            ChangedPoints.Clear();
             var num = new XYInt(0, 0);
-            for ( var y = 0; y <= PointIsChanged.GetUpperBound(1); y++ )
+            for ( var y = 0; y < pointSize.Y; y++ )
             {
                 num.Y = y;
-                for ( var x = 0; x <= PointIsChanged.GetUpperBound(0); x++ )
+                for ( var x = 0; x < pointSize.X; x++ )
                 {
                     num.X = x;
-                    Changed(num);
+                    ChangedPoints.Add(num);
                 }
             }
         }
 
         public void Clear()
         {
-            foreach ( var point in ChangedPoints )
-            {
-                PointIsChanged[point.X, point.Y] = false;
-            }
             ChangedPoints.Clear();
         }
 

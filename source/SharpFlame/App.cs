@@ -137,6 +137,7 @@ namespace SharpFlame
         private static ObservableCollection<Tileset> tilesets = new ObservableCollection<Tileset>();
         public static ObservableCollection<Tileset> Tilesets { get { return tilesets; } }
 
+        // TODO: Remove these once everthing uses ninject.
         public static SettingsManager SettingsManager { get; set; }
         public static KeyboardManager KeyboardManager { get; set; }       
         public static GLSurface MapViewGlSurface { get; set; }

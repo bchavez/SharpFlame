@@ -46,7 +46,13 @@ namespace SharpFlame.Core.Domain
                 return false;
             }
 
-            return base.Equals (obj);
+            if(obj.GetType() != typeof(XYInt))
+            {
+                return false;
+            }
+
+            var b = (XYInt)obj;
+            return X == b.X && Y == b.Y;
         }
 
         public override int GetHashCode ()

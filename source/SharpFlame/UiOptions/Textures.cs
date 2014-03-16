@@ -24,6 +24,7 @@ THE SOFTWARE.
 */
  #endregion
 
+using System;
 using SharpFlame.Mapping.Tiles;
 
 namespace SharpFlame.UiOptions
@@ -54,10 +55,22 @@ namespace SharpFlame.UiOptions
 
         public double Radius { get; set; }
 
+        public EventHandler TilesetNumChanged = delegate {};
+
+        private int tilesetNum;
         /// <summary>
         /// Index of the selected Tileset
         /// </summary>
-        public int TilesetNum { get; set; }
+        public int TilesetNum { 
+            get { return tilesetNum; }
+            set { 
+                if(tilesetNum != value)
+                {
+                    tilesetNum = value;
+                    TilesetNumChanged(this, EventArgs.Empty);
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the number of the selected tile/texture.

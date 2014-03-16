@@ -757,14 +757,13 @@ namespace SharpFlame
                 return;
             }
 
-            var A = 0;
-            for ( A = 0; A <= Map.Painter.TerrainCount - 1; A++ )
+            for ( var a = 0; a < Map.Painter.TerrainCount; a++ )
             {
-                lstAutoTexture.Items.Add(Map.Painter.Terrains[A].Name);
+                lstAutoTexture.Items.Add(Map.Painter.Terrains[a].Name);
             }
-            for ( A = 0; A <= Map.Painter.RoadCount - 1; A++ )
+            for ( var a = 0; a < Map.Painter.RoadCount; a++ )
             {
-                lstAutoRoad.Items.Add(Map.Painter.Roads[A].Name);
+                lstAutoRoad.Items.Add(Map.Painter.Roads[a].Name);
             }
             lstAutoTexture.SelectedIndex = Terrain_NewSelectedIndex;
             lstAutoRoad.SelectedIndex = Road_NewSelectedIndex;

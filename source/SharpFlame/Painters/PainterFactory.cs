@@ -3,10 +3,6 @@
 using SharpFlame.Generators;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
-using SharpFlame.Generators;
-using SharpFlame.Mapping.Tiles;
-using SharpFlame.Maths;
-using SharpFlame.Util;
 using SharpFlame.Util;
 
 #endregion

@@ -50,7 +50,7 @@ namespace SharpFlame.Mapping
         public InterfaceOptions InterfaceOptions;
         public SimpleClassList<Message> Messages;
 
-        public Painter Painter = new Painter();
+        public Painter Painter;
         public PathInfo PathInfo;
         public XYInt SectorCount;
         public Sector[,] Sectors = new Sector[0, 0];
@@ -686,33 +686,18 @@ namespace SharpFlame.Mapping
                         }
                     }
                 }
-                clsDrawTile drawTile = new clsDrawTileMiddleVertex();
-                drawTile.Map = this;
-                for ( TileY = StartY; TileY <= FinishY; TileY++ )
-                {
-                    drawTile.TileY = TileY;
-                    for ( TileX = StartX; TileX <= FinishX; TileX++ )
-                    {
-                        if ( !IsBasePlate[TileX - StartX, TileY - StartY] )
-                        {
-                            drawTile.TileX = TileX;
-                            drawTile.Perform();
-                        }
-                    }
-                }
             }
-            else
+
+            // Draw Terrain
+            clsDrawTile drawTile = new clsDrawTileMiddleVertex();
+            drawTile.Map = this;
+            for ( TileY = StartY; TileY <= FinishY; TileY++ )
             {
-                clsDrawTile drawTile = new clsDrawTileMiddleVertex();
-                drawTile.Map = this;
-                for ( TileY = StartY; TileY <= FinishY; TileY++ )
+                drawTile.TileY = TileY;
+                for ( TileX = StartX; TileX <= FinishX; TileX++ )
                 {
-                    drawTile.TileY = TileY;
-                    for ( TileX = StartX; TileX <= FinishX; TileX++ )
-                    {
-                        drawTile.TileX = TileX;
-                        drawTile.Perform();
-                    }
+                    drawTile.TileX = TileX;
+                    drawTile.Perform();
                 }
             }
 
@@ -1819,7 +1804,7 @@ namespace SharpFlame.Mapping
             var UpdateSectorGraphics = new clsUpdateSectorGraphics();
             UpdateSectorGraphics.Map = this;
 
-            if ( !isMainMap )
+            if (isMainMap)
             {
                 SectorGraphicsChanges.PerformTool(UpdateSectorGraphics);
             }
@@ -2275,6 +2260,7 @@ namespace SharpFlame.Mapping
 
         public bool ClosePrompt()
         {
+            // TODO: Implement me.
 //            if ( ChangedSinceSave )
 //            {
 //                var Prompt = new frmClose(GetTitle());
