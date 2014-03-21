@@ -44,4 +44,12 @@ namespace SharpFlame.Core.Extensions
             return Path.Combine(path1, path2);
         }
     }
+
+    public static class ExtensionsForDouble
+    {
+        public static int ToInt(this double d)
+        {
+            return Convert.ToInt32(d);
+        }
+    }
 }
