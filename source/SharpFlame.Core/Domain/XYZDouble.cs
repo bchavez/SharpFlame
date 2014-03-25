@@ -1,8 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace SharpFlame.Core.Domain
 {
+    [DebuggerDisplay("X={X}, Y={Y}, Z={Z}")]
     [StructLayout(LayoutKind.Sequential)]
     public struct XYZDouble
     {

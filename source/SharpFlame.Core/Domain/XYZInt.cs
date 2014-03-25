@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using SharpFlame.Core.Extensions;
@@ -6,6 +7,7 @@ using SharpFlame.Core.Extensions;
 namespace SharpFlame.Core.Domain
 {
     [StructLayout(LayoutKind.Sequential)]
+    [DebuggerDisplay("X={X}, Y={Y}, Z={Z}")]
     public class XYZInt {
         public Int32 X;
         public Int32 Y;
