@@ -3,6 +3,7 @@
 using System;
 using System.Windows.Forms;
 using NLog;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Old.Collections;
 using SharpFlame.Old.AppSettings;
 using SharpFlame.Old.Controls;
@@ -167,8 +168,7 @@ namespace SharpFlame.Old
 
             if ( App.ViewMoveType == ViewMoveType.RTS & App.RTSOrbit )
             {
-                if ( ScreenXYGetViewPlanePosForwardDownOnly(Convert.ToInt32((MapViewControl.GLSize.X / 2.0D)), Convert.ToInt32((MapViewControl.GLSize.Y / 2.0D)), 127.5D,
-                    ref xyDbl) )
+                if ( ScreenXYGetViewPlanePosForwardDownOnly(Math.Floor(MapViewControl.GLSize.X / 2.0D).ToInt(), Math.Floor(MapViewControl.GLSize.Y / 2.0D).ToInt(), 127.5D, ref xyDbl) )
                 {
                     xyzDbl.X = xyDbl.X;
                     xyzDbl.Y = 127.5D;
@@ -466,7 +466,7 @@ namespace SharpFlame.Old
                 resultPos.Horizontal.X = Convert.ToInt32(bestPos.X);
                 resultPos.Altitude = Convert.ToInt32(bestPos.Y);
                 resultPos.Horizontal.Y = Convert.ToInt32(bestPos.Z);
-                logger.Info("ScreenPos [X {3}, Y {4}], WorldPos: X {0}, Y {1}, Z {2}", resultPos.Horizontal.X, resultPos.Horizontal.Y, resultPos.Altitude, screenPos.X, screenPos.Y);
+                //logger.Info("ScreenPos [X {3}, Y {4}], WorldPos: X {0}, Y {1}, Z {2}", resultPos.Horizontal.X, resultPos.Horizontal.Y, resultPos.Altitude, screenPos.X, screenPos.Y);
             }
             catch
             {
@@ -559,8 +559,8 @@ namespace SharpFlame.Old
                 if ( flag )
                 {
                     MouseOver.OverTerrain = mouseOverTerrain;
-                    mouseOverTerrain.Tile.Normal.X = Convert.ToInt32((double)mouseOverTerrain.Pos.Horizontal.X / Constants.TerrainGridSpacing);
-                    mouseOverTerrain.Tile.Normal.Y = Convert.ToInt32(((double)mouseOverTerrain.Pos.Horizontal.Y / Constants.TerrainGridSpacing));
+                    mouseOverTerrain.Tile.Normal.X = Math.Floor((double)mouseOverTerrain.Pos.Horizontal.X / Constants.TerrainGridSpacing).ToInt();
+                    mouseOverTerrain.Tile.Normal.Y = Math.Floor((double)mouseOverTerrain.Pos.Horizontal.Y / Constants.TerrainGridSpacing).ToInt();
                     mouseOverTerrain.Vertex.Normal.X = Convert.ToInt32(Math.Round(((double)mouseOverTerrain.Pos.Horizontal.X / Constants.TerrainGridSpacing)));
                     mouseOverTerrain.Vertex.Normal.Y = Convert.ToInt32(Math.Round(((double)mouseOverTerrain.Pos.Horizontal.Y / Constants.TerrainGridSpacing)));
                     mouseOverTerrain.Tile.Alignment = mouseOverTerrain.Vertex.Normal;
@@ -1543,8 +1543,7 @@ namespace SharpFlame.Old
                         {
                             DownPos = screenPos
                         };
-                    var pos = new XYInt(Convert.ToInt32((screenPos.X * TilesPerMinimapPixel)),
-                        Convert.ToInt32(screenPos.Y * TilesPerMinimapPixel));
+                    var pos = new XYInt(Math.Floor(screenPos.X * TilesPerMinimapPixel).ToInt(), Math.Floor(screenPos.Y * TilesPerMinimapPixel).ToInt());
                     Map.TileNumClampToMap(pos);
                     LookAtTile(pos);
                 }
