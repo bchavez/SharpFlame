@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFlame.Core", "SharpFlame.Core\SharpFlame.Core.csproj", "{8AE7F7A3-841A-44A7-B016-4661BBBF7821}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFlame.Tests.Gui", "SharpFlame.Tests.Gui\SharpFlame.Tests.Gui.csproj", "{5FDA3465-03C0-493D-9E10-97E97C289FB3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFlame.Old", "SharpFlame.Old\SharpFlame.Old.csproj", "{152475A4-3ABE-41C4-B338-A2FB7B350FAF}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FlaMEVB", "..\..\SharpFlame.old\reference\FlaMEVB\FlaMEVB.vbproj", "{59A15906-263A-4A68-AF44-6AF69F431A99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,16 @@ Global
 		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Release|Mixed Platforms.Build.0 = Release|x86
 		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Release|x86.ActiveCfg = Release|x86
 		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Release|x86.Build.0 = Release|x86
+		{59A15906-263A-4A68-AF44-6AF69F431A99}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{59A15906-263A-4A68-AF44-6AF69F431A99}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{59A15906-263A-4A68-AF44-6AF69F431A99}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{59A15906-263A-4A68-AF44-6AF69F431A99}.Debug|x86.ActiveCfg = Debug|x86
+		{59A15906-263A-4A68-AF44-6AF69F431A99}.Debug|x86.Build.0 = Debug|x86
+		{59A15906-263A-4A68-AF44-6AF69F431A99}.Release|Any CPU.ActiveCfg = Release|x86
+		{59A15906-263A-4A68-AF44-6AF69F431A99}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{59A15906-263A-4A68-AF44-6AF69F431A99}.Release|Mixed Platforms.Build.0 = Release|x86
+		{59A15906-263A-4A68-AF44-6AF69F431A99}.Release|x86.ActiveCfg = Release|x86
+		{59A15906-263A-4A68-AF44-6AF69F431A99}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

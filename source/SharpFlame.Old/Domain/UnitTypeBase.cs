@@ -2,6 +2,7 @@
 
 using System;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Old.Collections;
 using SharpFlame.Core.Collections;
 using SharpFlame.Core.Domain;
@@ -477,7 +478,7 @@ namespace SharpFlame.Old.Domain
             {
                 return result;
             }
-            result += (int)(Body.Hitpoints * Propulsion.HitPoints / 100.0D);
+            result += (Body.Hitpoints * Propulsion.HitPoints / 100.0D).ToInt();
             if ( Turret1 == null )
             {
                 return result;

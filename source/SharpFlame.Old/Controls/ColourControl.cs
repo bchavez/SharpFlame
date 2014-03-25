@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Old.Colors;
 using SharpFlame.Old.Colors;
 using SharpFlame.Core.Domain.Colors;
@@ -32,9 +33,9 @@ namespace SharpFlame.Old.Controls
             }
 
             colour = newColour;
-            var red = (int)(MathUtil.ClampDbl(colour.Red * 255.0D, 0.0D, 255.0D));
-            var green = (int)(MathUtil.ClampDbl(colour.Green * 255.0D, 0.0D, 255.0D));
-            var blue = (int)(MathUtil.ClampDbl(colour.Blue * 255.0D, 0.0D, 255.0D));
+            var red = MathUtil.ClampDbl(colour.Red * 255.0D, 0.0D, 255.0D).ToInt();
+            var green = MathUtil.ClampDbl(colour.Green * 255.0D, 0.0D, 255.0D).ToInt();
+            var blue = MathUtil.ClampDbl(colour.Blue * 255.0D, 0.0D, 255.0D).ToInt();
             colourColor = ColorTranslator.FromOle(ColorUtil.OsRgb(red, green, blue));
 
             if ( colour is Rgba )

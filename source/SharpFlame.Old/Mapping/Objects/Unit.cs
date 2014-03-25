@@ -2,6 +2,7 @@
 
 using System;
 using System.Diagnostics;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Old.Collections;
 using SharpFlame.Old.FileIO;
 using SharpFlame.Core;
@@ -104,7 +105,7 @@ namespace SharpFlame.Old.Mapping.Objects
         {
             var rotation16 = 0;
 
-            rotation16 = (int)(Rotation * Constants.IniRotationMax / 360.0D);
+            rotation16 = (Rotation * Constants.IniRotationMax / 360.0D).ToInt();
             if ( rotation16 >= Constants.IniRotationMax )
             {
                 rotation16 -= Constants.IniRotationMax;
@@ -120,7 +121,7 @@ namespace SharpFlame.Old.Mapping.Objects
 
         public string GetINIHealthPercent()
         {
-            return string.Format("{0}%", (int)(MathUtil.ClampDbl(Health * 100.0D, 1.0D, 100.0D)));
+            return string.Format("{0}%", MathUtil.ClampDbl(Health * 100.0D, 1.0D, 100.0D).ToInt());
         }
 
         public string GetPosText()

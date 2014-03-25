@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Old.FileIO;
 using SharpFlame.Core.Domain;
 using SharpFlame.Old.Graphics.OpenGL;
@@ -373,7 +374,7 @@ namespace SharpFlame.Old.Controls
             }
             else if ( e.X >= 0 & e.X < TextureCount.X * 64 & e.Y >= 0 & e.Y < TextureCount.Y * 64 )
             {
-                App.SelectedTextureNum = (int)((TextureYOffset + (int)(e.Y / 64.0D)) * TextureCount.X + (e.X / 64.0D));
+                App.SelectedTextureNum = TextureYOffset + Math.Floor(e.Y / 64.0D).ToInt() * TextureCount.X + Math.Floor(e.X / 64.0D).ToInt();
                 if ( App.SelectedTextureNum >= map.Tileset.TileCount )
                 {
                     App.SelectedTextureNum = -1;
@@ -421,8 +422,8 @@ namespace SharpFlame.Old.Controls
             if ( OpenGLControl != null )
             {
                 OpenGL_Size_Calc();
-                TextureCount.X = (int)(Math.Floor(GLSize.X / 64.0D));
-                TextureCount.Y = (int)(Math.Ceiling(GLSize.Y / 64.0D));
+                TextureCount.X = Math.Floor(GLSize.X / 64.0D).ToInt();
+                TextureCount.Y = Math.Ceiling(GLSize.Y / 64.0D).ToInt();
             }
             else
             {
@@ -463,7 +464,7 @@ namespace SharpFlame.Old.Controls
             }
             else
             {
-                TextureScroll.Maximum = (int)(Math.Ceiling(((double)map.Tileset.TileCount / TextureCount.X)));
+                TextureScroll.Maximum = Math.Ceiling((double)map.Tileset.TileCount / TextureCount.X).ToInt();
                 TextureScroll.LargeChange = TextureCount.Y;
                 TextureScroll.Enabled = true;
             }

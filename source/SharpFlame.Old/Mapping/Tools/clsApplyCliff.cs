@@ -1,6 +1,7 @@
 #region
 
 using System;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Old.Mapping.Tiles;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
@@ -41,7 +42,7 @@ namespace SharpFlame.Old.Mapping.Tools
             DifB = HeightB - HeightA;
             if ( Math.Abs(DifA) == Math.Abs(DifB) )
             {
-                RandomNum = (int)((App.Random.Next() * 4.0F));
+                RandomNum = (App.Random.Next() * 4.0F).ToInt();
                 if ( RandomNum == 0 )
                 {
                     Terrain.Tiles[PosNum.X, PosNum.Y].DownSide = TileUtil.Top;
@@ -117,11 +118,11 @@ namespace SharpFlame.Old.Mapping.Tools
 
             if ( Terrain.Tiles[PosNum.X, PosNum.Y].Tri )
             {
-                Pos.X = (int)((PosNum.X + 0.25D) * Constants.TerrainGridSpacing);
-                Pos.Y = (int)((PosNum.Y + 0.25D) * Constants.TerrainGridSpacing);
+                Pos.X = ((PosNum.X + 0.25D) * Constants.TerrainGridSpacing).ToInt();
+                Pos.Y = ((PosNum.Y + 0.25D) * Constants.TerrainGridSpacing).ToInt();
                 TriTopLeftMaxSlope = Map.GetTerrainSlopeAngle(Pos);
-                Pos.X = (int)((PosNum.X + 0.75D) * Constants.TerrainGridSpacing);
-                Pos.Y = (int)((PosNum.Y + 0.75D) * Constants.TerrainGridSpacing);
+                Pos.X = ((PosNum.X + 0.75D) * Constants.TerrainGridSpacing).ToInt();
+                Pos.Y = ((PosNum.Y + 0.75D) * Constants.TerrainGridSpacing).ToInt();
                 TriBottomRightMaxSlope = Map.GetTerrainSlopeAngle(Pos);
 
                 if ( Terrain.Tiles[PosNum.X, PosNum.Y].TriTopRightIsCliff )
@@ -160,11 +161,11 @@ namespace SharpFlame.Old.Mapping.Tools
             }
             else
             {
-                Pos.X = (int)((PosNum.X + 0.75D) * Constants.TerrainGridSpacing);
-                Pos.Y = (int)((PosNum.Y + 0.25D) * Constants.TerrainGridSpacing);
+                Pos.X = ((PosNum.X + 0.75D) * Constants.TerrainGridSpacing).ToInt();
+                Pos.Y = ((PosNum.Y + 0.25D) * Constants.TerrainGridSpacing).ToInt();
                 TriTopRightMaxSlope = Map.GetTerrainSlopeAngle(Pos);
-                Pos.X = (int)((PosNum.X + 0.25D) * Constants.TerrainGridSpacing);
-                Pos.Y = (int)((PosNum.Y + 0.75D) * Constants.TerrainGridSpacing);
+                Pos.X = ((PosNum.X + 0.25D) * Constants.TerrainGridSpacing).ToInt();
+                Pos.Y = ((PosNum.Y + 0.75D) * Constants.TerrainGridSpacing).ToInt();
                 TriBottomLeftMaxSlope = Map.GetTerrainSlopeAngle(Pos);
 
                 if ( Terrain.Tiles[PosNum.X, PosNum.Y].TriBottomRightIsCliff )

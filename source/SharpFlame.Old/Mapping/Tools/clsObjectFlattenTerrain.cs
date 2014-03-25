@@ -1,6 +1,7 @@
 #region
 
 using System;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Old.Collections;
 using SharpFlame.Old.Mapping.Objects;
 using SharpFlame.Old.Maths;
@@ -45,7 +46,7 @@ namespace SharpFlame.Old.Mapping.Tools
 
             if ( samples >= 1 )
             {
-                var average = (byte)(MathUtil.ClampInt((int)(total / samples), Byte.MinValue, Byte.MaxValue));
+                var average = (byte)(MathUtil.ClampInt((total / samples).ToInt(), Byte.MinValue, Byte.MaxValue));
                 for ( y = start.Y; y <= finish.Y + 1; y++ )
                 {
                     vertexPos.Y = y;

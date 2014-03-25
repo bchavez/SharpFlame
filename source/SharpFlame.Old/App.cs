@@ -313,7 +313,7 @@ namespace SharpFlame.Old
         public static bool SizeIsPowerOf2(int Size)
         {
             var Power = Math.Log(Size) / Math.Log(2.0D);
-            return Power == (int)Power;
+            return Power == Power.ToInt();
         }
 
         public static Result LoadTilesets(string TilesetsPath)

@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Old.Colors;
 using SharpFlame.Old.Graphics.OpenGL;
 using SharpFlame.Old.AppSettings;
@@ -652,10 +653,8 @@ namespace SharpFlame.Old.Controls
                         {
                             var centre = App.CalcUnitsCentrePos(map.SelectedUnits.GetItemsAsSimpleList());
                             var offset = new XYInt();
-                            offset.X = ((int)(Math.Round(Convert.ToDouble((mouseOverTerrain.Pos.Horizontal.X - centre.X) / Constants.TerrainGridSpacing)))) *
-                                       Constants.TerrainGridSpacing;
-                            offset.Y = ((int)(Math.Round(Convert.ToDouble((mouseOverTerrain.Pos.Horizontal.Y - centre.Y) / Constants.TerrainGridSpacing)))) *
-                                       Constants.TerrainGridSpacing;
+                            offset.X = Math.Round(Convert.ToDouble((mouseOverTerrain.Pos.Horizontal.X - centre.X) / Constants.TerrainGridSpacing)).ToInt() * Constants.TerrainGridSpacing;
+                            offset.Y = Math.Round(Convert.ToDouble((mouseOverTerrain.Pos.Horizontal.Y - centre.Y) / Constants.TerrainGridSpacing)).ToInt() * Constants.TerrainGridSpacing;
                             var objectPosOffset = new clsObjectPosOffset
                                 {
                                     Map = map,
@@ -943,9 +942,8 @@ namespace SharpFlame.Old.Controls
 
             var move = new XYZInt(0, 0, 0);
             var xyzDbl = default(XYZDouble);
-            var a = 0;
 
-            for ( a = 0; a <= (int)(Math.Abs(e.Delta / 120.0D)); a++ )
+            for ( var a = 0; a <= Math.Abs(e.Delta / 120.0D).ToInt(); a++ )
             {
                 Matrix3DMath.VectorForwardsRotationByMatrix(map.ViewInfo.ViewAngleMatrix,
                     Convert.ToDouble(Math.Sign(e.Delta) * Math.Max(map.ViewInfo.ViewPos.Y, 512.0D) / 24.0D), ref xyzDbl);

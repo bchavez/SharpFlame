@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using NLog;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Old.Bitmaps;
 using SharpFlame.Old.Colors;
 using SharpFlame.Core;
@@ -36,10 +37,12 @@ namespace SharpFlame.Old.Mapping.IO.Minimap
                 for ( var x = 0; x <= map.Terrain.TileSize.X - 1; x++ )
                 {
                     minimapBitmap.SetPixel(x, y,
-                                           ColorTranslator.FromOle(
-                        ColorUtil.OsRgb((int)(MathUtil.ClampSng(Convert.ToSingle(texture.get_Pixels(x, y).Red * 255.0F), 0.0F, 255.0F)),
-                                    (int)(MathUtil.ClampSng(Convert.ToSingle(texture.get_Pixels(x, y).Green * 255.0F), 0.0F, 255.0F)),
-                                    (int)(MathUtil.ClampSng(Convert.ToSingle(texture.get_Pixels(x, y).Blue * 255.0F), 0.0F, 255.0F)))));
+                        ColorTranslator.FromOle(
+                            ColorUtil.OsRgb(
+                                MathUtil.ClampSng(Convert.ToSingle(texture.get_Pixels(x, y).Red * 255.0F), 0.0F, 255.0F).ToInt(),
+                                (MathUtil.ClampSng(Convert.ToSingle(texture.get_Pixels(x, y).Green * 255.0F), 0.0F, 255.0F)).ToInt(),
+                                (MathUtil.ClampSng(Convert.ToSingle(texture.get_Pixels(x, y).Blue * 255.0F), 0.0F, 255.0F)).ToInt()
+                                )));
                 }
             }
 

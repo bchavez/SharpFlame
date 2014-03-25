@@ -6,6 +6,7 @@ using System.IO;
 using System.Windows.Forms;
 using NLog;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Old.AppSettings;
 using SharpFlame.Core;
 using SharpFlame.Core.Collections;
@@ -157,8 +158,8 @@ namespace SharpFlame.Old.Mapping
                 }
             }
 
-            SectorCount.X = (int)(Math.Ceiling(((double)area.X / Constants.SectorTileSize)));
-            SectorCount.Y = (int)(Math.Ceiling(((double)area.Y / Constants.SectorTileSize)));
+            SectorCount.X = Math.Ceiling((double)area.X / Constants.SectorTileSize).ToInt();
+            SectorCount.Y = Math.Ceiling((double)area.Y / Constants.SectorTileSize).ToInt();
             Sectors = new Sector[SectorCount.X, SectorCount.Y];
             for ( index1 = 0; index1 <= SectorCount.Y - 1; index1++ )
             {
@@ -234,8 +235,8 @@ namespace SharpFlame.Old.Mapping
             var index1 = 0;
 
             Terrain = new clsTerrain(tileSize);
-            SectorCount.X = (int)(Math.Ceiling(((double)Terrain.TileSize.X / Constants.SectorTileSize)));
-            SectorCount.Y = (int)(Math.Ceiling(((double)Terrain.TileSize.Y / Constants.SectorTileSize)));
+            SectorCount.X = Math.Ceiling((double)Terrain.TileSize.X / Constants.SectorTileSize).ToInt();
+            SectorCount.Y = Math.Ceiling((double)Terrain.TileSize.Y / Constants.SectorTileSize).ToInt();
             Sectors = new Sector[SectorCount.X, SectorCount.Y];
             for ( index1 = 0; index1 <= SectorCount.Y - 1; index1++ )
             {
@@ -1083,10 +1084,8 @@ namespace SharpFlame.Old.Mapping
 
         private void MinimapMake()
         {
-            var newTextureSize =
-                (int)
-                    (Math.Round(
-                        Convert.ToDouble(Math.Pow(2.0D, Math.Ceiling(Math.Log(Math.Max(Terrain.TileSize.X, Terrain.TileSize.Y)) / Math.Log(2.0D))))));
+            var newTextureSize = Math.Round(Math.Pow(2.0d, Math.Ceiling(Math.Log(Math.Max(Terrain.TileSize.X, Terrain.TileSize.Y)) / Math.Log(2.0d))))
+                .ToInt();
 
             if ( newTextureSize != MinimapTextureSize )
             {
@@ -1145,9 +1144,9 @@ namespace SharpFlame.Old.Mapping
         {
             var Result = new WorldPos();
 
-            Result.Horizontal.X = (int)((TileNum.X + Footprint.X / 2.0D) * Constants.TerrainGridSpacing);
-            Result.Horizontal.Y = (int)((TileNum.Y + Footprint.Y / 2.0D) * Constants.TerrainGridSpacing);
-            Result.Altitude = (int)(GetTerrainHeight(Result.Horizontal));
+            Result.Horizontal.X = ((TileNum.X + Footprint.X / 2.0D) * Constants.TerrainGridSpacing).ToInt();
+            Result.Horizontal.Y = ((TileNum.Y + Footprint.Y / 2.0D) * Constants.TerrainGridSpacing).ToInt();
+            Result.Altitude = (GetTerrainHeight(Result.Horizontal)).ToInt();
 
             return Result;
         }
@@ -1156,15 +1155,11 @@ namespace SharpFlame.Old.Mapping
         {
             var Result = new WorldPos();
 
-            Result.Horizontal.X =
-                (int)
-                    ((Math.Round(Convert.ToDouble((Horizontal.X - Footprint.X * Constants.TerrainGridSpacing / 2.0D) / Constants.TerrainGridSpacing)) +
-                      Footprint.X / 2.0D) * Constants.TerrainGridSpacing);
-            Result.Horizontal.Y =
-                (int)
-                    ((Math.Round(Convert.ToDouble((Horizontal.Y - Footprint.Y * Constants.TerrainGridSpacing / 2.0D) / Constants.TerrainGridSpacing)) +
-                      Footprint.Y / 2.0D) * Constants.TerrainGridSpacing);
-            Result.Altitude = (int)(GetTerrainHeight(Result.Horizontal));
+            Result.Horizontal.X = ((Math.Round(Convert.ToDouble((Horizontal.X - Footprint.X * Constants.TerrainGridSpacing / 2.0D) / Constants.TerrainGridSpacing)) +
+                      Footprint.X / 2.0D) * Constants.TerrainGridSpacing).ToInt();
+            Result.Horizontal.Y = ((Math.Round(Convert.ToDouble((Horizontal.Y - Footprint.Y * Constants.TerrainGridSpacing / 2.0D) / Constants.TerrainGridSpacing)) +
+                      Footprint.Y / 2.0D) * Constants.TerrainGridSpacing).ToInt();
+            Result.Altitude = GetTerrainHeight(Result.Horizontal).ToInt();
 
             return Result;
         }
@@ -1877,7 +1872,7 @@ namespace SharpFlame.Old.Mapping
             RotatedOffset = TileUtil.GetTileRotatedOffset(Terrain.Tiles[Tile.X, Tile.Y].Texture.Orientation, TileOffsetToRotate);
             Result.Horizontal.X = Tile.X * Constants.TerrainGridSpacing + RotatedOffset.X;
             Result.Horizontal.Y = Tile.Y * Constants.TerrainGridSpacing + RotatedOffset.Y;
-            Result.Altitude = (int)(GetTerrainHeight(Result.Horizontal));
+            Result.Altitude = GetTerrainHeight(Result.Horizontal).ToInt();
 
             return Result;
         }
@@ -1924,8 +1919,8 @@ namespace SharpFlame.Old.Mapping
         {
             var Result = new XYInt();
 
-            Result.X = (int)(Math.Round(((double)Horizontal.X / Constants.TerrainGridSpacing)));
-            Result.Y = (int)(Math.Round(((double)Horizontal.Y / Constants.TerrainGridSpacing)));
+            Result.X = Math.Round((double)Horizontal.X / Constants.TerrainGridSpacing).ToInt();
+            Result.Y = Math.Round((double)Horizontal.Y / Constants.TerrainGridSpacing).ToInt();
 
             return Result;
         }
@@ -2042,8 +2037,8 @@ namespace SharpFlame.Old.Mapping
             var X = 0;
             var Y = 0;
 
-            SectorCount.X = (int)(Math.Ceiling(((double)Terrain.TileSize.X / Constants.SectorTileSize)));
-            SectorCount.Y = (int)(Math.Ceiling(((double)Terrain.TileSize.Y / Constants.SectorTileSize)));
+            SectorCount.X = Math.Ceiling((double)Terrain.TileSize.X / Constants.SectorTileSize).ToInt();
+            SectorCount.Y = Math.Ceiling((double)Terrain.TileSize.Y / Constants.SectorTileSize).ToInt();
             Sectors = new Sector[SectorCount.X, SectorCount.Y];
             for ( Y = 0; Y <= SectorCount.Y - 1; Y++ )
             {

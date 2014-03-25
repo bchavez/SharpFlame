@@ -1,6 +1,7 @@
 #region
 
 using System;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Old.Collections.Specialized;
 using SharpFlame.Old.Collections.Specialized;
 using SharpFlame.Core;
@@ -157,11 +158,9 @@ namespace SharpFlame.Old.Mapping
                 Unit.Sectors.Clear();
                 if ( ObjectRotateMode == Util.ObjectRotateMode.All )
                 {
-                    Unit.Rotation =
-                        (int)
-                            (MathUtil.AngleClamp(MathUtil.RadOf360Deg -
-                                                 TileUtil.GetRotatedAngle(Orientation,
-                                                     MathUtil.AngleClamp(MathUtil.RadOf360Deg - Unit.Rotation * MathUtil.RadOf1Deg))) / MathUtil.RadOf1Deg);
+                    Unit.Rotation = (MathUtil.AngleClamp(MathUtil.RadOf360Deg -
+                                                         TileUtil.GetRotatedAngle(Orientation,
+                                                             MathUtil.AngleClamp(MathUtil.RadOf360Deg - Unit.Rotation * MathUtil.RadOf1Deg))) / MathUtil.RadOf1Deg).ToInt();
                     if ( Unit.Rotation < 0 )
                     {
                         Unit.Rotation += 360;
@@ -173,11 +172,11 @@ namespace SharpFlame.Old.Mapping
                     {
                         if ( ((StructureTypeBase)Unit.TypeBase).StructureType == StructureType.Wall )
                         {
-                            Unit.Rotation =
-                                (int)
-                                    (MathUtil.AngleClamp(MathUtil.RadOf360Deg -
-                                                         TileUtil.GetRotatedAngle(Orientation,
-                                                             MathUtil.AngleClamp(MathUtil.RadOf360Deg - Unit.Rotation * MathUtil.RadOf1Deg))) / MathUtil.RadOf1Deg);
+                            Unit.Rotation = (MathUtil.AngleClamp(MathUtil.RadOf360Deg -
+                                                                 TileUtil.GetRotatedAngle(Orientation,
+                                                                     MathUtil.AngleClamp(MathUtil.RadOf360Deg - Unit.Rotation * MathUtil.RadOf1Deg))) / MathUtil.RadOf1Deg)
+                                .ToInt();
+
                             if ( Unit.Rotation < 0 )
                             {
                                 Unit.Rotation += 360;
@@ -388,7 +387,7 @@ namespace SharpFlame.Old.Mapping
                 {
                     hmB.GenerateNewOfSize(Terrain.TileSize.Y, Terrain.TileSize.X, Convert.ToSingle(Args.Layers[A].TerrainmapScale), 1.0D);
                     hmC.Rescale(hmB, 0.0D, 1.0D);
-                    Args.Layers[A].Terrainmap.Convert_Heightmap(hmC, (int)((1.0F - Args.Layers[A].TerrainmapDensity) / hmC.HeightScale));
+                    Args.Layers[A].Terrainmap.Convert_Heightmap(hmC, ((1.0F - Args.Layers[A].TerrainmapDensity) / hmC.HeightScale).ToLong());
                 }
             }
 
@@ -403,32 +402,32 @@ namespace SharpFlame.Old.Mapping
                     //get slope
                     BestSlope = 0.0D;
 
-                    Pos.X = (int)((X + 0.25D) * Constants.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.25D) * Constants.TerrainGridSpacing);
+                    Pos.X = ((X + 0.25D) * Constants.TerrainGridSpacing).ToInt();
+                    Pos.Y = ((Y + 0.25D) * Constants.TerrainGridSpacing).ToInt();
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
                         BestSlope = CurrentSlope;
                     }
 
-                    Pos.X = (int)((X + 0.75D) * Constants.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.25D) * Constants.TerrainGridSpacing);
+                    Pos.X = ((X + 0.75D) * Constants.TerrainGridSpacing).ToInt();
+                    Pos.Y = ((Y + 0.25D) * Constants.TerrainGridSpacing).ToInt();
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
                         BestSlope = CurrentSlope;
                     }
 
-                    Pos.X = (int)((X + 0.25D) * Constants.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.75D) * Constants.TerrainGridSpacing);
+                    Pos.X = ((X + 0.25D) * Constants.TerrainGridSpacing).ToInt();
+                    Pos.Y = ((Y + 0.75D) * Constants.TerrainGridSpacing).ToInt();
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
                         BestSlope = CurrentSlope;
                     }
 
-                    Pos.X = (int)((X + 0.75D) * Constants.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.75D) * Constants.TerrainGridSpacing);
+                    Pos.X = ((X + 0.75D) * Constants.TerrainGridSpacing).ToInt();
+                    Pos.Y = ((Y + 0.75D) * Constants.TerrainGridSpacing).ToInt();
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
@@ -595,32 +594,32 @@ namespace SharpFlame.Old.Mapping
                     //get slope
                     BestSlope = 0.0D;
 
-                    Pos.X = (int)((X + 0.25D) * Constants.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.25D) * Constants.TerrainGridSpacing);
+                    Pos.X = ((X + 0.25D) * Constants.TerrainGridSpacing).ToInt();
+                    Pos.Y = ((Y + 0.25D) * Constants.TerrainGridSpacing).ToInt();
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
                         BestSlope = CurrentSlope;
                     }
 
-                    Pos.X = (int)((X + 0.75D) * Constants.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.25D) * Constants.TerrainGridSpacing);
+                    Pos.X = ((X + 0.75D) * Constants.TerrainGridSpacing).ToInt();
+                    Pos.Y = ((Y + 0.25D) * Constants.TerrainGridSpacing).ToInt();
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
                         BestSlope = CurrentSlope;
                     }
 
-                    Pos.X = (int)((X + 0.25D) * Constants.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.75D) * Constants.TerrainGridSpacing);
+                    Pos.X = ((X + 0.25D) * Constants.TerrainGridSpacing).ToInt();
+                    Pos.Y = ((Y + 0.75D) * Constants.TerrainGridSpacing).ToInt();
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
                         BestSlope = CurrentSlope;
                     }
 
-                    Pos.X = (int)((X + 0.75D) * Constants.TerrainGridSpacing);
-                    Pos.Y = (int)((Y + 0.75D) * Constants.TerrainGridSpacing);
+                    Pos.X = ((X + 0.75D) * Constants.TerrainGridSpacing).ToInt();
+                    Pos.Y = ((Y + 0.75D) * Constants.TerrainGridSpacing).ToInt();
                     CurrentSlope = GetTerrainSlopeAngle(Pos);
                     if ( CurrentSlope > BestSlope )
                     {
@@ -758,7 +757,7 @@ namespace SharpFlame.Old.Mapping
             hmB.GenerateNewOfSize(Terrain.TileSize.Y + 1, Terrain.TileSize.X + 1, Scale, 1.0D);
             hmC.Rescale(hmB, 0.0D, 1.0D);
             ReturnResult = new BooleanMap();
-            ReturnResult.Convert_Heightmap(hmC, (int)((1.0D - Density) / hmC.HeightScale));
+            ReturnResult.Convert_Heightmap(hmC, ((1.0D - Density) / hmC.HeightScale).ToLong());
             return ReturnResult;
         }
 

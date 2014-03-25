@@ -494,7 +494,7 @@ namespace SharpFlame.Old.Mapping.IO.FMap
                     {
                         value = file.ReadByte();
 
-                        partValue = (int)(Math.Floor(((double)value / 16)));
+                        partValue = Math.Floor(((double)value / 16)).ToInt();
                         if ( partValue > 0 )
                         {
                             if ( warningCount < 16 )
@@ -505,15 +505,15 @@ namespace SharpFlame.Old.Mapping.IO.FMap
                         }
                         value -= partValue * 16;
 
-                        partValue = (int)(value / 8.0D);
+                        partValue = Math.Floor(value / 8.0D).ToInt();
                         map.Terrain.Tiles[x, y].Texture.Orientation.SwitchedAxes = partValue > 0;
                         value -= partValue * 8;
 
-                        partValue = (int)(value / 4.0D);
+                        partValue = Math.Floor(value / 4.0D).ToInt();
                         map.Terrain.Tiles[x, y].Texture.Orientation.ResultXFlip = partValue > 0;
                         value -= partValue * 4;
 
-                        partValue = (int)(value / 2.0D);
+                        partValue = Math.Floor(value / 2.0D).ToInt();
                         map.Terrain.Tiles[x, y].Texture.Orientation.ResultYFlip = partValue > 0;
                         value -= partValue * 2;
 
@@ -561,7 +561,7 @@ namespace SharpFlame.Old.Mapping.IO.FMap
                     {
                         value = file.ReadByte();
 
-                        partValue = (int)(value / 64.0D);
+                        partValue = Math.Floor(value / 64.0D).ToInt();
                         if ( partValue > 0 )
                         {
                             if ( warningCount < 16 )
@@ -572,7 +572,7 @@ namespace SharpFlame.Old.Mapping.IO.FMap
                         }
                         value -= partValue * 64;
 
-                        partValue = (int)(value / 8.0D);
+                        partValue = Math.Floor(value / 8.0D).ToInt();
                         switch ( partValue )
                         {
                         case 0:
@@ -602,11 +602,11 @@ namespace SharpFlame.Old.Mapping.IO.FMap
                         }
                         value -= partValue * 8;
 
-                        partValue = (int)(value / 4.0D);
+                        partValue = Math.Floor(value / 4.0D).ToInt();
                         map.Terrain.Tiles[x, y].Terrain_IsCliff = partValue > 0;
                         value -= partValue * 4;
 
-                        partValue = (int)(value / 2.0D);
+                        partValue = Math.Floor(value / 2.0D).ToInt();
                         if ( map.Terrain.Tiles[x, y].Tri )
                         {
                             map.Terrain.Tiles[x, y].TriTopLeftIsCliff = partValue > 0;
@@ -1044,7 +1044,7 @@ namespace SharpFlame.Old.Mapping.IO.FMap
                     newObject.Pos.Horizontal.Y = iniObject2.Pos.Y;
                     newObject.Health = iniObject2.Health;
                     newObject.SavePriority = iniObject2.Priority;
-                    newObject.Rotation = (int)(iniObject2.Heading);
+                    newObject.Rotation = (iniObject2.Heading).ToInt();
                     if ( newObject.Rotation >= 360 )
                     {
                         newObject.Rotation -= 360;

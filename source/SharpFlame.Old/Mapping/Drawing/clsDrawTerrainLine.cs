@@ -2,6 +2,7 @@
 
 using System;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Old.Colors;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
@@ -49,7 +50,7 @@ namespace SharpFlame.Old.Mapping.Drawing
 
             Horizontal = StartXY;
             vertex.X = Horizontal.X;
-            vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
+            vertex.Y = Map.GetTerrainHeight(Horizontal).ToInt();
             vertex.Z = Convert.ToInt32(- Horizontal.Y);
             GL.Vertex3(vertex.X, vertex.Y, Convert.ToInt32(- vertex.Z));
 
@@ -78,7 +79,7 @@ namespace SharpFlame.Old.Mapping.Drawing
                             {
                                 Horizontal = IntersectX.Pos;
                                 vertex.X = Horizontal.X;
-                                vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
+                                vertex.Y = Map.GetTerrainHeight(Horizontal).ToInt();
                                 vertex.Z = Convert.ToInt32(- Horizontal.Y);
                                 GL.Vertex3(vertex.X, vertex.Y, Convert.ToInt32(- vertex.Z));
                             }
@@ -88,7 +89,7 @@ namespace SharpFlame.Old.Mapping.Drawing
 
                         Horizontal = IntersectY.Pos;
                         vertex.X = Horizontal.X;
-                        vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
+                        vertex.Y = Map.GetTerrainHeight(Horizontal).ToInt();
                         vertex.Z = Convert.ToInt32(- Horizontal.Y);
                         GL.Vertex3(vertex.X, vertex.Y, Convert.ToInt32(- vertex.Z));
                     }
@@ -109,7 +110,7 @@ namespace SharpFlame.Old.Mapping.Drawing
                     {
                         Horizontal = IntersectX.Pos;
                         vertex.X = Horizontal.X;
-                        vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
+                        vertex.Y = Map.GetTerrainHeight(Horizontal).ToInt();
                         vertex.Z = Convert.ToInt32(- Horizontal.Y);
                         GL.Vertex3(vertex.X, vertex.Y, Convert.ToInt32(- vertex.Z));
                     }
@@ -118,7 +119,7 @@ namespace SharpFlame.Old.Mapping.Drawing
 
             Horizontal = FinishXY;
             vertex.X = Horizontal.X;
-            vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
+            vertex.Y = Map.GetTerrainHeight(Horizontal).ToInt();
             vertex.Z = Convert.ToInt32(- Horizontal.Y);
             GL.Vertex3(vertex.X, vertex.Y, Convert.ToInt32(- vertex.Z));
 

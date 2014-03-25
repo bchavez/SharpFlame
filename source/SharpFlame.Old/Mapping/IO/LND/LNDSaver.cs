@@ -175,7 +175,7 @@ namespace SharpFlame.Old.Mapping.IO.LND
                         }
 
                         text = "        TID " + (map.Terrain.Tiles[x, y].Texture.TextureNum + 1) + " VF " + vf.ToStringInvariant() + " TF " +
-                            tf.ToStringInvariant() + " F " + ((int)flip).ToStringInvariant() + " VH " +
+                            tf.ToStringInvariant() + " F " + (flip).ToStringInvariant() + " VH " +
                                 Convert.ToByte(map.Terrain.Vertices[x, y].Height).ToStringInvariant() + " " +
                                 map.Terrain.Vertices[x + 1, y].Height.ToStringInvariant() + " " + Convert.ToString(map.Terrain.Vertices[x + 1, y + 1].Height) +
                                 " " + Convert.ToByte(map.Terrain.Vertices[x, y + 1].Height).ToStringInvariant() + Convert.ToString(endChar);
@@ -304,7 +304,7 @@ namespace SharpFlame.Old.Mapping.IO.LND
                 File.Write(text);
                 text = "    Tiles {" + Convert.ToString(endChar);
                 File.Write(text);
-                for ( a = 0; a <= ((int)(Math.Ceiling(Convert.ToDecimal((map.Tileset.TileCount + 1) / 16.0D)))) - 1; a++ )
+                for ( a = 0; a <= Math.Ceiling(Convert.ToDecimal((map.Tileset.TileCount + 1) / 16.0D)).ToInt() - 1; a++ )
                     //+1 because the first number is not a tile type
                 {
                     text = "        ";
@@ -378,9 +378,11 @@ namespace SharpFlame.Old.Mapping.IO.LND
 
         private XYZInt lndPos_From_MapPos(XYInt Horizontal)
         {
-            return new XYZInt(Horizontal.X - (int)(map.Terrain.TileSize.X * Constants.TerrainGridSpacing / 2.0D),
-                              ((int)(map.Terrain.TileSize.Y * Constants.TerrainGridSpacing / 2.0D)) - Horizontal.Y,
-                              (int)(map.GetTerrainHeight(Horizontal)));
+            return new XYZInt(
+                Horizontal.X - (map.Terrain.TileSize.X * Constants.TerrainGridSpacing / 2.0D).ToInt(),
+                (map.Terrain.TileSize.Y * Constants.TerrainGridSpacing / 2.0D).ToInt() - Horizontal.Y,
+                map.GetTerrainHeight(Horizontal).ToInt()
+                );
         }
     }
 }

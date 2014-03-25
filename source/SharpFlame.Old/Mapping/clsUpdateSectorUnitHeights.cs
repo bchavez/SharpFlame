@@ -2,6 +2,7 @@
 
 using System;
 using System.Diagnostics;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Old.Mapping.Objects;
 using SharpFlame.Old.Mapping.Tools;
 
@@ -43,7 +44,7 @@ namespace SharpFlame.Old.Mapping
             for ( A = 0; A <= OldUnitCount - 1; A++ )
             {
                 Unit = OldUnits[A];
-                NewAltitude = (int)(Map.GetTerrainHeight(Unit.Pos.Horizontal));
+                NewAltitude = Map.GetTerrainHeight(Unit.Pos.Horizontal).ToInt();
                 if ( NewAltitude != Unit.Pos.Altitude )
                 {
                     NewUnit = new Unit(Unit, Map);

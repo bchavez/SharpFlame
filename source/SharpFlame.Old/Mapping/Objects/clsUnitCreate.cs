@@ -1,6 +1,7 @@
 #region
 
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Old.Domain;
 
 #endregion
@@ -36,7 +37,7 @@ namespace SharpFlame.Old.Mapping.Objects
             var newUnit = new Unit();
             if ( RandomizeRotation )
             {
-                newUnit.Rotation = (int)(App.Random.Next() * 360.0D);
+                newUnit.Rotation = (App.Random.Next() * 360.0D).ToInt();
             }
             else
             {
