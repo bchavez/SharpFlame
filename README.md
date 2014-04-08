@@ -23,7 +23,7 @@ Building
 ####Build Status - MS Build
 ![MS Build Status](http://teamcity.codebetter.com/app/rest/builds/buildType:(id:bt1234)/statusIcon)
 ####Build Status - Mono
-![MS Build Status](http://teamcity.codebetter.com/app/rest/builds/buildType:(id:bt1234)/statusIcon)
+![MS Build Status](http://teamcity.codebetter.com/app/rest/builds/buildType:(id:bt1235)/statusIcon)
 
 Contributing
 --------
