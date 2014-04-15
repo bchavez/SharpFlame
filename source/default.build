@@ -144,7 +144,7 @@
 
      <script language="C#">
          <references>
-             <include name="System.dll"/>
+             <include name="System.dll" if="${win}"/>
              <include name="System.Core.dll" if="${win}"/>
          </references>
          <imports>
