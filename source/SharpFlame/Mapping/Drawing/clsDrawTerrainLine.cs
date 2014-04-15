@@ -49,7 +49,7 @@ namespace SharpFlame.Mapping.Drawing
 
             Horizontal = StartXY;
             vertex.X = Horizontal.X;
-            vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
+            vertex.Y = Map.GetTerrainHeight(Horizontal).ToInt();
             vertex.Z = Convert.ToInt32(- Horizontal.Y);
             GL.Vertex3(vertex.X, vertex.Y, Convert.ToInt32(- vertex.Z));
 
@@ -78,7 +78,7 @@ namespace SharpFlame.Mapping.Drawing
                             {
                                 Horizontal = IntersectX.Pos;
                                 vertex.X = Horizontal.X;
-                                vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
+                                vertex.Y = Map.GetTerrainHeight(Horizontal).ToInt();
                                 vertex.Z = Convert.ToInt32(- Horizontal.Y);
                                 GL.Vertex3(vertex.X, vertex.Y, Convert.ToInt32(- vertex.Z));
                             }
@@ -88,7 +88,7 @@ namespace SharpFlame.Mapping.Drawing
 
                         Horizontal = IntersectY.Pos;
                         vertex.X = Horizontal.X;
-                        vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
+                        vertex.Y = Map.GetTerrainHeight(Horizontal).ToInt();
                         vertex.Z = Convert.ToInt32(- Horizontal.Y);
                         GL.Vertex3(vertex.X, vertex.Y, Convert.ToInt32(- vertex.Z));
                     }
@@ -109,7 +109,7 @@ namespace SharpFlame.Mapping.Drawing
                     {
                         Horizontal = IntersectX.Pos;
                         vertex.X = Horizontal.X;
-                        vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
+                        vertex.Y = Map.GetTerrainHeight(Horizontal).ToInt();
                         vertex.Z = Convert.ToInt32(- Horizontal.Y);
                         GL.Vertex3(vertex.X, vertex.Y, Convert.ToInt32(- vertex.Z));
                     }
@@ -118,7 +118,7 @@ namespace SharpFlame.Mapping.Drawing
 
             Horizontal = FinishXY;
             vertex.X = Horizontal.X;
-            vertex.Y = (int)(Map.GetTerrainHeight(Horizontal));
+            vertex.Y = Map.GetTerrainHeight(Horizontal).ToInt();
             vertex.Z = Convert.ToInt32(- Horizontal.Y);
             GL.Vertex3(vertex.X, vertex.Y, Convert.ToInt32(- vertex.Z));
 

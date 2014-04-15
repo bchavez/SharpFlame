@@ -40,10 +40,12 @@ namespace SharpFlame.Mapping.IO.Minimap
                 for ( var x = 0; x <= map.Terrain.TileSize.X - 1; x++ )
                 {
                     minimapBitmap.SetPixel(x, y,
-                                           ColorTranslator.FromOle(
-                            ColorUtil.OsRgb((int)(MathUtil.ClampSng(Convert.ToSingle(texture.get(x, y).Red * 255.0F), 0.0F, 255.0F)),
-                                (int)(MathUtil.ClampSng(Convert.ToSingle(texture.get(x, y).Green * 255.0F), 0.0F, 255.0F)),
-                                (int)(MathUtil.ClampSng(Convert.ToSingle(texture.get(x, y).Blue * 255.0F), 0.0F, 255.0F)))));
+                        ColorTranslator.FromOle(
+                            ColorUtil.OsRgb(
+                                MathUtil.ClampSng(Convert.ToSingle(texture.get(x, y).Red * 255.0F), 0.0F, 255.0F).ToInt(),
+                                (MathUtil.ClampSng(Convert.ToSingle(texture.get(x, y).Green * 255.0F), 0.0F, 255.0F)).ToInt(),
+                                (MathUtil.ClampSng(Convert.ToSingle(texture.get(x, y).Blue * 255.0F), 0.0F, 255.0F)).ToInt()
+                                )));
                 }
             }
 

@@ -1,10 +1,12 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace SharpFlame.Core.Domain
 {
     [StructLayout(LayoutKind.Sequential)]
+    [DebuggerDisplay("Direction {Direction}, Pitch {Pitch}, Roll {Roll}")]
     public struct Rotation {
         public UInt16 Direction;
         public UInt16 Pitch;

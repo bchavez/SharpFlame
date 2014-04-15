@@ -433,7 +433,7 @@ namespace SharpFlame.Mapping.IO.Wz
                     newUnit.UnitGroup = map.UnitGroups[Convert.ToInt32(bjoUnit.Player)];
                 }
                 newUnit.Pos = bjoUnit.Pos;
-                newUnit.Rotation = (int)(Math.Min(bjoUnit.Rotation, 359U));
+                newUnit.Rotation = Convert.ToInt32(Math.Min(bjoUnit.Rotation, 359U));
                 if ( bjoUnit.ID == 0U )
                 {
                     bjoUnit.ID = availableID;
@@ -1537,20 +1537,20 @@ namespace SharpFlame.Mapping.IO.Wz
                         flip = File.ReadByte();
                         map.Terrain.Vertices[x, y].Height = File.ReadByte();
                         //get flipx
-                        a = (int)((flip / 128.0D));
+                        a = Math.Floor(flip / 128.0D).ToInt();
                         flip -= (byte)(a * 128);
                         flipX = a == 1;
                         //get flipy
-                        a = (int)((flip / 64.0D));
+                        a = Math.Floor(flip / 64.0D).ToInt();
                         flip -= (byte)(a * 64);
                         flipZ = a == 1;
                         //get rotation
-                        a = (int)((flip / 16.0D));
+                        a = Math.Floor(flip / 16.0D).ToInt();
                         flip -= (byte)(a * 16);
                         rotate = (byte)a;
                         TileUtil.OldOrientation_To_TileOrientation(rotate, flipX, flipZ, ref map.Terrain.Tiles[x, y].Texture.Orientation);
                         //get tri direction
-                        a = (int)((flip / 8.0D));
+                        a = Math.Floor(flip / 8.0D).ToInt();
                         flip -= (byte)(a * 8);
                         map.Terrain.Tiles[x, y].Tri = a == 1;
                     }
@@ -1631,7 +1631,7 @@ namespace SharpFlame.Mapping.IO.Wz
                     wzbJOUnit.Code = IOUtil.ReadOldTextOfLength(file, 40);
                     wzbJOUnit.Code = wzbJOUnit.Code.Substring(0, wzbJOUnit.Code.IndexOf('\0'));
                     wzbJOUnit.ID = file.ReadUInt32();
-                    wzbJOUnit.Pos.Horizontal.X = (int)(file.ReadUInt32());
+                    wzbJOUnit.Pos.Horizontal.X = (int)file.ReadUInt32();
                     wzbJOUnit.Pos.Horizontal.Y = (int)(file.ReadUInt32());
                     wzbJOUnit.Pos.Altitude = (int)(file.ReadUInt32());
                     wzbJOUnit.Rotation = file.ReadUInt32();

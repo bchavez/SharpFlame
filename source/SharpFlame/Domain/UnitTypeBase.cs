@@ -477,7 +477,7 @@ namespace SharpFlame.Domain
             {
                 return result;
             }
-            result += (int)(Body.Hitpoints * Propulsion.HitPoints / 100.0D);
+            result += (Body.Hitpoints * Propulsion.HitPoints / 100.0D).ToInt();
             if ( Turret1 == null )
             {
                 return result;

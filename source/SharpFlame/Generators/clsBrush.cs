@@ -60,17 +60,17 @@ namespace SharpFlame
 
         private void CreateTiles()
         {
-            var AlignmentOffset = radius - (int)radius;
-            double RadiusB = (int)(radius + 0.25D);
+            var alignmentOffset = radius - Math.Floor(radius);
+            double radiusB = Math.Floor(radius + 0.25D);
 
-            alignment = AlignmentOffset >= 0.25D & AlignmentOffset < 0.75D;
+            alignment = alignmentOffset >= 0.25D & alignmentOffset < 0.75D;
             switch ( shape )
             {
                 case ShapeType.Circle:
-                    Tiles.CreateCircle(RadiusB, 1.0D, alignment);
+                    Tiles.CreateCircle(radiusB, 1.0D, alignment);
                     break;
                 case ShapeType.Square:
-                    Tiles.CreateSquare(RadiusB, 1.0D, alignment);
+                    Tiles.CreateSquare(radiusB, 1.0D, alignment);
                     break;
             }
         }
@@ -193,49 +193,49 @@ namespace SharpFlame
             var Y = 0;
             double dblX = 0;
             double dblY = 0;
-            double RadiusB = 0;
-            double RadiusC = 0;
+            double radiusB = 0;
+            double radiusC = 0;
             var A = 0;
             var B = 0;
 
-            RadiusB = Radius / TileSize;
+            radiusB = Radius / TileSize;
             if ( Alignment )
             {
-                RadiusB += 1.0D;
-                Y = (int)RadiusB;
+                radiusB += 1.0D;
+                Y = (radiusB).Floor().ToInt();
                 YMin = Convert.ToInt32(- Y);
                 YMax = Y - 1;
                 B = YMax - YMin;
                 XMin = new int[B + 1];
                 XMax = new int[B + 1];
-                RadiusC = RadiusB * RadiusB;
+                radiusC = radiusB * radiusB;
                 for ( Y = YMin; Y <= YMax; Y++ )
                 {
                     dblY = Y + 0.5D;
-                    dblX = Math.Sqrt(RadiusC - dblY * dblY) + 0.5D;
+                    dblX = Math.Sqrt(radiusC - dblY * dblY) + 0.5D;
                     A = Y - YMin;
-                    X = (int)dblX;
+                    X = (dblX).Floor().ToInt();
                     XMin[A] = Convert.ToInt32(- X);
                     XMax[A] = X - 1;
                 }
             }
             else
             {
-                RadiusB += 0.125D;
-                Y = (int)RadiusB;
+                radiusB += 0.125D;
+                Y = Math.Floor(radiusB).ToInt();
                 YMin = Convert.ToInt32(- Y);
                 YMax = Y;
                 B = YMax - YMin;
                 XMin = new int[B + 1];
                 XMax = new int[B + 1];
-                RadiusC = RadiusB * RadiusB;
+                radiusC = radiusB * radiusB;
                 for ( Y = YMin; Y <= YMax; Y++ )
                 {
                     dblY = Y;
-                    dblX = Math.Sqrt(RadiusC - dblY * dblY);
+                    dblX = Math.Sqrt(radiusC - dblY * dblY);
                     A = Y - YMin;
-                    X = (int)dblX;
-                    XMin[A] = Convert.ToInt32(- X);
+                    X = dblX.Floor().ToInt();
+                    XMin[A] = -X;
                     XMax[A] = X;
                 }
             }
@@ -254,14 +254,14 @@ namespace SharpFlame
             if ( Alignment )
             {
                 RadiusB += 0.5D;
-                A = (int)RadiusB;
-                YMin = Convert.ToInt32(- A);
+                A = RadiusB.Floor().ToInt();
+                YMin = -A;
                 YMax = A - 1;
             }
             else
             {
-                A = (int)RadiusB;
-                YMin = Convert.ToInt32(- A);
+                A = RadiusB.Floor().ToInt();
+                YMin = -A;
                 YMax = A;
             }
             B = YMax - YMin;

@@ -325,15 +325,15 @@ namespace SharpFlame.Mapping.IO.LND
                                 IOUtil.InvariantParse(ObjectText[7], ref NewObject.Pos.Z);
                                 if ( IOUtil.InvariantParse(ObjectText[8], ref dblTemp) )
                                 {
-                                    NewObject.Rotation.X = (int)(MathUtil.ClampDbl(dblTemp, 0.0D, 359.0D));
+                                    NewObject.Rotation.X =MathUtil.ClampDbl(dblTemp, 0.0D, 359.0D).ToInt();
                                 }
                                 if ( IOUtil.InvariantParse(ObjectText[9], ref dblTemp) )
                                 {
-                                    NewObject.Rotation.Y = (int)(MathUtil.ClampDbl(dblTemp, 0.0D, 359.0D));
+                                    NewObject.Rotation.Y = MathUtil.ClampDbl(dblTemp, 0.0D, 359.0D).ToInt();
                                 }
                                 if ( IOUtil.InvariantParse(ObjectText[10], ref dblTemp) )
                                 {
-                                    NewObject.Rotation.Z = (int)(MathUtil.ClampDbl(dblTemp, 0.0D, 359.0D));
+                                    NewObject.Rotation.Z = MathUtil.ClampDbl(dblTemp, 0.0D, 359.0D).ToInt();
                                 }
                                 LNDObjects.Add(NewObject);
                             }
@@ -514,11 +514,11 @@ namespace SharpFlame.Mapping.IO.LND
                         map.Terrain.Tiles[X, Y].Texture.TextureNum = LNDTile[Tile_Num].TID - 1;
 
                         //ignore higher values
-                        A = Convert.ToInt32((LNDTile[Tile_Num].F / 64.0D));
-                        LNDTile[Tile_Num].F = (short)(LNDTile[Tile_Num].F - A * 64);
+                        A = Math.Floor(LNDTile[Tile_Num].F / 64.0D).ToInt();
+                        LNDTile[Tile_Num].F = Convert.ToInt16(LNDTile[Tile_Num].F - A * 64);
 
-                        A = (int)((LNDTile[Tile_Num].F / 16.0D));
-                        LNDTile[Tile_Num].F = (short)(LNDTile[Tile_Num].F - A * 16);
+                        A = Math.Floor(LNDTile[Tile_Num].F / 16.0D).ToInt();
+                        LNDTile[Tile_Num].F = Convert.ToInt16(LNDTile[Tile_Num].F - A * 16);
                         if ( A < 0 | A > 3 )
                         {
                             returnResult.ProblemAdd("Invalid flip value.");
@@ -526,15 +526,15 @@ namespace SharpFlame.Mapping.IO.LND
                         }
                         Rotation = (byte)A;
 
-                        A = (int)((LNDTile[Tile_Num].F / 8.0D));
+                        A = Math.Floor(LNDTile[Tile_Num].F / 8.0D).ToInt();
                         LNDTile[Tile_Num].F -= (short)(A * 8);
                         FlipZ = A == 1;
 
-                        A = (int)((LNDTile[Tile_Num].F / 4.0D));
+                        A = Math.Floor(LNDTile[Tile_Num].F / 4.0D).ToInt();
                         LNDTile[Tile_Num].F -= (short)(A * 4);
                         FlipX = A == 1;
 
-                        A = Convert.ToInt32((LNDTile[Tile_Num].F / 2.0D));
+                        A = Math.Floor(LNDTile[Tile_Num].F / 2.0D).ToInt();
                         LNDTile[Tile_Num].F -= (short)(A * 2);
                         map.Terrain.Tiles[X, Y].Tri = A == 1;
 
@@ -586,9 +586,9 @@ namespace SharpFlame.Mapping.IO.LND
                         {
                             newUnit.UnitGroup = map.UnitGroups[currentObject.PlayerNum];
                         }
-                        xyzInt.X = (int)currentObject.Pos.X;
-                        xyzInt.Y = (int)currentObject.Pos.Y;
-                        xyzInt.Z = (int)currentObject.Pos.Z;
+                        xyzInt.X = currentObject.Pos.X.ToInt();
+                        xyzInt.Y = currentObject.Pos.Y.ToInt();
+                        xyzInt.Z = currentObject.Pos.Z.ToInt();
                         newUnit.Pos = mapPos_From_LNDPos(xyzInt);
                         newUnit.Rotation = currentObject.Rotation.Y;
                         if ( currentObject.ID == 0U )
@@ -634,9 +634,9 @@ namespace SharpFlame.Mapping.IO.LND
         {
             var Result = new WorldPos();
 
-            Result.Horizontal.X = Pos.X + (int)(map.Terrain.TileSize.X * Constants.TerrainGridSpacing / 2.0D);
-            Result.Horizontal.Y = ((int)(map.Terrain.TileSize.Y * Constants.TerrainGridSpacing / 2.0D)) - Pos.Z;
-            Result.Altitude = (int)(map.GetTerrainHeight(Result.Horizontal));
+            Result.Horizontal.X = Pos.X + (map.Terrain.TileSize.X * Constants.TerrainGridSpacing / 2.0D).ToInt();
+            Result.Horizontal.Y = (map.Terrain.TileSize.Y * Constants.TerrainGridSpacing / 2.0D).ToInt() - Pos.Z;
+            Result.Altitude = map.GetTerrainHeight(Result.Horizontal).ToInt();
 
             return Result;
         }       

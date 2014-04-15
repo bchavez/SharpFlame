@@ -20,7 +20,10 @@ Building
 * Download the source code.
 * Compile.
 
-Build Status: ![Build Status](http://www.bitarmory.com/Main/BuildStatus.ashx?Project=SharpFlame)
+####Build Status - MS Build
+![MS Build Status](http://teamcity.codebetter.com/app/rest/builds/buildType:(id:bt1234)/statusIcon)
+####Build Status - Mono
+![MS Build Status](http://teamcity.codebetter.com/app/rest/builds/buildType:(id:bt1235)/statusIcon)
 
 Contributing
 --------

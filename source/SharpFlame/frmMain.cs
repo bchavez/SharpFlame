@@ -159,6 +159,19 @@ namespace SharpFlame
 
             InitializeComponent();
 
+            var t = new ToolStripMenuItem("TESTING");
+            this.MainMenuStrip.Items.Add(t);
+            t.DropDownItems.Add("CMD1", null,
+                (sender, args) =>
+                    {
+                        this.MainMap.ViewInfo
+                            .LookAtTile(new XYInt(1, 1));
+                    });
+            t.DropDownItems.Add("CMD2 - VIewpos", null, (sender, args) =>
+                {
+                    this.MainMap.ViewInfo.ViewPosSet(new XYZInt(1024, 1024, 4096));
+                });
+
             MapViewControl = new MapViewControl(this);
             TextureViewControl = new TextureViewControl(this);
 

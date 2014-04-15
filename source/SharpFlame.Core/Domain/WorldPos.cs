@@ -1,5 +1,8 @@
+using System.Diagnostics;
+
 namespace SharpFlame.Core.Domain
 {
+    [DebuggerDisplay("Horiz.X {Horizontal.X}, Horz.Y {Horizontal.Y}, Alt {Altitude}")]
     public struct WorldPos
     {
         public XYInt Horizontal;

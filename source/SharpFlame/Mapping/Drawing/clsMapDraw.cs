@@ -69,10 +69,11 @@ namespace SharpFlame.Mapping
                                                (MathUtil.RootTwo * dblTemp);
             if ( minimap.TextureSize > 0 & viewInfo.TilesPerMinimapPixel > 0.0D )
             {
-                minimapSizeXy.X = (int)(Terrain.TileSize.X / viewInfo.TilesPerMinimapPixel);
-                minimapSizeXy.Y = (int)(Terrain.TileSize.Y / viewInfo.TilesPerMinimapPixel);
+                minimapSizeXy.X = (Terrain.TileSize.X / ViewInfo.TilesPerMinimapPixel).ToInt();
+                minimapSizeXy.Y = (Terrain.TileSize.Y / ViewInfo.TilesPerMinimapPixel).ToInt();
             }
-            if ( !viewInfo.ScreenXYGetViewPlanePos(new XYInt((int)(glSize.Width / 2.0D), (int)(glSize.Height / 2.0D)), dblTemp, ref drawCentre) )
+
+            if ( !ViewInfo.ScreenXYGetViewPlanePos(new XYInt((glSize.X / 2.0D).ToInt(), (glSize.Y / 2.0D).ToInt()), dblTemp, ref drawCentre) )
             {
                 Matrix3DMath.VectorForwardsRotationByMatrix(viewInfo.ViewAngleMatrix, ref xyzDbl);
                 var dblTemp2 = App.VisionRadius * 2.0D / Math.Sqrt(xyzDbl.X * xyzDbl.X + xyzDbl.Z * xyzDbl.Z);
@@ -81,10 +82,8 @@ namespace SharpFlame.Mapping
             }
             drawCentre.X = MathUtil.ClampDbl(drawCentre.X, 0.0D, Terrain.TileSize.X * Constants.TerrainGridSpacing - 1.0D);
             drawCentre.Y = MathUtil.ClampDbl(Convert.ToDouble(- drawCentre.Y), 0.0D, Terrain.TileSize.Y * Constants.TerrainGridSpacing - 1.0D);
-            drawCentreSector.Normal = GetPosSectorNum(new XYInt((int)drawCentre.X, (int)drawCentre.Y));
-            drawCentreSector.Alignment =
-                GetPosSectorNum(new XYInt((int)(drawCentre.X - Constants.SectorTileSize * Constants.TerrainGridSpacing / 2.0D),
-                    (int)(drawCentre.Y - Constants.SectorTileSize * Constants.TerrainGridSpacing / 2.0D)));
+            drawCentreSector.Normal = GetPosSectorNum(new XYInt(drawCentre.X.ToInt(), drawCentre.Y.ToInt()));
+            drawCentreSector.Alignment = GetPosSectorNum(new XYInt((drawCentre.X - Constants.SectorTileSize * Constants.TerrainGridSpacing / 2.0D).ToInt(), (drawCentre.Y - Constants.SectorTileSize * Constants.TerrainGridSpacing / 2.0D).ToInt()));
 
             var drawObjects = Kernel.Get<clsDrawSectorObjects>();
             drawObjects.Map = this;
@@ -94,7 +93,7 @@ namespace SharpFlame.Mapping
             xyzDbl.X = drawCentre.X - viewInfo.ViewPos.X;
             xyzDbl.Y = 128 - viewInfo.ViewPos.Y;
             xyzDbl.Z = - drawCentre.Y - viewInfo.ViewPos.Z;
-            zNearFar = (float)(xyzDbl.GetMagnitude());
+            zNearFar = Convert.ToSingle(xyzDbl.GetMagnitude());
 
             GL.Enable(EnableCap.DepthTest);
             GL.MatrixMode(MatrixMode.Projection);
@@ -106,8 +105,8 @@ namespace SharpFlame.Mapping
 
             Matrix3DMath.MatrixRotationByMatrix(viewInfo.ViewAngleMatrixInverted, App.SunAngleMatrix, matrixB);
             Matrix3DMath.VectorForwardsRotationByMatrix(matrixB, ref xyzDbl);
-            lightPosition[0] = (float)xyzDbl.X;
-            lightPosition[1] = (float)xyzDbl.Y;
+            lightPosition[0] = Convert.ToSingle(xyzDbl.X);
+            lightPosition[1] = Convert.ToSingle(xyzDbl.Y);
             lightPosition[2] = Convert.ToSingle(- xyzDbl.Z);
             lightPosition[3] = 0.0F;
             GL.Light(LightName.Light0, LightParameter.Position, lightPosition);
@@ -912,7 +911,7 @@ namespace SharpFlame.Mapping
                     textLabel.TextFont = App.UnitLabelFont;
                     textLabel.SizeY = App.SettingsManager.FontSize;
                     textLabel.Pos.X = 32 + minimapSizeXy.X;
-                    textLabel.Pos.Y = 32 + (int)(Math.Ceiling((decimal)(b * textLabel.SizeY)));
+                    textLabel.Pos.Y = 32 + Math.Ceiling((decimal)(b * textLabel.SizeY)).ToInt();
                     textLabel.Text = Convert.ToString(Messages[a].Text);
                     messageTextLabels.Add(textLabel);
                     b++;
@@ -1123,10 +1122,10 @@ namespace SharpFlame.Mapping
 
             GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.TypeBase.GetGetFootprintSelected(Unit.Rotation), ref posA, ref posB);
             a = posA.Y;
-            posA.X = (int)((posA.X + 0.125D) * Constants.TerrainGridSpacing - viewInfo.ViewPos.X);
-            posA.Y = (int)((posB.Y + 0.875D) * - Constants.TerrainGridSpacing - viewInfo.ViewPos.Z);
-            posB.X = (int)((posB.X + 0.875D) * Constants.TerrainGridSpacing - viewInfo.ViewPos.X);
-            posB.Y = (int)((a + 0.125D) * - Constants.TerrainGridSpacing - viewInfo.ViewPos.Z);
+            posA.X = ((posA.X + 0.125D) * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X).ToInt();
+            posA.Y = ((posB.Y + 0.875D) * - Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z).ToInt();
+            posB.X = ((posB.X + 0.875D) * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X).ToInt();
+            posB.Y = ((a + 0.125D) * - Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z).ToInt();
 
             GL.Color4(OutsideColour.Red, OutsideColour.Green, OutsideColour.Blue, OutsideColour.Alpha);
             GL.Vertex3(posB.X, altitude, Convert.ToInt32(- posA.Y));

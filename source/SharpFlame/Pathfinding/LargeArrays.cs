@@ -27,7 +27,7 @@ namespace SharpFlame.Pathfinding
             if ( Size < NewSize )
             {
                 var Num = 0;
-                Size = (int)(NewSize * SizeEnlargementRatio);
+                Size = (NewSize * SizeEnlargementRatio).ToInt();
                 Num = Size - 1;
                 Nodes_Booleans = new bool[Num + 1];
                 Nodes_ValuesA = new float[Num + 1];
@@ -41,7 +41,7 @@ namespace SharpFlame.Pathfinding
                 if ( Size > NewSize * SizeReductionRatio )
                 {
                     var Num = 0;
-                    Size = (int)(NewSize * SizeEnlargementRatio);
+                    Size = (NewSize * SizeEnlargementRatio).ToInt();
                     Num = Size - 1;
                     Nodes_Booleans = new bool[Num + 1];
                     Nodes_ValuesA = new float[Num + 1];

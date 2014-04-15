@@ -36,7 +36,7 @@ namespace SharpFlame.Mapping.Objects
             var newUnit = new Unit();
             if ( RandomizeRotation )
             {
-                newUnit.Rotation = (int)(App.Random.Next() * 360.0D);
+                newUnit.Rotation = (App.Random.Next() * 360.0D).ToInt();
             }
             else
             {

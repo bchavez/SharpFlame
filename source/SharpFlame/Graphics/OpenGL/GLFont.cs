@@ -74,8 +74,8 @@ namespace SharpFlame.Graphics.OpenGL
                 Bitmap texBitmap;
                 if ( newSizeX <= 0 )
                 {
-                    newSizeX = Math.Max((int)(Math.Round(Height / 4.0F)), 1);
-                    Character[a].TexSize = (int)(Math.Round(Math.Pow(2.0D, Math.Ceiling(Math.Log(Math.Max(newSizeX, tempBitmap.Height)) / Math.Log(2.0D)))));
+                    newSizeX = Math.Max((Math.Round(Height / 4.0F)).ToInt(), 1);
+                    Character[a].TexSize = Math.Round(Math.Pow(2.0D, Math.Ceiling(Math.Log(Math.Max(newSizeX, tempBitmap.Height)) / Math.Log(2.0D)))).ToInt();
                     texBitmap = new Bitmap( Character[a].TexSize, Convert.ToInt32( Character[a].TexSize ), System.Drawing.Imaging.PixelFormat.Format32bppArgb );
                     gfx = System.Drawing.Graphics.FromImage(texBitmap);
                     gfx.Clear(Color.Transparent);
@@ -93,7 +93,7 @@ namespace SharpFlame.Graphics.OpenGL
                 }
                 else
                 {
-                    Character[a].TexSize = (int)(Math.Round(Math.Pow(2.0D, Math.Ceiling(Math.Log(Math.Max(newSizeX, tempBitmap.Height)) / Math.Log(2.0D)))));
+                    Character[a].TexSize = Math.Round(Math.Pow(2.0D, Math.Ceiling(Math.Log(Math.Max(newSizeX, tempBitmap.Height)) / Math.Log(2.0D)))).ToInt();
                     texBitmap = new Bitmap( Convert.ToInt32( Character[a].TexSize ), Character[a].TexSize, System.Drawing.Imaging.PixelFormat.Format32bppArgb );
                     gfx = System.Drawing.Graphics.FromImage(texBitmap);
                     gfx.Clear(Color.Transparent);

@@ -45,7 +45,7 @@ namespace SharpFlame.Mapping.Tools
 
             if ( samples >= 1 )
             {
-                var average = (byte)(MathUtil.ClampInt((int)(total / samples), Byte.MinValue, Byte.MaxValue));
+                var average = (byte)(MathUtil.ClampInt((total / samples).ToInt(), Byte.MinValue, Byte.MaxValue));
                 for ( y = start.Y; y <= finish.Y + 1; y++ )
                 {
                     vertexPos.Y = y;
