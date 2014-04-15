@@ -43,7 +43,18 @@
 
     <target name="build-linux" if="${linux}" description="Main Build Script for Linux">
         <call target="set-dev-env"/>
+        <call target="gen-asminfo" />
 
+        <exec program="xbuild" commandline="SharpFlame.sln">
+            <arg value="/p:Configuration=Release" />
+            <arg value="/p:DefineConstants=Mono" />
+        </exec>
+    
+        <property name="il.input.dir" value="SharpFlame.Gui.Gtk\bin\Release" />
+        <property name="il.input.exe" value="SharpFlame.Gui.Gtk.exe"/>
+        <property name="il.output.dir" value="${build.dir}"/>
+        <call target="il-repack" />
+    
     </target>
 
     <target name="build-osx" if="${osx}" description="Main Build Script for OSX">
@@ -57,9 +68,9 @@
                 <include name="tilesets/**"/>
                 <include name="3.1_b4-objects/**"/>
             </fileset>
-        </copy>
+        </copy>./n
         <property name="artifact.name" value="${path::get-file-name(build.dir)}"/>
-        <zip zipfile="${build.base}\${artifact.name}.zip">
+        <zip zipfile="${path::combine(build.base, artifact.name + '.zip' )}">
             <fileset basedir="${build.dir}">
                 <include name="**" />
             </fileset>
@@ -111,7 +122,7 @@
     <target name="il-repack">
         <!--tools\ILRepack.exe /target:winexe /targetplatform:v4 /wildcards /out:C:\Code\Projects\Public\SharpFlame\source\SharpFlame.Gui.Windows\bin\Release\REPACK\SharpFlame.exe SharpFlame.Gui.Windows\bin\Release\*.exe SharpFlame.Gui.Windows\bin\Release\*.dll-->
         <mkdir dir="${il.output.dir}" />
-        <exec workingdir="${il.input.dir}" program="tools\ILRepack.exe" verbose="true">
+        <exec workingdir="${il.input.dir}" program="tools\ILRepack.exe" verbose="true" if="${win}">
             <arg value="/target:winexe" />
             <arg value="/targetplatform:v4" />
             <arg value="/wildcards" />
@@ -119,6 +130,16 @@
             <arg line="${il.input.exe}" />
             <arg line="*.dll" />
         </exec>
+        <exec workingdir="${il.input.dir}" program="mono" verbose="true" if="${linux or osx}">
+            <arg value="../../../tools/ILRepack.exe" />
+            <arg value="/target:winexe" />
+            <arg value="/targetplatform:v4" />
+            <arg value="/wildcards" />
+            <arg line="/out:${path::combine(il.output.dir,'SharpFlame.exe')}"/>
+            <arg line="${il.input.exe}" />
+            <arg line="*.dll" />
+        </exec>
+
     </target>
 
      <script language="C#">
@@ -230,3 +251,4 @@
     </target>
 
 </project>
+
