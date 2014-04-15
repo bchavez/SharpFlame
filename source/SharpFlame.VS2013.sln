@@ -190,7 +190,6 @@ Global
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Debug|osx.ActiveCfg = Debug|Any CPU
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.DebugMac|Any CPU.ActiveCfg = Debug|Any CPU
@@ -200,7 +199,6 @@ Global
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Release|osx.ActiveCfg = Release|Any CPU
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.Release|x86.ActiveCfg = Release|Any CPU
 		{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}.ReleaseMac|Any CPU.ActiveCfg = Release|Any CPU
@@ -216,7 +214,6 @@ Global
 		{FEBB5203-A2F1-49AD-B045-F077D372DFDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FEBB5203-A2F1-49AD-B045-F077D372DFDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEBB5203-A2F1-49AD-B045-F077D372DFDD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{FEBB5203-A2F1-49AD-B045-F077D372DFDD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{FEBB5203-A2F1-49AD-B045-F077D372DFDD}.Debug|osx.ActiveCfg = Debug|Any CPU
 		{FEBB5203-A2F1-49AD-B045-F077D372DFDD}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{FEBB5203-A2F1-49AD-B045-F077D372DFDD}.DebugMac|Any CPU.ActiveCfg = Debug|Any CPU
@@ -228,7 +225,6 @@ Global
 		{FEBB5203-A2F1-49AD-B045-F077D372DFDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEBB5203-A2F1-49AD-B045-F077D372DFDD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FEBB5203-A2F1-49AD-B045-F077D372DFDD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{FEBB5203-A2F1-49AD-B045-F077D372DFDD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{FEBB5203-A2F1-49AD-B045-F077D372DFDD}.Release|osx.ActiveCfg = Release|Any CPU
 		{FEBB5203-A2F1-49AD-B045-F077D372DFDD}.Release|x86.ActiveCfg = Release|Any CPU
 		{FEBB5203-A2F1-49AD-B045-F077D372DFDD}.ReleaseMac|Any CPU.ActiveCfg = Release|Any CPU
@@ -276,7 +272,6 @@ Global
 		{06F7AC59-0E70-4646-BBFA-C105D9664FD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{06F7AC59-0E70-4646-BBFA-C105D9664FD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06F7AC59-0E70-4646-BBFA-C105D9664FD0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{06F7AC59-0E70-4646-BBFA-C105D9664FD0}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{06F7AC59-0E70-4646-BBFA-C105D9664FD0}.Debug|osx.ActiveCfg = Debug|Any CPU
 		{06F7AC59-0E70-4646-BBFA-C105D9664FD0}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{06F7AC59-0E70-4646-BBFA-C105D9664FD0}.DebugMac|Any CPU.ActiveCfg = Debug|Any CPU
@@ -288,7 +283,6 @@ Global
 		{06F7AC59-0E70-4646-BBFA-C105D9664FD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06F7AC59-0E70-4646-BBFA-C105D9664FD0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{06F7AC59-0E70-4646-BBFA-C105D9664FD0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{06F7AC59-0E70-4646-BBFA-C105D9664FD0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{06F7AC59-0E70-4646-BBFA-C105D9664FD0}.Release|osx.ActiveCfg = Release|Any CPU
 		{06F7AC59-0E70-4646-BBFA-C105D9664FD0}.Release|x86.ActiveCfg = Release|Any CPU
 		{06F7AC59-0E70-4646-BBFA-C105D9664FD0}.ReleaseMac|Any CPU.ActiveCfg = Release|Any CPU
@@ -371,7 +365,6 @@ Global
 		{C6D7920E-3FB5-4DAD-80F1-2B76158D493F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C6D7920E-3FB5-4DAD-80F1-2B76158D493F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6D7920E-3FB5-4DAD-80F1-2B76158D493F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{C6D7920E-3FB5-4DAD-80F1-2B76158D493F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{C6D7920E-3FB5-4DAD-80F1-2B76158D493F}.Debug|osx.ActiveCfg = Debug|Any CPU
 		{C6D7920E-3FB5-4DAD-80F1-2B76158D493F}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{C6D7920E-3FB5-4DAD-80F1-2B76158D493F}.DebugMac|Any CPU.ActiveCfg = Debug|Any CPU
@@ -383,7 +376,6 @@ Global
 		{C6D7920E-3FB5-4DAD-80F1-2B76158D493F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6D7920E-3FB5-4DAD-80F1-2B76158D493F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C6D7920E-3FB5-4DAD-80F1-2B76158D493F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{C6D7920E-3FB5-4DAD-80F1-2B76158D493F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C6D7920E-3FB5-4DAD-80F1-2B76158D493F}.Release|osx.ActiveCfg = Release|Any CPU
 		{C6D7920E-3FB5-4DAD-80F1-2B76158D493F}.Release|x86.ActiveCfg = Release|Any CPU
 		{C6D7920E-3FB5-4DAD-80F1-2B76158D493F}.ReleaseMac|Any CPU.ActiveCfg = Release|Any CPU
