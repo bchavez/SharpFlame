@@ -5,6 +5,7 @@ using Ninject;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
@@ -69,11 +70,11 @@ namespace SharpFlame.Mapping
                                                (MathUtil.RootTwo * dblTemp);
             if ( minimap.TextureSize > 0 & viewInfo.TilesPerMinimapPixel > 0.0D )
             {
-                minimapSizeXy.X = (Terrain.TileSize.X / ViewInfo.TilesPerMinimapPixel).ToInt();
-                minimapSizeXy.Y = (Terrain.TileSize.Y / ViewInfo.TilesPerMinimapPixel).ToInt();
+                minimapSizeXy.X = (Terrain.TileSize.X / viewInfo.TilesPerMinimapPixel).ToInt();
+                minimapSizeXy.Y = (Terrain.TileSize.Y / viewInfo.TilesPerMinimapPixel).ToInt();
             }
 
-            if ( !ViewInfo.ScreenXYGetViewPlanePos(new XYInt((glSize.X / 2.0D).ToInt(), (glSize.Y / 2.0D).ToInt()), dblTemp, ref drawCentre) )
+            if ( !viewInfo.ScreenXYGetViewPlanePos(new XYInt((glSize.Width / 2.0D).ToInt(), (glSize.Height / 2.0D).ToInt()), dblTemp, ref drawCentre) )
             {
                 Matrix3DMath.VectorForwardsRotationByMatrix(viewInfo.ViewAngleMatrix, ref xyzDbl);
                 var dblTemp2 = App.VisionRadius * 2.0D / Math.Sqrt(xyzDbl.X * xyzDbl.X + xyzDbl.Z * xyzDbl.Z);
@@ -1122,10 +1123,10 @@ namespace SharpFlame.Mapping
 
             GetFootprintTileRangeClamped(Unit.Pos.Horizontal, Unit.TypeBase.GetGetFootprintSelected(Unit.Rotation), ref posA, ref posB);
             a = posA.Y;
-            posA.X = ((posA.X + 0.125D) * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X).ToInt();
-            posA.Y = ((posB.Y + 0.875D) * - Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z).ToInt();
-            posB.X = ((posB.X + 0.875D) * Constants.TerrainGridSpacing - ViewInfo.ViewPos.X).ToInt();
-            posB.Y = ((a + 0.125D) * - Constants.TerrainGridSpacing - ViewInfo.ViewPos.Z).ToInt();
+            posA.X = ((posA.X + 0.125D) * Constants.TerrainGridSpacing - viewInfo.ViewPos.X).ToInt();
+            posA.Y = ((posB.Y + 0.875D) * - Constants.TerrainGridSpacing - viewInfo.ViewPos.Z).ToInt();
+            posB.X = ((posB.X + 0.875D) * Constants.TerrainGridSpacing - viewInfo.ViewPos.X).ToInt();
+            posB.Y = ((a + 0.125D) * - Constants.TerrainGridSpacing - viewInfo.ViewPos.Z).ToInt();
 
             GL.Color4(OutsideColour.Red, OutsideColour.Green, OutsideColour.Blue, OutsideColour.Alpha);
             GL.Vertex3(posB.X, altitude, Convert.ToInt32(- posA.Y));

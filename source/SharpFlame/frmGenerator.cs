@@ -3,6 +3,7 @@
 using System;
 using System.Windows.Forms;
 using SharpFlame.Collections.Specialized;
+using SharpFlame.Core.Extensions;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Collections.Specialized;

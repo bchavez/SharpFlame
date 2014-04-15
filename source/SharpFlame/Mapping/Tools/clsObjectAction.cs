@@ -1,10 +1,8 @@
 #region
 
 using System.Diagnostics;
-using SharpFlame.Collections;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Core.Collections;
-using SharpFlame.Mapping.Objects;
 
 #endregion
 

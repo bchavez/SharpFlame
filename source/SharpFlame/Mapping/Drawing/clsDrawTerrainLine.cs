@@ -6,6 +6,7 @@ using SharpFlame.Colors;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Maths;
 
 #endregion

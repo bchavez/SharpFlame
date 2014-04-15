@@ -1,6 +1,7 @@
 #region
 
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 
 #endregion

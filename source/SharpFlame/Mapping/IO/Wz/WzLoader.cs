@@ -10,6 +10,7 @@ using Eto.Forms;
 using Ionic.Zip;
 using Ionic.Zlib;
 using NLog;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.IO.TTP;

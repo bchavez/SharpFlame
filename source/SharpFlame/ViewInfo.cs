@@ -10,6 +10,7 @@ using SharpFlame.Controls;
 using SharpFlame.Core;
 using SharpFlame.Core.Collections;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Extensions;
 using SharpFlame.FileIO;
 using SharpFlame.Gui.Sections;
 using SharpFlame.Infrastructure;
@@ -55,8 +56,10 @@ namespace SharpFlame
                 ViewPos = new XYZInt(0, 3072, 0);
                 FovMultiplierSet(settings.FOVDefault);
                 ViewAngleSetToDefault();
-                LookAtPos(new XYInt((int)(Map.Terrain.TileSize.X * Constants.TerrainGridSpacing / 2.0D),
-                    (int)(Map.Terrain.TileSize.Y * Constants.TerrainGridSpacing / 2.0D)));
+                LookAtPos(new XYInt(
+                    (Map.Terrain.TileSize.X * Constants.TerrainGridSpacing / 2.0D).ToInt(),
+                    (Map.Terrain.TileSize.Y * Constants.TerrainGridSpacing / 2.0D).ToInt())
+                    );
                 // Reset Mouse on map change.
                 HandleLostFocus(this, EventArgs.Empty);
             }
@@ -185,7 +188,7 @@ namespace SharpFlame
 
             if ( App.ViewMoveType == ViewMoveType.RTS & App.RTSOrbit )
             {
-                if ( ScreenXYGetViewPlanePosForwardDownOnly(Math.Floor(MapViewView.GLSurface.Size.Width / 2.0D).ToInt(), Math.Floor(MainMapView.GLSurface.Size.Height / 2.0D).ToInt(), 127.5D, ref xyDbl) )
+                if ( ScreenXYGetViewPlanePosForwardDownOnly(Math.Floor(MainMapView.GLSurface.Size.Width / 2.0D).ToInt(), Math.Floor(MainMapView.GLSurface.Size.Height / 2.0D).ToInt(), 127.5D, ref xyDbl) )
                 {
                     xyzDbl.X = xyDbl.X;
                     xyzDbl.Y = 127.5D;
@@ -1279,7 +1282,7 @@ namespace SharpFlame
             var applyHeightSmoothing = new clsApplyHeightSmoothing();
             applyHeightSmoothing.Map = Map;
             applyHeightSmoothing.Ratio = ratio;
-            var radius = Convert.ToInt32(Math.Ceiling(uiOptions.HeightBrush.Radius));
+            var radius = Convert.ToInt32(Math.Ceiling(uiOptions.Height.Brush.Radius));
             var posNum = uiOptions.Height.Brush.GetPosNum(mouseOverTerrain.Vertex);
             applyHeightSmoothing.Offset.X = MathUtil.ClampInt(posNum.X - radius, 0, Map.Terrain.TileSize.X);
             applyHeightSmoothing.Offset.Y = MathUtil.ClampInt(posNum.Y - radius, 0, Map.Terrain.TileSize.Y);
@@ -1426,8 +1429,9 @@ namespace SharpFlame
             {
                 if ( MouseOver != null && IsViewPosOverMinimap(MouseOver.ScreenPos) )
                 {
-                    var pos = new XYInt((int)(MouseOver.ScreenPos.X * TilesPerMinimapPixel),
-                        (int)((MouseOver.ScreenPos.Y * TilesPerMinimapPixel)));
+                    var pos = new XYInt(
+                        (MouseOver.ScreenPos.X * TilesPerMinimapPixel).ToInt(),
+                        (MouseOver.ScreenPos.Y * TilesPerMinimapPixel).ToInt());
                     Map.TileNumClampToMap(pos);
                     LookAtTile(pos);
                 }
@@ -1447,14 +1451,14 @@ namespace SharpFlame
                 }
                 else
                 {
-                    mouseOverTerrain.Pos.Altitude = (int)(255.0D / 2.0D * Map.HeightMultiplier);
+                    mouseOverTerrain.Pos.Altitude = (255.0D / 2.0D * Map.HeightMultiplier).ToInt();
                     if ( ScreenXYGetViewPlanePos(MouseOver.ScreenPos, mouseOverTerrain.Pos.Altitude, ref xyDouble) )
                     {
-                        mouseOverTerrain.Pos.Horizontal.X = (int)xyDouble.X;
-                        mouseOverTerrain.Pos.Horizontal.Y = Convert.ToInt32(- xyDouble.Y);
+                        mouseOverTerrain.Pos.Horizontal.X = xyDouble.X.ToInt();
+                        mouseOverTerrain.Pos.Horizontal.Y = (-xyDouble.Y).ToInt();
                         if ( Map.PosIsOnMap(mouseOverTerrain.Pos.Horizontal) )
                         {
-                            mouseOverTerrain.Pos.Altitude = (int)(Map.GetTerrainHeight(mouseOverTerrain.Pos.Horizontal));
+                            mouseOverTerrain.Pos.Altitude = Map.GetTerrainHeight(mouseOverTerrain.Pos.Horizontal).ToInt();
                             flag = true;
                         }
                     }
@@ -1462,10 +1466,10 @@ namespace SharpFlame
                 if ( flag )
                 {
                     MouseOver.OverTerrain = mouseOverTerrain;
-                    mouseOverTerrain.Tile.Normal.X = (int)((double)mouseOverTerrain.Pos.Horizontal.X / Constants.TerrainGridSpacing);
-                    mouseOverTerrain.Tile.Normal.Y = (int)(((double)mouseOverTerrain.Pos.Horizontal.Y / Constants.TerrainGridSpacing));
-                    mouseOverTerrain.Vertex.Normal.X = (int)(Math.Round(((double)mouseOverTerrain.Pos.Horizontal.X / Constants.TerrainGridSpacing)));
-                    mouseOverTerrain.Vertex.Normal.Y = (int)(Math.Round(((double)mouseOverTerrain.Pos.Horizontal.Y / Constants.TerrainGridSpacing)));
+                    mouseOverTerrain.Tile.Normal.X = Math.Floor((double)mouseOverTerrain.Pos.Horizontal.X / Constants.TerrainGridSpacing).ToInt();
+                    mouseOverTerrain.Tile.Normal.Y = Math.Floor((double)mouseOverTerrain.Pos.Horizontal.Y / Constants.TerrainGridSpacing).ToInt();
+                    mouseOverTerrain.Vertex.Normal.X = Math.Round((double)mouseOverTerrain.Pos.Horizontal.X / Constants.TerrainGridSpacing).ToInt();
+                    mouseOverTerrain.Vertex.Normal.Y = Math.Round((double)mouseOverTerrain.Pos.Horizontal.Y / Constants.TerrainGridSpacing).ToInt();
                     mouseOverTerrain.Tile.Alignment = mouseOverTerrain.Vertex.Normal;
                     mouseOverTerrain.Vertex.Alignment = new XYInt(mouseOverTerrain.Tile.Normal.X + 1, mouseOverTerrain.Tile.Normal.Y + 1);
                     mouseOverTerrain.Triangle = Map.GetTerrainTri(mouseOverTerrain.Pos.Horizontal);
@@ -1924,7 +1928,7 @@ namespace SharpFlame
             var xyzDbl = default(XYZDouble);
             var a = 0;
 
-            for ( a = 0; a <= (int)(Math.Abs(e.Delta.Height / 120.0f)); a++ )
+            for ( a = 0; a <= Math.Abs(e.Delta.Height / 120.0f).ToInt(); a++ )
             {
                 Matrix3DMath.VectorForwardsRotationByMatrix(ViewAngleMatrix, (Math.Sign(e.Delta.Height) * Math.Max(ViewPos.Y, 512.0D) / 24.0D), ref xyzDbl);
                 move.SetDbl(xyzDbl);

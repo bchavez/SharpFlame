@@ -3,6 +3,7 @@
 using System;
 using System.Diagnostics;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 

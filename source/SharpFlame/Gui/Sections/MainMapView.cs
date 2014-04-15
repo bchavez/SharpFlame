@@ -36,6 +36,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 using SharpFlame.Infrastructure;
 using SharpFlame.Mapping;
@@ -679,10 +680,8 @@ namespace SharpFlame.Gui.Sections
                         {
                             var centre = App.CalcUnitsCentrePos(mainMap.SelectedUnits.GetItemsAsSimpleList());
                             var offset = new XYInt();
-                            offset.X = ((int)(Math.Round(Convert.ToDouble((mouseOverTerrain.Pos.Horizontal.X - centre.X) / Constants.TerrainGridSpacing)))) *
-                                       Constants.TerrainGridSpacing;
-                            offset.Y = ((int)(Math.Round(Convert.ToDouble((mouseOverTerrain.Pos.Horizontal.Y - centre.Y) / Constants.TerrainGridSpacing)))) *
-                                       Constants.TerrainGridSpacing;
+                            offset.X = Math.Round(Convert.ToDouble((mouseOverTerrain.Pos.Horizontal.X - centre.X) / Constants.TerrainGridSpacing)).ToInt() * Constants.TerrainGridSpacing;
+                            offset.Y = Math.Round(Convert.ToDouble((mouseOverTerrain.Pos.Horizontal.Y - centre.Y) / Constants.TerrainGridSpacing)).ToInt() * Constants.TerrainGridSpacing;
                             var objectPosOffset = new clsObjectPosOffset
                                 {
                                     Map = mainMap,

@@ -1,6 +1,7 @@
 #region
 
 using System;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Mapping.Tiles;
 
 #endregion

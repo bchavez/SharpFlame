@@ -32,6 +32,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 using SharpFlame.Infrastructure;
 using SharpFlame.Mapping;
@@ -128,12 +129,7 @@ namespace SharpFlame.Mapping.Minimap
 
             var terrain = Map.Terrain;
 
-            TextureSize = (int)(Math.Round(
-                Math.Pow(
-                    2.0D, 
-                    Math.Ceiling(Math.Log(Math.Max(terrain.TileSize.X, terrain.TileSize.Y)) / Math.Log(2.0D))
-                )
-            ));
+            TextureSize = Math.Round(Math.Pow(2.0D, Math.Ceiling(Math.Log(Math.Max(terrain.TileSize.X, terrain.TileSize.Y)) / Math.Log(2.0D)))).ToInt();
 
             var texture = new MinimapTexture(new XYInt(TextureSize, TextureSize));
 

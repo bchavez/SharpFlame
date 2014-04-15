@@ -8,6 +8,7 @@ using NLog;
 using SharpFlame.Collections.Specialized;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 using SharpFlame.Generators;
 using SharpFlame.Mapping;

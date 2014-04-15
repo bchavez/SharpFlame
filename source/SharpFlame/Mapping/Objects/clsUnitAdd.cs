@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using Eto.Forms;
 using SharpFlame.Core;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Maths;
 
 #endregion

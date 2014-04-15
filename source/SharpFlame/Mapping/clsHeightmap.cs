@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using SharpFlame.Bitmaps;
 using SharpFlame.Core;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Maths;
 using SharpFlame.Util;
 

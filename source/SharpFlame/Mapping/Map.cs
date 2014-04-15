@@ -13,6 +13,7 @@ using SharpFlame.Core;
 using SharpFlame.Core.Collections;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 using SharpFlame.Gui.Sections;
 using SharpFlame.Infrastructure;
@@ -1540,12 +1541,7 @@ namespace SharpFlame.Mapping
             foreach ( var tempLoopVar_Connection in UnitToUpdateFor.Sectors )
             {
                 Connection = tempLoopVar_Connection;
-                try {
-                    SectorGraphicsChanges.Changed(Connection.Sector.Pos);
-                } catch (Exception ex) {
-                    Debugger.Break ();
-                    logger.WarnException ("Got an exception in UnitSectorsGraphicsChanged", ex);
-                }
+                SectorGraphicsChanges.Changed(Connection.Sector.Pos);
             }
         }
 

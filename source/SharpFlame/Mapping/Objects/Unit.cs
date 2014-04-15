@@ -3,6 +3,7 @@
 using System;
 using System.Diagnostics;
 using SharpFlame.Collections;
+using SharpFlame.Core.Extensions;
 using SharpFlame.FileIO;
 using SharpFlame.Core;
 using SharpFlame.Core.Collections;

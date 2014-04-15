@@ -1,3 +1,5 @@
+using SharpFlame.Core.Extensions;
+
 namespace SharpFlame.Pathfinding
 {
     public class LargeArrays

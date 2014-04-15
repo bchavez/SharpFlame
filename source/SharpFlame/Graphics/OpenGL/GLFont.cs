@@ -6,6 +6,7 @@ using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Core.Extensions;
 using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
 
 

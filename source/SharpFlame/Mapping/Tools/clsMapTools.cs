@@ -4,6 +4,7 @@ using System;
 using SharpFlame.Collections.Specialized;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tiles;

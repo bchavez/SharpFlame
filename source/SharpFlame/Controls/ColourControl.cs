@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using SharpFlame.Colors;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain.Colors;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Maths;
 
 #endregion
