@@ -134,8 +134,8 @@
             <arg value="../../../tools/ILRepack.exe" />
             <arg value="/target:winexe" />
             <arg value="/targetplatform:v4" />
-            <arg value="/lib:packages/other/GtkSharp/2.12/lib/gtk-sharp-2.0" />
-            <arg value="/lib:packages/other/GtkSharp/2.12/lib/Mono.Cairo" />
+            <arg value="/lib:../../../packages/other/GtkSharp/2.12/lib/gtk-sharp-2.0" />
+            <arg value="/lib:../../../packages/other/GtkSharp/2.12/lib/Mono.Cairo" />
             <arg value="/wildcards" />
             <arg line="/out:${path::combine(il.output.dir,'SharpFlame.exe')}"/>
             <arg line="${il.input.exe}" />
