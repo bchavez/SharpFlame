@@ -20,6 +20,8 @@ Downloads are current snapshots of this ETO branch with Native UI. Please consid
 
 ![Linux](https://github.com/Turbo87/Font-Awesome/raw/platform-icons/svg/linux.png) [Linux Download](http://teamcity.codebetter.com/guestAuth/repository/download/bt1246/.lastSuccessful/SharpFlame.Linux.zip)
 
+![Mac](https://github.com/Turbo87/Font-Awesome/raw/platform-icons/svg/apple.png) None Yet
+
 Building
 --------
 * Download the source code.
