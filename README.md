@@ -13,7 +13,12 @@ A modern [Warzone 21000](http://wz2100.net/) map editor based on the original Wa
 * .NET 4.0 or Mono 3.x
 
 ### Download & Install
-Continuous Integration builds soon.
+
+Downloads are current snapshots of this ETO branch with Native UI. Please consider these downloads as a work in progress until we get our code base stabilized.
+
+![Windows](https://github.com/Turbo87/Font-Awesome/raw/platform-icons/svg/windows.png) [Windows Download](http://teamcity.codebetter.com/guestAuth/repository/download/bt1245/.lastSuccessful/SharpFlame.Windows.zip)
+
+![Linux](https://github.com/Turbo87/Font-Awesome/raw/platform-icons/svg/linux.png) [Linux Download](http://teamcity.codebetter.com/guestAuth/repository/download/bt1246/.lastSuccessful/SharpFlame.Linux.zip)
 
 Building
 --------
@@ -21,9 +26,9 @@ Building
 * Compile.
 
 ####Build Status - MS Build
-![MS Build Status](http://teamcity.codebetter.com/app/rest/builds/buildType:(id:bt1234)/statusIcon)
+![MS Build Status](http://teamcity.codebetter.com/app/rest/builds/buildType:(id:bt1245)/statusIcon)
 ####Build Status - Mono
-![MS Build Status](http://teamcity.codebetter.com/app/rest/builds/buildType:(id:bt1235)/statusIcon)
+![MS Build Status](http://teamcity.codebetter.com/app/rest/builds/buildType:(id:bt1246)/statusIcon)
 
 Contributing
 --------
