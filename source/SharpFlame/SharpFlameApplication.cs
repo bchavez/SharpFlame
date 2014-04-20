@@ -123,7 +123,8 @@ namespace SharpFlame
 
             if( Settings.ShowOptionsAtStartup )
             {
-                kernel.Get<Gui.Dialogs.Settings>().Show();            }
+                kernel.Get<Gui.Dialogs.Settings>().Show();
+            }
         }
 
         public override void OnTerminating(CancelEventArgs e)
