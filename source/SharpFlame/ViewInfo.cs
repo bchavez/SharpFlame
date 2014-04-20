@@ -133,10 +133,10 @@ namespace SharpFlame
             MainMapView.DrawLater();
         }
 
-        private void viewPosSet(XYZInt newViewPos)
+        private void ViewPosSet(XYZInt newViewPos)
         {
             ViewPos = newViewPos;
-            viewPosClamp();
+            ViewPosClamp();
 
             MainMapView.DrawLater();
         }
@@ -146,12 +146,12 @@ namespace SharpFlame
             ViewPos.X += displacement.X;
             ViewPos.Z += displacement.Z;
             ViewPos.Y += displacement.Y;
-            viewPosClamp();
+            ViewPosClamp();
 
             MainMapView.DrawLater();
         }
 
-        private void viewPosClamp()
+        private void ViewPosClamp()
         {
             const int maxHeight = 1048576;
             const int maxDist = 1048576;
@@ -211,7 +211,7 @@ namespace SharpFlame
             if ( flag )
             {
                 var xyzDbl2 = new XYZDouble(ViewPos.X, ViewPos.Y, Convert.ToDouble(- ViewPos.Z));
-                moveToViewTerrainPosFromDistance(xyzDbl, Convert.ToDouble((xyzDbl2 - xyzDbl).GetMagnitude()));
+                MoveToViewTerrainPosFromDistance(xyzDbl, Convert.ToDouble((xyzDbl2 - xyzDbl).GetMagnitude()));
             }
 
             MainMapView.DrawLater();
@@ -253,10 +253,10 @@ namespace SharpFlame
             xyzInt.Y = ViewPos.Y;
             xyzInt.Z = Convert.ToInt32(- horizontal.Y + dblTemp * xyzDbl.Z);
 
-            viewPosSet(xyzInt);
+            ViewPosSet(xyzInt);
         }
 
-        private void moveToViewTerrainPosFromDistance(XYZDouble terrainPos, double distance)
+        private void MoveToViewTerrainPosFromDistance(XYZDouble terrainPos, double distance)
         {
             var xyzDbl = default(XYZDouble);
             var xyzInt = new XYZInt(0, 0, 0);
@@ -267,7 +267,7 @@ namespace SharpFlame
             xyzInt.Y = Convert.ToInt32(terrainPos.Y - xyzDbl.Y * distance);
             xyzInt.Z = Convert.ToInt32(- terrainPos.Z - xyzDbl.Z * distance);
 
-            viewPosSet(xyzInt);
+            ViewPosSet(xyzInt);
         }
 
         public bool PosGetScreenXY(XYZDouble pos, ref XYInt result)
@@ -317,7 +317,7 @@ namespace SharpFlame
             return true;
         }
 
-        private bool screenXYGetTerrainPos(XYInt screenPos, ref WorldPos resultPos)
+        private bool ScreenXyGetTerrainPos(XYInt screenPos, ref WorldPos resultPos)
         {
             var xyzDbl = default(XYZDouble);
             var terrainViewVector = default(XYZDouble);
@@ -585,7 +585,7 @@ namespace SharpFlame
             return false;
         }
 
-        private void applyTerrain()
+        private void ApplyTerrain()
         {
             var mouseOverTerrain = GetMouseOverTerrain();
 
@@ -605,7 +605,7 @@ namespace SharpFlame
             MainMapView.DrawLater();
         }
 
-        private void applyRoad()
+        private void ApplyRoad()
         {
             var mouseOverTerrain = GetMouseOverTerrain();
 
@@ -677,7 +677,7 @@ namespace SharpFlame
             }
         }
 
-        private void applyRoadLineSelection()
+        private void ApplyRoadLineSelection()
         {
             var mouseOverTerrian = GetMouseOverTerrain();
 
@@ -759,7 +759,7 @@ namespace SharpFlame
             }
         }
 
-        private void applyTerrainFill(FillCliffAction cliffAction, bool inside)
+        private void ApplyTerrainFill(FillCliffAction cliffAction, bool inside)
         {
             var mouseOverTerrain = GetMouseOverTerrain();
 
@@ -1014,7 +1014,7 @@ namespace SharpFlame
             MainMapView.DrawLater();
         }
 
-        private void applyTexture()
+        private void ApplyTexture()
         {
             var mouseOverTerrain = GetMouseOverTerrain();
 
@@ -1028,7 +1028,7 @@ namespace SharpFlame
                 Map = Map,
                 TextureNum = uiOptions.Textures.SelectedTile,
                 SetTexture = uiOptions.Textures.SetTexture,
-                Orientation = relativeToViewAngle(uiOptions.Textures.TextureOrientation),
+                Orientation = RelativeToViewAngle(uiOptions.Textures.TextureOrientation),
                 RandomOrientation = uiOptions.Textures.Randomize,
                 SetOrientation = uiOptions.Textures.SetOrientation,
                 TerrainAction = uiOptions.Textures.TerrainMode
@@ -1047,7 +1047,7 @@ namespace SharpFlame
         /// </summary>
         /// <param name="currentOrientation"></param>
         /// <returns></returns>
-        private TileOrientation relativeToViewAngle(TileOrientation currentOrientation)
+        private TileOrientation RelativeToViewAngle(TileOrientation currentOrientation)
         {
             var anglePY = new Angles.AnglePY();
             Matrix3DMath.MatrixToPY(ViewAngleMatrix, ref anglePY);
@@ -1081,7 +1081,7 @@ namespace SharpFlame
             return currentOrientation;
         }
 
-        private void applyCliffTriangle(bool remove)
+        private void ApplyCliffTriangle(bool remove)
         {
             var mouseOverTerrain = GetMouseOverTerrain();
 
@@ -1116,7 +1116,7 @@ namespace SharpFlame
             MainMapView.DrawLater();
         }
 
-        private void applyCliff()
+        private void ApplyCliff()
         {
             var mouseOverTerrain = GetMouseOverTerrain();
 
@@ -1141,7 +1141,7 @@ namespace SharpFlame
             MainMapView.DrawLater();
         }
 
-        private void applyCliffRemove()
+        private void ApplyCliffRemove()
         {
             var mouseOverTerrain = GetMouseOverTerrain();
 
@@ -1441,7 +1441,7 @@ namespace SharpFlame
                 var mouseOverTerrain = new clsMouseOver.clsOverTerrain();
                 if ( App.SettingsManager.DirectPointer )
                 {
-                    if ( screenXYGetTerrainPos(MouseOver.ScreenPos, ref mouseOverTerrain.Pos) )
+                    if ( ScreenXyGetTerrainPos(MouseOver.ScreenPos, ref mouseOverTerrain.Pos) )
                     {
                         if ( Map.PosIsOnMap(mouseOverTerrain.Pos.Horizontal) )
                         {
@@ -1505,7 +1505,7 @@ namespace SharpFlame
                     {
                         if (uiOptions.MouseTool == MouseTool.TerrainBrush)
                         {
-                            applyTerrain();
+                            ApplyTerrain();
                             // TODO: implement me.
 //                            if (Program.frmMainInstance.cbxAutoTexSetHeight.Checked)
 //                            {
@@ -1518,23 +1518,23 @@ namespace SharpFlame
                         }
                         else if (uiOptions.MouseTool == MouseTool.TextureBrush)
                         {
-                            applyTexture();
+                            ApplyTexture();
                         }
                         else if (uiOptions.MouseTool == MouseTool.CliffTriangle)
                         {
-                            applyCliffTriangle(false);
+                            ApplyCliffTriangle(false);
                         }
                         else if (uiOptions.MouseTool == MouseTool.CliffBrush)
                         {
-                            applyCliff();
+                            ApplyCliff();
                         }
                         else if (uiOptions.MouseTool == MouseTool.CliffRemove)
                         {
-                            applyCliffRemove();
+                            ApplyCliffRemove();
                         }
                         else if (uiOptions.MouseTool == MouseTool.RoadPlace)
                         {
-                            applyRoad();
+                            ApplyRoad();
                         }
                         else if (uiOptions.MouseTool == MouseTool.RoadRemove)
                         {
@@ -1552,7 +1552,7 @@ namespace SharpFlame
                         }
                         else if (uiOptions.MouseTool == MouseTool.CliffTriangle)
                         {
-                            applyCliffTriangle(true);
+                            ApplyCliffTriangle(true);
                         }
                     }
                 }
@@ -1732,7 +1732,7 @@ namespace SharpFlame
                                 }
                                 else
                                 {
-                                    applyTerrain();
+                                    ApplyTerrain();
                                     if ( Program.frmMainInstance.cbxAutoTexSetHeight.Checked )
                                     {
                                         applyHeightSet(uiOptions.Terrain.Brush, (byte)uiOptions.Height.LmbHeight);
@@ -1761,21 +1761,21 @@ namespace SharpFlame
                                 }
                                 else
                                 {
-                                    applyTexture();
+                                    ApplyTexture();
                                 }
                             }
                         }
                         else if (uiOptions.MouseTool == MouseTool.CliffTriangle)
                         {
-                            applyCliffTriangle(false);
+                            ApplyCliffTriangle(false);
                         }
                         else if (uiOptions.MouseTool == MouseTool.CliffBrush)
                         {
-                            applyCliff();
+                            ApplyCliff();
                         }
                         else if (uiOptions.MouseTool == MouseTool.CliffRemove)
                         {
-                            applyCliffRemove();
+                            ApplyCliffRemove();
                         }
                         else if (uiOptions.MouseTool == MouseTool.TerrainFill)
                         {
@@ -1787,7 +1787,7 @@ namespace SharpFlame
                                 }
                                 else
                                 {
-                                    applyTerrainFill(Program.frmMainInstance.FillCliffAction, Program.frmMainInstance.cbxFillInside.Checked);
+                                    ApplyTerrainFill(Program.frmMainInstance.FillCliffAction, Program.frmMainInstance.cbxFillInside.Checked);
                                     MainMapView.DrawLater();
                                 }
                             }
@@ -1796,14 +1796,14 @@ namespace SharpFlame
                         {
                             if ( Map.Tileset != null )
                             {
-                                applyRoad();
+                                ApplyRoad();
                             }
                         }
                         else if (uiOptions.MouseTool == MouseTool.RoadLines)
                         {
                             if ( Map.Tileset != null )
                             {
-                                applyRoadLineSelection();
+                                ApplyRoadLineSelection();
                             }
                         }
                         else if (uiOptions.MouseTool == MouseTool.RoadRemove)
@@ -1888,7 +1888,7 @@ namespace SharpFlame
                 }
                 else if (uiOptions.MouseTool == MouseTool.CliffTriangle)
                 {
-                    applyCliffTriangle(true);
+                    ApplyCliffTriangle(true);
                 }
                 else if (uiOptions.MouseTool == MouseTool.Gateways)
                 {
