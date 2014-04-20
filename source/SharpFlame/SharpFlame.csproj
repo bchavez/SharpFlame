@@ -137,7 +137,7 @@
       <HintPath>..\packages\Ninject.Extensions.Logging.nlog2.3.0.1.0\lib\net40\Ninject.Extensions.Logging.NLog2.dll</HintPath>
     </Reference>
     <Reference Include="Eto">
-      <HintPath>..\packages\Eto-20140305\net40\Eto.dll</HintPath>
+      <HintPath>..\packages\Eto-20140420\net40\Eto.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup />
@@ -411,22 +411,54 @@
     <Compile Include="Gui\Actions\LoadMap.cs" />
     <Compile Include="Gui\Actions\Quit.cs" />
     <Compile Include="Gui\Actions\Settings.cs" />
-    <Compile Include="Gui\Controls\CustomButton.cs" />
-    <Compile Include="Gui\Controls\PlayerSelector.cs" />
-    <Compile Include="Gui\Controls\PlayerSelectorWinforms.cs" />
-    <Compile Include="Gui\Dialogs\About.cs" />
-    <Compile Include="Gui\Dialogs\KeyInput.cs" />
-    <Compile Include="Gui\Dialogs\Settings.cs" />
-    <Compile Include="Gui\Dialogs\Status.cs" />
-    <Compile Include="Gui\Forms\MainForm.cs" />
-    <Compile Include="Gui\Sections\HeightTab.cs" />
-    <Compile Include="Gui\Sections\LabelsTab.cs" />
-    <Compile Include="Gui\Sections\MainMapView.cs" />
-    <Compile Include="Gui\Sections\ObjectTab.cs" />
-    <Compile Include="Gui\Sections\PlaceObjectsTab.cs" />
-    <Compile Include="Gui\Sections\ResizeTab.cs" />
-    <Compile Include="Gui\Sections\TerrainTab.cs" />
-    <Compile Include="Gui\Sections\TexturesTab.cs" />
+    <Compile Include="Gui\Controls\CustomButton.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Gui\Controls\PlayerSelector.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Gui\Controls\PlayerSelectorWinforms.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Gui\Dialogs\About.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Gui\Dialogs\KeyInput.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Gui\Dialogs\Settings.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Gui\Dialogs\Status.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Gui\Forms\MainForm.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Gui\Sections\HeightTab.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Gui\Sections\LabelsTab.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Gui\Sections\MainMapView.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Gui\Sections\ObjectTab.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Gui\Sections\PlaceObjectsTab.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Gui\Sections\ResizeTab.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Gui\Sections\TerrainTab.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Gui\Sections\TexturesTab.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
     <Compile Include="Infrastructure\Bootstrap.cs" />
     <Compile Include="Infrastructure\EventBrokerExtensionMethods.cs" />
     <Compile Include="Infrastructure\EventBrokerModule.cs" />
@@ -639,7 +671,5 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="Mapping\Minimap\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

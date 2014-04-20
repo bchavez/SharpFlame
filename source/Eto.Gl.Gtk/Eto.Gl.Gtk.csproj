@@ -40,10 +40,10 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Eto">
-      <HintPath>..\packages\Eto-20140305\net40\Eto.dll</HintPath>
+      <HintPath>..\packages\Eto-20140420\net40\Eto.dll</HintPath>
     </Reference>
     <Reference Include="Eto.Platform.Gtk">
-      <HintPath>..\packages\Eto-20140305\net40\Eto.Platform.Gtk.dll</HintPath>
+      <HintPath>..\packages\Eto-20140420\net40\Eto.Platform.Gtk.dll</HintPath>
     </Reference>
     <Reference Include="gdk-sharp">
       <HintPath>..\packages\other\GtkSharp\2.12\lib\gtk-sharp-2.0\gdk-sharp.dll</HintPath>

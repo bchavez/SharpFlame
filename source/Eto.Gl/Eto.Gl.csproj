@@ -32,7 +32,7 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Reference Include="Eto">
-      <HintPath>..\packages\Eto-20140305\net40\Eto.dll</HintPath>
+      <HintPath>..\packages\Eto-20140420\net40\Eto.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="OpenTK">

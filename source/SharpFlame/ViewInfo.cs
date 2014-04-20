@@ -1420,7 +1420,7 @@ namespace SharpFlame
             MouseOver = new clsMouseOver();
             MouseOver.ScreenPos.X = e.Location.X.ToInt();
             MouseOver.ScreenPos.Y = e.Location.Y.ToInt();
-            logger.Info("Mouse: {0} {1}", e.Location.X, e.Location.Y);
+            //logger.Info("Mouse: {0} {1}", e.Location.X, e.Location.Y);
 
             MouseOverPosCalc();
         }
@@ -1432,13 +1432,6 @@ namespace SharpFlame
                 return;
             }
             enableMouseMove = false;
-
-            //var pointFromScreen = MainMapView.GLSurface.PointFromScreen(e.Location);
-
-//            logger.Info("Point on screen: Mouse xy[{0}, {1}], PointFromScreen: xy[{2}, {3}]", mouse.X, mouse.Y, pointFromScreen.X, pointFromScreen.Y);
-
-            //MouseOver.ScreenPos.X = (int)pointFromScreen.X;
-            //MouseOver.ScreenPos.Y = (int)pointFromScreen.Y;
 
             var xyDouble = default(XYDouble);
             var flag = false;
@@ -1947,9 +1940,10 @@ namespace SharpFlame
             var xyzDbl = default(XYZDouble);
             var a = 0;
 
-            for ( a = 0; a <= Math.Abs(e.Delta.Height / 120.0f).ToInt(); a++ )
+            for ( a = 0; a <= Math.Abs(e.Delta.Height).ToInt(); a++ )
             {
-                Matrix3DMath.VectorForwardsRotationByMatrix(ViewAngleMatrix, (Math.Sign(e.Delta.Height) * Math.Max(ViewPos.Y, 512.0D) / 24.0D), ref xyzDbl);
+                Matrix3DMath.VectorForwardsRotationByMatrix(ViewAngleMatrix, 
+                    (Math.Sign(e.Delta.Height * 120f) * Math.Max(ViewPos.Y, 512.0D) / 24.0D), ref xyzDbl);
                 move.SetDbl(xyzDbl);
                 ViewPosChange(move);
             }

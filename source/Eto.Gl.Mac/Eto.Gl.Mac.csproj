@@ -31,13 +31,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Eto">
-      <HintPath>..\packages\Eto-20140305\net40\Eto.dll</HintPath>
+      <HintPath>..\packages\Eto-20140420\net40\Eto.dll</HintPath>
     </Reference>
     <Reference Include="Eto.Platform.Mac">
-      <HintPath>..\packages\Eto-20140305\net40\Eto.Platform.Mac.dll</HintPath>
+      <HintPath>..\packages\Eto-20140420\net40\Eto.Platform.Mac.dll</HintPath>
     </Reference>
     <Reference Include="MonoMac">
-      <HintPath>..\packages\Eto-20140305\net40\MonoMac.dll</HintPath>
+      <HintPath>..\packages\Eto-20140420\net40\MonoMac.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenTK.1.1.1508.5724\lib\NET40\OpenTK.dll</HintPath>
