@@ -5,7 +5,9 @@ using Eto.Drawing;
 using Eto.Forms;
 using Ninject;
 using SharpFlame.Core;
+using SharpFlame.Core.Domain;
 using SharpFlame.Gui.Sections;
+using SharpFlame.Mapping;
 
 namespace SharpFlame.Gui.Forms
 {
@@ -30,6 +32,9 @@ namespace SharpFlame.Gui.Forms
 
         [Inject]
         internal Actions.LoadMap LoadMapAction { get; set; }
+
+	    [Inject]
+	    internal ViewInfo ViewInfo { get; set; }
 
 	    //Ninject initializer
 	    void IInitializable.Initialize()
@@ -122,6 +127,16 @@ namespace SharpFlame.Gui.Forms
 
 			// optional, removes empty submenus and duplicate separators
 			// menu.Items.Trim();
+
+	        var testing = menu.Items.GetSubmenu("TESTING");
+	        testing.Items.GetSubmenu("CMD1").Click += (sender, args) =>
+	            {
+	                this.ViewInfo.LookAtTile(new XYInt(1, 1));
+	            };
+	        testing.Items.GetSubmenu("CMD2 - ViewPos").Click += (sender, args) =>
+	            {
+	                this.ViewInfo.ViewPosChange(new XYZInt(1024, 1024, 1024));
+	            };
 
 			Menu = menu;
 		}
