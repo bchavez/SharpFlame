@@ -1,9 +1,8 @@
-#region
+
 
 using System;
 using System.Diagnostics;
 
-#endregion
 
 namespace SharpFlame.Pathfinding
 {

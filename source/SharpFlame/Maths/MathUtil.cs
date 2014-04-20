@@ -1,10 +1,10 @@
-#region
+
 
 using System;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Extensions;
 
-#endregion
+
 
 namespace SharpFlame.Maths
 {

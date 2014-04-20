@@ -8,8 +8,7 @@ namespace SharpFlame.Core.Extensions
     public static class ExtensionsForEnum
     {
 
-        #region Extension Methods
-
+        
         /// <summary>
         /// Includes an enumerated type and returns the new value
         /// </summary>
@@ -89,10 +88,9 @@ namespace SharpFlame.Core.Extensions
             return !Has( obj, value );
         }
 
-        #endregion
+        
 
-        #region Helper Classes
-
+        
         //class to simplfy narrowing values between 
         //a ulong and long since either value should
         //cover any lesser value
@@ -135,7 +133,7 @@ namespace SharpFlame.Core.Extensions
 
         }
 
-        #endregion
+        
 
     }
 }

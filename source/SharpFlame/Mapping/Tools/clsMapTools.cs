@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using SharpFlame.Collections.Specialized;
@@ -13,7 +13,7 @@ using SharpFlame.Maths;
 using SharpFlame.Painters;
 using SharpFlame.Util;
 
-#endregion
+
 
 namespace SharpFlame.Mapping
 {

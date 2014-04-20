@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using SharpFlame.Collections;
@@ -6,7 +6,6 @@ using SharpFlame.FileIO;
 using SharpFlame.Core;
 using SharpFlame.Core.Collections;
 
-#endregion
 
 namespace SharpFlame.Mapping.Objects
 {

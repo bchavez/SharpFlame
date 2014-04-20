@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using OpenTK.Graphics.OpenGL;
@@ -10,7 +10,7 @@ using SharpFlame.Domain.ObjData;
 using SharpFlame.Maths;
 using SharpFlame.Util;
 
-#endregion
+
 
 namespace SharpFlame.Domain
 {

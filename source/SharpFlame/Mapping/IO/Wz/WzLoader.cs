@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using System.Collections.Generic;
@@ -37,7 +37,7 @@ using SharpFlame.Util;
 using Sprache;
 using Result = SharpFlame.Core.Result;
 
-#endregion
+
 
 namespace SharpFlame.Mapping.IO.Wz
 {

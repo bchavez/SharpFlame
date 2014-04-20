@@ -1,10 +1,9 @@
-#region
+
 
 using System;
 using SharpFlame.FileIO;
 using SharpFlame.Core.Domain;
 
-#endregion
 
 namespace SharpFlame.Mapping.IO.FMap
 {

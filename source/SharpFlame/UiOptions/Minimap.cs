@@ -1,4 +1,3 @@
-#region License
 /*
 The MIT License (MIT)
 
@@ -22,7 +21,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -33,8 +31,7 @@ namespace SharpFlame.UiOptions
 {
     public class Minimap : INotifyPropertyChanged
     {
-        #region Properties      
-        private bool textures;
+                private bool textures;
         public bool Textures { 
             get { return textures; }
             set { SetField(ref textures, value, () => Textures); }
@@ -59,10 +56,8 @@ namespace SharpFlame.UiOptions
             get { return gateways; }
             set { SetField(ref gateways, value, () => Gateways); }
         }
-        #endregion
-
-        #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        
+                public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
@@ -93,8 +88,7 @@ namespace SharpFlame.UiOptions
             OnPropertyChanged(selectorExpression);
             return true;
         }
-        #endregion
-
+        
         public Minimap() {
             Textures = true;
             Heights = true;

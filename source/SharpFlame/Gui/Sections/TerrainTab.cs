@@ -1,5 +1,4 @@
-﻿#region License
- /*
+﻿ /*
  The MIT License (MIT)
 
  Copyrigth (c) 2013 Flail13
@@ -23,7 +22,6 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  */
-#endregion
 
 using System.Diagnostics;
 using Eto.Drawing;

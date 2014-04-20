@@ -1,9 +1,8 @@
-#region
+
 
 using System;
 using SharpFlame.Core;
 
-#endregion
 
 namespace SharpFlame
 {

@@ -1,10 +1,9 @@
-#region
+
 
 using System;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Mapping.Tiles;
 
-#endregion
 
 namespace SharpFlame.Painters
 {

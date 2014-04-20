@@ -1,9 +1,8 @@
-#region
+
 
 using SharpFlame.Collections.Specialized;
 using SharpFlame.Mapping.Tiles;
 
-#endregion
 
 namespace SharpFlame.Mapping.Tools
 {

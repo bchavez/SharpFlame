@@ -1,10 +1,10 @@
-#region
+
 
 using System.Diagnostics;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Core.Collections;
 
-#endregion
+
 
 namespace SharpFlame.Mapping.Tools
 {

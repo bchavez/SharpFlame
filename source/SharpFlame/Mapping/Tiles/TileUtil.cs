@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using System.Diagnostics;
@@ -6,7 +6,6 @@ using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Painters;
 
-#endregion
 
 namespace SharpFlame.Mapping.Tiles
 {

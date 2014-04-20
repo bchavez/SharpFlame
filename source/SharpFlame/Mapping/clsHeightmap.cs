@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using System.Diagnostics;
@@ -9,7 +9,7 @@ using SharpFlame.Core.Extensions;
 using SharpFlame.Maths;
 using SharpFlame.Util;
 
-#endregion
+
 
 namespace SharpFlame
 {

@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using SharpFlame.Core.Extensions;
@@ -6,7 +6,7 @@ using SharpFlame.Mapping.Tiles;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 
-#endregion
+
 
 namespace SharpFlame.Mapping.Tools
 {

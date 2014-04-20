@@ -1,8 +1,7 @@
-#region
+
 
 using System.Windows.Forms;
 
-#endregion
 
 namespace SharpFlame
 {

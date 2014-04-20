@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using System.Collections.Generic;
@@ -20,7 +20,6 @@ using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.Domain;
 using SharpFlame.Mapping.Tiles;
 
-#endregion
 
 namespace SharpFlame.Mapping.IO.FMap
 {

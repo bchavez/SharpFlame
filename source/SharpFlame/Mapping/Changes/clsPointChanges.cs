@@ -1,10 +1,9 @@
-#region
+
 
 using System.Collections.Generic;
 using SharpFlame.Core.Domain;
 using SharpFlame.Mapping.Tools;
 
-#endregion
 
 namespace SharpFlame.Mapping.Changes
 {

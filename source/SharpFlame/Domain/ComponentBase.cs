@@ -1,10 +1,9 @@
-#region
+
 
 using SharpFlame.Collections;
 using SharpFlame.Core.Collections;
 using SharpFlame.Domain.ObjData;
 
-#endregion
 
 namespace SharpFlame.Domain
 {

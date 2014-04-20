@@ -1,8 +1,7 @@
-#region
+
 
 using SharpFlame.Mapping.Objects;
 
-#endregion
 
 namespace SharpFlame.Mapping
 {

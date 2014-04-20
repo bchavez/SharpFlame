@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using System.Collections.Generic;
@@ -38,7 +38,7 @@ using SharpFlame.Util;
 using SharpFlame.UiOptions;
 using SharpFlame.Settings;
 
-#endregion
+
 
 namespace SharpFlame
 {

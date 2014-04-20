@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using SharpFlame.Collections;
@@ -10,7 +10,7 @@ using SharpFlame.Core.Domain;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Maths;
 
-#endregion
+
 
 namespace SharpFlame.Mapping.Tools
 {

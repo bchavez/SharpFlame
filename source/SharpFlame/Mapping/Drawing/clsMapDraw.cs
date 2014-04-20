@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using Ninject;
@@ -19,7 +19,7 @@ using SharpFlame.Maths;
 using SharpFlame.Util;
 using SharpFlame.UiOptions;
 
-#endregion
+
 
 namespace SharpFlame.Mapping
 {

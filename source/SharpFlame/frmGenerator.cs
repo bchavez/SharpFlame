@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using System.Windows.Forms;
@@ -16,7 +16,7 @@ using SharpFlame.Mapping.Tiles;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 
-#endregion
+
 
 namespace SharpFlame
 {

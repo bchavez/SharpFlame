@@ -1,5 +1,4 @@
-// #region License
-// // /*
+// // // /*
 // // The MIT License (MIT)
 // //
 // // Copyright (c) 2013-2014 The SharpFlame Authors.
@@ -22,8 +21,7 @@
 // // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // // THE SOFTWARE.
 // // */
-// #endregion
-//
+// //
 using System;
 
 namespace SharpFlame.Settings

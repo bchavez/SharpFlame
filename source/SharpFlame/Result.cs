@@ -1,12 +1,9 @@
-#region
-
 using System;
 using Ninject;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Mapping.Objects;
 
-#endregion
 
 namespace SharpFlame
 {

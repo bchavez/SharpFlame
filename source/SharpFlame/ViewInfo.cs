@@ -1,10 +1,12 @@
-#region
+
 
 using System;
+using Eto.Drawing;
 using Eto.Forms;
 using Eto.Gl;
 using Ninject;
 using Ninject.Extensions.Logging;
+using NLog;
 using SharpFlame.Collections;
 using SharpFlame.Controls;
 using SharpFlame.Core;
@@ -26,7 +28,7 @@ using SharpFlame.Painters;
 using SharpFlame.Settings;
 using SharpFlame.UiOptions;
 
-#endregion
+
 
 namespace SharpFlame
 {
@@ -85,7 +87,7 @@ namespace SharpFlame
             minimap = mmc;
 
             tmrMouseMove = new UITimer { Interval = 0.1 };
-            tmrMouseMove.Elapsed += enableMouseMove;
+            tmrMouseMove.Elapsed += EnableMouseMove;
             tmrMouseMove.Start();
         }
 
@@ -338,6 +340,7 @@ namespace SharpFlame
                 //convert screen pos to vector of one pos unit
                 xyzDbl.X = (screenPos.X - MainMapView.GLSurface.Size.Height/ 2.0D) * FOVMultiplier;
                 xyzDbl.Y = (MainMapView.GLSurface.Size.Width / 2.0D - screenPos.Y) * FOVMultiplier;
+                logger.Info("GLSurface Size: {0}", MainMapView.GLSurface.Size.ToString());
                 xyzDbl.Z = 1.0D;
                 //rotate the vector so that it points forward and level
                 Matrix3DMath.VectorRotationByMatrix(ViewAngleMatrix, xyzDbl, ref terrainViewVector);
@@ -1398,7 +1401,7 @@ namespace SharpFlame
             }
         }
 
-        public void enableMouseMove(object sender, EventArgs e)
+        public void EnableMouseMove(object sender, EventArgs e)
         {
             if(Map == null)
             {
@@ -1407,6 +1410,8 @@ namespace SharpFlame
 
             blEnableMouseMove = true;
         }
+
+        public static readonly Logger logger = LogManager.GetCurrentClassLogger();
             
         public void HandleMouseMove(object sender, MouseEventArgs e)
         {
@@ -1417,7 +1422,14 @@ namespace SharpFlame
             blEnableMouseMove = false;
 
             MouseOver = new ViewInfo.clsMouseOver();
-            var pointFromScreen = MainMapView.GLSurface.PointFromScreen(Mouse.GetPosition());
+
+            var mouse = Mouse.GetPosition();
+
+            //var pointFromScreen = MainMapView.GLSurface.PointFromScreen(mouse);
+            var pointFromScreen = MainMapView.GLSurface.PointFromScreen(e.Location);
+
+            logger.Info("Point on screen: Mouse xy[{0}, {1}], PointFromScreen: xy[{2}, {3}]", mouse.X, mouse.Y, pointFromScreen.X, pointFromScreen.Y);
+
             MouseOver.ScreenPos.X = (int)pointFromScreen.X;
             MouseOver.ScreenPos.Y = (int)pointFromScreen.Y;
 

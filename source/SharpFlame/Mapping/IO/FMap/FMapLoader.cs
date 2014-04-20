@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using System.Collections.Generic;
@@ -24,7 +24,6 @@ using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tiles;
 
-#endregion
 
 namespace SharpFlame.Mapping.IO.FMap
 {

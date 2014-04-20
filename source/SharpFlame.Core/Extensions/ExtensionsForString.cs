@@ -1,9 +1,9 @@
-#region
+
 
 using System;
 using System.IO;
 
-#endregion
+
 
 namespace SharpFlame.Core.Extensions
 {
@@ -70,6 +70,14 @@ namespace SharpFlame.Core.Extensions
         public static long ToLong(this double d)
         {
             return Convert.ToInt64(d);
+        }
+    }
+
+    public static class PrintUtil
+    {
+        public static string Print(Eto.Drawing.Size size)
+        {
+            return size.ToString();
         }
     }
 }

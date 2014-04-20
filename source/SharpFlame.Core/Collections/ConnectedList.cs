@@ -1,11 +1,11 @@
-#region
+
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-#endregion
+
 
 namespace SharpFlame.Core.Collections
 {
@@ -211,8 +211,7 @@ namespace SharpFlame.Core.Collections
                 get { return Current; }
             }
 
-            #region IDisposable Support
-
+            
             private bool disposedValue; // To detect redundant calls
 
             // IDisposable
@@ -247,7 +246,7 @@ namespace SharpFlame.Core.Collections
                 disposedValue = true;
             }
 
-            #endregion
+            
         }
     }
 }

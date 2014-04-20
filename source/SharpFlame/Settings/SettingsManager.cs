@@ -1,5 +1,4 @@
- #region License
-  /*
+   /*
   The MIT License (MIT)
  
   Copyright (c) 2013-2014 The SharpFlame Authors.
@@ -22,8 +21,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
   */
- #endregion
-
+ 
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -46,8 +44,7 @@ namespace SharpFlame.Settings
     {
         private readonly ILogger logger;
 
-        #region Properties
-        public bool AutoSaveEnabled {  get; set; }
+                public bool AutoSaveEnabled {  get; set; }
         public bool AutoSaveCompress { get; set; }
         public UInt32 AutoSaveMinIntervalSeconds { get; set; }
         public UInt32 AutoSaveMinChanges { get; set; }
@@ -94,10 +91,8 @@ namespace SharpFlame.Settings
 
         [JsonIgnore]
         public Font Font { get; private set; }
-        #endregion
-
-        #region INotifyPropertyChanged
-
+        
+        
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -129,10 +124,8 @@ namespace SharpFlame.Settings
             OnPropertyChanged(selectorExpression);
             return true;
         }
-        #endregion
-
-        #region Public Methods
-        public SettingsManager (ILoggerFactory logFactory, KeyboardManager keyboardManager)
+        
+                public SettingsManager (ILoggerFactory logFactory, KeyboardManager keyboardManager)
         {
             logger = logFactory.GetCurrentClassLogger();
             TilesetDirectories = new ObservableCollection<string> ();
@@ -279,6 +272,5 @@ namespace SharpFlame.Settings
 
             return returnResult;
         }
-        #endregion       
-    }
+            }
 }

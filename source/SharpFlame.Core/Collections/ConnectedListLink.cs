@@ -1,8 +1,8 @@
-#region
+
 
 using System.Diagnostics;
 
-#endregion
+
 
 namespace SharpFlame.Core.Collections
 {

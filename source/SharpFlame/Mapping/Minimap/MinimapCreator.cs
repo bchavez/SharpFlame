@@ -1,5 +1,4 @@
- #region License
-/*
+ /*
 The MIT License (MIT)
 
 Copyright (c) 2013-2014 The SharpFlame Authors.
@@ -22,8 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
- #endregion
-
+ 
 using System;
 using Eto.Forms;
 using Eto.Gl;
@@ -96,7 +94,7 @@ namespace SharpFlame.Mapping.Minimap
             Suppress = false;
 
             timer = new UITimer { Interval = Constants.MinimapDelay };
-            timer.Elapsed += tick;
+            timer.Elapsed += Tick;
 
             options.PropertyChanged += delegate
             {
@@ -104,13 +102,13 @@ namespace SharpFlame.Mapping.Minimap
             };
         }           
 
-        private void tick(object sender, EventArgs e)
+        private void Tick(object sender, EventArgs e)
         {
             if (Map != null && Refresh)
             {
                 if(!Suppress) // Try again on next call, let the timer run.
                 {
-                    make();
+                    Make();
                     Refresh = false;
                 }
             }
@@ -120,7 +118,7 @@ namespace SharpFlame.Mapping.Minimap
             }
         }
 
-        private void make()
+        private void Make()
         {
             if(Map == null || !GLSurface.IsInitialized)
             {
@@ -393,8 +391,7 @@ namespace SharpFlame.Mapping.Minimap
             }
         }
 
-        #region IDisposeable
-        ~MinimapCreator()
+                ~MinimapCreator()
         {
             Dispose(false);
         }
@@ -410,7 +407,6 @@ namespace SharpFlame.Mapping.Minimap
             GC.SuppressFinalize(this);
         }
 
-        #endregion
-    }
+            }
 }
 

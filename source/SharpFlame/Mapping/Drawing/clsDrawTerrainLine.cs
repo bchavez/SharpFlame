@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using OpenTK.Graphics.OpenGL;
@@ -9,7 +9,7 @@ using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Maths;
 
-#endregion
+
 
 namespace SharpFlame.Mapping.Drawing
 {

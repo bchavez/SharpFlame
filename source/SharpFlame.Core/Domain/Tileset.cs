@@ -1,11 +1,11 @@
-#region
+
 
 using System;
 using System.Collections.Generic;
 using Eto.Forms;
 using SharpFlame.Core.Domain.Colors;
 
-#endregion
+
 
 namespace SharpFlame.Core.Domain
 {
@@ -39,8 +39,7 @@ namespace SharpFlame.Core.Domain
         /// <value>The directory.</value>
         public string Directory { get; set; } 
 
-        #region IListItem
-        /// <summary>
+                /// <summary>
         /// Implements IListItem, this is for the eto GUI.
         /// </summary>
         /// <value>The text.</value>
@@ -57,13 +56,12 @@ namespace SharpFlame.Core.Domain
             get { return Name; }
             set { Name = value; }
         }
-        #endregion
+        
 
-        #region IEquatable
-        public bool Equals(Tileset other) {
+                public bool Equals(Tileset other) {
             return Name == other.Name;
         }
-        #endregion
+        
 
         public Tileset() {
             Tiles = new List<Tile>();

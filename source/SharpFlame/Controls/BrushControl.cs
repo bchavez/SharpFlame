@@ -1,9 +1,8 @@
-#region
+
 
 using System;
 using SharpFlame.Maths;
 
-#endregion
 
 namespace SharpFlame.Controls
 {

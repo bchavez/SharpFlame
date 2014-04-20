@@ -1,11 +1,11 @@
-﻿#region
+﻿
 
 using System;
 using System.Collections.Generic;
 using NLog;
 using SharpFlame.Core.Interfaces;
 
-#endregion
+
 
 namespace SharpFlame.Core
 {

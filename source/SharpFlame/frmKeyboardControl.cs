@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using System.Windows.Forms;
@@ -6,7 +6,6 @@ using SharpFlame.Collections;
 using SharpFlame.FileIO;
 using SharpFlame.Core.Collections;
 
-#endregion
 
 namespace SharpFlame
 {

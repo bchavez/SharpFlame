@@ -1,4 +1,4 @@
-﻿#region
+﻿
 
 using System;
 using System.Diagnostics;
@@ -30,7 +30,7 @@ using SharpFlame.Painters;
 using SharpFlame.Util;
 using SharpFlame.UiOptions;
 
-#endregion
+
 
 namespace SharpFlame.Mapping
 {

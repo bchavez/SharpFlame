@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using System.IO;
@@ -9,7 +9,6 @@ using OpenTK.Graphics;
 using SharpFlame.Core;
 using Timer = System.Windows.Forms.Timer;
 
-#endregion
 
 namespace SharpFlame
 {

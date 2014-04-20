@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using System.Diagnostics;
@@ -6,7 +6,7 @@ using SharpFlame.Core.Extensions;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tools;
 
-#endregion
+
 
 namespace SharpFlame.Mapping
 {

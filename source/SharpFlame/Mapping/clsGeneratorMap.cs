@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using System.Diagnostics;
@@ -18,7 +18,7 @@ using SharpFlame.Maths;
 using SharpFlame.Pathfinding;
 using SharpFlame.Util;
 
-#endregion
+
 
 namespace SharpFlame
 {
