@@ -57,12 +57,15 @@ namespace SharpFlame.Gui.Forms
 	                tabControl.SelectedPage.Content.OnShown(EventArgs.Empty);
 	            };
 
+            this.Closing += MainForm_Closing;
+
+
 	        var splitter = new Splitter
 	            {
 	                Position = 392,
 	                FixedPanel = SplitterFixedPanel.Panel1,
 	                Panel1 = tabControl,
-                    Panel2 = (MainMapView)this.MainMapView
+                    Panel2 = this.MainMapView
 	            };
 
 	        // Set the content of the form to use the layout
@@ -71,6 +74,11 @@ namespace SharpFlame.Gui.Forms
 	        GenerateMenuToolBar();
 	        Maximize();
 	    }
+
+        void MainForm_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            App.Kernel.Dispose();
+        }
 
 
 	    private void GenerateMenuToolBar()
@@ -137,6 +145,19 @@ namespace SharpFlame.Gui.Forms
 	            {
 	                this.ViewInfo.ViewPosChange(new XYZInt(1024, 1024, 1024));
 	            };
+            testing.Items.GetSubmenu("CMD3 - Check Screen Calculation").Click += (sender, args) =>
+            {
+                var posWorld = new WorldPos();
+                this.ViewInfo.ScreenXyGetTerrainPos(new XYInt(500, 1000), ref posWorld);
+            };
+            testing.Items.GetSubmenu("CMD4 - MousePos").Click += (sender, args) =>
+                {
+                    this.ViewInfo.MouseOver = new ViewInfo.clsMouseOver();
+                    this.ViewInfo.MouseOver.ScreenPos.X = 500;
+                    this.ViewInfo.MouseOver.ScreenPos.Y = 1000;
+                    this.ViewInfo.MouseOverPosCalc();
+                };
+            
 
 			Menu = menu;
 		}

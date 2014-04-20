@@ -432,17 +432,17 @@ namespace SharpFlame.Gui.Sections
                     mouseOverTerrain.Tile.Normal.Y
                 );
                 lblVertex.Text = string.Format("Vertex  x:{0}, y:{1}, alt:{2} ({3}x{4})", 
-                    Convert.ToString(mouseOverTerrain.Vertex.Normal.X), 
-                    Convert.ToString(mouseOverTerrain.Vertex.Normal.Y), 
+                    mouseOverTerrain.Vertex.Normal.X, 
+                    mouseOverTerrain.Vertex.Normal.Y, 
                     mainMap.Terrain.Vertices[mouseOverTerrain.Vertex.Normal.X, mouseOverTerrain.Vertex.Normal.Y].Height * mainMap.HeightMultiplier, 
-                    Convert.ToString(mainMap.Terrain.Vertices[mouseOverTerrain.Vertex.Normal.X, mouseOverTerrain.Vertex.Normal.Y].Height), 
-                    Convert.ToString(mainMap.HeightMultiplier)
+                    mainMap.Terrain.Vertices[mouseOverTerrain.Vertex.Normal.X, mouseOverTerrain.Vertex.Normal.Y].Height, 
+                    mainMap.HeightMultiplier
                 );
                 lblPos.Text = string.Format("Pos x:{0}, y:{1}, alt:{2}, slope: {3}°", 
-                    Convert.ToString(mouseOverTerrain.Pos.Horizontal.X), 
-                    Convert.ToString(mouseOverTerrain.Pos.Horizontal.Y), 
-                    Convert.ToString(mouseOverTerrain.Pos.Altitude), 
-                    Convert.ToString(Math.Round(mainMap.GetTerrainSlopeAngle(mouseOverTerrain.Pos.Horizontal) / MathUtil.RadOf1Deg * 10.0D) / 10.0D)
+                    mouseOverTerrain.Pos.Horizontal.X, 
+                    mouseOverTerrain.Pos.Horizontal.Y, 
+                    mouseOverTerrain.Pos.Altitude, 
+                    Math.Round(mainMap.GetTerrainSlopeAngle(mouseOverTerrain.Pos.Horizontal) / MathUtil.RadOf1Deg * 10.0D) / 10.0D
                 );
             }
         }

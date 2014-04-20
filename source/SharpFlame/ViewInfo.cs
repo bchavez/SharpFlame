@@ -1,5 +1,3 @@
-
-
 using System;
 using Eto.Drawing;
 using Eto.Forms;
@@ -75,7 +73,7 @@ namespace SharpFlame
         private readonly UITimer tmrMouseMove;
         private readonly MinimapCreator minimap;
 
-        private bool blEnableMouseMove = false;
+        private bool enableMouseMove = false;
 
         public ViewInfo(KeyboardManager kbm, Options argUiOptions,
             SettingsManager argSettings, MinimapCreator mmc
@@ -282,8 +280,8 @@ namespace SharpFlame
             try
             {
                 var ratioZpx = 1.0D / (FOVMultiplier * pos.Z);
-                result.X = Convert.ToInt32(MainMapView.GLSurface.Size.Height / 2.0D + (pos.X * ratioZpx));
-                result.Y = Convert.ToInt32(MainMapView.GLSurface.Size.Width / 2.0D - (pos.Y * ratioZpx));
+                result.X = Convert.ToInt32(MainMapView.GLSurface.Size.Width / 2.0D + (pos.X * ratioZpx));
+                result.Y = Convert.ToInt32(MainMapView.GLSurface.Size.Height / 2.0D - (pos.Y * ratioZpx));
                 return true;
             }
             catch
@@ -319,7 +317,7 @@ namespace SharpFlame
             return true;
         }
 
-        private bool ScreenXyGetTerrainPos(XYInt screenPos, ref WorldPos resultPos)
+        public bool ScreenXyGetTerrainPos(XYInt screenPos, ref WorldPos resultPos)
         {
             var xyzDbl = default(XYZDouble);
             var terrainViewVector = default(XYZDouble);
@@ -338,9 +336,8 @@ namespace SharpFlame
                 terrainViewPos.Z = Convert.ToDouble(- ViewPos.Z);
 
                 //convert screen pos to vector of one pos unit
-                xyzDbl.X = (screenPos.X - MainMapView.GLSurface.Size.Height/ 2.0D) * FOVMultiplier;
-                xyzDbl.Y = (MainMapView.GLSurface.Size.Width / 2.0D - screenPos.Y) * FOVMultiplier;
-                logger.Info("GLSurface Size: {0}", MainMapView.GLSurface.Size.ToString());
+                xyzDbl.X = (screenPos.X - MainMapView.GLSurface.Size.Width / 2.0D) * FOVMultiplier;
+                xyzDbl.Y = ( MainMapView.GLSurface.Size.Height / 2.0D - screenPos.Y ) * FOVMultiplier;
                 xyzDbl.Z = 1.0D;
                 //rotate the vector so that it points forward and level
                 Matrix3DMath.VectorRotationByMatrix(ViewAngleMatrix, xyzDbl, ref terrainViewVector);
@@ -1408,30 +1405,40 @@ namespace SharpFlame
                 return;
             }
 
-            blEnableMouseMove = true;
+            enableMouseMove = true;
         }
 
         public static readonly Logger logger = LogManager.GetCurrentClassLogger();
-            
+
         public void HandleMouseMove(object sender, MouseEventArgs e)
         {
-            if(Map == null || !blEnableMouseMove)
+            if( Map == null || !enableMouseMove )
             {
                 return;
             }
-            blEnableMouseMove = false;
 
-            MouseOver = new ViewInfo.clsMouseOver();
+            MouseOver = new clsMouseOver();
+            MouseOver.ScreenPos.X = e.Location.X.ToInt();
+            MouseOver.ScreenPos.Y = e.Location.Y.ToInt();
+            logger.Info("Mouse: {0} {1}", e.Location.X, e.Location.Y);
 
-            var mouse = Mouse.GetPosition();
+            MouseOverPosCalc();
+        }
 
-            //var pointFromScreen = MainMapView.GLSurface.PointFromScreen(mouse);
-            var pointFromScreen = MainMapView.GLSurface.PointFromScreen(e.Location);
+        public void MouseOverPosCalc()
+        {
+            if(Map == null || !enableMouseMove)
+            {
+                return;
+            }
+            enableMouseMove = false;
 
-            logger.Info("Point on screen: Mouse xy[{0}, {1}], PointFromScreen: xy[{2}, {3}]", mouse.X, mouse.Y, pointFromScreen.X, pointFromScreen.Y);
+            //var pointFromScreen = MainMapView.GLSurface.PointFromScreen(e.Location);
 
-            MouseOver.ScreenPos.X = (int)pointFromScreen.X;
-            MouseOver.ScreenPos.Y = (int)pointFromScreen.Y;
+//            logger.Info("Point on screen: Mouse xy[{0}, {1}], PointFromScreen: xy[{2}, {3}]", mouse.X, mouse.Y, pointFromScreen.X, pointFromScreen.Y);
+
+            //MouseOver.ScreenPos.X = (int)pointFromScreen.X;
+            //MouseOver.ScreenPos.Y = (int)pointFromScreen.Y;
 
             var xyDouble = default(XYDouble);
             var flag = false;
