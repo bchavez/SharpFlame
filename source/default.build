@@ -102,7 +102,7 @@
      <!-- PRIVATE BUILD TARGETS -->
 
     <target name="gen-asminfo">
-        <asminfo output="SharpFlame.Core\GlobalAssemblyInfo.cs" language="CSharp">
+        <asminfo output="${path::combine('SharpFlame.Core', 'GlobalAssemblyInfo.cs')}" language="CSharp">
             <imports>
                 <import namespace="System" />
                 <import namespace="System.Reflection" />
