@@ -13,6 +13,7 @@ using Ninject.Extensions.Logging;
 using OpenTK;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain.Colors;
+using SharpFlame.Core.Extensions;
 
 namespace SharpFlame.Settings
 {
@@ -55,7 +56,18 @@ namespace SharpFlame.Settings
         public double FOVDefault { get; set; }
         public bool Mipmaps { get; set; }
         public bool MipmapsHardware { get; set; }
-        public string OpenPath { get; set; }
+
+        public string openPath;
+        public string OpenPath
+        {
+            get { return this.openPath; }
+            set
+            {
+                new Uri(value);
+                this.openPath = value;
+            }
+        }
+
         public string SavePath { get; set; }
         public int MapViewBPP { get; set; }
         public int TextureViewBPP { get; set; }
@@ -100,14 +112,14 @@ namespace SharpFlame.Settings
             OnPropertyChanged(selectorExpression);
             return true;
         }
-        
-                public SettingsManager (ILoggerFactory logFactory, KeyboardManager keyboardManager)
+
+        public SettingsManager(ILoggerFactory logFactory, KeyboardManager keyboardManager)
         {
             logger = logFactory.GetCurrentClassLogger();
-            TilesetDirectories = new ObservableCollection<string> ();
-            ObjectDataDirectories = new ObservableCollection<string> ();
+            TilesetDirectories = new ObservableCollection<string>();
+            ObjectDataDirectories = new ObservableCollection<string>();
 
-            SetToDefaults (keyboardManager);
+            SetToDefaults(keyboardManager);
         }
 
         public void SetToDefaults(KeyboardManager keyboardManager)
@@ -131,7 +143,7 @@ namespace SharpFlame.Settings
             FOVDefault = 30.0D / (50.0D * 900.0D);
             Mipmaps = true;
             MipmapsHardware = true;
-            OpenPath = "";
+            OpenPath = new Uri(Directory.GetCurrentDirectory()).ToString();
             SavePath = "";
             MapViewBPP = DisplayDevice.Default.BitsPerPixel;
             TextureViewBPP = DisplayDevice.Default.BitsPerPixel;

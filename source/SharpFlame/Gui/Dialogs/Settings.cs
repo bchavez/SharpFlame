@@ -125,10 +125,11 @@ namespace SharpFlame.Gui.Dialogs
                 Close();
             };
 
+
             btnAddTilesetDirectory.Click += delegate
                 {
                     var dialog = new SelectFolderDialog();
-                    dialog.Directory = settings.OpenPath ?? Directory.GetCurrentDirectory();
+                    dialog.Directory = settings.OpenPath;
 
                     var result = dialog.ShowDialog(ParentWindow);
                     if( result == DialogResult.Ok )
@@ -140,7 +141,7 @@ namespace SharpFlame.Gui.Dialogs
             btnAddObjectDirectory.Click += delegate
                 {
                     var dialog = new SelectFolderDialog();
-                    dialog.Directory = settings.OpenPath ?? Directory.GetCurrentDirectory();
+                    dialog.Directory = settings.OpenPath;
 
                     var result = dialog.ShowDialog(ParentWindow);
                     if( result == DialogResult.Ok )

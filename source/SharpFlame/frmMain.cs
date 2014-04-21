@@ -548,20 +548,20 @@ namespace SharpFlame
 
         public void Load_Map_Prompt()
         {
-            var Dialog = new OpenFileDialog();
+            var dialog = new OpenFileDialog();
 
-            Dialog.InitialDirectory = App.SettingsManager.OpenPath;
-            Dialog.FileName = "";
-            Dialog.Filter = "Warzone Map Files (*.fmap, *.wz, *.gam, *.lnd)|*.fmap;*.wz;*.gam;*.lnd|All Files (*.*)|*.*";
-            Dialog.Multiselect = true;
-            if ( Dialog.ShowDialog(this) != DialogResult.OK )
+            dialog.InitialDirectory = App.SettingsManager.OpenPath;
+            dialog.FileName = "";
+            dialog.Filter = "Warzone Map Files (*.fmap, *.wz, *.gam, *.lnd)|*.fmap;*.wz;*.gam;*.lnd|All Files (*.*)|*.*";
+            dialog.Multiselect = true;
+            if ( dialog.ShowDialog(this) != DialogResult.OK )
             {
                 return;
             }
-            App.SettingsManager.OpenPath = Path.GetDirectoryName(Dialog.FileName);
+            App.SettingsManager.OpenPath = Path.GetDirectoryName(dialog.FileName);
             var fileName = "";
             var Results = new Result("Loading maps", false);
-            foreach ( var tempLoopVar_FileName in Dialog.FileNames )
+            foreach ( var tempLoopVar_FileName in dialog.FileNames )
             {
                 fileName = tempLoopVar_FileName;
                 logger.Info("Loading map '{0}'", fileName);
