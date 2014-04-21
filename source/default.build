@@ -59,6 +59,18 @@
 
     <target name="build-osx" if="${osx}" description="Main Build Script for OSX">
         <call target="set-dev-env"/>
+        <call target="gen-asminfo" />
+
+        <exec program="xbuild" commandline="SharpFlame.sln">
+            <arg value="/p:Configuration=Release" />
+            <arg value="/p:DefineConstants=Mono" />
+        </exec>
+
+        <property name="il.input.dir" value="SharpFlame.Gui.Linux/bin/Release" />
+        <property name="il.input.exe" value="SharpFlame.Gui.Linux.exe"/>
+        <property name="il.output.dir" value="${build.dir}"/>
+        <call target="il-repack" />
+
 
     </target>
 
