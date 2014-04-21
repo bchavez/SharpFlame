@@ -232,6 +232,7 @@
     
     <!-- Continuous Integration -->
     <target name="ci-build" description="cibuild">
+        <delete dir="${build.base}" />
         <call target ="ci-build-projects"/>
         <call target ="ci-package"/>
     </target>
