@@ -45,7 +45,7 @@
         <call target="set-dev-env"/>
         <call target="gen-asminfo" />
 
-        <exec program="xbuild" commandline="SharpFlame.sln">
+        <exec program="xbuild" commandline="SharpFlame.MonoDevelop.sln">
             <arg value="/p:Configuration=Release" />
             <arg value="/p:DefineConstants=Mono" />
         </exec>
@@ -61,17 +61,29 @@
         <call target="set-dev-env"/>
         <call target="gen-asminfo" />
 
-        <exec program="xbuild" commandline="SharpFlame.sln">
+        <exec program="xbuild" commandline="SharpFlame.MonoDevelop.sln">
             <arg value="/p:Configuration=Release" />
             <arg value="/p:DefineConstants=Mono" />
         </exec>
 
-        <property name="il.input.dir" value="SharpFlame.Gui.Linux/bin/Release" />
-        <property name="il.input.exe" value="SharpFlame.Gui.Linux.exe"/>
-        <property name="il.output.dir" value="${build.dir}"/>
-        <call target="il-repack" />
+        <copy todir="${build.dir}" >
+            <fileset>
+                <include name="tools/MacAppLauncher.app"/>
+            </fileset>
+        </copy>
 
-
+        <copy todir="${build.dir}/MacAppLauncher.app/Contents/MonoBundle">
+            <fileset>
+                <include name="SharpFlame.Gui.Mac/bin/Release/**"/>
+            </fileset>
+        </copy>
+        
+        <copy file="SharpFlame.Gui.Mac/Info.MacAppLauncher.plist" 
+              tofile="${build.dir}/MacAppLauncher.app/Contents/Info.plist" overwrite="true" />
+        
+        <copy file="SharpFlame.Gui.Mac/Resources/Icon.icns"
+              tofile="${build.dir}/MacAppLauncher.app/Contents/Resources/Icon.icns" overwrite="true" />
+        
     </target>
 
     <target name="package">
@@ -80,7 +92,7 @@
                 <include name="tilesets/**"/>
                 <include name="3.1_b4-objects/**"/>
             </fileset>
-        </copy>./n
+        </copy>
         <property name="artifact.name" value="${path::get-file-name(build.dir)}"/>
         <zip zipfile="${path::combine(build.base, artifact.name + '.zip' )}">
             <fileset basedir="${build.dir}">

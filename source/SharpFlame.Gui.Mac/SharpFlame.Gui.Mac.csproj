@@ -6,7 +6,6 @@
     <ProductVersion>12.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}</ProjectGuid>
-    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
     <RootNamespace>SharpFlame.Gui.Mac</RootNamespace>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
@@ -135,17 +134,17 @@
     <BundleResource Include="Resources\Icon.icns" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Eto.Gl.Mac\Eto.Gl.Mac.csproj">
-      <Project>{c6d7920e-3fb5-4dad-80f1-2b76158d493f}</Project>
-      <Name>Eto.Gl.Mac</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Eto.Gl\Eto.Gl.csproj">
-      <Project>{510ce98d-2169-48a0-889c-e743417ee5e1}</Project>
+      <Project>{510CE98D-2169-48A0-889C-E743417EE5E1}</Project>
       <Name>Eto.Gl</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpFlame\SharpFlame.csproj">
-      <Project>{152475a4-3abe-41c4-b338-a2fb7b350faf}</Project>
+      <Project>{152475A4-3ABE-41C4-B338-A2FB7B350FAF}</Project>
       <Name>SharpFlame</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Eto.Gl.Mac\Eto.Gl.Mac.csproj">
+      <Project>{C6D7920E-3FB5-4DAD-80F1-2B76158D493F}</Project>
+      <Name>Eto.Gl.Mac</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
