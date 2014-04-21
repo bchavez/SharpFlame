@@ -50,8 +50,8 @@
             <arg value="/p:DefineConstants=Mono" />
         </exec>
     
-        <property name="il.input.dir" value="SharpFlame.Gui.Gtk/bin/Release" />
-        <property name="il.input.exe" value="SharpFlame.Gui.Gtk.exe"/>
+        <property name="il.input.dir" value="SharpFlame.Gui.Linux/bin/Release" />
+        <property name="il.input.exe" value="SharpFlame.Gui.Linux.exe"/>
         <property name="il.output.dir" value="${build.dir}"/>
         <call target="il-repack" />
     
