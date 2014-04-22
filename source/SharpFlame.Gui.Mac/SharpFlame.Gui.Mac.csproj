@@ -6,7 +6,7 @@
     <ProductVersion>12.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}</ProjectGuid>
-    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectTypeGuids>{948B3504-5B70-4649-8FE4-BDE1FB46EC69};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
     <RootNamespace>SharpFlame.Gui.Mac</RootNamespace>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
@@ -29,6 +29,7 @@
     <CodeSigningKey>Mac Developer</CodeSigningKey>
     <EnableCodeSigning>false</EnableCodeSigning>
     <CreatePackage>false</CreatePackage>
+    <StartupObject>SharpFlame.Gui.Mac.Startup</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -44,6 +45,7 @@
     <CodeSigningKey>Developer ID Application</CodeSigningKey>
     <EnableCodeSigning>true</EnableCodeSigning>
     <CreatePackage>true</CreatePackage>
+    <StartupObject>SharpFlame.Gui.Mac.Startup</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -60,6 +62,7 @@
     <CodeSigningKey>3rd Party Mac Developer Application</CodeSigningKey>
     <EnableCodeSigning>true</EnableCodeSigning>
     <EnablePackageSigning>true</EnablePackageSigning>
+    <StartupObject>SharpFlame.Gui.Mac.Startup</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugMac|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -76,6 +79,7 @@
     <CodeSigningKey>Mac Developer</CodeSigningKey>
     <EnableCodeSigning>false</EnableCodeSigning>
     <CreatePackage>false</CreatePackage>
+    <StartupObject>SharpFlame.Gui.Mac.Startup</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseMac|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -91,6 +95,7 @@
     <CodeSigningKey>Developer ID Application</CodeSigningKey>
     <EnableCodeSigning>true</EnableCodeSigning>
     <CreatePackage>true</CreatePackage>
+    <StartupObject>SharpFlame.Gui.Mac.Startup</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>SharpFlame.Gui.Mac.Startup</StartupObject>
@@ -109,6 +114,7 @@
       <HintPath>..\packages\other\Ninject.Mono\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -135,6 +141,9 @@
     <BundleResource Include="Resources\Icon.icns" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="EtoCustom\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Eto.Gl\Eto.Gl.csproj">
       <Project>{510CE98D-2169-48A0-889C-E743417EE5E1}</Project>
       <Name>Eto.Gl</Name>
@@ -147,8 +156,5 @@
       <Project>{C6D7920E-3FB5-4DAD-80F1-2B76158D493F}</Project>
       <Name>Eto.Gl.Mac</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="EtoCustom\" />
   </ItemGroup>
 </Project>

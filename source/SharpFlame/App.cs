@@ -136,7 +136,7 @@ namespace SharpFlame
 
         // TODO: Remove these once everthing uses ninject.
         public static SettingsManager SettingsManager { get; set; }
-        public static KeyboardManager KeyboardManager { get; set; }       
+        public static KeyboardManager KeyboardManager { get; set; } 
         public static GLSurface MapViewGlSurface { get; set; }
         public static Options UiOptions { get; set; }
 

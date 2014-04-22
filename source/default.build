@@ -66,23 +66,25 @@
             <arg value="/p:DefineConstants=Mono" />
         </exec>
 
-        <copy todir="${build.dir}" >
-            <fileset>
-                <include name="tools/MacAppLauncher.app"/>
+        <mkdir dir="${build.dir}"/>
+        
+        <copy todir="${build.dir}/SharpFlame.app" >
+            <fileset basedir="tools/MacAppLauncher.app">
+                <include name="**/*"/>
             </fileset>
         </copy>
 
-        <copy todir="${build.dir}/MacAppLauncher.app/Contents/MonoBundle">
-            <fileset>
-                <include name="SharpFlame.Gui.Mac/bin/Release/**"/>
+        <copy todir="${build.dir}/SharpFlame.app/Contents/MonoBundle" >
+            <fileset basedir="SharpFlame.Gui.Mac/bin/Release">
+                <include name="**/*"/>
             </fileset>
         </copy>
         
         <copy file="SharpFlame.Gui.Mac/Info.MacAppLauncher.plist" 
-              tofile="${build.dir}/MacAppLauncher.app/Contents/Info.plist" overwrite="true" />
+              tofile="${build.dir}/SharpFlame.app/Contents/Info.plist" overwrite="true" />
         
         <copy file="SharpFlame.Gui.Mac/Resources/Icon.icns"
-              tofile="${build.dir}/MacAppLauncher.app/Contents/Resources/Icon.icns" overwrite="true" />
+              tofile="${build.dir}/SharpFlame.app/Contents/Resources/Icon.icns" overwrite="true" />
         
     </target>
 

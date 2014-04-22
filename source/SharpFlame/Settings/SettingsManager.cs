@@ -143,7 +143,7 @@ namespace SharpFlame.Settings
             FOVDefault = 30.0D / (50.0D * 900.0D);
             Mipmaps = true;
             MipmapsHardware = true;
-            OpenPath = new Uri(Directory.GetCurrentDirectory()).ToString();
+			OpenPath = new Uri(AppDomain.CurrentDomain.BaseDirectory).ToString();
             SavePath = "";
             MapViewBPP = DisplayDevice.Default.BitsPerPixel;
             TextureViewBPP = DisplayDevice.Default.BitsPerPixel;

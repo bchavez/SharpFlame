@@ -5,7 +5,7 @@
 	<key>MonoBundleExecutable</key>
 	<string>SharpFlame.Gui.Mac.exe</string>
 	<key>CFBundleName</key>
-	<string>SharpFLame</string>
+	<string>SharpFlame</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.github.bchavez.sharpflame</string>
 	<key>CFBundleShortVersionString</key>

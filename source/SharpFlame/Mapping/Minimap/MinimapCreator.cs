@@ -61,7 +61,7 @@ namespace SharpFlame.Mapping.Minimap
         public int TextureSize { get; private set; }
         public bool Suppress { get; set; }
 
-        [Inject, Named(NamedBinding.TextureView)]
+        [Inject, Named(NamedBinding.MapView)]
         internal GLSurface GLSurface { get; set; }
 
         private readonly UITimer timer;
