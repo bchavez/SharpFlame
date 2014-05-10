@@ -1,8 +1,7 @@
-#region
+
 
 using SharpFlame.Mapping.Tiles;
 
-#endregion
 
 namespace SharpFlame.Mapping.Tools
 {

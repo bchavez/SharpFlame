@@ -18,7 +18,11 @@
     <property name="build.label" value ="${build.label}.${build.number}" if ="${property::exists('build.number')}" />
     <property name="build.label" value ="${build.label}.11111.11111" unless="${property::exists('build.number')}" />
 
-    <property name="build.dir"  value="${path::get-full-path('__COMPILEOUTPUT')}" />
+    <property name="build.base" value="${path::get-full-path('__COMPILE_OUTPUT')}" />
+    <property name="build.dir"  value="${path::combine(build.base, 'SharpFlame.Windows')}" if="${win}" />
+    <property name="build.dir"  value="${path::combine(build.base, 'SharpFlame.Osx')}" if="${osx}" />
+    <property name="build.dir"  value="${path::combine(build.base, 'SharpFlame.Linux')}" if="${linux}" />
+    
 
     <target name="build-win" if="${win}" description="Main Build Script for Windows OS">
         <call target="set-dev-env"/>
@@ -39,12 +43,49 @@
 
     <target name="build-linux" if="${linux}" description="Main Build Script for Linux">
         <call target="set-dev-env"/>
+        <call target="gen-asminfo" />
 
+        <exec program="xbuild" commandline="SharpFlame.MonoDevelop.sln">
+            <arg value="/p:Configuration=Release" />
+            <arg value="/p:DefineConstants=Mono" />
+        </exec>
+    
+        <property name="il.input.dir" value="SharpFlame.Gui.Linux/bin/Release" />
+        <property name="il.input.exe" value="SharpFlame.Gui.Linux.exe"/>
+        <property name="il.output.dir" value="${build.dir}"/>
+        <call target="il-repack" />
+    
     </target>
 
     <target name="build-osx" if="${osx}" description="Main Build Script for OSX">
         <call target="set-dev-env"/>
+        <call target="gen-asminfo" />
 
+        <exec program="xbuild" commandline="SharpFlame.MonoDevelop.sln">
+            <arg value="/p:Configuration=Release" />
+            <arg value="/p:DefineConstants=Mono" />
+        </exec>
+
+        <mkdir dir="${build.dir}"/>
+        
+        <copy todir="${build.dir}/SharpFlame.app" >
+            <fileset basedir="tools/MacAppLauncher.app">
+                <include name="**/*"/>
+            </fileset>
+        </copy>
+
+        <copy todir="${build.dir}/SharpFlame.app/Contents/MonoBundle" >
+            <fileset basedir="SharpFlame.Gui.Mac/bin/Release">
+                <include name="**/*"/>
+            </fileset>
+        </copy>
+        
+        <copy file="SharpFlame.Gui.Mac/Info.MacAppLauncher.plist" 
+              tofile="${build.dir}/SharpFlame.app/Contents/Info.plist" overwrite="true" />
+        
+        <copy file="SharpFlame.Gui.Mac/Resources/Icon.icns"
+              tofile="${build.dir}/SharpFlame.app/Contents/Resources/Icon.icns" overwrite="true" />
+        
     </target>
 
     <target name="package">
@@ -54,7 +95,8 @@
                 <include name="3.1_b4-objects/**"/>
             </fileset>
         </copy>
-        <zip zipfile="${build.dir}\SharpFlame.zip">
+        <property name="artifact.name" value="${path::get-file-name(build.dir)}"/>
+        <zip zipfile="${path::combine(build.base, artifact.name + '.zip' )}">
             <fileset basedir="${build.dir}">
                 <include name="**" />
             </fileset>
@@ -86,7 +128,7 @@
      <!-- PRIVATE BUILD TARGETS -->
 
     <target name="gen-asminfo">
-        <asminfo output="SharpFlame.Core\GlobalAssemblyInfo.cs" language="CSharp">
+        <asminfo output="${path::combine('SharpFlame.Core', 'GlobalAssemblyInfo.cs')}" language="CSharp">
             <imports>
                 <import namespace="System" />
                 <import namespace="System.Reflection" />
@@ -106,7 +148,7 @@
     <target name="il-repack">
         <!--tools\ILRepack.exe /target:winexe /targetplatform:v4 /wildcards /out:C:\Code\Projects\Public\SharpFlame\source\SharpFlame.Gui.Windows\bin\Release\REPACK\SharpFlame.exe SharpFlame.Gui.Windows\bin\Release\*.exe SharpFlame.Gui.Windows\bin\Release\*.dll-->
         <mkdir dir="${il.output.dir}" />
-        <exec workingdir="${il.input.dir}" program="tools\ILRepack.exe" verbose="true">
+        <exec workingdir="${il.input.dir}" program="tools\ILRepack.exe" verbose="true" if="${win}">
             <arg value="/target:winexe" />
             <arg value="/targetplatform:v4" />
             <arg value="/wildcards" />
@@ -114,11 +156,23 @@
             <arg line="${il.input.exe}" />
             <arg line="*.dll" />
         </exec>
+        <exec workingdir="${il.input.dir}" program="mono" verbose="true" if="${linux or osx}">
+            <arg value="../../../tools/ILRepack.exe" />
+            <arg value="/target:winexe" />
+            <arg value="/targetplatform:v4" />
+            <arg value="/lib:../../../packages/other/GtkSharp/2.12/lib/gtk-sharp-2.0" />
+            <arg value="/lib:../../../packages/other/GtkSharp/2.12/lib/Mono.Cairo" />
+            <arg value="/wildcards" />
+            <arg line="/out:${path::combine(il.output.dir,'SharpFlame.exe')}"/>
+            <arg line="${il.input.exe}" />
+            <arg line="*.dll" />
+        </exec>
+
     </target>
 
      <script language="C#">
          <references>
-             <include name="System.dll"/>
+             <include name="System.dll" if="${win}"/>
              <include name="System.Core.dll" if="${win}"/>
          </references>
          <imports>
@@ -180,32 +234,18 @@
     
     <!-- Continuous Integration -->
     <target name="ci-build" description="cibuild">
-        <property name ="ci.output" value ="_COMPILE_OUTPUT" />
-        
+        <delete dir="${build.base}" />
         <call target ="ci-build-projects"/>
         <call target ="ci-package"/>
     </target>
 
     <target name="ci-build-projects">
-        <delete dir ="${ci.output}" />
-
-
-        <msbuild project="SharpFlame.VS2013.sln" target="Rebuild" >
-            <!--<arg value ="/verbosity:diag" />-->
-            <property name="Configuration" value="Release"/>
-            <property name="VisualStudioVersion" value="11.0"/>            
-            <property name="EnablePackageProcessLoggingAndAssert" value="false" />
-        </msbuild>
-     
+        <call target="build-win" if ="${win}"/>
+        <call target="build-linux" if ="${linux}"/>
+        <call target="build-osx" if ="${osx}"/>
     </target>
     <target name ="ci-package">
-        <zip zipfile="${ci.output}\SharpFlame.Windows.zip" unless="${directory::is-empty(path::combine(ci.output,'SharpFlame.Windows'))}">
-            <fileset basedir ="${ci.output}">
-                <include name ="**/*"/>
-                <exclude name="**/*.log"/>
-                <exclude name ="**/**publishproj.teamcity*"/>
-            </fileset>
-        </zip>
+        <call target="package"/>
     </target>
 
     <target name ="clean-all">
@@ -240,3 +280,4 @@
     </target>
 
 </project>
+

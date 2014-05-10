@@ -1,10 +1,9 @@
-#region
+
 
 using SharpFlame.Collections.Specialized;
 using SharpFlame.Collections.Specialized;
 using SharpFlame.Painters;
 
-#endregion
 
 namespace SharpFlame.Util
 {

@@ -1,12 +1,13 @@
-#region
+
 
 using System;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Colors;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
+using SharpFlame.Core.Extensions;
 
-#endregion
+
 
 namespace SharpFlame.Mapping.Drawing
 {
@@ -27,7 +28,7 @@ namespace SharpFlame.Mapping.Drawing
         public void ActionPerform()
         {
             vertex0.X = Horizontal.X;
-            vertex0.Y = (int)(Map.GetTerrainHeight(Horizontal));
+            vertex0.Y = Map.GetTerrainHeight(Horizontal).ToInt();
             vertex0.Z = Convert.ToInt32(- Horizontal.Y);
             GL.Begin(BeginMode.Lines);
             GL.Color4(Colour.Red, Colour.Green, Colour.Blue, Colour.Alpha);

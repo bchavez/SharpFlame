@@ -1,9 +1,10 @@
-#region
+
 
 using System;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Extensions;
 
-#endregion
+
 
 namespace SharpFlame.Maths
 {
@@ -120,8 +121,8 @@ namespace SharpFlame.Maths
                     }
                     else
                     {
-                        result.Pos.X = a1.X + (int)(ar * adifx);
-                        result.Pos.Y = a1.Y + (int)(ar * adify);
+                        result.Pos.X = a1.X + (ar * adifx).ToInt();
+                        result.Pos.Y = a1.Y + (ar * adify).ToInt();
                         result.Exists = true;
                     }
                 }
@@ -153,8 +154,8 @@ namespace SharpFlame.Maths
                 return linePointB;
             }
             var result = new XYInt();
-            result.X = linePointA.X + (int)(adifx * ar);
-            result.Y = linePointA.Y + (int)(adify * ar);
+            result.X = linePointA.X + (adifx * ar).ToInt();
+            result.Y = linePointA.Y + (adify * ar).ToInt();
             return result;
         }
 

@@ -1,5 +1,4 @@
-﻿#region License
-//
+﻿//
 // The Open Toolkit Library License
 //
 // Copyright (c) 2006 - 2009 the Open Toolkit library, except where noted.
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.ComponentModel;
@@ -389,8 +387,7 @@ namespace Eto.Gl.Windows
             get { return windowInfo; }
         }
 
-        #region Focus
-        public bool HasFocus 
+                public bool HasFocus 
         {
             get { return Focused; }
         }
@@ -402,10 +399,8 @@ namespace Eto.Gl.Windows
                 base.Focus();
             }
         }
-        #endregion
-
-        #region KeyDown/Up
-        public event EventHandler<ef.KeyEventArgs> GlKeyDown = delegate {};
+        
+                public event EventHandler<ef.KeyEventArgs> GlKeyDown = delegate {};
         public event EventHandler<ef.KeyEventArgs> GlKeyUp = delegate {};       
 
         ef.Keys key;
@@ -464,6 +459,5 @@ namespace Eto.Gl.Windows
             GlKeyUp(this, kpea);
             e.Handled = kpea.Handled;
         }
-        #endregion
-    }
+            }
 }

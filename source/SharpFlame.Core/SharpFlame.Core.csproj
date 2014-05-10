@@ -76,7 +76,7 @@
       <HintPath>..\packages\Appccelerate.Fundamentals.1.0.29\lib\Net40\Appccelerate.Fundamentals.dll</HintPath>
     </Reference>
     <Reference Include="Eto">
-      <HintPath>..\packages\Eto-20140305\net40\Eto.dll</HintPath>
+      <HintPath>..\packages\Eto-20140420\net40\Eto.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

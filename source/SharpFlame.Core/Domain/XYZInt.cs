@@ -1,10 +1,13 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using SharpFlame.Core.Extensions;
 
 namespace SharpFlame.Core.Domain
 {
     [StructLayout(LayoutKind.Sequential)]
+    [DebuggerDisplay("X={X}, Y={Y}, Z={Z}")]
     public class XYZInt {
         public Int32 X;
         public Int32 Y;
@@ -36,16 +39,16 @@ namespace SharpFlame.Core.Domain
 
         public void AddDbl( XYZDouble xyz )
         {
-            X += (int)xyz.X;
-            Y += (int)xyz.Y;
-            Z += (int)xyz.Z;
+            X += xyz.X.ToInt();
+            Y += xyz.Y.ToInt();
+            Z += xyz.Z.ToInt();
         }
 
         public void SetDbl( XYZDouble xyz )
         {
-            X = (int)xyz.X;
-            Y = (int)xyz.Y;
-            Z = (int)xyz.Z;
+            X = xyz.X.ToInt();
+            Y = xyz.Y.ToInt();
+            Z = xyz.Z.ToInt();
         }
     }
 }

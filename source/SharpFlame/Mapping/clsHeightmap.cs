@@ -1,14 +1,15 @@
-#region
+
 
 using System;
 using System.Diagnostics;
 using System.Drawing;
 using SharpFlame.Bitmaps;
 using SharpFlame.Core;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Maths;
 using SharpFlame.Util;
 
-#endregion
+
 
 namespace SharpFlame
 {
@@ -30,12 +31,12 @@ namespace SharpFlame
             var Y = 0;
             long HeightMultiplierHalved = 0;
 
-            HeightMultiplierHalved = (int)(HeightMultiplier / 2.0D);
+            HeightMultiplierHalved = Convert.ToInt64(HeightMultiplier / 2.0D);
             for ( Y = 0; Y <= HeightData.SizeY - 1; Y++ )
             {
                 for ( X = 0; X <= HeightData.SizeX - 1; X++ )
                 {
-                    HeightData.Height[Y, X] = (int)(App.Random.Next() * HeightMultiplier - HeightMultiplierHalved);
+                    HeightData.Height[Y, X] = Convert.ToInt64(App.Random.Next() * HeightMultiplier - HeightMultiplierHalved);
                 }
             }
         }
@@ -115,75 +116,57 @@ namespace SharpFlame
             //centre points
             Dist = MathUtil.RootTwo;
             Variation = Dist * LayerFactor * HeightMultiplier;
-            VariationHalved = (int)(Variation / 2.0D);
+            VariationHalved = Convert.ToInt64(Variation / 2.0D);
             for ( Y = 1; Y <= HeightData.SizeY - 2; Y += 2 )
             {
                 for ( X = 1; X <= HeightData.SizeX - 2; X += 2 )
                 {
-                    Mean =
-                        Convert.ToInt32(
-                            Convert.ToDouble(Convert.ToInt32(HeightData.Height[Y - 1, X - 1] + HeightData.Height[Y - 1, X + 1]) +
-                                             HeightData.Height[Y + 1, X - 1] + HeightData.Height[Y + 1, X + 1]) / 4.0D);
-                    HeightData.Height[Y, X] = Convert.ToInt64(Convert.ToInt32(Mean + ((int)(App.Random.Next() * Variation))) - VariationHalved);
+                    Mean = Convert.ToInt64((HeightData.Height[Y - 1, X - 1] + HeightData.Height[Y - 1, X + 1] + HeightData.Height[Y + 1, X - 1] + HeightData.Height[Y + 1, X + 1]) / 4.0d);
+                    HeightData.Height[Y, X] = Mean + Convert.ToInt64(App.Random.Next() * Variation) - VariationHalved;
                 }
             }
 
             //side points
             Dist = 1.0D;
             Variation = Dist * LayerFactor * HeightMultiplier;
-            VariationHalved = (int)(Variation / 2.0D);
+            VariationHalved = Convert.ToInt64(Variation / 2.0D);
             //inner side points
             for ( Y = 1; Y <= HeightData.SizeY - 2; Y++ )
             {
-                A = Y - ((int)((Y / 2.0D))) * 2;
+                A = Y - (Y / 2.0D).Floor().ToInt() * 2;
                 for ( X = 1 + A; X <= HeightData.SizeX - 2 - A; X += 2 )
                 {
-                    Mean =
-                        Convert.ToInt32(
-                            Convert.ToDouble(Convert.ToInt32(HeightData.Height[Y - 1, X] + HeightData.Height[Y, X - 1]) + HeightData.Height[Y, X + 1] +
-                                             HeightData.Height[Y + 1, X]) / 4.0D);
-                    HeightData.Height[Y, X] = Convert.ToInt64(Convert.ToInt32(Mean + ((int)(App.Random.Next() * Variation))) - VariationHalved);
+                    Mean = Convert.ToInt64((HeightData.Height[Y - 1, X] + HeightData.Height[Y, X - 1] + HeightData.Height[Y, X + 1] + HeightData.Height[Y + 1, X]) / 4.0d);
+                    HeightData.Height[Y, X] = Mean + Convert.ToInt64(App.Random.Next() * Variation) - VariationHalved;
                 }
             }
             //top side points
             Y = 0;
             for ( X = 1; X <= HeightData.SizeX - 2; X += 2 )
             {
-                Mean =
-                    Convert.ToInt32(
-                        Convert.ToDouble(Convert.ToInt32(HeightData.Height[Y, X - 1] + HeightData.Height[Y, X + 1]) + HeightData.Height[Y + 1, X]) /
-                        3.0D);
-                HeightData.Height[Y, X] = Convert.ToInt64(Convert.ToInt32(Mean + ((int)(App.Random.Next() * Variation))) - VariationHalved);
+                Mean = Convert.ToInt64((HeightData.Height[Y, X - 1] + HeightData.Height[Y, X + 1] + HeightData.Height[Y + 1, X]) / 3.0d);
+                HeightData.Height[Y, X] = Mean + Convert.ToInt64(App.Random.Next() * Variation) - VariationHalved;
             }
             //left side points
             X = 0;
             for ( Y = 1; Y <= HeightData.SizeY - 2; Y += 2 )
             {
-                Mean =
-                    Convert.ToInt32(
-                        Convert.ToDouble(Convert.ToInt32(HeightData.Height[Y - 1, X] + HeightData.Height[Y, X + 1]) + HeightData.Height[Y + 1, X]) /
-                        3.0D);
-                HeightData.Height[Y, X] = Convert.ToInt64(Convert.ToInt32(Mean + ((int)(App.Random.Next() * Variation))) - VariationHalved);
+                Mean = Convert.ToInt64((HeightData.Height[Y - 1, X] + HeightData.Height[Y, X + 1] + HeightData.Height[Y + 1, X]) / 3.0d);
+                HeightData.Height[Y, X] = Mean + Convert.ToInt64(App.Random.Next() * Variation) - VariationHalved;
             }
             //right side points
             X = HeightData.SizeX - 1;
             for ( Y = 1; Y <= HeightData.SizeY - 2; Y += 2 )
             {
-                Mean =
-                    Convert.ToInt32(
-                        Convert.ToDouble(Convert.ToInt32(HeightData.Height[Y - 1, X] + HeightData.Height[Y, X - 1]) + HeightData.Height[Y + 1, X]) /
-                        3.0D);
-                HeightData.Height[Y, X] = Convert.ToInt64(Convert.ToInt32(Mean + ((int)(App.Random.Next() * Variation))) - VariationHalved);
+                Mean = Convert.ToInt64((HeightData.Height[Y - 1, X] + HeightData.Height[Y, X - 1] + HeightData.Height[Y + 1, X]) / 3.0d);
+                HeightData.Height[Y, X] = Mean + Convert.ToInt64(App.Random.Next() * Variation) - VariationHalved;
             }
             //bottom side points
             Y = HeightData.SizeY - 1;
             for ( X = 1; X <= HeightData.SizeX - 2; X += 2 )
             {
-                Mean =
-                    Convert.ToInt32(
-                        Convert.ToDouble(Convert.ToInt32(HeightData.Height[Y - 1, X] + HeightData.Height[Y, X - 1]) + HeightData.Height[Y, X + 1]) /
-                        3.0D);
-                HeightData.Height[Y, X] = Convert.ToInt64(Convert.ToInt32(Mean + ((int)(App.Random.Next() * Variation))) - VariationHalved);
+                Mean = Convert.ToInt64((HeightData.Height[Y - 1, X] + HeightData.Height[Y, X - 1] + HeightData.Height[Y, X + 1]) / 3.0d);
+                HeightData.Height[Y, X] = Mean + Convert.ToInt64(App.Random.Next() * Variation) - VariationHalved;
             }
         }
 
@@ -435,11 +418,11 @@ namespace SharpFlame
                     dblTempB = Convert.ToDouble(SourceB.HeightData.Height[Y, X] * dblTempD);
                     if ( dblTempA >= dblTempB )
                     {
-                        HeightData.Height[Y, X] = (int)dblTempA;
+                        HeightData.Height[Y, X] = dblTempA.ToLong();
                     }
                     else
                     {
-                        HeightData.Height[Y, X] = (int)dblTempB;
+                        HeightData.Height[Y, X] = dblTempB.ToLong();
                     }
                 }
             }
@@ -461,11 +444,11 @@ namespace SharpFlame
                     dblTemp3 = Convert.ToDouble(Source.HeightData.Height[Y, X] * dblTemp);
                     if ( dblTemp3 >= dblTemp2 )
                     {
-                        HeightData.Height[Y, X] = (int)dblTemp3;
+                        HeightData.Height[Y, X] = dblTemp3.ToLong();
                     }
                     else
                     {
-                        HeightData.Height[Y, X] = (int)dblTemp2;
+                        HeightData.Height[Y, X] = dblTemp2.ToLong();
                     }
                 }
             }
@@ -493,11 +476,11 @@ namespace SharpFlame
                     dblTempB = Convert.ToDouble(SourceB.HeightData.Height[Y, X] * dblTempD);
                     if ( dblTempA <= dblTempB )
                     {
-                        HeightData.Height[Y, X] = (int)dblTempA;
+                        HeightData.Height[Y, X] = dblTempA.ToLong();
                     }
                     else
                     {
-                        HeightData.Height[Y, X] = (int)dblTempB;
+                        HeightData.Height[Y, X] = dblTempB.ToLong();
                     }
                 }
             }
@@ -519,11 +502,11 @@ namespace SharpFlame
                     dblTemp3 = Convert.ToDouble(Source.HeightData.Height[Y, X] * dblTemp);
                     if ( dblTemp3 <= dblTemp2 )
                     {
-                        HeightData.Height[Y, X] = (int)dblTemp3;
+                        HeightData.Height[Y, X] = dblTemp3.ToLong();
                     }
                     else
                     {
-                        HeightData.Height[Y, X] = (int)dblTemp2;
+                        HeightData.Height[Y, X] = dblTemp2.ToLong();
                     }
                 }
             }
@@ -567,15 +550,15 @@ namespace SharpFlame
                     dblTemp = Convert.ToDouble(Source.HeightData.Height[Y, X] * Source.HeightScale);
                     if ( dblTemp < HeightMin )
                     {
-                        HeightData.Height[Y, X] = (int)(HeightMin / HeightScale);
+                        HeightData.Height[Y, X] = (HeightMin / HeightScale).ToLong();
                     }
                     else if ( dblTemp > HeightMax )
                     {
-                        HeightData.Height[Y, X] = (int)(HeightMax / HeightScale);
+                        HeightData.Height[Y, X] = (HeightMax / HeightScale).ToLong();
                     }
                     else
                     {
-                        HeightData.Height[Y, X] = (int)(dblTemp / HeightScale);
+                        HeightData.Height[Y, X] = (dblTemp / HeightScale).ToLong();
                     }
                 }
             }
@@ -619,10 +602,11 @@ namespace SharpFlame
             {
                 for ( X = 0; X <= HeightData.SizeX - 1; X++ )
                 {
-                    HeightData.Height[Y, X] =
-                        (int)
-                            (((1.0D - Math.Sin((1.0D - Convert.ToInt32(Source.HeightData.Height[Y, X] - HeightMin) / (double)HeightRange) * MathUtil.RadOf90Deg)) *
-                              HeightRange + HeightMin) * Source.HeightScale / HeightScale);
+                    var val =
+                        (((1.0d - Math.Sin((1.0d - (Source.HeightData.Height[Y, X] - HeightMin) / (double)HeightRange) * MathUtil.RadOf90Deg)) * HeightRange + HeightMin) *
+                         Source.HeightScale / HeightScale).ToLong();
+
+                    HeightData.Height[Y, X] = val;
                 }
             }
         }
@@ -649,11 +633,11 @@ namespace SharpFlame
             {
                 for ( X = 0; X <= HeightData.SizeX - 1; X++ )
                 {
-                    HeightData.Height[Y, X] =
-                        (int)
-                            ((Math.Sin(
-                                Convert.ToDouble(Convert.ToInt32(Convert.ToDouble(Source.HeightData.Height[Y, X] - HeightMin) / HeightRange) *
-                                                 MathUtil.RadOf90Deg)) * HeightRange + HeightMin) * Source.HeightScale / HeightScale);
+                    var val =
+                        ((Math.Sin((Source.HeightData.Height[Y, X] - HeightMin) / (double)HeightRange * MathUtil.RadOf90Deg) * HeightRange + HeightMin) * Source.HeightScale / HeightScale)
+                            .ToLong();
+
+                    HeightData.Height[Y, X] = val;
                 }
             }
         }
@@ -677,7 +661,7 @@ namespace SharpFlame
             if ( HeightRange > 0 )
             {
                 Ratio = (HeightMax - HeightMin) / (HeightRange * HeightScale);
-                lngTemp = (int)(HeightMin / HeightScale);
+                lngTemp = (HeightMin / HeightScale).ToLong();
                 for ( Y = 0; Y <= HeightData.SizeY - 1; Y++ )
                 {
                     for ( X = 0; X <= HeightData.SizeX - 1; X++ )
@@ -689,7 +673,7 @@ namespace SharpFlame
             }
             else
             {
-                lngTemp = (int)((HeightMin + HeightMax) / 2.0D);
+                lngTemp = ((HeightMin + HeightMax) / 2.0D).ToLong();
                 for ( Y = 0; Y <= HeightData.SizeY - 1; Y++ )
                 {
                     for ( X = 0; X <= HeightData.SizeX - 1; X++ )
@@ -810,26 +794,26 @@ namespace SharpFlame
             Log2 = Math.Log(2.0D);
             if ( Final_SizeX > Final_SizeY )
             {
-                Inflations = (int)(Math.Ceiling(Math.Log(Final_SizeX - 1) / Log2));
+                Inflations = Math.Ceiling(Math.Log(Final_SizeX - 1) / Log2).ToInt();
             }
             else
             {
-                Inflations = (int)(Math.Ceiling(Math.Log(Final_SizeY - 1) / Log2));
+                Inflations = Math.Ceiling(Math.Log(Final_SizeY - 1) / Log2).ToInt();
             }
-            Inflations = (int)(Math.Ceiling(Scale));
+            Inflations = Math.Ceiling(Scale).ToInt();
             if ( Inflations < 0 )
             {
                 Debugger.Break();
             }
             Ratio = Math.Pow(2.0D, (Scale - Inflations));
-            intTemp = (int)(Math.Pow(2.0D, Inflations));
-            SizeX = ((int)(Math.Ceiling((Final_SizeX / Ratio - 1) / intTemp))) + 1;
-            SizeY = ((int)(Math.Ceiling((Final_SizeY / Ratio - 1) / intTemp))) + 1;
+            intTemp = Math.Pow(2.0D, Inflations).ToInt();
+            SizeX = Math.Ceiling((Final_SizeX / Ratio - 1) / intTemp).ToInt() + 1;
+            SizeY = Math.Ceiling((Final_SizeY / Ratio - 1) / intTemp).ToInt() + 1;
 
             GenerateNew(SizeY, SizeX, Inflations, 1.0D, HeightMultiplier);
             if ( Inflations > Scale )
             {
-                hmTemp.Stretch(this, (int)(HeightData.SizeX * Ratio), (int)(HeightData.SizeY * Ratio));
+                hmTemp.Stretch(this, (HeightData.SizeX * Ratio).ToInt(), (HeightData.SizeY * Ratio).ToInt());
                 HeightData = hmTemp.HeightData;
                 hmTemp.HeightData = new clsHeightData();
             }
@@ -883,13 +867,13 @@ namespace SharpFlame
                     OldPixEndX = (OldPixelX + 1) * New_Per_OldX;
                     OldPixEndY = (OldPixelY + 1) * New_Per_OldY;
                     //cycles through each new image pixel that is to be influenced
-                    for ( NewPixelY = (int)OldPixStartY; NewPixelY <= (int)(-(-OldPixEndY)); NewPixelY++ )
+                    for ( NewPixelY = Math.Floor(OldPixStartY).ToInt(); NewPixelY <= -Math.Floor(-OldPixEndY).ToInt(); NewPixelY++ )
                     {
                         if ( NewPixelY >= SizeY )
                         {
                             break;
                         }
-                        for ( NewPixelX = (int)OldPixStartX; NewPixelX <= (int)(-(-OldPixEndX)); NewPixelX++ )
+                        for ( NewPixelX = Math.Floor(OldPixStartX).ToInt(); NewPixelX <= -Math.Floor(-OldPixEndX).ToInt(); NewPixelX++ )
                         {
                             if ( NewPixelX >= SizeX )
                             {

@@ -7,6 +7,7 @@ namespace SharpFlame.Core.Domain
 {
     [DebuggerDisplay("X={X}, Y={Y}")]
     [StructLayout(LayoutKind.Sequential)]
+    [DebuggerDisplay("X={X}, Y={Y}")]
     public struct XYInt {
         public Int32 X;
         public Int32 Y;

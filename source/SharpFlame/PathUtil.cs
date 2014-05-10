@@ -1,8 +1,7 @@
-#region
+
 
 using System.IO;
 
-#endregion
 
 public static class PathUtil
 {

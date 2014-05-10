@@ -1,11 +1,10 @@
-#region
+
 
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Mapping.Tiles;
 
-#endregion
 
 namespace SharpFlame.Mapping.Renderers
 {

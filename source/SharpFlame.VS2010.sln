@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFlame.Old", "SharpFlam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFlame.Gui", "SharpFlame.Gui\SharpFlame.Gui.csproj", "{EA9D0D64-812B-4A4F-9227-6BEC303A10DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFlame.Gui.Gtk", "SharpFlame.Gui.Gtk\SharpFlame.Gui.Gtk.csproj", "{FEBB5203-A2F1-49AD-B045-F077D372DFDD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFlame.Gui.Linux", "SharpFlame.Gui.Linux\SharpFlame.Gui.Linux.csproj", "{FEBB5203-A2F1-49AD-B045-F077D372DFDD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFlame.Gui.Mac", "SharpFlame.Gui.Mac\SharpFlame.Gui.Mac.csproj", "{FA52AEF0-A10F-4EB4-B19A-863A2D8B4563}"
 EndProject

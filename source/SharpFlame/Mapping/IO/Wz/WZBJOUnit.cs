@@ -1,10 +1,9 @@
-#region
+
 
 using System;
 using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
 
-#endregion
 
 namespace SharpFlame.Mapping.IO.Wz
 {

@@ -1,4 +1,4 @@
-#region
+
 
 using System.Windows.Forms;
 using SharpFlame.Core;
@@ -6,7 +6,6 @@ using SharpFlame.Core.Interfaces;
 using Sprache;
 using Result = SharpFlame.Core.Result;
 
-#endregion
 
 namespace SharpFlame
 {

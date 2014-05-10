@@ -67,7 +67,7 @@ namespace SharpFlame.Mapping.IO.TTP
                     return returnResult;
                 }
                 uintTemp = file.ReadUInt32();
-                for ( A = 0; A <= ((int)(Math.Min(uintTemp, (uint)map.Tileset.Tiles.Count))) - 1; A++ )
+                for ( A = 0; A <= Math.Min(uintTemp, (uint)map.Tileset.Tiles.Count) - 1; A++ )
                 {
                     ushortTemp = file.ReadUInt16();
                     if ( ushortTemp > 11 )

@@ -1,4 +1,4 @@
-#region
+
 
 using Eto.Forms;
 using SharpFlame.Collections;
@@ -9,7 +9,6 @@ using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
 using SharpFlame.Util;
 
-#endregion
 
 namespace SharpFlame.Mapping
 {

@@ -1,10 +1,8 @@
-﻿#region
-
+﻿
 using System;
 using System.Runtime.InteropServices;
 using SharpFlame.Core.Domain;
 
-#endregion
 
 namespace SharpFlame.Maths
 {

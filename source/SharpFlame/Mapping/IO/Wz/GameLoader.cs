@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,6 @@ using SharpFlame.FileIO;
 using SharpFlame.Mapping.IO.TTP;
 using SharpFlame.Util;
 
-#endregion
 
 namespace SharpFlame.Mapping.IO.Wz
 {

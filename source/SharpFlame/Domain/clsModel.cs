@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using System.IO;
@@ -9,7 +9,6 @@ using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Domain.ObjData;
 
-#endregion
 
 namespace SharpFlame.Domain
 {

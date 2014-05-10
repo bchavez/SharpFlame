@@ -1,29 +1,3 @@
- #region License
-  /*
-  The MIT License (MIT)
- 
-  Copyright (c) 2013-2014 The SharpFlame Authors.
- 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
- 
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
- 
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  THE SOFTWARE.
-  */
- #endregion
-
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -39,6 +13,7 @@ using Ninject.Extensions.Logging;
 using OpenTK;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain.Colors;
+using SharpFlame.Core.Extensions;
 
 namespace SharpFlame.Settings
 {
@@ -46,8 +21,7 @@ namespace SharpFlame.Settings
     {
         private readonly ILogger logger;
 
-        #region Properties
-        public bool AutoSaveEnabled {  get; set; }
+                public bool AutoSaveEnabled {  get; set; }
         public bool AutoSaveCompress { get; set; }
         public UInt32 AutoSaveMinIntervalSeconds { get; set; }
         public UInt32 AutoSaveMinChanges { get; set; }
@@ -82,7 +56,18 @@ namespace SharpFlame.Settings
         public double FOVDefault { get; set; }
         public bool Mipmaps { get; set; }
         public bool MipmapsHardware { get; set; }
-        public string OpenPath { get; set; }
+
+        public string openPath;
+        public string OpenPath
+        {
+            get { return this.openPath; }
+            set
+            {
+                new Uri(value);
+                this.openPath = value;
+            }
+        }
+
         public string SavePath { get; set; }
         public int MapViewBPP { get; set; }
         public int TextureViewBPP { get; set; }
@@ -94,10 +79,8 @@ namespace SharpFlame.Settings
 
         [JsonIgnore]
         public Font Font { get; private set; }
-        #endregion
-
-        #region INotifyPropertyChanged
-
+        
+        
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -129,16 +112,14 @@ namespace SharpFlame.Settings
             OnPropertyChanged(selectorExpression);
             return true;
         }
-        #endregion
 
-        #region Public Methods
-        public SettingsManager (ILoggerFactory logFactory, KeyboardManager keyboardManager)
+        public SettingsManager(ILoggerFactory logFactory, KeyboardManager keyboardManager)
         {
             logger = logFactory.GetCurrentClassLogger();
-            TilesetDirectories = new ObservableCollection<string> ();
-            ObjectDataDirectories = new ObservableCollection<string> ();
+            TilesetDirectories = new ObservableCollection<string>();
+            ObjectDataDirectories = new ObservableCollection<string>();
 
-            SetToDefaults (keyboardManager);
+            SetToDefaults(keyboardManager);
         }
 
         public void SetToDefaults(KeyboardManager keyboardManager)
@@ -162,7 +143,7 @@ namespace SharpFlame.Settings
             FOVDefault = 30.0D / (50.0D * 900.0D);
             Mipmaps = true;
             MipmapsHardware = true;
-            OpenPath = "";
+			OpenPath = new Uri(AppDomain.CurrentDomain.BaseDirectory).ToString();
             SavePath = "";
             MapViewBPP = DisplayDevice.Default.BitsPerPixel;
             TextureViewBPP = DisplayDevice.Default.BitsPerPixel;
@@ -279,6 +260,5 @@ namespace SharpFlame.Settings
 
             return returnResult;
         }
-        #endregion       
-    }
+            }
 }

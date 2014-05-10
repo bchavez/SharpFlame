@@ -1,29 +1,3 @@
-#region License
- /*
- The MIT License (MIT)
-
- Copyright (c) 2013-2014 The SharpFlame Authors.
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- */
-#endregion
-
 using System;
 using System.Diagnostics;
 using Appccelerate.EventBroker;
@@ -36,6 +10,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 using SharpFlame.Infrastructure;
 using SharpFlame.Mapping;
@@ -457,17 +432,17 @@ namespace SharpFlame.Gui.Sections
                     mouseOverTerrain.Tile.Normal.Y
                 );
                 lblVertex.Text = string.Format("Vertex  x:{0}, y:{1}, alt:{2} ({3}x{4})", 
-                    Convert.ToString(mouseOverTerrain.Vertex.Normal.X), 
-                    Convert.ToString(mouseOverTerrain.Vertex.Normal.Y), 
+                    mouseOverTerrain.Vertex.Normal.X, 
+                    mouseOverTerrain.Vertex.Normal.Y, 
                     mainMap.Terrain.Vertices[mouseOverTerrain.Vertex.Normal.X, mouseOverTerrain.Vertex.Normal.Y].Height * mainMap.HeightMultiplier, 
-                    Convert.ToString(mainMap.Terrain.Vertices[mouseOverTerrain.Vertex.Normal.X, mouseOverTerrain.Vertex.Normal.Y].Height), 
-                    Convert.ToString(mainMap.HeightMultiplier)
+                    mainMap.Terrain.Vertices[mouseOverTerrain.Vertex.Normal.X, mouseOverTerrain.Vertex.Normal.Y].Height, 
+                    mainMap.HeightMultiplier
                 );
                 lblPos.Text = string.Format("Pos x:{0}, y:{1}, alt:{2}, slope: {3}°", 
-                    Convert.ToString(mouseOverTerrain.Pos.Horizontal.X), 
-                    Convert.ToString(mouseOverTerrain.Pos.Horizontal.Y), 
-                    Convert.ToString(mouseOverTerrain.Pos.Altitude), 
-                    Convert.ToString(Math.Round(mainMap.GetTerrainSlopeAngle(mouseOverTerrain.Pos.Horizontal) / MathUtil.RadOf1Deg * 10.0D) / 10.0D)
+                    mouseOverTerrain.Pos.Horizontal.X, 
+                    mouseOverTerrain.Pos.Horizontal.Y, 
+                    mouseOverTerrain.Pos.Altitude, 
+                    Math.Round(mainMap.GetTerrainSlopeAngle(mouseOverTerrain.Pos.Horizontal) / MathUtil.RadOf1Deg * 10.0D) / 10.0D
                 );
             }
         }
@@ -679,10 +654,8 @@ namespace SharpFlame.Gui.Sections
                         {
                             var centre = App.CalcUnitsCentrePos(mainMap.SelectedUnits.GetItemsAsSimpleList());
                             var offset = new XYInt();
-                            offset.X = ((int)(Math.Round(Convert.ToDouble((mouseOverTerrain.Pos.Horizontal.X - centre.X) / Constants.TerrainGridSpacing)))) *
-                                       Constants.TerrainGridSpacing;
-                            offset.Y = ((int)(Math.Round(Convert.ToDouble((mouseOverTerrain.Pos.Horizontal.Y - centre.Y) / Constants.TerrainGridSpacing)))) *
-                                       Constants.TerrainGridSpacing;
+                            offset.X = Math.Round(Convert.ToDouble((mouseOverTerrain.Pos.Horizontal.X - centre.X) / Constants.TerrainGridSpacing)).ToInt() * Constants.TerrainGridSpacing;
+                            offset.Y = Math.Round(Convert.ToDouble((mouseOverTerrain.Pos.Horizontal.Y - centre.Y) / Constants.TerrainGridSpacing)).ToInt() * Constants.TerrainGridSpacing;
                             var objectPosOffset = new clsObjectPosOffset
                                 {
                                     Map = mainMap,

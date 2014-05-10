@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using System.Diagnostics;
@@ -8,6 +8,7 @@ using NLog;
 using SharpFlame.Collections.Specialized;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 using SharpFlame.Generators;
 using SharpFlame.Mapping;
@@ -17,7 +18,7 @@ using SharpFlame.Maths;
 using SharpFlame.Pathfinding;
 using SharpFlame.Util;
 
-#endregion
+
 
 namespace SharpFlame
 {
@@ -106,10 +107,9 @@ namespace SharpFlame
 
             //create passage nodes
 
-            var passageRadius = (int)(128.0F * NodeScale);
+            var passageRadius = (128.0F * NodeScale).ToInt();
             var maxLikelyPassageNodeCount = 0;
-            maxLikelyPassageNodeCount =
-                (int)(Math.Ceiling(Convert.ToDecimal(2.0D * TileSize.X * 128 * TileSize.Y * 128 / (Math.PI * passageRadius * passageRadius))));
+            maxLikelyPassageNodeCount = Math.Ceiling(Convert.ToDecimal(2.0D * TileSize.X * 128 * TileSize.Y * 128 / (Math.PI * passageRadius * passageRadius))).ToInt();
 
             passageNodes = new clsPassageNode[SymmetryBlockCount, maxLikelyPassageNodeCount];
             const int EdgeOffset = 0 * 128;
@@ -119,38 +119,32 @@ namespace SharpFlame
 
             if ( SymmetryBlockCountXY.X == 1 )
             {
-                edgeSections.X =
-                    Convert.ToInt32(
-                        ((TileSize.X * Constants.TerrainGridSpacing - EdgeOffset * 2.0D) / (NodeScale * Constants.TerrainGridSpacing * 2.0F)));
+                edgeSections.X = ((TileSize.X * Constants.TerrainGridSpacing - EdgeOffset * 2.0D) / (NodeScale * Constants.TerrainGridSpacing * 2.0F)).Floor().ToInt();
                 edgeSectionSize.X = (TileSize.X * Constants.TerrainGridSpacing - EdgeOffset * 2.0D) / edgeSections.X;
                 edgeSections.X--;
             }
             else
             {
-                edgeSections.X =
-                    (int)
-                        (((TileSize.X * Constants.TerrainGridSpacing / SymmetryBlockCountXY.X - EdgeOffset) /
-                          (NodeScale * Constants.TerrainGridSpacing * 2.0F) - 0.5D));
-                edgeSectionSize.X =
-                    Convert.ToDouble((TileSize.X * Constants.TerrainGridSpacing / SymmetryBlockCountXY.X - EdgeOffset) /
-                                     (Convert.ToDouble(
-                                         ((TileSize.X * Constants.TerrainGridSpacing / SymmetryBlockCountXY.X - EdgeOffset) /
-                                          (NodeScale * Constants.TerrainGridSpacing * 2.0F) - 0.5D)) + 0.5D));
+                edgeSections.X = ((TileSize.X * Constants.TerrainGridSpacing / SymmetryBlockCountXY.X - EdgeOffset) / (NodeScale * Constants.TerrainGridSpacing * 2.0F) - 0.5D).Floor().ToInt();
+                edgeSectionSize.X = (TileSize.X * Constants.TerrainGridSpacing / SymmetryBlockCountXY.X - EdgeOffset) /
+                                    (((TileSize.X * Constants.TerrainGridSpacing / SymmetryBlockCountXY.X - EdgeOffset) /
+                                      (NodeScale * Constants.TerrainGridSpacing * 2.0F) - 0.5D).Floor() + 0.5D);
             }
+
             if ( SymmetryBlockCountXY.Y == 1 )
             {
-                edgeSections.Y =
-                    Convert.ToInt32(
-                        ((TileSize.Y * Constants.TerrainGridSpacing - EdgeOffset * 2.0D) / (NodeScale * Constants.TerrainGridSpacing * 2.0F)));
+                edgeSections.Y = (
+                    (TileSize.Y * Constants.TerrainGridSpacing - EdgeOffset * 2.0D) / (NodeScale * Constants.TerrainGridSpacing * 2.0F)
+                    ).Floor().ToInt();
                 edgeSectionSize.Y = (TileSize.Y * Constants.TerrainGridSpacing - EdgeOffset * 2.0D) / edgeSections.Y;
                 edgeSections.Y--;
             }
             else
             {
-                edgeSections.Y =
-                    Convert.ToInt32(
-                        ((TileSize.Y * Constants.TerrainGridSpacing / SymmetryBlockCountXY.Y - EdgeOffset) /
-                         (NodeScale * Constants.TerrainGridSpacing * 2.0F) - 0.5D));
+                edgeSections.Y =(
+                        (TileSize.Y * Constants.TerrainGridSpacing / SymmetryBlockCountXY.Y - EdgeOffset) /
+                        (NodeScale * Constants.TerrainGridSpacing * 2.0F) - 0.5D
+                        ).Floor().ToInt();
                 edgeSectionSize.Y =
                     Convert.ToDouble((TileSize.Y * Constants.TerrainGridSpacing / SymmetryBlockCountXY.Y - EdgeOffset) /
                                      (Convert.ToDouble(
@@ -161,7 +155,7 @@ namespace SharpFlame
             passageNodeCount = 0;
             for ( y = 0; y <= edgeSections.Y; y++ )
             {
-                if ( !MakePassageNodes(new XYInt(EdgeOffset, EdgeOffset + (int)(y * edgeSectionSize.Y)), true) )
+                if ( !MakePassageNodes(new XYInt(EdgeOffset, EdgeOffset + (y * edgeSectionSize.Y).ToInt()), true) )
                 {
                     returnResult.ProblemAdd("Error: Bad border node.");
                     return returnResult;
@@ -169,7 +163,7 @@ namespace SharpFlame
                 if ( SymmetryBlockCountXY.X == 1 )
                 {
                     if (
-                        !MakePassageNodes(new XYInt(TileSize.X * Constants.TerrainGridSpacing - EdgeOffset, EdgeOffset + (int)(y * edgeSectionSize.Y)), true) )
+                        !MakePassageNodes(new XYInt(TileSize.X * Constants.TerrainGridSpacing - EdgeOffset, EdgeOffset + Convert.ToInt32(y * edgeSectionSize.Y)), true) )
                     {
                         returnResult.ProblemAdd("Error: Bad border node.");
                         return returnResult;
@@ -178,7 +172,7 @@ namespace SharpFlame
             }
             for ( x = 1; x <= edgeSections.X; x++ )
             {
-                if ( !MakePassageNodes(new XYInt(EdgeOffset + (int)(x * edgeSectionSize.X), EdgeOffset), true) )
+                if ( !MakePassageNodes(new XYInt(EdgeOffset + Convert.ToInt32(x * edgeSectionSize.X), EdgeOffset), true) )
                 {
                     returnResult.ProblemAdd("Error: Bad border node.");
                     return returnResult;
@@ -186,7 +180,7 @@ namespace SharpFlame
                 if ( SymmetryBlockCountXY.Y == 1 )
                 {
                     if (
-                        !MakePassageNodes(new XYInt(EdgeOffset + (int)(x * edgeSectionSize.X), TileSize.Y * Constants.TerrainGridSpacing - EdgeOffset), true) )
+                        !MakePassageNodes(new XYInt(EdgeOffset + Convert.ToInt32(x * edgeSectionSize.X), TileSize.Y * Constants.TerrainGridSpacing - EdgeOffset), true) )
                     {
                         returnResult.ProblemAdd("Error: Bad border node.");
                         return returnResult;
@@ -233,7 +227,7 @@ namespace SharpFlame
                         }
                     }
                     loopCount++;
-                    if ( loopCount >= (int)(64.0F * TileSize.X * TileSize.Y / (NodeScale * NodeScale)) )
+                    if ( loopCount >= (64.0F * TileSize.X * TileSize.Y / (NodeScale * NodeScale)).ToInt() )
                     {
                         goto PointMakingFinished;
                     }
@@ -252,7 +246,7 @@ namespace SharpFlame
             var tmpPassageNodeA = default(clsPassageNode);
             var tmpPassageNodeB = default(clsPassageNode);
             var nearestArgs = new clsTestNearestArgs();
-            var minConDist = (int)(NodeScale * 1.25F * 128.0F);
+            var minConDist = (NodeScale * 1.25F * 128.0F).ToInt();
 
             nearestArgs.MaxConDist2 = maxConDist2;
             nearestArgs.MinConDist = minConDist;
@@ -517,7 +511,7 @@ namespace SharpFlame
                     }
                     else
                     {
-                        for ( c = 0; c <= ((int)(SymmetryBlockCount / 2.0D)) - 1; c++ )
+                        for ( c = 0; c <= (SymmetryBlockCount / 2.0D).ToInt() - 1; c++ )
                         {
                             if ( SymmetryBlocks[0].ReflectToNum[c] == BestNodes[a].MirrorNum )
                             {
@@ -843,7 +837,7 @@ namespace SharpFlame
                 {
                     nearestA.NodeA = new clsPassageNode[SymmetryBlockCount];
                     nearestA.NodeB = new clsPassageNode[SymmetryBlockCount];
-                    var reflectionCount = (int)(SymmetryBlockCount / 2.0D);
+                    var reflectionCount = (SymmetryBlockCount / 2.0D).ToInt();
                     var reflectionNum = 0;                  
                     for ( reflectionNum = 0; reflectionNum <= reflectionCount - 1; reflectionNum++ )
                     {
@@ -873,7 +867,7 @@ namespace SharpFlame
                     {
                         nearestA.NodeA = new clsPassageNode[2];
                         nearestA.NodeB = new clsPassageNode[2];
-                        var reflectionCount = (int)(SymmetryBlockCount / 2.0D);
+                        var reflectionCount = (SymmetryBlockCount / 2.0D).ToInt();
                         var reflectionNum = 0;
                         for ( reflectionNum = 0; reflectionNum <= reflectionCount - 1; reflectionNum++ )
                         {
@@ -1050,8 +1044,8 @@ namespace SharpFlame
                     XY_dbl.Y = 0.0D;
                     CalcNodePos(tmpNodeA, ref XY_dbl, ref C);
                     NodeTag = new clsNodeTag();
-                    NodeTag.Pos.X = (int)(XY_dbl.X / C);
-                    NodeTag.Pos.Y = (int)(XY_dbl.Y / C);
+                    NodeTag.Pos.X = (XY_dbl.X / C).ToInt();
+                    NodeTag.Pos.Y = (XY_dbl.Y / C).ToInt();
                     tmpNodeA.Tag = NodeTag;
                 }
             }
@@ -1136,7 +1130,7 @@ namespace SharpFlame
 
             //make ramp slopes
 
-            var MinRampLength = ((int)(LevelHeight * Map.HeightMultiplier * 2.0D)) + 128;
+            var MinRampLength = (LevelHeight * Map.HeightMultiplier * 2.0D).ToInt() + 128;
             var RampArgs = new clsSetBaseLevelRampArgs();
             RampArgs.BaseLevel = BaseNodeLevel;
             RampArgs.RampRadius = 320.0F;
@@ -1164,7 +1158,7 @@ namespace SharpFlame
             for ( A = 0; A <= BaseLayer.GetNodeCount - 1; A++ )
             {
                 NodeTag = (clsNodeTag)(BaseLayer.get_GetNode(A).Tag);
-                Map.Terrain.Vertices[(int)(NodeTag.Pos.X / 128.0F), (int)(NodeTag.Pos.Y / 128.0F)].Height = (byte)(BaseNodeLevel.NodeLevels[A] * LevelHeight);
+                Map.Terrain.Vertices[(NodeTag.Pos.X / 128.0F).ToInt(), (NodeTag.Pos.Y / 128.0F).ToInt()].Height = (byte)(BaseNodeLevel.NodeLevels[A] * LevelHeight);
             }
 
             return ReturnResult;
@@ -1187,7 +1181,7 @@ namespace SharpFlame
                     GenerateTerrainTiles[X, Y] = new GenerateTerrainTile();
                     GenerateTerrainTiles[X, Y].Node = new PathfinderNode(TilePathMap);
                     NodeTag = new clsNodeTag();
-                    NodeTag.Pos = new XYInt((int)((X + 0.5D) * 128.0D), (int)((Y + 0.5D) * 128.0D));
+                    NodeTag.Pos = new XYInt(((X + 0.5D) * 128.0D).ToInt(), ((Y + 0.5D) * 128.0D).ToInt());
                     GenerateTerrainTiles[X, Y].Node.Tag = NodeTag;
                 }
             }
@@ -1835,11 +1829,11 @@ namespace SharpFlame
                     {
                         if ( App.Random.Next() >= 0.5F )
                         {
-                            NewUnit.Pos.Horizontal.X = (int)(NodeTag.Pos.X - Constants.TerrainGridSpacing / 2.0D);
+                            NewUnit.Pos.Horizontal.X = (NodeTag.Pos.X - Constants.TerrainGridSpacing / 2.0D).ToInt();
                         }
                         else
                         {
-                            NewUnit.Pos.Horizontal.X = (int)(NodeTag.Pos.X + Constants.TerrainGridSpacing / 2.0D);
+                            NewUnit.Pos.Horizontal.X = (NodeTag.Pos.X + Constants.TerrainGridSpacing / 2.0D).ToInt();
                         }
                     }
                     Remainder = Footprint.Y % 2;
@@ -1851,17 +1845,17 @@ namespace SharpFlame
                     {
                         if ( App.Random.Next() >= 0.5F )
                         {
-                            NewUnit.Pos.Horizontal.Y = (int)(NodeTag.Pos.Y - Constants.TerrainGridSpacing / 2.0D);
+                            NewUnit.Pos.Horizontal.Y = (NodeTag.Pos.Y - Constants.TerrainGridSpacing / 2.0D).ToInt();
                         }
                         else
                         {
-                            NewUnit.Pos.Horizontal.Y = (int)(NodeTag.Pos.Y + Constants.TerrainGridSpacing / 2.0D);
+                            NewUnit.Pos.Horizontal.Y = (NodeTag.Pos.Y + Constants.TerrainGridSpacing / 2.0D).ToInt();
                         }
                     }
-                    TilePosA.X = (int)((double)NewUnit.Pos.Horizontal.X / Constants.TerrainGridSpacing - Footprint.X / 2.0D + 0.5D);
-                    TilePosA.Y = (int)((double)NewUnit.Pos.Horizontal.Y / Constants.TerrainGridSpacing - Footprint.Y / 2.0D + 0.5D);
-                    TilePosB.X = (int)(((double)NewUnit.Pos.Horizontal.X / Constants.TerrainGridSpacing + Footprint.X / 2.0D - 0.5D));
-                    TilePosB.Y = (int)(((double)NewUnit.Pos.Horizontal.Y / Constants.TerrainGridSpacing + Footprint.Y / 2.0D - 0.5D));
+                    TilePosA.X = ((double)NewUnit.Pos.Horizontal.X / Constants.TerrainGridSpacing - Footprint.X / 2.0D + 0.5D).Floor().ToInt();
+                    TilePosA.Y = ((double)NewUnit.Pos.Horizontal.Y / Constants.TerrainGridSpacing - Footprint.Y / 2.0D + 0.5D).Floor().ToInt();
+                    TilePosB.X = (((double)NewUnit.Pos.Horizontal.X / Constants.TerrainGridSpacing + Footprint.X / 2.0D - 0.5D)).Floor().ToInt();
+                    TilePosB.Y = (((double)NewUnit.Pos.Horizontal.Y / Constants.TerrainGridSpacing + Footprint.Y / 2.0D - 0.5D)).Floor().ToInt();
                     NewUnit.Rotation = Rotation;
 
                     NewUnitAdd.Perform();
@@ -1906,10 +1900,10 @@ namespace SharpFlame
             Footprint = TypeBase.GetGetFootprintSelected(Rotation);
 
             NewUnit.Pos = Pos;
-            TilePosA.X = (int)(((double)NewUnit.Pos.Horizontal.X / Constants.TerrainGridSpacing - Footprint.X / 2.0D + 0.5D));
-            TilePosA.Y = (int)(((double)NewUnit.Pos.Horizontal.Y / Constants.TerrainGridSpacing - Footprint.Y / 2.0D + 0.5D));
-            TilePosB.X = (int)((double)NewUnit.Pos.Horizontal.X / Constants.TerrainGridSpacing + Footprint.X / 2.0D - 0.5D);
-            TilePosB.Y = (int)((double)NewUnit.Pos.Horizontal.Y / Constants.TerrainGridSpacing + Footprint.Y / 2.0D - 0.5D);
+            TilePosA.X = ((double)NewUnit.Pos.Horizontal.X / Constants.TerrainGridSpacing - Footprint.X / 2.0D + 0.5D).Floor().ToInt();
+            TilePosA.Y = ((double)NewUnit.Pos.Horizontal.Y / Constants.TerrainGridSpacing - Footprint.Y / 2.0D + 0.5D).Floor().ToInt();
+            TilePosB.X = ((double)NewUnit.Pos.Horizontal.X / Constants.TerrainGridSpacing + Footprint.X / 2.0D - 0.5D).Floor().ToInt();
+            TilePosB.Y = ((double)NewUnit.Pos.Horizontal.Y / Constants.TerrainGridSpacing + Footprint.Y / 2.0D - 0.5D).Floor().ToInt();
             NewUnit.Rotation = Rotation;
 
             NewUnitAdd.Perform();
@@ -2199,7 +2193,7 @@ namespace SharpFlame
                                 }
                                 Rotation = 0;
                                 Footprint = GenerateTileset.ClusteredUnits[C].TypeBase.GetGetFootprintSelected(Rotation);
-                                E = ((int)(Math.Ceiling((decimal)(Math.Max(Footprint.X, Footprint.Y) / 2.0F)))) + 1;
+                                E = Math.Ceiling(Math.Max(Footprint.X, Footprint.Y) / 2.0F).ToInt() + 1;
                                 tmpUnit = PlaceUnitNear(GenerateTileset.ClusteredUnits[C].TypeBase, passageNodes[D, A].Pos, Map.ScavengerUnitGroup, E, Rotation,
                                     FeaturePlaceRange);
                                 if ( tmpUnit == null )
@@ -2239,7 +2233,7 @@ namespace SharpFlame
                     }
                     Rotation = 0;
                     Footprint = GenerateTileset.ScatteredUnits[C].TypeBase.GetGetFootprintSelected(Rotation);
-                    B = FeatureScatterGap + (int)(Math.Ceiling((decimal)(Math.Max(Footprint.X, Footprint.Y) / 2.0F)));
+                    B = FeatureScatterGap + Math.Ceiling(Math.Max(Footprint.X, Footprint.Y) / 2.0F).ToInt();
                     tmpNode = GetRandomChildNode(TilePathMap.get_GetNodeLayer(TilePathMap.GetNodeLayerCount - 1).get_GetNode(0), B);
                     if ( tmpNode == null )
                     {
@@ -3061,8 +3055,8 @@ namespace SharpFlame
                             ResultPaths = PassageNodeNetwork.Network.GetPath(GetPathStartNodes,
                                 PassageNodePathNodes[connections[B].PassageNodeB.MirrorNum, connections[B].PassageNodeB.Num], -1, 0);
                             BaseDist = double.MaxValue;
-                            XY_int.X = (int)((connections[B].PassageNodeA.Pos.X + connections[B].PassageNodeB.Pos.X) / 2.0D);
-                            XY_int.Y = (int)((connections[B].PassageNodeA.Pos.Y + connections[B].PassageNodeB.Pos.Y) / 2.0D);
+                            XY_int.X = ((connections[B].PassageNodeA.Pos.X + connections[B].PassageNodeB.Pos.X) / 2.0D).ToInt();
+                            XY_int.Y = ((connections[B].PassageNodeA.Pos.Y + connections[B].PassageNodeB.Pos.Y) / 2.0D).ToInt();
                             for ( E = 0; E <= totalPlayerCount - 1; E++ )
                             {
                                 Dist = Convert.ToDouble((playerBases[E].Pos - XY_int).ToDoubles().GetMagnitude());
@@ -3304,7 +3298,7 @@ namespace SharpFlame
                 {
                     oilArgs.OilClusterSizes[A] =
                         Math.Min(ExtraOilClusterSizeMin + App.Random.Next() * (ExtraOilClusterSizeMax - ExtraOilClusterSizeMin + 1),
-                            Math.Max((int)(Math.Ceiling(Convert.ToDecimal((ExtraOilCount - PlacedExtraOilCount) / SymmetryBlockCount))), 1));
+                            Math.Max(Math.Ceiling(Convert.ToDecimal((ExtraOilCount - PlacedExtraOilCount) / SymmetryBlockCount)).ToInt(), 1));
                 }
                 oilArgs.OilPossibilities = new clsOilPossibilities();
                 OilBalanceLoop(oilArgs, 0);
@@ -3678,8 +3672,8 @@ namespace SharpFlame
                     Total.X += Nodes[A].Pos.X;
                     Total.Y += Nodes[A].Pos.Y;
                 }
-                Pos.X = (int)(Total.X / NodeCount);
-                Pos.Y = (int)(Total.Y / NodeCount);
+                Pos.X = (Total.X / NodeCount).ToInt();
+                Pos.Y = (Total.Y / NodeCount).ToInt();
             }
         }
 

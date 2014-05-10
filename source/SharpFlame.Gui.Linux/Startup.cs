@@ -6,7 +6,7 @@ using SharpFlame.Gui;
 using OpenTK;
 using SharpFlame.Infrastructure;
 
-namespace SharpFlame.Gui.Gtk
+namespace SharpFlame.Gui.Linux
 {
 	class Startup
 	{

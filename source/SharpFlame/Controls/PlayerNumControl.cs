@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using System.Windows.Forms;
@@ -8,7 +8,6 @@ using SharpFlame.Core;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Objects;
 
-#endregion
 
 namespace SharpFlame.Controls
 {

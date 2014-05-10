@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using System.Collections.Generic;
@@ -36,7 +36,6 @@ using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 using SharpFlame.Util;
 
-#endregion
 
 namespace SharpFlame.Mapping.IO.Wz
 {
@@ -314,10 +313,10 @@ namespace SharpFlame.Mapping.IO.Wz
                                 if ( A < underneathTypeCount )
                                 {
                                     footprint = otherStructureTypeBase.GetGetFootprintSelected(otherUnit.Rotation);
-                                    moduleMin.X = otherUnit.Pos.Horizontal.X - (int)(footprint.X * Constants.TerrainGridSpacing / 2.0D);
-                                    moduleMin.Y = otherUnit.Pos.Horizontal.Y - (int)(footprint.Y * Constants.TerrainGridSpacing / 2.0D);
-                                    moduleMax.X = otherUnit.Pos.Horizontal.X + (int)(footprint.X * Constants.TerrainGridSpacing / 2.0D);
-                                    moduleMax.Y = otherUnit.Pos.Horizontal.Y + (int)(footprint.Y * Constants.TerrainGridSpacing / 2.0D);
+                                    moduleMin.X = otherUnit.Pos.Horizontal.X - (footprint.X * Constants.TerrainGridSpacing / 2.0D).ToInt();
+                                    moduleMin.Y = otherUnit.Pos.Horizontal.Y - (footprint.Y * Constants.TerrainGridSpacing / 2.0D).ToInt();
+                                    moduleMax.X = otherUnit.Pos.Horizontal.X + (footprint.X * Constants.TerrainGridSpacing / 2.0D).ToInt();
+                                    moduleMax.Y = otherUnit.Pos.Horizontal.Y + (footprint.Y * Constants.TerrainGridSpacing / 2.0D).ToInt();
                                     if ( unit.Pos.Horizontal.X >= moduleMin.X & unit.Pos.Horizontal.X < moduleMax.X &
                                         unit.Pos.Horizontal.Y >= moduleMin.Y & unit.Pos.Horizontal.Y < moduleMax.Y )
                                     {

@@ -1,9 +1,8 @@
-#region
+
 
 using System;
 using System.Globalization;
 
-#endregion
 
 namespace SharpFlame.FileIO
 {

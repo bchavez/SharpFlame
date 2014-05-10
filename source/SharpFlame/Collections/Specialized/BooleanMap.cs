@@ -1,9 +1,8 @@
-#region
+
 
 using System;
 using SharpFlame.Core.Domain;
 
-#endregion
 
 namespace SharpFlame.Collections.Specialized
 {

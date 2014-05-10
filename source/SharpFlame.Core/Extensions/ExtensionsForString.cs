@@ -1,9 +1,9 @@
-#region
+
 
 using System;
 using System.IO;
 
-#endregion
+
 
 namespace SharpFlame.Core.Extensions
 {
@@ -42,6 +42,42 @@ namespace SharpFlame.Core.Extensions
                 return Path.Combine(path1, path2) + Path.DirectorySeparatorChar;
 
             return Path.Combine(path1, path2);
+        }
+    }
+
+    public static class ExtensionsForDouble
+    {
+        public static int ToInt(this double d)
+        {
+            return Convert.ToInt32(d);
+        }
+
+        public static int ToInt(this decimal d)
+        {
+            return Convert.ToInt32(d);
+        }
+
+        public static int ToInt(this float f)
+        {
+            return Convert.ToInt32(f);
+        }
+
+        public static double Floor(this double d)
+        {
+            return Math.Floor(d);
+        }
+
+        public static long ToLong(this double d)
+        {
+            return Convert.ToInt64(d);
+        }
+    }
+
+    public static class PrintUtil
+    {
+        public static string Print(Eto.Drawing.Size size)
+        {
+            return size.ToString();
         }
     }
 }

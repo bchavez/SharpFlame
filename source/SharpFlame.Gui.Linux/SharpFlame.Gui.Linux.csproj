@@ -7,8 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{FEBB5203-A2F1-49AD-B045-F077D372DFDD}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>SharpFlame.Gui.Gtk</RootNamespace>
-    <AssemblyName>SharpFlame.Gui.Gtk</AssemblyName>
+    <RootNamespace>SharpFlame.Gui.Linux</RootNamespace>
+    <AssemblyName>SharpFlame.Gui.Linux</AssemblyName>
     <ReleaseVersion>0.24</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -27,6 +27,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <DefineConstants>Mono</DefineConstants>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -76,10 +77,10 @@
       <HintPath>..\packages\other\Ninject.Mono\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="Eto">
-      <HintPath>..\packages\Eto-20140305\net40\Eto.dll</HintPath>
+      <HintPath>..\packages\Eto-20140420\net40\Eto.dll</HintPath>
     </Reference>
     <Reference Include="Eto.Platform.Gtk">
-      <HintPath>..\packages\Eto-20140305\net40\Eto.Platform.Gtk.dll</HintPath>
+      <HintPath>..\packages\Eto-20140420\net40\Eto.Platform.Gtk.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

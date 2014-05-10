@@ -1,9 +1,10 @@
-#region
+
 
 using System;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Maths;
 
-#endregion
+
 
 namespace SharpFlame.Mapping.Tools
 {
@@ -18,7 +19,7 @@ namespace SharpFlame.Mapping.Tools
             Terrain = Map.Terrain;
 
             Terrain.Vertices[PosNum.X, PosNum.Y].Height =
-                (byte)(MathUtil.ClampInt((Terrain.Vertices[PosNum.X, PosNum.Y].Height) + (int)(Rate * Effect), Byte.MinValue, Byte.MaxValue));
+                (byte)(MathUtil.ClampInt((Terrain.Vertices[PosNum.X, PosNum.Y].Height) + (Rate * Effect).ToInt(), Byte.MinValue, Byte.MaxValue));
 
             Map.SectorGraphicsChanges.VertexAndNormalsChanged(PosNum);
             Map.SectorUnitHeightsChanges.VertexChanged(PosNum);

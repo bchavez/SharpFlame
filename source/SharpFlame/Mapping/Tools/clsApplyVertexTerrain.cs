@@ -1,8 +1,7 @@
-#region
+
 
 using SharpFlame.Painters;
 
-#endregion
 
 namespace SharpFlame.Mapping.Tools
 {

@@ -4,10 +4,8 @@ namespace Eto.Gl.Windows
 {
     internal class Win32Helper
     {
-        #region P/Invoke declarations
-
-        #region Message
-
+        
+        
         struct MSG
         {
             public IntPtr HWnd;
@@ -24,10 +22,8 @@ namespace Eto.Gl.Windows
             }
         }
 
-        #endregion
-
-        #region Point
-
+        
+        
         struct POINT
         {
             public int X;
@@ -50,36 +46,27 @@ namespace Eto.Gl.Windows
             }
         }
 
-        #endregion
-
-        #region PeekMessage
-
+        
+        
         [System.Security.SuppressUnmanagedCodeSecurity]
         [System.Runtime.InteropServices.DllImport( "User32.dll" )]
         static extern bool PeekMessage( ref MSG msg, IntPtr hWnd, int messageFilterMin, int messageFilterMax, int flags );
 
-        #endregion
+        
 
-        #region
 
-        #endregion
-
-        #endregion
-
-        #region Fields
-
+        
+        
+        
         static MSG msg = new MSG();
 
-        #endregion
+        
 
-
-        #region IGLControl Members
-
+        
         public static bool IsIdle
         {
             get { return !PeekMessage( ref msg, IntPtr.Zero, 0, 0, 0 ); }
         }
 
-        #endregion
-    }
+            }
 }

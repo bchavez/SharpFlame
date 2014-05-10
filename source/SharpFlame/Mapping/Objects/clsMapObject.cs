@@ -1,4 +1,4 @@
-#region
+
 
 using System;
 using System.Diagnostics;
@@ -10,7 +10,6 @@ using SharpFlame.Core.Collections;
 using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Mapping.Objects;
 
-#endregion
 
 namespace SharpFlame.Mapping
 {

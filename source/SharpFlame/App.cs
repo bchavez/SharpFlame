@@ -1,5 +1,3 @@
-#region
-
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -32,7 +30,6 @@ using SharpFlame.Settings;
 using SharpFlame.Util;
 using SharpFlame.UiOptions;
 
-#endregion
 
 namespace SharpFlame
 {
@@ -139,7 +136,7 @@ namespace SharpFlame
 
         // TODO: Remove these once everthing uses ninject.
         public static SettingsManager SettingsManager { get; set; }
-        public static KeyboardManager KeyboardManager { get; set; }       
+        public static KeyboardManager KeyboardManager { get; set; } 
         public static GLSurface MapViewGlSurface { get; set; }
         public static Options UiOptions { get; set; }
 
@@ -511,7 +508,7 @@ namespace SharpFlame
         public static bool SizeIsPowerOf2(int Size)
         {
             var Power = Math.Log(Size) / Math.Log(2.0D);
-            return Power == (int)Power;
+            return Power == Power.ToInt();
         }
 
         public static Result LoadTilesets(string TilesetsPath)

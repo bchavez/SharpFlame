@@ -1,4 +1,4 @@
-#region
+
 
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
@@ -6,7 +6,6 @@ using SharpFlame.Core.Collections;
 using SharpFlame.Core.Domain;
 using SharpFlame.Mapping.Objects;
 
-#endregion
 
 namespace SharpFlame.Mapping
 {
@@ -19,6 +18,7 @@ namespace SharpFlame.Mapping
 
         public Sector()
         {
+            Pos = new XYInt (0, 0);
             Units = new ConnectedList<clsUnitSectorConnection, Sector>(this);
         }
 

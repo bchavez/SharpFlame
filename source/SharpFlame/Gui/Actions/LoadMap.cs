@@ -1,31 +1,6 @@
-#region License
-/*
-The MIT License (MIT)
-
-Copyright (c) 2013-2014 The SharpFlame Authors.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-*/
-#endregion
-
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using Eto.Forms;
 using Ninject;
@@ -80,22 +55,15 @@ namespace SharpFlame.Gui.Actions
             // show the about dialog
 
             var dialog = new OpenFileDialog();
-            #if Portable
-            dialog.Directory = new UriBuilder { Scheme = Uri.UriSchemeFile, Path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.OpenPath) }.Uri;
-            #else
-            dialog.Directory = new UriBuilder { Scheme = Uri.UriSchemeFile, Path = Settings.OpenPath }.Uri;
-            #endif
+            
+            dialog.Directory = new Uri( Settings.OpenPath );
             dialog.Filters = GetFilters("All Supported Formats");
 
             var result = dialog.ShowDialog(Application.Instance.MainForm);
             if(result == DialogResult.Ok)
             {
                 // Set Openpath to the directory of the selected file and save the settings.
-                #if Portable 
-                Settings.OpenPath = Uri.UnescapeDataString(dialog.Directory.MakeRelativeUriToBinPath().ToString());
-                #else
-				Settings.OpenPath = Uri.UnescapeDataString(dialog.Directory.AbsolutePath);
-                #endif
+                Settings.OpenPath = new Uri(Path.GetDirectoryName(dialog.FileName)).ToString();
                 var returnResult = Settings.Save(App.SettingsPath);
                 if(returnResult.HasProblems)
                 {

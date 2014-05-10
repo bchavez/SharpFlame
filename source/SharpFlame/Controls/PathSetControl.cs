@@ -1,10 +1,9 @@
-#region
+
 
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-#endregion
 
 namespace SharpFlame.Controls
 {

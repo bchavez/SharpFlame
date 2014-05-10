@@ -1,35 +1,13 @@
-#region License
- /*
- The MIT License (MIT)
 
- Copyright (c) 2013-2014 The SharpFlame Authors.
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- */
-#endregion
 
 using System;
 using Eto.Drawing;
 using Eto.Forms;
 using Ninject;
 using SharpFlame.Core;
+using SharpFlame.Core.Domain;
 using SharpFlame.Gui.Sections;
+using SharpFlame.Mapping;
 
 namespace SharpFlame.Gui.Forms
 {
@@ -55,6 +33,9 @@ namespace SharpFlame.Gui.Forms
         [Inject]
         internal Actions.LoadMap LoadMapAction { get; set; }
 
+	    [Inject]
+	    internal ViewInfo ViewInfo { get; set; }
+
 	    //Ninject initializer
 	    void IInitializable.Initialize()
 	    {
@@ -76,12 +57,15 @@ namespace SharpFlame.Gui.Forms
 	                tabControl.SelectedPage.Content.OnShown(EventArgs.Empty);
 	            };
 
+            this.Closing += MainForm_Closing;
+
+
 	        var splitter = new Splitter
 	            {
 	                Position = 392,
 	                FixedPanel = SplitterFixedPanel.Panel1,
 	                Panel1 = tabControl,
-                    Panel2 = (MainMapView)this.MainMapView
+                    Panel2 = this.MainMapView
 	            };
 
 	        // Set the content of the form to use the layout
@@ -90,6 +74,11 @@ namespace SharpFlame.Gui.Forms
 	        GenerateMenuToolBar();
 	        Maximize();
 	    }
+
+        void MainForm_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            App.Kernel.Dispose();
+        }
 
 
 	    private void GenerateMenuToolBar()
@@ -146,6 +135,29 @@ namespace SharpFlame.Gui.Forms
 
 			// optional, removes empty submenus and duplicate separators
 			// menu.Items.Trim();
+
+	        var testing = menu.Items.GetSubmenu("TESTING");
+	        testing.Items.GetSubmenu("CMD1").Click += (sender, args) =>
+	            {
+	                this.ViewInfo.LookAtTile(new XYInt(1, 1));
+	            };
+	        testing.Items.GetSubmenu("CMD2 - ViewPos").Click += (sender, args) =>
+	            {
+	                this.ViewInfo.ViewPosChange(new XYZInt(1024, 1024, 1024));
+	            };
+            testing.Items.GetSubmenu("CMD3 - Check Screen Calculation").Click += (sender, args) =>
+            {
+                var posWorld = new WorldPos();
+                this.ViewInfo.ScreenXyGetTerrainPos(new XYInt(500, 1000), ref posWorld);
+            };
+            testing.Items.GetSubmenu("CMD4 - MousePos").Click += (sender, args) =>
+                {
+                    this.ViewInfo.MouseOver = new ViewInfo.clsMouseOver();
+                    this.ViewInfo.MouseOver.ScreenPos.X = 500;
+                    this.ViewInfo.MouseOver.ScreenPos.Y = 1000;
+                    this.ViewInfo.MouseOverPosCalc();
+                };
+            
 
 			Menu = menu;
 		}

@@ -1,11 +1,10 @@
-#region
+
 
 using System;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Mapping.Tools;
 
-#endregion
 
 namespace SharpFlame.Mapping.Drawing
 {

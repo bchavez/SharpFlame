@@ -1,4 +1,3 @@
-#region
 
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,6 @@ using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Util;
 
-#endregion
 
 namespace SharpFlame.FileIO
 {
