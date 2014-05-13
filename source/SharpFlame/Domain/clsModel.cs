@@ -205,9 +205,9 @@ namespace SharpFlame.Domain
 
                                 try
                                 {
-                                    levels[levelNum].Point[a].X = float.Parse(splitText[0]);
-                                    levels[levelNum].Point[a].Y = float.Parse(splitText[1]);
-                                    levels[levelNum].Point[a].Z = float.Parse(splitText[2]);
+                                    levels[levelNum].Point[a].X = double.Parse(splitText[0], System.Globalization.CultureInfo.InvariantCulture);
+                                    levels[levelNum].Point[a].Y = double.Parse(splitText[1], System.Globalization.CultureInfo.InvariantCulture);
+                                    levels[levelNum].Point[a].Z = double.Parse(splitText[2], System.Globalization.CultureInfo.InvariantCulture);
                                 }
                                 catch ( Exception )
                                 {
@@ -322,7 +322,7 @@ namespace SharpFlame.Domain
 
                                         try
                                         {
-                                            levels[levelNum].Polygon[a].TexCoord[b].X = float.Parse(splitText[2 + count + 2 * b]);
+                                            levels[levelNum].Polygon[a].TexCoord[b].X = double.Parse(splitText[2 + count + 2 * b], System.Globalization.CultureInfo.InvariantCulture);
                                         }
                                         catch ( Exception ex )
                                         {
@@ -331,7 +331,7 @@ namespace SharpFlame.Domain
                                         }
                                         try
                                         {
-                                            levels[levelNum].Polygon[a].TexCoord[b].Y = float.Parse(splitText[2 + count + 2 * b + 1]);
+                                            levels[levelNum].Polygon[a].TexCoord[b].Y = double.Parse(splitText[2 + count + 2 * b + 1], System.Globalization.CultureInfo.InvariantCulture);
                                         }
                                         catch ( Exception ex )
                                         {
