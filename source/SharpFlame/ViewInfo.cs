@@ -64,7 +64,7 @@ namespace SharpFlame
                 HandleLostFocus(this, EventArgs.Empty);
             }
         }
-                  
+
         public MainMapView MainMapView { get; set; }
 
         private readonly KeyboardManager keyboardManager;
@@ -76,13 +76,12 @@ namespace SharpFlame
         private bool enableMouseMove = false;
 
         public ViewInfo(KeyboardManager kbm, Options argUiOptions,
-            SettingsManager argSettings, MinimapCreator mmc
-        )
+            SettingsManager argSettings, MinimapCreator mmc)
         {
-            keyboardManager = kbm;
-            uiOptions = argUiOptions;
-            settings = argSettings;
-            minimap = mmc;
+            this.keyboardManager = kbm;
+            this.uiOptions = argUiOptions;
+            this.settings = argSettings;
+            this.minimap = mmc;
 
             tmrMouseMove = new UITimer { Interval = 0.1 };
             tmrMouseMove.Elapsed += EnableMouseMove;

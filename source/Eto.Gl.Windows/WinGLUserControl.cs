@@ -41,7 +41,7 @@ namespace Eto.Gl.Windows
     /// Inherit from this class and call one of its specialized constructors
     /// to enable antialiasing or custom <see cref="GraphicsMode"/>s.
     /// </summary>
-    public partial class WinGLUserControl : UserControl, IGLSurface
+    public partial class WinGLUserControl : UserControl
     {
         IGraphicsContext context;
         readonly GraphicsMode graphicsMode;

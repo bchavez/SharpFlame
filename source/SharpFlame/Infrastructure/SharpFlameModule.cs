@@ -3,6 +3,8 @@ using Ninject.Modules;
 using SharpFlame.Gui.Actions;
 using SharpFlame.Gui.Forms;
 using SharpFlame.Gui.Sections;
+using SharpFlame.Mapping;
+using SharpFlame.Mapping.Drawing;
 using SharpFlame.Mapping.Minimap;
 using SharpFlame.Settings;
 using SharpFlame.UiOptions;
@@ -61,6 +63,22 @@ namespace SharpFlame.Infrastructure
                 .ToSelf()
                 .InSingletonScope();
             #endif
+
+
+            //GUI
+
+            this.Bind<TextureTab>().ToSelf().InSingletonScope();
+            this.Bind<TerrainTab>().ToSelf().InSingletonScope();
+            this.Bind<ResizeTab>().ToSelf().InSingletonScope();
+            this.Bind<PlaceObjectsTab>().ToSelf().InSingletonScope();
+            this.Bind<ObjectTab>().ToSelf().InSingletonScope();
+            this.Bind<LabelsTab>().ToSelf().InSingletonScope();
+            this.Bind<HeightTab>().ToSelf().InSingletonScope();
+            this.Bind<LoadMap>().ToSelf().InSingletonScope();
+
+            this.Bind<Map>().ToSelf().InSingletonScope();
+            this.Bind<clsDrawSectorObjects>().ToSelf().InTransientScope();
+			this.Bind<Gui.Dialogs.Settings> ().ToSelf ().InSingletonScope ();
         }
     }
 }

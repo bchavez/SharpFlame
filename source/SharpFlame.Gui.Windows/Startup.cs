@@ -3,6 +3,7 @@ using Eto.Forms;
 using Eto.Gl;
 using Eto.Gl.Windows;
 using Ninject;
+using SharpFlame.Gui.Windows.EtoCustom;
 using SharpFlame.Infrastructure;
 
 namespace SharpFlame.Gui.Windows
@@ -14,7 +15,7 @@ namespace SharpFlame.Gui.Windows
         {
             var generator = new Eto.Platform.Windows.Generator();
 
-            generator.Add<IGLSurfaceHandler>(() => new WinGLSurfaceHandler());
+            generator.Add<IGLSurfacePlatformHandler>(() => new WinGLSurfaceHandler());
             generator.Add<IPanel>(() => new WinPanelHandler());
 
             var kernel = Bootstrap.KernelWith(generator);

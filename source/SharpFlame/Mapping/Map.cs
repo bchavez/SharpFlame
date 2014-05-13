@@ -106,7 +106,7 @@ namespace SharpFlame.Mapping
             ScriptPositions = new ConnectedList<clsScriptPosition, Map>(this);
             ScriptAreas = new ConnectedList<clsScriptArea, Map>(this);
 
-            initialize();
+            InitializeMap();
         }
 
         public Map Create(XYInt tileSize) {
@@ -230,7 +230,7 @@ namespace SharpFlame.Mapping
             remove { changedEvent = (ChangedEventHandler)Delegate.Remove(changedEvent, value); }
         }
 
-        private void initialize()
+        private void InitializeMap()
         {
             MakeDefaultUnitGroups();
             ScriptPositions.MaintainOrder = true;

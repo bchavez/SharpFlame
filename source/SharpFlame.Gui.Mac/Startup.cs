@@ -15,7 +15,7 @@ namespace SharpFlame.Gui.Mac
         public static void Main(string[] args)
         {
             var macGenerator = new Eto.Platform.Mac.Generator();
-			macGenerator.Add<IGLSurfaceHandler>( () => new MacGLSurfaceHandler() );
+			macGenerator.Add<IGLSurfacePlatformHandler>( () => new MacGLSurfaceHandler() );
 
             //var app = new SharpFlameApplication( macGenrator );
 

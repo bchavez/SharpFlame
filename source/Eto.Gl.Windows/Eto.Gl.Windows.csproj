@@ -39,7 +39,6 @@
     <Compile Include="WinGLUserControl.Designer.cs">
       <DependentUpon>WinGLUserControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinPanelHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="WinGLUserControl.resx">

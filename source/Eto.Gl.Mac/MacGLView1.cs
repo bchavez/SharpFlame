@@ -1,7 +1,8 @@
-ï»¿using System;
+using System;
 using Eto.Drawing;
 using Eto.Forms;
 using Eto.Platform;
+using Eto.Platform.Mac.Forms;
 using MonoMac.AppKit;
 
 namespace Eto.Gl.Mac
@@ -14,36 +15,58 @@ namespace Eto.Gl.Mac
     /// <remarks>
     /// -- Method Summery --
     /// * Initializing an NSOpenGLView
-    ///     â€“ initWithFrame:pixelFormat:
+    ///     – initWithFrame:pixelFormat:
     /// * Managing the NSOpenGLPixelFormat
     ///     + defaultPixelFormat
-    ///     â€“ pixelFormat
-    ///     â€“ setPixelFormat:
+    ///     – pixelFormat
+    ///     – setPixelFormat:
     /// * Managing the NSOpenGLContext
-    ///     â€“ prepareOpenGL
-    ///     â€“ clearGLContext
-    ///     â€“ openGLContext
-    ///     â€“ setOpenGLContext:
+    ///     – prepareOpenGL
+    ///     – clearGLContext
+    ///     – openGLContext
+    ///     – setOpenGLContext:
     /// * Managing the Visible Region
-    ///     â€“ reshape
-    ///     â€“ update
+    ///     – reshape
+    ///     – update
     /// * Displaying
-    ///     â€“ isOpaque
+    ///     – isOpaque
     /// </remarks>
-    public class MacGLView : NSOpenGLView, IGLSurface
+    public class MacGLView1 : NSOpenGLView, IMacControl
     {
-        public delegate void GLEventHandler(MacGLView sender, NSEvent args);
+
+        private static NSOpenGLContext globalContext;
+
+        public delegate void GLEventHandler(MacGLView1 sender, NSEvent args);
 
         public delegate void DrawRectHandler(System.Drawing.RectangleF dirtyRect);
-
-        public event DrawRectHandler DrawNow = delegate { };
 
         private OpenTK.Graphics.GraphicsContext openTK = null;
         private OpenTK.Platform.IWindowInfo windowInfo = null;
 
+
+        public MacGLView1(){
+            var ctx = this.OpenGLContext;
+
+            globalContext = ctx;
+        }
+
         public override void DrawRect(System.Drawing.RectangleF dirtyRect)
         {
-            this.DrawNow(dirtyRect);
+            this.DrawNow(this, EventArgs.Empty);
+
+        }
+	
+
+        public override void AwakeFromNib()
+        {
+
+            var pf = DefaultPixelFormat;
+
+            var context = new NSOpenGLContext (pf, globalContext);
+            if (globalContext == null)
+                globalContext = context;
+
+            this.OpenGLContext = context;
         }
 
         /// <summary>
@@ -55,7 +78,7 @@ namespace Eto.Gl.Mac
         /// state in preparation for drawing.
         /// </remarks>
         public override void PrepareOpenGL()
-        {
+        {        
             base.PrepareOpenGL();
 
             //get access to low-level OSX GL core handle.
@@ -124,6 +147,7 @@ namespace Eto.Gl.Mac
         public void MakeCurrent()
         {
             //OSX without OpenTK: this.OpenGLContext.MakeCurrentContext();
+            this.OpenGLContext.MakeCurrentContext ();
             this.openTK.MakeCurrent(this.windowInfo);
         }
 
@@ -143,6 +167,7 @@ namespace Eto.Gl.Mac
         public event EventHandler Resize = delegate { };
 
         public event EventHandler ShuttingDown = delegate { };
+        public event EventHandler DrawNow = delegate { };
         public event EventHandler<KeyEventArgs> GlKeyDown;
         public event EventHandler<KeyEventArgs> GlKeyUp;
 
@@ -193,5 +218,7 @@ namespace Eto.Gl.Mac
             base.ScrollWheel(theEvent);
             GLScrollWheel(this, theEvent);
         }
+
+        public WeakReference WeakHandler{ get; private set; }
     }
 }

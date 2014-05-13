@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using Eto.Gl;
+using Eto.Gl.Gtk;
 using Ninject;
 using SharpFlame.Gui;
 using OpenTK;
@@ -29,7 +30,7 @@ namespace SharpFlame.Gui.Linux
 			Debug.Listeners.Add (new ConsoleTraceListener());
 			#endif
 			var generator = new Eto.Platform.GtkSharp.Generator ();
-            generator.Add<IGLSurfaceHandler>(()=> new GtkGlSurfaceHandler());
+            generator.Add<IGLSurfacePlatformHandler>(()=> new GtkGlSurfaceHandler());
 
 		    var kernel = Bootstrap.KernelWith(generator);
 

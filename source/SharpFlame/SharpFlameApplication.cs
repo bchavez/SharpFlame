@@ -17,6 +17,7 @@ using SharpFlame.Core;
 using SharpFlame.Generators;
 using SharpFlame.Gui;
 using SharpFlame.Gui.Forms;
+using SharpFlame.Gui.Sections;
 using SharpFlame.Infrastructure;
 using SharpFlame;
 using SharpFlame.Domain.ObjData;
@@ -58,15 +59,26 @@ namespace SharpFlame
         public SharpFlameApplication(IKernel myKernel, Generator generator, ILoggerFactory logFactory)
             : base(generator)
         {
-            myKernel.Inject(this); //inject properties also, not just constructor.
-            kernel = myKernel;
+			try
+			{
+				Toolkit.Init();
+			}
+			catch( Exception ex )
+			{
+				logger.Error(ex, "Got an exception while initializing OpenTK");
+				// initializeResult.ProblemAdd (string.Format("Failure while loading opentk, error was: {0}", ex.Message));
+				Instance.Quit();
+			}
+				
+			myKernel.Inject(this); //inject properties also, not just constructor.
+			kernel = myKernel;
 
-            // TODO: Remove me once everthing is inectable.
-            App.Kernel = myKernel;
-            App.SettingsManager = this.Settings;
-            App.KeyboardManager = this.KeyboardManager;
-            App.MapViewGlSurface = this.GlMapView;
-            App.Random = new Random();
+			// TODO: Remove me once everthing is inectable.
+			App.Kernel = myKernel;
+			App.SettingsManager = this.Settings;
+			App.KeyboardManager = this.KeyboardManager;
+			App.MapViewGlSurface = this.GlMapView;
+			App.Random = new Random();
 
             logger = logFactory.GetCurrentClassLogger();
 
@@ -94,18 +106,9 @@ namespace SharpFlame
 
             App.SetProgramSubDirs();
 
-            try
-            {
-                Toolkit.Init();
-            }
-            catch( Exception ex )
-            {
-                logger.Error(ex, "Got an exception while initializing OpenTK");
-                // initializeResult.ProblemAdd (string.Format("Failure while loading opentk, error was: {0}", ex.Message));
-                Instance.Quit();
-            }
 
-            GlTexturesView.Initialized += OnGLControlInitialized;
+            GlTexturesView.Initialized += TextureView_OnGLControlInitialized;
+            GlMapView.Initialized += GlMapView_Initialized;
 
             SetupEventHandlers();
 
@@ -136,20 +139,27 @@ namespace SharpFlame
                 e.Cancel = true;
         }
 
-        /// <summary>
-        /// Ons the GL control initialized.
-        /// </summary>
-        /// <param name="o">Not used.</param>
-        /// <param name="e">Not used.</param>
-        private void OnGLControlInitialized(object o, EventArgs e)
+        void GlMapView_Initialized(object sender, EventArgs e)
         {
-            GlTexturesView.MakeCurrent();
-
+            this.GlMapView.MakeCurrent();
             // Set Vision radius
             App.VisionRadius_2E = 10;
             App.VisionRadius_2E_Changed();
 
             Matrix3DMath.MatrixSetToPY(App.SunAngleMatrix, new Angles.AnglePY(-22.5D * MathUtil.RadOf1Deg, 157.5D * MathUtil.RadOf1Deg));
+
+            // Make the GL Font.
+            MakeGlFont();
+        }
+
+        /// <summary>
+        /// Ons the GL control initialized.
+        /// </summary>
+        /// <param name="o">Not used.</param>
+        /// <param name="e">Not used.</param>
+        private void TextureView_OnGLControlInitialized(object o, EventArgs e)
+        {
+            GlTexturesView.MakeCurrent();
 
             // Load tileset directories.
             foreach( var path in Settings.TilesetDirectories )
@@ -169,16 +179,12 @@ namespace SharpFlame
                 }
             }
 
-
             DefaultGenerator.CreateGeneratorTilesets();
 
             // Create Painters for the known tilesets.
             PainterFactory.CreatePainterArizona();
             PainterFactory.CreatePainterUrban();
             PainterFactory.CreatePainterRockies();
-
-            // Make the GL Font.
-            MakeGlFont();
 
             // Show initialize problems.
             if( initializeResult.HasProblems )
@@ -197,6 +203,26 @@ namespace SharpFlame
             {
                 logger.Debug(initializeResult.ToString());
             }
+        }
+
+        private void MakeGlFont()
+        {
+            if(!GlMapView.IsInitialized)
+            {
+                return;
+            }
+            GlMapView.MakeCurrent();
+
+            var style = FontStyle.Regular;
+            if( Settings.FontBold )
+            {
+                style = style | FontStyle.Bold;
+            }
+            if( Settings.FontItalic )
+            {
+                style = style | FontStyle.Italic;
+            }
+            App.UnitLabelFont = new GLFont(new System.Drawing.Font(Settings.FontFamily, Settings.FontSize, style, System.Drawing.GraphicsUnit.Pixel));
         }
 
         private void SetupEventHandlers()
@@ -301,25 +327,6 @@ namespace SharpFlame
                         logger.Error(ex, "Got an Exception while loading object data.");
                     }
                 };
-        }
-
-        private void MakeGlFont()
-        {
-            if(!GlTexturesView.IsInitialized)
-            {
-                return;
-            }
-
-            var style = FontStyle.Regular;
-            if( Settings.FontBold )
-            {
-                style = style | FontStyle.Bold;
-            }
-            if( Settings.FontItalic )
-            {
-                style = style | FontStyle.Italic;
-            }
-            App.UnitLabelFont = new GLFont(new System.Drawing.Font(Settings.FontFamily, Settings.FontSize, style, System.Drawing.GraphicsUnit.Pixel));
         }
     }
 }

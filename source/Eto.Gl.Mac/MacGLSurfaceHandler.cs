@@ -1,67 +1,24 @@
-﻿using Eto.Platform.Mac.Forms;
+﻿using System;
+using System.Drawing;
+using Eto.Platform;
+using Eto.Platform.Mac.Forms;
 using MonoMac.AppKit;
+using Size = Eto.Drawing.Size;
 
 namespace Eto.Gl.Mac
 {
-    public class MacGLSurfaceHandler : MacView<MacGLView, GLSurface>, IGLSurfaceHandler
+	public class MacGLSurfaceHandler : MacView<MacGLView3, GLSurface>, IGLSurfacePlatformHandler
     {
-        public override MacGLView CreateControl()
+		public override MacGLView3 CreateControl()
         {
-            return new MacGLView();
+			var c = new MacGLView3();
+            c.Initialized += (sender, args) => Widget.OnInitialized(sender, args);
+            c.Resize += (sender, args) => Widget.OnResize(sender, args);
+            c.ShuttingDown += (sender, args) => Widget.OnShuttingDown(sender, args);
+		    return c;
         }
 
-        public override void AttachEvent(string id)
-        {
-            switch( id )
-            {
-                case "Control.MouseEnter":
-                    break;
-
-                case "Control.MouseLeave":
-
-                    break;
-                case "Control.MouseMove":
-                    break;
-
-                case "Control.SizeChanged":
-                    break;
-
-                case "Control.MouseDown":
-                    this.Control.GLMouseDown += Control_GLMouseDown;
-                    break;
-
-                case "Control.MouseUp":
-                    break;
-
-                case "Control.MouseDoubleClick":
-                    break;
-
-                case "Control.MouseWheel":
-                    break;
-
-                case "Control.KeyDown":
-                    break;
-
-                case "Control.KeyUp":
-                    break;
-
-                case "Control.LostFocus":
-                    break;
-
-                case "Control.GotFocus":
-                    break;
-
-                case "Control.Shown":
-                    break;
-
-                default:
-                    base.AttachEvent(id);
-                    break;
-            }
-
-        }
-
-        private void Control_GLMouseDown(MacGLView sender, NSEvent args)
+        private void Control_GLMouseDown(MacGLView2 sender, NSEvent args)
         {
             var mouseEvent = Eto.Platform.Mac.Conversions.GetMouseEvent(sender, args, false);
             this.Widget.OnMouseDown(mouseEvent);
@@ -73,5 +30,30 @@ namespace Eto.Gl.Mac
         {
             get { return this.Control; }
         }
+
+        public Size GLSize
+        {
+            get { return this.Control.GLSize; }
+            set
+            {
+
+            }
+        }
+
+        public bool IsInitialized
+        {
+            get { return Control.IsInitialized; }
+        }
+
+
+	    public void MakeCurrent()
+	    {
+	        this.Control.MakeCurrent();
+	    }
+
+	    public void SwapBuffers()
+	    {
+	        this.Control.SwapBuffers();
+	    }
     }
 }

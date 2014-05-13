@@ -107,6 +107,7 @@ namespace SharpFlame.Mapping.Minimap
             {
                 return;
             }
+            this.GLSurface.MakeCurrent();
 
             var terrain = Map.Terrain;
 

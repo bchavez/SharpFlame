@@ -24,19 +24,17 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading;
 using Eto.Drawing;
-using Eto.Forms;
 using Eto.Platform.GtkSharp;
 using Gtk;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Platform;
-using KeyPressEventArgs = Gtk.KeyPressEventArgs;
 
-namespace Eto.Gl
+namespace Eto.Gl.Gtk
 {
     [ToolboxItem(true)]
-    public class GLDrawingArea : DrawingArea, IDisposable, IGLSurface
+    public class GLDrawingArea : DrawingArea, IDisposable
     {
         IGraphicsContext graphicsContext;
         static int graphicsContextCount;

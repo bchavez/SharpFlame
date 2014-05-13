@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Ninject;
 using Ninject.Modules;
+using Ninject.Planning.Bindings.Resolvers;
 
 namespace SharpFlame.Infrastructure
 {
@@ -12,6 +13,7 @@ namespace SharpFlame.Infrastructure
                 {
                     InjectNonPublic = true,
                     LoadExtensions = false,
+                    AllowNullInjection = false,
                 };
 
             var kernelModules = new List<INinjectModule>
@@ -23,7 +25,7 @@ namespace SharpFlame.Infrastructure
                     new SharpFlameModule(),
                 };
 
-            var kernel = new StandardKernel(settings, kernelModules.ToArray());
+            var kernel = new ExplicitKernel(settings, kernelModules.ToArray());
 
             kernel.Bind<Eto.Generator>().ToMethod(ctx => generator);
 
@@ -54,6 +56,19 @@ namespace SharpFlame.Infrastructure
                         }
                     }
                 };
+        }
+    }
+
+    public class ExplicitKernel : StandardKernel
+    {
+        public ExplicitKernel(INinjectSettings settings, params INinjectModule[] modules) : base(settings, modules)
+        {
+        }
+
+        protected override bool HandleMissingBinding(Ninject.Activation.IRequest request)
+        {
+			System.Console.WriteLine ("RESOLVING: " + request.Service.ToString());
+            return false;
         }
     }
 }

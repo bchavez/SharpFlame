@@ -173,7 +173,7 @@ namespace SharpFlame.Gui.Sections
             tileTypeSetter.EndHorizontal();
 
             mainLayout.Add(layout);
-            this.scrollTextureView = new Scrollable {Content = this.GLSurface};
+             this.scrollTextureView = new Scrollable {Content = this.GLSurface};
             mainLayout.Add(this.scrollTextureView, true, true);
             mainLayout.Add(tileTypeSetter);
             //mainLayout.Add();
@@ -338,20 +338,20 @@ namespace SharpFlame.Gui.Sections
                 {
                     DrawTexturesView();
                 };
-           
         }
+
 
         private void DrawTexturesView()
         {
+			this.GLSurface.MakeCurrent ();
             if( uiOptions.Textures.TilesetNum == -1 )
             {
+				
                 GL.Clear(ClearBufferMask.ColorBufferBit);
                 GL.Flush();
                 this.GLSurface.SwapBuffers();
                 return;
             }
-
-            this.GLSurface.MakeCurrent();
 
             var tileset = App.Tilesets[uiOptions.Textures.TilesetNum];
 

@@ -31,7 +31,8 @@ namespace SharpFlame.Gui.Sections
         private Map mainMap;
         public Map MainMap { 
             get { return mainMap; }
-            set {
+            set
+            {
                 mainMap = value;
 
                 viewInfo.Map = mainMap;
@@ -83,7 +84,7 @@ namespace SharpFlame.Gui.Sections
             minimapCreator = mmc;
             uiOptions = argUiOptions;
 
-		    var mainLayout = new DynamicLayout();
+            var mainLayout = new DynamicLayout();
             mainLayout.AddSeparateRow(
                 lblMinimap = new Label { Text = "Minimap" }
             );
@@ -93,45 +94,45 @@ namespace SharpFlame.Gui.Sections
                 null,
                 lblVertex = new Label { },
                 null,
-                lblPos = new Label {}
+                lblPos = new Label { }
             );
 
-		    Content = mainLayout;           
+            Content = mainLayout;
 
-            setBindings();
+            SetBindings();
 		}
 
-        void setBindings() 
+        void SetBindings()
         {
             GLSurface.KeyDown += keyboardManager.HandleKeyDown;
             GLSurface.KeyUp += keyboardManager.HandleKeyUp;
 
-            GLSurface.MouseEnter += (sender, e) => 
+            GLSurface.MouseEnter += (sender, e) =>
             {
                 GLSurface.Focus();
             };
             GLSurface.MouseDown += viewInfo.HandleMouseDown;
             GLSurface.MouseUp += viewInfo.HandleMouseUp;
             GLSurface.MouseMove += viewInfo.HandleMouseMove;
-            GLSurface.MouseMove += handleMouseMove;
+            GLSurface.MouseMove += HandleMouseMove;
             GLSurface.MouseWheel += viewInfo.HandleMouseWheel;
 
             GLSurface.LostFocus += viewInfo.HandleLostFocus;
             GLSurface.MouseLeave += viewInfo.HandleMouseLeave;
 
-            GLSurface.Initialized += initalizeGlSurface;
-            GLSurface.Resize += resizeMapView;
+            GLSurface.Initialized += InitalizeGlSurface;
+            GLSurface.Resize += ResizeMapView;
 
-            keyboardManager.KeyDown += handleKeyDown;
+            keyboardManager.KeyDown += HandleKeyDown;
 
             lblMinimap.MouseDown += delegate
             {
-                var menu = createMinimapContextMenu();
+                var menu = CreateMinimapContextMenu();
                 menu.Show(lblMinimap);
             };
         }
 
-        private ContextMenu createMinimapContextMenu() {
+        private ContextMenu CreateMinimapContextMenu() {
             var menu = new ContextMenu();
 
             var cmiTextures = new CheckMenuItem(new CheckCommand {
@@ -187,7 +188,7 @@ namespace SharpFlame.Gui.Sections
             return menu;
         }
 
-        private void initalizeGlSurface(object sender, EventArgs e)
+        private void InitalizeGlSurface(object sender, EventArgs e)
         {
             this.GLSurface.MakeCurrent();
 
@@ -272,7 +273,7 @@ namespace SharpFlame.Gui.Sections
             tmrTool.Start();
         }
 
-        private void resizeMapView(object sender, EventArgs e)
+        private void ResizeMapView(object sender, EventArgs e)
         {
             GLSurface.MakeCurrent();
 
@@ -285,23 +286,23 @@ namespace SharpFlame.Gui.Sections
 
             GLSurface.SwapBuffers();
 
-            if(viewInfo.Map != null)
+            if( viewInfo.Map != null )
             {
                 viewInfo.FovCalc();
             }
 
-            DrawLater();              
+            DrawLater();
         }
 
         public void DrawLater()
         {
             drawPending = true;
-        }            
+        }
 
         private void timedDraw(object sender, EventArgs e)
         {
-            if(!drawPending || 
-                !this.GLSurface.IsInitialized)
+            if( !drawPending ||
+                !this.GLSurface.IsInitialized )
             {
                 return;
             }
@@ -309,7 +310,7 @@ namespace SharpFlame.Gui.Sections
             this.GLSurface.MakeCurrent();
 
             var bgColour = new SRgb();
-            if ( mainMap == null || mainMap.Tileset == null )
+            if( mainMap == null || mainMap.Tileset == null )
             {
                 bgColour.Red = 0.5F;
                 bgColour.Green = 0.5F;
@@ -323,12 +324,13 @@ namespace SharpFlame.Gui.Sections
             GL.ClearColor(bgColour.Red, bgColour.Green, bgColour.Blue, 1.0F);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            if(mainMap != null) // Else just clear the screen.
+            if( mainMap != null ) // Else just clear the screen.
             {
                 try
                 {
                     MainMap.GLDraw();
-                } catch(Exception ex)
+                }
+                catch( Exception ex )
                 {
                     Debugger.Break();
                     logger.Error(ex, "Got an exception");
@@ -343,20 +345,22 @@ namespace SharpFlame.Gui.Sections
 
         private void timedTool(object sender, EventArgs e)
         {
-            if ( viewInfo.Map == null )
+            if( viewInfo.Map == null )
             {
                 return;
             }
+            this.GLSurface.MakeCurrent();
 
             viewInfo.TimedTools();
         }
 
         private void timedKey(object sender, EventArgs e)
         {
-            if ( viewInfo.Map == null )
+            if( viewInfo.Map == null )
             {
                 return;
             }
+            this.GLSurface.MakeCurrent();
 
             double Rate = 0;
             double Zoom = 0;
@@ -365,9 +369,9 @@ namespace SharpFlame.Gui.Sections
             double Pan = 0;
             double OrbitRate = 0;
 
-            if ( keyboardManager.Keys[KeyboardKeys.ViewFast].Active )
+            if( keyboardManager.Keys[KeyboardKeys.ViewFast].Active )
             {
-                if (keyboardManager.Keys[KeyboardKeys.ViewSlow].Active)
+                if( keyboardManager.Keys[KeyboardKeys.ViewSlow].Active )
                 {
                     Rate = 8.0D;
                 }
@@ -376,7 +380,7 @@ namespace SharpFlame.Gui.Sections
                     Rate = 4.0D;
                 }
             }
-            else if (keyboardManager.Keys[KeyboardKeys.ViewSlow].Active)
+            else if( keyboardManager.Keys[KeyboardKeys.ViewSlow].Active )
             {
                 Rate = 0.25D;
             }
@@ -393,7 +397,7 @@ namespace SharpFlame.Gui.Sections
 
             viewInfo.TimedActions(Zoom, Move, Pan, Roll, OrbitRate);
 
-            if ( MainMap.CheckMessages() )
+            if( MainMap.CheckMessages() )
             {
                 DrawLater();
             }
@@ -416,7 +420,7 @@ namespace SharpFlame.Gui.Sections
             base.Dispose(disposing);
         }
 
-        private void handleMouseMove(object sender, MouseEventArgs e)
+        private void HandleMouseMove(object sender, MouseEventArgs e)
         {
             var mouseOverTerrain = viewInfo.GetMouseOverTerrain();
 
@@ -447,7 +451,7 @@ namespace SharpFlame.Gui.Sections
             }
         }
 
-        private void handleKeyDown(object sender, KeyboardEventArgs e)
+        private void HandleKeyDown(object sender, KeyboardEventArgs e)
         {
             if(mainMap == null)
             {
