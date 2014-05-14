@@ -12,8 +12,13 @@ A modern [Warzone 21000](http://wz2100.net/) map editor based on the original Wa
 ### Requirements
 * .NET 4.0 or Mono 3.x
 
-### Download & Install
-Continuous Integration builds soon.
+### Download
+* [MONO / .NET Build: SharpFlame.Master.zip](http://teamcity.codebetter.com/guestAuth/repository/download/bt1234/.lastSuccessful/SharpFlame.Master.zip)
+
+#### Running On Mono / Linux / OSX
+* Mono 3.2.7 or higher is required.
+* Run with `mono SharpFlame/SharpFlame.exe`
+* Note: Linux users, please use [ppa:inizan-yannick/mono](https://launchpad.net/~inizan-yannick/+archive/mono)
 
 Building
 --------
