@@ -3,8 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>12.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{06F7AC59-0E70-4646-BBFA-C105D9664FD0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Eto.Gl.Gtk</RootNamespace>

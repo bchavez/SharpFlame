@@ -268,7 +268,7 @@ namespace Eto.Gl.Gtk
 
                 // GraphicsContext
                 graphicsContext = new GraphicsContext(graphicsMode, windowInfo, GlVersionMajor, GlVersionMinor, graphicsContextFlags);
-                graphicsContext.MakeCurrent(windowInfo);
+                MakeCurrent();
 
                 if (GraphicsContext.ShareContexts)
                 {

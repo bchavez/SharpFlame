@@ -11,8 +11,6 @@
     <AssemblyName>SharpFlame.Tests.Gui</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ProductVersion>12.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <TargetFrameworkProfile />
     <ReleaseVersion>0.24</ReleaseVersion>
   </PropertyGroup>

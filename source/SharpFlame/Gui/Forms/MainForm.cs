@@ -1,6 +1,8 @@
 
 
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Eto.Drawing;
 using Eto.Forms;
 using Ninject;
@@ -8,6 +10,7 @@ using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Gui.Sections;
 using SharpFlame.Mapping;
+using SharpFlame.Settings;
 
 namespace SharpFlame.Gui.Forms
 {
@@ -32,6 +35,9 @@ namespace SharpFlame.Gui.Forms
 
         [Inject]
         internal Actions.LoadMap LoadMapAction { get; set; }
+
+        [Inject]
+        internal SettingsManager Settings { get; set; }
 
 	    [Inject]
 	    internal ViewInfo ViewInfo { get; set; }
@@ -73,13 +79,41 @@ namespace SharpFlame.Gui.Forms
 
 	        GenerateMenuToolBar();
 	        Maximize();
-	    }
+
+            if (Settings.UpdateOnStartup) 
+            { 
+                var updater = App.Kernel.Get<Updater> ();
+                var taskCheckUpdate = updater.CheckForUpdatesAsync ();
+
+                taskCheckUpdate.ContinueWith ((t) =>
+                {
+                    if (t.Result > 0)
+                    {
+                        if (MessageBox.Show (
+                            "Theres an Update available, do you want to download and apply it now?",
+                            "Update available",
+                            MessageBoxButtons.OKCancel,
+                            MessageBoxType.Question) == DialogResult.Ok)
+                        {
+                            var taskPrepareUpdates = updater.PrepareUpdatesAsync ();
+                            taskPrepareUpdates.ContinueWith((t2) => {
+                                // TODO: Save the maps and ask the user for a restart here.
+                                if (t2.Result == true) {
+                                    updater.DoUpdate();
+                                }
+                            });
+                            taskPrepareUpdates.Start();
+                        }
+                    }
+                }, TaskScheduler.FromCurrentSynchronizationContext ());
+                taskCheckUpdate.Start();
+            }
+        }
 
         void MainForm_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             App.Kernel.Dispose();
         }
-
 
 	    private void GenerateMenuToolBar()
 		{

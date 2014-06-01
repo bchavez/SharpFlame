@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
 using Eto;
@@ -72,6 +73,9 @@ namespace SharpFlame
 				
 			myKernel.Inject(this); //inject properties also, not just constructor.
 			kernel = myKernel;
+
+            // Make a SynchronizationContext for System.Threading.Tasks.
+            SynchronizationContext.SetSynchronizationContext(new SynchronizationContext());
 
 			// TODO: Remove me once everthing is inectable.
 			App.Kernel = myKernel;
@@ -187,22 +191,22 @@ namespace SharpFlame
             PainterFactory.CreatePainterRockies();
 
             // Show initialize problems.
-            if( initializeResult.HasProblems )
-            {
-                logger.Error(initializeResult.ToString());
-                App.StatusDialog = new Gui.Dialogs.Status(initializeResult);
-                App.StatusDialog.Show();
-            }
-            else if( initializeResult.HasWarnings )
-            {
-                logger.Warn(initializeResult.ToString());
-                App.StatusDialog = new Gui.Dialogs.Status(initializeResult);
-                App.StatusDialog.Show();
-            }
-            else
-            {
-                logger.Debug(initializeResult.ToString());
-            }
+//            if( initializeResult.HasProblems )
+//            {
+//                logger.Error(initializeResult.ToString());
+//                App.StatusDialog = new Gui.Dialogs.Status(initializeResult);
+//                App.StatusDialog.Show();
+//            }
+//            else if( initializeResult.HasWarnings )
+//            {
+//                logger.Warn(initializeResult.ToString());
+//                App.StatusDialog = new Gui.Dialogs.Status(initializeResult);
+//                App.StatusDialog.Show();
+//            }
+//            else
+//            {
+//                logger.Debug(initializeResult.ToString());
+//            }
         }
 
         private void MakeGlFont()

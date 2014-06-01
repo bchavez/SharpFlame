@@ -3,8 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>12.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{510CE98D-2169-48A0-889C-E743417EE5E1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Eto.Gl</RootNamespace>

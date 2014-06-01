@@ -56,6 +56,10 @@ namespace SharpFlame.Infrastructure
             this.Bind<MinimapCreator>()
                 .ToSelf()
                 .InSingletonScope();
+
+            this.Bind<Updater>()
+                .ToSelf()
+                .InSingletonScope();
                 
             #if DEBUG
             // This is here to keep a reference of it.

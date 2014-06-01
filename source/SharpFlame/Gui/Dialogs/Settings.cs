@@ -35,6 +35,7 @@ namespace SharpFlame.Gui.Dialogs
         private Label lblFont;
 
         private CheckBox chkStartupShowOptions;
+        private CheckBox chkUpdateOnStartup;
 
         private CheckBox chkAutoSaveEnabled;
         private CheckBox chkAutoSaveCompress;
@@ -327,6 +328,7 @@ namespace SharpFlame.Gui.Dialogs
 
             // Checkboxes
             chkStartupShowOptions.Bind(r => r.Checked, App.SettingsManager, t => t.ShowOptionsAtStartup);
+            chkUpdateOnStartup.Bind(r => r.Checked, App.SettingsManager, t => t.UpdateOnStartup);
             chkAutoSaveEnabled.Bind(r => r.Checked, App.SettingsManager, t => t.AutoSaveEnabled);
             chkAutoSaveCompress.Bind(r => r.Checked, App.SettingsManager, t => t.AutoSaveCompress);
             chkMipmapsGenerate.Bind(r => r.Checked, App.SettingsManager, t => t.Mipmaps);
@@ -388,7 +390,7 @@ namespace SharpFlame.Gui.Dialogs
                     Editable = false
                 });
 
-            layout.Add(chkStartupShowOptions = new CheckBox {Text = "Show options after startup."});
+            layout.AddSeparateRow(chkStartupShowOptions = new CheckBox {Text = "Show options after startup."}, null, chkUpdateOnStartup = new CheckBox {Text = "Check for updates on Startup."});
             var gboxTilesets = new GroupBox {Text = "Tileset Directories"};
             var layoutTilesets = new DynamicLayout();
             layoutTilesets.BeginHorizontal();

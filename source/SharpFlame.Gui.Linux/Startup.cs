@@ -11,9 +11,9 @@ namespace SharpFlame.Gui.Linux
 {
 	class Startup
 	{
-		//[STAThread]
+		[STAThread]
 		static void Main (string [] args)
-		{
+        {
             // SDL does not currently support embedding
             // on external windows. If Open.Toolkit is not yet
             // initialized, we'll try to request a native backend

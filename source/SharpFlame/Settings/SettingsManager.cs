@@ -77,6 +77,8 @@ namespace SharpFlame.Settings
         public ObservableCollection<string> ObjectDataDirectories { get; private set; }
         public bool PickOrientation { get; set; }
 
+        public bool UpdateOnStartup { get; set; }
+
         [JsonIgnore]
         public Font Font { get; private set; }
         
@@ -150,6 +152,7 @@ namespace SharpFlame.Settings
             MapViewDepth = 24;
             TextureViewDepth = 24;
             PickOrientation = true;
+            UpdateOnStartup = true;
 
             //Remove "old" keys
             keyboardManager.Clear();

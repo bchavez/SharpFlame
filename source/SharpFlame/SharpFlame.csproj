@@ -3,9 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>
-    </ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{152475A4-3ABE-41C4-B338-A2FB7B350FAF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>SharpFlame</RootNamespace>
@@ -138,6 +135,9 @@
     </Reference>
     <Reference Include="Eto">
       <HintPath>..\packages\Eto-20140420\net40\Eto.dll</HintPath>
+    </Reference>
+    <Reference Include="NAppUpdate.Framework">
+      <HintPath>..\packages\NAppUpdate-0.1.3.0\net40\NAppUpdate.Framework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup />
@@ -474,6 +474,7 @@
     <Compile Include="UiOptions\Minimap.cs" />
     <Compile Include="UiOptions\TerrainOptions.cs" />
     <Compile Include="UiOptions\HeightOptions.cs" />
+    <Compile Include="Updater.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">
