@@ -83,7 +83,9 @@ Reference
 * [FlaME](https://github.com/flail/flaME) - Original Source Code
 
 
-Created by [Brian Chavez](http://bchavez.bitarmory.com).
+Created by:
+[Brian Chavez](http://bchavez.bitarmory.com).
+[René Kistl](http://rene.kistl.at).
 
 ---
 
