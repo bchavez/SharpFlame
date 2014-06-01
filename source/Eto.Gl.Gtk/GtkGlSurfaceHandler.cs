@@ -17,7 +17,7 @@ namespace Eto.Gl.Gtk
         public Size GLSize
         {
             get { return this.Control.GLSize; }
-            set { this.GLSize = value; }
+            set { this.Control.GLSize = value; }
         }
 
         public bool IsInitialized
