@@ -1,0 +1,16 @@
+<Feed BaseUrl="http://rene.kistl.at/downloads/SharpFlame/Gtk/">
+  <Tasks>
+    <FileUpdateTask localPath="SharpFlame" sha256-checksum="e3f070b805d5967d5a8133b66edabbe2fe861f858712366ed8e9a4f1fee37066">
+      <Description>SharpFlame</Description>
+      <Conditions>
+        <FileExistsCondition type="not" />
+        <FileChecksumCondition checksum="e3f070b805d5967d5a8133b66edabbe2fe861f858712366ed8e9a4f1fee37066" checksumType="sha256" type="or-not" />
+      </Conditions>
+    </FileUpdateTask>
+  </Tasks>
+  <Updater>
+    <FileUpdateTask localPath="updater.exe" sha256-checksum="6fa7b08255876aa21b2e29ce83daa8ca104a1f642881b0847abcf243a386f7db">
+        <Description>updater.exe</Description>
+    </FileUpdateTask>
+  </Updater>  
+</Feed>

@@ -1,0 +1,12 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Icon=flaME
+Name=SharpFlame
+Comment=Warzone 2100 Map Editor.
+Exec=sh -c "\$HOME/.local/SharpFlame/SharpFlame"
+Name=SharpFlame
+StartupNotify=true
+Categories=GTK;Game;
