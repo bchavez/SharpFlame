@@ -282,33 +282,6 @@ namespace SharpFlame
             }
         }
 
-#if !Mono
-        public class clsSplashScreen
-        {
-            public frmSplash Form = new frmSplash();
-
-            public clsSplashScreen()
-            {
-                Form.Icon = App.ProgramIcon;
-            }
-        }
-
-        private void ShowThreadedSplashScreen()
-        {
-            clsSplashScreen SplashScreen = new clsSplashScreen();
-
-            SplashScreen.Form.Show();
-            SplashScreen.Form.Activate();
-            while ( !App.ProgramInitializeFinished )
-            {
-                SplashScreen.Form.lblStatus.Text = InitializeStatus;
-                Application.DoEvents();
-                Thread.Sleep(200);
-            }
-            SplashScreen.Form.Close();
-        }
-#endif
-
         public string InitializeStatus = "";
 
         public void Initialize(object sender, EventArgs e)
@@ -322,13 +295,6 @@ namespace SharpFlame
             {
                 return;
             }
-
- #if !Mono
-            Hide();
-            Thread SplashThread = new Thread(new ThreadStart(ShowThreadedSplashScreen));
-            SplashThread.IsBackground = true;
-            SplashThread.Start();
-#endif
 
             App.ProgramInitialized = true;
 
