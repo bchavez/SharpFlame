@@ -41,11 +41,25 @@ namespace SharpFlame.Gui.Forms
 	    [Inject]
 	    internal ViewInfo ViewInfo { get; set; }
 
+        private string mainMapName;   
+
+        /// <summary>
+        /// Sets the title Map.
+        /// </summary>
+        /// <value>The name of the main map.</value>
+        public string MainMapName { 
+            get { return mainMapName; } 
+            set { 
+                mainMapName = value;
+                Title = string.Format("{0} - {1} {2}", mainMapName, Constants.ProgramName, Constants.ProgramVersion());
+            }
+        }
+
 	    //Ninject initializer
 	    void IInitializable.Initialize()
 	    {
 	        ClientSize = new Size(1024, 768);
-	        Title = string.Format("No Map - {0} {1}", Constants.ProgramName, Constants.ProgramVersion());
+            MainMapName = "No Map";
 	        Icon = Resources.SharpFlameIcon();
 
 	        var tabControl = new TabControl();

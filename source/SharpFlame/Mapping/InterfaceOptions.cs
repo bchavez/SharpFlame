@@ -1,5 +1,4 @@
-
-
+using System.IO;
 using SharpFlame.FileIO;
 using SharpFlame.Core.Domain;
 using SharpFlame.Maths;
@@ -18,6 +17,19 @@ namespace SharpFlame.Mapping
         public sXY_uint ScrollMax;
         public XYInt ScrollMin;
 
+        /// <summary>
+        /// Contains the full path to the file.
+        /// </summary>
+        public string FilePath { get; set; }
+
+        /// <summary>
+        /// Helper for Path.GetFileName(FilePath);
+        /// </summary>
+        public string FileName
+        {
+            get { return Path.GetFileName(FilePath); }
+        }
+
         public CompileType CompileType;
 
         public InterfaceOptions()
@@ -33,6 +45,7 @@ namespace SharpFlame.Mapping
             ScrollMax.Y = 0U;
             CampaignGameType = -1;
             CompileType = CompileType.Unspecified;
+            FilePath = "";
         }
     }
 

@@ -12,6 +12,7 @@ using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
+using SharpFlame.Gui.Forms;
 using SharpFlame.Infrastructure;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Minimap;
@@ -46,20 +47,28 @@ namespace SharpFlame.Gui.Sections
 
                     // Change the tileset in the TexturesView.
                     uiOptions.Textures.TilesetNum = App.Tilesets.IndexOf(mainMap.Tileset);
+
+                    // Update the title.
+                    mainForm.MainMapName = mainMap.InterfaceOptions.FileName;
                 } else
                 {
                     uiOptions.Textures.TilesetNum = -1;
+                    mainForm.MainMapName = "No Map";
                 }
 
                 DrawLater();
             }
         }
 
+        /// <summary>
+        /// These get injected by Ninject over the constructor.
+        /// </summary>
         private readonly ILogger logger;
         private readonly KeyboardManager keyboardManager;
         private readonly ViewInfo viewInfo;
         private readonly MinimapCreator minimapCreator;
         private readonly UiOptions.Options uiOptions;
+        private readonly MainForm mainForm;
 
         private UITimer tmrDraw;
         private UITimer tmrKey;
@@ -74,7 +83,7 @@ namespace SharpFlame.Gui.Sections
 
         public MainMapView(IKernel kernel, ILoggerFactory logFactory, 
             KeyboardManager kbm, ViewInfo argViewInfo,
-            MinimapCreator mmc, UiOptions.Options argUiOptions)
+            MinimapCreator mmc, UiOptions.Options argUiOptions, MainForm argMainForm)
         {
             kernel.Inject(this); // For GLSurface
             logger = logFactory.GetCurrentClassLogger();
@@ -83,6 +92,7 @@ namespace SharpFlame.Gui.Sections
             viewInfo.MainMapView = this; // They need each other.
             minimapCreator = mmc;
             uiOptions = argUiOptions;
+            mainForm = argMainForm;
 
             var mainLayout = new DynamicLayout();
             mainLayout.AddSeparateRow(

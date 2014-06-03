@@ -58,6 +58,8 @@ namespace SharpFlame.Mapping.IO.Wz
             logger.Info("Loading WZ from '{0}'.", path);
             var subResult = new SimpleResult();
 
+            map.InterfaceOptions.FilePath = path;
+
             ZipSplitPath splitPath;
             var mapLoadName = "";
 

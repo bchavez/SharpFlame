@@ -31,6 +31,8 @@ namespace SharpFlame.Mapping.IO.Wz
             logger.Info("Loading game file from \"{0}\"", path);
             var subResult = new SimpleResult();
 
+            map.InterfaceOptions.FilePath = path;
+
             map.Tileset = null;
 
             map.TileType_Reset();

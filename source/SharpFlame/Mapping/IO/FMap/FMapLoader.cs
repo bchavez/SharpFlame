@@ -43,6 +43,8 @@ namespace SharpFlame.Mapping.IO.FMap
             var returnResult = new Result(string.Format("Loading FMap from \"{0}\"", path), false);
             logger.Info(string.Format("Loading FMap from \"{0}\"", path));
 
+            map.InterfaceOptions.FilePath = path;
+
             using ( var zip = ZipFile.Read(path) )
             {
                 /*

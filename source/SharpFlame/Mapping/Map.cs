@@ -105,6 +105,7 @@ namespace SharpFlame.Mapping
             UnitGroups = new ConnectedList<clsUnitGroup, Map>(this);
             ScriptPositions = new ConnectedList<clsScriptPosition, Map>(this);
             ScriptAreas = new ConnectedList<clsScriptArea, Map>(this);
+            InterfaceOptions = new InterfaceOptions();
 
             InitializeMap();
         }
@@ -1759,11 +1760,6 @@ namespace SharpFlame.Mapping
             UndoPosition = 0;
 
             SelectedUnits = new ConnectedList<Unit, Map>(this);
-
-            if ( InterfaceOptions == null )
-            {
-                InterfaceOptions = new InterfaceOptions();
-            }
 
             _SelectedUnitGroup = new clsUnitGroupContainer();
             SelectedUnitGroup.Item = ScavengerUnitGroup;
