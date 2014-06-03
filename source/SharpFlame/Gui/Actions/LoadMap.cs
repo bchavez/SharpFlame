@@ -105,9 +105,10 @@ namespace SharpFlame.Gui.Actions
 
                 if(!loadResult.HasProblems)
                 {
-                    map.InitializeUserInput();
-                    map.Update(); // TODO: Remove me once map drawing works.
                     MainMapView.MainMap = map;
+                } else
+                {
+                    map.Deallocate();
                 }
             }
         }

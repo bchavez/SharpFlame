@@ -488,8 +488,12 @@ namespace SharpFlame.Mapping
 
             while ( Units.Count > 0 )
             {
-                if (Units [0] != null) {
-                    Units [0].Deallocate ();
+                if(Units[0] != null)
+                {
+                    Units[0].Deallocate();
+                } else
+                {
+                    Units.Remove(0);
                 }
             }
             Units.Deallocate();
@@ -497,7 +501,13 @@ namespace SharpFlame.Mapping
 
             while ( Gateways.Count > 0 )
             {
-                Gateways[0].Deallocate();
+                if(Gateways[0] != null)
+                {
+                    Gateways[0].Deallocate();
+                } else
+                {
+                    Gateways.Remove(0);
+                }
             }
             Gateways.Deallocate();
             Gateways = null;

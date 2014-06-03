@@ -475,10 +475,10 @@ namespace SharpFlame
                 return;
             }
 
-            var messageText = "An object\'s ID has been changed unexpectedly. The error was in \"{0}\"\n\n" +
+            var messageText = string.Format("An object\'s ID has been changed unexpectedly. The error was in \"{0}\"\n\n" +
                               "The object is of type {1} and is at map position {2}. " +
                               "It\'s ID was {3}, but is now {4}.\n\n" +
-                              "Click Cancel to stop seeing this message. Otherwise, click OK.".Format2(nameOfErrorSource, idUnit.TypeBase.GetDisplayTextCode(),
+                              "Click Cancel to stop seeing this message. Otherwise, click OK.", nameOfErrorSource, idUnit.TypeBase.GetDisplayTextCode(),
                                   idUnit.GetPosText(), intendedID.ToStringInvariant(), idUnit.ID.ToStringInvariant());
             const string caption = "An object\'s ID has been changed unexpectedly.";
 

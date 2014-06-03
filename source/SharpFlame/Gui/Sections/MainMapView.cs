@@ -34,6 +34,17 @@ namespace SharpFlame.Gui.Sections
             get { return mainMap; }
             set
             {
+                // Unload the previous map, until we have multimap support.
+                if(mainMap != null)
+                {
+//                    if ( !map.ClosePrompt() )
+//                    {
+//                        return;
+//                    }
+
+                    mainMap.Deallocate();
+                }
+
                 mainMap = value;
 
                 viewInfo.Map = mainMap;

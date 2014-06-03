@@ -80,9 +80,9 @@ namespace SharpFlame.Infrastructure
             this.Bind<HeightTab>().ToSelf().InSingletonScope();
             this.Bind<LoadMap>().ToSelf().InSingletonScope();
 
-            this.Bind<Map>().ToSelf().InSingletonScope();
+            this.Bind<Map>().ToSelf().InTransientScope();
             this.Bind<clsDrawSectorObjects>().ToSelf().InTransientScope();
-			this.Bind<Gui.Dialogs.Settings> ().ToSelf ().InSingletonScope ();
+            this.Bind<Gui.Dialogs.Settings> ().ToSelf ().InTransientScope ();
         }
     }
 }
