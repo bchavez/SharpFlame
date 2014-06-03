@@ -1,5 +1,3 @@
-
-
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +6,7 @@ using Eto.Forms;
 using Ninject;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
+using SharpFlame.Extensions;
 using SharpFlame.Gui.Sections;
 using SharpFlame.Mapping;
 using SharpFlame.Settings;
@@ -83,11 +82,8 @@ namespace SharpFlame.Gui.Forms
             if (Settings.UpdateOnStartup) 
             { 
                 var updater = App.Kernel.Get<Updater> ();
-                var taskCheckUpdate = updater.CheckForUpdatesAsync ();
-
-                taskCheckUpdate.ContinueWith ((t) =>
-                {
-                    if (t.Result > 0)
+                updater.CheckForUpdatesAsync ().ThenOnUI(updatesAvailable => {
+                    if (updatesAvailable > 0)
                     {
                         if (MessageBox.Show (
                             "Theres an Update available, do you want to download and apply it now?",
@@ -95,18 +91,15 @@ namespace SharpFlame.Gui.Forms
                             MessageBoxButtons.OKCancel,
                             MessageBoxType.Question) == DialogResult.Ok)
                         {
-                            var taskPrepareUpdates = updater.PrepareUpdatesAsync ();
-                            taskPrepareUpdates.ContinueWith((t2) => {
+                            updater.PrepareUpdatesAsync ().ThenOnUI(worked => {
                                 // TODO: Save the maps and ask the user for a restart here.
-                                if (t2.Result == true) {
+                                    if (worked) {
                                     updater.DoUpdate();
                                 }
                             });
-                            taskPrepareUpdates.Start();
                         }
                     }
-                }, TaskScheduler.FromCurrentSynchronizationContext ());
-                taskCheckUpdate.Start();
+                });
             }
         }
 

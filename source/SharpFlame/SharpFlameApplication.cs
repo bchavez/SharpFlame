@@ -1,11 +1,8 @@
-
-
 using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Threading;
 using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
 using Eto;
@@ -73,9 +70,6 @@ namespace SharpFlame
 				
 			myKernel.Inject(this); //inject properties also, not just constructor.
 			kernel = myKernel;
-
-            // Make a SynchronizationContext for System.Threading.Tasks.
-            SynchronizationContext.SetSynchronizationContext(new SynchronizationContext());
 
 			// TODO: Remove me once everthing is inectable.
 			App.Kernel = myKernel;

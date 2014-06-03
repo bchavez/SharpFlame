@@ -475,6 +475,7 @@
     <Compile Include="UiOptions\TerrainOptions.cs" />
     <Compile Include="UiOptions\HeightOptions.cs" />
     <Compile Include="Updater.cs" />
+    <Compile Include="Extensions\AsyncExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">
@@ -673,4 +674,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
 </Project>
