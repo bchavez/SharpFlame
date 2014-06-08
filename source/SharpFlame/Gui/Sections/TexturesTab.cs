@@ -1,5 +1,3 @@
-
-
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -43,6 +41,7 @@ namespace SharpFlame.Gui.Sections
         private RadioButtonList rblTerrainModifier;
 
         private ComboBox cbTileset;
+        private ComboBox cbTileType;
 
         private Scrollable scrollTextureView;
 
@@ -148,7 +147,7 @@ namespace SharpFlame.Gui.Sections
                     Text = "Tile Type:",
                     VerticalAlign = VerticalAlign.Middle
                 });
-            tileTypeCombo.Add(TileTypeComboBox());
+            tileTypeCombo.Add(cbTileType = TileTypeComboBox());
             tileTypeCombo.EndHorizontal();
 
             var tileTypeCheckBoxes = new DynamicLayout();
@@ -178,17 +177,16 @@ namespace SharpFlame.Gui.Sections
             mainLayout.Add(tileTypeSetter);
             //mainLayout.Add();
 
-            // Set the bindings to UiOptions.Textures
-            SetupEventHandlers();
-
             Content = mainLayout;
         }
 
         /// <summary>
         /// Sets the Bindings to uiOptions.Textures;
         /// </summary>
-        private void SetupEventHandlers()
+        public override void OnLoadComplete(EventArgs lcEventArgs)
         {
+            base.OnLoadComplete(lcEventArgs);
+
             Textures texturesOptions = uiOptions.Textures;
 
             // Circular / Square Button
@@ -280,10 +278,10 @@ namespace SharpFlame.Gui.Sections
             cbTileset.Bind(r => r.SelectedIndex, texturesOptions, t => t.TilesetNum);
             cbTileset.SelectedIndexChanged += delegate
             {
-                if (mainMapView.MainMap != null && 
-                    mainMapView.MainMap.Tileset != App.Tilesets[texturesOptions.TilesetNum]) 
+                var map = mainMapView.MainMap;
+                if (map != null && 
+                    map.Tileset != App.Tilesets[texturesOptions.TilesetNum]) 
                 {
-                    var map = mainMapView.MainMap;
                     map.Tileset = App.Tilesets[texturesOptions.TilesetNum];
                     map.TileType_Reset();
 
@@ -308,24 +306,48 @@ namespace SharpFlame.Gui.Sections
                 };
 
             this.GLSurface.MouseDown += (sender, e) =>
+            {
+                if( uiOptions.Textures.TilesetNum == -1 )
                 {
-                    if( uiOptions.Textures.TilesetNum == -1 )
-                    {
-                        return;
-                    }
+                    return;
+                }
 
-                    var args = (MouseEventArgs)e;
+                var args = (MouseEventArgs)e;
 
-                    var x = (int)Math.Floor(args.Location.X / 64);
-                    var y = (int)Math.Floor(args.Location.Y / 64);
-                    var tile = x + (y * TextureCount.X);
-                    if( tile >= App.Tilesets[uiOptions.Textures.TilesetNum].Tiles.Count )
-                    {
-                        return;
-                    }
-                    uiOptions.Textures.SelectedTile = tile;
-                    DrawTexturesView();
-                };
+                var x = (int)Math.Floor(args.Location.X / 64);
+                var y = (int)Math.Floor(args.Location.Y / 64);
+                var tile = x + (y * TextureCount.X);
+                if( tile >= App.Tilesets[uiOptions.Textures.TilesetNum].Tiles.Count )
+                {
+                    return;
+                }
+                uiOptions.Textures.SelectedTile = tile;
+
+                var map = mainMapView.MainMap;
+                if (map != null) {
+                    cbTileType.SelectedIndex = (int)map.TileTypeNum[tile];
+                }
+
+                DrawTexturesView();
+            };
+
+            cbTileType.SelectedIndexChanged += delegate
+            {
+                var map = mainMapView.MainMap;
+                if (map == null) {
+                    MessageBox.Show("Please open a map before changing tile types.");
+                    return;
+                }
+
+                if (uiOptions.Textures.SelectedTile == 0) {
+                    MessageBox.Show("Select a tile to modify first.");
+                    return;
+                }
+
+                map.TileTypeNum[uiOptions.Textures.SelectedTile] = (byte)cbTileType.SelectedIndex;
+
+                DrawTexturesView();
+            };
 
             // Set Mousetool, when we are shown.
             Shown += (sender, args) =>
@@ -450,8 +472,14 @@ namespace SharpFlame.Gui.Sections
                             goto EndOfTextures2;
                         }
 
-                        // TODO: Change this to a per map value once we have a map.
-                        num = tileset.Tiles[num].DefaultType;
+                        if(mainMapView.MainMap != null)
+                        {
+                            num = mainMapView.MainMap.TileTypeNum[num];
+                        } else
+                        {
+                            num = tileset.Tiles[num].DefaultType;
+                        }
+
                         GL.Color3(App.TileTypes[num].DisplayColour.Red, App.TileTypes[num].DisplayColour.Green, App.TileTypes[num].DisplayColour.Blue);
 
                         GL.Vertex2(x * 64 + 24, y * 64 + 24);
@@ -558,9 +586,13 @@ namespace SharpFlame.Gui.Sections
             return control;
         }
 
-        private static Control TileTypeComboBox()
+        private static ComboBox TileTypeComboBox()
         {
             var control = new ComboBox();
+            if(App.TileTypes != null)
+            {
+                control.Items.AddRange(App.TileTypes);
+            }
             return control;
         }
 
