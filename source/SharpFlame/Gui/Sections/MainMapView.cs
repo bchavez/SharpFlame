@@ -119,12 +119,12 @@ namespace SharpFlame.Gui.Sections
             );
 
             Content = mainLayout;
-
-            SetBindings();
 		}
 
-        void SetBindings()
+        public override void OnLoadComplete(EventArgs lcEventArgs)
         {
+            base.OnLoadComplete(lcEventArgs);
+
             GLSurface.KeyDown += keyboardManager.HandleKeyDown;
             GLSurface.KeyUp += keyboardManager.HandleKeyUp;
 

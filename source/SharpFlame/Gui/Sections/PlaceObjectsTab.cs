@@ -1,5 +1,3 @@
-
-
 using System;
 using System.Linq;
 using Eto.Drawing;
@@ -89,12 +87,13 @@ namespace SharpFlame.Gui.Sections
             mainLayout.AddRow (nLayout5);
 			mainLayout.Add (tabControl);
 
-            SetupEventHandlers ();
-
 			Content = mainLayout;
 		}
 
-        void SetupEventHandlers() {
+        public override void OnLoadComplete(EventArgs lcEventArgs)
+        {
+            base.OnLoadComplete(lcEventArgs);
+
             // Rotation buttons
             btnRotation0.Click += delegate {
                 nudRotation.Value = 0D;

@@ -1,5 +1,4 @@
-
-
+using System;
 using Eto;
 using Eto.Drawing;
 using Eto.Forms;
@@ -271,13 +270,13 @@ namespace SharpFlame.Gui.Sections
 		    newMainyLayout.AddRow(null, mainLayout, null);
             newMainyLayout.Add(null);
 
-            setupEventHandlers ();
-
             Content = newMainyLayout;
 		}
 
-        private void setupEventHandlers() 
+        public override void OnLoadComplete(EventArgs lcEventArgs)
         {
+            base.OnLoadComplete(lcEventArgs);
+
             rbSet.CheckedChanged += delegate
             {
                 setMouseMode();

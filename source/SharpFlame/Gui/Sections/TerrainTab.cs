@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Eto.Drawing;
 using Eto.Forms;
 using Ninject.Extensions.Logging;
@@ -45,12 +46,13 @@ namespace SharpFlame.Gui.Sections
 			layout.Add (CliffSection ());
             layout.Add (null);
 
-            setupEventHandlers ();
-
 			Content = layout;
 		}
 
-        private void setupEventHandlers() {
+        public override void OnLoadComplete(EventArgs lcEventArgs)
+        {
+            base.OnLoadComplete(lcEventArgs);
+
             rbGroundPlace.CheckedChanged += delegate
             {
                 setMouseMode ();

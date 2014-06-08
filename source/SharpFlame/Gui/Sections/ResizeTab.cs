@@ -1,5 +1,4 @@
-
-
+using System;
 using Eto.Drawing;
 using Eto.Forms;
 using SharpFlame.Core;
@@ -39,12 +38,13 @@ namespace SharpFlame.Gui.Sections
 
 			mainLayout.Add (null);
 
-            SetupEventHandlers ();
-
 			Content = mainLayout;
 		}
 
-        void SetupEventHandlers() {
+        public override void OnLoadComplete(EventArgs lcEventArgs)
+        {
+            base.OnLoadComplete(lcEventArgs);
+
             // Set Mousetool, when we are shown.
             Shown += delegate {
                 uiOptions.MouseTool = MouseTool.Default;

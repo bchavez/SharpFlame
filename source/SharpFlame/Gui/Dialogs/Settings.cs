@@ -101,13 +101,13 @@ namespace SharpFlame.Gui.Dialogs
                 btnOk = new Button {Text = "OK", Size = new Size(80, -1)}
                 );
 
-            SetupEventHandlers();
-
             Content = layout;
         }
 
-        private void SetupEventHandlers()
+        public override void OnLoadComplete(EventArgs lcEventArgs)
         {
+            base.OnLoadComplete(lcEventArgs);
+
             var settings = App.SettingsManager;
 
             btnReset.Click += delegate
