@@ -1,13 +1,12 @@
 using System;
 using System.Drawing;
 using Ninject;
-using NLog;
+using Ninject.Extensions.Logging;
 using SharpFlame.Bitmaps;
 using SharpFlame.Colors;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Extensions;
-using SharpFlame.Core.Interfaces.Mapping.IO;
 using SharpFlame.Mapping.Minimap;
 using SharpFlame.Maths;
 
@@ -15,23 +14,23 @@ namespace SharpFlame.Mapping.IO.Minimap
 {
     public class MinimapSaver : IIOSaver
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger logger;
+        private readonly IKernel kernel;
 
-        protected readonly Map map;
-
-        public MinimapSaver(Map newMap)
+        public MinimapSaver(IKernel argKernel, ILoggerFactory logFactory)
         {
-            map = newMap;
+            kernel = argKernel;
+            logger = logFactory.GetCurrentClassLogger();
         }
 
-        public Result Save(string path, bool overwrite, bool compress = false) // compress is ignored.
+        public Result Save(string path, Map map, bool overwrite, bool compress = false) // compress is ignored.
         {
             var returnResult = new Result(string.Format("Saving minimap to \"{0}\".", path), false);
             logger.Info ("Saving minimap to \"{0}\"", path);
 
             var minimapBitmap = new Bitmap(map.Terrain.TileSize.X, map.Terrain.TileSize.Y);
 
-            var mmc = App.Kernel.Get<MinimapCreator>();
+            var mmc = kernel.Get<MinimapCreator>();
 
             var texture = new MinimapTexture(new XYInt(map.Terrain.TileSize.X, map.Terrain.TileSize.Y));
             mmc.FillTexture(texture, map);

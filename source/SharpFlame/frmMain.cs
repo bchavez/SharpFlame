@@ -622,15 +622,15 @@ namespace SharpFlame
                 return;
             }
             App.SettingsManager.OpenPath = Path.GetDirectoryName(Dialog.FileName);
-            var ttpLoader = new TTPLoader (Map);
-            var result = ttpLoader.Load(Dialog.FileName);
+            var ttpLoader = App.Kernel.Get<TTPLoader>();
+            var result = ttpLoader.Load(Dialog.FileName, Map);
             if (!result.HasProblems && !result.HasWarnings)
             {
                 TextureViewControl.DrawViewLater();
             }
             else
             {
-                App.ShowWarnings(result);
+                App.ShowWarnings(result.ToResult());
             }
         }
 
@@ -989,8 +989,8 @@ namespace SharpFlame
             }
             App.SettingsManager.SavePath = Path.GetDirectoryName(Dialog.FileName);
                  
-            var lndSaver = new LNDSaver (Map);
-            var result = lndSaver.Save(Dialog.FileName, true);
+            var lndSaver = App.Kernel.Get<LNDSaver>();
+            var result = lndSaver.Save(Dialog.FileName, Map, true);
             App.ShowWarnings(result);
         }
 
@@ -1013,8 +1013,8 @@ namespace SharpFlame
                 return;
             }
             App.SettingsManager.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            var minmapSaver = new MinimapSaver (Map);
-            var result = minmapSaver.Save(Dialog.FileName, true);
+            var minimapSaver = App.Kernel.Get<MinimapSaver>();
+            var result = minimapSaver.Save(Dialog.FileName, Map, true);
             if (result.HasProblems || result.HasWarnings) {
                 App.ShowWarnings (result);
             }
@@ -1039,8 +1039,8 @@ namespace SharpFlame
                 return;
             }
             App.SettingsManager.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            var hmSaver = new HeightmapSaver (Map);
-            var result = hmSaver.Save(Dialog.FileName, true);
+            var hmSaver = App.Kernel.Get<HeightmapSaver>();
+            var result = hmSaver.Save(Dialog.FileName, Map, true);
             if (result.HasProblems || result.HasWarnings) {
                 App.ShowWarnings (result);
             }
@@ -1065,8 +1065,8 @@ namespace SharpFlame
                 return;
             }
             App.SettingsManager.SavePath = Path.GetDirectoryName(Dialog.FileName);
-            var ttpSaver = new TTPSaver (Map);
-            var result = ttpSaver.Save(Dialog.FileName, true);
+            var ttpSaver = App.Kernel.Get<TTPSaver>();
+            var result = ttpSaver.Save(Dialog.FileName, Map, true);
             if (result.HasProblems || result.HasWarnings) {
                 App.ShowWarnings (result);
             }
@@ -3955,42 +3955,6 @@ namespace SharpFlame
             var ReturnResult = new Result("", false);
             var SplitPath = new sSplitPath(Path);
             var resultMap = App.Kernel.Get<Map>();
-
-            switch ( SplitPath.FileExtension.ToLower() )
-            {
-            case "fmap":
-                var fmap = new FMapLoader (resultMap);
-                ReturnResult.Add(fmap.Load(Path));
-                resultMap.PathInfo = new PathInfo(Path, true);
-                break;
-            case "wz":
-                var wzFormat = new WzLoader(resultMap);
-                ReturnResult.Add(wzFormat.Load(Path));
-                resultMap.PathInfo = new PathInfo(Path, false);
-                break;
-            case "gam":
-                var gameFormat = new GameLoader(resultMap);
-                ReturnResult.Add(gameFormat.Load(Path));
-                resultMap.PathInfo = new PathInfo(Path, false);
-                break;
-            case "lnd":
-                var lndFormat = new LNDLoader (resultMap);
-                ReturnResult.Add(lndFormat.Load(Path));
-                resultMap.PathInfo = new PathInfo(Path, false);
-                break;
-            default:
-                ReturnResult.ProblemAdd("File extension not recognised.");
-                break;
-            }
-
-            if ( ReturnResult.HasProblems )
-            {
-                resultMap.Deallocate();
-            }
-            else
-            {
-                NewMainMap(resultMap);
-            }
 
             return ReturnResult;
         }

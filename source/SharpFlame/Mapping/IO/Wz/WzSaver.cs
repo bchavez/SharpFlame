@@ -1,5 +1,3 @@
-
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,7 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using Ionic.Zip;
 using Ionic.Zlib;
-using NLog;
+using Ninject;
+using Ninject.Extensions.Logging;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Core.Parsers;
 using SharpFlame.Core.Parsers.Lev;
@@ -21,36 +20,27 @@ using SharpFlame.Mapping.IO.TTP;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tiles;
+using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
-using SharpFlame.Core.Interfaces.Mapping.IO;
 using SharpFlame.Core.Parsers.Ini;
-using SharpFlame.Domain;
-using SharpFlame.FileIO;
-using SharpFlame.Mapping.IO.TTP;
-using SharpFlame.Mapping.Objects;
-using SharpFlame.Mapping.Script;
-using SharpFlame.Mapping.Tiles;
-using SharpFlame.Mapping.Tools;
-using SharpFlame.Maths;
 using SharpFlame.Util;
-
 
 namespace SharpFlame.Mapping.IO.Wz
 {
     public class WzSaver: IIOSaver
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger logger;
+        private readonly IKernel kernel;
 
-        protected readonly Map map;
-
-        public WzSaver(Map newMap)
+        public WzSaver(IKernel argKernel, ILoggerFactory logFactory)
         {
-            map = newMap;
+            kernel = argKernel;
+            logger = logFactory.GetCurrentClassLogger();
         }
 
-        public Result Save(string path, bool overwrite, bool compress) // compress is not implemented.
+        public Result Save(string path, Map map, bool overwrite, bool compress) // compress is not implemented.
         {
             var returnResult =
                 new Result("Compiling to \"{0}\"".Format2(path), false);
@@ -111,41 +101,41 @@ namespace SharpFlame.Mapping.IO.Wz
                             if ( map.InterfaceOptions.CompileType == CompileType.Multiplayer )
                             {
                                 zip.PutNextEntry(zipPath);
-                                returnResult.Add(Serialize_WZ_LEV(zip));
+                                returnResult.Add(Serialize_WZ_LEV(zip, map));
                             }
 
                             var inZipPath = string.Format("multiplay/maps/{0}c-{1}", map.InterfaceOptions.CompileMultiPlayers, map.InterfaceOptions.CompileName);
                             zip.PutNextEntry(string.Format("{0}.gam", inZipPath));
                             returnResult.Add(Serialize_WZ_Gam(zip, 0U,
-                                                              map.InterfaceOptions.CompileType, map.InterfaceOptions.ScrollMin, map.InterfaceOptions.ScrollMax));
+                                map.InterfaceOptions.CompileType, map.InterfaceOptions.ScrollMin, map.InterfaceOptions.ScrollMax, map));
 
 
                             zip.PutNextEntry(string.Format("{0}/struct.ini", inZipPath));
                             var iniStruct = new IniWriter(zip);
-                            returnResult.Add(Serialize_WZ_StructuresINI(iniStruct, int.Parse(map.InterfaceOptions.CompileMultiPlayers)));
+                            returnResult.Add(Serialize_WZ_StructuresINI(iniStruct, int.Parse(map.InterfaceOptions.CompileMultiPlayers), map));
                             iniStruct.Flush();
 
                             zip.PutNextEntry(string.Format("{0}/droid.ini", inZipPath));
                             var iniDroid = new IniWriter(zip);
-                            returnResult.Add(Serialize_WZ_DroidsINI(iniDroid, int.Parse(map.InterfaceOptions.CompileMultiPlayers)));
+                            returnResult.Add(Serialize_WZ_DroidsINI(iniDroid, int.Parse(map.InterfaceOptions.CompileMultiPlayers), map));
                             iniDroid.Flush();
 
                             zip.PutNextEntry(string.Format("{0}/labels.ini", inZipPath));
                             var iniLabels = new IniWriter(zip);
-                            returnResult.Add(Serialize_WZ_LabelsINI(iniLabels, int.Parse(map.InterfaceOptions.CompileMultiPlayers)));
+                            returnResult.Add(Serialize_WZ_LabelsINI(iniLabels, int.Parse(map.InterfaceOptions.CompileMultiPlayers), map));
                             iniLabels.Flush();
 
                             zip.PutNextEntry(string.Format("{0}/feature.ini", inZipPath));
                             var iniFeature = new IniWriter(zip);
-                            returnResult.Add(Serialize_WZ_FeaturesINI(iniFeature));
+                            returnResult.Add(Serialize_WZ_FeaturesINI(iniFeature, map));
                             iniFeature.Flush();
 
                             zip.PutNextEntry(string.Format("{0}/game.map", inZipPath));
-                            returnResult.Add(Serialize_WZ_Map(zip));
+                            returnResult.Add(Serialize_WZ_Map(zip, map));
 
                             zip.PutNextEntry(string.Format("{0}/ttypes.ttp", inZipPath));
-                            var ttpSaver = new TTPSaver (map);
-                            returnResult.Add(ttpSaver.Save(zip));
+                            var ttpSaver = kernel.Get<TTPSaver>();
+                            returnResult.Add(ttpSaver.Save(zip, map));
                         }
                     }
                     catch ( Exception ex )
@@ -172,7 +162,7 @@ namespace SharpFlame.Mapping.IO.Wz
                     using ( var file = File.Open(filePath, FileMode.Open | FileMode.CreateNew) )
                     {
                         returnResult.Add(Serialize_WZ_Gam(file, (UInt32)map.InterfaceOptions.CampaignGameType,
-                                                          map.InterfaceOptions.CompileType, map.InterfaceOptions.ScrollMin, map.InterfaceOptions.ScrollMax));
+                            map.InterfaceOptions.CompileType, map.InterfaceOptions.ScrollMin, map.InterfaceOptions.ScrollMax, map));
                     }
 
                     CampDirectory += map.InterfaceOptions.CompileName + Convert.ToString(Path.DirectorySeparatorChar);
@@ -191,7 +181,7 @@ namespace SharpFlame.Mapping.IO.Wz
                     using ( var file = File.Open(filePath, FileMode.Open | FileMode.CreateNew) )
                     {
                         var iniDroid = new IniWriter(file);
-                        returnResult.Add(Serialize_WZ_DroidsINI(iniDroid, -1));
+                        returnResult.Add(Serialize_WZ_DroidsINI(iniDroid, -1, map));
                         iniDroid.Flush();
                     }
 
@@ -199,33 +189,33 @@ namespace SharpFlame.Mapping.IO.Wz
                     using ( var file = File.Open(filePath, FileMode.Open | FileMode.CreateNew) )
                     {
                         var iniFeatures = new IniWriter(file);
-                        returnResult.Add(Serialize_WZ_FeaturesINI(iniFeatures));
+                        returnResult.Add(Serialize_WZ_FeaturesINI(iniFeatures, map));
                         iniFeatures.Flush();
                     }
 
                     filePath = CampDirectory + "game.map";
                     using ( var file = File.Open(filePath, FileMode.Open | FileMode.CreateNew) )
                     {
-                        returnResult.Add(Serialize_WZ_Map(file));
+                        returnResult.Add(Serialize_WZ_Map(file, map));
                     }
 
                     filePath = CampDirectory + "struct.ini";
                     using ( var file = File.Open(filePath, FileMode.Open | FileMode.CreateNew) )
                     {
                         var iniStruct = new IniWriter(file);
-                        returnResult.Add(Serialize_WZ_StructuresINI(iniStruct, -1));
+                        returnResult.Add(Serialize_WZ_StructuresINI(iniStruct, -1, map));
                         iniStruct.Flush();
                     }
 
                     filePath = CampDirectory + "ttypes.ttp";
-                    var ttpSaver = new TTPSaver(map);
-                    returnResult.Add(ttpSaver.Save(filePath, false));
+                    var ttpSaver = kernel.Get<TTPSaver>();
+                    returnResult.Add(ttpSaver.Save(filePath, map, false));
 
                     filePath = CampDirectory + "labels.ini";
                     using ( var file = File.Open(filePath, FileMode.Open | FileMode.CreateNew) )
                     {
                         var iniLabels = new IniWriter(file);
-                        returnResult.Add(Serialize_WZ_LabelsINI(iniLabels, 0));
+                        returnResult.Add(Serialize_WZ_LabelsINI(iniLabels, 0, map));
                         iniLabels.Flush();
                     }
                 }
@@ -241,7 +231,7 @@ namespace SharpFlame.Mapping.IO.Wz
             return returnResult;
         }
 
-        private Result Serialize_WZ_StructuresINI(IniWriter File, int PlayerCount)
+        private Result Serialize_WZ_StructuresINI(IniWriter File, int PlayerCount, Map map)
         {
             var ReturnResult = new Result("Serializing structures INI", false);
             logger.Info("Serializing structures INI");
@@ -422,7 +412,7 @@ namespace SharpFlame.Mapping.IO.Wz
             return ReturnResult;
         }
 
-        private Result Serialize_WZ_DroidsINI(IniWriter ini, int playerCount)
+        private Result Serialize_WZ_DroidsINI(IniWriter ini, int playerCount, Map map)
         {
             var returnResult = new Result("Serializing droids INI", false);
             logger.Info("Serializing droids INI");
@@ -619,7 +609,7 @@ namespace SharpFlame.Mapping.IO.Wz
             return returnResult;
         }
 
-        private Result Serialize_WZ_FeaturesINI(IniWriter File)
+        private Result Serialize_WZ_FeaturesINI(IniWriter File, Map map)
         {
             var ReturnResult = new Result("Serializing features INI", false);
             logger.Info("Serializing features INI");
@@ -659,7 +649,7 @@ namespace SharpFlame.Mapping.IO.Wz
             return ReturnResult;
         }
 
-        private Result Serialize_WZ_LabelsINI(IniWriter File, int PlayerCount)
+        private Result Serialize_WZ_LabelsINI(IniWriter File, int PlayerCount, Map map)
         {
             var returnResult = new Result("Serializing labels INI", false);
             logger.Info("Serializing labels INI");
@@ -697,7 +687,7 @@ namespace SharpFlame.Mapping.IO.Wz
             return returnResult;
         }
 
-        private Result Serialize_WZ_Gam(Stream stream, UInt32 gamType, CompileType compileType, XYInt scrollMin, sXY_uint scrollMax)
+        private Result Serialize_WZ_Gam(Stream stream, UInt32 gamType, CompileType compileType, XYInt scrollMin, sXY_uint scrollMax, Map map)
         {
             var returnResult = new Result("Serializing .gam", false);
             logger.Info("Serializing .gam");
@@ -725,7 +715,7 @@ namespace SharpFlame.Mapping.IO.Wz
             return returnResult;
         }
 
-        private Result Serialize_WZ_Map(Stream stream)
+        private Result Serialize_WZ_Map(Stream stream, Map map)
         {
             var returnResult = new Result("Serializing game.map", false);
             logger.Info("Serializing game.map");
@@ -793,7 +783,7 @@ namespace SharpFlame.Mapping.IO.Wz
             return returnResult;
         }
 
-        private Result Serialize_WZ_LEV(Stream stream)
+        private Result Serialize_WZ_LEV(Stream stream, Map map)
         {
             var returnResult = new Result("Serializing .lev", false);
             logger.Info("Serializing .lev");

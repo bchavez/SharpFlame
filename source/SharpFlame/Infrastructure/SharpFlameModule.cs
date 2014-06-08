@@ -68,9 +68,7 @@ namespace SharpFlame.Infrastructure
                 .InSingletonScope();
             #endif
 
-
             //GUI
-
             this.Bind<TextureTab>().ToSelf().InSingletonScope();
             this.Bind<TerrainTab>().ToSelf().InSingletonScope();
             this.Bind<ResizeTab>().ToSelf().InSingletonScope();
@@ -83,6 +81,18 @@ namespace SharpFlame.Infrastructure
             this.Bind<Map>().ToSelf().InTransientScope();
             this.Bind<clsDrawSectorObjects>().ToSelf().InTransientScope();
             this.Bind<Gui.Dialogs.Settings> ().ToSelf ().InTransientScope ();
+
+            //Mapping.IO
+            this.Bind<SharpFlame.Mapping.IO.FMap.FMapLoader>().ToSelf().InSingletonScope();
+            this.Bind<SharpFlame.Mapping.IO.FMap.FMapSaver>().ToSelf().InSingletonScope();
+            this.Bind<SharpFlame.Mapping.IO.Heightmap.HeightmapSaver>().ToSelf().InSingletonScope();
+            this.Bind<SharpFlame.Mapping.IO.LND.LNDLoader>().ToSelf().InSingletonScope();
+            this.Bind<SharpFlame.Mapping.IO.LND.LNDSaver>().ToSelf().InSingletonScope();
+            this.Bind<SharpFlame.Mapping.IO.Minimap.MinimapSaver>().ToSelf().InSingletonScope();
+            this.Bind<SharpFlame.Mapping.IO.TTP.TTPLoader>().ToSelf().InSingletonScope();
+            this.Bind<SharpFlame.Mapping.IO.TTP.TTPSaver>().ToSelf().InSingletonScope();
+            this.Bind<SharpFlame.Mapping.IO.Wz.WzLoader>().ToSelf().InSingletonScope();
+            this.Bind<SharpFlame.Mapping.IO.Wz.WzSaver>().ToSelf().InSingletonScope();
         }
     }
 }

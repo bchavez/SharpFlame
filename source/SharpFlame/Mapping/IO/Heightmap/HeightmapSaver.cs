@@ -1,27 +1,22 @@
 using System;
 using System.Drawing;
-using NLog;
-using SharpFlame.Bitmaps;
-using SharpFlame.Colors;
+using Ninject.Extensions.Logging;
 using SharpFlame.Bitmaps;
 using SharpFlame.Colors;
 using SharpFlame.Core;
-using SharpFlame.Core.Interfaces.Mapping.IO;
 
 namespace SharpFlame.Mapping.IO.Heightmap
 {
     public class HeightmapSaver : IIOSaver
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger logger;
 
-        protected readonly Map map;
-
-		public HeightmapSaver(Map newMap)
+        public HeightmapSaver(ILoggerFactory logFactory)
         {
-            map = newMap;
+            logger = logFactory.GetCurrentClassLogger();
         }
 
-        public Result Save(string path, bool overwrite, bool compress = false) // compress is ignored.
+        public Result Save(string path, Map map, bool overwrite, bool compress = false) // compress is ignored.
         {
             var returnResult = new Result(string.Format("Saving heightmap to \"{0}\".", path), false);
             logger.Info ("Saving heightmap to \"{0}\"", path);

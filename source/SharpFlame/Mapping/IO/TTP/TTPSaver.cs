@@ -1,26 +1,23 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using NLog;
+using Ninject.Extensions.Logging;
 using SharpFlame.Mapping.IO;
 using SharpFlame.Core;
-using SharpFlame.Core.Interfaces.Mapping.IO;
 using SharpFlame.FileIO;
 
 namespace SharpFlame.Mapping.IO.TTP
 {
     public class TTPSaver : IIOSaver
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger logger;
 
-        protected readonly Map map;
-
-        public TTPSaver(Map newMap)
+        public TTPSaver(ILoggerFactory logFactory)
         {
-            map = newMap;
+            logger = logFactory.GetCurrentClassLogger();
         }
 
-        public Result Save(string path, bool overwrite, bool compress = false) // compress is ignored.
+        public Result Save(string path, Map map, bool overwrite, bool compress = false) // compress is ignored.
         {
             var returnResult = new Result(string.Format("Writing .ttp to \"{0}\"", path), false);
             logger.Info(string.Format("Writing .ttp to \"{0}\"", path));           
@@ -40,20 +37,20 @@ namespace SharpFlame.Mapping.IO.TTP
                 }
 
                 using (var file = new FileStream(path, FileMode.CreateNew)) {
-                    returnResult.Take(Save (file));
+                    returnResult.Take(Save (file, map));
                 }
             }            
             catch (Exception ex) {
                 Debugger.Break ();
                 returnResult.ProblemAdd (string.Format ("Failed to create .ttp, failure was: {0}", ex.Message));
-                logger.ErrorException ("Failed to create .ttp", ex);
+                logger.Error (ex, "Failed to create .ttp");
                 return returnResult;
             }
 
             return returnResult;
         }
 
-        public Result Save(Stream stream)
+        public Result Save(Stream stream, Map map)
         {            
             var returnResult = new Result("Serializing ttypes.ttp", false);
             logger.Info("Serializing ttypes.ttp");

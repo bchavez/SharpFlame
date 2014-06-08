@@ -7,10 +7,10 @@ using Ninject;
 using Ninject.Extensions.Logging;
 using SharpFlame.Core;
 using SharpFlame.Core.Extensions;
-using SharpFlame.Core.Interfaces.Mapping.IO;
 using SharpFlame.Gui.Sections;
 using SharpFlame;
 using SharpFlame.Mapping;
+using SharpFlame.Mapping.IO;
 using SharpFlame.Mapping.IO.FMap;
 using SharpFlame.Mapping.IO.LND;
 using SharpFlame.Mapping.IO.Wz;
@@ -73,19 +73,19 @@ namespace SharpFlame.Gui.Actions
 
                 var map = Kernel.Get<Map>();
                 IIOLoader loader;
-                switch(Path.GetExtension(dialog.FileName))
+                switch(Path.GetExtension(dialog.FileName).ToLower())
                 {
                 case ".fmap":
-                    loader = new FMapLoader(map);
+                    loader = Kernel.Get<FMapLoader>();
                     break;
                 case ".wz":
-                    loader = new WzLoader(map);
+                    loader = Kernel.Get<WzLoader>();
                     break;
                 case ".game":
-                    loader = new GameLoader(map);
+                    loader = Kernel.Get<GameLoader>();
                     break;
                 case ".lnd":
-                    loader = new LNDLoader(map);
+                    loader = Kernel.Get<LNDLoader>();
                     break;
                 default:
                     returnResult = new Result(string.Format("Loading \"{0}\"", Path.GetExtension(dialog.FileName)), false);
@@ -99,16 +99,17 @@ namespace SharpFlame.Gui.Actions
                 var loadResult = loader.Load(dialog.FileName);
                 if(loadResult.HasProblems || loadResult.HasWarnings)
                 {
-                    App.StatusDialog = new Dialogs.Status(loadResult);
+                    App.StatusDialog = new Dialogs.Status(loadResult.ToResult());
                     App.StatusDialog.Show();
                 }
 
                 if(!loadResult.HasProblems)
                 {
-                    MainMapView.MainMap = map;
+                    loadResult.Value.PathInfo = new PathInfo(dialog.FileName, true);
+                    MainMapView.MainMap = loadResult.Value;
                 } else
                 {
-                    map.Deallocate();
+                    loadResult.Value.Deallocate();
                 }
             }
         }

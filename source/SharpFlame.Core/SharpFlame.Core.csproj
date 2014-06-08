@@ -98,7 +98,6 @@
     <Compile Include="Domain\Tileset.cs" />
     <Compile Include="Extensions\ExtensionsForEnum.cs" />
     <Compile Include="Extensions\ExtensionsForString.cs" />
-    <Compile Include="Interfaces\Mapping\IO\IIOLoaderSaver.cs" />
     <Compile Include="Parsers\Lev2\Lev2Grammar.cs" />
     <Compile Include="Parsers\Lev\LevGrammar.cs" />
     <Compile Include="Parsers\Pie\Connector.cs" />
@@ -138,6 +137,7 @@
     <Compile Include="Interfaces\ISharpFlameApplication.cs" />
     <Compile Include="Extensions\EventBrokerLogExtension.cs" />
     <Compile Include="Extensions\ExtensionsForUri.cs" />
+    <Compile Include="GenericResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

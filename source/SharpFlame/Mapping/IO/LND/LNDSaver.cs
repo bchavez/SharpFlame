@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using NLog;
+using Ninject.Extensions.Logging;
 using SharpFlame.Collections;
 using SharpFlame.Core.Extensions;
 using SharpFlame.FileIO;
@@ -8,7 +8,6 @@ using SharpFlame.Mapping.Objects;
 using SharpFlame.Maths;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
-using SharpFlame.Core.Interfaces.Mapping.IO;
 using SharpFlame.Domain;
 using SharpFlame.Mapping.Tiles;
 
@@ -16,16 +15,14 @@ namespace SharpFlame.Mapping.IO.LND
 {
     public class LNDSaver: IIOSaver
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger logger;
 
-        protected readonly Map map;
-
-        public LNDSaver(Map newMap)
+        public LNDSaver(ILoggerFactory logFactory)
         {
-            map = newMap;
+            logger = logFactory.GetCurrentClassLogger();
         }
 
-        public Result Save(string path, bool overwrite, bool compress = false) // Compress is ignored.
+        public Result Save(string path, Map map, bool overwrite, bool compress = false) // Compress is ignored.
         {
             var returnResult =
                 new Result("Writing LND to \"{0}\"".Format2(path), false);
@@ -239,7 +236,7 @@ namespace SharpFlame.Mapping.IO.LND
                         returnResult.WarningAdd("Unit type classification not accounted for.");
                         break;
                     }
-                    XYZ_int = lndPos_From_MapPos(map.Units[a].Pos.Horizontal);
+                    XYZ_int = lndPos_From_MapPos(map, map.Units[a].Pos.Horizontal);
                     if ( b >= 0 )
                     {
                         if ( unit.TypeBase.GetCode(ref Code) )
@@ -376,7 +373,7 @@ namespace SharpFlame.Mapping.IO.LND
             return returnResult;
         }
 
-        private XYZInt lndPos_From_MapPos(XYInt Horizontal)
+        private XYZInt lndPos_From_MapPos(Map map, XYInt Horizontal)
         {
             return new XYZInt(
                 Horizontal.X - (map.Terrain.TileSize.X * Constants.TerrainGridSpacing / 2.0D).ToInt(),

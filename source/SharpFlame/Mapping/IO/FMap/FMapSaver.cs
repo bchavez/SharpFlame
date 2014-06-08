@@ -1,5 +1,3 @@
-
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,33 +6,28 @@ using System.Linq;
 using System.Text;
 using Ionic.Zip;
 using Ionic.Zlib;
-using NLog;
+using Ninject.Extensions.Logging;
 using SharpFlame.Core.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Core;
-using SharpFlame.Core.Interfaces.Mapping.IO;
 using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.Domain;
-using SharpFlame.Mapping.Tiles;
-
 
 namespace SharpFlame.Mapping.IO.FMap
 {
     public class FMapSaver : IIOSaver
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger logger;
 
-        protected readonly Map map;
-
-        public FMapSaver(Map newMap)
+        public FMapSaver(ILoggerFactory logFactory)
         {
-            map = newMap;
+            logger = logFactory.GetCurrentClassLogger();
         }
 
-        public Result Save(string path, bool overwrite, bool compress)
+        public Result Save(string path, Map map, bool overwrite, bool compress)
         {
             var returnResult = new Result(string.Format("Writing FMap to \"{0}\"", path), false);
             logger.Info(string.Format("Writing FMap to \"{0}\"", path));
@@ -70,50 +63,50 @@ namespace SharpFlame.Mapping.IO.FMap
 
                     zip.PutNextEntry("Info.ini");
                     var infoIniWriter = new IniWriter(streamWriter);
-                    returnResult.Add(serialize_FMap_Info(infoIniWriter));
+                    returnResult.Add(serialize_FMap_Info(map, infoIniWriter));
                     streamWriter.Flush();
 
                     zip.PutNextEntry("VertexHeight.dat");
-                    returnResult.Add(serialize_FMap_VertexHeight(binaryWriter));
+                    returnResult.Add(serialize_FMap_VertexHeight(map, binaryWriter));
                     binaryWriter.Flush();
 
                     zip.PutNextEntry("VertexTerrain.dat");
-                    returnResult.Add(serialize_FMap_VertexTerrain(binaryWriter));
+                    returnResult.Add(serialize_FMap_VertexTerrain(map, binaryWriter));
                     binaryWriter.Flush();
 
                     zip.PutNextEntry("TileTexture.dat");
-                    returnResult.Add(serialize_FMap_TileTexture(binaryWriter));
+                    returnResult.Add(serialize_FMap_TileTexture(map, binaryWriter));
                     binaryWriter.Flush();
 
                     zip.PutNextEntry("TileOrientation.dat");
-                    returnResult.Add(serialize_FMap_TileOrientation(binaryWriter));
+                    returnResult.Add(serialize_FMap_TileOrientation(map, binaryWriter));
                     binaryWriter.Flush();
 
                     zip.PutNextEntry("TileCliff.dat");
-                    returnResult.Add(serialize_FMap_TileCliff(binaryWriter));
+                    returnResult.Add(serialize_FMap_TileCliff(map, binaryWriter));
                     binaryWriter.Flush();
 
                     zip.PutNextEntry("Roads.dat");
-                    returnResult.Add(serialize_FMap_Roads(binaryWriter));
+                    returnResult.Add(serialize_FMap_Roads(map, binaryWriter));
                     binaryWriter.Flush();
 
                     zip.PutNextEntry("Objects.ini");
                     var objectsIniWriter = new IniWriter(streamWriter);
-                    returnResult.Add(serialize_FMap_Objects(objectsIniWriter));
+                    returnResult.Add(serialize_FMap_Objects(map, objectsIniWriter));
                     streamWriter.Flush();
 
                     zip.PutNextEntry("Gateways.ini");
                     var gatewaysIniWriter = new IniWriter(streamWriter);
-                    returnResult.Add(serialize_FMap_Gateways(gatewaysIniWriter));
+                    returnResult.Add(serialize_FMap_Gateways(map, gatewaysIniWriter));
                     streamWriter.Flush();
 
                     zip.PutNextEntry("TileTypes.dat");
-                    returnResult.Add(serialize_FMap_TileTypes(binaryWriter));
+                    returnResult.Add(serialize_FMap_TileTypes(map, binaryWriter));
                     binaryWriter.Flush();
 
                     zip.PutNextEntry("ScriptLabels.ini");
                     var scriptLabelsIniWriter = new IniWriter(streamWriter);
-                    returnResult.Add(serialize_WZ_LabelsINI(scriptLabelsIniWriter));
+                    returnResult.Add(serialize_WZ_LabelsINI(map, scriptLabelsIniWriter));
                     streamWriter.Flush();
 
                     streamWriter.Close();
@@ -129,7 +122,7 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private Result serialize_WZ_LabelsINI(IniWriter file)
+        private Result serialize_WZ_LabelsINI(Map map, IniWriter file)
         {
             var returnResult = new Result("Serializing labels INI", false);
             logger.Info("Serializing labels INI");
@@ -148,13 +141,13 @@ namespace SharpFlame.Mapping.IO.FMap
             catch ( Exception ex )
             {
                 returnResult.WarningAdd(ex.Message);
-                logger.ErrorException("Got an exception", ex);
+                logger.Error(ex, "Got an exception");
             }
 
             return returnResult;
         }
 
-        private Result serialize_FMap_Info(IniWriter file)
+        private Result serialize_FMap_Info(Map map, IniWriter file)
         {
             var ReturnResult = new Result("Serializing general map info", false);
             logger.Info("Serializing general map info");
@@ -202,7 +195,7 @@ namespace SharpFlame.Mapping.IO.FMap
             return ReturnResult;
         }
 
-        private Result serialize_FMap_VertexHeight(BinaryWriter file)
+        private Result serialize_FMap_VertexHeight(Map map, BinaryWriter file)
         {
             var ReturnResult = new Result("Serializing vertex heights", false);
             logger.Info("Serializing vertex heights");
@@ -227,7 +220,7 @@ namespace SharpFlame.Mapping.IO.FMap
             return ReturnResult;
         }
 
-        private Result serialize_FMap_VertexTerrain(BinaryWriter file)
+        private Result serialize_FMap_VertexTerrain(Map map, BinaryWriter file)
         {
             var ReturnResult = new Result("Serializing vertex terrain", false);
             logger.Info("Serializing vertex terrain");
@@ -278,7 +271,7 @@ namespace SharpFlame.Mapping.IO.FMap
             return ReturnResult;
         }
 
-        private Result serialize_FMap_TileTexture(BinaryWriter file)
+        private Result serialize_FMap_TileTexture(Map map, BinaryWriter file)
         {
             var ReturnResult = new Result("Serializing tile textures", false);
             logger.Info("Serializing tile textures");
@@ -317,7 +310,7 @@ namespace SharpFlame.Mapping.IO.FMap
             return ReturnResult;
         }
 
-        private Result serialize_FMap_TileOrientation(BinaryWriter file)
+        private Result serialize_FMap_TileOrientation(Map map, BinaryWriter file)
         {
             var returnResult = new Result("Serializing tile orientations", false);
             logger.Info("Serializing tile orientations");
@@ -360,7 +353,7 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private Result serialize_FMap_TileCliff(BinaryWriter file)
+        private Result serialize_FMap_TileCliff(Map map, BinaryWriter file)
         {
             var returnResult = new Result("Serializing tile cliffs", false);
             logger.Info("Serializing tile cliffs");
@@ -447,7 +440,7 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private Result serialize_FMap_Roads(BinaryWriter file)
+        private Result serialize_FMap_Roads(Map map, BinaryWriter file)
         {
             var returnResult = new Result("Serializing roads", false);
             logger.Info("Serializing roads");
@@ -523,7 +516,7 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private Result serialize_FMap_Objects(IniWriter file)
+        private Result serialize_FMap_Objects(Map map, IniWriter file)
         {
             var returnResult = new Result("Serializing objects", false);
             logger.Info("Serializing objects");
@@ -630,7 +623,7 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private Result serialize_FMap_Gateways(IniWriter File)
+        private Result serialize_FMap_Gateways(Map map, IniWriter File)
         {
             var returnResult = new Result("Serializing gateways", false);
             logger.Info("Serializing gateways");
@@ -656,7 +649,7 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private Result serialize_FMap_TileTypes(BinaryWriter file)
+        private Result serialize_FMap_TileTypes(Map map, BinaryWriter file)
         {
             var returnResult = new Result("Serializing tile types", false);
             logger.Info("Serializing tile types");

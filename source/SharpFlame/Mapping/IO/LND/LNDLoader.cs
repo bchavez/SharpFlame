@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using NLog;
+using Ninject.Extensions.Logging;
 using SharpFlame.Collections;
 using SharpFlame.Core.Extensions;
 using SharpFlame.FileIO;
@@ -9,30 +9,23 @@ using SharpFlame.Mapping.Tiles;
 using SharpFlame.Core;
 using SharpFlame.Core.Collections;
 using SharpFlame.Core.Domain;
-using SharpFlame.Core.Interfaces.Mapping.IO;
 using SharpFlame.Domain;
-using SharpFlame.FileIO;
-using SharpFlame.Mapping.Objects;
-using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
 
 namespace SharpFlame.Mapping.IO.LND
 {
     public class LNDLoader : IIOLoader
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger logger;
 
-        protected readonly Map map;
-
-        public LNDLoader(Map newMap)
+        public LNDLoader(ILoggerFactory logFactory)
         {
-            map = newMap;
+            logger = logFactory.GetCurrentClassLogger();
         }
 
-        public Result Load(string path)
+        public GenericResult<Map> Load(string path, Map map)
         {
-            var returnResult =
-                new Result("Loading LND from \"{0}\"".Format2(path), false);
+            var returnResult = new GenericResult<Map>("Loading LND from \"{0}\"".Format2(path), false);
             logger.Info("Loading LND from \"{0}\"".Format2(path));
             try
             {
@@ -589,7 +582,7 @@ namespace SharpFlame.Mapping.IO.LND
                         xyzInt.X = currentObject.Pos.X.ToInt();
                         xyzInt.Y = currentObject.Pos.Y.ToInt();
                         xyzInt.Z = currentObject.Pos.Z.ToInt();
-                        newUnit.Pos = mapPos_From_LNDPos(xyzInt);
+                        newUnit.Pos = mapPos_From_LNDPos(xyzInt, map);
                         newUnit.Rotation = currentObject.Rotation.Y;
                         if ( currentObject.ID == 0U )
                         {
@@ -627,10 +620,11 @@ namespace SharpFlame.Mapping.IO.LND
                 return returnResult;
             }
 
+            returnResult.Value = map;
             return returnResult;
         }
                
-        private WorldPos mapPos_From_LNDPos(XYZInt Pos)
+        private WorldPos mapPos_From_LNDPos(XYZInt Pos, Map map)
         {
             var Result = new WorldPos();
 

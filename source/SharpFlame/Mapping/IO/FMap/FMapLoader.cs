@@ -1,5 +1,3 @@
-
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,7 +6,8 @@ using System.Linq;
 using System.Text;
 using Ionic.Zip;
 using Ionic.Zlib;
-using NLog;
+using Ninject;
+using Ninject.Extensions.Logging;
 using SharpFlame.Core.Extensions;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.Objects;
@@ -16,32 +15,31 @@ using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
-using SharpFlame.Core.Interfaces.Mapping.IO;
 using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.Domain;
-using SharpFlame.FileIO;
-using SharpFlame.Mapping.Objects;
-using SharpFlame.Mapping.Script;
-using SharpFlame.Mapping.Tiles;
-
 
 namespace SharpFlame.Mapping.IO.FMap
 {
     public class FMapLoader : IIOLoader
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger logger;
+        private readonly IKernel kernel;
 
-        protected readonly Map map;
-
-        public FMapLoader(Map newMap)
+        public FMapLoader(IKernel argKernel, ILoggerFactory logFactory)
         {
-            map = newMap;
+            kernel = argKernel;
+            logger = logFactory.GetCurrentClassLogger();
         }
 
-        public Result Load(string path)
+        public GenericResult<Map> Load(string path, Map map = null)
         {
-            var returnResult = new Result(string.Format("Loading FMap from \"{0}\"", path), false);
+            var returnResult = new GenericResult<Map>(string.Format("Loading FMap from \"{0}\"", path), false);
             logger.Info(string.Format("Loading FMap from \"{0}\"", path));
+
+            if(map == null)
+            {
+                map = kernel.Get<Map>();
+            }
 
             map.InterfaceOptions.FilePath = path;
 
@@ -100,7 +98,7 @@ namespace SharpFlame.Mapping.IO.FMap
                     using ( Stream s = vhEntry.OpenReader() )
                     {
                         var reader = new BinaryReader(s);
-                        returnResult.Add(read_FMap_VertexHeight(reader));
+                        returnResult.Add(read_FMap_VertexHeight(map, reader));
                         reader.Close();
                     }
                 }
@@ -116,7 +114,7 @@ namespace SharpFlame.Mapping.IO.FMap
                     using ( Stream s = vtEntry.OpenReader() )
                     {
                         var reader = new BinaryReader(s);
-                        returnResult.Add(read_FMap_VertexTerrain(reader));
+                        returnResult.Add(read_FMap_VertexTerrain(map, reader));
                         reader.Close();
                     }
                 }
@@ -132,7 +130,7 @@ namespace SharpFlame.Mapping.IO.FMap
                     using ( Stream s = ttEntry.OpenReader() )
                     {
                         var reader = new BinaryReader(s);
-                        returnResult.Add(read_FMap_TileTexture(reader));
+                        returnResult.Add(read_FMap_TileTexture(map, reader));
                         reader.Close();
                     }
                 }
@@ -148,7 +146,7 @@ namespace SharpFlame.Mapping.IO.FMap
                     using ( Stream s = toEntry.OpenReader() )
                     {
                         var reader = new BinaryReader(s);
-                        returnResult.Add(read_FMap_TileOrientation(reader));
+                        returnResult.Add(read_FMap_TileOrientation(map, reader));
                         reader.Close();
                     }
                 }
@@ -164,7 +162,7 @@ namespace SharpFlame.Mapping.IO.FMap
                     using ( Stream s = tcEntry.OpenReader() )
                     {
                         var reader = new BinaryReader(s);
-                        returnResult.Add(read_FMap_TileCliff(reader));
+                        returnResult.Add(read_FMap_TileCliff(map, reader));
                         reader.Close();
                     }
                 }
@@ -180,7 +178,7 @@ namespace SharpFlame.Mapping.IO.FMap
                     using ( Stream s = roEntry.OpenReader() )
                     {
                         var reader = new BinaryReader(s);
-                        returnResult.Add(read_FMap_Roads(reader));
+                        returnResult.Add(read_FMap_Roads(map, reader));
                         reader.Close();
                     }
                 }
@@ -196,7 +194,7 @@ namespace SharpFlame.Mapping.IO.FMap
                     using ( var reader = new StreamReader(obEntry.OpenReader()) )
                     {
                         var text = reader.ReadToEnd();
-                        returnResult.Add(read_FMap_Objects(text));
+                        returnResult.Add(read_FMap_Objects(map, text));
                     }
                 }
 
@@ -210,7 +208,7 @@ namespace SharpFlame.Mapping.IO.FMap
                 using ( var reader = new StreamReader(gaEntry.OpenReader()) )
                 {
                     var text = reader.ReadToEnd();
-                    returnResult.Add(read_FMap_Gateways(text));
+                    returnResult.Add(read_FMap_Gateways(map, text));
                 }
 
                 // tiletypes.dat
@@ -224,7 +222,7 @@ namespace SharpFlame.Mapping.IO.FMap
                     using ( Stream s = tileTypesEntry.OpenReader() )
                     {
                         var reader = new BinaryReader(s);
-                        returnResult.Add(read_FMap_TileTypes(reader));
+                        returnResult.Add(read_FMap_TileTypes(map, reader));
                         reader.Close();
                     }
                 }
@@ -241,13 +239,14 @@ namespace SharpFlame.Mapping.IO.FMap
                     using ( var reader = new StreamReader(scriptLabelsEntry.OpenReader()) )
                     {
                         var text = reader.ReadToEnd();
-                        returnResult.Add(read_INI_Labels(text));
+                        returnResult.Add(read_INI_Labels(map, text));
                     }
                 }
 
                 map.InterfaceOptions = resultInfo.InterfaceOptions;
             }
 
+            returnResult.Value = map;
             return returnResult;
         }      
 
@@ -338,7 +337,7 @@ namespace SharpFlame.Mapping.IO.FMap
                         invalid = true;
                         returnResult.WarningAdd(
                             string.Format("#{0} invalid {2}: \"{3}\", got exception: {2}", iniSection.Name, iniToken.Name, iniToken.Data, ex.Message), false);
-                        logger.WarnException(string.Format("#{0} invalid {2} \"{1}\"", iniSection.Name, iniToken.Name, iniToken.Data), ex);
+                        logger.Warn(ex, "#{0} invalid {2} \"{1}\"", iniSection.Name, iniToken.Name, iniToken.Data);
                     }
                 }
             }
@@ -351,7 +350,7 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private Result read_FMap_VertexHeight(BinaryReader file)
+        private Result read_FMap_VertexHeight(Map map, BinaryReader file)
         {
             var returnResult = new Result("Reading vertex heights", false);
             logger.Info("Reading vertex heights");
@@ -383,7 +382,7 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private Result read_FMap_VertexTerrain(BinaryReader file)
+        private Result read_FMap_VertexTerrain(Map map, BinaryReader file)
         {
             var returnResult = new Result("Reading vertex terrain", false);
             logger.Info("Reading vertex terrain");
@@ -442,7 +441,7 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private Result read_FMap_TileTexture(BinaryReader file)
+        private Result read_FMap_TileTexture(Map map, BinaryReader file)
         {
             var returnResult = new Result("Reading tile textures", false);
             logger.Info("Reading tile textures");
@@ -476,7 +475,7 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private Result read_FMap_TileOrientation(BinaryReader file)
+        private Result read_FMap_TileOrientation(Map map, BinaryReader file)
         {
             var returnResult = new Result("Reading tile orientations", false);
             logger.Info("Reading tile orientations");
@@ -542,7 +541,7 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private Result read_FMap_TileCliff(BinaryReader file)
+        private Result read_FMap_TileCliff(Map map, BinaryReader file)
         {
             var returnResult = new Result("Reading tile cliffs", false);
             logger.Info("Reading tile cliffs");
@@ -653,7 +652,7 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private Result read_FMap_Roads(BinaryReader file)
+        private Result read_FMap_Roads(Map map, BinaryReader file)
         {
             var returnResult = new Result("Reading roads", false);
             logger.Info("Reading roads");
@@ -735,7 +734,7 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private Result read_FMap_Objects(string text)
+        private Result read_FMap_Objects(Map map, string text)
         {
             var returnResult = new Result("Reading objects", false);
             logger.Info("Reading objects");
@@ -929,7 +928,7 @@ namespace SharpFlame.Mapping.IO.FMap
                         invalid = true;
                         returnResult.WarningAdd(
                             string.Format("#{0} invalid {2}: \"{3}\", got exception: {2}", iniSection.Name, iniToken.Name, iniToken.Data, ex.Message), false);
-                        logger.WarnException(string.Format("#{0} invalid {2} \"{1}\"", iniSection.Name, iniToken.Name, iniToken.Data), ex);
+                        logger.Warn(ex, "#{0} invalid {2} \"{1}\"", iniSection.Name, iniToken.Name, iniToken.Data);
                     }
                 }
 
@@ -1144,7 +1143,7 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private Result read_FMap_Gateways(string text)
+        private Result read_FMap_Gateways(Map map, string text)
         {
             var returnResult = new Result("Reading gateways", false);
             logger.Info("Reading gateways");
@@ -1185,7 +1184,7 @@ namespace SharpFlame.Mapping.IO.FMap
                         invalid = true;
                         returnResult.WarningAdd(
                             string.Format("#{0} invalid {2}: \"{3}\", got exception: {2}", iniSection.Name, iniToken.Name, iniToken.Data, ex.Message), false);
-                        logger.WarnException(string.Format("#{0} invalid {2} \"{1}\"", iniSection.Name, iniToken.Name, iniToken.Data), ex);
+                        logger.Warn(ex, "#{0} invalid {2} \"{1}\"", iniSection.Name, iniToken.Name, iniToken.Data);
                     }
                 }
 
@@ -1211,7 +1210,7 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private Result read_FMap_TileTypes(BinaryReader file)
+        private Result read_FMap_TileTypes(Map map, BinaryReader file)
         {
             var returnResult = new Result("Reading tile types", false);
             logger.Info("Reading tile types");
@@ -1257,7 +1256,7 @@ namespace SharpFlame.Mapping.IO.FMap
             return returnResult;
         }
 
-        private Result read_INI_Labels(string iniText)
+        private Result read_INI_Labels(Map map, string iniText)
         {
             var resultObject = new Result("Reading labels", false);
             logger.Info("Reading labels.");
@@ -1317,7 +1316,7 @@ namespace SharpFlame.Mapping.IO.FMap
                     catch ( Exception ex )
                     {
                         resultObject.WarningAdd(string.Format("Failed to parse \"label\", error was: {0}", ex.Message));
-                        logger.WarnException("Failed to parse \"label\", error was", ex);
+                        logger.Warn(ex, "Failed to parse \"label\", error was");
                         failedCount++;
                         continue;
                     }
@@ -1348,7 +1347,7 @@ namespace SharpFlame.Mapping.IO.FMap
                         catch ( Exception ex )
                         {
                             resultObject.WarningAdd(string.Format("Failed to parse \"pos\", error was: {0}", ex.Message));
-                            logger.WarnException("Failed to parse \"pos\", error was", ex);
+                            logger.Warn(ex, "Failed to parse \"pos\", error was");
                             failedCount++;
                         }
                         break;
@@ -1373,7 +1372,7 @@ namespace SharpFlame.Mapping.IO.FMap
                         {
                             Debugger.Break();
                             resultObject.WarningAdd(string.Format("Failed to parse \"pos1\" or \"pos2\", error was: {0}", ex.Message));
-                            logger.WarnException("Failed to parse \"pos1\" or \"pos2\".", ex);
+                            logger.Warn(ex, "Failed to parse \"pos1\" or \"pos2\".");
                             failedCount++;
                         }
                         break;

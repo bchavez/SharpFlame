@@ -927,8 +927,8 @@ namespace SharpFlame.Mapping
 
             logger.Info(string.Format("Autosave to: \"{0}\"", path));
 
-            var fmap = new FMapSaver (this);
-            ReturnResult.Add(fmap.Save(path, false, App.SettingsManager.AutoSaveCompress));
+            var fmap = App.Kernel.Get<FMapSaver>();
+            ReturnResult.Add(fmap.Save(path, this, false, App.SettingsManager.AutoSaveCompress));
 
             return ReturnResult;
         }
@@ -2249,8 +2249,8 @@ namespace SharpFlame.Mapping
             }
             if ( PathInfo.IsFMap )
             {
-                var fMap = new FMapSaver (this);
-                var result = fMap.Save(PathInfo.Path, true, true);
+                var fMap = App.Kernel.Get<FMapSaver>();
+                var result = fMap.Save(PathInfo.Path, this, true, true);
                 if ( !result.HasProblems )
                 {
                     ChangedSinceSave = false;

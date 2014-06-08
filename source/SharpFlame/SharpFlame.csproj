@@ -476,6 +476,7 @@
     <Compile Include="UiOptions\HeightOptions.cs" />
     <Compile Include="Updater.cs" />
     <Compile Include="Extensions\AsyncExtensions.cs" />
+    <Compile Include="Mapping\IO\IIOLoaderSaver.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmKeyboardControl.resx">

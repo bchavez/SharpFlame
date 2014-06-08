@@ -1,35 +1,38 @@
-
-
 using System;
 using System.Collections.Generic;
 using System.IO;
 using Eto.Forms;
-using NLog;
+using Ninject;
+using Ninject.Extensions.Logging;
 using SharpFlame.Core.Extensions;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.IO.TTP;
 using SharpFlame.Core;
-using SharpFlame.FileIO;
-using SharpFlame.Mapping.IO.TTP;
 using SharpFlame.Util;
-
 
 namespace SharpFlame.Mapping.IO.Wz
 {
     public class GameLoader : WzLoader
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger logger;
+        private readonly IKernel kernel;
 
-        public GameLoader(Map newMap) : base(newMap)
+        public GameLoader(IKernel argKernel, ILoggerFactory logFactory) : base(argKernel, logFactory)
         {
+            kernel = argKernel;
+            logger = logFactory.GetCurrentClassLogger();
         }
 
-        public override Result Load(string path)
+        public override GenericResult<Map> Load(string path, Map map = null)
         {
-            var returnResult =
-                new Result("Loading game file from \"{0}\"".Format2(path), false);
+            var returnResult = new GenericResult<Map>("Loading game file from \"{0}\"".Format2(path), false);
             logger.Info("Loading game file from \"{0}\"", path);
             var subResult = new SimpleResult();
+
+            if(map == null)
+            {
+                map = kernel.Get<Map>();
+            }
 
             map.InterfaceOptions.FilePath = path;
 
@@ -51,7 +54,7 @@ namespace SharpFlame.Mapping.IO.Wz
             }
 
             var Map_Reader = new BinaryReader(file);
-            subResult = read_WZ_gam(Map_Reader);
+            subResult = read_WZ_gam(map, Map_Reader);
             Map_Reader.Close();
 
             if ( !subResult.Success )
@@ -72,7 +75,7 @@ namespace SharpFlame.Mapping.IO.Wz
             }
 
             var Map_ReaderB = new BinaryReader(file);
-            subResult = read_WZ_map(Map_ReaderB);
+            subResult = read_WZ_map(map, Map_ReaderB);
             Map_ReaderB.Close();
 
             if ( !subResult.Success )
@@ -106,7 +109,7 @@ namespace SharpFlame.Mapping.IO.Wz
                 else
                 {
                     var Features_Reader = new BinaryReader(file);
-                    subResult = read_WZ_Features(Features_Reader, bjoUnits);
+                    subResult = read_WZ_Features(map, Features_Reader, bjoUnits);
                     Features_Reader.Close();
                     if ( !subResult.Success )
                     {
@@ -125,8 +128,8 @@ namespace SharpFlame.Mapping.IO.Wz
             {
                 using ( var reader = new BinaryReader(file) )
                 {
-                    var ttpLoader = new TTPLoader (map);
-                    returnResult.Add(ttpLoader.Load(reader));
+                    var ttpLoader = kernel.Get<TTPLoader>();
+                    returnResult.Add(ttpLoader.Load(reader, map));
                 }
             }
 
@@ -137,7 +140,7 @@ namespace SharpFlame.Mapping.IO.Wz
                 using ( var reader = new StreamReader(file) )
                 {
                     var text = reader.ReadToEnd();
-                    returnResult.Add(read_INI_Structures(text, iniStructures));
+                    returnResult.Add(read_INI_Structures(map, text, iniStructures));
                 }
             }
 
@@ -153,7 +156,7 @@ namespace SharpFlame.Mapping.IO.Wz
                 else
                 {
                     var Structures_Reader = new BinaryReader(file);
-                    subResult = read_WZ_Structures(Structures_Reader, bjoUnits);
+                    subResult = read_WZ_Structures(map, Structures_Reader, bjoUnits);
                     Structures_Reader.Close();
                     if ( !subResult.Success )
                     {
@@ -170,7 +173,7 @@ namespace SharpFlame.Mapping.IO.Wz
                 using ( var reader = new StreamReader(file) )
                 {
                     var text = reader.ReadToEnd();
-                    returnResult.Add(read_INI_Droids(text, iniDroids));
+                    returnResult.Add(read_INI_Droids(map, text, iniDroids));
                 }
             }
 
@@ -186,7 +189,7 @@ namespace SharpFlame.Mapping.IO.Wz
                 else
                 {
                     var Droids_Reader = new BinaryReader(file);
-                    subResult = read_WZ_Droids(Droids_Reader, bjoUnits);
+                    subResult = read_WZ_Droids(map, Droids_Reader, bjoUnits);
                     Droids_Reader.Close();
                     if ( !subResult.Success )
                     {
@@ -196,7 +199,7 @@ namespace SharpFlame.Mapping.IO.Wz
                 returnResult.Add(Result);
             }
 
-            returnResult.Add(createWZObjects(bjoUnits, iniStructures, iniDroids, iniFeatures));
+            returnResult.Add(createWZObjects(map, bjoUnits, iniStructures, iniDroids, iniFeatures));
 
             //map objects are modified by this and must already exist
             subResult = IOUtil.TryOpenFileStream(gameFilesPath + "labels.ini", ref file);
@@ -205,10 +208,11 @@ namespace SharpFlame.Mapping.IO.Wz
                 using ( var reader = new StreamReader(file) )
                 {
                     var text = reader.ReadToEnd();
-                    returnResult.Add(read_INI_Labels(text));
+                    returnResult.Add(read_INI_Labels(map, text));
                 }
             }
 
+            returnResult.Value = map;
             return returnResult;
         }
     }

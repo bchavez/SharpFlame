@@ -1,45 +1,55 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using NLog;
+using Ninject;
+using Ninject.Extensions.Logging;
 using SharpFlame.Mapping.IO;
 using SharpFlame.Core;
-using SharpFlame.Core.Interfaces.Mapping.IO;
 using SharpFlame.FileIO;
 
 namespace SharpFlame.Mapping.IO.TTP
 {
     public class TTPLoader : IIOLoader
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger logger;
+        private readonly IKernel kernel;
 
-        protected readonly Map map;
-
-        public TTPLoader(Map newMap)
+        public TTPLoader(IKernel argKernel, ILoggerFactory logFactory)
         {
-            map = newMap;
+            kernel = argKernel;
+            logger = logFactory.GetCurrentClassLogger();
         }
 
-        public Result Load(string path)
+        public GenericResult<Map> Load(string path, Map map = null)
         {
+            if(map == null)
+            {
+                map = kernel.Get<Map>();
+            }
+
             try {
                 using (var file = new BinaryReader(new FileStream(path, FileMode.Open))) {
-                    return Load (file);
+                    return Load (file, map);
                 }
             }
             catch (Exception ex) {
                 Debugger.Break ();
-                var returnResult = new Result ("Loading .ttp", false);
+                var returnResult = new GenericResult<Map> ("Loading .ttp", false);
                 returnResult.ProblemAdd (string.Format ("Failed to open .ttp, failure was: {0}", ex.Message));
-                logger.ErrorException ("Failed to open .ttp", ex);
+                logger.Error (ex, "Failed to open .ttp");
                 return returnResult;
             }
         }
 
-        public Result Load(BinaryReader file)
+        public GenericResult<Map> Load(BinaryReader file, Map map = null)
         {
-            var returnResult = new Result ("Loading .ttp", false);
+            var returnResult = new GenericResult<Map> ("Loading .ttp", false);
             logger.Info ("Loading .ttp");
+
+            if(map == null)
+            {
+                map = kernel.Get<Map>();
+            }
 
             var strTemp = "";
             UInt32 uintTemp = 0;
@@ -82,10 +92,11 @@ namespace SharpFlame.Mapping.IO.TTP
             {
                 Debugger.Break ();
                 returnResult.ProblemAdd (ex.Message);
-                logger.ErrorException("Got an exception", ex);
+                logger.Error(ex, "Got an exception");
                 return returnResult;
             }
 
+            returnResult.Value = map;
             return returnResult;
         }       
     }

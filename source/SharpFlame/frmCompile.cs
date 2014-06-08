@@ -1,9 +1,8 @@
-
-
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 using NLog;
+using Ninject;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
@@ -202,8 +201,8 @@ namespace SharpFlame
             Map.InterfaceOptions.CompileMultiPlayers = PlayerCount.ToString();
             Map.InterfaceOptions.CompileMultiLicense = License;
             Map.InterfaceOptions.CompileType = CompileType.Multiplayer;
-            var wzFormat = new WzSaver(Map);
-            ReturnResult.Add(wzFormat.Save(CompileMultiDialog.FileName, true, true));
+            var wzFormat = App.Kernel.Get<WzSaver>();
+            ReturnResult.Add(wzFormat.Save(CompileMultiDialog.FileName, Map, true, true));
             App.ShowWarnings(ReturnResult);
             if ( !ReturnResult.HasWarnings )
             {
@@ -635,8 +634,8 @@ namespace SharpFlame
             Map.InterfaceOptions.CompileType = CompileType.Campaign;
             Map.InterfaceOptions.CampaignGameType = TypeNum;
 
-            var wzFormat = new WzSaver(Map);
-            ReturnResult.Add(wzFormat.Save(CompileCampDialog.SelectedPath, false, true));
+            var wzFormat = App.Kernel.Get<WzSaver>();
+            ReturnResult.Add(wzFormat.Save(CompileCampDialog.SelectedPath, Map, false, true));
             App.ShowWarnings(ReturnResult);
             if ( !ReturnResult.HasWarnings )
             {

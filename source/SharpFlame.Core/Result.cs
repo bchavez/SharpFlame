@@ -1,11 +1,7 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using NLog;
 using SharpFlame.Core.Interfaces;
-
-
 
 namespace SharpFlame.Core
 {
@@ -64,12 +60,31 @@ namespace SharpFlame.Core
             Items.Add(resultToAdd);
         }
 
+        public void Take<T>(GenericResult<T> resultToMerge)
+        {
+            if (resultToMerge.HasProblems)
+            {
+                bad = true;
+            }
+            if(resultToMerge.HasWarnings)
+            {
+                warnings = true;
+            }
+
+            Items.AddRange(resultToMerge.Items);
+        }
+
         public void Take(Result resultToMerge)
         {
             if (resultToMerge.HasProblems)
             {
                 bad = true;
             }
+            if(resultToMerge.HasWarnings)
+            {
+                warnings = true;
+            }
+
             Items.AddRange(resultToMerge.Items);
         }
 
