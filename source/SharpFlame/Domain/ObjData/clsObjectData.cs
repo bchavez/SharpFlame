@@ -208,6 +208,7 @@ namespace SharpFlame.Domain.ObjData
                         {
                             result.Take(BitmapUtil.BitmapIsGlCompatible(bitmap));
                             newPage.GLTexture_Num = BitmapUtil.CreateGLTexture (bitmap, 0);
+                            bitmap.Dispose();
                         }
                         else
                         {

@@ -39,6 +39,7 @@ namespace SharpFlame.Bitmaps
             }
 
             resultBitmap = new Bitmap(bitmap); //copying the bitmap is needed so it doesn't lock access to the file
+            bitmap.Dispose();
 
             returnResult.Success = true;
             return returnResult;

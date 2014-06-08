@@ -155,6 +155,8 @@ namespace SharpFlame.FileIO
                 }
 
                 tileset.Tiles[tileNum] = tile;
+
+                bitmap.Dispose();
             }
 
             return returnResult;
