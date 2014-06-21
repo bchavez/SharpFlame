@@ -456,7 +456,7 @@
     <Compile Include="Gui\Sections\TerrainTab.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Gui\Sections\TexturesTab.cs">
+    <Compile Include="Gui\Sections\TextureTab.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Infrastructure\Bootstrap.cs" />
@@ -675,7 +675,5 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

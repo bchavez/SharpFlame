@@ -47,7 +47,8 @@ namespace SharpFlame.Infrastructure
 
             this.Bind<MainForm>()
                 .ToSelf()
-                .InSingletonScope();
+                .InSingletonScope()
+                .RegisterOnGlobalEventBroker();
 
             this.Bind<Options>()
                 .ToSelf()
@@ -69,7 +70,7 @@ namespace SharpFlame.Infrastructure
             #endif
 
             //GUI
-            this.Bind<TextureTab>().ToSelf().InSingletonScope();
+            this.Bind<TextureTab>().ToSelf().InSingletonScope().RegisterOnGlobalEventBroker();
             this.Bind<TerrainTab>().ToSelf().InSingletonScope();
             this.Bind<ResizeTab>().ToSelf().InSingletonScope();
             this.Bind<PlaceObjectsTab>().ToSelf().InSingletonScope();

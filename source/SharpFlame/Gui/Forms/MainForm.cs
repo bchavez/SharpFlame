@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Appccelerate.EventBroker;
 using Eto.Drawing;
 using Eto.Forms;
 using Ninject;
@@ -41,6 +42,9 @@ namespace SharpFlame.Gui.Forms
 	    [Inject]
 	    internal ViewInfo ViewInfo { get; set; }
 
+        [Inject]
+        internal IEventBroker EventBroker { get; set; }
+
         private string mainMapName;   
 
         /// <summary>
@@ -78,7 +82,6 @@ namespace SharpFlame.Gui.Forms
 
             this.Closing += MainForm_Closing;
 
-
 	        var splitter = new Splitter
 	            {
 	                Position = 392,
@@ -89,7 +92,7 @@ namespace SharpFlame.Gui.Forms
 
 	        // Set the content of the form to use the layout
 	        Content = splitter;
-
+            
 	        GenerateMenuToolBar();
 	        Maximize();
 

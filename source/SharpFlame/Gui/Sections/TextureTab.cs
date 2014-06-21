@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using Appccelerate.EventBroker;
+using Appccelerate.EventBroker.Handlers;
 using Eto;
 using Eto.Drawing;
 using Eto.Forms;
@@ -177,7 +179,17 @@ namespace SharpFlame.Gui.Sections
             mainLayout.Add(tileTypeSetter);
             //mainLayout.Add();
 
+            this.scrollTextureView.SizeChanged += scrollTextureView_SizeChanged;
+
             Content = mainLayout;
+        }
+
+        void scrollTextureView_SizeChanged(object sender, EventArgs e)
+        {
+            if( uiOptions.Textures.TilesetNum != -1 )
+            {
+                this.DrawTexturesView();
+            }
         }
 
         /// <summary>
@@ -356,24 +368,24 @@ namespace SharpFlame.Gui.Sections
                 };
 
 
-            this.GLSurface.Resize += (sender, args) =>
-                {
-                    DrawTexturesView();
-                };
+            // trigger the redraw on the scroll texture view scrollable.
+            //this.GLSurface.Resize += (sender, args) =>
+            //    {
+            //        DrawTexturesView();
+            //    };
         }
-
 
         private void DrawTexturesView()
         {
-			this.GLSurface.MakeCurrent ();
+            this.GLSurface.MakeCurrent();
             if( uiOptions.Textures.TilesetNum == -1 )
             {
-				
                 GL.Clear(ClearBufferMask.ColorBufferBit);
                 GL.Flush();
                 this.GLSurface.SwapBuffers();
                 return;
             }
+            
 
             var tileset = App.Tilesets[uiOptions.Textures.TilesetNum];
 
