@@ -1,17 +1,20 @@
 using Eto.Drawing;
-using Eto.Platform.GtkSharp;
+using Eto.GtkSharp;
+using Eto.GtkSharp.Forms;
 
 namespace Eto.Gl.Gtk
 {
-    public class GtkGlSurfaceHandler : GtkControl<GLDrawingArea, GLSurface>, IGLSurfacePlatformHandler
+    public class GtkGlSurfaceHandler : GtkControl<GLDrawingArea, GLSurface, GLSurface.ICallback>, GLSurface.IHandler
     {
-        public override GLDrawingArea CreateControl()
+        protected override void Initialize()
         {
+            base.Initialize();
+
             var c = new GLDrawingArea();
             c.Initialized += (sender, args) => Widget.OnInitialized(sender, args);
             c.Resize += (sender, args) => Widget.OnResize(sender, args);
             c.ShuttingDown += (sender, args) => Widget.OnShuttingDown(sender, args);
-            return c;
+            this.Control = c;
         }
 
         public Size GLSize
@@ -35,4 +38,5 @@ namespace Eto.Gl.Gtk
             this.Control.SwapBuffers();
         }
     }
+
 }

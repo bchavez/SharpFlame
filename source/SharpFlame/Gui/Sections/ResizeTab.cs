@@ -41,7 +41,7 @@ namespace SharpFlame.Gui.Sections
 			Content = mainLayout;
 		}
 
-        public override void OnLoadComplete(EventArgs lcEventArgs)
+	    protected override void OnLoadComplete(EventArgs lcEventArgs)
         {
             base.OnLoadComplete(lcEventArgs);
 

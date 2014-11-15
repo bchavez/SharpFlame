@@ -29,21 +29,33 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Reference Include="glade-sharp">
-      <HintPath>..\packages\other\GtkSharp\2.12\lib\gtk-sharp-2.0\glade-sharp.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="atk-sharp">
+      <HintPath>..\packages\other\GtkSharp\2.12\lib\gtk-sharp-2.0\atk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Eto.Forms.2.0.1\lib\net40\Eto.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto.Gtk2">
+      <HintPath>..\packages\Eto.Platform.Gtk.2.0.1\lib\net40\Eto.Gtk2.dll</HintPath>
+    </Reference>
+    <Reference Include="gdk-sharp">
+      <HintPath>..\packages\other\GtkSharp\2.12\lib\gtk-sharp-2.0\gdk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="glib-sharp">
+      <HintPath>..\packages\other\GtkSharp\2.12\lib\gtk-sharp-2.0\glib-sharp.dll</HintPath>
     </Reference>
     <Reference Include="gtk-dotnet">
       <HintPath>..\packages\other\GtkSharp\2.12\lib\gtk-sharp-2.0\gtk-dotnet.dll</HintPath>
-      <Private>False</Private>
+    </Reference>
+    <Reference Include="gtk-sharp">
+      <HintPath>..\packages\other\GtkSharp\2.12\lib\gtk-sharp-2.0\gtk-sharp.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cairo">
       <HintPath>..\packages\other\GtkSharp\2.12\lib\Mono.Cairo\Mono.Cairo.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="pango-sharp">
       <HintPath>..\packages\other\GtkSharp\2.12\lib\gtk-sharp-2.0\pango-sharp.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="NLog">
@@ -55,30 +67,8 @@
     <Reference Include="OpenTK.GLControl">
       <HintPath>..\packages\OpenTK.GLControl.1.1.1508.5724\lib\NET40\OpenTK.GLControl.dll</HintPath>
     </Reference>
-    <Reference Include="gtk-sharp">
-      <HintPath>..\packages\other\GtkSharp\2.12\lib\gtk-sharp-2.0\gtk-sharp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="glib-sharp">
-      <HintPath>..\packages\other\GtkSharp\2.12\lib\gtk-sharp-2.0\glib-sharp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="gdk-sharp">
-      <HintPath>..\packages\other\GtkSharp\2.12\lib\gtk-sharp-2.0\gdk-sharp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="atk-sharp">
-      <HintPath>..\packages\other\GtkSharp\2.12\lib\gtk-sharp-2.0\atk-sharp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\other\Ninject.Mono\Ninject.dll</HintPath>
-    </Reference>
-    <Reference Include="Eto">
-      <HintPath>..\packages\Eto-20140420\net40\Eto.dll</HintPath>
-    </Reference>
-    <Reference Include="Eto.Platform.Gtk">
-      <HintPath>..\packages\Eto-20140420\net40\Eto.Platform.Gtk.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -1,16 +1,20 @@
 using Eto.Drawing;
-using Eto.Platform.Windows;
+using Eto.Forms;
+using Eto.WinForms.Forms;
+
 namespace Eto.Gl.Windows
 {
-    public class WinGLSurfaceHandler : WindowsControl<WinGLUserControl, GLSurface>, IGLSurfacePlatformHandler
+    public class WinGLSurfaceHandler : WindowsControl<WinGLUserControl, GLSurface, GLSurface.ICallback>, GLSurface.IHandler
     {
-        public override WinGLUserControl CreateControl()
+        protected override void Initialize()
         {
+            base.Initialize();
+
             var c = new WinGLUserControl();
             c.Initialized += (sender, args) => Widget.OnInitialized(sender, args);
             c.Resize += (sender, args) => Widget.OnResize(sender, args);
             c.ShuttingDown += (sender, args) => Widget.OnShuttingDown(sender, args);
-            return c;
+            this.Control = c;
         }
 
         public Size GLSize

@@ -1,4 +1,4 @@
-﻿using Eto.Platform.Windows;
+﻿using Eto.WinForms.Forms.Controls;
 
 namespace SharpFlame.Gui.Windows.EtoCustom
 {
@@ -19,7 +19,10 @@ namespace SharpFlame.Gui.Windows.EtoCustom
         {
             if ( this.Control.Visible )
             {
-                this.Widget.OnShown(e);
+                //ETO 1.0
+                //this.Widget.OnShown(e);
+
+                this.Widget.Properties.TriggerEvent(Eto.Forms.Control.ShownEvent, this, e);
             }
         }
     }

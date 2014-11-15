@@ -45,10 +45,10 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Eto">
-      <HintPath>..\packages\Eto-20140420\net40\Eto.dll</HintPath>
+      <HintPath>..\packages\Eto.Forms.2.0.1\lib\net40\Eto.dll</HintPath>
     </Reference>
-    <Reference Include="Eto.Platform.Windows">
-      <HintPath>..\packages\Eto-20140420\net40\Eto.Platform.Windows.dll</HintPath>
+    <Reference Include="Eto.WinForms">
+      <HintPath>..\packages\Eto.Platform.Windows.2.0.1\lib\net40\Eto.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK">
       <HintPath>..\packages\OpenTK.1.1.1508.5724\lib\NET40\OpenTK.dll</HintPath>
@@ -62,5 +62,8 @@
       <Project>{510CE98D-2169-48A0-889C-E743417EE5E1}</Project>
       <Name>Eto.Gl</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

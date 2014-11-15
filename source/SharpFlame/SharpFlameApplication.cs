@@ -113,7 +113,7 @@ namespace SharpFlame
             initializeResult.Add(Settings.Load(App.SettingsPath));
         }
 
-        public override void OnInitialized(EventArgs e)
+        protected override void OnInitialized(EventArgs e)
         {
             this.MainForm = kernel.Get<MainForm>();
 
@@ -128,7 +128,7 @@ namespace SharpFlame
             }
         }
 
-        public override void OnTerminating(CancelEventArgs e)
+        protected override void OnTerminating(CancelEventArgs e)
         {
             base.OnTerminating(e);
 

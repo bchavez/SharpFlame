@@ -1,5 +1,4 @@
 ﻿using System;
-using Eto.Forms;
 using Eto.Gl;
 using Eto.Gl.Windows;
 using Ninject;
@@ -13,12 +12,12 @@ namespace SharpFlame.Gui.Windows
         [STAThread]
         static void Main(string[] args)
         {
-            var generator = new Eto.Platform.Windows.Generator();
+            var generator = Eto.Platform.Instance;
 
-            generator.Add<IGLSurfacePlatformHandler>(() => new WinGLSurfaceHandler());
-            generator.Add<IPanel>(() => new WinPanelHandler());
+            generator.Add<GLSurface.IHandler>(() => new WinGLSurfaceHandler());
+            generator.Add<Eto.Forms.Panel.IHandler>(() => new WinPanelHandler());
 
-            var kernel = Bootstrap.KernelWith(generator);
+            var kernel = Bootstrap.KernelWith(Eto.Platform.Instance);
             
             var app = kernel.Get<SharpFlameApplication>();
 

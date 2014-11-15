@@ -195,7 +195,7 @@ namespace SharpFlame.Gui.Sections
         /// <summary>
         /// Sets the Bindings to uiOptions.Textures;
         /// </summary>
-        public override void OnLoadComplete(EventArgs lcEventArgs)
+        protected override void OnLoadComplete(EventArgs lcEventArgs)
         {
             base.OnLoadComplete(lcEventArgs);
 

@@ -7,7 +7,7 @@ namespace SharpFlame.Infrastructure
 {
     public static class Bootstrap
     {
-        public static IKernel KernelWith(Eto.Generator generator)
+        public static IKernel KernelWith(Eto.Platform generator)
         {
             var settings = new NinjectSettings
                 {
@@ -34,7 +34,7 @@ namespace SharpFlame.Infrastructure
             return kernel;
         }
 
-        private static void HookEtoGenerator(Eto.Generator eto, IKernel k)
+        private static void HookEtoGenerator(Eto.Platform eto, IKernel k)
         {
             //actually, WidgetCreated is fired when the *generator handler* is created 
             //from the generator factory.
@@ -44,10 +44,10 @@ namespace SharpFlame.Infrastructure
                     var newObject = args.Instance;
                     k.Inject(newObject); //this is usually the platform handler.
 
-                    var asWidgetHandler = newObject as Eto.IWidget;
+                    var asWidgetHandler = newObject as Eto.IControlObjectSource;
                     if( asWidgetHandler != null )
                     {
-                        var widget = asWidgetHandler.Widget;
+                        var widget = asWidgetHandler.ControlObject;
                         //widget willa ways be null b/c 
                         //widget poreprty is set AFTER widget created is fired.
                         if( widget != null )

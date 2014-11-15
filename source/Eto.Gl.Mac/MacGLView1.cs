@@ -1,8 +1,7 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
-using Eto.Platform;
-using Eto.Platform.Mac.Forms;
+using Eto.Mac.Forms;
 using MonoMac.AppKit;
 
 namespace Eto.Gl.Mac

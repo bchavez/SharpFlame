@@ -90,7 +90,7 @@ namespace SharpFlame.Gui.Sections
 			Content = mainLayout;
 		}
 
-        public override void OnLoadComplete(EventArgs lcEventArgs)
+	    protected override void OnLoadComplete(EventArgs lcEventArgs)
         {
             base.OnLoadComplete(lcEventArgs);
 
@@ -120,7 +120,7 @@ namespace SharpFlame.Gui.Sections
             App.ObjectDataChanged += delegate
             {
                 var objFeatures = App.ObjectData.FeatureTypes.GetItemsAsSimpleList();
-                var gicFeatures = new GridItemCollection();
+                var gicFeatures = new DataStoreCollection<object>();
                 foreach (var obj in objFeatures) 
                 {
                     string code = null;
@@ -130,7 +130,7 @@ namespace SharpFlame.Gui.Sections
                 grvFeatures.DataStore = gicFeatures;
 
                 var objStructures = App.ObjectData.StructureTypes.GetItemsAsSimpleList();
-                var gicStructures = new GridItemCollection();
+                var gicStructures = new DataStoreCollection<object>();
                 foreach (var obj in objStructures) 
                 {
                     string code = null;
@@ -140,7 +140,7 @@ namespace SharpFlame.Gui.Sections
                 grvStructures.DataStore = gicStructures;
 
                 var objDroids = App.ObjectData.DroidTemplates.GetItemsAsSimpleList();
-                var gicDroids = new GridItemCollection();
+                var gicDroids = new DataStoreCollection<object>();
                 foreach (var obj in objDroids) 
                 {
                     string code = null;

@@ -1,4 +1,5 @@
 using Eto.Gl;
+using Eto.IO;
 using Ninject.Modules;
 using SharpFlame.Gui.Actions;
 using SharpFlame.Gui.Forms;

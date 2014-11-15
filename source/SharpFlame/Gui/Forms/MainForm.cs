@@ -77,7 +77,9 @@ namespace SharpFlame.Gui.Forms
 
 	        tabControl.SelectedIndexChanged += delegate
 	            {
-	                tabControl.SelectedPage.Content.OnShown(EventArgs.Empty);
+                    //ETO 1.0 
+	                //tabControl.SelectedPage.Content.OnShown(EventArgs.Empty);
+	                tabControl.SelectedPage.Content.Properties.TriggerEvent(ShownEvent, this, EventArgs.Empty);
 	            };
 
             this.Closing += MainForm_Closing;

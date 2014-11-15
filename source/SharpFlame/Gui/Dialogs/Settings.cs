@@ -104,7 +104,7 @@ namespace SharpFlame.Gui.Dialogs
             Content = layout;
         }
 
-        public override void OnLoadComplete(EventArgs lcEventArgs)
+        protected override void OnLoadComplete(EventArgs lcEventArgs)
         {
             base.OnLoadComplete(lcEventArgs);
 
@@ -175,7 +175,7 @@ namespace SharpFlame.Gui.Dialogs
 
             // Load initial tileset data.
             {
-                var itemsTileset = (GridItemCollection)grvTilesets.DataStore;
+                var itemsTileset = (DataStoreCollection<object>)grvTilesets.DataStore;
                 foreach( var item in settings.TilesetDirectories )
                 {
                     itemsTileset.Add(new OneColumnGridItem((string)item));
@@ -184,7 +184,7 @@ namespace SharpFlame.Gui.Dialogs
 
             // Load initial object data.
             {
-                var itemsObjects = (GridItemCollection)grvObjects.DataStore;
+                var itemsObjects = (DataStoreCollection<object>)grvObjects.DataStore;
                 foreach( var item in settings.ObjectDataDirectories )
                 {
                     itemsObjects.Add(new OneColumnGridItem((string)item));
@@ -193,7 +193,7 @@ namespace SharpFlame.Gui.Dialogs
 
             settings.TilesetDirectories.CollectionChanged += (sender, e) =>
                 {
-                    var itemsTileset = (GridItemCollection)grvTilesets.DataStore;
+                    var itemsTileset = (DataStoreCollection<object>)grvTilesets.DataStore;
                     if( e.Action == NotifyCollectionChangedAction.Add )
                     {
                         foreach( var item in e.NewItems )
@@ -217,7 +217,7 @@ namespace SharpFlame.Gui.Dialogs
                             {
                                 tmpList.Remove(foundItem);
                             }
-                            var datastoreTilesets = new GridItemCollection();
+                            var datastoreTilesets = new DataStoreCollection<object>();
                             datastoreTilesets.AddRange(tmpList);
                             grvTilesets.DataStore = datastoreTilesets;
                         }
@@ -226,7 +226,7 @@ namespace SharpFlame.Gui.Dialogs
 
             settings.ObjectDataDirectories.CollectionChanged += (sender, e) =>
                 {
-                    var itemsObjects = (GridItemCollection)grvObjects.DataStore;
+                    var itemsObjects = (DataStoreCollection<object>)grvObjects.DataStore;
                     if( e.Action == NotifyCollectionChangedAction.Add )
                     {
                         foreach( var item in e.NewItems )
@@ -250,7 +250,7 @@ namespace SharpFlame.Gui.Dialogs
                             {
                                 tmpList.Remove(foundItem);
                             }
-                            var datastoreObjects = new GridItemCollection();
+                            var datastoreObjects = new DataStoreCollection<object>();
                             datastoreObjects.AddRange(tmpList);
                             grvObjects.DataStore = datastoreObjects;
                         }
@@ -347,7 +347,7 @@ namespace SharpFlame.Gui.Dialogs
             nudGraphicsTextureViewColours.Bind(r => r.Value, App.SettingsManager, s => s.TextureViewBPP);
             nudGraphicsTextureViewDepth.Bind(r => r.Value, App.SettingsManager, s => s.TextureViewDepth);
             nudMinimapSize.Bind(r => r.Value, App.SettingsManager, s => s.MinimapSize);
-            tbFoV.Bind(r => r.Text, App.SettingsManager, s => s.FOVDefault);
+            tbFoV.Bind(r => r.Text, App.SettingsManager, s => s.FOVDefaultStr);
 
         }
 
@@ -369,7 +369,7 @@ namespace SharpFlame.Gui.Dialogs
             grvTilesets = new GridView
                 {
                     ShowHeader = false,
-                    DataStore = new GridItemCollection()
+                    DataStore = new DataStoreCollection<object>()
                 };
             grvTilesets.Columns.Add(new GridColumn
                 {
@@ -381,7 +381,7 @@ namespace SharpFlame.Gui.Dialogs
             grvObjects = new GridView
                 {
                     ShowHeader = false,
-                    DataStore = new GridItemCollection()
+                    DataStore = new DataStoreCollection<object>()
                 };
             grvObjects.Columns.Add(new GridColumn
                 {
@@ -614,7 +614,7 @@ namespace SharpFlame.Gui.Dialogs
             var panel = new Panel();
             var layout = new DynamicLayout();
             grvKeyboard = new GridView {
-                DataStore = new GridItemCollection ()
+                DataStore = new DataStoreCollection<object>()
             };
             grvKeyboard.Columns.Add (new GridColumn {
                 HeaderText = "Name",
@@ -627,7 +627,7 @@ namespace SharpFlame.Gui.Dialogs
                Editable = false
             });
 
-            var store = new GridItemCollection ();
+            var store = new DataStoreCollection<object>();
             grvKeyboard.DataStore = store;
             foreach (KeyValuePair<string, KeyboardKey> pair in Keyboard.Keys)
             {

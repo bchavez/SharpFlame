@@ -1,51 +1,65 @@
 
 
 using System;
-using Eto;
 using Eto.Drawing;
 using Eto.Forms;
-using Eto.Misc;
 
 namespace Eto.Gl
 {
-    public interface IGLSurfacePlatformHandler : IControl
-    {
-        Size GLSize { get; set; }
-        bool IsInitialized { get; }
-
-        void MakeCurrent();
-        void SwapBuffers();
-    }
-
+    [Handler(typeof(GLSurface.IHandler))]
     public class GLSurface : Control
     {
-        public IGLSurfacePlatformHandler PlatformHandler
+        new IHandler Handler { get { return (IHandler)base.Handler; } }
+
+        public new interface IHandler : Control.IHandler
         {
-            get { return this.Handler as IGLSurfacePlatformHandler; }
+            Size GLSize { get; set; }
+            bool IsInitialized { get; }
+
+            void MakeCurrent();
+            void SwapBuffers();
         }
 
+        static readonly object callback = new Callback();
+
+        protected override object GetCallback()
+        {
+            return callback;
+        }
+
+        public new interface ICallback : Control.ICallback
+        {
+            void OnInitialized(GLSurface w, EventArgs e);
+            void OnClick(GLSurface widget, EventArgs e);
+        }
+
+        protected new class Callback : Control.Callback, ICallback
+        {
+            public void OnInitialized(GLSurface w, EventArgs e)
+            {
+                w.Platform.Invoke(() => w.OnInitialized(w, e));
+            }
+
+            public void OnClick(GLSurface widget, EventArgs e)
+            {
+                widget.Platform.Invoke( () => widget.OnClick(e) );
+            }
+        }
+
+        public virtual void OnClick(EventArgs e)
+        {
+            Click(this, e);
+        }
+
+        public event EventHandler Click;
+
         public Size GLSize {
-            get { return PlatformHandler.GLSize; } 
-            set { PlatformHandler.GLSize = value; }
+            get { return this.Handler.GLSize; } 
+            set { this.Handler.GLSize = value; }
         }
 
         public bool IsInitialized {
-            get { return PlatformHandler.IsInitialized; }
-        }
-
-        public GLSurface() : this(Generator.Current)
-        {
-        }
-        public GLSurface(Generator generator) : this(generator, typeof(IGLSurfacePlatformHandler), true)
-        {
-        }
-
-        public GLSurface(Generator generator, Type type, bool initialize = true) : base(generator, type, initialize)
-        {
-        }
-
-        public GLSurface(Generator generator, IControl handler, bool initialize = true) : base(generator, handler, initialize)
-        {
+            get { return this.Handler.IsInitialized; }
         }
 
         public event EventHandler Initialized = delegate {};
@@ -78,12 +92,12 @@ namespace Eto.Gl
 
         public virtual void MakeCurrent() 
         {
-            PlatformHandler.MakeCurrent ();
+            this.Handler.MakeCurrent ();
         }
 
         public virtual void SwapBuffers() 
         {
-            PlatformHandler.SwapBuffers ();
+            this.Handler.SwapBuffers ();
         }
     }
 }

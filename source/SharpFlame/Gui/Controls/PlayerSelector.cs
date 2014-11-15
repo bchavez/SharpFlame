@@ -13,9 +13,9 @@ namespace SharpFlame.Gui.Controls
 		readonly List<CustomButton> buttons = new List<CustomButton> ();
 		CustomButton selectedButton;
 
-		readonly Color backGroundColor = Color.FromArgb(0xFFF3F2EC);
-		readonly Color hoverColor = Color.FromArgb(0xFFB6BDD2);
-		readonly Color hoverBorderColor = Color.FromArgb(0xFF316AC5);
+		readonly Color backGroundColor = Color.FromArgb(unchecked ((int)0xFFF3F2EC));
+		readonly Color hoverColor = Color.FromArgb(unchecked((int)0xFFB6BDD2));
+		readonly Color hoverBorderColor = Color.FromArgb(unchecked((int)0xFF316AC5));
 
 		public virtual string SelectedPlayer {
 			get { 

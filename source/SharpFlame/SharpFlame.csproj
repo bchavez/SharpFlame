@@ -93,6 +93,9 @@
     <Reference Include="Appccelerate.Fundamentals">
       <HintPath>..\packages\Appccelerate.Fundamentals.1.0.29\lib\Net40\Appccelerate.Fundamentals.dll</HintPath>
     </Reference>
+    <Reference Include="Eto">
+      <HintPath>..\packages\Eto.Forms.2.0.1\lib\net40\Eto.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
@@ -132,9 +135,6 @@
     </Reference>
     <Reference Include="Ninject.Extensions.Logging.NLog2">
       <HintPath>..\packages\Ninject.Extensions.Logging.nlog2.3.0.1.0\lib\net40\Ninject.Extensions.Logging.NLog2.dll</HintPath>
-    </Reference>
-    <Reference Include="Eto">
-      <HintPath>..\packages\Eto-20140420\net40\Eto.dll</HintPath>
     </Reference>
     <Reference Include="NAppUpdate.Framework">
       <HintPath>..\packages\NAppUpdate-0.1.4.0\net40\NAppUpdate.Framework.dll</HintPath>

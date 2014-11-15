@@ -53,6 +53,13 @@ namespace SharpFlame.Settings
         public bool MinimapTeamColoursExceptFeatures { get; set; }
         public Rgba MinimapCliffColour { get; set; }
         public Rgba MinimapSelectedObjectsColour { get; set; }
+
+        public string FOVDefaultStr
+        {
+            get { return this.FOVDefault.ToString(); }
+            set { this.FOVDefault = double.Parse(value); }
+        }
+
         public double FOVDefault { get; set; }
         public bool Mipmaps { get; set; }
         public bool MipmapsHardware { get; set; }

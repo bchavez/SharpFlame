@@ -1,27 +1,28 @@
-﻿using System;
-using System.Drawing;
-using Eto.Platform;
-using Eto.Platform.Mac.Forms;
+﻿
+using Eto.Drawing;
 using MonoMac.AppKit;
-using Size = Eto.Drawing.Size;
+using Eto.Mac.Forms;
 
 namespace Eto.Gl.Mac
 {
-	public class MacGLSurfaceHandler : MacView<MacGLView3, GLSurface>, IGLSurfacePlatformHandler
+	public class MacGLSurfaceHandler : MacView<MacGLView7, GLSurface, GLSurface.ICallback>, GLSurface.IHandler
     {
-		public override MacGLView3 CreateControl()
+        protected override void Initialize()
         {
-			var c = new MacGLView3();
+            base.Initialize();
+
+            var c = new MacGLView7();
             c.Initialized += (sender, args) => Widget.OnInitialized(sender, args);
             c.Resize += (sender, args) => Widget.OnResize(sender, args);
             c.ShuttingDown += (sender, args) => Widget.OnShuttingDown(sender, args);
-		    return c;
+
+            this.Control = c;
         }
 
         private void Control_GLMouseDown(MacGLView2 sender, NSEvent args)
         {
-            var mouseEvent = Eto.Platform.Mac.Conversions.GetMouseEvent(sender, args, false);
-            this.Widget.OnMouseDown(mouseEvent);
+            var mouseEvent = Eto.Mac.Conversions.GetMouseEvent(sender, args, false);
+            this.Callback.OnMouseDown(this.Widget, mouseEvent);
         }
 
         public override bool Enabled { get; set; }

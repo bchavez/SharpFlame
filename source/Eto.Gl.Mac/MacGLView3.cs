@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using Eto.Forms;
-using Eto.Platform;
-using Eto.Platform.Mac.Forms;
 using MonoMac.AppKit;
 using MonoMac.CoreVideo;
 using MonoMac.Foundation;
@@ -12,9 +9,7 @@ using Size = Eto.Drawing.Size;
 
 namespace Eto.Gl.Mac
 {
-    public delegate void NativeEventHandler(MacGLView3 sender, NSEvent args);
-
-    public class MacGLView3 : NSView, IMacControl
+    public class MacGLView3 : NSScrollView
     {
         
         private bool suspendResize = true;

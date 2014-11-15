@@ -41,6 +41,12 @@
     <Reference Include="Appccelerate.Fundamentals">
       <HintPath>..\packages\Appccelerate.Fundamentals.1.0.29\lib\Net40\Appccelerate.Fundamentals.dll</HintPath>
     </Reference>
+    <Reference Include="Eto">
+      <HintPath>..\packages\Eto.Forms.2.0.1\lib\net40\Eto.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto.WinForms">
+      <HintPath>..\packages\Eto.Platform.Windows.2.0.1\lib\net40\Eto.WinForms.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
@@ -66,12 +72,6 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="Eto">
-      <HintPath>..\packages\Eto-20140420\net40\Eto.dll</HintPath>
-    </Reference>
-    <Reference Include="Eto.Platform.Windows">
-      <HintPath>..\packages\Eto-20140420\net40\Eto.Platform.Windows.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharpFlame.Core\GlobalAssemblyInfo.cs">
@@ -108,6 +108,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Eto.Gl.Windows\Eto.Gl.Windows.csproj">
+      <Project>{a0dccc13-936c-4d5a-ad8c-adff75816a8f}</Project>
+      <Name>Eto.Gl.Windows</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SharpFlame.Core\SharpFlame.Core.csproj">
       <Project>{8AE7F7A3-841A-44A7-B016-4661BBBF7821}</Project>
       <Name>SharpFlame.Core</Name>
@@ -115,10 +119,6 @@
     <ProjectReference Include="..\Eto.Gl\Eto.Gl.csproj">
       <Project>{510CE98D-2169-48A0-889C-E743417EE5E1}</Project>
       <Name>Eto.Gl</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Eto.Gl.Windows\Eto.Gl.Windows.csproj">
-      <Project>{A0DCCC13-936C-4D5A-AD8C-ADFF75816A8F}</Project>
-      <Name>Eto.Gl.Windows</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpFlame\SharpFlame.csproj">
       <Project>{152475A4-3ABE-41C4-B338-A2FB7B350FAF}</Project>

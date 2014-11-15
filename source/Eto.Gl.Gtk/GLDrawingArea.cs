@@ -24,7 +24,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading;
 using Eto.Drawing;
-using Eto.Platform.GtkSharp;
+using Eto.GtkSharp;
 using Gtk;
 using OpenTK;
 using OpenTK.Graphics;

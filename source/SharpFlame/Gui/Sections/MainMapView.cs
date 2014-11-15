@@ -121,11 +121,11 @@ namespace SharpFlame.Gui.Sections
             Content = mainLayout;
 		}
 
-        public override void OnLoadComplete(EventArgs lcEventArgs)
+        protected override void OnLoadComplete(EventArgs lcEventArgs)
         {
             base.OnLoadComplete(lcEventArgs);
 
-            GLSurface.KeyDown += keyboardManager.HandleKeyDown;
+            /*GLSurface.KeyDown += keyboardManager.HandleKeyDown;
             GLSurface.KeyUp += keyboardManager.HandleKeyUp;
 
             GLSurface.MouseEnter += (sender, e) =>
@@ -142,7 +142,7 @@ namespace SharpFlame.Gui.Sections
             GLSurface.MouseLeave += viewInfo.HandleMouseLeave;
 
             GLSurface.Initialized += InitalizeGlSurface;
-            GLSurface.Resize += ResizeMapView;
+            GLSurface.Resize += ResizeMapView;*/
 
             keyboardManager.KeyDown += HandleKeyDown;
 

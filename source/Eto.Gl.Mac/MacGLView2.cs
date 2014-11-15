@@ -1,6 +1,5 @@
 ﻿using System;
 using Eto.Forms;
-using Eto.Platform;
 using MonoMac.AppKit;
 using MonoMac.CoreVideo;
 using MonoMac.Foundation;
@@ -8,7 +7,7 @@ using MonoMac.OpenGL;
 
 namespace Eto.Gl.Mac
 {
-    public class MacGLView2 : NSView 
+    public class MacGLView2 : NSView
     {
         //required for sharing textures between contexts,
         //NSOpenGLView does not allow contexts to be created

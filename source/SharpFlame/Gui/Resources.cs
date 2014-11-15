@@ -18,34 +18,34 @@ namespace SharpFlame.Gui
         public static string IconProblemName = "problem.png";
         public static string IconWarningmName = "warning.png";
 
-		public static Icon SharpFlameIcon(Generator generator = null)
+		public static Icon SharpFlameIcon()
 		{
-			return Icon.FromResource (string.Format ("{0}{1}", Prefix, SharpFlameIconName), generator);
+			return Icon.FromResource (string.Format ("{0}{1}", Prefix, SharpFlameIconName));
 		}
 
-		public static Bitmap BtnRotateAntiClockwise(Generator generator = null)
+		public static Bitmap BtnRotateAntiClockwise()
 		{
-			return Bitmap.FromResource (string.Format ("{0}{1}", Prefix, BtnRotateAntiClockwiseName), Assembly.GetExecutingAssembly(), generator);
+			return Bitmap.FromResource (string.Format ("{0}{1}", Prefix, BtnRotateAntiClockwiseName), Assembly.GetExecutingAssembly());
 		}
 
-		public static Bitmap BtnRotateClockwise(Generator generator = null)
+		public static Bitmap BtnRotateClockwise()
 		{
-			return Bitmap.FromResource (string.Format ("{0}{1}", Prefix, BtnRotateClockwiseName), Assembly.GetExecutingAssembly(), generator);
+			return Bitmap.FromResource (string.Format ("{0}{1}", Prefix, BtnRotateClockwiseName), Assembly.GetExecutingAssembly());
 		}
 
-		public static Bitmap BtnFlipX(Generator generator = null)
+		public static Bitmap BtnFlipX()
 		{
-			return Bitmap.FromResource (string.Format ("{0}{1}", Prefix, BtnFlipXName), Assembly.GetExecutingAssembly(), generator);
+			return Bitmap.FromResource (string.Format ("{0}{1}", Prefix, BtnFlipXName), Assembly.GetExecutingAssembly());
 		}
 
-        public static Bitmap IconProblem(Generator generator = null)
+        public static Bitmap IconProblem()
         {
-            return Bitmap.FromResource (string.Format ("{0}{1}", Prefix, IconProblemName), Assembly.GetExecutingAssembly(), generator);
+            return Bitmap.FromResource (string.Format ("{0}{1}", Prefix, IconProblemName), Assembly.GetExecutingAssembly());
         }
 
-        public static Bitmap IconWarning(Generator generator = null)
+        public static Bitmap IconWarning()
         {
-            return Bitmap.FromResource (string.Format ("{0}{1}", Prefix, IconWarningmName), Assembly.GetExecutingAssembly(), generator);
+            return Bitmap.FromResource (string.Format ("{0}{1}", Prefix, IconWarningmName), Assembly.GetExecutingAssembly());
         }
 	}
 }
