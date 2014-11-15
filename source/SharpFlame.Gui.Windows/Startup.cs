@@ -12,7 +12,7 @@ namespace SharpFlame.Gui.Windows
         [STAThread]
         static void Main(string[] args)
         {
-            var generator = Eto.Platform.Instance;
+            var generator = Eto.Platform.Detect;
 
             generator.Add<GLSurface.IHandler>(() => new WinGLSurfaceHandler());
             generator.Add<Eto.Forms.Panel.IHandler>(() => new WinPanelHandler());

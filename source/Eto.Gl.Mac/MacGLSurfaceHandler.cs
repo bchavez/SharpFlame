@@ -9,7 +9,6 @@ namespace Eto.Gl.Mac
     {
         protected override void Initialize()
         {
-            base.Initialize();
 
             var c = new MacGLView7();
             c.Initialized += (sender, args) => Widget.OnInitialized(sender, args);
@@ -17,6 +16,8 @@ namespace Eto.Gl.Mac
             c.ShuttingDown += (sender, args) => Widget.OnShuttingDown(sender, args);
 
             this.Control = c;
+
+            base.Initialize();
         }
 
         private void Control_GLMouseDown(MacGLView2 sender, NSEvent args)

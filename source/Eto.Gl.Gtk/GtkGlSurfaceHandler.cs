@@ -8,13 +8,13 @@ namespace Eto.Gl.Gtk
     {
         protected override void Initialize()
         {
-            base.Initialize();
-
             var c = new GLDrawingArea();
             c.Initialized += (sender, args) => Widget.OnInitialized(sender, args);
             c.Resize += (sender, args) => Widget.OnResize(sender, args);
             c.ShuttingDown += (sender, args) => Widget.OnShuttingDown(sender, args);
             this.Control = c;
+
+            base.Initialize();
         }
 
         public Size GLSize
