@@ -125,7 +125,7 @@ namespace SharpFlame.Gui.Sections
         {
             base.OnLoadComplete(lcEventArgs);
 
-            /*GLSurface.KeyDown += keyboardManager.HandleKeyDown;
+            GLSurface.KeyDown += keyboardManager.HandleKeyDown;
             GLSurface.KeyUp += keyboardManager.HandleKeyUp;
 
             GLSurface.MouseEnter += (sender, e) =>
@@ -142,7 +142,7 @@ namespace SharpFlame.Gui.Sections
             GLSurface.MouseLeave += viewInfo.HandleMouseLeave;
 
             GLSurface.Initialized += InitalizeGlSurface;
-            GLSurface.Resize += ResizeMapView;*/
+            GLSurface.Resize += ResizeMapView;
 
             keyboardManager.KeyDown += HandleKeyDown;
 

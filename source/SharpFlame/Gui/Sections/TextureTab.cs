@@ -599,7 +599,12 @@ namespace SharpFlame.Gui.Sections
 
         private static ComboBox TextureComboBox()
         {
-            var control = new ComboBox();
+            var control = new ComboBox
+                {
+                    AutoComplete = true,
+                    ReadOnly = true,
+                };
+
             if( App.Tilesets != null )
             {
                 control.Items.AddRange(App.Tilesets);
@@ -609,7 +614,11 @@ namespace SharpFlame.Gui.Sections
 
         private static ComboBox TileTypeComboBox()
         {
-            var control = new ComboBox();
+            var control = new ComboBox()
+                {
+                    AutoComplete = true,
+                    ReadOnly = true
+                };
             if(App.TileTypes != null)
             {
                 control.Items.AddRange(App.TileTypes);

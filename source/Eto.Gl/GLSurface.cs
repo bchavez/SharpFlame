@@ -11,6 +11,7 @@ namespace Eto.Gl
     {
         new IHandler Handler { get { return (IHandler)base.Handler; } }
 
+        // interface to the platform implementations
         public new interface IHandler : Control.IHandler
         {
             Size GLSize { get; set; }
@@ -18,13 +19,6 @@ namespace Eto.Gl
 
             void MakeCurrent();
             void SwapBuffers();
-        }
-
-        static readonly object callback = new Callback();
-
-        protected override object GetCallback()
-        {
-            return callback;
         }
 
         public new interface ICallback : Control.ICallback
@@ -45,6 +39,14 @@ namespace Eto.Gl
                 widget.Platform.Invoke( () => widget.OnClick(e) );
             }
         }
+
+        //Gets an instance of an object used to perform callbacks to the widget from handler implementations
+        protected override object GetCallback()
+        {
+            return callback;
+        }
+
+        static readonly object callback = new Callback();
 
         public virtual void OnClick(EventArgs e)
         {

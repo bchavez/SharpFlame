@@ -13,6 +13,7 @@ namespace Eto.Gl.Windows
             c.Initialized += (sender, args) => Widget.OnInitialized(sender, args);
             c.Resize += (sender, args) => Widget.OnResize(sender, args);
             c.ShuttingDown += (sender, args) => Widget.OnShuttingDown(sender, args);
+
             this.Control = c;
 
             base.Initialize();
