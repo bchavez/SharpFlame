@@ -101,14 +101,15 @@
   <ItemGroup>
     <Reference Include="Eto, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Eto.Forms.2.0.1\lib\net40\Eto.dll</HintPath>
+      <HintPath>..\packages\Eto.Forms.2.0.7\lib\net40\Eto.dll</HintPath>
     </Reference>
-    <Reference Include="Eto.Mac">
-      <HintPath>..\packages\Eto.Platform.Mac.2.0.1\lib\net40\Eto.Mac.dll</HintPath>
+    <Reference Include="Eto.Mac, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Eto.Platform.Mac.2.0.7\lib\net40\Eto.Mac.dll</HintPath>
     </Reference>
     <Reference Include="MonoMac, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Eto.Platform.Mac.2.0.1\lib\net40\MonoMac.dll</HintPath>
+      <HintPath>..\packages\Eto.Platform.Mac.2.0.7\lib\net40\MonoMac.dll</HintPath>
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\other\Ninject.Mono\Ninject.dll</HintPath>

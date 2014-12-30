@@ -41,11 +41,13 @@
     <Reference Include="Appccelerate.Fundamentals">
       <HintPath>..\packages\Appccelerate.Fundamentals.1.0.29\lib\Net40\Appccelerate.Fundamentals.dll</HintPath>
     </Reference>
-    <Reference Include="Eto">
-      <HintPath>..\packages\Eto.Forms.2.0.1\lib\net40\Eto.dll</HintPath>
+    <Reference Include="Eto, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Eto.Forms.2.0.7\lib\net40\Eto.dll</HintPath>
     </Reference>
-    <Reference Include="Eto.WinForms">
-      <HintPath>..\packages\Eto.Platform.Windows.2.0.1\lib\net40\Eto.WinForms.dll</HintPath>
+    <Reference Include="Eto.WinForms, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Eto.Platform.Windows.2.0.7\lib\net40\Eto.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
