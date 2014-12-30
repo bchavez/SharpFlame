@@ -180,8 +180,17 @@ namespace SharpFlame.Gui.Sections
             //mainLayout.Add();
 
             this.scrollTextureView.SizeChanged += scrollTextureView_SizeChanged;
+            this.scrollTextureView.Scroll += scrollTextureView_Scroll;
 
             Content = mainLayout;
+        }
+
+        void scrollTextureView_Scroll(object sender, ScrollEventArgs e)
+        {
+            if( uiOptions.Textures.TilesetNum != -1 )
+            {
+                this.DrawTexturesView();
+            }
         }
 
         void scrollTextureView_SizeChanged(object sender, EventArgs e)

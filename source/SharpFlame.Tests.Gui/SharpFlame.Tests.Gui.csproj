@@ -38,19 +38,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Eto.Forms.2.0.7\lib\net40\Eto.dll</HintPath>
     </Reference>
-    <Reference Include="Eto.Mac, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Eto.Platform.Mac.2.0.7\lib\net40\Eto.Mac.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoMac, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Eto.Platform.Mac.2.0.7\lib\net40\MonoMac.dll</HintPath>
+    <Reference Include="Eto.WinForms">
+      <HintPath>..\packages\Eto.Platform.Windows.2.0.7\lib\net40\Eto.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -93,9 +89,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Eto.Gl.Mac\Eto.Gl.Mac.csproj">
-      <Project>{c6d7920e-3fb5-4dad-80f1-2b76158d493f}</Project>
-      <Name>Eto.Gl.Mac</Name>
+    <ProjectReference Include="..\Eto.Gl.Windows\Eto.Gl.Windows.csproj">
+      <Project>{a0dccc13-936c-4d5a-ad8c-adff75816a8f}</Project>
+      <Name>Eto.Gl.Windows</Name>
     </ProjectReference>
     <ProjectReference Include="..\Eto.Gl\Eto.Gl.csproj">
       <Project>{510ce98d-2169-48a0-889c-e743417ee5e1}</Project>

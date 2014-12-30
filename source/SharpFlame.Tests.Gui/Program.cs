@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
-using Eto;
 using Eto.Drawing;
 using Eto.Forms;
 using Eto.Gl;
-using Eto.Gl.Mac;
+using Eto.Gl.Windows;
 using OpenTK;
 using Application = Eto.Forms.Application;
 
@@ -27,9 +26,10 @@ namespace SharpFlame.Tests.Gui
             {
                 Debugger.Break();
             }
+            var gen = Eto.Platform.Detect;
 
-
-            Platform.Instance.Add<GLSurface.IHandler>(() => new MacGLSurfaceHandler());
+            //gen.Add<GLSurface.IHandler>(() => new MacGLSurfaceHandler());
+            gen.Add<GLSurface.IHandler>(() => new WinGLSurfaceHandler());
 
             new Application().Run(new MainForm());
         }
@@ -41,10 +41,22 @@ namespace SharpFlame.Tests.Gui
         {
             this.ClientSize = new Size(1024, 768);
 
+            var leftlayout = new DynamicLayout();
+            leftlayout.BackgroundColor = Color.FromArgb(0, 255, 0);
+
+            var cmdImgButton = new Button()
+                {
+                    Text = "test",
+                };
+
+            leftlayout.Add(cmdImgButton);
+
             var left = new Panel()
                 {
-                    BackgroundColor = Color.FromArgb(255, 0, 0, 0),
+                    BackgroundColor = Color.FromArgb(255, 0, 0),
+                    Content = leftlayout
                 };
+            
 
             var gl = new GLSurface();
 

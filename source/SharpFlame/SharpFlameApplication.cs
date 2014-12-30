@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Drawing;
 using System.Linq;
 using Appccelerate.EventBroker;
-using Appccelerate.EventBroker.Handlers;
 using Eto;
 using Eto.Forms;
 using Eto.Gl;
@@ -13,19 +11,14 @@ using Ninject.Extensions.Logging;
 using OpenTK;
 using SharpFlame.Core;
 using SharpFlame.Generators;
-using SharpFlame.Gui;
 using SharpFlame.Gui.Forms;
-using SharpFlame.Gui.Sections;
 using SharpFlame.Infrastructure;
-using SharpFlame;
 using SharpFlame.Domain.ObjData;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Maths;
 using SharpFlame.Painters;
 using SharpFlame.Settings;
-using SharpFlame.Util;
 using Size = Eto.Drawing.Size;
-using Font = System.Drawing.Font;
 using FontStyle = System.Drawing.FontStyle;
 
 namespace SharpFlame
