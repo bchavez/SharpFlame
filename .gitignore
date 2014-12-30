@@ -1,6 +1,7 @@
 # Custom ignores
 source/SharpFlame/FlaME.xml
 test-results
+source/__COMPILE_OUTPUT/*
 
 # GTK Build files
 NAppUpdate-Feed/Gtk/SharpFlame
