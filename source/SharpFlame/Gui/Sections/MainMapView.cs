@@ -142,7 +142,7 @@ namespace SharpFlame.Gui.Sections
             GLSurface.MouseLeave += viewInfo.HandleMouseLeave;
 
             GLSurface.Initialized += InitalizeGlSurface;
-            GLSurface.Resize += ResizeMapView;
+            GLSurface.SizeChanged += ResizeMapView;
 
             keyboardManager.KeyDown += HandleKeyDown;
 

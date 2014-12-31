@@ -9,9 +9,10 @@ namespace Eto.Gl
     [Handler(typeof(GLSurface.IHandler))]
     public class GLSurface : Control
     {
-        new IHandler Handler { get { return (IHandler)base.Handler; } }
+        private new IHandler Handler{get{return (IHandler)base.Handler;}}
 
         // interface to the platform implementations
+        // ETO WIDGET -> Platform Control
         public new interface IHandler : Control.IHandler
         {
             Size GLSize { get; set; }
@@ -24,9 +25,10 @@ namespace Eto.Gl
         public new interface ICallback : Control.ICallback
         {
             void OnInitialized(GLSurface w, EventArgs e);
-            void OnClick(GLSurface widget, EventArgs e);
+            void OnShuttingDown(GLSurface w, EventArgs e);
         }
 
+        //PLATFORM CONTROL -> ETO WIDGET
         protected new class Callback : Control.Callback, ICallback
         {
             public void OnInitialized(GLSurface w, EventArgs e)
@@ -34,9 +36,9 @@ namespace Eto.Gl
                 w.Platform.Invoke(() => w.OnInitialized(w, e));
             }
 
-            public void OnClick(GLSurface widget, EventArgs e)
+            public void OnShuttingDown(GLSurface w, EventArgs e)
             {
-                widget.Platform.Invoke( () => widget.OnClick(e) );
+                w.Platform.Invoke(() => w.OnShuttingDown(w, e));
             }
         }
 
@@ -69,13 +71,6 @@ namespace Eto.Gl
         public virtual void OnInitialized(object obj, EventArgs e) 
         {
             Initialized (obj, e);
-        }
-
-        public event EventHandler Resize = delegate {};
-
-        public virtual void OnResize(object obj, EventArgs e) 
-        {
-            Resize (obj, e);
         }
 
         public event EventHandler ShuttingDown = delegate {};

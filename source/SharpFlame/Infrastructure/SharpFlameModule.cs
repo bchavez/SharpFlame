@@ -27,12 +27,20 @@ namespace SharpFlame.Infrastructure
             this.Bind<GLSurface>()
                 .ToSelf()
                 .InSingletonScope()
-                .Named(NamedBinding.MapView);
+                .Named(NamedBinding.MapView)
+                .OnActivation((x) =>
+                    {
+                        x.Tag = NamedBinding.MapView;
+                    });
 
             this.Bind<GLSurface>()
                 .ToSelf()
                 .InSingletonScope()
-                .Named(NamedBinding.TextureView);
+                .Named(NamedBinding.TextureView)
+                .OnActivation(x =>
+                    {
+                        x.Tag = NamedBinding.TextureView;
+                    });
 
             this.Bind<SharpFlameApplication>()
                 .ToSelf()

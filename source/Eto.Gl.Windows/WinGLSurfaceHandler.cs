@@ -8,16 +8,23 @@ namespace Eto.Gl.Windows
     {
         protected override void Initialize()
         {
-
             var c = new WinGLUserControl();
-            c.Initialized += (sender, args) => Widget.OnInitialized(sender, args);
-            c.Resize += (sender, args) => Widget.OnResize(sender, args);
-            c.ShuttingDown += (sender, args) => Widget.OnShuttingDown(sender, args);
+            c.Initialized += (sender, args) =>
+                {
+                    this.Callback.OnInitialized(Widget, args);
+                };
+            c.Resize += (sender, args) =>
+                {
+                    this.Callback.OnSizeChanged(Widget, args);
+                };
+            c.ShuttingDown += (sender, args) =>
+                {
+                    this.Callback.OnShuttingDown(Widget, args);
+                };
 
             this.Control = c;
 
             base.Initialize();
-
         }
 
         public Size GLSize
