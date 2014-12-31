@@ -152,6 +152,10 @@
     <Compile Include="Domain\ObjData\Definitions.cs" />
     <Compile Include="Generators\clsBrush.cs" />
     <Compile Include="Domain\ComponentBase.cs" />
+    <Compile Include="Gui\Actions\CompileMap.cs" />
+    <Compile Include="Gui\Dialogs\CompileMap.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
     <Compile Include="Mapping\Changes\clsAutoTextureChanges.cs" />
     <Compile Include="Mapping\Changes\clsMapTileChanges.cs" />
     <Compile Include="Mapping\Changes\clsPointChanges.cs" />

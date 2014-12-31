@@ -15,57 +15,57 @@ namespace SharpFlame.Gui.Dialogs
 
 			var layout = new DynamicLayout(new Padding(20, 5), new Size(10, 10));
 
-			layout.AddCentered(new ImageView
-			{
-				Image = Resources.SharpFlameIcon()
-			}, true, true);
-			
-			layout.Add(new Label
-			{
-				Text = Constants.ProgramName,
-				Font = new Font(SystemFont.Bold, 20),
-				HorizontalAlign = HorizontalAlign.Center
-			});
+		    layout.AddCentered(new ImageView
+		        {
+		            Image = Resources.SharpFlameIcon()
+		        }, true, true);
 
-			layout.Add(new Label
-			{
-				Text = string.Format("Version {0}", Constants.ProgramVersion()),
-				Font = new Font(SystemFont.Default, 10),
-				HorizontalAlign = HorizontalAlign.Center
-			});
+		    layout.Add(new Label
+		        {
+		            Text = Constants.ProgramName,
+		            Font = new Font(SystemFont.Bold, 20),
+		            HorizontalAlign = HorizontalAlign.Center
+		        });
 
-			layout.Add(new Label
-			           {
-				Text = "Copyright 2013 by Flail13",
-				Font = new Font(SystemFont.Default, 10),
-				HorizontalAlign = HorizontalAlign.Center
-			});
+		    layout.Add(new Label
+		        {
+		            Text = string.Format("Version {0}", Constants.ProgramVersion()),
+		            Font = new Font(SystemFont.Default, 10),
+		            HorizontalAlign = HorizontalAlign.Center
+		        });
 
-			
-			layout.Add(new Label
-			{
-				Text = "Copyright 2014 by Cowboy, pcdummy and jorzi",
-				Font = new Font(SystemFont.Default, 10),
-				HorizontalAlign = HorizontalAlign.Center
-			});
+		    layout.Add(new Label
+		        {
+		            Text = "Copyright 2013 by Flail13",
+		            Font = new Font(SystemFont.Default, 10),
+		            HorizontalAlign = HorizontalAlign.Center
+		        });
+
+
+		    layout.Add(new Label
+		        {
+		            Text = "Copyright 2014 by Cowboy, pcdummy and jorzi",
+		            Font = new Font(SystemFont.Default, 10),
+		            HorizontalAlign = HorizontalAlign.Center
+		        });
 
 			layout.AddCentered(CloseButton());
 
-			Content = layout;
+			this.Content = layout;
 		}
 
-		Control CloseButton()
+		private Control CloseButton()
 		{
-			var button = new Button
-			{
-				Text = "Close"
-			};
+		    var button = new Button
+		        {
+		            Text = "Close"
+		        };
 			DefaultButton = button;
 			AbortButton = button;
-			button.Click += delegate
-			{
-				Close();
-			};
+		    button.Click += delegate
+		        {
+		            this.Close();
+		        };
 			return button;
 		}
 	}

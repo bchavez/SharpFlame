@@ -42,7 +42,7 @@ namespace SharpFlame.Gui.Sections
 
         private RadioButtonList rblTerrainModifier;
 
-        private ComboBox cbTileset;
+        private DropDown cbTileset;
         private ComboBox cbTileType;
 
         private Scrollable scrollTextureView;
@@ -597,13 +597,14 @@ namespace SharpFlame.Gui.Sections
             this.GLSurface.SwapBuffers();
         }
 
-        private static ComboBox TextureComboBox()
+        private static DropDown TextureComboBox()
         {
-            var control = new ComboBox
-                {
-                    AutoComplete = true,
-                    ReadOnly = true,
-                };
+            //var control = new ComboBox
+            //    {
+            //        AutoComplete = true,
+            //        ReadOnly = true,
+            //    };
+            var control = new DropDown();
 
             if( App.Tilesets != null )
             {
