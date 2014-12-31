@@ -477,7 +477,7 @@ namespace SharpFlame
                     }
                 }
 
-                if ( bestPos.X == double.NaN )
+                if ( double.IsNaN(bestPos.X) )
                 {
                     return false;
                 }
