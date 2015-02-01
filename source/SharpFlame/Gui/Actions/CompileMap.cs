@@ -3,9 +3,9 @@ using Eto.Forms;
 
 namespace SharpFlame.Gui.Actions
 {
-    public class CompileMap : Command
+    public class CompileMapCommand : Command
     {
-        public CompileMap()
+        public CompileMapCommand()
         {
             ID = "compile";
             MenuText = "&Compile Map ...";
@@ -18,8 +18,9 @@ namespace SharpFlame.Gui.Actions
         {
             base.OnExecuted(e);
 
-            var compileMap = new Dialogs.CompileMap();
-            compileMap.ShowModal(Application.Instance.MainForm);
+            var compileMap = new Dialogs.CompileMapDialog();
+            var options = compileMap.ShowModal();
+
         }
     }
 }

@@ -1,92 +1,255 @@
-﻿using Eto.Drawing;
+﻿using System.ComponentModel;
+using Eto.Drawing;
 using Eto.Forms;
+using FluentValidation;
+using Omu.ValueInjecter;
+using SharpFlame.Core;
+using SharpFlame.Util;
 
 namespace SharpFlame.Gui.Dialogs
 {
-    public class CompileMap : Dialog
+
+    public class ControlToModel : KnownSourceValueInjection<Form>
     {
-        public class Model
+        protected override void Inject(Form source, object target)
         {
-            public string MapName { get; set; }
-            public string NumPlayers { get; set; }
-            public string Author { get; set; }
-            public string License { get; set; }
-
-            public string SetScrollLimits { get; set; }
-            public string ScrollMinX { get; set; }
-            public string ScrollMaxX { get; set; }
-            public string ScrollMinY { get; set; }
-            public string ScrollMaxY { get; set; }
+            
         }
+    }
 
-        public CompileMap()
+    public class CompileMapDialog : Dialog<CompileOptions>
+    {
+        public CompileMapDialog()
         {
             this.Title = "Compile Map";
-            this.Resizable = false;
+            //this.Resizable = false;
 
-            this.DataContext = new Model();
+            this.DataContext = new CompileOptions();
 
-            BuildTabPages();
-            
+            CompileTypeTabPages();
+
             var layout = new TableLayout()
                 {
-                    Padding = new Padding(10),
-                    Spacing = new Size(5, 5),
                     Rows =
                         {
-                            new TableRow(new Label{Text = "Map Name:"}, null),
-
+                            new TableRow(TableLayout.Horizontal(new Label {Text = "Map Name:"}, TableLayout.AutoSized( MapNameTextBox()))),
+                            new TableRow(CompileTypeTabPages()),
+                            new TableRow(SetScrollLimitsAutomaticallyCheckBox()),
+                            new TableRow(ScrollLimitsGroupBox()),
+                            new TableRow(TableLayout.AutoSized( CompileButton()))
                         }
                 };
             
+            this.Content = layout;
         }
 
-
-        private TextBox MapNameBinding()
+        void cmdCompile_Click(object sender, System.EventArgs e)
         {
-            var txt = new TextBox();
-            txt.TextBinding.BindDataContext<Model>(m => m.MapName);
-            return txt;
+            
         }
 
-        private TextBox ScrollMinXBinding()
+        private Button CompileButton()
         {
-            var txt = new TextBox();
-            txt.TextBinding.BindDataContext<Model>(m => m.ScrollMinX);
-            return txt;
-        }
-        private TextBox ScrollMinYBinding()
-        {
-            var txt = new TextBox();
-            txt.TextBinding.BindDataContext<Model>(m => m.ScrollMinY);
-            return txt;
-        }
-
-
-        private void BuildTabPages()
-        {
-            new TabControl()
+            var cmdCompile = new Button()
                 {
-                    Pages =
+                    Text = "Compile"
+                };
+            cmdCompile.Click += this.cmdCompile_Click;
+            return cmdCompile;
+        }
+
+        private TextBox MapNameTextBox()
+        {
+            return new TextBox()
+                {
+                    ID = this.BindId(x => x.MapName)
+                };
+        }
+
+        private TextBox ScrollMinXTextBox()
+        {
+            return new TextBox()
+                {
+                    ID = this.BindId(x => x.ScrollMinX)
+                };
+        }
+        private TextBox ScrollMinYTextBox()
+        {
+            return new TextBox()
+                {
+                    ID = this.BindId(x => x.ScrollMinY)
+                };
+        }
+        private TextBox ScrollMaxYTextBox()
+        {
+            return new TextBox()
+                {
+                    ID = this.BindId(x => x.ScrollMaxY)
+                };
+        }
+        private TextBox ScrollMaxXTextBox()
+        {
+            return new TextBox()
+                {
+                    ID = this.BindId(x => x.ScrollMaxX)
+                };
+        }
+
+        private NumericUpDown PlayersNumericBox()
+        {
+            return new NumericUpDown()
+                {
+                    ID = this.BindId(x => x.NumPlayers),
+                    Width = 50,
+                    MaxValue = Constants.PlayerCountMax,
+                    MinValue = 2
+                };
+        }
+        private TextBox AuthorTextBox()
+        {
+            return new TextBox()
+                {
+                    ID = this.BindId(x => x.Author)
+                };
+        }
+        private ComboBox LicenseComboBox()
+        {
+            return new ComboBox()
+                {
+                    ID = this.BindId(x => x.ScrollMaxX),
+                    Items =
                         {
-                            new TabPage
+                            "GPL 2+",
+                            "CC BY 3.0 + GPL v2+",
+                            "CC BY-SA 3.0 + GPL v2+",
+                            "CC0"
+                        }
+                };
+        }
+
+        
+        private CheckBox SetScrollLimitsAutomaticallyCheckBox()
+        {
+            return new CheckBox()
+                {
+                    ID = this.BindId(x => x.SetScrollLimits),
+                    Text = "Set Scroll Limits Automatically"
+                };
+        }
+
+        private GroupBox ScrollLimitsGroupBox()
+        {
+            return new GroupBox()
+                {
+                    Text = "Scroll Limits",
+                    Content = new TableLayout()
+                        {
+                            Rows =
                                 {
-                                    Text = "Multiplayer",
-                                    Content = new TableLayout()
-                                        {
-                                            Rows =
-                                                {
-                                                    new TableRow()
-                                                }
-                                        }
-                                },
-                            new TabPage
-                                {
-                                    Text = "Campaign"
+                                    new TableRow(null, new Label {Text = "X:"}, new Label {Text = "Y:"}),
+                                    new TableRow(new Label {Text = "Minimum:"}, TableLayout.AutoSized(ScrollMinXTextBox()), TableLayout.AutoSized(ScrollMinYTextBox())),
+                                    new TableRow(new Label {Text = "Maximum:"}, TableLayout.AutoSized(ScrollMaxXTextBox()), TableLayout.AutoSized(ScrollMaxYTextBox())),
                                 }
                         }
                 };
         }
 
+
+        private EnumDropDown<CampaignType> CampaignTypeDropDown()
+        {
+            return new EnumDropDown<CampaignType>()
+                {
+                };
+        }
+
+        private TabPage MultiplayerTabPage()
+        {
+            return new TabPage
+                {
+                    Text = "Multiplayer",
+                    Content = new TableLayout()
+                        {
+                            Rows =
+                                {
+                                    new TableRow(new Label{Text = "Players:"}, TableLayout.AutoSized( PlayersNumericBox() )),
+                                    new TableRow(new Label{Text = "Author:"}, TableLayout.AutoSized(AuthorTextBox())),
+                                    new TableRow(new Label{Text = "License:"}, TableLayout.AutoSized( LicenseComboBox())),
+                                }
+                        }
+                };
+        }
+
+        private TabPage CampaignTabPage()
+        {
+            return new TabPage()
+                {
+                    Text = "Campaign",
+                    Content = new TableLayout()
+                        {
+                            Rows =
+                                {
+                                    new TableRow(new Label{Text = "Type:"}, CampaignTypeDropDown() ),
+                                }
+                        }
+                };
+        }
+
+        private TabControl CompileTypeTabPages()
+        {
+            return new TabControl()
+                {
+                    Pages =
+                        {
+                            MultiplayerTabPage(),
+                            CampaignTabPage()
+                        }
+                };
+        }
+
+    }
+
+    public class CompileOptions
+    {
+        public string MapName { get; set; }
+        public int NumPlayers { get; set; }
+        public string Author { get; set; }
+        public string License { get; set; }
+
+        public bool SetScrollLimits { get; set; }
+        public int ScrollMinX { get; set; }
+        public int ScrollMaxX { get; set; }
+        public int ScrollMinY { get; set; }
+        public int ScrollMaxY { get; set; }
+    }
+
+    public enum CampaignType
+    {
+        [Description("Initial scenario state")]
+        Initial = 0,
+        [Description("Scenario scroll area expansion")]
+        Scroll,
+        [Description("Stand alone mission")]
+        StandAlone
+    }
+
+    public class CompileMapConfigValidator : AbstractValidator<CompileOptions>
+    {
+        public CompileMapConfigValidator()
+        {
+            RuleFor(x => x.MapName)
+                .NotEmpty();
+            RuleFor(x => x.NumPlayers)
+                .GreaterThanOrEqualTo(2);
+            RuleFor(x => x.ScrollMaxX)
+                .GreaterThanOrEqualTo(0);
+            RuleFor(x => x.ScrollMaxY)
+                .GreaterThanOrEqualTo(0);
+            RuleFor(x => x.ScrollMinX)
+                .GreaterThanOrEqualTo(0);
+            RuleFor(x => x.ScrollMinY)
+                .GreaterThanOrEqualTo(0);
+            RuleFor(x => x.License)
+                .NotEmpty();
+        }
     }
 }

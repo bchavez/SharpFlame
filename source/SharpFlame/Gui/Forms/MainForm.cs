@@ -8,6 +8,7 @@ using Ninject;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Extensions;
+using SharpFlame.Gui.Actions;
 using SharpFlame.Gui.Sections;
 using SharpFlame.Mapping;
 using SharpFlame.Settings;
@@ -160,7 +161,7 @@ namespace SharpFlame.Gui.Forms
 
 			file.Items.GetSubmenu ("&Import", 400);
 			file.Items.AddSeparator ();
-			file.Items.GetSubmenu ("&Compile Map", 500);
+	        file.Items.Add(new CompileMapCommand(), 500);
 			file.Items.AddSeparator ();
 			file.Items.Add(quit);
 
