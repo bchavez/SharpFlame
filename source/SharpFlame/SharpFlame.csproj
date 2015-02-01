@@ -144,9 +144,6 @@
     <Reference Include="Ninject.Extensions.Logging.NLog2">
       <HintPath>..\packages\Ninject.Extensions.Logging.nlog2.3.0.1.0\lib\net40\Ninject.Extensions.Logging.NLog2.dll</HintPath>
     </Reference>
-    <Reference Include="NAppUpdate.Framework">
-      <HintPath>..\packages\NAppUpdate-0.1.4.0\net40\NAppUpdate.Framework.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

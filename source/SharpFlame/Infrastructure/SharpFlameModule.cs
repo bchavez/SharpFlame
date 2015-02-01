@@ -67,9 +67,9 @@ namespace SharpFlame.Infrastructure
                 .ToSelf()
                 .InSingletonScope();
 
-            this.Bind<Updater>()
+            /*this.Bind<Updater>()
                 .ToSelf()
-                .InSingletonScope();
+                .InSingletonScope();*/
                 
             #if DEBUG
             // This is here to keep a reference of it.

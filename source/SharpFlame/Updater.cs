@@ -3,15 +3,11 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Eto;
-using Ninject;
 using Ninject.Extensions.Logging;
-using NAppUpdate.Framework;
-using NAppUpdate.Framework.Common;
-using NAppUpdate.Framework.Sources;
 
 namespace SharpFlame
 {
-    public class Updater
+    /*public class Updater
     {
         private ILogger logger;
         private UpdateManager updManager;
@@ -130,5 +126,5 @@ namespace SharpFlame
         {
             logger.Debug("UpdateManager.Instance.State: {0}", UpdateManager.Instance.State);
         }
-    }
+    }*/
 }

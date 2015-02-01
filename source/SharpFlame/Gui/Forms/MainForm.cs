@@ -99,7 +99,7 @@ namespace SharpFlame.Gui.Forms
 	        GenerateMenuToolBar();
 	        Maximize();
 
-            if (Settings.UpdateOnStartup) 
+            /*if (Settings.UpdateOnStartup) 
             { 
                 var updater = App.Kernel.Get<Updater> ();
                 updater.CheckForUpdatesAsync ().ThenOnUI(updatesAvailable => {
@@ -120,7 +120,7 @@ namespace SharpFlame.Gui.Forms
                         }
                     }
                 });
-            }
+            }*/
         }
 
         void MainForm_Closing(object sender, System.ComponentModel.CancelEventArgs e)
