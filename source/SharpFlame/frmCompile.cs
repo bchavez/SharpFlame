@@ -593,14 +593,14 @@ namespace SharpFlame
         {
             var ReturnResult = new Result("Compile campaign", false);
             logger.Info("Compile campaign");
-            var A = 0;
+            var waterTileErrors = 0;
 
             SaveToMap();
 
-            A = ValidateMap_WaterTris();
-            if ( A > 0 )
+            waterTileErrors = ValidateMap_WaterTris();
+            if ( waterTileErrors > 0 )
             {
-                ReturnResult.WarningAdd(A + " water tiles have an incorrect triangle direction. There might be in-game graphical glitches on those tiles.");
+                ReturnResult.WarningAdd(waterTileErrors + " water tiles have an incorrect triangle direction. There might be in-game graphical glitches on those tiles.");
             }
 
             ReturnResult.Add(ValidateMap());

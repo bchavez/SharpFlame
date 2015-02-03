@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<eto:Dialog
+	   xmlns="http://schema.picoe.ca/eto.forms" 
+	   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+       xmlns:eto="clr-namespace:Eto.Forms;assembly=Eto"
+       xmlns:s="clr-namespace:SharpFlame.Gui.Controls;assembly=SharpFlame"
+       Title="Compile Map">
+
+    <eto:TableLayout>
+        <eto:TableRow>
+            <eto:TableCell>
+                <eto:TableLayout>
+                    <eto:TableRow>
+                        <eto:TableCell>
+                            <eto:Label Text="Map Name:"/>
+                        </eto:TableCell>
+                        <eto:TableCell>
+                            <eto:TableLayout>
+                                <eto:TableRow>
+                                    <eto:TableCell>
+                                        <eto:TextBox Width="100" ID="txtMapName" />
+                                    </eto:TableCell>
+                                    <eto:TableCell></eto:TableCell>
+                                </eto:TableRow>
+                                <eto:TableRow>
+                                    <eto:TableCell></eto:TableCell>
+                                    <eto:TableCell></eto:TableCell>
+                                </eto:TableRow>
+                            </eto:TableLayout>
+                        </eto:TableCell>
+                    </eto:TableRow>
+                </eto:TableLayout>
+            </eto:TableCell>
+        </eto:TableRow>
+        <eto:TableRow>
+            <eto:TableCell>
+                <eto:TabControl ID="tabCompileType">
+                    <eto:TabPage Text="Multiplayer">
+                        <eto:TableLayout>
+                            <eto:TableRow>
+                                <eto:TableCell>
+                                    <eto:Label Text="Players:" />
+                                </eto:TableCell>
+                                <eto:TableCell>
+                                    <eto:TableLayout>
+                                        <eto:TableRow>
+                                            <eto:TableCell>
+                                                <eto:NumericUpDown ID="numPlayers" />
+                                            </eto:TableCell>
+                                            <eto:TableCell></eto:TableCell>
+                                        </eto:TableRow>
+                                        <eto:TableRow>
+                                            <eto:TableCell></eto:TableCell>
+                                            <eto:TableCell></eto:TableCell>
+                                        </eto:TableRow>
+                                    </eto:TableLayout>
+                                </eto:TableCell>
+                            </eto:TableRow>
+                            <eto:TableRow>
+                                <eto:TableCell>
+                                    <eto:Label Text="Author:" />
+                                </eto:TableCell>
+                                <eto:TableCell>
+                                    <eto:TableLayout>
+                                        <eto:TableRow>
+                                            <eto:TableCell>
+                                                <eto:TextBox ID="txtAuthor" />
+                                            </eto:TableCell>
+                                            <eto:TableCell></eto:TableCell>
+                                        </eto:TableRow>
+                                        <eto:TableRow>
+                                            <eto:TableCell></eto:TableCell>
+                                            <eto:TableCell></eto:TableCell>
+                                        </eto:TableRow>
+                                    </eto:TableLayout>
+                                </eto:TableCell>
+                            </eto:TableRow>
+                            <eto:TableRow>
+                                <eto:TableCell>
+                                    <eto:Label Text="License:" />
+                                </eto:TableCell>
+                                <eto:TableCell>
+                                    <eto:TableLayout>
+                                        <eto:TableRow>
+                                            <eto:TableCell>
+                                                <eto:ComboBox ID="cboLicense">
+                                                    <eto:ListItem Text="GPL 2+" />
+                                                    <eto:ListItem Text="CC BY 3.0 + GPL v2+" />
+                                                    <eto:ListItem Text="CC BY-SA 3.0 + GPL v2+" />
+                                                    <eto:ListItem Text="CC0" />
+                                                </eto:ComboBox>
+                                            </eto:TableCell>
+                                            <eto:TableCell></eto:TableCell>
+                                        </eto:TableRow>
+                                        <eto:TableRow>
+                                            <eto:TableCell></eto:TableCell>
+                                            <eto:TableCell></eto:TableCell>
+                                        </eto:TableRow>
+                                    </eto:TableLayout>
+                                </eto:TableCell>
+                            </eto:TableRow>
+                        </eto:TableLayout>
+                    </eto:TabPage>
+                    <eto:TabPage Text="Campaign">
+                        <eto:TableLayout>
+                            <eto:TableRow>
+                                <eto:TableCell>
+                                    <eto:Label Text="Type:" />
+                                </eto:TableCell>
+                                <eto:TableCell>
+                                    <eto:TableLayout>
+                                        <eto:TableRow>
+                                            <eto:TableCell>
+                                                <s:CampaignDropDown ID="ddlCampType" />
+                                            </eto:TableCell>
+                                            <eto:TableCell></eto:TableCell>
+                                        </eto:TableRow>
+                                        <eto:TableRow>
+                                            <eto:TableCell></eto:TableCell>
+                                            <eto:TableCell></eto:TableCell>
+                                        </eto:TableRow>
+                                    </eto:TableLayout>
+                                </eto:TableCell>
+                            </eto:TableRow>
+                        </eto:TableLayout>
+                    </eto:TabPage>
+                </eto:TabControl>
+            </eto:TableCell>
+        </eto:TableRow>
+        <eto:TableRow>
+            <eto:TableCell>
+                <eto:CheckBox Text="Set Scroll Limits Automatically" ID="chkAutoScrollLimits"/>
+            </eto:TableCell>
+        </eto:TableRow>
+        <eto:TableRow>
+            <eto:TableCell>
+                <eto:GroupBox Text="Scroll Limits" ID="grpLimits">
+                    <eto:TableLayout>
+                        <eto:TableRow>
+                            <eto:TableCell />
+                            <eto:TableCell>
+                                <eto:Label Text="X:"/>
+                            </eto:TableCell>
+                            <eto:TableCell>
+                                <eto:Label Text="Y:"/>
+                            </eto:TableCell>
+                        </eto:TableRow>
+                        <eto:TableRow>
+                            <eto:TableCell>
+                                <eto:Label Text="Minimum:"/>
+                            </eto:TableCell>
+                            <eto:TableCell>
+                                <eto:NumericUpDown ID="numScrollMinX"/>
+                            </eto:TableCell>
+                            <eto:TableCell>
+                                <eto:NumericUpDown ID="numScrollMinY" />
+                            </eto:TableCell>
+                        </eto:TableRow>
+                        <eto:TableRow>
+                            <eto:TableCell>
+                                <eto:Label Text="Maximum:"/>
+                            </eto:TableCell>
+                            <eto:TableCell>
+                                <eto:NumericUpDown ID="numScrollMaxX" />
+                            </eto:TableCell>
+                            <eto:TableCell>
+                                <eto:NumericUpDown ID="numScrollMaxY" />
+                            </eto:TableCell>
+                        </eto:TableRow>
+                    </eto:TableLayout>
+                </eto:GroupBox>
+            </eto:TableCell>
+        </eto:TableRow>
+        <eto:TableRow>
+            <eto:TableCell>
+                <eto:TableLayout>
+                    <eto:TableRow>
+                        <eto:TableCell>
+                            <eto:Button Text="Compile" Click="cmdCompile_Click" />
+                        </eto:TableCell>
+                        <eto:TableCell></eto:TableCell>
+                    </eto:TableRow>
+                    <eto:TableRow>
+                        <eto:TableCell></eto:TableCell>
+                        <eto:TableCell></eto:TableCell>
+                    </eto:TableRow>
+                </eto:TableLayout>
+            </eto:TableCell>
+        </eto:TableRow>
+    </eto:TableLayout>
+</eto:Dialog>

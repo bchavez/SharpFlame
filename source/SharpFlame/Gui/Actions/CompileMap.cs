@@ -1,5 +1,7 @@
 using System;
 using Eto.Forms;
+using SharpFlame.Gui.Dialogs;
+using SharpFlame.Mapping;
 
 namespace SharpFlame.Gui.Actions
 {
@@ -20,7 +22,24 @@ namespace SharpFlame.Gui.Actions
 
             var compileMap = new Dialogs.CompileMapDialog();
             var options = compileMap.ShowModal();
+            if( options.CompileType == CompileType.Campaign )
+            {
+                CompileCampaign(options);
+            }
+            else
+            {
+                CompileMultiPlayer(options);
+            }
+        }
 
+        private void CompileMultiPlayer(CompileOptions options)
+        {
+            
+        }
+
+        private void CompileCampaign(CompileOptions options)
+        {
+            
         }
     }
 }

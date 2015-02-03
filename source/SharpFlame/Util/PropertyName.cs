@@ -48,5 +48,10 @@ namespace SharpFlame.Util
         {
             return PropertyName.For<T>(expression);
         }
+
+        public static void Bind<T>(this Dialog<T> dialog)
+        {
+            
+        }
     }
 }

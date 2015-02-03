@@ -97,11 +97,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Eto.Forms.2.0.7\lib\net40\Eto.dll</HintPath>
     </Reference>
+    <Reference Include="Eto.Serialization.Xaml">
+      <HintPath>..\packages\Eto.Serialization.Xaml.2.0.7\lib\net40\Eto.Serialization.Xaml.dll</HintPath>
+    </Reference>
     <Reference Include="FluentValidation, Version=5.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentValidation.5.5.0.0\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
@@ -110,9 +117,6 @@
     </Reference>
     <Reference Include="Ninject.Extensions.NamedScope">
       <HintPath>..\packages\Ninject.Extensions.NamedScope.3.0.0.5\lib\net40\Ninject.Extensions.NamedScope.dll</HintPath>
-    </Reference>
-    <Reference Include="Omu.ValueInjecter">
-      <HintPath>..\packages\valueinjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
@@ -124,6 +128,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="Ionic.Zip.Reduced">
       <HintPath>..\packages\DotNetZipLib.1.9\zip-v1.9-Reduced\Release\Ionic.Zip.Reduced.dll</HintPath>
@@ -132,9 +137,6 @@
       <HintPath>..\packages\Sprache.1.10.0.35\lib\net40\Sprache.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
     </Reference>
@@ -144,8 +146,18 @@
     <Reference Include="Ninject.Extensions.Logging.NLog2">
       <HintPath>..\packages\Ninject.Extensions.Logging.nlog2.3.0.1.0\lib\net40\Ninject.Extensions.Logging.NLog2.dll</HintPath>
     </Reference>
+    <Reference Include="Z.ExtensionMethods.WithNamespace">
+      <HintPath>..\packages\Z.ExtensionMethods.WithNamespace.1.3.0.0\lib\Z.ExtensionMethods.WithNamespace.dll</HintPath>
+    </Reference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Page Include="Gui\Dialogs\CompileMapDialog.xaml" Condition="false">
+      <SubType>Designer</SubType>
+    </Page>
+    <EmbeddedResource Include="Gui\Dialogs\CompileMapDialog.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharpFlame.Core\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
@@ -157,7 +169,14 @@
     <Compile Include="Generators\clsBrush.cs" />
     <Compile Include="Domain\ComponentBase.cs" />
     <Compile Include="Gui\Actions\CompileMap.cs" />
-    <Compile Include="Gui\Dialogs\CompileMap.cs">
+    <Compile Include="Gui\Controls\CampaignDropDown.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Gui\Dialogs\CompileMap.cs" />
+    <Compile Include="Gui\Dialogs\CompileMapDialog.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Gui\Dialogs\Dialog2.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Mapping\Changes\clsAutoTextureChanges.cs" />
@@ -588,6 +607,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="flaME.ico" />
+    <Content Include="License.txt" />
     <None Include="Resources\objectsselect.png" />
     <None Include="Resources\notile.png" />
     <None Include="Resources\gateways.png" />

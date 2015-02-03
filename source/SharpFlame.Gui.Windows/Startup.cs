@@ -12,6 +12,8 @@ namespace SharpFlame.Gui.Windows
         [STAThread]
         static void Main(string[] args)
         {
+            System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(true);
+
             var generator = Eto.Platform.Detect;
 
             generator.Add<GLSurface.IHandler>(() => new WinGLSurfaceHandler());
