@@ -35,8 +35,8 @@
         </eto:TableRow>
         <eto:TableRow>
             <eto:TableCell>
-                <eto:TabControl ID="tabCompileType">
-                    <eto:TabPage Text="Multiplayer">
+                <eto:TabControl ID="tabCompile">
+                    <eto:TabPage ID="tabMulti" Text="Multiplayer">
                         <eto:TableLayout>
                             <eto:TableRow>
                                 <eto:TableCell>
@@ -46,7 +46,7 @@
                                     <eto:TableLayout>
                                         <eto:TableRow>
                                             <eto:TableCell>
-                                                <eto:NumericUpDown ID="numPlayers" />
+                                                <eto:NumericUpDown ID="numPlayers" MinValue="2" />
                                             </eto:TableCell>
                                             <eto:TableCell></eto:TableCell>
                                         </eto:TableRow>
@@ -162,10 +162,10 @@
                                 <eto:Label Text="Maximum:"/>
                             </eto:TableCell>
                             <eto:TableCell>
-                                <eto:NumericUpDown ID="numScrollMaxX" />
+                                <eto:NumericUpDown ID="numScrollMaxX" MinValue="0" />
                             </eto:TableCell>
                             <eto:TableCell>
-                                <eto:NumericUpDown ID="numScrollMaxY" />
+                                <eto:NumericUpDown ID="numScrollMaxY" MinValue="0" />
                             </eto:TableCell>
                         </eto:TableRow>
                     </eto:TableLayout>

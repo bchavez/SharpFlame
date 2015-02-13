@@ -163,16 +163,19 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Collections\Specialized\BooleanMap.cs" />
+    <Compile Include="Domain\CampaignType.cs" />
+    <Compile Include="Domain\CompileType.cs" />
+    <Compile Include="Domain\InterfaceOptions.cs" />
+    <Compile Include="Domain\InterfaceOptionsValidator.cs" />
     <Compile Include="Domain\ObjData\clsTextFile.cs" />
     <Compile Include="Domain\Definitions.cs" />
     <Compile Include="Domain\ObjData\Definitions.cs" />
     <Compile Include="Generators\clsBrush.cs" />
     <Compile Include="Domain\ComponentBase.cs" />
-    <Compile Include="Gui\Actions\CompileMap.cs" />
+    <Compile Include="Gui\Actions\CompileMapCommand.cs" />
     <Compile Include="Gui\Controls\CampaignDropDown.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Gui\Dialogs\CompileMap.cs" />
     <Compile Include="Gui\Dialogs\CompileMapDialog.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
@@ -337,12 +340,6 @@
     <Compile Include="frmClose.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmCompile.Designer.cs">
-      <DependentUpon>frmCompile.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmCompile.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="frmGenerator.Designer.cs">
       <DependentUpon>frmGenerator.cs</DependentUpon>
     </Compile>
@@ -420,7 +417,6 @@
     <Compile Include="Mapping\AutoSave.cs" />
     <Compile Include="Mapping\Gateway.cs" />
     <Compile Include="Mapping\GatewayChange.cs" />
-    <Compile Include="Mapping\InterfaceOptions.cs" />
     <Compile Include="Mapping\Map.cs" />
     <Compile Include="Mapping\Message.cs" />
     <Compile Include="Mapping\PathInfo.cs" />
@@ -534,9 +530,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmClose.resx">
       <DependentUpon>frmClose.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmCompile.resx">
-      <DependentUpon>frmCompile.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmGenerator.resx">
       <DependentUpon>frmGenerator.cs</DependentUpon>
@@ -691,7 +684,6 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
-  <ItemGroup />
   <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\SharpFlame.Core\SharpFlame.Core.csproj">

@@ -1,7 +1,9 @@
 
 
 using System;
+using SharpFlame.Domain;
 using SharpFlame.FileIO;
+using SharpFlame.Gui.Dialogs;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Core.Domain;
 

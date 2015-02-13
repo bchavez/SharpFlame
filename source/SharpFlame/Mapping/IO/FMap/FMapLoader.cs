@@ -10,6 +10,7 @@ using Ninject;
 using Ninject.Extensions.Logging;
 using SharpFlame.Core.Extensions;
 using SharpFlame.FileIO;
+using SharpFlame.Gui.Dialogs;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tiles;
@@ -329,7 +330,7 @@ namespace SharpFlame.Mapping.IO.FMap
                             // ignore
                             break;
                         case "camptype":
-                            resultInfo.InterfaceOptions.CampaignGameType = int.Parse(iniToken.Data);
+                            resultInfo.InterfaceOptions.CampaignGameType = (CampaignType)int.Parse(iniToken.Data);
                             break;
                         }
                     }

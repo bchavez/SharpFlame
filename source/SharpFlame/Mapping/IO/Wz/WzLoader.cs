@@ -1457,7 +1457,7 @@ namespace SharpFlame.Mapping.IO.Wz
                 }
 
                 File.ReadInt32(); //game time
-                map.InterfaceOptions.CampaignGameType = File.ReadInt32();
+                map.InterfaceOptions.CampaignGameType = (CampaignType)File.ReadInt32();
                 map.InterfaceOptions.AutoScrollLimits = false;
                 map.InterfaceOptions.ScrollMin.X = File.ReadInt32();
                 map.InterfaceOptions.ScrollMin.Y = File.ReadInt32();

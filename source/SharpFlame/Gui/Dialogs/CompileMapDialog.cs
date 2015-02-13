@@ -1,15 +1,18 @@
 using System;
+using System.Net.Mime;
+using Eto;
 using Eto.Forms;
 using FluentValidation;
 using FluentValidation.Attributes;
 using SharpFlame.Core;
+using SharpFlame.Domain;
 using SharpFlame.Gui.Controls;
 using SharpFlame.Mapping;
 using Z.ExtensionMethods;
 
 namespace SharpFlame.Gui.Dialogs
 {
-    public class CompileMapDialog : Dialog2<CompileOptions>
+    public class CompileMapDialog : Dialog2<InterfaceOptions>
     {
         protected TextBox txtMapName;
         protected NumericUpDown numPlayers;
@@ -22,48 +25,62 @@ namespace SharpFlame.Gui.Dialogs
         protected NumericUpDown numScrollMinY;
         protected NumericUpDown numScrollMaxX;
         protected NumericUpDown numScrollMaxY;
-        protected TabControl tabCompileType;
+        protected TabPage tabMulti;
 
         public CompileMapDialog()
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            this.DataContext = new CompileOptions();
+            this.DataContext = this.DataContext ?? new InterfaceOptions();
 
             Init();
         }
 
         private void Init()
         {
-            this.txtMapName.TextBinding.BindDataContext<CompileOptions>(c => c.MapName);
-            
-            this.numPlayers.ValueBinding.BindDataContext<CompileOptions>(c => c.NumPlayers);
+            this.txtMapName.TextBinding.BindDataContext<InterfaceOptions>(c => c.CompileName);
+
+            this.numPlayers.ValueBinding.BindDataContext<InterfaceOptions>(c => c.CompileMultiPlayers, (c, v) =>c.CompileMultiPlayers = Convert.ToInt32(v),
+                defaultGetValue: this.DataContext.CompileMultiPlayers);
+
             this.numPlayers.MaxValue = Constants.PlayerCountMax;
-            this.numPlayers.MinValue = 2;
 
-            this.txtAuthor.TextBinding.BindDataContext<CompileOptions>(c => c.Author);
+            this.txtAuthor.TextBinding.BindDataContext<InterfaceOptions>(c => c.CompileMultiAuthor);
 
-            this.cboLicense.SelectedValueBinding.BindDataContext<CompileOptions>(c => c.License);
+            this.cboLicense.BindDataContext(x => x.Text, (InterfaceOptions o) => o.CompileMultiLicense);
 
-            this.ddlCampType.SelectedValueBinding.BindDataContext<CompileOptions>(c => c.CampType);
+            this.ddlCampType.SelectedValueBinding.BindDataContext<InterfaceOptions>(c => c.CampaignGameType);
 
-            this.chkAutoScrollLimits.CheckedBinding.BindDataContext<CompileOptions>(c => c.AutoScrollLimits);
+            this.chkAutoScrollLimits.CheckedBinding.BindDataContext<InterfaceOptions>(c => c.AutoScrollLimits);
 
             this.grpLimits.Bind(x => x.Enabled, this.chkAutoScrollLimits.CheckedBinding.Convert(i => !i.Value));
 
-            this.numScrollMinX.ValueBinding.BindDataContext<CompileOptions>(c => c.ScrollMinX);
-            this.numScrollMinY.ValueBinding.BindDataContext<CompileOptions>(c => c.ScrollMinY);
-            this.numScrollMaxX.ValueBinding.BindDataContext<CompileOptions>(c => c.ScrollMaxX);
-            this.numScrollMaxY.ValueBinding.BindDataContext<CompileOptions>(c => c.ScrollMaxY);
+            this.numScrollMinX.ValueBinding.BindDataContext<InterfaceOptions>(c => c.ScrollMin.X, (c, v) => c.ScrollMin.X = Convert.ToInt32(v));
+            this.numScrollMinY.ValueBinding.BindDataContext<InterfaceOptions>(c => c.ScrollMin.Y, (c, v) => c.ScrollMin.Y = Convert.ToInt32(v));
+            this.numScrollMaxX.ValueBinding.BindDataContext<InterfaceOptions>(c => c.ScrollMax.X, (c, v) => c.ScrollMax.X = Convert.ToUInt32(v));
+            this.numScrollMaxY.ValueBinding.BindDataContext<InterfaceOptions>(c => c.ScrollMax.Y, (c, v) => c.ScrollMax.Y = Convert.ToUInt32(v));
 
+            //not working, Visible property doesn't have a changed event
 
+            //this.tabMulti.BindDataContext(c => c.Visible,
+            //    Binding.Property((InterfaceOptions o) => o.CompileType).ToBool(CompileType.Multiplayer, CompileType.Campaign));
+
+            //this.tabMulti.BindDataContext(x => x.Visible,
+            //    Binding.Delegate<InterfaceOptions, bool>(
+            //        m => m.CompileType == CompileType.Multiplayer,
+            //        (m, v) =>
+            //            {
+            //                m.CompileType = v ? CompileType.Multiplayer : CompileType.Campaign;
+            //            }));
         }
 
         void cmdCompile_Click(object sender, System.EventArgs e)
         {
             var options = this.DataContext;
 
-            var validator = new CompileOptionsValidator();
+            options.CompileType = tabMulti.Visible ? CompileType.Multiplayer : CompileType.Campaign;
+
+            var validator = new InterfaceOptionsValidator();
             var results = validator.Validate(options);
 
             if( !results.IsValid )
@@ -73,9 +90,6 @@ namespace SharpFlame.Gui.Dialogs
                 App.ShowWarnings(warn);
                 return;
             }
-
-            options.CompileType = this.tabCompileType.SelectedPage.Text.StartsWith("mulit", StringComparison.OrdinalIgnoreCase)
-                ? CompileType.Multiplayer : CompileType.Campaign;
 
             this.Close(options);
         }

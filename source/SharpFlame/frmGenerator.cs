@@ -4,6 +4,7 @@ using System;
 using System.Windows.Forms;
 using SharpFlame.Collections.Specialized;
 using SharpFlame.Core.Extensions;
+using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Collections.Specialized;
@@ -340,7 +341,7 @@ namespace SharpFlame
             Generator.Map.RandomizeHeights(Generator.LevelCount);
 
             Generator.Map.InterfaceOptions = new InterfaceOptions();
-            Generator.Map.InterfaceOptions.CompileMultiPlayers = Generator.GetTotalPlayerCount.ToStringInvariant();
+            Generator.Map.InterfaceOptions.CompileMultiPlayers = Generator.GetTotalPlayerCount;
 
             _Owner.NewMainMap(Generator.Map);
 

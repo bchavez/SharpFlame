@@ -383,7 +383,6 @@ namespace SharpFlame
 			this.menuImportTileTypes.Click += this.menuImportTileTypes_Click;
 			this.ToolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.MapWZToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.MapWZToolStripMenuItem.Click += this.MapWZToolStripMenuItem_Click;
 			this.ToolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
 			this.CloseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.CloseToolStripMenuItem.Click += this.CloseToolStripMenuItem_Click;

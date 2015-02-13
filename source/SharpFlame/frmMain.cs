@@ -1123,26 +1123,6 @@ namespace SharpFlame
             QuickSave();
         }
 
-        public void MapWZToolStripMenuItem_Click(Object sender, EventArgs e)
-        {
-            var Map = MainMap;
-
-            if ( Map == null )
-            {
-                return;
-            }
-
-            if ( Map.CompileScreen == null )
-            {
-                var NewCompile = frmCompile.Create(Map);
-                NewCompile.Show();
-            }
-            else
-            {
-                Map.CompileScreen.Activate();
-            }
-        }
-
         public void rdoAutoTextureFill_CheckedChanged(Object sender, EventArgs e)
         {
             App.UiOptions.MouseTool = MouseTool.TerrainFill;

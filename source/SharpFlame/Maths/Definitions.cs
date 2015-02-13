@@ -1,10 +1,12 @@
 
 
 using System;
+using System.Diagnostics;
 
 
 namespace SharpFlame.Maths
 {
+    [DebuggerDisplay("X={X}, Y={Y}")]
     public struct sXY_uint
     {
         public UInt32 X;

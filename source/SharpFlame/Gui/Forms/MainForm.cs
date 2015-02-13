@@ -161,7 +161,7 @@ namespace SharpFlame.Gui.Forms
 
 			file.Items.GetSubmenu ("&Import", 400);
 			file.Items.AddSeparator ();
-	        file.Items.Add(new CompileMapCommand(), 500);
+	        file.Items.Add(new CompileMapCommand(this), 500);
 			file.Items.AddSeparator ();
 			file.Items.Add(quit);
 

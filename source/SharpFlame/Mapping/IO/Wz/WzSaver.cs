@@ -51,8 +51,8 @@ namespace SharpFlame.Mapping.IO.Wz
                 switch ( map.InterfaceOptions.CompileType )
                 {
                     case CompileType.Multiplayer:
-                    if ( int.Parse(map.InterfaceOptions.CompileMultiPlayers) < 2 | 
-                        int.Parse(map.InterfaceOptions.CompileMultiPlayers) > Constants.PlayerCountMax )
+                    if ( map.InterfaceOptions.CompileMultiPlayers < 2 | 
+                        map.InterfaceOptions.CompileMultiPlayers > Constants.PlayerCountMax )
                     {
                         returnResult.ProblemAdd(string.Format("Number of players was below 2 or above {0}.", Constants.PlayerCountMax));
                         return returnResult;
@@ -112,17 +112,17 @@ namespace SharpFlame.Mapping.IO.Wz
 
                             zip.PutNextEntry(string.Format("{0}/struct.ini", inZipPath));
                             var iniStruct = new IniWriter(zip);
-                            returnResult.Add(Serialize_WZ_StructuresINI(iniStruct, int.Parse(map.InterfaceOptions.CompileMultiPlayers), map));
+                            returnResult.Add(Serialize_WZ_StructuresINI(iniStruct, map.InterfaceOptions.CompileMultiPlayers, map));
                             iniStruct.Flush();
 
                             zip.PutNextEntry(string.Format("{0}/droid.ini", inZipPath));
                             var iniDroid = new IniWriter(zip);
-                            returnResult.Add(Serialize_WZ_DroidsINI(iniDroid, int.Parse(map.InterfaceOptions.CompileMultiPlayers), map));
+                            returnResult.Add(Serialize_WZ_DroidsINI(iniDroid, map.InterfaceOptions.CompileMultiPlayers, map));
                             iniDroid.Flush();
 
                             zip.PutNextEntry(string.Format("{0}/labels.ini", inZipPath));
                             var iniLabels = new IniWriter(zip);
-                            returnResult.Add(Serialize_WZ_LabelsINI(iniLabels, int.Parse(map.InterfaceOptions.CompileMultiPlayers), map));
+                            returnResult.Add(Serialize_WZ_LabelsINI(iniLabels, map.InterfaceOptions.CompileMultiPlayers, map));
                             iniLabels.Flush();
 
                             zip.PutNextEntry(string.Format("{0}/feature.ini", inZipPath));

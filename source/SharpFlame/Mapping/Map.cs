@@ -15,6 +15,7 @@ using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
+using SharpFlame.Gui.Dialogs;
 using SharpFlame.Gui.Sections;
 using SharpFlame.Infrastructure;
 using SharpFlame.Mapping.Changes;
@@ -42,7 +43,7 @@ namespace SharpFlame.Mapping
         public AutoSave AutoSave = new AutoSave();
         private ChangedEventHandler changedEvent;
         public bool ChangedSinceSave = false;
-        public frmCompile CompileScreen;
+        public Dialog CompileScreen;
 
         public SimpleClassList<GatewayChange> GatewayChanges;
         public ConnectedList<Gateway, Map> Gateways;

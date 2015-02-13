@@ -15,6 +15,7 @@ using SharpFlame.Mapping.Tiles;
 using SharpFlame.Core;
 using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.Domain;
+using Z.ExtensionMethods.Object;
 
 namespace SharpFlame.Mapping.IO.FMap
 {
@@ -179,12 +180,12 @@ namespace SharpFlame.Mapping.IO.FMap
                 file.AddProperty("ScrollMaxY", map.InterfaceOptions.ScrollMax.Y.ToStringInvariant());
 
                 file.AddProperty("Name", map.InterfaceOptions.CompileName);
-                file.AddProperty("Players", map.InterfaceOptions.CompileMultiPlayers);
+                file.AddProperty("Players", map.InterfaceOptions.CompileMultiPlayers.ToStringInvariant());
                 file.AddProperty("Author", map.InterfaceOptions.CompileMultiAuthor);
                 file.AddProperty("License", map.InterfaceOptions.CompileMultiLicense);
                 if ( map.InterfaceOptions.CampaignGameType >= 0 )
                 {
-                    file.AddProperty("CampType", map.InterfaceOptions.CampaignGameType.ToStringInvariant());
+                    file.AddProperty("CampType", ((int)map.InterfaceOptions.CampaignGameType).ToStringInvariant());
                 }
             }
             catch ( Exception ex )
