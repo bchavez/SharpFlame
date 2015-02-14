@@ -15,7 +15,7 @@ using SharpFlame.Settings;
 
 namespace SharpFlame.Gui.Forms
 {
-	public class MainForm : Form, IInitializable
+	public class MainForm : Form
 	{
         [Inject]
         internal TextureTab TextureTab { get; set; }
@@ -23,8 +23,8 @@ namespace SharpFlame.Gui.Forms
         internal TerrainTab TerrainTab { get; set; }
         [Inject]
         internal HeightTab HeightTab { get; set; }
-        [Inject]
-        internal ResizeTab ResizeTab { get; set; }
+        //[Inject]
+        //internal ResizeTab ResizeTab { get; set; }
         [Inject]
         internal PlaceObjectsTab PlaceObjectsTab { get; set; }
         [Inject]
@@ -60,8 +60,13 @@ namespace SharpFlame.Gui.Forms
             }
         }
 
-	    //Ninject initializer
-	    void IInitializable.Initialize()
+	    public MainForm()
+	    {
+	        Init();
+	        App.ShowWarnings(SharpFlameApplication.InitializeResult);
+	    }
+
+	    void Init()
 	    {
 	        ClientSize = new Size(1024, 768);
             MainMapName = "No Map";
@@ -71,7 +76,8 @@ namespace SharpFlame.Gui.Forms
 	        tabControl.TabPages.Add(new TabPage {Text = "Textures", Content = this.TextureTab});
 	        tabControl.TabPages.Add(new TabPage {Text = "Terrain", Content = this.TerrainTab});
 	        tabControl.TabPages.Add(new TabPage {Text = "Height", Content = this.HeightTab});
-	        tabControl.TabPages.Add(new TabPage {Text = "Resize", Content = this.ResizeTab});
+	        tabControl.TabPages.Add(new ResizeTab());
+	        //tabControl.TabPages.Add(new TabPage {Text = "Resize", Content = this.ResizeTab});
 	        tabControl.TabPages.Add(new TabPage {Text = "Place Objects", Content = this.PlaceObjectsTab});
 	        tabControl.TabPages.Add(new TabPage {Text = "Object", Content = this.ObjectTab});
 	        tabControl.TabPages.Add(new TabPage {Text = "Label", Content = this.LabelsTab});

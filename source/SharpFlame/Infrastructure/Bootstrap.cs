@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using Ninject;
 using Ninject.Modules;
-using Ninject.Planning.Bindings.Resolvers;
 
 namespace SharpFlame.Infrastructure
 {
     public static class Bootstrap
     {
-        public static IKernel KernelWith(Eto.Platform generator)
+        public static IKernel KernelWith(Eto.Platform platform)
         {
             var settings = new NinjectSettings
                 {
@@ -27,35 +26,40 @@ namespace SharpFlame.Infrastructure
 
             var kernel = new ExplicitKernel(settings, kernelModules.ToArray());
 
-            kernel.Bind<Eto.Generator>().ToMethod(ctx => generator);
-
-            HookEtoGenerator(generator, kernel);
+            kernel.Bind<Eto.Platform>().ToMethod(ctx => platform);
+            
+            HookEtoGenerator(platform, kernel);
 
             return kernel;
         }
 
         private static void HookEtoGenerator(Eto.Platform eto, IKernel k)
         {
+            Eto.Style.Add<Eto.Widget>("inject", w =>
+            {
+                k.Inject(w);
+            });
+
             //actually, WidgetCreated is fired when the *generator handler* is created 
             //from the generator factory.
 
-            eto.WidgetCreated += (o, args) =>
-                {
-                    var newObject = args.Instance;
-                    k.Inject(newObject); //this is usually the platform handler.
+            //eto.WidgetCreated += (o, args) =>
+            //    {
+            //        var newObject = args.Instance;
+            //        k.Inject(newObject); //this is usually the platform handler.
 
-                    var asWidgetHandler = newObject as Eto.IControlObjectSource;
-                    if( asWidgetHandler != null )
-                    {
-                        var widget = asWidgetHandler.ControlObject;
-                        //widget willa ways be null b/c 
-                        //widget poreprty is set AFTER widget created is fired.
-                        if( widget != null )
-                        {
-                            k.Inject(widget); // and inject the widget too.
-                        }
-                    }
-                };
+            //        var asWidgetHandler = newObject as Eto.IControlObjectSource;
+            //        if( asWidgetHandler != null )
+            //        {
+            //            var widget = asWidgetHandler.ControlObject;
+            //            //widget willa ways be null b/c 
+            //            //widget poreprty is set AFTER widget created is fired.
+            //            if( widget != null )
+            //            {
+            //                k.Inject(widget); // and inject the widget too.
+            //            }
+            //        }
+            //    };
         }
     }
 

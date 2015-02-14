@@ -1,21 +1,23 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
+using Ninject;
 using SharpFlame.Core;
 using SharpFlame;
 using SharpFlame.UiOptions;
 
 namespace SharpFlame.Gui.Sections
 {
-	public class ResizeTab : Panel
+	public class ResizeTab : TabPage
 	{
-        private readonly Options uiOptions;
+        [Inject]
+        public Options UiOptions { get; set; }
 
-        public ResizeTab (Options argUiOptions)
-		{
-            uiOptions = argUiOptions;
+        public ResizeTab ()
+        {
+            XomlReader.Load(this);
 
-            var mainLayout = new DynamicLayout ();
+            /*var mainLayout = new DynamicLayout ();
 
 			var nLayout1 = new DynamicLayout ();
 			nLayout1.AddRow(new Label { Text = "Size X:" }, 
@@ -38,8 +40,18 @@ namespace SharpFlame.Gui.Sections
 
 			mainLayout.Add (null);
 
-			Content = mainLayout;
+			Content = mainLayout;*/
 		}
+
+	    protected void cmdResize_Click(object sender, EventArgs e)
+	    {
+	        
+	    }
+
+	    protected void cmdResizeSelection_Click(object sender, EventArgs e)
+	    {
+	        
+	    }
 
 	    protected override void OnLoadComplete(EventArgs lcEventArgs)
         {
@@ -47,7 +59,7 @@ namespace SharpFlame.Gui.Sections
 
             // Set Mousetool, when we are shown.
             Shown += delegate {
-                uiOptions.MouseTool = MouseTool.Default;
+                UiOptions.MouseTool = MouseTool.Default;
             };
         }
 	}

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
 using Eto;
@@ -8,13 +9,17 @@ using Eto.Drawing;
 using Eto.Forms;
 using Eto.Gl;
 using Ninject;
+using Ninject.Extensions.Logging;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core.Domain;
+using SharpFlame.Domain.ObjData;
+using SharpFlame.Generators;
 using SharpFlame.Infrastructure;
 using SharpFlame;
 using SharpFlame.Core;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping.Tiles;
+using SharpFlame.Painters;
 using SharpFlame.Settings;
 using SharpFlame.UiOptions;
 
@@ -46,14 +51,18 @@ namespace SharpFlame.Gui.Sections
         private ComboBox cbTileType;
 
         private Scrollable scrollTextureView;
+        private ILogger logger;
 
-        [Inject, Named(NamedBinding.TextureView)]
+        [Inject]
+        internal SettingsManager Settings { get; set; }
+
         internal GLSurface GLSurface { get; set; }
 
         private XYInt TextureCount { get; set; }
 
-        public TextureTab(IKernel kernel, Options argUiOptions, MainMapView mmv)
+        public TextureTab(IKernel kernel, Options argUiOptions, MainMapView mmv, ILoggerFactory loggerFactory)
         {
+            this.logger = loggerFactory.GetCurrentClassLogger();
             uiOptions = argUiOptions;
             kernel.Inject(this); // GLSurface
             mainMapView = mmv;
@@ -183,6 +192,101 @@ namespace SharpFlame.Gui.Sections
             this.scrollTextureView.Scroll += scrollTextureView_Scroll;
 
             Content = mainLayout;
+
+            this.GLSurface.Initialized += TextureView_OnGLControlInitialized;
+            SetupEventHandlers();
+        }
+
+        private void SetupEventHandlers()
+        {
+            Settings.TilesetDirectories.CollectionChanged += (sender, e) =>
+                {
+                    if( !this.GLSurface.IsInitialized )
+                    {
+                        return;
+                    }
+
+                    try
+                    {
+                        if( e.Action == NotifyCollectionChangedAction.Add )
+                        {
+                            foreach( var item in e.NewItems )
+                            {
+                                var result = App.LoadTilesets((string)item);
+                                if( result.HasProblems || result.HasWarnings )
+                                {
+                                    App.StatusDialog = new Gui.Dialogs.Status(result);
+                                    App.StatusDialog.Show();
+                                    Settings.TilesetDirectories.Remove((string)item);
+                                }
+                            }
+                        }
+                        else if( e.Action == NotifyCollectionChangedAction.Remove )
+                        {
+                            foreach( var item in e.OldItems )
+                            {
+                                var found = App.Tilesets.Where(w => w.Directory.StartsWith((string)item)).ToList();
+                                foreach( var foundItem in found )
+                                {
+                                    App.Tilesets.Remove(foundItem);
+                                }
+                            }
+                        }
+                    }
+                    catch( Exception ex )
+                    {
+                        logger.Error(ex, "Got an exception while loading tilesets.");
+                    }
+                };
+
+            Settings.ObjectDataDirectories.CollectionChanged += (sender, e) =>
+                {
+                    if( !this.GLSurface.IsInitialized )
+                    {
+                        return;
+                    }
+
+                    try
+                    {
+                        var result = new Result("Reloading object data.", false);
+                        if( e.Action == NotifyCollectionChangedAction.Add )
+                        {
+                            // Just reload Object Data.
+                            App.ObjectData = new ObjectData();
+                            foreach( var path in Settings.ObjectDataDirectories )
+                            {
+                                if( path != null && path != "" )
+                                {
+                                    result.Add(App.ObjectData.LoadDirectory(path));
+                                }
+                            }
+                        }
+                        else if( e.Action == NotifyCollectionChangedAction.Remove )
+                        {
+                            // Just reload Object Data.
+                            App.ObjectData = new ObjectData();
+                            foreach( var path in Settings.ObjectDataDirectories )
+                            {
+                                if( path != null && path != "" )
+                                {
+                                    result.Add(App.ObjectData.LoadDirectory(path));
+                                }
+                            }
+                            // Need to send an objectchanged event as LoadDirectory may never occurs.
+                            App.OnObjectDataChanged(this, EventArgs.Empty);
+                        }
+
+                        if( result.HasProblems || result.HasWarnings )
+                        {
+                            App.StatusDialog = new Gui.Dialogs.Status(result);
+                            App.StatusDialog.Show();
+                        }
+                    }
+                    catch( Exception ex )
+                    {
+                        logger.Error(ex, "Got an Exception while loading object data.");
+                    }
+                };
         }
 
         void scrollTextureView_Scroll(object sender, ScrollEventArgs e)
@@ -692,5 +796,59 @@ namespace SharpFlame.Gui.Sections
 
             return control;
         }
+
+        /// <summary>
+        /// Ons the GL control initialized.
+        /// </summary>
+        /// <param name="o">Not used.</param>
+        /// <param name="e">Not used.</param>
+        private void TextureView_OnGLControlInitialized(object o, EventArgs e)
+        {
+            this.GLSurface.MakeCurrent();
+
+            // Load tileset directories.
+            foreach( var path in Settings.TilesetDirectories )
+            {
+                if( !string.IsNullOrEmpty(path) )
+                {
+                    SharpFlameApplication.InitializeResult.Add(App.LoadTilesets(path));
+                }
+            }
+
+            // Load Object Data.
+            foreach( var path in Settings.ObjectDataDirectories )
+            {
+                if( !string.IsNullOrEmpty(path) )
+                {
+                    SharpFlameApplication.InitializeResult.Add(App.ObjectData.LoadDirectory(path));
+                }
+            }
+
+            DefaultGenerator.CreateGeneratorTilesets();
+
+            // Create Painters for the known tilesets.
+            PainterFactory.CreatePainterArizona();
+            PainterFactory.CreatePainterUrban();
+            PainterFactory.CreatePainterRockies();
+
+            // Show initialize problems.
+            //            if( initializeResult.HasProblems )
+            //            {
+            //                logger.Error(initializeResult.ToString());
+            //                App.StatusDialog = new Gui.Dialogs.Status(initializeResult);
+            //                App.StatusDialog.Show();
+            //            }
+            //            else if( initializeResult.HasWarnings )
+            //            {
+            //                logger.Warn(initializeResult.ToString());
+            //                App.StatusDialog = new Gui.Dialogs.Status(initializeResult);
+            //                App.StatusDialog.Show();
+            //            }
+            //            else
+            //            {
+            //                logger.Debug(initializeResult.ToString());
+            //            }
+        }
+
     }
 }

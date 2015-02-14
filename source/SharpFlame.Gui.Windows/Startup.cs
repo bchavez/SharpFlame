@@ -12,7 +12,8 @@ namespace SharpFlame.Gui.Windows
         [STAThread]
         static void Main(string[] args)
         {
-            System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(true);
+            System.Windows.Forms.Application.EnableVisualStyles();
+            System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
 
             var generator = Eto.Platform.Detect;
 

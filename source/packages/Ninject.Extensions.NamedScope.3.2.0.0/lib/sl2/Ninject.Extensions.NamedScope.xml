@@ -1,0 +1,292 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Ninject.Extensions.NamedScope</name>
+    </assembly>
+    <members>
+        <member name="T:Ninject.Extensions.NamedScope.DisposeNotifyingObject">
+            <summary>
+            An object that notifies when ti is disposed.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.DisposeNotifyingObject.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="E:Ninject.Extensions.NamedScope.DisposeNotifyingObject.Disposed">
+            <summary>
+            Occurs when the object is disposed.
+            </summary>
+        </member>
+        <member name="T:Ninject.Extensions.NamedScope.ExceptionFormatter">
+            <summary>
+            Provides meaningful exception messages.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.ExceptionFormatter.CouldNotFindScope(Ninject.Activation.IRequest,System.String)">
+            <summary>
+            Generates a message saying that the binding could not be resolved due to unknown scope
+            </summary>
+            <param name="request">The request.</param>
+            <param name="scopeName">Scope name</param>
+            <returns>The exception message.</returns>
+        </member>
+        <member name="T:Ninject.Extensions.NamedScope.NamedScope">
+            <summary>
+            A resolution root that specifies a named scope.
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.NamedScope.NamedScope.resolutionRoot">
+            <summary>
+            The decorated resolution root.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScope.#ctor(Ninject.Syntax.IResolutionRoot)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Extensions.NamedScope.NamedScope"/> class.
+            </summary>
+            <param name="resolutionRoot">The decorated resolution root.</param>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScope.CanResolve(Ninject.Activation.IRequest)">
+            <summary>
+            Determines whether the specified request can be resolved.
+            </summary>
+            <param name="request">The request.</param>
+            <returns><c>True</c> if the request can be resolved; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScope.CanResolve(Ninject.Activation.IRequest,System.Boolean)">
+            <summary>
+            Determines whether the specified request can be resolved.
+            </summary>
+            <param name="request">The request.</param>
+            <param name="ignoreImplicitBindings">if set to <c>true</c> implicit bindings are ignored.</param>
+            <returns><c>True</c> if the request can be resolved; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScope.Resolve(Ninject.Activation.IRequest)">
+            <summary>
+            Resolves instances for the specified request. The instances are not actually resolved
+            until a consumer iterates over the enumerator.
+            </summary>
+            <param name="request">The request to resolve.</param>
+            <returns>An enumerator of instances that match the request.</returns>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScope.CreateRequest(System.Type,System.Func{Ninject.Planning.Bindings.IBindingMetadata,System.Boolean},System.Collections.Generic.IEnumerable{Ninject.Parameters.IParameter},System.Boolean,System.Boolean)">
+            <summary>
+            Creates a request for the specified service.
+            </summary>
+            <param name="service">The service that is being requested.</param>
+            <param name="constraint">The constraint to apply to the bindings to determine if they match the request.</param>
+            <param name="parameters">The parameters to pass to the resolution.</param>
+            <param name="isOptional"><c>True</c> if the request is optional; otherwise, <c>false</c>.</param>
+            <param name="isUnique"><c>True</c> if the request should return a unique result; otherwise, <c>false</c>.</param>
+            <returns>The created request.</returns>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScope.Release(System.Object)">
+            <summary>
+            Deactivates and releases the specified instance if it is currently managed by Ninject.
+            </summary>
+            <param name="instance">The instance to release.</param>
+            <returns><see langword="True"/> if the instance was found and released; otherwise <see langword="false"/>.</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScope.Ninject#Syntax#IFluentSyntax#GetType">
+            <summary>
+            A resolution root that specifies a named scope.
+            </summary>
+        </member>
+        <member name="T:Ninject.Extensions.NamedScope.NamedScopeActivationStrategy">
+            <summary>
+            Activation strategy that creates a reference from the owner to the named scopes.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScopeActivationStrategy.Activate(Ninject.Activation.IContext,Ninject.Activation.InstanceReference)">
+            <summary>
+            Activates the specified context.
+            </summary>
+            <param name="context">The context.</param>
+            <param name="reference">The reference.</param>
+        </member>
+        <member name="T:Ninject.Extensions.NamedScope.NamedScopeExtensionMethods">
+            <summary>
+            Extension methods for the named scope module.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScopeExtensionMethods.InNamedScope``1(Ninject.Syntax.IBindingInSyntax{``0},System.String)">
+            <summary>
+            Defines that a binding is in a named scope.
+            </summary>
+            <typeparam name="T">The type of the binding.</typeparam>
+            <param name="syntax">The In syntax.</param>
+            <param name="scopeParameterName">Name of the scope parameter.</param>
+            <returns>The Named syntax.</returns>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScopeExtensionMethods.InParentScope``1(Ninject.Syntax.IBindingInSyntax{``0})">
+            <summary>
+            Defines that a binding is in the scope of its target.
+            </summary>
+            <typeparam name="T">The type of the binding.</typeparam>
+            <param name="syntax">The In syntax.</param>
+            <returns>The Named syntax.</returns>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScopeExtensionMethods.InCallScope``1(Ninject.Syntax.IBindingInSyntax{``0})">
+            <summary>
+            Defines that a binding is in the scope of its target.
+            </summary>
+            <typeparam name="T">The type of the binding.</typeparam>
+            <param name="syntax">The In syntax.</param>
+            <returns>The Named syntax.</returns>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScopeExtensionMethods.DefinesNamedScope``1(Ninject.Syntax.IBindingOnSyntax{``0},System.String)">
+            <summary>
+            Defines the a binding defines a named scope.
+            </summary>
+            <typeparam name="T">The type of the binding.</typeparam>
+            <param name="syntax">The syntax.</param>
+            <param name="scopeName">The name of the scope.</param>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScopeExtensionMethods.GetNamedScope(Ninject.Activation.IContext,System.String)">
+            <summary>
+            Gets a named scope from the request.
+            </summary>
+            <param name="context">The context.</param>
+            <param name="scopeParameterName">Name of the scope parameter.</param>
+            <returns>The scope.</returns>
+            <exception cref="T:Ninject.Extensions.NamedScope.ScopeDisposedException">Thrown when the scope is already disposed.</exception>
+            <exception cref="T:Ninject.Extensions.NamedScope.UnknownScopeException">Throw if no scope with the specified name exists in the current context.</exception>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScopeExtensionMethods.TryGetNamedScope(Ninject.Activation.IContext,System.String)">
+            <summary>
+            Tries to get a named scope from the request.
+            </summary>
+            <param name="context">The context.</param>
+            <param name="scopeParameterName">Name of the scope parameter.</param>
+            <returns>The scope, null if not found.</returns>
+            <exception cref="T:Ninject.Extensions.NamedScope.ScopeDisposedException">Thrown when the scope is already disposed.</exception>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScopeExtensionMethods.CreateNamedScope(Ninject.Syntax.IResolutionRoot,System.String)">
+            <summary>
+            Creates a named scope with the specified name.
+            </summary>
+            <param name="resolutionRoot">The resolution root.</param>
+            <param name="scopeName">The name of the scope.</param>
+            <returns>A resolution root that represents the specified scope.</returns>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScopeExtensionMethods.GetNamedScopeParameter(Ninject.Activation.IContext,System.String)">
+            <summary>
+            Gets a named scope parameter from a context.
+            </summary>
+            <param name="context">The context.</param>
+            <param name="scopeParameterName">Name of the scope parameter.</param>
+            <returns>The requested parameter of null if it is not found.</returns>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScopeExtensionMethods.GetOrAddScope(Ninject.Activation.IContext,System.String)">
+            <summary>
+            Gets the specified named scope or adds a scope with the specified name in case it does not exist yet.
+            </summary>
+            <param name="parentContext">The parent context.</param>
+            <param name="scopeParameterName">Name of the scope parameter.</param>
+            <returns>The requested scope.</returns>
+        </member>
+        <member name="T:Ninject.Extensions.NamedScope.NamedScopeModule">
+            <summary>
+            This module provides the definition of named scopes.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScopeModule.Load">
+            <summary>
+            Loads this instance.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScopeModule.GetNamedScope(Ninject.Activation.IContext)">
+            <summary>
+            Gets the named scope.
+            </summary>
+            <param name="context">The context.</param>
+            <returns>The scope for a named scope reference.</returns>
+        </member>
+        <member name="T:Ninject.Extensions.NamedScope.NamedScopeParameter">
+            <summary>
+            Parameter for defining that an object defines a named scope.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScopeParameter.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Extensions.NamedScope.NamedScopeParameter"/> class.
+            </summary>
+            <param name="name">The name of the scope.</param>
+        </member>
+        <member name="P:Ninject.Extensions.NamedScope.NamedScopeParameter.Scope">
+            <summary>
+            Gets the scope object.
+            </summary>
+            <value>The scope object.</value>
+        </member>
+        <member name="T:Ninject.Extensions.NamedScope.NamedScopeReference">
+            <summary>
+            References a scope object. The reference its self has the owner of the scope as scope.
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.NamedScope.NamedScopeReference.scope">
+            <summary>
+            The scope object.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScopeReference.#ctor(System.IDisposable)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Extensions.NamedScope.NamedScopeReference"/> class.
+            </summary>
+            <param name="scope">The scope object.</param>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScopeReference.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="T:Ninject.Extensions.NamedScope.NamedScopeReferenceScopeParameter">
+            <summary>
+            Parameter to pass the scope to <see cref="T:Ninject.Extensions.NamedScope.NamedScopeReference"/> when it is created.
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.NamedScope.NamedScopeReferenceScopeParameter.scope">
+            <summary>
+            Weak reference to the scope
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.NamedScopeReferenceScopeParameter.#ctor(System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Extensions.NamedScope.NamedScopeReferenceScopeParameter"/> class.
+            </summary>
+            <param name="scope">The scope.</param>
+        </member>
+        <member name="P:Ninject.Extensions.NamedScope.NamedScopeReferenceScopeParameter.Scope">
+            <summary>
+            Gets the scope.
+            </summary>
+            <value>The scope.</value>
+        </member>
+        <member name="T:Ninject.Extensions.NamedScope.ScopeDisposedException">
+            <summary>
+            This exception is thrown when a binding tries to use a scope that already has been disposed.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.ScopeDisposedException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Extensions.NamedScope.ScopeDisposedException"/> class.
+            </summary>
+        </member>
+        <member name="T:Ninject.Extensions.NamedScope.UnknownScopeException">
+            <summary>
+            This exception is thrown when a binding requests a scope that is not defined in the current scope.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.NamedScope.UnknownScopeException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Extensions.NamedScope.UnknownScopeException"/> class.
+            </summary>
+            <param name="message">The exception message.</param>
+        </member>
+    </members>
+</doc>

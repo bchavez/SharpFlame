@@ -29,7 +29,6 @@ namespace SharpFlame.Gui.Dialogs
 
         public CompileMapDialog()
         {
-            //Eto.Serialization.Xaml.XamlReader.Load(this);
             XomlReader.Load(this);
 
             this.DataContext = this.DataContext ?? new InterfaceOptions();

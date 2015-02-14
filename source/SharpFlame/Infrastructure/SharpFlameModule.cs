@@ -24,24 +24,6 @@ namespace SharpFlame.Infrastructure
                 .ToSelf()
                 .InSingletonScope();
 
-            this.Bind<GLSurface>()
-                .ToSelf()
-                .InSingletonScope()
-                .Named(NamedBinding.MapView)
-                .OnActivation((x) =>
-                    {
-                        x.Tag = NamedBinding.MapView;
-                    });
-
-            this.Bind<GLSurface>()
-                .ToSelf()
-                .InSingletonScope()
-                .Named(NamedBinding.TextureView)
-                .OnActivation(x =>
-                    {
-                        x.Tag = NamedBinding.TextureView;
-                    });
-
             this.Bind<SharpFlameApplication>()
                 .ToSelf()
                 .InSingletonScope();
@@ -81,7 +63,7 @@ namespace SharpFlame.Infrastructure
             //GUI
             this.Bind<TextureTab>().ToSelf().InSingletonScope().RegisterOnGlobalEventBroker();
             this.Bind<TerrainTab>().ToSelf().InSingletonScope();
-            this.Bind<ResizeTab>().ToSelf().InSingletonScope();
+            //this.Bind<ResizeTab>().ToSelf().InSingletonScope();
             this.Bind<PlaceObjectsTab>().ToSelf().InSingletonScope();
             this.Bind<ObjectTab>().ToSelf().InSingletonScope();
             this.Bind<LabelsTab>().ToSelf().InSingletonScope();
@@ -90,7 +72,7 @@ namespace SharpFlame.Infrastructure
 
             this.Bind<Map>().ToSelf().InTransientScope();
             this.Bind<clsDrawSectorObjects>().ToSelf().InTransientScope();
-            this.Bind<Gui.Dialogs.Settings> ().ToSelf ().InTransientScope ();
+            this.Bind<Gui.Dialogs.Settings>().ToSelf().InTransientScope();
 
             //Mapping.IO
             this.Bind<SharpFlame.Mapping.IO.FMap.FMapLoader>().ToSelf().InSingletonScope();

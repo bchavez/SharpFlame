@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<eto:TabPage
+	   xmlns="http://schema.picoe.ca/eto.forms" 
+	   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+       xmlns:eto="clr-namespace:Eto.Forms;assembly=Eto"
+       xmlns:s="clr-namespace:SharpFlame.Gui.Controls;assembly=SharpFlame"
+       Text="Resize" Style="inject">
+
+    <eto:TableLayout>
+        <eto:TableRow>
+            <eto:TableCell>
+                <eto:TableLayout>
+                    <eto:TableRow>
+                        <eto:TableCell>
+                            <eto:Label Text="Size X"/>
+                        </eto:TableCell>
+                        <eto:TableCell>
+                            <eto:NumericUpDown ID="numSizeX" />
+                        </eto:TableCell>
+                    </eto:TableRow>
+                </eto:TableLayout>
+            </eto:TableCell>
+        </eto:TableRow>
+        <eto:TableRow>
+            <eto:TableCell>
+                
+            </eto:TableCell>
+        </eto:TableRow>
+        <eto:TableRow>
+            <eto:TableCell>
+
+            </eto:TableCell>
+        </eto:TableRow>
+        <eto:TableRow>
+            <eto:TableCell>
+                
+            </eto:TableCell>
+        </eto:TableRow>
+        <eto:TableRow>
+            <eto:TableCell>
+                
+            </eto:TableCell>
+        </eto:TableRow>
+        <eto:TableRow>
+            <eto:TableCell>                            
+                <eto:TableLayout>
+                    <eto:TableRow ScaleHeight="True" />
+                    <eto:TableRow>
+                        <eto:TableCell ScaleWidth="True" />
+                        <eto:TableCell>
+                            <eto:Button ID="cmdResize" Text="Resize" Click="cmdResize_Click" />
+                        </eto:TableCell>
+                        <eto:TableCell ScaleWidth="True" />
+                    </eto:TableRow>
+                    <eto:TableRow ScaleHeight="True"/>
+                </eto:TableLayout>
+            </eto:TableCell>
+        </eto:TableRow>
+        <eto:TableRow>
+            <eto:TableCell>
+                <eto:TableLayout>
+                    <eto:TableRow ScaleHeight="True" />
+                    <eto:TableRow>
+                        <eto:TableCell ScaleWidth="True" />
+                        <eto:TableCell>
+                            <eto:Button ID="cmdResizeSelection" Text="Resize To Selection" Click="cmdResizeSelection_Click" />
+                        </eto:TableCell>
+                        <eto:TableCell ScaleWidth="True" />
+                    </eto:TableRow>
+                    <eto:TableRow ScaleHeight="True"/>
+                </eto:TableLayout>
+            </eto:TableCell>
+        </eto:TableRow>
+
+    </eto:TableLayout>
+</eto:TabPage>

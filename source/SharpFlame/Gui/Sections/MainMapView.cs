@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
@@ -12,6 +13,7 @@ using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
+using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Gui.Forms;
 using SharpFlame.Infrastructure;
 using SharpFlame.Mapping;
@@ -26,7 +28,6 @@ namespace SharpFlame.Gui.Sections
 {
     public class MainMapView : Panel
 	{
-        [Inject, Named(NamedBinding.MapView)]
         public GLSurface GLSurface { get; set; }
 
         private Map mainMap;
@@ -92,6 +93,9 @@ namespace SharpFlame.Gui.Sections
 
         private bool drawPending = false;
 
+        [Inject]
+        internal SettingsManager Settings { get; set; }
+
         public MainMapView(IKernel kernel, ILoggerFactory logFactory, 
             KeyboardManager kbm, ViewInfo argViewInfo,
             MinimapCreator mmc, UiOptions.Options argUiOptions, MainForm argMainForm)
@@ -119,8 +123,58 @@ namespace SharpFlame.Gui.Sections
             );
 
             Content = mainLayout;
-		}
+            App.MapGLSurface = this.GLSurface;
+            this.GLSurface.Initialized += GLSurface_Initialized;
+            SetupEventHandlers();
+        }
 
+        private void SetupEventHandlers()
+        {
+            Settings.PropertyChanged += (object sender, PropertyChangedEventArgs e) =>
+                {
+#if DEBUG
+                    Console.WriteLine("Setting {0} changed ", e.PropertyName);
+#endif
+
+                    if( e.PropertyName.StartsWith("Font") )
+                    {
+                        MakeGlFont();
+                    }
+                };
+        }
+
+        void GLSurface_Initialized(object sender, EventArgs e)
+        {
+             this.GLSurface.MakeCurrent();
+            // Set Vision radius
+            App.VisionRadius_2E = 10;
+            App.VisionRadius_2E_Changed();
+
+            Matrix3DMath.MatrixSetToPY(App.SunAngleMatrix, new Angles.AnglePY(-22.5D * MathUtil.RadOf1Deg, 157.5D * MathUtil.RadOf1Deg));
+
+            // Make the GL Font.
+            MakeGlFont();
+        }
+        private void MakeGlFont()
+        {
+            if(!this.GLSurface.IsInitialized)
+            {
+                return;
+            }
+            this.GLSurface.MakeCurrent();
+
+            //TODO: Remove depedency on SD try for ETO
+            var style = System.Drawing.FontStyle.Regular;
+            if( Settings.FontBold )
+            {
+                style = style | System.Drawing.FontStyle.Bold;
+            }
+            if( Settings.FontItalic )
+            {
+                style = style | System.Drawing.FontStyle.Italic;
+            }
+            App.UnitLabelFont = new GLFont(new System.Drawing.Font(Settings.FontFamily, Settings.FontSize, style, System.Drawing.GraphicsUnit.Pixel));
+        }
         protected override void OnLoadComplete(EventArgs lcEventArgs)
         {
             base.OnLoadComplete(lcEventArgs);
