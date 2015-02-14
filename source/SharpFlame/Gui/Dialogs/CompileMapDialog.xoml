@@ -174,18 +174,20 @@
         </eto:TableRow>
         <eto:TableRow>
             <eto:TableCell>
+
                 <eto:TableLayout>
+                    <eto:TableRow ScaleHeight="True" />
                     <eto:TableRow>
+                        <eto:TableCell ScaleWidth="True" />
                         <eto:TableCell>
                             <eto:Button Text="Compile" Click="cmdCompile_Click" />
                         </eto:TableCell>
-                        <eto:TableCell></eto:TableCell>
+                        <eto:TableCell ScaleWidth="True" />
                     </eto:TableRow>
-                    <eto:TableRow>
-                        <eto:TableCell></eto:TableCell>
-                        <eto:TableCell></eto:TableCell>
-                    </eto:TableRow>
+                    <eto:TableRow ScaleHeight="True"/>
                 </eto:TableLayout>
+
+
             </eto:TableCell>
         </eto:TableRow>
     </eto:TableLayout>

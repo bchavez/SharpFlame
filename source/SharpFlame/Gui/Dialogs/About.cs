@@ -3,71 +3,48 @@
 using Eto.Drawing;
 using Eto.Forms;
 using SharpFlame.Core;
+using SharpFlame.Core.Extensions;
+using System;
 
 namespace SharpFlame.Gui.Dialogs
 {
 	public class About : Dialog
 	{
-		public About()
-		{
-			Title = string.Format ("{0} {1}", Constants.ProgramName, Constants.ProgramVersion());
-			Resizable = true;
+	    protected Label lblVersion;
+	    protected Label lblName;
+	    protected ImageView imgLogo;
+        protected Label lblCopy0;
+        protected Label lblCopy1;
+	    protected Button cmdClose;
 
-			var layout = new DynamicLayout(new Padding(20, 5), new Size(10, 10));
+	    public About()
+	    {
+	        XomlReader.Load(this);
 
-		    layout.AddCentered(new ImageView
-		        {
-		            Image = Resources.SharpFlameIcon()
-		        }, true, true);
+	        BindSetup();
+	    }
 
-		    layout.Add(new Label
-		        {
-		            Text = Constants.ProgramName,
-		            Font = new Font(SystemFont.Bold, 20),
-		            HorizontalAlign = HorizontalAlign.Center
-		        });
+	    private void BindSetup()
+	    {
+            this.lblName.Text = Constants.ProgramName;
+	        this.lblName.Font = new Font(SystemFont.Bold, 20);
 
-		    layout.Add(new Label
-		        {
-		            Text = string.Format("Version {0}", Constants.ProgramVersion()),
-		            Font = new Font(SystemFont.Default, 10),
-		            HorizontalAlign = HorizontalAlign.Center
-		        });
+            this.lblVersion.Text = "Version {0}".Format2(Constants.ProgramVersion());
+	        this.lblVersion.Font = new Font(SystemFont.Default, 10);
 
-		    layout.Add(new Label
-		        {
-		            Text = "Copyright 2013 by Flail13",
-		            Font = new Font(SystemFont.Default, 10),
-		            HorizontalAlign = HorizontalAlign.Center
-		        });
+            this.imgLogo.Image = Resources.SharpFlameIcon();
 
+            this.lblCopy0.Font = new Font(SystemFont.Default, 10);
+            this.lblCopy1.Font = new Font(SystemFont.Default, 10);
+            
+	        this.DefaultButton = cmdClose;
+	        this.AbortButton = cmdClose;
+	    }       
 
-		    layout.Add(new Label
-		        {
-		            Text = "Copyright 2014 by Cowboy, pcdummy and jorzi",
-		            Font = new Font(SystemFont.Default, 10),
-		            HorizontalAlign = HorizontalAlign.Center
-		        });
-
-			layout.AddCentered(CloseButton());
-
-			this.Content = layout;
-		}
-
-		private Control CloseButton()
-		{
-		    var button = new Button
-		        {
-		            Text = "Close"
-		        };
-			DefaultButton = button;
-			AbortButton = button;
-		    button.Click += delegate
-		        {
-		            this.Close();
-		        };
-			return button;
-		}
+	    protected void cmdClose_Click(object sender, EventArgs e)
+	    {
+	        this.Close();
+	    }
 	}
 }
 

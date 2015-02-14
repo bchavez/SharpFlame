@@ -42,7 +42,7 @@ namespace SharpFlame.Gui.Actions
         protected override void OnExecuted(EventArgs e)
         {
             base.OnExecuted(e);
-
+            
             if( Map == null )
                 return;
             if( Map.CompileScreen != null )
@@ -55,6 +55,13 @@ namespace SharpFlame.Gui.Actions
             var options = compileMap.ShowModal();
 
             Map.SetChanged();
+
+            if( options == null )
+            {
+                Map.CompileScreen = null;
+                //canceled.
+                return;
+            }
 
             if( options.CompileType == CompileType.Campaign )
             {

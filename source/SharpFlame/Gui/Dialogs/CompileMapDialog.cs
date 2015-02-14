@@ -1,6 +1,5 @@
 using System;
 using System.Net.Mime;
-using Eto;
 using Eto.Forms;
 using FluentValidation;
 using FluentValidation.Attributes;
@@ -29,14 +28,15 @@ namespace SharpFlame.Gui.Dialogs
 
         public CompileMapDialog()
         {
-            Eto.Serialization.Xaml.XamlReader.Load(this);
+            //Eto.Serialization.Xaml.XamlReader.Load(this);
+            XomlReader.Load(this);
 
             this.DataContext = this.DataContext ?? new InterfaceOptions();
 
-            Init();
+            BindSetup();
         }
 
-        private void Init()
+        private void BindSetup()
         {
             this.txtMapName.TextBinding.BindDataContext<InterfaceOptions>(c => c.CompileName);
 
