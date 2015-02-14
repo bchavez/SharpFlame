@@ -1,6 +1,6 @@
 using Eto;
 
-namespace SharpFlame.Gui.Dialogs
+namespace SharpFlame.Gui
 {
     public static class XomlReader
     {

@@ -5,6 +5,7 @@ using Eto.Forms;
 using SharpFlame.Core;
 using SharpFlame.Core.Extensions;
 using System;
+using SharpFlame.Util;
 
 namespace SharpFlame.Gui.Dialogs
 {

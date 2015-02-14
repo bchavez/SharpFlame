@@ -182,7 +182,7 @@
     <Compile Include="Gui\Dialogs\Dialog2.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Gui\Dialogs\XomlReader.cs" />
+    <Compile Include="Gui\XomlReader.cs" />
     <Compile Include="Mapping\Changes\clsAutoTextureChanges.cs" />
     <Compile Include="Mapping\Changes\clsMapTileChanges.cs" />
     <Compile Include="Mapping\Changes\clsPointChanges.cs" />

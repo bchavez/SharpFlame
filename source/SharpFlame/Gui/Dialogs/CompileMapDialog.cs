@@ -7,6 +7,7 @@ using SharpFlame.Core;
 using SharpFlame.Domain;
 using SharpFlame.Gui.Controls;
 using SharpFlame.Mapping;
+using SharpFlame.Util;
 using Z.ExtensionMethods;
 
 namespace SharpFlame.Gui.Dialogs
