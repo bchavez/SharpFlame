@@ -494,13 +494,20 @@ namespace SharpFlame.Gui.Actions
                 App.ShowWarnings(result);
                 return;
             }
-            var saveFileDialog = new SaveFileDialog();
+            var saveFileDialog = new SaveFileDialog()
+                {
+                    Filters =
+                        {
+                            new FileDialogFilter("WZ Files", ".wz")
+                        }
+                };
+
             if( Map.PathInfo != null )
             {
                 saveFileDialog.Directory = new Uri(Map.PathInfo.Path);
             }
             saveFileDialog.FileName = playerCount + "c-" + mapName;
-            saveFileDialog.Filters = new[] {new FileDialogFilter("WZ Files", ".wz")};
+
             if( saveFileDialog.ShowDialog(form) != DialogResult.Ok )
             {
                 return;

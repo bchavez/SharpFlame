@@ -24,9 +24,6 @@ namespace SharpFlame.Gui.Windows
             
             var app = kernel.Get<SharpFlameApplication>();
 
-            kernel.Inject(app);
-            
-
             app.Run(args);
             
         }

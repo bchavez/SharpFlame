@@ -1,22 +1,13 @@
 using System;
-using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
 using Appccelerate.EventBroker;
 using Eto;
 using Eto.Forms;
-using Eto.Gl;
 using Ninject;
 using Ninject.Extensions.Logging;
 using OpenTK;
 using SharpFlame.Core;
-using SharpFlame.Generators;
 using SharpFlame.Gui.Forms;
-using SharpFlame.Infrastructure;
-using SharpFlame.Domain.ObjData;
-using SharpFlame.Graphics.OpenGL;
-using SharpFlame.Maths;
-using SharpFlame.Painters;
 using SharpFlame.Settings;
 using Size = Eto.Drawing.Size;
 

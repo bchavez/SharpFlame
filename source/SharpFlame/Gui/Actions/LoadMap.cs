@@ -22,15 +22,6 @@ namespace SharpFlame.Gui.Actions
     {
         private readonly ILogger logger;
 
-        static IEnumerable<IFileDialogFilter> GetFilters(string allFormatDescription)
-        {
-            yield return new FileDialogFilter(allFormatDescription, "fmap", "wz", "game", "lnd");
-            yield return new FileDialogFilter("FMAP Files", "fmap");
-            yield return new FileDialogFilter("WZ Files", "wz");
-            yield return new FileDialogFilter("Game Files", "game");
-            yield return new FileDialogFilter("LND Files", "lnd");
-        }
-
         [Inject]
         internal SettingsManager Settings { get; set; }
 
@@ -54,10 +45,18 @@ namespace SharpFlame.Gui.Actions
             base.OnExecuted(e);
             // show the about dialog
 
-            var dialog = new OpenFileDialog();
-            
-            dialog.Directory = new Uri( Settings.OpenPath );
-            dialog.Filters = GetFilters("All Supported Formats");
+            var dialog = new OpenFileDialog
+                {
+                    Directory = new Uri(Settings.OpenPath),
+                    Filters =
+                        {
+                            new FileDialogFilter("All Supported Formats", "fmap", "wz", "game", "lnd"),
+                            new FileDialogFilter("FMAP Files", "fmap"),
+                            new FileDialogFilter("WZ Files", "wz"),
+                            new FileDialogFilter("Game Files", "game"),
+                            new FileDialogFilter("LND Files", "lnd")
+                        }
+                };
 
             var result = dialog.ShowDialog(Application.Instance.MainForm);
             if(result == DialogResult.Ok)
