@@ -31,12 +31,12 @@ namespace SharpFlame.Infrastructure
 
             k.Bind<Eto.Platform>().ToMethod(ctx => platform);
             
-            HookEtoGenerator(platform, k);
+            HookEtoPlatform(platform, k);
 
             return k;
         }
 
-        private static void HookEtoGenerator(Eto.Platform eto, IKernel k)
+        private static void HookEtoPlatform(Eto.Platform eto, IKernel k)
         {
             eto.WidgetCreated += (sender, args) =>
                 {
