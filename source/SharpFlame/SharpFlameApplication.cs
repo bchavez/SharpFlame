@@ -81,8 +81,7 @@ namespace SharpFlame
 
             InitializeResult.Add(Settings.Load(App.SettingsPath));
 
-            this.MainForm = Kernel.Get<MainForm>();
-            //this.MainForm = new MainForm();
+            this.MainForm = new MainForm();
 
             base.OnInitialized(e);
 

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using Appccelerate.EventBroker;
 using Appccelerate.Events;
@@ -8,9 +6,6 @@ using Eto.Forms;
 using Ninject;
 using Ninject.Extensions.Logging;
 using SharpFlame.Core;
-using SharpFlame.Core.Extensions;
-using SharpFlame.Gui.Sections;
-using SharpFlame;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.IO;
 using SharpFlame.Mapping.IO.FMap;
@@ -20,18 +15,16 @@ using SharpFlame.Settings;
 
 namespace SharpFlame.Gui.Actions
 {
-    public class LoadMap : Command
+    public class LoadMapCommand : Command
     {
         [EventPublication(EventTopics.OnMapLoad)]
         public event EventHandler<EventArgs<Map>> OnMapLoad = delegate {  };
 
-        private readonly ILogger logger;
+        [Inject]
+        internal ILogger Logger { get; set; }
 
         [Inject]
         internal SettingsManager Settings { get; set; }
-
-        [Inject]
-        internal MainMapView MainMapView { get; set; }
 
         [Inject]
         internal FMapLoader FMapLoader { get; set; }
@@ -45,10 +38,8 @@ namespace SharpFlame.Gui.Actions
         [Inject]
         internal LNDLoader LndLoader { get; set; }
 
-        public LoadMap(ILoggerFactory logFactory)
+        public LoadMapCommand()
         {
-            logger = logFactory.GetCurrentClassLogger();
-
             ID = "loadMap";
             MenuText = "&Open";
             ToolBarText = "Open";
@@ -104,7 +95,7 @@ namespace SharpFlame.Gui.Actions
                         returnResult.ProblemAdd(string.Format("UNKNOWN File type: can\'t load file \"{0}\"", dialog.FileName));
                         App.StatusDialog = new Dialogs.Status(returnResult);
                         App.StatusDialog.Show();
-                        logger.Error("Loading \"{0}\", UNKNOWN File type: can\'t load file \"{1}\"", Path.GetExtension(dialog.FileName), dialog.FileName);
+                        Logger.Error("Loading \"{0}\", UNKNOWN File type: can\'t load file \"{1}\"", Path.GetExtension(dialog.FileName), dialog.FileName);
                         return;
                 }
 

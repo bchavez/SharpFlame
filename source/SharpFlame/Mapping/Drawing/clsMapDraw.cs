@@ -1,6 +1,7 @@
 
 
 using System;
+using Eto.Drawing;
 using Ninject;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -24,9 +25,15 @@ using SharpFlame.UiOptions;
 
 namespace SharpFlame.Mapping
 {
+    public class DrawInfo
+    {
+        public MinimapGl MinimapGl { get; set; }
+        public Size GlSize { get; set; }
+        //public ViewInfo ViewInfo { get; set; }
+    }
     public partial class Map
     {
-        public void GLDraw(MinimapGl minimapGl)
+        public void GLDraw(DrawInfo info)
         {
             var xyzDbl = default(XYZDouble);
             var x2 = 0;
@@ -69,7 +76,7 @@ namespace SharpFlame.Mapping
             dblTemp = App.SettingsManager.MinimapSize;
             viewInfo.TilesPerMinimapPixel = Math.Sqrt(Terrain.TileSize.X * Terrain.TileSize.X + Terrain.TileSize.Y * Terrain.TileSize.Y) /
                                                (MathUtil.RootTwo * dblTemp);
-            if ( minimapGl.TextureSize > 0 & viewInfo.TilesPerMinimapPixel > 0.0D )
+            if ( info.MinimapGl.TextureSize > 0 & viewInfo.TilesPerMinimapPixel > 0.0D )
             {
                 minimapSizeXy.X = (Terrain.TileSize.X / viewInfo.TilesPerMinimapPixel).ToInt();
                 minimapSizeXy.Y = (Terrain.TileSize.Y / viewInfo.TilesPerMinimapPixel).ToInt();
@@ -87,9 +94,12 @@ namespace SharpFlame.Mapping
             drawCentreSector.Normal = GetPosSectorNum(new XYInt(drawCentre.X.ToInt(), drawCentre.Y.ToInt()));
             drawCentreSector.Alignment = GetPosSectorNum(new XYInt((drawCentre.X - Constants.SectorTileSize * Constants.TerrainGridSpacing / 2.0D).ToInt(), (drawCentre.Y - Constants.SectorTileSize * Constants.TerrainGridSpacing / 2.0D).ToInt()));
 
-            var drawObjects = Kernel.Get<clsDrawSectorObjects>();
-            drawObjects.Map = this;
-            drawObjects.UnitTextLabels = new clsTextLabels(64);
+            var drawObjects = new clsDrawSectorObjects(info.GlSize, this.viewInfo)
+                {
+                    Map = this,
+                    UnitTextLabels = new clsTextLabels(64)
+                };
+
             drawObjects.Start();
 
             xyzDbl.X = drawCentre.X - viewInfo.ViewPos.X;
@@ -981,17 +991,17 @@ namespace SharpFlame.Mapping
 
             debugGLError("Minimap matrix modes");
 
-            if ( minimapGl.TextureSize > 0 & viewInfo.TilesPerMinimapPixel > 0.0D )
+            if ( info.MinimapGl.TextureSize > 0 & viewInfo.TilesPerMinimapPixel > 0.0D )
             {
                 GL.Translate(0.0F, glSize.Height - minimapSizeXy.Y, 0.0F);
 
-                xyzDbl.X = (double)Terrain.TileSize.X / minimapGl.TextureSize;
-                xyzDbl.Z = (double)Terrain.TileSize.Y / minimapGl.TextureSize;
+                xyzDbl.X = (double)Terrain.TileSize.X / info.MinimapGl.TextureSize;
+                xyzDbl.Z = (double)Terrain.TileSize.Y / info.MinimapGl.TextureSize;
 
-                if ( minimapGl.GLTexture > 0 )
+                if ( info.MinimapGl.GLTexture > 0 )
                 {
                     GL.Enable(EnableCap.Texture2D);
-                    GL.BindTexture(TextureTarget.Texture2D, minimapGl.GLTexture);
+                    GL.BindTexture(TextureTarget.Texture2D, info.MinimapGl.GLTexture);
                     GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Decal);
 
                     GL.Begin(BeginMode.Quads);

@@ -19,6 +19,7 @@ using SharpFlame.Infrastructure;
 using SharpFlame;
 using SharpFlame.Core;
 using SharpFlame.Graphics.OpenGL;
+using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Painters;
 using SharpFlame.Settings;
@@ -28,9 +29,6 @@ namespace SharpFlame.Gui.Sections
 {
     public class TextureTab : Panel
     {
-        private readonly Options uiOptions;
-        private readonly MainMapView mainMapView;
-
         private CheckBox chkTexture;
         private CheckBox chkOrientation;
         private CheckBox chkRandomize;
@@ -52,22 +50,31 @@ namespace SharpFlame.Gui.Sections
         private ComboBox cbTileType;
 
         private Scrollable scrollTextureView;
-        private ILogger logger;
+        
+        [Inject]
+        private ILogger Logger { get; set; }
+        
+        private Map map;
 
         [Inject]
         internal SettingsManager Settings { get; set; }
+        [Inject]
+        internal Options UiOptions { get; set; }
+
 
         internal GLSurface GLSurface { get; set; }
 
         private XYInt TextureCount { get; set; }
 
-        public TextureTab(IKernel kernel, Options argUiOptions, MainMapView mmv, ILoggerFactory loggerFactory)
+        [EventSubscription(EventTopics.OnMapLoad, typeof(OnPublisher))]
+        public void OnMapLoad(object sender, EventArgs<Map> args)
         {
-            this.logger = loggerFactory.GetCurrentClassLogger();
-            uiOptions = argUiOptions;
-            kernel.Inject(this); // GLSurface
-            mainMapView = mmv;
+            this.map = args.Value;
+        }
 
+
+        public TextureTab()
+        {
             this.TextureCount = new XYInt(0, 0);
 
             var layout = new DynamicLayout {Padding = Padding.Empty, Spacing = Size.Empty};
@@ -85,7 +92,7 @@ namespace SharpFlame.Gui.Sections
                 Size = new Size(-1, -1), 
                 MinValue = 0, 
                 MaxValue = Constants.MapMaxSize, 
-                Value = uiOptions.Textures.Brush.Radius
+                Value = UiOptions.Textures.Brush.Radius
             };
             this.btnCircular = new Button {Text = "Circular", Enabled = false};
             this.btnSquare = new Button {Text = "Square"};
@@ -236,7 +243,7 @@ namespace SharpFlame.Gui.Sections
                     }
                     catch( Exception ex )
                     {
-                        logger.Error(ex, "Got an exception while loading tilesets.");
+                        Logger.Error(ex, "Got an exception while loading tilesets.");
                     }
                 };
 
@@ -285,14 +292,14 @@ namespace SharpFlame.Gui.Sections
                     }
                     catch( Exception ex )
                     {
-                        logger.Error(ex, "Got an Exception while loading object data.");
+                        Logger.Error(ex, "Got an Exception while loading object data.");
                     }
                 };
         }
 
         void scrollTextureView_Scroll(object sender, ScrollEventArgs e)
         {
-            if( uiOptions.Textures.TilesetNum != -1 )
+            if( UiOptions.Textures.TilesetNum != -1 )
             {
                 this.DrawTexturesView();
             }
@@ -300,7 +307,7 @@ namespace SharpFlame.Gui.Sections
 
         void scrollTextureView_SizeChanged(object sender, EventArgs e)
         {
-            if( uiOptions.Textures.TilesetNum != -1 )
+            if( UiOptions.Textures.TilesetNum != -1 )
             {
                 this.DrawTexturesView();
             }
@@ -316,7 +323,7 @@ namespace SharpFlame.Gui.Sections
         {
             base.OnLoadComplete(lcEventArgs);
 
-            Textures texturesOptions = uiOptions.Textures;
+            Textures texturesOptions = UiOptions.Textures;
 
             // Circular / Square Button
             btnCircular.Click += (sender, e) =>
@@ -394,13 +401,13 @@ namespace SharpFlame.Gui.Sections
                     }
                 };
 
-            uiOptions.Textures.TilesetNumChanged += delegate
+            UiOptions.Textures.TilesetNumChanged += delegate
             {
-                if (cbTileset.SelectedIndex == uiOptions.Textures.TilesetNum) {
+                if (cbTileset.SelectedIndex == UiOptions.Textures.TilesetNum) {
                     return;
                 }
 
-                cbTileset.SelectedIndex = uiOptions.Textures.TilesetNum;
+                cbTileset.SelectedIndex = UiOptions.Textures.TilesetNum;
             };
 
             // Bind tileset combobox.
@@ -423,7 +430,7 @@ namespace SharpFlame.Gui.Sections
 
             this.GLSurface.MouseDown += (sender, e) =>
             {
-                if( uiOptions.Textures.TilesetNum == -1 )
+                if( UiOptions.Textures.TilesetNum == -1 )
                 {
                     return;
                 }
@@ -433,13 +440,12 @@ namespace SharpFlame.Gui.Sections
                 var x = (int)Math.Floor(args.Location.X / 64);
                 var y = (int)Math.Floor(args.Location.Y / 64);
                 var tile = x + (y * TextureCount.X);
-                if( tile >= App.Tilesets[uiOptions.Textures.TilesetNum].Tiles.Count )
+                if( tile >= App.Tilesets[UiOptions.Textures.TilesetNum].Tiles.Count )
                 {
                     return;
                 }
-                uiOptions.Textures.SelectedTile = tile;
+                UiOptions.Textures.SelectedTile = tile;
 
-                var map = mainMapView.MainMap;
                 if (map != null) {
                     cbTileType.SelectedIndex = (int)map.TileTypeNum[tile];
                 }
@@ -449,18 +455,17 @@ namespace SharpFlame.Gui.Sections
 
             cbTileType.SelectedIndexChanged += delegate
             {
-                var map = mainMapView.MainMap;
                 if (map == null) {
                     MessageBox.Show("Please open a map before changing tile types.");
                     return;
                 }
 
-                if (uiOptions.Textures.SelectedTile == 0) {
+                if (UiOptions.Textures.SelectedTile == 0) {
                     MessageBox.Show("Select a tile to modify first.");
                     return;
                 }
 
-                map.TileTypeNum[uiOptions.Textures.SelectedTile] = (byte)cbTileType.SelectedIndex;
+                map.TileTypeNum[UiOptions.Textures.SelectedTile] = (byte)cbTileType.SelectedIndex;
 
                 DrawTexturesView();
             };
@@ -468,7 +473,7 @@ namespace SharpFlame.Gui.Sections
             // Set Mousetool, when we are shown.
             Shown += (sender, args) =>
                 {
-                    uiOptions.MouseTool = MouseTool.TextureBrush;
+                    UiOptions.MouseTool = MouseTool.TextureBrush;
                 };
 
 
@@ -482,7 +487,7 @@ namespace SharpFlame.Gui.Sections
         private void DrawTexturesView()
         {
             this.GLSurface.MakeCurrent();
-            if( uiOptions.Textures.TilesetNum == -1 )
+            if( UiOptions.Textures.TilesetNum == -1 )
             {
                 GL.Clear(ClearBufferMask.ColorBufferBit);
                 GL.Flush();
@@ -491,7 +496,7 @@ namespace SharpFlame.Gui.Sections
             }
             
 
-            var tileset = App.Tilesets[uiOptions.Textures.TilesetNum];
+            var tileset = App.Tilesets[UiOptions.Textures.TilesetNum];
 
             var glSize = new Size (0, 0);
             TextureCount = new XYInt {
@@ -535,7 +540,7 @@ namespace SharpFlame.Gui.Sections
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
-            TileUtil.GetTileRotatedTexCoords(uiOptions.Textures.TextureOrientation, ref texCoord0, ref texCoord1, ref texCoord2, ref texCoord3);
+            TileUtil.GetTileRotatedTexCoords(UiOptions.Textures.TextureOrientation, ref texCoord0, ref texCoord1, ref texCoord2, ref texCoord3);
 
             GL.Enable(EnableCap.Texture2D);
             GL.Color4(0.0F, 0.0F, 0.0F, 1.0F);
@@ -588,9 +593,9 @@ namespace SharpFlame.Gui.Sections
                             goto EndOfTextures2;
                         }
 
-                        if(mainMapView.MainMap != null)
+                        if(map != null)
                         {
-                            num = mainMapView.MainMap.TileTypeNum[num];
+                            num = map.TileTypeNum[num];
                         } else
                         {
                             num = tileset.Tiles[num].DefaultType;
@@ -673,10 +678,10 @@ namespace SharpFlame.Gui.Sections
                 GL.Disable(EnableCap.Texture2D);
             }
 
-            if( uiOptions.Textures.SelectedTile >= 0 & TextureCount.X > 0 )
+            if( UiOptions.Textures.SelectedTile >= 0 & TextureCount.X > 0 )
             {
-                xyInt.X = uiOptions.Textures.SelectedTile % TextureCount.X;
-                xyInt.Y = uiOptions.Textures.SelectedTile / TextureCount.X;
+                xyInt.X = UiOptions.Textures.SelectedTile % TextureCount.X;
+                xyInt.Y = UiOptions.Textures.SelectedTile / TextureCount.X;
                 GL.Begin(BeginMode.LineLoop);
                 GL.Color3(1.0F, 1.0F, 0.0F);
                 GL.Vertex2(xyInt.X * 64, xyInt.Y * 64);

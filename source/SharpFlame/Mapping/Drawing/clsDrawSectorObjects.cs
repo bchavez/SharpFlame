@@ -1,14 +1,10 @@
-
-
 using System;
 using System.Diagnostics;
-using Ninject;
+using Eto.Drawing;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core.Domain;
-using SharpFlame.Gui.Sections;
 using SharpFlame.Domain;
 using SharpFlame.Graphics.OpenGL;
-using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 
@@ -17,15 +13,18 @@ namespace SharpFlame.Mapping.Drawing
 {
     public class clsDrawSectorObjects : clsAction
     {
+        private readonly Size glSize;
         private bool Started;
         private bool[] UnitDrawn;
         public clsTextLabels UnitTextLabels;
 
-        [Inject]
-        internal MainMapView MainMapView { get; set; }
-
-        [Inject]
         internal ViewInfo ViewInfo { get; set; }
+
+        public clsDrawSectorObjects(Size glSize, ViewInfo viewInfo)
+        {
+            this.glSize = glSize;
+            this.ViewInfo = viewInfo;
+        }
 
         public void Start()
         {
@@ -100,7 +99,7 @@ namespace SharpFlame.Mapping.Drawing
                         Matrix3DMath.VectorRotationByMatrix(ViewInfo.ViewAngleMatrixInverted, XYZ_dbl, ref XYZ_dbl2);
                         if ( ViewInfo.PosGetScreenXY(XYZ_dbl2, ref ScreenPos) )
                         {
-                            if ( ScreenPos.X >= 0 & ScreenPos.X <= MainMapView.GLSurface.Size.Width & ScreenPos.Y >= 0 & ScreenPos.Y <= MainMapView.GLSurface.Size.Height )
+                            if ( ScreenPos.X >= 0 & ScreenPos.X <= glSize.Width & ScreenPos.Y >= 0 & ScreenPos.Y <= glSize.Height )
                             {
                                 TextLabel = new clsTextLabel();
                                 TextLabel.TextFont = App.UnitLabelFont;

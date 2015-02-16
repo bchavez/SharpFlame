@@ -1,19 +1,18 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
-using SharpFlame;
+using Ninject;
 using SharpFlame.UiOptions;
 
 namespace SharpFlame.Gui.Sections
 {
     public class LabelsTab : Panel
     {
-        private readonly Options uiOptions;
+        [Inject]
+        internal Options UiOptions { get; set; }
 
-        public LabelsTab (Options argUiOptions)
+        public LabelsTab()
         {
-            uiOptions = argUiOptions;
-
             var mainLayout = new DynamicLayout ();
 
             var nLayout0 = new DynamicLayout ();
@@ -65,7 +64,7 @@ namespace SharpFlame.Gui.Sections
 
             // Set Mousetool, when we are shown.
             Shown += delegate {
-                uiOptions.MouseTool = MouseTool.Default;
+                UiOptions.MouseTool = MouseTool.Default;
             };
         }
     }

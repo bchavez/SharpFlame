@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Eto.Drawing;
 using Eto.Forms;
+using Ninject;
 using SharpFlame.Core;
 using SharpFlame.Gui.Controls;
 using SharpFlame;
@@ -11,7 +12,8 @@ namespace SharpFlame.Gui.Sections
 {
 	public class PlaceObjectsTab : Panel
 	{
-        private readonly Options uiOptions;
+        [Inject]
+        internal Options UiOptions { get; set; }
 
         private readonly SearchBox filterText;
         private readonly Button btnRotation0;
@@ -25,12 +27,10 @@ namespace SharpFlame.Gui.Sections
         private GridView grvStructures { get; set; }
         private GridView grvDroids { get; set; }
 
-        public PlaceObjectsTab (Options argUiOptions)
+        public PlaceObjectsTab ()
 		{
-            uiOptions = argUiOptions;
-
             PlayerSelector playerSelector;
-            if (Generator.IsWinForms)
+            if (this.Platform.IsWinForms)
             {
                 playerSelector = new PlayerSelectorWinforms (Constants.PlayerCountMax);
             } else
@@ -114,7 +114,7 @@ namespace SharpFlame.Gui.Sections
 
             // Set Mousetool, when we are shown.
             Shown += delegate {
-                uiOptions.MouseTool = MouseTool.Default;
+                UiOptions.MouseTool = MouseTool.Default;
             };
 
             App.ObjectDataChanged += delegate

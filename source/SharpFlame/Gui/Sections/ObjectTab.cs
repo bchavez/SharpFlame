@@ -1,6 +1,7 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
+using Ninject;
 using SharpFlame.Core;
 using SharpFlame.Gui.Controls;
 using SharpFlame;
@@ -10,11 +11,11 @@ namespace SharpFlame.Gui.Sections
 {
     public class ObjectTab : Panel
     {
-        private readonly Options uiOptions;
+        [Inject]
+        internal Options UiOptions { get; set; }
 
-        public ObjectTab (Options argUiOptions)
+        public ObjectTab ()
         {
-            uiOptions = argUiOptions;
 
             var mainLayout = new DynamicLayout ();
 
@@ -28,7 +29,7 @@ namespace SharpFlame.Gui.Sections
             nLayout0.AddRow (nLayout1);
 
             PlayerSelector playerSelector;
-            if (Generator.IsWinForms)
+            if (this.Platform.IsWinForms)
             {
                 playerSelector = new PlayerSelectorWinforms (Constants.PlayerCountMax);
             } else
@@ -104,7 +105,7 @@ namespace SharpFlame.Gui.Sections
 
             // Set Mousetool, when we are shown.
             Shown += delegate {
-                uiOptions.MouseTool = MouseTool.ObjectSelect;
+                UiOptions.MouseTool = MouseTool.ObjectSelect;
             };
         }
     }

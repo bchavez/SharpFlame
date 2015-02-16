@@ -1,9 +1,5 @@
-
-
 using System;
 using System.Diagnostics;
-using SharpFlame.Collections;
-using SharpFlame.Colors;
 using SharpFlame.FileIO;
 using SharpFlame.Core;
 using SharpFlame.Core.Collections;

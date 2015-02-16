@@ -114,7 +114,7 @@ namespace SharpFlame.Gui.Actions
                     if( StartPos.X < 0 | FinishPos.X >= Map.Terrain.TileSize.X
                          | StartPos.Y < 0 | FinishPos.Y >= Map.Terrain.TileSize.Y )
                     {
-                        var resultItem = modResults.CreateResultProblemGotoForObject(unit);
+                        var resultItem = MapErrorHelper.CreateResultProblemGotoForObject(unit, form.ViewInfo);
                         resultItem.Text = string.Format("Unit off map at position {0}.", unit.GetPosText());
                         Result.ItemAdd(resultItem);
                     }
@@ -126,7 +126,7 @@ namespace SharpFlame.Gui.Actions
                             {
                                 if( TileHasUnit[x, y] )
                                 {
-                                    var resultItem = modResults.CreateResultProblemGotoForObject(unit);
+                                    var resultItem = MapErrorHelper.CreateResultProblemGotoForObject(unit, form.ViewInfo);
                                     logger.Info("Bad overlap of {0} on tile {1}, {2}.", unit.TypeBase.GetDisplayTextName(), x, y);
                                     resultItem.Text = string.Format("Bad unit overlap of {0} on tile {1}, {2}.", unit.TypeBase.GetDisplayTextName(), x, y);
                                     Result.ItemAdd(resultItem);
@@ -162,7 +162,7 @@ namespace SharpFlame.Gui.Actions
                     if( CentrePos.X < 0 | CentrePos.X >= Map.Terrain.TileSize.X
                          | CentrePos.Y < 0 | CentrePos.Y >= Map.Terrain.TileSize.Y )
                     {
-                        var resultItem = modResults.CreateResultProblemGotoForObject(unit);
+                        var resultItem = MapErrorHelper.CreateResultProblemGotoForObject(unit, form.ViewInfo);
                         resultItem.Text = "Module off map at position " + unit.GetPosText() + ".";
                         Result.ItemAdd(resultItem);
                     }
@@ -244,7 +244,7 @@ namespace SharpFlame.Gui.Actions
                         }
                         if( !IsValid )
                         {
-                            var resultItem = modResults.CreateResultProblemGotoForObject(unit);
+                            var resultItem = MapErrorHelper.CreateResultProblemGotoForObject(unit, form.ViewInfo);
                             resultItem.Text = "Bad module on tile " + Convert.ToString(CentrePos.X) + ", " + Convert.ToString(CentrePos.Y) + ".";
                             Result.ItemAdd(resultItem);
                         }
@@ -315,7 +315,7 @@ namespace SharpFlame.Gui.Actions
                         if( UnusedPlayerUnitWarningCount < 32 )
                         {
                             UnusedPlayerUnitWarningCount++;
-                            var resultItem = modResults.CreateResultProblemGotoForObject(Unit);
+                            var resultItem = MapErrorHelper.CreateResultProblemGotoForObject(Unit, form.ViewInfo);
                             resultItem.Text = string.Format("An unused player ({0}) has a unit at {1}.", Unit.UnitGroup.WZ_StartPos, Unit.GetPosText());
                             Result.ItemAdd(resultItem);
                         }

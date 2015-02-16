@@ -20,25 +20,24 @@ namespace SharpFlame.Gui.Forms
 {
 	public class MainForm : Form
 	{
-        [Inject]
         internal TextureTab TextureTab { get; set; }
-        [Inject]
+        
         internal TerrainTab TerrainTab { get; set; }
-        [Inject]
+        
         internal HeightTab HeightTab { get; set; }
         //[Inject]
         //internal ResizeTab ResizeTab { get; set; }
-        [Inject]
+        
         internal PlaceObjectsTab PlaceObjectsTab { get; set; }
-        [Inject]
+        
         internal ObjectTab ObjectTab { get; set; }
-        [Inject]
+        
         internal LabelsTab LabelsTab { get; set; }
-        [Inject]
+        
         internal MainMapView MainMapView { get; set; }
 
         [Inject]
-        internal Actions.LoadMap LoadMapAction { get; set; }
+        internal LoadMapCommand LoadMapCommand { get; set; }
 
         [Inject]
         internal SettingsManager Settings { get; set; }
@@ -81,6 +80,15 @@ namespace SharpFlame.Gui.Forms
 	        ClientSize = new Size(1024, 768);
 	        this.SetTitle("No Map");
 	        Icon = Resources.SharpFlameIcon();
+
+            this.MainMapView = new MainMapView();
+	        this.TextureTab = new TextureTab();
+	        this.TerrainTab = new TerrainTab();
+	        this.HeightTab = new HeightTab();
+	        this.PlaceObjectsTab = new PlaceObjectsTab();
+	        this.ObjectTab = new ObjectTab();
+	        this.LabelsTab = new LabelsTab();
+
 
 	        var tabControl = new TabControl();
 	        tabControl.TabPages.Add(new TabPage {Text = "Textures", Content = this.TextureTab});
@@ -159,7 +167,7 @@ namespace SharpFlame.Gui.Forms
 			var file = menu.Items.GetSubmenu("&File", 100);
 			file.Items.GetSubmenu ("&New Map", 100);
 			file.Items.AddSeparator ();
-            file.Items.Add(LoadMapAction);
+            file.Items.Add(LoadMapCommand);
 			file.Items.AddSeparator ();
 
 			var saveMenu = file.Items.GetSubmenu ("&Save", 300);

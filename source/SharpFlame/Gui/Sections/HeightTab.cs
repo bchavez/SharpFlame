@@ -1,16 +1,16 @@
 using System;
-using Eto;
 using Eto.Drawing;
 using Eto.Forms;
+using Ninject;
 using SharpFlame.Core;
-using SharpFlame;
 using SharpFlame.UiOptions;
 
 namespace SharpFlame.Gui.Sections
 {
     public class HeightTab : Panel
 	{
-        private readonly Options uiOptions;
+        [Inject]
+        internal Options UiOptions { get; set; }
 
         private readonly NumericUpDown nudBrushRadius;
 
@@ -26,10 +26,8 @@ namespace SharpFlame.Gui.Sections
 
         private readonly NumericUpDown nudSmoothRate;
 
-        public HeightTab (Options argUiOptions)
+        public HeightTab ()
 		{
-            uiOptions = argUiOptions;
-
             rbSet = new RadioButton { Text = "Set", Checked = true };
             rbChange = new RadioButton (rbSet){ Text = "Change" };
             rbSmooth = new RadioButton (rbChange) { Text = "Smooth" };
@@ -41,12 +39,12 @@ namespace SharpFlame.Gui.Sections
 			circularButton.Click += (sender, e) => { 
 				circularButton.Enabled = false;
 				squareButton.Enabled = true;
-                uiOptions.Height.Brush.Shape = ShapeType.Circle;
+                UiOptions.Height.Brush.Shape = ShapeType.Circle;
 			};
 			squareButton.Click += (sender, e) => { 
 				squareButton.Enabled = false;
 				circularButton.Enabled = true;
-                uiOptions.Height.Brush.Shape = ShapeType.Square;
+                UiOptions.Height.Brush.Shape = ShapeType.Square;
 			};
 
 			var nLayout1 = new DynamicLayout { Padding = Padding.Empty };
@@ -54,7 +52,7 @@ namespace SharpFlame.Gui.Sections
                 new Label { Text = "Radius:", VerticalAlign = VerticalAlign.Middle },
                 nudBrushRadius = new NumericUpDown { 
                     Size = new Size(-1, -1), 
-                    Value = uiOptions.Height.Brush.Radius, 
+                    Value = UiOptions.Height.Brush.Radius, 
                     MaxValue = Constants.MapMaxSize, 
                     MinValue = 1
                 }, 
@@ -297,7 +295,7 @@ namespace SharpFlame.Gui.Sections
                 setMouseMode();
             };
 
-            var heightOptions = uiOptions.Height;
+            var heightOptions = UiOptions.Height;
             nudBrushRadius.ValueChanged += delegate
             {
                 heightOptions.Brush.Radius = nudBrushRadius.Value;
@@ -316,13 +314,13 @@ namespace SharpFlame.Gui.Sections
         {
             if(rbSet.Checked)
             {
-                uiOptions.MouseTool = MouseTool.HeightSetBrush;
+                UiOptions.MouseTool = MouseTool.HeightSetBrush;
             } else if(rbChange.Checked)
             {
-                uiOptions.MouseTool = MouseTool.HeightChangeBrush;
+                UiOptions.MouseTool = MouseTool.HeightChangeBrush;
             } else if(rbSmooth.Checked)
             {
-                uiOptions.MouseTool = MouseTool.HeightSmoothBrush;
+                UiOptions.MouseTool = MouseTool.HeightSmoothBrush;
             }
         }
 	}

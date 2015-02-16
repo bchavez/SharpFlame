@@ -29,34 +29,9 @@ namespace SharpFlame.Infrastructure
                 .ToSelf()
                 .InSingletonScope();
 
-            //this.Bind<SharpFlameApplication>()
-            //    .ToSelf()
-            //    .InSingletonScope();
-
-            this.Bind<MainMapView>()
-                .ToSelf()
-                .InSingletonScope();
-
-            this.Bind<ViewInfo>()
-                .ToSelf()
-                .InSingletonScope();
-
-            this.Bind<MainForm>()
-                .ToSelf()
-                .InSingletonScope()
-                .RegisterOnGlobalEventBroker();
-
             this.Bind<Options>()
                 .ToSelf()
                 .InSingletonScope();
-
-            //this.Bind<MinimapCreator>()
-            //    .ToSelf()
-            //    .InSingletonScope();
-
-            /*this.Bind<Updater>()
-                .ToSelf()
-                .InSingletonScope();*/
                 
             #if DEBUG
             // This is here to keep a reference of it.
@@ -66,17 +41,9 @@ namespace SharpFlame.Infrastructure
             #endif
 
             //GUI
-            this.Bind<TextureTab>().ToSelf().InSingletonScope().RegisterOnGlobalEventBroker();
-            this.Bind<TerrainTab>().ToSelf().InSingletonScope();
-            //this.Bind<ResizeTab>().ToSelf().InSingletonScope();
-            this.Bind<PlaceObjectsTab>().ToSelf().InSingletonScope();
-            this.Bind<ObjectTab>().ToSelf().InSingletonScope();
-            this.Bind<LabelsTab>().ToSelf().InSingletonScope();
-            this.Bind<HeightTab>().ToSelf().InSingletonScope();
-            this.Bind<LoadMap>().ToSelf().InSingletonScope().RegisterOnGlobalEventBroker();
+            this.Bind<LoadMapCommand>().ToSelf().InSingletonScope().RegisterOnGlobalEventBroker();
 
             this.Bind<Map>().ToSelf().InTransientScope();
-            this.Bind<clsDrawSectorObjects>().ToSelf().InTransientScope();
             this.Bind<Gui.Dialogs.Settings>().ToSelf().InTransientScope();
 
             //Mapping.IO

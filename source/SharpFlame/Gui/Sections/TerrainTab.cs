@@ -2,8 +2,8 @@
 using System.Diagnostics;
 using Eto.Drawing;
 using Eto.Forms;
+using Ninject;
 using Ninject.Extensions.Logging;
-using SharpFlame;
 using SharpFlame.Core;
 using SharpFlame.UiOptions;
 
@@ -11,8 +11,11 @@ namespace SharpFlame.Gui.Sections
 {
     public class TerrainTab : Panel
 	{
-        private readonly ILogger logger;
-        private readonly Options uiOptions;
+        [Inject]
+        internal ILogger Logger { get; set; }
+        
+        [Inject]
+        internal Options UiOptions { get; set; }
 
         private readonly RadioButton rbGroundPlace;
         private readonly RadioButton rbGroundFill;
@@ -26,11 +29,8 @@ namespace SharpFlame.Gui.Sections
         private NumericUpDown nudTerrainBrushRadius;
         private NumericUpDown nudCliffBrushRadius;
 
-        public TerrainTab (ILoggerFactory logFactory, Options argUiOptions)
+        public TerrainTab()
 		{
-            logger = logFactory.GetCurrentClassLogger();
-            uiOptions = argUiOptions;
-
             rbGroundPlace = new RadioButton { Text = "Place", Checked = true };
             rbGroundFill = new RadioButton (rbGroundPlace) { Text = "Fill" };
             rbRoadSides = new RadioButton (rbGroundFill) { Text = "Sides" };
@@ -91,7 +91,7 @@ namespace SharpFlame.Gui.Sections
                 setMouseMode();
             };
 
-            var terrainOptions = uiOptions.Terrain;
+            var terrainOptions = UiOptions.Terrain;
             nudTerrainBrushRadius.ValueChanged += delegate
             {
                 terrainOptions.Brush.Radius = nudTerrainBrushRadius.Value;
@@ -106,33 +106,33 @@ namespace SharpFlame.Gui.Sections
         private void setMouseMode() {
             if (rbGroundPlace.Checked)
             {
-                uiOptions.MouseTool = MouseTool.TerrainBrush;
+                UiOptions.MouseTool = MouseTool.TerrainBrush;
             } else if (rbGroundFill.Checked)
             {
-                uiOptions.MouseTool = MouseTool.TerrainFill;
+                UiOptions.MouseTool = MouseTool.TerrainFill;
             } else if (rbRoadSides.Checked)
             {
-                uiOptions.MouseTool = MouseTool.RoadPlace;
+                UiOptions.MouseTool = MouseTool.RoadPlace;
             } else if (rbRoadLines.Checked)
             {
-                uiOptions.MouseTool = MouseTool.RoadLines;
+                UiOptions.MouseTool = MouseTool.RoadLines;
             } else if (rbRoadRemove.Checked)
             {
-                uiOptions.MouseTool = MouseTool.RoadRemove;
+                UiOptions.MouseTool = MouseTool.RoadRemove;
             } else if (rbCliffTriangle.Checked)
             {
-                uiOptions.MouseTool = MouseTool.CliffTriangle;
+                UiOptions.MouseTool = MouseTool.CliffTriangle;
             } else if (rbCliffBrush.Checked)
             {
-                uiOptions.MouseTool = MouseTool.CliffBrush;
+                UiOptions.MouseTool = MouseTool.CliffBrush;
             } else if (rbCliffRemove.Checked)
             {
-                uiOptions.MouseTool = MouseTool.CliffRemove;
+                UiOptions.MouseTool = MouseTool.CliffRemove;
             } else
             {
                 Debugger.Break ();
-                logger.Error ("No Radiobutton in the TerrainTab selected, this should never happen!");
-                uiOptions.MouseTool = MouseTool.Default;
+                Logger.Error ("No Radiobutton in the TerrainTab selected, this should never happen!");
+                UiOptions.MouseTool = MouseTool.Default;
             }
         }
 
@@ -169,19 +169,19 @@ namespace SharpFlame.Gui.Sections
 			circularButton.Click += (sender, e) => { 
 				circularButton.Enabled = false;
 				squareButton.Enabled = true;
-                uiOptions.Terrain.CliffBrush.Shape = ShapeType.Circle;
+                UiOptions.Terrain.CliffBrush.Shape = ShapeType.Circle;
 			};
 			squareButton.Click += (sender, e) => { 
 				squareButton.Enabled = false;
 				circularButton.Enabled = true;
-                uiOptions.Terrain.CliffBrush.Shape = ShapeType.Square;
+                UiOptions.Terrain.CliffBrush.Shape = ShapeType.Square;
 			};
 
 			var nLayout5 = new DynamicLayout ();
 			nLayout5.AddRow (new Label { Text = "Radius:", VerticalAlign = VerticalAlign.Middle },
                 nudCliffBrushRadius = new NumericUpDown { 
                     Size = new Size(-1, -1), 
-                    Value = uiOptions.Terrain.CliffBrush.Radius, 
+                    Value = UiOptions.Terrain.CliffBrush.Radius, 
                     MaxValue = Constants.MapMaxSize, 
                     MinValue = 1 
                 }, 
@@ -231,12 +231,12 @@ namespace SharpFlame.Gui.Sections
             circularButton.Click += (sender, e) => { 
                 circularButton.Enabled = false;
                 squareButton.Enabled = true;
-                uiOptions.Terrain.Brush.Shape = ShapeType.Circle;
+                UiOptions.Terrain.Brush.Shape = ShapeType.Circle;
             };
             squareButton.Click += (sender, e) => { 
                 squareButton.Enabled = false;
                 circularButton.Enabled = true;
-                uiOptions.Terrain.Brush.Shape = ShapeType.Square;
+                UiOptions.Terrain.Brush.Shape = ShapeType.Square;
             };
 
             var mainLayout = new DynamicLayout ();
@@ -244,7 +244,7 @@ namespace SharpFlame.Gui.Sections
             mainLayout.AddRow (new Label { Text = "Radius:", VerticalAlign = VerticalAlign.Middle }, 
                 nudTerrainBrushRadius = new NumericUpDown { 
                     Size = new Size(-1, -1), 
-                    Value = uiOptions.Terrain.Brush.Radius,
+                    Value = UiOptions.Terrain.Brush.Radius,
                     MaxValue = Constants.MapMaxSize, 
                     MinValue = 1 
                 }, 

@@ -58,20 +58,21 @@ namespace SharpFlame
         }
     }
 
-    public sealed class modResults
+    public sealed class MapErrorHelper
     {
-        public static ResultProblemGoto<clsResultItemPosGoto> CreateResultProblemGotoForObject(Unit unit)
+        public static ResultProblemGoto<clsResultItemPosGoto> CreateResultProblemGotoForObject(Unit unit, ViewInfo view)
         {
             var resultGoto = new clsResultItemPosGoto();
-            var view = App.Kernel.Get<ViewInfo>();
             if(view.Map != unit.MapLink.Source)
             {
                 throw new Exception("Map changed?");
             }
 
             resultGoto.Horizontal = unit.Pos.Horizontal;
-            var resultProblem = new ResultProblemGoto<clsResultItemPosGoto>();
-            resultProblem.MapGoto = resultGoto;
+            var resultProblem = new ResultProblemGoto<clsResultItemPosGoto>
+                {
+                    MapGoto = resultGoto
+                };
             return resultProblem;
         }
     }
