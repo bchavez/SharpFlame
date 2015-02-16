@@ -74,19 +74,16 @@ namespace SharpFlame.Mapping
 
         private readonly MainMapView mainMapView;
         private readonly ViewInfo viewInfo;
-        private readonly MinimapCreator minimap;
         private readonly Options uiOptions;
 
         [Inject]
         internal IKernel Kernel { get; set; }
        
-        public Map(ILoggerFactory logFactory, MainMapView mmv, ViewInfo vi, MinimapCreator mmc,
-            Options argUiOptions)
+        public Map(ILoggerFactory logFactory, MainMapView mmv, ViewInfo vi, Options argUiOptions)
         {
             logger = logFactory.GetCurrentClassLogger();
             mainMapView = mmv;
             viewInfo = vi;
-            minimap = mmc;
             uiOptions = argUiOptions;
 
             SectorCount = new XYInt(0, 0);
@@ -214,7 +211,7 @@ namespace SharpFlame.Mapping
             get { return readyForUserInput; }
         }
 
-        private bool isMainMap
+        private bool IsMainMap
         {
             get
             {
@@ -728,8 +725,7 @@ namespace SharpFlame.Mapping
             }
 
             GL.EndList();
-
-            minimap.Refresh = true;
+            this.mainMapView.RefreshMinimap();
         }
 
         public void DrawTileWireframe(int TileX, int TileY)
@@ -1128,7 +1124,7 @@ namespace SharpFlame.Mapping
             }
 
             SectorsUpdateGraphics();
-            minimap.Refresh = true;
+            this.mainMapView.RefreshMinimap();
             Program.frmMainInstance.SelectedObject_Changed();
         }
 
@@ -1211,7 +1207,7 @@ namespace SharpFlame.Mapping
             UndoPosition++;
 
             SectorsUpdateGraphics();
-            minimap.Refresh = true;
+            this.mainMapView.RefreshMinimap();
             Program.frmMainInstance.SelectedObject_Changed();
         }
 
@@ -1448,7 +1444,7 @@ namespace SharpFlame.Mapping
 
             SectorsUpdateGraphics();
             SectorsUpdateUnitHeights();
-            minimap.Refresh = true;
+            this.mainMapView.RefreshMinimap();
         }
 
         public Gateway GatewayCreate(XYInt PosA, XYInt PosB)
@@ -1779,17 +1775,17 @@ namespace SharpFlame.Mapping
             Messages.MaintainOrder = true;
         }
 
-        public void Update()
+        public void Update(MinimapGl minimapGl)
         {
-            var lastSuppress = minimap.Suppress;
-            minimap.Suppress = true;
+            var lastSuppress = minimapGl.Suppress;
+            minimapGl.Suppress = true;
             UpdateAutoTextures();
             TerrainInterpretUpdate();
             SectorsUpdateGraphics();
             SectorsUpdateUnitHeights();
-            minimap.Suppress = lastSuppress;
+            minimapGl.Suppress = lastSuppress;
 
-            minimap.Refresh = true;
+            minimapGl.Refresh = true;
         }
 
         public void SectorsUpdateUnitHeights()
@@ -1808,7 +1804,7 @@ namespace SharpFlame.Mapping
             var UpdateSectorGraphics = new clsUpdateSectorGraphics();
             UpdateSectorGraphics.Map = this;
 
-            if (isMainMap)
+            if (IsMainMap)
             {
                 SectorGraphicsChanges.PerformTool(UpdateSectorGraphics);
             }

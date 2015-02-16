@@ -55,7 +55,7 @@ namespace SharpFlame.Gui.Sections
             {
                 mainMap.InitializeUserInput();
                 mainMap.SectorGraphicsChanges.SetAllChanged();
-                mainMap.Update();
+                mainMap.Update(this.minimapGl);
 
                 // Change the tileset in the TexturesView.
                 UiOptions.Textures.TilesetNum = App.Tilesets.IndexOf(mainMap.Tileset);
@@ -68,6 +68,26 @@ namespace SharpFlame.Gui.Sections
             DrawLater();   
         }
 
+        [EventSubscription(EventTopics.OnTilesetChanged,typeof(OnPublisher))]
+        public void OnTilsetChanged(object sender, EventArgs<int> args)
+        {
+            var tilesetNum = args.Value;
+            var map = this.MainMap;
+            if( map != null &&
+                map.Tileset != App.Tilesets[tilesetNum] )
+            {
+                map.Tileset = App.Tilesets[tilesetNum];
+                map.TileType_Reset();
+
+                map.SetPainterToDefaults();
+
+                map.SectorGraphicsChanges.SetAllChanged();
+                map.Update(this.minimapGl);
+
+                this.DrawLater();
+            }
+        }
+
         /// <summary>
         /// These get injected by Ninject over the constructor.
         /// </summary>
@@ -77,7 +97,7 @@ namespace SharpFlame.Gui.Sections
         internal KeyboardManager KeyboardManager { get; set; }
 
         private readonly ViewInfo viewInfo;
-        private readonly MinimapCreator MinimapCreator;
+        private readonly MinimapGl minimapGl;
         
         [Inject]
         internal Options UiOptions { get; set; }
@@ -95,13 +115,6 @@ namespace SharpFlame.Gui.Sections
 
         [Inject]
         internal SettingsManager Settings { get; set; }
-
-        [Inject]
-        public void BindLater(IKernel k)
-        {
-            k.Bind<GLSurface>().ToConstant(this.GLSurface).Named(NamedBinding.MapGl);
-        }
-
 
         public MainMapView(ILoggerFactory logFactory, ViewInfo argViewInfo)
         {
@@ -125,7 +138,7 @@ namespace SharpFlame.Gui.Sections
 
             Content = mainLayout;
 
-            this.MinimapCreator = new MinimapCreator(this.Settings, this.UiOptions, this.GLSurface);
+            this.minimapGl = new MinimapGl(this.Settings, this.UiOptions, this.GLSurface);
             this.GLSurface.Initialized += GLSurface_Initialized;
             SetupEventHandlers();
         }
@@ -188,8 +201,16 @@ namespace SharpFlame.Gui.Sections
             {
                 GLSurface.Focus();
             };
-            GLSurface.MouseDown += viewInfo.HandleMouseDown;
-            GLSurface.MouseUp += viewInfo.HandleMouseUp;
+            GLSurface.MouseDown += (sender, args) =>
+                {
+                    this.minimapGl.Suppress = true;
+                    viewInfo.HandleMouseDown(sender, args);
+                };
+            GLSurface.MouseUp += (sender, args) =>
+                {
+                    this.minimapGl.Suppress = false;
+                    viewInfo.HandleMouseUp(sender, args);
+                };
             GLSurface.MouseMove += viewInfo.HandleMouseMove;
             GLSurface.MouseMove += HandleMouseMove;
             GLSurface.MouseWheel += viewInfo.HandleMouseWheel;
@@ -405,7 +426,7 @@ namespace SharpFlame.Gui.Sections
             {
                 try
                 {
-                    MainMap.GLDraw();
+                    MainMap.GLDraw(this.minimapGl);
                 }
                 catch( Exception ex )
                 {
@@ -662,7 +683,7 @@ namespace SharpFlame.Gui.Sections
                         }
                     }
                 }
-                mainMap.Update();
+                mainMap.Update(this.minimapGl);
                 DrawLater();
             }
             if (KeyboardManager.Keys[KeyboardKeys.ShowLabels].Active)
@@ -723,7 +744,7 @@ namespace SharpFlame.Gui.Sections
                         }
                         Program.frmMainInstance.SelectedObject_Changed();
                         mainMap.UndoStepCreate("Object Deleted");
-                        mainMap.Update();
+                        mainMap.Update(this.minimapGl);
                         DrawLater();
                     }
                 }
@@ -745,7 +766,7 @@ namespace SharpFlame.Gui.Sections
                             mainMap.SelectedUnitsAction(objectPosOffset);
 
                             mainMap.UndoStepCreate("Objects Moved");
-                            mainMap.Update();
+                            mainMap.Update(this.minimapGl);
                             Program.frmMainInstance.SelectedObject_Changed();
                             DrawLater();
                         }
@@ -759,7 +780,7 @@ namespace SharpFlame.Gui.Sections
                             Offset = -90
                         };
                     mainMap.SelectedUnitsAction(objectRotationOffset);
-                    mainMap.Update();
+                    mainMap.Update(this.minimapGl);
                     Program.frmMainInstance.SelectedObject_Changed();
                     mainMap.UndoStepCreate("Object Rotated");
                     DrawLater();
@@ -772,7 +793,7 @@ namespace SharpFlame.Gui.Sections
                             Offset = 90
                         };
                     mainMap.SelectedUnitsAction(objectRotationOffset);
-                    mainMap.Update();
+                    mainMap.Update(this.minimapGl);
                     Program.frmMainInstance.SelectedObject_Changed();
                     mainMap.UndoStepCreate("Object Rotated");
                     DrawLater();
@@ -784,6 +805,11 @@ namespace SharpFlame.Gui.Sections
                 UiOptions.MouseTool = MouseTool.ObjectSelect;
                 DrawLater();
             }
+        }
+
+        public void RefreshMinimap()
+        {
+            this.minimapGl.Refresh = true;
         }
 	}
 }

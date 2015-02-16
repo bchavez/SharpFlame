@@ -1,149 +1,16 @@
- 
 using System;
-using Appccelerate.EventBroker;
-using Appccelerate.EventBroker.Handlers;
-using Appccelerate.Events;
-using Eto.Forms;
-using Eto.Gl;
-using Ninject;
-using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
-using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Maths;
-using SharpFlame.Settings;
 
 namespace SharpFlame.Mapping.Minimap
 {
-    public class MinimapCreator : IDisposable
+    public class MinimapRender
     {
-        private Map map;
-
-        public Map Map
-        {
-            get { return map; }
-        }
-
-        [EventSubscription(EventTopics.OnMapLoad, typeof(OnPublisher))]
-        public void OnMapLoad(object sender, EventArgs<Map> args)
-        {
-            // Delete old Texture
-            GlDelete();
-
-            map = args.Value;
-            if( map != null )
-            {
-                // Make new one later
-                Refresh = true;
-            }
-            else
-            {
-                this.timer.Stop();
-            }
-        }
-
-        private bool refresh;
-
-        public bool Refresh
-        {
-            get { return refresh; }
-            set
-            {
-                refresh = value;
-                if( refresh && !timer.Started )
-                {
-                    timer.Start();
-                }
-            }
-        }
-
-        public int GLTexture;
-        public int TextureSize { get; private set; }
-        public bool Suppress { get; set; }
-
-        internal GLSurface GLSurface { get; set; }
-
-        private readonly UITimer timer;
-        private readonly SettingsManager settings;
-        private readonly UiOptions.MinimapOpts miniOpts;
-
-        public MinimapCreator(SettingsManager argSettings, UiOptions.Options opts, GLSurface mapGl)
-        {
-            this.GLSurface = mapGl;
-            settings = argSettings;
-            miniOpts = opts.MinimapOpts;
-            
-
-            Suppress = false;
-
-            timer = new UITimer {Interval = Constants.MinimapDelay};
-            timer.Elapsed += Tick;
-
-            miniOpts.PropertyChanged += delegate
-                {
-                    Refresh = true;
-                };
-        }
-
-        private void Tick(object sender, EventArgs e)
-        {
-            if( Map != null && Refresh )
-            {
-                if( !Suppress ) // Try again on next call, let the timer run.
-                {
-                    Make();
-                    Refresh = false;
-                }
-            }
-            else
-            {
-                timer.Stop();
-            }
-        }
-
-        private void Make()
-        {
-            if( Map == null || !GLSurface.IsInitialized )
-            {
-                return;
-            }
-            this.GLSurface.MakeCurrent();
-
-            var terrain = Map.Terrain;
-
-            TextureSize = Math.Round(Math.Pow(2.0D, Math.Ceiling(Math.Log(Math.Max(terrain.TileSize.X, terrain.TileSize.Y)) / Math.Log(2.0D)))).ToInt();
-
-            var texture = new MinimapTexture(new XYInt(TextureSize, TextureSize));
-
-            FillTexture(texture, Map);
-
-            GlDelete();
-
-            GL.GenTextures(1, out GLTexture);
-            GL.BindTexture(TextureTarget.Texture2D, GLTexture);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, TextureSize, TextureSize, 0, PixelFormat.Rgba,
-                PixelType.Float, texture.InlinePixels);
-
-            // TODO: Here was a MainMapView.DrawLater not sure its required.
-        }
-
-        private void GlDelete()
-        {
-            if( GLTexture != 0 )
-            {
-                GL.DeleteTextures(1, ref GLTexture);
-                GLTexture = 0;
-            }
-        }
-
-        private SRgb GetUnitGroupColour(clsUnitGroup colourUnitGroup)
+        private static SRgb GetUnitGroupColour(clsUnitGroup colourUnitGroup)
         {
             if( colourUnitGroup.WZ_StartPos < 0 )
             {
@@ -151,8 +18,7 @@ namespace SharpFlame.Mapping.Minimap
             }
             return App.PlayerColour[colourUnitGroup.WZ_StartPos].MinimapColour;
         }
-
-        public void FillTexture(MinimapTexture Texture, Map myMap)
+        public static void FillTexture(MinimapTexture texture, Map myMap, UiOptions.MinimapOpts miniOpts, Settings.SettingsManager settings)
         {
             if( myMap == null )
             {
@@ -168,8 +34,8 @@ namespace SharpFlame.Mapping.Minimap
             var high = new XYInt();
             var footprint = new XYInt();
             var flag = default(bool);
-            var unitMap = new bool[Texture.Size.Y, Texture.Size.X];
-            var sngTexture = new float[Texture.Size.Y, Texture.Size.X, 3];
+            var unitMap = new bool[texture.Size.Y, texture.Size.X];
+            var sngTexture = new float[texture.Size.Y, texture.Size.X, 3];
             float alpha = 0;
             float antiAlpha = 0;
             var rGBSng = new SRgb();
@@ -178,15 +44,15 @@ namespace SharpFlame.Mapping.Minimap
             {
                 if( tileset != null )
                 {
-                    for( var Y = 0; Y <= terrain.TileSize.Y - 1; Y++ )
+                    for( var y = 0; y <= terrain.TileSize.Y - 1; y++ )
                     {
-                        for( var X = 0; X <= terrain.TileSize.X - 1; X++ )
+                        for( var x = 0; x <= terrain.TileSize.X - 1; x++ )
                         {
-                            if( terrain.Tiles[X, Y].Texture.TextureNum >= 0 && terrain.Tiles[X, Y].Texture.TextureNum < tileset.Tiles.Count )
+                            if( terrain.Tiles[x, y].Texture.TextureNum >= 0 && terrain.Tiles[x, y].Texture.TextureNum < tileset.Tiles.Count )
                             {
-                                sngTexture[Y, X, 0] = tileset.Tiles[terrain.Tiles[X, Y].Texture.TextureNum].AverageColour.Red;
-                                sngTexture[Y, X, 1] = tileset.Tiles[terrain.Tiles[X, Y].Texture.TextureNum].AverageColour.Green;
-                                sngTexture[Y, X, 2] = tileset.Tiles[terrain.Tiles[X, Y].Texture.TextureNum].AverageColour.Blue;
+                                sngTexture[y, x, 0] = tileset.Tiles[terrain.Tiles[x, y].Texture.TextureNum].AverageColour.Red;
+                                sngTexture[y, x, 1] = tileset.Tiles[terrain.Tiles[x, y].Texture.TextureNum].AverageColour.Green;
+                                sngTexture[y, x, 2] = tileset.Tiles[terrain.Tiles[x, y].Texture.TextureNum].AverageColour.Blue;
                             }
                         }
                     }
@@ -194,16 +60,16 @@ namespace SharpFlame.Mapping.Minimap
                 if( miniOpts.Heights )
                 {
                     float Height = 0;
-                    for( var Y = 0; Y <= terrain.TileSize.Y - 1; Y++ )
+                    for( var y = 0; y <= terrain.TileSize.Y - 1; y++ )
                     {
-                        for( var X = 0; X <= terrain.TileSize.X - 1; X++ )
+                        for( var x = 0; x <= terrain.TileSize.X - 1; x++ )
                         {
                             Height =
-                                Convert.ToSingle(((terrain.Vertices[X, Y].Height) + terrain.Vertices[X + 1, Y].Height + terrain.Vertices[X, Y + 1].Height +
-                                                  terrain.Vertices[X + 1, Y + 1].Height) / 1020.0F);
-                            sngTexture[Y, X, 0] = (sngTexture[Y, X, 0] * 2.0F + Height) / 3.0F;
-                            sngTexture[Y, X, 1] = (sngTexture[Y, X, 1] * 2.0F + Height) / 3.0F;
-                            sngTexture[Y, X, 2] = (sngTexture[Y, X, 2] * 2.0F + Height) / 3.0F;
+                                Convert.ToSingle(( ( terrain.Vertices[x, y].Height ) + terrain.Vertices[x + 1, y].Height + terrain.Vertices[x, y + 1].Height +
+                                                   terrain.Vertices[x + 1, y + 1].Height ) / 1020.0F);
+                            sngTexture[y, x, 0] = ( sngTexture[y, x, 0] * 2.0F + Height ) / 3.0F;
+                            sngTexture[y, x, 1] = ( sngTexture[y, x, 1] * 2.0F + Height ) / 3.0F;
+                            sngTexture[y, x, 2] = ( sngTexture[y, x, 2] * 2.0F + Height ) / 3.0F;
                         }
                     }
                 }
@@ -215,8 +81,8 @@ namespace SharpFlame.Mapping.Minimap
                     for( var x = 0; x <= terrain.TileSize.X - 1; x++ )
                     {
                         var height =
-                            Convert.ToSingle(((terrain.Vertices[x, y].Height) + terrain.Vertices[x + 1, y].Height + terrain.Vertices[x, y + 1].Height +
-                                              terrain.Vertices[x + 1, y + 1].Height) / 1020.0F);
+                            Convert.ToSingle(( ( terrain.Vertices[x, y].Height ) + terrain.Vertices[x + 1, y].Height + terrain.Vertices[x, y + 1].Height +
+                                               terrain.Vertices[x + 1, y + 1].Height ) / 1020.0F);
                         sngTexture[y, x, 0] = height;
                         sngTexture[y, x, 1] = height;
                         sngTexture[y, x, 2] = height;
@@ -326,9 +192,9 @@ namespace SharpFlame.Mapping.Minimap
                     }
                 }
                 //reset unit map
-                for( var y = 0; y <= Texture.Size.Y - 1; y++ )
+                for( var y = 0; y <= texture.Size.Y - 1; y++ )
                 {
-                    for( var x = 0; x <= Texture.Size.X - 1; x++ )
+                    for( var x = 0; x <= texture.Size.X - 1; x++ )
                     {
                         unitMap[y, x] = false;
                     }
@@ -369,7 +235,7 @@ namespace SharpFlame.Mapping.Minimap
             {
                 for( var x = 0; x <= terrain.TileSize.X - 1; x++ )
                 {
-                    Texture.set(x, y, new SRgba(
+                    texture.set(x, y, new SRgba(
                         sngTexture[y, x, 0],
                         sngTexture[y, x, 1],
                         sngTexture[y, x, 2],
@@ -378,25 +244,5 @@ namespace SharpFlame.Mapping.Minimap
             }
         }
 
-        //~MinimapCreator()
-        //{
-        //    Dispose(false);
-        //}
-
-        public void Dispose()
-        {
-            Dispose(true);
-        }
-
-        private void Dispose(bool disposing)
-        {
-            //Map = null; // Will clean up everthing.
-            GlDelete();
-            this.timer.Stop();
-
-            GC.SuppressFinalize(this);
-        }
-
     }
 }
-

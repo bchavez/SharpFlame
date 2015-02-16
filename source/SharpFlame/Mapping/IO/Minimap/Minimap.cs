@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Net.Mime;
 using Ninject;
 using Ninject.Extensions.Logging;
 using SharpFlame.Bitmaps;
@@ -9,17 +10,22 @@ using SharpFlame.Core.Domain;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Mapping.Minimap;
 using SharpFlame.Maths;
+using SharpFlame.Settings;
 
 namespace SharpFlame.Mapping.IO.Minimap
 {
     public class MinimapSaver : IIOSaver
     {
         private readonly ILogger logger;
-        private readonly IKernel kernel;
 
-        public MinimapSaver(IKernel argKernel, ILoggerFactory logFactory)
+        [Inject]
+        internal SettingsManager Settings { get; set; }
+
+        [Inject]
+        internal UiOptions.MinimapOpts MiniOpts { get; set; }
+
+        public MinimapSaver(ILoggerFactory logFactory)
         {
-            kernel = argKernel;
             logger = logFactory.GetCurrentClassLogger();
         }
 
@@ -30,10 +36,8 @@ namespace SharpFlame.Mapping.IO.Minimap
 
             var minimapBitmap = new Bitmap(map.Terrain.TileSize.X, map.Terrain.TileSize.Y);
 
-            var mmc = kernel.Get<MinimapCreator>();
-
             var texture = new MinimapTexture(new XYInt(map.Terrain.TileSize.X, map.Terrain.TileSize.Y));
-            mmc.FillTexture(texture, map);
+            MinimapRender.FillTexture(texture, map, this.MiniOpts, this.Settings);
 
             for ( var y = 0; y <= map.Terrain.TileSize.Y - 1; y++ )
             {

@@ -468,7 +468,7 @@ namespace SharpFlame
             Generator.Map.SectorGraphicsChanges.SetAllChanged();
             Generator.Map.SectorUnitHeightsChanges.SetAllChanged();
 
-            Generator.Map.Update();
+            Generator.Map.Update(null);
 
             Generator.Map.UndoStepCreate("Generated Textures");
 
@@ -525,7 +525,7 @@ namespace SharpFlame
             }
 
             Generator.Map.SectorGraphicsChanges.SetAllChanged();
-            Generator.Map.Update();
+            Generator.Map.Update(null);
             Generator.Map.UndoStepCreate("Generator objects");
         }
 

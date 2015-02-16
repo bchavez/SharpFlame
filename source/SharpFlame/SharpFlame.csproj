@@ -209,6 +209,8 @@
     <Compile Include="Mapping\Drawing\clsDrawTileOutline.cs" />
     <Compile Include="Mapping\Drawing\clsDrawVertexMarker.cs" />
     <Compile Include="Mapping\Drawing\clsDrawVertexTerrain.cs" />
+    <Compile Include="Mapping\Minimap\MinimapGl.cs" />
+    <Compile Include="Mapping\Minimap\MinimapRender.cs" />
     <Compile Include="Mapping\Objects\clsUnitAdd.cs" />
     <Compile Include="Mapping\Objects\clsUnitCreate.cs" />
     <Compile Include="Mapping\Objects\clsUnitGroup.cs" />
@@ -500,7 +502,6 @@
     <Compile Include="ViewInfo.cs" />
     <Compile Include="UiOptions\Options.cs" />
     <Compile Include="Mapping\Minimap\MinimapTexture.cs" />
-    <Compile Include="Mapping\Minimap\MinimapCreator.cs" />
     <Compile Include="UiOptions\Textures.cs" />
     <Compile Include="UiOptions\Minimap.cs" />
     <Compile Include="UiOptions\TerrainOptions.cs" />

@@ -138,7 +138,6 @@ namespace SharpFlame
         public static SettingsManager SettingsManager { get; set; }
         public static KeyboardManager KeyboardManager { get; set; } 
         public static Options UiOptions { get; set; }
-        public static GLSurface MapGLSurface { get; set; }
 
         /// <summary>
         /// Holder for the Status form.

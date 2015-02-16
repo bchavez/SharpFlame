@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
+using Appccelerate.Events;
 using Eto;
 using Eto.Drawing;
 using Eto.Forms;
@@ -305,6 +306,9 @@ namespace SharpFlame.Gui.Sections
             }
         }
 
+        [EventPublication(EventTopics.OnTilesetChanged)]
+        public event EventHandler<EventArgs<int>> OnTilesetChanged = delegate { }; 
+
         /// <summary>
         /// Sets the Bindings to uiOptions.Textures;
         /// </summary>
@@ -402,23 +406,10 @@ namespace SharpFlame.Gui.Sections
             // Bind tileset combobox.
             cbTileset.Bind(r => r.SelectedIndex, texturesOptions, t => t.TilesetNum);
             cbTileset.SelectedIndexChanged += delegate
-            {
-                var map = mainMapView.MainMap;
-                if (map != null && 
-                    map.Tileset != App.Tilesets[texturesOptions.TilesetNum]) 
                 {
-                    map.Tileset = App.Tilesets[texturesOptions.TilesetNum];
-                    map.TileType_Reset();
-
-                    map.SetPainterToDefaults();
-
-                    map.SectorGraphicsChanges.SetAllChanged();
-                    map.Update();
-
-                    mainMapView.DrawLater();
-                }
-                DrawTexturesView();
-            };
+                    OnTilesetChanged(this, new EventArgs<int>(texturesOptions.TilesetNum));
+                    DrawTexturesView();
+                };
 
             chkDisplayTileTypes.CheckedChanged += delegate
                 {

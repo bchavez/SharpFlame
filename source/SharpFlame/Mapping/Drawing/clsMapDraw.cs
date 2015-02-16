@@ -12,6 +12,7 @@ using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping.Drawing;
+using SharpFlame.Mapping.Minimap;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tools;
@@ -25,7 +26,7 @@ namespace SharpFlame.Mapping
 {
     public partial class Map
     {
-        public void GLDraw()
+        public void GLDraw(MinimapGl minimapGl)
         {
             var xyzDbl = default(XYZDouble);
             var x2 = 0;
@@ -68,7 +69,7 @@ namespace SharpFlame.Mapping
             dblTemp = App.SettingsManager.MinimapSize;
             viewInfo.TilesPerMinimapPixel = Math.Sqrt(Terrain.TileSize.X * Terrain.TileSize.X + Terrain.TileSize.Y * Terrain.TileSize.Y) /
                                                (MathUtil.RootTwo * dblTemp);
-            if ( minimap.TextureSize > 0 & viewInfo.TilesPerMinimapPixel > 0.0D )
+            if ( minimapGl.TextureSize > 0 & viewInfo.TilesPerMinimapPixel > 0.0D )
             {
                 minimapSizeXy.X = (Terrain.TileSize.X / viewInfo.TilesPerMinimapPixel).ToInt();
                 minimapSizeXy.Y = (Terrain.TileSize.Y / viewInfo.TilesPerMinimapPixel).ToInt();
@@ -980,17 +981,17 @@ namespace SharpFlame.Mapping
 
             debugGLError("Minimap matrix modes");
 
-            if ( minimap.TextureSize > 0 & viewInfo.TilesPerMinimapPixel > 0.0D )
+            if ( minimapGl.TextureSize > 0 & viewInfo.TilesPerMinimapPixel > 0.0D )
             {
                 GL.Translate(0.0F, glSize.Height - minimapSizeXy.Y, 0.0F);
 
-                xyzDbl.X = (double)Terrain.TileSize.X / minimap.TextureSize;
-                xyzDbl.Z = (double)Terrain.TileSize.Y / minimap.TextureSize;
+                xyzDbl.X = (double)Terrain.TileSize.X / minimapGl.TextureSize;
+                xyzDbl.Z = (double)Terrain.TileSize.Y / minimapGl.TextureSize;
 
-                if ( minimap.GLTexture > 0 )
+                if ( minimapGl.GLTexture > 0 )
                 {
                     GL.Enable(EnableCap.Texture2D);
-                    GL.BindTexture(TextureTarget.Texture2D, minimap.GLTexture);
+                    GL.BindTexture(TextureTarget.Texture2D, minimapGl.GLTexture);
                     GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Decal);
 
                     GL.Begin(BeginMode.Quads);

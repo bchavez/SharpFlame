@@ -50,9 +50,9 @@ namespace SharpFlame.Infrastructure
                 .ToSelf()
                 .InSingletonScope();
 
-            this.Bind<MinimapCreator>()
-                .ToSelf()
-                .InSingletonScope();
+            //this.Bind<MinimapCreator>()
+            //    .ToSelf()
+            //    .InSingletonScope();
 
             /*this.Bind<Updater>()
                 .ToSelf()

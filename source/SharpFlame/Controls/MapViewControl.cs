@@ -289,7 +289,7 @@ namespace SharpFlame.Controls
 
             if ( map != null )
             {
-                map.GLDraw();
+                map.GLDraw(null);
             }
 
             GL.Flush();

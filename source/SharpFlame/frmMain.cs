@@ -591,13 +591,13 @@ namespace SharpFlame
                 ApplyToMap.SectorTerrainUndoChanges.SetAllChanged();
                 ApplyToMap.SectorUnitHeightsChanges.SetAllChanged();
                 ApplyToMap.SectorGraphicsChanges.SetAllChanged();
-                ApplyToMap.Update();
+                ApplyToMap.Update(null);
                 ApplyToMap.UndoStepCreate("Apply heightmap");
             }
             else
             {
                 NewMainMap(ApplyToMap);
-                ApplyToMap.Update();
+                ApplyToMap.Update(null);
             }
 
             View_DrawViewLater();
@@ -705,7 +705,7 @@ namespace SharpFlame
                 PainterTerrains_Refresh(-1, -1);
 
                 Map.SectorGraphicsChanges.SetAllChanged();
-                Map.Update();
+                Map.Update(null);
                 View_DrawViewLater();
                 TextureViewControl.ScrollUpdate();
                 TextureViewControl.DrawViewLater();
@@ -929,7 +929,7 @@ namespace SharpFlame
 
             Map.SectorGraphicsChanges.SetAllChanged();
 
-            Map.Update();
+            Map.Update(null);
 
             View_DrawViewLater();
         }
@@ -1083,7 +1083,7 @@ namespace SharpFlame
             NewMainMap(NewMap);
 
             NewMap.RandomizeTileOrientations();
-            NewMap.Update();
+            NewMap.Update(null);
             NewMap.UndoClear();
         }
 
@@ -1169,7 +1169,7 @@ namespace SharpFlame
                 }
             }
 
-            Map.Update();
+            Map.Update(null);
 
             Map.UndoStepCreate("Selection Heights Offset");
 
@@ -1414,7 +1414,7 @@ namespace SharpFlame
             ObjectRotation.Angle = Angle;
             Map.SelectedUnitsAction(ObjectRotation);
 
-            Map.Update();
+            Map.Update(null);
             SelectedObject_Changed();
             Map.UndoStepCreate("Object Rotated");
             View_DrawViewLater();
@@ -2468,7 +2468,7 @@ namespace SharpFlame
                 }
             }
 
-            Map.Update();
+            Map.Update(null);
 
             Map.UndoStepCreate("Selection Heights Multiply");
 
@@ -3249,7 +3249,7 @@ namespace SharpFlame
                 Map.CheckMessages();
 //                Map.viewInfo.FovCalc();
                 Map.SectorGraphicsChanges.SetAllChanged();
-                Map.Update();
+                Map.Update(null);
                 tsbSave.Enabled = Map.ChangedSinceSave;
                 NewPlayerNumControl.SetMap(Map);
                 NewPlayerNumControl.Target = Map.SelectedUnitGroup;
@@ -3454,7 +3454,7 @@ namespace SharpFlame
             var FlattenTool = new clsObjectFlattenTerrain();
             Map.SelectedUnits.GetItemsAsSimpleClassList().PerformTool(FlattenTool);
 
-            Map.Update();
+            Map.Update(null);
             Map.UndoStepCreate("Flatten Under Structures");
         }
 
@@ -3974,7 +3974,7 @@ namespace SharpFlame
             AlignTool.Map = Map;
             Map.SelectedUnits.GetItemsAsSimpleList().PerformTool(AlignTool);
 
-            Map.Update();
+            Map.Update(null);
             Map.UndoStepCreate("Align Objects");
         }
 
@@ -4082,7 +4082,7 @@ namespace SharpFlame
 
             Map.TerrainInterpretChanges.SetAllChanged();
 
-            Map.Update();
+            Map.Update(null);
 
             Map.UndoStepCreate("Interpret Terrain");
         }
@@ -4098,7 +4098,7 @@ namespace SharpFlame
 
             Map.WaterTriCorrection();
 
-            Map.Update();
+            Map.Update(null);
 
             Map.UndoStepCreate("Water Triangle Correction");
 
@@ -4133,7 +4133,7 @@ namespace SharpFlame
             var FlattenTool = new clsObjectFlattenTerrain();
             OilList.PerformTool(FlattenTool);
 
-            Map.Update();
+            Map.Update(null);
             Map.UndoStepCreate("Flatten Under Oil");
         }
 
@@ -4159,7 +4159,7 @@ namespace SharpFlame
             var FlattenTool = new clsObjectFlattenTerrain();
             StructureList.PerformTool(FlattenTool);
 
-            Map.Update();
+            Map.Update(null);
             Map.UndoStepCreate("Flatten Under Structures");
         }
 

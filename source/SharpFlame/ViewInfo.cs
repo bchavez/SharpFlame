@@ -77,17 +77,15 @@ namespace SharpFlame
         private readonly Options uiOptions;
         private readonly SettingsManager settings;
         private readonly UITimer tmrMouseMove;
-        private readonly MinimapCreator minimap;
 
         private bool enableMouseMove = false;
 
         public ViewInfo(KeyboardManager kbm, Options argUiOptions,
-            SettingsManager argSettings, MinimapCreator mmc)
+            SettingsManager argSettings)
         {
             this.keyboardManager = kbm;
             this.uiOptions = argUiOptions;
             this.settings = argSettings;
-            this.minimap = mmc;
 
             tmrMouseMove = new UITimer { Interval = 0.1 };
             tmrMouseMove.Elapsed += EnableMouseMove;
@@ -605,7 +603,7 @@ namespace SharpFlame
                 };
             uiOptions.Terrain.Brush.PerformActionMapVertices(applyVertexTerrain, mouseOverTerrain.Vertex);
 
-            Map.Update();
+            Map.Update(null);
 
             MainMapView.DrawLater();
         }
@@ -644,7 +642,7 @@ namespace SharpFlame
                         Map.SectorTerrainUndoChanges.TileChanged(tileNum);
                     }
 
-                    Map.Update();
+                    Map.Update(null);
 
                     Map.UndoStepCreate("Road Side");
 
@@ -673,7 +671,7 @@ namespace SharpFlame
                         Map.SectorTerrainUndoChanges.TileChanged(tileNum);
                     }
 
-                    Map.Update();
+                    Map.Update(null);
 
                     Map.UndoStepCreate("Road Side");
 
@@ -721,7 +719,7 @@ namespace SharpFlame
                         Map.SectorTerrainUndoChanges.SideHChanged(sideNum);
                     }
 
-                    Map.Update();
+                    Map.Update(null);
 
                     Map.UndoStepCreate("Road Line");
 
@@ -750,7 +748,7 @@ namespace SharpFlame
                         Map.SectorTerrainUndoChanges.SideVChanged(sideNum);
                     }
 
-                    Map.Update();
+                    Map.Update(null);
 
                     Map.UndoStepCreate("Road Line");
 
@@ -1012,7 +1010,7 @@ namespace SharpFlame
                 }
             }
 
-            Map.Update();
+            Map.Update(null);
 
             Map.UndoStepCreate("Ground Fill");
 
@@ -1041,7 +1039,7 @@ namespace SharpFlame
 
             uiOptions.Textures.Brush.PerformActionMapTiles(applyTexture, mouseOverTerrain.Tile);
 
-            Map.Update();
+            Map.Update(null);
 
             MainMapView.DrawLater();
         }
@@ -1116,7 +1114,7 @@ namespace SharpFlame
                 applyCliffTriangle.ActionPerform();
             }
 
-            Map.Update();
+            Map.Update(null);
 
             MainMapView.DrawLater();
         }
@@ -1141,7 +1139,7 @@ namespace SharpFlame
             applyCliff.SetTris = Program.frmMainInstance.cbxCliffTris.Checked;
             uiOptions.Terrain.CliffBrush.PerformActionMapTiles(applyCliff, mouseOverTerrain.Tile);
 
-            Map.Update();
+            Map.Update(null);
 
             MainMapView.DrawLater();
         }
@@ -1158,7 +1156,7 @@ namespace SharpFlame
             var applyCliffRemove = new clsApplyCliffRemove {Map = Map};
             uiOptions.Terrain.CliffBrush.PerformActionMapTiles(applyCliffRemove, mouseOverTerrain.Tile);
 
-            Map.Update();
+            Map.Update(null);
 
             MainMapView.DrawLater();
         }
@@ -1175,7 +1173,7 @@ namespace SharpFlame
             var applyRoadRemove = new clsApplyRoadRemove {Map = Map};
             uiOptions.Terrain.CliffBrush.PerformActionMapTiles(applyRoadRemove, mouseOverTerrain.Tile);
 
-            Map.Update();
+            Map.Update(null);
 
             MainMapView.DrawLater();
         }
@@ -1197,7 +1195,7 @@ namespace SharpFlame
             Map.SectorGraphicsChanges.TileChanged(tile);
             Map.SectorTerrainUndoChanges.TileChanged(tile);
 
-            Map.Update();
+            Map.Update(null);
 
             Map.UndoStepCreate("Texture Rotate");
 
@@ -1221,7 +1219,7 @@ namespace SharpFlame
             Map.SectorGraphicsChanges.TileChanged(tile);
             Map.SectorTerrainUndoChanges.TileChanged(tile);
 
-            Map.Update();
+            Map.Update(null);
 
             Map.UndoStepCreate("Texture Rotate");
 
@@ -1245,7 +1243,7 @@ namespace SharpFlame
             Map.SectorGraphicsChanges.TileChanged(tile);
             Map.SectorTerrainUndoChanges.TileChanged(tile);
 
-            Map.Update();
+            Map.Update(null);
 
             Map.UndoStepCreate("Texture Rotate");
 
@@ -1268,7 +1266,7 @@ namespace SharpFlame
             Map.SectorGraphicsChanges.TileChanged(tile);
             Map.SectorTerrainUndoChanges.TileChanged(tile);
 
-            Map.Update();
+            Map.Update(null);
 
             Map.UndoStepCreate("Triangle Flip");
 
@@ -1302,7 +1300,7 @@ namespace SharpFlame
             uiOptions.Height.Brush.PerformActionMapVertices(applyHeightSmoothing, mouseOverTerrain.Vertex);
             applyHeightSmoothing.Finish();
 
-            Map.Update();
+            Map.Update(null);
 
             MainMapView.DrawLater();
         }
@@ -1322,7 +1320,7 @@ namespace SharpFlame
             applyHeightChange.UseEffect = uiOptions.Height.ChangeFade;
             uiOptions.Height.Brush.PerformActionMapVertices(applyHeightChange, mouseOverTerrain.Vertex);
 
-            Map.Update();
+            Map.Update(null);
 
             MainMapView.DrawLater();
         }
@@ -1343,7 +1341,7 @@ namespace SharpFlame
                 };
             brush.PerformActionMapVertices(applyHeightSet, mouseOverTerrain.Vertex);
 
-            Map.Update();
+            Map.Update(null);
 
             MainMapView.DrawLater();
         }
@@ -1375,7 +1373,7 @@ namespace SharpFlame
                     {
                         Map.GatewayRemoveStoreChange(a);
                         Map.UndoStepCreate("Gateway Delete");
-                        minimap.Refresh = true;
+                        MainMapView.RefreshMinimap();
                         MainMapView.DrawLater();
                         break;
                     }
@@ -1396,7 +1394,7 @@ namespace SharpFlame
                         Map.UndoStepCreate("Gateway Place");
                         Map.SelectedTileA = null;
                         Map.SelectedTileB = null;
-                        minimap.Refresh = true;
+                        MainMapView.RefreshMinimap();
                         MainMapView.DrawLater();
                     }
                 }
@@ -1587,8 +1585,6 @@ namespace SharpFlame
 
             var mouseOverTerrain = GetMouseOverTerrain();
 
-            minimap.Suppress = false;
-
             if ( e.Buttons == MouseButtons.Primary )
             {
                 if ( GetMouseLeftDownOverMinimap() != null )
@@ -1675,8 +1671,6 @@ namespace SharpFlame
             }
 
             var screenPos = new XYInt();
-
-            minimap.Suppress = true;
 
             screenPos.X = (int)e.Location.X;
             screenPos.Y = (int)e.Location.Y;
@@ -1836,7 +1830,7 @@ namespace SharpFlame
                                 objectCreator.Horizontal = mouseOverTerrain.Pos.Horizontal;
                                 objectCreator.Perform();
                                 Map.UndoStepCreate("Place Object");
-                                Map.Update();
+                                Map.Update(null);
                                 MainMapView.DrawLater();
                             }
                         }
@@ -2301,7 +2295,7 @@ namespace SharpFlame
                         }
 
                         Map.UndoStepCreate("Object Line");
-                        Map.Update();
+                        Map.Update(null);
                         Map.SelectedTileA = null;
                         MainMapView.DrawLater();
                     }
@@ -2327,7 +2321,7 @@ namespace SharpFlame
                         }
 
                         Map.UndoStepCreate("Object Line");
-                        Map.Update();
+                        Map.Update(null);
                         Map.SelectedTileA = null;
                         MainMapView.DrawLater();
                     }
