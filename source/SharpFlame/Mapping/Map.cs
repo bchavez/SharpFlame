@@ -72,17 +72,17 @@ namespace SharpFlame.Mapping
         public XYInt UnitSelectedAreaVertexA;
         private bool readyForUserInput;
 
-        private readonly MainMapView mainMapView;
+        private readonly MapPanel mapPanel;
         private readonly ViewInfo viewInfo;
         private readonly Options uiOptions;
 
         [Inject]
         internal IKernel Kernel { get; set; }
        
-        public Map(ILoggerFactory logFactory, MainMapView mmv, ViewInfo vi, Options argUiOptions)
+        public Map(ILoggerFactory logFactory, MapPanel mmv, ViewInfo vi, Options argUiOptions)
         {
             logger = logFactory.GetCurrentClassLogger();
-            mainMapView = mmv;
+            mapPanel = mmv;
             viewInfo = vi;
             uiOptions = argUiOptions;
 
@@ -215,7 +215,7 @@ namespace SharpFlame.Mapping
         {
             get
             {
-                if ( mainMapView.MainMap != this )
+                if ( mapPanel.MainMap != this )
                 {
                     return false;
                 }
@@ -725,7 +725,7 @@ namespace SharpFlame.Mapping
             }
 
             GL.EndList();
-            this.mainMapView.RefreshMinimap();
+            this.mapPanel.RefreshMinimap();
         }
 
         public void DrawTileWireframe(int TileX, int TileY)
@@ -1124,7 +1124,7 @@ namespace SharpFlame.Mapping
             }
 
             SectorsUpdateGraphics();
-            this.mainMapView.RefreshMinimap();
+            this.mapPanel.RefreshMinimap();
             Program.frmMainInstance.SelectedObject_Changed();
         }
 
@@ -1207,7 +1207,7 @@ namespace SharpFlame.Mapping
             UndoPosition++;
 
             SectorsUpdateGraphics();
-            this.mainMapView.RefreshMinimap();
+            this.mapPanel.RefreshMinimap();
             Program.frmMainInstance.SelectedObject_Changed();
         }
 
@@ -1444,7 +1444,7 @@ namespace SharpFlame.Mapping
 
             SectorsUpdateGraphics();
             SectorsUpdateUnitHeights();
-            this.mainMapView.RefreshMinimap();
+            this.mapPanel.RefreshMinimap();
         }
 
         public Gateway GatewayCreate(XYInt PosA, XYInt PosB)

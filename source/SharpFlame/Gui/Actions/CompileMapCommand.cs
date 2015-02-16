@@ -25,7 +25,7 @@ namespace SharpFlame.Gui.Actions
         {
             get
             {
-                return form.MainMapView.MainMap;
+                return form.MapPanel.MainMap;
             }
         }
 
@@ -42,7 +42,7 @@ namespace SharpFlame.Gui.Actions
         protected override void OnExecuted(EventArgs e)
         {
             base.OnExecuted(e);
-            
+
             if( Map == null )
                 return;
             if( Map.CompileScreen != null )
@@ -508,7 +508,7 @@ namespace SharpFlame.Gui.Actions
             }
             saveFileDialog.FileName = playerCount + "c-" + mapName;
 
-            if( saveFileDialog.ShowDialog(form) != DialogResult.Ok )
+            if( saveFileDialog.ShowDialog(Application.Instance.MainForm) != DialogResult.Ok )
             {
                 return;
             }
@@ -568,7 +568,7 @@ namespace SharpFlame.Gui.Actions
                 return;
             }
             var CompileCampDialog = new SelectFolderDialog();
-            if( CompileCampDialog.ShowDialog(form) != DialogResult.Ok )
+            if( CompileCampDialog.ShowDialog(Application.Instance.MainForm) != DialogResult.Ok )
             {
                 return;
             }

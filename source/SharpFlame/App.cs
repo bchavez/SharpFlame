@@ -351,7 +351,7 @@ namespace SharpFlame
 
         public static void VisionRadius_2E_Changed()
         {
-            var mmv = Kernel.Get<MainMapView>();
+            var mmv = Kernel.Get<MapPanel>();
             VisionRadius = 256.0D * Math.Pow(2.0D, (VisionRadius_2E / 2.0D));
             if (mmv != null)
             {

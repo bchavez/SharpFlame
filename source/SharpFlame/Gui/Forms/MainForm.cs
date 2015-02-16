@@ -34,7 +34,7 @@ namespace SharpFlame.Gui.Forms
         
         internal LabelsTab LabelsTab { get; set; }
         
-        internal MainMapView MainMapView { get; set; }
+        internal MapPanel MapPanel { get; set; }
 
         [Inject]
         internal LoadMapCommand LoadMapCommand { get; set; }
@@ -42,7 +42,6 @@ namespace SharpFlame.Gui.Forms
         [Inject]
         internal SettingsManager Settings { get; set; }
 
-	    [Inject]
 	    internal ViewInfo ViewInfo { get; set; }
 
         [Inject]
@@ -81,7 +80,7 @@ namespace SharpFlame.Gui.Forms
 	        this.SetTitle("No Map");
 	        Icon = Resources.SharpFlameIcon();
 
-            this.MainMapView = new MainMapView();
+            this.MapPanel = new MapPanel();
 	        this.TextureTab = new TextureTab();
 	        this.TerrainTab = new TerrainTab();
 	        this.HeightTab = new HeightTab();
@@ -114,14 +113,14 @@ namespace SharpFlame.Gui.Forms
 	                Position = 392,
 	                FixedPanel = SplitterFixedPanel.Panel1,
 	                Panel1 = tabControl,
-                    Panel2 = this.MainMapView
+                    Panel2 = this.MapPanel
 	            };
 
 	        // Set the content of the form to use the layout
 	        Content = splitter;
             
 	        GenerateMenuToolBar();
-	        Maximize();
+	        //Maximize();
 
             /*if (Settings.UpdateOnStartup) 
             { 
@@ -193,8 +192,8 @@ namespace SharpFlame.Gui.Forms
 			toolsMenu.Items.GetSubmenu ("Reinterpret Terrain", 100);
 			toolsMenu.Items.GetSubmenu ("Water Triangle Correction", 200);
 			toolsMenu.Items.AddSeparator ();
-			toolsMenu.Items.GetSubmenu ("Flaten Under Oils", 300);
-			toolsMenu.Items.GetSubmenu ("Flaten Under Structures", 400);
+			toolsMenu.Items.GetSubmenu ("Flatten Under Oils", 300);
+			toolsMenu.Items.GetSubmenu ("Flatten Under Structures", 400);
 			toolsMenu.Items.AddSeparator ();
 			toolsMenu.Items.GetSubmenu ("Generator", 500);
 

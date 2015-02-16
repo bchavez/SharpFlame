@@ -27,16 +27,7 @@ namespace SharpFlame.Gui.Actions
         internal SettingsManager Settings { get; set; }
 
         [Inject]
-        internal FMapLoader FMapLoader { get; set; }
-        
-        [Inject]
-        internal WzLoader WzLoader { get; set; }
-        
-        [Inject]
-        internal GameLoader GameLoader { get; set; }
-        
-        [Inject]
-        internal LNDLoader LndLoader { get; set; }
+        internal IKernel Kernel { get; set; }
 
         public LoadMapCommand()
         {
@@ -74,29 +65,17 @@ namespace SharpFlame.Gui.Actions
                     App.StatusDialog = new Dialogs.Status(returnResult);
                     App.StatusDialog.Show();
                 }
-
-                IIOLoader loader;
-                switch( Path.GetExtension(dialog.FileName).ToLower() )
+                var ext = Path.GetExtension(dialog.FileName).ToLower();
+                var loader = this.Kernel.Get<IIOLoader>(ext);
+                
+                if( loader == null )
                 {
-                    case ".fmap":
-                        loader = this.FMapLoader;
-                        break;
-                    case ".wz":
-                        loader = this.WzLoader;
-                        break;
-                    case ".game":
-                        loader = this.GameLoader;
-                        break;
-                    case ".lnd":
-                        loader = this.LndLoader;
-                        break;
-                    default:
-                        returnResult = new Result(string.Format("Loading \"{0}\"", Path.GetExtension(dialog.FileName)), false);
-                        returnResult.ProblemAdd(string.Format("UNKNOWN File type: can\'t load file \"{0}\"", dialog.FileName));
-                        App.StatusDialog = new Dialogs.Status(returnResult);
-                        App.StatusDialog.Show();
-                        Logger.Error("Loading \"{0}\", UNKNOWN File type: can\'t load file \"{1}\"", Path.GetExtension(dialog.FileName), dialog.FileName);
-                        return;
+                    returnResult = new Result(string.Format("Loading \"{0}\"", Path.GetExtension(dialog.FileName)), false);
+                    returnResult.ProblemAdd(string.Format("UNKNOWN File type: can\'t load file \"{0}\"", dialog.FileName));
+                    App.StatusDialog = new Dialogs.Status(returnResult);
+                    App.StatusDialog.Show();
+                    Logger.Error("Loading \"{0}\", UNKNOWN File type: can\'t load file \"{1}\"", Path.GetExtension(dialog.FileName), dialog.FileName);
+                    return;
                 }
 
                 var loadResult = loader.Load(dialog.FileName);

@@ -10,35 +10,35 @@
     <eto:TableLayout>
         <eto:TableRow>
             <eto:TableCell>
-                <eto:TableLayout>
-                    <eto:TableRow>
-                        <eto:TableCell>
-                            <eto:Label Text="Size X"/>
-                        </eto:TableCell>
-                        <eto:TableCell>
-                            <eto:NumericUpDown ID="numSizeX" />
-                        </eto:TableCell>
-                    </eto:TableRow>
-                </eto:TableLayout>
-            </eto:TableCell>
-        </eto:TableRow>
-        <eto:TableRow>
-            <eto:TableCell>
-                
-            </eto:TableCell>
-        </eto:TableRow>
-        <eto:TableRow>
-            <eto:TableCell>
 
-            </eto:TableCell>
-        </eto:TableRow>
-        <eto:TableRow>
-            <eto:TableCell>
-                
-            </eto:TableCell>
-        </eto:TableRow>
-        <eto:TableRow>
-            <eto:TableCell>
+                <eto:TableLayout>
+                    <eto:TableRow ScaleHeight="True" />
+                    <eto:TableRow>
+                        <eto:TableCell ScaleWidth="True" />
+                        <eto:TableCell>
+                            <eto:TableLayout>
+                                <eto:TableRow>
+                                    <eto:Label Text="Size X:"/>
+                                    <eto:NumericUpDown ID="numSizeX" />
+                                </eto:TableRow>
+                                <eto:TableRow>
+                                    <eto:Label Text="Size Y:"/>
+                                    <eto:NumericUpDown ID="numSizeY" />
+                                </eto:TableRow>
+                                <eto:TableRow>
+                                    <eto:Label Text="Offset X:"/>
+                                    <eto:NumericUpDown ID="numOffsetX" />
+                                </eto:TableRow>
+                                <eto:TableRow>
+                                    <eto:Label Text="Offset Y:"/>
+                                    <eto:NumericUpDown ID="numOffsetY" />
+                                </eto:TableRow>
+                            </eto:TableLayout>
+                        </eto:TableCell>
+                        <eto:TableCell ScaleWidth="True" />
+                    </eto:TableRow>
+                    <eto:TableRow ScaleHeight="True"/>
+                </eto:TableLayout>
                 
             </eto:TableCell>
         </eto:TableRow>
@@ -49,14 +49,28 @@
                     <eto:TableRow>
                         <eto:TableCell ScaleWidth="True" />
                         <eto:TableCell>
-                            <eto:Button ID="cmdResize" Text="Resize" Click="cmdResize_Click" />
+
+
+                            <eto:TableLayout>
+                                <eto:TableRow>
+                                    <eto:Button ID="cmdResize" Text="Resize" Click="cmdResize_Click" />
+                                </eto:TableRow>
+                                <eto:TableRow>
+                                    <eto:Button ID="cmdResizeSelection" Text="Resize To Selection" Click="cmdResizeSelection_Click" />
+                                </eto:TableRow>
+                            </eto:TableLayout>
+
+
                         </eto:TableCell>
                         <eto:TableCell ScaleWidth="True" />
                     </eto:TableRow>
                     <eto:TableRow ScaleHeight="True"/>
+
                 </eto:TableLayout>
             </eto:TableCell>
+
         </eto:TableRow>
+        
         <eto:TableRow>
             <eto:TableCell>
                 <eto:TableLayout>
@@ -64,7 +78,6 @@
                     <eto:TableRow>
                         <eto:TableCell ScaleWidth="True" />
                         <eto:TableCell>
-                            <eto:Button ID="cmdResizeSelection" Text="Resize To Selection" Click="cmdResizeSelection_Click" />
                         </eto:TableCell>
                         <eto:TableCell ScaleWidth="True" />
                     </eto:TableRow>

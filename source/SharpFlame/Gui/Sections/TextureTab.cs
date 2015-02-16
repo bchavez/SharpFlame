@@ -191,7 +191,10 @@ namespace SharpFlame.Gui.Sections
             tileTypeSetter.EndHorizontal();
 
             mainLayout.Add(layout);
-             this.scrollTextureView = new Scrollable {Content = this.GLSurface};
+
+            this.GLSurface = new GLSurface();
+
+            this.scrollTextureView = new Scrollable {Content = this.GLSurface};
             mainLayout.Add(this.scrollTextureView, true, true);
             mainLayout.Add(tileTypeSetter);
             //mainLayout.Add();

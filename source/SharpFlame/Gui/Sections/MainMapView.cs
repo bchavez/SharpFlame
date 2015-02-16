@@ -27,7 +27,7 @@ using SharpFlame.UiOptions;
 
 namespace SharpFlame.Gui.Sections
 {
-    public class MainMapView : Panel
+    public class MapPanel : Panel
 	{
         public GLSurface GLSurface { get; set; }
 
@@ -117,7 +117,7 @@ namespace SharpFlame.Gui.Sections
         [Inject]
         internal SettingsManager Settings { get; set; }
 
-        public MainMapView()
+        public MapPanel()
         {
             this.GLSurface = new GLSurface();
 
