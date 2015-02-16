@@ -1,5 +1,8 @@
  
 using System;
+using Appccelerate.EventBroker;
+using Appccelerate.EventBroker.Handlers;
+using Appccelerate.Events;
 using Eto.Forms;
 using Eto.Gl;
 using Ninject;
@@ -9,8 +12,6 @@ using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
-using SharpFlame.Infrastructure;
-using SharpFlame.Mapping;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Maths;
 using SharpFlame.Settings;
@@ -24,21 +25,23 @@ namespace SharpFlame.Mapping.Minimap
         public Map Map
         {
             get { return map; }
-            set
-            {
-                // Delete old Texture
-                glDelete();
+        }
 
-                map = value;
-                if( map != null )
-                {
-                    // Make new one later
-                    Refresh = true;
-                }
-                else
-                {
-                    timer.Stop();
-                }
+        [EventSubscription(EventTopics.OnMapLoad, typeof(OnPublisher))]
+        public void OnMapLoad(object sender, EventArgs<Map> args)
+        {
+            // Delete old Texture
+            GlDelete();
+
+            map = args.Value;
+            if( map != null )
+            {
+                // Make new one later
+                Refresh = true;
+            }
+            else
+            {
+                this.timer.Stop();
             }
         }
 
@@ -65,14 +68,13 @@ namespace SharpFlame.Mapping.Minimap
 
         private readonly UITimer timer;
         private readonly SettingsManager settings;
-        private readonly UiOptions.Minimap options;
+        private readonly UiOptions.MinimapOpts miniOpts;
 
-        public MinimapCreator(IKernel kernel, SettingsManager argSettings, UiOptions.Options argUiOptions)
+        public MinimapCreator(SettingsManager argSettings, UiOptions.Options opts, GLSurface mapGl)
         {
-            this.GLSurface = App.MapGLSurface;
-            kernel.Inject(this); // For GLSurface
+            this.GLSurface = mapGl;
             settings = argSettings;
-            options = argUiOptions.Minimap;
+            miniOpts = opts.MinimapOpts;
             
 
             Suppress = false;
@@ -80,7 +82,7 @@ namespace SharpFlame.Mapping.Minimap
             timer = new UITimer {Interval = Constants.MinimapDelay};
             timer.Elapsed += Tick;
 
-            options.PropertyChanged += delegate
+            miniOpts.PropertyChanged += delegate
                 {
                     Refresh = true;
                 };
@@ -118,7 +120,7 @@ namespace SharpFlame.Mapping.Minimap
 
             FillTexture(texture, Map);
 
-            glDelete();
+            GlDelete();
 
             GL.GenTextures(1, out GLTexture);
             GL.BindTexture(TextureTarget.Texture2D, GLTexture);
@@ -132,7 +134,7 @@ namespace SharpFlame.Mapping.Minimap
             // TODO: Here was a MainMapView.DrawLater not sure its required.
         }
 
-        private void glDelete()
+        private void GlDelete()
         {
             if( GLTexture != 0 )
             {
@@ -141,13 +143,13 @@ namespace SharpFlame.Mapping.Minimap
             }
         }
 
-        private SRgb getUnitGroupColour(clsUnitGroup ColourUnitGroup)
+        private SRgb GetUnitGroupColour(clsUnitGroup colourUnitGroup)
         {
-            if( ColourUnitGroup.WZ_StartPos < 0 )
+            if( colourUnitGroup.WZ_StartPos < 0 )
             {
                 return new SRgb(1.0F, 1.0F, 1.0F);
             }
-            return App.PlayerColour[ColourUnitGroup.WZ_StartPos].MinimapColour;
+            return App.PlayerColour[colourUnitGroup.WZ_StartPos].MinimapColour;
         }
 
         public void FillTexture(MinimapTexture Texture, Map myMap)
@@ -172,7 +174,7 @@ namespace SharpFlame.Mapping.Minimap
             float antiAlpha = 0;
             var rGBSng = new SRgb();
 
-            if( options.Textures )
+            if( miniOpts.Textures )
             {
                 if( tileset != null )
                 {
@@ -189,7 +191,7 @@ namespace SharpFlame.Mapping.Minimap
                         }
                     }
                 }
-                if( options.Heights )
+                if( miniOpts.Heights )
                 {
                     float Height = 0;
                     for( var Y = 0; Y <= terrain.TileSize.Y - 1; Y++ )
@@ -206,7 +208,7 @@ namespace SharpFlame.Mapping.Minimap
                     }
                 }
             }
-            else if( options.Heights )
+            else if( miniOpts.Heights )
             {
                 for( var y = 0; y <= terrain.TileSize.Y - 1; y++ )
                 {
@@ -233,7 +235,7 @@ namespace SharpFlame.Mapping.Minimap
                     }
                 }
             }
-            if( options.Cliffs )
+            if( miniOpts.Cliffs )
             {
                 if( tileset != null )
                 {
@@ -256,7 +258,7 @@ namespace SharpFlame.Mapping.Minimap
                     }
                 }
             }
-            if( options.Gateways )
+            if( miniOpts.Gateways )
             {
                 foreach( var gateway in gateways )
                 {
@@ -272,7 +274,7 @@ namespace SharpFlame.Mapping.Minimap
                     }
                 }
             }
-            if( options.Objects )
+            if( miniOpts.Objects )
             {
                 //units that are not selected
                 foreach( var unit in units )
@@ -306,7 +308,7 @@ namespace SharpFlame.Mapping.Minimap
                                         }
                                         else
                                         {
-                                            rGBSng = getUnitGroupColour(unit.UnitGroup);
+                                            rGBSng = GetUnitGroupColour(unit.UnitGroup);
                                             sngTexture[y, x, 0] = rGBSng.Red;
                                             sngTexture[y, x, 1] = rGBSng.Green;
                                             sngTexture[y, x, 2] = rGBSng.Blue;
@@ -388,7 +390,10 @@ namespace SharpFlame.Mapping.Minimap
 
         private void Dispose(bool disposing)
         {
-            Map = null; // Will clean up everthing.
+            //Map = null; // Will clean up everthing.
+            GlDelete();
+            this.timer.Stop();
+
             GC.SuppressFinalize(this);
         }
 

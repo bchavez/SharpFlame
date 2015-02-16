@@ -12,17 +12,14 @@ namespace SharpFlame.Gui.Windows
         [STAThread]
         static void Main(string[] args)
         {
-            System.Windows.Forms.Application.EnableVisualStyles();
-            System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
-
             var generator = Eto.Platform.Detect;
 
             generator.Add<GLSurface.IHandler>(() => new WinGLSurfaceHandler());
             generator.Add<Eto.Forms.Panel.IHandler>(() => new WinPanelHandler());
 
             var kernel = Bootstrap.KernelWith(Eto.Platform.Instance);
-            
-            var app = kernel.Get<SharpFlameApplication>();
+
+            var app = new SharpFlameApplication();
 
             app.Run(args);
             

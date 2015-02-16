@@ -37,14 +37,14 @@ namespace SharpFlame.UiOptions
         public readonly HeightOptions Height;
         public readonly TerrainOptions Terrain;
         public readonly Textures Textures;
-        public readonly Minimap Minimap;
+        public readonly MinimapOpts MinimapOpts;
 
         public Options ()
         {
             Height = new HeightOptions();
             Terrain = new TerrainOptions();
             Textures = new Textures();
-            Minimap = new Minimap();
+            MinimapOpts = new MinimapOpts();
         }
     }
 }

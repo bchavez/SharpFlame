@@ -6,14 +6,12 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq.Expressions;
-using Appccelerate.EventBroker;
 using Eto.Forms;
 using Newtonsoft.Json;
 using Ninject.Extensions.Logging;
 using OpenTK;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain.Colors;
-using SharpFlame.Core.Extensions;
 
 namespace SharpFlame.Settings
 {

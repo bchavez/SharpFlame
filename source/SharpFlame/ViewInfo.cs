@@ -1,4 +1,7 @@
 using System;
+using Appccelerate.EventBroker;
+using Appccelerate.EventBroker.Handlers;
+using Appccelerate.Events;
 using Eto.Drawing;
 using Eto.Forms;
 using Eto.Gl;
@@ -51,18 +54,21 @@ namespace SharpFlame
         public Map Map
         {
             get { return map; }
-            set {
-                map = value;
-                ViewPos = new XYZInt(0, 3072, 0);
-                FovMultiplierSet(settings.FOVDefault);
-                ViewAngleSetToDefault();
-                LookAtPos(new XYInt(
-                    (Map.Terrain.TileSize.X * Constants.TerrainGridSpacing / 2.0D).ToInt(),
-                    (Map.Terrain.TileSize.Y * Constants.TerrainGridSpacing / 2.0D).ToInt())
-                    );
-                // Reset Mouse on map change.
-                HandleLostFocus(this, EventArgs.Empty);
-            }
+        }
+
+        [EventSubscription(EventTopics.OnMapLoad, typeof(OnPublisher))]
+        public void OnMapLoad(object sender, EventArgs<Map> args)
+        {
+            map = args.Value;
+            ViewPos = new XYZInt(0, 3072, 0);
+            FovMultiplierSet(settings.FOVDefault);
+            ViewAngleSetToDefault();
+            LookAtPos(new XYInt(
+                (Map.Terrain.TileSize.X * Constants.TerrainGridSpacing / 2.0D).ToInt(),
+                (Map.Terrain.TileSize.Y * Constants.TerrainGridSpacing / 2.0D).ToInt())
+                );
+            // Reset Mouse on map change.
+            HandleLostFocus(this, EventArgs.Empty);
         }
 
         public MainMapView MainMapView { get; set; }

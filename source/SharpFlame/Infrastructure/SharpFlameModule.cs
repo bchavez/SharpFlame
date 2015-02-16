@@ -12,6 +12,11 @@ using SharpFlame.UiOptions;
 
 namespace SharpFlame.Infrastructure
 {
+    public class NamedBinding
+    {
+        public const string MapGl = "MapGl";
+        public const string TextureGl = "TextureGl";
+    }
     public class SharpFlameModule : NinjectModule
     {
         public override void Load()
@@ -24,9 +29,9 @@ namespace SharpFlame.Infrastructure
                 .ToSelf()
                 .InSingletonScope();
 
-            this.Bind<SharpFlameApplication>()
-                .ToSelf()
-                .InSingletonScope();
+            //this.Bind<SharpFlameApplication>()
+            //    .ToSelf()
+            //    .InSingletonScope();
 
             this.Bind<MainMapView>()
                 .ToSelf()
@@ -68,7 +73,7 @@ namespace SharpFlame.Infrastructure
             this.Bind<ObjectTab>().ToSelf().InSingletonScope();
             this.Bind<LabelsTab>().ToSelf().InSingletonScope();
             this.Bind<HeightTab>().ToSelf().InSingletonScope();
-            this.Bind<LoadMap>().ToSelf().InSingletonScope();
+            this.Bind<LoadMap>().ToSelf().InSingletonScope().RegisterOnGlobalEventBroker();
 
             this.Bind<Map>().ToSelf().InTransientScope();
             this.Bind<clsDrawSectorObjects>().ToSelf().InTransientScope();

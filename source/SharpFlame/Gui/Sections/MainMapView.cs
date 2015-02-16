@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
+using Appccelerate.Events;
 using Eto.Forms;
 using Eto.Gl;
 using Ninject;
@@ -14,7 +15,6 @@ using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 using SharpFlame.Graphics.OpenGL;
-using SharpFlame.Gui.Forms;
 using SharpFlame.Infrastructure;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Minimap;
@@ -33,54 +33,54 @@ namespace SharpFlame.Gui.Sections
         private Map mainMap;
         public Map MainMap { 
             get { return mainMap; }
-            set
+        }
+
+        [EventSubscription(EventTopics.OnMapLoad, typeof(OnPublisher))]
+        public void OnMapLoad(object sender, EventArgs<Map> args)
+        {
+            // Unload the previous map, until we have multimap support.
+            if( mainMap != null )
             {
-                // Unload the previous map, until we have multimap support.
-                if(mainMap != null)
-                {
-//                    if ( !map.ClosePrompt() )
-//                    {
-//                        return;
-//                    }
+                //                    if ( !map.ClosePrompt() )
+                //                    {
+                //                        return;
+                //                    }
 
-                    mainMap.Deallocate();
-                }
-
-                mainMap = value;
-
-                viewInfo.Map = mainMap;
-                minimapCreator.Map = mainMap;
-
-                if(mainMap != null)
-                {
-                    mainMap.InitializeUserInput();
-                    mainMap.SectorGraphicsChanges.SetAllChanged();
-                    mainMap.Update();
-
-                    // Change the tileset in the TexturesView.
-                    uiOptions.Textures.TilesetNum = App.Tilesets.IndexOf(mainMap.Tileset);
-
-                    // Update the title.
-                    mainForm.MainMapName = mainMap.InterfaceOptions.FileName;
-                } else
-                {
-                    uiOptions.Textures.TilesetNum = -1;
-                    mainForm.MainMapName = "No Map";
-                }
-
-                DrawLater();
+                mainMap.Deallocate();
             }
+
+            mainMap = args.Value;
+
+            if( mainMap != null )
+            {
+                mainMap.InitializeUserInput();
+                mainMap.SectorGraphicsChanges.SetAllChanged();
+                mainMap.Update();
+
+                // Change the tileset in the TexturesView.
+                UiOptions.Textures.TilesetNum = App.Tilesets.IndexOf(mainMap.Tileset);
+            }
+            else
+            {
+                UiOptions.Textures.TilesetNum = -1;
+            }
+
+            DrawLater();   
         }
 
         /// <summary>
         /// These get injected by Ninject over the constructor.
         /// </summary>
         private readonly ILogger logger;
-        private readonly KeyboardManager keyboardManager;
+
+        [Inject]
+        internal KeyboardManager KeyboardManager { get; set; }
+
         private readonly ViewInfo viewInfo;
-        private readonly MinimapCreator minimapCreator;
-        private readonly UiOptions.Options uiOptions;
-        private readonly MainForm mainForm;
+        private readonly MinimapCreator MinimapCreator;
+        
+        [Inject]
+        internal Options UiOptions { get; set; }
 
         private UITimer tmrDraw;
         private UITimer tmrKey;
@@ -96,19 +96,20 @@ namespace SharpFlame.Gui.Sections
         [Inject]
         internal SettingsManager Settings { get; set; }
 
-        public MainMapView(IKernel kernel, ILoggerFactory logFactory, 
-            KeyboardManager kbm, ViewInfo argViewInfo,
-            MinimapCreator mmc, UiOptions.Options argUiOptions, MainForm argMainForm)
+        [Inject]
+        public void BindLater(IKernel k)
         {
-            kernel.Inject(this); // For GLSurface
+            k.Bind<GLSurface>().ToConstant(this.GLSurface).Named(NamedBinding.MapGl);
+        }
+
+
+        public MainMapView(ILoggerFactory logFactory, ViewInfo argViewInfo)
+        {
             logger = logFactory.GetCurrentClassLogger();
-            keyboardManager = kbm;
+
             viewInfo = argViewInfo;
             viewInfo.MainMapView = this; // They need each other.
-            minimapCreator = mmc;
-            uiOptions = argUiOptions;
-            mainForm = argMainForm;
-
+            
             var mainLayout = new DynamicLayout();
             mainLayout.AddSeparateRow(
                 lblMinimap = new Label { Text = "Minimap" }
@@ -123,7 +124,8 @@ namespace SharpFlame.Gui.Sections
             );
 
             Content = mainLayout;
-            App.MapGLSurface = this.GLSurface;
+
+            this.MinimapCreator = new MinimapCreator(this.Settings, this.UiOptions, this.GLSurface);
             this.GLSurface.Initialized += GLSurface_Initialized;
             SetupEventHandlers();
         }
@@ -179,8 +181,8 @@ namespace SharpFlame.Gui.Sections
         {
             base.OnLoadComplete(lcEventArgs);
 
-            GLSurface.KeyDown += keyboardManager.HandleKeyDown;
-            GLSurface.KeyUp += keyboardManager.HandleKeyUp;
+            GLSurface.KeyDown += KeyboardManager.HandleKeyDown;
+            GLSurface.KeyUp += KeyboardManager.HandleKeyUp;
 
             GLSurface.MouseEnter += (sender, e) =>
             {
@@ -198,7 +200,7 @@ namespace SharpFlame.Gui.Sections
             GLSurface.Initialized += InitalizeGlSurface;
             GLSurface.SizeChanged += ResizeMapView;
 
-            keyboardManager.KeyDown += HandleKeyDown;
+            KeyboardManager.KeyDown += HandleKeyDown;
 
             lblMinimap.MouseDown += delegate
             {
@@ -212,51 +214,51 @@ namespace SharpFlame.Gui.Sections
 
             var cmiTextures = new CheckMenuItem(new CheckCommand {
                 MenuText = "Show Textures",
-                Checked = uiOptions.Minimap.Textures
+                Checked = UiOptions.MinimapOpts.Textures
             });
             cmiTextures.Click += delegate
             {
-                uiOptions.Minimap.Textures = !uiOptions.Minimap.Textures;
+                UiOptions.MinimapOpts.Textures = !UiOptions.MinimapOpts.Textures;
             };
             menu.Items.Add(cmiTextures);
 
             var cmiHeights = new CheckMenuItem(new CheckCommand {
                 MenuText = "Show Heights",
-                Checked = uiOptions.Minimap.Heights
+                Checked = UiOptions.MinimapOpts.Heights
             });
             cmiHeights.Click += delegate
             {
-                uiOptions.Minimap.Heights = !uiOptions.Minimap.Heights;
+                UiOptions.MinimapOpts.Heights = !UiOptions.MinimapOpts.Heights;
             };
             menu.Items.Add(cmiHeights);
 
             var cmiCliffs = new CheckMenuItem(new CheckCommand {
                 MenuText = "Show Cliffs",
-                Checked = uiOptions.Minimap.Cliffs
+                Checked = UiOptions.MinimapOpts.Cliffs
             });
             cmiCliffs.Click += delegate
             {
-                uiOptions.Minimap.Cliffs = !uiOptions.Minimap.Cliffs;
+                UiOptions.MinimapOpts.Cliffs = !UiOptions.MinimapOpts.Cliffs;
             };
             menu.Items.Add(cmiCliffs);
 
             var cmiObjects = new CheckMenuItem(new CheckCommand {
                 MenuText = "Show Objects",
-                Checked = uiOptions.Minimap.Objects
+                Checked = UiOptions.MinimapOpts.Objects
             });
             cmiObjects.Click += delegate
             {
-                uiOptions.Minimap.Objects = !uiOptions.Minimap.Objects;
+                UiOptions.MinimapOpts.Objects = !UiOptions.MinimapOpts.Objects;
             };
             menu.Items.Add(cmiObjects);
 
             var cmiGateways = new CheckMenuItem(new CheckCommand {
                 MenuText = "Show Gateways",
-                Checked = uiOptions.Minimap.Gateways
+                Checked = UiOptions.MinimapOpts.Gateways
             });
             cmiGateways.Click += delegate
             {
-                uiOptions.Minimap.Gateways = !uiOptions.Minimap.Gateways;
+                UiOptions.MinimapOpts.Gateways = !UiOptions.MinimapOpts.Gateways;
             };
             menu.Items.Add(cmiGateways);
 
@@ -444,9 +446,9 @@ namespace SharpFlame.Gui.Sections
             double Pan = 0;
             double OrbitRate = 0;
 
-            if( keyboardManager.Keys[KeyboardKeys.ViewFast].Active )
+            if( KeyboardManager.Keys[KeyboardKeys.ViewFast].Active )
             {
-                if( keyboardManager.Keys[KeyboardKeys.ViewSlow].Active )
+                if( KeyboardManager.Keys[KeyboardKeys.ViewSlow].Active )
                 {
                     Rate = 8.0D;
                 }
@@ -455,7 +457,7 @@ namespace SharpFlame.Gui.Sections
                     Rate = 4.0D;
                 }
             }
-            else if( keyboardManager.Keys[KeyboardKeys.ViewSlow].Active )
+            else if( KeyboardManager.Keys[KeyboardKeys.ViewSlow].Active )
             {
                 Rate = 0.25D;
             }
@@ -533,68 +535,68 @@ namespace SharpFlame.Gui.Sections
                 return;
             }
 
-            if(keyboardManager.Keys[KeyboardKeys.VisionRadius6].Active)
+            if(KeyboardManager.Keys[KeyboardKeys.VisionRadius6].Active)
             {
                 App.VisionRadius_2E = 6;
                 App.VisionRadius_2E_Changed();
                 DrawLater();
             }
-            if(keyboardManager.Keys[KeyboardKeys.VisionRadius7].Active)
+            if(KeyboardManager.Keys[KeyboardKeys.VisionRadius7].Active)
             {
                 App.VisionRadius_2E = 7;
                 App.VisionRadius_2E_Changed();
                 DrawLater();
             }
-            if(keyboardManager.Keys[KeyboardKeys.VisionRadius8].Active)
+            if(KeyboardManager.Keys[KeyboardKeys.VisionRadius8].Active)
             {
                 App.VisionRadius_2E = 8;
                 App.VisionRadius_2E_Changed();
                 DrawLater();
             }
-            if(keyboardManager.Keys[KeyboardKeys.VisionRadius9].Active)
+            if(KeyboardManager.Keys[KeyboardKeys.VisionRadius9].Active)
             {
                 App.VisionRadius_2E = 9;
                 App.VisionRadius_2E_Changed();
                 DrawLater();
             }
-            if(keyboardManager.Keys[KeyboardKeys.VisionRadius10].Active)
+            if(KeyboardManager.Keys[KeyboardKeys.VisionRadius10].Active)
             {
                 App.VisionRadius_2E = 10;
                 App.VisionRadius_2E_Changed();
                 DrawLater();
             }
-            if(keyboardManager.Keys[KeyboardKeys.VisionRadius11].Active)
+            if(KeyboardManager.Keys[KeyboardKeys.VisionRadius11].Active)
             {
                 App.VisionRadius_2E = 11;
                 App.VisionRadius_2E_Changed();
                 DrawLater();
             }
-            if(keyboardManager.Keys[KeyboardKeys.VisionRadius12].Active)
+            if(KeyboardManager.Keys[KeyboardKeys.VisionRadius12].Active)
             {
                 App.VisionRadius_2E = 12;
                 App.VisionRadius_2E_Changed();
                 DrawLater();
             }
-            if(keyboardManager.Keys[KeyboardKeys.VisionRadius13].Active)
+            if(KeyboardManager.Keys[KeyboardKeys.VisionRadius13].Active)
             {
                 App.VisionRadius_2E = 13;
                 App.VisionRadius_2E_Changed();
                 DrawLater();
             }
-            if(keyboardManager.Keys[KeyboardKeys.VisionRadius14].Active)
+            if(KeyboardManager.Keys[KeyboardKeys.VisionRadius14].Active)
             {
                 App.VisionRadius_2E = 14;
                 App.VisionRadius_2E_Changed();
                 DrawLater();
             }
-            if(keyboardManager.Keys[KeyboardKeys.VisionRadius15].Active)
+            if(KeyboardManager.Keys[KeyboardKeys.VisionRadius15].Active)
             {
                 App.VisionRadius_2E = 15;
                 App.VisionRadius_2E_Changed();
                 DrawLater();
             }
 
-            if (keyboardManager.Keys[KeyboardKeys.ViewMoveMode].Active)
+            if (KeyboardManager.Keys[KeyboardKeys.ViewMoveMode].Active)
             {
                 if ( App.ViewMoveType == ViewMoveType.Free )
                 {
@@ -605,11 +607,11 @@ namespace SharpFlame.Gui.Sections
                     App.ViewMoveType = ViewMoveType.Free;
                 }
             }
-            if (keyboardManager.Keys[KeyboardKeys.ViewRotateMode].Active)
+            if (KeyboardManager.Keys[KeyboardKeys.ViewRotateMode].Active)
             {
                 App.RTSOrbit = !App.RTSOrbit;
             }
-            if (keyboardManager.Keys[KeyboardKeys.ViewReset].Active)
+            if (KeyboardManager.Keys[KeyboardKeys.ViewReset].Active)
             {
                 var matrixA = new Matrix3DMath.Matrix3D();
 
@@ -625,17 +627,17 @@ namespace SharpFlame.Gui.Sections
                     viewInfo.ViewAngleSetRotate(matrixA);
                 }
             }
-            if (keyboardManager.Keys[KeyboardKeys.ShowTextures].Active)
+            if (KeyboardManager.Keys[KeyboardKeys.ShowTextures].Active)
             {
                 App.Draw_TileTextures = !App.Draw_TileTextures;
                 DrawLater();
             }
-            if (keyboardManager.Keys[KeyboardKeys.ShowWireframe].Active)
+            if (KeyboardManager.Keys[KeyboardKeys.ShowWireframe].Active)
             {
                 App.Draw_TileWireframe = !App.Draw_TileWireframe;
                 DrawLater();
             }
-            if (keyboardManager.Keys[KeyboardKeys.ShowObjects].Active)
+            if (KeyboardManager.Keys[KeyboardKeys.ShowObjects].Active)
             {
                 App.Draw_Units = !App.Draw_Units;
                 
@@ -663,12 +665,12 @@ namespace SharpFlame.Gui.Sections
                 mainMap.Update();
                 DrawLater();
             }
-            if (keyboardManager.Keys[KeyboardKeys.ShowLabels].Active)
+            if (KeyboardManager.Keys[KeyboardKeys.ShowLabels].Active)
             {
                 App.Draw_ScriptMarkers = !App.Draw_ScriptMarkers;
                 DrawLater();
             }
-            if (keyboardManager.Keys[KeyboardKeys.ShowLighting].Active)
+            if (KeyboardManager.Keys[KeyboardKeys.ShowLighting].Active)
             {
                 if ( App.Draw_Lighting == DrawLighting.Off )
                 {
@@ -686,31 +688,31 @@ namespace SharpFlame.Gui.Sections
             }
 
             var mouseOverTerrain = viewInfo.GetMouseOverTerrain();
-            if (uiOptions.MouseTool == MouseTool.TextureBrush)
+            if (UiOptions.MouseTool == MouseTool.TextureBrush)
             {
                 if ( mouseOverTerrain != null )
                 {
-                    if (keyboardManager.Keys[KeyboardKeys.Clockwise].Active)
+                    if (KeyboardManager.Keys[KeyboardKeys.Clockwise].Active)
                     {
                         viewInfo.ApplyTextureClockwise();
                     }
-                    if (keyboardManager.Keys[KeyboardKeys.CounterClockwise].Active)
+                    if (KeyboardManager.Keys[KeyboardKeys.CounterClockwise].Active)
                     {
                         viewInfo.ApplyTextureCounterClockwise();
                     }
-                    if (keyboardManager.Keys[KeyboardKeys.TextureFlip].Active)
+                    if (KeyboardManager.Keys[KeyboardKeys.TextureFlip].Active)
                     {
                         viewInfo.ApplyTextureFlipX();
                     }
-                    if (keyboardManager.Keys[KeyboardKeys.TriangleFlip].Active)
+                    if (KeyboardManager.Keys[KeyboardKeys.TriangleFlip].Active)
                     {
                         viewInfo.ApplyTriFlip();
                     }
                 }
             }
-            if (uiOptions.MouseTool == MouseTool.ObjectSelect)
+            if (UiOptions.MouseTool == MouseTool.ObjectSelect)
             {
-                if (keyboardManager.Keys[KeyboardKeys.DeleteObjects].Active)
+                if (KeyboardManager.Keys[KeyboardKeys.DeleteObjects].Active)
                 {
                     if ( mainMap.SelectedUnits.Count > 0 )
                     {
@@ -725,7 +727,7 @@ namespace SharpFlame.Gui.Sections
                         DrawLater();
                     }
                 }
-                if (keyboardManager.Keys[KeyboardKeys.MoveObjects].Active)
+                if (KeyboardManager.Keys[KeyboardKeys.MoveObjects].Active)
                 {
                     if ( mouseOverTerrain != null )
                     {
@@ -749,7 +751,7 @@ namespace SharpFlame.Gui.Sections
                         }
                     }
                 }
-                if (keyboardManager.Keys[KeyboardKeys.Clockwise].Active)
+                if (KeyboardManager.Keys[KeyboardKeys.Clockwise].Active)
                 {
                     var objectRotationOffset = new clsObjectRotationOffset
                         {
@@ -762,7 +764,7 @@ namespace SharpFlame.Gui.Sections
                     mainMap.UndoStepCreate("Object Rotated");
                     DrawLater();
                 }
-                if (keyboardManager.Keys[KeyboardKeys.CounterClockwise].Active)
+                if (KeyboardManager.Keys[KeyboardKeys.CounterClockwise].Active)
                 {
                     var objectRotationOffset = new clsObjectRotationOffset
                         {
@@ -777,9 +779,9 @@ namespace SharpFlame.Gui.Sections
                 }
             }
 
-            if (keyboardManager.Keys[KeyboardKeys.ObjectSelectTool].Active)
+            if (KeyboardManager.Keys[KeyboardKeys.ObjectSelectTool].Active)
             {
-                uiOptions.MouseTool = MouseTool.ObjectSelect;
+                UiOptions.MouseTool = MouseTool.ObjectSelect;
                 DrawLater();
             }
         }

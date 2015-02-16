@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using Appccelerate.EventBroker;
+using Appccelerate.Events;
 using Eto.Forms;
 using Ninject;
 using Ninject.Extensions.Logging;
@@ -20,6 +22,9 @@ namespace SharpFlame.Gui.Actions
 {
     public class LoadMap : Command
     {
+        [EventPublication(EventTopics.OnMapLoad)]
+        public event EventHandler<EventArgs<Map>> OnMapLoad = delegate {  };
+
         private readonly ILogger logger;
 
         [Inject]
@@ -29,7 +34,16 @@ namespace SharpFlame.Gui.Actions
         internal MainMapView MainMapView { get; set; }
 
         [Inject]
-        internal IKernel Kernel { get; set; }
+        internal FMapLoader FMapLoader { get; set; }
+        
+        [Inject]
+        internal WzLoader WzLoader { get; set; }
+        
+        [Inject]
+        internal GameLoader GameLoader { get; set; }
+        
+        [Inject]
+        internal LNDLoader LndLoader { get; set; }
 
         public LoadMap(ILoggerFactory logFactory)
         {
@@ -70,29 +84,28 @@ namespace SharpFlame.Gui.Actions
                     App.StatusDialog.Show();
                 }
 
-                var map = Kernel.Get<Map>();
                 IIOLoader loader;
-                switch(Path.GetExtension(dialog.FileName).ToLower())
+                switch( Path.GetExtension(dialog.FileName).ToLower() )
                 {
-                case ".fmap":
-                    loader = Kernel.Get<FMapLoader>();
-                    break;
-                case ".wz":
-                    loader = Kernel.Get<WzLoader>();
-                    break;
-                case ".game":
-                    loader = Kernel.Get<GameLoader>();
-                    break;
-                case ".lnd":
-                    loader = Kernel.Get<LNDLoader>();
-                    break;
-                default:
-                    returnResult = new Result(string.Format("Loading \"{0}\"", Path.GetExtension(dialog.FileName)), false);
-                    returnResult.ProblemAdd(string.Format("UNKNOWN File type: can\'t load file \"{0}\"", dialog.FileName));
-                    App.StatusDialog = new Dialogs.Status(returnResult);
-                    App.StatusDialog.Show();
-                    logger.Error("Loading \"{0}\", UNKNOWN File type: can\'t load file \"{1}\"", Path.GetExtension(dialog.FileName), dialog.FileName);
-                    return;
+                    case ".fmap":
+                        loader = this.FMapLoader;
+                        break;
+                    case ".wz":
+                        loader = this.WzLoader;
+                        break;
+                    case ".game":
+                        loader = this.GameLoader;
+                        break;
+                    case ".lnd":
+                        loader = this.LndLoader;
+                        break;
+                    default:
+                        returnResult = new Result(string.Format("Loading \"{0}\"", Path.GetExtension(dialog.FileName)), false);
+                        returnResult.ProblemAdd(string.Format("UNKNOWN File type: can\'t load file \"{0}\"", dialog.FileName));
+                        App.StatusDialog = new Dialogs.Status(returnResult);
+                        App.StatusDialog.Show();
+                        logger.Error("Loading \"{0}\", UNKNOWN File type: can\'t load file \"{1}\"", Path.GetExtension(dialog.FileName), dialog.FileName);
+                        return;
                 }
 
                 var loadResult = loader.Load(dialog.FileName);
@@ -105,7 +118,7 @@ namespace SharpFlame.Gui.Actions
                 if(!loadResult.HasProblems)
                 {
                     loadResult.Value.PathInfo = new PathInfo(dialog.FileName, true);
-                    MainMapView.MainMap = loadResult.Value;
+                    OnMapLoad(this, new EventArgs<Map>(loadResult.Value));
                 } else
                 {
                     loadResult.Value.Deallocate();

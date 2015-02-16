@@ -2,9 +2,12 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Appccelerate.EventBroker;
+using Appccelerate.EventBroker.Handlers;
+using Appccelerate.Events;
 using Eto.Drawing;
 using Eto.Forms;
 using Ninject;
+using Ninject.Modules;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Extensions;
@@ -46,19 +49,26 @@ namespace SharpFlame.Gui.Forms
         [Inject]
         internal IEventBroker EventBroker { get; set; }
 
-        private string mainMapName;   
+        public void SetTitle(string mapName)
+	    {
+            this.Title = string.Format("{0} - {1} {2}", mapName, Constants.ProgramName, Constants.ProgramVersion());
+	    }
 
-        /// <summary>
-        /// Sets the title Map.
-        /// </summary>
-        /// <value>The name of the main map.</value>
-        public string MainMapName { 
-            get { return mainMapName; } 
-            set { 
-                mainMapName = value;
-                Title = string.Format("{0} - {1} {2}", mainMapName, Constants.ProgramName, Constants.ProgramVersion());
-            }
-        }
+	    [EventSubscription(EventTopics.OnMapLoad, typeof(OnPublisher))]
+	    public void OnMapLoad(object sender, EventArgs<Map> args)
+	    {
+	        var map = args.Value;
+
+	        if( map == null )
+	        {
+	            this.SetTitle("No Map");
+	        }
+	        else
+	        {
+	            var mapName = map.InterfaceOptions.FileName;
+	            this.SetTitle(mapName);
+	        }
+	    }
 
 	    public MainForm()
 	    {
@@ -69,7 +79,7 @@ namespace SharpFlame.Gui.Forms
 	    void Init()
 	    {
 	        ClientSize = new Size(1024, 768);
-            MainMapName = "No Map";
+	        this.SetTitle("No Map");
 	        Icon = Resources.SharpFlameIcon();
 
 	        var tabControl = new TabControl();

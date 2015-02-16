@@ -15,7 +15,7 @@ namespace SharpFlame
 {
     public class SharpFlameApplication : Application
     {
-        private readonly ILogger logger;
+        private ILogger logger;
 
         [Inject]
         internal IEventBroker EventBroker { get; set; }
@@ -26,35 +26,34 @@ namespace SharpFlame
         [Inject]
         internal KeyboardManager KeyboardManager { get; set; }
 
-        private readonly IKernel kernel;
+        [Inject]
+        internal IKernel Kernel { get; set; }
+
+        [Inject]
+        internal ILoggerFactory LogFactory { get; set; }
 
         public static Result InitializeResult = new Result("Startup result", false);
 
-        [Inject]
-        public SharpFlameApplication(IKernel myKernel, Platform platform, ILoggerFactory logFactory)
-            : base(platform)
+        protected override void OnInitialized(EventArgs e)
         {
-			try
-			{
-				Toolkit.Init();
-			}
-			catch( Exception ex )
-			{
-				logger.Error(ex, "Got an exception while initializing OpenTK");
-				// initializeResult.ProblemAdd (string.Format("Failure while loading opentk, error was: {0}", ex.Message));
-				Instance.Quit();
-			}
-				
-			myKernel.Inject(this); //inject properties also, not just constructor.
-			kernel = myKernel;
+            try
+            {
+                Toolkit.Init();
+            }
+            catch( Exception ex )
+            {
+                logger.Error(ex, "Got an exception while initializing OpenTK");
+                // initializeResult.ProblemAdd (string.Format("Failure while loading opentk, error was: {0}", ex.Message));
+                Instance.Quit();
+            }
 
-			// TODO: Remove me once everthing is inectable.
-			App.Kernel = myKernel;
-			App.SettingsManager = this.Settings;
-			App.KeyboardManager = this.KeyboardManager;
-			App.Random = new Random();
+            // TODO: Remove me once everthing is inectable.
+            App.Kernel = this.Kernel;
+            App.SettingsManager = this.Settings;
+            App.KeyboardManager = this.KeyboardManager;
+            App.Random = new Random();
 
-            logger = logFactory.GetCurrentClassLogger();
+            logger = LogFactory.GetCurrentClassLogger();
 
             // Allows manual Button size on GTK2.
             Button.DefaultSize = new Size(1, 1);
@@ -66,26 +65,24 @@ namespace SharpFlame
             App.Initalize();
 
             // Uncomment me to debug the EventBroker.
-//            #if DEBUG
-//            EventBroker.AddExtension(new SharpFlame.Core.Extensions.EventBrokerLogExtension());
-//            #endif
+            //            #if DEBUG
+            //            EventBroker.AddExtension(new SharpFlame.Core.Extensions.EventBrokerLogExtension());
+            //            #endif
 
             EventBroker.Register(this.Settings);
             EventBroker.Register(this.KeyboardManager);
 
-            #if DEBUG
-            var keylogger = kernel.Get<Keylogger>();
+#if DEBUG
+            var keylogger = Kernel.Get<Keylogger>();
             EventBroker.Register(keylogger);
-            #endif
+#endif
 
             App.SetProgramSubDirs();
 
             InitializeResult.Add(Settings.Load(App.SettingsPath));
-        }
 
-        protected override void OnInitialized(EventArgs e)
-        {
-            this.MainForm = kernel.Get<MainForm>();
+            this.MainForm = Kernel.Get<MainForm>();
+            //this.MainForm = new MainForm();
 
             base.OnInitialized(e);
 
@@ -94,7 +91,7 @@ namespace SharpFlame
 
             if( Settings.ShowOptionsAtStartup )
             {
-                kernel.Get<Gui.Dialogs.Settings>().Show();
+                Kernel.Get<Gui.Dialogs.Settings>().Show();
             }
         }
 

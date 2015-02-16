@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace SharpFlame.UiOptions
 {
-    public class Minimap : INotifyPropertyChanged
+    public class MinimapOpts : INotifyPropertyChanged
     {
                 private bool textures;
         public bool Textures { 
@@ -65,7 +65,7 @@ namespace SharpFlame.UiOptions
             return true;
         }
         
-        public Minimap() {
+        public MinimapOpts() {
             Textures = true;
             Heights = true;
             Cliffs = false;
