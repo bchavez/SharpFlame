@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using Appccelerate.EventBroker;
 using Eto.Gl;
 using Ninject;
 using NLog;
@@ -351,12 +352,12 @@ namespace SharpFlame
 
         public static void VisionRadius_2E_Changed()
         {
-            var mmv = Kernel.Get<MapPanel>();
+            var eve = Kernel.Get<IEventBroker>();
             VisionRadius = 256.0D * Math.Pow(2.0D, (VisionRadius_2E / 2.0D));
-            if (mmv != null)
+            if (eve != null)
             {
                 View_Radius_Set(VisionRadius);
-                mmv.DrawLater();
+                eve.DrawLater(typeof(App));
             }
         }
 

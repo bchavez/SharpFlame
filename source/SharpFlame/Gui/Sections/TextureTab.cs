@@ -5,7 +5,6 @@ using System.Linq;
 using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
 using Appccelerate.Events;
-using Eto;
 using Eto.Drawing;
 using Eto.Forms;
 using Eto.Gl;
@@ -15,8 +14,6 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core.Domain;
 using SharpFlame.Domain.ObjData;
 using SharpFlame.Generators;
-using SharpFlame.Infrastructure;
-using SharpFlame;
 using SharpFlame.Core;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping;
@@ -60,6 +57,9 @@ namespace SharpFlame.Gui.Sections
         internal SettingsManager Settings { get; set; }
         [Inject]
         internal Options UiOptions { get; set; }
+
+        [Inject]
+        internal IEventBroker EventBroker { get; set; }
 
 
         internal GLSurface GLSurface { get; set; }
@@ -316,9 +316,6 @@ namespace SharpFlame.Gui.Sections
             }
         }
 
-        [EventPublication(EventTopics.OnTilesetChanged)]
-        public event EventHandler<EventArgs<int>> OnTilesetChanged = delegate { }; 
-
         /// <summary>
         /// Sets the Bindings to uiOptions.Textures;
         /// </summary>
@@ -417,7 +414,22 @@ namespace SharpFlame.Gui.Sections
             cbTileset.Bind(r => r.SelectedIndex, texturesOptions, t => t.TilesetNum);
             cbTileset.SelectedIndexChanged += delegate
                 {
-                    OnTilesetChanged(this, new EventArgs<int>(texturesOptions.TilesetNum));
+                    var tilesetNum = texturesOptions.TilesetNum;
+                    if( map != null &&
+                        map.Tileset != App.Tilesets[tilesetNum] )
+                    {
+                        map.Tileset = App.Tilesets[tilesetNum];
+                        map.TileType_Reset();
+
+                        map.SetPainterToDefaults();
+
+                        map.SectorGraphicsChanges.SetAllChanged();
+                        this.EventBroker.UpdateMap(this);
+                        this.EventBroker.DrawLater(this);
+                    }
+
+
+
                     DrawTexturesView();
                 };
 

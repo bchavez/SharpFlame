@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<eto:TabPage
+	   xmlns="http://schema.picoe.ca/eto.forms" 
+	   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+       xmlns:eto="clr-namespace:Eto.Forms;assembly=Eto"
+       xmlns:s="clr-namespace:SharpFlame.Gui.Controls;assembly=SharpFlame"
+       Text="Labels">
+
+    <eto:TableLayout >
+        <eto:TableRow >
+            <eto:Button Text="Create Area From Selection"/>
+            <eto:Label Text="Hold P and click to make positions." />
+        </eto:TableRow>
+
+        <eto:TableRow>
+            <eto:Label Text="Positions:" />
+            <eto:Label Text="Areas:" />
+        </eto:TableRow>
+
+        <eto:TableRow>
+            <eto:TableCell ScaleWidth="True">
+                <eto:ListBox ID="lstScriptPositions" />
+            </eto:TableCell>
+            <eto:TableCell ScaleWidth="True">
+                <eto:ListBox ID="lstScriptAreas" />
+            </eto:TableCell>
+        </eto:TableRow>
+        
+        <eto:TableRow>
+
+            <eto:TableLayout>
+                <eto:TableRow ScaleHeight="True" />
+                <eto:TableRow>
+                    <eto:TableCell ScaleWidth="True" />
+                    <eto:TableCell>
+                        <eto:GroupBox Text="Selected Marker">
+                            <eto:TableLayout>
+                                <eto:TableRow>
+                                    <eto:TableLayout>
+                                        <eto:TableRow>
+                                            <eto:TableCell>
+                                                <eto:Label Text="Map Name:"/>
+                                            </eto:TableCell>
+                                            <eto:TableCell>
+                                                <eto:TableLayout>
+                                                    <eto:TableRow>
+                                                        <eto:TableCell>
+                                                            <eto:TextBox Width="100" ID="txtMapName" />
+                                                        </eto:TableCell>
+                                                        <eto:TableCell></eto:TableCell>
+                                                    </eto:TableRow>
+                                                    <eto:TableRow>
+                                                        <eto:TableCell></eto:TableCell>
+                                                        <eto:TableCell></eto:TableCell>
+                                                    </eto:TableRow>
+                                                </eto:TableLayout>
+                                            </eto:TableCell>
+                                        </eto:TableRow>
+                                    </eto:TableLayout>
+                                </eto:TableRow>
+                                <eto:TableLayout>
+                                    <eto:TableRow>
+                                        <eto:Label Text="x:"></eto:Label>
+                                        <eto:Label Text="y:"></eto:Label>
+                                    </eto:TableRow>
+                                    <eto:TableRow>
+                                        <eto:TextBox></eto:TextBox>
+                                        <eto:TextBox></eto:TextBox>
+                                    </eto:TableRow>
+                                    <eto:TableRow>
+                                        <eto:Label Text="x2:"></eto:Label>
+                                        <eto:Label Text="y2:"></eto:Label>
+                                    </eto:TableRow>
+                                    <eto:TableRow>
+                                        <eto:TextBox></eto:TextBox>
+                                        <eto:TextBox></eto:TextBox>
+                                    </eto:TableRow>
+                                    <eto:TableRow>
+                                        <eto:Button Text="Remove"/>
+                                    </eto:TableRow>
+                                </eto:TableLayout>
+
+                            </eto:TableLayout>
+
+                        </eto:GroupBox>
+
+                    </eto:TableCell>
+                    <eto:TableCell ScaleWidth="True" />
+                </eto:TableRow>
+                <eto:TableRow ScaleHeight="True"/>
+            </eto:TableLayout>
+
+
+
+        </eto:TableRow>
+        
+        <eto:TableRow>
+            <eto:TableLayout>
+                <eto:TableRow ScaleHeight="True" />
+                <eto:TableRow>
+                    <eto:TableCell ScaleWidth="True" />
+                    <eto:TableCell>
+                    </eto:TableCell>
+                    <eto:TableCell ScaleWidth="True" />
+                </eto:TableRow>
+                <eto:TableRow ScaleHeight="True"/>
+            </eto:TableLayout>
+        </eto:TableRow>
+        
+    </eto:TableLayout>
+</eto:TabPage>

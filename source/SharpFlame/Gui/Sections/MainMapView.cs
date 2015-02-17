@@ -15,9 +15,7 @@ using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 using SharpFlame.Graphics.OpenGL;
-using SharpFlame.Infrastructure;
 using SharpFlame.Mapping;
-using SharpFlame.Mapping.Drawing;
 using SharpFlame.Mapping.Minimap;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
@@ -69,25 +67,6 @@ namespace SharpFlame.Gui.Sections
             DrawLater();   
         }
 
-        [EventSubscription(EventTopics.OnTilesetChanged,typeof(OnPublisher))]
-        public void OnTilsetChanged(object sender, EventArgs<int> args)
-        {
-            var tilesetNum = args.Value;
-            var map = this.MainMap;
-            if( map != null &&
-                map.Tileset != App.Tilesets[tilesetNum] )
-            {
-                map.Tileset = App.Tilesets[tilesetNum];
-                map.TileType_Reset();
-
-                map.SetPainterToDefaults();
-
-                map.SectorGraphicsChanges.SetAllChanged();
-                this.UpdateMap();
-                this.DrawLater();
-            }
-        }
-
         /// <summary>
         /// These get injected by Ninject over the constructor.
         /// </summary>
@@ -97,8 +76,8 @@ namespace SharpFlame.Gui.Sections
         [Inject]
         internal KeyboardManager KeyboardManager { get; set; }
 
-        private readonly ViewInfo viewInfo;
-        private readonly MinimapGl minimapGl;
+        private ViewInfo viewInfo;
+        private MinimapGl minimapGl;
         
         [Inject]
         internal Options UiOptions { get; set; }
@@ -117,11 +96,12 @@ namespace SharpFlame.Gui.Sections
         [Inject]
         internal SettingsManager Settings { get; set; }
 
+        [Inject]
+        internal IEventBroker EventBroker { get; set; }
+
         public MapPanel()
         {
             this.GLSurface = new GLSurface();
-
-            this.viewInfo = new ViewInfo(this.KeyboardManager, this.UiOptions, this.Settings, this);
             
             var mainLayout = new DynamicLayout();
             mainLayout.AddSeparateRow(
@@ -138,9 +118,15 @@ namespace SharpFlame.Gui.Sections
 
             Content = mainLayout;
 
-            this.minimapGl = new MinimapGl(this.Settings, this.UiOptions, this.GLSurface);
             this.GLSurface.Initialized += GLSurface_Initialized;
             SetupEventHandlers();
+        }
+        protected override void OnPreLoad(EventArgs e)
+        {
+            this.viewInfo = new ViewInfo(this.KeyboardManager, this.UiOptions, this.Settings, this.EventBroker , this.GLSurface);
+            this.minimapGl = new MinimapGl(this.Settings, this.UiOptions, this.GLSurface);
+
+            base.OnPreLoad(e);
         }
 
         private void SetupEventHandlers()
@@ -392,7 +378,13 @@ namespace SharpFlame.Gui.Sections
             DrawLater();
         }
 
-        public void DrawLater()
+        [EventSubscription(EventTopics.OnMapDrawLater, typeof(OnPublisher))]
+        public void OnDrawLater(object sender, EventArgs args)
+        {
+            this.DrawLater();
+        }
+
+        private void DrawLater()
         {
             drawPending = true;
         }
@@ -816,7 +808,13 @@ namespace SharpFlame.Gui.Sections
             this.minimapGl.Refresh = true;
         }
 
-        public void UpdateMap()
+        [EventSubscription(EventTopics.OnMapUpdate, typeof(OnPublisher))]
+        public void OnMapUpdate(object sender, EventArgs args)
+        {
+            this.UpdateMap();
+        }
+
+        private void UpdateMap()
         {
             this.mainMap.Update(this.minimapGl);
         }

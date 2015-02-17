@@ -610,6 +610,9 @@
     <EmbeddedResource Include="Gui\Sections\ResizeTab.xoml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Gui\Sections\LabelsTab.xoml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="License.txt" />
     <None Include="Resources\objectsselect.png" />
     <None Include="Resources\notile.png" />

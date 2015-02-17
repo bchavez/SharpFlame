@@ -6,14 +6,15 @@ using SharpFlame.UiOptions;
 
 namespace SharpFlame.Gui.Sections
 {
-    public class LabelsTab : Panel
+    public class LabelsTab : TabPage
     {
         [Inject]
         internal Options UiOptions { get; set; }
 
         public LabelsTab()
         {
-            var mainLayout = new DynamicLayout ();
+            XomlReader.Load(this);
+            /*var mainLayout = new DynamicLayout ();
 
             var nLayout0 = new DynamicLayout ();
             nLayout0.AddRow(new Button { Text = "Create Area From Selection" }, 
@@ -55,7 +56,7 @@ namespace SharpFlame.Gui.Sections
 
             mainLayout.Add (null);
 
-            Content = mainLayout;
+            Content = mainLayout;*/
         }
 
         protected override void OnLoadComplete(EventArgs lcEventArgs)

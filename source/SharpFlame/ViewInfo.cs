@@ -2,30 +2,22 @@ using System;
 using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
 using Appccelerate.Events;
-using Eto.Drawing;
 using Eto.Forms;
 using Eto.Gl;
-using Ninject;
-using Ninject.Extensions.Logging;
 using NLog;
-using SharpFlame.Collections;
-using SharpFlame.Controls;
 using SharpFlame.Core;
 using SharpFlame.Core.Collections;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Extensions;
 using SharpFlame.FileIO;
 using SharpFlame.Gui.Sections;
-using SharpFlame.Infrastructure;
 using SharpFlame.Mapping;
-using SharpFlame.Mapping.Minimap;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 using SharpFlame.Util;
-using SharpFlame.Painters;
 using SharpFlame.Settings;
 using SharpFlame.UiOptions;
 
@@ -71,21 +63,22 @@ namespace SharpFlame
             HandleLostFocus(this, EventArgs.Empty);
         }
 
-        public MapPanel MapPanel { get; private set; }
-
+        private GLSurface glSurface;
         private readonly KeyboardManager keyboardManager;
         private readonly Options uiOptions;
         private readonly SettingsManager settings;
+        private readonly IEventBroker broker;
         private readonly UITimer tmrMouseMove;
 
         private bool enableMouseMove = false;
 
-        public ViewInfo(KeyboardManager kbm, Options argUiOptions, SettingsManager argSettings, MapPanel mapPanel)
+        public ViewInfo(KeyboardManager kbm, Options argUiOptions, SettingsManager argSettings, IEventBroker broker, GLSurface glSurface)
         {
             this.keyboardManager = kbm;
             this.uiOptions = argUiOptions;
             this.settings = argSettings;
-            this.MapPanel = mapPanel;
+            this.broker = broker;
+            this.glSurface = glSurface;
 
             tmrMouseMove = new UITimer { Interval = 0.1 };
             tmrMouseMove.Elapsed += EnableMouseMove;
@@ -113,27 +106,27 @@ namespace SharpFlame
             const float min = (float)(0.1d * MathUtil.RadOf1Deg);
             const float max = (float)(179.0d * MathUtil.RadOf1Deg);
 
-            FieldOfViewY = (float)(Math.Atan(MapPanel.GLSurface.Size.Height * FOVMultiplier / 2.0D) * 2.0D);
+            FieldOfViewY = (float)(Math.Atan(glSurface.Size.Height * FOVMultiplier / 2.0D) * 2.0D);
             if ( FieldOfViewY < min )
             {
                 FieldOfViewY = min;
-                if ( MapPanel.GLSurface.Size.Height > 0 )
+                if ( glSurface.Size.Height > 0 )
                 {
-                    FOVMultiplier = 2.0D * Math.Tan(FieldOfViewY / 2.0D) / MapPanel.GLSurface.Size.Height;
+                    FOVMultiplier = 2.0D * Math.Tan(FieldOfViewY / 2.0D) / glSurface.Size.Height;
                     FOVMultiplierExponent = Math.Log(FOVMultiplier) / Math.Log(2.0D);
                 }
             }
             else if ( FieldOfViewY > max )
             {
                 FieldOfViewY = max;
-                if ( MapPanel.GLSurface.Size.Height > 0 )
+                if ( glSurface.Size.Height > 0 )
                 {
-                    FOVMultiplier = 2.0D * Math.Tan(FieldOfViewY / 2.0D) / MapPanel.GLSurface.Size.Height;
+                    FOVMultiplier = 2.0D * Math.Tan(FieldOfViewY / 2.0D) / glSurface.Size.Height;
                     FOVMultiplierExponent = Math.Log(FOVMultiplier) / Math.Log(2.0D);
                 }
             }
 
-            MapPanel.DrawLater();
+            broker.DrawLater(this);
         }
 
         private void ViewPosSet(XYZInt newViewPos)
@@ -141,7 +134,7 @@ namespace SharpFlame
             ViewPos = newViewPos;
             ViewPosClamp();
 
-            MapPanel.DrawLater();
+            broker.DrawLater(this);
         }
 
         public void ViewPosChange(XYZInt displacement)
@@ -151,7 +144,7 @@ namespace SharpFlame
             ViewPos.Y += displacement.Y;
             ViewPosClamp();
 
-            MapPanel.DrawLater();
+            broker.DrawLater(this);
         }
 
         private void ViewPosClamp()
@@ -171,7 +164,7 @@ namespace SharpFlame
             Matrix3DMath.MatrixInvert(ViewAngleMatrix, ViewAngleMatrixInverted);
             Matrix3DMath.MatrixToRPY(ViewAngleMatrix, ref ViewAngleRPY);
 
-            MapPanel.DrawLater();
+            broker.DrawLater(this);
         }
 
         private void ViewAngleSetToDefault()
@@ -180,7 +173,7 @@ namespace SharpFlame
             Matrix3DMath.MatrixSetToXAngle(matrixA, Math.Atan(2.0D));
             viewAngleSet(matrixA);
 
-            MapPanel.DrawLater();
+            broker.DrawLater(this);
         }
 
         public void ViewAngleSetRotate(Matrix3DMath.Matrix3D newMatrix)
@@ -191,7 +184,7 @@ namespace SharpFlame
 
             if ( App.ViewMoveType == ViewMoveType.RTS & App.RTSOrbit )
             {
-                if ( ScreenXYGetViewPlanePosForwardDownOnly(Math.Floor(MapPanel.GLSurface.Size.Width / 2.0D).ToInt(), Math.Floor(MapPanel.GLSurface.Size.Height / 2.0D).ToInt(), 127.5D, ref xyDbl) )
+                if ( ScreenXYGetViewPlanePosForwardDownOnly(Math.Floor(glSurface.Size.Width / 2.0D).ToInt(), Math.Floor(glSurface.Size.Height / 2.0D).ToInt(), 127.5D, ref xyDbl) )
                 {
                     xyzDbl.X = xyDbl.X;
                     xyzDbl.Y = 127.5D;
@@ -217,7 +210,7 @@ namespace SharpFlame
                 MoveToViewTerrainPosFromDistance(xyzDbl, Convert.ToDouble((xyzDbl2 - xyzDbl).GetMagnitude()));
             }
 
-            MapPanel.DrawLater();
+            broker.DrawLater(this);
         }
 
         public void LookAtTile(XYInt tileNum)
@@ -283,8 +276,8 @@ namespace SharpFlame
             try
             {
                 var ratioZpx = 1.0D / (FOVMultiplier * pos.Z);
-                result.X = Convert.ToInt32(MapPanel.GLSurface.Size.Width / 2.0D + (pos.X * ratioZpx));
-                result.Y = Convert.ToInt32(MapPanel.GLSurface.Size.Height / 2.0D - (pos.Y * ratioZpx));
+                result.X = Convert.ToInt32(glSurface.Size.Width / 2.0D + (pos.X * ratioZpx));
+                result.Y = Convert.ToInt32(glSurface.Size.Height / 2.0D - (pos.Y * ratioZpx));
                 return true;
             }
             catch
@@ -303,8 +296,8 @@ namespace SharpFlame
             try
             {
                 //convert screen pos to vector of one pos unit
-                xyzDbl.X = (screenPos.X - MapPanel.GLSurface.Size.Width / 2.0D) * FOVMultiplier;
-                xyzDbl.Y = (MapPanel.GLSurface.Size.Height / 2.0D - screenPos.Y) * FOVMultiplier;
+                xyzDbl.X = (screenPos.X - glSurface.Size.Width / 2.0D) * FOVMultiplier;
+                xyzDbl.Y = (glSurface.Size.Height / 2.0D - screenPos.Y) * FOVMultiplier;
                 xyzDbl.Z = 1.0D;
                 //factor in the view angle
                 Matrix3DMath.VectorRotationByMatrix(ViewAngleMatrix, xyzDbl, ref xyzDbl2);
@@ -339,8 +332,8 @@ namespace SharpFlame
                 terrainViewPos.Z = Convert.ToDouble(- ViewPos.Z);
 
                 //convert screen pos to vector of one pos unit
-                xyzDbl.X = (screenPos.X - MapPanel.GLSurface.Size.Width / 2.0D) * FOVMultiplier;
-                xyzDbl.Y = ( MapPanel.GLSurface.Size.Height / 2.0D - screenPos.Y ) * FOVMultiplier;
+                xyzDbl.X = (screenPos.X - glSurface.Size.Width / 2.0D) * FOVMultiplier;
+                xyzDbl.Y = ( glSurface.Size.Height / 2.0D - screenPos.Y ) * FOVMultiplier;
                 xyzDbl.Z = 1.0D;
                 //rotate the vector so that it points forward and level
                 Matrix3DMath.VectorRotationByMatrix(ViewAngleMatrix, xyzDbl, ref terrainViewVector);
@@ -512,8 +505,8 @@ namespace SharpFlame
             {
                 //convert screen pos to vector of one pos unit
                 double dblTemp2 = FOVMultiplier;
-                xyzDouble.X = (screenX - MapPanel.GLSurface.Size.Width / 2.0D) * dblTemp2;
-                xyzDouble.Y = (MapPanel.GLSurface.Size.Height / 2.0D - screenY) * dblTemp2;
+                xyzDouble.X = (screenX - glSurface.Size.Width / 2.0D) * dblTemp2;
+                xyzDouble.Y = (glSurface.Size.Height / 2.0D - screenY) * dblTemp2;
                 xyzDouble.Z = 1.0D;
                 //factor in the view angle
                 Matrix3DMath.VectorRotationByMatrix(ViewAngleMatrix, xyzDouble, ref xyzDbl2);
@@ -603,8 +596,8 @@ namespace SharpFlame
                 };
             uiOptions.Terrain.Brush.PerformActionMapVertices(applyVertexTerrain, mouseOverTerrain.Vertex);
 
-            MapPanel.UpdateMap();
-            MapPanel.DrawLater();
+            broker.UpdateMap(this);
+            broker.DrawLater(this);
         }
 
         private void ApplyRoad()
@@ -641,11 +634,11 @@ namespace SharpFlame
                         Map.SectorTerrainUndoChanges.TileChanged(tileNum);
                     }
 
-                    MapPanel.UpdateMap();
+                    broker.UpdateMap(this);
 
                     Map.UndoStepCreate("Road Side");
 
-                    MapPanel.DrawLater();
+                    broker.DrawLater(this);
                 }
             }
             else
@@ -670,11 +663,11 @@ namespace SharpFlame
                         Map.SectorTerrainUndoChanges.TileChanged(tileNum);
                     }
 
-                    MapPanel.UpdateMap();
+                    broker.UpdateMap(this);
 
                     Map.UndoStepCreate("Road Side");
 
-                    MapPanel.DrawLater();
+                    broker.DrawLater(this);
                 }
             }
         }
@@ -718,12 +711,13 @@ namespace SharpFlame
                         Map.SectorTerrainUndoChanges.SideHChanged(sideNum);
                     }
 
-                    MapPanel.UpdateMap();
+                    broker.UpdateMap(this);
 
                     Map.UndoStepCreate("Road Line");
 
                     Map.SelectedTileA = null;
-                    MapPanel.DrawLater();
+
+                    broker.DrawLater(this);
                 }
                 else if ( tile.Y == Map.SelectedTileA.Y )
                 {
@@ -747,13 +741,13 @@ namespace SharpFlame
                         Map.SectorTerrainUndoChanges.SideVChanged(sideNum);
                     }
 
-                    //Map.Update(null);
-                    MapPanel.UpdateMap();
+                    broker.UpdateMap(this);
 
                     Map.UndoStepCreate("Road Line");
 
                     Map.SelectedTileA = null;
-                    MapPanel.DrawLater();
+
+                    broker.DrawLater(this);
                 }
             }
             else
@@ -1010,11 +1004,11 @@ namespace SharpFlame
                 }
             }
 
-            MapPanel.UpdateMap();
+            broker.UpdateMap(this);
 
             Map.UndoStepCreate("Ground Fill");
 
-            MapPanel.DrawLater();
+            broker.DrawLater(this);
         }
 
         private void ApplyTexture()
@@ -1039,8 +1033,8 @@ namespace SharpFlame
 
             uiOptions.Textures.Brush.PerformActionMapTiles(applyTexture, mouseOverTerrain.Tile);
 
-            MapPanel.UpdateMap();
-            MapPanel.DrawLater();
+            broker.UpdateMap(this);
+            broker.DrawLater(this);
         }
 
         /// <summary>
@@ -1113,8 +1107,8 @@ namespace SharpFlame
                 applyCliffTriangle.ActionPerform();
             }
 
-            MapPanel.UpdateMap();
-            MapPanel.DrawLater();
+            broker.UpdateMap(this);
+            broker.DrawLater(this);
         }
 
         private void ApplyCliff()
@@ -1137,8 +1131,8 @@ namespace SharpFlame
             applyCliff.SetTris = Program.frmMainInstance.cbxCliffTris.Checked;
             uiOptions.Terrain.CliffBrush.PerformActionMapTiles(applyCliff, mouseOverTerrain.Tile);
 
-            MapPanel.UpdateMap();
-            MapPanel.DrawLater();
+            broker.UpdateMap(this);
+            broker.DrawLater(this);
         }
 
         private void ApplyCliffRemove()
@@ -1153,8 +1147,8 @@ namespace SharpFlame
             var applyCliffRemove = new clsApplyCliffRemove {Map = Map};
             uiOptions.Terrain.CliffBrush.PerformActionMapTiles(applyCliffRemove, mouseOverTerrain.Tile);
 
-            MapPanel.UpdateMap();
-            MapPanel.DrawLater();
+            broker.UpdateMap(this);
+            broker.DrawLater(this);
         }
 
         private void applyRoadRemove()
@@ -1169,8 +1163,8 @@ namespace SharpFlame
             var applyRoadRemove = new clsApplyRoadRemove {Map = Map};
             uiOptions.Terrain.CliffBrush.PerformActionMapTiles(applyRoadRemove, mouseOverTerrain.Tile);
 
-            MapPanel.UpdateMap();
-            MapPanel.DrawLater();
+            broker.UpdateMap(this);
+            broker.DrawLater(this);
         }
 
         public void ApplyTextureClockwise()
@@ -1190,11 +1184,11 @@ namespace SharpFlame
             Map.SectorGraphicsChanges.TileChanged(tile);
             Map.SectorTerrainUndoChanges.TileChanged(tile);
 
-            MapPanel.UpdateMap();
+            broker.UpdateMap(this);
 
             Map.UndoStepCreate("Texture Rotate");
 
-            MapPanel.DrawLater();
+            broker.DrawLater(this);
         }
 
         public void ApplyTextureCounterClockwise()
@@ -1214,11 +1208,11 @@ namespace SharpFlame
             Map.SectorGraphicsChanges.TileChanged(tile);
             Map.SectorTerrainUndoChanges.TileChanged(tile);
 
-            MapPanel.UpdateMap();
+            broker.UpdateMap(this);
 
             Map.UndoStepCreate("Texture Rotate");
 
-            MapPanel.DrawLater();
+            broker.DrawLater(this);
         }
 
         public void ApplyTextureFlipX()
@@ -1238,11 +1232,11 @@ namespace SharpFlame
             Map.SectorGraphicsChanges.TileChanged(tile);
             Map.SectorTerrainUndoChanges.TileChanged(tile);
 
-            MapPanel.UpdateMap();
+            broker.UpdateMap(this);
 
             Map.UndoStepCreate("Texture Rotate");
 
-            MapPanel.DrawLater();
+            broker.DrawLater(this);
         }
 
         public void ApplyTriFlip()
@@ -1261,11 +1255,11 @@ namespace SharpFlame
             Map.SectorGraphicsChanges.TileChanged(tile);
             Map.SectorTerrainUndoChanges.TileChanged(tile);
 
-            MapPanel.UpdateMap();
+            broker.UpdateMap(this);
 
             Map.UndoStepCreate("Triangle Flip");
 
-            MapPanel.DrawLater();
+            broker.DrawLater(this);
         }
 
         public void ApplyHeightSmoothing(double ratio)
@@ -1295,8 +1289,8 @@ namespace SharpFlame
             uiOptions.Height.Brush.PerformActionMapVertices(applyHeightSmoothing, mouseOverTerrain.Vertex);
             applyHeightSmoothing.Finish();
 
-            MapPanel.UpdateMap();
-            MapPanel.DrawLater();
+            broker.UpdateMap(this);
+            broker.DrawLater(this);
         }
 
         private void applyHeightChange(double rate)
@@ -1314,8 +1308,8 @@ namespace SharpFlame
             applyHeightChange.UseEffect = uiOptions.Height.ChangeFade;
             uiOptions.Height.Brush.PerformActionMapVertices(applyHeightChange, mouseOverTerrain.Vertex);
 
-            MapPanel.UpdateMap();
-            MapPanel.DrawLater();
+            broker.UpdateMap(this);
+            broker.DrawLater(this);
         }
 
         private void applyHeightSet(clsBrush brush, byte height)
@@ -1334,8 +1328,8 @@ namespace SharpFlame
                 };
             brush.PerformActionMapVertices(applyHeightSet, mouseOverTerrain.Vertex);
 
-            MapPanel.UpdateMap();
-            MapPanel.DrawLater();
+            broker.UpdateMap(this);
+            broker.DrawLater(this);
         }
 
         private void applyGateway()
@@ -1365,8 +1359,9 @@ namespace SharpFlame
                     {
                         Map.GatewayRemoveStoreChange(a);
                         Map.UndoStepCreate("Gateway Delete");
-                        MapPanel.RefreshMinimap();
-                        MapPanel.DrawLater();
+                        
+                        broker.RefreshMinimap(this);
+                        broker.DrawLater(this);
                         break;
                     }
                     a++;
@@ -1377,7 +1372,7 @@ namespace SharpFlame
                 if ( Map.SelectedTileA == null )
                 {
                     Map.SelectedTileA = tile;
-                    MapPanel.DrawLater();
+                    broker.DrawLater(this);
                 }
                 else if ( tile.X == Map.SelectedTileA.X | tile.Y == Map.SelectedTileA.Y )
                 {
@@ -1386,8 +1381,8 @@ namespace SharpFlame
                         Map.UndoStepCreate("Gateway Place");
                         Map.SelectedTileA = null;
                         Map.SelectedTileB = null;
-                        MapPanel.RefreshMinimap();
-                        MapPanel.DrawLater();
+                        broker.RefreshMinimap(this);
+                        broker.DrawLater(this);
                     }
                 }
             }
@@ -1565,7 +1560,7 @@ namespace SharpFlame
                 }
             }
 
-            MapPanel.DrawLater();
+            broker.DrawLater(this);
         }
 
         public void HandleMouseUp(object sender, MouseEventArgs e)
@@ -1722,7 +1717,7 @@ namespace SharpFlame
                                 }
                                 // Program.frmMainInstance.SelectedObject_Changed(); // TODO: Implement me.
                                 Map.UnitSelectedAreaVertexA = mouseOverTerrain.Vertex.Normal;
-                                MapPanel.DrawLater();
+                                broker.DrawLater(this);
                             }
                         }
                         else if (uiOptions.MouseTool == MouseTool.TerrainBrush)
@@ -1791,7 +1786,7 @@ namespace SharpFlame
                                 else
                                 {
                                     ApplyTerrainFill(Program.frmMainInstance.FillCliffAction, Program.frmMainInstance.cbxFillInside.Checked);
-                                    MapPanel.DrawLater();
+                                    broker.DrawLater(this);
                                 }
                             }
                         }
@@ -1822,8 +1817,8 @@ namespace SharpFlame
                                 objectCreator.Horizontal = mouseOverTerrain.Pos.Horizontal;
                                 objectCreator.Perform();
                                 Map.UndoStepCreate("Place Object");
-                                MapPanel.UpdateMap();
-                                MapPanel.DrawLater();
+                                broker.UpdateMap(this);
+                                broker.DrawLater(this);
                             }
                         }
                         else if (uiOptions.MouseTool == MouseTool.ObjectLines)
@@ -1835,18 +1830,18 @@ namespace SharpFlame
                             if ( Map.SelectedAreaVertexA == null )
                             {
                                 Map.SelectedAreaVertexA = mouseOverTerrain.Vertex.Normal;
-                                MapPanel.DrawLater();
+                                broker.DrawLater(this);
                             }
                             else if ( Map.SelectedAreaVertexB == null )
                             {
                                 Map.SelectedAreaVertexB = mouseOverTerrain.Vertex.Normal;
-                                MapPanel.DrawLater();
+                                broker.DrawLater(this);
                             }
                             else
                             {
                                 Map.SelectedAreaVertexA = null;
                                 Map.SelectedAreaVertexB = null;
-                                MapPanel.DrawLater();
+                                broker.DrawLater(this);
                             }
                         }
                         else if (uiOptions.MouseTool == MouseTool.Gateways)
@@ -1881,13 +1876,13 @@ namespace SharpFlame
                 if (uiOptions.MouseTool == MouseTool.RoadLines || uiOptions.MouseTool == MouseTool.ObjectLines)
                 {
                     Map.SelectedTileA = null;
-                    MapPanel.DrawLater();
+                    broker.DrawLater(this);
                 }
                 else if (uiOptions.MouseTool == MouseTool.TerrainSelect)
                 {
                     Map.SelectedAreaVertexA = null;
                     Map.SelectedAreaVertexB = null;
-                    MapPanel.DrawLater();
+                    broker.DrawLater(this);
                 }
                 else if (uiOptions.MouseTool == MouseTool.CliffTriangle)
                 {
@@ -1897,7 +1892,7 @@ namespace SharpFlame
                 {
                     Map.SelectedTileA = null;
                     Map.SelectedTileB = null;
-                    MapPanel.DrawLater();
+                    broker.DrawLater(this);
                 }
                 else if (uiOptions.MouseTool == MouseTool.HeightSetBrush)
                 {
@@ -2014,7 +2009,7 @@ namespace SharpFlame
             }
 
             //Program.frmMainInstance.SelectedObject_Changed(); // TODO: Implement with UiOptions
-            MapPanel.DrawLater();
+            broker.DrawLater(this);
         }
 
         public void TimedActions(double zoom, double move, double pan, double roll, double orbitRate)
@@ -2028,7 +2023,7 @@ namespace SharpFlame
             var viewPosChangeXyz = new XYZInt(0, 0, 0);
             var angleChanged = default(bool);
 
-            move *= FOVMultiplier * (MapPanel.GLSurface.Size.Width + MapPanel.GLSurface.Size.Height) * Math.Max(Math.Abs(ViewPos.Y), 512.0D);
+            move *= FOVMultiplier * (glSurface.Size.Width + glSurface.Size.Height) * Math.Max(Math.Abs(ViewPos.Y), 512.0D);
 
             if (keyboardManager.Keys[KeyboardKeys.ViewZoomIn].Active)
             {
@@ -2287,9 +2282,9 @@ namespace SharpFlame
                         }
 
                         Map.UndoStepCreate("Object Line");
-                        MapPanel.UpdateMap();
+                        broker.UpdateMap(this);
                         Map.SelectedTileA = null;
-                        MapPanel.DrawLater();
+                        broker.DrawLater(this);
                     }
                     else if ( tile.Y == Map.SelectedTileA.Y )
                     {
@@ -2313,9 +2308,9 @@ namespace SharpFlame
                         }
 
                         Map.UndoStepCreate("Object Line");
-                        MapPanel.UpdateMap();
+                        broker.UpdateMap(this);
                         Map.SelectedTileA = null;
-                        MapPanel.DrawLater();
+                        broker.DrawLater(this);
                     }
                 }
                 else

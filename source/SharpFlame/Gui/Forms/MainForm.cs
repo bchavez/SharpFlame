@@ -32,7 +32,6 @@ namespace SharpFlame.Gui.Forms
         
         internal ObjectTab ObjectTab { get; set; }
         
-        internal LabelsTab LabelsTab { get; set; }
         
         internal MapPanel MapPanel { get; set; }
 
@@ -86,7 +85,6 @@ namespace SharpFlame.Gui.Forms
 	        this.HeightTab = new HeightTab();
 	        this.PlaceObjectsTab = new PlaceObjectsTab();
 	        this.ObjectTab = new ObjectTab();
-	        this.LabelsTab = new LabelsTab();
 
 
 	        var tabControl = new TabControl();
@@ -97,7 +95,7 @@ namespace SharpFlame.Gui.Forms
 	        //tabControl.TabPages.Add(new TabPage {Text = "Resize", Content = this.ResizeTab});
 	        tabControl.TabPages.Add(new TabPage {Text = "Place Objects", Content = this.PlaceObjectsTab});
 	        tabControl.TabPages.Add(new TabPage {Text = "Object", Content = this.ObjectTab});
-	        tabControl.TabPages.Add(new TabPage {Text = "Label", Content = this.LabelsTab});
+	        tabControl.TabPages.Add(new LabelsTab());
 
 	        tabControl.SelectedIndexChanged += delegate
 	            {

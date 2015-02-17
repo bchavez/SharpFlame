@@ -1777,6 +1777,7 @@ namespace SharpFlame.Mapping
 
         public void Update(MinimapGl minimapGl)
         {
+
             var lastSuppress = minimapGl.Suppress;
             minimapGl.Suppress = true;
             UpdateAutoTextures();

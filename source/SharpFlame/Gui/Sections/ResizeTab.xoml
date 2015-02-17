@@ -5,7 +5,7 @@
        xmlns:sys="clr-namespace:System;assembly=mscorlib"
        xmlns:eto="clr-namespace:Eto.Forms;assembly=Eto"
        xmlns:s="clr-namespace:SharpFlame.Gui.Controls;assembly=SharpFlame"
-       Text="Resize" Style="inject">
+       Text="Resize">
 
     <eto:TableLayout>
         <eto:TableRow>
