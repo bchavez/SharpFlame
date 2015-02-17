@@ -1,23 +1,15 @@
-﻿
-
-using System;
+﻿using System;
 using System.Diagnostics;
-using System.IO;
+using Appccelerate.EventBroker;
 using Eto.Forms;
-using Eto.Gl;
 using Ninject;
-using Ninject.Parameters;
 using Ninject.Extensions.Logging;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core;
 using SharpFlame.Core.Collections;
 using SharpFlame.Core.Domain;
-using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
-using SharpFlame.Gui.Dialogs;
-using SharpFlame.Gui.Sections;
-using SharpFlame.Infrastructure;
 using SharpFlame.Mapping.Changes;
 using SharpFlame.Mapping.IO.FMap;
 using SharpFlame.Mapping.Minimap;
@@ -30,8 +22,6 @@ using SharpFlame.Maths;
 using SharpFlame.Painters;
 using SharpFlame.Util;
 using SharpFlame.UiOptions;
-
-
 
 namespace SharpFlame.Mapping
 {
@@ -72,18 +62,19 @@ namespace SharpFlame.Mapping
         public XYInt UnitSelectedAreaVertexA;
         private bool readyForUserInput;
 
-        private readonly MapPanel mapPanel;
-        private readonly ViewInfo viewInfo;
+	    private readonly IEventBroker eventBroker;
+	    private readonly ViewInfo viewInfo;
         private readonly Options uiOptions;
 
         [Inject]
         internal IKernel Kernel { get; set; }
        
-        public Map(ILoggerFactory logFactory, MapPanel mmv, ViewInfo vi, Options argUiOptions)
+        public Map(ILoggerFactory logFactory, IEventBroker eventBroker, ViewInfo vi, Options argUiOptions)
         {
             logger = logFactory.GetCurrentClassLogger();
-            mapPanel = mmv;
-            viewInfo = vi;
+
+	        this.eventBroker = eventBroker;
+	        viewInfo = vi;
             uiOptions = argUiOptions;
 
             SectorCount = new XYInt(0, 0);
@@ -725,7 +716,7 @@ namespace SharpFlame.Mapping
             }
 
             GL.EndList();
-            this.mapPanel.RefreshMinimap();
+	        this.eventBroker.RefreshMinimap(this);
         }
 
         public void DrawTileWireframe(int TileX, int TileY)
@@ -1124,7 +1115,7 @@ namespace SharpFlame.Mapping
             }
 
             SectorsUpdateGraphics();
-            this.mapPanel.RefreshMinimap();
+            this.ve
             Program.frmMainInstance.SelectedObject_Changed();
         }
 
@@ -1207,7 +1198,7 @@ namespace SharpFlame.Mapping
             UndoPosition++;
 
             SectorsUpdateGraphics();
-            this.mapPanel.RefreshMinimap();
+	        this.eventBroker.RefreshMinimap(this);
             Program.frmMainInstance.SelectedObject_Changed();
         }
 
@@ -1444,7 +1435,7 @@ namespace SharpFlame.Mapping
 
             SectorsUpdateGraphics();
             SectorsUpdateUnitHeights();
-            this.mapPanel.RefreshMinimap();
+	        this.eventBroker.RefreshMinimap();
         }
 
         public Gateway GatewayCreate(XYInt PosA, XYInt PosB)

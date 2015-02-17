@@ -70,7 +70,7 @@ namespace SharpFlame.Mapping
             var matrixB = new Matrix3DMath.Matrix3D();
             clsAction mapAction;
             float zNearFar = 0;
-            var glSize = mapPanel.GLSurface.Size;
+            var glSize = info.GlSize;
             var drawCentre = default(XYDouble);
 
             dblTemp = App.SettingsManager.MinimapSize;

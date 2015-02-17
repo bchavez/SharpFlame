@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Appccelerate.EventBroker;
 using Ninject;
 using Ninject.Modules;
 using Ninject.Planning.Bindings.Resolvers;
@@ -38,9 +39,11 @@ namespace SharpFlame.Infrastructure
 
         private static void HookEtoPlatform(Eto.Platform eto, IKernel k)
         {
+	        var eb = k.Get<IEventBroker>();
             eto.WidgetCreated += (sender, args) =>
                 {
                     k.Inject(args.Instance);
+	                eb.Register(args.Instance);
                 };
         }
     }

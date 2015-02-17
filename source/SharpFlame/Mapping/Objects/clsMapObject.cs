@@ -40,60 +40,62 @@ namespace SharpFlame.Mapping
             return ID;
         }
 
-        public void UnitRemoveStoreChange(int Num)
+        public void UnitRemoveStoreChange(int num)
         {
-            var UnitChange = new UnitChange();
-            UnitChange.Type = UnitChangeType.Deleted;
-            UnitChange.Unit = Units[Num];
-            UnitChanges.Add(UnitChange);
+            var unitChange = new UnitChange
+	            {
+		            Type = UnitChangeType.Deleted,
+					Unit = Units[num]
+	            };
+	        UnitChanges.Add(unitChange);
 
-            UnitRemove(Num);
+            UnitRemove(num);
         }
 
-        public void UnitRemove(int Num)
+        public void UnitRemove(int num)
         {
-            var Unit = default(Unit);
-
-            Unit = Units[Num];
+	        var unit = Units[num];
 
             if ( SectorGraphicsChanges != null )
             {
-                UnitSectorsGraphicsChanged(Unit);
+                UnitSectorsGraphicsChanged(unit);
             }
 
             if ( viewInfo != null )
             {
-                var MouseOverTerrain = viewInfo.GetMouseOverTerrain();
-                if ( MouseOverTerrain != null )
+                var mouseOverTerrain = viewInfo.GetMouseOverTerrain();
+                if ( mouseOverTerrain != null )
                 {
-                    var Pos = MouseOverTerrain.Units.FindFirstItemPosition(Unit);
-                    if ( Pos >= 0 )
+                    var pos = mouseOverTerrain.Units.FindFirstItemPosition(unit);
+                    if ( pos >= 0 )
                     {
-                        MouseOverTerrain.Units.RemoveAt(Pos);
+                        mouseOverTerrain.Units.RemoveAt(pos);
                     }
                 }
             }
 
-            Unit.DisconnectFromMap();
+            unit.DisconnectFromMap();
         }
 
-        public void UnitSwap(Unit OldUnit, Unit NewUnit)
+        public void UnitSwap(Unit oldUnit, Unit newUnit)
         {
-            if ( OldUnit.MapLink.Source != this )
+            if ( oldUnit.MapLink.Source != this )
             {
                 Debugger.Break();
                 return;
             }
 
-            UnitRemoveStoreChange(OldUnit.MapLink.ArrayPosition);
-            var UnitAdd = new clsUnitAdd();
-            UnitAdd.Map = this;
-            UnitAdd.StoreChange = true;
-            UnitAdd.ID = OldUnit.ID;
-            UnitAdd.NewUnit = NewUnit;
-            UnitAdd.Label = OldUnit.Label;
-            UnitAdd.Perform();
-            App.ErrorIDChange(OldUnit.ID, NewUnit, "UnitSwap");
+            UnitRemoveStoreChange(oldUnit.MapLink.ArrayPosition);
+            var unitAdd = new clsUnitAdd
+	            {
+		            Map = this, 
+					StoreChange = true,
+					ID = oldUnit.ID,
+					NewUnit = newUnit,
+					Label = oldUnit.Label
+	            };
+	        unitAdd.Perform();
+            App.ErrorIDChange(oldUnit.ID, newUnit, "UnitSwap");
         }
 
         public void MakeDefaultUnitGroups()

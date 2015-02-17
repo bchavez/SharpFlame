@@ -8,25 +8,27 @@
        Text="Labels">
 
     <eto:TableLayout >
-        <eto:TableRow >
-            <eto:Button Text="Create Area From Selection"/>
-            <eto:Label Text="Hold P and click to make positions." />
-        </eto:TableRow>
+        <eto:TableLayout>
+            <eto:TableRow >
+                <eto:Button ID="cmdScriptAreaCreate" Text="Create Area From Selection" Click="cmdScriptAreaCreate_Click"/>
+                <eto:Label Text="Hold P and click to make positions." />
+            </eto:TableRow>
 
-        <eto:TableRow>
-            <eto:Label Text="Positions:" />
-            <eto:Label Text="Areas:" />
-        </eto:TableRow>
+            <eto:TableRow>
+                <eto:Label Text="Positions:" />
+                <eto:Label Text="Areas:" />
+            </eto:TableRow>
 
-        <eto:TableRow>
-            <eto:TableCell ScaleWidth="True">
-                <eto:ListBox ID="lstScriptPositions" />
-            </eto:TableCell>
-            <eto:TableCell ScaleWidth="True">
-                <eto:ListBox ID="lstScriptAreas" />
-            </eto:TableCell>
-        </eto:TableRow>
-        
+            <eto:TableRow>
+                <eto:TableCell ScaleWidth="True">
+                    <eto:ListBox ID="lstScriptPositions" />
+                </eto:TableCell>
+                <eto:TableCell ScaleWidth="True">
+                    <eto:ListBox ID="lstScriptAreas" />
+                </eto:TableCell>
+            </eto:TableRow>
+        </eto:TableLayout>
+
         <eto:TableRow>
 
             <eto:TableLayout>
@@ -34,19 +36,19 @@
                 <eto:TableRow>
                     <eto:TableCell ScaleWidth="True" />
                     <eto:TableCell>
-                        <eto:GroupBox Text="Selected Marker">
+                        <eto:GroupBox ID="grpSelectedMarker" Text="Selected Marker">
                             <eto:TableLayout>
                                 <eto:TableRow>
                                     <eto:TableLayout>
                                         <eto:TableRow>
                                             <eto:TableCell>
-                                                <eto:Label Text="Map Name:"/>
+                                                <eto:Label Text="Label:"/>
                                             </eto:TableCell>
                                             <eto:TableCell>
                                                 <eto:TableLayout>
                                                     <eto:TableRow>
                                                         <eto:TableCell>
-                                                            <eto:TextBox Width="100" ID="txtMapName" />
+                                                            <eto:TextBox Width="100" ID="txtLabel" />
                                                         </eto:TableCell>
                                                         <eto:TableCell></eto:TableCell>
                                                     </eto:TableRow>
@@ -61,23 +63,23 @@
                                 </eto:TableRow>
                                 <eto:TableLayout>
                                     <eto:TableRow>
-                                        <eto:Label Text="x:"></eto:Label>
-                                        <eto:Label Text="y:"></eto:Label>
+                                        <eto:Label Text="x:"/>
+                                        <eto:Label Text="y:"/>
                                     </eto:TableRow>
                                     <eto:TableRow>
-                                        <eto:TextBox></eto:TextBox>
-                                        <eto:TextBox></eto:TextBox>
+                                        <eto:NumericUpDown ID="numX"/>
+                                        <eto:NumericUpDown ID="numY"/>
                                     </eto:TableRow>
                                     <eto:TableRow>
-                                        <eto:Label Text="x2:"></eto:Label>
-                                        <eto:Label Text="y2:"></eto:Label>
+                                        <eto:Label Text="x2:"/>
+                                        <eto:Label Text="y2:"/>
                                     </eto:TableRow>
                                     <eto:TableRow>
-                                        <eto:TextBox></eto:TextBox>
-                                        <eto:TextBox></eto:TextBox>
+                                        <eto:NumericUpDown ID="numX2"/>
+                                        <eto:NumericUpDown ID="numY2"/>
                                     </eto:TableRow>
                                     <eto:TableRow>
-                                        <eto:Button Text="Remove"/>
+                                        <eto:Button ID="cmdRemove" Text="Remove" Click="cmdRemove_Click"/>
                                     </eto:TableRow>
                                 </eto:TableLayout>
 
@@ -94,7 +96,7 @@
 
 
         </eto:TableRow>
-        
+
         <eto:TableRow>
             <eto:TableLayout>
                 <eto:TableRow ScaleHeight="True" />
@@ -107,6 +109,6 @@
                 <eto:TableRow ScaleHeight="True"/>
             </eto:TableLayout>
         </eto:TableRow>
-        
+
     </eto:TableLayout>
 </eto:TabPage>
