@@ -206,10 +206,10 @@ namespace SharpFlame.Mapping
         {
             get
             {
-                if ( mapPanel.MainMap != this )
+                /*if ( mapPanel.MainMap != this )
                 {
                     return false;
-                }
+                }*/
                 return true;
             }
         }
@@ -1115,7 +1115,7 @@ namespace SharpFlame.Mapping
             }
 
             SectorsUpdateGraphics();
-            this.ve
+
             Program.frmMainInstance.SelectedObject_Changed();
         }
 
@@ -1435,7 +1435,7 @@ namespace SharpFlame.Mapping
 
             SectorsUpdateGraphics();
             SectorsUpdateUnitHeights();
-	        this.eventBroker.RefreshMinimap();
+	        this.eventBroker.RefreshMinimap(this);
         }
 
         public Gateway GatewayCreate(XYInt PosA, XYInt PosB)
