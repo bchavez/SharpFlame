@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Appccelerate.EventBroker;
 using Eto.Forms;
 using Ninject;
 using Ninject.Extensions.Logging;
@@ -15,12 +16,16 @@ namespace SharpFlame.Mapping.IO.Wz
     public class GameLoader : WzLoader
     {
         private readonly ILogger logger;
-        private readonly IKernel kernel;
+	    private readonly ILoggerFactory logFactory;
+	    private readonly IEventBroker eve;
+	    private readonly ITtpLoader ttpLoader;
 
-        public GameLoader(IKernel argKernel, ILoggerFactory logFactory) : base(argKernel, logFactory)
+	    public GameLoader(ILoggerFactory logFactory, IEventBroker eve, ITtpLoader ttpLoader)
         {
-            kernel = argKernel;
-            logger = logFactory.GetCurrentClassLogger();
+		    this.logFactory = logFactory;
+		    this.eve = eve;
+		    this.ttpLoader = ttpLoader;
+		    logger = logFactory.GetCurrentClassLogger();
         }
 
         public override GenericResult<Map> Load(string path, Map map = null)
@@ -31,7 +36,7 @@ namespace SharpFlame.Mapping.IO.Wz
 
             if(map == null)
             {
-                map = kernel.Get<Map>();
+                map = new Map(this.logFactory, this.eve);
             }
 
             map.InterfaceOptions.FilePath = path;
@@ -128,7 +133,6 @@ namespace SharpFlame.Mapping.IO.Wz
             {
                 using ( var reader = new BinaryReader(file) )
                 {
-                    var ttpLoader = kernel.Get<TTPLoader>();
                     returnResult.Add(ttpLoader.Load(reader, map));
                 }
             }

@@ -63,7 +63,7 @@ namespace SharpFlame.Mapping
         private bool readyForUserInput;
 
 	    private readonly IEventBroker eventBroker;
-	    private ViewInfo ViewInfo { get; set; }
+	    public ViewInfo ViewInfo { get; set; }
        
         public Map(ILoggerFactory logFactory, IEventBroker eventBroker)
         {

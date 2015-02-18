@@ -4,6 +4,7 @@ using SharpFlame.Mapping;
 using SharpFlame.Mapping.IO;
 using SharpFlame.Mapping.IO.FMap;
 using SharpFlame.Mapping.IO.LND;
+using SharpFlame.Mapping.IO.TTP;
 using SharpFlame.Mapping.IO.Wz;
 using SharpFlame.Settings;
 using SharpFlame.UiOptions;
@@ -23,13 +24,15 @@ namespace SharpFlame.Infrastructure
     {
         public override void Load()
         {
-            this.Bind<KeyboardManager>()
-                .ToSelf()
-                .InSingletonScope();
+	        this.Bind<KeyboardManager>()
+		        .ToSelf()
+		        .InSingletonScope()
+		        .RegisterOnGlobalEventBroker();
 
-            this.Bind<SettingsManager>()
-                .ToSelf()
-                .InSingletonScope();
+	        this.Bind<SettingsManager>()
+		        .ToSelf()
+		        .InSingletonScope()
+		        .RegisterOnGlobalEventBroker();
 
             this.Bind<Options>()
                 .ToSelf()
@@ -37,9 +40,10 @@ namespace SharpFlame.Infrastructure
                 
             #if DEBUG
             // This is here to keep a reference of it.
-            this.Bind<Keylogger>()
-                .ToSelf()
-                .InSingletonScope();
+	        this.Bind<Keylogger>()
+		        .ToSelf()
+		        .InSingletonScope()
+		        .RegisterOnGlobalEventBroker();
             #endif
 
 
@@ -61,7 +65,7 @@ namespace SharpFlame.Infrastructure
             this.Bind<IIOLoader>().To<LNDLoader>().InTransientScope().Named(NamedBinding.LndLoader);
             this.Bind<SharpFlame.Mapping.IO.LND.LNDSaver>().ToSelf().InSingletonScope();
             this.Bind<SharpFlame.Mapping.IO.Minimap.MinimapSaver>().ToSelf().InSingletonScope();
-            this.Bind<SharpFlame.Mapping.IO.TTP.TTPLoader>().ToSelf().InSingletonScope();
+	        this.Bind<ITtpLoader>().To<TTPLoader>().InTransientScope();
             this.Bind<SharpFlame.Mapping.IO.TTP.TTPSaver>().ToSelf().InSingletonScope();
             //this.Bind<SharpFlame.Mapping.IO.Wz.WzLoader>().ToSelf().InSingletonScope();
             this.Bind<IIOLoader>().To<WzLoader>().InTransientScope().Named(NamedBinding.WzLoader);

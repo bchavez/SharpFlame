@@ -51,6 +51,10 @@ namespace SharpFlame.Gui.Sections
 
 			mainMap = newMap;
 			mainMap.IsMainMap = true;
+			
+			this.ViewInfo.SetGlSize(this.GLSurface.Size);
+			
+			mainMap.ViewInfo = this.ViewInfo;
 
 			if( mainMap != null )
 			{
@@ -65,7 +69,7 @@ namespace SharpFlame.Gui.Sections
 			{
 				UiOptions.Textures.TilesetNum = -1;
 			}
-
+			this.minimapGl.HandleMapLoad(mainMap);
 			DrawLater();   
 		}
 
@@ -373,21 +377,17 @@ namespace SharpFlame.Gui.Sections
 
 			GLSurface.SwapBuffers();
 
-			OnMapGlSizeChange(this, new EventArgs<Size>(glSize));
-
 			if( this.mainMap != null )
 			{
-				ViewInfo.FovCalc();
+				this.ViewInfo.SetGlSize(glSize);
+				this.ViewInfo.FovCalc();
 			}
 
 			DrawLater();
 		}
 
-		[EventPublication(EventTopics.OnMapGlSizeChange)]
-		public event EventHandler<EventArgs<Eto.Drawing.Size>> OnMapGlSizeChange = delegate { };
-
 		[EventSubscription(EventTopics.OnMapDrawLater, typeof(OnPublisher))]
-		public void HandleDrawLater()
+		public void HandleDrawLater(EventArgs e)
 		{
 			this.DrawLater();
 		}
@@ -819,7 +819,7 @@ namespace SharpFlame.Gui.Sections
 		}
 
 		[EventSubscription(EventTopics.OnMapUpdate, typeof(OnPublisher))]
-		public void HandleMapUpdate()
+		public void HandleMapUpdate(EventArgs e)
 		{
 			this.UpdateMap();
 		}

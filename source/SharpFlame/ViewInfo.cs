@@ -65,8 +65,7 @@ namespace SharpFlame
 
 	    private Eto.Drawing.Size glSize;
 
-		[EventSubscription(EventTopics.OnMapGlSizeChange, typeof(OnPublisher))]
-	    public void HandleMapGlSizeChange(Eto.Drawing.Size glSize)
+	    public void SetGlSize(Eto.Drawing.Size glSize)
 		{
 			this.glSize = glSize;
 		}

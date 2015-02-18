@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Appccelerate.EventBroker;
 using Eto.Forms;
 using Ionic.Zip;
 using Ninject;
@@ -10,6 +11,7 @@ using Ninject.Extensions.Logging;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
+using SharpFlame.Infrastructure;
 using SharpFlame.Mapping.IO.TTP;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
@@ -27,14 +29,21 @@ namespace SharpFlame.Mapping.IO.Wz
 {
     public class WzLoader : IIOLoader
     {
-        private readonly ILogger logger;
-        private readonly IKernel kernel;
+		[Inject]
+		internal ITtpLoader TtpLoader { get; set; }
 
-        public WzLoader(IKernel argKernel, ILoggerFactory logFactory)
-        {
-            kernel = argKernel;
-            logger = logFactory.GetCurrentClassLogger();
-        }
+	    [Inject]
+	    internal void OnLoggerFactory(ILoggerFactory factory)
+	    {
+		    this.factory = factory;
+		    this.logger = factory.GetCurrentClassLogger();
+	    }
+
+		[Inject]
+		internal IEventBroker Eve { get; set; }
+
+	    private ILogger logger;
+	    private ILoggerFactory factory;
 
         public virtual GenericResult<Map> Load(string path, Map map = null)
         {
@@ -44,7 +53,7 @@ namespace SharpFlame.Mapping.IO.Wz
 
             if(map == null)
             {
-                map = kernel.Get<Map>();
+                map = new Map(this.factory, this.Eve);
             }
 
             map.InterfaceOptions.FilePath = path;
@@ -264,7 +273,7 @@ namespace SharpFlame.Mapping.IO.Wz
                 {
                     using ( var reader = new BinaryReader(ttypesEntry.OpenReader()) )
                     {
-                        var ttpLoader = kernel.Get<TTPLoader>();
+                        var ttpLoader = this.TtpLoader;
                         returnResult.Add(ttpLoader.Load(reader, map));
                     }
                 }

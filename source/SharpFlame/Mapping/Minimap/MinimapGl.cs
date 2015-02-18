@@ -21,7 +21,6 @@ namespace SharpFlame.Mapping.Minimap
             get { return map; }
         }
 
-        [EventSubscription(EventTopics.OnMapLoad, typeof(OnPublisher))]
         public void HandleMapLoad(Map newMap)
         {
             // Delete old Texture

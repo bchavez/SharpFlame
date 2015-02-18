@@ -9,7 +9,11 @@ using SharpFlame.FileIO;
 
 namespace SharpFlame.Mapping.IO.TTP
 {
-    public class TTPLoader : IIOLoader
+	public interface ITtpLoader : IIOLoader
+	{
+		GenericResult<Map> Load(BinaryReader file, Map map = null);
+	}
+    public class TTPLoader : ITtpLoader
     {
         private readonly ILogger logger;
         private readonly IKernel kernel;

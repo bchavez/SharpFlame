@@ -69,14 +69,6 @@ namespace SharpFlame
             //            EventBroker.AddExtension(new SharpFlame.Core.Extensions.EventBrokerLogExtension());
             //            #endif
 
-            EventBroker.Register(this.Settings);
-            EventBroker.Register(this.KeyboardManager);
-
-#if DEBUG
-            var keylogger = Kernel.Get<Keylogger>();
-            EventBroker.Register(keylogger);
-#endif
-
             App.SetProgramSubDirs();
 
             InitializeResult.Add(Settings.Load(App.SettingsPath));

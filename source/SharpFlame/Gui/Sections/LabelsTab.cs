@@ -226,7 +226,7 @@ namespace SharpFlame.Gui.Sections
         protected ListBox lstScriptAreas;
 
         [EventSubscription(EventTopics.OnScriptMarkerUpdate, typeof(OnPublisher))]
-        public void HandleScriptMarkerUpdate()
+        public void HandleScriptMarkerUpdate(EventArgs e)
         {
             this.ScriptMarkerLists_Update();
         }
