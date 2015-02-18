@@ -49,9 +49,9 @@ namespace SharpFlame.Gui.Sections
 		}
 
         [EventSubscription(EventTopics.OnMapLoad, typeof(OnPublisher))]
-        public void OnMapLoad(object sender, EventArgs<Map> args)
+        public void OnMapLoad(Map args)
         {
-            this.map = args.Value;
+	        this.map = args;
         }
 
 	    protected void cmdResize_Click(object sender, EventArgs e)

@@ -52,17 +52,15 @@ namespace SharpFlame.Gui.Forms
 	    }
 
 	    [EventSubscription(EventTopics.OnMapLoad, typeof(OnPublisher))]
-	    public void OnMapLoad(object sender, EventArgs<Map> args)
+	    public void OnMapLoad(Map newMap)
 	    {
-	        var map = args.Value;
-
-	        if( map == null )
+			if( newMap == null )
 	        {
 	            this.SetTitle("No Map");
 	        }
 	        else
 	        {
-	            var mapName = map.InterfaceOptions.FileName;
+	            var mapName = newMap.InterfaceOptions.FileName;
 	            this.SetTitle(mapName);
 	        }
 	    }

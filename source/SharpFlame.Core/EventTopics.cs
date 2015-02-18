@@ -10,6 +10,7 @@ namespace SharpFlame.Core
         public const string OnMapLoad = "topic://Map/Load";
         public const string OnMapDrawLater = "topic://Map/DrawLater";
         public const string OnMapUpdate = "topic://Map/Update";
+		public const string OnMapGlSizeChange = "topic://Map/GlSizeChange";
         public const string OnMinimapRefresh = "topic://Minimap/Refresh";
         public const string OnScriptMarkerUpdate = "topic://Labels/Update";
 

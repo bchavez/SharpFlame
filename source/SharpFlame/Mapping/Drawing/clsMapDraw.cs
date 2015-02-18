@@ -25,15 +25,16 @@ using SharpFlame.UiOptions;
 
 namespace SharpFlame.Mapping
 {
-    public class DrawInfo
+    public class DrawContext
     {
         public MinimapGl MinimapGl { get; set; }
         public Size GlSize { get; set; }
-        //public ViewInfo ViewInfo { get; set; }
+        public ViewInfo ViewInfo { get; set; }
+		public Options Options { get; set; }
     }
     public partial class Map
     {
-        public void GLDraw(DrawInfo info)
+        public void GLDraw(DrawContext ctx)
         {
             var xyzDbl = default(XYZDouble);
             var x2 = 0;
@@ -70,31 +71,31 @@ namespace SharpFlame.Mapping
             var matrixB = new Matrix3DMath.Matrix3D();
             clsAction mapAction;
             float zNearFar = 0;
-            var glSize = info.GlSize;
+            var glSize = ctx.GlSize;
             var drawCentre = default(XYDouble);
 
             dblTemp = App.SettingsManager.MinimapSize;
-            viewInfo.TilesPerMinimapPixel = Math.Sqrt(Terrain.TileSize.X * Terrain.TileSize.X + Terrain.TileSize.Y * Terrain.TileSize.Y) /
+            ctx.ViewInfo.TilesPerMinimapPixel = Math.Sqrt(Terrain.TileSize.X * Terrain.TileSize.X + Terrain.TileSize.Y * Terrain.TileSize.Y) /
                                                (MathUtil.RootTwo * dblTemp);
-            if ( info.MinimapGl.TextureSize > 0 & viewInfo.TilesPerMinimapPixel > 0.0D )
+            if ( ctx.MinimapGl.TextureSize > 0 & ctx.ViewInfo.TilesPerMinimapPixel > 0.0D )
             {
-                minimapSizeXy.X = (Terrain.TileSize.X / viewInfo.TilesPerMinimapPixel).ToInt();
-                minimapSizeXy.Y = (Terrain.TileSize.Y / viewInfo.TilesPerMinimapPixel).ToInt();
+                minimapSizeXy.X = (Terrain.TileSize.X / ctx.ViewInfo.TilesPerMinimapPixel).ToInt();
+                minimapSizeXy.Y = (Terrain.TileSize.Y / ctx.ViewInfo.TilesPerMinimapPixel).ToInt();
             }
 
-            if ( !viewInfo.ScreenXYGetViewPlanePos(new XYInt((glSize.Width / 2.0D).ToInt(), (glSize.Height / 2.0D).ToInt()), dblTemp, ref drawCentre) )
+            if ( !ctx.ViewInfo.ScreenXYGetViewPlanePos(new XYInt((glSize.Width / 2.0D).ToInt(), (glSize.Height / 2.0D).ToInt()), dblTemp, ref drawCentre) )
             {
-                Matrix3DMath.VectorForwardsRotationByMatrix(viewInfo.ViewAngleMatrix, ref xyzDbl);
+                Matrix3DMath.VectorForwardsRotationByMatrix(ctx.ViewInfo.ViewAngleMatrix, ref xyzDbl);
                 var dblTemp2 = App.VisionRadius * 2.0D / Math.Sqrt(xyzDbl.X * xyzDbl.X + xyzDbl.Z * xyzDbl.Z);
-                drawCentre.X = viewInfo.ViewPos.X + xyzDbl.X * dblTemp2;
-                drawCentre.Y = viewInfo.ViewPos.Z + xyzDbl.Z * dblTemp2;
+                drawCentre.X = ctx.ViewInfo.ViewPos.X + xyzDbl.X * dblTemp2;
+                drawCentre.Y = ctx.ViewInfo.ViewPos.Z + xyzDbl.Z * dblTemp2;
             }
             drawCentre.X = MathUtil.ClampDbl(drawCentre.X, 0.0D, Terrain.TileSize.X * Constants.TerrainGridSpacing - 1.0D);
             drawCentre.Y = MathUtil.ClampDbl(Convert.ToDouble(- drawCentre.Y), 0.0D, Terrain.TileSize.Y * Constants.TerrainGridSpacing - 1.0D);
             drawCentreSector.Normal = GetPosSectorNum(new XYInt(drawCentre.X.ToInt(), drawCentre.Y.ToInt()));
             drawCentreSector.Alignment = GetPosSectorNum(new XYInt((drawCentre.X - Constants.SectorTileSize * Constants.TerrainGridSpacing / 2.0D).ToInt(), (drawCentre.Y - Constants.SectorTileSize * Constants.TerrainGridSpacing / 2.0D).ToInt()));
 
-            var drawObjects = new clsDrawSectorObjects(info.GlSize, this.viewInfo)
+            var drawObjects = new clsDrawSectorObjects(ctx.GlSize, ctx.ViewInfo)
                 {
                     Map = this,
                     UnitTextLabels = new clsTextLabels(64)
@@ -102,20 +103,20 @@ namespace SharpFlame.Mapping
 
             drawObjects.Start();
 
-            xyzDbl.X = drawCentre.X - viewInfo.ViewPos.X;
-            xyzDbl.Y = 128 - viewInfo.ViewPos.Y;
-            xyzDbl.Z = - drawCentre.Y - viewInfo.ViewPos.Z;
+            xyzDbl.X = drawCentre.X - ctx.ViewInfo.ViewPos.X;
+            xyzDbl.Y = 128 - ctx.ViewInfo.ViewPos.Y;
+            xyzDbl.Z = - drawCentre.Y - ctx.ViewInfo.ViewPos.Z;
             zNearFar = Convert.ToSingle(xyzDbl.GetMagnitude());
 
             GL.Enable(EnableCap.DepthTest);
             GL.MatrixMode(MatrixMode.Projection);
             float aspectRatio = (float)glSize.Width / (float)glSize.Height;
-            var temp_mat = Matrix4.CreatePerspectiveFieldOfView(viewInfo.FieldOfViewY, aspectRatio, zNearFar / 128.0F, zNearFar * 128.0F);
+            var temp_mat = Matrix4.CreatePerspectiveFieldOfView(ctx.ViewInfo.FieldOfViewY, aspectRatio, zNearFar / 128.0F, zNearFar * 128.0F);
             GL.LoadMatrix(ref temp_mat);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
-            Matrix3DMath.MatrixRotationByMatrix(viewInfo.ViewAngleMatrixInverted, App.SunAngleMatrix, matrixB);
+            Matrix3DMath.MatrixRotationByMatrix(ctx.ViewInfo.ViewAngleMatrixInverted, App.SunAngleMatrix, matrixB);
             Matrix3DMath.VectorForwardsRotationByMatrix(matrixB, ref xyzDbl);
             lightPosition[0] = Convert.ToSingle(xyzDbl.X);
             lightPosition[1] = Convert.ToSingle(xyzDbl.Y);
@@ -144,10 +145,10 @@ namespace SharpFlame.Mapping
             }
 
             dblTemp = 127.5D * HeightMultiplier;
-            if ( viewInfo.ScreenXYGetViewPlanePosForwardDownOnly(0, 0, dblTemp, ref viewCorner0)
-                && viewInfo.ScreenXYGetViewPlanePosForwardDownOnly(glSize.Width, 0, dblTemp, ref viewCorner1)
-                && viewInfo.ScreenXYGetViewPlanePosForwardDownOnly(glSize.Width, glSize.Height, dblTemp, ref viewCorner2)
-                && viewInfo.ScreenXYGetViewPlanePosForwardDownOnly(0, glSize.Height, dblTemp, ref viewCorner3) )
+            if ( ctx.ViewInfo.ScreenXYGetViewPlanePosForwardDownOnly(0, 0, dblTemp, ref viewCorner0)
+                && ctx.ViewInfo.ScreenXYGetViewPlanePosForwardDownOnly(glSize.Width, 0, dblTemp, ref viewCorner1)
+                && ctx.ViewInfo.ScreenXYGetViewPlanePosForwardDownOnly(glSize.Width, glSize.Height, dblTemp, ref viewCorner2)
+                && ctx.ViewInfo.ScreenXYGetViewPlanePosForwardDownOnly(0, glSize.Height, dblTemp, ref viewCorner3) )
             {
                 showMinimapViewPosBox = true;
             }
@@ -156,10 +157,10 @@ namespace SharpFlame.Mapping
                 showMinimapViewPosBox = false;
             }
 
-            GL.Rotate((float)(viewInfo.ViewAngleRPY.Roll / MathUtil.RadOf1Deg), 0.0F, 0.0F, -1.0F);
-            GL.Rotate((float)(viewInfo.ViewAngleRPY.Pitch / MathUtil.RadOf1Deg), 1.0F, 0.0F, 0.0F);
-            GL.Rotate((float)(viewInfo.ViewAngleRPY.Yaw / MathUtil.RadOf1Deg), 0.0F, 1.0F, 0.0F);
-            GL.Translate(Convert.ToDouble(- viewInfo.ViewPos.X), Convert.ToDouble(- viewInfo.ViewPos.Y), viewInfo.ViewPos.Z);
+            GL.Rotate((float)(ctx.ViewInfo.ViewAngleRPY.Roll / MathUtil.RadOf1Deg), 0.0F, 0.0F, -1.0F);
+            GL.Rotate((float)(ctx.ViewInfo.ViewAngleRPY.Pitch / MathUtil.RadOf1Deg), 1.0F, 0.0F, 0.0F);
+            GL.Rotate((float)(ctx.ViewInfo.ViewAngleRPY.Yaw / MathUtil.RadOf1Deg), 0.0F, 1.0F, 0.0F);
+            GL.Translate(Convert.ToDouble(- ctx.ViewInfo.ViewPos.X), Convert.ToDouble(- ctx.ViewInfo.ViewPos.Y), ctx.ViewInfo.ViewPos.Z);
 
             GL.Enable(EnableCap.CullFace);
 
@@ -213,14 +214,14 @@ namespace SharpFlame.Mapping
 
             SRgb rgb;
 
-            var mouseOverTerrain = viewInfo.GetMouseOverTerrain();
+            var mouseOverTerrain = ctx.ViewInfo.GetMouseOverTerrain();
 
             if ( App.Draw_VertexTerrain )
             {
                 GL.LineWidth(1.0F);
                 var DrawVertexTerran = new clsDrawVertexTerrain();
                 DrawVertexTerran.Map = this;
-                DrawVertexTerran.ViewAngleMatrix = viewInfo.ViewAngleMatrix;
+                DrawVertexTerran.ViewAngleMatrix = ctx.ViewInfo.ViewAngleMatrix;
                 App.VisionSectors.PerformActionMapSectors(DrawVertexTerran, drawCentreSector);
                 debugGLError("Terrain type markers");
             }
@@ -234,27 +235,27 @@ namespace SharpFlame.Mapping
                 {
                     //area is selected
                     MathUtil.ReorderXY(SelectedAreaVertexA, SelectedAreaVertexB, ref startXy, ref finishXy);
-                    xyzDbl.X = SelectedAreaVertexB.X * Constants.TerrainGridSpacing - viewInfo.ViewPos.X;
-                    xyzDbl.Z = - SelectedAreaVertexB.Y * Constants.TerrainGridSpacing - viewInfo.ViewPos.Z;
-                    xyzDbl.Y = GetVertexAltitude(SelectedAreaVertexB) - viewInfo.ViewPos.Y;
+                    xyzDbl.X = SelectedAreaVertexB.X * Constants.TerrainGridSpacing - ctx.ViewInfo.ViewPos.X;
+                    xyzDbl.Z = - SelectedAreaVertexB.Y * Constants.TerrainGridSpacing - ctx.ViewInfo.ViewPos.Z;
+                    xyzDbl.Y = GetVertexAltitude(SelectedAreaVertexB) - ctx.ViewInfo.ViewPos.Y;
                     drawIt = true;
                 }
-                else if (uiOptions.MouseTool == MouseTool.TerrainSelect)
+                else if (ctx.Options.MouseTool == MouseTool.TerrainSelect)
                 {
                     if ( mouseOverTerrain != null )
                     {
                         //selection is changing under pointer
                         MathUtil.ReorderXY(SelectedAreaVertexA, mouseOverTerrain.Vertex.Normal, ref startXy, ref finishXy);
-                        xyzDbl.X = mouseOverTerrain.Vertex.Normal.X * Constants.TerrainGridSpacing - viewInfo.ViewPos.X;
-                        xyzDbl.Z = - mouseOverTerrain.Vertex.Normal.Y * Constants.TerrainGridSpacing - viewInfo.ViewPos.Z;
-                        xyzDbl.Y = GetVertexAltitude(mouseOverTerrain.Vertex.Normal) - viewInfo.ViewPos.Y;
+                        xyzDbl.X = mouseOverTerrain.Vertex.Normal.X * Constants.TerrainGridSpacing - ctx.ViewInfo.ViewPos.X;
+                        xyzDbl.Z = - mouseOverTerrain.Vertex.Normal.Y * Constants.TerrainGridSpacing - ctx.ViewInfo.ViewPos.Z;
+                        xyzDbl.Y = GetVertexAltitude(mouseOverTerrain.Vertex.Normal) - ctx.ViewInfo.ViewPos.Y;
                         drawIt = true;
                     }
                 }
                 if ( drawIt )
                 {
-                    Matrix3DMath.VectorRotationByMatrix(viewInfo.ViewAngleMatrixInverted, xyzDbl, ref xyzDbl2);
-                    if ( viewInfo.PosGetScreenXY(xyzDbl2, ref screenPos) )
+                    Matrix3DMath.VectorRotationByMatrix(ctx.ViewInfo.ViewAngleMatrixInverted, xyzDbl, ref xyzDbl2);
+                    if ( ctx.ViewInfo.PosGetScreenXY(xyzDbl2, ref screenPos) )
                     {
                         if ( screenPos.X >= 0 & screenPos.X <= glSize.Width & screenPos.Y >= 0 & screenPos.Y <= glSize.Height )
                         {
@@ -282,7 +283,7 @@ namespace SharpFlame.Mapping
                 debugGLError("Terrain selection box");
             }
 
-            if (uiOptions.MouseTool == MouseTool.TerrainSelect)
+            if (ctx.Options.MouseTool == MouseTool.TerrainSelect)
             {
                 if ( mouseOverTerrain != null )
                 {
@@ -436,7 +437,7 @@ namespace SharpFlame.Mapping
 
             if ( mouseOverTerrain != null )
             {
-                if (uiOptions.MouseTool == MouseTool.ObjectSelect)
+                if (ctx.Options.MouseTool == MouseTool.ObjectSelect)
                 {
                     if ( UnitSelectedAreaVertexA != null )
                     {
@@ -516,7 +517,7 @@ namespace SharpFlame.Mapping
                     }
                 }
 
-                if (uiOptions.MouseTool == MouseTool.RoadPlace)
+                if (ctx.Options.MouseTool == MouseTool.RoadPlace)
                 {
                     GL.LineWidth(2.0F);
 
@@ -547,9 +548,9 @@ namespace SharpFlame.Mapping
 
                     debugGLError("Road place brush");
                 }
-                else if (uiOptions.MouseTool == MouseTool.RoadLines || 
-                    uiOptions.MouseTool == MouseTool.Gateways || 
-                    uiOptions.MouseTool == MouseTool.ObjectLines )
+                else if (ctx.Options.MouseTool == MouseTool.RoadLines || 
+                    ctx.Options.MouseTool == MouseTool.Gateways || 
+                    ctx.Options.MouseTool == MouseTool.ObjectLines )
                 {
                     GL.LineWidth(2.0F);
 
@@ -682,21 +683,21 @@ namespace SharpFlame.Mapping
                 //draw mouseover tiles
 
                 clsBrush toolBrush;
-                if (uiOptions.MouseTool == MouseTool.TextureBrush)
+                if (ctx.Options.MouseTool == MouseTool.TextureBrush)
                 {
-                    toolBrush = uiOptions.Textures.Brush;
+                    toolBrush = ctx.Options.Textures.Brush;
                 }
-                else if (uiOptions.MouseTool == MouseTool.CliffBrush)
+                else if (ctx.Options.MouseTool == MouseTool.CliffBrush)
                 {
-                    toolBrush = uiOptions.Terrain.CliffBrush;
+                    toolBrush = ctx.Options.Terrain.CliffBrush;
                 }
-                else if (uiOptions.MouseTool == MouseTool.CliffRemove)
+                else if (ctx.Options.MouseTool == MouseTool.CliffRemove)
                 {
-                    toolBrush = uiOptions.Terrain.CliffBrush;
+                    toolBrush = ctx.Options.Terrain.CliffBrush;
                 }
-                else if (uiOptions.MouseTool == MouseTool.RoadRemove)
+                else if (ctx.Options.MouseTool == MouseTool.RoadRemove)
                 {
-                    toolBrush = uiOptions.Terrain.CliffBrush;
+                    toolBrush = ctx.Options.Terrain.CliffBrush;
                 }
                 else
                 {
@@ -717,7 +718,7 @@ namespace SharpFlame.Mapping
                 }
 
                 //draw mouseover vertex
-                if (uiOptions.MouseTool == MouseTool.TerrainFill)
+                if (ctx.Options.MouseTool == MouseTool.TerrainFill)
                 {
                     GL.LineWidth(2.0F);
 
@@ -735,21 +736,21 @@ namespace SharpFlame.Mapping
                     debugGLError("Mouse over vertex");
                 }
 
-                if (uiOptions.MouseTool == MouseTool.TerrainBrush)
+                if (ctx.Options.MouseTool == MouseTool.TerrainBrush)
                 {
-                    toolBrush = uiOptions.Terrain.Brush;
+                    toolBrush = ctx.Options.Terrain.Brush;
                 }
-                else if (uiOptions.MouseTool == MouseTool.HeightSetBrush)
+                else if (ctx.Options.MouseTool == MouseTool.HeightSetBrush)
                 {
-                    toolBrush = uiOptions.Height.Brush;
+                    toolBrush = ctx.Options.Height.Brush;
                 }
-                else if (uiOptions.MouseTool == MouseTool.HeightChangeBrush)
+                else if (ctx.Options.MouseTool == MouseTool.HeightChangeBrush)
                 {
-                    toolBrush = uiOptions.Height.Brush;
+                    toolBrush = ctx.Options.Height.Brush;
                 }
-                else if (uiOptions.MouseTool == MouseTool.HeightSmoothBrush)
+                else if (ctx.Options.MouseTool == MouseTool.HeightSmoothBrush)
                 {
-                    toolBrush = uiOptions.Height.Brush;
+                    toolBrush = ctx.Options.Height.Brush;
                 }
                 else
                 {
@@ -775,9 +776,9 @@ namespace SharpFlame.Mapping
             GL.Disable(EnableCap.CullFace);
 
             GL.LoadIdentity();
-            GL.Rotate((float)(viewInfo.ViewAngleRPY.Roll / MathUtil.RadOf1Deg), 0.0F, 0.0F, -1.0F);
-            GL.Rotate((float)(viewInfo.ViewAngleRPY.Pitch / MathUtil.RadOf1Deg), 1.0F, 0.0F, 0.0F);
-            GL.Rotate((float)(viewInfo.ViewAngleRPY.Yaw / MathUtil.RadOf1Deg), 0.0F, 1.0F, 0.0F);
+            GL.Rotate((float)(ctx.ViewInfo.ViewAngleRPY.Roll / MathUtil.RadOf1Deg), 0.0F, 0.0F, -1.0F);
+            GL.Rotate((float)(ctx.ViewInfo.ViewAngleRPY.Pitch / MathUtil.RadOf1Deg), 1.0F, 0.0F, 0.0F);
+            GL.Rotate((float)(ctx.ViewInfo.ViewAngleRPY.Yaw / MathUtil.RadOf1Deg), 0.0F, 1.0F, 0.0F);
 
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
@@ -796,7 +797,7 @@ namespace SharpFlame.Mapping
             if ( mouseOverTerrain != null )
             {
                 GL.Enable(EnableCap.Texture2D);
-                if (uiOptions.MouseTool == MouseTool.ObjectPlace)
+                if (ctx.Options.MouseTool == MouseTool.ObjectPlace)
                 {
                     var placeObject = Program.frmMainInstance.SingleSelectedObjectTypeBase;
                     if ( placeObject != null )
@@ -816,8 +817,8 @@ namespace SharpFlame.Mapping
                         }
                         WorldPos worldPos = TileAlignedPosFromMapPos(mouseOverTerrain.Pos.Horizontal, placeObject.GetGetFootprintSelected(rotation));
                         GL.PushMatrix();
-                        GL.Translate(worldPos.Horizontal.X - viewInfo.ViewPos.X, worldPos.Altitude - viewInfo.ViewPos.Y + 2.0D,
-                            viewInfo.ViewPos.Z + worldPos.Horizontal.Y);
+                        GL.Translate(worldPos.Horizontal.X - ctx.ViewInfo.ViewPos.X, worldPos.Altitude - ctx.ViewInfo.ViewPos.Y + 2.0D,
+                            ctx.ViewInfo.ViewPos.Z + worldPos.Horizontal.Y);
                         placeObject.GLDraw(rotation);
                         GL.PopMatrix();
                     }
@@ -835,7 +836,7 @@ namespace SharpFlame.Mapping
                 clsScriptPosition scriptPosition;
                 clsScriptArea scriptArea;
                 GL.PushMatrix();
-                GL.Translate(Convert.ToDouble(- viewInfo.ViewPos.X), Convert.ToDouble(- viewInfo.ViewPos.Y), viewInfo.ViewPos.Z);
+                GL.Translate(Convert.ToDouble(- ctx.ViewInfo.ViewPos.X), Convert.ToDouble(- ctx.ViewInfo.ViewPos.Y), ctx.ViewInfo.ViewPos.Z);
                 foreach ( var tempLoopVar_ScriptPosition in ScriptPositions )
                 {
                     scriptPosition = tempLoopVar_ScriptPosition;
@@ -853,11 +854,11 @@ namespace SharpFlame.Mapping
                     {
                         break;
                     }
-                    xyzDbl.X = scriptPosition.PosX - viewInfo.ViewPos.X;
-                    xyzDbl.Z = - scriptPosition.PosY - viewInfo.ViewPos.Z;
-                    xyzDbl.Y = GetTerrainHeight(new XYInt(scriptPosition.PosX, scriptPosition.PosY)) - viewInfo.ViewPos.Y;
-                    Matrix3DMath.VectorRotationByMatrix(viewInfo.ViewAngleMatrixInverted, xyzDbl, ref xyzDbl2);
-                    if ( viewInfo.PosGetScreenXY(xyzDbl2, ref screenPos) )
+                    xyzDbl.X = scriptPosition.PosX - ctx.ViewInfo.ViewPos.X;
+                    xyzDbl.Z = - scriptPosition.PosY - ctx.ViewInfo.ViewPos.Z;
+                    xyzDbl.Y = GetTerrainHeight(new XYInt(scriptPosition.PosX, scriptPosition.PosY)) - ctx.ViewInfo.ViewPos.Y;
+                    Matrix3DMath.VectorRotationByMatrix(ctx.ViewInfo.ViewAngleMatrixInverted, xyzDbl, ref xyzDbl2);
+                    if ( ctx.ViewInfo.PosGetScreenXY(xyzDbl2, ref screenPos) )
                     {
                         if ( screenPos.X >= 0 & screenPos.X <= glSize.Width & screenPos.Y >= 0 & screenPos.Y <= glSize.Height )
                         {
@@ -882,11 +883,11 @@ namespace SharpFlame.Mapping
                     {
                         break;
                     }
-                    xyzDbl.X = scriptArea.PosAX - viewInfo.ViewPos.X;
-                    xyzDbl.Z = - scriptArea.PosAY - viewInfo.ViewPos.Z;
-                    xyzDbl.Y = GetTerrainHeight(new XYInt(scriptArea.PosAX, scriptArea.PosAY)) - viewInfo.ViewPos.Y;
-                    Matrix3DMath.VectorRotationByMatrix(viewInfo.ViewAngleMatrixInverted, xyzDbl, ref xyzDbl2);
-                    if ( viewInfo.PosGetScreenXY(xyzDbl2, ref screenPos) )
+                    xyzDbl.X = scriptArea.PosAX - ctx.ViewInfo.ViewPos.X;
+                    xyzDbl.Z = - scriptArea.PosAY - ctx.ViewInfo.ViewPos.Z;
+                    xyzDbl.Y = GetTerrainHeight(new XYInt(scriptArea.PosAX, scriptArea.PosAY)) - ctx.ViewInfo.ViewPos.Y;
+                    Matrix3DMath.VectorRotationByMatrix(ctx.ViewInfo.ViewAngleMatrixInverted, xyzDbl, ref xyzDbl2);
+                    if ( ctx.ViewInfo.PosGetScreenXY(xyzDbl2, ref screenPos) )
                     {
                         if ( screenPos.X >= 0 & screenPos.X <= glSize.Width & screenPos.Y >= 0 & screenPos.Y <= glSize.Height )
                         {
@@ -939,20 +940,20 @@ namespace SharpFlame.Mapping
                 rgb = GetUnitGroupColour(unit.UnitGroup);
                 colourA = new SRgba((1.0F + rgb.Red) / 2.0F, (1.0F + rgb.Green) / 2.0F, (1.0F + rgb.Blue) / 2.0F, 0.75F);
                 colourB = new SRgba(rgb.Red, rgb.Green, rgb.Blue, 0.75F);
-                DrawUnitRectangle(unit, 8, colourA, colourB);
+                DrawUnitRectangle(unit, 8, colourA, colourB, ctx.ViewInfo);
             }
             if ( mouseOverTerrain != null )
             {
                 foreach ( var tempLoopVar_Unit in mouseOverTerrain.Units )
                 {
                     unit = tempLoopVar_Unit;
-                    if ( unit != null && uiOptions.MouseTool == MouseTool.ObjectSelect)
+                    if ( unit != null && ctx.Options.MouseTool == MouseTool.ObjectSelect)
                     {
                         rgb = GetUnitGroupColour(unit.UnitGroup);
                         GL.Color4((0.5F + rgb.Red) / 1.5F, (0.5F + rgb.Green) / 1.5F, (0.5F + rgb.Blue) / 1.5F, 0.75F);
                         colourA = new SRgba((1.0F + rgb.Red) / 2.0F, (1.0F + rgb.Green) / 2.0F, (1.0F + rgb.Blue) / 2.0F, 0.75F);
                         colourB = new SRgba(rgb.Red, rgb.Green, rgb.Blue, 0.875F);
-                        DrawUnitRectangle(unit, 16, colourA, colourB);
+                        DrawUnitRectangle(unit, 16, colourA, colourB, ctx.ViewInfo);
                     }
                 }
             }
@@ -991,17 +992,17 @@ namespace SharpFlame.Mapping
 
             debugGLError("Minimap matrix modes");
 
-            if ( info.MinimapGl.TextureSize > 0 & viewInfo.TilesPerMinimapPixel > 0.0D )
+            if ( ctx.MinimapGl.TextureSize > 0 & ctx.ViewInfo.TilesPerMinimapPixel > 0.0D )
             {
                 GL.Translate(0.0F, glSize.Height - minimapSizeXy.Y, 0.0F);
 
-                xyzDbl.X = (double)Terrain.TileSize.X / info.MinimapGl.TextureSize;
-                xyzDbl.Z = (double)Terrain.TileSize.Y / info.MinimapGl.TextureSize;
+                xyzDbl.X = (double)Terrain.TileSize.X / ctx.MinimapGl.TextureSize;
+                xyzDbl.Z = (double)Terrain.TileSize.Y / ctx.MinimapGl.TextureSize;
 
-                if ( info.MinimapGl.GLTexture > 0 )
+                if ( ctx.MinimapGl.GLTexture > 0 )
                 {
                     GL.Enable(EnableCap.Texture2D);
-                    GL.BindTexture(TextureTarget.Texture2D, info.MinimapGl.GLTexture);
+                    GL.BindTexture(TextureTarget.Texture2D, ctx.MinimapGl.GLTexture);
                     GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Decal);
 
                     GL.Begin(BeginMode.Quads);
@@ -1042,7 +1043,7 @@ namespace SharpFlame.Mapping
 
                 if ( showMinimapViewPosBox )
                 {
-                    dblTemp = Constants.TerrainGridSpacing * viewInfo.TilesPerMinimapPixel;
+                    dblTemp = Constants.TerrainGridSpacing * ctx.ViewInfo.TilesPerMinimapPixel;
 
                     posA.X = viewCorner0.X / dblTemp;
                     posA.Y = minimapSizeXy.Y + viewCorner0.Y / dblTemp;
@@ -1074,7 +1075,7 @@ namespace SharpFlame.Mapping
                         MathUtil.ReorderXY(SelectedAreaVertexA, SelectedAreaVertexB, ref startXy, ref finishXy);
                         drawIt = true;
                     }
-                    else if (uiOptions.MouseTool == MouseTool.TerrainSelect)
+                    else if (ctx.Options.MouseTool == MouseTool.TerrainSelect)
                     {
                         if ( mouseOverTerrain != null )
                         {
@@ -1086,14 +1087,14 @@ namespace SharpFlame.Mapping
                     if ( drawIt )
                     {
                         GL.LineWidth(1.0F);
-                        posA.X = startXy.X / viewInfo.TilesPerMinimapPixel;
-                        posA.Y = minimapSizeXy.Y - startXy.Y / viewInfo.TilesPerMinimapPixel;
-                        posB.X = finishXy.X / viewInfo.TilesPerMinimapPixel;
-                        posB.Y = minimapSizeXy.Y - startXy.Y / viewInfo.TilesPerMinimapPixel;
-                        posC.X = finishXy.X / viewInfo.TilesPerMinimapPixel;
-                        posC.Y = minimapSizeXy.Y - finishXy.Y / viewInfo.TilesPerMinimapPixel;
-                        posD.X = startXy.X / viewInfo.TilesPerMinimapPixel;
-                        posD.Y = minimapSizeXy.Y - finishXy.Y / viewInfo.TilesPerMinimapPixel;
+                        posA.X = startXy.X / ctx.ViewInfo.TilesPerMinimapPixel;
+                        posA.Y = minimapSizeXy.Y - startXy.Y / ctx.ViewInfo.TilesPerMinimapPixel;
+                        posB.X = finishXy.X / ctx.ViewInfo.TilesPerMinimapPixel;
+                        posB.Y = minimapSizeXy.Y - startXy.Y / ctx.ViewInfo.TilesPerMinimapPixel;
+                        posC.X = finishXy.X / ctx.ViewInfo.TilesPerMinimapPixel;
+                        posC.Y = minimapSizeXy.Y - finishXy.Y / ctx.ViewInfo.TilesPerMinimapPixel;
+                        posD.X = startXy.X / ctx.ViewInfo.TilesPerMinimapPixel;
+                        posD.Y = minimapSizeXy.Y - finishXy.Y / ctx.ViewInfo.TilesPerMinimapPixel;
                         GL.Begin(BeginMode.LineLoop);
                         GL.Color3(1.0F, 1.0F, 1.0F);
                         GL.Vertex2(posA.X, posA.Y);
@@ -1125,7 +1126,7 @@ namespace SharpFlame.Mapping
             }
         }
 
-        public void DrawUnitRectangle(Unit Unit, int BorderInsideThickness, SRgba InsideColour, SRgba OutsideColour)
+        public void DrawUnitRectangle(Unit Unit, int BorderInsideThickness, SRgba InsideColour, SRgba OutsideColour, ViewInfo viewInfo)
         {
             var posA = new XYInt();
             var posB = new XYInt();

@@ -22,12 +22,12 @@ namespace SharpFlame.Mapping.Minimap
         }
 
         [EventSubscription(EventTopics.OnMapLoad, typeof(OnPublisher))]
-        public void OnMapLoad(object sender, EventArgs<Map> args)
+        public void HandleMapLoad(Map newMap)
         {
             // Delete old Texture
             GlDelete();
 
-            map = args.Value;
+            map = newMap;
             if( map != null )
             {
                 // Make new one later

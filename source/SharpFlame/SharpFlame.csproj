@@ -188,6 +188,9 @@
     <Compile Include="Gui\Dialogs\Dialog2.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
+    <Compile Include="Gui\Sections\MapPanel.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
     <Compile Include="Gui\XomlReader.cs" />
     <Compile Include="Mapping\Changes\clsAutoTextureChanges.cs" />
     <Compile Include="Mapping\Changes\clsMapTileChanges.cs" />
@@ -473,9 +476,6 @@
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Gui\Sections\LabelsTab.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
-    <Compile Include="Gui\Sections\MainMapView.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Gui\Sections\ObjectTab.cs">

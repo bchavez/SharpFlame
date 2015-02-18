@@ -49,9 +49,9 @@ namespace SharpFlame
         }
 
         [EventSubscription(EventTopics.OnMapLoad, typeof(OnPublisher))]
-        public void OnMapLoad(object sender, EventArgs<Map> args)
+        public void HandleMapLoad(Map newMap)
         {
-            map = args.Value;
+            map = newMap;
             ViewPos = new XYZInt(0, 3072, 0);
             FovMultiplierSet(settings.FOVDefault);
             ViewAngleSetToDefault();
@@ -63,7 +63,14 @@ namespace SharpFlame
             HandleLostFocus(this, EventArgs.Empty);
         }
 
-        private GLSurface glSurface;
+	    private Eto.Drawing.Size glSize;
+
+		[EventSubscription(EventTopics.OnMapGlSizeChange, typeof(OnPublisher))]
+	    public void HandleMapGlSizeChange(Eto.Drawing.Size glSize)
+		{
+			this.glSize = glSize;
+		}
+
         private readonly KeyboardManager keyboardManager;
         private readonly Options uiOptions;
         private readonly SettingsManager settings;
@@ -72,13 +79,12 @@ namespace SharpFlame
 
         private bool enableMouseMove = false;
 
-        public ViewInfo(KeyboardManager kbm, Options argUiOptions, SettingsManager argSettings, IEventBroker broker, GLSurface glSurface)
+        public ViewInfo(KeyboardManager kbm, Options argUiOptions, SettingsManager argSettings, IEventBroker broker)
         {
             this.keyboardManager = kbm;
             this.uiOptions = argUiOptions;
             this.settings = argSettings;
             this.broker = broker;
-            this.glSurface = glSurface;
 
             tmrMouseMove = new UITimer { Interval = 0.1 };
             tmrMouseMove.Elapsed += EnableMouseMove;
@@ -106,22 +112,22 @@ namespace SharpFlame
             const float min = (float)(0.1d * MathUtil.RadOf1Deg);
             const float max = (float)(179.0d * MathUtil.RadOf1Deg);
 
-            FieldOfViewY = (float)(Math.Atan(glSurface.Size.Height * FOVMultiplier / 2.0D) * 2.0D);
+            FieldOfViewY = (float)(Math.Atan(glSize.Height * FOVMultiplier / 2.0D) * 2.0D);
             if ( FieldOfViewY < min )
             {
                 FieldOfViewY = min;
-                if ( glSurface.Size.Height > 0 )
+                if ( glSize.Height > 0 )
                 {
-                    FOVMultiplier = 2.0D * Math.Tan(FieldOfViewY / 2.0D) / glSurface.Size.Height;
+                    FOVMultiplier = 2.0D * Math.Tan(FieldOfViewY / 2.0D) / glSize.Height;
                     FOVMultiplierExponent = Math.Log(FOVMultiplier) / Math.Log(2.0D);
                 }
             }
             else if ( FieldOfViewY > max )
             {
                 FieldOfViewY = max;
-                if ( glSurface.Size.Height > 0 )
+                if ( glSize.Height > 0 )
                 {
-                    FOVMultiplier = 2.0D * Math.Tan(FieldOfViewY / 2.0D) / glSurface.Size.Height;
+                    FOVMultiplier = 2.0D * Math.Tan(FieldOfViewY / 2.0D) / glSize.Height;
                     FOVMultiplierExponent = Math.Log(FOVMultiplier) / Math.Log(2.0D);
                 }
             }
@@ -184,7 +190,7 @@ namespace SharpFlame
 
             if ( App.ViewMoveType == ViewMoveType.RTS & App.RTSOrbit )
             {
-                if ( ScreenXYGetViewPlanePosForwardDownOnly(Math.Floor(glSurface.Size.Width / 2.0D).ToInt(), Math.Floor(glSurface.Size.Height / 2.0D).ToInt(), 127.5D, ref xyDbl) )
+                if ( ScreenXYGetViewPlanePosForwardDownOnly(Math.Floor(glSize.Width / 2.0D).ToInt(), Math.Floor(glSize.Height / 2.0D).ToInt(), 127.5D, ref xyDbl) )
                 {
                     xyzDbl.X = xyDbl.X;
                     xyzDbl.Y = 127.5D;
@@ -276,8 +282,8 @@ namespace SharpFlame
             try
             {
                 var ratioZpx = 1.0D / (FOVMultiplier * pos.Z);
-                result.X = Convert.ToInt32(glSurface.Size.Width / 2.0D + (pos.X * ratioZpx));
-                result.Y = Convert.ToInt32(glSurface.Size.Height / 2.0D - (pos.Y * ratioZpx));
+                result.X = Convert.ToInt32(glSize.Width / 2.0D + (pos.X * ratioZpx));
+                result.Y = Convert.ToInt32(glSize.Height / 2.0D - (pos.Y * ratioZpx));
                 return true;
             }
             catch
@@ -296,8 +302,8 @@ namespace SharpFlame
             try
             {
                 //convert screen pos to vector of one pos unit
-                xyzDbl.X = (screenPos.X - glSurface.Size.Width / 2.0D) * FOVMultiplier;
-                xyzDbl.Y = (glSurface.Size.Height / 2.0D - screenPos.Y) * FOVMultiplier;
+                xyzDbl.X = (screenPos.X - glSize.Width / 2.0D) * FOVMultiplier;
+                xyzDbl.Y = (glSize.Height / 2.0D - screenPos.Y) * FOVMultiplier;
                 xyzDbl.Z = 1.0D;
                 //factor in the view angle
                 Matrix3DMath.VectorRotationByMatrix(ViewAngleMatrix, xyzDbl, ref xyzDbl2);
@@ -332,8 +338,8 @@ namespace SharpFlame
                 terrainViewPos.Z = Convert.ToDouble(- ViewPos.Z);
 
                 //convert screen pos to vector of one pos unit
-                xyzDbl.X = (screenPos.X - glSurface.Size.Width / 2.0D) * FOVMultiplier;
-                xyzDbl.Y = ( glSurface.Size.Height / 2.0D - screenPos.Y ) * FOVMultiplier;
+                xyzDbl.X = (screenPos.X - glSize.Width / 2.0D) * FOVMultiplier;
+                xyzDbl.Y = ( glSize.Height / 2.0D - screenPos.Y ) * FOVMultiplier;
                 xyzDbl.Z = 1.0D;
                 //rotate the vector so that it points forward and level
                 Matrix3DMath.VectorRotationByMatrix(ViewAngleMatrix, xyzDbl, ref terrainViewVector);
@@ -505,8 +511,8 @@ namespace SharpFlame
             {
                 //convert screen pos to vector of one pos unit
                 double dblTemp2 = FOVMultiplier;
-                xyzDouble.X = (screenX - glSurface.Size.Width / 2.0D) * dblTemp2;
-                xyzDouble.Y = (glSurface.Size.Height / 2.0D - screenY) * dblTemp2;
+                xyzDouble.X = (screenX - glSize.Width / 2.0D) * dblTemp2;
+                xyzDouble.Y = (glSize.Height / 2.0D - screenY) * dblTemp2;
                 xyzDouble.Z = 1.0D;
                 //factor in the view angle
                 Matrix3DMath.VectorRotationByMatrix(ViewAngleMatrix, xyzDouble, ref xyzDbl2);
@@ -2023,7 +2029,7 @@ namespace SharpFlame
             var viewPosChangeXyz = new XYZInt(0, 0, 0);
             var angleChanged = default(bool);
 
-            move *= FOVMultiplier * (glSurface.Size.Width + glSurface.Size.Height) * Math.Max(Math.Abs(ViewPos.Y), 512.0D);
+            move *= FOVMultiplier * (glSize.Width + glSize.Height) * Math.Max(Math.Abs(ViewPos.Y), 512.0D);
 
             if (keyboardManager.Keys[KeyboardKeys.ViewZoomIn].Active)
             {

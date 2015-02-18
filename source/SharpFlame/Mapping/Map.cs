@@ -63,19 +63,13 @@ namespace SharpFlame.Mapping
         private bool readyForUserInput;
 
 	    private readonly IEventBroker eventBroker;
-	    private readonly ViewInfo viewInfo;
-        private readonly Options uiOptions;
-
-        [Inject]
-        internal IKernel Kernel { get; set; }
+	    private ViewInfo ViewInfo { get; set; }
        
-        public Map(ILoggerFactory logFactory, IEventBroker eventBroker, ViewInfo vi, Options argUiOptions)
+        public Map(ILoggerFactory logFactory, IEventBroker eventBroker)
         {
             logger = logFactory.GetCurrentClassLogger();
 
 	        this.eventBroker = eventBroker;
-	        viewInfo = vi;
-            uiOptions = argUiOptions;
 
             SectorCount = new XYInt(0, 0);
             SelectedAreaVertexA = new XYInt(0, 0);
@@ -202,17 +196,7 @@ namespace SharpFlame.Mapping
             get { return readyForUserInput; }
         }
 
-        private bool IsMainMap
-        {
-            get
-            {
-                /*if ( mapPanel.MainMap != this )
-                {
-                    return false;
-                }*/
-                return true;
-            }
-        }
+        public bool IsMainMap { get; set; }
 
         public event ChangedEventHandler Changed
         {
@@ -1115,7 +1099,7 @@ namespace SharpFlame.Mapping
             }
 
             SectorsUpdateGraphics();
-
+	        this.eventBroker.RefreshMinimap(this);
             Program.frmMainInstance.SelectedObject_Changed();
         }
 

@@ -61,9 +61,9 @@ namespace SharpFlame.Mapping
                 UnitSectorsGraphicsChanged(unit);
             }
 
-            if ( viewInfo != null )
+            if ( this.ViewInfo != null )
             {
-                var mouseOverTerrain = viewInfo.GetMouseOverTerrain();
+                var mouseOverTerrain = this.ViewInfo.GetMouseOverTerrain();
                 if ( mouseOverTerrain != null )
                 {
                     var pos = mouseOverTerrain.Units.FindFirstItemPosition(unit);

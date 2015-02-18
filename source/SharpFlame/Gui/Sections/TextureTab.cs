@@ -67,9 +67,9 @@ namespace SharpFlame.Gui.Sections
         private XYInt TextureCount { get; set; }
 
         [EventSubscription(EventTopics.OnMapLoad, typeof(OnPublisher))]
-        public void OnMapLoad(object sender, EventArgs<Map> args)
+        public void HandleMapLoad(Map newMap)
         {
-            this.map = args.Value;
+	        this.map = newMap;
         }
 
 

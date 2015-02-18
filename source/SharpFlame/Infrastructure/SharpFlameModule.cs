@@ -42,11 +42,15 @@ namespace SharpFlame.Infrastructure
                 .InSingletonScope();
             #endif
 
+
+
             //GUI
             this.Bind<LoadMapCommand>().ToSelf().InSingletonScope().RegisterOnGlobalEventBroker();
 
-            this.Bind<Map>().ToSelf().InTransientScope();
             this.Bind<Gui.Dialogs.Settings>().ToSelf().InTransientScope();
+
+	        this.Bind<ViewInfo>().ToSelf().InSingletonScope().RegisterOnGlobalEventBroker();
+
 
             //Mapping.IO
             //this.Bind<SharpFlame.Mapping.IO.FMap.FMapLoader>().ToSelf().InSingletonScope();
