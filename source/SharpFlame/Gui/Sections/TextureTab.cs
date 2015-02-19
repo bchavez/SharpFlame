@@ -207,6 +207,16 @@ namespace SharpFlame.Gui.Sections
             this.GLSurface.Initialized += TextureView_OnGLControlInitialized;
             SetupEventHandlers();
         }
+		protected override void OnPreLoad(EventArgs e)
+		{
+			this.ParentWindow.GotFocus +=ParentWindow_GotFocus;
+			base.OnPreLoad(e);
+		}
+
+		void ParentWindow_GotFocus(object sender, EventArgs e)
+		{
+			this.DrawTexturesView();
+		}
 
         private void SetupEventHandlers()
         {
@@ -504,7 +514,7 @@ namespace SharpFlame.Gui.Sections
             this.GLSurface.MakeCurrent();
             if( UiOptions.Textures.TilesetNum == -1 )
             {
-                GL.Clear(ClearBufferMask.ColorBufferBit);
+                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
                 GL.Flush();
                 this.GLSurface.SwapBuffers();
                 return;

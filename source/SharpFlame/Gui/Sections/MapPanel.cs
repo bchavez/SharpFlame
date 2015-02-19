@@ -128,12 +128,20 @@ namespace SharpFlame.Gui.Sections
 
 			this.GLSurface.Initialized += GLSurface_Initialized;
 			SetupEventHandlers();
+
 		}
+
+
 		protected override void OnPreLoad(EventArgs e)
 		{
 			this.minimapGl = new MinimapGl(this.Settings, this.UiOptions, this.GLSurface);
-
+			this.ParentWindow.GotFocus += ParentWindow_GotFocus;
 			base.OnPreLoad(e);
+		}
+
+		void ParentWindow_GotFocus(object sender, EventArgs e)
+		{
+			this.DrawLater();
 		}
 
 		private void SetupEventHandlers()
@@ -530,9 +538,9 @@ namespace SharpFlame.Gui.Sections
 
 			if(mouseOverTerrain == null) // Map is maybe null here
 			{
-				lblTile.Text = "";
-				lblVertex.Text = "";
-				lblPos.Text = "";
+				lblTile.Text = "Tile x: -, y: -";
+				lblVertex.Text = "Vertex x: -, y: -";
+				lblPos.Text = "Pos x: -, y: -, alt: -, slope: -";
 			} else
 			{
 				lblTile.Text = string.Format("Tile x:{0}, y:{1}", 
