@@ -607,6 +607,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="flaME.ico" />
+    <None Include="Resources\nomap.png" />
     <EmbeddedResource Include="Gui\Sections\ResizeTab.xoml">
       <SubType>Designer</SubType>
     </EmbeddedResource>

@@ -73,7 +73,7 @@ namespace SharpFlame.Mapping.Minimap
             Suppress = false;
 
             timer = new UITimer {Interval = Constants.MinimapDelay};
-            timer.Elapsed += Tick;
+            timer.Elapsed += timer_Elapsed;
 
             miniOpts.PropertyChanged += delegate
                 {
@@ -81,7 +81,7 @@ namespace SharpFlame.Mapping.Minimap
                 };
         }
 
-        private void Tick(object sender, EventArgs e)
+        private void timer_Elapsed(object sender, EventArgs e)
         {
             if( Map != null && Refresh )
             {

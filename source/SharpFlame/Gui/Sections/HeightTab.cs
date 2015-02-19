@@ -7,7 +7,7 @@ using SharpFlame.UiOptions;
 
 namespace SharpFlame.Gui.Sections
 {
-    public class HeightTab : Panel
+	public class HeightTab : Panel
 	{
         [Inject]
         internal Options UiOptions { get; set; }

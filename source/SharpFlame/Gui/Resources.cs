@@ -16,7 +16,8 @@ namespace SharpFlame.Gui
 		public static string BtnRotateClockwiseName = "btnrotateclockwise.png";
 		public static string BtnFlipXName = "btnflipx.png";
         public static string IconProblemName = "problem.png";
-        public static string IconWarningmName = "warning.png";
+		public static string IconWarningmName = "warning.png";
+		public static string NoMapName = "nomap.png";
 
 		public static Icon SharpFlameIcon()
 		{
@@ -47,6 +48,10 @@ namespace SharpFlame.Gui
         {
             return Bitmap.FromResource (string.Format ("{0}{1}", Prefix, IconWarningmName), Assembly.GetExecutingAssembly());
         }
+		public static Bitmap NoMap()
+		{
+			return Bitmap.FromResource(string.Format("{0}{1}", Prefix, NoMapName), Assembly.GetExecutingAssembly());
+		}
 	}
 }
 

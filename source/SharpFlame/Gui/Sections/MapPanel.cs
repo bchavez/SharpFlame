@@ -3,8 +3,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
-using Appccelerate.Events;
-using Eto.Drawing;
 using Eto.Forms;
 using Eto.Gl;
 using Ninject;
@@ -69,8 +67,9 @@ namespace SharpFlame.Gui.Sections
 			{
 				UiOptions.Textures.TilesetNum = -1;
 			}
+			SetViewPort();
 			this.minimapGl.HandleMapLoad(mainMap);
-			DrawLater();   
+			DrawLater();
 		}
 
 		/// <summary>
@@ -87,9 +86,9 @@ namespace SharpFlame.Gui.Sections
 		[Inject]
 		internal Options UiOptions { get; set; }
 
-		private UITimer tmrDraw;
-		private UITimer tmrKey;
-		private UITimer tmrTool;
+		private UITimer timDraw;
+		private UITimer timKey;
+		private UITimer timTool;
 
 		private readonly Label lblMinimap;
 		private readonly Label lblTile;
@@ -126,9 +125,7 @@ namespace SharpFlame.Gui.Sections
 
 			Content = mainLayout;
 
-			this.GLSurface.Initialized += GLSurface_Initialized;
 			SetupEventHandlers();
-
 		}
 
 
@@ -159,18 +156,7 @@ namespace SharpFlame.Gui.Sections
 				};
 		}
 
-		void GLSurface_Initialized(object sender, EventArgs e)
-		{
-			this.GLSurface.MakeCurrent();
-			// Set Vision radius
-			App.VisionRadius_2E = 10;
-			App.VisionRadius_2E_Changed();
-
-			Matrix3DMath.MatrixSetToPY(App.SunAngleMatrix, new Angles.AnglePY(-22.5D * MathUtil.RadOf1Deg, 157.5D * MathUtil.RadOf1Deg));
-
-			// Make the GL Font.
-			MakeGlFont();
-		}
+	
 		private void MakeGlFont()
 		{
 			if(!this.GLSurface.IsInitialized)
@@ -293,7 +279,8 @@ namespace SharpFlame.Gui.Sections
 
 			GL.PixelStore(PixelStoreParameter.PackAlignment, 1);
 			GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
-			GL.ClearColor(0.0F, 0.0F, 0.0F, 1.0F);
+			//GL.ClearColor(0.0F, 0.0F, 0.0F, 1.0F);
+			GL.ClearColor(OpenTK.Graphics.Color4.CornflowerBlue);
 			GL.Clear(ClearBufferMask.ColorBufferBit);
 			GL.ShadeModel(ShadingModel.Smooth);
 			GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
@@ -335,46 +322,66 @@ namespace SharpFlame.Gui.Sections
 			GL.Light(LightName.Light1, LightParameter.Specular, specular);
 			GL.Light(LightName.Light1, LightParameter.Ambient, ambient);
 
-			var mat_diffuse = new float[4];
-			var mat_specular = new float[4];
-			var mat_ambient = new float[4];
-			var mat_shininess = new float[1];
+			var matDiffuse = new float[4];
+			var matSpecular = new float[4];
+			var matAmbient = new float[4];
+			var matShininess = new float[1];
 
-			mat_specular[0] = 0.0F;
-			mat_specular[1] = 0.0F;
-			mat_specular[2] = 0.0F;
-			mat_specular[3] = 0.0F;
-			mat_ambient[0] = 1.0F;
-			mat_ambient[1] = 1.0F;
-			mat_ambient[2] = 1.0F;
-			mat_ambient[3] = 1.0F;
-			mat_diffuse[0] = 1.0F;
-			mat_diffuse[1] = 1.0F;
-			mat_diffuse[2] = 1.0F;
-			mat_diffuse[3] = 1.0F;
-			mat_shininess[0] = 0.0F;
+			matSpecular[0] = 0.0F;
+			matSpecular[1] = 0.0F;
+			matSpecular[2] = 0.0F;
+			matSpecular[3] = 0.0F;
+			matAmbient[0] = 1.0F;
+			matAmbient[1] = 1.0F;
+			matAmbient[2] = 1.0F;
+			matAmbient[3] = 1.0F;
+			matDiffuse[0] = 1.0F;
+			matDiffuse[1] = 1.0F;
+			matDiffuse[2] = 1.0F;
+			matDiffuse[3] = 1.0F;
+			matShininess[0] = 0.0F;
 
-			GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Ambient, mat_ambient);
-			GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Specular, mat_specular);
-			GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Diffuse, mat_diffuse);
-			GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Shininess, mat_shininess);
+			GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Ambient, matAmbient);
+			GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Specular, matSpecular);
+			GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Diffuse, matDiffuse);
+			GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Shininess, matShininess);
 
-			tmrDraw = new UITimer { Interval = 0.013 }; // Every Millisecond.
-			tmrDraw.Elapsed += timedDraw;
-			tmrDraw.Start();
+			timDraw = new UITimer { Interval = 0.013 }; // Every Millisecond.
+			timDraw.Elapsed += timDraw_Elapsed;
+			timDraw.Start();
 
-			tmrKey = new UITimer { Interval = 0.030 }; // Every 30 milliseconds.
-			tmrKey.Elapsed += timedKey;
-			tmrKey.Start();
+			timKey = new UITimer { Interval = 0.030 }; // Every 30 milliseconds.
+			timKey.Elapsed += timKey_Elapsed;
+			timKey.Start();
 
-			tmrTool = new UITimer { Interval = 0.1 }; // Every 100 milliseconds.
-			tmrTool.Elapsed += timedTool;
-			tmrTool.Start();
+			timTool = new UITimer { Interval = 0.1 }; // Every 100 milliseconds.
+			timTool.Elapsed += timTool_Elapsed;
+			timTool.Start();
+
+			// Set Vision radius
+			App.VisionRadius_2E = 10;
+			App.VisionRadius_2E_Changed();
+
+			Matrix3DMath.MatrixSetToPY(App.SunAngleMatrix, new Angles.AnglePY(-22.5D * MathUtil.RadOf1Deg, 157.5D * MathUtil.RadOf1Deg));
+
+			// Make the GL Font.
+			MakeGlFont();
+			SetViewPort();
+			DrawLater();
 		}
 
 		private void ResizeMapView(object sender, EventArgs e)
 		{
-			GLSurface.MakeCurrent();
+			SetViewPort();
+			DrawLater();
+		}
+
+		private void SetViewPort()
+		{
+			if( !this.GLSurface.IsInitialized )
+				return;
+
+			this.GLSurface.MakeCurrent();
 
 			var glSize = GLSurface.Size;
 
@@ -383,15 +390,27 @@ namespace SharpFlame.Gui.Sections
 			GL.Clear(ClearBufferMask.ColorBufferBit);
 			GL.Flush();
 
-			GLSurface.SwapBuffers();
+			this.GLSurface.SwapBuffers();
 
 			if( this.mainMap != null )
 			{
 				this.ViewInfo.SetGlSize(glSize);
 				this.ViewInfo.FovCalc();
 			}
+		}
 
-			DrawLater();
+		
+		private void DrawPlaceHolder()
+		{
+			if( !this.GLSurface.IsInitialized )
+				return;
+
+			this.GLSurface.MakeCurrent();
+	
+			GL.ClearColor(OpenTK.Graphics.Color4.DimGray);
+			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+			
+			this.GLSurface.SwapBuffers();
 		}
 
 		[EventSubscription(EventTopics.OnMapDrawLater, typeof(OnPublisher))]
@@ -405,11 +424,15 @@ namespace SharpFlame.Gui.Sections
 			drawPending = true;
 		}
 
-		private void timedDraw(object sender, EventArgs e)
+		private void timDraw_Elapsed(object sender, EventArgs e)
 		{
-			if( !drawPending ||
-			    !this.GLSurface.IsInitialized )
+			if( !drawPending || !this.GLSurface.IsInitialized )
 			{
+				return;
+			}
+			if( this.mainMap == null )
+			{
+				DrawPlaceHolder();
 				return;
 			}
 
@@ -455,7 +478,7 @@ namespace SharpFlame.Gui.Sections
 			drawPending = false;
 		}
 
-		private void timedTool(object sender, EventArgs e)
+		private void timTool_Elapsed(object sender, EventArgs e)
 		{
 			if( this.mainMap == null )
 			{
@@ -466,7 +489,7 @@ namespace SharpFlame.Gui.Sections
 			ViewInfo.TimedTools();
 		}
 
-		private void timedKey(object sender, EventArgs e)
+		private void timKey_Elapsed(object sender, EventArgs e)
 		{
 			if( this.mainMap == null )
 			{
@@ -501,8 +524,8 @@ namespace SharpFlame.Gui.Sections
 				Rate = 1.0D;
 			}
 
-			Zoom = tmrKey.Interval * 1000 * 0.002D;
-			Move = tmrKey.Interval * 1000 * Rate / 2048.0D;
+			Zoom = timKey.Interval * 1000 * 0.002D;
+			Move = timKey.Interval * 1000 * Rate / 2048.0D;
 			Roll = 5.0D * MathUtil.RadOf1Deg;
 			Pan = 1.0D / 16.0D;
 			OrbitRate = 1.0D / 32.0D;
@@ -521,11 +544,11 @@ namespace SharpFlame.Gui.Sections
 			{
 				if(GLSurface.IsInitialized)
 				{
-					tmrDraw.Stop();
-					tmrDraw = null;
+					timDraw.Stop();
+					timDraw = null;
 
-					tmrKey.Stop();
-					tmrKey = null;
+					timKey.Stop();
+					timKey = null;
 				}
 			}
 
@@ -541,7 +564,8 @@ namespace SharpFlame.Gui.Sections
 				lblTile.Text = "Tile x: -, y: -";
 				lblVertex.Text = "Vertex x: -, y: -";
 				lblPos.Text = "Pos x: -, y: -, alt: -, slope: -";
-			} else
+			}
+			else
 			{
 				lblTile.Text = string.Format("Tile x:{0}, y:{1}", 
 					mouseOverTerrain.Tile.Normal.X, 

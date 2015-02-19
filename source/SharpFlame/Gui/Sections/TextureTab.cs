@@ -24,7 +24,7 @@ using SharpFlame.UiOptions;
 
 namespace SharpFlame.Gui.Sections
 {
-    public class TextureTab : Panel
+	public class TextureTab : Panel
     {
         private CheckBox chkTexture;
         private CheckBox chkOrientation;

@@ -187,7 +187,8 @@ namespace SharpFlame.Graphics.OpenGL
             float charSpacing = 0;
             var a = 0;
 
-            GL.Color4(Colour.Red, Colour.Green, Colour.Blue, Colour.Alpha);
+            //GL.Color4(Colour.Red, Colour.Green, Colour.Blue, Colour.Alpha);
+	        GL.Color4(OpenTK.Graphics.Color4.LemonChiffon);
             posY1 = Pos.Y;
             posY2 = Pos.Y + SizeY;
             charSpacing = SizeY / 10.0F;
