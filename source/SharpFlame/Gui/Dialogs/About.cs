@@ -33,7 +33,7 @@ namespace SharpFlame.Gui.Dialogs
             this.lblVersion.Text = "Version {0}".Format2(Constants.ProgramVersion());
 	        this.lblVersion.Font = new Font(SystemFont.Default, 10);
 
-            this.imgLogo.Image = Resources.SharpFlameIcon();
+            this.imgLogo.Image = Resources.ProgramIcon;
 
             this.lblCopy0.Font = new Font(SystemFont.Default, 10);
             this.lblCopy1.Font = new Font(SystemFont.Default, 10);

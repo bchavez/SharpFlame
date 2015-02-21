@@ -75,12 +75,11 @@ namespace SharpFlame.Gui.Forms
 	    {
 	        ClientSize = new Size(1024, 768);
 	        this.SetTitle("No Map");
-	        Icon = Resources.SharpFlameIcon();
+	        Icon = Resources.ProgramIcon;
 
             this.MapPanel = new MapPanel();
 	        this.TextureTab = new TextureTab();
 	        this.TerrainTab = new TerrainTab();
-	        this.HeightTab = new HeightTab();
 	        this.PlaceObjectsTab = new PlaceObjectsTab();
 	        this.ObjectTab = new ObjectTab();
 
@@ -88,7 +87,7 @@ namespace SharpFlame.Gui.Forms
 	        var tabControl = new TabControl();
 	        tabControl.TabPages.Add(new TabPage {Text = "Textures", Content = this.TextureTab});
 	        tabControl.TabPages.Add(new TabPage {Text = "Terrain", Content = this.TerrainTab});
-	        tabControl.TabPages.Add(new TabPage {Text = "Height", Content = this.HeightTab});
+		    tabControl.TabPages.Add(new HeightTab());
 	        tabControl.TabPages.Add(new ResizeTab());
 	        //tabControl.TabPages.Add(new TabPage {Text = "Resize", Content = this.ResizeTab});
 	        tabControl.TabPages.Add(new TabPage {Text = "Place Objects", Content = this.PlaceObjectsTab});

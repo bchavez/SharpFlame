@@ -13,6 +13,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.Bitmaps;
 using SharpFlame.Collections;
 using SharpFlame.Core.Extensions;
+using SharpFlame.Gui;
 using SharpFlame.Mapping.IO.Minimap;
 using SharpFlame.Controls;
 using SharpFlame.Core;
@@ -178,7 +179,7 @@ namespace SharpFlame
 
         private Result LoadInterfaceImages()
         {
-            var ReturnResult = new Result("Loading interface images", false);
+          /*  var ReturnResult = new Result("Loading interface images", false);
             logger.Info("Loading interface images");
 
             Bitmap InterfaceImage_DisplayAutoTexture = null;
@@ -194,7 +195,7 @@ namespace SharpFlame
             Bitmap InterfaceImage_SelectionPasteOptions = null;
             Bitmap InterfaceImage_Gateways = null;
 
-            InterfaceImage_DisplayAutoTexture = Resources.displayautotexture;
+            /*InterfaceImage_DisplayAutoTexture = Resources.displayautotexture;
             InterfaceImage_DrawTileOrientation = Resources.drawtileorientation;
             InterfaceImage_QuickSave = Resources.save;
             InterfaceImage_Selection = Resources.selection;
@@ -236,7 +237,8 @@ namespace SharpFlame
             btnTextureClockwise.Image = InterfaceImage_SelectionRotateClockwise;
             btnTextureFlipX.Image = InterfaceImage_SelectionFlipX;
 
-            return ReturnResult;
+            return ReturnResult;*/
+	        return null;
         }
 
         public void frmMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -1933,7 +1935,7 @@ namespace SharpFlame
 
             Bitmap Bitmap = null;
 
-            Bitmap = Resources.notile;
+            Bitmap = new Bitmap("");
             {
                 var Result = new Result("Loading notile.png", false);
                 logger.Info("Loading notile.png");
@@ -1942,7 +1944,7 @@ namespace SharpFlame
                 App.GLTexture_NoTile = BitmapUtil.CreateGLTexture (Bitmap, 0);
             }
 
-            Bitmap = Resources.overflow;
+            Bitmap = new Bitmap("");
             {
                 var Result = new Result("Loading overflow.png", false);
                 logger.Info("Loading overflow.png");

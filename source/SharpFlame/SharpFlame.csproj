@@ -178,6 +178,9 @@
     <Compile Include="Domain\ObjData\Definitions.cs" />
     <Compile Include="Generators\clsBrush.cs" />
     <Compile Include="Domain\ComponentBase.cs" />
+    <Compile Include="Graphics\EmptyPlaceHolder.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
     <Compile Include="Gui\Actions\CompileMapCommand.cs" />
     <Compile Include="Gui\Controls\CampaignDropDown.cs">
       <SubType>Eto.Forms</SubType>
@@ -394,11 +397,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Pathfinding\PathfinderConnection.cs" />
     <Compile Include="Pathfinding\PathfinderLayer.cs" />
     <Compile Include="Pathfinding\PathfinderNetwork.cs" />
@@ -554,19 +552,13 @@
     <EmbeddedResource Include="frmWZLoad.resx">
       <DependentUpon>frmWZLoad.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>SharpFlame</CustomToolNamespace>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\btnflipx.png" />
-    <EmbeddedResource Include="Resources\btnrotateanticlockwise.png" />
-    <EmbeddedResource Include="Resources\btnrotateclockwise.png" />
-    <EmbeddedResource Include="Resources\flaME.ico" />
+    <EmbeddedResource Include="Resources\FlipX.png" />
+    <EmbeddedResource Include="Resources\RotateAntiClockwise.png" />
+    <EmbeddedResource Include="Resources\RotateClockwise.png" />
+    <EmbeddedResource Include="Resources\ProgramIcon.ico" />
     <EmbeddedResource Include="Resources\overflow.png" />
     <EmbeddedResource Include="Resources\problem.png" />
-    <EmbeddedResource Include="Resources\warning.png" />
+    <EmbeddedResource Include="Resources\Warning.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -607,27 +599,34 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="flaME.ico" />
-    <None Include="Resources\nomap.png" />
+    <EmbeddedResource Include="Resources\Circle.png" />
+    <EmbeddedResource Include="Resources\MouseLeft.png" />
+    <EmbeddedResource Include="Resources\MouseRight.png" />
+    <EmbeddedResource Include="Resources\Square.png" />
+    <EmbeddedResource Include="Resources\NoMap.png" />
     <EmbeddedResource Include="Gui\Sections\ResizeTab.xoml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Gui\Sections\LabelsTab.xoml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Gui\Sections\HeightTab.xoml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="License.txt" />
-    <None Include="Resources\objectsselect.png" />
-    <None Include="Resources\notile.png" />
-    <None Include="Resources\gateways.png" />
-    <None Include="Resources\drawtileorientation.png" />
-    <None Include="Resources\displayautotexture.png" />
-    <None Include="Resources\selectionrotateclockwise.png" />
-    <None Include="Resources\selectionrotateanticlockwise.png" />
-    <None Include="Resources\selectionpasteoptions.png" />
-    <None Include="Resources\selectionpaste.png" />
-    <None Include="Resources\selectionflipx.png" />
-    <None Include="Resources\selectioncopy.png" />
-    <None Include="Resources\selection.png" />
-    <None Include="Resources\save.png" />
+    <EmbeddedResource Include="Resources\objectsselect.png" />
+    <EmbeddedResource Include="Resources\notile.png" />
+    <EmbeddedResource Include="Resources\gateways.png" />
+    <EmbeddedResource Include="Resources\drawtileorientation.png" />
+    <EmbeddedResource Include="Resources\displayautotexture.png" />
+    <EmbeddedResource Include="Resources\selectionrotateclockwise.png" />
+    <EmbeddedResource Include="Resources\selectionrotateanticlockwise.png" />
+    <EmbeddedResource Include="Resources\selectionpasteoptions.png" />
+    <EmbeddedResource Include="Resources\selectionpaste.png" />
+    <EmbeddedResource Include="Resources\selectionflipx.png" />
+    <EmbeddedResource Include="Resources\selectioncopy.png" />
+    <EmbeddedResource Include="Resources\selection.png" />
+    <EmbeddedResource Include="Resources\save.png" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

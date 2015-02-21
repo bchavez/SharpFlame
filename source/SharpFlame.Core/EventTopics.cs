@@ -13,6 +13,8 @@ namespace SharpFlame.Core
         public const string OnMinimapRefresh = "topic://Minimap/Refresh";
         public const string OnScriptMarkerUpdate = "topic://Labels/Update";
 
+	    public const string OnSelectTool = "topic://Tool/Select";
+
         public static void UpdateMap(this IEventBroker broker, object sender)
         {
             broker.Fire(OnMapUpdate, new OnPublisher(), HandlerRestriction.None, sender, EventArgs.Empty);

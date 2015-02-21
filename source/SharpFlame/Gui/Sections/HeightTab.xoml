@@ -1,0 +1,324 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<eto:TabPage
+	   xmlns="http://schema.picoe.ca/eto.forms" 
+	   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+       xmlns:eto="clr-namespace:Eto.Forms;assembly=Eto"
+       xmlns:s="clr-namespace:SharpFlame.Gui.Controls;assembly=SharpFlame"
+       Text="Height">
+
+
+   <eto:TableLayout>
+        <eto:TableRow ScaleHeight="False" />
+        <eto:TableRow>
+            <eto:TableCell ScaleWidth="False" />
+            <eto:TableCell>
+
+                <eto:TableLayout>
+                    <eto:TableRow>
+                        <eto:Label Text="Radius:" />
+
+                        <eto:TableLayout>
+                            <eto:TableRow>
+                                <eto:NumericUpDown ID="numRadius" />
+                                <eto:TableCell />
+                            </eto:TableRow>
+                        </eto:TableLayout>
+
+                    </eto:TableRow>
+                    <eto:TableRow>
+
+                        <eto:Label Text="Tool:"/>
+                        <eto:TableCell>
+                            <eto:TableLayout>
+                                <eto:TableRow>
+                                    <eto:Button ID="cmdCircularTool" Text="Circle Tool" Click="ToolSelection" />
+                                    <eto:TableCell />
+                                </eto:TableRow>
+                                <eto:TableRow>
+                                    <eto:Button ID="cmdSquareTool" Text="Square Tool" Click="ToolSelection" />
+                                    <eto:TableCell />
+                                </eto:TableRow>
+                            </eto:TableLayout>
+                        </eto:TableCell>
+
+                    </eto:TableRow>
+                    <eto:TableRow>
+
+                        <eto:Label Text="Mode:" />
+                        <eto:DropDown ID="ddlMode">
+                            <eto:ListItem Text="Set Height Directly" />
+                            <eto:ListItem Text="Change By Amount" />
+                            <eto:ListItem Text="Smooth Height" />
+                        </eto:DropDown>
+                        <eto:TableCell/>
+                    </eto:TableRow>
+                </eto:TableLayout>
+            
+            </eto:TableCell>
+            <eto:TableCell ScaleWidth="False" />
+        </eto:TableRow>
+        
+        
+        <eto:TableRow>
+            <eto:TableCell ScaleWidth="False" />
+
+            <eto:TableCell>
+                
+                <eto:TableLayout>
+
+                    <eto:TableRow>
+                        
+                        <eto:Panel>
+
+                            <eto:GroupBox Text="Set Height Directly" ID="grpHeight">
+
+                                <eto:TableLayout>
+                                    <eto:TableRow>
+                                        <eto:TableLayout>
+
+                                            <eto:TableRow>
+                                                <eto:TableCell>
+                                                    <eto:TableLayout>
+                                                        <eto:TableRow>
+                                                            <eto:TableLayout>
+                                                                <eto:TableRow>
+                                                                    <eto:ImageView ID="imgLeftClick" />
+                                                                    <eto:TableCell />
+                                                                </eto:TableRow>
+                                                            </eto:TableLayout>
+                                                            <eto:TableLayout>
+                                                                <eto:TableRow>
+                                                                    <eto:NumericUpDown ID="numLeftClick" MinValue="0" MaxValue="255" />
+                                                                    <eto:TableCell />
+                                                                </eto:TableRow>
+                                                            </eto:TableLayout>
+
+                                                            <eto:Label Text="0 - 255"/>
+
+                                                        </eto:TableRow>
+                                                    </eto:TableLayout>
+
+                                                </eto:TableCell>
+                                            </eto:TableRow>
+
+                                            <eto:TableRow>
+
+                                                <eto:TableLayout>
+
+                                                    <eto:TableRow>
+                                                        <eto:TableLayout>
+                                                            <eto:TableRow>
+                                                                <eto:Button ID="lset1" Text="0" Style="toggle" />
+                                                                <eto:TableCell />
+                                                            </eto:TableRow>
+                                                        </eto:TableLayout>
+
+                                                        <eto:TableLayout>
+                                                            <eto:TableRow>
+                                                                <eto:Button ID="lset2" Text="85" Style="toggle" />
+                                                                <eto:TableCell />
+                                                            </eto:TableRow>
+                                                        </eto:TableLayout>
+
+                                                        <eto:TableLayout>
+                                                            <eto:TableRow>
+                                                                <eto:Button ID="lset3" Text="170"  Style="toggle"/>
+                                                                <eto:TableCell />
+                                                            </eto:TableRow>
+                                                        </eto:TableLayout>
+
+                                                        <eto:TableLayout>
+                                                            <eto:TableRow>
+                                                                <eto:Button ID="lset4" Text="255" Style="toggle" />
+                                                                <eto:TableCell />
+                                                            </eto:TableRow>
+                                                        </eto:TableLayout>
+                                                        <eto:TableCell ScaleWidth="True"/>
+                                                    </eto:TableRow>
+
+                                                    <eto:TableRow>
+                                                        <eto:TableLayout>
+                                                            <eto:TableRow>
+                                                                <eto:Button ID="lset5" Text="64" Style="toggle" />
+                                                                <eto:TableCell />
+                                                            </eto:TableRow>
+                                                        </eto:TableLayout>
+
+                                                        <eto:TableLayout>
+                                                            <eto:TableRow>
+                                                                <eto:Button ID="lset6" Text="128" Style="toggle" />
+                                                                <eto:TableCell />
+                                                            </eto:TableRow>
+                                                        </eto:TableLayout>
+
+                                                        <eto:TableLayout>
+                                                            <eto:TableRow>
+                                                                <eto:Button ID="lset7" Text="192" Style="toggle" />
+                                                                <eto:TableCell />
+                                                            </eto:TableRow>
+                                                        </eto:TableLayout>
+
+                                                        <eto:TableLayout>
+                                                            <eto:TableRow>
+                                                                <eto:Button ID="lset8" Text="255" Style="toggle" />
+                                                                <eto:TableCell />
+                                                            </eto:TableRow>
+                                                        </eto:TableLayout>
+                                                    </eto:TableRow>
+
+                                                </eto:TableLayout>
+
+
+                                            </eto:TableRow>
+
+
+                                            <eto:TableRow>
+                                                <eto:TableCell>
+                                                    <eto:TableLayout>
+                                                        <eto:TableRow>
+                                                            <eto:TableLayout>
+                                                                <eto:TableRow>
+                                                                    <eto:ImageView ID="imgRightClick" />
+                                                                    <eto:TableCell />
+                                                                </eto:TableRow>
+                                                            </eto:TableLayout>
+                                                            <eto:TableLayout>
+                                                                <eto:TableRow>
+                                                                    <eto:NumericUpDown ID="numRightClick" MinValue="0" MaxValue="255" />
+                                                                    <eto:TableCell />
+                                                                </eto:TableRow>
+                                                            </eto:TableLayout>
+
+                                                            <eto:Label Text="0 - 255"/>
+
+                                                        </eto:TableRow>
+                                                    </eto:TableLayout>
+
+                                                </eto:TableCell>
+                                            </eto:TableRow>
+
+
+
+
+
+                                            <eto:TableRow>
+
+                                                <eto:TableLayout>
+                                                    <eto:TableRow>
+                                                        <eto:Label Text="Right Click Preset Heights:"/>
+                                                        <eto:TableCell />
+                                                    </eto:TableRow>
+                                                </eto:TableLayout>
+
+                                                <eto:TableCell />
+
+
+                                            </eto:TableRow>
+
+                                            <eto:TableRow>
+
+                                                <eto:TableLayout>
+
+                                                    <eto:TableRow>
+                                                        <eto:TableLayout>
+                                                            <eto:TableRow>
+                                                                <eto:Button ID="rset1" Text="0" Style="toggle" />
+                                                                <eto:TableCell />
+                                                            </eto:TableRow>
+                                                        </eto:TableLayout>
+
+                                                        <eto:TableLayout>
+                                                            <eto:TableRow>
+                                                                <eto:Button ID="rset2" Text="85" Style="toggle" />
+                                                                <eto:TableCell />
+                                                            </eto:TableRow>
+                                                        </eto:TableLayout>
+
+                                                        <eto:TableLayout>
+                                                            <eto:TableRow>
+                                                                <eto:Button ID="rset3" Text="170"  Style="toggle"/>
+                                                                <eto:TableCell />
+                                                            </eto:TableRow>
+                                                        </eto:TableLayout>
+
+                                                        <eto:TableLayout>
+                                                            <eto:TableRow>
+                                                                <eto:Button ID="rset4" Text="255" Style="toggle" />
+                                                                <eto:TableCell />
+                                                            </eto:TableRow>
+                                                        </eto:TableLayout>
+                                                        <eto:TableCell ScaleWidth="True"/>
+                                                    </eto:TableRow>
+
+                                                    <eto:TableRow>
+                                                        <eto:TableLayout>
+                                                            <eto:TableRow>
+                                                                <eto:Button ID="rset5" Text="64" Style="toggle" />
+                                                                <eto:TableCell />
+                                                            </eto:TableRow>
+                                                        </eto:TableLayout>
+
+                                                        <eto:TableLayout>
+                                                            <eto:TableRow>
+                                                                <eto:Button ID="rset6" Text="128" Style="toggle" />
+                                                                <eto:TableCell />
+                                                            </eto:TableRow>
+                                                        </eto:TableLayout>
+
+                                                        <eto:TableLayout>
+                                                            <eto:TableRow>
+                                                                <eto:Button ID="rset7" Text="192" Style="toggle" />
+                                                                <eto:TableCell />
+                                                            </eto:TableRow>
+                                                        </eto:TableLayout>
+
+                                                        <eto:TableLayout>
+                                                            <eto:TableRow>
+                                                                <eto:Button ID="rset8" Text="255" Style="toggle" />
+                                                                <eto:TableCell />
+                                                            </eto:TableRow>
+                                                        </eto:TableLayout>
+                                                    </eto:TableRow>
+
+                                                </eto:TableLayout>
+
+
+                                            </eto:TableRow>
+
+
+
+
+
+                                        </eto:TableLayout>
+                                        <eto:TableCell />
+                                    </eto:TableRow>
+
+                                </eto:TableLayout>
+
+                            </eto:GroupBox>
+
+
+                        </eto:Panel>
+                        
+                        <eto:TableCell/>
+
+                    </eto:TableRow>
+                    
+                </eto:TableLayout>
+
+            
+            </eto:TableCell>
+
+            <eto:TableCell ScaleWidth="False" />
+           
+        </eto:TableRow>
+        <eto:TableRow ScaleHeight="True"/>
+    </eto:TableLayout>
+    
+
+    
+
+    
+    
+</eto:TabPage>

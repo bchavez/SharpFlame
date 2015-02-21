@@ -514,6 +514,7 @@ namespace SharpFlame.Gui.Sections
             this.GLSurface.MakeCurrent();
             if( UiOptions.Textures.TilesetNum == -1 )
             {
+				GL.ClearColor(OpenTK.Graphics.Color4.DimGray);
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
                 GL.Flush();
                 this.GLSurface.SwapBuffers();
@@ -754,7 +755,7 @@ namespace SharpFlame.Gui.Sections
 
         private static ImageView MakeBtnRotateAntiClockwise()
         {
-            var image = Resources.BtnRotateAntiClockwise();
+            var image = Resources.RotateAntiClockwise;
             var control = new ImageView
             {
                 Image = image,
@@ -776,7 +777,7 @@ namespace SharpFlame.Gui.Sections
 
         private static ImageView MakeBtnRotateClockwise()
         {
-            var image = Resources.BtnRotateClockwise();
+            var image = Resources.RotateClockwise;
             var control = new ImageView
                 {
                     Image = image,
@@ -798,7 +799,7 @@ namespace SharpFlame.Gui.Sections
 
         private static ImageView MakeBtnFlipX()
         {
-            var image = Resources.BtnFlipX();
+            var image = Resources.FlipX;
             var control = new ImageView
                 {
                     Image = image,

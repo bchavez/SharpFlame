@@ -42,14 +42,14 @@ namespace SharpFlame.Gui.Dialogs
                     item.Children.Add (new TreeItem { 
                         Text = ((Result.Problem)lItem).GetText,
                         Expanded = true,
-                        Image = Resources.IconProblem()
+                        Image = Resources.Problem
                     });
                 } else if (lItem is Result.Warning)
                 {
                     item.Children.Add (new TreeItem { 
                         Text = ((Result.Warning)lItem).GetText,
                         Expanded = true,
-                        Image = Resources.IconWarning()
+                        Image = Resources.Warning
                     });
                 } else if (lItem is Result)
                 {

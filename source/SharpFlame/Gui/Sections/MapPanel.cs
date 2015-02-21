@@ -1,18 +1,22 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
 using Eto.Forms;
 using Eto.Gl;
 using Ninject;
 using Ninject.Extensions.Logging;
+using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using QuickFont;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
+using SharpFlame.Graphics;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Minimap;
@@ -46,6 +50,7 @@ namespace SharpFlame.Gui.Sections
 
 				mainMap.Deallocate();
 			}
+			this.panel.Content = this.GLSurface;
 
 			mainMap = newMap;
 			mainMap.IsMainMap = true;
@@ -97,6 +102,9 @@ namespace SharpFlame.Gui.Sections
 
 		private bool drawPending = false;
 
+		private EmptyPlaceHolder emptyPlaceHolder;
+		private Panel panel;
+
 		[Inject]
 		internal SettingsManager Settings { get; set; }
 
@@ -109,12 +117,15 @@ namespace SharpFlame.Gui.Sections
 		public MapPanel()
 		{
 			this.GLSurface = new GLSurface();
-            
+			this.emptyPlaceHolder = new EmptyPlaceHolder();
+			this.panel = new Panel();
+
 			var mainLayout = new DynamicLayout();
 			mainLayout.AddSeparateRow(
 				lblMinimap = new Label { Text = "Minimap" }
 				);
-			mainLayout.Add(this.GLSurface, true, true);
+			this.panel.Content = this.GLSurface;
+			mainLayout.Add(this.panel, true, true);
 			mainLayout.AddSeparateRow(
 				lblTile = new Label { },
 				null,
@@ -155,8 +166,7 @@ namespace SharpFlame.Gui.Sections
 					}
 				};
 		}
-
-	
+		
 		private void MakeGlFont()
 		{
 			if(!this.GLSurface.IsInitialized)
@@ -175,6 +185,7 @@ namespace SharpFlame.Gui.Sections
 			{
 				style = style | System.Drawing.FontStyle.Italic;
 			}
+			
 			App.UnitLabelFont = new GLFont(new System.Drawing.Font(Settings.FontFamily, Settings.FontSize, style, System.Drawing.GraphicsUnit.Pixel));
 		}
 		protected override void OnLoadComplete(EventArgs lcEventArgs)
@@ -366,8 +377,8 @@ namespace SharpFlame.Gui.Sections
 
 			// Make the GL Font.
 			MakeGlFont();
-			SetViewPort();
-			DrawLater();
+			//SetViewPort();
+			//DrawLater();
 		}
 
 		private void ResizeMapView(object sender, EventArgs e)
@@ -399,18 +410,17 @@ namespace SharpFlame.Gui.Sections
 			}
 		}
 
+		private Eto.Drawing.Size GLSize
+		{
+			get { return this.GLSurface.Size; }
+		}
 		
 		private void DrawPlaceHolder()
 		{
 			if( !this.GLSurface.IsInitialized )
 				return;
 
-			this.GLSurface.MakeCurrent();
-	
-			GL.ClearColor(OpenTK.Graphics.Color4.DimGray);
-			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-			
-			this.GLSurface.SwapBuffers();
+			this.panel.Content = this.emptyPlaceHolder;
 		}
 
 		[EventSubscription(EventTopics.OnMapDrawLater, typeof(OnPublisher))]

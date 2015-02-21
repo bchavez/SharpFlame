@@ -8,6 +8,9 @@ using Eto.Forms;
 
 namespace SharpFlame.Gui.Controls
 {
+
+	
+
 	public class PlayerSelector : Panel
 	{
 		readonly List<CustomButton> buttons = new List<CustomButton> ();

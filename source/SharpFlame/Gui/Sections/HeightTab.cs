@@ -7,28 +7,55 @@ using SharpFlame.UiOptions;
 
 namespace SharpFlame.Gui.Sections
 {
-	public class HeightTab : Panel
+	public class HeightTab : TabPage
 	{
         [Inject]
         internal Options UiOptions { get; set; }
 
-        private readonly NumericUpDown nudBrushRadius;
+        protected NumericUpDown numRadius;
 
-        private readonly RadioButton rbSet;
-        private readonly RadioButton rbChange;
-        private readonly RadioButton rbSmooth;
+        protected RadioButton rbSet;
+        protected RadioButton rbChange;
+        protected RadioButton rbSmooth;
+		
+        protected NumericUpDown nudLmbHeight;
+        protected NumericUpDown nudRmbHeight;
 
-        private readonly NumericUpDown nudLmbHeight;
-        private readonly NumericUpDown nudRmbHeight;
+        protected NumericUpDown nudChangeRate;
+        protected CheckBox cbChangeFade;
 
-        private readonly NumericUpDown nudChangeRate;
-        private readonly CheckBox cbChangeFade;
+		protected Button cmdCircularTool;
+		protected Button cmdSquareTool;
 
         private readonly NumericUpDown nudSmoothRate;
 
-        public HeightTab ()
+		protected GroupBox grpHeight;
+		protected GroupBox grpAmount;
+		protected GroupBox grpSmooth;
+		protected DropDown ddlMode;
+		protected ImageView imgLeftClick;
+		protected ImageView imgRightClick;
+		protected Button lset1;
+
+		public void ToolSelection(object sender, EventArgs e)
 		{
-            rbSet = new RadioButton { Text = "Set", Checked = true };
+			
+		}
+
+        public HeightTab ()
+        {
+	        XomlReader.Load(this);
+
+	        this.cmdSquareTool.Image = Resources.Square;
+	        this.cmdCircularTool.Image = Resources.Circle;
+	        this.imgLeftClick.Image = Resources.MouseLeft;
+	        this.imgRightClick.Image = Resources.MouseRight;
+
+			this.grpHeight.Bind(x => x.Visible, this.ddlMode.SelectedIndexBinding.Convert(i => i == 0));
+			//this.grpAmount.Bind(x => x.Visible, this.ddlMode.SelectedIndexBinding.Convert(i => i == 1));
+			//this.grpSmooth.Bind(x => x.Visible, this.ddlMode.SelectedIndexBinding.Convert(i => i == 2));
+
+	        /*rbSet = new RadioButton { Text = "Set", Checked = true };
             rbChange = new RadioButton (rbSet){ Text = "Change" };
             rbSmooth = new RadioButton (rbChange) { Text = "Smooth" };
 
@@ -268,12 +295,12 @@ namespace SharpFlame.Gui.Sections
 		    newMainyLayout.AddRow(null, mainLayout, null);
             newMainyLayout.Add(null);
 
-            Content = newMainyLayout;
-		}
+            Content = newMainyLayout;*/
+        }
 
         protected override void OnLoadComplete(EventArgs lcEventArgs)
         {
-            base.OnLoadComplete(lcEventArgs);
+            /*base.OnLoadComplete(lcEventArgs);
 
             rbSet.CheckedChanged += delegate
             {
@@ -307,12 +334,12 @@ namespace SharpFlame.Gui.Sections
             nudChangeRate.Bind(r => r.Value, heightOptions, t => t.ChangeRate);
             cbChangeFade.Bind(r => r.Checked, heightOptions, t => t.ChangeFade);
 
-            nudSmoothRate.Bind(r => r.Value, heightOptions, t => t.SmoothRate);
+            nudSmoothRate.Bind(r => r.Value, heightOptions, t => t.SmoothRate);*/
         }
 
         private void setMouseMode() 
         {
-            if(rbSet.Checked)
+            /*if(rbSet.Checked)
             {
                 UiOptions.MouseTool = MouseTool.HeightSetBrush;
             } else if(rbChange.Checked)
@@ -322,6 +349,7 @@ namespace SharpFlame.Gui.Sections
             {
                 UiOptions.MouseTool = MouseTool.HeightSmoothBrush;
             }
+			 */
         }
 	}
 }
