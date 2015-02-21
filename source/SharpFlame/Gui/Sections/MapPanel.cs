@@ -1,16 +1,13 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
 using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
 using Eto.Forms;
 using Eto.Gl;
 using Ninject;
 using Ninject.Extensions.Logging;
-using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using QuickFont;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Domain.Colors;

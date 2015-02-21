@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Forms.VisualStyles;
 using Eto.Drawing;
 using Eto.Forms;
 using Ninject;
@@ -29,13 +30,17 @@ namespace SharpFlame.Gui.Sections
 
         private readonly NumericUpDown nudSmoothRate;
 
-		protected GroupBox grpHeight;
+		protected Panel panHeight;
 		protected GroupBox grpAmount;
 		protected GroupBox grpSmooth;
 		protected DropDown ddlMode;
 		protected ImageView imgLeftClick;
 		protected ImageView imgRightClick;
 		protected Button lset1;
+		protected NumericUpDown numIncrDecr;
+		protected Panel panSmooth;
+
+		protected Panel panIncrDecr;
 
 		public void ToolSelection(object sender, EventArgs e)
 		{
@@ -51,30 +56,19 @@ namespace SharpFlame.Gui.Sections
 	        this.imgLeftClick.Image = Resources.MouseLeft;
 	        this.imgRightClick.Image = Resources.MouseRight;
 
-			this.grpHeight.Bind(x => x.Visible, this.ddlMode.SelectedIndexBinding.Convert(i => i == 0));
-			//this.grpAmount.Bind(x => x.Visible, this.ddlMode.SelectedIndexBinding.Convert(i => i == 1));
-			//this.grpSmooth.Bind(x => x.Visible, this.ddlMode.SelectedIndexBinding.Convert(i => i == 2));
+			this.panHeight.Bind(x => x.Visible, this.ddlMode.SelectedIndexBinding.Convert(i => i == 0));
+			this.panIncrDecr.Bind(x => x.Visible, this.ddlMode.SelectedIndexBinding.Convert(i => i == 1));
+			this.panSmooth.Bind(x => x.Visible, this.ddlMode.SelectedIndexBinding.Convert(i => i == 2));
+
+	        this.numRadius.MaxValue = Constants.MapMaxSize;
+	        this.numRadius.Increment = 0.5;
+	        this.numRadius.ValueBinding.Bind(UiOptions.Height.Brush, b => b.Radius);
+
+	        //this.grpAmount.Bind(x => x.Visible, this.ddlMode.SelectedIndexBinding.Convert(i => i == 1));
+	        //this.grpSmooth.Bind(x => x.Visible, this.ddlMode.SelectedIndexBinding.Convert(i => i == 2));
 
 	        /*rbSet = new RadioButton { Text = "Set", Checked = true };
-            rbChange = new RadioButton (rbSet){ Text = "Change" };
-            rbSmooth = new RadioButton (rbChange) { Text = "Smooth" };
-
-			var mainLayout = new DynamicLayout ();
-
-			var circularButton = new Button { Text = "Circular", Enabled = false };
-			var squareButton = new Button { Text = "Square" };
-			circularButton.Click += (sender, e) => { 
-				circularButton.Enabled = false;
-				squareButton.Enabled = true;
-                UiOptions.Height.Brush.Shape = ShapeType.Circle;
-			};
-			squareButton.Click += (sender, e) => { 
-				squareButton.Enabled = false;
-				circularButton.Enabled = true;
-                UiOptions.Height.Brush.Shape = ShapeType.Square;
-			};
-
-			var nLayout1 = new DynamicLayout { Padding = Padding.Empty };
+            var nLayout1 = new DynamicLayout { Padding = Padding.Empty };
 			nLayout1.AddRow (
                 new Label { Text = "Radius:", VerticalAlign = VerticalAlign.Middle },
                 nudBrushRadius = new NumericUpDown { 
@@ -298,9 +292,30 @@ namespace SharpFlame.Gui.Sections
             Content = newMainyLayout;*/
         }
 
+		void ToolSelection_Click(object sender, EventArgs e)
+		{
+			if( sender == this.cmdCircularTool )
+			{
+				this.cmdCircularTool.Enabled = false;
+				this.cmdSquareTool.Enabled = true;
+				this.UiOptions.Height.Brush.Shape = ShapeType.Circle;
+				
+			}
+			else if( sender == this.cmdSquareTool )
+			{
+				this.cmdCircularTool.Enabled = true;
+				this.cmdSquareTool.Enabled = false;
+				this.UiOptions.Height.Brush.Shape = ShapeType.Square;
+			}
+		}
+
+
+
         protected override void OnLoadComplete(EventArgs lcEventArgs)
         {
-            /*base.OnLoadComplete(lcEventArgs);
+	        base.OnLoadComplete(lcEventArgs);
+			
+	        /*base.OnLoadComplete(lcEventArgs);
 
             rbSet.CheckedChanged += delegate
             {
@@ -337,20 +352,21 @@ namespace SharpFlame.Gui.Sections
             nudSmoothRate.Bind(r => r.Value, heightOptions, t => t.SmoothRate);*/
         }
 
-        private void setMouseMode() 
-        {
-            /*if(rbSet.Checked)
-            {
-                UiOptions.MouseTool = MouseTool.HeightSetBrush;
-            } else if(rbChange.Checked)
-            {
-                UiOptions.MouseTool = MouseTool.HeightChangeBrush;
-            } else if(rbSmooth.Checked)
-            {
-                UiOptions.MouseTool = MouseTool.HeightSmoothBrush;
-            }
-			 */
-        }
+		void ddlMode_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if( this.ddlMode.SelectedIndex == 0 )
+			{
+				UiOptions.MouseTool = MouseTool.HeightSetBrush;
+			}
+			else if( this.ddlMode.SelectedIndex == 1 )
+			{
+				UiOptions.MouseTool = MouseTool.HeightChangeBrush;
+			}
+			else if( this.ddlMode.SelectedIndex == 2 )
+			{
+				UiOptions.MouseTool = MouseTool.HeightSmoothBrush;
+			}
+		}
 	}
 }
 
