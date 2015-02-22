@@ -4,7 +4,7 @@
 	   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
        xmlns:sys="clr-namespace:System;assembly=mscorlib"
        xmlns:eto="clr-namespace:Eto.Forms;assembly=Eto"
-       xmlns:s="clr-namespace:SharpFlame.Gui.Controls;assembly=SharpFlame"
+       xmlns:s="clr-namespace:SharpFlame.Gui.Sections;assembly=SharpFlame"
        Text="Height">
 
 
@@ -69,7 +69,7 @@
 
                     <eto:TableRow>
                         
-                        <eto:Panel ID="panHeight">
+                        <eto:Panel ID="panSetHeight">
                                 <eto:TableLayout>
                                     <eto:TableRow>
                                         <eto:TableLayout>
@@ -107,7 +107,7 @@
 
                                                 <eto:TableRow>
 
-                                                    <eto:TableLayout>
+                                                    <eto:TableLayout ID="tblLeftPresets">
 
                                                         <eto:TableRow>
                                                             <eto:Label Text="Presets:" />
@@ -116,28 +116,28 @@
                                                         <eto:TableRow>
                                                             <eto:TableLayout>
                                                                 <eto:TableRow>
-                                                                    <eto:Button ID="lset1" Text="0" Style="toggle" />
+                                                                    <eto:Button ID="lset1" Text="0" Style="toggle" Click="AnyPreset_Click" Tag='{x:Static s:HeightPresetGroup.Left}' PreLoad="AnyPreset_PreLoad"  />
                                                                     <eto:TableCell />
                                                                 </eto:TableRow>
                                                             </eto:TableLayout>
 
                                                             <eto:TableLayout>
                                                                 <eto:TableRow>
-                                                                    <eto:Button ID="lset2" Text="85" Style="toggle" />
+                                                                    <eto:Button ID="lset2" Text="85" Style="toggle" Click="AnyPreset_Click" Tag='{x:Static s:HeightPresetGroup.Left}' PreLoad="AnyPreset_PreLoad" />
                                                                     <eto:TableCell />
                                                                 </eto:TableRow>
                                                             </eto:TableLayout>
 
                                                             <eto:TableLayout>
                                                                 <eto:TableRow>
-                                                                    <eto:Button ID="lset3" Text="170"  Style="toggle"/>
+                                                                    <eto:Button ID="lset3" Text="170"  Style="toggle" Click="AnyPreset_Click" Tag='{x:Static s:HeightPresetGroup.Left}' PreLoad="AnyPreset_PreLoad" />
                                                                     <eto:TableCell />
                                                                 </eto:TableRow>
                                                             </eto:TableLayout>
 
                                                             <eto:TableLayout>
                                                                 <eto:TableRow>
-                                                                    <eto:Button ID="lset4" Text="255" Style="toggle" />
+                                                                    <eto:Button ID="lset4" Text="255" Style="toggle" Click="AnyPreset_Click" Tag='{x:Static s:HeightPresetGroup.Left}' PreLoad="AnyPreset_PreLoad" />
                                                                     <eto:TableCell />
                                                                 </eto:TableRow>
                                                             </eto:TableLayout>
@@ -147,28 +147,28 @@
                                                         <eto:TableRow>
                                                             <eto:TableLayout>
                                                                 <eto:TableRow>
-                                                                    <eto:Button ID="lset5" Text="64" Style="toggle" />
+                                                                    <eto:Button ID="lset5" Text="64" Style="toggle" Click="AnyPreset_Click" Tag='{x:Static s:HeightPresetGroup.Left}' PreLoad="AnyPreset_PreLoad" />
                                                                     <eto:TableCell />
                                                                 </eto:TableRow>
                                                             </eto:TableLayout>
 
                                                             <eto:TableLayout>
                                                                 <eto:TableRow>
-                                                                    <eto:Button ID="lset6" Text="128" Style="toggle" />
+                                                                    <eto:Button ID="lset6" Text="128" Style="toggle" Click="AnyPreset_Click" Tag='{x:Static s:HeightPresetGroup.Left}' PreLoad="AnyPreset_PreLoad" />
                                                                     <eto:TableCell />
                                                                 </eto:TableRow>
                                                             </eto:TableLayout>
 
                                                             <eto:TableLayout>
                                                                 <eto:TableRow>
-                                                                    <eto:Button ID="lset7" Text="192" Style="toggle" />
+                                                                    <eto:Button ID="lset7" Text="192" Style="toggle" Click="AnyPreset_Click" Tag='{x:Static s:HeightPresetGroup.Left}' PreLoad="AnyPreset_PreLoad" />
                                                                     <eto:TableCell />
                                                                 </eto:TableRow>
                                                             </eto:TableLayout>
 
                                                             <eto:TableLayout>
                                                                 <eto:TableRow>
-                                                                    <eto:Button ID="lset8" Text="255" Style="toggle" />
+                                                                    <eto:Button ID="lset8" Text="255" Style="toggle" Click="AnyPreset_Click" Tag='{x:Static s:HeightPresetGroup.Left}' PreLoad="AnyPreset_PreLoad"/>
                                                                     <eto:TableCell />
                                                                 </eto:TableRow>
                                                             </eto:TableLayout>
@@ -212,7 +212,7 @@
 
                                             <eto:TableRow>
 
-                                                <eto:TableLayout>
+                                                <eto:TableLayout ID="tblRightPresets">
                                                     <eto:TableRow>
                                                         <eto:Label Text="Presets:" />
                                                     </eto:TableRow>
@@ -220,28 +220,28 @@
                                                     <eto:TableRow>
                                                         <eto:TableLayout>
                                                             <eto:TableRow>
-                                                                <eto:Button ID="rset1" Text="0" Style="toggle" />
+                                                                <eto:Button ID="rset1" Text="0" Style="toggle" Tag='{x:Static s:HeightPresetGroup.Right}' PreLoad="AnyPreset_PreLoad" Click="AnyPreset_Click" />
                                                                 <eto:TableCell />
                                                             </eto:TableRow>
                                                         </eto:TableLayout>
 
                                                         <eto:TableLayout>
                                                             <eto:TableRow>
-                                                                <eto:Button ID="rset2" Text="85" Style="toggle" />
+                                                                <eto:Button ID="rset2" Text="85" Style="toggle" Tag='{x:Static s:HeightPresetGroup.Right}' PreLoad="AnyPreset_PreLoad" Click="AnyPreset_Click"/>
                                                                 <eto:TableCell />
                                                             </eto:TableRow>
                                                         </eto:TableLayout>
 
                                                         <eto:TableLayout>
                                                             <eto:TableRow>
-                                                                <eto:Button ID="rset3" Text="170"  Style="toggle"/>
+                                                                <eto:Button ID="rset3" Text="170"  Style="toggle" Tag='{x:Static s:HeightPresetGroup.Right}' PreLoad="AnyPreset_PreLoad" Click="AnyPreset_Click"/>
                                                                 <eto:TableCell />
                                                             </eto:TableRow>
                                                         </eto:TableLayout>
 
                                                         <eto:TableLayout>
                                                             <eto:TableRow>
-                                                                <eto:Button ID="rset4" Text="255" Style="toggle" />
+                                                                <eto:Button ID="rset4" Text="255" Style="toggle" Tag='{x:Static s:HeightPresetGroup.Right}' PreLoad="AnyPreset_PreLoad" Click="AnyPreset_Click" />
                                                                 <eto:TableCell />
                                                             </eto:TableRow>
                                                         </eto:TableLayout>
@@ -251,28 +251,28 @@
                                                     <eto:TableRow>
                                                         <eto:TableLayout>
                                                             <eto:TableRow>
-                                                                <eto:Button ID="rset5" Text="64" Style="toggle" />
+                                                                <eto:Button ID="rset5" Text="64" Style="toggle" Tag='{x:Static s:HeightPresetGroup.Right}' PreLoad="AnyPreset_PreLoad" Click="AnyPreset_Click" />
                                                                 <eto:TableCell />
                                                             </eto:TableRow>
                                                         </eto:TableLayout>
 
                                                         <eto:TableLayout>
                                                             <eto:TableRow>
-                                                                <eto:Button ID="rset6" Text="128" Style="toggle" />
+                                                                <eto:Button ID="rset6" Text="128" Style="toggle" Tag='{x:Static s:HeightPresetGroup.Right}' PreLoad="AnyPreset_PreLoad" Click="AnyPreset_Click"/>
                                                                 <eto:TableCell />
                                                             </eto:TableRow>
                                                         </eto:TableLayout>
 
                                                         <eto:TableLayout>
                                                             <eto:TableRow>
-                                                                <eto:Button ID="rset7" Text="192" Style="toggle" />
+                                                                <eto:Button ID="rset7" Text="192" Style="toggle" Tag='{x:Static s:HeightPresetGroup.Right}' PreLoad="AnyPreset_PreLoad" Click="AnyPreset_Click" />
                                                                 <eto:TableCell />
                                                             </eto:TableRow>
                                                         </eto:TableLayout>
 
                                                         <eto:TableLayout>
                                                             <eto:TableRow>
-                                                                <eto:Button ID="rset8" Text="255" Style="toggle" />
+                                                                <eto:Button ID="rset8" Text="255" Style="toggle" Tag='{x:Static s:HeightPresetGroup.Right}' PreLoad="AnyPreset_PreLoad" Click="AnyPreset_Click"/>
                                                                 <eto:TableCell />
                                                             </eto:TableRow>
                                                         </eto:TableLayout>
@@ -305,6 +305,7 @@
                                                 <eto:TableCell/>
                                             </eto:TableRow>
                                         </eto:TableLayout>
+                                        <eto:CheckBox Text="Fading" ID="chkIncrDecrFade" />
                                     </eto:TableRow>
                                 </eto:TableLayout>
                             </eto:GroupBox>
@@ -319,7 +320,7 @@
                                         <eto:Label Text="By Amount:" />
                                         <eto:TableLayout>
                                             <eto:TableRow>
-                                                <eto:NumericUpDown ID="numIncrDecr" MinValue="-255" MaxValue="255" />
+                                                <eto:NumericUpDown ID="numSmooth" MinValue="-255" MaxValue="255" />
                                                 <eto:TableCell/>
                                             </eto:TableRow>
                                         </eto:TableLayout>
