@@ -320,7 +320,7 @@
                                         <eto:Label Text="By Amount:" />
                                         <eto:TableLayout>
                                             <eto:TableRow>
-                                                <eto:NumericUpDown ID="numSmooth" MinValue="-255" MaxValue="255" />
+                                                <eto:NumericUpDown ID="numSmoothRate" MinValue="-255" MaxValue="255" />
                                                 <eto:TableCell/>
                                             </eto:TableRow>
                                         </eto:TableLayout>
