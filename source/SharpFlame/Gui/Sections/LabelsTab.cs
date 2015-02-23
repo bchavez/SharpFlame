@@ -29,19 +29,6 @@ namespace SharpFlame.Gui.Sections
         {
             XomlReader.Load(this);
 
-            //this.lstScriptPositions.Bind(l => l.DataStore, this.map.ScriptPositions.ToList(),);
-            //this.lstScriptPositions.Bind(l => l.DataStore, src, s => s.People, DualBindingMode.OneWay);
-            
-            //this.lstScriptPositions.TextBinding = Binding.Delegate((Person p) =>
-            //    {
-            //        return p.Name;
-            //    }, defaultGetValue: "Main Menu");
-            //this.lstScriptPositions.KeyBinding = Binding.Delegate((Person p) =>
-            //    {
-            //        return p.Value;
-            //    }, defaultGetValue: "Main Menu");
-
-
 			this.txtLabel.Bind(l => l.Enabled, Binding.Delegate(() => this.DataContext != null,
 				addChangeEvent: handlerToExecuteWhenSourceChanges => this.DataContextChanged += handlerToExecuteWhenSourceChanges,
 				removeChangeEvent: handlerToExecuteWhenSourceChanges => this.DataContextChanged -= handlerToExecuteWhenSourceChanges));

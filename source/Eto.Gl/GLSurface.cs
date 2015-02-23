@@ -3,18 +3,40 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
+using OpenTK.Graphics;
 
 namespace Eto.Gl
 {
     [Handler(typeof(GLSurface.IHandler))]
     public class GLSurface : Control
     {
-        private new IHandler Handler{get{return (IHandler)base.Handler;}}
+	    public GLSurface() :
+			this(GraphicsMode.Default)
+	    {
+	    }
+
+	    public GLSurface(GraphicsMode graphicsMode):
+			this(graphicsMode, 3, 0, GraphicsContextFlags.Default)
+	    {
+		    
+	    }
+
+	    public GLSurface(GraphicsMode mode, int major, int minor, GraphicsContextFlags flags)
+	    {
+		    this.Handler.CreateWithParams(mode, major, minor, flags);
+		    this.Initialize();
+	    }
+
+
+	    private new IHandler Handler{get{return (IHandler)base.Handler;}}
 
         // interface to the platform implementations
         // ETO WIDGET -> Platform Control
+		[AutoInitialize(false)]
         public new interface IHandler : Control.IHandler
-        {
+		{
+			void CreateWithParams(GraphicsMode mode, int major, int minor, GraphicsContextFlags flags);
+
             Size GLSize { get; set; }
             bool IsInitialized { get; }
 

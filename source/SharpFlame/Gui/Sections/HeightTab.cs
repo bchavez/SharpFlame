@@ -155,8 +155,6 @@ namespace SharpFlame.Gui.Sections
 
 		void ddlMode_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			UiOptions.Height.ChangeFade = this.panIncrDecr.Visible;
-
 			if( this.ddlMode.SelectedIndex == 0 )
 			{
 				UiOptions.MouseTool = MouseTool.HeightSetBrush;
