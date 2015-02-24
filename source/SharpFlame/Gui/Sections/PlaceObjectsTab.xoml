@@ -126,7 +126,7 @@
 
         <StackLayoutItem Expand="True" HorizontalAlignment="Stretch">
             <StackLayoutItem.Control>
-                <TabControl >
+                <TabControl>
                     <TabPage Text="Features">
                         <StackLayout>
                             <TableLayout>
@@ -135,7 +135,13 @@
                                     <SearchBox />
                                 </TableRow>
                             </TableLayout>
-                            <GridView ID="gFeatures"/>
+                            <StackLayoutItem Expand="True" HorizontalAlignment="Stretch">
+                                <StackLayoutItem.Control>
+
+                                    <GridView ID="gFeatures"/>
+
+                                </StackLayoutItem.Control>
+                            </StackLayoutItem>
                         </StackLayout>
                     </TabPage>
                     <TabPage Text="Structures">
