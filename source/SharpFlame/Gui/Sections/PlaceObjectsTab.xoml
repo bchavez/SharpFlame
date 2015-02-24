@@ -1,8 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<TabPage xmlns="clr-namespace:Eto.Forms;assembly=Eto" Text="Place Objects">
+<TabPage xmlns="clr-namespace:Eto.Forms;assembly=Eto"
+         xmlns:s="clr-namespace:SharpFlame.Gui.Sections;assembly=SharpFlame"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         Text="Place Objects">
     
     <StackLayout>
-        <Label Text="Place Units For Player:" />
+        <Label Text="Place Units For Player:" Tag="{x:}" />
         
         <TableLayout>
             <TableRow>
@@ -125,53 +128,51 @@
 
 
         <StackLayoutItem Expand="True" HorizontalAlignment="Stretch">
-            <StackLayoutItem.Control>
-                <TabControl>
-                    <TabPage Text="Features">
-                        <StackLayout>
-                            <TableLayout>
-                                <TableRow>
-                                    <Label Text="Filter:" />
-                                    <SearchBox />
-                                </TableRow>
-                            </TableLayout>
-                            <StackLayoutItem Expand="True" HorizontalAlignment="Stretch">
-                                <StackLayoutItem.Control>
-
-                                    <GridView ID="gFeatures"/>
-
-                                </StackLayoutItem.Control>
-                            </StackLayoutItem>
-                        </StackLayout>
-                    </TabPage>
-                    <TabPage Text="Structures">
-
+            <TabControl>
+                <TabPage Text="Features">
+                    <StackLayout>
                         <TableLayout>
                             <TableRow>
                                 <Label Text="Filter:" />
-                                <SearchBox />
-                            </TableRow>
-                            <TableRow>
-                                <GridView ID="gStructures" />
+                                <SearchBox KeyUp="Filter_KeyUp" Tag="{x:Static s:PlaceObjectFilterType.Feature }" />
                             </TableRow>
                         </TableLayout>
+                        <StackLayoutItem Expand="True" HorizontalAlignment="Stretch">
+                            <GridView ID="gFeatures"/>
+                        </StackLayoutItem>
+                    </StackLayout>
+                </TabPage>
+                <TabPage Text="Structures">
 
-                    </TabPage>
-                    <TabPage Text="Droids">
-
+                    <StackLayout>
                         <TableLayout>
                             <TableRow>
                                 <Label Text="Filter:" />
-                                <SearchBox />
-                            </TableRow>
-                            <TableRow>
-                                <GridView ID="gDroids" />
+                                <SearchBox KeyUp="Filter_KeyUp" Tag="{x:Static s:PlaceObjectFilterType.Structs }" />
                             </TableRow>
                         </TableLayout>
+                        <StackLayoutItem Expand="True" HorizontalAlignment="Stretch">
+                            <GridView ID="gStructures"/>
+                        </StackLayoutItem>
+                    </StackLayout>
 
-                    </TabPage>
-                </TabControl>
-            </StackLayoutItem.Control>
+                </TabPage>
+                <TabPage Text="Droids">
+
+                    <StackLayout>
+                        <TableLayout>
+                            <TableRow>
+                                <Label Text="Filter:" />
+                                <SearchBox KeyUp="Filter_KeyUp" Tag="{x:Static s:PlaceObjectFilterType.Droids }" />
+                            </TableRow>
+                        </TableLayout>
+                        <StackLayoutItem Expand="True" HorizontalAlignment="Stretch">
+                            <GridView ID="gDroids"/>
+                        </StackLayoutItem>
+                    </StackLayout>
+
+                </TabPage>
+            </TabControl>
         </StackLayoutItem>
 
     </StackLayout>

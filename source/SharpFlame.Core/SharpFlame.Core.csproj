@@ -45,9 +45,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Eto, Version=2.0.5532.38186, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Eto, Version=2.0.5533.3608, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Eto.Forms.2.1.0-build0086\lib\net40\Eto.dll</HintPath>
+      <HintPath>..\packages\Eto.Forms.2.1.0-build0087\lib\net40\Eto.dll</HintPath>
     </Reference>
     <Reference Include="FluentValidation, Version=5.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

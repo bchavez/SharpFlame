@@ -100,13 +100,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Eto">
-      <HintPath>..\packages\Eto.Forms.2.1.0-build0086\lib\net40\Eto.dll</HintPath>
+      <HintPath>..\packages\Eto.Forms.2.1.0-build0087\lib\net40\Eto.dll</HintPath>
     </Reference>
     <Reference Include="Eto.Mac">
-      <HintPath>..\packages\Eto.Platform.Mac.2.1.0-build0086\lib\net40\Eto.Mac.dll</HintPath>
+      <HintPath>..\packages\Eto.Platform.Mac.2.1.0-build0087\lib\net40\Eto.Mac.dll</HintPath>
     </Reference>
     <Reference Include="MonoMac">
-      <HintPath>..\packages\Eto.Platform.Mac.2.1.0-build0086\lib\net40\MonoMac.dll</HintPath>
+      <HintPath>..\packages\Eto.Platform.Mac.2.1.0-build0087\lib\net40\MonoMac.dll</HintPath>
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\other\Ninject.Mono\Ninject.dll</HintPath>

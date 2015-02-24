@@ -1,22 +1,32 @@
 using System;
 using System.Collections.Specialized;
+using System.Linq;
 using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
 using Appccelerate.Events;
-using Eto.Drawing;
 using Eto.Forms;
 using Eto.Gl;
 using Ninject;
 using Ninject.Extensions.Logging;
 using SharpFlame.Core;
+using SharpFlame.Domain;
 using SharpFlame.Domain.ObjData;
 using SharpFlame.Settings;
 using SharpFlame.UiOptions;
+using Z.ExtensionMethods;
+using Z.ExtensionMethods.Object;
 
 namespace SharpFlame.Gui.Sections
 {
+	public enum PlaceObjectFilterType
+	{
+		Structs,
+		Feature,
+		Droids
+	}
 	public class PlaceObjectsTab : TabPage
 	{
+		
         [Inject]
         internal Options UiOptions { get; set; }
 
@@ -83,6 +93,7 @@ namespace SharpFlame.Gui.Sections
 	        this.cmdPlaceRow.Image = Resources.Line;
 
 			this.SettingsManager.ObjectDataDirectories.CollectionChanged += ObjectDataDirectories_CollectionChanged;
+			this.features = new FilterCollection<GridViewItem>();
 			
 		
 	        /*PlayerSelector playerSelector;
@@ -145,8 +156,8 @@ namespace SharpFlame.Gui.Sections
 
 			Content = mainLayout;
 			 * */
-			gFeatures.Columns.Add(new GridColumn { HeaderText = "Internal Name", DataCell = new TextBoxCell("Name"), Editable = false, Sortable = true,  });
-			gFeatures.Columns.Add(new GridColumn { HeaderText = "In-Game Name", DataCell = new TextBoxCell("Code"), Editable = false, Sortable = true });
+			gFeatures.Columns.Add(new GridColumn { HeaderText = "Internal Name", DataCell = new TextBoxCell("InternalName"), Editable = false, Sortable = true, AutoSize  = true});
+			gFeatures.Columns.Add(new GridColumn { HeaderText = "In-Game Name", DataCell = new TextBoxCell("InGameName"), Editable = false, Sortable = true, AutoSize = true});
 			gStructures.Columns.Add(new GridColumn { HeaderText = "Internal Name", DataCell = new TextBoxCell("InternalName"), Editable = false, Sortable = true });
 			gStructures.Columns.Add(new GridColumn { HeaderText = "In-Game Name", DataCell = new TextBoxCell("InGameName"), Editable = false, Sortable = true });
 			gDroids.Columns.Add(new GridColumn { HeaderText = "Internal Name", DataCell = new TextBoxCell("InternalName"), Editable = false, Sortable = true });
@@ -173,10 +184,32 @@ namespace SharpFlame.Gui.Sections
 
 		public void RefreshGridViews()
 		{
-			var objFeatures = App.ObjectData.FeatureTypes.GetItemsAsSimpleList();
-			var dsc = new DataStoreCollection<object>(objFeatures);
+			var objFeatures = App.ObjectData.FeatureTypes.GetItemsAsSimpleList()
+				.ConvertAll(f => new GridViewItem(f));
 
-			this.gFeatures.DataStore = dsc;
+			this.features.Clear();
+			this.features.AddRange(objFeatures);
+			
+			this.gFeatures.DataStore = features;
+
+
+			var objStrcuts = App.ObjectData.StructureTypes.GetItemsAsSimpleList()
+				.ConvertAll(f => new GridViewItem(f));
+
+			this.structs.Clear();
+			this.structs.AddRange(objStrcuts);
+
+			this.gStructures.DataStore = this.structs;
+
+
+			var objDroids = App.ObjectData.DroidTemplates.GetItemsAsSimpleList()
+				.ConvertAll(f => new GridViewItem(f));
+
+			this.droids.Clear();
+			this.droids.AddRange(objDroids);
+
+			this.gDroids.DataStore = this.droids;
+
 		}
 
 	    protected override void OnLoadComplete(EventArgs lcEventArgs)
@@ -255,6 +288,58 @@ namespace SharpFlame.Gui.Sections
 		void ToolSelection_Click(object sender, EventArgs e)
 		{
 			
+		}
+
+		private FilterCollection<GridViewItem> features;
+		private FilterCollection<GridViewItem> structs;
+		private FilterCollection<GridViewItem> droids; 
+
+		void Filter_KeyUp(object sender, KeyEventArgs e)
+		{
+			var search = sender as SearchBox;
+
+			var searchType = search.Tag.To<PlaceObjectFilterType>();
+
+			FilterCollection<GridViewItem> collection = null;
+			if( searchType == PlaceObjectFilterType.Feature)
+			{
+				collection = features;
+			}
+			else if( searchType == PlaceObjectFilterType.Structs )
+			{
+				collection = structs;
+			}
+			else if( searchType == PlaceObjectFilterType.Droids )
+			{
+				collection = droids;
+			}
+
+			if( search.Text.IsNullOrWhiteSpace() )
+			{
+				collection.Filter = null;
+				return;
+			}
+
+			var searchTokens = search.Text.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+
+			collection.Filter = item =>
+				{
+					return searchTokens.Any(t => item.InGameName.IndexOf(t, StringComparison.OrdinalIgnoreCase) >= 0);
+				};
+		}
+
+		public class GridViewItem
+		{
+			public GridViewItem(UnitTypeBase obj)
+			{
+				string code = null;
+				obj.GetCode(ref code);
+				this.InternalName = code;
+				this.InGameName = obj.GetName().Replace("*", "");
+			}
+
+			public string InternalName { get; set; }
+			public string InGameName { get; set; }
 		}
 
 		/*
