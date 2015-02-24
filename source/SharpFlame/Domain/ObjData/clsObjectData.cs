@@ -747,9 +747,6 @@ namespace SharpFlame.Domain.ObjData
                 returnResult.WarningAdd(turretConflictCount + " templates had multiple conflicting turrets.");
             }
 
-            // Advertise the App.ObjectData changes, now we are done.
-            App.OnObjectDataChanged (this, EventArgs.Empty);
-
             return returnResult;
         }
 

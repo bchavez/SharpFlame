@@ -1,17 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using Appccelerate.EventBroker;
-using Eto.Gl;
 using Ninject;
 using NLog;
-using OpenTK;
-using OpenTK.Graphics;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Core;
 using SharpFlame.Core.Collections;
@@ -21,7 +17,6 @@ using SharpFlame.Domain;
 using SharpFlame.Domain.ObjData;
 using SharpFlame.FileIO;
 using SharpFlame.Graphics.OpenGL;
-using SharpFlame.Gui.Sections;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tiles;
@@ -68,8 +63,7 @@ namespace SharpFlame
 
         public static bool DisplayTileOrientation;
 
-        public static ObjectData ObjectData = new ObjectData();
-        public static event EventHandler ObjectDataChanged = delegate {};
+	    public static ObjectData ObjectData = new ObjectData();
 
         public static int SelectedTextureNum = -1;
         public static TileOrientation TextureOrientation = new TileOrientation(false, false, false);
@@ -311,18 +305,6 @@ namespace SharpFlame
             newTileType.DisplayColour.Blue = 0.75F;
             App.TileTypes.Add(newTileType);
         }
-
-        /// <summary>
-        /// Raises the object data changed event.
-        /// Call me every time you change ObjectData!
-        /// </summary>
-        /// <param name="o">O.</param>
-        /// <param name="e">E.</param>
-        public static void OnObjectDataChanged(object o, EventArgs e) 
-        {
-            ObjectDataChanged(o, e);
-        }
-
 
         public static void SetProgramSubDirs()
         {

@@ -259,55 +259,6 @@ namespace SharpFlame.Gui.Sections
                         Logger.Error(ex, "Got an exception while loading tilesets.");
                     }
                 };
-
-            Settings.ObjectDataDirectories.CollectionChanged += (sender, e) =>
-                {
-                    if( !this.GLSurface.IsInitialized )
-                    {
-                        return;
-                    }
-
-                    try
-                    {
-                        var result = new Result("Reloading object data.", false);
-                        if( e.Action == NotifyCollectionChangedAction.Add )
-                        {
-                            // Just reload Object Data.
-                            App.ObjectData = new ObjectData();
-                            foreach( var path in Settings.ObjectDataDirectories )
-                            {
-                                if( path != null && path != "" )
-                                {
-                                    result.Add(App.ObjectData.LoadDirectory(path));
-                                }
-                            }
-                        }
-                        else if( e.Action == NotifyCollectionChangedAction.Remove )
-                        {
-                            // Just reload Object Data.
-                            App.ObjectData = new ObjectData();
-                            foreach( var path in Settings.ObjectDataDirectories )
-                            {
-                                if( path != null && path != "" )
-                                {
-                                    result.Add(App.ObjectData.LoadDirectory(path));
-                                }
-                            }
-                            // Need to send an objectchanged event as LoadDirectory may never occurs.
-                            App.OnObjectDataChanged(this, EventArgs.Empty);
-                        }
-
-                        if( result.HasProblems || result.HasWarnings )
-                        {
-                            App.StatusDialog = new Gui.Dialogs.Status(result);
-                            App.StatusDialog.Show();
-                        }
-                    }
-                    catch( Exception ex )
-                    {
-                        Logger.Error(ex, "Got an Exception while loading object data.");
-                    }
-                };
         }
 
         void scrollTextureView_Scroll(object sender, ScrollEventArgs e)
@@ -819,6 +770,9 @@ namespace SharpFlame.Gui.Sections
             return control;
         }
 
+		[EventPublication(EventTopics.OnOpenGLInitalized)]
+		public event EventHandler<EventArgs<GLSurface>> OnOpenGLInitalized = delegate { }; 
+
         /// <summary>
         /// Ons the GL control initialized.
         /// </summary>
@@ -834,15 +788,6 @@ namespace SharpFlame.Gui.Sections
                 if( !string.IsNullOrEmpty(path) )
                 {
                     SharpFlameApplication.InitializeResult.Add(App.LoadTilesets(path));
-                }
-            }
-
-            // Load Object Data.
-            foreach( var path in Settings.ObjectDataDirectories )
-            {
-                if( !string.IsNullOrEmpty(path) )
-                {
-                    SharpFlameApplication.InitializeResult.Add(App.ObjectData.LoadDirectory(path));
                 }
             }
 
@@ -870,6 +815,7 @@ namespace SharpFlame.Gui.Sections
             //            {
             //                logger.Debug(initializeResult.ToString());
             //            }
+	        this.OnOpenGLInitalized(this, new EventArgs<GLSurface>(this.GLSurface));
         }
 
     }

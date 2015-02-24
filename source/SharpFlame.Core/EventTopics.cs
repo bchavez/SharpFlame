@@ -1,7 +1,6 @@
 using System;
 using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
-using Appccelerate.Events;
 
 namespace SharpFlame.Core
 {
@@ -13,7 +12,7 @@ namespace SharpFlame.Core
         public const string OnMinimapRefresh = "topic://Minimap/Refresh";
         public const string OnScriptMarkerUpdate = "topic://Labels/Update";
 
-	    public const string OnSelectTool = "topic://Tool/Select";
+	    public const string OnOpenGLInitalized = "topic://GL/Init";
 
         public static void UpdateMap(this IEventBroker broker, object sender)
         {

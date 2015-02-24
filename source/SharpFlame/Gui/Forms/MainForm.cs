@@ -80,7 +80,7 @@ namespace SharpFlame.Gui.Forms
             this.MapPanel = new MapPanel();
 	        this.TextureTab = new TextureTab();
 	        this.TerrainTab = new TerrainTab();
-	        this.PlaceObjectsTab = new PlaceObjectsTab();
+	        //this.PlaceObjectsTab = new PlaceObjectsTab();
 	        this.ObjectTab = new ObjectTab();
 
 
@@ -90,7 +90,7 @@ namespace SharpFlame.Gui.Forms
 		    tabControl.TabPages.Add(new HeightTab());
 	        tabControl.TabPages.Add(new ResizeTab());
 	        //tabControl.TabPages.Add(new TabPage {Text = "Resize", Content = this.ResizeTab});
-	        tabControl.TabPages.Add(new TabPage {Text = "Place Objects", Content = this.PlaceObjectsTab});
+		    tabControl.TabPages.Add(new PlaceObjectsTab());
 	        tabControl.TabPages.Add(new TabPage {Text = "Object", Content = this.ObjectTab});
 	        tabControl.TabPages.Add(new LabelsTab());
 

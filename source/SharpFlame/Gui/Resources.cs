@@ -62,6 +62,16 @@ namespace SharpFlame.Gui
 			get { return new Bitmap(GetBytes(() => MouseRight)); }
 		}
 
+		public static Bitmap Place
+		{
+			get { return new Bitmap(GetBytes(() => Place)); }
+		}
+		public static Bitmap Line
+		{
+			get { return new Bitmap(GetBytes(() => Line)); }
+		}
+
+
 		public static Lazy<Assembly> Assembly = new Lazy<Assembly>(System.Reflection.Assembly.GetExecutingAssembly);
 
 		public static Stream GetBytes(Expression<Func<object>> exp, string ext)
