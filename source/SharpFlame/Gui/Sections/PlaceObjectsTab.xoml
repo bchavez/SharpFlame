@@ -1,179 +1,173 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<eto:TabPage
-	   xmlns="http://schema.picoe.ca/eto.forms"
-	   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-       xmlns:sys="clr-namespace:System;assembly=mscorlib"
-       xmlns:eto="clr-namespace:Eto.Forms;assembly=Eto"
-       xmlns:s="clr-namespace:SharpFlame.Gui.Sections;assembly=SharpFlame"
-       Text="Place Objects">
+<TabPage xmlns="clr-namespace:Eto.Forms;assembly=Eto" Text="Place Objects">
+    
+    <StackLayout>
+        <Label Text="Place Units For Player:" />
+        
+        <TableLayout>
+            <TableRow>
+                <TableLayout>
+                    <TableRow>
+                        <Button ID="pset0" Text="P0" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
+                        <TableCell />
+                    </TableRow>
+                </TableLayout>
+                <TableLayout>
+                    <TableRow>
+                        <Button ID="pset1" Text="P1" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
+                        <TableCell />
+                    </TableRow>
+                </TableLayout>
+                <TableLayout>
+                    <TableRow>
+                        <Button ID="pset2" Text="P2"  Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
+                        <TableCell />
+                    </TableRow>
+                </TableLayout>
+                <TableLayout>
+                    <TableRow>
+                        <Button ID="pset3" Text="P3" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
+                        <TableCell />
+                    </TableRow>
+                </TableLayout>
+                <TableLayout>
+                    <TableRow>
+                        <Button ID="pset4" Text="P4" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
+                        <TableCell />
+                    </TableRow>
+                </TableLayout>
+            </TableRow>
+            <TableRow>
+                <TableLayout>
+                    <TableRow>
+                        <Button ID="pset5" Text="P5" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
+                        <TableCell />
+                    </TableRow>
+                </TableLayout>
+                <TableLayout>
+                    <TableRow>
+                        <Button ID="pset6" Text="P6" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
+                        <TableCell />
+                    </TableRow>
+                </TableLayout>
+                <TableLayout>
+                    <TableRow>
+                        <Button ID="pset7" Text="P7" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
+                        <TableCell />
+                    </TableRow>
+                </TableLayout>
+                <TableLayout>
+                    <TableRow>
+                        <Button ID="pset8" Text="P8" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
+                        <TableCell />
+                    </TableRow>
+                </TableLayout>
+                <TableLayout>
+                    <TableRow>
+                        <Button ID="pset9" Text="P9" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
+                        <TableCell />
+                    </TableRow>
+                </TableLayout>
+                <TableLayout>
+                    <TableRow>
+                        <Button ID="psetscav" Text="Scav" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
+                        <TableCell />
+                    </TableRow>
+                </TableLayout>
 
-    <eto:StackLayout>
-        <eto:Label Text="Place Units For Player:" />
+            </TableRow>
 
-        <eto:TableLayout>
-            <eto:TableRow>
-                <eto:TableLayout>
-                    <eto:TableRow>
-                        <eto:Button ID="pset0" Text="P0" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
-                        <eto:TableCell />
-                    </eto:TableRow>
-                </eto:TableLayout>
-                <eto:TableLayout>
-                    <eto:TableRow>
-                        <eto:Button ID="pset1" Text="P1" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
-                        <eto:TableCell />
-                    </eto:TableRow>
-                </eto:TableLayout>
-                <eto:TableLayout>
-                    <eto:TableRow>
-                        <eto:Button ID="pset2" Text="P2"  Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
-                        <eto:TableCell />
-                    </eto:TableRow>
-                </eto:TableLayout>
-                <eto:TableLayout>
-                    <eto:TableRow>
-                        <eto:Button ID="pset3" Text="P3" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
-                        <eto:TableCell />
-                    </eto:TableRow>
-                </eto:TableLayout>
-                <eto:TableLayout>
-                    <eto:TableRow>
-                        <eto:Button ID="pset4" Text="P4" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
-                        <eto:TableCell />
-                    </eto:TableRow>
-                </eto:TableLayout>
-            </eto:TableRow>
-            <eto:TableRow>
-                <eto:TableLayout>
-                    <eto:TableRow>
-                        <eto:Button ID="pset5" Text="P5" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
-                        <eto:TableCell />
-                    </eto:TableRow>
-                </eto:TableLayout>
-                <eto:TableLayout>
-                    <eto:TableRow>
-                        <eto:Button ID="pset6" Text="P6" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
-                        <eto:TableCell />
-                    </eto:TableRow>
-                </eto:TableLayout>
-                <eto:TableLayout>
-                    <eto:TableRow>
-                        <eto:Button ID="pset7" Text="P7" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
-                        <eto:TableCell />
-                    </eto:TableRow>
-                </eto:TableLayout>
-                <eto:TableLayout>
-                    <eto:TableRow>
-                        <eto:Button ID="pset8" Text="P8" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
-                        <eto:TableCell />
-                    </eto:TableRow>
-                </eto:TableLayout>
-                <eto:TableLayout>
-                    <eto:TableRow>
-                        <eto:Button ID="pset9" Text="P9" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
-                        <eto:TableCell />
-                    </eto:TableRow>
-                </eto:TableLayout>
-                <eto:TableLayout>
-                    <eto:TableRow>
-                        <eto:Button ID="psetscav" Text="Scav" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
-                        <eto:TableCell />
-                    </eto:TableRow>
-                </eto:TableLayout>
+        </TableLayout>
 
-            </eto:TableRow>
-
-        </eto:TableLayout>
-
-        <eto:TableLayout>
-            <eto:TableRow>
-                <eto:Label Text="Tool:"/>
+        <TableLayout>
+            <TableRow>
+                <Label Text="Tool:"/>
                 
-                <eto:TableLayout>
-                    <eto:TableRow>
-                        <eto:Button ID="cmdPlaceOne" Text="Place One Object" Click="ToolSelection_Click" />
-                    </eto:TableRow>
-                    <eto:TableRow>
-                        <eto:Button ID="cmdPlaceRow" Text="Place Row Of Objects" Click="ToolSelection_Click" />
-                    </eto:TableRow>
+                <TableLayout>
+                    <TableRow>
+                        <Button ID="cmdPlaceOne" Text="Place One Object" Click="ToolSelection_Click" />
+                    </TableRow>
+                    <TableRow>
+                        <Button ID="cmdPlaceRow" Text="Place Row Of Objects" Click="ToolSelection_Click" />
+                    </TableRow>
 
-                </eto:TableLayout>
+                </TableLayout>
                 
-            </eto:TableRow>
+            </TableRow>
 
-        </eto:TableLayout>
+        </TableLayout>
         
         
-        <eto:TableLayout>
-            <eto:TableRow>
-                <eto:Label Text="Rotation:" />
+        <TableLayout>
+            <TableRow>
+                <Label Text="Rotation:" />
 
-                <eto:TableLayout>
-                    <eto:TableRow>
-                        <eto:TableLayout>
-                            <eto:TableRow>
-                                <eto:NumericUpDown ID="nRotation" MinValue="0" MaxValue="359" />
-                                <eto:TableCell />
-                                <eto:CheckBox ID="chkRandom" Text="Random" />
-                            </eto:TableRow>
-                        </eto:TableLayout>
-                    </eto:TableRow>
-                    <eto:TableRow>
-                        <eto:CheckBox ID="chkRotateFootprints" Text="Rotate Footprints" />
-                    </eto:TableRow>
-                    <eto:TableRow>
-                        <eto:CheckBox ID="chkAutoWalls" Text="Automatic Walls" />
-                    </eto:TableRow>
-                </eto:TableLayout>
+                <TableLayout>
+                    <TableRow>
+                        <TableLayout>
+                            <TableRow>
+                                <NumericUpDown ID="nRotation" MinValue="0" MaxValue="359" />
+                                <TableCell />
+                                <CheckBox ID="chkRandom" Text="Random" />
+                            </TableRow>
+                        </TableLayout>
+                    </TableRow>
+                    <TableRow>
+                        <CheckBox ID="chkRotateFootprints" Text="Rotate Footprints" />
+                    </TableRow>
+                    <TableRow>
+                        <CheckBox ID="chkAutoWalls" Text="Automatic Walls" />
+                    </TableRow>
+                </TableLayout>
 
-            </eto:TableRow>
-        </eto:TableLayout>
+            </TableRow>
+        </TableLayout>
 
 
-        <eto:StackLayoutItem Expand="True" HorizontalAlignment="Stretch">
-            <eto:StackLayoutItem.Control>
-                <eto:TabControl >
-                    <eto:TabPage Text="Features">
-                        <eto:StackLayout>
-                            <eto:TableLayout>
-                                <eto:TableRow>
-                                    <eto:Label Text="Filter:" />
-                                    <eto:SearchBox />
-                                </eto:TableRow>
-                            </eto:TableLayout>
-                            <eto:GridView ID="gFeatures"/>
-                        </eto:StackLayout>
-                    </eto:TabPage>
-                    <eto:TabPage Text="Structures">
+        <StackLayoutItem Expand="True" HorizontalAlignment="Stretch">
+            <StackLayoutItem.Control>
+                <TabControl >
+                    <TabPage Text="Features">
+                        <StackLayout>
+                            <TableLayout>
+                                <TableRow>
+                                    <Label Text="Filter:" />
+                                    <SearchBox />
+                                </TableRow>
+                            </TableLayout>
+                            <GridView ID="gFeatures"/>
+                        </StackLayout>
+                    </TabPage>
+                    <TabPage Text="Structures">
 
-                        <eto:TableLayout>
-                            <eto:TableRow>
-                                <eto:Label Text="Filter:" />
-                                <eto:SearchBox />
-                            </eto:TableRow>
-                            <eto:TableRow>
-                                <eto:GridView ID="gStructures" />
-                            </eto:TableRow>
-                        </eto:TableLayout>
+                        <TableLayout>
+                            <TableRow>
+                                <Label Text="Filter:" />
+                                <SearchBox />
+                            </TableRow>
+                            <TableRow>
+                                <GridView ID="gStructures" />
+                            </TableRow>
+                        </TableLayout>
 
-                    </eto:TabPage>
-                    <eto:TabPage Text="Droids">
+                    </TabPage>
+                    <TabPage Text="Droids">
 
-                        <eto:TableLayout>
-                            <eto:TableRow>
-                                <eto:Label Text="Filter:" />
-                                <eto:SearchBox />
-                            </eto:TableRow>
-                            <eto:TableRow>
-                                <eto:GridView ID="gDroids" />
-                            </eto:TableRow>
-                        </eto:TableLayout>
+                        <TableLayout>
+                            <TableRow>
+                                <Label Text="Filter:" />
+                                <SearchBox />
+                            </TableRow>
+                            <TableRow>
+                                <GridView ID="gDroids" />
+                            </TableRow>
+                        </TableLayout>
 
-                    </eto:TabPage>
-                </eto:TabControl>
-            </eto:StackLayoutItem.Control>
-        </eto:StackLayoutItem>
+                    </TabPage>
+                </TabControl>
+            </StackLayoutItem.Control>
+        </StackLayoutItem>
 
-    </eto:StackLayout>
+    </StackLayout>
 
-</eto:TabPage>
+</TabPage>
