@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <TabPage xmlns="clr-namespace:Eto.Forms;assembly=Eto"
          xmlns:s="clr-namespace:SharpFlame.Gui.Sections;assembly=SharpFlame"
+         xmlns:o="clr-namespace:SharpFlame.UiOptions;assembly=SharpFlame"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          Text="Place Objects">
     
     <StackLayout>
-        <Label Text="Place Units For Player:" Tag="{x:}" />
+        <Label Text="Place Units For Player:" />
         
         <TableLayout>
             <TableRow>
@@ -88,10 +89,10 @@
                 
                 <TableLayout>
                     <TableRow>
-                        <Button ID="cmdPlaceOne" Text="Place One Object" Click="ToolSelection_Click" />
+                        <Button ID="cmdPlaceOne" Text="Place One Object" Click="ToolSelection_Click" Tag="{x:Static o:MouseTool.ObjectLines}" />
                     </TableRow>
                     <TableRow>
-                        <Button ID="cmdPlaceRow" Text="Place Row Of Objects" Click="ToolSelection_Click" />
+                        <Button ID="cmdPlaceRow" Text="Place Row Of Objects" Click="ToolSelection_Click" Tag="{x:Static o:MouseTool.ObjectLines}" />
                     </TableRow>
 
                 </TableLayout>
@@ -134,11 +135,11 @@
                         <TableLayout>
                             <TableRow>
                                 <Label Text="Filter:" />
-                                <SearchBox KeyUp="Filter_KeyUp" Tag="{x:Static s:PlaceObjectFilterType.Feature }" />
+                                <SearchBox KeyUp="Filter_KeyUp" Tag="{x:Static s:PlaceObjectsTab+FilterType.Feature }" />
                             </TableRow>
                         </TableLayout>
                         <StackLayoutItem Expand="True" HorizontalAlignment="Stretch">
-                            <GridView ID="gFeatures"/>
+                            <GridView ID="gFeatures" SelectionChanged="AnyGrid_SelectionChanged" />
                         </StackLayoutItem>
                     </StackLayout>
                 </TabPage>
@@ -148,11 +149,11 @@
                         <TableLayout>
                             <TableRow>
                                 <Label Text="Filter:" />
-                                <SearchBox KeyUp="Filter_KeyUp" Tag="{x:Static s:PlaceObjectFilterType.Structs }" />
+                                <SearchBox KeyUp="Filter_KeyUp" Tag="{x:Static s:PlaceObjectsTab+FilterType.Structs }" />
                             </TableRow>
                         </TableLayout>
                         <StackLayoutItem Expand="True" HorizontalAlignment="Stretch">
-                            <GridView ID="gStructures"/>
+                            <GridView ID="gStructures" SelectionChanged="AnyGrid_SelectionChanged"/>
                         </StackLayoutItem>
                     </StackLayout>
 
@@ -163,11 +164,11 @@
                         <TableLayout>
                             <TableRow>
                                 <Label Text="Filter:" />
-                                <SearchBox KeyUp="Filter_KeyUp" Tag="{x:Static s:PlaceObjectFilterType.Droids }" />
+                                <SearchBox KeyUp="Filter_KeyUp" Tag="{x:Static s:PlaceObjectsTab+FilterType.Droids }" />
                             </TableRow>
                         </TableLayout>
                         <StackLayoutItem Expand="True" HorizontalAlignment="Stretch">
-                            <GridView ID="gDroids"/>
+                            <GridView ID="gDroids" SelectionChanged="AnyGrid_SelectionChanged"/>
                         </StackLayoutItem>
                     </StackLayout>
 

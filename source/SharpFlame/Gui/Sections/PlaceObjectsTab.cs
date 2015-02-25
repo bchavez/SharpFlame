@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using Appccelerate.EventBroker;
@@ -18,15 +19,16 @@ using Z.ExtensionMethods.Object;
 
 namespace SharpFlame.Gui.Sections
 {
-	public enum PlaceObjectFilterType
-	{
-		Structs,
-		Feature,
-		Droids
-	}
+
 	public class PlaceObjectsTab : TabPage
 	{
-		
+		public enum FilterType
+		{
+			Structs,
+			Feature,
+			Droids
+		}
+
         [Inject]
         internal Options UiOptions { get; set; }
 
@@ -35,6 +37,9 @@ namespace SharpFlame.Gui.Sections
 
 		[Inject]
 		internal ILogger Logger { get; set; }
+
+		[Inject]
+		internal IEventBroker EventBroker { get; set; }
 
 		private Button cmdPlaceOne;
 		private Button cmdPlaceRow;
@@ -94,6 +99,8 @@ namespace SharpFlame.Gui.Sections
 
 			this.SettingsManager.ObjectDataDirectories.CollectionChanged += ObjectDataDirectories_CollectionChanged;
 			this.features = new FilterCollection<GridViewItem>();
+			this.structs = new FilterCollection<GridViewItem>();
+			this.droids = new FilterCollection<GridViewItem>();
 			
 		
 	        /*PlayerSelector playerSelector;
@@ -209,71 +216,19 @@ namespace SharpFlame.Gui.Sections
 			this.droids.AddRange(objDroids);
 
 			this.gDroids.DataStore = this.droids;
-
 		}
 
 	    protected override void OnLoadComplete(EventArgs lcEventArgs)
         {
             base.OnLoadComplete(lcEventArgs);
-			
-		    /*// Rotation buttons
-            btnRotation0.Click += delegate {
-                nudRotation.Value = 0D;
-            };
 
-            btnRotation90.Click += delegate {
-                nudRotation.Value = 90D;
-            };
-
-
-            btnRotation180.Click += delegate {
-                nudRotation.Value = 180D;
-            };
-
-            btnRotation270.Click += delegate {
-                nudRotation.Value = 270D;
-            };
-
-            // Set Mousetool, when we are shown.
-            Shown += delegate {
-                UiOptions.MouseTool = MouseTool.Default;
-            };
-
-            App.ObjectDataChanged += delegate
-            {
-                var objFeatures = App.ObjectData.FeatureTypes.GetItemsAsSimpleList();
-                var gicFeatures = new DataStoreCollection<object>();
-                foreach (var obj in objFeatures) 
-                {
-                    string code = null;
-                    obj.GetCode(ref code);
-                    gicFeatures.Add(new MyGridItem(code, obj.GetName().Replace("*", "")));
-                }
-                grvFeatures.DataStore = gicFeatures;
-
-                var objStructures = App.ObjectData.StructureTypes.GetItemsAsSimpleList();
-                var gicStructures = new DataStoreCollection<object>();
-                foreach (var obj in objStructures) 
-                {
-                    string code = null;
-                    obj.GetCode(ref code);
-                    gicStructures.Add(new MyGridItem(code, obj.GetName().Replace("*", "")));
-                }
-                grvStructures.DataStore = gicStructures;
-
-                var objDroids = App.ObjectData.DroidTemplates.GetItemsAsSimpleList();
-                var gicDroids = new DataStoreCollection<object>();
-                foreach (var obj in objDroids) 
-                {
-                    string code = null;
-                    obj.GetCode(ref code);
-                    gicDroids.Add(new MyGridItem(code, obj.GetName().Replace("*", "")));
-                }
-                grvDroids.DataStore = gicDroids;
-            };
-			 */
-
+		    this.Shown += (sender, args) =>
+			    {
+				    UiOptions.MouseTool = MouseTool.Default;
+			    };
         }
+
+		private IEnumerable<object> selected;
 
 		void AnyPlayer_Click(object sender, EventArgs e)
 		{
@@ -285,10 +240,31 @@ namespace SharpFlame.Gui.Sections
 			
 		}
 
+		
+
+		void AnyGrid_SelectionChanged(object sender, EventArgs e)
+		{
+			var grid = sender as GridView;
+			var types = grid.SelectedItems.Cast<GridViewItem>()
+				.Select(gvi => gvi.UnitBaseType);
+			
+			//NULL reference here.... not sure how to resolve this yet.
+			Program.frmMainInstance.SelectedObjectTypes.Clear();
+
+			types.ForEach(u => Program.frmMainInstance.SelectedObjectTypes.Add(u.UnitType_frmMainSelectedLink));
+
+			this.EventBroker.DrawLater(this);
+		}
+
 		void ToolSelection_Click(object sender, EventArgs e)
 		{
-			
+			var button = sender as Button;
+
+			var tool = button.Tag.To<MouseTool>();
+
+			UiOptions.MouseTool = tool;
 		}
+
 
 		private FilterCollection<GridViewItem> features;
 		private FilterCollection<GridViewItem> structs;
@@ -298,18 +274,18 @@ namespace SharpFlame.Gui.Sections
 		{
 			var search = sender as SearchBox;
 
-			var searchType = search.Tag.To<PlaceObjectFilterType>();
+			var searchType = search.Tag.To<FilterType>();
 
 			FilterCollection<GridViewItem> collection = null;
-			if( searchType == PlaceObjectFilterType.Feature)
+			if( searchType == FilterType.Feature)
 			{
 				collection = features;
 			}
-			else if( searchType == PlaceObjectFilterType.Structs )
+			else if( searchType == FilterType.Structs )
 			{
 				collection = structs;
 			}
-			else if( searchType == PlaceObjectFilterType.Droids )
+			else if( searchType == FilterType.Droids )
 			{
 				collection = droids;
 			}
@@ -336,135 +312,15 @@ namespace SharpFlame.Gui.Sections
 				obj.GetCode(ref code);
 				this.InternalName = code;
 				this.InGameName = obj.GetName().Replace("*", "");
+				this.UnitBaseType = obj;
 			}
+
+			public UnitTypeBase UnitBaseType { get; set; }
 
 			public string InternalName { get; set; }
 			public string InGameName { get; set; }
 		}
 
-		/*
-        class MyGridItem
-        {
-            public string InternalName
-            {
-                get;
-                set;
-            }
-
-            public string InGameName
-            {
-                get;
-                set;
-            }
-
-            // used for owner-drawn cells
-            public MyGridItem(string internalName, string inGameName)
-            {
-                // initialize to random values
-                InternalName = internalName;
-                InGameName = inGameName;
-            }
-        }
-
-        DynamicLayout FeaturesPanel() {
-            var mainLayout = new DynamicLayout ();
-
-            grvFeatures = new GridView { Size = new Size(300, 100) };
-            grvFeatures.Columns.Add(new GridColumn { HeaderText = "Internal Name", DataCell = new TextBoxCell("InternalName"), Editable = false, Sortable = true });
-            grvFeatures.Columns.Add(new GridColumn { HeaderText = "In-Game Name", DataCell = new TextBoxCell("InGameName"), Editable = false, Sortable = true });
-
-            filterText.TextChanged += (s, e) =>
-            {
-                var filterItems = (filterText.Text ?? "").Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-                // Set the filter delegate on the GridView
-                grvFeatures.Filter = (filterItems.Length == 0) ? (Func<object, bool>)null : o =>
-                {
-                    var i = o as MyGridItem;
-                    var matches = true;
-
-                    // Every item in the split filter string should be within the Text property
-                    matches = filterItems.Any(f => i.InternalName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) != -1 ||
-                        i.InGameName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) != -1);
-
-                    return matches;
-                };
-            };
-
-            mainLayout.Add (grvFeatures);
-
-            return mainLayout;
-        }
-
-        DynamicLayout StructuresPanel() {
-            var mainLayout = new DynamicLayout ();
-            grvStructures = new GridView { Size = new Size(300, 100) };
-            grvStructures.Columns.Add(new GridColumn { HeaderText = "Internal Name", DataCell = new TextBoxCell("InternalName"), Editable = false, Sortable = true });
-            grvStructures.Columns.Add(new GridColumn { HeaderText = "In-Game Name", DataCell = new TextBoxCell("InGameName"), Editable = false, Sortable = true });
-
-            filterText.TextChanged += (s, e) =>
-            {
-                var filterItems = (filterText.Text ?? "").Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-                // Set the filter delegate on the GridView
-                grvStructures.Filter = (filterItems.Length == 0) ? (Func<object, bool>)null : o =>
-                {
-                    var i = o as MyGridItem;
-                    var matches = true;
-
-                    // Every item in the split filter string should be within the Text property
-                    matches = filterItems.Any(f => i.InternalName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) != -1 ||
-                        i.InGameName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) != -1);
-
-                    return matches;
-                };
-            };
-
-            mainLayout.Add (grvStructures);
-            return mainLayout;
-        }
-
-        DynamicLayout DroidsPanel() {
-            var mainLayout = new DynamicLayout ();
-            grvDroids = new GridView { Size = new Size(300, 100) };
-            grvDroids.Columns.Add(new GridColumn { HeaderText = "Internal Name", DataCell = new TextBoxCell("InternalName"), Editable = false, Sortable = true, Width = 200 });
-            grvDroids.Columns.Add(new GridColumn { HeaderText = "In-Game Name", DataCell = new TextBoxCell("InGameName"), Editable = false, Sortable = true, Width = 200 });
-
-            filterText.TextChanged += (s, e) =>
-            {
-                var filterItems = (filterText.Text ?? "").Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-                // Set the filter delegate on the GridView
-                grvDroids.Filter = (filterItems.Length == 0) ? (Func<object, bool>)null : o =>
-                {
-                    var i = o as MyGridItem;
-                    var matches = true;
-
-                    // Every item in the split filter string should be within the Text property
-                    matches = filterItems.Any(f => i.InternalName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) != -1 ||
-                        i.InGameName.IndexOf(f, StringComparison.CurrentCultureIgnoreCase) != -1);
-
-                    return matches;
-                };
-            };
-
-            mainLayout.Add (grvDroids);
-            return mainLayout;
-        }
-
-
-        Control ToolGroupBox() {
-            var control = new GroupBox { Text = "Tool" };
-            var nLayout1 = new DynamicLayout ();
-            var rbList = new RadioButtonList { Orientation = RadioButtonListOrientation.Vertical };
-            rbList.Items.Add(new ListItem { Text = "Place" });
-            rbList.Items.Add(new ListItem { Text = "Lines" });
-            rbList.SelectedIndex = 0;
-            nLayout1.Add (rbList);
-
-            control.Content = nLayout1;
-            return control;
-        }*/
 	}
 }
 

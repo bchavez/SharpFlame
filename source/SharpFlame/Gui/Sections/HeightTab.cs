@@ -1,7 +1,5 @@
 using System;
-using System.Windows.Forms.VisualStyles;
 using Eto;
-using Eto.Drawing;
 using Eto.Forms;
 using Ninject;
 using SharpFlame.Core;
@@ -10,15 +8,14 @@ using Z.ExtensionMethods.Object;
 
 namespace SharpFlame.Gui.Sections
 {
-	public static class HeightPresetGroup
-	{
-		public const string Left = "LEFT";
-		public const string Right = "RIGHT";
-	}
-
-
 	public class HeightTab : TabPage
 	{
+		public enum PresetGroup
+		{
+			Left,
+			Right
+		}
+
         [Inject]
         internal Options UiOptions { get; set; }
 
@@ -74,12 +71,12 @@ namespace SharpFlame.Gui.Sections
 
 			NumericUpDown upDownContext = null;
 			TableLayout presetGroup = null;
-			if( preset.Tag.To<string>() == HeightPresetGroup.Left )
+			if( preset.Tag.To<PresetGroup>() == PresetGroup.Left )
 			{
 				upDownContext = this.numLeftClick;
 				presetGroup = this.tblLeftPresets;
 			}
-			else if( preset.Tag.To<string>() == HeightPresetGroup.Right )
+			else if( preset.Tag.To<PresetGroup>() == PresetGroup.Right )
 			{
 				upDownContext = this.numRightClick;
 				presetGroup = this.tblRightPresets;
@@ -119,13 +116,13 @@ namespace SharpFlame.Gui.Sections
 
 			var value = Convert.ToInt32(preset.Text);
 
-			if( preset.Tag.To<string>() == HeightPresetGroup.Left )
+			if( preset.Tag.To<PresetGroup>() == PresetGroup.Left )
 			{
 
 				this.tblLeftPresets.DataContext = preset;
 				this.numLeftClick.Value = value;
 			}
-			else if( preset.Tag.To<string>() == HeightPresetGroup.Right )
+			else if( preset.Tag.To<PresetGroup>() == PresetGroup.Right )
 			{
 				this.tblRightPresets.DataContext = preset;
 				this.numRightClick.Value = value;
