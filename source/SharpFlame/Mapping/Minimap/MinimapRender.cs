@@ -5,6 +5,7 @@ using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Domain;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Maths;
+using SharpFlame.MouseTools;
 
 namespace SharpFlame.Mapping.Minimap
 {
@@ -18,7 +19,7 @@ namespace SharpFlame.Mapping.Minimap
             }
             return App.PlayerColour[colourUnitGroup.WZ_StartPos].MinimapColour;
         }
-        public static void FillTexture(MinimapTexture texture, Map myMap, UiOptions.MinimapOpts miniOpts, Settings.SettingsManager settings)
+        public static void FillTexture(MinimapTexture texture, Map myMap, MinimapOpts miniOpts, Settings.SettingsManager settings)
         {
             if( myMap == null )
             {

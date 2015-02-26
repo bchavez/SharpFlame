@@ -19,9 +19,9 @@ using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
+using SharpFlame.MouseTools;
 using SharpFlame.Painters;
 using SharpFlame.Util;
-using SharpFlame.UiOptions;
 
 namespace SharpFlame.Mapping
 {

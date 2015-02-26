@@ -5,12 +5,16 @@ using SharpFlame.Core;
 using SharpFlame.Core.Collections;
 using SharpFlame.Core.Domain.Colors;
 using SharpFlame.Mapping.Objects;
+using SharpFlame.MouseTools;
 
 
 namespace SharpFlame.Mapping
 {
     public partial class Map
     {
+
+
+
         public clsUnitGroup ScavengerUnitGroup;
         public ConnectedList<clsUnitGroup, Map> UnitGroups;
         public ConnectedList<Unit, Map> Units;
@@ -147,17 +151,17 @@ namespace SharpFlame.Mapping
             return null;
         }
 
-        public void SetObjectCreatorDefaults(clsUnitCreate objectCreator)
+        public void SetObjectCreatorDefaults(clsUnitCreate objectCreator, PlaceObjectOptions placeObject)
         {
             objectCreator.Map = this;
 
-            objectCreator.ObjectTypeBase = Program.frmMainInstance.SingleSelectedObjectTypeBase;
-            objectCreator.AutoWalls = Program.frmMainInstance.cbxAutoWalls.Checked;
+            objectCreator.ObjectTypeBase = placeObject.SingleSelectedObjectTypeBase;
+            objectCreator.AutoWalls = placeObject.AutoWalls;
             objectCreator.UnitGroup = SelectedUnitGroup.Item;
             try
             {
-                var Rotation = 0;
-                IOUtil.InvariantParse(Program.frmMainInstance.txtNewObjectRotation.Text, ref Rotation);
+	            var Rotation = Convert.ToInt32(placeObject.Rotation);
+
                 if ( Rotation < 0 | Rotation > 359 )
                 {
                     objectCreator.Rotation = 0;
@@ -171,7 +175,7 @@ namespace SharpFlame.Mapping
             {
                 objectCreator.Rotation = 0;
             }
-            objectCreator.RandomizeRotation = Program.frmMainInstance.cbxObjectRandomRotation.Checked;
+            objectCreator.RandomizeRotation = placeObject.RotationRandom;
         }
     }
 }

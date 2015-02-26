@@ -17,10 +17,9 @@ using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
+using SharpFlame.MouseTools;
 using SharpFlame.Util;
 using SharpFlame.Settings;
-using SharpFlame.UiOptions;
-
 
 
 namespace SharpFlame
@@ -71,17 +70,17 @@ namespace SharpFlame
 		}
 
         private readonly KeyboardManager keyboardManager;
-        private readonly Options uiOptions;
+        private readonly ToolOptions toolOptions;
         private readonly SettingsManager settings;
         private readonly IEventBroker broker;
         private readonly UITimer tmrMouseMove;
 
         private bool enableMouseMove = false;
 
-        public ViewInfo(KeyboardManager kbm, Options argUiOptions, SettingsManager argSettings, IEventBroker broker)
+        public ViewInfo(KeyboardManager kbm, ToolOptions toolOptions, SettingsManager argSettings, IEventBroker broker)
         {
             this.keyboardManager = kbm;
-            this.uiOptions = argUiOptions;
+            this.toolOptions = toolOptions;
             this.settings = argSettings;
             this.broker = broker;
 
@@ -599,7 +598,7 @@ namespace SharpFlame
                 {
                     Map = Map, VertexTerrain = App.SelectedTerrain
                 };
-            uiOptions.Terrain.Brush.PerformActionMapVertices(applyVertexTerrain, mouseOverTerrain.Vertex);
+            toolOptions.Terrain.Brush.PerformActionMapVertices(applyVertexTerrain, mouseOverTerrain.Vertex);
 
             broker.UpdateMap(this);
             broker.DrawLater(this);
@@ -1028,15 +1027,15 @@ namespace SharpFlame
             var applyTexture = new clsApplyTexture
             {
                 Map = Map,
-                TextureNum = uiOptions.Textures.SelectedTile,
-                SetTexture = uiOptions.Textures.SetTexture,
-                Orientation = RelativeToViewAngle(uiOptions.Textures.TextureOrientation),
-                RandomOrientation = uiOptions.Textures.Randomize,
-                SetOrientation = uiOptions.Textures.SetOrientation,
-                TerrainAction = uiOptions.Textures.TerrainMode
+                TextureNum = toolOptions.Textures.SelectedTile,
+                SetTexture = toolOptions.Textures.SetTexture,
+                Orientation = RelativeToViewAngle(toolOptions.Textures.TextureOrientation),
+                RandomOrientation = toolOptions.Textures.Randomize,
+                SetOrientation = toolOptions.Textures.SetOrientation,
+                TerrainAction = toolOptions.Textures.TerrainMode
             };
 
-            uiOptions.Textures.Brush.PerformActionMapTiles(applyTexture, mouseOverTerrain.Tile);
+            toolOptions.Textures.Brush.PerformActionMapTiles(applyTexture, mouseOverTerrain.Tile);
 
             broker.UpdateMap(this);
             broker.DrawLater(this);
@@ -1134,7 +1133,7 @@ namespace SharpFlame
             }
             applyCliff.Angle = MathUtil.ClampDbl(angle * MathUtil.RadOf1Deg, 0.0D, MathUtil.RadOf90Deg);
             applyCliff.SetTris = Program.frmMainInstance.cbxCliffTris.Checked;
-            uiOptions.Terrain.CliffBrush.PerformActionMapTiles(applyCliff, mouseOverTerrain.Tile);
+            toolOptions.Terrain.CliffBrush.PerformActionMapTiles(applyCliff, mouseOverTerrain.Tile);
 
             broker.UpdateMap(this);
             broker.DrawLater(this);
@@ -1150,7 +1149,7 @@ namespace SharpFlame
             }
 
             var applyCliffRemove = new clsApplyCliffRemove {Map = Map};
-            uiOptions.Terrain.CliffBrush.PerformActionMapTiles(applyCliffRemove, mouseOverTerrain.Tile);
+            toolOptions.Terrain.CliffBrush.PerformActionMapTiles(applyCliffRemove, mouseOverTerrain.Tile);
 
             broker.UpdateMap(this);
             broker.DrawLater(this);
@@ -1166,7 +1165,7 @@ namespace SharpFlame
             }
 
             var applyRoadRemove = new clsApplyRoadRemove {Map = Map};
-            uiOptions.Terrain.CliffBrush.PerformActionMapTiles(applyRoadRemove, mouseOverTerrain.Tile);
+            toolOptions.Terrain.CliffBrush.PerformActionMapTiles(applyRoadRemove, mouseOverTerrain.Tile);
 
             broker.UpdateMap(this);
             broker.DrawLater(this);
@@ -1184,7 +1183,7 @@ namespace SharpFlame
             var tile = mouseOverTerrain.Tile.Normal;
 
             Map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.RotateClockwise();
-            Map.TileTextureChangeTerrainAction(tile, uiOptions.Textures.TerrainMode);
+            Map.TileTextureChangeTerrainAction(tile, toolOptions.Textures.TerrainMode);
 
             Map.SectorGraphicsChanges.TileChanged(tile);
             Map.SectorTerrainUndoChanges.TileChanged(tile);
@@ -1208,7 +1207,7 @@ namespace SharpFlame
             var tile = mouseOverTerrain.Tile.Normal;
 
             Map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.RotateAntiClockwise();
-            Map.TileTextureChangeTerrainAction(tile, uiOptions.Textures.TerrainMode);
+            Map.TileTextureChangeTerrainAction(tile, toolOptions.Textures.TerrainMode);
 
             Map.SectorGraphicsChanges.TileChanged(tile);
             Map.SectorTerrainUndoChanges.TileChanged(tile);
@@ -1232,7 +1231,7 @@ namespace SharpFlame
             var tile = mouseOverTerrain.Tile.Normal;
 
             Map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.XFlip = !Map.Terrain.Tiles[tile.X, tile.Y].Texture.Orientation.XFlip;
-            Map.TileTextureChangeTerrainAction(tile, uiOptions.Textures.TerrainMode);
+            Map.TileTextureChangeTerrainAction(tile, toolOptions.Textures.TerrainMode);
 
             Map.SectorGraphicsChanges.TileChanged(tile);
             Map.SectorTerrainUndoChanges.TileChanged(tile);
@@ -1279,8 +1278,8 @@ namespace SharpFlame
             var applyHeightSmoothing = new clsApplyHeightSmoothing();
             applyHeightSmoothing.Map = Map;
             applyHeightSmoothing.Ratio = ratio;
-            var radius = Convert.ToInt32(Math.Ceiling(uiOptions.Height.Brush.Radius));
-            var posNum = uiOptions.Height.Brush.GetPosNum(mouseOverTerrain.Vertex);
+            var radius = Convert.ToInt32(Math.Ceiling(toolOptions.Height.Brush.Radius));
+            var posNum = toolOptions.Height.Brush.GetPosNum(mouseOverTerrain.Vertex);
             applyHeightSmoothing.Offset.X = MathUtil.ClampInt(posNum.X - radius, 0, Map.Terrain.TileSize.X);
             applyHeightSmoothing.Offset.Y = MathUtil.ClampInt(posNum.Y - radius, 0, Map.Terrain.TileSize.Y);
             var posEnd = new XYInt
@@ -1291,7 +1290,7 @@ namespace SharpFlame
             applyHeightSmoothing.AreaTileSize.X = posEnd.X - applyHeightSmoothing.Offset.X;
             applyHeightSmoothing.AreaTileSize.Y = posEnd.Y - applyHeightSmoothing.Offset.Y;
             applyHeightSmoothing.Start();
-            uiOptions.Height.Brush.PerformActionMapVertices(applyHeightSmoothing, mouseOverTerrain.Vertex);
+            toolOptions.Height.Brush.PerformActionMapVertices(applyHeightSmoothing, mouseOverTerrain.Vertex);
             applyHeightSmoothing.Finish();
 
             broker.UpdateMap(this);
@@ -1310,8 +1309,8 @@ namespace SharpFlame
             var applyHeightChange = new clsApplyHeightChange();
             applyHeightChange.Map = Map;
             applyHeightChange.Rate = rate;
-            applyHeightChange.UseEffect = uiOptions.Height.ChangeFade;
-            uiOptions.Height.Brush.PerformActionMapVertices(applyHeightChange, mouseOverTerrain.Vertex);
+            applyHeightChange.UseEffect = toolOptions.Height.ChangeFade;
+            toolOptions.Height.Brush.PerformActionMapVertices(applyHeightChange, mouseOverTerrain.Vertex);
 
             broker.UpdateMap(this);
             broker.DrawLater(this);
@@ -1510,7 +1509,7 @@ namespace SharpFlame
 
                     if ( MouseLeftDown != null )
                     {
-                        if (uiOptions.MouseTool == MouseTool.TerrainBrush)
+                        if (toolOptions.MouseTool == MouseTool.TerrainBrush)
                         {
                             ApplyTerrain();
                             // TODO: implement me.
@@ -1519,45 +1518,45 @@ namespace SharpFlame
 //                                applyHeightSet(App.TerrainBrush, (byte)uiOptions.Height.LmbHeight);
 //                            }
                         }
-                        else if (uiOptions.MouseTool == MouseTool.HeightSetBrush)
+                        else if (toolOptions.MouseTool == MouseTool.HeightSetBrush)
                         {
-                            applyHeightSet(uiOptions.Height.Brush, (byte)uiOptions.Height.LmbHeight);
+                            applyHeightSet(toolOptions.Height.Brush, (byte)toolOptions.Height.LmbHeight);
                         }
-                        else if (uiOptions.MouseTool == MouseTool.TextureBrush)
+                        else if (toolOptions.MouseTool == MouseTool.TextureBrush)
                         {
                             ApplyTexture();
                         }
-                        else if (uiOptions.MouseTool == MouseTool.CliffTriangle)
+                        else if (toolOptions.MouseTool == MouseTool.CliffTriangle)
                         {
                             ApplyCliffTriangle(false);
                         }
-                        else if (uiOptions.MouseTool == MouseTool.CliffBrush)
+                        else if (toolOptions.MouseTool == MouseTool.CliffBrush)
                         {
                             ApplyCliff();
                         }
-                        else if (uiOptions.MouseTool == MouseTool.CliffRemove)
+                        else if (toolOptions.MouseTool == MouseTool.CliffRemove)
                         {
                             ApplyCliffRemove();
                         }
-                        else if (uiOptions.MouseTool == MouseTool.RoadPlace)
+                        else if (toolOptions.MouseTool == MouseTool.RoadPlace)
                         {
                             ApplyRoad();
                         }
-                        else if (uiOptions.MouseTool == MouseTool.RoadRemove)
+                        else if (toolOptions.MouseTool == MouseTool.RoadRemove)
                         {
                             applyRoadRemove();
                         }
                     }
                     if ( MouseRightDown != null )
                     {
-                        if (uiOptions.MouseTool == MouseTool.HeightSetBrush)
+                        if (toolOptions.MouseTool == MouseTool.HeightSetBrush)
                         {
                             if ( MouseLeftDown == null )
                             {
-                                applyHeightSet(uiOptions.Height.Brush, (byte)uiOptions.Height.RmbHeight);
+                                applyHeightSet(toolOptions.Height.Brush, (byte)toolOptions.Height.RmbHeight);
                             }
                         }
-                        else if (uiOptions.MouseTool == MouseTool.CliffTriangle)
+                        else if (toolOptions.MouseTool == MouseTool.CliffTriangle)
                         {
                             ApplyCliffTriangle(true);
                         }
@@ -1584,43 +1583,43 @@ namespace SharpFlame
                 }
                 else
                 {
-                    if (uiOptions.MouseTool == MouseTool.TerrainBrush)
+                    if (toolOptions.MouseTool == MouseTool.TerrainBrush)
                     {
                         Map.UndoStepCreate("Ground Painted");
                     }
-                    else if (uiOptions.MouseTool == MouseTool.CliffTriangle)
+                    else if (toolOptions.MouseTool == MouseTool.CliffTriangle)
                     {
                         Map.UndoStepCreate("Cliff Triangles");
                     }
-                    else if (uiOptions.MouseTool == MouseTool.CliffBrush)
+                    else if (toolOptions.MouseTool == MouseTool.CliffBrush)
                     {
                         Map.UndoStepCreate("Cliff Brush");
                     }
-                    else if (uiOptions.MouseTool == MouseTool.CliffRemove)
+                    else if (toolOptions.MouseTool == MouseTool.CliffRemove)
                     {
                         Map.UndoStepCreate("Cliff Remove Brush");
                     }
-                    else if (uiOptions.MouseTool == MouseTool.HeightChangeBrush)
+                    else if (toolOptions.MouseTool == MouseTool.HeightChangeBrush)
                     {
                         Map.UndoStepCreate("Height Change");
                     }
-                    else if (uiOptions.MouseTool == MouseTool.HeightSetBrush)
+                    else if (toolOptions.MouseTool == MouseTool.HeightSetBrush)
                     {
                         Map.UndoStepCreate("Height Set");
                     }
-                    else if (uiOptions.MouseTool == MouseTool.HeightSmoothBrush)
+                    else if (toolOptions.MouseTool == MouseTool.HeightSmoothBrush)
                     {
                         Map.UndoStepCreate("Height Smooth");
                     }
-                    else if (uiOptions.MouseTool == MouseTool.TextureBrush)
+                    else if (toolOptions.MouseTool == MouseTool.TextureBrush)
                     {
                         Map.UndoStepCreate("Texture");
                     }
-                    else if (uiOptions.MouseTool == MouseTool.RoadRemove)
+                    else if (toolOptions.MouseTool == MouseTool.RoadRemove)
                     {
                         Map.UndoStepCreate("Road Remove");
                     }
-                    else if (uiOptions.MouseTool == MouseTool.ObjectSelect)
+                    else if (toolOptions.MouseTool == MouseTool.ObjectSelect)
                     {
                         if ( Map.UnitSelectedAreaVertexA != null )
                         {
@@ -1641,11 +1640,11 @@ namespace SharpFlame
                 }
                 else
                 {
-                    if (uiOptions.MouseTool == MouseTool.HeightChangeBrush)
+                    if (toolOptions.MouseTool == MouseTool.HeightChangeBrush)
                     {
                         Map.UndoStepCreate("Height Change");
                     }
-                    else if (uiOptions.MouseTool == MouseTool.HeightSetBrush)
+                    else if (toolOptions.MouseTool == MouseTool.HeightSetBrush)
                     {
                         Map.UndoStepCreate("Height Set");
                     }
@@ -1688,7 +1687,7 @@ namespace SharpFlame
                             {
                                 DownPos = mouseOverTerrain.Pos
                             };
-                        if (uiOptions.MouseTool == MouseTool.ObjectSelect)
+                        if (toolOptions.MouseTool == MouseTool.ObjectSelect)
                         {
                             if (keyboardManager.Keys[KeyboardKeys.Picker].Active)
                             {
@@ -1725,7 +1724,7 @@ namespace SharpFlame
                                 broker.DrawLater(this);
                             }
                         }
-                        else if (uiOptions.MouseTool == MouseTool.TerrainBrush)
+                        else if (toolOptions.MouseTool == MouseTool.TerrainBrush)
                         {
                             if ( Map.Tileset != null )
                             {
@@ -1738,12 +1737,12 @@ namespace SharpFlame
                                     ApplyTerrain();
                                     if ( Program.frmMainInstance.cbxAutoTexSetHeight.Checked )
                                     {
-                                        applyHeightSet(uiOptions.Terrain.Brush, (byte)uiOptions.Height.LmbHeight);
+                                        applyHeightSet(toolOptions.Terrain.Brush, (byte)toolOptions.Height.LmbHeight);
                                     }
                                 }
                             }
                         }
-                        else if (uiOptions.MouseTool == MouseTool.HeightSetBrush)
+                        else if (toolOptions.MouseTool == MouseTool.HeightSetBrush)
                         {
                             if (keyboardManager.Keys[KeyboardKeys.Picker].Active)
                             {
@@ -1751,10 +1750,10 @@ namespace SharpFlame
                             }
                             else
                             {
-                                applyHeightSet(uiOptions.Height.Brush, (byte)uiOptions.Height.LmbHeight);
+                                applyHeightSet(toolOptions.Height.Brush, (byte)toolOptions.Height.LmbHeight);
                             }
                         }
-                        else if (uiOptions.MouseTool == MouseTool.TextureBrush)
+                        else if (toolOptions.MouseTool == MouseTool.TextureBrush)
                         {
                             if ( Map.Tileset != null )
                             {
@@ -1768,19 +1767,19 @@ namespace SharpFlame
                                 }
                             }
                         }
-                        else if (uiOptions.MouseTool == MouseTool.CliffTriangle)
+                        else if (toolOptions.MouseTool == MouseTool.CliffTriangle)
                         {
                             ApplyCliffTriangle(false);
                         }
-                        else if (uiOptions.MouseTool == MouseTool.CliffBrush)
+                        else if (toolOptions.MouseTool == MouseTool.CliffBrush)
                         {
                             ApplyCliff();
                         }
-                        else if (uiOptions.MouseTool == MouseTool.CliffRemove)
+                        else if (toolOptions.MouseTool == MouseTool.CliffRemove)
                         {
                             ApplyCliffRemove();
                         }
-                        else if (uiOptions.MouseTool == MouseTool.TerrainFill)
+                        else if (toolOptions.MouseTool == MouseTool.TerrainFill)
                         {
                             if ( Map.Tileset != null )
                             {
@@ -1795,30 +1794,30 @@ namespace SharpFlame
                                 }
                             }
                         }
-                        else if (uiOptions.MouseTool == MouseTool.RoadPlace)
+                        else if (toolOptions.MouseTool == MouseTool.RoadPlace)
                         {
                             if ( Map.Tileset != null )
                             {
                                 ApplyRoad();
                             }
                         }
-                        else if (uiOptions.MouseTool == MouseTool.RoadLines)
+                        else if (toolOptions.MouseTool == MouseTool.RoadLines)
                         {
                             if ( Map.Tileset != null )
                             {
                                 ApplyRoadLineSelection();
                             }
                         }
-                        else if (uiOptions.MouseTool == MouseTool.RoadRemove)
+                        else if (toolOptions.MouseTool == MouseTool.RoadRemove)
                         {
                             applyRoadRemove();
                         }
-                        else if (uiOptions.MouseTool == MouseTool.ObjectPlace)
+                        else if (toolOptions.MouseTool == MouseTool.ObjectPlace)
                         {
-                            if ( Program.frmMainInstance.SingleSelectedObjectTypeBase != null && Map.SelectedUnitGroup != null )
+                            if ( this.toolOptions.PlaceObject.SingleSelectedObjectTypeBase != null && Map.SelectedUnitGroup != null )
                             {
                                 var objectCreator = new clsUnitCreate();
-                                Map.SetObjectCreatorDefaults(objectCreator);
+                                Map.SetObjectCreatorDefaults(objectCreator, toolOptions.PlaceObject);
                                 objectCreator.Horizontal = mouseOverTerrain.Pos.Horizontal;
                                 objectCreator.Perform();
                                 Map.UndoStepCreate("Place Object");
@@ -1826,11 +1825,11 @@ namespace SharpFlame
                                 broker.DrawLater(this);
                             }
                         }
-                        else if (uiOptions.MouseTool == MouseTool.ObjectLines)
+                        else if (toolOptions.MouseTool == MouseTool.ObjectLines)
                         {
                             applyObjectLine();
                         }
-                        else if (uiOptions.MouseTool == MouseTool.TerrainSelect)
+                        else if (toolOptions.MouseTool == MouseTool.TerrainSelect)
                         {
                             if ( Map.SelectedAreaVertexA == null )
                             {
@@ -1849,12 +1848,12 @@ namespace SharpFlame
                                 broker.DrawLater(this);
                             }
                         }
-                        else if (uiOptions.MouseTool == MouseTool.Gateways)
+                        else if (toolOptions.MouseTool == MouseTool.Gateways)
                         {
                             applyGateway();
                         }
                     }
-                    else if (uiOptions.MouseTool == MouseTool.ObjectSelect)
+                    else if (toolOptions.MouseTool == MouseTool.ObjectSelect)
                     {
                         Map.SelectedUnits.Clear();
                         Program.frmMainInstance.SelectedObject_Changed();
@@ -1878,28 +1877,28 @@ namespace SharpFlame
                         MouseRightDown.OverTerrain.DownPos = mouseOverTerrain.Pos;
                     }
                 }
-                if (uiOptions.MouseTool == MouseTool.RoadLines || uiOptions.MouseTool == MouseTool.ObjectLines)
+                if (toolOptions.MouseTool == MouseTool.RoadLines || toolOptions.MouseTool == MouseTool.ObjectLines)
                 {
                     Map.SelectedTileA = null;
                     broker.DrawLater(this);
                 }
-                else if (uiOptions.MouseTool == MouseTool.TerrainSelect)
+                else if (toolOptions.MouseTool == MouseTool.TerrainSelect)
                 {
                     Map.SelectedAreaVertexA = null;
                     Map.SelectedAreaVertexB = null;
                     broker.DrawLater(this);
                 }
-                else if (uiOptions.MouseTool == MouseTool.CliffTriangle)
+                else if (toolOptions.MouseTool == MouseTool.CliffTriangle)
                 {
                     ApplyCliffTriangle(true);
                 }
-                else if (uiOptions.MouseTool == MouseTool.Gateways)
+                else if (toolOptions.MouseTool == MouseTool.Gateways)
                 {
                     Map.SelectedTileA = null;
                     Map.SelectedTileB = null;
                     broker.DrawLater(this);
                 }
-                else if (uiOptions.MouseTool == MouseTool.HeightSetBrush)
+                else if (toolOptions.MouseTool == MouseTool.HeightSetBrush)
                 {
                     if (keyboardManager.Keys[KeyboardKeys.Picker].Active)
                     {
@@ -1907,7 +1906,7 @@ namespace SharpFlame
                     }
                     else
                     {
-                        applyHeightSet(uiOptions.Height.Brush, (byte)uiOptions.Height.RmbHeight);
+                        applyHeightSet(toolOptions.Height.Brush, (byte)toolOptions.Height.RmbHeight);
                     }
                 }
             }
@@ -2227,29 +2226,29 @@ namespace SharpFlame
                 return;
             }
 
-            if (uiOptions.MouseTool == MouseTool.HeightSmoothBrush)
+            if (toolOptions.MouseTool == MouseTool.HeightSmoothBrush)
             {
                 if ( GetMouseLeftDownOverTerrain() != null )
                 {
-                    ApplyHeightSmoothing(MathUtil.ClampDbl(uiOptions.Height.SmoothRate * 0.1D, 0.0D, 1.0D));
+                    ApplyHeightSmoothing(MathUtil.ClampDbl(toolOptions.Height.SmoothRate * 0.1D, 0.0D, 1.0D));
                 }
             }
-            else if (uiOptions.MouseTool == MouseTool.HeightChangeBrush)
+            else if (toolOptions.MouseTool == MouseTool.HeightChangeBrush)
             {
                 if ( GetMouseLeftDownOverTerrain() != null )
                 {
-                    applyHeightChange(MathUtil.ClampDbl(uiOptions.Height.ChangeRate, -255.0D, 255.0D));
+                    applyHeightChange(MathUtil.ClampDbl(toolOptions.Height.ChangeRate, -255.0D, 255.0D));
                 }
                 else if ( GetMouseRightDownOverTerrain() != null )
                 {
-                    applyHeightChange(MathUtil.ClampDbl(Convert.ToDouble(-uiOptions.Height.ChangeRate), -255.0D, 255.0D));
+                    applyHeightChange(MathUtil.ClampDbl(Convert.ToDouble(-toolOptions.Height.ChangeRate), -255.0D, 255.0D));
                 }
             }
         }
 
         private void applyObjectLine()
         {
-            if ( Program.frmMainInstance.SingleSelectedObjectTypeBase != null && Map.SelectedUnitGroup != null )
+            if ( this.toolOptions.PlaceObject.SingleSelectedObjectTypeBase != null && Map.SelectedUnitGroup != null )
             {
                 var mouseOverTerrian = GetMouseOverTerrain();
 
@@ -2278,7 +2277,7 @@ namespace SharpFlame
                             b = tile.Y;
                         }
                         var objectCreator = new clsUnitCreate();
-                        Map.SetObjectCreatorDefaults(objectCreator);
+                        Map.SetObjectCreatorDefaults(objectCreator, this.toolOptions.PlaceObject);
                         for ( num = a; num <= b; num++ )
                         {
                             objectCreator.Horizontal.X = Convert.ToInt32((tile.X + 0.5D) * Constants.TerrainGridSpacing);
@@ -2304,7 +2303,7 @@ namespace SharpFlame
                             b = tile.X;
                         }
                         var objectCreator = new clsUnitCreate();
-                        Map.SetObjectCreatorDefaults(objectCreator);
+                        Map.SetObjectCreatorDefaults(objectCreator, this.toolOptions.PlaceObject);
                         for ( num = a; num <= b; num++ )
                         {
                             objectCreator.Horizontal.X = Convert.ToInt32((num + 0.5D) * Constants.TerrainGridSpacing);

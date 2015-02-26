@@ -1,4 +1,4 @@
-namespace SharpFlame.UiOptions
+namespace SharpFlame.MouseTools
 {
     public class TerrainOptions
     {

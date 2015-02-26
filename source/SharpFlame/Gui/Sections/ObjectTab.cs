@@ -5,14 +5,14 @@ using Ninject;
 using SharpFlame.Core;
 using SharpFlame.Gui.Controls;
 using SharpFlame;
-using SharpFlame.UiOptions;
+using SharpFlame.MouseTools;
 
 namespace SharpFlame.Gui.Sections
 {
     public class ObjectTab : Panel
     {
         [Inject]
-        internal Options UiOptions { get; set; }
+        internal ToolOptions ToolOptions { get; set; }
 
         public ObjectTab ()
         {
@@ -105,7 +105,7 @@ namespace SharpFlame.Gui.Sections
 
             // Set Mousetool, when we are shown.
             Shown += delegate {
-                UiOptions.MouseTool = MouseTool.ObjectSelect;
+                ToolOptions.MouseTool = MouseTool.ObjectSelect;
             };
         }
     }

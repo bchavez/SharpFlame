@@ -13,7 +13,7 @@ using SharpFlame.Core.Extensions;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping;
 using SharpFlame.Maths;
-using SharpFlame.UiOptions;
+using SharpFlame.MouseTools;
 using Z.ExtensionMethods.Object;
 
 namespace SharpFlame.Gui.Sections
@@ -21,7 +21,7 @@ namespace SharpFlame.Gui.Sections
 	public class ResizeTab : TabPage
 	{
         [Inject]
-        public Options UiOptions { get; set; }
+        public ToolOptions ToolOptions { get; set; }
 
         [Inject]
         public IEventBroker EventBroker { get; set; }
@@ -130,7 +130,7 @@ namespace SharpFlame.Gui.Sections
 
             // Set Mousetool, when we are shown.
             this.Shown += delegate {
-                UiOptions.MouseTool = MouseTool.Default;
+                ToolOptions.MouseTool = MouseTool.Default;
             };
         }
 	}

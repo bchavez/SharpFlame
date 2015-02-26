@@ -1,7 +1,6 @@
 
 
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -9,34 +8,28 @@ using System.IO;
 using System.Windows.Forms;
 using Ninject;
 using NLog;
-using OpenTK.Graphics.OpenGL;
 using SharpFlame.Bitmaps;
-using SharpFlame.Collections;
 using SharpFlame.Core.Extensions;
-using SharpFlame.Gui;
 using SharpFlame.Mapping.IO.Minimap;
 using SharpFlame.Controls;
 using SharpFlame.Core;
 using SharpFlame.Core.Collections;
 using SharpFlame.Core.Domain;
 using SharpFlame.Domain;
-using SharpFlame.Domain.ObjData;
 using SharpFlame.FileIO;
 using SharpFlame.Generators;
 using SharpFlame.Mapping;
-using SharpFlame.Mapping.IO.FMap;
 using SharpFlame.Mapping.IO.Heightmap;
 using SharpFlame.Mapping.IO.LND;
 using SharpFlame.Mapping.IO.TTP;
-using SharpFlame.Mapping.IO.Wz;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Script;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
+using SharpFlame.MouseTools;
 using SharpFlame.Painters;
 using SharpFlame.Util;
-using SharpFlame.UiOptions;
 using SharpFlame.Settings;
 
 
@@ -741,61 +734,61 @@ namespace SharpFlame
         {
             if ( TabControl.SelectedTab == tpTextures )
             {
-                App.UiOptions.MouseTool = MouseTool.TextureBrush;
+                App.ToolOptions.MouseTool = MouseTool.TextureBrush;
                 TextureViewControl.DrawViewLater();
             }
             else if ( TabControl.SelectedTab == tpHeight )
             {
                 if ( rdoHeightSet.Checked )
                 {
-                    App.UiOptions.MouseTool = MouseTool.HeightSetBrush;
+                    App.ToolOptions.MouseTool = MouseTool.HeightSetBrush;
                 }
                 else if ( rdoHeightSmooth.Checked )
                 {
-                    App.UiOptions.MouseTool = MouseTool.HeightSmoothBrush;
+                    App.ToolOptions.MouseTool = MouseTool.HeightSmoothBrush;
                 }
                 else if ( rdoHeightChange.Checked )
                 {
-                    App.UiOptions.MouseTool = MouseTool.HeightChangeBrush;
+                    App.ToolOptions.MouseTool = MouseTool.HeightChangeBrush;
                 }
             }
             else if ( TabControl.SelectedTab == tpAutoTexture )
             {
                 if ( rdoAutoTexturePlace.Checked )
                 {
-                    App.UiOptions.MouseTool = MouseTool.TerrainBrush;
+                    App.ToolOptions.MouseTool = MouseTool.TerrainBrush;
                 }
                 else if ( rdoAutoRoadPlace.Checked )
                 {
-                    App.UiOptions.MouseTool = MouseTool.RoadPlace;
+                    App.ToolOptions.MouseTool = MouseTool.RoadPlace;
                 }
                 else if ( rdoCliffTriBrush.Checked )
                 {
-                    App.UiOptions.MouseTool = MouseTool.CliffTriangle;
+                    App.ToolOptions.MouseTool = MouseTool.CliffTriangle;
                 }
                 else if ( rdoAutoCliffBrush.Checked )
                 {
-                    App.UiOptions.MouseTool = MouseTool.CliffBrush;
+                    App.ToolOptions.MouseTool = MouseTool.CliffBrush;
                 }
                 else if ( rdoAutoCliffRemove.Checked )
                 {
-                    App.UiOptions.MouseTool = MouseTool.CliffRemove;
+                    App.ToolOptions.MouseTool = MouseTool.CliffRemove;
                 }
                 else if ( rdoAutoTextureFill.Checked )
                 {
-                    App.UiOptions.MouseTool = MouseTool.TerrainFill;
+                    App.ToolOptions.MouseTool = MouseTool.TerrainFill;
                 }
                 else if ( rdoAutoRoadLine.Checked )
                 {
-                    App.UiOptions.MouseTool = MouseTool.RoadLines;
+                    App.ToolOptions.MouseTool = MouseTool.RoadLines;
                 }
                 else if ( rdoRoadRemove.Checked )
                 {
-                    App.UiOptions.MouseTool = MouseTool.RoadRemove;
+                    App.ToolOptions.MouseTool = MouseTool.RoadRemove;
                 }
                 else
                 {
-                    App.UiOptions.MouseTool = MouseTool.ObjectSelect;
+                    App.ToolOptions.MouseTool = MouseTool.ObjectSelect;
                 }
             }
             else if ( TabControl.SelectedTab == tpObjects )
@@ -803,20 +796,20 @@ namespace SharpFlame
                 ObjectsUpdate();
                 if ( rdoObjectPlace.Checked )
                 {
-                    App.UiOptions.MouseTool = MouseTool.ObjectPlace;
+                    App.ToolOptions.MouseTool = MouseTool.ObjectPlace;
                 }
                 else if ( rdoObjectLines.Checked )
                 {
-                    App.UiOptions.MouseTool = MouseTool.ObjectLines;
+                    App.ToolOptions.MouseTool = MouseTool.ObjectLines;
                 }
                 else
                 {
-                    App.UiOptions.MouseTool = MouseTool.ObjectSelect;
+                    App.ToolOptions.MouseTool = MouseTool.ObjectSelect;
                 }
             }
             else
             {
-                App.UiOptions.MouseTool = MouseTool.ObjectSelect;
+                App.ToolOptions.MouseTool = MouseTool.ObjectSelect;
             }
         }
 
@@ -827,7 +820,7 @@ namespace SharpFlame
                 rdoHeightSmooth.Checked = false;
                 rdoHeightChange.Checked = false;
 
-                App.UiOptions.MouseTool = MouseTool.HeightSetBrush;
+                App.ToolOptions.MouseTool = MouseTool.HeightSetBrush;
             }
         }
 
@@ -838,7 +831,7 @@ namespace SharpFlame
                 rdoHeightSet.Checked = false;
                 rdoHeightSmooth.Checked = false;
 
-                App.UiOptions.MouseTool = MouseTool.HeightChangeBrush;
+                App.ToolOptions.MouseTool = MouseTool.HeightChangeBrush;
             }
         }
 
@@ -849,7 +842,7 @@ namespace SharpFlame
                 rdoHeightSet.Checked = false;
                 rdoHeightChange.Checked = false;
 
-                App.UiOptions.MouseTool = MouseTool.HeightSmoothBrush;
+                App.ToolOptions.MouseTool = MouseTool.HeightSmoothBrush;
             }
         }
 
@@ -1091,12 +1084,12 @@ namespace SharpFlame
 
         public void rdoAutoCliffRemove_Click(Object sender, EventArgs e)
         {
-            App.UiOptions.MouseTool = MouseTool.CliffRemove;
+            App.ToolOptions.MouseTool = MouseTool.CliffRemove;
         }
 
         public void rdoAutoCliffBrush_Click(Object sender, EventArgs e)
         {
-            App.UiOptions.MouseTool = MouseTool.CliffBrush;
+            App.ToolOptions.MouseTool = MouseTool.CliffBrush;
         }
 
         public void MinimapBMPToolStripMenuItem_Click(Object sender, EventArgs e)
@@ -1127,7 +1120,7 @@ namespace SharpFlame
 
         public void rdoAutoTextureFill_CheckedChanged(Object sender, EventArgs e)
         {
-            App.UiOptions.MouseTool = MouseTool.TerrainFill;
+            App.ToolOptions.MouseTool = MouseTool.TerrainFill;
         }
 
         public void btnHeightOffsetSelection_Click(Object sender, EventArgs e)
@@ -1180,17 +1173,17 @@ namespace SharpFlame
 
         public void rdoAutoTexturePlace_Click(Object sender, EventArgs e)
         {
-            App.UiOptions.MouseTool = MouseTool.TerrainBrush;
+            App.ToolOptions.MouseTool = MouseTool.TerrainBrush;
         }
 
         public void rdoAutoRoadPlace_Click(Object sender, EventArgs e)
         {
-            App.UiOptions.MouseTool = MouseTool.RoadPlace;
+            App.ToolOptions.MouseTool = MouseTool.RoadPlace;
         }
 
         public void rdoAutoRoadLine_Click(Object sender, EventArgs e)
         {
-            App.UiOptions.MouseTool = MouseTool.RoadLines;
+            App.ToolOptions.MouseTool = MouseTool.RoadLines;
             var Map = MainMap;
             if ( Map != null )
             {
@@ -1201,7 +1194,7 @@ namespace SharpFlame
 
         public void rdoRoadRemove_Click(Object sender, EventArgs e)
         {
-            App.UiOptions.MouseTool = MouseTool.RoadRemove;
+            App.ToolOptions.MouseTool = MouseTool.RoadRemove;
         }
 
         public void btnAutoRoadRemove_Click(Object sender, EventArgs e)
@@ -1800,7 +1793,7 @@ namespace SharpFlame
 
         public void tsbSelection_Click(Object sender, EventArgs e)
         {
-            App.UiOptions.MouseTool = MouseTool.TerrainSelect;
+            App.ToolOptions.MouseTool = MouseTool.TerrainSelect;
         }
 
         public void tsbSelectionCopy_Click(Object sender, EventArgs e)
@@ -1958,16 +1951,16 @@ namespace SharpFlame
 
         public void tsbGateways_Click(Object sender, EventArgs e)
         {
-            if ( App.UiOptions.MouseTool == MouseTool.Gateways )
+            if ( App.ToolOptions.MouseTool == MouseTool.Gateways )
             {
                 App.Draw_Gateways = false;
-                App.UiOptions.MouseTool = MouseTool.ObjectSelect;
+                App.ToolOptions.MouseTool = MouseTool.ObjectSelect;
                 tsbGateways.Checked = false;
             }
             else
             {
                 App.Draw_Gateways = true;
-                App.UiOptions.MouseTool = MouseTool.Gateways;
+                App.ToolOptions.MouseTool = MouseTool.Gateways;
                 tsbGateways.Checked = true;
             }
             var Map = MainMap;
@@ -2259,7 +2252,7 @@ namespace SharpFlame
                 return;
             }
 
-            if ( !(App.UiOptions.MouseTool == MouseTool.TerrainBrush || App.UiOptions.MouseTool == MouseTool.TerrainFill) )
+            if ( !(App.ToolOptions.MouseTool == MouseTool.TerrainBrush || App.ToolOptions.MouseTool == MouseTool.TerrainFill) )
             {
                 rdoAutoTexturePlace.Checked = true;
                 rdoAutoTexturePlace_Click(null, null);
@@ -2268,7 +2261,7 @@ namespace SharpFlame
 
         public void lstAutoRoad_Click(Object sender, EventArgs e)
         {
-            if ( !(App.UiOptions.MouseTool == MouseTool.RoadPlace || App.UiOptions.MouseTool == MouseTool.RoadLines) )
+            if ( !(App.ToolOptions.MouseTool == MouseTool.RoadPlace || App.ToolOptions.MouseTool == MouseTool.RoadLines) )
             {
                 rdoAutoRoadLine.Checked = true;
                 rdoAutoRoadLine_Click(null, null);
@@ -2405,7 +2398,7 @@ namespace SharpFlame
             }
 
             SelectedObject_Changed();
-            App.UiOptions.MouseTool = MouseTool.ObjectSelect;
+            App.ToolOptions.MouseTool = MouseTool.ObjectSelect;
             View_DrawViewLater();
         }
 
@@ -3227,7 +3220,7 @@ namespace SharpFlame
 
         public void rdoCliffTriBrush_CheckedChanged(Object sender, EventArgs e)
         {
-            App.UiOptions.MouseTool = MouseTool.CliffTriangle;
+            App.ToolOptions.MouseTool = MouseTool.CliffTriangle;
         }
 
         public void MainMapAfterChanged()
@@ -3305,7 +3298,7 @@ namespace SharpFlame
 
         public void ObjectPicker(UnitTypeBase unitTypeBase)
         {
-            App.UiOptions.MouseTool = MouseTool.ObjectPlace;
+            App.ToolOptions.MouseTool = MouseTool.ObjectPlace;
 //            if ( !KeyboardManager.KeyboardProfile.Active(KeyboardManager.UnitMultiselect) )
 //            {
 //                dgvFeatures.ClearSelection();
@@ -4041,23 +4034,23 @@ namespace SharpFlame
 
         public void rdoObjectPlace_Click(Object sender, EventArgs e)
         {
-            App.UiOptions.MouseTool = MouseTool.ObjectPlace;
+            App.ToolOptions.MouseTool = MouseTool.ObjectPlace;
         }
 
         public void rdoObjectLine_Click(Object sender, EventArgs e)
         {
-            App.UiOptions.MouseTool = MouseTool.ObjectLines;
+            App.ToolOptions.MouseTool = MouseTool.ObjectLines;
         }
 
         private void ActivateObjectTool()
         {
             if ( rdoObjectPlace.Checked )
             {
-                App.UiOptions.MouseTool = MouseTool.ObjectPlace;
+                App.ToolOptions.MouseTool = MouseTool.ObjectPlace;
             }
             else if ( rdoObjectLines.Checked )
             {
-                App.UiOptions.MouseTool = MouseTool.ObjectLines;
+                App.ToolOptions.MouseTool = MouseTool.ObjectLines;
             }
         }
 

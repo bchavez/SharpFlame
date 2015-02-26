@@ -21,10 +21,10 @@ using SharpFlame.Mapping;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Maths;
+using SharpFlame.MouseTools;
 using SharpFlame.Painters;
 using SharpFlame.Settings;
 using SharpFlame.Util;
-using SharpFlame.UiOptions;
 
 
 namespace SharpFlame
@@ -132,7 +132,7 @@ namespace SharpFlame
         // TODO: Remove these once everthing uses ninject.
         public static SettingsManager SettingsManager { get; set; }
         public static KeyboardManager KeyboardManager { get; set; } 
-        public static Options UiOptions { get; set; }
+        public static ToolOptions ToolOptions { get; set; }
 
         /// <summary>
         /// Holder for the Status form.

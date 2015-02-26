@@ -10,6 +10,7 @@ using SharpFlame.Core.Domain;
 using SharpFlame.Core.Extensions;
 using SharpFlame.Mapping.Minimap;
 using SharpFlame.Maths;
+using SharpFlame.MouseTools;
 using SharpFlame.Settings;
 
 namespace SharpFlame.Mapping.IO.Minimap
@@ -22,7 +23,7 @@ namespace SharpFlame.Mapping.IO.Minimap
         internal SettingsManager Settings { get; set; }
 
         [Inject]
-        internal UiOptions.MinimapOpts MiniOpts { get; set; }
+        internal MinimapOpts MiniOpts { get; set; }
 
         public MinimapSaver(ILoggerFactory logFactory)
         {

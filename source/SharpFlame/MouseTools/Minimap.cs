@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq.Expressions;
 
-namespace SharpFlame.UiOptions
+namespace SharpFlame.MouseTools
 {
     public class MinimapOpts : INotifyPropertyChanged
     {

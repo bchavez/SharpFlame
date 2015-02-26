@@ -6,8 +6,8 @@ using SharpFlame.Mapping.IO.FMap;
 using SharpFlame.Mapping.IO.LND;
 using SharpFlame.Mapping.IO.TTP;
 using SharpFlame.Mapping.IO.Wz;
+using SharpFlame.MouseTools;
 using SharpFlame.Settings;
-using SharpFlame.UiOptions;
 
 namespace SharpFlame.Infrastructure
 {
@@ -34,7 +34,7 @@ namespace SharpFlame.Infrastructure
 		        .InSingletonScope()
 		        .RegisterOnGlobalEventBroker();
 
-            this.Bind<Options>()
+            this.Bind<ToolOptions>()
                 .ToSelf()
                 .InSingletonScope();
                 

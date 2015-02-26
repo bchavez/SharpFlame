@@ -130,7 +130,7 @@ namespace SharpFlame
             this.tpObjects = new System.Windows.Forms.TabPage();
             this.TableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.Panel1 = new System.Windows.Forms.Panel();
-            this.btnPlayerSelectObjects = new System.Windows.Forms.Button();
+			this.btnPlayerSelectObjects = new System.Windows.Forms.Button();
             this.Label44 = new System.Windows.Forms.Label();
             this.GroupBox3 = new System.Windows.Forms.GroupBox();
             this.rdoObjectPlace = new System.Windows.Forms.RadioButton();

@@ -3,7 +3,7 @@ using Eto;
 using Eto.Forms;
 using Ninject;
 using SharpFlame.Core;
-using SharpFlame.UiOptions;
+using SharpFlame.MouseTools;
 using Z.ExtensionMethods.Object;
 
 namespace SharpFlame.Gui.Sections
@@ -17,7 +17,7 @@ namespace SharpFlame.Gui.Sections
 		}
 
         [Inject]
-        internal Options UiOptions { get; set; }
+        internal ToolOptions ToolOptions { get; set; }
 
         protected NumericUpDown numRadius;
 
@@ -52,15 +52,15 @@ namespace SharpFlame.Gui.Sections
 
 	        this.numRadius.MaxValue = Constants.MapMaxSize;
 	        this.numRadius.Increment = 0.5;
-	        this.numRadius.ValueBinding.Bind(UiOptions.Height.Brush, b => b.Radius);
+	        this.numRadius.ValueBinding.Bind(ToolOptions.Height.Brush, b => b.Radius);
 
-	        this.numLeftClick.ValueBinding.Bind(UiOptions.Height, h => h.LmbHeight);
-	        this.numRightClick.ValueBinding.Bind(UiOptions.Height, h => h.RmbHeight);
+	        this.numLeftClick.ValueBinding.Bind(ToolOptions.Height, h => h.LmbHeight);
+	        this.numRightClick.ValueBinding.Bind(ToolOptions.Height, h => h.RmbHeight);
 
-	        this.numIncrDecr.ValueBinding.Bind(UiOptions.Height, h => h.ChangeRate);
-	        this.chkIncrDecrFade.CheckedBinding.Bind(UiOptions.Height, h => h.ChangeFade);
+	        this.numIncrDecr.ValueBinding.Bind(ToolOptions.Height, h => h.ChangeRate);
+	        this.chkIncrDecrFade.CheckedBinding.Bind(ToolOptions.Height, h => h.ChangeFade);
 
-	        this.numSmoothRate.ValueBinding.Bind(UiOptions.Height, h => h.SmoothRate);
+	        this.numSmoothRate.ValueBinding.Bind(ToolOptions.Height, h => h.SmoothRate);
         }
 
 
@@ -137,7 +137,7 @@ namespace SharpFlame.Gui.Sections
 				this.cmdSquareTool.Enabled = true;
 				this.cmdCircularTool.BackgroundColor = Eto.Drawing.Colors.Coral;
 				this.cmdSquareTool.BackgroundColor = Eto.Drawing.Colors.Transparent;
-				this.UiOptions.Height.Brush.Shape = ShapeType.Circle;
+				this.ToolOptions.Height.Brush.Shape = ShapeType.Circle;
 				
 			}
 			else if( sender == this.cmdSquareTool )
@@ -146,7 +146,7 @@ namespace SharpFlame.Gui.Sections
 				this.cmdSquareTool.Enabled = false;
 				this.cmdCircularTool.BackgroundColor = Eto.Drawing.Colors.Transparent;
 				this.cmdSquareTool.BackgroundColor = Eto.Drawing.Colors.Coral; 
-				this.UiOptions.Height.Brush.Shape = ShapeType.Square;
+				this.ToolOptions.Height.Brush.Shape = ShapeType.Square;
 			}
 		}
 
@@ -154,15 +154,15 @@ namespace SharpFlame.Gui.Sections
 		{
 			if( this.ddlMode.SelectedIndex == 0 )
 			{
-				UiOptions.MouseTool = MouseTool.HeightSetBrush;
+				ToolOptions.MouseTool = MouseTool.HeightSetBrush;
 			}
 			else if( this.ddlMode.SelectedIndex == 1 )
 			{
-				UiOptions.MouseTool = MouseTool.HeightChangeBrush;
+				ToolOptions.MouseTool = MouseTool.HeightChangeBrush;
 			}
 			else if( this.ddlMode.SelectedIndex == 2 )
 			{
-				UiOptions.MouseTool = MouseTool.HeightSmoothBrush;
+				ToolOptions.MouseTool = MouseTool.HeightSmoothBrush;
 			}
 		}
 	}

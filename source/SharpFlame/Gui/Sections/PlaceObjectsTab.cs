@@ -12,13 +12,34 @@ using Ninject.Extensions.Logging;
 using SharpFlame.Core;
 using SharpFlame.Domain;
 using SharpFlame.Domain.ObjData;
+using SharpFlame.MouseTools;
 using SharpFlame.Settings;
-using SharpFlame.UiOptions;
 using Z.ExtensionMethods;
 using Z.ExtensionMethods.Object;
 
 namespace SharpFlame.Gui.Sections
 {
+
+	public class PlaceObjectGridViewItem
+	{
+		public PlaceObjectGridViewItem(UnitTypeBase obj)
+		{
+			string code = null;
+			obj.GetCode(ref code);
+			this.InternalName = code;
+			this.InGameName = obj.GetName().Replace("*", "");
+			this.UnitBaseType = obj;
+		}
+
+		public UnitTypeBase UnitBaseType { get; set; }
+
+		public string InternalName { get; set; }
+		public string InGameName { get; set; }
+	}
+
+	public class PlaceObjectGridView : GridView<PlaceObjectGridViewItem>
+	{
+	}
 
 	public class PlaceObjectsTab : TabPage
 	{
@@ -30,7 +51,7 @@ namespace SharpFlame.Gui.Sections
 		}
 
         [Inject]
-        internal Options UiOptions { get; set; }
+        internal ToolOptions ToolOptions { get; set; }
 
 		[Inject]
 		internal SettingsManager SettingsManager { get; set; }
@@ -98,9 +119,9 @@ namespace SharpFlame.Gui.Sections
 	        this.cmdPlaceRow.Image = Resources.Line;
 
 			this.SettingsManager.ObjectDataDirectories.CollectionChanged += ObjectDataDirectories_CollectionChanged;
-			this.features = new FilterCollection<GridViewItem>();
-			this.structs = new FilterCollection<GridViewItem>();
-			this.droids = new FilterCollection<GridViewItem>();
+			this.features = new FilterCollection<PlaceObjectGridViewItem>();
+			this.structs = new FilterCollection<PlaceObjectGridViewItem>();
+			this.droids = new FilterCollection<PlaceObjectGridViewItem>();
 			
 		
 	        /*PlayerSelector playerSelector;
@@ -171,28 +192,29 @@ namespace SharpFlame.Gui.Sections
 			gDroids.Columns.Add(new GridColumn { HeaderText = "In-Game Name", DataCell = new TextBoxCell("InGameName"), Editable = false, Sortable = true });
         }
 
-
-
-
 		private Panel panDroids;
 		private Panel panStructs;
 		private Panel panFeatures;
 
-		private GridView gFeatures;
-		private GridView gStructures;
-		private GridView gDroids;
+		private PlaceObjectGridView gFeatures;
+		private PlaceObjectGridView gStructures;
+		private PlaceObjectGridView gDroids;
 
 		protected override void OnPreLoad(EventArgs e)
 		{
 			base.OnPreLoad(e);
 			
 			this.nRotation.Bind(n => n.Enabled, this.chkRandom.CheckedBinding.Convert(g => !g.Value));
+			this.nRotation.ValueBinding.Bind(this.ToolOptions.PlaceObject, p => p.Rotation);
+			this.chkAutoWalls.CheckedBinding.Bind(this.ToolOptions.PlaceObject, p => p.AutoWalls);
+			this.chkRandom.CheckedBinding.Bind(this.ToolOptions.PlaceObject, p => p.RotationRandom);
+			this.chkRotateFootprints.CheckedBinding.Bind(this.ToolOptions.PlaceObject, p => p.RotateFootprints);
 		}
 
 		public void RefreshGridViews()
 		{
 			var objFeatures = App.ObjectData.FeatureTypes.GetItemsAsSimpleList()
-				.ConvertAll(f => new GridViewItem(f));
+				.ConvertAll(f => new PlaceObjectGridViewItem(f));
 
 			this.features.Clear();
 			this.features.AddRange(objFeatures);
@@ -201,7 +223,7 @@ namespace SharpFlame.Gui.Sections
 
 
 			var objStrcuts = App.ObjectData.StructureTypes.GetItemsAsSimpleList()
-				.ConvertAll(f => new GridViewItem(f));
+				.ConvertAll(f => new PlaceObjectGridViewItem(f));
 
 			this.structs.Clear();
 			this.structs.AddRange(objStrcuts);
@@ -210,7 +232,7 @@ namespace SharpFlame.Gui.Sections
 
 
 			var objDroids = App.ObjectData.DroidTemplates.GetItemsAsSimpleList()
-				.ConvertAll(f => new GridViewItem(f));
+				.ConvertAll(f => new PlaceObjectGridViewItem(f));
 
 			this.droids.Clear();
 			this.droids.AddRange(objDroids);
@@ -224,7 +246,7 @@ namespace SharpFlame.Gui.Sections
 
 		    this.Shown += (sender, args) =>
 			    {
-				    UiOptions.MouseTool = MouseTool.Default;
+				    ToolOptions.MouseTool = MouseTool.Default;
 			    };
         }
 
@@ -240,18 +262,14 @@ namespace SharpFlame.Gui.Sections
 			
 		}
 
-		
-
 		void AnyGrid_SelectionChanged(object sender, EventArgs e)
 		{
-			var grid = sender as GridView;
-			var types = grid.SelectedItems.Cast<GridViewItem>()
-				.Select(gvi => gvi.UnitBaseType);
+			var grid = sender as PlaceObjectGridView;
+			var types = grid.SelectedItems
+				.Select(gvi => gvi.UnitBaseType).ToList();
 			
 			//NULL reference here.... not sure how to resolve this yet.
-			Program.frmMainInstance.SelectedObjectTypes.Clear();
-
-			types.ForEach(u => Program.frmMainInstance.SelectedObjectTypes.Add(u.UnitType_frmMainSelectedLink));
+			this.ToolOptions.PlaceObject.SelectedObjectTypes = types;
 
 			this.EventBroker.DrawLater(this);
 		}
@@ -262,13 +280,13 @@ namespace SharpFlame.Gui.Sections
 
 			var tool = button.Tag.To<MouseTool>();
 
-			UiOptions.MouseTool = tool;
+			ToolOptions.MouseTool = tool;
 		}
 
 
-		private FilterCollection<GridViewItem> features;
-		private FilterCollection<GridViewItem> structs;
-		private FilterCollection<GridViewItem> droids; 
+		private FilterCollection<PlaceObjectGridViewItem> features;
+		private FilterCollection<PlaceObjectGridViewItem> structs;
+		private FilterCollection<PlaceObjectGridViewItem> droids; 
 
 		void Filter_KeyUp(object sender, KeyEventArgs e)
 		{
@@ -276,7 +294,7 @@ namespace SharpFlame.Gui.Sections
 
 			var searchType = search.Tag.To<FilterType>();
 
-			FilterCollection<GridViewItem> collection = null;
+			FilterCollection<PlaceObjectGridViewItem> collection = null;
 			if( searchType == FilterType.Feature)
 			{
 				collection = features;
@@ -304,22 +322,6 @@ namespace SharpFlame.Gui.Sections
 				};
 		}
 
-		public class GridViewItem
-		{
-			public GridViewItem(UnitTypeBase obj)
-			{
-				string code = null;
-				obj.GetCode(ref code);
-				this.InternalName = code;
-				this.InGameName = obj.GetName().Replace("*", "");
-				this.UnitBaseType = obj;
-			}
-
-			public UnitTypeBase UnitBaseType { get; set; }
-
-			public string InternalName { get; set; }
-			public string InGameName { get; set; }
-		}
 
 	}
 }

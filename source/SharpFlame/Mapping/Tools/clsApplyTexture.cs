@@ -1,8 +1,8 @@
 
 
 using SharpFlame.Mapping.Tiles;
+using SharpFlame.MouseTools;
 using SharpFlame.Util;
-using SharpFlame.UiOptions;
 
 
 namespace SharpFlame.Mapping.Tools

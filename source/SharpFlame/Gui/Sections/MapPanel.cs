@@ -20,8 +20,8 @@ using SharpFlame.Mapping;
 using SharpFlame.Mapping.Minimap;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
+using SharpFlame.MouseTools;
 using SharpFlame.Settings;
-using SharpFlame.UiOptions;
 using SharpFlame.Util;
 
 namespace SharpFlame.Gui.Sections
@@ -64,11 +64,11 @@ namespace SharpFlame.Gui.Sections
 				this.UpdateMap();
 
 				// Change the tileset in the TexturesView.
-				UiOptions.Textures.TilesetNum = App.Tilesets.IndexOf(mainMap.Tileset);
+				ToolOptions.Textures.TilesetNum = App.Tilesets.IndexOf(mainMap.Tileset);
 			}
 			else
 			{
-				UiOptions.Textures.TilesetNum = -1;
+				ToolOptions.Textures.TilesetNum = -1;
 			}
 			SetViewPort();
 			this.minimapGl.HandleMapLoad(mainMap);
@@ -87,7 +87,7 @@ namespace SharpFlame.Gui.Sections
 		private MinimapGl minimapGl;
         
 		[Inject]
-		internal Options UiOptions { get; set; }
+		internal ToolOptions ToolOptions { get; set; }
 
 		private UITimer timDraw;
 		private UITimer timKey;
@@ -140,7 +140,7 @@ namespace SharpFlame.Gui.Sections
 
 		protected override void OnPreLoad(EventArgs e)
 		{
-			this.minimapGl = new MinimapGl(this.Settings, this.UiOptions, this.GLSurface);
+			this.minimapGl = new MinimapGl(this.Settings, this.ToolOptions, this.GLSurface);
 			this.ParentWindow.GotFocus += ParentWindow_GotFocus;
 			base.OnPreLoad(e);
 		}
@@ -231,51 +231,51 @@ namespace SharpFlame.Gui.Sections
 
 			var cmiTextures = new CheckMenuItem(new CheckCommand {
 				MenuText = "Show Textures",
-				Checked = UiOptions.MinimapOpts.Textures
+				Checked = ToolOptions.MinimapOpts.Textures
 			});
 			cmiTextures.Click += delegate
 				{
-					UiOptions.MinimapOpts.Textures = !UiOptions.MinimapOpts.Textures;
+					ToolOptions.MinimapOpts.Textures = !ToolOptions.MinimapOpts.Textures;
 				};
 			menu.Items.Add(cmiTextures);
 
 			var cmiHeights = new CheckMenuItem(new CheckCommand {
 				MenuText = "Show Heights",
-				Checked = UiOptions.MinimapOpts.Heights
+				Checked = ToolOptions.MinimapOpts.Heights
 			});
 			cmiHeights.Click += delegate
 				{
-					UiOptions.MinimapOpts.Heights = !UiOptions.MinimapOpts.Heights;
+					ToolOptions.MinimapOpts.Heights = !ToolOptions.MinimapOpts.Heights;
 				};
 			menu.Items.Add(cmiHeights);
 
 			var cmiCliffs = new CheckMenuItem(new CheckCommand {
 				MenuText = "Show Cliffs",
-				Checked = UiOptions.MinimapOpts.Cliffs
+				Checked = ToolOptions.MinimapOpts.Cliffs
 			});
 			cmiCliffs.Click += delegate
 				{
-					UiOptions.MinimapOpts.Cliffs = !UiOptions.MinimapOpts.Cliffs;
+					ToolOptions.MinimapOpts.Cliffs = !ToolOptions.MinimapOpts.Cliffs;
 				};
 			menu.Items.Add(cmiCliffs);
 
 			var cmiObjects = new CheckMenuItem(new CheckCommand {
 				MenuText = "Show Objects",
-				Checked = UiOptions.MinimapOpts.Objects
+				Checked = ToolOptions.MinimapOpts.Objects
 			});
 			cmiObjects.Click += delegate
 				{
-					UiOptions.MinimapOpts.Objects = !UiOptions.MinimapOpts.Objects;
+					ToolOptions.MinimapOpts.Objects = !ToolOptions.MinimapOpts.Objects;
 				};
 			menu.Items.Add(cmiObjects);
 
 			var cmiGateways = new CheckMenuItem(new CheckCommand {
 				MenuText = "Show Gateways",
-				Checked = UiOptions.MinimapOpts.Gateways
+				Checked = ToolOptions.MinimapOpts.Gateways
 			});
 			cmiGateways.Click += delegate
 				{
-					UiOptions.MinimapOpts.Gateways = !UiOptions.MinimapOpts.Gateways;
+					ToolOptions.MinimapOpts.Gateways = !ToolOptions.MinimapOpts.Gateways;
 				};
 			menu.Items.Add(cmiGateways);
 
@@ -470,7 +470,7 @@ namespace SharpFlame.Gui.Sections
 							GlSize = this.GLSurface.Size,
 							MinimapGl = this.minimapGl,
 							ViewInfo = this.ViewInfo,
-							Options = this.UiOptions
+							ToolOptions = this.ToolOptions
 						});
 				}
 				catch( Exception ex )
@@ -755,7 +755,7 @@ namespace SharpFlame.Gui.Sections
 			}
 
 			var mouseOverTerrain = ViewInfo.GetMouseOverTerrain();
-			if (UiOptions.MouseTool == MouseTool.TextureBrush)
+			if (ToolOptions.MouseTool == MouseTool.TextureBrush)
 			{
 				if ( mouseOverTerrain != null )
 				{
@@ -777,7 +777,7 @@ namespace SharpFlame.Gui.Sections
 					}
 				}
 			}
-			if (UiOptions.MouseTool == MouseTool.ObjectSelect)
+			if (ToolOptions.MouseTool == MouseTool.ObjectSelect)
 			{
 				if (KeyboardManager.Keys[KeyboardKeys.DeleteObjects].Active)
 				{
@@ -848,7 +848,7 @@ namespace SharpFlame.Gui.Sections
 
 			if (KeyboardManager.Keys[KeyboardKeys.ObjectSelectTool].Active)
 			{
-				UiOptions.MouseTool = MouseTool.ObjectSelect;
+				ToolOptions.MouseTool = MouseTool.ObjectSelect;
 				DrawLater();
 			}
 		}

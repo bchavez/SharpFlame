@@ -498,12 +498,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Gui\Resources.cs" />
     <Compile Include="ViewInfo.cs" />
-    <Compile Include="UiOptions\Options.cs" />
+    <Compile Include="MouseTools\Options.cs" />
     <Compile Include="Mapping\Minimap\MinimapTexture.cs" />
-    <Compile Include="UiOptions\Textures.cs" />
-    <Compile Include="UiOptions\Minimap.cs" />
-    <Compile Include="UiOptions\TerrainOptions.cs" />
-    <Compile Include="UiOptions\HeightOptions.cs" />
+    <Compile Include="MouseTools\Textures.cs" />
+    <Compile Include="MouseTools\Minimap.cs" />
+    <Compile Include="MouseTools\TerrainOptions.cs" />
+    <Compile Include="MouseTools\HeightOptions.cs" />
     <Compile Include="Updater.cs" />
     <Compile Include="Extensions\AsyncExtensions.cs" />
     <Compile Include="Mapping\IO\IIOLoaderSaver.cs" />

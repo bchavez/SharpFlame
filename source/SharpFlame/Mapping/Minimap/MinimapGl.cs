@@ -8,6 +8,7 @@ using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Core.Extensions;
+using SharpFlame.MouseTools;
 using SharpFlame.Settings;
 
 namespace SharpFlame.Mapping.Minimap
@@ -61,9 +62,9 @@ namespace SharpFlame.Mapping.Minimap
 
         private readonly UITimer timer;
         private readonly SettingsManager settings;
-        private readonly UiOptions.MinimapOpts miniOpts;
+        private readonly MinimapOpts miniOpts;
 
-        public MinimapGl(SettingsManager argSettings, UiOptions.Options opts, GLSurface mapGl)
+        public MinimapGl(SettingsManager argSettings, ToolOptions opts, GLSurface mapGl)
         {
             this.GLSurface = mapGl;
             settings = argSettings;

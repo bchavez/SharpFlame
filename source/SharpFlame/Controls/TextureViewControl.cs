@@ -11,9 +11,8 @@ using SharpFlame.Core.Domain;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
+using SharpFlame.MouseTools;
 using SharpFlame.Util;
-using SharpFlame.UiOptions;
-
 
 
 namespace SharpFlame.Controls
@@ -382,7 +381,7 @@ namespace SharpFlame.Controls
                 }
                 else
                 {
-                    App.UiOptions.MouseTool = MouseTool.TextureBrush;
+                    App.ToolOptions.MouseTool = MouseTool.TextureBrush;
                 }
             }
             else

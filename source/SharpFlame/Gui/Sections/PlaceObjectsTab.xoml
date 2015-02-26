@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <TabPage xmlns="clr-namespace:Eto.Forms;assembly=Eto"
          xmlns:s="clr-namespace:SharpFlame.Gui.Sections;assembly=SharpFlame"
-         xmlns:o="clr-namespace:SharpFlame.UiOptions;assembly=SharpFlame"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:o="clr-namespace:SharpFlame.MouseTools;assembly=SharpFlame"
          Text="Place Objects">
     
     <StackLayout>
@@ -89,7 +89,7 @@
                 
                 <TableLayout>
                     <TableRow>
-                        <Button ID="cmdPlaceOne" Text="Place One Object" Click="ToolSelection_Click" Tag="{x:Static o:MouseTool.ObjectLines}" />
+                        <Button ID="cmdPlaceOne" Text="Place One Object" Click="ToolSelection_Click" Tag="{x:Static o:MouseTool.ObjectPlace}" />
                     </TableRow>
                     <TableRow>
                         <Button ID="cmdPlaceRow" Text="Place Row Of Objects" Click="ToolSelection_Click" Tag="{x:Static o:MouseTool.ObjectLines}" />
@@ -127,7 +127,6 @@
             </TableRow>
         </TableLayout>
 
-
         <StackLayoutItem Expand="True" HorizontalAlignment="Stretch">
             <TabControl>
                 <TabPage Text="Features">
@@ -139,7 +138,7 @@
                             </TableRow>
                         </TableLayout>
                         <StackLayoutItem Expand="True" HorizontalAlignment="Stretch">
-                            <GridView ID="gFeatures" SelectionChanged="AnyGrid_SelectionChanged" />
+                            <s:PlaceObjectGridView ID="gFeatures" SelectionChanged="AnyGrid_SelectionChanged" />
                         </StackLayoutItem>
                     </StackLayout>
                 </TabPage>
@@ -153,7 +152,7 @@
                             </TableRow>
                         </TableLayout>
                         <StackLayoutItem Expand="True" HorizontalAlignment="Stretch">
-                            <GridView ID="gStructures" SelectionChanged="AnyGrid_SelectionChanged"/>
+                            <s:PlaceObjectGridView ID="gStructures" SelectionChanged="AnyGrid_SelectionChanged"/>
                         </StackLayoutItem>
                     </StackLayout>
 
@@ -168,7 +167,7 @@
                             </TableRow>
                         </TableLayout>
                         <StackLayoutItem Expand="True" HorizontalAlignment="Stretch">
-                            <GridView ID="gDroids" SelectionChanged="AnyGrid_SelectionChanged"/>
+                            <s:PlaceObjectGridView ID="gDroids" SelectionChanged="AnyGrid_SelectionChanged"/>
                         </StackLayoutItem>
                     </StackLayout>
 

@@ -1,7 +1,7 @@
 using System;
 using SharpFlame.Mapping.Tiles;
 
-namespace SharpFlame.UiOptions
+namespace SharpFlame.MouseTools
 {
     /// <summary>
     /// DO NOT Change: Enumeration of the terrain modes.

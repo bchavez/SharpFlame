@@ -12,7 +12,7 @@ using SharpFlame.Core;
 using SharpFlame.Core.Domain;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Script;
-using SharpFlame.UiOptions;
+using SharpFlame.MouseTools;
 
 
 namespace SharpFlame.Gui.Sections
@@ -20,7 +20,7 @@ namespace SharpFlame.Gui.Sections
     public class LabelsTab : TabPage
     {
         [Inject]
-        internal Options UiOptions { get; set; }
+        internal ToolOptions ToolOptions { get; set; }
 
         [Inject]
         internal IEventBroker EventBroker { get; set; }
@@ -154,7 +154,7 @@ namespace SharpFlame.Gui.Sections
 
             // Set Mousetool, when we are shown.
             Shown += delegate {
-                                  UiOptions.MouseTool = MouseTool.Default;
+                                  ToolOptions.MouseTool = MouseTool.Default;
             };
         }
 
