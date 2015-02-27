@@ -108,6 +108,14 @@ namespace SharpFlame.Gui.Sections
                 ToolOptions.MouseTool = MouseTool.ObjectSelect;
             };
         }
+
+
+
+		public void SelectedObject_Changed()
+		{
+
+		}
+
     }
 }
 

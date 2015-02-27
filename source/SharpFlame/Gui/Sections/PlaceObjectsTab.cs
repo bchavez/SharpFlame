@@ -5,6 +5,7 @@ using System.Linq;
 using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
 using Appccelerate.Events;
+using Eto;
 using Eto.Forms;
 using Eto.Gl;
 using Ninject;
@@ -12,6 +13,9 @@ using Ninject.Extensions.Logging;
 using SharpFlame.Core;
 using SharpFlame.Domain;
 using SharpFlame.Domain.ObjData;
+using SharpFlame.Mapping;
+using SharpFlame.Mapping.Objects;
+using SharpFlame.Mapping.Tools;
 using SharpFlame.MouseTools;
 using SharpFlame.Settings;
 using Z.ExtensionMethods;
@@ -62,12 +66,16 @@ namespace SharpFlame.Gui.Sections
 		[Inject]
 		internal IEventBroker EventBroker { get; set; }
 
+		[Inject]
+		internal KeyboardManager KeyboardManager { get; set; }
+
 		private Button cmdPlaceOne;
 		private Button cmdPlaceRow;
 		private NumericUpDown nRotation;
 		private CheckBox chkRandom;
 		private CheckBox chkRotateFootprints;
 		private CheckBox chkAutoWalls;
+		private GroupBox grpPlayers;
 
 		void ObjectDataDirectories_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
@@ -97,10 +105,33 @@ namespace SharpFlame.Gui.Sections
 			}
 		}
 
+		[EventSubscription(EventTopics.OnMapLoad, typeof(OnPublisher))]
+		public void OnMapLoad(Map args)
+		{
+			this.map = args;
+
+			//load preset groups
+			this.grpPlayers.Controls.OfType<Button>()
+				.ForEach(b =>
+					{
+						if( b.Text.StartsWith("P") )
+						{
+							var player = b.Text.Substring(1).ToInt32();
+							b.Tag = this.map.UnitGroups[player];
+						}
+						else if( b.Text.StartsWith("Scav") )
+						{
+							b.Tag = this.map.ScavengerUnitGroup;
+						}
+					});
+		}
+
+
 		[EventSubscription(EventTopics.OnOpenGLInitalized,typeof(OnPublisher))]
 		public void HandleOpenGlInitalized(object sender, EventArgs<GLSurface> gl)
 		{
-			// Load Object Data.
+			// Load Object Data. We need to know when GL is initialized
+			// because of the texture loading in the object data directory.
 			foreach( var path in this.SettingsManager.ObjectDataDirectories )
 			{
 				if( !string.IsNullOrEmpty(path) )
@@ -123,7 +154,6 @@ namespace SharpFlame.Gui.Sections
 			this.structs = new FilterCollection<PlaceObjectGridViewItem>();
 			this.droids = new FilterCollection<PlaceObjectGridViewItem>();
 			
-		
 	        /*PlayerSelector playerSelector;
             if (this.Platform.IsWinForms)
             {
@@ -200,6 +230,9 @@ namespace SharpFlame.Gui.Sections
 		private PlaceObjectGridView gStructures;
 		private PlaceObjectGridView gDroids;
 
+		private LinkButton cmdSelectAll;
+		private Label lbl;
+
 		protected override void OnPreLoad(EventArgs e)
 		{
 			base.OnPreLoad(e);
@@ -209,6 +242,17 @@ namespace SharpFlame.Gui.Sections
 			this.chkAutoWalls.CheckedBinding.Bind(this.ToolOptions.PlaceObject, p => p.AutoWalls);
 			this.chkRandom.CheckedBinding.Bind(this.ToolOptions.PlaceObject, p => p.RotationRandom);
 			this.chkRotateFootprints.CheckedBinding.Bind(this.ToolOptions.PlaceObject, p => p.RotateFootprints);
+
+			//this.lbl.TextBinding.BindDataContext<Button>(getValue: b =>
+			//	{
+			//		return "Select All {0} Units".FormatWith(b.Text);
+			//	}, setValue: null, mode: DualBindingMode.OneWay, defaultGetValue: "Select All");
+
+			this.cmdSelectAll.TextBinding.BindDataContext<Button>(getValue: b =>
+				{
+					return "Select All {0} Units".FormatWith(b.Text);
+				}, setValue: null, mode: DualBindingMode.OneWay, defaultGetValue:"Select All z");
+			
 		}
 
 		public void RefreshGridViews()
@@ -252,14 +296,70 @@ namespace SharpFlame.Gui.Sections
 
 		private IEnumerable<object> selected;
 
+
 		void AnyPlayer_Click(object sender, EventArgs e)
 		{
+			if( this.map == null )
+				return;
+
+			this.grpPlayers.DataContext = sender;
+
+			if( map.SelectedUnits.Count <= 0 )
+				return;
+
+			var button = sender as Button;
+			var group = button.Tag.To<clsUnitGroup>();
+
+			var objUnitGroup = new clsObjectUnitGroup()
+				{
+					Map = this.map,
+					UnitGroup = group
+				};
 			
+			this.map.SelectedUnitsAction(objUnitGroup);
+
+			this.map.UndoStepCreate("Object Player Changed");
+
+			if( this.SettingsManager.MinimapTeamColours )
+			{
+				this.EventBroker.RefreshMinimap(this);
+			}
+
+			this.EventBroker.DrawLater(this);
 		}
 
 		void AnyPlayer_PreLoad(object sender, EventArgs e)
 		{
-			
+			var button = sender as Button;
+
+			button.Tag = new clsUnitGroup();
+		}
+
+		void cmdSelectAll_Click(object sender, EventArgs e)
+		{
+			if( this.map == null ) return;
+
+			if( !KeyboardManager.Keys[KeyboardKeys.Multiselect].Active )
+			{
+				this.map.SelectedUnits.Clear();
+			}
+
+			var unitGroup = this.map.SelectedUnitGroup.Item;
+
+			foreach( var unit in this.map.Units )
+			{
+				if( unit.UnitGroup == unitGroup )
+				{
+					if( unit.TypeBase.Type != UnitType.Feature )
+					{
+						if( !unit.MapSelectedUnitLink.IsConnected )
+						{
+							unit.MapSelectedUnitLink.Connect(this.map.SelectedUnits);
+						}
+					}
+				}
+			}
+
 		}
 
 		void AnyGrid_SelectionChanged(object sender, EventArgs e)
@@ -268,7 +368,6 @@ namespace SharpFlame.Gui.Sections
 			var types = grid.SelectedItems
 				.Select(gvi => gvi.UnitBaseType).ToList();
 			
-			//NULL reference here.... not sure how to resolve this yet.
 			this.ToolOptions.PlaceObject.SelectedObjectTypes = types;
 
 			this.EventBroker.DrawLater(this);
@@ -286,7 +385,8 @@ namespace SharpFlame.Gui.Sections
 
 		private FilterCollection<PlaceObjectGridViewItem> features;
 		private FilterCollection<PlaceObjectGridViewItem> structs;
-		private FilterCollection<PlaceObjectGridViewItem> droids; 
+		private FilterCollection<PlaceObjectGridViewItem> droids;
+		private Map map;
 
 		void Filter_KeyUp(object sender, KeyEventArgs e)
 		{

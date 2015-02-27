@@ -6,83 +6,95 @@
          Text="Place Objects">
     
     <StackLayout>
-        <Label Text="Place Units For Player:" />
-        
-        <TableLayout>
-            <TableRow>
+        <GroupBox Text="Place Units For Player:" ID="grpPlayers" >
+            <StackLayout>
                 <TableLayout>
                     <TableRow>
-                        <Button ID="pset0" Text="P0" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
-                        <TableCell />
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="pset0" Text="P0" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="pset1" Text="P1" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="pset2" Text="P2"  Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="pset3" Text="P3" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="pset4" Text="P4" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
                     </TableRow>
-                </TableLayout>
-                <TableLayout>
                     <TableRow>
-                        <Button ID="pset1" Text="P1" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
-                        <TableCell />
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="pset5" Text="P5" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="pset6" Text="P6" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="pset7" Text="P7" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="pset8" Text="P8" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="pset9" Text="P9" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="psetscav" Text="Scav" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
                     </TableRow>
                 </TableLayout>
+                <StackLayoutItem Expand="True" HorizontalAlignment="Center">
                 <TableLayout>
-                    <TableRow>
-                        <Button ID="pset2" Text="P2"  Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
-                        <TableCell />
+                    <TableRow ScaleHeight="True">
+                        <Label Text="Action:" ID="lbl"/>
+                        <TableCell ScaleWidth="True">
+                            <LinkButton Text="Select All Units for Player" Click="cmdSelectAll_Click" ID="cmdSelectAll" />
+                        </TableCell>
                     </TableRow>
                 </TableLayout>
-                <TableLayout>
-                    <TableRow>
-                        <Button ID="pset3" Text="P3" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
-                        <TableCell />
-                    </TableRow>
-                </TableLayout>
-                <TableLayout>
-                    <TableRow>
-                        <Button ID="pset4" Text="P4" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
-                        <TableCell />
-                    </TableRow>
-                </TableLayout>
-            </TableRow>
-            <TableRow>
-                <TableLayout>
-                    <TableRow>
-                        <Button ID="pset5" Text="P5" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
-                        <TableCell />
-                    </TableRow>
-                </TableLayout>
-                <TableLayout>
-                    <TableRow>
-                        <Button ID="pset6" Text="P6" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
-                        <TableCell />
-                    </TableRow>
-                </TableLayout>
-                <TableLayout>
-                    <TableRow>
-                        <Button ID="pset7" Text="P7" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
-                        <TableCell />
-                    </TableRow>
-                </TableLayout>
-                <TableLayout>
-                    <TableRow>
-                        <Button ID="pset8" Text="P8" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
-                        <TableCell />
-                    </TableRow>
-                </TableLayout>
-                <TableLayout>
-                    <TableRow>
-                        <Button ID="pset9" Text="P9" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
-                        <TableCell />
-                    </TableRow>
-                </TableLayout>
-                <TableLayout>
-                    <TableRow>
-                        <Button ID="psetscav" Text="Scav" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
-                        <TableCell />
-                    </TableRow>
-                </TableLayout>
+                </StackLayoutItem>
+            </StackLayout>
 
-            </TableRow>
+        </GroupBox>
 
-        </TableLayout>
-
+   
         <TableLayout>
             <TableRow>
                 <Label Text="Tool:"/>
