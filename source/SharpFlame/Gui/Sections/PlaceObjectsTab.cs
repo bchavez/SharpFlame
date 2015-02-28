@@ -111,7 +111,7 @@ namespace SharpFlame.Gui.Sections
 			this.map = args;
 
 			//load preset groups
-			this.grpPlayers.Controls.OfType<Button>()
+			this.grpPlayers.Children.OfType<Button>()
 				.ForEach(b =>
 					{
 						if( b.Text.StartsWith("P") )
@@ -231,7 +231,6 @@ namespace SharpFlame.Gui.Sections
 		private PlaceObjectGridView gDroids;
 
 		private LinkButton cmdSelectAll;
-		private Label lbl;
 
 		protected override void OnPreLoad(EventArgs e)
 		{
@@ -243,16 +242,12 @@ namespace SharpFlame.Gui.Sections
 			this.chkRandom.CheckedBinding.Bind(this.ToolOptions.PlaceObject, p => p.RotationRandom);
 			this.chkRotateFootprints.CheckedBinding.Bind(this.ToolOptions.PlaceObject, p => p.RotateFootprints);
 
-			//this.lbl.TextBinding.BindDataContext<Button>(getValue: b =>
-			//	{
-			//		return "Select All {0} Units".FormatWith(b.Text);
-			//	}, setValue: null, mode: DualBindingMode.OneWay, defaultGetValue: "Select All");
-
 			this.cmdSelectAll.TextBinding.BindDataContext<Button>(getValue: b =>
 				{
 					return "Select All {0} Units".FormatWith(b.Text);
-				}, setValue: null, mode: DualBindingMode.OneWay, defaultGetValue:"Select All z");
+				}, setValue: null, mode: DualBindingMode.OneWay, defaultGetValue:"");
 			
+
 		}
 
 		public void RefreshGridViews()
@@ -304,11 +299,14 @@ namespace SharpFlame.Gui.Sections
 
 			this.grpPlayers.DataContext = sender;
 
-			if( map.SelectedUnits.Count <= 0 )
-				return;
-
 			var button = sender as Button;
 			var group = button.Tag.To<clsUnitGroup>();
+
+			this.map.SelectedUnitGroup.Item = group;
+
+
+			if( map.SelectedUnits.Count <= 0 )
+				return;
 
 			var objUnitGroup = new clsObjectUnitGroup()
 				{
@@ -332,7 +330,21 @@ namespace SharpFlame.Gui.Sections
 		{
 			var button = sender as Button;
 
-			button.Tag = new clsUnitGroup();
+			button.Bind(b => b.Enabled,
+				Binding.Delegate(() => this.grpPlayers.DataContext != button,
+				addChangeEvent: handlerToExecuteWhenSourceChanges => this.grpPlayers.DataContextChanged += handlerToExecuteWhenSourceChanges,
+				removeChangeEvent: handlerToExecuteWhenSourceChanges => this.grpPlayers.DataContextChanged += handlerToExecuteWhenSourceChanges));
+
+			button.Bind(b => b.BackgroundColor, Binding.Delegate(() =>
+			{
+				if( this.grpPlayers.DataContext == button )
+				{
+					return Eto.Drawing.Colors.SkyBlue;
+				}
+				return Eto.Drawing.Colors.Transparent;
+			},
+				addChangeEvent: h => this.grpPlayers.DataContextChanged += h,
+				removeChangeEvent: h => this.grpPlayers.DataContextChanged += h));
 		}
 
 		void cmdSelectAll_Click(object sender, EventArgs e)
@@ -360,6 +372,7 @@ namespace SharpFlame.Gui.Sections
 				}
 			}
 
+			this.EventBroker.DrawLater(this);
 		}
 
 		void AnyGrid_SelectionChanged(object sender, EventArgs e)

@@ -83,7 +83,7 @@
                 <StackLayoutItem Expand="True" HorizontalAlignment="Center">
                 <TableLayout>
                     <TableRow ScaleHeight="True">
-                        <Label Text="Action:" ID="lbl"/>
+                        <Label Text="Action:" />
                         <TableCell ScaleWidth="True">
                             <LinkButton Text="Select All Units for Player" Click="cmdSelectAll_Click" ID="cmdSelectAll" />
                         </TableCell>
