@@ -393,6 +393,20 @@ namespace SharpFlame.Gui.Sections
 			var tool = button.Tag.To<MouseTool>();
 
 			ToolOptions.MouseTool = tool;
+			if( sender == this.cmdPlaceOne )
+			{
+				this.cmdPlaceOne.Enabled = false;
+				this.cmdPlaceRow.Enabled = true;
+				this.cmdPlaceOne.BackgroundColor = Eto.Drawing.Colors.Coral;
+				this.cmdPlaceRow.BackgroundColor = Eto.Drawing.Colors.Transparent;
+			}
+			else if( sender == this.cmdPlaceRow )
+			{
+				this.cmdPlaceRow.Enabled = false;
+				this.cmdPlaceOne.Enabled = true;
+				this.cmdPlaceRow.BackgroundColor = Eto.Drawing.Colors.Coral;
+				this.cmdPlaceOne.BackgroundColor = Eto.Drawing.Colors.Transparent;
+			}
 		}
 
 
