@@ -125,14 +125,14 @@
 
         <TableLayout>
             <TableRow>
-                <Button Text="Convert Templates To Design" />
+                <Button Text="Convert Templates To Design" ID="cmdConvertToDroid" />
                 <CheckBox ID="chkDesignable" Text="Designables Only" Checked="True" />
             </TableRow>
         </TableLayout>
 
 
 
-        <GroupBox Text="Droid Editor" >
+        <GroupBox Text="Droid Editor" ID="grpDroidEditor" >
 
             <TableLayout>
                 <TableRow>

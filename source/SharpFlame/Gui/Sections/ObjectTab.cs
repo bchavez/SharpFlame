@@ -171,11 +171,15 @@ namespace SharpFlame.Gui.Sections
 				{
 					if( m.SelectedUnits.Count == 1 )
 					{
+						this.txtId.Enabled = true;
 						var u = m.SelectedUnits[0];
 						return u.ID.ToStringInvariant();
 					}
+					this.txtId.Enabled = false;
 					return string.Empty;
 				}, setValue: null, mode: DualBindingMode.OneWay);
+
+
 
 			this.txtLabel.TextBinding.BindDataContext<Map>(getValue: m =>
 				{
@@ -187,25 +191,79 @@ namespace SharpFlame.Gui.Sections
 
 						if( labelEnabled )
 						{
+							this.txtLabel.Enabled = true;
 							return u.Label;
 						}
-						return string.Empty;
 					}
+					this.txtLabel.Enabled = false;
 					return string.Empty;
 				}, setValue: null, mode: DualBindingMode.OneWay);
+			//this.txtLabel.BindDataContext(t => t.Enabled, Binding.Delegate((Map m) =>
+			//	{
+			//		if( m.SelectedUnits.Count == 1 )
+			//		{
+			//			var u = m.SelectedUnits[0];
+			//			return u.TypeBase.Type != UnitType.PlayerStructure;
+			//		}
+			//		return false;
+			//	}, setValue: null), mode: DualBindingMode.OneWay);
+
 
 			this.txtHealth.ValueBinding.BindDataContext<Map>(getValue: m =>
 				{
-					//LEFT OFF HERE....
 					if( m.SelectedUnits.Count == 1 )
 					{
+						this.txtHealth.Enabled = true;
+
 						var u = m.SelectedUnits[0];
 						return u.Health;
 					}
+					this.txtHealth.Enabled = false;
 					return 0;
 				}, setValue: null, mode: DualBindingMode.OneWay);
+
+			this.grpDroidEditor.BindDataContext(t => t.Enabled, Binding.Delegate((Map m) =>
+				{
+					if( m.SelectedUnits.Count == 1 )
+					{
+						var u = m.SelectedUnits[0];
+						return u.TypeBase.Type == UnitType.PlayerDroid;
+					}
+					return false;
+				}, setValue: null), mode: DualBindingMode.OneWay);
+
+			this.ddlType.SelectedIndexBinding.BindDataContext(getValue: (Map m) =>
+				{
+					if( m.SelectedUnits.Count == 1 )
+					{
+						//left off here.
+					}
+				}
+				,setValue: null);
+			
+
+
+			this.cmdConvertToDroid.BindDataContext(t => t.Enabled, Binding.Delegate((Map m) =>
+				{
+					if( m.SelectedUnits.Count == 1 )
+					{
+						var u = m.SelectedUnits[0];
+						if( u.TypeBase.Type == UnitType.PlayerDroid )
+						{
+							var drodType = u.TypeBase as DroidDesign;
+							if( drodType.IsTemplate )
+							{
+								return true;
+							}
+						}
+					}
+					return false;
+				}, setValue: null), mode: DualBindingMode.OneWay);
 		}
 
+	    private Button cmdConvertToDroid;
+
+	    private GroupBox grpDroidEditor;
 
         protected override void OnLoadComplete(EventArgs lcEventArgs)
         {
@@ -309,7 +367,7 @@ namespace SharpFlame.Gui.Sections
 
 		    var flatten = new clsObjectFlattenTerrain();
 		    this.map.SelectedUnits.GetItemsAsSimpleClassList().PerformTool(flatten);
-		    this.EventBroker.UpdateMap();
+		    this.EventBroker.UpdateMap(this);
 		    this.map.UndoStepCreate("Flatten Under Structures");
 	    }
 
