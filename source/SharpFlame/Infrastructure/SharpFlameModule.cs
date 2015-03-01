@@ -1,6 +1,6 @@
 using Ninject.Modules;
+using SharpFlame.Generators;
 using SharpFlame.Gui.Actions;
-using SharpFlame.Mapping;
 using SharpFlame.Mapping.IO;
 using SharpFlame.Mapping.IO.FMap;
 using SharpFlame.Mapping.IO.LND;
@@ -30,6 +30,16 @@ namespace SharpFlame.Infrastructure
 		        .RegisterOnGlobalEventBroker();
 
 	        this.Bind<SettingsManager>()
+		        .ToSelf()
+		        .InSingletonScope()
+		        .RegisterOnGlobalEventBroker();
+
+	        this.Bind<ObjectManager>()
+		        .ToSelf()
+		        .InSingletonScope()
+		        .RegisterOnGlobalEventBroker();
+
+	        this.Bind<DefaultGenerator>()
 		        .ToSelf()
 		        .InSingletonScope()
 		        .RegisterOnGlobalEventBroker();

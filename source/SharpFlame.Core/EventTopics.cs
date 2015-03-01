@@ -14,6 +14,8 @@ namespace SharpFlame.Core
 
 	    public const string OnOpenGLInitalized = "topic://GL/Init";
 
+	    public const string OnObjectManagerLoaded = "topic://Object/Loaded";
+
         public static void UpdateMap(this IEventBroker broker, object sender)
         {
             broker.Fire(OnMapUpdate, new OnPublisher(), HandlerRestriction.None, sender, EventArgs.Empty);

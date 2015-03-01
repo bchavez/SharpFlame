@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TabPage xmlns="clr-namespace:Eto.Forms;assembly=Eto"
+         xmlns:s="clr-namespace:SharpFlame.Gui.Sections;assembly=SharpFlame"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:o="clr-namespace:SharpFlame.MouseTools;assembly=SharpFlame"
+         Text="Objects">
+    
+    <StackLayout>
+
+   
+        <GroupBox Text="Object Name:">
+            <Label ID="lblObjectName" Text="No Object Selected" />
+        </GroupBox>
+        
+        <GroupBox ID="grpPlayers" Text="Player:">
+
+            <StackLayout>
+                <TableLayout>
+                    <TableRow>
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="pset0" Text="P0" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="pset1" Text="P1" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="pset2" Text="P2"  Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="pset3" Text="P3" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="pset4" Text="P4" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
+                    </TableRow>
+                    <TableRow>
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="pset5" Text="P5" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="pset6" Text="P6" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="pset7" Text="P7" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="pset8" Text="P8" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="pset9" Text="P9" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click" />
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
+                        <TableLayout>
+                            <TableRow>
+                                <Button ID="psetscav" Text="Scav" Style="toggle" PreLoad="AnyPlayer_PreLoad" Click="AnyPlayer_Click"/>
+                                <TableCell />
+                            </TableRow>
+                        </TableLayout>
+                    </TableRow>
+                </TableLayout>
+            </StackLayout>
+
+        </GroupBox>
+        
+        <GroupBox ID="grpModify" Text="Modify">
+            
+            <TableLayout>
+                <TableRow>
+                    <Label Text="Rotation:" />
+                    <NumericUpDown ID="txtRotation" MinValue="0" MaxValue="359" ValueChanged="txtRotation_ValueChanged" />
+                </TableRow>
+                <TableRow>
+                    <Label Text="ID:" />
+                    <TextBox ID="txtId" ReadOnly="True" />
+                </TableRow>
+                <TableRow>
+                    <Label Text="Label:" />
+                    <TextBox ID="txtLabel" />
+                </TableRow>
+                <TableRow>
+                    <Label Text="Health %:" />
+                    <NumericUpDown ID="txtHealth" MinValue="1" MaxValue="100" />
+                </TableRow>
+            </TableLayout>
+            
+        </GroupBox>
+        <GroupBox Text="Object On Terrain">
+            <TableLayout>
+                <TableRow>
+                    <Button Text="Realign" />
+                    <Button Text="Flatten" />
+                </TableRow>
+            </TableLayout>
+            
+        </GroupBox>
+
+        <TableLayout>
+            <TableRow>
+                <Button Text="Convert Templates To Design" />
+                <CheckBox ID="chkDesignable" Text="Designables Only" Checked="True" />
+            </TableRow>
+        </TableLayout>
+
+
+
+        <GroupBox Text="Droid Editor" >
+
+            <TableLayout>
+                <TableRow>
+                    <Label Text="Type:" />
+                    <DropDown ID="ddlType" />
+                </TableRow>
+                <TableRow>
+                    <Label Text="Body:" />
+                    <DropDown ID="ddlBody" />
+                </TableRow>
+                <TableRow>
+                    <Label Text="Propulsion:" />
+                    <DropDown ID="ddlProp" />
+                </TableRow>
+
+                <TableRow>
+                    <Label Text="Turrets:" />
+                    <TableLayout>
+                        <TableRow>
+                            <TableLayout>
+                                <TableRow>
+                                    <NumericUpDown ID="txtTurrets" MinValue="0" MaxValue="3" Value="0" />
+                                    <TableCell />
+                                </TableRow>
+                            </TableLayout>                            
+                        </TableRow>
+
+                        <TableRow>
+                            <StackLayout ID="slTurret1" Visible="False">
+                                <Label Text="Turret 1:" />
+                                <DropDown ID="ddlTurret1" />
+                            </StackLayout>
+                        </TableRow>
+
+                        <TableRow>
+                            <StackLayout ID="slTurret2" Visible="False">
+                                <Label Text="Turret 2:" />
+                                <DropDown ID="ddlTurret2" />
+                            </StackLayout>
+                        </TableRow>
+
+                        <TableRow>
+                            <StackLayout ID="slTurret3" Visible="False">
+
+                                <Label Text="Turret 3:" />
+                                <DropDown ID="ddlTurret3" />
+                            </StackLayout>
+
+                        </TableRow>
+                        
+                    </TableLayout>
+                </TableRow>
+
+            </TableLayout>
+
+
+        </GroupBox>
+
+
+    </StackLayout>
+
+</TabPage>

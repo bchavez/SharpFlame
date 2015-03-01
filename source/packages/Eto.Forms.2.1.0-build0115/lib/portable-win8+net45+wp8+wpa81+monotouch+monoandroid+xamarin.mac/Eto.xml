@@ -10791,6 +10791,11 @@
             <param name="type">Type of the button handler to use for the subclass</param>
             <param name="initialize">True to initialize the button, false if you will initialize after constructor logic</param>
         </member>
+        <member name="M:Eto.Forms.Button.PerformClick">
+            <summary>
+            Triggers the <see cref="E:Eto.Forms.Button.Click"/> event for the button, if the button is visable and enabled.
+            </summary>
+        </member>
         <member name="M:Eto.Forms.Button.GetCallback">
             <summary>
             Gets an instance of an object used to perform callbacks to the widget from handler implementations
@@ -27750,6 +27755,12 @@
             Gets a binding to the <see cref="P:Eto.Forms.RadioButtonList.SelectedValue"/> property.
             </summary>
             <value>The selected value binding.</value>
+        </member>
+        <member name="P:Eto.Forms.RadioButtonList.SelectedIndexBinding">
+            <summary>
+            Gets a binding to the <see cref="P:Eto.Forms.RadioButtonList.SelectedIndex"/> property.
+            </summary>
+            <value>The selected index binding.</value>
         </member>
         <member name="T:Eto.Forms.RadioButtonListOrientation">
             <summary>

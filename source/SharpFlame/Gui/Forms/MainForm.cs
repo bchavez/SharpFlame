@@ -81,7 +81,7 @@ namespace SharpFlame.Gui.Forms
 	        this.TextureTab = new TextureTab();
 	        this.TerrainTab = new TerrainTab();
 	        //this.PlaceObjectsTab = new PlaceObjectsTab();
-	        this.ObjectTab = new ObjectTab();
+	        //this.ObjectTab = new ObjectTab();
 
 
 	        var tabControl = new TabControl();
@@ -91,7 +91,7 @@ namespace SharpFlame.Gui.Forms
 	        tabControl.TabPages.Add(new ResizeTab());
 	        //tabControl.TabPages.Add(new TabPage {Text = "Resize", Content = this.ResizeTab});
 		    tabControl.TabPages.Add(new PlaceObjectsTab());
-	        tabControl.TabPages.Add(new TabPage {Text = "Object", Content = this.ObjectTab});
+	        tabControl.TabPages.Add(new ObjectTab());
 	        tabControl.TabPages.Add(new LabelsTab());
 
 	        tabControl.SelectedIndexChanged += delegate

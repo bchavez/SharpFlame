@@ -1,15 +1,32 @@
 
 
 using System;
+using Appccelerate.EventBroker;
+using Appccelerate.EventBroker.Handlers;
+using SharpFlame.Core;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.Domain;
 using SharpFlame.Mapping.Tools;
+using SharpFlame.Painters;
 
 
 namespace SharpFlame.Generators
 {
-    public sealed class DefaultGenerator
+    public class DefaultGenerator
     {
+		[EventSubscription(EventTopics.OnObjectManagerLoaded, typeof(OnPublisher))]
+		public void HandleObjectManagerLoaded(object sender, EventArgs e)
+		{
+			CreateGeneratorTilesets();
+
+			// Create Painters for the known tilesets.
+			// Order matters here because CreateGeneratorTileSets
+			// needs to fire first.
+			PainterFactory.CreatePainterArizona();
+			PainterFactory.CreatePainterUrban();
+			PainterFactory.CreatePainterRockies();
+		}
+
         public static clsGeneratorTileset Generator_TilesetArizona;
         public static clsGeneratorTileset Generator_TilesetUrban;
         public static clsGeneratorTileset Generator_TilesetRockies;

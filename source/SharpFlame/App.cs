@@ -63,7 +63,7 @@ namespace SharpFlame
 
         public static bool DisplayTileOrientation;
 
-	    public static ObjectData ObjectData = new ObjectData();
+	    public static ObjectData ObjectData = null;
 
         public static int SelectedTextureNum = -1;
         public static TileOrientation TextureOrientation = new TileOrientation(false, false, false);

@@ -61,6 +61,9 @@ namespace SharpFlame.Gui.Sections
         [Inject]
         internal IEventBroker EventBroker { get; set; }
 
+		[Inject]
+		internal DefaultGenerator DefaultGenerator { get; set; }
+
 
         internal GLSurface GLSurface { get; set; }
 
@@ -791,32 +794,7 @@ namespace SharpFlame.Gui.Sections
                 }
             }
 
-            DefaultGenerator.CreateGeneratorTilesets();
-
-            // Create Painters for the known tilesets.
-            PainterFactory.CreatePainterArizona();
-            PainterFactory.CreatePainterUrban();
-            PainterFactory.CreatePainterRockies();
-
-            // Show initialize problems.
-            //            if( initializeResult.HasProblems )
-            //            {
-            //                logger.Error(initializeResult.ToString());
-            //                App.StatusDialog = new Gui.Dialogs.Status(initializeResult);
-            //                App.StatusDialog.Show();
-            //            }
-            //            else if( initializeResult.HasWarnings )
-            //            {
-            //                logger.Warn(initializeResult.ToString());
-            //                App.StatusDialog = new Gui.Dialogs.Status(initializeResult);
-            //                App.StatusDialog.Show();
-            //            }
-            //            else
-            //            {
-            //                logger.Debug(initializeResult.ToString());
-            //            }
 	        this.OnOpenGLInitalized(this, new EventArgs<GLSurface>(this.GLSurface));
         }
-
     }
 }

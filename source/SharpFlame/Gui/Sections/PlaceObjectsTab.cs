@@ -69,6 +69,9 @@ namespace SharpFlame.Gui.Sections
 		[Inject]
 		internal KeyboardManager KeyboardManager { get; set; }
 
+		[Inject]
+		internal ObjectManager ObjectManager { get; set; }
+
 		private Button cmdPlaceOne;
 		private Button cmdPlaceRow;
 		private NumericUpDown nRotation;
@@ -84,12 +87,12 @@ namespace SharpFlame.Gui.Sections
 				var result = new Result("Reloading object data.", false);
 
 				// Just reload Object Data.
-				App.ObjectData = new ObjectData();
+				this.ObjectManager.ObjectData = new ObjectData();
 				foreach( var path in this.SettingsManager.ObjectDataDirectories )
 				{
 					if( !string.IsNullOrEmpty(path) )
 					{
-						result.Add(App.ObjectData.LoadDirectory(path));
+						result.Add(this.ObjectManager.ObjectData.LoadDirectory(path));
 					}
 				}
 				
@@ -106,7 +109,7 @@ namespace SharpFlame.Gui.Sections
 		}
 
 		[EventSubscription(EventTopics.OnMapLoad, typeof(OnPublisher))]
-		public void OnMapLoad(Map args)
+		public void HandleMapLoad(Map args)
 		{
 			this.map = args;
 
@@ -126,20 +129,10 @@ namespace SharpFlame.Gui.Sections
 					});
 		}
 
-
-		[EventSubscription(EventTopics.OnOpenGLInitalized,typeof(OnPublisher))]
-		public void HandleOpenGlInitalized(object sender, EventArgs<GLSurface> gl)
+		[EventSubscription(EventTopics.OnObjectManagerLoaded, typeof(OnPublisher))]
+		public void HandleObjectManagerLoaded(object sender, EventArgs e)
 		{
-			// Load Object Data. We need to know when GL is initialized
-			// because of the texture loading in the object data directory.
-			foreach( var path in this.SettingsManager.ObjectDataDirectories )
-			{
-				if( !string.IsNullOrEmpty(path) )
-				{
-					SharpFlameApplication.InitializeResult.Add(App.ObjectData.LoadDirectory(path));
-				}
-			}
-			RefreshGridViews();
+			this.RefreshGridViews();
 		}
 
 		public PlaceObjectsTab ()
@@ -252,7 +245,7 @@ namespace SharpFlame.Gui.Sections
 
 		public void RefreshGridViews()
 		{
-			var objFeatures = App.ObjectData.FeatureTypes.GetItemsAsSimpleList()
+			var objFeatures = this.ObjectManager.ObjectData.FeatureTypes.GetItemsAsSimpleList()
 				.ConvertAll(f => new PlaceObjectGridViewItem(f));
 
 			this.features.Clear();
@@ -261,7 +254,7 @@ namespace SharpFlame.Gui.Sections
 			this.gFeatures.DataStore = features;
 
 
-			var objStrcuts = App.ObjectData.StructureTypes.GetItemsAsSimpleList()
+			var objStrcuts = this.ObjectManager.ObjectData.StructureTypes.GetItemsAsSimpleList()
 				.ConvertAll(f => new PlaceObjectGridViewItem(f));
 
 			this.structs.Clear();
@@ -270,7 +263,7 @@ namespace SharpFlame.Gui.Sections
 			this.gStructures.DataStore = this.structs;
 
 
-			var objDroids = App.ObjectData.DroidTemplates.GetItemsAsSimpleList()
+			var objDroids = this.ObjectManager.ObjectData.DroidTemplates.GetItemsAsSimpleList()
 				.ConvertAll(f => new PlaceObjectGridViewItem(f));
 
 			this.droids.Clear();
@@ -289,9 +282,6 @@ namespace SharpFlame.Gui.Sections
 			    };
         }
 
-		private IEnumerable<object> selected;
-
-
 		void AnyPlayer_Click(object sender, EventArgs e)
 		{
 			if( this.map == null )
@@ -307,6 +297,14 @@ namespace SharpFlame.Gui.Sections
 
 			if( map.SelectedUnits.Count <= 0 )
 				return;
+
+			if( this.map.SelectedUnits.Count > 1 )
+			{
+				if( MessageBox.Show(this, "Change player of multiple objects?", MessageBoxButtons.YesNo) != DialogResult.Yes )
+				{
+					return;
+				}
+			}
 
 			var objUnitGroup = new clsObjectUnitGroup()
 				{
