@@ -197,6 +197,11 @@ namespace SharpFlame.Gui.Sections
 			this.txtHealth.ValueBinding.BindDataContext<Map>(getValue: m =>
 				{
 					//LEFT OFF HERE....
+					if( m.SelectedUnits.Count == 1 )
+					{
+						var u = m.SelectedUnits[0];
+						return u.Health;
+					}
 					return 0;
 				}, setValue: null, mode: DualBindingMode.OneWay);
 		}
@@ -285,6 +290,28 @@ namespace SharpFlame.Gui.Sections
 			this.OnDataContextChanged(EventArgs.Empty);
 		}
 
+	    void cmdRealign_Click(object sender, EventArgs e)
+	    {
+			if( this.map == null ) return;
+
+		    var align = new clsObjectAlignment
+			    {
+				    Map = this.map
+			    };
+		    this.map.SelectedUnits.GetItemsAsSimpleList().PerformTool(align);
+		    this.EventBroker.UpdateMap(this);
+		    this.map.UndoStepCreate("Align Objects");
+	    }
+
+	    void cmdFlatten_Click(object sender, EventArgs e)
+	    {
+			if( this.map == null ) return;
+
+		    var flatten = new clsObjectFlattenTerrain();
+		    this.map.SelectedUnits.GetItemsAsSimpleClassList().PerformTool(flatten);
+		    this.EventBroker.UpdateMap();
+		    this.map.UndoStepCreate("Flatten Under Structures");
+	    }
 
 	    void txtRotation_ValueChanged(object sender, EventArgs e)
 	    {
