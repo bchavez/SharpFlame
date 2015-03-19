@@ -219,8 +219,8 @@ namespace SharpFlame.Gui.Sections
 						return u.Health;
 					}
 					this.txtHealth.Enabled = false;
-					return 0;
-				}, setValue: null, mode: DualBindingMode.OneWay);
+					return 1;
+				}, setValue: null, defaultGetValue:100, mode: DualBindingMode.OneWay);
 
 			this.grpDroidEditor.BindDataContext(t => t.Enabled, Binding.Delegate((Map m) =>
 				{
@@ -237,9 +237,19 @@ namespace SharpFlame.Gui.Sections
 					if( m.SelectedUnits.Count == 1 )
 					{
 						//left off here.
+						var u = m.SelectedUnits[0];
+						if( u.TypeBase.Type == UnitType.PlayerDroid )
+						{
+							var droidType = (DroidDesign)u.TypeBase;
+							if( droidType.TemplateDroidType != null )
+							{
+								return droidType.TemplateDroidType.Num;
+							}
+						}
 					}
+					return -1;
 				}
-				,setValue: null);
+				, setValue: null);
 			
 
 

@@ -143,7 +143,7 @@ namespace SharpFlame.Gui.Forms
 
         void MainForm_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            App.Kernel.Dispose();
+            //App.Kernel.Dispose();
         }
 
 	    private void GenerateMenuToolBar()
