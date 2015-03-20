@@ -250,7 +250,97 @@ namespace SharpFlame.Gui.Sections
 					return -1;
 				}
 				, setValue: null);
-			
+
+			this.ddlBody.SelectedKeyBinding.BindDataContext(getValue: (Map m) =>
+				{
+					if( m.SelectedUnits.Count == 1 )
+					{
+						var u = m.SelectedUnits[0];
+						if( u.TypeBase.Type == UnitType.PlayerDroid )
+						{
+							var droidType = (DroidDesign)u.TypeBase;
+							if( droidType.Body != null )
+							{
+								return droidType.Body.Code;
+							}
+						}
+					}
+					return null;
+				}
+				, setValue: null);
+
+
+			this.ddlProp.SelectedKeyBinding.BindDataContext(getValue: (Map m) =>
+				{
+					if( m.SelectedUnits.Count == 1 )
+					{
+						var u = m.SelectedUnits[0];
+						if( u.TypeBase.Type == UnitType.PlayerDroid )
+						{
+							var droidType = (DroidDesign)u.TypeBase;
+							if( droidType.Propulsion != null )
+							{
+								return droidType.Propulsion.Code;
+							}
+						}
+					}
+					return null;
+				}
+				, setValue: null);
+
+			this.ddlTurret1.SelectedKeyBinding.BindDataContext(getValue: (Map m) =>
+				{
+					if( m.SelectedUnits.Count == 1 )
+					{
+						var u = m.SelectedUnits[0];
+						if( u.TypeBase.Type == UnitType.PlayerDroid )
+						{
+							var droidType = (DroidDesign)u.TypeBase;
+							if( droidType.Turret1 != null )
+							{
+								return droidType.Turret1.Code;
+							}
+						}
+					}
+					return null;
+				}
+				, setValue: null);
+
+			this.ddlTurret2.SelectedKeyBinding.BindDataContext(getValue: (Map m) =>
+				{
+					if( m.SelectedUnits.Count == 1 )
+					{
+						var u = m.SelectedUnits[0];
+						if( u.TypeBase.Type == UnitType.PlayerDroid )
+						{
+							var droidType = (DroidDesign)u.TypeBase;
+							if( droidType.Turret2 != null )
+							{
+								return droidType.Turret2.Code;
+							}
+						}
+					}
+					return null;
+				}
+				, setValue: null);
+
+			this.ddlTurret3.SelectedKeyBinding.BindDataContext(getValue: (Map m) =>
+				{
+					if( m.SelectedUnits.Count == 1 )
+					{
+						var u = m.SelectedUnits[0];
+						if( u.TypeBase.Type == UnitType.PlayerDroid )
+						{
+							var droidType = (DroidDesign)u.TypeBase;
+							if( droidType.Turret3 != null )
+							{
+								return droidType.Turret3.Code;
+							}
+						}
+					}
+					return null;
+				}
+				, setValue: null);
 
 
 			this.cmdConvertToDroid.BindDataContext(t => t.Enabled, Binding.Delegate((Map m) =>
