@@ -99,19 +99,27 @@
     <StartupObject>SharpFlame.Gui.Mac.Startup</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Eto">
-      <HintPath>..\packages\Eto.Forms.2.1.0-build0115\lib\net40\Eto.dll</HintPath>
+    <Reference Include="Eto, Version=2.0.5682.7839, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Eto.Forms.2.1.0-build0318\lib\net40\Eto.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Eto.Mac">
-      <HintPath>..\packages\Eto.Platform.Mac.2.1.0-build0115\lib\net40\Eto.Mac.dll</HintPath>
+    <Reference Include="Eto.Mac, Version=2.0.5682.7845, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Eto.Platform.Mac.2.1.0-build0318\lib\net40\Eto.Mac.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="MonoMac">
-      <HintPath>..\packages\Eto.Platform.Mac.2.1.0-build0115\lib\net40\MonoMac.dll</HintPath>
+    <Reference Include="Eto.Serialization.Xaml, Version=2.0.5682.7864, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Eto.Serialization.Xaml.2.1.0-build0318\lib\net40\Eto.Serialization.Xaml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MonoMac, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Eto.Platform.Mac.2.1.0-build0318\lib\net40\MonoMac.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\other\Ninject.Mono\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

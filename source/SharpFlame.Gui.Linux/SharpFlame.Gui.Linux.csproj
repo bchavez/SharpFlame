@@ -32,11 +32,17 @@
     <Reference Include="atk-sharp">
       <HintPath>..\packages\other\GtkSharp\2.12\lib\gtk-sharp-2.0\atk-sharp.dll</HintPath>
     </Reference>
-    <Reference Include="Eto">
-      <HintPath>..\packages\Eto.Forms.2.1.0-build0115\lib\net40\Eto.dll</HintPath>
+    <Reference Include="Eto, Version=2.0.5682.7839, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Eto.Forms.2.1.0-build0318\lib\net40\Eto.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Eto.Gtk2">
-      <HintPath>..\packages\Eto.Platform.Gtk.2.1.0-build0115\lib\net40\Eto.Gtk2.dll</HintPath>
+    <Reference Include="Eto.Gtk2, Version=2.0.5682.7844, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Eto.Platform.Gtk.2.1.0-build0318\lib\net40\Eto.Gtk2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Eto.Serialization.Xaml, Version=2.0.5682.7864, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Eto.Serialization.Xaml.2.1.0-build0318\lib\net40\Eto.Serialization.Xaml.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="gdk-sharp">
       <HintPath>..\packages\other\GtkSharp\2.12\lib\gtk-sharp-2.0\gdk-sharp.dll</HintPath>
@@ -69,6 +75,7 @@
     <Reference Include="Ninject">
       <HintPath>..\packages\other\Ninject.Mono\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharpFlame.Core\GlobalAssemblyInfo.cs">
