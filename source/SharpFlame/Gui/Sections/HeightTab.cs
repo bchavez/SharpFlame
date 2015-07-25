@@ -4,7 +4,7 @@ using Eto.Forms;
 using Ninject;
 using SharpFlame.Core;
 using SharpFlame.MouseTools;
-using Z.ExtensionMethods.Object;
+using Z.ExtensionMethods.ObjectExtensions;
 
 namespace SharpFlame.Gui.Sections
 {

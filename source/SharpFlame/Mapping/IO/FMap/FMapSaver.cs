@@ -15,7 +15,6 @@ using SharpFlame.Mapping.Tiles;
 using SharpFlame.Core;
 using SharpFlame.Core.Parsers.Ini;
 using SharpFlame.Domain;
-using Z.ExtensionMethods.Object;
 
 namespace SharpFlame.Mapping.IO.FMap
 {

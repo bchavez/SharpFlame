@@ -18,8 +18,7 @@ using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.MouseTools;
 using SharpFlame.Settings;
-using Z.ExtensionMethods;
-using Z.ExtensionMethods.Object;
+using Z.ExtensionMethods.ObjectExtensions;
 
 namespace SharpFlame.Gui.Sections
 {

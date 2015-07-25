@@ -80,8 +80,9 @@
     <Reference Include="Appccelerate.Fundamentals">
       <HintPath>..\packages\Appccelerate.Fundamentals.1.0.29\lib\Net40\Appccelerate.Fundamentals.dll</HintPath>
     </Reference>
-    <Reference Include="Z.ExtensionMethods.WithNamespace">
-      <HintPath>..\packages\Z.ExtensionMethods.WithNamespace.2.0.4\lib\net40\Z.ExtensionMethods.WithNamespace.dll</HintPath>
+    <Reference Include="Z.ExtensionMethods.WithObjectNamespace, Version=2.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.ExtensionMethods.WithObjectNamespace.2.0.6\lib\net40\Z.ExtensionMethods.WithObjectNamespace.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>

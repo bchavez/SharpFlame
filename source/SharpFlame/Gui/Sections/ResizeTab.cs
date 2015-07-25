@@ -14,7 +14,6 @@ using SharpFlame.FileIO;
 using SharpFlame.Mapping;
 using SharpFlame.Maths;
 using SharpFlame.MouseTools;
-using Z.ExtensionMethods.Object;
 
 namespace SharpFlame.Gui.Sections
 {
