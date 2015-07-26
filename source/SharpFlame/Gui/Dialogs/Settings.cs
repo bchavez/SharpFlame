@@ -79,17 +79,17 @@ namespace SharpFlame.Gui.Dialogs
 
             var layout = new DynamicLayout();
             var tabControl = new TabControl();
-            tabControl.TabPages.Add(new TabPage
+            tabControl.Pages.Add(new TabPage
                 {
                     Text = "Directories",
                     Content = directories()
                 });
-            tabControl.TabPages.Add(new TabPage
+            tabControl.Pages.Add(new TabPage
                 {
                     Text = "General",
                     Content = general()
                 });
-            tabControl.TabPages.Add(new TabPage
+            tabControl.Pages.Add(new TabPage
                 {
                     Text = "Keyboard",
                     Content = keyboard()
@@ -264,7 +264,7 @@ namespace SharpFlame.Gui.Dialogs
                 var name = ((KeyboardGridItem)grvKeyboard.SelectedItem).Name;
                 var key = Keyboard.Keys[name];
                 var dialog = new Dialogs.KeyInput { Key = key };
-                dialog.ShowDialog(Application.Instance.MainForm);
+                dialog.ShowModal(Application.Instance.MainForm);
 
                 // Update the key
                 Console.WriteLine("Update key: \"{0}\" to \"{1}\".", key.ToString(), dialog.Key.ToString());

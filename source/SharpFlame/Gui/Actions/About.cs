@@ -19,7 +19,7 @@ namespace SharpFlame.Gui.Actions
 			base.OnExecuted(e);
 			// show the about dialog
 			var about = new Dialogs.About();
-			about.ShowDialog (Application.Instance.MainForm);
+	        about.ShowModal(Application.Instance.MainForm);
 		}
 	}
 }

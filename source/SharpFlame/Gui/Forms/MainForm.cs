@@ -85,14 +85,14 @@ namespace SharpFlame.Gui.Forms
 
 
 	        var tabControl = new TabControl();
-	        tabControl.TabPages.Add(new TabPage {Text = "Textures", Content = this.TextureTab});
-	        tabControl.TabPages.Add(new TabPage {Text = "Terrain", Content = this.TerrainTab});
-		    tabControl.TabPages.Add(new HeightTab());
-	        tabControl.TabPages.Add(new ResizeTab());
-	        //tabControl.TabPages.Add(new TabPage {Text = "Resize", Content = this.ResizeTab});
-		    tabControl.TabPages.Add(new PlaceObjectsTab());
-	        tabControl.TabPages.Add(new ObjectTab());
-	        tabControl.TabPages.Add(new LabelsTab());
+	        tabControl.Pages.Add(new TabPage {Text = "Textures", Content = this.TextureTab});
+	        tabControl.Pages.Add(new TabPage {Text = "Terrain", Content = this.TerrainTab});
+		    tabControl.Pages.Add(new HeightTab());
+	        tabControl.Pages.Add(new ResizeTab());
+	        //tabControabPages.Add(new TabPage {Text = "Resize", Content = this.ResizeTab});
+		    tabControl.Pages.Add(new PlaceObjectsTab());
+	        tabControl.Pages.Add(new ObjectTab());
+	        tabControl.Pages.Add(new LabelsTab());
 
 	        tabControl.SelectedIndexChanged += delegate
 	            {
@@ -154,7 +154,7 @@ namespace SharpFlame.Gui.Forms
 
 			var menu = new MenuBar();
 			// create standard system menu (e.g. for OS X)
-			Application.Instance.CreateStandardMenu(menu.Items);
+			//Application.Instance.CreateStandardMenu(menu.Items);
 
 			// add our own items to the menu
 

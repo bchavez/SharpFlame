@@ -1715,7 +1715,7 @@ namespace SharpFlame
                             }
                             else
                             {
-                                if (keyboardManager.Keys[KeyboardKeys.Multiselect].Active)
+                                if (!keyboardManager.Keys[KeyboardKeys.Multiselect].Active)
                                 {
                                     Map.SelectedUnits.Clear();
                                 }

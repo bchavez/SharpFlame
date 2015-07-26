@@ -3,7 +3,7 @@
          xmlns:s="clr-namespace:SharpFlame.Gui.Sections;assembly=SharpFlame"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          xmlns:o="clr-namespace:SharpFlame.MouseTools;assembly=SharpFlame"
-         Text="Objects">
+         Text="Objects" Shown="DoShow" Click="DoClick">
     
     <StackLayout>
 
@@ -90,9 +90,8 @@
             </StackLayout>
 
         </GroupBox>
-        
+
         <GroupBox ID="grpModify" Text="Modify">
-            
             <TableLayout>
                 <TableRow>
                     <Label Text="Rotation:" />
@@ -111,8 +110,8 @@
                     <NumericUpDown ID="txtHealth" MinValue="1" MaxValue="100" />
                 </TableRow>
             </TableLayout>
-            
         </GroupBox>
+        
         <GroupBox Text="Object On Terrain">
             <TableLayout>
                 <TableRow>
@@ -120,7 +119,6 @@
                     <Button Text="Flatten" Click="cmdFlatten_Click" />
                 </TableRow>
             </TableLayout>
-            
         </GroupBox>
 
         <TableLayout>

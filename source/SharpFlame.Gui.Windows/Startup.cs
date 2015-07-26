@@ -25,7 +25,7 @@ namespace SharpFlame.Gui.Windows
 
             var app = new SharpFlameApplication();
 
-            app.Run(args);
+            app.Run();
             
         }
 

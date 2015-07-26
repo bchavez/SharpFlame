@@ -1,7 +1,9 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
+using Appccelerate.EventBroker.Internals.Subscriptions;
 using Eto;
 using Eto.Forms;
 using Ninject;
@@ -283,18 +285,36 @@ namespace SharpFlame.Gui.Sections
             base.OnLoadComplete(lcEventArgs);
 
             // Set Mousetool, when we are shown
-            this.Shown += (sender, args) =>
+            //this.Shown += (sender, args) =>
+            //    {
+            //        ToolOptions.MouseTool = MouseTool.ObjectSelect;
+            //    };
+            //this.Click += (snede, args) =>
+            //    {
+            //        Debugger.Break();
+            //    };
+
+            this.ParentTab.SelectedIndexChanged += (sender, args) =>
                 {
-                    ToolOptions.MouseTool = MouseTool.ObjectSelect;
+                    if( this.ParentTab.SelectedPage == this )
+                    {
+                        ToolOptions.MouseTool = MouseTool.ObjectSelect;
+                    }
                 };
         }
 
-        public void doShow(object sender, EventArgs e)
+        public TabControl ParentTab => this.Parent as TabControl;
+
+        public void DoShow(object sender, EventArgs e)
+        {
+            ToolOptions.MouseTool = MouseTool.ObjectSelect;
+        }
+        public void DoClick(object sender, EventArgs e)
         {
             ToolOptions.MouseTool = MouseTool.ObjectSelect;
         }
 
-		[EventSubscription(EventTopics.OnMapLoad, typeof(OnPublisher))]
+        [EventSubscription(EventTopics.OnMapLoad, typeof(OnPublisher))]
 		public void HandleMapLoad(Map args)
 		{
 			this.map = args;

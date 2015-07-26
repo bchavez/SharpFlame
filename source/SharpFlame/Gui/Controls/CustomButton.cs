@@ -95,8 +95,8 @@ namespace SharpFlame.Gui.Controls
 			{
 				OnClick (EventArgs.Empty);
 			};
-
-            if(Generator.IsWpf)
+            
+            if(Platform.IsWpf)
             {
                 layout.MouseDown += delegate
                 {

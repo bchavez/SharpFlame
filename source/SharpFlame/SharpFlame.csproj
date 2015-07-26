@@ -616,10 +616,10 @@
     <EmbeddedResource Include="Gui\Sections\PlaceObjectsTab.xoml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Content Include="Gui\Sections\ObjectTab.xoml">
+    <EmbeddedResource Include="Gui\Sections\ObjectTab.xoml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Content>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\objectsselect.png" />
     <EmbeddedResource Include="Resources\notile.png" />
     <EmbeddedResource Include="Resources\gateways.png" />
