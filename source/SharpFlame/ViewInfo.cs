@@ -1720,6 +1720,7 @@ namespace SharpFlame
                                     Map.SelectedUnits.Clear();
                                 }
                                 // Program.frmMainInstance.SelectedObject_Changed(); // TODO: Implement me.
+                                broker.SelectedUnitsChanged(this);
                                 Map.UnitSelectedAreaVertexA = mouseOverTerrain.Vertex.Normal;
                                 broker.DrawLater(this);
                             }
@@ -1856,7 +1857,8 @@ namespace SharpFlame
                     else if (toolOptions.MouseTool == MouseTool.ObjectSelect)
                     {
                         Map.SelectedUnits.Clear();
-                        Program.frmMainInstance.SelectedObject_Changed();
+                        //Program.frmMainInstance.SelectedObject_Changed();
+                        broker.SelectedUnitsChanged(this);
                     }
                 }
             }
@@ -2012,7 +2014,7 @@ namespace SharpFlame
                 }
             }
 
-            //Program.frmMainInstance.SelectedObject_Changed(); // TODO: Implement with UiOptions
+            broker.SelectedUnitsChanged(this);
             broker.DrawLater(this);
         }
 

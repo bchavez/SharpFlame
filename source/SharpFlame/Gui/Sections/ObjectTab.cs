@@ -1,20 +1,20 @@
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Linq;
 using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
-using Appccelerate.EventBroker.Internals.Subscriptions;
-using Eto;
 using Eto.Forms;
 using Ninject;
 using SharpFlame.Core;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping;
+using SharpFlame.Mapping.Objects;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 using SharpFlame.MouseTools;
 using SharpFlame.Settings;
+using Z.ExtensionMethods.ObjectExtensions;
 
 namespace SharpFlame.Gui.Sections
 {
@@ -113,20 +113,20 @@ namespace SharpFlame.Gui.Sections
 					this.txtLabel.Enabled = false;
 					return string.Empty;
 				}, setValue: null, mode: DualBindingMode.OneWay);
-			//this.txtLabel.BindDataContext(t => t.Enabled, Binding.Delegate((Map m) =>
-			//	{
-			//		if( m.SelectedUnits.Count == 1 )
-			//		{
-			//			var u = m.SelectedUnits[0];
-			//			return u.TypeBase.Type != UnitType.PlayerStructure;
-			//		}
-			//		return false;
-			//	}, setValue: null), mode: DualBindingMode.OneWay);
+            //this.txtLabel.BindDataContext(t => t.Enabled, Binding.Delegate((Map m) =>
+            //    {
+            //        if( m.SelectedUnits.Count == 1 )
+            //        {
+            //            var u = m.SelectedUnits[0];
+            //            return u.TypeBase.Type != UnitType.PlayerStructure;
+            //        }
+            //        return false;
+            //    }, setValue: null), mode: DualBindingMode.OneWay);
 
 
-			this.txtHealth.ValueBinding.BindDataContext<Map>(getValue: m =>
-				{
-					if( m.SelectedUnits.Count == 1 )
+            this.txtHealth.ValueBinding.BindDataContext<Map>(getValue: m =>
+                {
+                    if( m.SelectedUnits.Count == 1 )
 					{
 						this.txtHealth.Enabled = true;
 
@@ -139,120 +139,84 @@ namespace SharpFlame.Gui.Sections
 
 			this.grpDroidEditor.BindDataContext(t => t.Enabled, Binding.Delegate((Map m) =>
 				{
-					if( m.SelectedUnits.Count == 1 )
-					{
-						var u = m.SelectedUnits[0];
-						return u.TypeBase.Type == UnitType.PlayerDroid;
-					}
+                    DroidDesign droidType = null;
+                    if( TryGetDroidDesign(out droidType) )
+                    {
+                        return !droidType.IsTemplate;
+                    }
 					return false;
 				}, setValue: null), mode: DualBindingMode.OneWay);
 
-            //this.ddlType.SelectedIndexBinding.BindDataContext(getValue: (Map m) =>
-            //    {
-            //        if( m.SelectedUnits.Count == 1 )
-            //        {
-            //            //left off here.
-            //            var u = m.SelectedUnits[0];
-            //            if( u.TypeBase.Type == UnitType.PlayerDroid )
-            //            {
-            //                var droidType = (DroidDesign)u.TypeBase;
-            //                if( droidType.TemplateDroidType != null )
-            //                {
-            //                    return droidType.TemplateDroidType.Num;
-            //                }
-            //            }
-            //        }
-            //        return -1;
-            //    }
-            //    , setValue: null);
+		    this.ddlType.SelectedIndexBinding.BindDataContext(getValue: (Map m) =>
+		        {
+		            DroidDesign droidType = null;
+		            if( TryGetDroidDesign(out droidType) && droidType.TemplateDroidType != null )
+		            {
+		                return droidType.TemplateDroidType.Num;
+		            }
+		            return -1;
+		        }
+		        , setValue: null, defaultGetValue: -1);
 
-            this.ddlBody.SelectedKeyBinding.BindDataContext(getValue: (Map m) =>
-				{
-					if( m.SelectedUnits.Count == 1 )
-					{
-						var u = m.SelectedUnits[0];
-						if( u.TypeBase.Type == UnitType.PlayerDroid )
-						{
-							var droidType = (DroidDesign)u.TypeBase;
-							if( droidType.Body != null )
-							{
-								return droidType.Body.Code;
-							}
-						}
-					}
-					return null;
-				}
-				, setValue: null);
+		    this.ddlBody.SelectedKeyBinding.BindDataContext(
+		        getValue: (Map m) =>
+		            {
+		                DroidDesign droidType = null;
+		                if( TryGetDroidDesign(out droidType) && droidType.Body != null )
+		                {
+		                    return droidType.Body?.Code;
+		                }
+
+		                return null;
+		            }
+		        ,
+		        setValue: ddlBody_Set);
 
 
 			this.ddlProp.SelectedKeyBinding.BindDataContext(getValue: (Map m) =>
-				{
-					if( m.SelectedUnits.Count == 1 )
-					{
-						var u = m.SelectedUnits[0];
-						if( u.TypeBase.Type == UnitType.PlayerDroid )
-						{
-							var droidType = (DroidDesign)u.TypeBase;
-							if( droidType.Propulsion != null )
-							{
-								return droidType.Propulsion.Code;
-							}
-						}
-					}
-					return null;
-				}
-				, setValue: null);
+			    {
+			        DroidDesign droidType = null;
+			        if( TryGetDroidDesign(out droidType) )
+			        {
+			            return droidType.Propulsion?.Code;
+			        }
+
+			        return null;
+			    }
+				, setValue: ddlProp_Set);
 
 			this.ddlTurret1.SelectedKeyBinding.BindDataContext(getValue: (Map m) =>
-				{
-					if( m.SelectedUnits.Count == 1 )
-					{
-						var u = m.SelectedUnits[0];
-						if( u.TypeBase.Type == UnitType.PlayerDroid )
-						{
-							var droidType = (DroidDesign)u.TypeBase;
-							if( droidType.Turret1 != null )
-							{
-								return droidType.Turret1.Code;
-							}
-						}
-					}
+			    {
+			        DroidDesign droidType = null;
+			        if( TryGetDroidDesign(out droidType) )
+			        {
+			            return droidType.Turret1?.Code;
+			        }
+
 					return null;
 				}
 				, setValue: null);
 
 			this.ddlTurret2.SelectedKeyBinding.BindDataContext(getValue: (Map m) =>
-				{
-					if( m.SelectedUnits.Count == 1 )
-					{
-						var u = m.SelectedUnits[0];
-						if( u.TypeBase.Type == UnitType.PlayerDroid )
-						{
-							var droidType = (DroidDesign)u.TypeBase;
-							if( droidType.Turret2 != null )
-							{
-								return droidType.Turret2.Code;
-							}
-						}
-					}
+			    {
+			        DroidDesign droidType = null;
+			        if( TryGetDroidDesign(out droidType) )
+			        {
+			            return droidType.Turret2?.Code;
+			        }
+
 					return null;
 				}
 				, setValue: null);
 
 			this.ddlTurret3.SelectedKeyBinding.BindDataContext(getValue: (Map m) =>
 				{
-					if( m.SelectedUnits.Count == 1 )
-					{
-						var u = m.SelectedUnits[0];
-						if( u.TypeBase.Type == UnitType.PlayerDroid )
-						{
-							var droidType = (DroidDesign)u.TypeBase;
-							if( droidType.Turret3 != null )
-							{
-								return droidType.Turret3.Code;
-							}
-						}
-					}
+                    DroidDesign droidType = null;
+                    if( TryGetDroidDesign(out droidType) )
+                    {
+                        return droidType.Turret3?.Code;
+                    }
+
 					return null;
 				}
 				, setValue: null);
@@ -260,56 +224,104 @@ namespace SharpFlame.Gui.Sections
 
 			this.cmdConvertToDroid.BindDataContext(t => t.Enabled, Binding.Delegate((Map m) =>
 				{
-					if( m.SelectedUnits.Count == 1 )
-					{
-						var u = m.SelectedUnits[0];
-						if( u.TypeBase.Type == UnitType.PlayerDroid )
-						{
-							var drodType = u.TypeBase as DroidDesign;
-							if( drodType.IsTemplate )
-							{
-								return true;
-							}
-						}
-					}
+                    DroidDesign droidType = null;
+                    if( TryGetDroidDesign(out droidType) )
+                    {
+                        return droidType.IsTemplate;
+                    }
+
 					return false;
 				}, setValue: null), mode: DualBindingMode.OneWay);
 		}
 
-	    private Button cmdConvertToDroid;
+        private void ddlProp_Set(Map m, string prop)
+        {
+            if( !CanSetDesign(m, "propulsion") )
+                return;
+
+            var objectPropulsion = new clsObjectPropulsion();
+            objectPropulsion.Map = m;
+            objectPropulsion.Propulsion = this.propulsion[ddlProp.SelectedIndex];
+            m.SelectedUnitsAction(objectPropulsion);
+
+            this.EventBroker.SelectedUnitsChanged(this);
+            if( objectPropulsion.ActionPerformed )
+            {
+                m.UndoStepCreate("Object Body Changed");
+                this.EventBroker.DrawLater(this);
+            }
+            this.EventBroker.SelectedUnitsChanged(this);
+            if( objectPropulsion.ActionPerformed )
+            {
+                m.UndoStepCreate("Object Propulsion Changed");
+                this.EventBroker.DrawLater(this);
+            }
+        }
+
+        private bool CanSetDesign(Map m, string checktype)
+        {
+            if( m == null )
+                return false;
+            if( !this.ddlBody.Enabled )
+                return false;
+            if( this.ddlBody.SelectedIndex < 0 )
+                return false;
+            if( m.SelectedUnits.Count <= 0 )
+                return false;
+            if( m.SelectedUnits.Count > 1 )
+            {
+                if( MessageBox.Show($"Change {checktype} of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxType.Question) != DialogResult.Ok )
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private void ddlBody_Set(Map m, string body)
+        {
+            if( !CanSetDesign(m, "body") )
+                return;
+
+            var objectBody = new clsObjectBody();
+            objectBody.Map = m;
+            objectBody.Body = bodies[ddlBody.SelectedIndex];
+            this.map.SelectedUnitsAction(objectBody);
+
+            this.EventBroker.SelectedUnitsChanged(this);
+            if( objectBody.ActionPerformed )
+            {
+                this.map.UndoStepCreate("Object Body Changed");
+                this.EventBroker.DrawLater(this);
+            }
+        }
+
+        private Button cmdConvertToDroid;
 
 	    private GroupBox grpDroidEditor;
+        private List<Body> bodies;
+        private List<Propulsion> propulsion;
 
-        protected override void OnLoadComplete(EventArgs lcEventArgs)
+        private bool TryGetUnit(out Unit u)
         {
-            base.OnLoadComplete(lcEventArgs);
-
-            // Set Mousetool, when we are shown
-            //this.Shown += (sender, args) =>
-            //    {
-            //        ToolOptions.MouseTool = MouseTool.ObjectSelect;
-            //    };
-            //this.Click += (snede, args) =>
-            //    {
-            //        Debugger.Break();
-            //    };
-
-            this.ParentTab.SelectedIndexChanged += (sender, args) =>
+            u = this.map.SelectedUnits[0];
+            return u != null;
+        }
+        private bool TryGetDroidDesign(out DroidDesign dd)
+        {
+            dd = null;
+            if( this.map.SelectedUnits.Count == 1 )
+            {
+                var u = map.SelectedUnits[0];
+                if( u.TypeBase.Type == UnitType.PlayerDroid )
                 {
-                    if( this.ParentTab.SelectedPage == this )
-                    {
-                        ToolOptions.MouseTool = MouseTool.ObjectSelect;
-                    }
-                };
+                    dd = (DroidDesign)u.TypeBase;
+                }
+            }
+            return dd != null;
         }
 
-        public TabControl ParentTab => this.Parent as TabControl;
-
-        public void DoShow(object sender, EventArgs e)
-        {
-            ToolOptions.MouseTool = MouseTool.ObjectSelect;
-        }
-        public void DoClick(object sender, EventArgs e)
+        public void Tab_Click(object sender, EventArgs e)
         {
             ToolOptions.MouseTool = MouseTool.ObjectSelect;
         }
@@ -318,16 +330,31 @@ namespace SharpFlame.Gui.Sections
 		public void HandleMapLoad(Map args)
 		{
 			this.map = args;
-		}
 
-		[EventSubscription(EventTopics.OnObjectManagerLoaded, typeof(OnPublisher))]
+            //load preset groups
+            this.grpPlayers.Children.OfType<Button>()
+                .ForEach(b =>
+                {
+                    if( b.Text.StartsWith("P") )
+                    {
+                        var player = b.Text.Substring(1).ToInt32();
+                        b.Tag = this.map.UnitGroups[player];
+                    }
+                    else if( b.Text.StartsWith("Scav") )
+                    {
+                        b.Tag = this.map.ScavengerUnitGroup;
+                    }
+                });
+        }
+
+        [EventSubscription(EventTopics.OnObjectManagerLoaded, typeof(OnPublisher))]
 		public void HandleObjectManagerLoaded( object sender, EventArgs e)
 		{
 			this.RefreshDroidEditor();
 		}
 
 
-	    public void RefreshDroidEditor()
+        public void RefreshDroidEditor()
 	    {
 		    if( App.ObjectData == null )
 			    return;
@@ -337,27 +364,27 @@ namespace SharpFlame.Gui.Sections
 				.ToList();
 			this.ddlType.DataStore = types;
 			
-		    var bodies = this.ObjectManager.ObjectData.Bodies
+		    bodies = this.ObjectManager.ObjectData.Bodies
 			    .Where(b => b.Designable || !this.chkDesignable.Checked.Value)
-			    .Select(b => new ListItem
-				    {
-					    Key = b.Code,
-					    Text = "({0}) {1}".FormatWith(b.Name, b.Code),
-					    Tag = b
-				    }).ToList();
+                .ToList();
 
-		    this.ddlBody.DataStore = bodies;
+            this.ddlBody.DataStore = bodies.Select(b => new ListItem
+                {
+                    Key = b.Code,
+                    Text = "({0}) {1}".FormatWith(b.Name, b.Code),
+                    Tag = b
+                }).ToList();
 
-		    var propulsion = this.ObjectManager.ObjectData.Propulsions
-			    .Where(p => p.Designable || !this.chkDesignable.Checked.Value)
-			    .Select(p => new ListItem
-				    {
-					    Key = p.Code,
-					    Text = "({0}) {1}".FormatWith(p.Name, p.Code),
-					    Tag = p
-				    }).ToList();
+            this.propulsion = this.ObjectManager.ObjectData.Propulsions
+			    .Where(p => p.Designable || !this.chkDesignable.Checked.Value).ToList();
 
-		    ddlProp.DataStore = propulsion;
+
+            ddlProp.DataStore = propulsion.Select(p => new ListItem
+                {
+                    Key = p.Code,
+                    Text = "({0}) {1}".FormatWith(p.Name, p.Code),
+                    Tag = p
+                }).ToList();
 
 			var turrets = this.ObjectManager.ObjectData.Turrets
 				.Where(t => t.Designable || !this.chkDesignable.Checked.Value)
@@ -381,13 +408,14 @@ namespace SharpFlame.Gui.Sections
 			this.ddlTurret3.DataStore = turrets;
 		}
 
-
-		public void SelectedObject_Changed()
-		{
+        [EventSubscription(EventTopics.OnSelectedObjectChanged, typeof(OnPublisher))]
+        public void SelectedObject_Changed(object sender, EventArgs e)
+        {
+            this.DataContext = this.map;
 			this.OnDataContextChanged(EventArgs.Empty);
 		}
 
-	    void cmdRealign_Click(object sender, EventArgs e)
+        void cmdRealign_Click(object sender, EventArgs e)
 	    {
 			if( this.map == null ) return;
 
@@ -400,7 +428,7 @@ namespace SharpFlame.Gui.Sections
 		    this.map.UndoStepCreate("Align Objects");
 	    }
 
-	    void cmdFlatten_Click(object sender, EventArgs e)
+        void cmdFlatten_Click(object sender, EventArgs e)
 	    {
 			if( this.map == null ) return;
 
@@ -409,6 +437,45 @@ namespace SharpFlame.Gui.Sections
 		    this.EventBroker.UpdateMap(this);
 		    this.map.UndoStepCreate("Flatten Under Structures");
 	    }
+
+        void cmdConvertToDroid_Click(object sender, EventArgs e)
+        {
+            if( this.map == null )
+            {
+                return;
+            }
+            if( this.map.SelectedUnits.Count <= 0 )
+            {
+                return;
+            }
+
+            if( this.map.SelectedUnits.Count > 1 )
+            {
+                if( MessageBox.Show("Change design of multiple droids?", "", MessageBoxButtons.OKCancel,MessageBoxType.Question) != DialogResult.Ok )
+                {
+                    return;
+                }
+            }
+            else
+            {
+                if( MessageBox.Show("Change design of a droid?", "", MessageBoxButtons.OKCancel, MessageBoxType.Question) != DialogResult.Ok )
+                {
+                    return;
+                }
+            }
+
+            var ObjectTemplateToDesign = new clsObjectTemplateToDesign();
+            ObjectTemplateToDesign.Map = this.map;
+            this.map.SelectedUnitsAction(ObjectTemplateToDesign);
+
+            this.EventBroker.SelectedUnitsChanged(this);
+
+            if( ObjectTemplateToDesign.ActionPerformed )
+            {
+                this.map.UndoStepCreate("Object Template Removed");
+                this.EventBroker.DrawLater(this);
+            }
+        }
 
 	    void txtRotation_ValueChanged(object sender, EventArgs e)
 	    {
@@ -434,7 +501,7 @@ namespace SharpFlame.Gui.Sections
 
 		    this.EventBroker.UpdateMap(this);
 
-		    SelectedObject_Changed();
+	        this.EventBroker.SelectedUnitsChanged(this);
 		    this.map.UndoStepCreate("Object Rotation");
 		    
 			this.EventBroker.DrawLater(this);
@@ -446,7 +513,46 @@ namespace SharpFlame.Gui.Sections
 			if( this.map == null )
 				return;
 
-		}
+		    this.grpPlayers.DataContext = sender;
+
+		    if( this.map.SelectedUnits.Count <= 0 )
+		    {
+		        return;
+		    }
+
+		    if( this.grpPlayers.DataContext == null )
+		    {
+		        return;
+		    }
+
+		    if( this.map.SelectedUnits.Count > 1 )
+		    {
+                if( MessageBox.Show("Change player of multiple objects?", "", MessageBoxButtons.OKCancel) != DialogResult.Ok )
+                {
+                    //SelectedObject_Changed()
+                    //todo
+                    return;
+                }
+            }
+
+
+		    var button = sender as Button;
+		    var group = button.Tag.To<clsUnitGroup>();
+
+
+            var ObjectUnitGroup = new clsObjectUnitGroup();
+            ObjectUnitGroup.Map = this.map;
+            ObjectUnitGroup.UnitGroup = group;
+            this.map.SelectedUnitsAction(ObjectUnitGroup);
+
+		    this.EventBroker.SelectedUnitsChanged(this);
+            this.map.UndoStepCreate("Object Player Changed");
+            if( App.SettingsManager.MinimapTeamColours )
+            {
+                // Map.MinimapMakeLater();
+            }
+		    this.EventBroker.DrawLater(this);
+        }
 
 		void AnyPlayer_PreLoad(object sender, EventArgs e)
 		{

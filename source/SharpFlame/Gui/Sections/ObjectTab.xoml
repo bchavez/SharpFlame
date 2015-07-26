@@ -3,13 +3,15 @@
          xmlns:s="clr-namespace:SharpFlame.Gui.Sections;assembly=SharpFlame"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          xmlns:o="clr-namespace:SharpFlame.MouseTools;assembly=SharpFlame"
-         Text="Objects" Shown="DoShow" Click="DoClick">
+         Text="Objects" Click="Tab_Click">
     
     <StackLayout>
 
    
         <GroupBox Text="Object Name:">
-            <Label ID="lblObjectName" Text="No Object Selected" />
+            <StackLayout>
+                <Label ID="lblObjectName" Text="No Object Selected" />
+            </StackLayout>
         </GroupBox>
         
         <GroupBox ID="grpPlayers" Text="Player:">
@@ -123,7 +125,7 @@
 
         <TableLayout>
             <TableRow>
-                <Button Text="Convert Templates To Design" ID="cmdConvertToDroid" />
+                <Button Text="Convert Templates To Design" ID="cmdConvertToDroid" Click="cmdConvertToDroid_Click" />
                 <CheckBox ID="chkDesignable" Text="Designables Only" Checked="True" />
             </TableRow>
         </TableLayout>

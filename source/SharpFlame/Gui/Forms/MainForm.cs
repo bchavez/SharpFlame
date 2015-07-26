@@ -7,6 +7,7 @@ using Appccelerate.Events;
 using Eto.Drawing;
 using Eto.Forms;
 using Ninject;
+using Ninject.Activation.Strategies;
 using Ninject.Modules;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
@@ -148,42 +149,35 @@ namespace SharpFlame.Gui.Forms
 
 	    private void GenerateMenuToolBar()
 		{
-			var about = new Actions.About();
-			var quit = new Actions.Quit();
-            var settings = new Actions.Settings();
-
-			var menu = new MenuBar();
+			this.Menu = new MenuBar();
 			// create standard system menu (e.g. for OS X)
-			//Application.Instance.CreateStandardMenu(menu.Items);
 
 			// add our own items to the menu
-
-			var file = menu.Items.GetSubmenu("&File", 100);
-			file.Items.GetSubmenu ("&New Map", 100);
-			file.Items.AddSeparator ();
+			var file = Menu.Items.GetSubmenu("&File", 100);
+            file.Items.Add(new Command() { MenuText = "&New Map" });
+	        file.Items.AddSeparator();
             file.Items.Add(LoadMapCommand);
-			file.Items.AddSeparator ();
+            file.Items.AddSeparator();
 
-			var saveMenu = file.Items.GetSubmenu ("&Save", 300);
-			file.Items.AddSeparator ();
-			saveMenu.Items.GetSubmenu ("&Map fmap");
-			saveMenu.Items.AddSeparator ();
-			saveMenu.Items.GetSubmenu ("&Quick Save fmap");
-			saveMenu.Items.AddSeparator ();
-			saveMenu.Items.GetSubmenu ("Export map &LND");
-			saveMenu.Items.AddSeparator ();
-			saveMenu.Items.GetSubmenu ("Export &Tile Types");
-			saveMenu.Items.AddSeparator ();
-			saveMenu.Items.GetSubmenu ("Minimap Bitmap");
-			saveMenu.Items.GetSubmenu ("Heightmap Bitmap");
+            var saveMenu = file.Items.GetSubmenu("&Save", 300);
+	        saveMenu.Items.Add(new Command() {MenuText = "&Map fmap"});
+            saveMenu.Items.AddSeparator();
+            saveMenu.Items.Add(new Command() { MenuText = "&Quick Save fmap" });
+            saveMenu.Items.AddSeparator();
+            saveMenu.Items.Add(new Command() { MenuText = "Export map &LND" });
+            saveMenu.Items.AddSeparator();
+            saveMenu.Items.Add(new Command() { MenuText = "Export &Tile Types" });
+            saveMenu.Items.AddSeparator();
+            saveMenu.Items.Add(new Command() { MenuText = "Minimap Bitmap" });
+            saveMenu.Items.Add(new Command() { MenuText = "Heightmap Bitmap" });
 
-			file.Items.GetSubmenu ("&Import", 400);
-			file.Items.AddSeparator ();
-	        file.Items.Add(new CompileMapCommand(this), 500);
-			file.Items.AddSeparator ();
-			file.Items.Add(quit);
+            file.Items.Add(new Command() { MenuText = "&Import" });
+            file.Items.AddSeparator();
+            file.Items.Add(new CompileMapCommand(this), 500);
+            file.Items.AddSeparator();
+	        file.Items.Add(new Actions.Quit());
 
-			var toolsMenu = menu.Items.GetSubmenu("&Tools", 600);
+            var toolsMenu = Menu.Items.GetSubmenu("&Tools", 600);
 			toolsMenu.Items.GetSubmenu ("Reinterpret Terrain", 100);
 			toolsMenu.Items.GetSubmenu ("Water Triangle Correction", 200);
 			toolsMenu.Items.AddSeparator ();
@@ -192,16 +186,16 @@ namespace SharpFlame.Gui.Forms
 			toolsMenu.Items.AddSeparator ();
 			toolsMenu.Items.GetSubmenu ("Generator", 500);
 
-            var editMenu = menu.Items.GetSubmenu ("&Edit", 700);
-            editMenu.Items.Add (settings);
+            var editMenu = Menu.Items.GetSubmenu ("&Edit", 700);
+	        editMenu.Items.Add(new Actions.Settings());
 
-			var help = menu.Items.GetSubmenu("&Help", 1000);
-			help.Items.Add(about);
+			var help = Menu.Items.GetSubmenu("&Help", 1000);
+	        help.Items.Add(new Actions.About());
 
 			// optional, removes empty submenus and duplicate separators
 			// menu.Items.Trim();
 
-	        var testing = menu.Items.GetSubmenu("TESTING");
+	        var testing = Menu.Items.GetSubmenu("TESTING");
 	        testing.Items.GetSubmenu("CMD1").Click += (sender, args) =>
 	            {
 	                this.ViewInfo.LookAtTile(new XYInt(1, 1));
@@ -223,8 +217,6 @@ namespace SharpFlame.Gui.Forms
                     this.ViewInfo.MouseOverPosCalc();
                 };
             
-
-			Menu = menu;
 		}
 	}
 }

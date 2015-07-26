@@ -16,6 +16,13 @@ namespace SharpFlame.Core
 
 	    public const string OnObjectManagerLoaded = "topic://Object/Loaded";
 
+        public const string OnSelectedObjectChanged = "topic://Object/SelectionChanged";
+
+        public static void SelectedUnitsChanged(this IEventBroker broker, object sender)
+        {
+            broker.Fire(OnSelectedObjectChanged, new OnPublisher(), HandlerRestriction.None, sender, EventArgs.Empty);
+        }
+
         public static void UpdateMap(this IEventBroker broker, object sender)
         {
             broker.Fire(OnMapUpdate, new OnPublisher(), HandlerRestriction.None, sender, EventArgs.Empty);
