@@ -44,7 +44,7 @@ namespace SharpFlame.Gui.Sections
 	    private DropDown ddlTurret1;
 	    private DropDown ddlTurret2;
 		private DropDown ddlTurret3;
-		private NumericUpDown txtTurrets;
+		private NumericUpDown nudTurrets;
 	    private CheckBox chkDesignable;
 
 	    public ObjectTab ()
@@ -60,11 +60,11 @@ namespace SharpFlame.Gui.Sections
 		{
 			base.OnPreLoad(e);
 
-			this.slTurret1.Bind(t => t.Visible, this.txtTurrets.ValueBinding.Convert(d => d >= 1));
-			this.slTurret2.Bind(t => t.Visible, this.txtTurrets.ValueBinding.Convert(d => d >= 2));
-			this.slTurret3.Bind(t => t.Visible, this.txtTurrets.ValueBinding.Convert(d => d >= 3));
+			this.slTurret1.Bind(t => t.Visible, this.nudTurrets.ValueBinding.Convert(d => d >= 1));
+			this.slTurret2.Bind(t => t.Visible, this.nudTurrets.ValueBinding.Convert(d => d >= 2));
+			this.slTurret3.Bind(t => t.Visible, this.nudTurrets.ValueBinding.Convert(d => d >= 3));
 
-			this.lblObjectName.TextBinding.BindDataContext<Map>(getValue: m =>
+		    this.lblObjectName.TextBinding.BindDataContext<Map>(getValue: m =>
 				{
 					if( m.SelectedUnits.Count == 0 )
 					{
@@ -82,7 +82,7 @@ namespace SharpFlame.Gui.Sections
 					return string.Empty;
 				}, setValue: (m, s) => { }, mode: DualBindingMode.OneWay);
 
-			this.txtId.TextBinding.BindDataContext<Map>(getValue: m =>
+		    this.txtId.TextBinding.BindDataContext<Map>(getValue: m =>
 				{
 					if( m.SelectedUnits.Count == 1 )
 					{
@@ -95,8 +95,7 @@ namespace SharpFlame.Gui.Sections
 				}, setValue: null, mode: DualBindingMode.OneWay);
 
 
-
-			this.txtLabel.TextBinding.BindDataContext<Map>(getValue: m =>
+		    this.txtLabel.TextBinding.BindDataContext<Map>(getValue: m =>
 				{
 					if( m.SelectedUnits.Count == 1 )
 					{
@@ -113,18 +112,18 @@ namespace SharpFlame.Gui.Sections
 					this.txtLabel.Enabled = false;
 					return string.Empty;
 				}, setValue: null, mode: DualBindingMode.OneWay);
-            //this.txtLabel.BindDataContext(t => t.Enabled, Binding.Delegate((Map m) =>
-            //    {
-            //        if( m.SelectedUnits.Count == 1 )
-            //        {
-            //            var u = m.SelectedUnits[0];
-            //            return u.TypeBase.Type != UnitType.PlayerStructure;
-            //        }
-            //        return false;
-            //    }, setValue: null), mode: DualBindingMode.OneWay);
+		    //this.txtLabel.BindDataContext(t => t.Enabled, Binding.Delegate((Map m) =>
+		    //    {
+		    //        if( m.SelectedUnits.Count == 1 )
+		    //        {
+		    //            var u = m.SelectedUnits[0];
+		    //            return u.TypeBase.Type != UnitType.PlayerStructure;
+		    //        }
+		    //        return false;
+		    //    }, setValue: null), mode: DualBindingMode.OneWay);
 
 
-            this.txtHealth.ValueBinding.BindDataContext<Map>(getValue: m =>
+		    this.txtHealth.ValueBinding.BindDataContext<Map>(getValue: m =>
                 {
                     if( m.SelectedUnits.Count == 1 )
 					{
@@ -137,7 +136,7 @@ namespace SharpFlame.Gui.Sections
 					return 1;
 				}, setValue: null, defaultGetValue:100, mode: DualBindingMode.OneWay);
 
-			this.grpDroidEditor.BindDataContext(t => t.Enabled, Binding.Delegate((Map m) =>
+		    this.grpDroidEditor.BindDataContext(t => t.Enabled, Binding.Delegate((Map m) =>
 				{
                     DroidDesign droidType = null;
                     if( TryGetDroidDesign(out droidType) )
@@ -156,7 +155,7 @@ namespace SharpFlame.Gui.Sections
 		            }
 		            return -1;
 		        }
-		        , setValue: null, defaultGetValue: -1);
+		        , setValue: (m, val)=> ddlType_Set(m), defaultGetValue: -1);
 
 		    this.ddlBody.SelectedKeyBinding.BindDataContext(
 		        getValue: (Map m) =>
@@ -170,22 +169,32 @@ namespace SharpFlame.Gui.Sections
 		                return null;
 		            }
 		        ,
-		        setValue: ddlBody_Set);
+		        setValue: (m, val) => ddlBody_Set(m));
 
 
-			this.ddlProp.SelectedKeyBinding.BindDataContext(getValue: (Map m) =>
-			    {
-			        DroidDesign droidType = null;
-			        if( TryGetDroidDesign(out droidType) )
-			        {
-			            return droidType.Propulsion?.Code;
-			        }
+		    this.ddlProp.SelectedKeyBinding.BindDataContext(getValue: (Map m) =>
+		        {
+		            DroidDesign droidType = null;
+		            if( TryGetDroidDesign(out droidType) )
+		            {
+		                return droidType.Propulsion?.Code;
+		            }
 
-			        return null;
-			    }
-				, setValue: ddlProp_Set);
+		            return null;
+		        }
+		        , setValue: (m, val) => ddlProp_Set(m));
 
-			this.ddlTurret1.SelectedKeyBinding.BindDataContext(getValue: (Map m) =>
+		    this.nudTurrets.ValueBinding.BindDataContext<Map>(getValue: m =>
+		        {
+                    DroidDesign droidType = null;
+                    if( TryGetDroidDesign(out droidType) )
+                    {
+                        return droidType.TurretCount;
+                    }
+                    return 0;
+		        }, setValue: (m, val) => nudTurrets_Set(m, val));
+
+		    this.ddlTurret1.SelectedKeyBinding.BindDataContext(getValue: (Map m) =>
 			    {
 			        DroidDesign droidType = null;
 			        if( TryGetDroidDesign(out droidType) )
@@ -195,31 +204,31 @@ namespace SharpFlame.Gui.Sections
 
 					return null;
 				}
-				, setValue: null);
+				, setValue: (m,val)=> ddlTurret_Set(m, this.ddlTurret1));
 
-			this.ddlTurret2.SelectedKeyBinding.BindDataContext(getValue: (Map m) =>
-			    {
-			        DroidDesign droidType = null;
-			        if( TryGetDroidDesign(out droidType) )
-			        {
-			            return droidType.Turret2?.Code;
-			        }
+		    this.ddlTurret2.SelectedKeyBinding.BindDataContext(getValue: (Map m) =>
+		        {
+		            DroidDesign droidType = null;
+		            if( TryGetDroidDesign(out droidType) )
+		            {
+		                return droidType.Turret2?.Code;
+		            }
 
-					return null;
-				}
-				, setValue: null);
+		            return null;
+		        }
+		        , setValue: (m, val) => ddlTurret_Set(m, this.ddlTurret2));
 
-			this.ddlTurret3.SelectedKeyBinding.BindDataContext(getValue: (Map m) =>
-				{
-                    DroidDesign droidType = null;
-                    if( TryGetDroidDesign(out droidType) )
-                    {
-                        return droidType.Turret3?.Code;
-                    }
+		    this.ddlTurret3.SelectedKeyBinding.BindDataContext(getValue: (Map m) =>
+		        {
+		            DroidDesign droidType = null;
+		            if( TryGetDroidDesign(out droidType) )
+		            {
+		                return droidType.Turret3?.Code;
+		            }
 
-					return null;
-				}
-				, setValue: null);
+		            return null;
+		        }
+		        , setValue: (m, val) => ddlTurret_Set(m, this.ddlTurret3));
 
 
 			this.cmdConvertToDroid.BindDataContext(t => t.Enabled, Binding.Delegate((Map m) =>
@@ -234,9 +243,74 @@ namespace SharpFlame.Gui.Sections
 				}, setValue: null), mode: DualBindingMode.OneWay);
 		}
 
-        private void ddlProp_Set(Map m, string prop)
+        private void nudTurrets_Set(Map m, double val)
         {
-            if( !CanSetDesign(m, "propulsion") )
+            if( m == null ) return;
+            if( m.SelectedUnits.Count <= 0 ) return;
+            if( m.SelectedUnits.Count > 1 )
+            {
+                if( MessageBox.Show("Change number of turrets of multiple droids?", "", MessageBoxButtons.OKCancel, MessageBoxType.Question) != DialogResult.Ok )
+                {
+                    return;
+                }
+            }
+
+            var ObjectTurretCount = new clsObjectTurretCount();
+            ObjectTurretCount.Map = m;
+            ObjectTurretCount.TurretCount = val.ToByte();
+            m.SelectedUnitsAction(ObjectTurretCount);
+
+            this.EventBroker.SelectedUnitsChanged(this);
+            if( ObjectTurretCount.ActionPerformed )
+            {
+                m.UndoStepCreate("Object Number Of Turrets Changed");
+                this.EventBroker.DrawLater(this);
+            }
+        }
+
+        private void ddlType_Set(Map m)
+        {
+            if( !CanSetDesign(m, "type", this.ddlType) )
+                return;
+
+            var NewType = App.TemplateDroidTypes[this.ddlType.SelectedIndex];
+
+            var ObjectDroidType = new clsObjectDroidType();
+            ObjectDroidType.Map = m;
+            ObjectDroidType.DroidType = NewType;
+            m.SelectedUnitsAction(ObjectDroidType);
+
+            this.EventBroker.SelectedUnitsChanged(this);
+            if( ObjectDroidType.ActionPerformed )
+            {
+                m.UndoStepCreate("Object Number Of Turrets Changed");
+                this.EventBroker.DrawLater(this);
+            }
+        }
+
+        private void ddlTurret_Set(Map m, DropDown ddl)
+        {
+            if( !CanSetDesign(m, "turret", ddl) )
+                return;
+
+            var objectTurret = new clsObjectTurret();
+            objectTurret.Map = m;
+            objectTurret.Turret = this.turrets[ddl.SelectedIndex];
+            objectTurret.TurretNum = ddl.ID.ExtractInt32() - 1;
+            
+            m.SelectedUnitsAction(objectTurret);
+
+            this.EventBroker.SelectedUnitsChanged(this);
+            if( objectTurret.ActionPerformed )
+            {
+                m.UndoStepCreate("Object Turret Changed");
+                this.EventBroker.DrawLater(this);
+            }
+        }
+
+        private void ddlProp_Set(Map m)
+        {
+            if( !CanSetDesign(m, "propulsion", this.ddlProp) )
                 return;
 
             var objectPropulsion = new clsObjectPropulsion();
@@ -258,13 +332,13 @@ namespace SharpFlame.Gui.Sections
             }
         }
 
-        private bool CanSetDesign(Map m, string checktype)
+        private bool CanSetDesign(Map m, string checktype, DropDown ddl)
         {
             if( m == null )
                 return false;
-            if( !this.ddlBody.Enabled )
+            if( !ddl.Enabled )
                 return false;
-            if( this.ddlBody.SelectedIndex < 0 )
+            if( ddl.SelectedIndex < 0 )
                 return false;
             if( m.SelectedUnits.Count <= 0 )
                 return false;
@@ -278,9 +352,9 @@ namespace SharpFlame.Gui.Sections
             return true;
         }
 
-        private void ddlBody_Set(Map m, string body)
+        private void ddlBody_Set(Map m)
         {
-            if( !CanSetDesign(m, "body") )
+            if( !CanSetDesign(m, "body", this.ddlBody) )
                 return;
 
             var objectBody = new clsObjectBody();
@@ -301,6 +375,7 @@ namespace SharpFlame.Gui.Sections
 	    private GroupBox grpDroidEditor;
         private List<Body> bodies;
         private List<Propulsion> propulsion;
+        private List<Turret> turrets;
 
         private bool TryGetUnit(out Unit u)
         {
@@ -386,9 +461,10 @@ namespace SharpFlame.Gui.Sections
                     Tag = p
                 }).ToList();
 
-			var turrets = this.ObjectManager.ObjectData.Turrets
+            this.turrets = this.ObjectManager.ObjectData.Turrets
 				.Where(t => t.Designable || !this.chkDesignable.Checked.Value)
-				.Select(t =>
+                .ToList();
+	        var turretItems = this.turrets.Select(t =>
 					{
 						var typeName = string.Empty;
 						t.GetTurretTypeName(ref typeName);
@@ -403,9 +479,9 @@ namespace SharpFlame.Gui.Sections
 						return l;
 					}).ToList();
 
-			this.ddlTurret1.DataStore = turrets;
-			this.ddlTurret2.DataStore = turrets;
-			this.ddlTurret3.DataStore = turrets;
+			this.ddlTurret1.DataStore = turretItems;
+			this.ddlTurret2.DataStore = turretItems;
+			this.ddlTurret3.DataStore = turretItems;
 		}
 
         [EventSubscription(EventTopics.OnSelectedObjectChanged, typeof(OnPublisher))]

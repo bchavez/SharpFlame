@@ -3,6 +3,7 @@
          xmlns:s="clr-namespace:SharpFlame.Gui.Sections;assembly=SharpFlame"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          xmlns:o="clr-namespace:SharpFlame.MouseTools;assembly=SharpFlame"
+         xmlns:sys="clr-namespace:System;assembly=mscorlib"
          Text="Objects" Click="Tab_Click">
     
     <StackLayout>
@@ -154,7 +155,7 @@
                         <TableRow>
                             <TableLayout>
                                 <TableRow>
-                                    <NumericUpDown ID="txtTurrets" MinValue="0" MaxValue="3" Value="0" />
+                                    <NumericUpDown ID="nudTurrets" MinValue="0" MaxValue="3" Value="0" />
                                     <TableCell />
                                 </TableRow>
                             </TableLayout>                            

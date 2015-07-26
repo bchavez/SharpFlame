@@ -1710,11 +1710,9 @@ namespace SharpFlame.Mapping
                 }
             }
 
-            var Unit = default(Unit);
-            foreach ( var tempLoopVar_Unit in Units )
+            foreach ( var unit in Units )
             {
-                Unit = tempLoopVar_Unit;
-                UnitSectorsCalc(Unit);
+                UnitSectorsCalc(unit);
             }
 
             ShadowSectors = new ShadowSector[SectorCount.X, SectorCount.Y];
