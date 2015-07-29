@@ -1,6 +1,6 @@
 namespace SharpFlame.Settings
 {
-    public class KeyboardKeys
+    public class CommandName
     {
         //interface controls
         public const string ObjectSelectTool = "ObjectSelectTool";

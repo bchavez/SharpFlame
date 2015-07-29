@@ -194,25 +194,24 @@ namespace SharpFlame.Mapping
             var ZeroPos = new XYInt(0, 0);
 
             var Position = 0;
-            foreach ( var tempLoopVar_Unit in Units.GetItemsAsSimpleList() )
+            foreach ( var tempLoopVar_Unit in Units.CopyList() )
             {
                 Unit = tempLoopVar_Unit;
                 if ( !App.PosIsWithinTileArea(Unit.Pos.Horizontal, ZeroPos, NewTerrain.TileSize) )
                 {
-                    Position = Unit.MapLink.ArrayPosition;
+                    Position = Unit.MapLink.Position;
                     UnitRemove(Position);
                 }
             }
 
             Terrain = NewTerrain;
 
-            var Gateway = default(Gateway);
-            foreach ( var tempLoopVar_Gateway in Gateways.GetItemsAsSimpleClassList() )
+            
+            foreach ( var gateway in Gateways.CopyList() )
             {
-                Gateway = tempLoopVar_Gateway;
-                GatewayCreate(TileUtil.GetRotatedPos(Orientation, Gateway.PosA, OldTileLimits),
-                    TileUtil.GetRotatedPos(Orientation, Gateway.PosB, OldTileLimits));
-                Gateway.Deallocate();
+                GatewayCreate(TileUtil.GetRotatedPos(Orientation, gateway.PosA, OldTileLimits),
+                    TileUtil.GetRotatedPos(Orientation, gateway.PosB, OldTileLimits));
+                gateway.Deallocate();
             }
 
             if ( readyForUserInput )

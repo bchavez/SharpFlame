@@ -1,3 +1,10 @@
+// OK TODO: 1 Fix keyboard manager, rename it to input manager.
+//TODO: 2 Continue work on ConnectedList, wrong propulstion body/viper/vtol.
+//TODO: 3 Converting Template Desing to Droid Design, the UNIT ID should be the same and swapped with new ConnectedList
+//impelmentation. Old impelmentation had 
+
+
+
 using System;
 using System.ComponentModel;
 using Appccelerate.EventBroker;

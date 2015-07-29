@@ -1,52 +1,43 @@
-
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
-
-
 
 namespace SharpFlame.Core.Collections
 {
-    public class ConnectedList<TItemType, TSourceType> : IEnumerable<TItemType> where TItemType : class
-        where TSourceType : class
+    public class ConnectedList<TItem, TOwner> : IEnumerable<TItem>
+        where TItem : class
+        where TOwner : class
     {
-        private readonly ConnectedListItemList<TItemType, TSourceType> list =
-            new ConnectedListItemList<TItemType, TSourceType>();
+        private readonly ObservableCollection<IConnectedListItem<TItem, TOwner>> list = new ObservableCollection<IConnectedListItem<TItem, TOwner>>();
 
-        private TSourceType source;
-
-        public ConnectedList(TSourceType owner)
+        public ConnectedList(TOwner owner)
         {
-            source = owner;
-            list.AddNullItemBehavior = AddNullItemBehavior.DisallowError;
+            this.Owner = owner;
+
+            list.CollectionChanged += (sender, args) =>
+                {
+                    if( args.Action == NotifyCollectionChangedAction.Add &&
+                        args.NewItems.Contains(null) )
+                    {
+                        throw new ArgumentNullException(nameof(args.NewItems), "Adding null values is disalowed.");
+                    }
+                };
         }
 
-        public TSourceType Owner
-        {
-            get { return source; }
-        }
+        public bool IsBusy { get; private set; } = false;
 
-        public bool MaintainOrder
-        {
-            get { return list.MaintainOrder; }
-            set { list.MaintainOrder = value; }
-        }
+        public TOwner Owner { get; private set; }
 
-        public TItemType this[int position]
-        {
-            get { return list[position].Item; }
-        }
+        public TItem this[int position] => list[position].Item;
 
-        public int Count
-        {
-            get { return list.Count; }
-        }
+        public int Count => list.Count;
 
-        public IEnumerator<TItemType> GetEnumerator()
+        public IEnumerator<TItem> GetEnumerator()
         {
-            return GetEnumeratorType();
+            return list.Select(l => l.Item).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -54,38 +45,65 @@ namespace SharpFlame.Core.Collections
             return GetEnumerator();
         }
 
-        public ConnectedListItem<TItemType, TSourceType> get_ItemContainer(int position)
+        public IConnectedListItem<TItem, TOwner> GetLinkItem(int position)
         {
             return list[position];
         }
 
-        public virtual void Add(ConnectedListItem<TItemType, TSourceType> newItem)
+        public virtual void Add(IConnectedListItem<TItem, TOwner> newItem)
         {
-            if (newItem.CanAdd())
+            if( this.IsBusy ) return;
+
+            this.IsBusy = true;
+
+            if( newItem.CanAdd())
             {
-                newItem.BeforeAdd(this, list.Count);
+                newItem.OnInserting(this, 0.Max(list.Count));
                 list.Add(newItem);
             }
+
+            this.IsBusy = false;
         }
 
-        public virtual void Insert(ConnectedListItem<TItemType, TSourceType> newItem, int position)
+        public virtual void Insert(IConnectedListItem<TItem, TOwner> newItem, int position)
         {
-            if (newItem.CanAdd())
+            if( this.IsBusy ) return;
+
+            this.IsBusy = true;
+
+            if( newItem.CanAdd())
             {
-                newItem.BeforeAdd(this, position);
-                list.Insert(newItem, position);
+                newItem.OnInserting(this, position);
+                list.Insert(position, newItem);
+                for( var i = position + 1; i < list.Count; i++ )
+                {
+                    list[i].OnMoved(i);
+                }
             }
+
+            this.IsBusy = false;
         }
 
         public virtual void Remove(int position)
         {
+            if( this.IsBusy ) return;
+
+            this.IsBusy = true;
+
             var removeItem = list[position];
-            removeItem.BeforeRemove();
+            removeItem.OnRemoving();
             list.RemoveAt(position);
-            removeItem.AfterRemove();
+            for( var i = position; i < list.Count; i++ )
+            {
+                list[i].OnMoved(i);
+            }
+            removeItem.OnRemoved();
+
+
+            this.IsBusy = false;
         }
 
-        public ConnectedListItem<TItemType, TSourceType> FindLinkTo(TItemType itemToFind)
+        public IConnectedListItem<TItem, TOwner> FindLinkTo(TItem itemToFind)
         {
             return list.FirstOrDefault(link => link.Item == itemToFind);
         }
@@ -93,25 +111,15 @@ namespace SharpFlame.Core.Collections
         public void Deallocate()
         {
             Clear();
-            source = null;
+            this.Owner = null;
+
+            this.IsBusy = true;
         }
 
-        public SimpleList<TItemType> GetItemsAsSimpleList()
+        public ObservableCollection<TItem> CopyList()
         {
-            var result = new SimpleList<TItemType>();
-            result.AddRange(this);
-            return result;
-        }
-
-        public SimpleClassList<TItemType> GetItemsAsSimpleClassList()
-        {
-            var result = new SimpleClassList<TItemType>();
-
-            foreach (var connectedItem in this)
-            {
-                result.Add(connectedItem);
-            }
-
+            var result = new ObservableCollection<TItem>();
+            result.AddRange(this.ToArray());
             return result;
         }
 
@@ -121,132 +129,6 @@ namespace SharpFlame.Core.Collections
             {
                 Remove(0);
             }
-        }
-
-        public IEnumerator<TItemType> GetEnumeratorType()
-        {
-            return new EnumeratorType(this);
-        }
-
-        //public System.Collections.IEnumerator GetEnumerator()
-        //{
-
-        //#if !Mono
-        //return new Enumerator(this);
-        //#else
-        //							return new Enumerator(modLists.MonoWorkaroundConnectedList<ItemType, SourceType>(this));
-        //#endif
-        //}
-
-        public class Enumerator : IEnumerator
-        {
-            private const int StartPosition = -1;
-            private readonly ConnectedList<TItemType, TSourceType> list;
-            private int position = StartPosition;
-
-            public Enumerator(ConnectedList<TItemType, TSourceType> list)
-            {
-                this.list = list;
-            }
-
-            public object Current
-            {
-                get { return list[position]; }
-            }
-
-            public bool MoveNext()
-            {
-                position++;
-                return position < list.Count;
-            }
-
-            public void Reset()
-            {
-                position = StartPosition;
-            }
-        }
-
-        public class EnumeratorType : IEnumerator<TItemType>
-        {
-            private const int StartPosition = -1;
-            private readonly ConnectedList<TItemType, TSourceType> list;
-            private int position = StartPosition;
-
-            public EnumeratorType(ConnectedList<TItemType, TSourceType> list)
-            {
-                this.list = list;
-            }
-
-            //public object Current
-            //{
-            //get
-            //{
-            //return this.Current1;
-            //}
-            //}
-
-            public object Current1
-            {
-                get { return list[position]; }
-            }
-
-            public TItemType Current
-            {
-                get { return list[position]; }
-            }
-
-            public bool MoveNext()
-            {
-                position++;
-                return position < list.Count;
-            }
-
-            public void Reset()
-            {
-                position = StartPosition;
-            }
-
-            object IEnumerator.Current
-            {
-                get { return Current; }
-            }
-
-            
-            private bool disposedValue; // To detect redundant calls
-
-            // IDisposable
-
-            // TODO: override Finalize() only if Dispose( disposing As Boolean) above has code to free unmanaged resources.
-            //Protected Overrides Sub Finalize()
-            //    ' Do not change this code.  Put cleanup code in Dispose( disposing As Boolean) above.
-            //    Dispose(False)
-            //    MyBase.Finalize()
-            //End Sub
-
-            // This code added by Visual Basic to correctly implement the disposable pattern.
-            public void Dispose()
-            {
-                // Do not change this code.  Put cleanup code in Dispose( disposing As Boolean) above.
-                Dispose(true);
-                GC.SuppressFinalize(this);
-            }
-
-            protected virtual void Dispose(bool disposing)
-            {
-                if (!disposedValue)
-                {
-                    if (disposing)
-                    {
-                        // TODO: dispose managed state (managed objects).
-                    }
-
-                    // TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
-                    // TODO: set large fields to null.
-                }
-                disposedValue = true;
-            }
-
-            
         }
     }
 }

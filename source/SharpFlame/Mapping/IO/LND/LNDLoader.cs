@@ -1,4 +1,5 @@
 using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using Ninject.Extensions.Logging;
 using SharpFlame.Collections;
@@ -39,7 +40,7 @@ namespace SharpFlame.Mapping.IO.LND
                 // SimpleList<string> LineData = default(SimpleList<string>);
                 var Line_Num = 0;
                 LNDTile[] LNDTile = null;
-                var LNDObjects = new SimpleList<LNDObject>();
+                var LNDObjects = new ObservableCollection<LNDObject>();
                 var UnitAdd = new clsUnitAdd();
 
                 UnitAdd.Map = map;
@@ -69,13 +70,13 @@ namespace SharpFlame.Mapping.IO.LND
                 var GateText = new string[4];
                 var TileTypeText = new string[256];
                 var LNDTileTypeCount = 0;
-                var LNDGates = new SimpleList<Gateway>();
-                var Gateway = default(Gateway);
+                var LNDGates = new ObservableCollection<Gateway>();
+                Gateway Gateway;
                 var C = 0;
                 var D = 0;
-                var GotText = default(bool);
-                var FlipX = default(bool);
-                var FlipZ = default(bool);
+                bool GotText;
+                bool FlipX;
+                bool FlipZ;
                 byte Rotation = 0;
                 var NewTileSize = new XYInt();
                 double dblTemp = 0;

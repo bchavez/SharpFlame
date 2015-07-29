@@ -1,6 +1,7 @@
 
 
 using System;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace SharpFlame.Domain.ObjData
         public ConnectedList<Sensor, ObjectData> Sensors;
         public ConnectedList<StructureTypeBase, ObjectData> StructureTypes;
 
-        public SimpleList<clsTexturePage> TexturePages = new SimpleList<clsTexturePage>();
+        public ObservableCollection<clsTexturePage> TexturePages = new ObservableCollection<clsTexturePage>();
         public ConnectedList<Turret, ObjectData> Turrets;
         public ConnectedList<UnitTypeBase, ObjectData> UnitTypes;
         public ConnectedList<clsWallType, ObjectData> WallTypes;
@@ -95,7 +96,7 @@ namespace SharpFlame.Domain.ObjData
             subDirAssignWeapons = "stats".CombinePathWith("assignweapons.txt");
             subDirStructureWeapons = "stats".CombinePathWith("structureweapons.txt");
 
-            var commaFiles = new SimpleList<clsTextFile>();
+            var commaFiles = new ObservableCollection<clsTextFile>();
 
             var dataNames = new clsTextFile
                 {
@@ -230,7 +231,7 @@ namespace SharpFlame.Domain.ObjData
             //load PIEs
 
             string[] pieFiles = null;
-            var pieList = new SimpleList<clsPIE>();
+            var pieList = new ObservableCollection<clsPIE>();
 
             try
             {
@@ -314,11 +315,11 @@ namespace SharpFlame.Domain.ObjData
                 {
                     if ( fields[2] != "0" )
                     {
-                        bodyPropulsionPIEs[body.ObjectDataLink.ArrayPosition, propulsion.ObjectDataLink.ArrayPosition].LeftPIE = fields[2].ToLower();
+                        bodyPropulsionPIEs[body.ObjectDataLink.Position, propulsion.ObjectDataLink.Position].LeftPIE = fields[2].ToLower();
                     }
                     if ( fields[3] != "0" )
                     {
-                        bodyPropulsionPIEs[body.ObjectDataLink.ArrayPosition, propulsion.ObjectDataLink.ArrayPosition].RightPIE = fields[3].ToLower();
+                        bodyPropulsionPIEs[body.ObjectDataLink.Position, propulsion.ObjectDataLink.Position].RightPIE = fields[3].ToLower();
                     }
                 }
             }
@@ -579,7 +580,7 @@ namespace SharpFlame.Domain.ObjData
                         if ( baseAttachment.Models[0].ConnectorCount >= 1 )
                         {
                             XYZDouble connector = baseAttachment.Models[0].Connectors[0];
-                            var StructureWeapons = default(SimpleList<string[]>);
+                            ObservableCollection<string[]> StructureWeapons;
                             StructureWeapons = GetRowsWithValue(dataStructureWeapons.ResultData, structureTypeBase.Code);
                             if ( StructureWeapons.Count > 0 )
                             {
@@ -750,14 +751,14 @@ namespace SharpFlame.Domain.ObjData
             return returnResult;
         }
 
-        public SimpleList<string[]> GetRowsWithValue(SimpleList<string[]> textLines, string value)
+        public ObservableCollection<string[]> GetRowsWithValue(ObservableCollection<string[]> textLines, string value)
         {
-            var result = new SimpleList<string[]>();
+            var result = new ObservableCollection<string[]>();
             result.AddRange(textLines.Where(line => line[0] == value));
             return result;
         }
 
-        public clsModel GetModelForPIE(SimpleList<clsPIE> pieList, string pieLCaseFileTitle, Result resultOutput)
+        public clsModel GetModelForPIE(ObservableCollection<clsPIE> pieList, string pieLCaseFileTitle, Result resultOutput)
         {
             if ( pieLCaseFileTitle == "0" )
             {
@@ -810,7 +811,7 @@ namespace SharpFlame.Domain.ObjData
             return null;
         }
 
-        public void SetComponentName(SimpleList<string[]> names, ComponentBase componentBase, Result result)
+        public void SetComponentName(ObservableCollection<string[]> names, ComponentBase componentBase, Result result)
         {
             var valueSearchResults = GetRowsWithValue(names, componentBase.Code);
             if ( valueSearchResults.Count == 0 )
@@ -823,7 +824,7 @@ namespace SharpFlame.Domain.ObjData
             }
         }
 
-        public void SetFeatureName(SimpleList<string[]> names, FeatureTypeBase featureTypeBase, Result result)
+        public void SetFeatureName(ObservableCollection<string[]> names, FeatureTypeBase featureTypeBase, Result result)
         {
             var valueSearchResults = GetRowsWithValue(names, featureTypeBase.Code);
             if ( valueSearchResults.Count == 0 )
@@ -836,7 +837,7 @@ namespace SharpFlame.Domain.ObjData
             }
         }
 
-        public void SetStructureName(SimpleList<string[]> names, StructureTypeBase structureTypeBase, Result result)
+        public void SetStructureName(ObservableCollection<string[]> names, StructureTypeBase structureTypeBase, Result result)
         {
             var valueSearchResults = GetRowsWithValue(names, structureTypeBase.Code);
             if ( valueSearchResults.Count == 0 )
@@ -849,7 +850,7 @@ namespace SharpFlame.Domain.ObjData
             }
         }
 
-        public void SetTemplateName(SimpleList<string[]> names, DroidTemplate template, Result result)
+        public void SetTemplateName(ObservableCollection<string[]> names, DroidTemplate template, Result result)
         {
             var valueSearchResults = GetRowsWithValue(names, template.Code);
             if ( valueSearchResults.Count == 0 )
@@ -862,7 +863,7 @@ namespace SharpFlame.Domain.ObjData
             }
         }
 
-        public void SetWallName(SimpleList<string[]> names, clsWallType wallType, Result result)
+        public void SetWallName(ObservableCollection<string[]> names, clsWallType wallType, Result result)
         {
             var valueSearchResults = GetRowsWithValue(names, wallType.Code);
             if ( valueSearchResults.Count == 0 )
@@ -1007,7 +1008,7 @@ namespace SharpFlame.Domain.ObjData
                         }
                         if ( structure.WallLink.IsConnected )
                         {
-                            if ( structure.WallLink.ArrayPosition == wallType )
+                            if ( structure.WallLink.Position == wallType )
                             {
                                 return structure;
                             }

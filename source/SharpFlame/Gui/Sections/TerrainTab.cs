@@ -87,7 +87,7 @@ namespace SharpFlame.Gui.Sections
             };
 
             // Set Mousetool, when we are shown.
-            Shown += delegate {
+            this.Shown += delegate {
                 setMouseMode();
             };
 

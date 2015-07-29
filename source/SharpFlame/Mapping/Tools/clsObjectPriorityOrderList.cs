@@ -1,5 +1,6 @@
 
 
+using System.Collections.ObjectModel;
 using SharpFlame.Collections;
 using SharpFlame.Core.Collections;
 using SharpFlame.Mapping.Objects;
@@ -9,16 +10,12 @@ namespace SharpFlame.Mapping.Tools
 {
     public class clsObjectPriorityOrderList : ISimpleListTool<Unit>
     {
-        private readonly SimpleClassList<Unit> result = new SimpleClassList<Unit>();
+        private readonly ObservableCollection<Unit> result = new ObservableCollection<Unit>();
 
         private Unit Unit;
 
-        public clsObjectPriorityOrderList()
-        {
-            result.MaintainOrder = true;
-        }
 
-        public SimpleClassList<Unit> Result
+        public ObservableCollection<Unit> Result
         {
             get { return result; }
         }
@@ -34,7 +31,7 @@ namespace SharpFlame.Mapping.Tools
                     break;
                 }
             }
-            result.Insert(Unit, A);
+            result.Insert(A, Unit);
         }
 
         public void SetItem(Unit item)

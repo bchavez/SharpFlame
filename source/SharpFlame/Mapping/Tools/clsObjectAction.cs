@@ -1,5 +1,6 @@
 
 
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using SharpFlame.Mapping.Objects;
 using SharpFlame.Core.Collections;
@@ -10,14 +11,14 @@ namespace SharpFlame.Mapping.Tools
 {
     public abstract class clsObjectAction : ISimpleListTool<Unit>
     {
-        private readonly SimpleClassList<Unit> _ResultUnits = new SimpleClassList<Unit>();
+        private readonly ObservableCollection<Unit> _ResultUnits = new ObservableCollection<Unit>();
         public bool ActionPerformed;
         public Map Map;
 
         protected Unit ResultUnit;
         public Unit Unit;
 
-        public SimpleClassList<Unit> ResultUnits
+        public ObservableCollection<Unit> ResultUnits
         {
             get { return _ResultUnits; }
         }

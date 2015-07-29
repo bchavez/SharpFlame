@@ -1,6 +1,7 @@
 
 
 using System;
+using System.Collections.ObjectModel;
 using System.Windows.Forms;
 using SharpFlame.Collections;
 using SharpFlame.FileIO;
@@ -11,7 +12,7 @@ namespace SharpFlame
 {
     public partial class frmKeyboardControl
     {
-        public SimpleList<Keys> Results = new SimpleList<Keys>();
+        public ObservableCollection<Keys> Results = new ObservableCollection<Keys>();
 
         public frmKeyboardControl()
         {

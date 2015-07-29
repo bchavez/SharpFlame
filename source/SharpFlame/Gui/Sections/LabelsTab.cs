@@ -153,7 +153,7 @@ namespace SharpFlame.Gui.Sections
             base.OnLoadComplete(lcEventArgs);            
 
             // Set Mousetool, when we are shown.
-            Shown += delegate {
+            this.Click += delegate {
                                   ToolOptions.MouseTool = MouseTool.Default;
             };
         }

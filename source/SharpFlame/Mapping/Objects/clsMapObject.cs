@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using SharpFlame.FileIO;
 using SharpFlame.Core;
 using SharpFlame.Core.Collections;
@@ -70,7 +71,7 @@ namespace SharpFlame.Mapping
                 var mouseOverTerrain = this.ViewInfo.GetMouseOverTerrain();
                 if ( mouseOverTerrain != null )
                 {
-                    var pos = mouseOverTerrain.Units.FindFirstItemPosition(unit);
+                    var pos = mouseOverTerrain.Units.IndexOf(unit);
                     if ( pos >= 0 )
                     {
                         mouseOverTerrain.Units.RemoveAt(pos);
@@ -83,13 +84,13 @@ namespace SharpFlame.Mapping
 
         public void UnitSwap(Unit oldUnit, Unit newUnit)
         {
-            if ( oldUnit.MapLink.Source != this )
+            if ( oldUnit.MapLink.Owner != this )
             {
                 Debugger.Break();
                 return;
             }
 
-            UnitRemoveStoreChange(oldUnit.MapLink.ArrayPosition);
+            UnitRemoveStoreChange(oldUnit.MapLink.Position);
             var unitAdd = new clsUnitAdd
 	            {
 		            Map = this, 

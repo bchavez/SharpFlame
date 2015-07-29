@@ -27,12 +27,54 @@ namespace Eto.Gl
 		    this.Initialize();
 	    }
 
+        static GLSurface ()
+        {
+            RegisterEvent<GLSurface>(c => c.OnGLInitalized(null), GLInitializedEvent);
+        }
+        
+        public const string GLShuttingDownEvent = "GL.ShuttingDown";
+        public const string GLDrawNowEvent = "GL.DrawNow";
+        public const string GLInitializedEvent = "GL.Initialized";
 
-	    private new IHandler Handler{get{return (IHandler)base.Handler;}}
+        //public event EventHandler<EventArgs> Click
+        public event EventHandler<EventArgs> GLInitalized
+        {
+            add { this.Properties.AddHandlerEvent(GLInitializedEvent, value); }
+            remove { this.Properties.RemoveEvent(GLInitializedEvent, value); }
+        }
+        public event EventHandler<EventArgs> GLDrawNow
+        {
+            add { this.Properties.AddHandlerEvent(GLDrawNowEvent, value); }
+            remove { this.Properties.RemoveEvent(GLDrawNowEvent, value); }
+        }
+        public event EventHandler<EventArgs> GLShuttingDown
+        {
+            add { this.Properties.AddHandlerEvent(GLDrawNowEvent, value); }
+            remove { this.Properties.RemoveEvent(GLDrawNowEvent, value); }
+        }
+
+        public virtual void OnGLInitalized(EventArgs e)
+        {
+            this.Properties.TriggerEvent(GLInitializedEvent, this, e);
+        }
+        private void OnDrawNow(object sender, EventArgs e)
+        {
+            this.Properties.TriggerEvent(GLInitializedEvent, this, e);
+        }
+        public virtual void OnShuttingDown(object obj, EventArgs e)
+        {
+            this.Properties.TriggerEvent(GLShuttingDownEvent, this, e);
+        }
+
+
+
+        private new IHandler Handler{get{return (IHandler)base.Handler;}}
 
         // interface to the platform implementations
+
         // ETO WIDGET -> Platform Control
-		[AutoInitialize(false)]
+
+        [AutoInitialize(false)]
         public new interface IHandler : Control.IHandler
 		{
 			void CreateWithParams(GraphicsMode mode, int major, int minor, GraphicsContextFlags flags);
@@ -51,11 +93,12 @@ namespace Eto.Gl
         }
 
         //PLATFORM CONTROL -> ETO WIDGET
+
         protected new class Callback : Control.Callback, ICallback
         {
             public void OnInitialized(GLSurface w, EventArgs e)
             {
-                w.Platform.Invoke(() => w.OnInitialized(w, e));
+                w.Platform.Invoke(() => w.OnDrawNow(w, e));
             }
 
             public void OnShuttingDown(GLSurface w, EventArgs e)
@@ -65,19 +108,15 @@ namespace Eto.Gl
         }
 
         //Gets an instance of an object used to perform callbacks to the widget from handler implementations
+
+        static readonly object callback = new Callback();
+
         protected override object GetCallback()
         {
             return callback;
         }
 
-        static readonly object callback = new Callback();
-
-        public virtual void OnClick(EventArgs e)
-        {
-            Click(this, e);
-        }
-
-        public event EventHandler Click;
+        //public event EventHandler Click;
 
         public Size GLSize {
             get { return this.Handler.GLSize; } 
@@ -86,27 +125,6 @@ namespace Eto.Gl
 
         public bool IsInitialized {
             get { return this.Handler.IsInitialized; }
-        }
-
-        public event EventHandler Initialized = delegate {};
-
-        public virtual void OnInitialized(object obj, EventArgs e) 
-        {
-            Initialized (obj, e);
-        }
-
-        public event EventHandler ShuttingDown = delegate {};
-
-        public event EventHandler DrawNow = delegate { };
-
-        private void OnDrawNow(object sender, EventArgs e)
-        {
-            this.DrawNow(sender, e);
-        }
-
-        public virtual void OnShuttingDown(object obj, EventArgs e) 
-        {
-            ShuttingDown (obj, e);
         }
 
         public virtual void MakeCurrent() 

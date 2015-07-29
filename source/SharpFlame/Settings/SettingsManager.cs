@@ -174,72 +174,72 @@ namespace SharpFlame.Settings
 			UpdateOnStartup = true;
 
 			//Remove "old" keys
-			keyboardManager.Clear();
+			keyboardManager.RegisterClearAll();
 
 			//interface controls
-			keyboardManager.Create(KeyboardKeys.ObjectSelectTool, Keys.Escape);
+			keyboardManager.Register(CommandName.ObjectSelectTool, Keys.Escape);
 
 			//selected unit controls
-			keyboardManager.Create(KeyboardKeys.MoveObjects, Keys.M);
-			keyboardManager.Create(KeyboardKeys.DeleteObjects, Keys.Delete);
-			keyboardManager.Create(KeyboardKeys.Multiselect, Keys.Shift);
+			keyboardManager.Register(CommandName.MoveObjects, Keys.M);
+			keyboardManager.Register(CommandName.DeleteObjects, Keys.Delete);
+			keyboardManager.Register(CommandName.Multiselect, Keys.Shift);
 
 			//generalised controls
-			keyboardManager.Create(KeyboardKeys.ViewSlow, Keys.R);
-			keyboardManager.Create(KeyboardKeys.ViewFast, Keys.F);
+			keyboardManager.Register(CommandName.ViewSlow, Keys.R);
+			keyboardManager.Register(CommandName.ViewFast, Keys.F);
 
 			//picker controls
-			keyboardManager.Create(KeyboardKeys.Picker, Keys.Control);
+			keyboardManager.Register(CommandName.Picker, Keys.Control);
 
 			//view controls
-			keyboardManager.Create(KeyboardKeys.ShowTextures, Keys.F5);
-			keyboardManager.Create(KeyboardKeys.ShowLighting, Keys.F8);
-			keyboardManager.Create(KeyboardKeys.ShowWireframe, Keys.F6);
-			keyboardManager.Create(KeyboardKeys.ShowObjects, Keys.F7);
-			keyboardManager.Create(KeyboardKeys.ShowLabels, Keys.F4);
-			keyboardManager.Create(KeyboardKeys.ViewMoveMode, Keys.F1);
-			keyboardManager.Create(KeyboardKeys.ViewRotateMode, Keys.F2);
-			keyboardManager.Create(KeyboardKeys.ViewMoveLeft, Keys.A, null, true);
-			keyboardManager.Create(KeyboardKeys.ViewMoveRight, Keys.D, null, true);
-			keyboardManager.Create(KeyboardKeys.ViewMoveForwards, Keys.W, null, true);
-			keyboardManager.Create(KeyboardKeys.ViewMoveBackwards, Keys.S, null, true);
-			keyboardManager.Create(KeyboardKeys.ViewMoveUp, Keys.E, null, true);
-			keyboardManager.Create(KeyboardKeys.ViewMoveDown, Keys.C, null, true);
-			keyboardManager.Create(KeyboardKeys.ViewZoomIn, Keys.Home, null, true);
-			keyboardManager.Create(KeyboardKeys.ViewZoomOut, Keys.End, null, true);
-			keyboardManager.Create(KeyboardKeys.ViewRotateLeft, Keys.Left, null, true);
-			keyboardManager.Create(KeyboardKeys.ViewRotateRight, Keys.Right, null, true);
-			keyboardManager.Create(KeyboardKeys.ViewRotateForwards, Keys.Up, null, true);
-			keyboardManager.Create(KeyboardKeys.ViewRotateBackwards, Keys.Down, null, true);
-			keyboardManager.Create(KeyboardKeys.ViewRotateUp, Keys.PageUp, null, true);
-			keyboardManager.Create(KeyboardKeys.ViewRotateDown, Keys.PageDown, null, true);
-			keyboardManager.Create(KeyboardKeys.ViewRollLeft, Keys.LeftBracket, null, true);
-			keyboardManager.Create(KeyboardKeys.ViewRollRight, Keys.RightBracket, null, true);
-			keyboardManager.Create(KeyboardKeys.ViewReset, Keys.Backspace);
+			keyboardManager.Register(CommandName.ShowTextures, Keys.F5);
+			keyboardManager.Register(CommandName.ShowLighting, Keys.F8);
+			keyboardManager.Register(CommandName.ShowWireframe, Keys.F6);
+			keyboardManager.Register(CommandName.ShowObjects, Keys.F7);
+			keyboardManager.Register(CommandName.ShowLabels, Keys.F4);
+			keyboardManager.Register(CommandName.ViewMoveMode, Keys.F1);
+			keyboardManager.Register(CommandName.ViewRotateMode, Keys.F2);
+            keyboardManager.Register(CommandName.ViewMoveLeft, Keys.A, true);
+            keyboardManager.Register(CommandName.ViewMoveRight, Keys.D, true);
+            keyboardManager.Register(CommandName.ViewMoveForwards, Keys.W, true);
+            keyboardManager.Register(CommandName.ViewMoveBackwards, Keys.S, true);
+            keyboardManager.Register(CommandName.ViewMoveUp, Keys.E, true);
+            keyboardManager.Register(CommandName.ViewMoveDown, Keys.C, true);
+            keyboardManager.Register(CommandName.ViewZoomIn, Keys.Home, true);
+            keyboardManager.Register(CommandName.ViewZoomOut, Keys.End, true);
+            keyboardManager.Register(CommandName.ViewRotateLeft, Keys.Left, true);
+            keyboardManager.Register(CommandName.ViewRotateRight, Keys.Right, true);
+            keyboardManager.Register(CommandName.ViewRotateForwards, Keys.Up, true);
+            keyboardManager.Register(CommandName.ViewRotateBackwards, Keys.Down, true);
+            keyboardManager.Register(CommandName.ViewRotateUp, Keys.PageUp, true);
+            keyboardManager.Register(CommandName.ViewRotateDown, Keys.PageDown, true);
+            keyboardManager.Register(CommandName.ViewRollLeft, Keys.LeftBracket, true);
+            keyboardManager.Register(CommandName.ViewRollRight, Keys.RightBracket, true);
+            keyboardManager.Register(CommandName.ViewReset, Keys.Backspace);
 
-			//texture controls
-			keyboardManager.Create(KeyboardKeys.CounterClockwise, Keys.D1);
-			keyboardManager.Create(KeyboardKeys.Clockwise, Keys.D2);
-			keyboardManager.Create(KeyboardKeys.TextureFlip, Keys.D3);
-			keyboardManager.Create(KeyboardKeys.TriangleFlip, Keys.D4);
-			keyboardManager.Create(KeyboardKeys.GatewayDelete, Keys.D5);
+            //texture controls
+            keyboardManager.Register(CommandName.CounterClockwise, Keys.D1);
+			keyboardManager.Register(CommandName.Clockwise, Keys.D2);
+			keyboardManager.Register(CommandName.TextureFlip, Keys.D3);
+			keyboardManager.Register(CommandName.TriangleFlip, Keys.D4);
+			keyboardManager.Register(CommandName.GatewayDelete, Keys.D5);
 
 			//undo controls
-			keyboardManager.Create(KeyboardKeys.Undo, Keys.Z);
-			keyboardManager.Create(KeyboardKeys.Redo, Keys.Y);
-			keyboardManager.Create(KeyboardKeys.PositionLabel, Keys.P);
+			keyboardManager.Register(CommandName.Undo, Keys.Z);
+			keyboardManager.Register(CommandName.Redo, Keys.Y);
+			keyboardManager.Register(CommandName.PositionLabel, Keys.P);
 
 			// Vision Radius
-			keyboardManager.Create(KeyboardKeys.VisionRadius6, Keys.Control | Keys.D1);
-			keyboardManager.Create(KeyboardKeys.VisionRadius7, Keys.Control | Keys.D2);
-			keyboardManager.Create(KeyboardKeys.VisionRadius8, Keys.Control | Keys.D3);
-			keyboardManager.Create(KeyboardKeys.VisionRadius9, Keys.Control | Keys.D4);
-			keyboardManager.Create(KeyboardKeys.VisionRadius10, Keys.Control | Keys.D5);
-			keyboardManager.Create(KeyboardKeys.VisionRadius11, Keys.Control | Keys.D6);
-			keyboardManager.Create(KeyboardKeys.VisionRadius12, Keys.Control | Keys.D7);
-			keyboardManager.Create(KeyboardKeys.VisionRadius13, Keys.Control | Keys.D8);
-			keyboardManager.Create(KeyboardKeys.VisionRadius14, Keys.Control | Keys.D9);
-			keyboardManager.Create(KeyboardKeys.VisionRadius15, Keys.Control | Keys.D0);
+			keyboardManager.Register(CommandName.VisionRadius6, Keys.Control | Keys.D1);
+			keyboardManager.Register(CommandName.VisionRadius7, Keys.Control | Keys.D2);
+			keyboardManager.Register(CommandName.VisionRadius8, Keys.Control | Keys.D3);
+			keyboardManager.Register(CommandName.VisionRadius9, Keys.Control | Keys.D4);
+			keyboardManager.Register(CommandName.VisionRadius10, Keys.Control | Keys.D5);
+			keyboardManager.Register(CommandName.VisionRadius11, Keys.Control | Keys.D6);
+			keyboardManager.Register(CommandName.VisionRadius12, Keys.Control | Keys.D7);
+			keyboardManager.Register(CommandName.VisionRadius13, Keys.Control | Keys.D8);
+			keyboardManager.Register(CommandName.VisionRadius14, Keys.Control | Keys.D9);
+			keyboardManager.Register(CommandName.VisionRadius15, Keys.Control | Keys.D0);
 		}
 
 		public Result Save(string path)

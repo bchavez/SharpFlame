@@ -1,4 +1,5 @@
 using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using SharpFlame.Collections;
 using SharpFlame.Core;
@@ -10,7 +11,7 @@ namespace SharpFlame.Domain.ObjData
     {
         public int FieldCount = 0;
 
-        public SimpleList<string[]> ResultData = new SimpleList<string[]>();
+        public ObservableCollection<string[]> ResultData = new ObservableCollection<string[]>();
         public string SubDirectory;
         public int UniqueField = 0;
 

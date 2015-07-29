@@ -47,7 +47,7 @@ namespace SharpFlame
 
         public static Icon ProgramIcon;
 
-        public static SimpleList<string> CommandLinePaths = new SimpleList<string>();
+        public static ObservableCollection<string> CommandLinePaths = new ObservableCollection<string>();
 
         public static int GLTexture_NoTile;
         public static int GLTexture_OverflowTile;
@@ -71,7 +71,7 @@ namespace SharpFlame
         public static Terrain SelectedTerrain;
         public static Road SelectedRoad;
 
-        public static SimpleList<clsTileType> TileTypes = new SimpleList<clsTileType>();
+        public static ObservableCollection<clsTileType> TileTypes = new ObservableCollection<clsTileType>();
 
         public static DroidDesign.clsTemplateDroidType[] TemplateDroidTypes = new DroidDesign.clsTemplateDroidType[0];
         public static int TemplateDroidTypeCount;
@@ -570,7 +570,7 @@ namespace SharpFlame
             VisionSectors.Radius = radius / (Constants.TerrainGridSpacing * Constants.SectorTileSize);
         }
 
-        public static XYDouble CalcUnitsCentrePos(SimpleList<Unit> units)
+        public static XYDouble CalcUnitsCentrePos(ObservableCollection<Unit> units)
         {
             var result = default(XYDouble);
 

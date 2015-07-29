@@ -63,7 +63,7 @@ namespace SharpFlame
         public static ResultProblemGoto<clsResultItemPosGoto> CreateResultProblemGotoForObject(Unit unit, ViewInfo view)
         {
             var resultGoto = new clsResultItemPosGoto();
-            if(view.Map != unit.MapLink.Source)
+            if(view.Map != unit.MapLink.Owner)
             {
                 throw new Exception("Map changed?");
             }

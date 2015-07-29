@@ -21,13 +21,13 @@ namespace SharpFlame.Mapping.Objects
     {
         public double Health = 1.0D;
         public UInt32 ID;
-        public ConnectedListLink<Unit, Map> MapLink;
-        public ConnectedListLink<Unit, Map> MapSelectedUnitLink;
+        public ConnectedListItem<Unit, Map> MapLink;
+        public ConnectedListItem<Unit, Map> MapSelectedUnitLink;
         public WorldPos Pos;
         public bool PreferPartsOutput = false;
         public int Rotation;
         public int SavePriority;
-        public ConnectedList<clsUnitSectorConnection, Unit> Sectors;
+        public ConnectedList<UnitSectorConnection, Unit> Sectors;
         public UnitTypeBase TypeBase;
         public clsUnitGroup UnitGroup;
 
@@ -35,16 +35,16 @@ namespace SharpFlame.Mapping.Objects
 
         public Unit()
         {
-            MapLink = new ConnectedListLink<Unit, Map>(this);
-            MapSelectedUnitLink = new ConnectedListLink<Unit, Map>(this);
-            Sectors = new ConnectedList<clsUnitSectorConnection, Unit>(this);
+            MapLink = new ConnectedListItem<Unit, Map>(this);
+            MapSelectedUnitLink = new ConnectedListItem<Unit, Map>(this);
+            Sectors = new ConnectedList<UnitSectorConnection, Unit>(this);
         }
 
         public Unit(Unit unitToCopy, Map targetMap)
         {
-            MapLink = new ConnectedListLink<Unit, Map>(this);
-            MapSelectedUnitLink = new ConnectedListLink<Unit, Map>(this);
-            Sectors = new ConnectedList<clsUnitSectorConnection, Unit>(this);
+            MapLink = new ConnectedListItem<Unit, Map>(this);
+            MapSelectedUnitLink = new ConnectedListItem<Unit, Map>(this);
+            Sectors = new ConnectedList<UnitSectorConnection, Unit>(this);
 
             var IsDesign = default(bool);
 
@@ -160,7 +160,7 @@ namespace SharpFlame.Mapping.Objects
                 Result.Problem = "";
                 return Result;
             }
-            Result = MapLink.Source.ScriptLabelIsValid(Text);
+            Result = MapLink.Owner.ScriptLabelIsValid(Text);
             if ( Result.Success )
             {
                 label = Text;
@@ -187,7 +187,7 @@ namespace SharpFlame.Mapping.Objects
                     default:
                         return;
                 }
-                File.AddSection("object_" + MapLink.ArrayPosition.ToStringInvariant());
+                File.AddSection("object_" + MapLink.Position.ToStringInvariant());
                 File.AddProperty("id", ID.ToStringInvariant());
                 if ( PlayerCount >= 0 ) //not an FMap
                 {
@@ -202,7 +202,7 @@ namespace SharpFlame.Mapping.Objects
         {
             var PlayerNum = 0;
 
-            if ( UnitGroup == MapLink.Source.ScavengerUnitGroup || UnitGroup.WZ_StartPos < 0 )
+            if ( UnitGroup == MapLink.Owner.ScavengerUnitGroup || UnitGroup.WZ_StartPos < 0 )
             {
                 PlayerNum = Math.Max(PlayerCount, 7);
             }
@@ -217,7 +217,7 @@ namespace SharpFlame.Mapping.Objects
         {
             var PlayerNum = 0;
 
-            if ( UnitGroup == MapLink.Source.ScavengerUnitGroup || UnitGroup.WZ_StartPos < 0 )
+            if ( UnitGroup == MapLink.Owner.ScavengerUnitGroup || UnitGroup.WZ_StartPos < 0 )
             {
                 PlayerNum = 7;
             }
@@ -236,7 +236,7 @@ namespace SharpFlame.Mapping.Objects
                 return;
             }
 
-            MapSelectedUnitLink.Connect(MapLink.Source.SelectedUnits);
+            MapSelectedUnitLink.Connect(MapLink.Owner.SelectedUnits);
         }
 
         public void MapDeselect()

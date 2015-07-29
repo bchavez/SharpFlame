@@ -1,5 +1,6 @@
 
 
+using System.Collections.ObjectModel;
 using SharpFlame.Collections;
 using SharpFlame.Core.Collections;
 
@@ -8,9 +9,9 @@ namespace SharpFlame.Mapping
 {
     public class Undo
     {
-        public SimpleList<ShadowSector> ChangedSectors = new SimpleList<ShadowSector>();
-        public SimpleList<GatewayChange> GatewayChanges = new SimpleList<GatewayChange>();
+        public ObservableCollection<ShadowSector> ChangedSectors = new ObservableCollection<ShadowSector>();
+        public ObservableCollection<GatewayChange> GatewayChanges = new ObservableCollection<GatewayChange>();
         public string Name;
-        public SimpleList<UnitChange> UnitChanges = new SimpleList<UnitChange>();
+        public ObservableCollection<UnitChange> UnitChanges = new ObservableCollection<UnitChange>();
     }
 }

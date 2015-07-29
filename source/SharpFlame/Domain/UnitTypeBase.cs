@@ -1,6 +1,9 @@
 
 
 using System;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Linq;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Collections;
 using SharpFlame.Core.Collections;
@@ -16,9 +19,9 @@ namespace SharpFlame.Domain
 {
     public abstract class UnitTypeBase
     {
-        public readonly ConnectedListLink<UnitTypeBase, ObjectData> UnitType_ObjectDataLink;
+        public readonly ConnectedListItem<UnitTypeBase, ObjectData> UnitType_ObjectDataLink;
 
-        public readonly ConnectedListLink<UnitTypeBase, frmMain> UnitType_frmMainSelectedLink;
+        public readonly ConnectedListItem<UnitTypeBase, frmMain> UnitType_frmMainSelectedLink;
 
         public bool IsUnknown = false;
 
@@ -26,8 +29,8 @@ namespace SharpFlame.Domain
 
         protected UnitTypeBase()
         {
-            UnitType_frmMainSelectedLink = new ConnectedListLink<UnitTypeBase, frmMain>(this);
-            UnitType_ObjectDataLink = new ConnectedListLink<UnitTypeBase, ObjectData>(this);
+            UnitType_frmMainSelectedLink = new ConnectedListItem<UnitTypeBase, frmMain>(this);
+            UnitType_ObjectDataLink = new ConnectedListItem<UnitTypeBase, ObjectData>(this);
         }
 
         public XYInt GetFootprintOld
@@ -193,15 +196,24 @@ namespace SharpFlame.Domain
     public class clsAttachment
     {
         public Matrix3DMath.Matrix3D AngleOffsetMatrix = new Matrix3DMath.Matrix3D();
-        public SimpleClassList<clsAttachment> Attachments = new SimpleClassList<clsAttachment>();
-        public SimpleClassList<clsModel> Models = new SimpleClassList<clsModel>();
+        public ObservableCollection<clsAttachment> Attachments = new ObservableCollection<clsAttachment>();
+        public ObservableCollection<clsModel> Models = new ObservableCollection<clsModel>();
+
         public XYZDouble PosOffset;
 
         public clsAttachment()
         {
-            Models.AddNullItemBehavior = AddNullItemBehavior.DisallowIgnore;
             Matrix3DMath.MatrixSetToIdentity(AngleOffsetMatrix);
+            this.Models.CollectionChanged += (sender, args) =>
+                {
+                    if( args.Action == NotifyCollectionChangedAction.Add &&
+                        args.NewItems.Contains(null) )
+                    {
+                        this.Models.Remove(null);
+                    }
+                };
         }
+
 
         public void GLDraw()
         {
@@ -281,14 +293,14 @@ namespace SharpFlame.Domain
         public clsAttachment BaseAttachment;
         public string Code = "";
         public FeatureType FeatureType = FeatureType.Unknown;
-        public ConnectedListLink<FeatureTypeBase, ObjectData> FeatureType_ObjectDataLink;
+        public ConnectedListItem<FeatureTypeBase, ObjectData> FeatureType_ObjectDataLink;
         public XYInt Footprint;
         public string Name = "Unknown";
 
         public FeatureTypeBase()
         {
             Footprint = new XYInt(0, 0);
-            FeatureType_ObjectDataLink = new ConnectedListLink<FeatureTypeBase, ObjectData>(this);
+            FeatureType_ObjectDataLink = new ConnectedListItem<FeatureTypeBase, ObjectData>(this);
 
 
             Type = UnitType.Feature;
@@ -324,14 +336,14 @@ namespace SharpFlame.Domain
         public clsModel StructureBasePlate;
 
         public StructureType StructureType = StructureType.Unknown;
-        public ConnectedListLink<StructureTypeBase, ObjectData> StructureType_ObjectDataLink;
+        public ConnectedListItem<StructureTypeBase, ObjectData> StructureType_ObjectDataLink;
 
-        public ConnectedListLink<StructureTypeBase, clsWallType> WallLink;
+        public ConnectedListItem<StructureTypeBase, clsWallType> WallLink;
 
         public StructureTypeBase()
         {
-            StructureType_ObjectDataLink = new ConnectedListLink<StructureTypeBase, ObjectData>(this);
-            WallLink = new ConnectedListLink<StructureTypeBase, clsWallType>(this);
+            StructureType_ObjectDataLink = new ConnectedListItem<StructureTypeBase, ObjectData>(this);
+            WallLink = new ConnectedListItem<StructureTypeBase, clsWallType>(this);
 
 
             Type = UnitType.PlayerStructure;
@@ -420,8 +432,8 @@ namespace SharpFlame.Domain
             {
                 if ( Body.ObjectDataLink.IsConnected )
                 {
-                    BaseAttachment.AddCopyOfAttachment(Propulsion.Bodies[Body.ObjectDataLink.ArrayPosition].LeftAttachment);
-                    BaseAttachment.AddCopyOfAttachment(Propulsion.Bodies[Body.ObjectDataLink.ArrayPosition].RightAttachment);
+                    BaseAttachment.AddCopyOfAttachment(Propulsion.Bodies[Body.ObjectDataLink.Position].LeftAttachment);
+                    BaseAttachment.AddCopyOfAttachment(Propulsion.Bodies[Body.ObjectDataLink.Position].RightAttachment);
                 }
             }
 
@@ -971,11 +983,11 @@ namespace SharpFlame.Domain
     public class DroidTemplate : DroidDesign
     {
         public string Code = "";
-        public ConnectedListLink<DroidTemplate, ObjectData> DroidTemplate_ObjectDataLink;
+        public ConnectedListItem<DroidTemplate, ObjectData> DroidTemplate_ObjectDataLink;
 
         public DroidTemplate()
         {
-            DroidTemplate_ObjectDataLink = new ConnectedListLink<DroidTemplate, ObjectData>(this);
+            DroidTemplate_ObjectDataLink = new ConnectedListItem<DroidTemplate, ObjectData>(this);
 
 
             IsTemplate = true;
@@ -995,15 +1007,13 @@ namespace SharpFlame.Domain
         public ConnectedList<StructureTypeBase, clsWallType> Segments;
         public int[] TileWalls_Direction = {d0, d0, d2, d0, d3, d0, d3, d0, d1, d1, d2, d2, d3, d1, d3, d0};
         public int[] TileWalls_Segment = {0, 0, 0, 0, 0, 3, 3, 2, 0, 3, 3, 2, 0, 2, 2, 1};
-        public ConnectedListLink<clsWallType, ObjectData> WallType_ObjectDataLink;
+        public ConnectedListItem<clsWallType, ObjectData> WallType_ObjectDataLink;
 
         public clsWallType()
         {
-            WallType_ObjectDataLink = new ConnectedListLink<clsWallType, ObjectData>(this);
+            WallType_ObjectDataLink = new ConnectedListItem<clsWallType, ObjectData>(this);
             Segments = new ConnectedList<StructureTypeBase, clsWallType>(this);
 
-
-            Segments.MaintainOrder = true;
         }
     }
 }

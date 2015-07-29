@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Appccelerate.EventBroker;
 using Eto.Forms;
 using Ninject.Extensions.Logging;
@@ -24,136 +25,81 @@ namespace SharpFlame.Settings
         }
     }
 
-    public class KeyboardEventArgs : EventArgs {
-        public KeyboardKey Key;
-
-        public KeyboardEventArgs()
-        {
-        }
+    public class KeyboardEventArgs : EventArgs
+    {
+        public KeyboardCommand Key;
     }
 
-    public class KeyboardKey {
+    public class KeyboardCommand {
         public string Name { get; set; }
 
-        private Keys? key;
-        public Keys? Key { 
-            get { return key; } 
-            private set { 
-                key = value; 
-                IsChar = false;
-            }
-        }
+        public Keys? Key { get; private set; }
 
-        private char? keyChar;
-        public char? KeyChar { 
-            get { return keyChar; }
-            private set { 
-                keyChar = value;
-                IsChar = true;
-            }
-        }
-
-        public bool IsChar { get; private set; }
-        public bool Invalid { get; set; }
         public bool Repeat { get; set; }
         public bool Active { get; set; }
 
-        public KeyboardKey(string name, Keys? key = null, char? keyChar = null, bool repeat = false) 
+        public KeyboardCommand(string name, Keys? key = null, bool repeat = false)
         {
             Name = name;
-
-            if(key != null)
+            if( key != null )
             {
                 Key = key;
-            } else if(keyChar != null)
-            {
-                KeyChar = keyChar;
-            } else
-            {
-                throw new InvalidKeyException("Give either a key or a keyChar.");
             }
-            Invalid = false;
             Active = false;
             Repeat = repeat;
         }
 
-        public new string ToString() 
+        public override string ToString()
         {
-            string text = Invalid ? "!! " : "";
-            if (IsChar) {
-                return text + ((char)KeyChar).ToString();
-            } else {
-                return text + ((Keys)Key).ToShortcutString();
-            }
+            return Key?.ToString() ?? $"{Name} has no key!";
         }
     }
 
     public class KeyboardManager
     {
-        public readonly Dictionary<string, KeyboardKey> Keys;
-        public readonly Dictionary<string, KeyboardKey> ActiveKeys;
-
-        [EventPublication(KeyboardManagerEvents.OnKeyUp)]
         public event EventHandler<KeyboardEventArgs> KeyUp = delegate {};
-        [EventPublication(KeyboardManagerEvents.OnKeyDown)]
+
         public event EventHandler<KeyboardEventArgs> KeyDown = delegate {};
 
-        private readonly ILogger logger;
-        private readonly Dictionary<Keys, KeyboardKey> keyLookupTable;
-        private readonly Dictionary<char, KeyboardKey> charLookupTable;
+        public readonly Dictionary<string, KeyboardCommand> Commands = new Dictionary<string, KeyboardCommand>();
 
-        private KeyboardKey lastKeyUp;
+        public readonly Dictionary<string, KeyboardCommand> ActiveCommands = new Dictionary<string, KeyboardCommand>();
+
+        private readonly Dictionary<Keys, KeyboardCommand> hookTable = new Dictionary<Keys, KeyboardCommand>();
+
+        private readonly ILogger logger;
+
+        private UITimer watchModifier = new UITimer();
+
 
         public KeyboardManager(ILoggerFactory logFactory)
         {
             logger = logFactory.GetCurrentClassLogger();
-
-            Keys = new Dictionary<string, KeyboardKey> ();
-            ActiveKeys = new Dictionary<string, KeyboardKey> ();
-            keyLookupTable = new Dictionary<Keys, KeyboardKey> ();
-            charLookupTable = new Dictionary<char, KeyboardKey>();
-            lastKeyUp = new KeyboardKey("none", Eto.Forms.Keys.None);
+            watchModifier.Interval = 0.100;
+            watchModifier.Elapsed += WatchModifier_Elapsed;
         }
 
-        public bool Create(string name, Keys? key = null, char? keyChar = null, bool repeat = false) 
+        public void RegisterClearAll()
         {
-            if (Keys.ContainsKey(name)) {
-                throw new Exception(string.Format("The key \"{0}\" does exist.", name));
+            this.Commands.Clear();
+            this.hookTable.Clear();
+            this.ActiveCommands.Clear();
+        }
+
+        public bool Register(string name, Eto.Forms.Keys key = Eto.Forms.Keys.None, bool repeat = false)
+        {
+            if( this.Commands.ContainsKey(name) )
+            {
+                throw new Exception($"The key '{name}' already exist.");
             }
 
-            KeyboardKey kkey;
-            if(key == null && keyChar == null)
-            {
-                kkey = new KeyboardKey(name, Eto.Forms.Keys.None, null);
-                kkey.Invalid = true;
-                Keys.Add(name, kkey);
-                return false;
-            }
+            var command = new KeyboardCommand(name, key, repeat);
 
-            kkey = new KeyboardKey (name, key, keyChar, repeat);
-            Keys.Add (name, kkey);
-            if(kkey.IsChar)
+            this.Commands.Add(name, command);
+
+            if( key != Keys.None )
             {
-                try
-                {
-                    charLookupTable.Add((char)keyChar, kkey);
-                } catch(System.ArgumentException)
-                {
-                    kkey.Invalid = true;
-                    logger.Error("Tried to add key \"{0}\", keyChar: \"{1}\" but it already exists.", name, keyChar);
-                    return false;
-                }
-            } else
-            {
-                try
-                {
-                    keyLookupTable.Add((Keys)key, kkey);
-                } catch(System.ArgumentException)
-                {
-                    kkey.Invalid = true;
-                    logger.Error("Tried to add key \"{0}\", key: \"{1}\" but it already exists.", name, ((Keys)key).ToShortcutString());
-                    return false;
-                }
+                hookTable.Add(key, command);
             }
 
             return true;
@@ -163,139 +109,124 @@ namespace SharpFlame.Settings
         /// Updates the specified Key.
         /// </summary>
         /// <param name="name">Name.</param>
-        /// <param name="key">Key.</param>
-        public void Update(string name, Keys? key = null, char? keyChar = null, bool? repeat = null)
+        /// <param name="etoKey">Key.</param>
+        public void RegisterUpdate(string name, Keys etoKey = Keys.None, bool repeat = false)
         {
-            if (!Keys.ContainsKey(name)) {
-                throw new Exception(string.Format("The key \"{0}\" does not exist.", name));
+            if( !this.Commands.ContainsKey(name) )
+            {
+                throw new Exception($"The key '{name}' does not exist.");
             }
 
-            var kkey = Keys [name];
-            if(repeat == null)
+            Commands.Remove(name);
+
+            KeyboardCommand cmd;
+            if( hookTable.TryGetValue(etoKey, out cmd) )
             {
-                repeat = kkey.Repeat;
+                hookTable.Remove(etoKey);
             }
 
-            Keys.Remove (name);
-            if(kkey.IsChar)
-            {
-                charLookupTable.Remove((char)kkey.KeyChar);
-            } else
-            {
-                keyLookupTable.Remove((Keys)kkey.Key);
-            }
-
-            Create(name, key, keyChar, (bool)repeat);
+            Register(name, etoKey, repeat);
         }
 
-        public void Update(string name, KeyboardKey kkey) {
-            Update(name, kkey.Key, kkey.KeyChar, kkey.Repeat);
-        }
-
-        public void Clear()
-        {
-            Keys.Clear();
-            charLookupTable.Clear();
-            keyLookupTable.Clear();
-            ActiveKeys.Clear(); // TODO: Send a KeyUp?
-        }
-                   
-        public void HandleKeyUp(object sender, KeyEventArgs e)
-        {
-            KeyboardKey myActiveKey = null;
-            var currentKeyOnly = e.KeyData & Eto.Forms.Keys.KeyMask;
-            if (currentKeyOnly != Eto.Forms.Keys.None) {
-                // Is known key.
-                if (keyLookupTable.ContainsKey(e.KeyData)) {
-                    myActiveKey = keyLookupTable[e.KeyData];
-                }
-            } else if (e.IsChar) {
-                // Is Char
-                if(charLookupTable.ContainsKey(e.KeyChar))
-                {
-                    myActiveKey = charLookupTable[e.KeyChar];
-                }
-            } else {
-                // Is modifier only
-                if(!lastKeyUp.IsChar) // Not char
-                {
-                    var lastKeyOnly = (Eto.Forms.Keys)lastKeyUp.Key & Eto.Forms.Keys.KeyMask;
-                    if(lastKeyOnly == Eto.Forms.Keys.None) // and modifier only
-                    {
-                        return; // skip
-                    }
-                }
-
-                if (keyLookupTable.ContainsKey(e.KeyData)) {
-                    myActiveKey = keyLookupTable[e.KeyData];
-                }
-            }
-
-            if(myActiveKey == null)
-            {
-                return;
-            }
-
-            myActiveKey.Active = false;
-            lastKeyUp = myActiveKey;
-
-            if(ActiveKeys.ContainsKey(myActiveKey.Name))
-            {
-                ActiveKeys.Remove(myActiveKey.Name);
-            }
-
-            KeyUp(sender, new KeyboardEventArgs { Key = myActiveKey });
-
-            e.Handled = true;
-
-            // logger.Debug("KeyUp: {0}, Char: {1}, Handled: {2}", e.KeyData, e.IsChar ? e.KeyChar.ToString() : "no char", e.Handled);
-        }
-            
         public void HandleKeyDown(object sender, KeyEventArgs e)
         {
-            KeyboardKey myActiveKey = null;
-            var currentKeyOnly = e.KeyData & Eto.Forms.Keys.KeyMask;
-            if (currentKeyOnly != Eto.Forms.Keys.None) {
-                // Is known key.
-                if (keyLookupTable.ContainsKey(e.KeyData)) {
-                    myActiveKey = keyLookupTable[e.KeyData];
-                }
-            } else if (e.IsChar) {
-                // Is Char
-                if(charLookupTable.ContainsKey(e.KeyChar))
-                {
-                    myActiveKey = charLookupTable[e.KeyChar];
-                }
-            } else {
-                // Is modifier only
-                if (keyLookupTable.ContainsKey(e.KeyData)) {
-                    myActiveKey = keyLookupTable[e.KeyData];
-                }
-            }
-
-            if(myActiveKey == null)
+            var kd = e.KeyData;
+            KeyboardCommand cmd = null;
+            if( !hookTable.TryGetValue(kd, out cmd) )
             {
                 return;
             }
-                
-            if(myActiveKey.Active)
+
+            if( cmd.Active )
             {
-                if(myActiveKey.Repeat)
+                if( cmd.Repeat )
                 {
-                    KeyDown(sender, new KeyboardEventArgs { Key = myActiveKey });
+                    KeyDown(sender, new KeyboardEventArgs { Key = cmd });
                 }
-            } else
+            }
+            else
             {
-                myActiveKey.Active = true;
-                ActiveKeys.Add(myActiveKey.Name, myActiveKey);
-                KeyDown(sender, new KeyboardEventArgs { Key = myActiveKey });
+                Activate(cmd);
+                KeyDown(sender, new KeyboardEventArgs { Key = cmd });
             }
 
             e.Handled = true;
 
-            // logger.Debug("KeyDown: {0}, Char: {1}, Handled: {2}", e.KeyData, e.IsChar ? e.KeyChar.ToString() : "no char", e.Handled);
+            logger.Debug($"KeyDown: {kd}, Char: {( e.IsChar ? e.KeyChar.ToString() : "no char" )}, Handled: {e.Handled}");
         }
 
+        public void HandleKeyUp(object sender, KeyEventArgs e)
+        {
+            var kd = e.KeyData;
+
+            KeyboardCommand cmd = null;
+            if( !hookTable.TryGetValue(kd, out cmd) )
+            {
+                return;
+            }
+
+            Deactivate(cmd);
+            
+            KeyUp(sender, new KeyboardEventArgs { Key = cmd });
+
+            e.Handled = true;
+
+            logger.Debug($"KeyUp: {kd}, Char: { ( e.IsChar ? e.KeyChar.ToString() : "no char" ) }, Handled: {e.Handled}");
+        }
+
+        private void Activate(KeyboardCommand cmd)
+        {
+            cmd.Active = true;
+            this.ActiveCommands.Add(cmd.Name, cmd);
+        }
+
+        private void Deactivate(KeyboardCommand cmd)
+        {
+            cmd.Active = false;
+
+            if( ActiveCommands.ContainsKey(cmd.Name) )
+            {
+                ActiveCommands.Remove(cmd.Name);
+            }
+        }
+
+        private void ActivateModifier(object sender)
+        {
+            var current = Keyboard.Modifiers;
+            var keyeve = new KeyEventArgs(current, KeyEventType.KeyDown);
+
+            HandleKeyDown(sender, keyeve);
+        }
+
+        private Keys lastModifier;
+
+        public void HandleMouseDown(object sender, MouseEventArgs e)
+        {
+            if( e.Modifiers != Keys.None )
+            {
+                //we have modifer keys.
+                lastModifier = e.Modifiers;
+                ActivateModifier(sender);
+                watchModifier.Start();
+            }
+        }
+
+        private void WatchModifier_Elapsed(object sender, EventArgs e)
+        {
+            //reset modifier
+            if( Keyboard.Modifiers != Keys.None )
+                return;//still going.
+
+            var active = this.ActiveCommands.Values.ToArray()
+                .Where( cmd => cmd.Key == lastModifier);
+
+            if( active.Any() )
+            {
+                active.ForEach(Deactivate);
+            }
+
+            watchModifier.Stop();
+        }
     }
 }
 

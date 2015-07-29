@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using Appccelerate.EventBroker;
 using Eto.Forms;
@@ -35,12 +36,12 @@ namespace SharpFlame.Mapping
         public bool ChangedSinceSave = false;
         public Dialog CompileScreen;
 
-        public SimpleClassList<GatewayChange> GatewayChanges;
+        public ObservableCollection<GatewayChange> GatewayChanges;
         public ConnectedList<Gateway, Map> Gateways;
 
         public int HeightMultiplier = Constants.DefaultHeightMultiplier;
         public InterfaceOptions InterfaceOptions;
-        public SimpleClassList<Message> Messages;
+        public ObservableCollection<Message> Messages;
 
         public Painter Painter;
         public PathInfo PathInfo;
@@ -57,8 +58,8 @@ namespace SharpFlame.Mapping
         public byte[] TileTypeNum = new byte[0];
         public Tileset Tileset;
         public int UndoPosition;
-        public SimpleClassList<Undo> Undos;
-        public SimpleClassList<UnitChange> UnitChanges;
+        public ObservableCollection<Undo> Undos;
+        public ObservableCollection<UnitChange> UnitChanges;
         public XYInt UnitSelectedAreaVertexA;
         private bool readyForUserInput;
 
@@ -207,8 +208,6 @@ namespace SharpFlame.Mapping
         private void InitializeMap()
         {
             MakeDefaultUnitGroups();
-            ScriptPositions.MaintainOrder = true;
-            ScriptAreas.MaintainOrder = true;
         }
 
         public void TerrainBlank(XYInt tileSize)
@@ -578,10 +577,10 @@ namespace SharpFlame.Mapping
             var ZeroPos = new XYInt(0, 0);
 
             var Position = 0;
-            foreach ( var tempLoopVar_Unit in Units.GetItemsAsSimpleList() )
+            foreach ( var tempLoopVar_Unit in Units.CopyList() )
             {
                 Unit = tempLoopVar_Unit;
-                Position = Unit.MapLink.ArrayPosition;
+                Position = Unit.MapLink.Position;
                 if ( !App.PosIsWithinTileArea(Units[Position].Pos.Horizontal, ZeroPos, NewTerrain.TileSize) )
                 {
                     UnitRemove(Position);
@@ -590,7 +589,7 @@ namespace SharpFlame.Mapping
 
             Terrain = NewTerrain;
 
-            foreach ( var tempLoopVar_Gateway in Gateways.GetItemsAsSimpleList() )
+            foreach ( var tempLoopVar_Gateway in Gateways.CopyList() )
             {
                 Gateway = tempLoopVar_Gateway;
                 if ( Gateway.IsOffMap() )
@@ -602,14 +601,14 @@ namespace SharpFlame.Mapping
             var PosOffset = new XYInt(Offset.X * Constants.TerrainGridSpacing, Offset.Y * Constants.TerrainGridSpacing);
 
             var ScriptPosition = default(clsScriptPosition);
-            foreach ( var tempLoopVar_ScriptPosition in ScriptPositions.GetItemsAsSimpleList() )
+            foreach ( var tempLoopVar_ScriptPosition in ScriptPositions.CopyList() )
             {
                 ScriptPosition = tempLoopVar_ScriptPosition;
                 ScriptPosition.MapResizing(PosOffset);
             }
 
             var ScriptArea = default(clsScriptArea);
-            foreach ( var tempLoopVar_ScriptArea in ScriptAreas.GetItemsAsSimpleList() )
+            foreach ( var tempLoopVar_ScriptArea in ScriptAreas.CopyList() )
             {
                 ScriptArea = tempLoopVar_ScriptArea;
                 ScriptArea.MapResizing(PosOffset);
@@ -647,7 +646,7 @@ namespace SharpFlame.Mapping
                 var Unit = default(Unit);
                 var structureTypeBase = default(StructureTypeBase);
                 var Footprint = new XYInt();
-                var Connection = default(clsUnitSectorConnection);
+                var Connection = default(UnitSectorConnection);
                 var FootprintStart = new XYInt();
                 var FootprintFinish = new XYInt();
                 foreach ( var tempLoopVar_Connection in Sectors[X, Y].Units )
@@ -856,7 +855,7 @@ namespace SharpFlame.Mapping
             {
                 for ( X = Start.X; X <= Finish.X; X++ )
                 {
-                    clsUnitSectorConnection.Create(Unit, Sectors[X, Y]);
+                    UnitSectorConnection.Create(Unit, Sectors[X, Y]);
                 }
             }
         }
@@ -1031,7 +1030,7 @@ namespace SharpFlame.Mapping
             var SectorNum = new XYInt();
             var CurrentSector = default(ShadowSector);
             var UndoSector = default(ShadowSector);
-            var NewSectorsForThisUndo = new SimpleList<ShadowSector>();
+            var NewSectorsForThisUndo = new ObservableCollection<ShadowSector>();
             foreach ( var tempLoopVar_UndoSector in ThisUndo.ChangedSectors )
             {
                 UndoSector = tempLoopVar_UndoSector;
@@ -1061,7 +1060,7 @@ namespace SharpFlame.Mapping
                 if ( ThisUndo.UnitChanges[A].Type == UnitChangeType.Added )
                 {
                     //remove the unit from the map
-                    UnitRemove(Unit.MapLink.ArrayPosition);
+                    UnitRemove(Unit.MapLink.Position);
                 }
                 else if ( ThisUndo.UnitChanges[A].Type == UnitChangeType.Deleted )
                 {
@@ -1112,7 +1111,7 @@ namespace SharpFlame.Mapping
             var SectorNum = new XYInt();
             var CurrentSector = default(ShadowSector);
             var UndoSector = default(ShadowSector);
-            var NewSectorsForThisUndo = new SimpleList<ShadowSector>();
+            var NewSectorsForThisUndo = new ObservableCollection<ShadowSector>();
             foreach ( var tempLoopVar_UndoSector in ThisUndo.ChangedSectors )
             {
                 UndoSector = tempLoopVar_UndoSector;
@@ -1151,7 +1150,7 @@ namespace SharpFlame.Mapping
                 else if ( ThisUndo.UnitChanges[A].Type == UnitChangeType.Deleted )
                 {
                     //remove the unit from the map
-                    UnitRemove(Unit.MapLink.ArrayPosition);
+                    UnitRemove(Unit.MapLink.Position);
                 }
                 else
                 {
@@ -1362,13 +1361,13 @@ namespace SharpFlame.Mapping
 
             if ( DeleteUnits )
             {
-                var UnitsToDelete = new SimpleList<Unit>();
+                var UnitsToDelete = new ObservableCollection<Unit>();
                 var Unit = default(Unit);
                 for ( Y = SectorStart.Y; Y <= SectorFinish.Y; Y++ )
                 {
                     for ( X = SectorStart.X; X <= SectorFinish.X; X++ )
                     {
-                        var Connection = default(clsUnitSectorConnection);
+                        var Connection = default(UnitSectorConnection);
                         foreach ( var tempLoopVar_Connection in Sectors[X, Y].Units )
                         {
                             Connection = tempLoopVar_Connection;
@@ -1385,7 +1384,7 @@ namespace SharpFlame.Mapping
                     Unit = tempLoopVar_Unit;
                     if ( Unit.MapLink.IsConnected ) //units may be in the list multiple times and already be deleted
                     {
-                        UnitRemoveStoreChange(Unit.MapLink.ArrayPosition);
+                        UnitRemoveStoreChange(Unit.MapLink.Position);
                     }
                 }
             }
@@ -1519,7 +1518,7 @@ namespace SharpFlame.Mapping
                 return;
             }
 
-            var Connection = default(clsUnitSectorConnection);
+            var Connection = default(UnitSectorConnection);
 
             foreach ( var tempLoopVar_Connection in UnitToUpdateFor.Sectors )
             {
@@ -1731,12 +1730,10 @@ namespace SharpFlame.Mapping
             AutoTextureChanges = new clsAutoTextureChanges(this);
             TerrainInterpretChanges = new clsTerrainUpdate(Terrain.TileSize);
 
-            UnitChanges = new SimpleClassList<UnitChange>();
-            UnitChanges.MaintainOrder = true;
-            GatewayChanges = new SimpleClassList<GatewayChange>();
-            GatewayChanges.MaintainOrder = true;
-            Undos = new SimpleClassList<Undo>();
-            Undos.MaintainOrder = true;
+            UnitChanges = new ObservableCollection<UnitChange>();
+            GatewayChanges = new ObservableCollection<GatewayChange>();
+            
+            Undos = new ObservableCollection<Undo>();
             UndoPosition = 0;
 
             SelectedUnits = new ConnectedList<Unit, Map>(this);
@@ -1744,8 +1741,7 @@ namespace SharpFlame.Mapping
             _SelectedUnitGroup = new clsUnitGroupContainer();
             SelectedUnitGroup.Item = ScavengerUnitGroup;
 
-            Messages = new SimpleClassList<Message>();
-            Messages.MaintainOrder = true;
+            Messages = new ObservableCollection<Message>();
         }
 
         public void Update(MinimapGl minimapGl)
@@ -2038,7 +2034,7 @@ namespace SharpFlame.Mapping
         {
             var SelectAction = new clsObjectSelect();
 
-            SelectedUnits.GetItemsAsSimpleClassList().PerformTool(Tool);
+            SelectedUnits.CopyList().PerformTool(Tool);
             SelectedUnits.Clear();
             Tool.ResultUnits.PerformTool(SelectAction);
         }
@@ -2073,15 +2069,15 @@ namespace SharpFlame.Mapping
             var UnitTile = new XYInt();
             var Difference = new XYInt();
             var TileWalls = Util.TileWalls.None;
-            var Walls = new SimpleList<Unit>();
-            var Removals = new SimpleList<Unit>();
+            var Walls = new ObservableCollection<Unit>();
+            var Removals = new ObservableCollection<Unit>();
             var unitTypeBase = default(UnitTypeBase);
             var structureTypeBase = default(StructureTypeBase);
             var X = 0;
             var Y = 0;
             var MinTile = new XYInt();
             var MaxTile = new XYInt();
-            var Connection = default(clsUnitSectorConnection);
+            var Connection = default(UnitSectorConnection);
             MinTile.X = TileNum.X - 1;
             MinTile.Y = TileNum.Y - 1;
             MaxTile.X = TileNum.X + 1;
@@ -2103,7 +2099,7 @@ namespace SharpFlame.Mapping
                         if ( unitTypeBase.Type == UnitType.PlayerStructure )
                         {
                             structureTypeBase = (StructureTypeBase)unitTypeBase;
-                            if ( structureTypeBase.WallLink.Source == WallType )
+                            if ( structureTypeBase.WallLink.Owner == WallType )
                             {
                                 UnitTile = GetPosTileNum(Unit.Pos.Horizontal);
                                 Difference.X = UnitTile.X - TileNum.X;
@@ -2150,7 +2146,7 @@ namespace SharpFlame.Mapping
             foreach ( var tempLoopVar_Unit in Removals )
             {
                 Unit = tempLoopVar_Unit;
-                UnitRemoveStoreChange(Unit.MapLink.ArrayPosition);
+                UnitRemoveStoreChange(Unit.MapLink.Position);
             }
 
             var NewUnit = new Unit();

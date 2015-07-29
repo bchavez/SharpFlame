@@ -1,67 +1,30 @@
 
 
 using System.Diagnostics;
-
+using System.Linq;
 
 
 namespace SharpFlame.Core.Collections
 {
-    public class ConnectedListLink<TItemType, TSourceType> : ConnectedListItem<TItemType, TSourceType>
-        where TItemType : class where TSourceType : class
+    public class ConnectedListItem<TItem, TOwner> : IConnectedListItem<TItem, TOwner>
+        where TItem : class where TOwner : class
     {
-        private ConnectedList<TItemType, TSourceType> connectedList;
-        private TItemType owner;
-        private int position = -1;
-
-        public ConnectedListLink(TItemType owner)
+        public ConnectedListItem(TItem item)
         {
-            this.owner = owner;
+            this.Item = item;
         }
 
-        public ConnectedList<TItemType, TSourceType> ParentList
-        {
-            get { return connectedList; }
-        }
+        public ConnectedList<TItem, TOwner> List { get; private set; }
 
-        public int ArrayPosition
-        {
-            get { return position; }
-        }
+        public int Position { get; private set; } = -1; //my position in the list
 
-        public bool IsConnected
-        {
-            get { return position >= 0; }
-        }
+        public bool IsConnected => this.Position >= 0;
 
-        public override TItemType Item
-        {
-            get { return owner; }
-        }
+        public virtual TItem Item { get; private set; }
 
-        public override TSourceType Source
-        {
-            get
-            {
-                if (IsConnected)
-                {
-                    return connectedList.Owner;
-                }
-                return null;
-            }
-        }
+        public virtual TOwner Owner => IsConnected ? this.List.Owner : null;
 
-        public override void AfterMove(int newPosition)
-        {
-            position = newPosition;
-        }
-
-        public override void BeforeRemove()
-        {
-            connectedList = null;
-            position = -1;
-        }
-
-        public void Connect(ConnectedList<TItemType, TSourceType> list)
+        public void Connect(ConnectedList<TItem, TOwner> list)
         {
             if (IsConnected)
             {
@@ -72,7 +35,7 @@ namespace SharpFlame.Core.Collections
             list.Add(this);
         }
 
-        public void ConnectInsert(ConnectedList<TItemType, TSourceType> list, int pos)
+        public void ConnectInsert(ConnectedList<TItem, TOwner> list, int pos)
         {
             if (IsConnected)
             {
@@ -83,15 +46,15 @@ namespace SharpFlame.Core.Collections
             list.Insert(this, pos);
         }
 
-        public override void Disconnect()
+        public virtual void Disconnect()
         {
-            if (connectedList == null)
+            if (this.List == null)
             {
                 Debugger.Break();
                 return;
             }
-
-            connectedList.Remove(connectedList.Count - 1);
+            
+            this.List.Remove(this.Position);
         }
 
         public void Deallocate()
@@ -100,22 +63,33 @@ namespace SharpFlame.Core.Collections
             {
                 Disconnect();
             }
-            owner = null;
+            this.Item = null;
         }
 
-        public override void AfterRemove()
-        {
-        }
-
-        public override bool CanAdd()
+        public virtual bool CanAdd()
         {
             return !IsConnected;
         }
 
-        public override void BeforeAdd(ConnectedList<TItemType, TSourceType> newList, int newPosition)
+        public virtual void OnInserting(ConnectedList<TItem, TOwner> newList, int newPosition)
         {
-            connectedList = newList;
-            position = newPosition;
+            this.List = newList;
+            this.Position = newPosition;
+        }
+
+        public virtual void OnRemoving()
+        {
+            this.List = null;
+            this.Position = -1;
+        }
+
+        public virtual void OnRemoved()
+        {
+        }
+
+        public virtual void OnMoved(int newPosition)
+        {
+            this.Position = newPosition;
         }
     }
 }

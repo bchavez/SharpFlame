@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<eto:Dialog
+	   xmlns="http://schema.picoe.ca/eto.forms" 
+	   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+       xmlns:eto="clr-namespace:Eto.Forms;assembly=Eto"
+       xmlns:s="clr-namespace:SharpFlame.Gui.Controls;assembly=SharpFlame"
+       Title="Enter a Key"
+       Topmost="True"
+      
+       KeyUp="Dialog_KeyUp">
+
+    <eto:StackLayout>
+        <eto:Label ID="lblKey" Text="[None]"></eto:Label>
+        <eto:CheckBox ID="chkCtrl" Text="Use CTRL" Tag="{ x:Static eto:Keys.Control }" CheckedChanged="chkModifer_Changed"></eto:CheckBox>
+        <eto:CheckBox ID="chkAlt" Text="Use ALT" Tag="{ x:Static eto:Keys.Alt }" CheckedChanged="chkModifer_Changed"></eto:CheckBox>
+        <eto:CheckBox ID="chkShift" Text="Use SHIFT" Tag="{x:Static eto:Keys.Shift}" CheckedChanged="chkModifer_Changed"></eto:CheckBox>
+        <eto:Button Click="cmdClose_Click" Text="Done" ></eto:Button>
+    </eto:StackLayout>
+</eto:Dialog>

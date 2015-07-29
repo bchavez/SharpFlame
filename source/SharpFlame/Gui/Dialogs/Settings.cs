@@ -2,14 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.IO;
+using System.Diagnostics;
 using System.Linq;
-using Eto;
 using Eto.Drawing;
 using Eto.Forms;
 using Ninject;
 using SharpFlame.Core.Domain.Colors;
-using SharpFlame;
 using SharpFlame.Settings;
 
 namespace SharpFlame.Gui.Dialogs
@@ -258,21 +256,22 @@ namespace SharpFlame.Gui.Dialogs
                 };
 
             // keyboard
-            grvKeyboard.MouseUp += (sender, e) => 
-            {
-                // Show the Dialog
-                var name = ((KeyboardGridItem)grvKeyboard.SelectedItem).Name;
-                var key = Keyboard.Keys[name];
-                var dialog = new Dialogs.KeyInput { Key = key };
-                dialog.ShowModal(Application.Instance.MainForm);
+            grvKeyboard.MouseUp += (sender, e) =>
+                {
+                    if( grvKeyboard.SelectedItem == null ) return;
+                    // Show the Dialog
+                    var name = ( (KeyboardGridItem)grvKeyboard.SelectedItem ).Name;
+                    var cmd = Keyboard.Commands[name];
+                    var dialog = new Dialogs.KeyInput();
+                    dialog.ShowModal(Application.Instance.MainForm);
 
-                // Update the key
-                Console.WriteLine("Update key: \"{0}\" to \"{1}\".", key.ToString(), dialog.Key.ToString());
-                Keyboard.Update(name, dialog.Key);
+                    // Update the key
+                    Debug.WriteLine($"Update key: '{cmd.Name}' to '{dialog.KeyData}'.");
+                    Keyboard.RegisterUpdate(name, dialog.KeyData, cmd.Repeat);
 
-                // Update the Gridview item.
-                ((KeyboardGridItem)grvKeyboard.SelectedItem).Key = Keyboard.Keys[name].ToString();              
-            };
+                    // Update the Gridview item.
+                    ( (KeyboardGridItem)grvKeyboard.SelectedItem ).Key = Keyboard.Commands[name].ToString();
+                };
 
             drawMinimapCliffColour.MouseDown += (sender, e) =>
                 {
@@ -629,7 +628,7 @@ namespace SharpFlame.Gui.Dialogs
 
             var store = new DataStoreCollection<object>();
             grvKeyboard.DataStore = store;
-            foreach (KeyValuePair<string, KeyboardKey> pair in Keyboard.Keys)
+            foreach (KeyValuePair<string, KeyboardCommand> pair in Keyboard.Commands)
             {
                 store.Add(new KeyboardGridItem(
                     pair.Key, 

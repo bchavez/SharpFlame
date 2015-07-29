@@ -8,18 +8,18 @@ namespace SharpFlame.Mapping
 {
     public class Gateway
     {
-        public ConnectedListLink<Gateway, Map> MapLink;
+        public ConnectedListItem<Gateway, Map> MapLink;
         public XYInt PosA;
         public XYInt PosB;
 
         public Gateway()
         {
-            MapLink = new ConnectedListLink<Gateway, Map>(this);
+            MapLink = new ConnectedListItem<Gateway, Map>(this);
         }
 
         public bool IsOffMap()
         {
-            var terrainSize = MapLink.Source.Terrain.TileSize;
+            var terrainSize = MapLink.Owner.Terrain.TileSize;
 
             return PosA.X < 0
                    | PosA.X >= terrainSize.X

@@ -6,6 +6,7 @@ using Appccelerate.EventBroker.Handlers;
 using Eto.Forms;
 using Ninject;
 using SharpFlame.Core;
+using SharpFlame.Core.Collections;
 using SharpFlame.Domain;
 using SharpFlame.FileIO;
 using SharpFlame.Mapping;
@@ -499,7 +500,7 @@ namespace SharpFlame.Gui.Sections
 			    {
 				    Map = this.map
 			    };
-		    this.map.SelectedUnits.GetItemsAsSimpleList().PerformTool(align);
+		    this.map.SelectedUnits.CopyList().PerformTool(align);
 		    this.EventBroker.UpdateMap(this);
 		    this.map.UndoStepCreate("Align Objects");
 	    }
@@ -509,7 +510,7 @@ namespace SharpFlame.Gui.Sections
 			if( this.map == null ) return;
 
 		    var flatten = new clsObjectFlattenTerrain();
-		    this.map.SelectedUnits.GetItemsAsSimpleClassList().PerformTool(flatten);
+		    this.map.SelectedUnits.CopyList().PerformTool(flatten);
 		    this.EventBroker.UpdateMap(this);
 		    this.map.UndoStepCreate("Flatten Under Structures");
 	    }

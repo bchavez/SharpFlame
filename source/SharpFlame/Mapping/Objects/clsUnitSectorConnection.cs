@@ -1,76 +1,60 @@
 
 
+using System.Diagnostics;
 using SharpFlame.Collections;
 using SharpFlame.Core.Collections;
 
 
 namespace SharpFlame.Mapping.Objects
 {
-    public class clsUnitSectorConnection
+    public class UnitSectorConnection
     {
-        protected Link<Sector> _SectorLink;
-        protected Link<Unit> _UnitLink;
+        protected Link<Sector> sectorLink;
+        protected Link<Unit> unitLink;
 
-        public clsUnitSectorConnection()
+        public UnitSectorConnection()
         {
-            _UnitLink = new Link<Unit>(this);
-            _SectorLink = new Link<Sector>(this);
+            unitLink = new Link<Unit>(this);
+            sectorLink = new Link<Sector>(this);
         }
 
-        public virtual Unit Unit
-        {
-            get { return _UnitLink.Source; }
-        }
+        public virtual Unit Unit => unitLink.Owner;
 
-        public virtual Sector Sector
-        {
-            get { return _SectorLink.Source; }
-        }
+        public virtual Sector Sector => sectorLink.Owner;
 
-        public static clsUnitSectorConnection Create(Unit Unit, Sector Sector)
+        public static UnitSectorConnection Create(Unit unit, Sector sector)
         {
-            if ( Unit == null )
+            if ( unit?.Sectors?.IsBusy == null )
             {
                 return null;
             }
-            if ( Unit.Sectors == null )
-            {
-                return null;
-            }
-            if ( Sector == null )
-            {
-                return null;
-            }
-            if ( Sector.Units == null )
+            if ( sector?.Units?.IsBusy == null )
             {
                 return null;
             }
 
-            var Result = new clsUnitSectorConnection();
-            Result._UnitLink.Connect(Unit.Sectors);
-            Result._SectorLink.Connect(Sector.Units);
-            return Result;
+            var result = new UnitSectorConnection();
+            result.unitLink.Connect(unit.Sectors);
+            result.sectorLink.Connect(sector.Units);
+            return result;
         }
 
         public void Deallocate()
         {
-            _UnitLink.Deallocate();
-            _SectorLink.Deallocate();
+            unitLink.Deallocate();
+            sectorLink.Deallocate();
         }
 
-        protected class Link<SourceType> : ConnectedListLink<clsUnitSectorConnection, SourceType> where SourceType : class
+        protected class Link<SourceType> : ConnectedListItem<UnitSectorConnection, SourceType> where SourceType : class
         {
-            public Link(clsUnitSectorConnection Owner) : base(Owner)
+            public Link(UnitSectorConnection item) : base(item)
             {
             }
 
-            public override void AfterRemove()
-            {              
-                base.AfterRemove();
-
-                if (Item != null) {
-                    Item.Deallocate ();
-                }
+            public override void OnRemoved()
+            {
+                base.OnRemoved();
+                Item.Deallocate();
             }
         }
     }

@@ -14,17 +14,17 @@ namespace SharpFlame.Mapping
         public int GLList_Textured;
         public int GLList_Wireframe;
         public XYInt Pos;
-        public ConnectedList<clsUnitSectorConnection, Sector> Units;
+        public ConnectedList<UnitSectorConnection, Sector> Units;
 
         public Sector()
         {
             Pos = new XYInt (0, 0);
-            Units = new ConnectedList<clsUnitSectorConnection, Sector>(this);
+            Units = new ConnectedList<UnitSectorConnection, Sector>(this);
         }
 
         public Sector(XYInt NewPos)
         {
-            Units = new ConnectedList<clsUnitSectorConnection, Sector>(this);
+            Units = new ConnectedList<UnitSectorConnection, Sector>(this);
 
 
             Pos = NewPos;

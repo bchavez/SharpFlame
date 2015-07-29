@@ -283,7 +283,7 @@ namespace SharpFlame.Mapping.IO.Wz
                     // IS module.
                     sectorNum = map.GetPosSectorNum(unit.Pos.Horizontal);
                     Unit underneath = null;
-                    var connection = default(clsUnitSectorConnection);
+                    var connection = default(UnitSectorConnection);
                     foreach ( var tempLoopVar_Connection in map.Sectors[sectorNum.X, sectorNum.Y].Units )
                     {
                         connection = tempLoopVar_Connection;
@@ -310,7 +310,7 @@ namespace SharpFlame.Mapping.IO.Wz
                                     if ( unit.Pos.Horizontal.X >= moduleMin.X & unit.Pos.Horizontal.X < moduleMax.X &
                                         unit.Pos.Horizontal.Y >= moduleMin.Y & unit.Pos.Horizontal.Y < moduleMax.Y )
                                     {
-                                        unitModuleCount[otherUnit.MapLink.ArrayPosition]++;
+                                        unitModuleCount[otherUnit.MapLink.Position]++;
                                         underneath = otherUnit;
                                         break;
                                     }
@@ -358,7 +358,7 @@ namespace SharpFlame.Mapping.IO.Wz
                     File.AddProperty("name", structureTypeBase.Code);
                     if ( structureTypeBase.WallLink.IsConnected )
                     {
-                        File.AddProperty("wall/type", structureTypeBase.WallLink.ArrayPosition.ToStringInvariant());
+                        File.AddProperty("wall/type", structureTypeBase.WallLink.Position.ToStringInvariant());
                     }
                     File.AddProperty("position", unit.GetINIPosition());
                     File.AddProperty("rotation", unit.GetINIRotation());
@@ -384,7 +384,7 @@ namespace SharpFlame.Mapping.IO.Wz
                         moduleLimit = 0;
                         break;
                     }
-                    if ( unitModuleCount[unit.MapLink.ArrayPosition] > moduleLimit )
+                    if ( unitModuleCount[unit.MapLink.Position] > moduleLimit )
                     {
                         moduleCount = moduleLimit;
                         if ( tooManyModulesWarningCount < tooManyModulesWarningMaxCount )
@@ -392,13 +392,13 @@ namespace SharpFlame.Mapping.IO.Wz
                             ReturnResult.WarningAdd(string.Format("Structure {0} at {1} has too many modules ({2})",
                                                                   structureTypeBase.GetDisplayTextCode(),
                                                                   unit.GetPosText(),
-                                                                  unitModuleCount[unit.MapLink.ArrayPosition]));
+                                                                  unitModuleCount[unit.MapLink.Position]));
                         }
                         tooManyModulesWarningCount++;
                     }
                     else
                     {
-                        moduleCount = unitModuleCount[unit.MapLink.ArrayPosition];
+                        moduleCount = unitModuleCount[unit.MapLink.Position];
                     }
                     File.AddProperty("modules", moduleCount.ToStringInvariant());
                 }

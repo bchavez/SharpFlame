@@ -184,8 +184,8 @@ namespace SharpFlame.Gui.Sections
 
 		public void RefreshGridViews()
 		{
-			var objFeatures = this.ObjectManager.ObjectData.FeatureTypes.GetItemsAsSimpleList()
-				.ConvertAll(f => new PlaceObjectGridViewItem(f));
+			var objFeatures = this.ObjectManager.ObjectData.FeatureTypes.CopyList()
+				.Select(f => new PlaceObjectGridViewItem(f));
 
 			this.features.Clear();
 			this.features.AddRange(objFeatures);
@@ -193,8 +193,8 @@ namespace SharpFlame.Gui.Sections
 			this.gFeatures.DataStore = features;
 
 
-			var objStrcuts = this.ObjectManager.ObjectData.StructureTypes.GetItemsAsSimpleList()
-				.ConvertAll(f => new PlaceObjectGridViewItem(f));
+			var objStrcuts = this.ObjectManager.ObjectData.StructureTypes.CopyList()
+				.Select(f => new PlaceObjectGridViewItem(f));
 
 			this.structs.Clear();
 			this.structs.AddRange(objStrcuts);
@@ -202,8 +202,8 @@ namespace SharpFlame.Gui.Sections
 			this.gStructures.DataStore = this.structs;
 
 
-			var objDroids = this.ObjectManager.ObjectData.DroidTemplates.GetItemsAsSimpleList()
-				.ConvertAll(f => new PlaceObjectGridViewItem(f));
+			var objDroids = this.ObjectManager.ObjectData.DroidTemplates.CopyList()
+				.Select(f => new PlaceObjectGridViewItem(f));
 
 			this.droids.Clear();
 			this.droids.AddRange(objDroids);
@@ -215,7 +215,7 @@ namespace SharpFlame.Gui.Sections
         {
             base.OnLoadComplete(lcEventArgs);
 
-		    this.Shown += (sender, args) =>
+		    this.Click += (sender, args) =>
 			    {
 				    ToolOptions.MouseTool = MouseTool.Default;
 			    };
@@ -288,7 +288,7 @@ namespace SharpFlame.Gui.Sections
 		{
 			if( this.map == null ) return;
 
-			if( !KeyboardManager.Keys[KeyboardKeys.Multiselect].Active )
+			if( !KeyboardManager.Commands[CommandName.Multiselect].Active )
 			{
 				this.map.SelectedUnits.Clear();
 			}

@@ -4,7 +4,7 @@ namespace SharpFlame.Mapping.Tools
     {
         protected override void _ActionPerform()
         {
-            ResultUnit.Pos = Unit.MapLink.Source.TileAlignedPosFromMapPos(Unit.Pos.Horizontal, Unit.TypeBase.GetGetFootprintNew(Unit.Rotation));
+            ResultUnit.Pos = Unit.MapLink.Owner.TileAlignedPosFromMapPos(Unit.Pos.Horizontal, Unit.TypeBase.GetGetFootprintNew(Unit.Rotation));
         }
     }
 }

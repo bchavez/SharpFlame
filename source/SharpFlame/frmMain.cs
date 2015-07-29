@@ -1,6 +1,7 @@
 
 
 using System;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -46,7 +47,6 @@ namespace SharpFlame
 
             public clsMaps(frmMain Owner) : base(Owner)
             {
-                MaintainOrder = true;
             }
 
             public Map MainMap
@@ -72,7 +72,7 @@ namespace SharpFlame
                 }
             }
 
-            public override void Add(ConnectedListItem<Map, frmMain> newItem)
+            public override void Add(IConnectedListItem<Map, frmMain> newItem)
             {
                 var NewMap = newItem.Item;
 
@@ -1284,11 +1284,11 @@ namespace SharpFlame
             }
         }
 
-        private void ObjectListFill<ObjectType>(SimpleList<ObjectType> objects, DataGridView gridView) where ObjectType : UnitTypeBase
+        private void ObjectListFill<ObjectType>(ObservableCollection<ObjectType> objects, DataGridView gridView) where ObjectType : UnitTypeBase
         {
-            var filtered = default(SimpleList<ObjectType>);
+            ObservableCollection<ObjectType> filtered;
             var searchText = txtObjectFind.Text;
-            var doSearch = default(bool);
+            bool doSearch;
             if ( searchText == null )
             {
                 doSearch = false;
@@ -1334,10 +1334,10 @@ namespace SharpFlame
 #endif
         }
 
-        public SimpleList<ItemType> ObjectFindText<ItemType>(SimpleList<ItemType> list, string text) where ItemType : UnitTypeBase
+        public ObservableCollection<ItemType> ObjectFindText<ItemType>(ObservableCollection<ItemType> list, string text) where ItemType : UnitTypeBase
         {
-            var result = new SimpleList<ItemType>();
-            result.MaintainOrder = true;
+            var result = new ObservableCollection<ItemType>();
+            //result.MaintainOrder = true;
 
             text = text.ToLower();
 
@@ -3447,7 +3447,7 @@ namespace SharpFlame
             }
 
             var FlattenTool = new clsObjectFlattenTerrain();
-            Map.SelectedUnits.GetItemsAsSimpleClassList().PerformTool(FlattenTool);
+            Map.SelectedUnits.CopyList().PerformTool(FlattenTool);
 
             Map.Update(null);
             Map.UndoStepCreate("Flatten Under Structures");
@@ -3668,7 +3668,7 @@ namespace SharpFlame
             if ( _SelectedScriptMarker is clsScriptPosition )
             {
                 var ScripPosition = (clsScriptPosition)_SelectedScriptMarker;
-                Number = ScripPosition.ParentMap.ArrayPosition;
+                Number = ScripPosition.ParentMap.Position;
                 ScripPosition.Deallocate();
                 if ( Map.ScriptPositions.Count > 0 )
                 {
@@ -3682,7 +3682,7 @@ namespace SharpFlame
             else if ( _SelectedScriptMarker is clsScriptArea )
             {
                 var ScriptArea = (clsScriptArea)_SelectedScriptMarker;
-                Number = ScriptArea.ParentMap.ArrayPosition;
+                Number = ScriptArea.ParentMap.Position;
                 ScriptArea.Deallocate();
                 if ( Map.ScriptAreas.Count > 0 )
                 {
@@ -3967,7 +3967,7 @@ namespace SharpFlame
 
             var AlignTool = new clsObjectAlignment();
             AlignTool.Map = Map;
-            Map.SelectedUnits.GetItemsAsSimpleList().PerformTool(AlignTool);
+            Map.SelectedUnits.CopyList().PerformTool(AlignTool);
 
             Map.Update(null);
             Map.UndoStepCreate("Align Objects");
@@ -3988,13 +3988,13 @@ namespace SharpFlame
             switch ( TabControl1.SelectedIndex )
             {
                 case 0:
-                    ObjectListFill(App.ObjectData.FeatureTypes.GetItemsAsSimpleList(), dgvFeatures);
+                    ObjectListFill(App.ObjectData.FeatureTypes.CopyList(), dgvFeatures);
                     break;
                 case 1:
-                    ObjectListFill(App.ObjectData.StructureTypes.GetItemsAsSimpleList(), dgvStructures);
+                    ObjectListFill(App.ObjectData.StructureTypes.CopyList(), dgvStructures);
                     break;
                 case 2:
-                    ObjectListFill(App.ObjectData.DroidTemplates.GetItemsAsSimpleList(), dgvDroids);
+                    ObjectListFill(App.ObjectData.DroidTemplates.CopyList(), dgvDroids);
                     break;
             }
         }
@@ -4115,7 +4115,7 @@ namespace SharpFlame
                 return;
             }
 
-            var OilList = new SimpleClassList<Unit>();
+            var OilList = new ObservableCollection<Unit>();
             var Unit = default(Unit);
             foreach ( var tempLoopVar_Unit in Map.Units )
             {
@@ -4141,7 +4141,7 @@ namespace SharpFlame
                 return;
             }
 
-            var StructureList = new SimpleClassList<Unit>();
+            var StructureList = new ObservableCollection<Unit>();
             var Unit = default(Unit);
             foreach ( var tempLoopVar_Unit in Map.Units )
             {

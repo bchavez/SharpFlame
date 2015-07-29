@@ -100,14 +100,14 @@ namespace SharpFlame.Gui.Actions
                 {
                     structureTypeBase = (StructureTypeBase)unit.TypeBase;
                     StructureTypeType = structureTypeBase.StructureType;
-                    UnitIsStructureModule[unit.MapLink.ArrayPosition] = structureTypeBase.IsModule() |
+                    UnitIsStructureModule[unit.MapLink.Position] = structureTypeBase.IsModule() |
                                                                         StructureTypeType == StructureType.ResourceExtractor;
                 }
             }
             //check and store non-module units first. modules need to check for the underlying unit.
             foreach( var unit in Map.Units )
             {
-                if( !UnitIsStructureModule[unit.MapLink.ArrayPosition] )
+                if( !UnitIsStructureModule[unit.MapLink.Position] )
                 {
                     Footprint = unit.TypeBase.GetGetFootprintSelected(unit.Rotation);
                     Map.GetFootprintTileRange(unit.Pos.Horizontal, Footprint, ref StartPos, ref FinishPos);
@@ -154,7 +154,7 @@ namespace SharpFlame.Gui.Actions
             //check modules and extractors
             foreach( var unit in Map.Units )
             {
-                if( UnitIsStructureModule[unit.MapLink.ArrayPosition] )
+                if( UnitIsStructureModule[unit.MapLink.Position] )
                 {
                     StructureTypeType = ( (StructureTypeBase)unit.TypeBase ).StructureType;
                     CentrePos.X = ( unit.Pos.Horizontal.X / Constants.TerrainGridSpacing );
@@ -374,11 +374,11 @@ namespace SharpFlame.Gui.Actions
                     structureTypeBase = (StructureTypeBase)Unit.TypeBase;
                     if( Unit.UnitGroup == Map.ScavengerUnitGroup )
                     {
-                        ScavStructureTypeCount[structureTypeBase.StructureType_ObjectDataLink.ArrayPosition]++;
+                        ScavStructureTypeCount[structureTypeBase.StructureType_ObjectDataLink.Position]++;
                     }
                     else
                     {
-                        PlayerStructureTypeCount[Unit.UnitGroup.WZ_StartPos, structureTypeBase.StructureType_ObjectDataLink.ArrayPosition]++;
+                        PlayerStructureTypeCount[Unit.UnitGroup.WZ_StartPos, structureTypeBase.StructureType_ObjectDataLink.Position]++;
                     }
                 }
             }
@@ -386,7 +386,7 @@ namespace SharpFlame.Gui.Actions
             foreach( var tempLoopVar_StructureType in App.ObjectData.StructureTypes )
             {
                 structureTypeBase = tempLoopVar_StructureType;
-                var StructureTypeNum = structureTypeBase.StructureType_ObjectDataLink.ArrayPosition;
+                var StructureTypeNum = structureTypeBase.StructureType_ObjectDataLink.Position;
                 var PlayerNum = 0;
                 for( PlayerNum = 0; PlayerNum <= Constants.PlayerCountMax - 1; PlayerNum++ )
                 {

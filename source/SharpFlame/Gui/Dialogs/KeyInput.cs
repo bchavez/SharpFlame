@@ -7,75 +7,52 @@ namespace SharpFlame.Gui.Dialogs
 {
     public class KeyInput : Dialog
     {
-        private KeyboardKey key;
-        public KeyboardKey Key { 
-            get { return key; }
-            set { 
-                key = value;
-                lblKey.Text = key.ToString();
-            }
+        private Label lblKey;
+
+        private CheckBox chkCtrl;
+        private CheckBox chkAlt;
+        private CheckBox chkShift;
+
+        public Keys KeyData { get; set; }
+
+        public KeyInput()
+        {
+            XomlReader.Load(this);
         }
 
-        private readonly Label lblKey;
-
-        public KeyInput ()
+        void chkModifer_Changed(object sender, EventArgs e)
         {
-            Title = "Enter a key";
-            Resizable = true;
-            Topmost = true;
-            Size = new Size (220, 70);
-
-            var layout = new DynamicLayout ();
-            layout.AddCentered(lblKey = new Label { VerticalAlign = VerticalAlign.Middle });
-
-            KeyboardKey keyDown = null;
-            KeyUp += (object sender, KeyEventArgs e) => 
+            var chk = sender as CheckBox;
+            var modifier = (Keys)chk.Tag;
+            if( true == chk.Checked )
             {
-                var currentKeyOnly = e.KeyData & Keys.KeyMask;
-                var currentModifier = e.KeyData & Keys.ModifierMask;
-                Keys keyDownModifier;
-                if (keyDown.Key != null) {
-                    keyDownModifier = (Keys)keyDown.Key & Keys.ModifierMask;
-                }
-                else
-                {
-                    keyDownModifier = Keys.None;
-                }
-
-                if (currentKeyOnly != Keys.None) {
-                    // Is known key.
-                    Key = new KeyboardKey("", e.KeyData, null, Key.Repeat);
-                    Console.WriteLine("keyUP={0}", Key.ToString());
-                } else if (e.IsChar) {
-                    // Is Char
-                    Key = new KeyboardKey("", null, e.KeyChar, Key.Repeat);
-                    Console.WriteLine("keyUP={0}", Key.ToString());
-                } else if (keyDownModifier != Keys.None && currentModifier != keyDownModifier) {
-                    // Is modifier only
-                    Key = new KeyboardKey("", e.KeyData, null, Key.Repeat);
-                    Console.WriteLine("keyUP={0}", Key.ToString());
-                } 
-            };
-
-            KeyDown += (object sender, KeyEventArgs e) => 
+                this.KeyData |= modifier;
+            }
+            else
             {
-                var currentKeyOnly = e.KeyData & Keys.KeyMask;
-                if (currentKeyOnly != Keys.None) {
-                    // Is known key.
-                    keyDown = new KeyboardKey("", e.KeyData, null);
-                    Console.WriteLine("keyDown={0}", keyDown.ToString());
-                } else if (e.IsChar) {
-                    // Is Char
-                    keyDown = new KeyboardKey("", null, e.KeyChar);
-                    Console.WriteLine("keyDown={0}", keyDown.ToString());
-                } else {
-                    // Is modifier only
-                    keyDown = new KeyboardKey("", e.KeyData, null);
-                    Console.WriteLine("keyDown={0}", keyDown.ToString());                   
-                }
-            };
+                this.KeyData &= ~modifier;
+            }
 
-            Content = layout;
+            this.lblKey.Text = this.KeyData.ToShortcutString();
+        }
+
+        private void cmdClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void Dialog_KeyUp(object sender, KeyEventArgs e)
+        {
+            if( e.KeyData == Keys.None ) //BUG: in eto, we get by pressing CTRL/ALT
+                return;
+
+            this.KeyData = e.KeyData;
+
+            this.chkCtrl.Checked = e.Control;
+            this.chkAlt.Checked = e.Alt;
+            this.chkShift.Checked = e.Shift;
+
+            lblKey.Text = this.KeyData.ToShortcutString();
         }
     }
 }

@@ -19,7 +19,7 @@ namespace SharpFlame.Mapping.Script
 {
     public class clsScriptPosition
     {
-        private readonly ConnectedListLink<clsScriptPosition, Map> parentMapLink;
+        private readonly ConnectedListItem<clsScriptPosition, Map> parentMapLink;
 
         private string label;
 
@@ -27,7 +27,7 @@ namespace SharpFlame.Mapping.Script
 
         public clsScriptPosition()
         {
-            parentMapLink = new ConnectedListLink<clsScriptPosition, Map>(this);
+            parentMapLink = new ConnectedListItem<clsScriptPosition, Map>(this);
         }
 
         public clsScriptPosition(Map map)
@@ -37,7 +37,7 @@ namespace SharpFlame.Mapping.Script
             parentMapLink.Connect(map.ScriptPositions);
         }
 
-        public ConnectedListLink<clsScriptPosition, Map> ParentMap
+        public ConnectedListItem<clsScriptPosition, Map> ParentMap
         {
             get { return parentMapLink; }
         }
@@ -53,7 +53,7 @@ namespace SharpFlame.Mapping.Script
             set
             {
                 pos.X = MathUtil.ClampInt(value, 0,
-                    Convert.ToInt32(Convert.ToInt32(parentMapLink.Source.Terrain.TileSize.X * Constants.TerrainGridSpacing) - 1));
+                    Convert.ToInt32(Convert.ToInt32(parentMapLink.Owner.Terrain.TileSize.X * Constants.TerrainGridSpacing) - 1));
             }
         }
 
@@ -63,7 +63,7 @@ namespace SharpFlame.Mapping.Script
             set
             {
                 pos.Y = MathUtil.ClampInt(value, 0,
-                    Convert.ToInt32(Convert.ToInt32(parentMapLink.Source.Terrain.TileSize.Y * Constants.TerrainGridSpacing) - 1));
+                    Convert.ToInt32(Convert.ToInt32(parentMapLink.Owner.Terrain.TileSize.Y * Constants.TerrainGridSpacing) - 1));
             }
         }
 
@@ -71,7 +71,7 @@ namespace SharpFlame.Mapping.Script
         {
             var Result = new SimpleResult();
 
-            Result = parentMapLink.Source.ScriptLabelIsValid(Text);
+            Result = parentMapLink.Owner.ScriptLabelIsValid(Text);
             if ( Result.Success )
             {
                 label = Text;
@@ -82,7 +82,7 @@ namespace SharpFlame.Mapping.Script
         public void GLDraw()
         {
             var Drawer = new clsDrawHorizontalPosOnTerrain();
-            Drawer.Map = parentMapLink.Source;
+            Drawer.Map = parentMapLink.Owner;
             Drawer.Horizontal = pos;
             if ( Program.frmMainInstance.SelectedScriptMarker == this )
             {
@@ -105,7 +105,7 @@ namespace SharpFlame.Mapping.Script
 
         public void WriteWZ(IniWriter File)
         {
-            File.AddSection("position_" + parentMapLink.ArrayPosition.ToStringInvariant());
+            File.AddSection("position_" + parentMapLink.Position.ToStringInvariant());
             File.AddProperty("pos", pos.X.ToStringInvariant() + ", " + pos.Y.ToStringInvariant());
             File.AddProperty("label", label);
         }

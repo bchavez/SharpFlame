@@ -439,7 +439,6 @@
     <Compile Include="Settings\KeyboardManager.cs" />
     <Compile Include="Settings\KeyboardKeys.cs" />
     <Compile Include="Settings\KeyboardManagerEvents.cs" />
-    <Compile Include="Settings\Keylogger.cs" />
     <Compile Include="Mapping\IO\Wz\GameLoader.cs" />
     <Compile Include="SharpFlameApplication.cs" />
     <Compile Include="Gui\Actions\About.cs" />
@@ -597,6 +596,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="flaME.ico" />
+    <EmbeddedResource Include="Gui\Dialogs\KeyInput.xoml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Line.png" />
     <EmbeddedResource Include="Resources\Place.png" />
     <EmbeddedResource Include="Resources\Circle.png" />

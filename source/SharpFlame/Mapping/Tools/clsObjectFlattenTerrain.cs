@@ -20,7 +20,7 @@ namespace SharpFlame.Mapping.Tools
 
         public void ActionPerform()
         {
-            var map = Unit.MapLink.Source;
+            var map = Unit.MapLink.Owner;
             var vertexPos = new XYInt();
             var x = 0;
             var y = 0;

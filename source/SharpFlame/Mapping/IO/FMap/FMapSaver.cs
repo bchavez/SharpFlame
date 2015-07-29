@@ -541,7 +541,7 @@ namespace SharpFlame.Mapping.IO.FMap
                         file.AddProperty("Type", "Structure, " + structureTypeBase.Code);
                         if ( structureTypeBase.WallLink.IsConnected )
                         {
-                            file.AddProperty("WallType", structureTypeBase.WallLink.ArrayPosition.ToStringInvariant());
+                            file.AddProperty("WallType", structureTypeBase.WallLink.Position.ToStringInvariant());
                         }
                         break;
                         case UnitType.PlayerDroid:

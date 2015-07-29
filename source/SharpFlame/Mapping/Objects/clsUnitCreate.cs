@@ -28,7 +28,7 @@ namespace SharpFlame.Mapping.Objects
                     if ( structureTypeBase.WallLink.IsConnected )
                     {
                         clsWallType AutoWallType = null;
-                        AutoWallType = structureTypeBase.WallLink.Source;
+                        AutoWallType = structureTypeBase.WallLink.Owner;
                         Map.PerformTileWall(AutoWallType, Map.GetPosTileNum(Horizontal), true);
                         return null;
                     }

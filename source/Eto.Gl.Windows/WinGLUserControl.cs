@@ -79,9 +79,9 @@ namespace Eto.Gl.Windows
         /// <param name="flags">The GraphicsContextFlags for the OpenGL GraphicsContext.</param>
         public WinGLUserControl(GraphicsMode mode, int major, int minor, GraphicsContextFlags flags)
         {
-            if (mode == null)
+            if( mode == null )
                 throw new ArgumentNullException("mode");
-            
+
             // SDL does not currently support embedding
             // on external windows. If Open.Toolkit is not yet
             // initialized, we'll try to request a native backend
@@ -103,29 +103,29 @@ namespace Eto.Gl.Windows
             this.major = major;
             this.minor = minor;
             this.flags = flags;
-            
+
             InitializeComponent();
 
             this.Disposed += WinGLUserControl_Disposed;
-            this.KeyDown += Control_KeyDown;
+            /*this.KeyDown += Control_KeyDown;
             this.KeyPress += Control_KeyPress;
-            this.KeyUp += Control_KeyUp;
+            this.KeyUp += Control_KeyUp;*/
         }
 
-        void WinGLUserControl_Disposed( object sender, EventArgs e )
+        void WinGLUserControl_Disposed(object sender, EventArgs e)
         {
             this.ShuttingDown(sender, e);
         }
 
         private void EnsureValidHandle()
         {
-            if (IsDisposed)
+            if( IsDisposed )
                 throw new ObjectDisposedException(GetType().Name);
 
-            if (!IsHandleCreated)
+            if( !IsHandleCreated )
                 CreateControl();
 
-            if (windowInfo == null || context == null || context.IsDisposed)
+            if( windowInfo == null || context == null || context.IsDisposed )
                 RecreateHandle();
         }
 
@@ -142,7 +142,7 @@ namespace Eto.Gl.Windows
                 const int CS_OWNDC = 0x20;
 
                 CreateParams cp = base.CreateParams;
-                if (Configuration.RunningOnWindows)
+                if( Configuration.RunningOnWindows )
                 {
                     // Setup necessary class style for OpenGL on windows
                     cp.ClassStyle |= CS_VREDRAW | CS_HREDRAW | CS_OWNDC;
@@ -155,28 +155,28 @@ namespace Eto.Gl.Windows
         /// <param name="e">Not used.</param>
         protected override void OnHandleCreated(EventArgs e)
         {
-            if (context != null)
+            if( context != null )
                 context.Dispose();
 
-            if ( windowInfo != null )
+            if( windowInfo != null )
                 windowInfo.Dispose();
 
             this.windowInfo = Utilities.CreateWindowsWindowInfo(this.Handle);
-            
+
             this.context = new GraphicsContext(this.graphicsMode, this.windowInfo, major, minor, flags);
 
             MakeCurrent();
 
-            ((IGraphicsContextInternal)Context).LoadAll();
+            ( (IGraphicsContextInternal)Context ).LoadAll();
 
             if( !this.IsInitialized )
             {
                 this.IsInitialized = true;
-                this.Initialized( this, EventArgs.Empty );
+                this.Initialized(this, EventArgs.Empty);
             }
 
             // Deferred setting of vsync mode. See VSync property for more information.
-            if (initialVsyncValue.HasValue)
+            if( initialVsyncValue.HasValue )
             {
                 Context.SwapInterval = initialVsyncValue.Value ? 1 : 0;
                 initialVsyncValue = null;
@@ -184,7 +184,7 @@ namespace Eto.Gl.Windows
 
             base.OnHandleCreated(e);
 
-            if (resizeEventSuppressed)
+            if( resizeEventSuppressed )
             {
                 OnResize(EventArgs.Empty);
                 resizeEventSuppressed = false;
@@ -195,13 +195,13 @@ namespace Eto.Gl.Windows
         /// <param name="e">Not used.</param>
         protected override void OnHandleDestroyed(EventArgs e)
         {
-            if (context != null)
+            if( context != null )
             {
                 context.Dispose();
                 context = null;
             }
 
-            if (windowInfo != null)
+            if( windowInfo != null )
             {
                 windowInfo.Dispose();
                 windowInfo = null;
@@ -230,13 +230,13 @@ namespace Eto.Gl.Windows
         protected override void OnResize(EventArgs e)
         {
             // Do not raise OnResize event before the handle and context are created.
-            if (!IsHandleCreated)
+            if( !IsHandleCreated )
             {
                 resizeEventSuppressed = true;
                 return;
             }
 
-            if ( context != null )
+            if( context != null )
             {
                 EnsureValidHandle();
                 context.Update(windowInfo);
@@ -251,7 +251,7 @@ namespace Eto.Gl.Windows
         /// <param name="e">A System.EventArgs that contains the event data.</param>
         protected override void OnParentChanged(EventArgs e)
         {
-            if ( context != null )
+            if( context != null )
             {
                 EnsureValidHandle();
                 context.Update(windowInfo);
@@ -270,10 +270,11 @@ namespace Eto.Gl.Windows
             Context.SwapBuffers();
         }
 
-        public event EventHandler Initialized = delegate {  };
+        public event EventHandler Initialized = delegate { };
         public event EventHandler ShuttingDown = delegate { };
 
-        public Eto.Drawing.Size GLSize {
+        public Eto.Drawing.Size GLSize
+        {
             get { return this.Size.ToEto(); }
             set { this.Size = value.ToSD(); }
         }
@@ -339,7 +340,7 @@ namespace Eto.Gl.Windows
         {
             get
             {
-                if (!IsHandleCreated)
+                if( !IsHandleCreated )
                     return false;
 
                 EnsureValidHandle();
@@ -351,7 +352,7 @@ namespace Eto.Gl.Windows
                 // However, events are typically connected after the VSync = false assignment, which
                 // can lead to "event xyz is not fired" issues.
                 // Work around this issue by deferring VSync mode setting to the HandleCreated event.
-                if (!IsHandleCreated)
+                if( !IsHandleCreated )
                 {
                     initialVsyncValue = value;
                     return;
@@ -386,35 +387,38 @@ namespace Eto.Gl.Windows
             get { return windowInfo; }
         }
 
-                public bool HasFocus 
+        public bool HasFocus
         {
             get { return Focused; }
         }
 
-        public new void Focus() 
+        public new void Focus()
         {
-            if(IsHandleCreated)
+            if( IsHandleCreated )
             {
                 base.Focus();
             }
         }
-        
-                public event EventHandler<ef.KeyEventArgs> GlKeyDown = delegate {};
-        public event EventHandler<ef.KeyEventArgs> GlKeyUp = delegate {};       
 
-        ef.Keys key;
-        bool handled;
-        char keyChar;
-        bool charPressed;
-        public ef.Keys? LastKeyDown { get; set; }
+        /*public event EventHandler<ef.KeyEventArgs> GlKeyDown = delegate { };
+        public event EventHandler<ef.KeyEventArgs> GlKeyUp = delegate { };
+        */
 
+        /*
+    ef.Keys key;
+    bool handled;
+    char keyChar;
+    bool charPressed;
+    public ef.Keys? LastKeyDown { get; set; }
+    */
+        /*
         void Control_KeyDown(object sender, KeyEventArgs e)
         {
             charPressed = false;
             handled = true;
             key = e.KeyData.ToEto();
 
-            if (key != ef.Keys.None && LastKeyDown != key)
+            if( key != ef.Keys.None && LastKeyDown != key )
             {
                 var kpea = new ef.KeyEventArgs(key, ef.KeyEventType.KeyDown);
                 GlKeyDown(this, kpea);
@@ -424,7 +428,7 @@ namespace Eto.Gl.Windows
             else
                 handled = false;
 
-            if (!handled && charPressed)
+            if( !handled && charPressed )
             {
                 // this is when something in the event causes messages to be processed for some reason (e.g. show dialog box)
                 // we want the char event to come after the dialog is closed, and handled is set to true!
@@ -440,7 +444,7 @@ namespace Eto.Gl.Windows
         {
             charPressed = true;
             keyChar = e.KeyChar;
-            if (!handled)
+            if( !handled )
             {
                 var kpea = new ef.KeyEventArgs(key, ef.KeyEventType.KeyDown, keyChar);
                 GlKeyDown(this, kpea);
@@ -458,5 +462,6 @@ namespace Eto.Gl.Windows
             GlKeyUp(this, kpea);
             e.Handled = kpea.Handled;
         }
-            }
+        */
+    }
 }

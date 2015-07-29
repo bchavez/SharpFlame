@@ -16,19 +16,6 @@ namespace Eto.Gl.Windows
         {
             var c = new WinGLUserControl(mode, major, minor, flags);
 
-            c.Initialized += (sender, args) =>
-                {
-                    this.Callback.OnInitialized(Widget, args);
-                };
-            c.Resize += (sender, args) =>
-                {
-                    this.Callback.OnSizeChanged(Widget, args);
-                };
-            c.ShuttingDown += (sender, args) =>
-                {
-                    this.Callback.OnShuttingDown(Widget, args);
-                };
-
             this.Control = c;
 
             base.Initialize();
@@ -61,6 +48,24 @@ namespace Eto.Gl.Windows
         public void SwapBuffers()
         {
             this.Control.SwapBuffers();
+        }
+
+        public override void AttachEvent(string id)
+        {
+            switch( id )
+            {
+                case GLSurface.GLInitializedEvent:
+                    this.Control.Initialized += (sender, args) => Callback.OnInitialized(this.Widget, args);
+                    break;
+
+                case GLSurface.GLShuttingDownEvent:
+                    this.Control.ShuttingDown += (sender, args) => Callback.OnShuttingDown(this.Widget, args);
+                    break;
+
+                default:
+                    base.AttachEvent(id);
+                    break;
+            }
         }
     }
 }

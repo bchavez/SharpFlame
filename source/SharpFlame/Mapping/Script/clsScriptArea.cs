@@ -19,19 +19,19 @@ namespace SharpFlame.Mapping.Script
 {
     public class clsScriptArea
     {
-        private readonly ConnectedListLink<clsScriptArea, Map> _ParentMapLink;
+        private readonly ConnectedListItem<clsScriptArea, Map> _ParentMapLink;
 
         private XYInt _PosA;
         private XYInt _PosB;
 
         public clsScriptArea(Map map)
         {
-            _ParentMapLink = new ConnectedListLink<clsScriptArea, Map>(this);
+            _ParentMapLink = new ConnectedListItem<clsScriptArea, Map>(this);
             Label = map.GetDefaultScriptLabel("Area");
             _ParentMapLink.Connect(map.ScriptAreas);
         }
 
-        public ConnectedListLink<clsScriptArea, Map> ParentMap
+        public ConnectedListItem<clsScriptArea, Map> ParentMap
         {
             get { return _ParentMapLink; }
         }
@@ -42,7 +42,7 @@ namespace SharpFlame.Mapping.Script
         {
             set
             {
-                var Map = _ParentMapLink.Source;
+                var Map = _ParentMapLink.Owner;
                 _PosA.X = MathUtil.ClampInt(value.X, 0, Map.Terrain.TileSize.X * Constants.TerrainGridSpacing - 1);
                 _PosA.Y = MathUtil.ClampInt(value.Y, 0, Map.Terrain.TileSize.Y * Constants.TerrainGridSpacing - 1);
                 MathUtil.ReorderXY(_PosA, _PosB, ref _PosA, ref _PosB);
@@ -53,7 +53,7 @@ namespace SharpFlame.Mapping.Script
         {
             set
             {
-                var Map = _ParentMapLink.Source;
+                var Map = _ParentMapLink.Owner;
                 _PosB.X = MathUtil.ClampInt(value.X, 0, Map.Terrain.TileSize.X * Constants.TerrainGridSpacing - 1);
                 _PosB.Y = MathUtil.ClampInt(value.Y, 0, Map.Terrain.TileSize.Y * Constants.TerrainGridSpacing - 1);
                 MathUtil.ReorderXY(_PosA, _PosB, ref _PosA, ref _PosB);
@@ -66,7 +66,7 @@ namespace SharpFlame.Mapping.Script
             set
             {
                 _PosA.X = MathUtil.ClampInt(value, 0,
-                    Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.X * Constants.TerrainGridSpacing) - 1));
+                    Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Owner.Terrain.TileSize.X * Constants.TerrainGridSpacing) - 1));
                 MathUtil.ReorderXY(_PosA, _PosB, ref _PosA, ref _PosB);
             }
         }
@@ -77,7 +77,7 @@ namespace SharpFlame.Mapping.Script
             set
             {
                 _PosA.Y = MathUtil.ClampInt(value, 0,
-                    Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.Y * Constants.TerrainGridSpacing) - 1));
+                    Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Owner.Terrain.TileSize.Y * Constants.TerrainGridSpacing) - 1));
                 MathUtil.ReorderXY(_PosA, _PosB, ref _PosA, ref _PosB);
             }
         }
@@ -88,7 +88,7 @@ namespace SharpFlame.Mapping.Script
             set
             {
                 _PosB.X = MathUtil.ClampInt(value, 0,
-                    Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.X * Constants.TerrainGridSpacing) - 1));
+                    Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Owner.Terrain.TileSize.X * Constants.TerrainGridSpacing) - 1));
                 MathUtil.ReorderXY(_PosA, _PosB, ref _PosA, ref _PosB);
             }
         }
@@ -99,14 +99,14 @@ namespace SharpFlame.Mapping.Script
             set
             {
                 _PosB.Y = MathUtil.ClampInt(value, 0,
-                    Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Source.Terrain.TileSize.Y * Constants.TerrainGridSpacing) - 1));
+                    Convert.ToInt32(Convert.ToInt32(_ParentMapLink.Owner.Terrain.TileSize.Y * Constants.TerrainGridSpacing) - 1));
                 MathUtil.ReorderXY(_PosA, _PosB, ref _PosA, ref _PosB);
             }
         }
 
         public void SetPositions(XYInt posA, XYInt posB)
         {
-            var map = _ParentMapLink.Source;
+            var map = _ParentMapLink.Owner;
 
             posA.X = MathUtil.ClampInt(posA.X, 0, map.Terrain.TileSize.X * Constants.TerrainGridSpacing - 1);
             posA.Y = MathUtil.ClampInt(posA.Y, 0, map.Terrain.TileSize.Y * Constants.TerrainGridSpacing - 1);
@@ -119,7 +119,7 @@ namespace SharpFlame.Mapping.Script
         public void GLDraw()
         {
             var Drawer = new clsDrawTerrainLine();
-            Drawer.Map = _ParentMapLink.Source;
+            Drawer.Map = _ParentMapLink.Owner;
             if ( Program.frmMainInstance.SelectedScriptMarker == this )
             {
                 GL.LineWidth(4.5F);
@@ -159,7 +159,7 @@ namespace SharpFlame.Mapping.Script
 
         public void WriteWZ(IniWriter file)
         {
-            file.AddSection("area_" + _ParentMapLink.ArrayPosition.ToStringInvariant());
+            file.AddSection("area_" + _ParentMapLink.Position.ToStringInvariant());
             file.AddProperty("pos1", _PosA.X.ToStringInvariant() + ", " + _PosA.Y.ToStringInvariant());
             file.AddProperty("pos2", _PosB.X.ToStringInvariant() + ", " + _PosB.Y.ToStringInvariant());
             file.AddProperty("label", Label);
@@ -169,7 +169,7 @@ namespace SharpFlame.Mapping.Script
         {
             var Result = new SimpleResult();
 
-            Result = _ParentMapLink.Source.ScriptLabelIsValid(text);
+            Result = _ParentMapLink.Owner.ScriptLabelIsValid(text);
             if ( Result.Success )
             {
                 Label = text;

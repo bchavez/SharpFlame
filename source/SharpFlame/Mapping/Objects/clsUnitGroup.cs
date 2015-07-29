@@ -11,13 +11,13 @@ namespace SharpFlame.Mapping.Objects
 {
     public class clsUnitGroup
     {
-        public ConnectedListLink<clsUnitGroup, Map> MapLink;
+        public ConnectedListItem<clsUnitGroup, Map> MapLink;
 
         public int WZ_StartPos = -1;
 
         public clsUnitGroup()
         {
-            MapLink = new ConnectedListLink<clsUnitGroup, Map>(this);
+            MapLink = new ConnectedListItem<clsUnitGroup, Map>(this);
         }
 
         public string GetFMapINIPlayerText()

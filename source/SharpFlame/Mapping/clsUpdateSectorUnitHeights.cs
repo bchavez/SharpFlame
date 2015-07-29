@@ -51,7 +51,7 @@ namespace SharpFlame.Mapping
                     ID = Unit.ID;
                     //NewUnit.Pos.Altitude = NewAltitude
                     //these create changed sectors and must be done before drawing the new sectors
-                    Map.UnitRemoveStoreChange(Unit.MapLink.ArrayPosition);
+                    Map.UnitRemoveStoreChange(Unit.MapLink.Position);
                     UnitAdd.NewUnit = NewUnit;
                     UnitAdd.ID = ID;
                     UnitAdd.Perform();
@@ -70,7 +70,7 @@ namespace SharpFlame.Mapping
                 return;
             }
 
-            var Connection = default(clsUnitSectorConnection);
+            var Connection = default(UnitSectorConnection);
             var Unit = default(Unit);
             var Sector = default(Sector);
             var A = 0;

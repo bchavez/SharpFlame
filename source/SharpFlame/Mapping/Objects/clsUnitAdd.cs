@@ -43,7 +43,7 @@ namespace SharpFlame.Mapping.Objects
                 NewUnit.UnitGroup = Map.ScavengerUnitGroup;
                 return false;
             }
-            if ( NewUnit.UnitGroup.MapLink.Source != Map )
+            if ( NewUnit.UnitGroup.MapLink.Owner != Map )
             {
                 MessageBox.Show("Error: Something terrible happened.");
                 return false;

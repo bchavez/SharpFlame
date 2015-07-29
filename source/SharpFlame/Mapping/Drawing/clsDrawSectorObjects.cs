@@ -59,9 +59,9 @@ namespace SharpFlame.Mapping.Drawing
             foreach ( var connection in Sector.Units )
             {
                 var unit = connection.Unit;
-                if ( !UnitDrawn[unit.MapLink.ArrayPosition] )
+                if ( !UnitDrawn[unit.MapLink.Position] )
                 {
-                    UnitDrawn[unit.MapLink.ArrayPosition] = true;
+                    UnitDrawn[unit.MapLink.Position] = true;
                     XYZ_dbl.X = unit.Pos.Horizontal.X - ViewInfo.ViewPos.X;
                     XYZ_dbl.Y = unit.Pos.Altitude - ViewInfo.ViewPos.Y;
                     XYZ_dbl.Z = - unit.Pos.Horizontal.Y - ViewInfo.ViewPos.Z;

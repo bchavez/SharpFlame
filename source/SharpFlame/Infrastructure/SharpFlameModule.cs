@@ -48,15 +48,6 @@ namespace SharpFlame.Infrastructure
                 .ToSelf()
                 .InSingletonScope();
                 
-            #if DEBUG
-            // This is here to keep a reference of it.
-	        this.Bind<Keylogger>()
-		        .ToSelf()
-		        .InSingletonScope()
-		        .RegisterOnGlobalEventBroker();
-            #endif
-
-
 
             //GUI
             this.Bind<LoadMapCommand>().ToSelf().InSingletonScope().RegisterOnGlobalEventBroker();

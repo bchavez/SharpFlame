@@ -207,7 +207,7 @@ namespace SharpFlame.Gui.Sections
 
             Content = mainLayout;
 
-            this.GLSurface.Initialized += TextureView_OnGLControlInitialized;
+            this.GLSurface.GLInitalized += TextureView_OnGLControlInitialized;
             SetupEventHandlers();
         }
 		protected override void OnPreLoad(EventArgs e)
@@ -450,7 +450,7 @@ namespace SharpFlame.Gui.Sections
             };
 
             // Set Mousetool, when we are shown.
-            Shown += (sender, args) =>
+            this.Shown += (sender, args) =>
                 {
                     ToolOptions.MouseTool = MouseTool.TextureBrush;
                 };
