@@ -36,7 +36,6 @@ namespace SharpFlame.Gui.Windows
 				    var msize = swf.TextRenderer.MeasureText("255", b.Font.ToSD());
 				    var esize = msize.ToEto();
 				    b.Size = new Size((esize.Width + b.Size.Width) / 2, b.Height);
-				    Console.WriteLine();
 			    });
 	    }
     }

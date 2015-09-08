@@ -7,10 +7,13 @@ namespace SharpFlame.Core
     public static class EventTopics
     {
         public const string OnMapLoad = "topic://Map/Load";
+	    public const string OnMapSave = "topic://Map/Save";
         public const string OnMapDrawLater = "topic://Map/DrawLater";
         public const string OnMapUpdate = "topic://Map/Update";
         public const string OnMinimapRefresh = "topic://Minimap/Refresh";
         public const string OnScriptMarkerUpdate = "topic://Labels/Update";
+
+	    public const string OnTextureDrawLater = "topic://Textures/DrawLater";
 
 	    public const string OnOpenGLInitalized = "topic://GL/Init";
 
@@ -39,5 +42,11 @@ namespace SharpFlame.Core
         {
             broker.Fire(OnScriptMarkerUpdate, new OnPublisher(), HandlerRestriction.None, sender, EventArgs.Empty);
         }
+
+	    public static void Fire(this IEventBroker broker, string topic, object sender, EventArgs args = null)
+	    {
+		    args = args ?? EventArgs.Empty;
+		    broker.Fire(topic, new OnPublisher(), HandlerRestriction.None, sender, args);
+	    }
     }
 }

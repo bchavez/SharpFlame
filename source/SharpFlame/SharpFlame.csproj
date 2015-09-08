@@ -40,6 +40,7 @@
     <Optimize>false</Optimize>
     <DefineConstants>Trace;DEBUG;Mono;Portable</DefineConstants>
     <AssemblyName>SharpFlame</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -182,8 +183,19 @@
     <Compile Include="Graphics\EmptyPlaceHolder.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
+    <Compile Include="Gui\Actions\AboutCommand.cs" />
     <Compile Include="Gui\Actions\CompileMapCommand.cs" />
+    <Compile Include="Gui\Actions\LoadMapCommand.cs" />
+    <Compile Include="Gui\Actions\QuitCommand.cs" />
+    <Compile Include="Gui\Actions\SaveFMapCommand.cs" />
+    <Compile Include="Gui\Actions\SettingsCommand.cs" />
     <Compile Include="Gui\Controls\CampaignDropDown.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Gui\Controls\ImageButton.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Gui\Controls\ImageButtonBase.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Gui\Dialogs\CompileMapDialog.cs">
@@ -441,10 +453,6 @@
     <Compile Include="Settings\KeyboardManagerEvents.cs" />
     <Compile Include="Mapping\IO\Wz\GameLoader.cs" />
     <Compile Include="SharpFlameApplication.cs" />
-    <Compile Include="Gui\Actions\About.cs" />
-    <Compile Include="Gui\Actions\LoadMap.cs" />
-    <Compile Include="Gui\Actions\Quit.cs" />
-    <Compile Include="Gui\Actions\Settings.cs" />
     <Compile Include="Gui\Controls\CustomButton.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
@@ -554,7 +562,7 @@
     <EmbeddedResource Include="Resources\RotateClockwise.png" />
     <EmbeddedResource Include="Resources\ProgramIcon.ico" />
     <EmbeddedResource Include="Resources\overflow.png" />
-    <EmbeddedResource Include="Resources\problem.png" />
+    <EmbeddedResource Include="Resources\Problem.png" />
     <EmbeddedResource Include="Resources\Warning.png" />
   </ItemGroup>
   <ItemGroup>
@@ -596,6 +604,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="flaME.ico" />
+    <EmbeddedResource Include="Gui\Sections\MapPanel+PasteOptions.xoml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gui\Sections\MapPanel+MinimapMenu.xoml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gui\Sections\MapPanel.xoml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Gui\Dialogs\KeyInput.xoml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -622,19 +639,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\objectsselect.png" />
+    <EmbeddedResource Include="Resources\ObjectsSelect.png" />
     <EmbeddedResource Include="Resources\notile.png" />
-    <EmbeddedResource Include="Resources\gateways.png" />
-    <EmbeddedResource Include="Resources\drawtileorientation.png" />
-    <EmbeddedResource Include="Resources\displayautotexture.png" />
-    <EmbeddedResource Include="Resources\selectionrotateclockwise.png" />
-    <EmbeddedResource Include="Resources\selectionrotateanticlockwise.png" />
-    <EmbeddedResource Include="Resources\selectionpasteoptions.png" />
-    <EmbeddedResource Include="Resources\selectionpaste.png" />
-    <EmbeddedResource Include="Resources\selectionflipx.png" />
-    <EmbeddedResource Include="Resources\selectioncopy.png" />
-    <EmbeddedResource Include="Resources\selection.png" />
-    <EmbeddedResource Include="Resources\save.png" />
+    <EmbeddedResource Include="Resources\Gateways.png" />
+    <EmbeddedResource Include="Resources\DrawTileOrientation.png" />
+    <EmbeddedResource Include="Resources\DisplayAutoTexture.png" />
+    <EmbeddedResource Include="Resources\SelectionRotateClockwise.png" />
+    <EmbeddedResource Include="Resources\SelectionRotateAntiClockwise.png" />
+    <EmbeddedResource Include="Resources\SelectionPasteOptions.png" />
+    <EmbeddedResource Include="Resources\SelectionPaste.png" />
+    <EmbeddedResource Include="Resources\SelectionFlipX.png" />
+    <EmbeddedResource Include="Resources\SelectionCopy.png" />
+    <EmbeddedResource Include="Resources\Selection.png" />
+    <EmbeddedResource Include="Resources\Save.png" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

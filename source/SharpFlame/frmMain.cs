@@ -1106,7 +1106,7 @@ namespace SharpFlame
                 return;
             }
 
-            if ( Map.Save_FMap_Prompt() )
+            //if ( Map.Save_FMap_Prompt() )
             {
                 Program.frmMainInstance.tsbSave.Enabled = false;
                 TitleTextUpdate();
@@ -1839,8 +1839,11 @@ namespace SharpFlame
                 return;
             }
             if (
-                !(menuSelPasteHeights.Checked || menuSelPasteTextures.Checked || menuSelPasteUnits.Checked || menuSelPasteDeleteUnits.Checked ||
-                  menuSelPasteGateways.Checked || menuSelPasteDeleteGateways.Checked) )
+                !(menuSelPasteHeights.Checked
+				|| menuSelPasteTextures.Checked
+				|| menuSelPasteUnits.Checked 
+				|| menuSelPasteDeleteUnits.Checked
+				||menuSelPasteGateways.Checked || menuSelPasteDeleteGateways.Checked) )
             {
                 return;
             }
@@ -2187,7 +2190,7 @@ namespace SharpFlame
                 return;
             }
 
-            if ( Map.Save_FMap_Quick() )
+            //if ( Map.Save_FMap_Quick() )
             {
                 Program.frmMainInstance.tsbSave.Enabled = false;
                 TitleTextUpdate();

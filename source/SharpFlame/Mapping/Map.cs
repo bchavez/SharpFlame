@@ -1879,11 +1879,11 @@ namespace SharpFlame.Mapping
         {
             const int MaxLength = 24;
 
-            var Result = "";
-            Result = GetTitle();
-            if ( Result.Length > MaxLength )
+            var result = "";
+            result = GetTitle();
+            if ( result.Length > MaxLength )
             {
-                Result = Result.Substring(0, MaxLength - 3) + "...";
+                result = result.Substring(0, MaxLength - 3) + "...";
             }
         }
 
@@ -2183,51 +2183,7 @@ namespace SharpFlame.Mapping
                 }
             }
         }
-
-        public bool Save_FMap_Prompt()
-        {
-//            var Dialog = new SaveFileDialog();
-//
-//            Dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-//            Dialog.FileName = "";
-//            Dialog.Filter = Constants.ProgramName + " Map Files (*.fmap)|*.fmap";
-//            if ( Dialog.ShowDialog(Program.frmMainInstance) != DialogResult.OK )
-//            {
-//                return false;
-//            }
-//            App.SettingsManager.SavePath = Path.GetDirectoryName(Dialog.FileName);
-//            var fMap = new FMapSaver (this);
-//            var result = fMap.Save(Dialog.FileName, true, true);
-//            if ( !result.HasProblems )
-//            {
-//                PathInfo = new PathInfo(Dialog.FileName, true);
-//                ChangedSinceSave = false;
-//            }
-//            App.ShowWarnings(result);
-//            return !result.HasProblems;
-            return true;
-        }
-
-        public bool Save_FMap_Quick()
-        {
-            if ( PathInfo == null )
-            {
-                return Save_FMap_Prompt();
-            }
-            if ( PathInfo.IsFMap )
-            {
-                var fMap = App.Kernel.Get<FMapSaver>();
-                var result = fMap.Save(PathInfo.Path, this, true, true);
-                if ( !result.HasProblems )
-                {
-                    ChangedSinceSave = false;
-                }
-                App.ShowWarnings(result);
-                return !result.HasProblems;
-            }
-            return Save_FMap_Prompt();
-        }
-
+		
         public bool ClosePrompt()
         {
             // TODO: Implement me.

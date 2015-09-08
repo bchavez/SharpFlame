@@ -218,10 +218,10 @@ namespace SharpFlame.Mapping
             if ( App.Draw_VertexTerrain )
             {
                 GL.LineWidth(1.0F);
-                var DrawVertexTerran = new clsDrawVertexTerrain();
-                DrawVertexTerran.Map = this;
-                DrawVertexTerran.ViewAngleMatrix = ctx.ViewInfo.ViewAngleMatrix;
-                App.VisionSectors.PerformActionMapSectors(DrawVertexTerran, drawCentreSector);
+                var drawVertexTerran = new clsDrawVertexTerrain();
+                drawVertexTerran.Map = this;
+                drawVertexTerran.ViewAngleMatrix = ctx.ViewInfo.ViewAngleMatrix;
+                App.VisionSectors.PerformActionMapSectors(drawVertexTerran, drawCentreSector);
                 debugGLError("Terrain type markers");
             }
 

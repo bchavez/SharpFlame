@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<eto:ContextMenu
+	   xmlns="http://schema.picoe.ca/eto.forms" 
+	   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+       xmlns:eto="clr-namespace:Eto.Forms;assembly=Eto"
+       xmlns:s="clr-namespace:SharpFlame.Gui.Controls;assembly=SharpFlame"
+       xmlns:g="clr-namespace:Eto.Gl;assembly=Eto.Gl">
+
+  <eto:CheckMenuItem ID="RotateAllObjects" Text="Rotate All Objects" Click="ExclusiveToggle" />
+  <eto:CheckMenuItem ID="RotateWallsOnly" Text="Rotate Walls Only" Click="ExclusiveToggle" Checked="True" />
+  <eto:CheckMenuItem ID="NoObjectRotation" Text="No Object Rotation" Click="ExclusiveToggle" />
+  <eto:SeparatorMenuItem />
+  <eto:CheckMenuItem ID="PasteHeights" Text="Paste Heights" Click="Toggle" Checked="True" />
+  <eto:CheckMenuItem ID="PasteTextures" Text="Paste Textures" Click="Toggle" Checked="True" />
+  <eto:CheckMenuItem ID="PasteObjects" Text="Paste Objects" Click="Toggle" />
+  <eto:CheckMenuItem ID="PasteGateways" Text="Paste Gateways" Click="Toggle" />
+  <eto:CheckMenuItem ID="DeleteExistingObjects" Text="Delete Existing Objects" Click="Toggle" />
+  <eto:CheckMenuItem ID="DeleteExistingGateways" Text="Delete Existing Gateways" Click="Toggle" />
+  
+</eto:ContextMenu>

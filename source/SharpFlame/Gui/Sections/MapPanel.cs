@@ -1,12 +1,14 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
 using Eto.Forms;
 using Eto.Gl;
 using Ninject;
 using Ninject.Extensions.Logging;
+using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using SharpFlame.Core;
@@ -16,8 +18,11 @@ using SharpFlame.Core.Extensions;
 using SharpFlame.Domain;
 using SharpFlame.Graphics;
 using SharpFlame.Graphics.OpenGL;
+using SharpFlame.Gui.Actions;
+using SharpFlame.Gui.Controls;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Minimap;
+using SharpFlame.Mapping.Tiles;
 using SharpFlame.Mapping.Tools;
 using SharpFlame.Maths;
 using SharpFlame.MouseTools;
@@ -28,9 +33,88 @@ namespace SharpFlame.Gui.Sections
 {
 	public class MapPanel : Panel
 	{
+		public class MinimapMenu : ContextMenu
+		{
+			public MinimapMenu()
+			{
+				XomlReader.Load(this);
+			}
+			protected void Click(object sender, EventArgs e)
+			{
+				var chk = sender as CheckMenuItem;
+				chk.Checked = !chk.Checked;
+				chk.UpdateBindings();
+			}
+			public CheckMenuItem Textures { get; set; }
+			public CheckMenuItem Heights { get; set; }
+			public CheckMenuItem Cliffs { get; set; }
+			public CheckMenuItem Objects { get; set; }
+			public CheckMenuItem Gateways { get; set; }
+		}
+
+		public class PasteOptions : ContextMenu
+		{
+			public PasteOptions()
+			{
+				XomlReader.Load(this);
+			}
+
+			protected void Toggle(object sender, EventArgs e)
+			{
+				var chk = sender as CheckMenuItem;
+				chk.Checked = !chk.Checked;
+				chk.UpdateBindings();
+			}
+			protected void ExclusiveToggle(object sender, EventArgs e)
+			{
+				//clear
+				this.RotateAllObjects.Checked = false;
+				this.RotateWallsOnly.Checked = false;
+				this.NoObjectRotation.Checked = false;
+
+				var chk = sender as CheckMenuItem;
+				chk.Checked = !chk.Checked;
+
+				this.RotateAllObjects.UpdateBindings();
+				this.RotateWallsOnly.UpdateBindings();
+				this.NoObjectRotation.UpdateBindings();
+			}
+
+			public ObjectRotateMode PasteRotateObjects
+			{
+				get
+				{
+					if( this.RotateAllObjects.Checked )
+						return ObjectRotateMode.All;
+					if( this.RotateWallsOnly.Checked)
+						return ObjectRotateMode.Walls;
+					if( this.NoObjectRotation.Checked)
+						return ObjectRotateMode.None;
+					return ObjectRotateMode.None;
+				}
+			}
+
+			public CheckMenuItem RotateAllObjects { get; set; }
+			public CheckMenuItem RotateWallsOnly { get; set; }
+			public CheckMenuItem NoObjectRotation { get; set; }
+
+			public CheckMenuItem PasteHeights { get; set; }
+			public CheckMenuItem PasteTextures { get; set; }
+			public CheckMenuItem PasteObjects { get; set; }
+			public CheckMenuItem PasteGateways { get; set; }
+			public CheckMenuItem DeleteExistingObjects { get; set; }
+			public CheckMenuItem DeleteExistingGateways { get; set; }
+		}
+
+		[EventPublication(EventTopics.OnTextureDrawLater)]
+		public event EventHandler OnTextureDrawLater;
+
+		public event EventHandler OnSaveFMap;
+
 		public GLSurface GLSurface { get; set; }
 
 		private Map mainMap;
+
 		public Map MainMap { 
 			get { return mainMap; }
 		}
@@ -83,25 +167,43 @@ namespace SharpFlame.Gui.Sections
 
 		[Inject]
 		internal KeyboardManager KeyboardManager { get; set; }
-		
+
 		private MinimapGl minimapGl;
-        
+
 		[Inject]
 		internal ToolOptions ToolOptions { get; set; }
 
 		private UITimer timDraw;
+
 		private UITimer timKey;
+
 		private UITimer timTool;
 
-		private readonly Label lblMinimap;
-		private readonly Label lblTile;
-		private readonly Label lblVertex;
-		private readonly Label lblPos;
+		protected Label lblTile;
+
+		protected Label lblVertex;
+
+		protected Label lblPos;
 
 		private bool drawPending = false;
 
 		private EmptyPlaceHolder emptyPlaceHolder;
-		private Panel panel;
+
+		protected Panel panel;
+
+		protected MinimapMenu miniMenu;
+
+		protected PasteOptions pasteOptions;
+
+		protected ImageButton cmdGateways;
+
+		protected ImageButton cmdDrawAutoTexture;
+
+		protected ImageButton cmdDrawTileOrentation;
+
+		protected ImageButton cmdSave;
+
+		protected ObjectRotateMode pasteRotateObjects = ObjectRotateMode.Walls;
 
 		[Inject]
 		internal SettingsManager Settings { get; set; }
@@ -114,29 +216,219 @@ namespace SharpFlame.Gui.Sections
 
 		public MapPanel()
 		{
-			this.GLSurface = new GLSurface();
-			this.emptyPlaceHolder = new EmptyPlaceHolder();
-			this.panel = new Panel();
+			XomlReader.Load(this);
 
-			var mainLayout = new DynamicLayout();
-			mainLayout.AddSeparateRow(
-				lblMinimap = new Label { Text = "Minimap" }
-				);
-			this.panel.Content = this.GLSurface;
-			mainLayout.Add(this.panel, true, true);
-			mainLayout.AddSeparateRow(
-				lblTile = new Label { },
-				null,
-				lblVertex = new Label { },
-				null,
-				lblPos = new Label { }
-				);
-
-			Content = mainLayout;
+			miniMenu = new MinimapMenu();
+			pasteOptions = new PasteOptions();
+			emptyPlaceHolder = new EmptyPlaceHolder();
 
 			SetupEventHandlers();
+			SetupBindings();
 		}
 
+		protected void MapPanelTool_Selection(object sender, EventArgs e)
+		{
+			this.ToolOptions.MouseTool = MouseTool.TerrainSelect;
+		}
+
+		protected void MapPanelTool_SelectionCopy(object sender, EventArgs e)
+		{
+			var map = MainMap;
+
+			if (map == null)
+			{
+				return;
+			}
+			if (map.SelectedAreaVertexA == null || map.SelectedAreaVertexB == null)
+			{
+				return;
+			}
+			if (App.Copied_Map != null)
+			{
+				App.Copied_Map.Deallocate();
+			}
+			var area = new XYInt();
+			var start = new XYInt();
+			var finish = new XYInt();
+			MathUtil.ReorderXY(map.SelectedAreaVertexA, map.SelectedAreaVertexB, ref start, ref finish);
+			area.X = finish.X - start.X;
+			area.Y = finish.Y - start.Y;
+			App.Copied_Map = App.Kernel.Get<Map>().Copy(map, start, area);
+		}
+
+		protected void MapPanelTool_SelectionPaste(object sender, EventArgs e)
+		{
+			var map = MainMap;
+
+			if (map == null)
+			{
+				return;
+			}
+			if (map.SelectedAreaVertexA == null || map.SelectedAreaVertexB == null)
+			{
+				return;
+			}
+			if (App.Copied_Map == null)
+			{
+				MessageBox.Show("Nothing to paste.");
+				return;
+			}
+			if (
+				!(this.pasteOptions.PasteHeights.Checked
+				  || this.pasteOptions.PasteTextures.Checked
+				  || this.pasteOptions.PasteObjects.Checked
+				  || this.pasteOptions.DeleteExistingObjects.Checked
+				  || this.pasteOptions.PasteGateways.Checked
+				  || this.pasteOptions.DeleteExistingGateways.Checked))
+			{
+				return;
+			}
+			var area = new XYInt();
+			var start = new XYInt();
+			var finish = new XYInt();
+			MathUtil.ReorderXY(map.SelectedAreaVertexA, map.SelectedAreaVertexB, ref start, ref finish);
+			area.X = finish.X - start.X;
+			area.Y = finish.Y - start.Y;
+			map.MapInsert(
+				App.Copied_Map,
+				start,
+				area,
+				this.pasteOptions.PasteHeights.Checked,
+				this.pasteOptions.PasteTextures.Checked,
+				this.pasteOptions.PasteObjects.Checked,
+				this.pasteOptions.DeleteExistingObjects.Checked,
+				this.pasteOptions.PasteGateways.Checked,
+				this.pasteOptions.DeleteExistingGateways.Checked);
+
+			this.EventBroker.SelectedUnitsChanged(this);
+
+			map.UndoStepCreate("Paste");
+
+			this.EventBroker.DrawLater(this);
+		}
+
+		protected void MapPanelTool_SelectionPasteOptions(object sender, EventArgs e)
+		{
+			this.pasteOptions.Show((Control)sender);
+		}
+
+		protected void MapPanelTool_SelectionRotateAntiClockwise(object sender, EventArgs e)
+		{
+			if (App.Copied_Map == null)
+			{
+				MessageBox.Show("Nothing to rotate.");
+				return;
+			}
+
+			App.Copied_Map.Rotate(TileUtil.CounterClockwise, this.pasteOptions.PasteRotateObjects);
+		}
+		protected void MapPanelTool_SelectionRotateClockwise(object sender, EventArgs e)
+		{
+			if (App.Copied_Map == null)
+			{
+				MessageBox.Show("Nothing to rotate.");
+				return;
+			}
+
+			App.Copied_Map.Rotate(TileUtil.Clockwise, this.pasteOptions.PasteRotateObjects);
+		}
+		protected void MapPanelTool_SelectionFlipX(object sender, EventArgs e)
+		{
+			if (App.Copied_Map == null)
+			{
+				MessageBox.Show("Nothing to flip.");
+				return;
+			}
+
+			App.Copied_Map.Rotate(TileUtil.FlipX, this.pasteOptions.PasteRotateObjects);
+		}
+		protected void MapPanelTool_ObjectsSelect(object sender, EventArgs e)
+		{
+			var map = MainMap;
+
+			if (map == null)
+			{
+				return;
+			}
+
+			if (map.SelectedAreaVertexA == null || map.SelectedAreaVertexB == null)
+			{
+				return;
+			}
+			var start = new XYInt();
+			var finish = new XYInt();
+
+			MathUtil.ReorderXY(map.SelectedAreaVertexA, map.SelectedAreaVertexB, ref start, ref finish);
+			for (var i = 0; i <= map.Units.Count - 1; i++)
+			{
+				if (App.PosIsWithinTileArea(map.Units[i].Pos.Horizontal, start, finish))
+				{
+					if (!map.Units[i].MapSelectedUnitLink.IsConnected)
+					{
+						map.Units[i].MapSelectedUnitLink.Connect(map.SelectedUnits);
+					}
+				}
+			}
+			this.EventBroker.SelectedUnitsChanged(this);
+			this.ToolOptions.MouseTool = MouseTool.ObjectSelect;
+			this.EventBroker.DrawLater(this);
+		}
+		protected void MapPanelTool_Gateways(object sender, EventArgs e)
+		{
+			if (this.ToolOptions.MouseTool == MouseTool.Gateways)
+			{
+				App.Draw_Gateways = false;
+				this.ToolOptions.MouseTool = MouseTool.ObjectSelect;
+				this.cmdGateways.Pressed = false;
+				this.cmdGateways.UpdateBindings(BindingUpdateMode.Destination);
+				//this.cmdGateways.Toggle = false;
+				//tsbGateways.Checked = false;
+			}
+			else
+			{
+				App.Draw_Gateways = true;
+				this.ToolOptions.MouseTool = MouseTool.Gateways;
+				this.cmdGateways.Pressed = true;
+				this.cmdGateways.UpdateBindings(BindingUpdateMode.Destination);
+				//this.cmdGateways.Toggle = true;
+				//tsbGateways.Checked = true;
+			}
+			var map = MainMap;
+			if (map != null)
+			{
+				map.SelectedTileA = null;
+				map.SelectedTileB = null;
+				this.EventBroker.DrawLater(this);
+			}
+		}
+		protected void MapPanelTool_DrawAutoTexture(object sender, EventArgs e)
+		{
+			this.cmdDrawAutoTexture.Toggle = !this.cmdDrawAutoTexture.Toggle;
+			this.cmdDrawAutoTexture.Pressed = this.cmdDrawAutoTexture.Toggle;
+            this.cmdDrawAutoTexture.UpdateBindings();
+			this.EventBroker.DrawLater(this);
+		}
+
+		protected void MapPanelTool_DrawTileOrentation(object sender, EventArgs e)
+		{
+			this.cmdDrawTileOrentation.Toggle = !this.cmdDrawTileOrentation.Toggle;
+			this.cmdDrawTileOrentation.Pressed = this.cmdDrawTileOrentation.Toggle;
+			this.cmdDrawTileOrentation.UpdateBindings();
+
+			this.EventBroker.DrawLater(this);
+			this.OnTextureDrawLater?.Invoke(this, EventArgs.Empty);
+		}
+
+		protected void MapPanelTool_Save(object sender, EventArgs e)
+		{
+			this.OnSaveFMap?.Invoke(this, EventArgs.Empty);
+			//this.cmdSave.Enabled = this.mainMap.ChangedSinceSave;
+		}
+
+		protected void minimapOptions_Click(object sender, EventArgs e)
+		{
+			miniMenu.Show((Control)sender);
+		}
 
 		protected override void OnPreLoad(EventArgs e)
 		{
@@ -150,6 +442,19 @@ namespace SharpFlame.Gui.Sections
 			this.DrawLater();
 		}
 
+		private void SetupBindings()
+		{
+			this.miniMenu.Textures.Bind(cm => cm.Checked, Binding.Property(ToolOptions.MinimapOpts, m => m.Textures));
+			this.miniMenu.Heights.Bind(cm => cm.Checked, Binding.Property(ToolOptions.MinimapOpts, m => m.Heights));
+			this.miniMenu.Cliffs.Bind(cm => cm.Checked, Binding.Property(ToolOptions.MinimapOpts, m => m.Cliffs));
+			this.miniMenu.Objects.Bind(cm => cm.Checked, Binding.Property(ToolOptions.MinimapOpts, m => m.Objects));
+			this.miniMenu.Gateways.Bind(cm => cm.Checked, Binding.Property(ToolOptions.MinimapOpts, m => m.Gateways));
+
+			this.cmdGateways.Bind(ib => ib.Toggle, Binding.Delegate(() => App.Draw_Gateways, val => App.Draw_Gateways = val ));
+			this.cmdDrawAutoTexture.Bind(ib => ib.Toggle, Binding.Delegate(() => App.Draw_VertexTerrain, val => App.Draw_VertexTerrain = val));
+			this.cmdDrawTileOrentation.Bind(ib => ib.Toggle, Binding.Delegate(() => App.DisplayTileOrientation, val => App.DisplayTileOrientation = val));
+			
+		}
 		private void SetupEventHandlers()
 		{
 			Settings.PropertyChanged += (object sender, PropertyChangedEventArgs e) =>
@@ -163,8 +468,12 @@ namespace SharpFlame.Gui.Sections
 						MakeGlFont();
 					}
 				};
+
+			this.pasteOptions.RotateAllObjects.Click += (sender, args) => this.pasteRotateObjects = ObjectRotateMode.All;
+			this.pasteOptions.RotateWallsOnly.Click += (sender, args) => this.pasteRotateObjects = ObjectRotateMode.Walls;
+			this.pasteOptions.NoObjectRotation.Click += (sender, args) => this.pasteRotateObjects = ObjectRotateMode.None;
 		}
-		
+
 		private void MakeGlFont()
 		{
 			if(!this.GLSurface.IsInitialized)
@@ -223,69 +532,8 @@ namespace SharpFlame.Gui.Sections
 			GLSurface.SizeChanged += ResizeMapView;
 
 			KeyboardManager.KeyDown += HandleKeyDown;
-
-			lblMinimap.MouseDown += delegate
-				{
-					var menu = CreateMinimapContextMenu();
-					menu.Show(lblMinimap);
-				};
 		}
-
-		private ContextMenu CreateMinimapContextMenu() {
-			var menu = new ContextMenu();
-
-			var cmiTextures = new CheckMenuItem(new CheckCommand {
-				MenuText = "Show Textures",
-				Checked = ToolOptions.MinimapOpts.Textures
-			});
-			cmiTextures.Click += delegate
-				{
-					ToolOptions.MinimapOpts.Textures = !ToolOptions.MinimapOpts.Textures;
-				};
-			menu.Items.Add(cmiTextures);
-
-			var cmiHeights = new CheckMenuItem(new CheckCommand {
-				MenuText = "Show Heights",
-				Checked = ToolOptions.MinimapOpts.Heights
-			});
-			cmiHeights.Click += delegate
-				{
-					ToolOptions.MinimapOpts.Heights = !ToolOptions.MinimapOpts.Heights;
-				};
-			menu.Items.Add(cmiHeights);
-
-			var cmiCliffs = new CheckMenuItem(new CheckCommand {
-				MenuText = "Show Cliffs",
-				Checked = ToolOptions.MinimapOpts.Cliffs
-			});
-			cmiCliffs.Click += delegate
-				{
-					ToolOptions.MinimapOpts.Cliffs = !ToolOptions.MinimapOpts.Cliffs;
-				};
-			menu.Items.Add(cmiCliffs);
-
-			var cmiObjects = new CheckMenuItem(new CheckCommand {
-				MenuText = "Show Objects",
-				Checked = ToolOptions.MinimapOpts.Objects
-			});
-			cmiObjects.Click += delegate
-				{
-					ToolOptions.MinimapOpts.Objects = !ToolOptions.MinimapOpts.Objects;
-				};
-			menu.Items.Add(cmiObjects);
-
-			var cmiGateways = new CheckMenuItem(new CheckCommand {
-				MenuText = "Show Gateways",
-				Checked = ToolOptions.MinimapOpts.Gateways
-			});
-			cmiGateways.Click += delegate
-				{
-					ToolOptions.MinimapOpts.Gateways = !ToolOptions.MinimapOpts.Gateways;
-				};
-			menu.Items.Add(cmiGateways);
-
-			return menu;
-		}
+		
 
 		private void InitalizeGlSurface(object sender, EventArgs e)
 		{

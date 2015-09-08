@@ -69,6 +69,14 @@ namespace SharpFlame.Gui.Sections
 
         private XYInt TextureCount { get; set; }
 
+
+		[EventSubscription(EventTopics.OnTextureDrawLater, typeof(OnPublisher))]
+		public void HandleTextureDrawLater(object sender, EventArgs e)
+		{
+			//really we should draw later....... use a timer.
+			this.DrawTexturesView();
+		}
+
         [EventSubscription(EventTopics.OnMapLoad, typeof(OnPublisher))]
         public void HandleMapLoad(Map newMap)
         {

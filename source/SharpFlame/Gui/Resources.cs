@@ -71,6 +71,21 @@ namespace SharpFlame.Gui
 			get { return new Bitmap(GetBytes(() => Line)); }
 		}
 
+		public static Bitmap Selection => new Bitmap(GetBytes(() => Selection));
+		public static Bitmap SelectionCopy => new Bitmap(GetBytes(() => SelectionCopy));
+		public static Bitmap SelectionPasteOptions => new Bitmap(GetBytes(() => SelectionPasteOptions));
+		public static Bitmap SelectionPaste => new Bitmap(GetBytes(() => SelectionPaste));
+		public static Bitmap SelectionRotateAntiClockwise => new Bitmap(GetBytes(() => SelectionRotateAntiClockwise));
+		public static Bitmap SelectionRotateClockwise => new Bitmap(GetBytes(() => SelectionRotateClockwise));
+		public static Bitmap SelectionFlipX => new Bitmap(GetBytes(() => SelectionFlipX));
+		public static Bitmap ObjectsSelect => new Bitmap(GetBytes(() => ObjectsSelect));
+
+		public static Bitmap Gateways => new Bitmap(GetBytes(() => Gateways));
+		public static Bitmap DisplayAutoTexture => new Bitmap(GetBytes(() => DisplayAutoTexture));
+		public static Bitmap DrawTileOrientation => new Bitmap(GetBytes(() => DrawTileOrientation));
+
+		public static Bitmap Save => new Bitmap(GetBytes(() => Save));
+		
 
 		public static Lazy<Assembly> Assembly = new Lazy<Assembly>(System.Reflection.Assembly.GetExecutingAssembly);
 

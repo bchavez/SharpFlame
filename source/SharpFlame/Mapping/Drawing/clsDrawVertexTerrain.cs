@@ -32,7 +32,7 @@ namespace SharpFlame.Mapping.Drawing
             var A = 0;
 
             for ( Y = PosNum.Y * Constants.SectorTileSize;
-                Y <= Math.Min(Convert.ToInt32((PosNum.Y + 1) * Constants.SectorTileSize - 1), Map.Terrain.TileSize.Y);
+                Y <= Math.Min((PosNum.Y + 1) * Constants.SectorTileSize - 1, Map.Terrain.TileSize.Y);
                 Y++ )
             {
                 for ( X = PosNum.X * Constants.SectorTileSize; X <= Math.Min((PosNum.X + 1) * Constants.SectorTileSize - 1, Map.Terrain.TileSize.X); X++ )

@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<eto:Panel
+	   xmlns="http://schema.picoe.ca/eto.forms" 
+	   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+       xmlns:eto="clr-namespace:Eto.Forms;assembly=Eto"
+       xmlns:s="clr-namespace:SharpFlame.Gui.Controls;assembly=SharpFlame"
+       xmlns:g="clr-namespace:Eto.Gl;assembly=Eto.Gl"
+       xmlns:gui="clr-namespace:SharpFlame.Gui;assembly=SharpFlame"
+       xmlns:p="clr-namespace:SharpFlame.Gui.Sections">
+
+  <eto:StackLayout>
+
+    <!--Map Tool Bar-->
+    <eto:StackLayoutItem VerticalAlignment="Top">
+
+      <eto:TableLayout>
+        <eto:TableRow>
+          <eto:Button Text="Minimap" Click="minimapOptions_Click" />
+          
+          <eto:Label Text="     " />
+          
+          <eto:Label Text="Selection:" />
+          <s:ImageButton Size="18,18" Image="{x:Static gui:Resources.Selection}" Click="MapPanelTool_Selection" />
+          <s:ImageButton Size="18,18" Image="{x:Static gui:Resources.SelectionCopy}" Click="MapPanelTool_SelectionCopy" />
+          <s:ImageButton Size="18,18" Image="{x:Static gui:Resources.SelectionPasteOptions}" Click="MapPanelTool_SelectionPasteOptions"  />
+          <s:ImageButton Size="18,18" Image="{x:Static gui:Resources.SelectionPaste}" Click="MapPanelTool_SelectionPaste"  />
+          <s:ImageButton Size="18,18" Image="{x:Static gui:Resources.SelectionRotateAntiClockwise}" Click="MapPanelTool_SelectionRotateAntiClockwise" />
+          <s:ImageButton Size="18,18" Image="{x:Static gui:Resources.SelectionRotateClockwise}" Click="MapPanelTool_SelectionRotateClockwise" />
+          <s:ImageButton Size="18,18" Image="{x:Static gui:Resources.SelectionFlipX}" Click="MapPanelTool_SelectionFlipX" />
+          <s:ImageButton Size="18,18" Image="{x:Static gui:Resources.ObjectsSelect}" Click="MapPanelTool_ObjectsSelect" />
+          
+          <eto:Label Text="     " />
+
+          <s:ImageButton ID="cmdGateways" Size="18,18" Image="{x:Static gui:Resources.Gateways}" Click="MapPanelTool_Gateways" />
+          <s:ImageButton ID="cmdDrawAutoTexture" Size="18,18" Image="{x:Static gui:Resources.DisplayAutoTexture}" Click="MapPanelTool_DrawAutoTexture" />
+          <s:ImageButton ID="cmdDrawTileOrentation" Size="18,18" Image="{x:Static gui:Resources.DrawTileOrientation}"  Click="MapPanelTool_DrawTileOrentation" />
+
+          <eto:Label Text="     " />
+
+          <s:ImageButton ID="cmdSave" Size="18,18" Image="{x:Static gui:Resources.Save}" Click="MapPanelTool_Save" />
+          
+        </eto:TableRow>
+      </eto:TableLayout>
+
+    </eto:StackLayoutItem>
+
+
+    <!--GL Map Surface-->
+    <eto:StackLayoutItem VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Expand="True">
+        
+          <eto:Panel ID="panel" >
+            <g:GLSurface ID="GLSurface"></g:GLSurface>
+          </eto:Panel>
+      
+    </eto:StackLayoutItem>
+
+
+    <!-- Status Bar -->
+    <eto:StackLayoutItem VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
+      <eto:StackLayout Orientation="Horizontal">
+        <eto:StackLayoutItem HorizontalAlignment="Left" Expand="True">
+          <eto:Label ID="lblTile" Text="Tile x: -, y: -"></eto:Label>
+        </eto:StackLayoutItem>
+        <eto:StackLayoutItem HorizontalAlignment="Stretch" Expand="True">
+          <eto:Label ID="lblVertex" Text="Vertex x: -, y: -"></eto:Label>
+        </eto:StackLayoutItem>
+        <eto:StackLayoutItem HorizontalAlignment="Right" Expand="True">
+          <eto:Label ID="lblPos" Text="Pos x: -, y: -, alt: -, slope: -"></eto:Label>
+        </eto:StackLayoutItem>
+      </eto:StackLayout>
+    </eto:StackLayoutItem>
+
+
+  </eto:StackLayout>
+</eto:Panel>

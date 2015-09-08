@@ -15,7 +15,7 @@ using SharpFlame.Maths;
 
 namespace SharpFlame.Gui.Actions
 {
-    public class CompileMapCommand : Command
+	public class CompileMapCommand : Command
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 

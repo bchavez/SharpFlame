@@ -1,4 +1,5 @@
 using System;
+using System.Net.Mime;
 using System.Threading;
 using System.Threading.Tasks;
 using Appccelerate.EventBroker;
@@ -11,11 +12,13 @@ using Ninject.Activation.Strategies;
 using Ninject.Modules;
 using SharpFlame.Core;
 using SharpFlame.Core.Domain;
+using SharpFlame.Core.Extensions;
 using SharpFlame.Extensions;
 using SharpFlame.Gui.Actions;
 using SharpFlame.Gui.Sections;
 using SharpFlame.Mapping;
 using SharpFlame.Settings;
+using SharpFlame.Util;
 
 namespace SharpFlame.Gui.Forms
 {
@@ -66,6 +69,59 @@ namespace SharpFlame.Gui.Forms
 	        }
 	    }
 
+		[EventSubscription(EventTopics.OnMapSave, typeof(OnPublisher))]
+		public void OnMapSave(string path)
+		{
+			var map = MapPanel.MainMap;
+			var mapFileTitle = "";
+
+			//menuSaveFMapQuick.Text = "Quick Save fmap";
+			//menuSaveFMapQuick.Enabled = false;
+			if (map == null)
+			{
+				mapFileTitle = "No Map";
+				//tsbSave.ToolTipText = "No Map";
+			}
+			else
+			{
+				if (map.PathInfo == null)
+				{
+					mapFileTitle = "Unsaved map";
+					//tsbSave.ToolTipText = "Save FMap...";
+				}
+				else
+				{
+					var splitPath = new sSplitPath(map.PathInfo.Path);
+					if (map.PathInfo.IsFMap)
+					{
+						mapFileTitle = splitPath.FileTitleWithoutExtension;
+						var quickSavePath = map.PathInfo.Path;
+						//tsbSave.ToolTipText = "Quick save FMap to {0}".Format2(quickSavePath);
+						//menuSaveFMapQuick.Text = "Quick Save fmap to \"";
+						if (quickSavePath.Length <= 32)
+						{
+							//menuSaveFMapQuick.Text += quickSavePath;
+						}
+						else
+						{
+							//menuSaveFMapQuick.Text += quickSavePath.Substring(0, 10) + "..." + quickSavePath.Substring(quickSavePath.Length - 20, 20);
+						}
+						//menuSaveFMapQuick.Text += "\"";
+						//menuSaveFMapQuick.Enabled = true;
+					}
+					else
+					{
+						mapFileTitle = splitPath.FileTitle;
+						//tsbSave.ToolTipText = "Save FMap...";
+					}
+				}
+				map.SetTabText();
+			}
+
+			var title = mapFileTitle;
+			this.SetTitle(title);
+		}
+
 	    public MainForm()
 	    {
 	        Init();
@@ -79,6 +135,7 @@ namespace SharpFlame.Gui.Forms
 	        Icon = Resources.ProgramIcon;
 
             this.MapPanel = new MapPanel();
+		    this.MapPanel.OnSaveFMap += (sender, args) => new SaveFMapCommand(this, this.EventBroker).Execute();
 	        this.TextureTab = new TextureTab();
 	        this.TerrainTab = new TerrainTab();
 	        //this.PlaceObjectsTab = new PlaceObjectsTab();
@@ -117,29 +174,6 @@ namespace SharpFlame.Gui.Forms
             
 	        GenerateMenuToolBar();
 	        //Maximize();
-
-            /*if (Settings.UpdateOnStartup) 
-            { 
-                var updater = App.Kernel.Get<Updater> ();
-                updater.CheckForUpdatesAsync ().ThenOnUI(updatesAvailable => {
-                    if (updatesAvailable > 0)
-                    {
-                        if (MessageBox.Show (
-                            "Theres an Update available, do you want to download and apply it now?",
-                            "Update available",
-                            MessageBoxButtons.OKCancel,
-                            MessageBoxType.Question) == DialogResult.Ok)
-                        {
-                            updater.PrepareUpdatesAsync ().ThenOnUI(worked => {
-                                // TODO: Save the maps and ask the user for a restart here.
-                                    if (worked) {
-                                    updater.DoUpdate();
-                                }
-                            });
-                        }
-                    }
-                });
-            }*/
         }
 
         void MainForm_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -160,7 +194,7 @@ namespace SharpFlame.Gui.Forms
             file.Items.AddSeparator();
 
             var saveMenu = file.Items.GetSubmenu("&Save", 300);
-	        saveMenu.Items.Add(new Command() {MenuText = "&Map fmap"});
+	        saveMenu.Items.Add(new SaveFMapCommand(this, this.EventBroker) {MenuText = "&Map fmap"});
             saveMenu.Items.AddSeparator();
             saveMenu.Items.Add(new Command() { MenuText = "&Quick Save fmap" });
             saveMenu.Items.AddSeparator();
@@ -175,7 +209,7 @@ namespace SharpFlame.Gui.Forms
             file.Items.AddSeparator();
             file.Items.Add(new CompileMapCommand(this), 500);
             file.Items.AddSeparator();
-	        file.Items.Add(new Actions.Quit());
+	        file.Items.Add(new Actions.QuitCommand());
 
             var toolsMenu = Menu.Items.GetSubmenu("&Tools", 600);
 			toolsMenu.Items.GetSubmenu ("Reinterpret Terrain", 100);
@@ -187,10 +221,10 @@ namespace SharpFlame.Gui.Forms
 			toolsMenu.Items.GetSubmenu ("Generator", 500);
 
             var editMenu = Menu.Items.GetSubmenu ("&Edit", 700);
-	        editMenu.Items.Add(new Actions.Settings());
+	        editMenu.Items.Add(new Actions.SettingsCommand());
 
 			var help = Menu.Items.GetSubmenu("&Help", 1000);
-	        help.Items.Add(new Actions.About());
+	        help.Items.Add(new Actions.AboutCommand());
 
 			// optional, removes empty submenus and duplicate separators
 			// menu.Items.Trim();

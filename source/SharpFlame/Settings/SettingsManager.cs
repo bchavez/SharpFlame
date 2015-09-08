@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq.Expressions;
+using Appccelerate.EventBroker;
+using Appccelerate.EventBroker.Handlers;
 using Eto.Forms;
 using Newtonsoft.Json;
 using Ninject.Extensions.Logging;
@@ -279,6 +281,12 @@ namespace SharpFlame.Settings
 			}
 
 			return returnResult;
+		}
+
+		[EventSubscription(EventTopics.OnMapSave, typeof(OnPublisher))]
+		public void HandleMapSaved(string path)
+		{
+			this.SavePath = path;
 		}
 	}
 }
