@@ -6,11 +6,16 @@ Project Description
 -------------------
 A modern [Warzone 21000](http://wz2100.net/) map editor based on the original Warzone 2100 [FlaME](https://github.com/flail/flaME) map editor, written in C#.
 
+
 ### License
 * [MIT License](https://github.com/bchavez/Dwolla/blob/master/LICENSE)
 
 ### Requirements
 * .NET 4.0 or Mono 3.x
+
+### Screenshots
+![Screenshot1](https://raw.githubusercontent.com/bchavez/SharpFlame/eto/graphics/Screenshot1.jpg)
+![Screenshot1](https://raw.githubusercontent.com/bchavez/SharpFlame/eto/graphics/Screenshot2.jpg)
 
 ### Download & Install
 
