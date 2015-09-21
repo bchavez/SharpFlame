@@ -4,6 +4,6 @@ using System.Reflection;
 [assembly: AssemblyCopyrightAttribute("Brian Chavez © 2015")]
 [assembly: AssemblyVersionAttribute("0.0.0")]
 [assembly: AssemblyFileVersion("0.0.0")]
-[assembly: AssemblyInformationalVersion("0.0.0-localbuild built on 9/21/2015 8:57:29 PM UTC")]
+[assembly: AssemblyInformationalVersion("0.0.0-localbuild built on 9/21/2015 9:58:18 PM UTC")]
 [assembly: AssemblyTrademark("MIT License")]
 [assembly: AssemblyDescriptionAttribute("http://www.github.com/bchavez/SharpFlame")]
