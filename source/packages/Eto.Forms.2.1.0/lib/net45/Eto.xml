@@ -1065,26 +1065,31 @@
             Enumeration of the pixel offset modes of a <see cref="T:Eto.Drawing.Graphics"/>
             </summary>
             <remarks>
-            The pixel offset mode usually applies to all graphics operations such as 
+            The pixel offset mode applies to all Draw* graphics operations such as 
             <see cref="M:Eto.Drawing.Graphics.DrawLine(Eto.Drawing.Pen,Eto.Drawing.PointF,Eto.Drawing.PointF)"/>, <see cref="M:Eto.Drawing.Graphics.DrawRectangle(Eto.Drawing.Pen,Eto.Drawing.RectangleF)"/>, etc.
             </remarks>
             <copyright>(c) 2014 by Curtis Wensley</copyright>
             <license type="BSD-3">See LICENSE for full terms</license>
         </member>
-        <member name="F:Eto.Drawing.PixelOffsetMode.Half">
-            <summary>
-            Specifies that pixels are offset by half a pixel (-0.5)
-            </summary>
-            <remarks>
-            This provides the best visual result by aligning to the pixel grid
-            </remarks>
-        </member>
         <member name="F:Eto.Drawing.PixelOffsetMode.None">
             <summary>
-            Specifies that pixels will not be offset and be relative to the center of each pixel
+            Specifies that pixels will not be offset and be relative to the center of each pixel.
             </summary>
             <remarks>
-            In this mode, vertical or horizontal lines that are not a fraction will typically be antialiased.
+            This simplifies drawing odd-width lines by aligning them to the pixel boundary.
+            </remarks>
+        </member>
+        <member name="F:Eto.Drawing.PixelOffsetMode.Half">
+            <summary>
+            Specifies that pixels are offset by half a pixel (-0.5) in both the horizontal and vertical axes. Use for high speed.
+            </summary>
+            <remarks>
+            In this mode, the center of lines will be at the point between logical pixels and can improve performance with some platforms. 
+            Horizontal or vertical lines that are not a fraction will typically be antialiased.
+            For example, to draw a 1px wide horizontal line without antialiasing, you would have to draw at a 0.5 offset in the vertical axis.
+            
+            Only Draw operations are offset with this mode, Fill operations will not be offset. (new in 2.1)
+            For example, filling a rectangle from 10, 10 to 20, 20 will not be antialiased and fall on (logical) pixel boundaries.
             </remarks>
         </member>
         <member name="T:Eto.Drawing.Region">
@@ -6543,6 +6548,258 @@
             </remarks>
             <value><c>true</c> to print in reverse; otherwise, <c>false</c>.</value>
         </member>
+        <member name="T:Eto.Forms.ThemedControls.ThemedExpanderHandler">
+            <summary>
+            A themed handler for the <see cref="T:Eto.Forms.Expander"/> control.
+            </summary>
+        </member>
+        <member name="T:Eto.Forms.Expander.IHandler">
+            <summary>
+            Handler interface for platform implementations of the <see cref="T:Eto.Forms.Expander"/>.
+            </summary>
+        </member>
+        <member name="T:Eto.Forms.Panel.IHandler">
+            <summary>
+            Handler interface fot the <see cref="T:Eto.Forms.Panel"/>
+            </summary>
+        </member>
+        <member name="T:Eto.Forms.Panel">
+            <summary>
+            Control to display a panel containing a single <see cref="P:Eto.Forms.Panel.Content"/> control
+            </summary>
+            <remarks>
+            This can be instantiated directly to provide padding around a control, and is also the base of other containers that have
+            only a single child control.
+            </remarks>
+        </member>
+        <member name="M:Eto.Forms.Panel.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Eto.Forms.Panel"/> class.
+            </summary>
+        </member>
+        <member name="M:Eto.Forms.Panel.#ctor(Eto.Forms.Panel.IHandler)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Eto.Forms.Panel"/> class with the specified handler.
+            </summary>
+            <param name="handler">Handler to use for the implementation of the control.</param>
+        </member>
+        <member name="M:Eto.Forms.Panel.Remove(Eto.Forms.Control)">
+            <summary>
+            Removes the specified child from the container
+            </summary>
+            <param name="child">Child to remove.</param>
+        </member>
+        <member name="P:Eto.Forms.Panel.Controls">
+            <summary>
+            Gets an enumeration of controls that are directly contained by this container
+            </summary>
+            <value>The contained controls.</value>
+        </member>
+        <member name="P:Eto.Forms.Panel.Padding">
+            <summary>
+            Gets or sets the padding around the <see cref="P:Eto.Forms.Panel.Content"/> of the panel.
+            </summary>
+            <value>The padding around the content.</value>
+        </member>
+        <member name="P:Eto.Forms.Panel.MinimumSize">
+            <summary>
+            Gets or sets the minimum size of the panel.
+            </summary>
+            <value>The minimum size.</value>
+        </member>
+        <member name="P:Eto.Forms.Panel.ContextMenu">
+            <summary>
+            Gets or sets the context menu for the panel.
+            </summary>
+            <remarks>
+            The context menu is usually shown when the user right clicks the control, or in mobile platforms when the
+            user taps and holds their finger down on the control.
+            </remarks>
+            <value>The context menu.</value>
+        </member>
+        <member name="P:Eto.Forms.Panel.Content">
+            <summary>
+            Gets or sets the main content of the panel.
+            </summary>
+            <remarks>
+            The main content will be offset by the <see cref="P:Eto.Forms.Panel.Padding"/> value specified, and will take up the entire
+            content area of the control.
+            Some controls may have decorations that will surround the content, such as a <see cref="T:Eto.Forms.GroupBox"/>, <see cref="T:Eto.Forms.TabControl"/>,
+            or <see cref="T:Eto.Forms.Window"/>
+            </remarks>
+            <value>The child content of the control.</value>
+        </member>
+        <member name="T:Eto.Forms.Panel.IHandler">
+            <summary>
+            Handler interface fot the <see cref="T:Eto.Forms.Panel"/>
+            </summary>
+        </member>
+        <member name="P:Eto.Forms.Panel.IHandler.Content">
+            <summary>
+            Gets or sets the main content of the panel.
+            </summary>
+            <remarks>
+            The main content will be offset by the <see cref="P:Eto.Forms.Panel.IHandler.Padding"/> value specified, and will take up the entire
+            content area of the control.
+            Some controls may have decorations that will surround the content, such as a <see cref="T:Eto.Forms.GroupBox"/>, <see cref="T:Eto.Forms.TabControl"/>,
+            or <see cref="T:Eto.Forms.Window"/>
+            </remarks>
+            <value>The child content of the control.</value>
+        </member>
+        <member name="P:Eto.Forms.Panel.IHandler.Padding">
+            <summary>
+            Gets or sets the padding around the <see cref="P:Eto.Forms.Panel.IHandler.Content"/> of the panel.
+            </summary>
+            <value>The padding around the content.</value>
+        </member>
+        <member name="P:Eto.Forms.Panel.IHandler.MinimumSize">
+            <summary>
+            Gets or sets the minimum size of the panel.
+            </summary>
+            <value>The minimum size.</value>
+        </member>
+        <member name="T:Eto.Forms.Expander">
+            <summary>
+            A control with a panel that can be expanded or collapsed with a header and button.
+            </summary>
+        </member>
+        <member name="F:Eto.Forms.Expander.ExpandedChangedEvent">
+            <summary>
+            Identifier for the <see cref="E:Eto.Forms.Expander.ExpandedChanged"/> event.
+            </summary>
+        </member>
+        <member name="M:Eto.Forms.Expander.OnExpandedChanged(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:Eto.Forms.Expander.ExpandedChanged"/> event.
+            </summary>
+            <param name="e">Event arguments</param>
+        </member>
+        <member name="M:Eto.Forms.Expander.GetCallback">
+            <summary>
+            Gets an instance of an object used to perform callbacks to the widget from handler implementations
+            </summary>
+            <returns>The callback.</returns>
+        </member>
+        <member name="E:Eto.Forms.Expander.ExpandedChanged">
+            <summary>
+            Occurs when the <see cref="P:Eto.Forms.Expander.Expanded"/> property changes.
+            </summary>
+        </member>
+        <member name="P:Eto.Forms.Expander.Controls">
+            <summary>
+            Gets an enumeration of controls that are directly contained by this container
+            </summary>
+            <value>The contained controls.</value>
+        </member>
+        <member name="P:Eto.Forms.Expander.Expanded">
+            <summary>
+            Gets or sets a value indicating whether the <see cref="P:Eto.Forms.Panel.Content"/> is expanded/visible.
+            </summary>
+            <value><c>true</c> if expanded; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Eto.Forms.Expander.Header">
+            <summary>
+            Gets or sets the header control.
+            </summary>
+            <value>The header control.</value>
+        </member>
+        <member name="T:Eto.Forms.Expander.ICallback">
+            <summary>
+            Callback interface for the <see cref="T:Eto.Forms.Expander"/>
+            </summary>
+        </member>
+        <member name="M:Eto.Forms.Expander.ICallback.OnExpandedChanged(Eto.Forms.Expander,System.EventArgs)">
+            <summary>
+            Raises the expanded changed event.
+            </summary>
+            <param name="widget">Widget to raise the event.</param>
+            <param name="e">Event arguments.</param>
+        </member>
+        <member name="T:Eto.Forms.Expander.Callback">
+            <summary>
+            Callback implementation for the <see cref="T:Eto.Forms.Expander"/>
+            </summary>
+        </member>
+        <member name="M:Eto.Forms.Expander.Callback.OnExpandedChanged(Eto.Forms.Expander,System.EventArgs)">
+            <summary>
+            Raises the expanded changed event.
+            </summary>
+            <param name="widget">Widget to raise the event.</param>
+            <param name="e">Event arguments.</param>
+        </member>
+        <member name="T:Eto.Forms.Expander.IHandler">
+            <summary>
+            Handler interface for platform implementations of the <see cref="T:Eto.Forms.Expander"/>.
+            </summary>
+        </member>
+        <member name="P:Eto.Forms.Expander.IHandler.Expanded">
+            <summary>
+            Gets or sets a value indicating whether the <see cref="P:Eto.Forms.Panel.IHandler.Content"/> is expanded/visible.
+            </summary>
+            <value><c>true</c> if expanded; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Eto.Forms.Expander.IHandler.Header">
+            <summary>
+            Gets or sets the header control.
+            </summary>
+            <value>The header control.</value>
+        </member>
+        <member name="M:Eto.Forms.ThemedControls.ThemedExpanderHandler.#ctor">
+            <summary>
+            Initializes a new instance of the ThemedExpanderHandler.
+            </summary>
+        </member>
+        <member name="M:Eto.Forms.ThemedControls.ThemedExpanderHandler.Initialize">
+            <summary>
+            Initializes the control after attached to a widget.
+            </summary>
+        </member>
+        <member name="M:Eto.Forms.ThemedControls.ThemedExpanderHandler.AttachEvent(System.String)">
+            <summary>
+            Attaches the handler events.
+            </summary>
+            <param name="id">Identifier of the event to attach</param>
+        </member>
+        <member name="P:Eto.Forms.ThemedControls.ThemedExpanderHandler.ExpandedButtonText">
+            <summary>
+            Gets or sets the text of the button when <see cref="P:Eto.Forms.ThemedControls.ThemedExpanderHandler.Expanded"/> is <c>true</c>.
+            </summary>
+        </member>
+        <member name="P:Eto.Forms.ThemedControls.ThemedExpanderHandler.CollapsedButtonText">
+            <summary>
+            Gets or sets the text of the button when <see cref="P:Eto.Forms.ThemedControls.ThemedExpanderHandler.Expanded"/> is <c>false</c>.
+            </summary>
+        </member>
+        <member name="P:Eto.Forms.ThemedControls.ThemedExpanderHandler.Expanded">
+            <summary>
+            Gets or sets whether the expander content is visible (expanded).
+            </summary>
+        </member>
+        <member name="P:Eto.Forms.ThemedControls.ThemedExpanderHandler.Header">
+            <summary>
+            Gets or sets the content of the header
+            </summary>
+        </member>
+        <member name="P:Eto.Forms.ThemedControls.ThemedExpanderHandler.Content">
+            <summary>
+            Gets or sets the content of the control when expanded.
+            </summary>
+        </member>
+        <member name="P:Eto.Forms.ThemedControls.ThemedExpanderHandler.Padding">
+            <summary>
+            Gets or sets the padding around the <see cref="P:Eto.Forms.ThemedControls.ThemedExpanderHandler.Content"/>.
+            </summary>
+        </member>
+        <member name="P:Eto.Forms.ThemedControls.ThemedExpanderHandler.MinimumSize">
+            <summary>
+            Gets or sets the minimum size of this control.
+            </summary>
+        </member>
+        <member name="P:Eto.Forms.ThemedControls.ThemedExpanderHandler.ContextMenu">
+            <summary>
+            Gets or sets the context menu of the expander.
+            </summary>
+        </member>
         <member name="T:Eto.Forms.ThemedControls.ThemedSplitterHandler">
             <summary>
             ! UNDER CONSTRUCTION !
@@ -6609,6 +6866,11 @@
             <summary>
             Gets or sets the orientation of the panels in the splitter.
             </summary>
+            <remarks>
+            This defines the orientation of the panels, with a splitter of the opposite orientation between them.
+            For example, when set to <see cref="T:Orientation.Horizontal"/>, Panel1 and Panel2 will be horizontal to 
+            eachother with a vertical splitter/gutter between them.
+            </remarks>
             <value>The orientation of the panels.</value>
         </member>
         <member name="P:Eto.Forms.Splitter.FixedPanel">
@@ -7904,101 +8166,6 @@
             Base window
             </summary>
         </member>
-        <member name="T:Eto.Forms.Panel">
-            <summary>
-            Control to display a panel containing a single <see cref="P:Eto.Forms.Panel.Content"/> control
-            </summary>
-            <remarks>
-            This can be instantiated directly to provide padding around a control, and is also the base of other containers that have
-            only a single child control.
-            </remarks>
-        </member>
-        <member name="M:Eto.Forms.Panel.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Eto.Forms.Panel"/> class.
-            </summary>
-        </member>
-        <member name="M:Eto.Forms.Panel.#ctor(Eto.Forms.Panel.IHandler)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Eto.Forms.Panel"/> class with the specified handler.
-            </summary>
-            <param name="handler">Handler to use for the implementation of the control.</param>
-        </member>
-        <member name="M:Eto.Forms.Panel.Remove(Eto.Forms.Control)">
-            <summary>
-            Removes the specified child from the container
-            </summary>
-            <param name="child">Child to remove.</param>
-        </member>
-        <member name="P:Eto.Forms.Panel.Controls">
-            <summary>
-            Gets an enumeration of controls that are directly contained by this container
-            </summary>
-            <value>The contained controls.</value>
-        </member>
-        <member name="P:Eto.Forms.Panel.Padding">
-            <summary>
-            Gets or sets the padding around the <see cref="P:Eto.Forms.Panel.Content"/> of the panel.
-            </summary>
-            <value>The padding around the content.</value>
-        </member>
-        <member name="P:Eto.Forms.Panel.MinimumSize">
-            <summary>
-            Gets or sets the minimum size of the panel.
-            </summary>
-            <value>The minimum size.</value>
-        </member>
-        <member name="P:Eto.Forms.Panel.ContextMenu">
-            <summary>
-            Gets or sets the context menu for the panel.
-            </summary>
-            <remarks>
-            The context menu is usually shown when the user right clicks the control, or in mobile platforms when the
-            user taps and holds their finger down on the control.
-            </remarks>
-            <value>The context menu.</value>
-        </member>
-        <member name="P:Eto.Forms.Panel.Content">
-            <summary>
-            Gets or sets the main content of the panel.
-            </summary>
-            <remarks>
-            The main content will be offset by the <see cref="P:Eto.Forms.Panel.Padding"/> value specified, and will take up the entire
-            content area of the control.
-            Some controls may have decorations that will surround the content, such as a <see cref="T:Eto.Forms.GroupBox"/>, <see cref="T:Eto.Forms.TabControl"/>,
-            or <see cref="T:Eto.Forms.Window"/>
-            </remarks>
-            <value>The child content of the control.</value>
-        </member>
-        <member name="T:Eto.Forms.Panel.IHandler">
-            <summary>
-            Handler interface fot the <see cref="T:Eto.Forms.Panel"/>
-            </summary>
-        </member>
-        <member name="P:Eto.Forms.Panel.IHandler.Content">
-            <summary>
-            Gets or sets the main content of the panel.
-            </summary>
-            <remarks>
-            The main content will be offset by the <see cref="P:Eto.Forms.Panel.IHandler.Padding"/> value specified, and will take up the entire
-            content area of the control.
-            Some controls may have decorations that will surround the content, such as a <see cref="T:Eto.Forms.GroupBox"/>, <see cref="T:Eto.Forms.TabControl"/>,
-            or <see cref="T:Eto.Forms.Window"/>
-            </remarks>
-            <value>The child content of the control.</value>
-        </member>
-        <member name="P:Eto.Forms.Panel.IHandler.Padding">
-            <summary>
-            Gets or sets the padding around the <see cref="P:Eto.Forms.Panel.IHandler.Content"/> of the panel.
-            </summary>
-            <value>The padding around the content.</value>
-        </member>
-        <member name="P:Eto.Forms.Panel.IHandler.MinimumSize">
-            <summary>
-            Gets or sets the minimum size of the panel.
-            </summary>
-            <value>The minimum size.</value>
-        </member>
         <member name="F:Eto.Forms.Window.ClosedEvent">
             <summary>
             Identifier for handlers when attaching the <see cref="E:Eto.Forms.Window.Closed"/> event.
@@ -8178,6 +8345,12 @@
             <summary>
             Gets or sets the owner of this window.
             </summary>
+            <remarks>
+            This sets the parent window that has ownership over this window.
+            For a <see cref="T:Eto.Forms.Dialog"/>, this will be the window that will be disabled while the modal dialog is shown.
+            With a  <see cref="T:Eto.Forms.Form"/>, the specified owner will always be below the current window when shown, and will 
+            still be responsive to user input.  Typically, but not always, the window will move along with the owner.
+            </remarks>
             <value>The owner of this window.</value>
         </member>
         <member name="P:Eto.Forms.Window.Screen">
@@ -8345,6 +8518,12 @@
             Sends the window behind all other windows in the z-order.
             </summary>
         </member>
+        <member name="M:Eto.Forms.Window.IHandler.SetOwner(Eto.Forms.Window)">
+            <summary>
+            Sets the owner of the window
+            </summary>
+            <param name="owner">Owner of the window</param>
+        </member>
         <member name="P:Eto.Forms.Window.IHandler.ToolBar">
             <summary>
             Gets or sets the tool bar for the window.
@@ -8477,6 +8656,7 @@
             <remarks>
             The <paramref name="owner"/> specifies the control on the window that will be blocked from user input until
             the dialog is closed.
+            Calling this method is identical to setting the <see cref="P:Eto.Forms.Window.Owner"/> property and calling <see cref="M:Eto.Forms.Dialog.ShowModal"/>.
             </remarks>
             <param name="owner">The owner control that is showing the form</param>
         </member>
@@ -8492,6 +8672,7 @@
             <remarks>
             The <paramref name="owner"/> specifies the control on the window that will be blocked from user input until
             the dialog is closed.
+            Calling this method is identical to setting the <see cref="P:Eto.Forms.Window.Owner"/> property and calling <see cref="M:Eto.Forms.Dialog.ShowModalAsync"/>.
             </remarks>
             <param name="owner">The owner control that is showing the form</param>
         </member>
@@ -8530,25 +8711,15 @@
             Handler interface for the <see cref="T:Eto.Forms.Dialog"/> class
             </summary>
         </member>
-        <member name="M:Eto.Forms.Dialog.IHandler.ShowModal(Eto.Forms.Control)">
+        <member name="M:Eto.Forms.Dialog.IHandler.ShowModal">
             <summary>
             Shows the dialog modally, blocking the current thread until it is closed.
             </summary>
-            <remarks>
-            The <paramref name="owner"/> specifies the control on the window that will be blocked from user input until
-            the dialog is closed.
-            </remarks>
-            <param name="owner">The owner control that is showing the form</param>
         </member>
-        <member name="M:Eto.Forms.Dialog.IHandler.ShowModalAsync(Eto.Forms.Control)">
+        <member name="M:Eto.Forms.Dialog.IHandler.ShowModalAsync">
             <summary>
             Shows the dialog modally asynchronously
             </summary>
-            <remarks>
-            The <paramref name="owner"/> specifies the control on the window that will be blocked from user input until
-            the dialog is closed.
-            </remarks>
-            <param name="owner">The owner control that is showing the form</param>
         </member>
         <member name="P:Eto.Forms.Dialog.IHandler.DisplayMode">
             <summary>
@@ -10101,6 +10272,23 @@
             </summary>
             <value>The image position</value>
         </member>
+        <member name="P:Eto.Forms.Button.MinimumSize">
+            <summary>
+            Gets or sets the minimum size for the button.
+            </summary>
+            <remarks>
+            Each platform may have a different initial minimum size set for buttons to match their standard sizes.
+            
+            Setting this to <see cref="F:Eto.Drawing.Size.Empty"/> is useful when you want the button to shrink to fit the size
+            of the specified <see cref="P:Eto.Forms.Button.Image"/> and/or <see cref="P:Eto.Forms.TextControl.Text"/>.
+            </remarks>
+        </member>
+        <member name="P:Eto.Forms.Button.Size">
+            <summary>
+            Gets or sets the size of the control. Use -1 to specify auto sizing for either the width and/or height.
+            </summary>
+            <value>The size of the control.</value>
+        </member>
         <member name="T:Eto.Forms.Button.ICallback">
             <summary>
             Callback interface for <see cref="T:Eto.Forms.Button"/>
@@ -10139,6 +10327,17 @@
             Gets or sets the image position
             </summary>
             <value>The image position</value>
+        </member>
+        <member name="P:Eto.Forms.Button.IHandler.MinimumSize">
+            <summary>
+            Gets or sets the minimum size for the button.
+            </summary>
+            <remarks>
+            Each platform may have a different initial minimum size set for buttons to match their standard sizes.
+            
+            Setting this to <see cref="F:Eto.Drawing.Size.Empty"/> is useful when you want the button to shrink to fit the size
+            of the specified <see cref="P:Eto.Forms.Button.IHandler.Image"/> and/or <see cref="P:Eto.Forms.TextControl.Text"/>.
+            </remarks>
         </member>
         <member name="T:Eto.Forms.CheckBox">
             <summary>
@@ -11574,13 +11773,49 @@
             <summary>
             Gets or sets the number of digits to display after the decimal.
             </summary>
-            <value>The number of decimal places.</value>
+            <remarks>
+            The NumericUpDown control will at least show the number of fraction digits as specified by this value, padded
+            by zeros. 
+            The <see cref="P:Eto.Forms.NumericUpDown.MaximumDecimalPlaces"/> specifies the maximum number of fraction digits the control will display
+            if the value has a value that can be represented by more digits.
+            The <see cref="P:Eto.Forms.NumericUpDown.Value"/> property is rounded to the number of fraction digits specified by <see cref="P:Eto.Forms.NumericUpDown.MaximumDecimalPlaces"/>.
+            </remarks>
+            <example>
+            This shows the effect of the <see cref="P:Eto.Forms.NumericUpDown.DecimalPlaces"/> and <see cref="P:Eto.Forms.NumericUpDown.MaximumDecimalPlaces"/> on the display 
+            of the control and its returned value.
+            <pre>
+            var numeric = new NumericUpDown();
+            
+            numeric.DecimalPlaces = 2;
+            numeric.MaximumDecimalPlaces = 4;
+            
+            numeric.Value = 123;         // control will display "123"
+            numeric.Value = 123.45;      // control will display "123.45"
+            numeric.Value = 123.4567;    // control will display "123.4567"
+            numeric.Value = 123.4567890; // control will display "123.4568"
+            </pre>
+            </example>
+            <value>The number of decimal places to always show.</value>
+            <seealso cref="P:Eto.Forms.NumericUpDown.MaximumDecimalPlaces"/>
         </member>
         <member name="P:Eto.Forms.NumericUpDown.Increment">
             <summary>
             Gets or sets the value to increment when the user clicks on the stepper buttons.
             </summary>
             <value>The step increment.</value>
+        </member>
+        <member name="P:Eto.Forms.NumericUpDown.MaximumDecimalPlaces">
+            <summary>
+            Gets or sets the maximum number of decimal places that can be shown.
+            </summary>
+            <remarks>
+            Specifies how many fraction digits can be shown if required to display the specified <see cref="P:Eto.Forms.NumericUpDown.Value"/>.
+            The number of digits shown will be at least the number of digits specified by <see cref="P:Eto.Forms.NumericUpDown.DecimalPlaces"/>.
+            The <see cref="P:Eto.Forms.NumericUpDown.Value"/> and the display is rounded to the number of fraction digits specified by this value.
+            <see cref="P:Eto.Forms.NumericUpDown.DecimalPlaces"/> for an example of how the MaximumDecimalPlaces can be used.
+            </remarks>
+            <value>The maximum number of decimal places that will be shown.</value>
+            <seealso cref="P:Eto.Forms.NumericUpDown.MaximumDecimalPlaces"/>
         </member>
         <member name="P:Eto.Forms.NumericUpDown.ValueBinding">
             <summary>
@@ -11653,7 +11888,13 @@
             <summary>
             Gets or sets the number of digits to display after the decimal.
             </summary>
-            <value>The number of decimal places.</value>
+            <remarks>
+            The NumericUpDown control will at least show the number of fraction digits as specified by this value, padded
+            by zeros. 
+            The <see cref="P:Eto.Forms.NumericUpDown.IHandler.MaximumDecimalPlaces"/> specifies the maximum number of fraction digits the control will display
+            if the value has a value that can be represented by more digits.
+            The <see cref="P:Eto.Forms.NumericUpDown.IHandler.Value"/> property is rounded to the number of fraction digits specified by <see cref="P:Eto.Forms.NumericUpDown.IHandler.MaximumDecimalPlaces"/>.
+            </remarks>
         </member>
         <member name="P:Eto.Forms.NumericUpDown.IHandler.Increment">
             <summary>
@@ -11669,6 +11910,18 @@
             By default, the text will get a color based on the user's theme. However, this is usually black.
             </remarks>
             <value>The color of the text.</value>
+        </member>
+        <member name="P:Eto.Forms.NumericUpDown.IHandler.MaximumDecimalPlaces">
+            <summary>
+            Gets or sets the maximum number of decimal places that can be shown.
+            </summary>
+            <remarks>
+            Specifies how many fraction digits can be shown if required to display the specified <see cref="P:Eto.Forms.NumericUpDown.IHandler.Value"/>.
+            The number of digits shown will be at least the number of digits specified by <see cref="P:Eto.Forms.NumericUpDown.IHandler.DecimalPlaces"/>.
+            The <see cref="P:Eto.Forms.NumericUpDown.IHandler.Value"/> and the display is rounded to the number of fraction digits specified by this value.
+            </remarks>
+            <value>The maximum number of decimal places that will be shown.</value>
+            <seealso cref="P:Eto.Forms.NumericUpDown.IHandler.MaximumDecimalPlaces"/>
         </member>
         <member name="T:Eto.Forms.RadioButton">
             <summary>
@@ -12029,21 +12282,6 @@
             </summary>
             <value>The current zoom level</value>
         </member>
-        <member name="T:Eto.Forms.SplitterOrientation">
-            <summary>
-            Orientation of a <see cref="T:Eto.Forms.Splitter"/> control.
-            </summary>
-        </member>
-        <member name="F:Eto.Forms.SplitterOrientation.Horizontal">
-            <summary>
-            Controls are in horizontal orientation, with a vertical divider between them.
-            </summary>
-        </member>
-        <member name="F:Eto.Forms.SplitterOrientation.Vertical">
-            <summary>
-            Controls are in vertical orientation, with a horizontal divider betwen them.
-            </summary>
-        </member>
         <member name="T:Eto.Forms.SplitterFixedPanel">
             <summary>
             Specifies which panel has a fixed size the parent container is resized.
@@ -12062,6 +12300,51 @@
         <member name="F:Eto.Forms.SplitterFixedPanel.None">
             <summary>
             Both panels will resize along with the splitter's container.
+            </summary>
+        </member>
+        <member name="T:Eto.Forms.SplitterOrientation">
+            <summary>
+            Orientation of a <see cref="T:Eto.Forms.Splitter"/> control.
+            </summary>
+        </member>
+        <member name="M:Eto.Forms.SplitterOrientation.op_Implicit(Eto.Forms.SplitterOrientation)~Eto.Forms.Orientation">
+            <summary>Converts to an Orientation</summary>
+        </member>
+        <member name="M:Eto.Forms.SplitterOrientation.op_Implicit(Eto.Forms.Orientation)~Eto.Forms.SplitterOrientation">
+            <summary>Converts an Orientation to a SplitterOrientation</summary>
+        </member>
+        <member name="M:Eto.Forms.SplitterOrientation.op_Equality(Eto.Forms.Orientation,Eto.Forms.SplitterOrientation)">
+            <summary>Compares for equality</summary>
+            <param name="orientation1">Orientation1.</param>
+            <param name="orientation2">Orientation2.</param>
+        </member>
+        <member name="M:Eto.Forms.SplitterOrientation.op_Inequality(Eto.Forms.Orientation,Eto.Forms.SplitterOrientation)">
+            <summary>Compares for inequality</summary>
+            <param name="orientation1">Orientation1.</param>
+            <param name="orientation2">Orientation2.</param>
+        </member>
+        <member name="M:Eto.Forms.SplitterOrientation.Equals(System.Object)">
+            <summary>
+            Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:Eto.Forms.SplitterOrientation"/>.
+            </summary>
+            <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:Eto.Forms.SplitterOrientation"/>.</param>
+            <returns><c>true</c> if the specified <see cref="T:System.Object"/> is equal to the current
+            <see cref="T:Eto.Forms.SplitterOrientation"/>; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:Eto.Forms.SplitterOrientation.GetHashCode">
+            <summary>
+            Serves as a hash function for a <see cref="T:Eto.Forms.SplitterOrientation"/> object.
+            </summary>
+            <returns>A hash code for this instance that is suitable for use in hashing algorithms and data structures such as a hash table.</returns>
+        </member>
+        <member name="P:Eto.Forms.SplitterOrientation.Horizontal">
+            <summary>
+            Controls are in horizontal orientation, with a vertical divider between them.
+            </summary>
+        </member>
+        <member name="P:Eto.Forms.SplitterOrientation.Vertical">
+            <summary>
+            Controls are in vertical orientation, with a horizontal divider betwen them.
             </summary>
         </member>
         <member name="T:Eto.Forms.TabControl">
@@ -12132,6 +12415,16 @@
             </summary>
             <value>The pages.</value>
         </member>
+        <member name="P:Eto.Forms.TabControl.TabPosition">
+            <summary>
+            Gets or sets the position of the tabs relative to the content.
+            </summary>
+            <remarks>
+            Note that on some platforms the text is rotated when using Left or Right (e.g. OS X).
+            This means that is is not suitable when you have a lot of tabs.
+            Some platforms (mobile) may ignore this hint and display the tabs according to the platform.
+            </remarks>
+        </member>
         <member name="P:Eto.Forms.TabControl.SelectedIndexBinding">
             <summary>
             Gets the binding for the <see cref="P:Eto.Forms.TabControl.SelectedIndex"/> property.
@@ -12187,6 +12480,11 @@
             Gets or sets the index of the selected tab.
             </summary>
             <value>The index of the selected tab.</value>
+        </member>
+        <member name="P:Eto.Forms.TabControl.IHandler.TabPosition">
+            <summary>
+            Gets or sets the position of the tabs relative to the content.
+            </summary>
         </member>
         <member name="T:Eto.Forms.TabPage">
             <summary>
@@ -13042,6 +13340,11 @@
             </summary>
             <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
         </member>
+        <member name="F:Eto.Forms.CheckMenuItem.CheckedChangedEvent">
+            <summary>
+            Event identifier for the <see cref="E:Eto.Forms.CheckMenuItem.CheckedChanged"/> event.
+            </summary>
+        </member>
         <member name="M:Eto.Forms.CheckMenuItem.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Eto.Forms.CheckMenuItem"/> class.
@@ -13053,11 +13356,48 @@
             </summary>
             <param name="command">Command to initialize the menu with.</param>
         </member>
+        <member name="M:Eto.Forms.CheckMenuItem.OnCheckedChanged(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:Eto.Forms.CheckMenuItem.CheckedChanged"/> event.
+            </summary>
+            <param name="e">Event arguments.</param>
+        </member>
+        <member name="M:Eto.Forms.CheckMenuItem.GetCallback">
+            <summary>
+            Gets an instance of an object used to perform callbacks to the widget from handler implementations
+            </summary>
+            <returns>The callback.</returns>
+        </member>
+        <member name="E:Eto.Forms.CheckMenuItem.CheckedChanged">
+            <summary>
+            Event to handle when the <see cref="P:Eto.Forms.CheckMenuItem.Checked"/> property changes.
+            </summary>
+        </member>
         <member name="P:Eto.Forms.CheckMenuItem.Checked">
             <summary>
             Gets or sets a value indicating whether this <see cref="T:Eto.Forms.CheckMenuItem"/> is checked.
             </summary>
             <value><c>true</c> if checked; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="T:Eto.Forms.CheckMenuItem.ICallback">
+            <summary>
+            Callback interface for the <see cref="T:Eto.Forms.CheckMenuItem"/> class.
+            </summary>
+        </member>
+        <member name="M:Eto.Forms.CheckMenuItem.ICallback.OnCheckedChanged(Eto.Forms.CheckMenuItem,System.EventArgs)">
+            <summary>
+            Raises the checked changed event.
+            </summary>
+        </member>
+        <member name="T:Eto.Forms.CheckMenuItem.Callback">
+            <summary>
+            Callback implementation for the <see cref="T:Eto.Forms.CheckMenuItem"/>.
+            </summary>
+        </member>
+        <member name="M:Eto.Forms.CheckMenuItem.Callback.OnCheckedChanged(Eto.Forms.CheckMenuItem,System.EventArgs)">
+            <summary>
+            Raises the checked changed event.
+            </summary>
         </member>
         <member name="T:Eto.Forms.CheckMenuItem.IHandler">
             <summary>
@@ -13353,6 +13693,11 @@
             <copyright>(c) 2014 by Curtis Wensley</copyright>
             <license type="BSD-3">See LICENSE for full terms</license>
         </member>
+        <member name="F:Eto.Forms.RadioMenuItem.CheckedChangedEvent">
+            <summary>
+            Event identifier for the <see cref="E:Eto.Forms.RadioMenuItem.CheckedChanged"/> event.
+            </summary>
+        </member>
         <member name="M:Eto.Forms.RadioMenuItem.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Eto.Forms.RadioMenuItem"/> class.
@@ -13371,11 +13716,48 @@
             <param name="command">Command to initialize the menu item with.</param>
             <param name="controller">Controller radio menu item to link to, or null if no controller.</param>
         </member>
+        <member name="M:Eto.Forms.RadioMenuItem.OnCheckedChanged(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:Eto.Forms.RadioMenuItem.CheckedChanged"/> event.
+            </summary>
+            <param name="e">E.</param>
+        </member>
+        <member name="M:Eto.Forms.RadioMenuItem.GetCallback">
+            <summary>
+            Gets an instance of an object used to perform callbacks to the widget from handler implementations
+            </summary>
+            <returns>The callback.</returns>
+        </member>
         <member name="P:Eto.Forms.RadioMenuItem.Checked">
             <summary>
             Gets or sets a value indicating whether this <see cref="T:Eto.Forms.RadioMenuItem"/> is checked.
             </summary>
             <value><c>true</c> if checked; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="E:Eto.Forms.RadioMenuItem.CheckedChanged">
+            <summary>
+            Event to handle when the <see cref="P:Eto.Forms.RadioMenuItem.Checked"/> property changes.
+            </summary>
+        </member>
+        <member name="T:Eto.Forms.RadioMenuItem.ICallback">
+            <summary>
+            Callback interface for the <see cref="T:Eto.Forms.RadioMenuItem"/>.
+            </summary>
+        </member>
+        <member name="M:Eto.Forms.RadioMenuItem.ICallback.OnCheckedChanged(Eto.Forms.RadioMenuItem,System.EventArgs)">
+            <summary>
+            Raises the checked changed event.
+            </summary>
+        </member>
+        <member name="T:Eto.Forms.RadioMenuItem.Callback">
+            <summary>
+            Callback implementation for the <see cref="T:Eto.Forms.RadioMenuItem"/>.
+            </summary>
+        </member>
+        <member name="M:Eto.Forms.RadioMenuItem.Callback.OnCheckedChanged(Eto.Forms.RadioMenuItem,System.EventArgs)">
+            <summary>
+            Raises the checked changed event.
+            </summary>
         </member>
         <member name="T:Eto.Forms.RadioMenuItem.IHandler">
             <summary>
@@ -16899,7 +17281,8 @@
             Sets the clip region to the specified <paramref name="rectangle"/>
             </summary>
             <remarks>
-            The previous clipping region will be cleared after this call
+            The previous clipping region will be cleared after this call.
+            The rectangle specified is translated by the current transform, but is not affected by subsequent transform operations.
             </remarks>
             <param name="rectangle">Rectangle for the clipping region</param>
         </member>
@@ -16909,6 +17292,7 @@
             </summary>
             <remarks>
             The previous clipping region will be cleared after this call
+            The path specified is translated by the current transform, but is not affected by subsequent transform operations.
             </remarks>
             <param name="path">Path to specify the clip region</param>
         </member>
@@ -16982,6 +17366,16 @@
             Retained mode systems may have different behaviour characteristics, which may impact how often the screen is updated
             or other code.
             </remarks>
+        </member>
+        <member name="P:Eto.Drawing.Graphics.CurrentTransform">
+            <summary>
+            Gets a copy of the current transform.
+            </summary>
+            <remarks>
+            The current transform is initially an identity matrix.
+            Any transform operations performed on this object will change this value.
+            </remarks>
+            <value>The current transform matrix.</value>
         </member>
         <member name="P:Eto.Drawing.Graphics.ClipBounds">
             <summary>
@@ -17255,6 +17649,16 @@
             Retained mode systems may have different behaviour characteristics, which may impact how often the screen is updated
             or other code.
             </remarks>
+        </member>
+        <member name="P:Eto.Drawing.Graphics.IHandler.CurrentTransform">
+            <summary>
+            Gets a copy of the current transform.
+            </summary>
+            <remarks>
+            The current transform is initially an identity matrix.
+            Any transform operations performed on this object will change this value.
+            </remarks>
+            <value>The current transform matrix.</value>
         </member>
         <member name="P:Eto.Drawing.Graphics.IHandler.ClipBounds">
             <summary>
@@ -30021,6 +30425,11 @@
             at certain times using the <see cref="M:Eto.Forms.DualBinding`1.Update(Eto.Forms.BindingUpdateMode)"/> method.
             </remarks>
         </member>
+        <member name="F:Eto.Forms.DualBindingMode.Manual">
+            <summary>
+            Binding will only update when the <see cref="M:Eto.Forms.Binding.Update(Eto.Forms.BindingUpdateMode)"/> method is called.
+            </summary>
+        </member>
         <member name="T:Eto.Forms.DualBinding`1">
             <summary>
             Binding for joining two object bindings together
@@ -30125,6 +30534,31 @@
             Use <see cref="M:Eto.Forms.Binding.AddPropertyEvent(System.Object,System.String,System.EventHandler{System.EventArgs})"/> and <see cref="M:Eto.Forms.Binding.RemovePropertyEvent(System.Object,System.EventHandler{System.EventArgs})"/> to access
             this functionality.
             </remarks>
+        </member>
+        <member name="T:Eto.Forms.DockPosition">
+            <summary>
+            Enumeration to define the dock position of a control, such as tabs in the <see cref="T:Eto.Forms.TabControl"/>
+            </summary>
+        </member>
+        <member name="F:Eto.Forms.DockPosition.Top">
+            <summary>
+            Element is docked to the top of the content.
+            </summary>
+        </member>
+        <member name="F:Eto.Forms.DockPosition.Left">
+            <summary>
+            Element is docked to the left of the content.
+            </summary>
+        </member>
+        <member name="F:Eto.Forms.DockPosition.Right">
+            <summary>
+            Element is docked to the right of the content.
+            </summary>
+        </member>
+        <member name="F:Eto.Forms.DockPosition.Bottom">
+            <summary>
+            Element is docked to the bottom of the content.
+            </summary>
         </member>
     </members>
 </doc>
