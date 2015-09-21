@@ -8,6 +8,8 @@ init:
               Set-AppveyorBuildVariable -Name "IsPreRelease" -Value False
             }
 
+before_build:
+    - nuget
 
 build_script: build.cmd
 
