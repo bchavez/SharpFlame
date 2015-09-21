@@ -56,6 +56,7 @@
     <DebugSymbols>true</DebugSymbols>
     <WarningLevel>4</WarningLevel>
     <AssemblyName>SharpFlame</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>

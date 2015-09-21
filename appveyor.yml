@@ -1,0 +1,38 @@
+version: {build}
+init:
+  -ps: |
+    If ($Env:APPVEYOR_REPO_TAG_NAME -match "-")
+      Set-AppveyorBuildVariable -Name "IsPreRelease" -Value True
+    Else
+      Set-AppveyorBuildVariable -Name "IsPreRelease" -Value False
+
+build_script: build.cmd
+
+test: off
+#  assemblies:
+#    - __compile\SharpFlame.Tests.dll
+
+after_build:
+    - 7z a __package\SharpFlame.Windows.zip %APPVEYOR_BUILD_FOLDER%\Source\SharpFlame.Gui.Windows\bin\**\*
+    - 7z a __package\SharpFlame.Windows.zip %APPVEYOR_BUILD_FOLDER%\Source\Data\**\*
+
+artifacts:
+    - path: __package\SharpFlame.Windows.zip
+      name: Zip
+
+nuget:
+    disable_publish_on_pr: true
+
+deploy:
+    - provider: GitHub
+      release: 'Release $(APPVEYOR_BUILD_VERSION)'
+      tag: $(APPVEYOR_REPO_TAG_NAME)
+      description: $(APPVEYOR_REPO_COMMIT_MESSAGE)
+      prerelease: $(IsPreRelease)
+      artifact: Zip
+      auth_token:
+        secure: cyivrWQwrZNAb6UCNXlIQlGfVSnKIC6TatUOIP95CQgMeKGnmBSqBgAFv2TsRZhR
+      on:
+        branch: /v\d+\.\d+\.\d+/
+        appveyor_repo_tag: true
+
