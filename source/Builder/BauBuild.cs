@@ -5,6 +5,7 @@ using BauMSBuild;
 using Builder.Extensions;
 using FluentAssertions;
 using FluentBuild;
+using Ionic.Zip;
 
 namespace Builder
 {
@@ -13,11 +14,8 @@ namespace Builder
         //Build Tasks
         public const string Build = "build";
         public const string Clean = "clean";
-        public const string Restore = "restore";
         public const string BuildInfo = "buildinfo";
-        public const string CodeGen = "codegen";
         public const string Pack = "pack";
-        public const string Push = "push";
 
         public static void Main(string[] args)
         {
@@ -42,7 +40,7 @@ namespace Builder
                             {
                                 Configuration = "Release",
                             };
-                        msb.Targets = new[] { "SharpFlame_Gui_Windows:Rebuild" };
+                        msb.Targets = new[] {"SharpFlame_Gui_Windows:Rebuild"};
                     })
                 .Task(BuildInfo).Desc("Creates dynamic AssemblyInfos for projects")
                 .Do(() =>
@@ -55,6 +53,18 @@ namespace Builder
                                 aid.OutputPath(outputPath);
                             });
                     })
+                .Task(Pack).Desc("Packs build for distribution")
+                .DependsOn(Build)
+                .Do(() =>
+                    {
+                        using( var z = new ZipFile(Folders.Package.File("SharpFlame.Windows.zip").ToString()) )
+                        {
+                            z.AddDirectory(Projects.Gui.WindowsOutput.ToString(), "SharpFlame.Windows");
+                            z.AddDirectory(Folders.Data.ToString(), "Data");
+                            z.Save();
+                        }
+                    })
+
                 .Task(Clean).Desc("Cleans project files")
                 .Do(() =>
                     {

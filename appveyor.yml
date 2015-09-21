@@ -8,15 +8,13 @@ init:
               Set-AppveyorBuildVariable -Name "IsPreRelease" -Value False
             }
 
-build_script: build.cmd
+build_script: build.cmd pack
 
 test: off
 #  assemblies:
 #    - __compile\SharpFlame.Tests.dll
 
 after_build:
-    - 7z a __package\SharpFlame.Windows.zip %APPVEYOR_BUILD_FOLDER%\Source\SharpFlame.Gui.Windows\bin\**\*
-    - 7z a __package\SharpFlame.Windows.zip %APPVEYOR_BUILD_FOLDER%\Source\Data\**\*
 
 artifacts:
     - path: __package\SharpFlame.Windows.zip

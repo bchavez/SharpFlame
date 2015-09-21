@@ -14,6 +14,7 @@ namespace Builder
         public static readonly Directory Package = WorkingFolder.SubFolder( "__package" );
         public static readonly Directory Source = WorkingFolder.SubFolder( "Source" );
         public static readonly Directory Builder = Source.SubFolder("Builder");
+        public static readonly Directory Data = Source.SubFolder("Data");
 
         public static readonly Directory Lib = Source.SubFolder( "packages" );
     }
@@ -44,8 +45,8 @@ namespace Builder
             public const string Name = "SharpFlame";
             public static readonly Directory Folder = Folders.Source.SubFolder( Name );
             public static readonly File ProjectFile = Folder.File( $"{Name}.csproj" );
-            public static readonly Directory OutputDirectory = Folders.CompileOutput.SubFolder(Name);
-            public static readonly File OutputDll = OutputDirectory.File( $"{Name}.dll" );
+            //public static readonly Directory OutputDirectory = Folders.CompileOutput.SubFolder(Name);
+            //public static readonly File OutputDll = OutputDirectory.File( $"{Name}.dll" );
             public static readonly Directory PackageDir = Folders.Package.SubFolder( Name );
             
             public static readonly File NugetSpec = Folders.Builder.SubFolder("NuGet").File( $"{Name}.nuspec" );
@@ -58,6 +59,16 @@ namespace Builder
 
                         GlobalAssemblyInfo(i);
                     };
+        }
+
+        public class Gui
+        {
+            public static readonly Directory Windows = Folders.Source.SubFolder($"{SharpFlame.Name}.Gui.Windows");
+            public static readonly Directory WindowsOutput = Windows.SubFolder("bin/Release");
+
+            public static readonly Directory Linux = Folders.Source.SubFolder($"{SharpFlame.Name}.Gui.Linux");
+
+            public static readonly Directory Mac = Folders.Source.SubFolder($"{SharpFlame.Name}.Gui.Mac");
         }
 
         public class Core
