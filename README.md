@@ -1,3 +1,4 @@
+[![License](https://img.shields.io/github/license/bchavez/SharpFlame.svg)](https://raw.githubusercontent.com/bchavez/SharpFlame/eto/LICENSE)
 SharpFlame
 ======================
 ----------------------
@@ -6,9 +7,14 @@ Project Description
 -------------------
 A modern [Warzone 21000](http://wz2100.net/) map editor based on the original Warzone 2100 [FlaME](https://github.com/flail/flaME) map editor, written in C#.
 
+Status
+------------
+|         | ![Windows](https://github.com/Turbo87/Font-Awesome/raw/platform-icons/svg/windows.png) Windows| ![Linux](https://github.com/Turbo87/Font-Awesome/raw/platform-icons/svg/linux.png) Linux  | ![Mac](https://github.com/Turbo87/Font-Awesome/raw/platform-icons/svg/apple.png) Mac OS X |
+|---------|:------:|:------:|:-------:|
+|**Debug**| [![Build status](https://ci.appveyor.com/api/projects/status/729c1ka8irgaevvv/branch/eto?svg=true)](https://ci.appveyor.com/project/bchavez/sharpflame/branch/eto) |  N/A | N/A |
+|**Download**| [![Release](https://img.shields.io/github/release/bchavez/SharpFlame.svg)](https://github.com/bchavez/SharpFlame/releases) |  N/A  | N/A   |
 
-### License
-* [MIT License](https://github.com/bchavez/Dwolla/blob/master/LICENSE)
+Downloads are current snapshots of this ETO branch with Native UI. Please consider these downloads as a work in progress until we get our code base stabilized.
 
 ### Requirements
 * .NET 4.0 or Mono 3.x
@@ -17,38 +23,16 @@ A modern [Warzone 21000](http://wz2100.net/) map editor based on the original Wa
 ![Screenshot1](https://raw.githubusercontent.com/bchavez/SharpFlame/eto/graphics/Screenshot1.jpg)
 ![Screenshot1](https://raw.githubusercontent.com/bchavez/SharpFlame/eto/graphics/Screenshot2.jpg)
 
-### Download & Install
-
-Downloads are current snapshots of this ETO branch with Native UI. Please consider these downloads as a work in progress until we get our code base stabilized.
-
-![Windows](https://github.com/Turbo87/Font-Awesome/raw/platform-icons/svg/windows.png) [Windows Download](http://teamcity.codebetter.com/guestAuth/repository/download/bt1245/.lastSuccessful/SharpFlame.Windows.zip)
-
-![Linux](https://github.com/Turbo87/Font-Awesome/raw/platform-icons/svg/linux.png) [Linux Download](http://teamcity.codebetter.com/guestAuth/repository/download/bt1246/.lastSuccessful/SharpFlame.Linux.zip)
-
-![Mac](https://github.com/Turbo87/Font-Awesome/raw/platform-icons/svg/apple.png) None Yet
 
 Building
 --------
-* Download the source code.
-* Compile.
 
+#### For windows
+* `git checkout git@github.com:bchavez/SharpFlame.git`
+* `build`
 
+The output executable should be in `source\SharpFlame.Gui.Windows\bin\Release\SharpFlame.Gui.Windows`.
 
-Build Status
-------------
-
-|         | Windows| Linux  |Mac OS X |
-|---------|:------:|:------:|:-------:|
-|**Debug**| [![Build status](https://ci.appveyor.com/api/projects/status/729c1ka8irgaevvv/branch/eto?svg=true)](https://ci.appveyor.com/project/bchavez/sharpflame/branch/eto) |  N/A | N/A |
-|**Release**| [![Release](https://img.shields.io/github/release/bchavez/SharpFlame.svg)](https://github.com/bchavez/SharpFlame/releases) |  N/A  | N/A   |
-
-
-
-
-####Build Status - MS Build
-![MS Build Status](http://teamcity.codebetter.com/app/rest/builds/buildType:(id:bt1245)/statusIcon)
-####Build Status - Mono
-![MS Build Status](http://teamcity.codebetter.com/app/rest/builds/buildType:(id:bt1246)/statusIcon)
 
 Contributing
 --------
