@@ -31,7 +31,7 @@ Building
 * `git checkout git@github.com:bchavez/SharpFlame.git`
 * `build`
 
-The output executable should be in `source\SharpFlame.Gui.Windows\bin\Release\SharpFlame.Gui.Windows`.
+The result of the build process is the executable in `source\SharpFlame.Gui.Windows\bin\Release\SharpFlame.Gui.Windows.exe`.
 
 
 Contributing
