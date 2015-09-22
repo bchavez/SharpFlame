@@ -1,7 +1,6 @@
 [![License](https://img.shields.io/github/license/bchavez/SharpFlame.svg)](https://raw.githubusercontent.com/bchavez/SharpFlame/eto/LICENSE)
 SharpFlame
 ======================
-----------------------
 
 Project Description
 -------------------
@@ -11,7 +10,7 @@ Status
 ------------
 |         | ![Windows](https://github.com/Turbo87/Font-Awesome/raw/platform-icons/svg/windows.png) Windows| ![Linux](https://github.com/Turbo87/Font-Awesome/raw/platform-icons/svg/linux.png) Linux  | ![Mac](https://github.com/Turbo87/Font-Awesome/raw/platform-icons/svg/apple.png) Mac OS X |
 |---------|:------:|:------:|:-------:|
-|**Debug**| [![Build status](https://ci.appveyor.com/api/projects/status/729c1ka8irgaevvv/branch/eto?svg=true)](https://ci.appveyor.com/project/bchavez/sharpflame/branch/eto) |  N/A | N/A |
+|**Debug**| [![Build status](https://ci.appveyor.com/api/projects/status/729c1ka8irgaevvv/branch/eto?svg=true)](https://ci.appveyor.com/project/bchavez/sharpflame/branch/eto/artifacts) |  N/A | N/A |
 |**Download**| [![Release](https://img.shields.io/github/release/bchavez/SharpFlame.svg)](https://github.com/bchavez/SharpFlame/releases) |  N/A  | N/A   |
 
 Downloads are current snapshots of this ETO branch with Native UI. Please consider these downloads as a work in progress until we get our code base stabilized.
