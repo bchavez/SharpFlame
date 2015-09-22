@@ -65,6 +65,7 @@ namespace Builder
         {
             public static readonly Directory Windows = Folders.Source.SubFolder($"{SharpFlame.Name}.Gui.Windows");
             public static readonly Directory WindowsOutput = Windows.SubFolder("bin/Release");
+            public static readonly File WindowsZip = Folders.Package.File($"{SharpFlame.Name}.Windows.zip");
 
             public static readonly Directory Linux = Folders.Source.SubFolder($"{SharpFlame.Name}.Gui.Linux");
 

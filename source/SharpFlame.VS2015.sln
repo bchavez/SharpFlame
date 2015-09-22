@@ -21,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		nant.bat = nant.bat
 		nant.sh = nant.sh
 		nuget.config = nuget.config
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFlame.Gui.Linux", "SharpFlame.Gui.Linux\SharpFlame.Gui.Linux.csproj", "{FEBB5203-A2F1-49AD-B045-F077D372DFDD}"

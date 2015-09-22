@@ -57,9 +57,9 @@ namespace Builder
                 .DependsOn(Build)
                 .Do(() =>
                     {
-                        using( var z = new ZipFile(Folders.Package.File("SharpFlame.Windows.zip").ToString()) )
+                        using( var z = new ZipFile(Projects.Gui.WindowsZip.ToString()) )
                         {
-                            z.AddDirectory(Projects.Gui.WindowsOutput.ToString(), "SharpFlame.Windows");
+                            z.AddDirectory(Projects.Gui.WindowsOutput.ToString(), Path.GetFileNameWithoutExtension(Projects.Gui.WindowsZip.ToString()));
                             z.AddDirectory(Folders.Data.ToString(), "Data");
                             z.Save();
                         }

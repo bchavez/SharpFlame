@@ -32,6 +32,19 @@ Building
 * Download the source code.
 * Compile.
 
+
+
+Build Status
+------------
+
+|         | Windows| Linux  |Mac OS X |
+|---------|:------:|:------:|:-------:|
+|**Debug**| [![Build status](https://ci.appveyor.com/api/projects/status/729c1ka8irgaevvv/branch/eto?svg=true)](https://ci.appveyor.com/project/bchavez/sharpflame/branch/eto) |  N/A | N/A |
+|**Release**| [![Release](https://img.shields.io/github/release/bchavez/SharpFlame.svg)](https://github.com/bchavez/SharpFlame/releases) |  N/A  | N/A   |
+
+
+
+
 ####Build Status - MS Build
 ![MS Build Status](http://teamcity.codebetter.com/app/rest/builds/buildType:(id:bt1245)/statusIcon)
 ####Build Status - Mono
