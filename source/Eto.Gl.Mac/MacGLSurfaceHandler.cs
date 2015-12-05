@@ -2,38 +2,42 @@
 using Eto.Drawing;
 using MonoMac.AppKit;
 using Eto.Mac.Forms;
+using OpenTK.Graphics;
 
 namespace Eto.Gl.Mac
 {
 	public class MacGLSurfaceHandler : MacView<MacGLView7, GLSurface, GLSurface.ICallback>, GLSurface.IHandler
     {
-        protected override void Initialize()
-        {
+	    private GraphicsMode mode;
+	    private int major;
+	    private int minor;
+	    private GraphicsContextFlags flags;
 
+	    protected override void Initialize()
+        {
             var c = new MacGLView7();
-            c.Initialized += (sender, args) => Widget.OnInitialized(sender, args);
-            c.Resize += (sender, args) => Widget.OnResize(sender, args);
-            c.ShuttingDown += (sender, args) => Widget.OnShuttingDown(sender, args);
 
             this.Control = c;
 
             base.Initialize();
         }
 
-        private void Control_GLMouseDown(MacGLView2 sender, NSEvent args)
-        {
-            var mouseEvent = Eto.Mac.Conversions.GetMouseEvent(sender, args, false);
-            this.Callback.OnMouseDown(this.Widget, mouseEvent);
-        }
+	    public void CreateWithParams(GraphicsMode mode, int major, int minor, GraphicsContextFlags flags)
+	    {
+	        this.mode = mode;
+	        this.major = major;
+	        this.minor = minor;
+	        this.flags = flags;
+	    }
 
-        public override bool Enabled { get; set; }
+	    public override bool Enabled { get; set; }
 
-        public override NSView ContainerControl
+	    public override NSView ContainerControl
         {
             get { return this.Control; }
         }
 
-        public Size GLSize
+	    public Size GLSize
         {
             get { return this.Control.GLSize; }
             set
@@ -57,5 +61,23 @@ namespace Eto.Gl.Mac
 	    {
 	        this.Control.SwapBuffers();
 	    }
+
+        public override void AttachEvent(string id)
+        {
+            switch (id)
+            {
+                case GLSurface.GLInitializedEvent:
+                    this.Control.Initialized += (sender, args) => Callback.OnInitialized(this.Widget, args);
+                    break;
+
+                case GLSurface.GLShuttingDownEvent:
+                    this.Control.ShuttingDown += (sender, args) => Callback.OnShuttingDown(this.Widget, args);
+                    break;
+
+                default:
+                    base.AttachEvent(id);
+                    break;
+            }
+        }
     }
 }

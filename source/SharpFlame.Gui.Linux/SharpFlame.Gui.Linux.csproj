@@ -55,6 +55,10 @@
     <Reference Include="Mono.Cairo">
       <HintPath>..\packages\other\GtkSharp\2.12\lib\Mono.Cairo\Mono.Cairo.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="pango-sharp">
       <HintPath>..\packages\other\GtkSharp\2.12\lib\gtk-sharp-2.0\pango-sharp.dll</HintPath>
     </Reference>
@@ -67,9 +71,6 @@
     </Reference>
     <Reference Include="OpenTK.GLControl">
       <HintPath>..\packages\OpenTK.GLControl.1.1.1508.5724\lib\NET40\OpenTK.GLControl.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject">
-      <HintPath>..\packages\other\Ninject.Mono\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="System.Xaml" />
   </ItemGroup>

@@ -19,11 +19,11 @@ namespace SharpFlame.Gui.Mac
 
             //var app = new SharpFlameApplication( macGenrator );
 
-            var kernel = Bootstrap.KernelWith(macGenerator);
+            var kernel = Bootstrap.KernelWith(Eto.Platform.Instance);
 
-            var app = kernel.Get<SharpFlameApplication>();
+            var app = new SharpFlameApplication();
 
-            app.Run( args );
+            app.Run();
         }
     }
 }

@@ -29,16 +29,17 @@ namespace SharpFlame.Gui.Linux
 			#if DEBUG
 			Debug.Listeners.Add (new ConsoleTraceListener());
 			#endif
-			var generator = Eto.Platform.Detect;
-            generator.Add<GLSurface.IHandler>(()=> new GtkGlSurfaceHandler());
 
-		    var kernel = Bootstrap.KernelWith(generator);
+			var p = Eto.Platform.Detect;
+            p.Add<GLSurface.IHandler>(()=> new GtkGlSurfaceHandler());
+
+		    var kernel = Bootstrap.KernelWith(Eto.Platform.Instance);
 
             //var app = new SharpFlameApplication (generator);
-		    var app = kernel.Get<SharpFlameApplication>();
+		    var app = new SharpFlameApplication();
 
-            app.Run (args);
-		}
+		    app.Run();
+        }
 	}
 }
 

@@ -14,9 +14,7 @@ namespace Eto.Gl.Gtk
 	    protected override void Initialize()
         {
 		    var c = new GLDrawingArea(mode, major, minor, flags);
-            c.Initialized += (sender, args) => Widget.OnInitialized(sender, args);
-            c.Resize += (sender, args) => Widget.OnResize(sender, args);
-            c.ShuttingDown += (sender, args) => Widget.OnShuttingDown(sender, args);
+
             this.Control = c;
 
             base.Initialize();
@@ -49,6 +47,24 @@ namespace Eto.Gl.Gtk
         public void SwapBuffers()
         {
             this.Control.SwapBuffers();
+        }
+
+        public override void AttachEvent(string id)
+        {
+            switch (id)
+            {
+                case GLSurface.GLInitializedEvent:
+                    this.Control.Initialized += (sender, args) => Callback.OnInitialized(this.Widget, args);
+                    break;
+
+                case GLSurface.GLShuttingDownEvent:
+                    this.Control.ShuttingDown += (sender, args) => Callback.OnShuttingDown(this.Widget, args);
+                    break;
+
+                default:
+                    base.AttachEvent(id);
+                    break;
+            }
         }
     }
 
