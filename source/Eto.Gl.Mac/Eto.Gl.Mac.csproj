@@ -62,6 +62,7 @@
     <Compile Include="MacGLSurfaceHandler.cs" />
     <Compile Include="MacGLView2.cs" />
     <Compile Include="MacGLView1.cs" />
+    <Compile Include="MacGLView8.cs" />
     <Compile Include="MacGLView7.cs" />
     <Compile Include="MacGLView5.cs" />
     <Compile Include="MacGLView4.cs" />
