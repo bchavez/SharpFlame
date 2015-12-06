@@ -169,67 +169,6 @@
         </exec>
 
     </target>
-
-     <script language="C#">
-         <references>
-             <include name="System.dll" if="${win}"/>
-             <include name="System.Core.dll" if="${win}"/>
-         </references>
-         <imports>
-             <import namespace="System.Text.RegularExpressions"/>
-             <import namespace="System.Linq"/>
-         </imports>
-          <code><![CDATA[
-          
-    [TaskName("filepoke")]
-    public class FilePoke : Task {
-      private string _file;
-      private string _target;
-      private string _value;
-      [TaskAttribute("file", Required=true)]
-      public string TargetFile {
-          get { return _file; }
-          set { _file = value; }
-      }
-      [TaskAttribute("target", Required=true)]
-      public string Target {
-          get { return _target; }
-          set { _target = value; }
-      }
-      [TaskAttribute("value", Required=true)]
-      public string Value {
-          get { return _value; }
-          set { _value = value; }
-      }
-      protected override void ExecuteTask() {
-        string path = _file;
-        StringBuilder filecontents = new StringBuilder();
-        using (StreamReader sr = File.OpenText(path)) {
-          string s = "";
-           while ((s = sr.ReadLine()) != null) {
-              filecontents.Append(Regex.Replace( s, _target, _value ) + "\n");
-          }
-      }
-      using (StreamWriter sw = new StreamWriter(path)) {
-        sw.Write(filecontents.ToString());
-      }
-      }
-    }
-        
-    [FunctionSet("directory", "Directory")]
-    public class CustomDirectoryFunctions : FunctionSetBase {
-        public CustomDirectoryFunctions(Project project, PropertyDictionary properties) : base(project, properties) {
-        }
-        
-        [Function("is-empty")]
-        public static bool IsEmpty(string path) {
-            return !Directory.EnumerateFileSystemEntries(path).Any();
-        }
-    }
-    
-    ]]></code>
-     </script>
-    
     
     
     <!-- Continuous Integration -->

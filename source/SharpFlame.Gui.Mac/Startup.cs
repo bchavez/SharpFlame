@@ -14,10 +14,8 @@ namespace SharpFlame.Gui.Mac
         [STAThread]
         public static void Main(string[] args)
         {
-            var macGenerator = Eto.Platform.Detect;
-			macGenerator.Add<GLSurface.IHandler>( () => new MacGLSurfaceHandler() );
-
-            //var app = new SharpFlameApplication( macGenrator );
+            var p = Eto.Platform.Detect;
+			p.Add<GLSurface.IHandler>( () => new MacGLSurfaceHandler() );
 
             var kernel = Bootstrap.KernelWith(Eto.Platform.Instance);
 

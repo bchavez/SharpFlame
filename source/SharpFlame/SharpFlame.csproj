@@ -26,6 +26,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <ReleaseVersion>0.24</ReleaseVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -80,13 +81,15 @@
     <WarningLevel>4</WarningLevel>
     <DebugSymbols>true</DebugSymbols>
     <DefineConstants>DEBUG;Mac;Mono;Portable</DefineConstants>
-    <AssemblyName>SharpFlame.Old</AssemblyName>
+    <AssemblyName>SharpFlame</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseMac|AnyCPU' ">
     <Optimize>false</Optimize>
     <OutputPath>bin\ReleaseMac</OutputPath>
     <WarningLevel>4</WarningLevel>
-    <AssemblyName>SharpFlame.Old</AssemblyName>
+    <AssemblyName>SharpFlame</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Appccelerate.EventBroker">

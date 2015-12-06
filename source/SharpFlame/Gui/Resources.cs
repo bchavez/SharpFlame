@@ -87,7 +87,7 @@ namespace SharpFlame.Gui
 		public static Bitmap Save => new Bitmap(GetBytes(() => Save));
 		
 
-		public static Lazy<Assembly> Assembly = new Lazy<Assembly>(System.Reflection.Assembly.GetExecutingAssembly);
+		public static Lazy<Assembly> Assembly = new Lazy<Assembly>(()=> typeof(Resources).Assembly);
 
 		public static Stream GetBytes(Expression<Func<object>> exp, string ext)
 		{
