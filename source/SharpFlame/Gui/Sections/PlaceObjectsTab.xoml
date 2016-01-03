@@ -150,7 +150,7 @@
                             </TableRow>
                         </TableLayout>
                         <StackLayoutItem Expand="True" HorizontalAlignment="Stretch">
-                            <s:PlaceObjectGridView ID="gFeatures" SelectionChanged="AnyGrid_SelectionChanged" />
+                            <s:PlaceObjectGridView x:Name="gFeatures" SelectionChanged="AnyGrid_SelectionChanged" />
                         </StackLayoutItem>
                     </StackLayout>
                 </TabPage>
@@ -164,7 +164,7 @@
                             </TableRow>
                         </TableLayout>
                         <StackLayoutItem Expand="True" HorizontalAlignment="Stretch">
-                            <s:PlaceObjectGridView ID="gStructures" SelectionChanged="AnyGrid_SelectionChanged"/>
+                            <s:PlaceObjectGridView x:Name="gStructures" SelectionChanged="AnyGrid_SelectionChanged"/>
                         </StackLayoutItem>
                     </StackLayout>
 
@@ -179,7 +179,7 @@
                             </TableRow>
                         </TableLayout>
                         <StackLayoutItem Expand="True" HorizontalAlignment="Stretch">
-                            <s:PlaceObjectGridView ID="gDroids" SelectionChanged="AnyGrid_SelectionChanged"/>
+                            <s:PlaceObjectGridView x:Name="gDroids" SelectionChanged="AnyGrid_SelectionChanged"/>
                         </StackLayoutItem>
                     </StackLayout>
 

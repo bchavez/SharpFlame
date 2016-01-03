@@ -27,6 +27,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <ReleaseVersion>0.24</ReleaseVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -42,6 +43,7 @@
     <DefineConstants>Trace;DEBUG;Mono;Portable</DefineConstants>
     <AssemblyName>SharpFlame</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -58,6 +60,7 @@
     <WarningLevel>4</WarningLevel>
     <AssemblyName>SharpFlame</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -83,6 +86,7 @@
     <DefineConstants>DEBUG;Mac;Mono;Portable</DefineConstants>
     <AssemblyName>SharpFlame</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseMac|AnyCPU' ">
     <Optimize>false</Optimize>
@@ -90,63 +94,84 @@
     <WarningLevel>4</WarningLevel>
     <AssemblyName>SharpFlame</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugMac|x86'">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseMac|x86'">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Appccelerate.EventBroker">
+    <Reference Include="Appccelerate.EventBroker, Version=2.0.0.0, Culture=neutral, PublicKeyToken=917bca444d1f2b4c, processorArchitecture=MSIL">
       <HintPath>..\packages\Appccelerate.EventBroker.2.0.84\lib\Net40\Appccelerate.EventBroker.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Appccelerate.Fundamentals">
+    <Reference Include="Appccelerate.Fundamentals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=917bca444d1f2b4c, processorArchitecture=MSIL">
       <HintPath>..\packages\Appccelerate.Fundamentals.1.0.29\lib\Net40\Appccelerate.Fundamentals.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Eto, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Eto.Forms.2.2.0\lib\net40\Eto.dll</HintPath>
+      <HintPath>..\packages\Eto.Forms.2.2.0\lib\net45\Eto.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Eto.Serialization.Xaml, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Eto.Serialization.Xaml.2.2.0\lib\net40\Eto.Serialization.Xaml.dll</HintPath>
+      <HintPath>..\packages\Eto.Serialization.Xaml.2.2.0\lib\net45\Eto.Serialization.Xaml.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FluentValidation, Version=5.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentValidation.5.5.0.0\lib\Net40\FluentValidation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Ionic.Zip, Version=1.9.6.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetZip.1.9.6\lib\net20\Ionic.Zip.dll</HintPath>
+    <Reference Include="Ionic.Zip, Version=1.9.7.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.9.7\lib\net20\Ionic.Zip.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Ninject.Extensions.ContextPreservation, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Ninject.Extensions.ContextPreservation.3.2.0.0\lib\net40\Ninject.Extensions.ContextPreservation.dll</HintPath>
+      <HintPath>..\packages\Ninject.Extensions.ContextPreservation.3.2.0.0\lib\net45-full\Ninject.Extensions.ContextPreservation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Ninject.Extensions.Logging, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Ninject.Extensions.Logging.3.2.2.0\lib\net40\Ninject.Extensions.Logging.dll</HintPath>
+      <HintPath>..\packages\Ninject.Extensions.Logging.3.2.2.0\lib\net45-full\Ninject.Extensions.Logging.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Ninject.Extensions.Logging.NLog2, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Ninject.Extensions.Logging.nlog2.3.2.2.0\lib\net40\Ninject.Extensions.Logging.NLog2.dll</HintPath>
+      <HintPath>..\packages\Ninject.Extensions.Logging.nlog2.3.2.2.0\lib\net45-full\Ninject.Extensions.Logging.NLog2.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Ninject.Extensions.NamedScope, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Ninject.Extensions.NamedScope.3.2.0.0\lib\net40\Ninject.Extensions.NamedScope.dll</HintPath>
+      <HintPath>..\packages\Ninject.Extensions.NamedScope.3.2.0.0\lib\net45-full\Ninject.Extensions.NamedScope.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NLog, Version=2.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.2.1.0\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenTK.GLControl.1.1.1589.5942\lib\NET40\OpenTK.GLControl.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Portable.Xaml, Version=0.6.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Portable.Xaml.0.6.1\lib\portable-net40+sl50+win+wp80+MonoAndroid10+xamarinios10+MonoTouch10\Portable.Xaml.dll</HintPath>
+    <Reference Include="Portable.Xaml, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Portable.Xaml.0.7.0\lib\dotnet\Portable.Xaml.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -159,11 +184,8 @@
       <HintPath>..\packages\Sprache.1.10.0.35\lib\net40\Sprache.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
-    <Reference Include="NLog">
-      <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="Z.ExtensionMethods.WithObjectNamespace, Version=2.0.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Z.ExtensionMethods.WithObjectNamespace.2.0.6\lib\net40\Z.ExtensionMethods.WithObjectNamespace.dll</HintPath>
+    <Reference Include="Z.ExtensionMethods.WithObjectNamespace, Version=2.0.10.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.ExtensionMethods.WithObjectNamespace.2.0.10\lib\net45\Z.ExtensionMethods.WithObjectNamespace.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -189,33 +211,19 @@
     <Compile Include="Domain\ObjData\Definitions.cs" />
     <Compile Include="Generators\clsBrush.cs" />
     <Compile Include="Domain\ComponentBase.cs" />
-    <Compile Include="Graphics\EmptyPlaceHolder.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
+    <Compile Include="Graphics\EmptyPlaceHolder.cs" />
     <Compile Include="Gui\Actions\AboutCommand.cs" />
     <Compile Include="Gui\Actions\CompileMapCommand.cs" />
     <Compile Include="Gui\Actions\LoadMapCommand.cs" />
     <Compile Include="Gui\Actions\QuitCommand.cs" />
     <Compile Include="Gui\Actions\SaveFMapCommand.cs" />
     <Compile Include="Gui\Actions\SettingsCommand.cs" />
-    <Compile Include="Gui\Controls\CampaignDropDown.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
-    <Compile Include="Gui\Controls\ImageButton.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
-    <Compile Include="Gui\Controls\ImageButtonBase.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
-    <Compile Include="Gui\Dialogs\CompileMapDialog.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
-    <Compile Include="Gui\Dialogs\Dialog2.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
-    <Compile Include="Gui\Sections\MapPanel.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
+    <Compile Include="Gui\Controls\CampaignDropDown.cs" />
+    <Compile Include="Gui\Controls\ImageButton.cs" />
+    <Compile Include="Gui\Controls\ImageButtonBase.cs" />
+    <Compile Include="Gui\Dialogs\CompileMapDialog.cs" />
+    <Compile Include="Gui\Dialogs\Dialog2.cs" />
+    <Compile Include="Gui\Sections\MapPanel.cs" />
     <Compile Include="Gui\XomlReader.cs" />
     <Compile Include="Mapping\Changes\clsAutoTextureChanges.cs" />
     <Compile Include="Mapping\Changes\clsMapTileChanges.cs" />
@@ -462,49 +470,21 @@
     <Compile Include="Settings\KeyboardManagerEvents.cs" />
     <Compile Include="Mapping\IO\Wz\GameLoader.cs" />
     <Compile Include="SharpFlameApplication.cs" />
-    <Compile Include="Gui\Controls\CustomButton.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
-    <Compile Include="Gui\Controls\PlayerSelector.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
-    <Compile Include="Gui\Controls\PlayerSelectorWinforms.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
-    <Compile Include="Gui\Dialogs\About.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
-    <Compile Include="Gui\Dialogs\KeyInput.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
-    <Compile Include="Gui\Dialogs\Settings.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
-    <Compile Include="Gui\Dialogs\Status.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
-    <Compile Include="Gui\Forms\MainForm.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
-    <Compile Include="Gui\Sections\HeightTab.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
-    <Compile Include="Gui\Sections\LabelsTab.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
-    <Compile Include="Gui\Sections\ObjectTab.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
+    <Compile Include="Gui\Controls\CustomButton.cs" />
+    <Compile Include="Gui\Controls\PlayerSelector.cs" />
+    <Compile Include="Gui\Controls\PlayerSelectorWinforms.cs" />
+    <Compile Include="Gui\Dialogs\About.cs" />
+    <Compile Include="Gui\Dialogs\KeyInput.cs" />
+    <Compile Include="Gui\Dialogs\Settings.cs" />
+    <Compile Include="Gui\Dialogs\Status.cs" />
+    <Compile Include="Gui\Forms\MainForm.cs" />
+    <Compile Include="Gui\Sections\HeightTab.cs" />
+    <Compile Include="Gui\Sections\LabelsTab.cs" />
+    <Compile Include="Gui\Sections\ObjectTab.cs" />
     <Compile Include="Gui\Sections\PlaceObjectsTab.cs" />
-    <Compile Include="Gui\Sections\ResizeTab.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
-    <Compile Include="Gui\Sections\TerrainTab.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
-    <Compile Include="Gui\Sections\TextureTab.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
+    <Compile Include="Gui\Sections\ResizeTab.cs" />
+    <Compile Include="Gui\Sections\TerrainTab.cs" />
+    <Compile Include="Gui\Sections\TextureTab.cs" />
     <Compile Include="Infrastructure\Bootstrap.cs" />
     <Compile Include="Infrastructure\EventBrokerExtensionMethods.cs" />
     <Compile Include="Infrastructure\EventBrokerModule.cs" />
@@ -576,6 +556,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\app.manifest">
       <SubType>Designer</SubType>
     </None>
@@ -587,7 +568,6 @@
     <None Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">

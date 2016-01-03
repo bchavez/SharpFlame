@@ -8,6 +8,8 @@
     <RootNamespace>Eto.Gl.Gtk</RootNamespace>
     <AssemblyName>Eto.Gl.Gtk</AssemblyName>
     <ReleaseVersion>0.24</ReleaseVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -18,6 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -26,6 +29,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -37,15 +41,11 @@
       <HintPath>..\packages\other\GtkSharp\2.12\lib\gtk-sharp-2.0\atk-sharp.dll</HintPath>
     </Reference>
     <Reference Include="Eto, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Eto.Forms.2.2.0\lib\net40\Eto.dll</HintPath>
+      <HintPath>..\packages\Eto.Forms.2.2.0\lib\net45\Eto.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Eto.Gtk2, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Eto.Platform.Gtk.2.2.0\lib\net40\Eto.Gtk2.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Eto.Serialization.Xaml, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Eto.Serialization.Xaml.2.2.0\lib\net40\Eto.Serialization.Xaml.dll</HintPath>
+      <HintPath>..\packages\Eto.Platform.Gtk.2.2.0\lib\net45\Eto.Gtk2.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="gdk-sharp">
@@ -63,16 +63,13 @@
     <Reference Include="Mono.Cairo">
       <HintPath>..\packages\other\GtkSharp\2.12\lib\Mono.Cairo\Mono.Cairo.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK">
-      <HintPath>..\packages\OpenTK.1.1.1508.5724\lib\NET40\OpenTK.dll</HintPath>
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\other\GtkSharp\2.12\lib\gtk-sharp-2.0\pango-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Portable.Xaml, Version=0.6.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Portable.Xaml.0.6.1\lib\portable-net40+sl50+win+wp80+MonoAndroid10+xamarinios10+MonoTouch10\Portable.Xaml.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xaml" />

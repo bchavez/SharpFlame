@@ -11,6 +11,8 @@
     <AssemblyName>SharpFlame.Core</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <ReleaseVersion>0.24</ReleaseVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE;Portable</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -27,6 +30,7 @@
     <DefineConstants>Portable</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugMac|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,6 +40,7 @@
     <DefineConstants>DEBUG;TRACE;Portable;Mac</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseMac|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -43,34 +48,40 @@
     <DefineConstants>Portable</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Eto, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Eto.Forms.2.2.0\lib\net40\Eto.dll</HintPath>
+      <HintPath>..\packages\Eto.Forms.2.2.0\lib\net45\Eto.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Eto.Serialization.Xaml, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Eto.Serialization.Xaml.2.2.0\lib\net40\Eto.Serialization.Xaml.dll</HintPath>
+      <HintPath>..\packages\Eto.Serialization.Xaml.2.2.0\lib\net45\Eto.Serialization.Xaml.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FluentValidation, Version=5.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentValidation.5.5.0.0\lib\Net40\FluentValidation.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject.Extensions.Logging, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Ninject.Extensions.Logging.3.2.2.0\lib\net40\Ninject.Extensions.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Portable.Xaml, Version=0.6.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Portable.Xaml.0.6.1\lib\portable-net40+sl50+win+wp80+MonoAndroid10+xamarinios10+MonoTouch10\Portable.Xaml.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sprache">
-      <HintPath>..\packages\Sprache.1.10.0.35\lib\net40\Sprache.dll</HintPath>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Extensions.Logging, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Extensions.Logging.3.2.2.0\lib\net45-full\Ninject.Extensions.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NLog, Version=2.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.2.1.0\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Portable.Xaml, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Portable.Xaml.0.7.0\lib\dotnet\Portable.Xaml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sprache, Version=1.10.0.37, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sprache.1.10.0.37\lib\net40\Sprache.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -80,17 +91,14 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="NLog">
-      <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="Appccelerate.EventBroker">
       <HintPath>..\packages\Appccelerate.EventBroker.2.0.84\lib\Net40\Appccelerate.EventBroker.dll</HintPath>
     </Reference>
     <Reference Include="Appccelerate.Fundamentals">
       <HintPath>..\packages\Appccelerate.Fundamentals.1.0.29\lib\Net40\Appccelerate.Fundamentals.dll</HintPath>
     </Reference>
-    <Reference Include="Z.ExtensionMethods.WithObjectNamespace, Version=2.0.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Z.ExtensionMethods.WithObjectNamespace.2.0.6\lib\net40\Z.ExtensionMethods.WithObjectNamespace.dll</HintPath>
+    <Reference Include="Z.ExtensionMethods.WithObjectNamespace, Version=2.0.10.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.ExtensionMethods.WithObjectNamespace.2.0.10\lib\net45\Z.ExtensionMethods.WithObjectNamespace.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -154,9 +162,6 @@
     <Compile Include="Extensions\ExtensionsForUri.cs" />
     <Compile Include="GenericResult.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -169,6 +174,8 @@
     <Folder Include="Extensions\Appccelerate\" />
     <Folder Include="Parsers\Names\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <ItemGroup />
 </Project>

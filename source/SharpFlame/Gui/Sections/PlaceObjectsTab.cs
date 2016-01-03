@@ -158,9 +158,9 @@ namespace SharpFlame.Gui.Sections
 		private Panel panStructs;
 		private Panel panFeatures;
 
-		private PlaceObjectGridView gFeatures;
-		private PlaceObjectGridView gStructures;
-		private PlaceObjectGridView gDroids;
+		public PlaceObjectGridView gFeatures;
+		public PlaceObjectGridView gStructures;
+		public PlaceObjectGridView gDroids;
 
 		private LinkButton cmdSelectAll;
 

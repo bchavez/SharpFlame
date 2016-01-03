@@ -8,6 +8,8 @@
     <RootNamespace>Eto.Gl</RootNamespace>
     <AssemblyName>Eto.Gl</AssemblyName>
     <ReleaseVersion>0.24</ReleaseVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -18,6 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -26,31 +29,31 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Reference Include="Eto, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Eto.Forms.2.2.0\lib\net40\Eto.dll</HintPath>
+      <HintPath>..\packages\Eto.Forms.2.2.0\lib\net45\Eto.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Eto.Serialization.Xaml, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Eto.Serialization.Xaml.2.2.0\lib\net40\Eto.Serialization.Xaml.dll</HintPath>
+      <HintPath>..\packages\Eto.Serialization.Xaml.2.2.0\lib\net45\Eto.Serialization.Xaml.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Portable.Xaml, Version=0.6.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Portable.Xaml.0.6.1\lib\portable-net40+sl50+win+wp80+MonoAndroid10+xamarinios10+MonoTouch10\Portable.Xaml.dll</HintPath>
+    <Reference Include="Portable.Xaml, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Portable.Xaml.0.7.0\lib\dotnet\Portable.Xaml.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xaml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GLSurface.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
+    <Compile Include="GLSurface.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -50,7 +50,7 @@
     <eto:StackLayoutItem VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Expand="True">
         
           <eto:Panel ID="panel" >
-            <g:GLSurface ID="GLSurface"></g:GLSurface>
+            <g:GLSurface x:Name="GLSurface"></g:GLSurface>
           </eto:Panel>
       
     </eto:StackLayoutItem>
