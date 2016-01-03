@@ -2,6 +2,7 @@
 using Eto.Gl;
 using Eto.Gl.Mac;
 using Ninject;
+using OpenTK;
 using SharpFlame.Infrastructure;
 
 namespace SharpFlame.Gui.Mac
@@ -14,6 +15,8 @@ namespace SharpFlame.Gui.Mac
         [STAThread]
         public static void Main(string[] args)
         {
+	        Toolkit.Init();
+
             var p = Eto.Platform.Detect;
 			p.Add<GLSurface.IHandler>( () => new MacGLSurfaceHandler() );
 

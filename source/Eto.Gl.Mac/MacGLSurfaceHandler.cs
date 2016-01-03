@@ -1,4 +1,5 @@
 ﻿
+using System.Diagnostics;
 using Eto.Drawing;
 using MonoMac.AppKit;
 using Eto.Mac.Forms;
@@ -13,7 +14,12 @@ namespace Eto.Gl.Mac
 	    private int minor;
 	    private GraphicsContextFlags flags;
 
-	    protected override void Initialize()
+		public MacGLSurfaceHandler()
+		{
+			//Debugger.Break();
+		}
+
+		protected override void Initialize()
         {
             var c = new MacGLView8();
 

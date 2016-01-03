@@ -473,6 +473,10 @@ namespace SharpFlame.Gui.Sections
 
         private void DrawTexturesView()
         {
+	        if( !GLSurface.IsInitialized )
+	        {
+		        return;
+	        }
             this.GLSurface.MakeCurrent();
             if( ToolOptions.Textures.TilesetNum == -1 )
             {

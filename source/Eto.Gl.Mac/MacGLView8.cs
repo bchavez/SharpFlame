@@ -10,7 +10,7 @@ using Size = Eto.Drawing.Size;
 
 namespace Eto.Gl.Mac
 {
-    public class MacGLView8 : NSScrollView, IMacControl
+    public class MacGLView8 : NSView, IMacControl
     {
         
         private bool suspendResize = true;
@@ -26,7 +26,7 @@ namespace Eto.Gl.Mac
 
         public override bool NeedsDisplay
         {
-            get { return false; }
+            get { return true; }
             set
             {
             }
@@ -89,8 +89,8 @@ namespace Eto.Gl.Mac
 
         public void MakeCurrent()
         {
-            this.openGLContext.MakeCurrentContext();
-            this.openTK.MakeCurrent(this.windowInfo);
+            this.openGLContext?.MakeCurrentContext();
+            this.openTK?.MakeCurrent(this.windowInfo);
         }
 
         public void SwapBuffers()
@@ -129,6 +129,8 @@ namespace Eto.Gl.Mac
 
         public void InitGL()
         {
+	        OpenTK.Graphics.GraphicsContext.ShareContexts = true;
+			
             this.Superview.AutoresizesSubviews = true;
 			this.Superview.AutoresizingMask = NSViewResizingMask.NotSizable;
             this.Superview.NeedsDisplay = false;
@@ -151,24 +153,31 @@ namespace Eto.Gl.Mac
 
             // NSOpenGLView does not handle context sharing, so we draw to a custom NSView instead
             openGLContext = new NSOpenGLContext(pixelFormat, GlobalSharedContext);
-            if( GlobalSharedContext == null )
-                GlobalSharedContext = openGLContext;
+			
+	        if( GlobalSharedContext == null )
+	        {
+		        GlobalSharedContext = openGLContext;
 
-            openGLContext.View = this;
+		        openGLContext.View = this;
+		        openGLContext.MakeCurrentContext();
+		        openGLContext.SwapInterval = true;
 
-            openGLContext.MakeCurrentContext();
+		        var ctxPtr = this.openGLContext.CGLContext.Handle;
+		        var ctxHandle = new OpenTK.ContextHandle(ctxPtr);
 
-            // Synchronize buffer swaps with vertical refresh rate
-            openGLContext.SwapInterval = true;
+		        //this.openTK = new OpenTK.Graphics.GraphicsContext(ctxHandle, );
+		        this.openTK = OpenTK.Graphics.GraphicsContext.CreateDummyContext(ctxHandle);
 
-            var ctxPtr = this.openGLContext.CGLContext.Handle;
-            var ctxHandle = new OpenTK.ContextHandle(ctxPtr);
+		        GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
+	        }
+	        else
+			{   
+				//Initialize OpenTK structures using OSX GL core handles.
+				this.windowInfo = OpenTK.Platform.Utilities.CreateMacOSCarbonWindowInfo(this.openGLContext.Handle, false, true);
+				this.openTK = new OpenTK.Graphics.GraphicsContext(OpenTK.Graphics.GraphicsMode.Default, windowInfo);
+			}
 
-            //Initialize OpenTK structures using OSX GL core handles.
-			this.windowInfo = OpenTK.Platform.Utilities.CreateMacOSCarbonWindowInfo(this.openGLContext.Handle, false, true);
-            this.openTK = new OpenTK.Graphics.GraphicsContext(ctxHandle, windowInfo);
-
-            GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
+	        
 
             this.IsInitialized = true;
 
