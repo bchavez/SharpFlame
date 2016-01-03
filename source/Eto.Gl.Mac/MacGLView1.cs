@@ -218,6 +218,6 @@ namespace Eto.Gl.Mac
             GLScrollWheel(this, theEvent);
         }
 
-        public WeakReference WeakHandler{ get; private set; }
+        public WeakReference WeakHandler{ get; set; }
     }
 }
