@@ -2,10 +2,10 @@
 using System.Drawing;
 using Eto.Mac.Forms;
 using MonoMac.AppKit;
-using MonoMac.CoreVideo;
 using MonoMac.Foundation;
-using MonoMac.OpenGL;
 using NLog;
+using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 using Size = Eto.Drawing.Size;
 
 namespace Eto.Gl.Mac
@@ -89,15 +89,12 @@ namespace Eto.Gl.Mac
 
         public void MakeCurrent()
         {
-            this.openGLContext?.MakeCurrentContext();
             this.openTK?.MakeCurrent(this.windowInfo);
         }
 
         public void SwapBuffers()
         {
-            //openglFLush
-            this.openGLContext.FlushBuffer();
-            //this.openTK.SwapBuffers();
+            this.openTK.SwapBuffers();
         }
 
         public event EventHandler Initialized = delegate { };
@@ -109,75 +106,23 @@ namespace Eto.Gl.Mac
         public event EventHandler DrawNow = delegate { };
 
 
-        private NSOpenGLContext openGLContext;
-
-        private NSOpenGLPixelFormat pixelFormat;
-
         private OpenTK.Graphics.GraphicsContext openTK = null;
 
         private OpenTK.Platform.IWindowInfo windowInfo = null;
 
-        public static NSOpenGLContext GlobalSharedContext = null;
-
-        private CVDisplayLink displayLink;
-
-        //public override void SetBoundsOrigin(PointF newOrigin)
-
-        //{
-
-        //}
-
         public void InitGL()
         {
 	        OpenTK.Graphics.GraphicsContext.ShareContexts = true;
-			
-            this.Superview.AutoresizesSubviews = true;
-			this.Superview.AutoresizingMask = NSViewResizingMask.NotSizable;
-            this.Superview.NeedsDisplay = false;
 
-            var attribs = new object[]
-                {
-                    NSOpenGLPixelFormatAttribute.Window,
-                    NSOpenGLPixelFormatAttribute.NoRecovery,
-                    NSOpenGLPixelFormatAttribute.DoubleBuffer,
-                    NSOpenGLPixelFormatAttribute.ColorSize, 24,
-                    NSOpenGLPixelFormatAttribute.AlphaSize, 8,
-                    NSOpenGLPixelFormatAttribute.DepthSize, 24,
-                    NSOpenGLPixelFormatAttribute.MinimumPolicy, 0
-                };
+			var gpxMode = GraphicsMode.Default;
 
-            pixelFormat = new NSOpenGLPixelFormat(attribs);
+			this.windowInfo = OpenTK.Platform.Utilities.CreateMacOSWindowInfo(this.Window.Handle, this.Handle);
 
-            if( pixelFormat == null )
-                Console.WriteLine("No OpenGL pixel format");
+	        this.openTK = new OpenTK.Graphics.GraphicsContext(gpxMode, this.windowInfo, 1, 0, GraphicsContextFlags.ForwardCompatible);
 
-            // NSOpenGLView does not handle context sharing, so we draw to a custom NSView instead
-            openGLContext = new NSOpenGLContext(pixelFormat, GlobalSharedContext);
-			
-	        if( GlobalSharedContext == null )
-	        {
-		        GlobalSharedContext = openGLContext;
+	        this.openTK.MakeCurrent(this.windowInfo);
 
-		        openGLContext.View = this;
-		        openGLContext.MakeCurrentContext();
-		        openGLContext.SwapInterval = true;
-
-		        var ctxPtr = this.openGLContext.CGLContext.Handle;
-		        var ctxHandle = new OpenTK.ContextHandle(ctxPtr);
-
-		        //this.openTK = new OpenTK.Graphics.GraphicsContext(ctxHandle, );
-		        this.openTK = OpenTK.Graphics.GraphicsContext.CreateDummyContext(ctxHandle);
-
-		        GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
-	        }
-	        else
-			{   
-				//Initialize OpenTK structures using OSX GL core handles.
-				this.windowInfo = OpenTK.Platform.Utilities.CreateMacOSCarbonWindowInfo(this.openGLContext.Handle, false, true);
-				this.openTK = new OpenTK.Graphics.GraphicsContext(OpenTK.Graphics.GraphicsMode.Default, windowInfo);
-			}
-
-	        
+	        GL.ClearColor(OpenTK.Graphics.Color4.CornflowerBlue);
 
             this.IsInitialized = true;
 
@@ -188,7 +133,6 @@ namespace Eto.Gl.Mac
                 this.Resize(this, EventArgs.Empty);
                 suspendResize = false;
             }
-
         }
 
         public WeakReference WeakHandler { get; set; }
