@@ -56,8 +56,8 @@ Global
 		{06F7AC59-0E70-4646-BBFA-C105D9664FD0}.ReleaseMac|Any CPU.Build.0 = Debug|Any CPU
 		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.AppStore|Any CPU.ActiveCfg = Debug|x86
 		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.AppStore|Any CPU.Build.0 = Debug|x86
-		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Debug|Any CPU.ActiveCfg = DebugMac|Any CPU
-		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Debug|Any CPU.Build.0 = DebugMac|Any CPU
+		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Debug|Mixed Platforms.ActiveCfg = DebugMac|Any CPU
 		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Debug|Mixed Platforms.Build.0 = DebugMac|Any CPU
 		{152475A4-3ABE-41C4-B338-A2FB7B350FAF}.Debug|x86.ActiveCfg = Debug|x86
@@ -230,7 +230,6 @@ Global
 		{FEBB5203-A2F1-49AD-B045-F077D372DFDD}.ReleaseMac|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = SharpFlame.Gui.Linux\SharpFlame.Gui.Linux.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1
 		$1.FileWidth = 120
@@ -299,6 +298,7 @@ Global
 		$14.inheritsSet = null
 		$14.scope = text/cache-manifest
 		version = 0.24
+		StartupItem = SharpFlame.Gui.Linux\SharpFlame.Gui.Linux.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
