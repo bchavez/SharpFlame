@@ -9,108 +9,85 @@ namespace SharpFlame.Gui
 {
 	public class Resources
 	{
-		public static Icon ProgramIcon
-		{
-			get { return new Icon(GetBytes(()=>ProgramIcon, ".ico")); }
-		}
+		public static Icon ProgramIcon { get; private set; }
 
-		public static Bitmap RotateAntiClockwise
-		{
-			get { return new Bitmap(GetBytes(()=> RotateAntiClockwise)); }
-		}
+		public static Bitmap RotateAntiClockwise { get; private set; }
 
-		public static Bitmap RotateClockwise
-		{
-			get { return new Bitmap(GetBytes(()=> RotateClockwise)); }
-		}
+		public static Bitmap RotateClockwise { get; private set; }
 
-		public static Bitmap FlipX
-		{
-			get { return new Bitmap(GetBytes(()=> FlipX)); }
-		}
+		public static Bitmap FlipX { get; private set; }
 
-		public static Bitmap Problem
-		{
-			get { return new Bitmap(GetBytes(()=> Problem)); }
-		}
+		public static Bitmap Problem { get; private set; }
 
-		public static Bitmap Warning
-		{
-			get { return new Bitmap(GetBytes(()=>Warning)); }
-		}
+		public static Bitmap Warning { get; private set; }
 
-		public static Bitmap NoMap
-		{
-			get { return new Bitmap(GetBytes(() => NoMap)); }
-		}
+		public static Bitmap NoMap { get; private set; }
 
-		public static Bitmap Circle
-		{
-			get { return new Bitmap(GetBytes(() => Circle)); }
-		}
+		public static Bitmap Circle { get; private set; }
 
-		public static Bitmap Square
-		{
-			get{return new Bitmap(GetBytes(()=> Square));}
-		}
-		public static Bitmap MouseLeft
-		{
-			get { return new Bitmap(GetBytes(() => MouseLeft)); }
-		}
-		public static Bitmap MouseRight
-		{
-			get { return new Bitmap(GetBytes(() => MouseRight)); }
-		}
+		public static Bitmap Square { get; private set; }
+		public static Bitmap MouseLeft { get; private set; }
+		public static Bitmap MouseRight { get; private set; }
 
-		public static Bitmap Place
-		{
-			get { return new Bitmap(GetBytes(() => Place)); }
-		}
-		public static Bitmap Line
-		{
-			get { return new Bitmap(GetBytes(() => Line)); }
-		}
+		public static Bitmap Place { get; private set; }
+		public static Bitmap Line { get; private set; }
 
-		public static Bitmap Selection => new Bitmap(GetBytes(() => Selection));
-		public static Bitmap SelectionCopy => new Bitmap(GetBytes(() => SelectionCopy));
-		public static Bitmap SelectionPasteOptions => new Bitmap(GetBytes(() => SelectionPasteOptions));
-		public static Bitmap SelectionPaste => new Bitmap(GetBytes(() => SelectionPaste));
-		public static Bitmap SelectionRotateAntiClockwise => new Bitmap(GetBytes(() => SelectionRotateAntiClockwise));
-		public static Bitmap SelectionRotateClockwise => new Bitmap(GetBytes(() => SelectionRotateClockwise));
-		public static Bitmap SelectionFlipX => new Bitmap(GetBytes(() => SelectionFlipX));
-		public static Bitmap ObjectsSelect => new Bitmap(GetBytes(() => ObjectsSelect));
+	    public static Bitmap Selection { get; private set; }
+		public static Bitmap SelectionCopy { get; private set; }
+		public static Bitmap SelectionPasteOptions { get; private set; }
+        public static Bitmap SelectionPaste { get; private set; }
+        public static Bitmap SelectionRotateAntiClockwise { get; private set; }
+        public static Bitmap SelectionRotateClockwise { get; private set; }
+        public static Bitmap SelectionFlipX { get; private set; }
+        public static Bitmap ObjectsSelect { get; private set; }
 
-		public static Bitmap Gateways => new Bitmap(GetBytes(() => Gateways));
-		public static Bitmap DisplayAutoTexture => new Bitmap(GetBytes(() => DisplayAutoTexture));
-		public static Bitmap DrawTileOrientation => new Bitmap(GetBytes(() => DrawTileOrientation));
+        public static Bitmap Gateways { get; private set; }
+        public static Bitmap DisplayAutoTexture { get; private set; }
+        public static Bitmap DrawTileOrientation { get; private set; }
 
-		public static Bitmap Save => new Bitmap(GetBytes(() => Save));
-		
+        public static Bitmap Save { get; private set; }
 
-		public static Lazy<Assembly> Assembly = new Lazy<Assembly>(()=> typeof(Resources).Assembly);
+	    public static void LoadResources()
+	    {
+            ProgramIcon = LoadIcon(nameof(ProgramIcon));
 
-		public static Stream GetBytes(Expression<Func<object>> exp, string ext)
-		{
-			var name = PropertyName.For(exp) + ext;
-			var fullName = Path.ChangeExtension(name, ext);
-			return GetBytes(fullName);
-		}
+	        RotateAntiClockwise = LoadBmp(nameof(RotateAntiClockwise));
+	        RotateClockwise = LoadBmp(nameof(RotateClockwise));
+	        FlipX = LoadBmp(nameof(FlipX));
+	        Problem = LoadBmp(nameof(Problem));
+	        Warning = LoadBmp(nameof(Warning));
+	        NoMap = LoadBmp(nameof(NoMap));
+	        Circle = LoadBmp(nameof(Circle));
+	        Square = LoadBmp(nameof(Square));
+	        MouseLeft = LoadBmp(nameof(MouseLeft));
+	        MouseRight = LoadBmp(nameof(MouseRight));
+	        Place = LoadBmp(nameof(Place));
+	        Line = LoadBmp(nameof(Line));
 
-		public static Stream GetBytes(Expression<Func<object>> exp)
-		{
-			return GetBytes(exp, ".png");
-		}
+            Selection = LoadBmp(nameof(Selection));
+            SelectionCopy = LoadBmp(nameof(SelectionCopy));
+            SelectionPasteOptions = LoadBmp(nameof(SelectionPasteOptions));
+            SelectionPaste = LoadBmp(nameof(SelectionPaste));
+            SelectionRotateAntiClockwise = LoadBmp(nameof(SelectionRotateAntiClockwise));
+            SelectionRotateClockwise = LoadBmp(nameof(SelectionRotateClockwise));
+            SelectionFlipX = LoadBmp(nameof(SelectionFlipX));
+            ObjectsSelect = LoadBmp(nameof(ObjectsSelect));
 
-		public static Stream GetBytes(string fileName)
-		{
-			var frn = FullResourceName(fileName);
-			return Assembly.Value.GetManifestResourceStream(frn);
-		}
+            Gateways = LoadBmp(nameof(Gateways));
+            DisplayAutoTexture = LoadBmp(nameof(DisplayAutoTexture));
+            DrawTileOrientation = LoadBmp(nameof(DrawTileOrientation));
+            Save = LoadBmp(nameof(Save));
+        }
 
-		public static string FullResourceName(string file)
-		{
-			return string.Concat(Assembly.Value.GetName().Name, ".Resources.", file);
-		}
+        public static Bitmap LoadBmp(string resource, string ext = "png")
+	    {
+	        return Bitmap.FromResource($"SharpFlame.Resources.{resource}.{ext}");
+	    }
+
+	    public static Icon LoadIcon(string resource, string ext = "ico")
+	    {
+            return Icon.FromResource($"SharpFlame.Resources.{resource}.{ext}");
+        }
 	}
 }
 

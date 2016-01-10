@@ -9,6 +9,7 @@ using Ninject;
 using Ninject.Extensions.Logging;
 using OpenTK;
 using SharpFlame.Core;
+using SharpFlame.Gui;
 using SharpFlame.Gui.Forms;
 using SharpFlame.Settings;
 using Size = Eto.Drawing.Size;
@@ -48,6 +49,8 @@ namespace SharpFlame
                 // initializeResult.ProblemAdd (string.Format("Failure while loading opentk, error was: {0}", ex.Message));
                 Instance.Quit();
             }
+
+            Resources.LoadResources();
 
             // TODO: Remove me once everthing is inectable.
             App.Kernel = this.Kernel;
