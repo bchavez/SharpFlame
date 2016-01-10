@@ -106,6 +106,11 @@ namespace Eto.Gl
             {
                 w.Platform.Invoke(() => w.OnShuttingDown(w, e));
             }
+
+            public void OnResize(GLSurface w, EventArgs e)
+            {
+                w.Platform.Invoke(() => w.OnSizeChanged(e));
+            }
         }
 
         //Gets an instance of an object used to perform callbacks to the widget from handler implementations
