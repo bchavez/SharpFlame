@@ -61,6 +61,10 @@ namespace Eto.Gl.Gtk
                     this.Control.ShuttingDown += (sender, args) => Callback.OnShuttingDown(this.Widget, args);
                     break;
 
+                case Eto.Forms.Control.SizeChangedEvent:
+                    this.Control.Resize += (sender, args) => Callback.OnResize(this.Widget, args);
+                    break;
+
                 default:
                     base.AttachEvent(id);
                     break;

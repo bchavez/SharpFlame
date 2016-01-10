@@ -90,6 +90,7 @@ namespace Eto.Gl
         {
             void OnInitialized(GLSurface w, EventArgs e);
             void OnShuttingDown(GLSurface w, EventArgs e);
+            void OnResize(GLSurface w, EventArgs e);
         }
 
         //PLATFORM CONTROL -> ETO WIDGET
