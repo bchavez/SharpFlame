@@ -16,7 +16,7 @@ namespace Eto.Gl
 	    }
 
 	    public GLSurface(GraphicsMode graphicsMode):
-			this(graphicsMode, 3, 0, GraphicsContextFlags.Default)
+			this(graphicsMode, 1, 0, GraphicsContextFlags.Default)
 	    {
 		    
 	    }
