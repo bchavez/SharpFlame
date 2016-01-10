@@ -222,6 +222,8 @@ namespace SharpFlame.Gui.Sections
 			pasteOptions = new PasteOptions();
 			emptyPlaceHolder = new EmptyPlaceHolder();
 
+		    this.GLSurface = new GLSurface();
+
 			SetupEventHandlers();
 			SetupBindings();
 		}
