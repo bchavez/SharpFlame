@@ -79,7 +79,6 @@ namespace Eto.Gl
 		{
 			void CreateWithParams(GraphicsMode mode, int major, int minor, GraphicsContextFlags flags);
 
-            Size GLSize { get; set; }
             bool IsInitialized { get; }
 
             void MakeCurrent();
@@ -123,11 +122,6 @@ namespace Eto.Gl
         }
 
         //public event EventHandler Click;
-
-        public Size GLSize {
-            get { return this.Handler.GLSize; } 
-            set { this.Handler.GLSize = value; }
-        }
 
         public bool IsInitialized {
             get { return this.Handler.IsInitialized; }

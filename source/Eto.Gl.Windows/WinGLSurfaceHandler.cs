@@ -29,12 +29,6 @@ namespace Eto.Gl.Windows
 		    this.flags = flags;
 	    }
 
-	    public Size GLSize
-        {
-            get { return this.Control.Size.ToEto() ; }
-            set { this.Control.Size = value.ToSD(); }
-        }
-
         public bool IsInitialized
         {
             get { return Control.IsInitialized; }

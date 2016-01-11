@@ -246,11 +246,6 @@ namespace Eto.Gl.Windows
             base.OnResize(e);
         }
 
-        public override Size GetPreferredSize(Size proposedSize)
-        {
-            return this.Size;
-        }
-
         /// <summary>
         /// Raises the ParentChanged event.
         /// </summary>

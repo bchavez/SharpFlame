@@ -43,15 +43,6 @@ namespace Eto.Gl.Mac
             get { return this.Control; }
         }
 
-	    public Size GLSize
-        {
-            get { return this.Control.GLSize; }
-            set
-            {
-
-            }
-        }
-
         public bool IsInitialized
         {
             get { return Control.IsInitialized; }

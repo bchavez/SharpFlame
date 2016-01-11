@@ -204,7 +204,7 @@ namespace SharpFlame.Gui.Sections
 
             mainLayout.Add(layout);
 
-            this.GLSurface = new GLSurface() {GLSize = new Size(500, 500)};
+            this.GLSurface = new GLSurface();
 
             this.scrollTextureView = new Scrollable {Content = this.GLSurface};
             mainLayout.Add(this.scrollTextureView, true, true);
@@ -511,7 +511,8 @@ namespace SharpFlame.Gui.Sections
             if (maxHeight >= scrollTextureView.Size.Height)
             {
                 glSize = new Size(scrollTextureView.ClientSize.Width, maxHeight);
-                GLSurface.GLSize = glSize;
+                //GLSurface.GLSize = glSize;
+                GLSurface.Size = glSize;
             }
             else
             {
@@ -520,7 +521,8 @@ namespace SharpFlame.Gui.Sections
                     Y = (int)(Math.Ceiling (GLSurface.Size.Height / 64.0D))
                 };        
                 glSize = scrollTextureView.ClientSize;
-                GLSurface.GLSize = glSize;
+                //GLSurface.GLSize = glSize;
+                GLSurface.Size = glSize;
             }
                             
             // send the resize event to the Graphics card.

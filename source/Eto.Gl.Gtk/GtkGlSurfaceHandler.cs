@@ -28,12 +28,6 @@ namespace Eto.Gl.Gtk
 		    this.flags = flags;
 	    }
 
-	    public Size GLSize
-        {
-            get { return this.Control.GLSize; }
-            set { this.Control.GLSize = value; }
-        }
-
         public bool IsInitialized
         {
             get { return this.Control.IsInitialized; }
