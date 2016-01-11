@@ -40,6 +40,9 @@ namespace SharpFlame.Gui.Forms
         internal MapPanel MapPanel { get; set; }
 
         [Inject]
+        internal NewMapCommand NewMapCommand { get; set; }
+
+        [Inject]
         internal LoadMapCommand LoadMapCommand { get; set; }
 
         [Inject]
@@ -188,7 +191,7 @@ namespace SharpFlame.Gui.Forms
 
 			// add our own items to the menu
 			var file = Menu.Items.GetSubmenu("&File", 100);
-            file.Items.Add(new Command() { MenuText = "&New Map" });
+            file.Items.Add(NewMapCommand);
 	        file.Items.AddSeparator();
             file.Items.Add(LoadMapCommand);
             file.Items.AddSeparator();

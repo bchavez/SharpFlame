@@ -1746,16 +1746,23 @@ namespace SharpFlame.Mapping
 
         public void Update(MinimapGl minimapGl)
         {
+            var lastSuppress = minimapGl?.Suppress ?? false;
 
-            var lastSuppress = minimapGl.Suppress;
-            minimapGl.Suppress = true;
+            if ( minimapGl != null )
+            {
+                minimapGl.Suppress = true;
+            }
+
             UpdateAutoTextures();
             TerrainInterpretUpdate();
             SectorsUpdateGraphics();
             SectorsUpdateUnitHeights();
-            minimapGl.Suppress = lastSuppress;
 
-            minimapGl.Refresh = true;
+            if( minimapGl != null )
+            {
+                minimapGl.Suppress = lastSuppress;
+                minimapGl.Refresh = true;
+            }
         }
 
         public void SectorsUpdateUnitHeights()

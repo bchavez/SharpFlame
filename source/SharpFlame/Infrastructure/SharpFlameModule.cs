@@ -51,6 +51,7 @@ namespace SharpFlame.Infrastructure
 
             //GUI
             this.Bind<LoadMapCommand>().ToSelf().InSingletonScope().RegisterOnGlobalEventBroker();
+            this.Bind<NewMapCommand>().ToSelf().InSingletonScope().RegisterOnGlobalEventBroker();
 
             this.Bind<Gui.Dialogs.Settings>().ToSelf().InTransientScope();
 

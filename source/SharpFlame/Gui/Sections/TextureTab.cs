@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Drawing;
 using System.Linq;
 using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
@@ -11,16 +12,16 @@ using Eto.Gl;
 using Ninject;
 using Ninject.Extensions.Logging;
 using OpenTK.Graphics.OpenGL;
+using SharpFlame.Bitmaps;
 using SharpFlame.Core.Domain;
-using SharpFlame.Domain.ObjData;
 using SharpFlame.Generators;
 using SharpFlame.Core;
 using SharpFlame.Graphics.OpenGL;
 using SharpFlame.Mapping;
 using SharpFlame.Mapping.Tiles;
 using SharpFlame.MouseTools;
-using SharpFlame.Painters;
 using SharpFlame.Settings;
+using Size = Eto.Drawing.Size;
 
 namespace SharpFlame.Gui.Sections
 {
@@ -819,7 +820,26 @@ namespace SharpFlame.Gui.Sections
                 }
             }
 
+            LoadSpecialTiles();
+
 	        this.OnOpenGLInitalized(this, new EventArgs<GLSurface>(this.GLSurface));
         }
+
+	    private void LoadSpecialTiles()
+	    {
+	        Logger.Trace("Loading NoTile.");
+
+	        var notileStream = Resources.GetStream("NoTile.png");
+
+	        var notile = System.Drawing.Bitmap.FromStream(notileStream) as System.Drawing.Bitmap;
+
+	        App.GLTexture_NoTile = BitmapUtil.CreateGLTexture(notile, 0);
+
+	        var overflowStream = Resources.GetStream("Overflow.png");
+
+	        var overflow = System.Drawing.Bitmap.FromStream(overflowStream) as System.Drawing.Bitmap;
+
+	        App.GLTexture_OverflowTile = BitmapUtil.CreateGLTexture(overflow, 0);
+	    }
     }
 }

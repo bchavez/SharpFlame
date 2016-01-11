@@ -88,6 +88,12 @@ namespace SharpFlame.Gui
 	    {
             return Icon.FromResource($"SharpFlame.Resources.{resource}.{ext}");
         }
+
+	    public static Stream GetStream(string resource)
+	    {
+	        return Assembly.GetExecutingAssembly().GetManifestResourceStream($"SharpFlame.Resources.{resource}");
+
+        }
 	}
 }
 

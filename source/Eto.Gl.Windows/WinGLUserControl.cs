@@ -279,12 +279,6 @@ namespace Eto.Gl.Windows
         public event EventHandler Initialized = delegate { };
         public event EventHandler ShuttingDown = delegate { };
 
-        //public Eto.Drawing.Size GLSize
-        //{
-        //    get { return this.Size.ToEto(); }
-        //    set { this.Size = value.ToSD(); }
-        //}
-
         public bool IsInitialized { get; private set; }
 
         /// <summary>

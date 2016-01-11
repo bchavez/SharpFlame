@@ -205,6 +205,7 @@
     <Compile Include="Gui\Actions\AboutCommand.cs" />
     <Compile Include="Gui\Actions\CompileMapCommand.cs" />
     <Compile Include="Gui\Actions\LoadMapCommand.cs" />
+    <Compile Include="Gui\Actions\NewMapCommand.cs" />
     <Compile Include="Gui\Actions\QuitCommand.cs" />
     <Compile Include="Gui\Actions\SaveFMapCommand.cs" />
     <Compile Include="Gui\Actions\SettingsCommand.cs" />
