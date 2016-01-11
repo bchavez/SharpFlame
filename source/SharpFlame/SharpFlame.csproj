@@ -28,6 +28,7 @@
     <ReleaseVersion>0.24</ReleaseVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <AssemblyName>SharpFlame</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -41,8 +42,6 @@
     <WarningLevel>4</WarningLevel>
     <Optimize>false</Optimize>
     <DefineConstants>Trace;DEBUG;Mono;Portable</DefineConstants>
-    <AssemblyName>SharpFlame</AssemblyName>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
@@ -58,8 +57,6 @@
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <DebugSymbols>true</DebugSymbols>
     <WarningLevel>4</WarningLevel>
-    <AssemblyName>SharpFlame</AssemblyName>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
@@ -84,100 +81,40 @@
     <WarningLevel>4</WarningLevel>
     <DebugSymbols>true</DebugSymbols>
     <DefineConstants>DEBUG;Mac;Mono;Portable</DefineConstants>
-    <AssemblyName>SharpFlame</AssemblyName>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseMac|AnyCPU' ">
     <Optimize>false</Optimize>
     <OutputPath>bin\ReleaseMac</OutputPath>
     <WarningLevel>4</WarningLevel>
-    <AssemblyName>SharpFlame</AssemblyName>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugMac|x86'">
     <Prefer32Bit>false</Prefer32Bit>
+    <OutputPath>bin\DebugMac</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <Prefer32Bit>false</Prefer32Bit>
+    <OutputPath>bin\Debug</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseMac|x86'">
     <Prefer32Bit>false</Prefer32Bit>
+    <OutputPath>bin\ReleaseMac</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <Prefer32Bit>false</Prefer32Bit>
+    <OutputPath>bin\Release</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Appccelerate.EventBroker, Version=2.0.0.0, Culture=neutral, PublicKeyToken=917bca444d1f2b4c, processorArchitecture=MSIL">
-      <HintPath>..\packages\Appccelerate.EventBroker.2.0.84\lib\Net40\Appccelerate.EventBroker.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Appccelerate.Fundamentals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=917bca444d1f2b4c, processorArchitecture=MSIL">
-      <HintPath>..\packages\Appccelerate.Fundamentals.1.0.29\lib\Net40\Appccelerate.Fundamentals.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Eto, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Eto.Forms.2.2.0\lib\net45\Eto.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Eto.Serialization.Xaml, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Eto.Serialization.Xaml.2.2.0\lib\net45\Eto.Serialization.Xaml.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FluentValidation, Version=5.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentValidation.5.5.0.0\lib\Net40\FluentValidation.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Ionic.Zip, Version=1.9.7.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetZip.1.9.7\lib\net20\Ionic.Zip.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="mscorlib" />
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Ninject.Extensions.ContextPreservation, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.Extensions.ContextPreservation.3.2.0.0\lib\net45-full\Ninject.Extensions.ContextPreservation.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Ninject.Extensions.Logging, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.Extensions.Logging.3.2.2.0\lib\net45-full\Ninject.Extensions.Logging.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Ninject.Extensions.Logging.NLog2, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.Extensions.Logging.nlog2.3.2.2.0\lib\net45-full\Ninject.Extensions.Logging.NLog2.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Ninject.Extensions.NamedScope, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.Extensions.NamedScope.3.2.0.0\lib\net45-full\Ninject.Extensions.NamedScope.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NLog, Version=2.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.2.1.0\lib\net45\NLog.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenTK.GLControl.1.1.1589.5942\lib\NET40\OpenTK.GLControl.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Portable.Xaml, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Portable.Xaml.0.7.0\lib\dotnet\Portable.Xaml.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Sprache, Version=1.10.0.37, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sprache.1.10.0.37\lib\net40\Sprache.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -185,9 +122,59 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="Z.ExtensionMethods.WithObjectNamespace, Version=2.0.10.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+    <Reference Include="Appccelerate.EventBroker, Version=2.0.0.0, Culture=neutral, PublicKeyToken=917bca444d1f2b4c">
+      <HintPath>..\packages\Appccelerate.EventBroker.2.0.84\lib\Net40\Appccelerate.EventBroker.dll</HintPath>
+    </Reference>
+    <Reference Include="Appccelerate.Fundamentals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=917bca444d1f2b4c">
+      <HintPath>..\packages\Appccelerate.Fundamentals.1.0.29\lib\Net40\Appccelerate.Fundamentals.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto, Version=2.2.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Eto.Forms.2.2.0\lib\net45\Eto.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto.Serialization.Xaml, Version=2.2.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Eto.Serialization.Xaml.2.2.0\lib\net45\Eto.Serialization.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentValidation, Version=5.5.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\FluentValidation.5.5.0.0\lib\Net40\FluentValidation.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.7.0, Culture=neutral, PublicKeyToken=6583c7c814667745">
+      <HintPath>..\packages\DotNetZip.1.9.7\lib\net20\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.ContextPreservation, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7">
+      <HintPath>..\packages\Ninject.Extensions.ContextPreservation.3.2.0.0\lib\net45-full\Ninject.Extensions.ContextPreservation.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.Logging, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7">
+      <HintPath>..\packages\Ninject.Extensions.Logging.3.2.2.0\lib\net45-full\Ninject.Extensions.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.Logging.NLog2, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7">
+      <HintPath>..\packages\Ninject.Extensions.Logging.nlog2.3.2.2.0\lib\net45-full\Ninject.Extensions.Logging.NLog2.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.NamedScope, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7">
+      <HintPath>..\packages\Ninject.Extensions.NamedScope.3.2.0.0\lib\net45-full\Ninject.Extensions.NamedScope.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=2.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c">
+      <HintPath>..\packages\NLog.2.1.0\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4">
+      <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4">
+      <HintPath>..\packages\OpenTK.GLControl.1.1.1589.5942\lib\NET40\OpenTK.GLControl.dll</HintPath>
+    </Reference>
+    <Reference Include="Portable.Xaml, Version=0.7.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Portable.Xaml.0.7.0\lib\dotnet\Portable.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="Sprache, Version=1.10.0.37, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Sprache.1.10.0.37\lib\net40\Sprache.dll</HintPath>
+    </Reference>
+    <Reference Include="Z.ExtensionMethods.WithObjectNamespace, Version=2.0.10.0, Culture=neutral, PublicKeyToken=59b66d028979105b">
       <HintPath>..\packages\Z.ExtensionMethods.WithObjectNamespace.2.0.10\lib\net45\Z.ExtensionMethods.WithObjectNamespace.dll</HintPath>
-      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -197,6 +184,8 @@
     <EmbeddedResource Include="Gui\Dialogs\CompileMapDialog.xoml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Overflow.png" />
+    <EmbeddedResource Include="Resources\NoTile.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharpFlame.Core\GlobalAssemblyInfo.cs">
@@ -551,7 +540,6 @@
     <EmbeddedResource Include="Resources\RotateAntiClockwise.png" />
     <EmbeddedResource Include="Resources\RotateClockwise.png" />
     <EmbeddedResource Include="Resources\ProgramIcon.ico" />
-    <EmbeddedResource Include="Resources\overflow.png" />
     <EmbeddedResource Include="Resources\Problem.png" />
     <EmbeddedResource Include="Resources\Warning.png" />
   </ItemGroup>
@@ -630,7 +618,6 @@
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ObjectsSelect.png" />
-    <EmbeddedResource Include="Resources\notile.png" />
     <EmbeddedResource Include="Resources\Gateways.png" />
     <EmbeddedResource Include="Resources\DrawTileOrientation.png" />
     <EmbeddedResource Include="Resources\DisplayAutoTexture.png" />
