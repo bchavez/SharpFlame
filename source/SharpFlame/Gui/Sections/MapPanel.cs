@@ -223,6 +223,7 @@ namespace SharpFlame.Gui.Sections
 			emptyPlaceHolder = new EmptyPlaceHolder();
 
 		    this.GLSurface = new GLSurface();
+		    this.panel.Content = this.emptyPlaceHolder;
 
 			SetupEventHandlers();
 			SetupBindings();

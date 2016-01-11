@@ -203,22 +203,31 @@ namespace SharpFlame.Gui.Sections
 
             mainLayout.Add(layout);
 
-            this.GLSurface = new GLSurface();
+            this.GLSurface = new GLSurface() {GLSize = new Size(500, 500)};
 
             this.scrollTextureView = new Scrollable {Content = this.GLSurface};
             mainLayout.Add(this.scrollTextureView, true, true);
             mainLayout.Add(tileTypeSetter);
             //mainLayout.Add();
 
+            this.scrollTextureView.ExpandContentHeight = false;
+            this.scrollTextureView.ExpandContentWidth = false;
+
+            //this.scrollTextureView.UpdateScrollSizes();
+            //this.scrollTextureView.minim
+
             this.scrollTextureView.SizeChanged += scrollTextureView_SizeChanged;
             this.scrollTextureView.Scroll += scrollTextureView_Scroll;
+            this.scrollTextureView.MouseWheel += ScrollTextureView_MouseWheel;
 
             Content = mainLayout;
 
             this.GLSurface.GLInitalized += TextureView_OnGLControlInitialized;
             SetupEventHandlers();
         }
-		protected override void OnPreLoad(EventArgs e)
+
+
+        protected override void OnPreLoad(EventArgs e)
 		{
 			this.ParentWindow.GotFocus +=ParentWindow_GotFocus;
 			base.OnPreLoad(e);
@@ -274,19 +283,18 @@ namespace SharpFlame.Gui.Sections
 
         void scrollTextureView_Scroll(object sender, ScrollEventArgs e)
         {
-            if( ToolOptions.Textures.TilesetNum != -1 )
-            {
-                this.DrawTexturesView();
-            }
+            this.DrawTexturesView();
         }
 
         void scrollTextureView_SizeChanged(object sender, EventArgs e)
         {
-            if( ToolOptions.Textures.TilesetNum != -1 )
-            {
-                this.DrawTexturesView();
-            }
+            this.DrawTexturesView();
         }
+        private void ScrollTextureView_MouseWheel(object sender, MouseEventArgs e)
+        {
+            this.DrawTexturesView();
+        }
+
 
         /// <summary>
         /// Sets the Bindings to uiOptions.Textures;
@@ -486,29 +494,34 @@ namespace SharpFlame.Gui.Sections
                 this.GLSurface.SwapBuffers();
                 return;
             }
-            
 
             var tileset = App.Tilesets[ToolOptions.Textures.TilesetNum];
 
             var glSize = new Size (0, 0);
-            TextureCount = new XYInt {
-                X = (int)(Math.Floor (scrollTextureView.ClientSize.Width / 64.0D)),
-                Y = (int)(Math.Ceiling ((double)tileset.Tiles.Count / TextureCount.X))
-            };        
+            var columns = (int)(Math.Floor(scrollTextureView.ClientSize.Width / 64.0D));
+            this.TextureCount = new XYInt
+                {
+                    X = columns,
+                    Y = (int)(Math.Ceiling((double)tileset.Tiles.Count / columns))
+                };
 
-            if (TextureCount.Y * 64 >= scrollTextureView.Size.Height)
+            var maxHeight = this.TextureCount.Y * 64;         
+            
+            if (maxHeight >= scrollTextureView.Size.Height)
             {
-                glSize = GLSurface.GLSize = new Size(scrollTextureView.ClientSize.Width, TextureCount.Y * 64);
+                glSize = new Size(scrollTextureView.ClientSize.Width, maxHeight);
+                GLSurface.GLSize = glSize;
             }
             else
             {
-                TextureCount = new XYInt {
+                this.TextureCount = new XYInt {
                     X = (int)(Math.Floor (GLSurface.Size.Width / 64.0D)),
                     Y = (int)(Math.Ceiling (GLSurface.Size.Height / 64.0D))
                 };        
-                glSize = GLSurface.GLSize = scrollTextureView.ClientSize;
+                glSize = scrollTextureView.ClientSize;
+                GLSurface.GLSize = glSize;
             }
-                
+                            
             // send the resize event to the Graphics card.
             GL.Viewport(0, 0, glSize.Width, glSize.Height);
             GL.MatrixMode(MatrixMode.Projection);

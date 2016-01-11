@@ -31,7 +31,7 @@ namespace Eto.Gl.Windows
 
 	    public Size GLSize
         {
-            get { return this.Control.GLSize; }
+            get { return this.Control.Size.ToEto() ; }
             set { this.Control.Size = value.ToSD(); }
         }
 

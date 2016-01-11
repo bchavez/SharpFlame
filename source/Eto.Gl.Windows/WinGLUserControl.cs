@@ -25,6 +25,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 using Eto.WinForms;
 using OpenTK;
@@ -245,6 +246,11 @@ namespace Eto.Gl.Windows
             base.OnResize(e);
         }
 
+        public override Size GetPreferredSize(Size proposedSize)
+        {
+            return this.Size;
+        }
+
         /// <summary>
         /// Raises the ParentChanged event.
         /// </summary>
@@ -273,11 +279,11 @@ namespace Eto.Gl.Windows
         public event EventHandler Initialized = delegate { };
         public event EventHandler ShuttingDown = delegate { };
 
-        public Eto.Drawing.Size GLSize
-        {
-            get { return this.Size.ToEto(); }
-            set { this.Size = value.ToSD(); }
-        }
+        //public Eto.Drawing.Size GLSize
+        //{
+        //    get { return this.Size.ToEto(); }
+        //    set { this.Size = value.ToSD(); }
+        //}
 
         public bool IsInitialized { get; private set; }
 
