@@ -12,7 +12,7 @@ Status
 |---------|:------:|:------:|:-------:|
 |**Debug**| [![Build status](https://ci.appveyor.com/api/projects/status/729c1ka8irgaevvv/branch/eto?svg=true)](https://ci.appveyor.com/project/bchavez/sharpflame/branch/eto/artifacts) | [![Build status](https://ci.appveyor.com/api/projects/status/729c1ka8irgaevvv/branch/eto?svg=true)](https://ci.appveyor.com/project/bchavez/sharpflame/branch/eto/artifacts) | N/A |
 |**Download**| [![Release](https://img.shields.io/github/release/bchavez/SharpFlame.svg)](https://github.com/bchavez/SharpFlame/releases) | [![Release](https://img.shields.io/github/release/bchavez/SharpFlame.svg)](https://github.com/bchavez/SharpFlame/releases)  | N/A   |
-| [Current Builds](https://ci.appveyor.com/project/bchavez/sharpflame/branch/eto/artifacts) |
+|         | [Current Build](https://ci.appveyor.com/project/bchavez/sharpflame/branch/eto/artifacts) | [Current Build](https://ci.appveyor.com/project/bchavez/sharpflame/branch/eto/artifacts) | N/A |
 
 Downloads are current snapshots of this ETO branch with Native UI. Please consider these downloads as a work in progress until we get our code base stabilized.
 
