@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using BauCore;
+using BauExec;
 using BauMSBuild;
 using Builder.Extensions;
 using FluentAssertions;
@@ -12,7 +13,8 @@ namespace Builder
     public static class BauBuild
     {
         //Build Tasks
-        public const string Build = "build";
+        public const string MsBuild = "msb";
+        public const string MonoBuild = "mono";
         public const string Clean = "clean";
         public const string BuildInfo = "buildinfo";
         public const string Pack = "pack";
@@ -29,16 +31,17 @@ namespace Builder
                 };
 
             new Bau(Arguments.Parse(args))
-                .DependsOn(Clean, Build)
-                .MSBuild(Build).Desc("Invokes MSBuild to build solution")
+                .DependsOn(Clean, MsBuild)
+                .MSBuild(MsBuild).Desc("Invokes MSBuild to build solution")
                 .DependsOn(Clean, BuildInfo)
                 .Do(msb =>
                     {
                         msb.ToolsVersion = "14.0";
-                        msb.Solution = Projects.SolutionFile.ToString();
+                        msb.Solution = Projects.VisualStudioSln.ToString();
                         msb.Properties = new
                             {
                                 Configuration = "Release",
+                                OutDir = Projects.Gui.WindowsOutput.ToString()
                             };
                         msb.Targets = new[] {"SharpFlame_Gui_Windows:Rebuild"};
                     })
@@ -54,7 +57,7 @@ namespace Builder
                             });
                     })
                 .Task(Pack).Desc("Packs build for distribution")
-                .DependsOn(Build)
+                .DependsOn(MsBuild, MonoBuild)
                 .Do(() =>
                     {
                         using( var z = new ZipFile(Projects.Gui.WindowsZip.ToString()) )
@@ -63,7 +66,24 @@ namespace Builder
                             z.AddDirectory(Folders.Data.ToString(), "Data");
                             z.Save();
                         }
+                        using (var z = new ZipFile(Projects.Gui.LinuxZip.ToString()))
+                        {
+                            z.AddDirectory(Projects.Gui.LinuxOutput.ToString(), Path.GetFileNameWithoutExtension(Projects.Gui.LinuxZip.ToString()));
+                            z.AddDirectory(Folders.Data.ToString(), "Data");
+                            z.Save();
+                        }
                     })
+                .Exec(MonoBuild).Desc("Produces runs the mono xbuild.")
+                .DependsOn(Clean, BuildInfo)
+                .Do(exec =>
+                {
+                    var monopath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)}\Mono\bin";
+                    exec.Run("cmd.exe")
+                        .With("/c",
+                            $@"""{monopath}\setmonopath.bat"" & ",
+                            $@"xbuild.bat {Projects.MonoDevelopSln.ToString()} /p:OutDir={Projects.Gui.LinuxOutput}\"
+                        ).In(Folders.Source.ToString());
+                })
 
                 .Task(Clean).Desc("Cleans project files")
                 .Do(() =>

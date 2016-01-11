@@ -38,7 +38,9 @@ namespace Builder
                 .Description("http://www.github.com/bchavez/SharpFlame");
         }
 
-        public static readonly File SolutionFile = Folders.Source.File("SharpFlame.VS2015.sln");
+        public static readonly File VisualStudioSln = Folders.Source.File("SharpFlame.VS2015.sln");
+        public static readonly File MonoDevelopSln = Folders.Source.File("SharpFlame.MonoDevelop.sln");
+
 
         public class SharpFlame
         {
@@ -64,10 +66,12 @@ namespace Builder
         public class Gui
         {
             public static readonly Directory Windows = Folders.Source.SubFolder($"{SharpFlame.Name}.Gui.Windows");
-            public static readonly Directory WindowsOutput = Windows.SubFolder("bin/Release");
+            public static readonly Directory WindowsOutput = Folders.CompileOutput.SubFolder("windows");
             public static readonly File WindowsZip = Folders.Package.File($"{SharpFlame.Name}.Windows.zip");
 
             public static readonly Directory Linux = Folders.Source.SubFolder($"{SharpFlame.Name}.Gui.Linux");
+            public static readonly Directory LinuxOutput = Folders.CompileOutput.SubFolder("mono");
+            public static readonly File LinuxZip = Folders.Package.File($"{SharpFlame.Name}.Linux.zip");
 
             public static readonly Directory Mac = Folders.Source.SubFolder($"{SharpFlame.Name}.Gui.Mac");
         }

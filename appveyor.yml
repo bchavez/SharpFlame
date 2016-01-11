@@ -17,7 +17,7 @@ test: off
 after_build:
 
 artifacts:
-    - path: __package\SharpFlame.Windows.zip
+    - path: __package\SharpFlame.*.zip
       name: Zip
 
 nuget:
