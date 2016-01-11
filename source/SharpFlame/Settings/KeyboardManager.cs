@@ -51,7 +51,12 @@ namespace SharpFlame.Settings
 
         public override string ToString()
         {
-            return Key?.ToString() ?? $"{Name} has no key!";
+            if( Key != null )
+                return Key.ToString();
+            else
+            {
+                return $"{Name} has no key!";
+            }
         }
     }
 
