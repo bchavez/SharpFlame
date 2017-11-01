@@ -337,8 +337,8 @@ namespace SharpFlame.Mapping.IO.FMap
                     catch (Exception ex) {
                         invalid = true;
                         returnResult.WarningAdd(
-                            string.Format("#{0} invalid {2}: \"{3}\", got exception: {2}", iniSection.Name, iniToken.Name, iniToken.Data, ex.Message), false);
-                        logger.Warn(ex, "#{0} invalid {2} \"{1}\"", iniSection.Name, iniToken.Name, iniToken.Data);
+                            string.Format("#{0} invalid {1}: \"{2}\", got exception: {3}", iniSection.Name, iniToken.Name, iniToken.Data, ex.Message), false);
+                        logger.Warn(ex, "#{0} invalid {1} \"{2}\"", iniSection.Name, iniToken.Name, iniToken.Data);
                     }
                 }
             }
@@ -928,8 +928,8 @@ namespace SharpFlame.Mapping.IO.FMap
                     catch (Exception ex) {
                         invalid = true;
                         returnResult.WarningAdd(
-                            string.Format("#{0} invalid {2}: \"{3}\", got exception: {2}", iniSection.Name, iniToken.Name, iniToken.Data, ex.Message), false);
-                        logger.Warn(ex, "#{0} invalid {2} \"{1}\"", iniSection.Name, iniToken.Name, iniToken.Data);
+                            string.Format("#{0} invalid {1}: \"{2}\", got exception: {3}", iniSection.Name, iniToken.Name, iniToken.Data, ex.Message), false);
+                        logger.Warn(ex, "#{0} invalid {1} \"{2}\"", iniSection.Name, iniToken.Name, iniToken.Data);
                     }
                 }
 
@@ -1184,8 +1184,8 @@ namespace SharpFlame.Mapping.IO.FMap
                     catch (Exception ex) {
                         invalid = true;
                         returnResult.WarningAdd(
-                            string.Format("#{0} invalid {2}: \"{3}\", got exception: {2}", iniSection.Name, iniToken.Name, iniToken.Data, ex.Message), false);
-                        logger.Warn(ex, "#{0} invalid {2} \"{1}\"", iniSection.Name, iniToken.Name, iniToken.Data);
+                            string.Format("#{0} invalid {1}: \"{2}\", got exception: {3}", iniSection.Name, iniToken.Name, iniToken.Data, ex.Message), false);
+                        logger.Warn(ex, "#{0} invalid {1} \"{2}\"", iniSection.Name, iniToken.Name, iniToken.Data);
                     }
                 }
 
