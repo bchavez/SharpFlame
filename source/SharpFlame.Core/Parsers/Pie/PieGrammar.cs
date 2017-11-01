@@ -86,7 +86,12 @@ namespace SharpFlame.Core.Parsers.Pie
             let 
             n = int.Parse( number )
             select n;
-
+	    
+ 	public static readonly Parser<TexCoord> TexCoord =
+            from u in Scan.F.Token()
+            from v in Scan.F.Token()
+            select new TexCoord {U = u, V = v};
+	    
         //data:
         //	200 3  3  2  1  237 220 239 220 239 222
         //  4200 3 7 6 5 2 1 11 14 45 128 54 128 54 140
@@ -115,12 +120,7 @@ namespace SharpFlame.Core.Parsers.Pie
                     Height = height.GetOrDefault(),
                     TexCoords = texCoords.ToArray()
                 };
-
-        public static readonly Parser<TexCoord> TexCoord =
-            from u in Scan.F.Token()
-            from v in Scan.F.Token()
-            select new TexCoord {U = u, V = v};
-
+	
         //CONNECTORS 2
         public static readonly Parser<int> Connectors =
             from levels in Parse.String( "CONNECTORS" )
