@@ -1121,8 +1121,8 @@ namespace SharpFlame.Mapping.IO.Wz
                         {
                             Debugger.Break();
                             resultObject.WarningAdd(
-                                string.Format("#{0} invalid {2}: \"{3}\", got exception: {2}", iniSection.Name, iniToken.Name, iniToken.Data, ex.Message), false);
-                            logger.ErrorException(string.Format("#{0} invalid {2} \"{1}\"", iniSection.Name, iniToken.Name, iniToken.Data), ex);
+                                string.Format("#{0} invalid {1}: \"{2}\", got exception: {3}", iniSection.Name, iniToken.Name, iniToken.Data, ex.Message), false);
+                            logger.ErrorException(string.Format("#{0} invalid {1} \"{2}\"", iniSection.Name, iniToken.Name, iniToken.Data), ex);
                             invalid = true;
                         }
                     }
