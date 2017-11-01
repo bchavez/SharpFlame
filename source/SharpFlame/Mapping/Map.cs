@@ -872,10 +872,10 @@ namespace SharpFlame.Mapping
             }
 
             var timeDiff = DateTime.Now - AutoSave.SavedDate;
-            if ( timeDiff.Seconds < App.SettingsManager.AutoSaveMinIntervalSeconds )
+            if ( timeDiff.TotalSeconds < App.SettingsManager.AutoSaveMinIntervalSeconds )
             {
                 logger.Debug(string.Format("No autosave, we have {0} seconds of {1}",
-                    timeDiff.Seconds, App.SettingsManager.AutoSaveMinIntervalSeconds));
+                    timeDiff.TotalSeconds, App.SettingsManager.AutoSaveMinIntervalSeconds));
                 return;
             }
 
@@ -2052,11 +2052,10 @@ namespace SharpFlame.Mapping
             var DateNow = DateTime.Now;
             var Changed = false;
 
-            A = 0;
             while ( A < Messages.Count )
             {
                 var timeDiff = DateTime.Now - Convert.ToDateTime(Messages[A].CreatedDate);
-                if ( timeDiff.Seconds >= 6 )
+                if ( timeDiff.TotalSeconds >= 6 )
                 {
                     Messages.RemoveAt(A);
                     Changed = true;
